@@ -1,0 +1,12 @@
+config.js
+gitignore
+server.js
+terminal.js
+plugins/lic
+tmp/
+setup/
+node_modules/
+www/admin/
+www/core
+www/js
+package-lock.json

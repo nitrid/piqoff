@@ -1,0 +1,44 @@
+*********************************************************************
+ADMIN PANELI YETKİ YAPISI - 09.09.2021 - ALI KEMAL KARACA
+- ACCESS KLASÖRÜ GENSRV İLE BİRLİKTE OLUŞUR.BU KLASÖR İÇERİSİNE 
+  UYGULAMANIZIN TAGINI KULLANARAK YENİ BİR KLASÖR OLUŞTURMANIZ GEREKİR.
+- YETKİLENDİRME MENÜSÜNE UYGULAMANIZA AİT MENÜYÜ EKLEMEK İÇİN UYGULAMA
+  KLASÖRÜNÜN İÇERİSİNE MENU.JS DOSYASINI OLUŞTURMANIZ GEREKİR.MENU 
+  YAPISI AŞAĞIDAKİ GİBİ OLACAKTIR.
+*********************************************************************
+ÖRNEK MENÜ
+*********************************************************************
+export const menu =
+[
+    {
+        id: 'acs_pos',
+        text: 'Pos',
+        expanded: false,
+        items: 
+        [
+            {
+                id: 'acs_piqpos_01',
+                text: 'Yetki Ekle',
+                path: '../../plugins/access/pos/access.js'
+            }
+        ]
+    },
+]
+***********************************************************************
+ÖRNEK ACCESS.JS
+***********************************************************************
+import React from 'react';
+import App from '../../../admin/lib/app.js';
+
+export default class Access extends React.Component
+{
+    constructor()
+    {
+        super()
+    }
+    render()
+    {
+        return(<div>SELAM</div>)
+    }
+}
+***********************************************************************
