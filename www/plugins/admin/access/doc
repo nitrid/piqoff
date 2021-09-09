@@ -19,7 +19,7 @@ export const menu =
             {
                 id: 'acs_piqpos_01',
                 text: 'Yetki Ekle',
-                path: '../../plugins/access/pos/access.js'
+                path: '../../plugins/admin/access/pos/access.js'
             }
         ]
     },
@@ -28,7 +28,7 @@ export const menu =
 ÖRNEK ACCESS.JS
 ***********************************************************************
 import React from 'react';
-import App from '../../../admin/lib/app.js';
+import App from '../../../../admin/lib/app.js';
 
 export default class Access extends React.Component
 {

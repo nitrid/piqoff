@@ -134,28 +134,38 @@ class licence
                     tmpRoot = await fs.readdirSync('./tmp/plugins')
                     for (let i = 0; i < tmpRoot.length; i++) 
                     {
-                        await fs.copySync('./tmp/plugins/' + tmpRoot[i],'./plugins/' + tmpRoot[i]);                  
+                        if(tmpRoot[i] != 'admin')
+                        {
+                            await fs.copySync('./tmp/plugins/' + tmpRoot[i],'./plugins/' + tmpRoot[i]);                  
+                        }
                     }
                 }
-                if(fs.existsSync('./tmp/www/plugins/access') && fs.existsSync('./www/plugins/access'))
+                if(fs.existsSync('./tmp/plugins/admin') && fs.existsSync('./plugins/admin'))
                 {
-                    tmpRoot = await fs.readdirSync('./tmp/www/plugins/access')
+                    tmpRoot = await fs.readdirSync('./tmp/plugins/admin')
                     for (let i = 0; i < tmpRoot.length; i++) 
                     {
-                        await fs.copySync('./tmp/www/plugins/access/' + tmpRoot[i],'./www/plugins/access/' + tmpRoot[i]);                  
+                        if(tmpRoot[i] != 'access' || tmpRoot[i] != 'param')
+                        {
+                            await fs.copySync('./tmp/plugins/admin/' + tmpRoot[i],'./plugins/admin/' + tmpRoot[i]);                  
+                        }
                     }
                 }
-                if(fs.existsSync('./tmp/www/plugins/param') && fs.existsSync('./www/plugins/param'))
+                if(fs.existsSync('./tmp/www/plugins/admin/access') && fs.existsSync('./www/plugins/admin/access'))
                 {
-                    tmpRoot = await fs.readdirSync('./tmp/www/plugins/param')
+                    tmpRoot = await fs.readdirSync('./tmp/www/plugins/admin/access')
                     for (let i = 0; i < tmpRoot.length; i++) 
                     {
-                        await fs.copySync('./tmp/www/plugins/param/' + tmpRoot[i],'./www/plugins/param/' + tmpRoot[i]);                  
+                        await fs.copySync('./tmp/www/plugins/admin/access/' + tmpRoot[i],'./www/plugins/admin/access/' + tmpRoot[i]);                  
                     }
                 }
-                if(fs.existsSync('./tmp/www/plugins/admin'))
+                if(fs.existsSync('./tmp/www/plugins/admin/param') && fs.existsSync('./www/plugins/admin/param'))
                 {
-                    await fs.copySync('./tmp/www/plugins/admin','./www/plugins/admin'); 
+                    tmpRoot = await fs.readdirSync('./tmp/www/plugins/admin/param')
+                    for (let i = 0; i < tmpRoot.length; i++) 
+                    {
+                        await fs.copySync('./tmp/www/plugins/admin/param/' + tmpRoot[i],'./www/plugins/admin/param/' + tmpRoot[i]);                  
+                    }
                 }
                 await fs.copySync('./tmp/package.json', './package.json');
 

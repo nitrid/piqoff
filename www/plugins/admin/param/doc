@@ -18,8 +18,8 @@ export const menu =
         [
             {
                 id: 'prm_piqpos_01',
-                text: 'Yetki Ekle',
-                path: '../../plugins/param/pos/param.js'
+                text: 'Parametre Ekle',
+                path: '../../plugins/admin/param/pos/param.js'
             }
         ]
     },
@@ -28,7 +28,7 @@ export const menu =
 ÖRNEK PARAM.JS
 ***********************************************************************
 import React from 'react';
-import App from '../../../admin/lib/app.js';
+import App from '../../../../admin/lib/app.js';
 
 export default class Param extends React.Component
 {
