@@ -1,4 +1,4 @@
-import core from 'gensrv'
+import {core} from 'gensrv'
 import macid from 'node-machine-id'
 import client from 'socket.io-client';
 import moment from 'moment'
@@ -11,17 +11,17 @@ class licence
     constructor()
     {
         this.socket = null;
-        this.core = core.default.instance;
+        this.core = core.instance;
         this.macid = macid.machineIdSync();
         this.path = path.resolve(path.dirname('')) + "\\plugins\\"
         this.data = [];
         this.status = false;
         this.host = 'http://172.16.97.250:8080'   
         
-        this.io_connection = this.io_connection.bind(this)
-        this.core.io_manager.io.on('connection',this.io_connection)
+        this.connEvt = this.connEvt.bind(this)
+        this.core.socket.on('connection',this.connEvt)
     }
-    io_connection(pSocket)
+    connEvt(pSocket)
     {
         pSocket.on('lic',async (pParam,pCallback) =>
         {
@@ -194,7 +194,7 @@ async function main()
         {
             if(tmpLic.status)
             {
-                if(tmpLic.getUserCount(pResult.socket.userInfo.APP) < tmpLic.core.io_manager.clients(pResult.socket.userInfo.APP).length)
+                if(tmpLic.getUserCount(pResult.socket.userInfo.APP) < tmpLic.core.socket.clients(pResult.socket.userInfo.APP).length)
                 {
                     tmpLic.core.log.msg('Licensed user limit exceeded','Licence');
                     pResult.socket.emit('general',{id:"M001",data:"Licensed user limit exceeded"});
