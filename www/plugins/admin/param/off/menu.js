@@ -2,19 +2,24 @@ export const menu =
 [
     {
         id: 'prm_off',
-        text: 'off',
+        text: 'OFF',
         expanded: false,
         items: 
         [
             {
                 id: 'prm_piqoff_01',
-                text: 'Sistem',
-                path: '../../plugins/admin/param/off/sistem.js'
+                text: 'Kullanıcı Parametreleri',
+                path: '../../plugins/admin/param/off/user_prm.js'
             },
             {
                 id: 'prm_piqoff_02',
-                text: 'Stok',
-                path: '../../plugins/admin/param/off/stok.js'
+                text: 'Cihaz Parametreleri',
+                path: '../../plugins/admin/param/off/device_param.js'
+            },
+            {
+                id: 'prm_piqoff_03',
+                text: 'Sistem Genel Parametreleri',
+                path: '../../plugins/admin/param/off/system_param.js'
             }
         ]
     },
