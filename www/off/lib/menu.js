@@ -9,7 +9,7 @@ export const menu =
             {
                 id: 'P0001',
                 text: 'Stok Listesi',
-                path: '../pages/test.js'
+                path: '../pages/items/items_list.js'
             }
         ]
     }

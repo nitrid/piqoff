@@ -8,12 +8,13 @@ import NdDatePicker from '../../core/react/devex/datepicker.js';
 import App from '../lib/app.js';
 import { datatable } from '../../core/core.js';
 import TextBox from 'devextreme-react/text-box';
-
+import { items } from '../lib/piqlib/piqlib.js';
 export default class Test extends React.Component
 {
     constructor(props)
     {
         super(props)
+        
         this.core = App.instance.core;
         //this.sysprm = this.param.
         this.onSelectionChanged = this.onSelectionChanged.bind(this);
