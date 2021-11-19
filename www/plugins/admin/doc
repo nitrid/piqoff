@@ -3,7 +3,7 @@ ADMIN PANELI PLUGIN YAPISI - 07.09.2021 - ALI KEMAL KARACA
 - PLUGIN OLARAK EKLEMEK İSTEDİĞİNİZ MENU İÇİN PLUGIN KLASÖRÜ İÇERİSİNE
   AYRI BİR KLASÖR OLUŞTURUN. BU KLASÖR İÇERİSİNE MENU.JS ADINDA BİR
   DOSYA EKLEYEBİLİRSİNİZ.MENU YAPISI AŞAĞIDAKİ GİBİ OLACAKTIR.
-- HER PLUGIN İÇİN MENU.JS OLMASI GEREKİR...
+- HER PLUGIN İÇİN MENU.JS OLMASI GEREKİR.
 *********************************************************************
 ÖRNEK MENÜ
 *********************************************************************
