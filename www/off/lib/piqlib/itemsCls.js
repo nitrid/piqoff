@@ -1,8 +1,9 @@
 import { core } from "../../../core/core.js";
-export class items
+
+export class itemsCls
 {
     constructor()
     {
-        console.log(core.instance)
+        this.core = core.instance;
     }
 }

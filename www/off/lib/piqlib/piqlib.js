@@ -1,1 +1,1 @@
-export {items} from './items.js'
+export {itemsCls} from './itemsCls.js'
