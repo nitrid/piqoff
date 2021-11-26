@@ -1,6 +1,6 @@
 {
     "type": "module",
     "dependencies": {
-        "gensrv": "^1.0.66"
+        "gensrv": "^1.0.67"
     }
 }

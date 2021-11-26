@@ -4,7 +4,7 @@ import {core} from '../../core/core.js'
 import { locale, loadMessages, formatMessage } from 'devextreme/localization';
 import moment from 'moment';
 // import momLocFr from 'moment-localization-fr'
-
+import i18n from './i18n.js'
 import Drawer from 'devextreme-react/drawer';
 import Toolbar from 'devextreme-react/toolbar';
 import TextBox from 'devextreme-react/text-box';
@@ -25,7 +25,7 @@ export default class App extends React.Component
         super();
 
         locale('en');
-
+        
         this.style =
         {
             splash_body : 
@@ -135,6 +135,8 @@ export default class App extends React.Component
             App.instance.setState({connected:false});
             this.core.auth.logout()
         })
+
+        this.lang = i18n;
     }
     menuClick(data)
     {

@@ -15,7 +15,7 @@ export const menu =
                     {
                         id: 'stk_01_001',
                         text: 'Stok Tanımları',
-                        path: '../pages/items/items_list.js'
+                        path: '../pages/items/cards/itemCard.js'
                     },
                     {
                         id: 'stk_01_002',
@@ -81,7 +81,7 @@ export const menu =
                     {
                         id: 'stk_03_001',
                         text: 'Stok Listesi',
-                        path: '../pages/items/items_list.js'
+                        path: '../pages/items/lists/itemList.js'
                     },
                     {
                         id: 'stk_03_002',

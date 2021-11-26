@@ -12,6 +12,7 @@ export default class Page extends React.Component
     super(props)
     
     this.core = App.instance.core;
+
     this.page = React.lazy(() => import(props.data.path).then(async (obj)=>
     {
       //SAYFA YÜKLENMEDEN ÖNCE PARAMETRE, DİL, YETKİLENDİRME DEĞERLERİ GETİRİLİP CLASS PROTOTYPE A SET EDİLİYOR.
@@ -21,9 +22,11 @@ export default class Page extends React.Component
       let tmpAcs = new access(acs);
       await tmpAcs.load({PAGE:props.data.id,APP:'OFF'})
       
-      obj.default.prototype.param = tmpPrm
-      obj.default.prototype.access = tmpAcs
-      obj.default.prototype.user = this.core.auth.data
+      obj.default.prototype.param = tmpPrm;
+      obj.default.prototype.access = tmpAcs;
+      obj.default.prototype.user = this.core.auth.data;
+      obj.default.prototype.lang = App.instance.lang;
+      
       return obj;
     }))
   }
@@ -32,9 +35,7 @@ export default class Page extends React.Component
     return(
       <React.Fragment>
         <React.Suspense fallback={<div style={{position: 'relative',margin:'auto',top: '40%',left:'50%'}}><LoadIndicator height={40} width={40} /></div>}>
-          <div>
-            <this.page data={this.props.data}/>
-          </div>
+          <this.page data={this.props.data}/>
         </React.Suspense>
       </React.Fragment>
     )

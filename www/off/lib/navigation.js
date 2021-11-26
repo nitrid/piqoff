@@ -73,13 +73,13 @@ export default class Navigation extends React.Component
             return(
                 <div style={this.style.div}>
                     <TreeView id="Menu" style={this.style.treeview}
-                        items = {this.menu}
-                        width = {300}
-                        height = {'100%'}
-                        onItemClick = {this.selectItem}
-                        searchMode={this.state.value}
-                        searchEnabled={true}                
-                        >
+                    items = {this.menu}
+                    width = {300}
+                    height = {'100%'}
+                    onItemClick = {this.selectItem}
+                    searchMode={this.state.value}
+                    searchEnabled={true}                
+                    >
                         <SearchEditorOptions height={'fit-content'} />
                     </TreeView>  
                 </div>
