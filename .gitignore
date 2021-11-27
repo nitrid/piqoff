@@ -7,5 +7,4 @@ tmp/
 node_modules/
 www/admin/
 www/core
-www/js
 package-lock.json

@@ -1,0 +1,57 @@
+{
+  "_from": "@devextreme/vdom@1.2.2",
+  "_id": "@devextreme/vdom@1.2.2",
+  "_inBundle": false,
+  "_integrity": "sha512-e8WCJ9u/5cZ2onWzWwVFhRKjbO5EmQaZBNLwWrbZwpKKLHmXEwC5lOJtQ6onDXPAhDfZDX8jDin9G+DDX4SSbg==",
+  "_location": "/@devextreme/vdom",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "@devextreme/vdom@1.2.2",
+    "name": "@devextreme/vdom",
+    "escapedName": "@devextreme%2fvdom",
+    "scope": "@devextreme",
+    "rawSpec": "1.2.2",
+    "saveSpec": null,
+    "fetchSpec": "1.2.2"
+  },
+  "_requiredBy": [
+    "/devextreme"
+  ],
+  "_resolved": "https://registry.npmjs.org/@devextreme/vdom/-/vdom-1.2.2.tgz",
+  "_shasum": "326b2fe3aa3ce9df13a068ac310e851a0f46bd8f",
+  "_spec": "@devextreme/vdom@1.2.2",
+  "_where": "C:\\Project\\Nitrogen\\GenSrv\\node_modules\\devextreme",
+  "author": {
+    "name": "Developer Express Inc."
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "inferno": "^7.4.6",
+    "inferno-compat": "^7.4.6",
+    "inferno-create-element": "^7.4.6",
+    "inferno-hydrate": "^7.4.6"
+  },
+  "deprecated": false,
+  "description": "DevExtreme virtual DOM common components",
+  "devDependencies": {
+    "shx": "^0.3.3",
+    "typescript": "3.8"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "SEE LICENSE IN LICENSE",
+  "main": "dist/cjs/index",
+  "module": "dist/esm/index",
+  "name": "@devextreme/vdom",
+  "scripts": {
+    "build": "tsc -p ./tsconfig.esm.build.json && tsc -p ./tsconfig.cjs.build.json",
+    "build:watch": "tsc -p ./tsconfig.esm.build.json --watch",
+    "clear": "shx rm -rf dist && shx rm -f *.tgz",
+    "pack": "npm run build && npm pack && shx cp *.tgz package.tgz"
+  },
+  "types": "dist/esm/index",
+  "version": "1.2.2"
+}
