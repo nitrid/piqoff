@@ -9,6 +9,8 @@ import App from '../lib/app.js';
 import { datatable } from '../../core/core.js';
 import TextBox from 'devextreme-react/text-box';
 import { items } from '../lib/piqlib/piqlib.js';
+import NdInputGroup from '../../core/react/devex/inputgroup.js';
+
 export default class Test extends React.Component
 {
     constructor(props)
@@ -19,6 +21,7 @@ export default class Test extends React.Component
         //this.sysprm = this.param.
         this.onSelectionChanged = this.onSelectionChanged.bind(this);
         //console.log(Button)
+        
         //console.log(this.access.filter({ELEMENT:'txtSeri',USERS:this.user.CODE}))
         
         //console.log(this.param)
@@ -140,6 +143,7 @@ export default class Test extends React.Component
                         // store = {[{"KEY":"MAHİR","VALUE":"001"},{"KEY":"FURKAN","VALUE":"002"}]} 
                         option={{title:"Depo :",titleAlign:"left"}} ></NdSelectBox>
                     </div> */}
+                    <NdInputGroup id={"igCheck"}></NdInputGroup>
                 </div>
                 <div className="row">
                     <div className="col-12">

@@ -3,37 +3,38 @@ import Form, { GroupItem,Item,Label } from 'devextreme-react/form';
 import Toolbar from 'devextreme-react/toolbar';
 import App from '../../../../admin/lib/app.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdTextBox from '../../../../core/react/devex/textbox.js';
-import {datatable,param} from '../../../../core/core.js';
-import {prm} from '../../../../off/meta/prm.js'
+import NdCheckBox from '../../../../core/react/devex/checkbox.js';
+import {datatable,access} from '../../../../core/core.js';
+import {acs} from '../../../../off/meta/acs.js'
 
-export default class UserParam extends React.Component
+export default class UserAccess extends React.Component
 {
     constructor(props)
     {
         super(props)
         
         this.core = App.instance.core;
+        this.form = React.createRef();
         
         this._cmbUserRender = this._cmbUserRender.bind(this)
-        this._cmbParamRender = this._cmbParamRender.bind(this)
-        this._txtTemplate = this._txtTemplate.bind(this)
+        this._cmbAcsRender = this._cmbAcsRender.bind(this)
 
-        this.tmpMeta = prm.filter(x => x.APP === 'OFF');
+        this.tmpMeta = acs.filter(x => x.APP === 'OFF');
 
-        this.param = new param(prm);
+        this.access = new access(acs);
         
         this.state = 
         {
-            prmMeta : [] 
+            acsMeta : [] ,
         }
+        
     }
     async _pageLoad(pUserId,pPrmId)
     {
-        await this.param.load({PAGE:pPrmId,APP:'OFF',USERS:pUserId})
+        await this.access.load({PAGE:pPrmId,APP:'OFF',USERS:pUserId})
         this.setState(
             {
-                prmMeta : this.tmpMeta.filter(x => x.PAGE === pPrmId)
+                acsMeta : this.tmpMeta.filter(x => x.PAGE === pPrmId),
             }
         )
     }
@@ -41,9 +42,9 @@ export default class UserParam extends React.Component
     {        
         let onValueChanged = function(data)
         {
-            if(typeof this.parent.cmbUser.value != 'undefined' && typeof this.parent.cmbParam.value != 'undefined')
+            if(typeof this.parent.cmbUser.value != 'undefined' && typeof this.parent.cmbAcs.value != 'undefined')
             {
-                this.parent._pageLoad(this.parent.cmbUser.value,this.parent.cmbParam.value)
+                this.parent._pageLoad(this.parent.cmbUser.value,this.parent.cmbAcs.value)
             }
         }
         return (
@@ -59,24 +60,24 @@ export default class UserParam extends React.Component
             </NdSelectBox>
         )
     }
-    _cmbParamRender(e)
+    _cmbAcsRender(e)
     {
-        let tmpPrmCmb = [];
+        let tmpAcsCmb = [];
 
         for (let i = 0; i < Object.keys(this.tmpMeta.toGroupBy("PAGE")).length; i++) 
         {
             let tmpGrpData = this.tmpMeta.toGroupBy("PAGE")[Object.keys(this.tmpMeta.toGroupBy("PAGE"))[i]]            
             if(tmpGrpData.length > 0 && typeof tmpGrpData[0].PAGE != 'undefined' && typeof tmpGrpData[0].VIEW != 'undefined' && typeof tmpGrpData[0].VIEW.PAGE_NAME != 'undefined')
             {
-                tmpPrmCmb.push({CODE : tmpGrpData[0].PAGE,NAME : tmpGrpData[0].VIEW.PAGE_NAME})
+                tmpAcsCmb.push({CODE : tmpGrpData[0].PAGE,NAME : tmpGrpData[0].VIEW.PAGE_NAME})
             }            
         }
         
         let onValueChanged = function(data)
         {
-            if(typeof this.parent.cmbUser.value != 'undefined' && typeof this.parent.cmbParam.value != 'undefined')
+            if(typeof this.parent.cmbUser.value != 'undefined' && typeof this.parent.cmbAcs.value != 'undefined')
             {
-                this.parent._pageLoad(this.parent.cmbUser.value,this.parent.cmbParam.value)
+                this.parent._pageLoad(this.parent.cmbUser.value,this.parent.cmbAcs.value)
             }
         }
         
@@ -84,34 +85,41 @@ export default class UserParam extends React.Component
             <NdSelectBox 
                 simple={true}
                 parent={this}                             
-                id = "cmbParam"                             
+                id = "cmbAcs"                             
                 displayExpr = "NAME"                       
                 valueExpr = "CODE"      
-                data={{source: tmpPrmCmb}}
+                data={{source: tmpAcsCmb}}
                 onValueChanged={onValueChanged}
             >
             </NdSelectBox>
         )
     }
-    _txtTemplate(e)
-    {
-        return (
-            <NdTextBox id={e.editorOptions.value.ID} parent={this} simple={true} value={this.param.filter({ID:e.editorOptions.value.ID}).getValue()}/>
-        )
-    }
     _grpRender()
     {
+        console.log(12)
+        let tmpCheckBox = function()
+        {
+            return (
+                <NdCheckBox text="Visible" defaultValue={true}/>
+            )
+        }
+
         return(
             <GroupItem name="GrpItem" caption={" "} colCount={2}>
             {
-                this.state.prmMeta.map((pItem,pIndex) => 
+                this.state.acsMeta.map((pItem,pIndex) => 
                 {
                     if(typeof pItem.VIEW != 'undefined')
                     {
                         if(typeof pItem.VIEW.TYPE == 'undefined' || pItem.VIEW.TYPE == 'text')
                         {
                             return (
-                                <Item key={pItem.ID} editorOptions={{value:pItem}} render={this._txtTemplate}><Label text={pItem.VIEW.CAPTION} /></Item>
+                                <Item key={pItem.ID + "_M"}><Label text={pItem.VIEW.CAPTION} />
+                                    <Form colCount={2}>
+                                        <Item key={pItem.ID + "_1"} render={tmpCheckBox}></Item>
+                                        <Item key={pItem.ID + "_2"} render={tmpCheckBox}></Item>
+                                    </Form>
+                                </Item>
                             )
                         }
                     }
@@ -169,7 +177,7 @@ export default class UserParam extends React.Component
                                     icon: 'save',
                                     onClick: async () => 
                                     {
-                                        let tmpData = [...this.state.prmMeta]
+                                        let tmpData = [...this.state.acsMeta]
                                         for (let i = 0; i < tmpData.length; i++) 
                                         {
                                             tmpData[i].USERS = this.cmbUser.value
@@ -189,9 +197,10 @@ export default class UserParam extends React.Component
                         <Form
                         colCount={1}
                         id="form"
+                        ref={this.form}
                         >
                             <GroupItem colCount={2}>
-                                <Item render={this._cmbParamRender}><Label text={"Parametre "} /></Item>
+                                <Item render={this._cmbAcsRender}><Label text={"Parametre "} /></Item>
                                 <Item render={this._cmbUserRender}><Label text={"Kullanıcı "} /></Item>
                             </GroupItem>
                             {this._grpRender()}

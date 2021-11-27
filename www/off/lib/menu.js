@@ -86,7 +86,7 @@ export const menu =
                     {
                         id: 'stk_03_002',
                         text: 'Fiyat Listesi',
-                        path: '../pages/items/items_list.js'
+                        path: '../pages/test.js'
                     },
                     {
                         id: 'stk_03_003',
