@@ -174,7 +174,7 @@ export default class UserParam extends React.Component
                                         {
                                             tmpData[i].USERS = this.cmbUser.value
                                             tmpData[i].VALUE = this[tmpData[i].ID].value
-                                            this.param.add(tmpData[i])                                            
+                                            this.param.add(tmpData[i])
                                         }
 
                                         await this.param.save()

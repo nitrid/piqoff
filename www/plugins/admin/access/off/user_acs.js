@@ -14,7 +14,6 @@ export default class UserAccess extends React.Component
         super(props)
         
         this.core = App.instance.core;
-        this.form = React.createRef();
         
         this._cmbUserRender = this._cmbUserRender.bind(this)
         this._cmbAcsRender = this._cmbAcsRender.bind(this)
@@ -96,14 +95,12 @@ export default class UserAccess extends React.Component
     }
     _grpRender()
     {
-        console.log(12)
-        let tmpCheckBox = function()
+        let tmpCheckBox = (function(e)
         {
             return (
-                <NdCheckBox text="Visible" defaultValue={true}/>
+                <NdCheckBox id={e.name}  text={e.editorOptions.text} parent={this} simple={true} defaultValue={e.editorOptions.value}  />
             )
-        }
-
+        }).bind(this)
         return(
             <GroupItem name="GrpItem" caption={" "} colCount={2}>
             {
@@ -113,11 +110,27 @@ export default class UserAccess extends React.Component
                     {
                         if(typeof pItem.VIEW.TYPE == 'undefined' || pItem.VIEW.TYPE == 'text')
                         {
+                            let tmpVisible = false;
+                            let tmpEditable = false;
+                            if(typeof  pItem.VALUE != 'undefined')
+                            {
+                                let tmpD = this.access.filter({ID:pItem.ID}).getValue()
+                                console.log(tmpD.visible)
+                                if(typeof tmpD.visible != 'undefined')
+                                {
+                                    tmpVisible = tmpD.visible
+                                }
+                                if(typeof pItem.VALUE.editable != 'undefined')
+                                {
+                                    tmpEditable = tmpD.editable
+                                }
+                            }
+
                             return (
                                 <Item key={pItem.ID + "_M"}><Label text={pItem.VIEW.CAPTION} />
                                     <Form colCount={2}>
-                                        <Item key={pItem.ID + "_1"} render={tmpCheckBox}></Item>
-                                        <Item key={pItem.ID + "_2"} render={tmpCheckBox}></Item>
+                                        <Item name={pItem.ID + "_1"} editorOptions={{value:tmpVisible,text:"Visible"}} render={tmpCheckBox}></Item>
+                                        <Item name={pItem.ID + "_2"} editorOptions={{value:tmpEditable,text:"Editable"}} render={tmpCheckBox}></Item>
                                     </Form>
                                 </Item>
                             )
@@ -177,15 +190,21 @@ export default class UserAccess extends React.Component
                                     icon: 'save',
                                     onClick: async () => 
                                     {
+                                        
                                         let tmpData = [...this.state.acsMeta]
+                                       
                                         for (let i = 0; i < tmpData.length; i++) 
                                         {
+                                            let tmpObj = {}
+                                            tmpObj.visible = this[tmpData[i].ID + "_1"].value
+                                            tmpObj.editable = this[tmpData[i].ID + "_2"].value
+
+                                            tmpData[i].VALUE = tmpObj
                                             tmpData[i].USERS = this.cmbUser.value
-                                            tmpData[i].VALUE = this[tmpData[i].ID].value
-                                            this.param.add(tmpData[i])                                            
+                                            this.access.add(tmpData[i])                                            
                                         }
 
-                                        await this.param.save()
+                                        await this.access.save()
                                     }
                                 }    
                             } />
@@ -197,7 +216,6 @@ export default class UserAccess extends React.Component
                         <Form
                         colCount={1}
                         id="form"
-                        ref={this.form}
                         >
                             <GroupItem colCount={2}>
                                 <Item render={this._cmbAcsRender}><Label text={"Parametre "} /></Item>

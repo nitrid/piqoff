@@ -3,7 +3,7 @@ export const acs =
     {
         TYPE : 1,
         ID :"txtSeri",
-        VALUE : {visible:true,editable:true},
+        VALUE : {visible:false,editable:true},
         SPECIAL : "",
         PAGE : "P0002",
         ELEMENT : "txtSeri",
@@ -13,6 +13,36 @@ export const acs =
             TYPE : "text",
             PAGE_NAME : "Sipariş",
             CAPTION : "Seri"
+        }
+    },
+    {
+        TYPE : 1,
+        ID :"txtSira",
+        VALUE : {visible:false,editable:true},
+        SPECIAL : "",
+        PAGE : "P0002",
+        ELEMENT : "txtSira",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Sipariş",
+            CAPTION : "Sıra"
+        }
+    },
+    {
+        TYPE : 1,
+        ID :"txtBelge",
+        VALUE : {visible:false,editable:true},
+        SPECIAL : "",
+        PAGE : "P0002",
+        ELEMENT : "txtBelge",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Sipariş",
+            CAPTION : "Belge No"
         }
     },
     {
