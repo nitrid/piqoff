@@ -13,7 +13,7 @@ export default class itemCard extends React.Component
     constructor()
     {
         super()
-
+ 
         this.core = App.instance.core;
         this.itemsCls = new itemsCls();
         
@@ -56,6 +56,26 @@ export default class itemCard extends React.Component
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Form colCount={2} id="frmItems">
+                                <Item>
+                                    <Label text={"Referans "} alignment="right" />
+                                        <NdTextBox id="txtRef" parent={this} simple={true}/>
+                                </Item>
+                                <Item>
+                                    <Label text={"Ürün Grubu "} alignment="right" />
+                                        <NdTextBox id="txtUrunGrp" parent={this} simple={true}/>
+                                </Item>
+                                <Item>
+                                    <Label text={"Tedarikçi "} alignment="right" />
+                                        <NdTextBox id="txtTedarikci" parent={this} simple={true} />
+                                </Item>
+                                <Item>
+                                    <Label text={"Tedarikçi Stok "} alignment="right" />
+                                        <NdTextBox id="txtTedarikciStok" parent={this} simple={true} />
+                                </Item>
+                                <Item>
+                                    <Label text={"Barkod "} alignment="right" />
+                                        <NdTextBox id="txtBarkod" parent={this} simple={true} />
+                                </Item>
                                 <Item>
                                     <Label text={"Barkod "} alignment="right" />
                                         <NdTextBox id="txtBarkod" parent={this} simple={true} />
