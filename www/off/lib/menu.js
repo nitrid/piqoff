@@ -20,7 +20,7 @@ export const menu =
                     {
                         id: 'stk_01_002',
                         text: 'Barkod Tanımları',
-                        path: '../pages/items/items_list.js'
+                        path: '../pages/items/cards/barcodeCard.js'
                     },
                     {
                         id: 'stk_01_003',
@@ -86,17 +86,17 @@ export const menu =
                     {
                         id: 'stk_03_002',
                         text: 'Fiyat Listesi',
-                        path: '../pages/test.js'
+                        path: '../pages/items/lists/priceList.js'
                     },
                     {
                         id: 'stk_03_003',
                         text: 'Barkod Listesi',
-                        path: '../pages/items/items_list.js'
+                        path: '../pages/items/lists/barcodeList.js'
                     },
                     {
                         id: 'stk_03_004',
                         text: 'Depo Listesi',
-                        path: '../pages/items/items_list.js'
+                        path: '../pages/items/lists/depotList.js'
                     },
                     {
                         id: 'stk_03_005',
