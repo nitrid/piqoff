@@ -24,7 +24,7 @@ export default class App extends React.Component
     {
         super();
 
-        locale('en');
+        locale('fr');
         
         this.style =
         {

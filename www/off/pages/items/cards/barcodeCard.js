@@ -9,6 +9,6 @@ export default class barcodeCard extends React.Component
     }
     render()
     {
-        return <div>NABER</div>
+        return <div>NABER - İYİ SENDEN NABER OLM SANA EKRANI YAP DEDİK NABER DEMİŞSİN :'(</div>
     }
 }
