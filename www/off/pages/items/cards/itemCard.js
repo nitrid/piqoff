@@ -23,40 +23,36 @@ export default class itemCard extends React.Component
         super()
  
         this.core = App.instance.core;
-        this.itemsCls = new itemsCls();
+        this.itemsObj = new itemsCls();
     }
-    //#region Private
-    
-    //#endregion
     async componentDidMount()
     {
-        this.init();
-
-        function uuid4() {
-            let array = new Uint8Array(16)
-            crypto.getRandomValues(array)
-          
-            // Manipulate the 9th byte
-            array[8] &= 0b00111111 // Clear the first two bits
-            array[8] |= 0b10000000 // Set the first two bits to 10
-          
-            // Manipulate the 7th byte
-            array[6] &= 0b00001111 // Clear the first four bits
-            array[6] |= 0b01000000 // Set the first four bits to 0100
-          
-            const pattern = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
-            let idx = 0
-          
-            return pattern.replace(
-              /XX/g,
-              () => array[idx++].toString(16).padStart(2, "0"), // padStart ensures a leading zero, if needed
-            ).toUpperCase()
-          }
-          console.log(uuid4())
+        await this.core.util.waitUntil(0)
+        this.init();          
     }
     async init()
     {
         //await this.itemsCls.getItems() 
+        this.itemsObj.clearAll();
+
+        let tmpUnderUnitObj = {...this.itemsObj.itemUnit.empty}
+        tmpUnderUnitObj.TYPE = 1
+        
+        this.itemsObj.addEmpty();
+        this.itemsObj.itemUnit.addEmpty();
+        this.itemsObj.itemUnit.addEmpty(tmpUnderUnitObj);
+        
+        //this.itemsObj.dt('ITEM_UNIT').find(x => x.TYPE == 0).TYPE = 1;
+        //this.itemsObj.dt('ITEM_UNIT').where({TYPE:0})[0].TYPE = 1
+        this.x = this.itemsObj.dt('ITEM_UNIT').where({TYPE:0})
+        console.log(this.x)
+        //this.itemsObj.dt('ITEM_UNIT').where({TYPE:0})[0].TYPE = 2
+        //console.log(this.itemsObj.dt('ITEM_UNIT'))
+        //this.itemsObj.dt('ITEMS')[0].CODE = '111'
+        //this.dtToForm();
+        // this.itemsCls.dt('ITEMS')[0].CODE = 1111
+        // this.itemsCls.dt('ITEMS')[0].CODE = 1111222
+        // console.log(this.txtRef.value)  
         // await this.itemsCls.getVat()
         // await this.cmbVergi.dataRefresh(
         //     {
@@ -71,7 +67,11 @@ export default class itemCard extends React.Component
         //     })
         //await this.cmbVergi.dataRefresh({source:this.itemsCls.data.get('VAT').toArray()})
     }
-    
+    async getItem(pCode)
+    {
+        this.itemsObj.clearAll();
+        await this.itemsObj.load({CODE:pCode});
+    }
     render()
     {
         return (
@@ -90,12 +90,7 @@ export default class itemCard extends React.Component
                                         icon: 'file',
                                         onClick: async () => 
                                         {
-                                            App.instance.menuClick(
-                                            {
-                                                id: 'stk_01_001',
-                                                text: 'Stok Tanımları',
-                                                path: '../pages/items/cards/itemCard.js'
-                                            })
+                                            this.init();
                                         }
                                     }    
                                 } />
@@ -109,12 +104,8 @@ export default class itemCard extends React.Component
                                         icon: 'floppy',
                                         onClick: async () => 
                                         {
-                                            App.instance.menuClick(
-                                            {
-                                                id: 'stk_01_001',
-                                                text: 'Stok Tanımları',
-                                                path: '../pages/items/cards/itemCard.js'
-                                            })
+                                            console.log(this.itemsObj.dt('ITEMS'))
+                                            console.log(this.itemsObj.dt('ITEM_UNIT'))
                                         }
                                     }    
                                 } />
@@ -183,7 +174,7 @@ export default class itemCard extends React.Component
                             <Form colCount={2} id="frmItems">
                                 <Item>
                                     <Label text={"Referans "} alignment="right" />
-                                    <NdTextBox id="txtRef" parent={this} simple={true} 
+                                    <NdTextBox id="txtRef" parent={this} simple={true} dt={this.itemsObj.dt('ITEMS')} dtField={"CODE"}
                                     button=
                                     {
                                         [
@@ -197,7 +188,7 @@ export default class itemCard extends React.Component
                                                     {
                                                         if(data.length > 0)
                                                         {
-                                                            this.txtRef.value = data[0].CODE
+                                                            this.getItem(data[0].CODE)
                                                         }
                                                     }
                                                 }
@@ -217,7 +208,7 @@ export default class itemCard extends React.Component
                                 </Item>
                                 <Item>
                                     <Label text={"Ürün Grubu "} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbUrunGrup" showClearButton={true}
+                                    <NdSelectBox simple={true} parent={this} id="cmbUrunGrup" showClearButton={true} dt={this.itemsObj.dt('ITEMS')} dtField={"MAIN_GRP"}
                                     displayExpr="NAME"                       
                                     valueExpr="CODE"
                                     searchEnabled={true}
@@ -293,7 +284,7 @@ export default class itemCard extends React.Component
                                 </Item>
                                 <Item>
                                     <Label text={"Ürün Cinsi "} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbUrunCins" showClearButton={true}
+                                    <NdSelectBox simple={true} parent={this} id="cmbUrunCins" showClearButton={true} dt={this.itemsObj.dt('ITEMS')} dtField={"TYPE"}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
                                     data={{source:{select:{query:"SELECT ID,VALUE FROM ITEM_TYPE ORDER BY ID ASC"},sql:this.core.sql}}}
@@ -303,7 +294,7 @@ export default class itemCard extends React.Component
                                     <Label text={"Ana Birim "} alignment="right" />
                                     <div className="row">
                                         <div className="col-4 pe-0">
-                                            <NdSelectBox simple={true} parent={this} id="cmbAnaBirim" showClearButton={true} height='fit-content' 
+                                            <NdSelectBox simple={true} parent={this} id="cmbAnaBirim" showClearButton={true} height='fit-content' dt={this.x} dtField={"NAME"} dtWhere={{TYPE:0}}
                                             style={{borderTopRightRadius:'0px',borderBottomRightRadius:'0px'}}
                                             displayExpr="NAME"                       
                                             valueExpr="NAME"
@@ -311,13 +302,13 @@ export default class itemCard extends React.Component
                                             />
                                         </div>
                                         <div className="col-4 ps-0">
-                                            <NdTextBox id="txtAnaBirim" parent={this} simple={true} style={{borderTopLeftRadius:'0px',borderBottomLeftRadius:'0px'}}/>
+                                            <NdTextBox id="txtAnaBirim" parent={this} simple={true} style={{borderTopLeftRadius:'0px',borderBottomLeftRadius:'0px'}} dt={this.x} dtField={"FACTOR"}/>
                                         </div>
                                     </div>
                                 </Item>
                                 <Item>
                                     <Label text={"Vergi "} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbVergi" showClearButton={true} height='fit-content'
+                                    <NdSelectBox simple={true} parent={this} id="cmbVergi" showClearButton={true} height='fit-content' dt={this.itemsObj.dt('ITEMS')} dtField={"VAT"}
                                     displayExpr="VAT"                       
                                     valueExpr="VAT"
                                     data={{source:{select:{query:"SELECT VAT FROM VAT ORDER BY ID ASC"},sql:this.core.sql}}}
@@ -341,7 +332,7 @@ export default class itemCard extends React.Component
                                 </Item>
                                 <Item>
                                     <Label text={"Menşei "} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbMensei" showClearButton={true} height='fit-content'
+                                    <NdSelectBox simple={true} parent={this} id="cmbMensei" showClearButton={true} height='fit-content' dt={this.itemsObj.dt('ITEMS')} dtField={"ORGINS_GRP"}
                                     displayExpr="NAME"                       
                                     valueExpr="CODE"
                                     data={{source:{select:{query:"SELECT CODE,NAME FROM COUNTRY ORDER BY CODE ASC"},sql:this.core.sql}}}
@@ -349,11 +340,11 @@ export default class itemCard extends React.Component
                                 </Item>
                                 <Item>
                                     <Label text={"Ürün Adı "} alignment="right" />
-                                    <NdTextBox id="txtUrunAdi" parent={this} simple={true} />
+                                    <NdTextBox id="txtUrunAdi" parent={this} simple={true} dt={this.itemsObj.dt('ITEMS')} dtField={"NAME"}/>
                                 </Item>
                                 <Item>
                                     <Label text={"Kısa Adı "} alignment="right" />
-                                        <NdTextBox id="txtKisaAdi" parent={this} simple={true} />
+                                        <NdTextBox id="txtKisaAdi" parent={this} simple={true} dt={this.itemsObj.dt('ITEMS')} dtField={"SNAME"}/>
                                 </Item>
                             </Form>
                         </div>
@@ -366,19 +357,19 @@ export default class itemCard extends React.Component
                             <Form colCount={6} id="frmChkBox">
                                 <Item>
                                     <Label text={"Aktif "} alignment="right" />
-                                    <NdCheckBox id="chkAktif" parent={this} defaultValue={true}></NdCheckBox>
+                                    <NdCheckBox id="chkAktif" parent={this} defaultValue={true} dt={this.itemsObj.dt('ITEMS')} dtField={"STATUS"}></NdCheckBox>
                                 </Item>
                                 <Item>
                                     <Label text={"Kasada Tartılsın "} alignment="right" />
-                                    <NdCheckBox id="chkKasaTartilsin" parent={this} defaultValue={false}></NdCheckBox>
+                                    <NdCheckBox id="chkKasaTartilsin" parent={this} defaultValue={false} dt={this.itemsObj.dt('ITEMS')} dtField={"WEIGHING"}></NdCheckBox>
                                 </Item>
                                 <Item>
                                     <Label text={"Satış da Satır Birleştir "} alignment="right" />
-                                    <NdCheckBox id="chkSatisBirlestir" parent={this} defaultValue={false}></NdCheckBox>
+                                    <NdCheckBox id="chkSatisBirlestir" parent={this} defaultValue={false} dt={this.itemsObj.dt('ITEMS')} dtField={"SALE_JOIN_LINE"}></NdCheckBox>
                                 </Item>
                                 <Item>
                                     <Label text={"Ticket Rest. "} alignment="right" />
-                                    <NdCheckBox id="chkTicketRest" parent={this} defaultValue={false}></NdCheckBox>
+                                    <NdCheckBox id="chkTicketRest" parent={this} defaultValue={false} dt={this.itemsObj.dt('ITEMS')} dtField={"TICKET_REST"}></NdCheckBox>
                                 </Item>
                             </Form>
                         </div>
@@ -389,13 +380,13 @@ export default class itemCard extends React.Component
                                 <Item title="Fiyat">
                                     <div className='row px-2 py-2'>
                                         <div className='col-2'>
-                                            <NdTextBox id="txtMaliyetFiyat" parent={this} title={"Maliyet Fiyatı"} titleAlign={"top"}/>
+                                            <NdTextBox id="txtMaliyetFiyat" parent={this} title={"Maliyet Fiyatı"} titleAlign={"top"} dt={this.itemsObj.dt('ITEMS')} dtField={"COST_PRICE"}/>
                                         </div>
                                         <div className='col-2'>
-                                            <NdTextBox id="txtMinSatisFiyat" parent={this} title={"Min. Satış Fiyatı"} titleAlign={"top"}/>
+                                            <NdTextBox id="txtMinSatisFiyat" parent={this} title={"Min. Satış Fiyatı"} titleAlign={"top"} dt={this.itemsObj.dt('ITEMS')} dtField={"MIN_PRICE"}/>
                                         </div>
                                         <div className='col-2'>
-                                            <NdTextBox id="txtMaxSatisFiyat" parent={this} title={"Max. Satış Fiyatı"} titleAlign={"top"}/>
+                                            <NdTextBox id="txtMaxSatisFiyat" parent={this} title={"Max. Satış Fiyatı"} titleAlign={"top"} dt={this.itemsObj.dt('ITEMS')} dtField={"MAX_PRICE"}/>
                                         </div>
                                         <div className='col-2'>
                                             <NdTextBox id="txtSonAlisFiyat" parent={this} title={"Son Alış Fiyatı"} titleAlign={"top"}/>
@@ -411,7 +402,7 @@ export default class itemCard extends React.Component
                                     <div className='row px-2 py-2'>
                                         <div className='col-12'>
                                             <NdGrid parent={this} id={"grdFiyat"} 
-                                            data={{source:{select:{query : "SELECT TYPE_NAME,DEPOT,START_DATE,FINISH_DATE,QUANTITY,0 AS VAT_EXT,CUSTOMER_NAME,PRICE,0 AS GROSS_MARGIN,0 AS NET_MARGIN FROM ITEM_PRICE_VW_01"},sql:this.core.sql}}}
+                                            data={{source:{select:{query : "SELECT TOP 20 TYPE_NAME,DEPOT,START_DATE,FINISH_DATE,QUANTITY,0 AS VAT_EXT,CUSTOMER_NAME,PRICE,0 AS GROSS_MARGIN,0 AS NET_MARGIN FROM ITEM_PRICE_VW_01"},sql:this.core.sql}}}
                                             showBorders={true} 
                                             columnsAutoWidth={true} 
                                             allowColumnReordering={true} 
@@ -451,7 +442,7 @@ export default class itemCard extends React.Component
                                     <div className='row px-2 py-2'>
                                         <div className='col-12'>
                                             <NdGrid parent={this} id={"grdBirim"} 
-                                            data={{source:{select:{query : "SELECT TYPE_NAME,NAME,FACTOR,WEIGHT,VOLUME,WIDTH,HEIGHT,SIZE FROM ITEM_UNIT_VW_01"},sql:this.core.sql}}}
+                                            data={{source:{select:{query : "SELECT TOP 20 TYPE_NAME,NAME,FACTOR,WEIGHT,VOLUME,WIDTH,HEIGHT,SIZE FROM ITEM_UNIT_VW_01"},sql:this.core.sql}}}
                                             showBorders={true} 
                                             columnsAutoWidth={true} 
                                             allowColumnReordering={true} 
@@ -486,7 +477,7 @@ export default class itemCard extends React.Component
                                     <div className='row px-2 py-2'>
                                         <div className='col-12'>
                                             <NdGrid parent={this} id={"grdBarkod"} 
-                                            data={{source:{select:{query : "SELECT BARCODE,UNIT_NAME,TYPE FROM ITEM_BARCODE_VW_01"},sql:this.core.sql}}}
+                                            data={{source:{select:{query : "SELECT TOP 20 BARCODE,UNIT_NAME,TYPE FROM ITEM_BARCODE_VW_01"},sql:this.core.sql}}}
                                             showBorders={true} 
                                             columnsAutoWidth={true} 
                                             allowColumnReordering={true} 
@@ -522,7 +513,7 @@ export default class itemCard extends React.Component
                                     <div className='row px-2 py-2'>
                                         <div className='col-12'>
                                             <NdGrid parent={this} id={"grdTedarikci"} 
-                                            data={{source:{select:{query : "SELECT [CUSTOMER_CODE],[CUSTOMER_NAME],[MULTICODE],[CUSTOMER_ITEM_PRICE],[CUSTOMER_ITEM_PRICE_DATE] FROM [ITEM_MULTICODE_VW_01]"},sql:this.core.sql}}}
+                                            data={{source:{select:{query : "SELECT TOP 20 [CUSTOMER_CODE],[CUSTOMER_NAME],[MULTICODE],[CUSTOMER_ITEM_PRICE],[CUSTOMER_ITEM_PRICE_DATE] FROM [ITEM_MULTICODE_VW_01]"},sql:this.core.sql}}}
                                             showBorders={true} 
                                             columnsAutoWidth={true} 
                                             allowColumnReordering={true} 
