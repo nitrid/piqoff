@@ -9,7 +9,7 @@ i18n.init(
         {
             translation: langTr
         }
-    }
+    },
 });
 
 export default i18n;
