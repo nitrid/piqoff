@@ -7,7 +7,8 @@ export class itemsCls
         this.core = core.instance;
         this.ds = new dataset();
         this.empty = {
-            CUSER : '',
+            GUID : '00000000-0000-0000-0000-000000000000',
+            CUSER : this.core.auth.data.CODE,
             TYPE : '0',
             SPECIAL : '',
             CODE : '',
@@ -20,7 +21,7 @@ export class itemsCls
             STATUS : true,
             MAIN_GRP : '',
             SUB_GRP : '',
-            ORGINS_GRP : '',
+            ORGINS : '',
             SECTOR : '',
             RAYON : '',
             SHELF : '',
@@ -44,7 +45,68 @@ export class itemsCls
         {
             query : "SELECT * FROM [dbo].[ITEMS_VW_01] WHERE ((CODE = @CODE) OR (@CODE = ''))",
             param : ['CODE:string|25']
-        }        
+        } 
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEMS_INSERT] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@TYPE = @PTYPE, " + 
+                    "@SPECIAL = @PSPECIAL, " + 
+                    "@CODE = @PCODE, " + 
+                    "@NAME = @PNAME, " + 
+                    "@SNAME = @PSNAME, " + 
+                    "@VAT = @PVAT, " + 
+                    "@COST_PRICE = @PCOST_PRICE, " + 
+                    "@MIN_PRICE = @PMIN_PRICE, " + 
+                    "@MAX_PRICE = @PMAX_PRICE, " + 
+                    "@STATUS = @PSTATUS, " + 
+                    "@MAIN = @PMAIN, " + 
+                    "@SUB = @PSUB, " + 
+                    "@ORGINS = @PORGINS, " + 
+                    "@SECTOR = @PSECTOR, " + 
+                    "@RAYON = @PRAYON, " + 
+                    "@SHELF = @PSHELF, " + 
+                    "@WEIGHING = @PWEIGHING, " +
+                    "@SALE_JOIN_LINE = @PSALE_JOIN_LINE, " +                     
+                    "@TICKET_REST = @PTICKET_REST ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:string|25','PSPECIAL:string|50','PCODE:string|25','PNAME:string|250','PSNAME:string|50','PVAT:float',
+                     'PCOST_PRICE:float','PMIN_PRICE:float','PMAX_PRICE:float','PSTATUS:bit','PMAIN:string|50','PSUB:string|50',
+                     'PORGINS:string|50','PSECTOR:string|50','PRAYON:string|50','PSHELF:string|50','PWEIGHING:bit','PSALE_JOIN_LINE:bit','PTICKET_REST:bit'],
+            dataprm : ['GUID','CUSER','TYPE','SPECIAL','CODE','NAME','SNAME','VAT','COST_PRICE','MIN_PRICE','MAX_PRICE','STATUS','MAIN_GRP','SUB_GRP','ORGINS','SECTOR','RAYON',
+                       'SHELF','WEIGHING','SALE_JOIN_LINE','TICKET_REST']
+        } 
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEMS_UPDATE] " + 
+                    "@GUID = @PGUID, " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@TYPE = @PTYPE, " + 
+                    "@SPECIAL = @PSPECIAL, " + 
+                    "@CODE = @PCODE, " + 
+                    "@NAME = @PNAME, " + 
+                    "@SNAME = @PSNAME, " + 
+                    "@VAT = @PVAT, " + 
+                    "@COST_PRICE = @PCOST_PRICE, " + 
+                    "@MIN_PRICE = @PMIN_PRICE, " + 
+                    "@MAX_PRICE = @PMAX_PRICE, " + 
+                    "@STATUS = @PSTATUS, " + 
+                    "@MAIN = @PMAIN, " + 
+                    "@SUB = @PSUB, " + 
+                    "@ORGINS = @PORGINS, " + 
+                    "@SECTOR = @PSECTOR, " + 
+                    "@RAYON = @PRAYON, " + 
+                    "@SHELF = @PSHELF, " + 
+                    "@WEIGHING = @PWEIGHING, " +
+                    "@SALE_JOIN_LINE = @PSALE_JOIN_LINE, " +                     
+                    "@TICKET_REST = @PTICKET_REST ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:string|25','PSPECIAL:string|50','PCODE:string|25','PNAME:string|250','PSNAME:string|50','PVAT:float',
+                     'PCOST_PRICE:float','PMIN_PRICE:float','PMAX_PRICE:float','PSTATUS:bit','PMAIN:string|50','PSUB:string|50',
+                     'PORGINS:string|50','PSECTOR:string|50','PRAYON:string|50','PSHELF:string|50','PWEIGHING:bit','PSALE_JOIN_LINE:bit','PTICKET_REST:bit'],
+            dataprm : ['GUID','CUSER','TYPE','SPECIAL','CODE','NAME','SNAME','VAT','COST_PRICE','MIN_PRICE','MAX_PRICE','STATUS','MAIN_GRP','SUB_GRP','ORGINS',
+                       'SECTOR','RAYON','SHELF','WEIGHING','SALE_JOIN_LINE','TICKET_REST']
+        } 
+
         this.ds.add(tmpDt);
         this.ds.add(this.itemUnit.dt('ITEM_UNIT'))
         this.ds.add(this.itemPrice.dt('ITEM_PRICE'))
@@ -67,15 +129,17 @@ export class itemsCls
         {
             return;
         }
-
+        let tmp = {}
         if(typeof arguments.length > 0)
         {
-            this.dt('ITEMS').push({...arguments[0]})
+            tmp = {...arguments[0]}            
         }
         else
         {
-            this.dt('ITEMS').push({...this.empty})
+            tmp = {...this.empty}
         }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('ITEMS').push(tmp)
     }
     clearAll()
     {
@@ -109,6 +173,15 @@ export class itemsCls
             resolve(this.ds.get('ITEMS'));    
         });
     }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            await this.dt('ITEMS').save(); 
+            await this.dt('ITEM_PRICE').save(); 
+            resolve();
+        });
+    }
 }
 export class itemUnitCls 
 {
@@ -117,7 +190,7 @@ export class itemUnitCls
         this.core = core.instance;
         this.ds = new dataset();
         this.empty = {
-            GUID:'00000000-0000-0000-0000-000000000000',
+            GUID : '00000000-0000-0000-0000-000000000000',
             TYPE : 0,
             TYPE_NAME : '',
             ID : '0',
@@ -163,15 +236,17 @@ export class itemUnitCls
         {
             return;
         }
-
+        let tmp = {};
         if(arguments.length > 0)
         {
-            this.dt('ITEM_UNIT').push({...arguments[0]})
+            tmp = {...arguments[0]}
         }
         else
         {
-            this.dt('ITEM_UNIT').push({...this.empty})
+            tmp = {...this.empty}
         }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('ITEM_UNIT').push(tmp)
     }
     clearAll()
     {
@@ -208,7 +283,8 @@ export class itemPriceCls
         this.core = core.instance;
         this.ds = new dataset();
         this.empty = {
-            GUID:'00000000-0000-0000-0000-000000000000',
+            GUID : '00000000-0000-0000-0000-000000000000',
+            LOG_USER : this.core.auth.data.CODE,
             TYPE : 0,
             TYPE_NAME : '',
             ITEM_GUID : '00000000-0000-0000-0000-000000000000',
@@ -246,6 +322,40 @@ export class itemPriceCls
             param : ['ITEM_GUID:string|50','ITEM_CODE:string|25','TYPE:int','DEPOT:string|25','START_DATE:date','FINISH_DATE:date',
                      'QUANTITY:float','CUSTOMER_CODE:string|25','CUSTOMER_GUID:string|50']
         }
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_PRICE_INSERT] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@TYPE = @PTYPE, " + 
+                    "@ITEM = @PITEM, " + 
+                    "@DEPOT = @PDEPOT, " + 
+                    "@START_DATE = @PSTART_DATE, " + 
+                    "@FINISH_DATE = @PFINISH_DATE, " + 
+                    "@PRICE = @PPRICE, " + 
+                    "@QUANTITY = @PQUANTITY, " + 
+                    "@CUSTOMER = @PCUSTOMER ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PITEM:string|50','PDEPOT:string|25','PSTART_DATE:date','PFINISH_DATE:date',
+                     'PPRICE:float','PQUANTITY:float','PCUSTOMER:string|50'],
+            dataprm : ['GUID','LOG_USER','TYPE','ITEM_GUID','DEPOT','START_DATE','FINISH_DATE','PRICE','QUANTITY','CUSTOMER_GUID']
+        } 
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_PRICE_UPDATE] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@TYPE = @PTYPE, " + 
+                    "@ITEM = @PITEM, " + 
+                    "@DEPOT = @PDEPOT, " + 
+                    "@START_DATE = @PSTART_DATE, " + 
+                    "@FINISH_DATE = @PFINISH_DATE, " + 
+                    "@PRICE = @PPRICE, " + 
+                    "@QUANTITY = @PQUANTITY, " + 
+                    "@CUSTOMER = @PCUSTOMER ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PITEM:string|50','PDEPOT:string|25','PSTART_DATE:date','PFINISH_DATE:date',
+                     'PPRICE:float','PQUANTITY:float','PCUSTOMER:string|50'],
+            dataprm : ['GUID','LOG_USER','TYPE','ITEM_GUID','DEPOT','START_DATE','FINISH_DATE','PRICE','QUANTITY','CUSTOMER_GUID']
+        } 
 
         this.ds.add(tmpDt);
     }
@@ -265,15 +375,17 @@ export class itemPriceCls
         {
             return;
         }
-
+        let tmp = {}
         if(arguments.length > 0)
         {
-            this.dt('ITEM_PRICE').push({...arguments[0]})
+            tmp = {...arguments[0]}            
         }
         else
         {
-            this.dt('ITEM_PRICE').push({...this.empty})
+            tmp = {...this.empty}
         }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('ITEM_PRICE').push(tmp)
     }
     clearAll()
     {
@@ -318,6 +430,14 @@ export class itemPriceCls
             resolve(this.ds.get('ITEM_PRICE'));    
         });
     }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            await this.dt('ITEM_PRICE').save(); 
+            resolve();
+        });
+    }
 }
 export class itemBarcodeCls
 {
@@ -326,10 +446,10 @@ export class itemBarcodeCls
         this.core = core.instance;
         this.ds = new dataset();
         this.empty = {
-            GUID:'00000000-0000-0000-0000-000000000000',
+            GUID : '00000000-0000-0000-0000-000000000000',
             BARCODE : '',
             TYPE : 0,
-            TYPE_NAME : '',
+            TYPE_NAME : 'EAN13',
             ITEM_GUID : '00000000-0000-0000-0000-000000000000',            
             ITEM_CODE : '',            
             ITEM_NAME : '',
@@ -372,15 +492,17 @@ export class itemBarcodeCls
         {
             return;
         }
-
+        let tmp = {}
         if(arguments.length > 0)
         {
-            this.dt('ITEM_BARCODE').push({...arguments[0]})
+            tmp = {...arguments[0]}            
         }
         else
         {
-            this.dt('ITEM_BARCODE').push({...this.empty})
+            tmp = {...this.empty}
         }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('ITEM_BARCODE').push(tmp)
     }
     clearAll()
     {
@@ -474,15 +596,17 @@ export class itemMultiCodeCls
         {
             return;
         }
-
+        let tmp = {}
         if(arguments.length > 0)
         {
-            this.dt('ITEM_MULTICODE').push({...arguments[0]})
+            tmp = {...arguments[0]}            
         }
         else
         {
-            this.dt('ITEM_MULTICODE').push({...this.empty})
+            tmp = {...this.empty}
         }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('ITEM_MULTICODE').push(tmp)
     }
     clearAll()
     {
@@ -525,7 +649,7 @@ export class itemMultiCodeCls
         });
     }
 }
-export class unitCls
+export class unitCls 
 {
     constructor()
     {
@@ -570,15 +694,17 @@ export class unitCls
         {
             return;
         }
-
+        let tmp = {}
         if(arguments.length > 0)
         {
-            this.dt('UNIT').push({...arguments[0]})
+            tmp = {...arguments[0]}
         }
         else
         {
-            this.dt('UNIT').push({...this.empty})
+            tmp = {...this.empty}
         }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('UNIT').push(tmp)
     }
     clearAll()
     {

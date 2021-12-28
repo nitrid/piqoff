@@ -1,6 +1,6 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import {itemsCls,itemPriceCls,itemBarcodeCls,unitCls} from '../../../lib/cls/items.js'
+import {itemsCls,itemPriceCls,itemBarcodeCls,itemMultiCodeCls,unitCls} from '../../../lib/cls/items.js'
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
@@ -13,9 +13,11 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Scrolling} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
+import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
+import { datatable } from '../../../../core/core.js';
 
 export default class itemCard extends React.Component
 {
@@ -33,7 +35,7 @@ export default class itemCard extends React.Component
     {
         await this.core.util.waitUntil(0)
         this.init();      
-    }
+    }    
     async init()
     {              
         this.itemsObj.clearAll();  
@@ -63,12 +65,15 @@ export default class itemCard extends React.Component
         this.itemsObj.itemUnit.addEmpty(tmpMainUnitObj);
         this.itemsObj.itemUnit.addEmpty(tmpUnderUnitObj);                
         
-        this.txtTedarikci.value = "";        
+        this.txtRef.value = Math.floor(Date.now() / 1000)
+        this.txtTedarikci.value = "";   
+        this.txtBarkod.readOnly = false;     
+        
         // this.itemsObj.itemPrice.dt().on('onAddRow',(pItem)=>
         // {
         //     console.log(pItem)
         // })
-
+        
         //this.itemsObj.dt('ITEM_UNIT').find(x => x.TYPE == 0).TYPE = 1;
         //this.itemsObj.dt('ITEM_UNIT').where({TYPE:0})[0].TYPE = 1
         //this.x = this.itemsObj.dt('ITEM_UNIT').where({TYPE:0})
@@ -99,8 +104,141 @@ export default class itemCard extends React.Component
         this.itemsObj.clearAll();
         await this.itemsObj.load({CODE:pCode});
         //TEDARİKÇİ FİYAT GETİR İŞLEMİ.                
-        await this.itemsPriceSupply.load({ITEM_CODE:pCode,TYPE:1})      
+        await this.itemsPriceSupply.load({ITEM_CODE:pCode,TYPE:1})    
+        this.txtBarkod.readOnly = true;
     }
+    async checkItem(pCode)
+    {
+        return new Promise(async resolve => 
+        {
+            if(pCode !== '')
+            {
+                let tmpData = await new itemsCls().load({CODE:pCode});
+    
+                if(tmpData.length > 0)
+                {
+                    let tmpConfObj =
+                    {
+                        id:'txtRef',
+                        showTitle:true,
+                        title:"Dikkat",
+                        showCloseButton:true,
+                        width:'500px',
+                        height:'200px',
+                        button:[{id:"btn01",caption:'Ürüne Git',location:'before'},{id:"btn02",caption:'Tamam',location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>Girmiş olduğunuz stok sistem de kayıtlı !</div>)
+                    }
+                    
+                    let pResult = await dialog(tmpConfObj);
+                    if(pResult == 'btn01')
+                    {
+                        this.getItem(pCode)
+                        resolve(2) //KAYIT VAR
+                    }
+                    else
+                    {
+                        resolve(3) //TAMAM BUTONUNA BASILDI
+                    }
+                }
+                else
+                {
+                    resolve(1) //KAYIT BULUNMADI
+                }
+            }
+            else
+            {
+                resolve(0) //PARAMETRE BOŞ
+            }
+        });
+    }
+    async checkBarcode(pCode)
+    {
+        return new Promise(async resolve => 
+        {
+            if(pCode !== '')
+            {
+                let tmpData = await new itemBarcodeCls().load({BARCODE:pCode});
+
+                if(tmpData.length > 0)
+                {
+                    let tmpConfObj =
+                    {
+                        id:'txtBarkod',
+                        showTitle:true,
+                        title:"Dikkat",
+                        showCloseButton:true,
+                        width:'500px',
+                        height:'200px',
+                        button:[{id:"btn01",caption:'Ürüne Git',location:'before'},{id:"btn02",caption:'Tamam',location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>Girmiş olduğunuz barkod sistem de kayıtlı !</div>)
+                    }
+                    
+                    let pResult = await dialog(tmpConfObj);
+                    if(pResult == 'btn01')
+                    {
+                        this.getItem(tmpData[0].ITEM_CODE)
+                        resolve(2) //KAYIT VAR
+                    }
+                    else
+                    {
+                        resolve(3) //TAMAM BUTONUNA BASILDI
+                    }
+                }
+                else
+                {
+                    resolve(1) //KAYIT BULUNMADI
+                }
+            }
+            else
+            {
+                resolve(0) //PARAMETRE BOŞ
+            }
+        });
+    }   
+    async checkMultiCode(pCode,pSupply)
+    {
+        return new Promise(async resolve => 
+        {
+            if(pCode !== '')
+            {
+                let tmpData = await new itemMultiCodeCls().load({MULTICODE:pCode,CUSTOMER_CODE:pSupply});
+
+                if(tmpData.length > 0)
+                {
+                    let tmpConfObj =
+                    {
+                        id:'txtBarkod',
+                        showTitle:true,
+                        title:"Dikkat",
+                        showCloseButton:true,
+                        width:'500px',
+                        height:'200px',
+                        button:[{id:"btn01",caption:'Ürüne Git',location:'before'},{id:"btn02",caption:'Tamam',location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>Girmiş olduğunuz tedarikçi stok kodu sistem de kayıtlı !</div>)
+                    }
+                    
+                    let pResult = await dialog(tmpConfObj);
+                    if(pResult == 'btn01')
+                    {
+                        this.getItem(tmpData[0].ITEM_CODE)
+                        resolve(2) //KAYIT VAR
+                    }
+                    else
+                    {
+                        resolve(3) //TAMAM BUTONUNA BASILDI
+                    }
+                }
+                else
+                {
+                    resolve(1) //KAYIT BULUNMADI
+                }
+            }
+            else
+            {
+                resolve(0) //PARAMETRE BOŞ
+            }
+        });
+    } 
     async _onItemRendered(e)
     {
         await this.core.util.waitUntil(10)
@@ -159,6 +297,9 @@ export default class itemCard extends React.Component
                                         onClick: async () => 
                                         {
                                             console.log(this.itemsObj)
+                                            console.log(this.txtBarkod)
+                                            //await this.itemsObj.itemPrice.save();
+                                            await this.itemsObj.save()
                                         }
                                     }    
                                 } />
@@ -246,35 +387,23 @@ export default class itemCard extends React.Component
                                                         }
                                                     }
                                                 }
+                                            },
+                                            {
+                                                id:'02',
+                                                icon:'arrowdown',
+                                                onClick:()=>
+                                                {
+                                                    this.txtRef.value = Math.floor(Date.now() / 1000)
+                                                }
                                             }
                                         ]
                                     }
                                     onChange={(async()=>
                                     {
-                                        if(this.txtRef.value !== '')
+                                        let tmpResult = await this.checkItem(this.txtRef.value)
+                                        if(tmpResult == 3)
                                         {
-                                            let tmpData = await new itemsCls().load({CODE:this.txtRef.value});
-
-                                            if(tmpData.length > 0)
-                                            {
-                                                let tmpConfObj =
-                                                {
-                                                    id:'txtRef',
-                                                    showTitle:true,
-                                                    title:"Dikkat",
-                                                    showCloseButton:true,
-                                                    width:'500px',
-                                                    height:'200px',
-                                                    button:[{id:"btn01",caption:'Ürüne Git',location:'before'},{id:"btn02",caption:'Tamam',location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>Girmiş olduğunuz stok sistem de kayıtlı !</div>)
-                                                }
-                                                
-                                                let pResult = await dialog(tmpConfObj);
-                                                if(pResult == 'btn01')
-                                                {
-                                                    this.getItem(this.txtRef.value)
-                                                }
-                                            }
+                                            this.txtRef.value = "";
                                         }
                                     }).bind(this)}                                    
                                     >                                        
@@ -288,7 +417,7 @@ export default class itemCard extends React.Component
                                     valueExpr="CODE"
                                     searchEnabled={true}
                                     searchExpr={"NAME"}
-                                    data={{source:{select:{query:"SELECT CODE,NAME FROM ITEM_GROUP ORDER BY CODE ASC"},sql:this.core.sql}}}
+                                    data={{source:{select:{query:"SELECT CODE,NAME FROM ITEM_GROUP ORDER BY NAME ASC"},sql:this.core.sql}}}
                                     />
                                 </Item>
                                 {/* txtTedarikci */}
@@ -324,7 +453,7 @@ export default class itemCard extends React.Component
                                 {/* cmbUrunCins */}
                                 <Item>
                                     <Label text={"Ürün Cinsi "} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbUrunCins" showClearButton={true} dt={{data:this.itemsObj.dt('ITEMS'),field:"TYPE"}}
+                                    <NdSelectBox simple={true} parent={this} id="cmbUrunCins" dt={{data:this.itemsObj.dt('ITEMS'),field:"TYPE"}}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
                                     data={{source:{select:{query:"SELECT ID,VALUE FROM ITEM_TYPE ORDER BY ID ASC"},sql:this.core.sql}}}
@@ -333,7 +462,7 @@ export default class itemCard extends React.Component
                                 {/* txtBarkod */}
                                 <Item>
                                     <Label text={"Barkod "} alignment="right" />
-                                    <NdTextBox id="txtBarkod" parent={this} simple={true} popgrid={{id:"001"}}
+                                    <NdTextBox id="txtBarkod" parent={this} simple={true}
                                     dt={{data:this.itemsObj.dt('ITEM_BARCODE'),field:"BARCODE"}}
                                     button=
                                     {
@@ -353,38 +482,14 @@ export default class itemCard extends React.Component
                                     }
                                     onChange={(async()=>
                                     {
-                                        if(this.txtBarkod.value !== '')
-                                        {
-                                            let tmpData = await new itemBarcodeCls().load({BARCODE:this.txtBarkod.value});
-
-                                            if(tmpData.length > 0)
-                                            {
-                                                let tmpConfObj =
-                                                {
-                                                    id:'txtBarkod',
-                                                    showTitle:true,
-                                                    title:"Dikkat",
-                                                    showCloseButton:true,
-                                                    width:'500px',
-                                                    height:'200px',
-                                                    button:[{id:"btn01",caption:'Ürüne Git',location:'before'},{id:"btn02",caption:'Tamam',location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>Girmiş olduğunuz barkod sistem de kayıtlı !</div>)
-                                                }
-                                                
-                                                let pResult = await dialog(tmpConfObj);
-                                                if(pResult == 'btn01')
-                                                {
-                                                    this.getItem(tmpData[0].ITEM_CODE)
-                                                }
-                                            }
-                                        }
+                                        await this.checkBarcode(this.txtBarkod.value)
                                     }).bind(this)}
                                     />
                                 </Item>  
                                 {/* cmbVergi */}
                                 <Item>
                                     <Label text={"Vergi "} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbVergi" showClearButton={true} height='fit-content' dt={{data:this.itemsObj.dt('ITEMS'),field:"VAT"}}
+                                    <NdSelectBox simple={true} parent={this} id="cmbVergi" height='fit-content' dt={{data:this.itemsObj.dt('ITEMS'),field:"VAT"}}
                                     displayExpr="VAT"                       
                                     valueExpr="VAT"
                                     data={{source:{select:{query:"SELECT VAT FROM VAT ORDER BY ID ASC"},sql:this.core.sql}}}
@@ -395,7 +500,7 @@ export default class itemCard extends React.Component
                                     <Label text={"Ana Birim "} alignment="right" />
                                     <div className="row">
                                         <div className="col-4 pe-0">
-                                            <NdSelectBox simple={true} parent={this} id="cmbAnaBirim" showClearButton={true} height='fit-content' 
+                                            <NdSelectBox simple={true} parent={this} id="cmbAnaBirim" height='fit-content' 
                                             dt={{data:this.itemsObj.dt('ITEM_UNIT'),field:"ID",display:"NAME",filter:{TYPE:0}}}
                                             style={{borderTopRightRadius:'0px',borderBottomRightRadius:'0px'}}
                                             displayExpr="NAME"                       
@@ -423,8 +528,8 @@ export default class itemCard extends React.Component
                                     <Label text={"Alt Birim "} alignment="right" />
                                     <div className="row">
                                         <div className="col-4 pe-0">
-                                            <NdSelectBox simple={true} parent={this} id="cmbAltBirim" showClearButton={true} height='fit-content' 
-                                            dt={{data:this.itemsObj.dt('ITEM_UNIT'),field:"ID",filter:{TYPE:1}}}
+                                            <NdSelectBox simple={true} parent={this} id="cmbAltBirim" height='fit-content' 
+                                            dt={{data:this.itemsObj.dt('ITEM_UNIT'),field:"ID",display:"NAME",filter:{TYPE:1}}}
                                             style={{borderTopRightRadius:'0px',borderBottomRightRadius:'0px'}}
                                             displayExpr="NAME"                       
                                             valueExpr="ID"
@@ -501,7 +606,16 @@ export default class itemCard extends React.Component
                                         <div className='col-4'>
                                             <Toolbar>
                                                 <Item location="after">
-                                                    <Button icon="add"/>
+                                                    <Button icon="add"
+                                                    onClick={()=>
+                                                    {                                                        
+                                                        this.dtPopFiyBasTarih.value = "1970-01-01"
+                                                        this.dtPopFiyBitTarih.value = "1970-01-01"
+                                                        this.txtPopFiyMiktar.value = "0"
+                                                        this.txtPopFiyFiyat.value = "0"
+
+                                                        this.popFiyat.show();
+                                                    }}/>
                                                 </Item>
                                             </Toolbar>
                                         </div>
@@ -521,8 +635,28 @@ export default class itemCard extends React.Component
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                                 <Column dataField="TYPE_NAME" caption="Tip" />
                                                 <Column dataField="DEPOT" caption="Depo" />
-                                                <Column dataField="START_DATE" caption="Baş.Tarih" dataType="date"/>
-                                                <Column dataField="FINISH_DATE" caption="Bit.Tarih" dataType="date"/>
+                                                <Column dataField="START_DATE" caption="Baş.Tarih" dataType="date" 
+                                                editorOptions={{value:null}}
+                                                cellRender={(e) => 
+                                                {
+                                                    if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
+                                                    {
+                                                        return e.text
+                                                    }
+                                                    
+                                                    return
+                                                }}/>
+                                                <Column dataField="FINISH_DATE" caption="Bit.Tarih" dataType="date"
+                                                editorOptions={{value:null}}
+                                                cellRender={(e) => 
+                                                {
+                                                    if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
+                                                    {
+                                                        return e.text
+                                                    }
+                                                    
+                                                    return
+                                                }}/>
                                                 <Column dataField="QUANTITY" caption="Miktar"/>
                                                 <Column dataField="VAT_EXT" caption="Vergi Hariç" dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                                 <Column dataField="CUSTOMER_NAME" caption="Cari"/>
@@ -541,7 +675,20 @@ export default class itemCard extends React.Component
                                         <div className='col-10'>
                                             <Toolbar>
                                                 <Item location="after">
-                                                    <Button icon="add"/>
+                                                    <Button icon="add"
+                                                    onClick={()=>
+                                                    {
+                                                        this.cmbPopBirimTip.value = "2"
+                                                        this.cmbPopBirimAdi.value = "001"
+                                                        this.txtPopBirimKatsayi.value = "0"
+                                                        this.txtPopBirimAgirlik.value = "0"
+                                                        this.txtPopBirimHacim.value = "0";
+                                                        this.txtPopBirimEn.value = "0";
+                                                        this.txtPopBirimBoy.value = "0"
+                                                        this.txtPopBirimYukseklik.value = "0"
+
+                                                        this.popBirim.show();
+                                                    }}/>
                                                 </Item>
                                             </Toolbar>
                                         </div>
@@ -603,7 +750,7 @@ export default class itemCard extends React.Component
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                                 <Column dataField="BARCODE" caption="Barkod" />
                                                 <Column dataField="UNIT_NAME" caption="Birim" />
-                                                <Column dataField="TYPE" caption="Tip"/>
+                                                <Column dataField="TYPE_NAME" caption="Tip"/>
                                             </NdGrid>
                                         </div>
                                     </div>
@@ -691,6 +838,259 @@ export default class itemCard extends React.Component
                         data={{source:{select:{query : "SELECT CODE,NAME FROM ITEMS"},sql:this.core.sql}}}
                         />
                     </div>
+                    {/* FİYAT POPUP */}
+                    <div>
+                        <NdPopUp parent={this} id={"popFiyat"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={"Fiyat Ekle"}
+                        container={".dx-multiview-wrapper"} 
+                        width={'500'}
+                        height={'320'}
+                        position={{of:'#page'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={"Baş.Tarih "} alignment="right" />
+                                    <NdDatePicker simple={true}  parent={this} id="dtPopFiyBasTarih"/>
+                                </Item>
+                                <Item>
+                                    <Label text={"Bit.Tarih "} alignment="right" />
+                                    <NdDatePicker simple={true}  parent={this} id="dtPopFiyBitTarih"/>
+                                </Item>
+                                <Item>
+                                    <Label text={"Miktar "} alignment="right" />
+                                    <NdTextBox id={"txtPopFiyMiktar"} parent={this} simple={true} />
+                                </Item>
+                                <Item>
+                                    <Label text={"Fiyat "} alignment="right" />
+                                    <NdTextBox id={"txtPopFiyFiyat"} parent={this} simple={true} />
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text="Kaydet" type="normal" stylingMode="contained" width={'100%'} 
+                                            onClick={async ()=>
+                                            {
+                                                let tmpEmpty = {...this.itemsObj.itemPrice.empty};
+                                                console.log(this.itemsObj.dt()[0].GUID )
+                                                tmpEmpty.TYPE = 0
+                                                tmpEmpty.TYPE_NAME = 'Standart'
+                                                tmpEmpty.ITEM_GUID = this.itemsObj.dt()[0].GUID 
+                                                tmpEmpty.DEPOT = "0"
+                                                tmpEmpty.START_DATE = this.dtPopFiyBasTarih.value
+                                                tmpEmpty.FINISH_DATE = this.dtPopFiyBitTarih.value
+                                                tmpEmpty.PRICE = this.txtPopFiyFiyat.value
+                                                tmpEmpty.QUANTITY = this.txtPopFiyMiktar.value
+
+                                                this.itemsObj.itemPrice.addEmpty(tmpEmpty); 
+                                                this.popFiyat.hide();
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text="İptal" type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popBirim.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div>
+                    {/* BİRİM POPUP */}
+                    <div>
+                        <NdPopUp parent={this} id={"popBirim"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={"Birim Ekle"}
+                        container={".dx-multiview-wrapper"} 
+                        width={'500'}
+                        height={'510'}
+                        position={{of:'#page'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={"Tip "} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbPopBirimTip"
+                                    displayExpr="VALUE"                       
+                                    valueExpr="ID"
+                                    value="2"
+                                    data={{source:[{ID:"2",VALUE:"Üst Birim"}]}}
+                                    />
+                                </Item>
+                                <Item>
+                                    <Label text={"Birim Adı "} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbPopBirimAdi"
+                                    displayExpr="NAME"                       
+                                    valueExpr="ID"
+                                    value="001"
+                                    data={{source:{select:{query:"SELECT ID,NAME,SYMBOL FROM UNIT ORDER BY ID ASC"},sql:this.core.sql}}}
+                                    />
+                                </Item>
+                                <Item>
+                                    <Label text={"Katsayı "} alignment="right" />
+                                    <NdTextBox id={"txtPopBirimKatsayi"} parent={this} simple={true} />
+                                </Item>
+                                <Item>
+                                    <Label text={"Ağırlık "} alignment="right" />
+                                    <NdTextBox id={"txtPopBirimAgirlik"} parent={this} simple={true} />
+                                </Item>
+                                <Item>
+                                    <Label text={"Hacim "} alignment="right" />
+                                    <NdTextBox id={"txtPopBirimHacim"} parent={this} simple={true} />
+                                </Item>
+                                <Item>
+                                    <Label text={"En "} alignment="right" />
+                                    <NdTextBox id={"txtPopBirimEn"} parent={this} simple={true} />
+                                </Item>
+                                <Item>
+                                    <Label text={"Boy "} alignment="right" />
+                                    <NdTextBox id={"txtPopBirimBoy"} parent={this} simple={true} />
+                                </Item>
+                                <Item>
+                                    <Label text={"Yükseklik "} alignment="right" />
+                                    <NdTextBox id={"txtPopBirimYukseklik"} parent={this} simple={true} />
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text="Kaydet" type="normal" stylingMode="contained" width={'100%'} 
+                                            onClick={async ()=>
+                                            {
+                                                let tmpEmpty = {...this.itemsObj.itemUnit.empty};
+                                                
+                                                tmpEmpty.TYPE = this.cmbPopBirimTip.value
+                                                tmpEmpty.TYPE_NAME = this.cmbPopBirimTip.displayValue
+                                                tmpEmpty.ID = this.cmbPopBirimAdi.value
+                                                tmpEmpty.NAME = this.cmbPopBirimAdi.displayValue
+                                                tmpEmpty.FACTOR = this.txtPopBirimKatsayi.value
+                                                tmpEmpty.WEIGHT = this.txtPopBirimAgirlik.value
+                                                tmpEmpty.VOLUME = this.txtPopBirimHacim.value
+                                                tmpEmpty.WIDTH = this.txtPopBirimEn.value
+                                                tmpEmpty.HEIGHT = this.txtPopBirimBoy.value
+                                                tmpEmpty.SIZE = this.txtPopBirimYukseklik.value
+
+                                                this.itemsObj.itemUnit.addEmpty(tmpEmpty); 
+                                                this.popBirim.hide();
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text="İptal" type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popBirim.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div>
+                    {/* BARKOD POPUP */}
+                    <div>
+                        <NdPopUp parent={this} id={"popBarkod"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={"Barkod Ekle"}
+                        container={".dx-multiview-wrapper"} 
+                        width={'500'}
+                        height={'275'}
+                        position={{of:'#page'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={"Barkodu "} alignment="right" />
+                                    <NdTextBox id={"txtPopBarkod"} parent={this} simple={true} 
+                                    onValueChanged={(e)=>
+                                    {
+                                        if(parseInt(e.value) == NaN || parseInt(e.value).toString() != e.value)
+                                        {
+                                            this.cmbPopBarTip.value = "2"
+                                            return;
+                                        }
+                                        if(e.value.length == 8)
+                                        {                                            
+                                            this.cmbPopBarTip.value = "0"
+                                        }
+                                        else if(e.value.length == 13)
+                                        {
+                                            this.cmbPopBarTip.value = "1"
+                                        }
+                                        else
+                                        {
+                                            this.cmbPopBarTip.value = "2"
+                                        }
+                                    }}/>
+                                </Item>
+                                <Item>
+                                    <Label text={"Birim "} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbPopBarBirim"
+                                    displayExpr="NAME"                       
+                                    valueExpr="ID"
+                                    value="Unité"
+                                    data={{source:this.itemsObj.dt('ITEM_UNIT')}}
+                                    />
+                                </Item>
+                                <Item>
+                                    <Label text={"Tip "} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbPopBarTip"
+                                    displayExpr="VALUE"                       
+                                    valueExpr="ID"
+                                    value="0"
+                                    data={{source:[{ID:"0",VALUE:"EAN8"},{ID:"1",VALUE:"EAN13"},{ID:"2",VALUE:"CODE39"}]}}
+                                    />
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text="Kaydet" type="normal" stylingMode="contained" width={'100%'} 
+                                            onClick={async ()=>
+                                            {
+                                                let tmpEmpty = {...this.itemsObj.itemBarcode.empty};
+                                                let tmpEmptyStat = true
+                                                if(typeof this.itemsObj.itemBarcode.dt().find(x => x.BARCODE === '') != 'undefined')
+                                                {
+                                                    tmpEmptyStat = false;
+                                                    tmpEmpty = this.itemsObj.itemBarcode.dt().find(x => x.BARCODE === '')
+                                                }
+                                                
+                                                tmpEmpty.BARCODE = this.txtPopBarkod.value
+                                                tmpEmpty.TYPE = this.cmbPopBarTip.value
+                                                tmpEmpty.UNIT_NAME = this.cmbPopBarBirim.value
+
+                                                let tmpResult = await this.checkBarcode(this.txtPopBarkod.value)
+                                                if(tmpResult == 2) //KAYIT VAR
+                                                {
+                                                    this.popBarkod.hide(); 
+                                                }
+                                                else if(tmpResult == 1) //KAYIT YOK
+                                                {
+                                                    if(tmpEmptyStat)
+                                                    {
+                                                        this.itemsObj.itemBarcode.addEmpty(tmpEmpty);    
+                                                    }
+                                                    
+                                                    this.popBarkod.hide(); 
+                                                }
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text="İptal" type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popBarkod.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div>  
                     {/* TEDARİKÇİ POPUP */}
                     <div>
                         <NdPopUp parent={this} id={"popTedarikci"} 
@@ -725,6 +1125,14 @@ export default class itemCard extends React.Component
                                                         }
                                                     }
                                                 }
+                                            },
+                                            {
+                                                id:'02',
+                                                icon:'add',
+                                                onClick:()=>
+                                                {                                                
+                                                   
+                                                }
                                             }
                                         ]
                                     }>                                        
@@ -735,9 +1143,15 @@ export default class itemCard extends React.Component
                                     showBorders={true}
                                     width={'90%'}
                                     height={'90%'}
-                                    title={'Stok Seçim'} 
+                                    title={'Tedarikçi Seçim'} 
+                                    columnAutoWidth={true}
+                                    allowColumnResizing={true}
                                     data={{source:{select:{query:"SELECT CODE,NAME FROM CUSTOMERS WHERE TYPE = 1 "},sql:this.core.sql}}}
-                                    />
+                                    >           
+                                    <Scrolling mode="virtual" />                         
+                                    <Column dataField="NAME" caption="NAME" width={650} defaultSortOrder="asc" />
+                                    <Column dataField="CODE" caption="CODE" width={150} />
+                                    </NdPopGrid>
                                 </Item>
                                 <Item>
                                     <Label text={"Adı "} alignment="right" />
@@ -755,15 +1169,13 @@ export default class itemCard extends React.Component
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text="Kaydet" type="normal" stylingMode="contained" width={'100%'} 
-                                            onClick={()=>
-                                            {
+                                            onClick={async ()=>
+                                            {                                                
                                                 this.itemsObj.itemMultiCode.empty.CUSTOMER_CODE = this.txtPopTedKodu.value
                                                 this.itemsObj.itemMultiCode.empty.CUSTOMER_NAME = this.txtPopTedAdi.value
                                                 this.itemsObj.itemMultiCode.empty.MULTICODE = this.txtPopTedStokKodu.value
                                                 this.itemsObj.itemMultiCode.empty.CUSTOMER_ITEM_PRICE = this.txtPopTedFiyat.value
-                                                this.itemsObj.itemMultiCode.empty.CUSTOMER_ITEM_PRICE_DATE = moment(new Date()).format("DD.MM.YYYY")
-
-                                                this.itemsObj.itemMultiCode.addEmpty();    
+                                                this.itemsObj.itemMultiCode.empty.CUSTOMER_ITEM_PRICE_DATE = moment(new Date()).format("DD.MM.YYYY")                                                    
 
                                                 this.itemsPriceSupply.empty.TYPE = 1;
                                                 this.itemsPriceSupply.empty.ITEM_CODE = this.itemsObj.dt('ITEMS')[0].CODE;
@@ -775,9 +1187,17 @@ export default class itemCard extends React.Component
                                                 this.itemsPriceSupply.empty.MULTICODE = this.txtPopTedStokKodu.value;
                                                 this.itemsPriceSupply.empty.CHANGE_DATE = moment(new Date()).format("DD.MM.YYYY");
 
-                                                this.itemsPriceSupply.addEmpty();
-
-                                                this.popTedarikci.hide();                                                            
+                                                let tmpResult = await this.checkMultiCode(this.txtPopTedStokKodu.value,this.txtPopTedKodu.value)
+                                                if(tmpResult == 2) //KAYIT VAR
+                                                {
+                                                    this.popTedarikci.hide(); 
+                                                }
+                                                else if(tmpResult == 1) //KAYIT YOK
+                                                {
+                                                    this.itemsObj.itemMultiCode.addEmpty();
+                                                    this.itemsPriceSupply.addEmpty();
+                                                    this.popTedarikci.hide(); 
+                                                }
                                             }}/>
                                         </div>
                                         <div className='col-6'>
@@ -791,69 +1211,7 @@ export default class itemCard extends React.Component
                                 </Item>
                             </Form>
                         </NdPopUp>
-                    </div>
-                    {/* BARKOD POPUP */}
-                    <div>
-                        <NdPopUp parent={this} id={"popBarkod"} 
-                        visible={false}
-                        showCloseButton={true}
-                        showTitle={true}
-                        title={"Barkod Ekle"}
-                        container={".dx-multiview-wrapper"} 
-                        width={'500'}
-                        height={'320'}
-                        position={{of:'#page'}}
-                        >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={"Barkodu "} alignment="right" />
-                                    <NdTextBox id={"txtPopBarkod"} parent={this} simple={true} />
-                                </Item>
-                                <Item>
-                                    <Label text={"Birim "} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbPopBarBirim" showClearButton={true}
-                                    displayExpr="NAME"                       
-                                    valueExpr="NAME"
-                                    value="Unité"
-                                    data={{source:this.itemsObj.dt('ITEM_UNIT')}}
-                                    />
-                                </Item>
-                                <Item>
-                                    <Label text={"Tip "} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbPopBarTip" showClearButton={true}
-                                    displayExpr="VALUE"                       
-                                    valueExpr="ID"
-                                    value="0"
-                                    data={{source:[{ID:"0",VALUE:"EAN8"},{ID:"1",VALUE:"EAN13"},{ID:"2",VALUE:"CODE39"}]}}
-                                    />
-                                </Item>
-                                <Item>
-                                    <div className='row'>
-                                        <div className='col-6'>
-                                            <NdButton text="Kaydet" type="normal" stylingMode="contained" width={'100%'} 
-                                            onClick={()=>
-                                            {
-                                                this.itemsObj.itemBarcode.empty.BARCODE = this.txtPopBarkod.value
-                                                this.itemsObj.itemBarcode.empty.TYPE = this.cmbPopBarTip.value
-                                                this.itemsObj.itemBarcode.empty.UNIT_NAME = this.cmbPopBarBirim.value
-
-                                                this.itemsObj.itemBarcode.addEmpty();    
-                                                
-                                                this.popBarkod.hide();                                                            
-                                            }}/>
-                                        </div>
-                                        <div className='col-6'>
-                                            <NdButton text="İptal" type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popBarkod.hide();  
-                                            }}/>
-                                        </div>
-                                    </div>
-                                </Item>
-                            </Form>
-                        </NdPopUp>
-                    </div>
+                    </div>                                      
                 </ScrollView>
             </div>
         )
