@@ -15,13 +15,15 @@ export class itemsCls
             NAME : '',
             SNAME : '',
             VAT : 5.5,
-            COST_PRICE : '0',
-            MIN_PRICE : '0',
-            MAX_PRICE : '0',
+            COST_PRICE : 0,
+            MIN_PRICE : 0,
+            MAX_PRICE : 0,
             STATUS : true,
             MAIN_GRP : '',
+            MAIN_GRP_NAME : '',
             SUB_GRP : '',
             ORGINS : '',
+            ORGINS_NAME : '',
             SECTOR : '',
             RAYON : '',
             SHELF : '',
@@ -34,6 +36,7 @@ export class itemsCls
         this.itemPrice = new itemPriceCls();
         this.itemBarcode = new itemBarcodeCls();
         this.itemMultiCode = new itemMultiCodeCls();
+        this.itemImage = new itemImageCls();
 
         this._initDs();
     }    
@@ -112,6 +115,7 @@ export class itemsCls
         this.ds.add(this.itemPrice.dt('ITEM_PRICE'))
         this.ds.add(this.itemBarcode.dt('ITEM_BARCODE'))
         this.ds.add(this.itemMultiCode.dt('ITEM_MULTICODE'))
+        this.ds.add(this.itemImage.dt('ITEM_IMAGE'))
     }
     //#endregion
     dt()
@@ -169,6 +173,7 @@ export class itemsCls
                 await this.itemPrice.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID,TYPE:0})
                 await this.itemBarcode.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID})
                 await this.itemMultiCode.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID})
+                await this.itemImage.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID})
             }
             resolve(this.ds.get('ITEMS'));    
         });
@@ -177,9 +182,7 @@ export class itemsCls
     {
         return new Promise(async resolve => 
         {
-            await this.dt('ITEMS').save(); 
-            await this.dt('ITEM_PRICE').save(); 
-            resolve();
+            resolve(await this.ds.update()); 
         });
     }
 }
@@ -191,11 +194,13 @@ export class itemUnitCls
         this.ds = new dataset();
         this.empty = {
             GUID : '00000000-0000-0000-0000-000000000000',
+            CUSER : this.core.auth.data.CODE,
+            CUSER_NAME : this.core.auth.data.NAME,
             TYPE : 0,
             TYPE_NAME : '',
             ID : '0',
             NAME : 'Unité',
-            FACTOR : '0',
+            FACTOR : 0,
             WEIGHT : '0',
             VOLUME : '0',
             WIDTH : '0',
@@ -217,7 +222,42 @@ export class itemUnitCls
             query : "SELECT * FROM [dbo].[ITEM_UNIT_VW_01] WHERE ((NAME = @NAME) OR (@NAME = '')) AND ((ITEM_GUID = @ITEM_GUID) OR (@ITEM_GUID = '00000000-0000-0000-0000-000000000000')) AND ((ITEM_CODE = @ITEM_CODE) OR (@ITEM_CODE = ''))",
             param : ['NAME:string|50','ITEM_GUID:string|50','ITEM_CODE:string|25']
         }
-
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_UNIT_INSERT] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@TYPE = @PTYPE, " + 
+                    "@ITEM = @PITEM, " + 
+                    "@ID = @PID, " + 
+                    "@FACTOR = @PFACTOR, " + 
+                    "@WEIGHT = @PWEIGHT, " + 
+                    "@VOLUME = @PVOLUME, " + 
+                    "@WIDTH = @PWIDTH, " + 
+                    "@HEIGHT = @PHEIGHT, " + 
+                    "@SIZE = @PSIZE ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PITEM:string|50','PID:string|25','PFACTOR:float','PWEIGHT:float',
+                     'PVOLUME:float','PWIDTH:float','PHEIGHT:float','PSIZE:float'],
+            dataprm : ['GUID','CUSER','TYPE','ITEM_GUID','ID','FACTOR','WEIGHT','VOLUME','WIDTH','HEIGHT','SIZE']
+        } 
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_UNIT_UPDATE] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@TYPE = @PTYPE, " + 
+                    "@ITEM = @PITEM, " + 
+                    "@ID = @PID, " + 
+                    "@FACTOR = @PFACTOR, " + 
+                    "@WEIGHT = @PWEIGHT, " + 
+                    "@VOLUME = @PVOLUME, " + 
+                    "@WIDTH = @PWIDTH, " + 
+                    "@HEIGHT = @PHEIGHT, " + 
+                    "@SIZE = @PSIZE ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PITEM:string|50','PID:string|25','PFACTOR:float','PWEIGHT:float',
+                     'PVOLUME:float','PWIDTH:float','PHEIGHT:float','PSIZE:float'],
+            dataprm : ['GUID','CUSER','TYPE','ITEM_GUID','ID','FACTOR','WEIGHT','VOLUME','WIDTH','HEIGHT','SIZE']
+        } 
         this.ds.add(tmpDt);
     }
     //#endregion
@@ -275,6 +315,13 @@ export class itemUnitCls
             resolve(this.ds.get('ITEM_UNIT'));    
         });
     }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            resolve(await this.ds.update()); 
+        });
+    }
 }
 export class itemPriceCls
 {
@@ -284,21 +331,22 @@ export class itemPriceCls
         this.ds = new dataset();
         this.empty = {
             GUID : '00000000-0000-0000-0000-000000000000',
-            LOG_USER : this.core.auth.data.CODE,
+            CUSER : this.core.auth.data.CODE,
+            CUSER_NAME : this.core.auth.data.NAME,
             TYPE : 0,
             TYPE_NAME : '',
             ITEM_GUID : '00000000-0000-0000-0000-000000000000',
             ITEM_CODE : '',
             ITEM_NAME : '',
             DEPOT : '0',
-            START_DATE : moment(new Date(0)).format("DD.MM.YYYY"),
-            FINISH_DATE : moment(new Date(0)).format("DD.MM.YYYY"),
+            START_DATE : moment(new Date(0)).format("DD/MM/YYYY"),
+            FINISH_DATE : moment(new Date(0)).format("DD/MM/YYYY"),
             PRICE : '0',
             QUANTITY : '0',
             CUSTOMER_GUID : '00000000-0000-0000-0000-000000000000',
             CUSTOMER_CODE : '',
             CUSTOMER_NAME : '',
-            CHANGE_DATE : moment(new Date(0)).format("DD.MM.YYYY"),
+            CHANGE_DATE : moment(new Date(0)).format("DD/MM/YYYY HH:mm:ss"),
         }
 
         this._initDs();
@@ -309,7 +357,7 @@ export class itemPriceCls
         let tmpDt = new datatable('ITEM_PRICE');            
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [dbo].[ITEM_PRICE_VW_02] " + 
+            query : "SELECT * FROM [dbo].[ITEM_PRICE_VW_01] " + 
                     "WHERE ((ITEM_GUID = @ITEM_GUID) OR (@ITEM_GUID = '00000000-0000-0000-0000-000000000000')) AND " + 
                     "((ITEM_CODE = @ITEM_CODE) OR (@ITEM_CODE = '')) AND " + 
                     "((TYPE = @TYPE) OR (@TYPE = -1)) AND " + 
@@ -405,8 +453,8 @@ export class itemPriceCls
                 ITEM_CODE : '',
                 TYPE : -1,
                 DEPOT : '',
-                START_DATE : moment(new Date(0)).format("DD.MM.YYYY"),
-                FINISH_DATE : moment(new Date(0)).format("DD.MM.YYYY"),
+                START_DATE : moment(new Date(0)).format("DD/MM/YYYY"),
+                FINISH_DATE : moment(new Date(0)).format("DD/MM/YYYY"),
                 QUANTITY : -1,
                 CUSTOMER_CODE : '',
                 CUSTOMER_GUID : '00000000-0000-0000-0000-000000000000',
@@ -418,8 +466,8 @@ export class itemPriceCls
                 tmpPrm.ITEM_CODE = typeof arguments[0].ITEM_CODE == 'undefined' ? '' : arguments[0].ITEM_CODE;
                 tmpPrm.TYPE = typeof arguments[0].TYPE == 'undefined' ? -1 : arguments[0].TYPE;
                 tmpPrm.DEPOT = typeof arguments[0].DEPOT == 'undefined' ? '' : arguments[0].DEPOT;
-                tmpPrm.START_DATE = typeof arguments[0].START_DATE == 'undefined' ? moment(new Date(0)).format("DD.MM.YYYY")  : arguments[0].START_DATE;
-                tmpPrm.FINISH_DATE = typeof arguments[0].FINISH_DATE == 'undefined' ? moment(new Date(0)).format("DD.MM.YYYY")  : arguments[0].FINISH_DATE;
+                tmpPrm.START_DATE = typeof arguments[0].START_DATE == 'undefined' ? moment(new Date(0)).format("DD/MM/YYYY")  : arguments[0].START_DATE;
+                tmpPrm.FINISH_DATE = typeof arguments[0].FINISH_DATE == 'undefined' ? moment(new Date(0)).format("DD/MM/YYYY")  : arguments[0].FINISH_DATE;
                 tmpPrm.QUANTITY = typeof arguments[0].QUANTITY == 'undefined' ? -1 : arguments[0].QUANTITY;
                 tmpPrm.CUSTOMER_CODE = typeof arguments[0].CUSTOMER_CODE == 'undefined' ? '' : arguments[0].CUSTOMER_CODE;
                 tmpPrm.CUSTOMER_GUID = typeof arguments[0].CUSTOMER_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].CUSTOMER_GUID;
@@ -434,8 +482,7 @@ export class itemPriceCls
     {
         return new Promise(async resolve => 
         {
-            await this.dt('ITEM_PRICE').save(); 
-            resolve();
+            resolve(await this.ds.update()); 
         });
     }
 }
@@ -447,12 +494,16 @@ export class itemBarcodeCls
         this.ds = new dataset();
         this.empty = {
             GUID : '00000000-0000-0000-0000-000000000000',
+            CUSER : this.core.auth.data.CODE,
+            CUSER_NAME : this.core.auth.data.NAME,
             BARCODE : '',
             TYPE : 0,
             TYPE_NAME : 'EAN13',
             ITEM_GUID : '00000000-0000-0000-0000-000000000000',            
             ITEM_CODE : '',            
             ITEM_NAME : '',
+            UNIT_GUID : '00000000-0000-0000-0000-000000000000',
+            UNIT_ID : '001',
             UNIT_NAME : '',
             UNIT_FACTOR : '0',
             UNIT_SYMBOL : ''
@@ -473,7 +524,30 @@ export class itemBarcodeCls
                     "((ITEM_CODE = @ITEM_CODE) OR (@ITEM_CODE = ''))",
             param : ['BARCODE:string|50','TYPE:int','ITEM_GUID:string|50','ITEM_CODE:string|25']
         }
-
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_BARCODE_INSERT] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@TYPE = @PTYPE, " + 
+                    "@ITEM = @PITEM, " + 
+                    "@BARCODE = @PBARCODE, " + 
+                    "@UNIT = @PUNIT ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PITEM:string|50','PBARCODE:string|50','PUNIT:string|50'],
+            dataprm : ['GUID','CUSER','TYPE','ITEM_GUID','BARCODE','UNIT_GUID']
+        } 
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_BARCODE_UPDATE] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@TYPE = @PTYPE, " + 
+                    "@ITEM = @PITEM, " + 
+                    "@BARCODE = @PBARCODE, " + 
+                    "@UNIT = @PUNIT ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PITEM:string|50','PBARCODE:string|50','PUNIT:string|50'],
+            dataprm : ['GUID','CUSER','TYPE','ITEM_GUID','BARCODE','UNIT_GUID']
+        } 
         this.ds.add(tmpDt);
     }
     //#endregion
@@ -538,6 +612,13 @@ export class itemBarcodeCls
             resolve(this.ds.get('ITEM_BARCODE'));    
         });
     }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            resolve(await this.ds.update()); 
+        });
+    }
 }
 export class itemMultiCodeCls
 {
@@ -547,6 +628,7 @@ export class itemMultiCodeCls
         this.ds = new dataset();
         this.empty = {
             GUID:'00000000-0000-0000-0000-000000000000',
+            CUSER: this.core.auth.data.CODE,
             ITEM_GUID : '00000000-0000-0000-0000-000000000000',            
             ITEM_CODE : '',            
             ITEM_NAME : '',
@@ -554,10 +636,11 @@ export class itemMultiCodeCls
             CUSTOMER_CODE : '',            
             CUSTOMER_NAME : '',
             MULTICODE : '',
-            CUSTOMER_ITEM_PRICE : '0',
-            CUSTOMER_ITEM_PRICE_DATE : moment(new Date(0)).format("DD.MM.YYYY")
+            CUSTOMER_PRICE : '0',
+            CUSTOMER_PRICE_DATE : moment(new Date(0)).format("DD/MM/YYYY HH:mm:ss"),
+            CUSTOMER_PRICE_USER_NAME : this.core.auth.data.NAME
         }
-
+        
         this._initDs();
     }
     //#region Private
@@ -577,7 +660,28 @@ export class itemMultiCodeCls
             param : ['ITEM_GUID:string|50','ITEM_CODE:string|25','ITEM_NAME:string|250','CUSTOMER_GUID:string|50',
                      'CUSTOMER_CODE:string|25','CUSTOMER_NAME:string|250','MULTICODE:string|25']
         }
-
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_MULTICODE_INSERT] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@ITEM = @PITEM, " + 
+                    "@CUSTOMER = @PCUSTOMER, " + 
+                    "@CODE = @PCODE ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PITEM:string|50','PCUSTOMER:string|50','PCODE:string|25'],
+            dataprm : ['GUID','CUSER','ITEM_GUID','CUSTOMER_GUID','MULTICODE']
+        } 
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_MULTICODE_UPDATE] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@ITEM = @PITEM, " + 
+                    "@CUSTOMER = @PCUSTOMER, " + 
+                    "@CODE = @PCODE ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PITEM:string|50','PCUSTOMER:string|50','PCODE:string|25'],
+            dataprm : ['GUID','CUSER','ITEM_GUID','CUSTOMER_GUID','MULTICODE']
+        }
         this.ds.add(tmpDt);
     }
     //#endregion
@@ -646,6 +750,133 @@ export class itemMultiCodeCls
               
             await this.ds.get('ITEM_MULTICODE').refresh();
             resolve(this.ds.get('ITEM_MULTICODE'));    
+        });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            resolve(await this.ds.update()); 
+        });
+    }
+}
+export class itemImageCls
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds = new dataset();
+        this.empty = 
+        {
+            GUID:'00000000-0000-0000-0000-000000000000',
+            CUSER: this.core.auth.data.CODE,
+            ITEM_GUID : '00000000-0000-0000-0000-000000000000',            
+            ITEM_CODE : '',            
+            ITEM_NAME : '',
+            IMAGE : ''
+        }
+        
+        this._initDs();
+    }
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('ITEM_IMAGE');            
+        tmpDt.selectCmd = 
+        {
+            query : "SELECT * FROM [dbo].[ITEM_IMAGE_VW_01] " + 
+                    "WHERE ((ITEM_GUID = @ITEM_GUID) OR (@ITEM_GUID = '00000000-0000-0000-0000-000000000000')) AND " + 
+                    "((ITEM_CODE = @ITEM_CODE) OR (@ITEM_CODE = '')) AND " + 
+                    "((ITEM_NAME = @ITEM_NAME) OR (@ITEM_NAME = '')) " ,
+            param : ['ITEM_GUID:string|50','ITEM_CODE:string|25','ITEM_NAME:string|250']
+        }
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_IMAGE_INSERT] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@ITEM = @PITEM, " + 
+                    "@IMAGE = @PIMAGE ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PITEM:string|50','PIMAGE:string|max'],
+            dataprm : ['GUID','CUSER','ITEM_GUID','IMAGE']
+        } 
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_IMAGE_UPDATE] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@ITEM = @PITEM, " + 
+                    "@IMAGE = @PIMAGE ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PITEM:string|50','PIMAGE:string|max'],
+            dataprm : ['GUID','CUSER','ITEM_GUID','IMAGE']
+        }
+        this.ds.add(tmpDt);
+    }
+    //#endregion
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0]);
+        }
+
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('ITEM_IMAGE') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {}
+        if(arguments.length > 0)
+        {
+            tmp = {...arguments[0]}            
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('ITEM_IMAGE').push(tmp)
+    }
+    clearAll()
+    {
+        for (let i = 0; i < this.ds.length; i++) 
+        {
+            this.dt(i).clear()
+        }
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ.
+        return new Promise(async resolve => 
+        {
+            let tmpPrm = 
+            {
+                ITEM_GUID : '00000000-0000-0000-0000-000000000000',
+                ITEM_CODE : '',
+                ITEM_NAME : ''
+            }
+           
+            if(arguments.length > 0)
+            {
+                tmpPrm.ITEM_GUID = typeof arguments[0].ITEM_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].ITEM_GUID;
+                tmpPrm.ITEM_CODE = typeof arguments[0].ITEM_CODE == 'undefined' ? '' : arguments[0].ITEM_CODE;  
+                tmpPrm.ITEM_NAME = typeof arguments[0].ITEM_NAME == 'undefined' ? '' : arguments[0].ITEM_NAME;
+            }
+            
+            this.ds.get('ITEM_IMAGE').selectCmd.value = Object.values(tmpPrm)
+              
+            await this.ds.get('ITEM_IMAGE').refresh();
+            resolve(this.ds.get('ITEM_IMAGE'));    
+        });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            resolve(await this.ds.update()); 
         });
     }
 }
@@ -731,6 +962,13 @@ export class unitCls
             
             await this.ds.get('UNIT').refresh();
             resolve(this.ds.get('UNIT'));    
+        });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            resolve(await this.ds.update()); 
         });
     }
 }
