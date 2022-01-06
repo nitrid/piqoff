@@ -26,7 +26,7 @@ export default class itemCard extends React.Component
     constructor()
     {
         super()                
-
+        this.state = {underPrice : 0}
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.itemsObj = new itemsCls();
@@ -66,6 +66,11 @@ export default class itemCard extends React.Component
                 this.btnCopy.setState({disabled:false});
                 this.btnPrint.setState({disabled:false});
             }
+            //ALT BİRİM FİYAT HESAPLAMASI
+            this.underPrice();
+            //MARGIN HESAPLAMASI
+            this.grossMargin()                 
+            this.netMargin()                 
         })
         this.itemsObj.ds.on('onEdit',(pTblName,pData) =>
         {            
@@ -77,7 +82,12 @@ export default class itemCard extends React.Component
                 this.btnDelete.setState({disabled:false});
                 this.btnCopy.setState({disabled:false});
                 this.btnPrint.setState({disabled:false});
-            }
+            }    
+            //ALT BİRİM FİYAT HESAPLAMASI
+            this.underPrice();  
+            //MARGIN HESAPLAMASI
+            this.grossMargin()                 
+            this.netMargin()                 
         })
         this.itemsObj.ds.on('onRefresh',(pTblName) =>
         {            
@@ -88,6 +98,11 @@ export default class itemCard extends React.Component
             this.btnDelete.setState({disabled:true});
             this.btnCopy.setState({disabled:true});
             this.btnPrint.setState({disabled:true});
+            //ALT BİRİM FİYAT HESAPLAMASI
+            this.underPrice()
+            //MARGIN HESAPLAMASI
+            this.grossMargin()                 
+            this.netMargin()                 
         })
 
         this.itemsObj.addEmpty();
@@ -125,36 +140,6 @@ export default class itemCard extends React.Component
         this.txtTedarikci.value = "";
         this.txtTedarikci.displayValue = "";   
         this.txtBarkod.readOnly = false;     
-        
-        // this.itemsObj.itemPrice.dt().on('onAddRow',(pItem)=>
-        // {
-        //     console.log(pItem)
-        // })
-        
-        //this.itemsObj.dt('ITEM_UNIT').find(x => x.TYPE == 0).TYPE = 1;
-        //this.itemsObj.dt('ITEM_UNIT').where({TYPE:0})[0].TYPE = 1
-        //this.x = this.itemsObj.dt('ITEM_UNIT').where({TYPE:0})
-        // console.log(this.itemsObj.dt('ITEM_UNIT'))
-        //this.itemsObj.dt('ITEM_UNIT').where({TYPE:0})[0].TYPE = 2
-        //console.log(this.itemsObj.dt('ITEM_UNIT'))
-        //this.itemsObj.dt('ITEMS')[0].CODE = '111'
-        //this.dtToForm();
-        // this.itemsCls.dt('ITEMS')[0].CODE = 1111
-        // this.itemsCls.dt('ITEMS')[0].CODE = 1111222
-        // console.log(this.txtRef.value)  
-        // await this.itemsCls.getVat()
-        // await this.cmbVergi.dataRefresh(
-        //     {
-        //         source : 
-        //         {
-        //             select : 
-        //             {
-        //                 query : "SELECT * FROM [dbo].[VAT] ",
-        //             },
-        //             sql : this.core.sql
-        //         }
-        //     })
-        //await this.cmbVergi.dataRefresh({source:this.itemsCls.data.get('VAT').toArray()})
     }
     async getItem(pCode)
     {
@@ -320,11 +305,41 @@ export default class itemCard extends React.Component
             await this.grdTedarikciFiyat.dataRefresh({source:this.itemsPriceSupply.dt()});
         }
     }
+    underPrice()
+    {
+        if(typeof this.itemsObj.itemUnit.dt().find(x => x.TYPE == 0) != 'undefined')
+        {
+            let tmpPrice = typeof this.itemsObj.itemPrice.dt().find(x => x.TYPE == 0 && x.QUANTITY == 1) != 'undefined' ? this.itemsObj.itemPrice.dt().find(x => x.TYPE == 0 && x.QUANTITY == 1).PRICE : 0;
+            let tmpFactor = typeof this.itemsObj.itemUnit.dt().find(x => x.TYPE == 1) != 'undefined' ? this.itemsObj.itemUnit.dt().find(x => x.TYPE == 1).FACTOR : 0;
+            this.setState({underPrice: (tmpPrice / tmpFactor).toFixed(2)});
+        }
+    }
+    grossMargin()
+    {
+        for (let i = 0; i < this.itemsObj.itemPrice.dt().length; i++) 
+        {
+            let tmpExVat = this.itemsObj.itemPrice.dt()[i].PRICE / ((this.itemsObj.dt("ITEMS")[0].VAT / 100) + 1)
+            let tmpMargin = tmpExVat - this.itemsObj.dt("ITEMS")[0].COST_PRICE;
+            let tmpMarginRate = ((tmpExVat - this.itemsObj.dt("ITEMS")[0].COST_PRICE) / tmpExVat) * 100
+            this.itemsObj.itemPrice.dt()[i].GROSS_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2);                 
+            this.itemsObj.itemPrice.dt()[i].GROSS_MARGIN_RATE = tmpMarginRate.toFixed(2);                 
+        }
+    }
+    netMargin()
+    {
+        for (let i = 0; i < this.itemsObj.itemPrice.dt().length; i++) 
+        {
+            let tmpExVat = this.itemsObj.itemPrice.dt()[i].PRICE / ((this.itemsObj.dt("ITEMS")[0].VAT / 100) + 1)
+            let tmpMargin = (tmpExVat - this.itemsObj.dt("ITEMS")[0].COST_PRICE) / 1.12;
+            let tmpMarginRate = (((tmpExVat - this.itemsObj.dt("ITEMS")[0].COST_PRICE) / 1.12) / tmpExVat) * 100
+            this.itemsObj.itemPrice.dt()[i].NET_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2); 
+            this.itemsObj.itemPrice.dt()[i].NET_MARGIN_RATE = tmpMarginRate.toFixed(2);                 
+        }
+    }
     render()
     {        
         return (
-            <div>
-                <div id="csx"></div>
+            <div>                
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -468,7 +483,34 @@ export default class itemCard extends React.Component
                                         <Validator validationGroup={"frmItems"}>
                                             <RequiredRule message="Referans'ı boş geçemezsiniz !" />
                                         </Validator>                                   
-                                    </NdTextBox>                                    
+                                    </NdTextBox>      
+                                    {/* STOK SEÇİM POPUP */}
+                                    <NdPopGrid id={"pg_txtRef"} parent={this} container={".dx-multiview-wrapper"} 
+                                    visible={false}
+                                    position={{of:'#page'}} 
+                                    showTitle={true} 
+                                    showBorders={true}
+                                    width={'90%'}
+                                    height={'90%'}
+                                    title={'Stok Seçim'} 
+                                    data={{source:{select:{query : "SELECT CODE,NAME FROM ITEMS"},sql:this.core.sql}}}
+                                    button=
+                                    {
+                                        [
+                                            {
+                                                id:'tst',
+                                                icon:'more',
+                                                onClick:()=>
+                                                {
+                                                    console.log(1111)
+                                                }
+                                            }
+                                        ]
+                                    }
+                                    >
+                                        <Column dataField="CODE" caption="CODE" width={150} />
+                                        <Column dataField="NAME" caption="NAME" width={650} defaultSortOrder="asc" />
+                                    </NdPopGrid>
                                 </Item>
                                 {/* cmbUrunGrup */}
                                 <Item>
@@ -486,7 +528,7 @@ export default class itemCard extends React.Component
                                                 id:'01',
                                                 icon:'more',
                                                 onClick:()=>
-                                                {
+                                                {                                                    
                                                     this.pg_txtUrunGrup.show()
                                                     this.pg_txtUrunGrup.onClick = (data) =>
                                                     {
@@ -549,11 +591,6 @@ export default class itemCard extends React.Component
                                     access={this.access.filter({ELEMENT:'txtTedarikci',USERS:this.user.CODE})}>
                                     </NdTextBox>
                                 </Item>
-                                {/* txtTedarikciStok */}
-                                {/* <Item>
-                                    <Label text={"Tedarikçi Stok "} alignment="right" />
-                                    <NdTextBox id="txtTedarikciStok" parent={this} simple={true} />
-                                </Item> */}
                                 {/* cmbUrunCins */}
                                 <Item>
                                     <Label text={"Ürün Cinsi "} alignment="right" />
@@ -713,6 +750,9 @@ export default class itemCard extends React.Component
                                                 </Validator>
                                             </NdNumberBox>
                                         </div>
+                                        <div className="col-3 pe-0">
+                                            <div className="dx-field-label" style={{width:"100%"}}>{this.state.underPrice} €</div>
+                                        </div>
                                     </div>                                     
                                 </Item>   
                                 {/* Boş */}
@@ -856,6 +896,17 @@ export default class itemCard extends React.Component
                                             height={'100%'} 
                                             width={'100%'}
                                             dbApply={false}
+                                            onCellPrepared={(e) =>
+                                            {
+                                                if(e.rowType === "data" && e.column.dataField === "GROSS_MARGIN")
+                                                {
+                                                    e.cellElement.style.color = e.data.GROSS_MARGIN_RATE < 30 ? "red" : "blue";
+                                                }
+                                                if(e.rowType === "data" && e.column.dataField === "NET_MARGIN")
+                                                {
+                                                    e.cellElement.style.color = e.data.NET_MARGIN_RATE < 30 ? "red" : "blue";
+                                                }
+                                            }}
                                             >
                                                 <Paging defaultPageSize={5} />
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
@@ -887,8 +938,10 @@ export default class itemCard extends React.Component
                                                 <Column dataField="VAT_EXT" caption="Vergi Hariç" dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                                 <Column dataField="CUSTOMER_NAME" caption="Cari"/>
                                                 <Column dataField="PRICE" caption="Fiyat" dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
-                                                <Column dataField="GROSS_MARGIN" caption="Brüt Marj" dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
-                                                <Column dataField="NET_MARGIN" caption="Net Marj" dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                                <Column dataField="GROSS_MARGIN" caption="Brüt Marj" dataType="string"
+                                                
+                                                />
+                                                <Column dataField="NET_MARGIN" caption="Net Marj" dataType="string" format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                             </NdGrid>
                                         </div>
                                     </div>
@@ -1052,26 +1105,11 @@ export default class itemCard extends React.Component
                                 <Item title="Bilgi"></Item>
                             </TabPanel>
                         </div>
-                    </div>
-                    {/* STOK SEÇİM POPUP */}
-                    <div>
-                        <NdPopGrid id={"pg_txtRef"} parent={this} container={".dx-multiview-wrapper"} 
-                        position={{of:'#page'}} 
-                        showTitle={true} 
-                        showBorders={true}
-                        width={'90%'}
-                        height={'90%'}
-                        title={'Stok Seçim'} 
-                        data={{source:{select:{query : "SELECT CODE,NAME FROM ITEMS"},sql:this.core.sql}}}
-                        >
-                            <Column dataField="CODE" caption="CODE" width={150} />
-                            <Column dataField="NAME" caption="NAME" width={650} defaultSortOrder="asc" />
-                        </NdPopGrid>
-                    </div>
+                    </div>                   
                     {/* FİYAT POPUP */}
                     <div>
                         <NdPopUp parent={this} id={"popFiyat"} 
-                        visible={false}
+                        visible={false}                        
                         showCloseButton={true}
                         showTitle={true}
                         title={"Fiyat Ekle"}
