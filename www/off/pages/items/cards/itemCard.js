@@ -47,7 +47,7 @@ export default class itemCard extends React.Component
         this.itemsPriceSupply.clearAll();
         
         this.itemsObj.ds.on('onAddRow',(pTblName,pData) =>
-        {
+        {            
             if(pData.stat == 'new')
             {
                 if(this.prevCode != '')
@@ -82,6 +82,8 @@ export default class itemCard extends React.Component
                 this.btnDelete.setState({disabled:false});
                 this.btnCopy.setState({disabled:false});
                 this.btnPrint.setState({disabled:false});
+
+                pData.rowData.CUSER = this.user.CODE
             }    
             //ALT BİRİM FİYAT HESAPLAMASI
             this.underPrice();  
@@ -280,7 +282,7 @@ export default class itemCard extends React.Component
                 resolve(0) //PARAMETRE BOŞ
             }
         });
-    } 
+    }
     async _onItemRendered(e)
     {
         await this.core.util.waitUntil(10)
@@ -321,6 +323,7 @@ export default class itemCard extends React.Component
             let tmpExVat = this.itemsObj.itemPrice.dt()[i].PRICE / ((this.itemsObj.dt("ITEMS")[0].VAT / 100) + 1)
             let tmpMargin = tmpExVat - this.itemsObj.dt("ITEMS")[0].COST_PRICE;
             let tmpMarginRate = ((tmpExVat - this.itemsObj.dt("ITEMS")[0].COST_PRICE) / tmpExVat) * 100
+            this.itemsObj.itemPrice.dt()[i].VAT_EXT = tmpExVat
             this.itemsObj.itemPrice.dt()[i].GROSS_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2);                 
             this.itemsObj.itemPrice.dt()[i].GROSS_MARGIN_RATE = tmpMarginRate.toFixed(2);                 
         }
@@ -335,7 +338,7 @@ export default class itemCard extends React.Component
             this.itemsObj.itemPrice.dt()[i].NET_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2); 
             this.itemsObj.itemPrice.dt()[i].NET_MARGIN_RATE = tmpMarginRate.toFixed(2);                 
         }
-    }
+    }    
     render()
     {        
         return (
@@ -394,8 +397,6 @@ export default class itemCard extends React.Component
                                                     await dialog(tmpConfObj1);
                                                 }
                                             }
-                                            console.log(this.itemsObj)
-                                            console.log(this.txtBarkod)
                                         }                              
                                         else
                                         {
@@ -477,7 +478,6 @@ export default class itemCard extends React.Component
                                             this.txtRef.value = "";
                                         }
                                     }).bind(this)}  
-                                    //param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}  
                                     access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}                                
                                     >     
                                         <Validator validationGroup={"frmItems"}>
@@ -485,9 +485,9 @@ export default class itemCard extends React.Component
                                         </Validator>                                   
                                     </NdTextBox>      
                                     {/* STOK SEÇİM POPUP */}
-                                    <NdPopGrid id={"pg_txtRef"} parent={this} container={".dx-multiview-wrapper"} 
+                                    <NdPopGrid id={"pg_txtRef"} parent={this} container={"#root"} 
                                     visible={false}
-                                    position={{of:'#page'}} 
+                                    position={{of:'#root'}} 
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}
@@ -549,8 +549,8 @@ export default class itemCard extends React.Component
                                     </NdTextBox>
                                     {/* ÜRÜN GRUP SEÇİM POPUP */}
                                     <div>
-                                        <NdPopGrid id={"pg_txtUrunGrup"} parent={this} container={".dx-multiview-wrapper"} 
-                                        position={{of:'#page'}} 
+                                        <NdPopGrid id={"pg_txtUrunGrup"} parent={this} container={"#root"} 
+                                        position={{of:'#root'}} 
                                         showTitle={true} 
                                         showBorders={true}
                                         width={'90%'}
@@ -708,8 +708,8 @@ export default class itemCard extends React.Component
                                     />
                                     {/* MENŞEİ SEÇİM POPUP */}
                                     <div>
-                                        <NdPopGrid id={"pg_txtMensei"} parent={this} container={".dx-multiview-wrapper"} 
-                                        position={{of:'#page'}} 
+                                        <NdPopGrid id={"pg_txtMensei"} parent={this} container={"#root"} 
+                                        position={{of:'#root'}} 
                                         showTitle={true} 
                                         showBorders={true}
                                         width={'90%'}
@@ -912,6 +912,7 @@ export default class itemCard extends React.Component
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                                 <Column dataField="TYPE_NAME" caption="Tip" />
                                                 <Column dataField="DEPOT" caption="Depo" />
+                                                <Column dataField="CUSTOMER_NAME" caption="Cari"/>
                                                 <Column dataField="START_DATE" caption="Baş.Tarih" dataType="date" 
                                                 editorOptions={{value:null}}
                                                 cellRender={(e) => 
@@ -935,8 +936,7 @@ export default class itemCard extends React.Component
                                                     return
                                                 }}/>
                                                 <Column dataField="QUANTITY" caption="Miktar"/>
-                                                <Column dataField="VAT_EXT" caption="Vergi Hariç" dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
-                                                <Column dataField="CUSTOMER_NAME" caption="Cari"/>
+                                                <Column dataField="VAT_EXT" caption="Vergi Hariç" dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>                                                
                                                 <Column dataField="PRICE" caption="Fiyat" dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                                 <Column dataField="GROSS_MARGIN" caption="Brüt Marj" dataType="string"
                                                 
@@ -1073,7 +1073,7 @@ export default class itemCard extends React.Component
                                                 <Column dataField="CUSTOMER_NAME" caption="Adı" />
                                                 <Column dataField="CUSTOMER_PRICE_USER_NAME" caption="Kullanıcı" />
                                                 <Column dataField="CUSTOMER_PRICE_DATE" caption="Son Fiyat Tarih" allowEditing={false} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
-                                                <Column dataField="CUSTOMER_PRICE" caption="Fiyat" allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                                <Column dataField="CUSTOMER_PRICE" caption="Fiyat" dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                                 <Column dataField="MULTICODE" caption="Tedarikçi Stok Kodu" />
                                             </NdGrid>
                                         </div>
@@ -1113,10 +1113,10 @@ export default class itemCard extends React.Component
                         showCloseButton={true}
                         showTitle={true}
                         title={"Fiyat Ekle"}
-                        container={".dx-multiview-wrapper"} 
+                        container={"#root"} 
                         width={'500'}
                         height={'320'}
-                        position={{of:'#page'}}
+                        position={{of:'#root'}}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -1175,10 +1175,10 @@ export default class itemCard extends React.Component
                         showCloseButton={true}
                         showTitle={true}
                         title={"Birim Ekle"}
-                        container={".dx-multiview-wrapper"} 
+                        container={"#root"} 
                         width={'500'}
                         height={'510'}
-                        position={{of:'#page'}}
+                        position={{of:'#root'}}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -1266,10 +1266,10 @@ export default class itemCard extends React.Component
                         showCloseButton={true}
                         showTitle={true}
                         title={"Barkod Ekle"}
-                        container={".dx-multiview-wrapper"} 
+                        container={"#root"} 
                         width={'500'}
                         height={'275'}
-                        position={{of:'#page'}}
+                        position={{of:'#root'}}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -1320,15 +1320,17 @@ export default class itemCard extends React.Component
                                             {
                                                 let tmpEmpty = {...this.itemsObj.itemBarcode.empty};
                                                 let tmpEmptyStat = true
-                                                if(typeof this.itemsObj.itemBarcode.dt().find(x => x.BARCODE === '') != 'undefined')
+                                                
+                                                if(typeof this.itemsObj.itemBarcode.dt().find(x => x.BARCODE == '') != 'undefined')
                                                 {
                                                     tmpEmptyStat = false;
-                                                    tmpEmpty = this.itemsObj.itemBarcode.dt().find(x => x.BARCODE === '')
+                                                    tmpEmpty = this.itemsObj.itemBarcode.dt().find(x => x.BARCODE == '')
                                                 }
                                                 
                                                 tmpEmpty.BARCODE = this.txtPopBarkod.value
                                                 tmpEmpty.TYPE = this.cmbPopBarTip.value
                                                 tmpEmpty.UNIT_GUID = this.cmbPopBarBirim.value
+                                                tmpEmpty.UNIT_NAME = this.cmbPopBarBirim.displayValue
                                                 tmpEmpty.ITEM_GUID = this.itemsObj.dt()[0].GUID 
 
                                                 let tmpResult = await this.checkBarcode(this.txtPopBarkod.value)
@@ -1342,7 +1344,6 @@ export default class itemCard extends React.Component
                                                     {
                                                         this.itemsObj.itemBarcode.addEmpty(tmpEmpty);    
                                                     }
-                                                    
                                                     this.popBarkod.hide(); 
                                                 }
                                             }}/>
@@ -1366,10 +1367,10 @@ export default class itemCard extends React.Component
                         showCloseButton={true}
                         showTitle={true}
                         title={"Tedarikçi Ekle"}
-                        container={".dx-multiview-wrapper"} 
+                        container={"#root"} 
                         width={'500'}
                         height={'320'}
-                        position={{of:'#page'}}
+                        position={{of:'#root'}}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -1452,18 +1453,6 @@ export default class itemCard extends React.Component
                                                 tmpEmptyMulti.CUSTOMER_PRICE = this.txtPopTedFiyat.value
                                                 tmpEmptyMulti.CUSTOMER_PRICE_DATE = moment(new Date()).format("DD/MM/YYYY HH:mm:ss")
 
-                                                let tmpEmptyPrice = {...this.itemsPriceSupply.empty};
-
-                                                tmpEmptyPrice.TYPE = 1;
-                                                tmpEmptyPrice.ITEM_GUID = this.itemsObj.dt()[0].GUID 
-                                                tmpEmptyPrice.DEPOT = '0';
-                                                tmpEmptyPrice.PRICE = this.txtPopTedFiyat.value;
-                                                tmpEmptyPrice.QUANTITY = 1;
-                                                tmpEmptyPrice.CUSTOMER_GUID = this.txtPopTedKodu.GUID 
-                                                tmpEmptyPrice.CUSTOMER_CODE = this.txtPopTedKodu.value;
-                                                tmpEmptyPrice.CUSTOMER_NAME = this.txtPopTedAdi.value;
-                                                tmpEmptyPrice.CHANGE_DATE = moment(new Date()).format("DD/MM/YYYY HH:mm:ss");
-
                                                 let tmpResult = await this.checkMultiCode(this.txtPopTedStokKodu.value,this.txtPopTedKodu.value)
                                                 if(tmpResult == 2) //KAYIT VAR
                                                 {
@@ -1472,7 +1461,6 @@ export default class itemCard extends React.Component
                                                 else if(tmpResult == 1) //KAYIT YOK
                                                 {
                                                     this.itemsObj.itemMultiCode.addEmpty(tmpEmptyMulti);
-                                                    this.itemsPriceSupply.addEmpty(tmpEmptyPrice);
                                                     this.popTedarikci.hide(); 
                                                 }
                                             }}/>

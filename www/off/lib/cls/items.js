@@ -385,7 +385,7 @@ export class itemPriceCls
                     "@CUSTOMER = @PCUSTOMER ", 
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PITEM:string|50','PDEPOT:string|25','PSTART_DATE:date','PFINISH_DATE:date',
                      'PPRICE:float','PQUANTITY:float','PCUSTOMER:string|50'],
-            dataprm : ['GUID','LOG_USER','TYPE','ITEM_GUID','DEPOT','START_DATE','FINISH_DATE','PRICE','QUANTITY','CUSTOMER_GUID']
+            dataprm : ['GUID','CUSER','TYPE','ITEM_GUID','DEPOT','START_DATE','FINISH_DATE','PRICE','QUANTITY','CUSTOMER_GUID']
         } 
         tmpDt.updateCmd = 
         {
@@ -404,6 +404,7 @@ export class itemPriceCls
                      'PPRICE:float','PQUANTITY:float','PCUSTOMER:string|50'],
             dataprm : ['GUID','LOG_USER','TYPE','ITEM_GUID','DEPOT','START_DATE','FINISH_DATE','PRICE','QUANTITY','CUSTOMER_GUID']
         } 
+        tmpDt.noColumnEdit = ['VAT_EXT','GROSS_MARGIN','GROSS_MARGIN_RATE','NET_MARGIN','NET_MARGIN_RATE']
 
         this.ds.add(tmpDt);
     }
@@ -504,7 +505,7 @@ export class itemBarcodeCls
             ITEM_NAME : '',
             UNIT_GUID : '00000000-0000-0000-0000-000000000000',
             UNIT_ID : '001',
-            UNIT_NAME : '',
+            UNIT_NAME : 'UNIT',
             UNIT_FACTOR : '0',
             UNIT_SYMBOL : ''
         }
@@ -636,6 +637,7 @@ export class itemMultiCodeCls
             CUSTOMER_CODE : '',            
             CUSTOMER_NAME : '',
             MULTICODE : '',
+            CUSTOMER_PRICE_GUID : '00000000-0000-0000-0000-000000000000',
             CUSTOMER_PRICE : '0',
             CUSTOMER_PRICE_DATE : moment(new Date(0)).format("DD/MM/YYYY HH:mm:ss"),
             CUSTOMER_PRICE_USER_NAME : this.core.auth.data.NAME
@@ -667,9 +669,11 @@ export class itemMultiCodeCls
                     "@CUSER = @PCUSER, " + 
                     "@ITEM = @PITEM, " + 
                     "@CUSTOMER = @PCUSTOMER, " + 
-                    "@CODE = @PCODE ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PITEM:string|50','PCUSTOMER:string|50','PCODE:string|25'],
-            dataprm : ['GUID','CUSER','ITEM_GUID','CUSTOMER_GUID','MULTICODE']
+                    "@CODE = @PCODE, " + 
+                    "@PRICE_GUID = @PPRICE_GUID, " + 
+                    "@PRICE = @PPRICE ",
+            param : ['PGUID:string|50','PCUSER:string|25','PITEM:string|50','PCUSTOMER:string|50','PCODE:string|25','PPRICE_GUID:string|50','PPRICE:float'],
+            dataprm : ['GUID','CUSER','ITEM_GUID','CUSTOMER_GUID','MULTICODE','CUSTOMER_PRICE_GUID','CUSTOMER_PRICE']
         } 
         tmpDt.updateCmd = 
         {
@@ -678,9 +682,11 @@ export class itemMultiCodeCls
                     "@CUSER = @PCUSER, " + 
                     "@ITEM = @PITEM, " + 
                     "@CUSTOMER = @PCUSTOMER, " + 
-                    "@CODE = @PCODE ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PITEM:string|50','PCUSTOMER:string|50','PCODE:string|25'],
-            dataprm : ['GUID','CUSER','ITEM_GUID','CUSTOMER_GUID','MULTICODE']
+                    "@CODE = @PCODE, " + 
+                    "@PRICE_GUID = @PPRICE_GUID, " + 
+                    "@PRICE = @PPRICE ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PITEM:string|50','PCUSTOMER:string|50','PCODE:string|25','PPRICE_GUID:string|50','PPRICE:float'],
+            dataprm : ['GUID','CUSER','ITEM_GUID','CUSTOMER_GUID','MULTICODE','CUSTOMER_PRICE_GUID','CUSTOMER_PRICE']
         }
         this.ds.add(tmpDt);
     }
@@ -710,6 +716,7 @@ export class itemMultiCodeCls
             tmp = {...this.empty}
         }
         tmp.GUID = datatable.uuidv4();
+        tmp.CUSTOMER_PRICE_GUID = datatable.uuidv4();
         this.dt('ITEM_MULTICODE').push(tmp)
     }
     clearAll()
