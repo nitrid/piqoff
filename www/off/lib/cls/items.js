@@ -402,7 +402,7 @@ export class itemPriceCls
                     "@CUSTOMER = @PCUSTOMER ", 
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PITEM:string|50','PDEPOT:string|25','PSTART_DATE:date','PFINISH_DATE:date',
                      'PPRICE:float','PQUANTITY:float','PCUSTOMER:string|50'],
-            dataprm : ['GUID','LOG_USER','TYPE','ITEM_GUID','DEPOT','START_DATE','FINISH_DATE','PRICE','QUANTITY','CUSTOMER_GUID']
+            dataprm : ['GUID','CUSER','TYPE','ITEM_GUID','DEPOT','START_DATE','FINISH_DATE','PRICE','QUANTITY','CUSTOMER_GUID']
         } 
         tmpDt.noColumnEdit = ['VAT_EXT','GROSS_MARGIN','GROSS_MARGIN_RATE','NET_MARGIN','NET_MARGIN_RATE']
 
