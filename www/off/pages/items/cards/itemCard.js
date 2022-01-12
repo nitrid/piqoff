@@ -108,7 +108,6 @@ export default class itemCard extends React.Component
         })
 
         this.itemsObj.addEmpty();
-        this.itemsObj.itemImage.addEmpty();
 
         let tmpUnit = new unitCls();
         await tmpUnit.load()
@@ -141,7 +140,8 @@ export default class itemCard extends React.Component
         this.txtRef.value = Math.floor(Date.now() / 1000)
         this.txtTedarikci.value = "";
         this.txtTedarikci.displayValue = "";   
-        this.txtBarkod.readOnly = false;     
+        this.txtBarkod.readOnly = false;   
+        this.imgFile.value = "";  
     }
     async getItem(pCode)
     {
@@ -783,14 +783,16 @@ export default class itemCard extends React.Component
                         <div className="col-3">
                             <NdImageUpload id="imgFile" parent={this} dt={{data:this.itemsObj.dt('ITEM_IMAGE'),field:"IMAGE"}}
                             onValueChanged={(e)=>
+                            {
+                                if(this.itemsObj.dt('ITEM_IMAGE').length == 0)
                                 {
-                                    if(this.itemsObj.dt('ITEM_IMAGE').length > 0)
-                                    {
-                                        this.itemsObj.dt('ITEM_IMAGE')[0].CUSER = this.core.auth.data.CODE,  
-                                        this.itemsObj.dt('ITEM_IMAGE')[0].ITEM_GUID = this.itemsObj.dt()[0].GUID 
-                                        this.itemsObj.dt('ITEM_IMAGE')[0].IMAGE = e                              
-                                    }
+                                    this.itemsObj.itemImage.addEmpty();                             
                                 }
+
+                                this.itemsObj.dt('ITEM_IMAGE')[0].CUSER = this.core.auth.data.CODE,  
+                                this.itemsObj.dt('ITEM_IMAGE')[0].ITEM_GUID = this.itemsObj.dt()[0].GUID 
+                                this.itemsObj.dt('ITEM_IMAGE')[0].IMAGE = e
+                            }
                             }/>
                         </div>
                     </div>
