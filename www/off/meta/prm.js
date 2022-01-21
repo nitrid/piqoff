@@ -337,37 +337,5 @@ export const prm =
             CAPTION : "Son Alış Fiyatı"
         }
     },
-    //anaBirimMinValid
-    {
-        TYPE : 1,
-        ID :"anaBirimMinValid",
-        VALUE : {value:1,msg:"Ana birim çarpanı bir den küçük olamaz !"},
-        SPECIAL : "",
-        PAGE : "stk_01_001",
-        ELEMENT : "",
-        APP : "OFF",
-        VIEW : 
-        {
-            TYPE : "text",
-            PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Ana Birim Çarpan Minimum Değer"
-        }
-    },
-    //altBirimMinValid
-    {
-        TYPE : 1,
-        ID :"altBirimMinValid",
-        VALUE : {value:0.01,msg:"Alt birim çarpanı sıfır ve sıfır dan küçük olamaz !"},
-        SPECIAL : "",
-        PAGE : "stk_01_001",
-        ELEMENT : "",
-        APP : "OFF",
-        VIEW : 
-        {
-            TYPE : "text",
-            PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Alt Birim Çarpan Minimum Değer"
-        }
-    },
     //#endregion
 ]

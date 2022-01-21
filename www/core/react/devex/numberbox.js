@@ -26,10 +26,10 @@ export default class NdNumberBox extends Base
         //PARAMETRE DEĞERİ SET EDİLİYOR.
         if(typeof props.param != 'undefined')
         {   
-            let tmpVal = props.param.getValue()
+            let tmpVal = parseFloat(props.param.getValue())
             if(typeof props.param.getValue() == 'object')
             {
-                tmpVal = typeof props.param.getValue().value == 'undefined' ? 0 : props.param.getValue().value
+                tmpVal = typeof props.param.getValue().value == 'undefined' ? 0 : parseFloat(props.param.getValue().value)
             }     
             this.state.value = tmpVal;
         }
@@ -138,7 +138,7 @@ export default class NdNumberBox extends Base
         this.setState({readOnly:e})
     }
     render()
-    {        
+    {               
         // YETKİLENDİRMEDEN GELEN GÖRÜNÜR GÖRÜNMEZ DURUMU. DEĞER BASE DEN GELİYOR.
         if(this.state.visible == false)
         {

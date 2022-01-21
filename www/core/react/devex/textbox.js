@@ -138,7 +138,7 @@ export default class NdTextBox extends Base
         }
     }
     _txtView()
-    {        
+    {                
         return (
             <TextBox id={this.props.id} showClearButton={this.state.showClearButton} height='fit-content' 
                 maxLength={this.props.maxLength}

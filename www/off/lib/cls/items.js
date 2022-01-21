@@ -28,7 +28,7 @@ export class itemsCls
             RAYON : '',
             SHELF : '',
             WEIGHING : false,
-            SALE_JOIN_LINE : false,
+            SALE_JOIN_LINE : true,
             TICKET_REST: false
         }
 
@@ -200,7 +200,7 @@ export class itemUnitCls
             TYPE_NAME : '',
             ID : '0',
             NAME : 'Unité',
-            FACTOR : 0,
+            FACTOR : 1,
             WEIGHT : '0',
             VOLUME : '0',
             WIDTH : '0',
@@ -341,8 +341,8 @@ export class itemPriceCls
             DEPOT : '0',
             START_DATE : moment(new Date(0)).format("DD/MM/YYYY"),
             FINISH_DATE : moment(new Date(0)).format("DD/MM/YYYY"),
-            PRICE : '0',
-            QUANTITY : '0',
+            PRICE : 0,
+            QUANTITY : 0,
             CUSTOMER_GUID : '00000000-0000-0000-0000-000000000000',
             CUSTOMER_CODE : '',
             CUSTOMER_NAME : '',

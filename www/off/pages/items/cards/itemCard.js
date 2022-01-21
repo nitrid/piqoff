@@ -370,6 +370,21 @@ export default class itemCard extends React.Component
                                     {
                                         if(e.validationGroup.validate().status == "valid")
                                         {
+                                            //FIYAT GİRMEDEN KAYIT EDİLEMEZ KONTROLÜ
+                                            if(this.itemsObj.dt('ITEM_PRICE').length == 0)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'diaSave3',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:'Tamam',location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>Lütfen fiyat giriniz !</div>)
+                                                }
+                                                
+                                                await dialog(tmpConfObj);
+
+                                                return;
+                                            }
+                                            //************************************ */
                                             let tmpConfObj =
                                             {
                                                 id:'diaSave1',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
@@ -589,6 +604,9 @@ export default class itemCard extends React.Component
                                     }
                                     param={this.param.filter({ELEMENT:'txtTedarikci',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtTedarikci',USERS:this.user.CODE})}>
+                                        <Validator validationGroup={"frmItems"}>
+                                            <RequiredRule message="Tedarikçi boş geçemezsiniz !" />
+                                        </Validator>  
                                     </NdTextBox>
                                 </Item>
                                 {/* cmbUrunCins */}
@@ -661,14 +679,14 @@ export default class itemCard extends React.Component
                                         </div>
                                         <div className="col-5 ps-0">
                                             <NdNumberBox id="txtAnaBirim" parent={this} simple={true} style={{borderTopLeftRadius:'0px',borderBottomLeftRadius:'0px'}} 
-                                            showSpinButtons={true} step={0.1} format={"###.000"}
+                                            showSpinButtons={true} step={1.0} format={"###.000"}
                                             dt={{data:this.itemsObj.dt('ITEM_UNIT'),field:"FACTOR",filter:{TYPE:0}}}
                                             param={this.param.filter({ELEMENT:'txtAnaBirim',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtAnaBirim',USERS:this.user.CODE})}>
                                                 <Validator validationGroup={"frmItems"}>
                                                     <RequiredRule message="Ana birim çarpanı'ı boş geçemezsiniz !" />
                                                     <NumericRule message="Ana birim çarpanı'na sayısal değer giriniz !" />
-                                                    <RangeRule min={this.param.filter({ID:'anaBirimMinValid',TYPE:1,USERS:this.user.CODE}).getValue().value} message={this.param.filter({ID:'anaBirimMinValid',TYPE:1,USERS:this.user.CODE}).getValue().msg} />
+                                                    <RangeRule min={1} message={"Ana birim çarpanı bir den küçük olamaz !"} />
                                                 </Validator>  
                                             </NdNumberBox>
                                         </div>
@@ -746,7 +764,7 @@ export default class itemCard extends React.Component
                                                 <Validator validationGroup={"frmItems"}>
                                                     <RequiredRule message="Alt birim çarpanı'ı boş geçemezsiniz !" />
                                                     <NumericRule message="Alt birim çarpanı'na sayısal değer giriniz !" />
-                                                    <RangeRule min={this.param.filter({ID:'altBirimMinValid',TYPE:1,USERS:this.user.CODE}).getValue().value} message={this.param.filter({ID:'altBirimMinValid',TYPE:1,USERS:this.user.CODE}).getValue().msg} />
+                                                    <RangeRule min={0.01} message={"Alt birim çarpanı sıfır ve sıfır dan küçük olamaz !"} />
                                                 </Validator>
                                             </NdNumberBox>
                                         </div>
@@ -781,19 +799,35 @@ export default class itemCard extends React.Component
                             </Form>
                         </div>
                         <div className="col-3">
-                            <NdImageUpload id="imgFile" parent={this} dt={{data:this.itemsObj.dt('ITEM_IMAGE'),field:"IMAGE"}}
-                            onValueChanged={(e)=>
-                            {
-                                if(this.itemsObj.dt('ITEM_IMAGE').length == 0)
-                                {
-                                    this.itemsObj.itemImage.addEmpty();                             
-                                }
+                            <div className='row'>
+                                <div className='col-12'>                                
+                                    <NdImageUpload id="imgFile" parent={this} dt={{data:this.itemsObj.dt('ITEM_IMAGE'),field:"IMAGE"}}
+                                    onValueChanged={(e)=>
+                                    {
+                                        if(this.itemsObj.dt('ITEM_IMAGE').length == 0)
+                                        {
+                                            this.itemsObj.itemImage.addEmpty();                             
+                                        }
 
-                                this.itemsObj.dt('ITEM_IMAGE')[0].CUSER = this.core.auth.data.CODE,  
-                                this.itemsObj.dt('ITEM_IMAGE')[0].ITEM_GUID = this.itemsObj.dt()[0].GUID 
-                                this.itemsObj.dt('ITEM_IMAGE')[0].IMAGE = e
-                            }
-                            }/>
+                                        this.itemsObj.dt('ITEM_IMAGE')[0].CUSER = this.core.auth.data.CODE,  
+                                        this.itemsObj.dt('ITEM_IMAGE')[0].ITEM_GUID = this.itemsObj.dt()[0].GUID 
+                                        this.itemsObj.dt('ITEM_IMAGE')[0].IMAGE = e
+                                    }
+                                    }/>
+                                </div>
+                            </div>
+                            <div className='row pt-2'>
+                                <div className='col-12'>
+                                    <NdButton id="btnImgDel" parent={this} icon="trash" type="default" width='100%'
+                                    onClick={()=>
+                                    {
+                                        if(this.prevCode != '')
+                                        {
+                                            this.itemsObj.dt('ITEM_IMAGE')[0].IMAGE = "" 
+                                        }
+                                    }}/>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -879,8 +913,8 @@ export default class itemCard extends React.Component
                                                     {                                                        
                                                         this.dtPopFiyBasTarih.value = "1970-01-01"
                                                         this.dtPopFiyBitTarih.value = "1970-01-01"
-                                                        this.txtPopFiyMiktar.value = "0"
-                                                        this.txtPopFiyFiyat.value = "0"
+                                                        this.txtPopFiyMiktar.value = 0
+                                                        this.txtPopFiyFiyat.value = 0
 
                                                         this.popFiyat.show();
                                                     }}/>
@@ -1120,7 +1154,7 @@ export default class itemCard extends React.Component
                         height={'320'}
                         position={{of:'#root'}}
                         >
-                            <Form colCount={1} height={'fit-content'}>
+                            <Form colCount={1} height={'fit-content'} id="frmPrice">
                                 <Item>
                                     <Label text={"Baş.Tarih "} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id="dtPopFiyBasTarih"/>
@@ -1131,38 +1165,78 @@ export default class itemCard extends React.Component
                                 </Item>
                                 <Item>
                                     <Label text={"Miktar "} alignment="right" />
-                                    <NdTextBox id={"txtPopFiyMiktar"} parent={this} simple={true} />
+                                    <NdNumberBox id={"txtPopFiyMiktar"} parent={this} simple={true}>
+                                        <Validator validationGroup={"frmPrice"}>
+                                            <RequiredRule message="Miktar'ı boş geçemezsiniz !" />
+                                            <NumericRule message="Miktar'a sayısal değer giriniz !" />
+                                        </Validator>
+                                    </NdNumberBox>
                                 </Item>
                                 <Item>
                                     <Label text={"Fiyat "} alignment="right" />
-                                    <NdTextBox id={"txtPopFiyFiyat"} parent={this} simple={true} />
+                                    <NdNumberBox id={"txtPopFiyFiyat"} parent={this} simple={true}>
+                                        <Validator validationGroup={"frmPrice"}>
+                                            <RequiredRule message="Fiyat'ı boş geçemezsiniz !" />
+                                            <NumericRule message="Fiyat'a sayısal değer giriniz !" />
+                                            <RangeRule min={0.001} message={"Fiyat sıfırdan küçük olamaz !"} />
+                                        </Validator> 
+                                    </NdNumberBox>
                                 </Item>
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>
-                                            <NdButton text="Kaydet" type="normal" stylingMode="contained" width={'100%'} 
-                                            onClick={async ()=>
+                                            <NdButton text="Kaydet" type="normal" stylingMode="contained" width={'100%'} validationGroup="frmPrice"
+                                            onClick={async (e)=>
                                             {
-                                                let tmpEmpty = {...this.itemsObj.itemPrice.empty};
-                                                
-                                                tmpEmpty.TYPE = 0
-                                                tmpEmpty.TYPE_NAME = 'Standart'
-                                                tmpEmpty.ITEM_GUID = this.itemsObj.dt()[0].GUID 
-                                                tmpEmpty.DEPOT = "0"
-                                                tmpEmpty.START_DATE = this.dtPopFiyBasTarih.value
-                                                tmpEmpty.FINISH_DATE = this.dtPopFiyBitTarih.value
-                                                tmpEmpty.PRICE = this.txtPopFiyFiyat.value
-                                                tmpEmpty.QUANTITY = this.txtPopFiyMiktar.value
+                                                if(e.validationGroup.validate().status == "valid")
+                                                {
+                                                    //FİYAT GİRERKEN MALİYET FİYAT KONTROLÜ
+                                                    if(this.txtMaliyetFiyat.value != 0 && this.txtMaliyetFiyat.value >= this.txtPopFiyFiyat.value)
+                                                    {
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'diaSave3',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:'Tamam',location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>Lütfen alış fiyatından yüksek fiyat giriniz !</div>)
+                                                        }
+                                                        
+                                                        await dialog(tmpConfObj);
 
-                                                this.itemsObj.itemPrice.addEmpty(tmpEmpty); 
-                                                this.popFiyat.hide();
+                                                        return;
+                                                    }
+                                                    //********************************** */
+                                                    let tmpEmpty = {...this.itemsObj.itemPrice.empty};
+                                                
+                                                    tmpEmpty.TYPE = 0
+                                                    tmpEmpty.TYPE_NAME = 'Standart'
+                                                    tmpEmpty.ITEM_GUID = this.itemsObj.dt()[0].GUID 
+                                                    tmpEmpty.DEPOT = "0"
+                                                    tmpEmpty.START_DATE = this.dtPopFiyBasTarih.value
+                                                    tmpEmpty.FINISH_DATE = this.dtPopFiyBitTarih.value
+                                                    tmpEmpty.PRICE = this.txtPopFiyFiyat.value
+                                                    tmpEmpty.QUANTITY = this.txtPopFiyMiktar.value
+
+                                                    this.itemsObj.itemPrice.addEmpty(tmpEmpty); 
+                                                    this.popFiyat.hide();
+                                                }                              
+                                                else
+                                                {
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'diaSave3',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:'Tamam',location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>Lütfen gerekli alanları doldurunuz !</div>)
+                                                    }
+                                                    
+                                                    await dialog(tmpConfObj);
+                                                }                                                 
                                             }}/>
                                         </div>
                                         <div className='col-6'>
                                             <NdButton text="İptal" type="normal" stylingMode="contained" width={'100%'}
                                             onClick={()=>
                                             {
-                                                this.popBirim.hide();  
+                                                this.popFiyat.hide();  
                                             }}/>
                                         </div>
                                     </div>
@@ -1462,6 +1536,7 @@ export default class itemCard extends React.Component
                                                 }
                                                 else if(tmpResult == 1) //KAYIT YOK
                                                 {
+                                                    this.txtMaliyetFiyat.value = this.txtPopTedFiyat.value
                                                     this.itemsObj.itemMultiCode.addEmpty(tmpEmptyMulti);
                                                     this.popTedarikci.hide(); 
                                                 }

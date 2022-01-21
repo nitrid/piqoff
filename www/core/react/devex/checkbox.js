@@ -17,10 +17,10 @@ export default class NdCheckBox extends Base
         //PARAMETRE DEĞERİ SET EDİLİYOR.
         if(typeof props.param != 'undefined')
         {   
-            let tmpVal = props.param.getValue()
+            let tmpVal = Boolean(props.param.getValue())
             if(typeof props.param.getValue() == 'object')
             {
-                tmpVal = typeof props.param.getValue().value == 'undefined' ? '' : props.param.getValue().value
+                tmpVal = typeof props.param.getValue().value == 'undefined' ? false : Boolean(props.param.getValue().value)
             }     
             this.state.value = tmpVal;
         }
