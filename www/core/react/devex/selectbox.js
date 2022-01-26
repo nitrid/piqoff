@@ -17,16 +17,19 @@ export default class NdSelectBox extends Base
         this._onInitialized = this._onInitialized.bind(this);
         this._onValueChanged = this._onValueChanged.bind(this);
 
-        //PARAMETRE DEĞERİ SET EDİLİYOR.
-        if(typeof props.param != 'undefined')
-        {   
-            let tmpVal = props.param.getValue()
-            if(typeof props.param.getValue() == 'object')
-            {
-                tmpVal = typeof props.param.getValue().value == 'undefined' ? '' : props.param.getValue().value
-            }     
-            this.state.value = tmpVal;
-        }
+        this.props.parent.on('onInit',(function()
+        {
+            //PARAMETRE DEĞERİ SET EDİLİYOR.
+            if(typeof props.param != 'undefined')
+            {   
+                let tmpVal = props.param.getValue()
+                if(typeof props.param.getValue() == 'object')
+                {
+                    tmpVal = props.param.getValue().value
+                }     
+                this.value = tmpVal;
+            }
+        }).bind(this))
     }
     //#region Private
     _onInitialized(e) 
@@ -72,6 +75,10 @@ export default class NdSelectBox extends Base
     }
     set value(e)
     {        
+        if(typeof e == 'undefined')
+        {
+            return;
+        }
         //VALUE DEĞİŞTİĞİNDE BU DEĞİŞİKLİK DATATABLE A YANSITMAK İÇİN YAPILDI.
         if(typeof this.props.dt != 'undefined' && typeof this.props.dt.data != 'undefined' && this.props.dt.data.length > 0 && typeof this.props.dt.field != 'undefined')
         {            

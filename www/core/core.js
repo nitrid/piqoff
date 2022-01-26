@@ -935,12 +935,12 @@ export class param extends datatable
             }                    
         }
         // DB İÇERİSİNDE KAYIT YOKSA META İÇERİSİNDEKİ DEĞER DÖNDÜRÜLÜYOR.
-        else if(this.length == 0 && this.meta != null && this.meta.length > 0)
+        else if(this.length == 0 && this.meta != null && this.meta.length > 0 && typeof this.meta[0].VALUE != 'undefined')
         {               
             return JSON.parse(JSON.stringify(this.meta[0].VALUE))
         }
 
-        return '';
+        return undefined;
     }
     setValue()
     {

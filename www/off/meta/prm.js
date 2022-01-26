@@ -5,7 +5,7 @@ export const prm =
     {
         TYPE : 2,
         ID :"txtRef",
-        VALUE : "",
+        VALUE : {validation:"TTSS"},
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "txtRef",

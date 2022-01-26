@@ -136,7 +136,7 @@ export default class App extends React.Component
             this.core.auth.logout()
         })
 
-        this.lang = i18n;
+        this.lang = i18n;        
     }
     menuClick(data)
     {
