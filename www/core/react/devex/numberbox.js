@@ -23,16 +23,19 @@ export default class NdNumberBox extends Base
         this._onFocusOut = this._onFocusOut.bind(this)
         this._onChange = this._onChange.bind(this)        
 
-        //PARAMETRE DEĞERİ SET EDİLİYOR.
-        if(typeof props.param != 'undefined')
-        {   
-            let tmpVal = parseFloat(props.param.getValue())
-            if(typeof props.param.getValue() == 'object')
-            {
-                tmpVal = typeof props.param.getValue().value == 'undefined' ? 0 : parseFloat(props.param.getValue().value)
-            }     
-            this.state.value = tmpVal;
-        }
+        this.props.parent.on('onInit',(function()
+        {
+            //PARAMETRE DEĞERİ SET EDİLİYOR.
+            if(typeof props.param != 'undefined')
+            {   
+                let tmpVal = parseFloat(props.param.getValue())
+                if(typeof props.param.getValue() == 'object')
+                {
+                    tmpVal = props.param.getValue().value
+                }     
+                this.value = tmpVal;
+            }
+        }).bind(this))
     }
     //#region Private
     _onValueChanged(e) 
@@ -96,6 +99,10 @@ export default class NdNumberBox extends Base
     }
     set value(e)
     {        
+        if(typeof e == 'undefined')
+        {
+            return;
+        }
         //VALUE DEĞİŞTİĞİNDE BU DEĞİŞİKLİK DATATABLE A YANSITMAK İÇİN YAPILDI.
         if(typeof this.props.dt != 'undefined' && typeof this.props.dt.data != 'undefined' && this.props.dt.data.length > 0 && typeof this.props.dt.field != 'undefined')
         {            

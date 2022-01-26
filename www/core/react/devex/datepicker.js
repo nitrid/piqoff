@@ -19,17 +19,20 @@ export default class NdDatePicker extends Base
         
         this._onValueChanged = this._onValueChanged.bind(this)
         this._onEnterKey = this._onEnterKey.bind(this)
-
-        //PARAMETRE DEĞERİ SET EDİLİYOR.
-        if(typeof props.param != 'undefined')
-        {   
-            let tmpVal = props.param.getValue()
-            if(typeof props.param.getValue() == 'object')
-            {
-                tmpVal = typeof props.param.getValue().value == 'undefined' ? '' : props.param.getValue().value
-            }     
-            this.state.value = new Date(tmpVal);
-        }
+        
+        this.props.parent.on('onInit',(function()
+        {
+            //PARAMETRE DEĞERİ SET EDİLİYOR.
+            if(typeof props.param != 'undefined')
+            {   
+                let tmpVal = props.param.getValue()
+                if(typeof props.param.getValue() == 'object')
+                {
+                    tmpVal = props.param.getValue().value
+                }     
+                this.value = new Date(tmpVal);
+            }
+        }).bind(this))
     }
     //#region Private
     _onValueChanged(e) 
@@ -70,6 +73,10 @@ export default class NdDatePicker extends Base
     }
     set value(e)
     {        
+        if(typeof e == 'undefined')
+        {
+            return;
+        }
         //VALUE DEĞİŞTİĞİNDE BU DEĞİŞİKLİK DATATABLE A YANSITMAK İÇİN YAPILDI.
         if(typeof this.props.dt != 'undefined' && typeof this.props.dt.data != 'undefined' && this.props.dt.data.length > 0 && typeof this.props.dt.field != 'undefined')
         {            

@@ -38,14 +38,14 @@ export default class itemCard extends React.Component
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
-        this.init();  
+        this.init(); 
     }    
     async init()
     {  
         this.prevCode = ""
         this.itemsObj.clearAll();  
-        this.itemsPriceSupply.clearAll();
-        
+        this.itemsPriceSupply.clearAll();             
+
         this.itemsObj.ds.on('onAddRow',(pTblName,pData) =>
         {            
             if(pData.stat == 'new')
@@ -109,6 +109,12 @@ export default class itemCard extends React.Component
 
         this.itemsObj.addEmpty();
 
+        this.txtRef.value = Math.floor(Date.now() / 1000)
+        this.txtTedarikci.value = "";
+        this.txtTedarikci.displayValue = "";   
+        this.txtBarkod.readOnly = false;   
+        this.imgFile.value = ""; 
+        
         let tmpUnit = new unitCls();
         await tmpUnit.load()
 
@@ -135,13 +141,7 @@ export default class itemCard extends React.Component
         this.itemsObj.itemBarcode.addEmpty(tmpBarcodeObj);     
 
         this.itemsObj.itemUnit.addEmpty(tmpMainUnitObj);
-        this.itemsObj.itemUnit.addEmpty(tmpUnderUnitObj);                
-                
-        this.txtRef.value = Math.floor(Date.now() / 1000)
-        this.txtTedarikci.value = "";
-        this.txtTedarikci.displayValue = "";   
-        this.txtBarkod.readOnly = false;   
-        this.imgFile.value = "";  
+        this.itemsObj.itemUnit.addEmpty(tmpUnderUnitObj);                        
     }
     async getItem(pCode)
     {
@@ -340,7 +340,7 @@ export default class itemCard extends React.Component
         }
     }    
     render()
-    {        
+    {   
         return (
             <div>                
                 <ScrollView>
@@ -492,7 +492,8 @@ export default class itemCard extends React.Component
                                         {
                                             this.txtRef.value = "";
                                         }
-                                    }).bind(this)}  
+                                    }).bind(this)} 
+                                    param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})} 
                                     access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}                                
                                     >     
                                         <Validator validationGroup={"frmItems"}>
@@ -1557,5 +1558,6 @@ export default class itemCard extends React.Component
                 </ScrollView>
             </div>
         )
+        
     }
 }

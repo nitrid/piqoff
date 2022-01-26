@@ -5,6 +5,14 @@ import {datatable,param,access} from '../../core/core.js';
 import {prm} from '../meta/prm.js'
 import {acs} from '../meta/acs.js'
 
+class test
+{
+  init()
+  {
+    console.log(3333)
+  }
+}
+
 export default class Page extends React.Component
 {
   constructor(props)
@@ -26,7 +34,35 @@ export default class Page extends React.Component
       obj.default.prototype.access = tmpAcs;
       obj.default.prototype.user = this.core.auth.data;
       obj.default.prototype.lang = App.instance.lang;
-      
+      obj.default.prototype.init = (function()
+      {
+        let tmpCached = obj.default.prototype.init;
+        return function()
+        {          
+          tmpCached.apply(this,arguments)
+          this.emit('onInit')
+        }
+      }());
+      //EVENT PAGE - ALI KEMAL KARACA - 25.01.2022 *****/
+      obj.default.prototype.listeners = Object();
+      obj.default.prototype.on = function(pEvt, pCallback) 
+      {
+        if (!this.listeners.hasOwnProperty(pEvt))
+        this.listeners[pEvt] = Array();
+        this.listeners[pEvt].push(pCallback); 
+      }
+      obj.default.prototype.emit = function(pEvt, pParams)
+      {
+          if (pEvt in this.listeners) 
+          {
+              let callbacks = this.listeners[pEvt];
+              for (var x in callbacks)
+              {
+                  callbacks[x](pParams);
+              }
+          } 
+      }
+      //***********************************************/      
       return obj;
     }))
   }

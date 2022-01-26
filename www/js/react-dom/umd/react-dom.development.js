@@ -20689,7 +20689,7 @@
                 }
               }
 
-              {
+              {                
                 instance.componentDidMount();
               }
             } else {

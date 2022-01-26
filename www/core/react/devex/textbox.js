@@ -14,7 +14,7 @@ export default class NdTextBox extends Base
         
         this.dev = null;
 
-        this.state.value = typeof props.value != 'undefined' ? props.value : '' 
+        this.state.value = typeof props.value == 'undefined' ? ''  : props.value
         this.state.title = typeof props.title == 'undefined' ? '' : props.title
         this.state.displayValue = typeof props.displayValue == 'undefined' ? '' : props.displayValue
         this.state.titleAlign = typeof props.titleAlign == 'undefined' ? 'left' : props.titleAlign
@@ -26,23 +26,26 @@ export default class NdTextBox extends Base
         this._onEnterKey = this._onEnterKey.bind(this);
         this._onFocusIn = this._onFocusIn.bind(this);
         this._onFocusOut = this._onFocusOut.bind(this);
-        this._onChange = this._onChange.bind(this);        
+        this._onChange = this._onChange.bind(this);     
 
-        //PARAMETRE DEĞERİ SET EDİLİYOR.
-        if(typeof props.param != 'undefined')
-        {   
-            let tmpVal = props.param.getValue()
-            if(typeof props.param.getValue() == 'object')
-            {
-                tmpVal = typeof props.param.getValue().value == 'undefined' ? '' : props.param.getValue().value
-            }     
-            this.state.value = tmpVal;
-        }
+        props.parent.on('onInit',(function()
+        {
+            //PARAMETRE DEĞERİ SET EDİLİYOR.
+            if(typeof props.param != 'undefined')
+            {   
+                let tmpVal = props.param.getValue()
+                if(typeof props.param.getValue() == 'object')
+                {
+                    tmpVal = props.param.getValue().value
+                }                     
+                this.value = tmpVal;
+            }
+        }).bind(this))
     }
     //#region Private
     _onInitialized(e) 
     {
-        this.dev = e.component;
+        this.dev = e.component;        
     }
     _onValueChanged(e) 
     {           
@@ -223,7 +226,11 @@ export default class NdTextBox extends Base
         return this.state.value
     }
     set value(e)
-    {        
+    {   
+        if(typeof e == 'undefined')
+        {
+            return;
+        }        
         //VALUE DEĞİŞTİĞİNDE BU DEĞİŞİKLİK DATATABLE A YANSITMAK İÇİN YAPILDI.
         if(typeof this.props.dt != 'undefined' && typeof this.props.dt.data != 'undefined' && this.props.dt.data.length > 0 && typeof this.props.dt.field != 'undefined')
         {            
@@ -254,7 +261,6 @@ export default class NdTextBox extends Base
                 }
             }
         }
-        
         this.setState({value:e.toString()})        
     } 
     get readOnly()
