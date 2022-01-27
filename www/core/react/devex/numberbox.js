@@ -1,8 +1,7 @@
 import React from 'react';
 import {NumberBox} from 'devextreme-react/number-box';
-import Base from './base.js';
+import Base,{ Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from './base.js';
 import { core } from '../../core.js';
-import { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from 'devextreme-react/validator';
 
 export { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule }
 export default class NdNumberBox extends Base
@@ -22,20 +21,6 @@ export default class NdNumberBox extends Base
         this._onFocusIn = this._onFocusIn.bind(this)
         this._onFocusOut = this._onFocusOut.bind(this)
         this._onChange = this._onChange.bind(this)        
-
-        this.props.parent.on('onInit',(function()
-        {
-            //PARAMETRE DEĞERİ SET EDİLİYOR.
-            if(typeof props.param != 'undefined')
-            {   
-                let tmpVal = parseFloat(props.param.getValue())
-                if(typeof props.param.getValue() == 'object')
-                {
-                    tmpVal = props.param.getValue().value
-                }     
-                this.value = tmpVal;
-            }
-        }).bind(this))
     }
     //#region Private
     _onValueChanged(e) 
@@ -89,6 +74,7 @@ export default class NdNumberBox extends Base
                 step={this.props.step}
                 format={this.props.format}>                    
                     {this.props.children}
+                    {this.validationView()}
             </NumberBox>
         )
     }

@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {TextBox,Button,Item} from 'devextreme-react/text-box';
-import Base from './base.js';
+import Base,{ Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from './base.js';
 import { core } from '../../core.js';
-import { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from 'devextreme-react/validator';
 
 export { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule }
 export default class NdTextBox extends Base
@@ -27,20 +26,6 @@ export default class NdTextBox extends Base
         this._onFocusIn = this._onFocusIn.bind(this);
         this._onFocusOut = this._onFocusOut.bind(this);
         this._onChange = this._onChange.bind(this);     
-
-        props.parent.on('onInit',(function()
-        {
-            //PARAMETRE DEĞERİ SET EDİLİYOR.
-            if(typeof props.param != 'undefined')
-            {   
-                let tmpVal = props.param.getValue()
-                if(typeof props.param.getValue() == 'object')
-                {
-                    tmpVal = props.param.getValue().value
-                }                     
-                this.value = tmpVal;
-            }
-        }).bind(this))
     }
     //#region Private
     _onInitialized(e) 
@@ -141,7 +126,7 @@ export default class NdTextBox extends Base
         }
     }
     _txtView()
-    {                
+    {                        
         return (
             <TextBox id={this.props.id} showClearButton={this.state.showClearButton} height='fit-content' 
                 maxLength={this.props.maxLength}
@@ -153,9 +138,10 @@ export default class NdTextBox extends Base
                 value={this.state.value.toString()} 
                 readOnly={this.state.readOnly}
                 disabled={typeof this.props.editable == 'undefined' ? this.state.editable : this.props.editable}>                    
-                    {this._buttonView()}
                     {this.props.children}
+                    {this._buttonView()}                    
                     {this._displayView()}
+                    {this.validationView()}                    
             </TextBox>
         )
     }
