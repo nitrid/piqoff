@@ -127,7 +127,7 @@ export const menu =
                     {
                         id: 'cri_01_001',
                         text: 'Cari Tanımları',
-                        path: '../pages/items/items_list.js'
+                        path: '../pages/customers/cards/customerCard.js'
                     },
                     {
                         id: 'cri_01_002',

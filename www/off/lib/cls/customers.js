@@ -10,7 +10,7 @@ export class customersCls
             GUID : '00000000-0000-0000-0000-000000000000',
             CUSER : this.core.auth.data.CODE,
             TITLE : '',
-            CUSTOMER_TYPE : 0,
+            TYPE : 0,
             GENUS : 0,
             CUSTOMER_GRP : '',
             WEB : '',
@@ -55,8 +55,8 @@ export class customersCls
                     "@TAX_OFFICE =@PTAX_OFFICE, " +
                     "@TAX_NO = @PTAX_NO, " +
                     "@INT_VAT_NO = @PINT_VAT_NO, " +
-                    "@TAX_TYPE = @PTAX_TYPE, " ,
-            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PTITLE:string|50','PCODE:string|50','PGENUS:int','CUSTOMER_GRP:string|25','PWEB:string|100','PNOTE:string|1500',
+                    "@TAX_TYPE = @PTAX_TYPE " ,
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PTITLE:string|50','PCODE:string|50','PGENUS:int','PCUSTOMER_GRP:string|25','PWEB:string|100','PNOTE:string|1500',
                         'PSIRET_ID:string|25','PAPE_CODE:string|50','PTAX_OFFICE:string|25','PTAX_NO:string|25','PINT_VAT_NO:string|50','PTAX_TYPE:int'],
             dataprm : ['GUID','CUSER','TYPE','TITLE','CODE','GENUS','CUSTOMER_GRP','WEB','NOTE','SIRET_ID','APE_CODE','TAX_OFFICE','TAX_NO','INT_VAT_NO','TAX_TYPE']
         }
@@ -77,13 +77,15 @@ export class customersCls
                     "@TAX_OFFICE =@PTAX_OFFICE, " +
                     "@TAX_NO = @PTAX_NO, " +
                     "@INT_VAT_NO = @PINT_VAT_NO, " +
-                    "@TAX_TYPE = @PTAX_TYPE, " ,
-            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PTITLE:string|50','PCODE:string|50','PGENUS:int','CUSTOMER_GRP:string|25','PWEB:string|100','PNOTE:string|1500',
+                    "@TAX_TYPE = @PTAX_TYPE " ,
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PTITLE:string|50','PCODE:string|50','PGENUS:int','PCUSTOMER_GRP:string|25','PWEB:string|100','PNOTE:string|1500',
                         'PSIRET_ID:string|25','PAPE_CODE:string|50','PTAX_OFFICE:string|25','PTAX_NO:string|25','PINT_VAT_NO:string|50','PTAX_TYPE:int'],
             dataprm : ['GUID','CUSER','TYPE','TITLE','CODE','GENUS','CUSTOMER_GRP','WEB','NOTE','SIRET_ID','APE_CODE','TAX_OFFICE','TAX_NO','INT_VAT_NO','TAX_TYPE']
         }
 
         this.ds.add(tmpDt);
+        this.ds.add(this.customerOffical.dt('CUSTOMER_OFFICAL'))
+        this.ds.add(this.customerAdress.dt('CUSTOMER_ADRESS'))
     }
     //#endregion
     dt()
@@ -136,7 +138,7 @@ export class customersCls
             await this.ds.get('CUSTOMERS').refresh()
 
             if(this.ds.get('CUSTOMERS').length > 0)
-            {
+            {  
                 await this.customerAdress.load({CUSTOMER:this.ds.get('CUSTOMERS')[0].GUID})
                 await this.customerOffical.load({CUSTOMER:this.ds.get('CUSTOMERS')[0].GUID})
             }
@@ -179,8 +181,8 @@ export class customerOfficalCls
         let tmpDt = new datatable('CUSTOMER_OFFICAL');
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [dbo].[CUSTOMER_OFFICAL_VW_01] WHERE ((CUSTOMER = @CUSTOMER) OR (@CUTOMER = '00000000-0000-0000-0000-000000000000') AND ((TYPE = @TYPE)) ",
-            param : ['CUSTOMER:stirng|50','TYPE:int']
+            query : "SELECT * FROM [dbo].[CUSTOMER_OFFICAL_VW_01] WHERE ((CUSTOMER = @CUSTOMER) OR (@CUSTOMER = '00000000-0000-0000-0000-000000000000')) AND ((TYPE = @TYPE)) ",
+            param : ['CUSTOMER:string|50','TYPE:int']
         }
         tmpDt.insertCmd = 
         {
@@ -195,7 +197,7 @@ export class customerOfficalCls
                     "@PHONE2 = @PPHONE2, " +
                     "@GSM_PHONE = @PGSM_PHONE, " +
                     "@OTHER_PHONE = @POTHER_PHONE, " +
-                    "@EMAIL = @PEMAIL, ",
+                    "@EMAIL = @PEMAIL ",
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PCUSTOMER:string|50','PNAME:string|50','PLAST_NAME:string|50',
                     'PPHONE1:string|50','PPHONE2:string|50','PGSM_PHONE:string|50','POTHER_PHONE:string|50','PEMAIL:string|50'],
             dataprm : ['GUID','CUSER','TYPE','CUSTOMER','NAME','LAST_NAME','PHONE1','PHONE2','GSM_PHONE','OTHER_PHONE','EMAIL']
@@ -213,7 +215,7 @@ export class customerOfficalCls
                     "@PHONE2 = @PPHONE2, " +
                     "@GSM_PHONE = @PGSM_PHONE, " +
                     "@OTHER_PHONE = @POTHER_PHONE, " +
-                    "@EMAIL = @PEMAIL, ",
+                    "@EMAIL = @PEMAIL ",
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PCUSTOMER:string|50','PNAME:string|50','PLAST_NAME:string|50',
                     'PPHONE1:string|50','PPHONE2:string|50','PGSM_PHONE:string|50','POTHER_PHONE:string|50','PEMAIL:string|50'],
             dataprm : ['GUID','CUSER','TYPE','CUSTOMER','NAME','LAST_NAME','PHONE1','PHONE2','GSM_PHONE','OTHER_PHONE','EMAIL']
@@ -282,7 +284,7 @@ export class customerOfficalCls
     }
     save()
     {
-        return new Promise(async resolve=>
+        return new Promise(async resolve =>
         {
             resolve(await this.ds.update())
         });
@@ -314,8 +316,8 @@ export class customerAdressCls
         let tmpDt = new datatable('CUSTOMER_ADRESS')
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [dbo].[CUSTOMER_ADRESS_VW_01] WHERE ((CUSTOMER = @CUSTOMER) OR (@CUTOMER = '00000000-0000-0000-0000-000000000000') AND ((TYPE = @TYPE))",
-            param : ['CUSTOMER:stirng|50','TYPE:int']
+            query : "SELECT * FROM [dbo].[CUSTOMER_ADRESS_VW_01] WHERE ((CUSTOMER = @CUSTOMER) OR (@CUSTOMER = '00000000-0000-0000-0000-000000000000')) AND ((TYPE = @TYPE))",
+            param : ['CUSTOMER:string|50','TYPE:int']
         }
         tmpDt.insertCmd = 
         {
@@ -328,7 +330,7 @@ export class customerAdressCls
                     "@ZIPCODE = @PZIPCODE, " +
                     "@CITY = @PCITY, " +
                     "@COUNTRY = @PCOUNTRY ",
-            param : ['PGUID:stirng|50','PCUSER:stirng|50','PTYPE:int','PCUSTOMER:stirng|50','PADRESS:stirng|500','PZIPCODE:stirng|10','PCITY:stirng|25','PCOUNTRY:stirng|5'],
+            param : ['PGUID:string|50','PCUSER:string|50','PTYPE:int','PCUSTOMER:string|50','PADRESS:string|500','PZIPCODE:string|10','PCITY:string|25','PCOUNTRY:string|5'],
             dataprm : ['GUID','CUSER','TYPE','CUSTOMER','ADRESS','ZIPCODE','CITY','COUNTRY']
         }
         tmpDt.updateCmd = 
@@ -342,7 +344,7 @@ export class customerAdressCls
                     "@ZIPCODE = @PZIPCODE, " +
                     "@CITY = @PCITY, " +
                     "@COUNTRY = @PCOUNTRY ",
-            param : ['PGUID:stirng|50','PCUSER:stirng|50','PTYPE:int','PCUSTOMER:stirng|50','PADRESS:stirng|500','PZIPCODE:stirng|10','PCITY:stirng|25','PCOUNTRY:stirng|5'],
+            param : ['PGUID:string|50','PCUSER:string|50','PTYPE:int','PCUSTOMER:string|50','PADRESS:string|500','PZIPCODE:string|10','PCITY:string|25','PCOUNTRY:string|5'],
             dataprm : ['GUID','CUSER','TYPE','CUSTOMER','ADRESS','ZIPCODE','CITY','COUNTRY']
         }
         this.ds.add(tmpDt);
@@ -402,7 +404,7 @@ export class customerAdressCls
             this.ds.get('CUSTOMER_ADRESS').selectCmd.value = Object.values(tmpPrm);
 
             await this.ds.get('CUSTOMER_ADRESS').refresh();
-
+            
             resolve(this.ds.get('CUSTOMER_ADRESS'));
             
         });
