@@ -1500,7 +1500,7 @@ export default class itemCard extends React.Component
                                     title={'Tedarikçi Seçim'} 
                                     columnAutoWidth={true}
                                     allowColumnResizing={true}
-                                    data={{source:{select:{query:"SELECT GUID,CODE,NAME FROM CUSTOMERS WHERE TYPE = 1 "},sql:this.core.sql}}}
+                                    data={{source:{select:{query:"SELECT GUID,CODE,NAME FROM CUSTOMERS_VW_01 WHERE TYPE = 1 "},sql:this.core.sql}}}
                                     >           
                                     <Scrolling mode="virtual" />                         
                                     <Column dataField="NAME" caption="NAME" width={650} defaultSortOrder="asc" />
