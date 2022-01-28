@@ -26,7 +26,7 @@ export default class itemCard extends React.Component
     constructor()
     {
         super()                
-        this.state = {underPrice : 0}
+        this.state = {underPrice : 0,isItemGrpForOrginsValid : false,isItemGrpForMinMaxAccess : false}
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.itemsObj = new itemsCls();
@@ -141,7 +141,10 @@ export default class itemCard extends React.Component
         this.itemsObj.itemBarcode.addEmpty(tmpBarcodeObj);     
 
         this.itemsObj.itemUnit.addEmpty(tmpMainUnitObj);
-        this.itemsObj.itemUnit.addEmpty(tmpUnderUnitObj);                        
+        this.itemsObj.itemUnit.addEmpty(tmpUnderUnitObj);
+
+        this.itemGrpForOrginsValidCheck();   
+        this.itemGrpForMinMaxAccessCheck();                        
     }
     async getItem(pCode)
     {
@@ -338,7 +341,31 @@ export default class itemCard extends React.Component
             this.itemsObj.itemPrice.dt()[i].NET_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2); 
             this.itemsObj.itemPrice.dt()[i].NET_MARGIN_RATE = tmpMarginRate.toFixed(2);                 
         }
-    }    
+    }   
+    itemGrpForOrginsValidCheck()
+    {
+        let tmpData = this.prmObj.filter({ID:'UrunGrubuMenseiValidation'}).getValue()
+        if(typeof tmpData != 'undefined' && Array.isArray(tmpData) && typeof tmpData.find(x => x == this.txtUrunGrup.value) != 'undefined')
+        {
+            this.setState({isItemGrpForOrginsValid:true})
+        }
+        else
+        {
+            this.setState({isItemGrpForOrginsValid:false})
+        }
+    }
+    itemGrpForMinMaxAccessCheck()
+    {
+        let tmpData = this.prmObj.filter({ID:'UrunGrubuMinMaxYetki'}).getValue()
+        if(typeof tmpData != 'undefined' && Array.isArray(tmpData) && typeof tmpData.find(x => x == this.txtUrunGrup.value) != 'undefined')
+        {
+            this.setState({isItemGrpForMinMaxAccess:true})
+        }
+        else
+        {
+            this.setState({isItemGrpForMinMaxAccess:false})
+        }
+    }
     render()
     {   
         return (
@@ -496,9 +523,6 @@ export default class itemCard extends React.Component
                                     param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})} 
                                     access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}                                
                                     >     
-                                        <Validator validationGroup={"frmItems"}>
-                                            <RequiredRule message="Referans'ı boş geçemezsiniz !" />
-                                        </Validator>                                   
                                     </NdTextBox>      
                                     {/* STOK SEÇİM POPUP */}
                                     <NdPopGrid id={"pg_txtRef"} parent={this} container={"#root"} 
@@ -533,8 +557,8 @@ export default class itemCard extends React.Component
                                     <Label text={"Ürün Grubu "} alignment="right" />
                                     <NdTextBox simple={true} parent={this} id="txtUrunGrup" showClearButton={true} 
                                     dt={{data:this.itemsObj.dt('ITEMS'),field:"MAIN_GRP",display:"MAIN_GRP_NAME"}}                                    
-                                    param={this.param.filter({ELEMENT:'cmbUrunGrup',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'cmbUrunGrup',USERS:this.user.CODE})}
+                                    param={this.param.filter({ELEMENT:'txtUrunGrup',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'txtUrunGrup',USERS:this.user.CODE})}
                                     displayValue={""}
                                     readOnly={true}
                                     button=
@@ -552,6 +576,8 @@ export default class itemCard extends React.Component
                                                         {
                                                             this.txtUrunGrup.value = data[0].CODE
                                                             this.txtUrunGrup.displayValue = data[0].NAME
+                                                            this.itemGrpForOrginsValidCheck();
+                                                            this.itemGrpForMinMaxAccessCheck();
                                                         }
                                                     }
                                                 }
@@ -559,9 +585,6 @@ export default class itemCard extends React.Component
                                         ]
                                     }
                                     >
-                                        <Validator validationGroup={"frmItems"}>
-                                            <RequiredRule message="Ürün Grubu'nu boş geçemezsiniz !" />
-                                        </Validator>   
                                     </NdTextBox>
                                     {/* ÜRÜN GRUP SEÇİM POPUP */}
                                     <div>
@@ -605,9 +628,6 @@ export default class itemCard extends React.Component
                                     }
                                     param={this.param.filter({ELEMENT:'txtTedarikci',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtTedarikci',USERS:this.user.CODE})}>
-                                        <Validator validationGroup={"frmItems"}>
-                                            <RequiredRule message="Tedarikçi boş geçemezsiniz !" />
-                                        </Validator>  
                                     </NdTextBox>
                                 </Item>
                                 {/* cmbUrunCins */}
@@ -684,11 +704,6 @@ export default class itemCard extends React.Component
                                             dt={{data:this.itemsObj.dt('ITEM_UNIT'),field:"FACTOR",filter:{TYPE:0}}}
                                             param={this.param.filter({ELEMENT:'txtAnaBirim',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtAnaBirim',USERS:this.user.CODE})}>
-                                                <Validator validationGroup={"frmItems"}>
-                                                    <RequiredRule message="Ana birim çarpanı'ı boş geçemezsiniz !" />
-                                                    <NumericRule message="Ana birim çarpanı'na sayısal değer giriniz !" />
-                                                    <RangeRule min={1} message={"Ana birim çarpanı bir den küçük olamaz !"} />
-                                                </Validator>  
                                             </NdNumberBox>
                                         </div>
                                     </div>
@@ -723,8 +738,11 @@ export default class itemCard extends React.Component
                                                 }
                                             }
                                         ]
-                                    }
-                                    />
+                                    }>
+                                        <Validator validationGroup={this.state.isItemGrpForOrginsValid ? "frmItems" : ""}>
+                                            <RequiredRule message="Menşei boş geçemezsiniz !" />
+                                        </Validator>
+                                    </NdTextBox>                                    
                                     {/* MENŞEİ SEÇİM POPUP */}
                                     <div>
                                         <NdPopGrid id={"pg_txtMensei"} parent={this} container={"#root"} 
@@ -762,11 +780,6 @@ export default class itemCard extends React.Component
                                             dt={{id:"txtAltBirim",data:this.itemsObj.dt('ITEM_UNIT'),field:"FACTOR",filter:{TYPE:1}}}
                                             param={this.param.filter({ELEMENT:'txtAltBirim',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtAltBirim',USERS:this.user.CODE})}>
-                                                <Validator validationGroup={"frmItems"}>
-                                                    <RequiredRule message="Alt birim çarpanı'ı boş geçemezsiniz !" />
-                                                    <NumericRule message="Alt birim çarpanı'na sayısal değer giriniz !" />
-                                                    <RangeRule min={0.01} message={"Alt birim çarpanı sıfır ve sıfır dan küçük olamaz !"} />
-                                                </Validator>
                                             </NdNumberBox>
                                         </div>
                                         <div className="col-3 pe-0">
@@ -875,29 +888,22 @@ export default class itemCard extends React.Component
                                             format={"#,##0.000"} step={0.1}
                                             param={this.param.filter({ELEMENT:'txtMaliyetFiyat',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtMaliyetFiyat',USERS:this.user.CODE})}>
-                                                <Validator validationGroup={"frmItems"}>
-                                                    <RangeRule min={0.01} message="Sıfır değer giremezsiniz !" />
-                                                </Validator>
                                             </NdNumberBox>
                                         </div>
                                         <div className='col-2'>
                                             <NdNumberBox id="txtMinSatisFiyat" parent={this} title={"Min. Satış Fiyatı"} titleAlign={"top"} dt={{data:this.itemsObj.dt('ITEMS'),field:"MIN_PRICE"}}
                                             format={"#,##0.000"} step={0.1}
+                                            editable={this.state.isItemGrpForMinMaxAccess}
                                             param={this.param.filter({ELEMENT:'txtMinSatisFiyat',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtMinSatisFiyat',USERS:this.user.CODE})}>
-                                                <Validator validationGroup={"frmItems"}>
-                                                    <RangeRule min={0.01} message="Sıfır değer giremezsiniz !" />
-                                                </Validator>
                                             </NdNumberBox>
                                         </div>
                                         <div className='col-2'>
                                             <NdNumberBox id="txtMaxSatisFiyat" parent={this} title={"Max. Satış Fiyatı"} titleAlign={"top"} dt={{data:this.itemsObj.dt('ITEMS'),field:"MAX_PRICE"}}
                                             format={"#,##0.000"} step={0.1}
+                                            editable={this.state.isItemGrpForMinMaxAccess}
                                             param={this.param.filter({ELEMENT:'txtMaxSatisFiyat',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtMaxSatisFiyat',USERS:this.user.CODE})}>
-                                                <Validator validationGroup={"frmItems"}>
-                                                    <RangeRule min={0.01} message="Sıfır değer giremezsiniz !" />
-                                                </Validator>
                                             </NdNumberBox>
                                         </div>
                                         <div className='col-2'>

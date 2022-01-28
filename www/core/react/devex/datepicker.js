@@ -1,7 +1,6 @@
 import React from 'react';
 import DateBox from 'devextreme-react/date-box';
-import Base from './base.js';
-import { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from 'devextreme-react/validator';
+import Base,{ Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from './base.js';
 
 export { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule }
 export default class NdDatePicker extends Base
@@ -19,20 +18,6 @@ export default class NdDatePicker extends Base
         
         this._onValueChanged = this._onValueChanged.bind(this)
         this._onEnterKey = this._onEnterKey.bind(this)
-        
-        this.props.parent.on('onInit',(function()
-        {
-            //PARAMETRE DEĞERİ SET EDİLİYOR.
-            if(typeof props.param != 'undefined')
-            {   
-                let tmpVal = props.param.getValue()
-                if(typeof props.param.getValue() == 'object')
-                {
-                    tmpVal = props.param.getValue().value
-                }     
-                this.value = new Date(tmpVal);
-            }
-        }).bind(this))
     }
     //#region Private
     _onValueChanged(e) 
@@ -63,6 +48,7 @@ export default class NdDatePicker extends Base
             editorOptions={this.state.editorOptions}
             onEnterKey={this._onEnterKey} onValueChanged={this._onValueChanged}>
                 {this.props.children}
+                {this.validationView()}
             </DateBox>
         )
     }

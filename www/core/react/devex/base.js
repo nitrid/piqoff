@@ -2,7 +2,9 @@ import React from 'react';
 import CustomStore from 'devextreme/data/custom_store';
 import { datatable } from '../../core.js';
 import { core } from '../../core.js';
+import { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from 'devextreme-react/validator';
 
+export { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule }
 export default class NdBase extends React.Component
 {
     constructor(props)
@@ -231,6 +233,23 @@ export default class NdBase extends React.Component
                 }
             });
         }
+
+        if(typeof this.props.parent != 'undefined' && typeof this.props.parent.on != 'undefined')
+        {
+            this.props.parent.on('onInit',(function()
+            {
+                //PARAMETRE DEĞERİ SET EDİLİYOR.
+                if(typeof props.param != 'undefined')
+                {   
+                    let tmpVal = props.param.getValue()
+                    if(typeof props.param.getValue() == 'object')
+                    {
+                        tmpVal = props.param.getValue().value
+                    }     
+                    this.value = tmpVal;
+                }
+            }).bind(this))
+        }
     }
     get data()
     {
@@ -436,5 +455,41 @@ export default class NdBase extends React.Component
                 }
             });
         });
+    }
+    validationView()
+    {        
+        let tmpValid = null;
+        if(typeof this.props.param != 'undefined')
+        {   
+            if(typeof this.props.param.getValue() == 'object' && typeof this.props.param.getValue().validation != 'undefined')
+            {
+                tmpValid = this.props.param.getValue().validation
+            }                     
+        }
+        if(tmpValid != null)
+        {
+            let tmp = []
+            for (let i = 0; i < tmpValid.val.length; i++) 
+            {
+                if(tmpValid.val[i].type == "required")
+                {
+                    tmp.push (<RequiredRule key={i} message={tmpValid.val[i].msg} />)
+                }
+                else if(tmpValid.val[i].type == "numeric")
+                {
+                    tmp.push (<NumericRule key={i} message={tmpValid.val[i].msg} />)
+                }
+                else if(tmpValid.val[i].type == "range")
+                {
+                    tmp.push (<RangeRule key={i} min={tmpValid.val[i].min} max={tmpValid.val[i].max} message={tmpValid.val[i].msg} />)
+                }
+            }
+
+            return (
+                <Validator validationGroup={tmpValid.grp}>
+                    {tmp}        
+                </Validator>
+            )
+        }
     }
 }

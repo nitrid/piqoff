@@ -5,7 +5,20 @@ export const prm =
     {
         TYPE : 2,
         ID :"txtRef",
-        VALUE : {validation:"TTSS"},
+        VALUE : 
+        {
+            validation :
+            {
+                grp : "frmItems",
+                val : 
+                [
+                    {
+                        type : "required",
+                        msg : "Referans'ı boş geçemezsiniz !"
+                    }
+                ]
+            }
+        },
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "txtRef",
@@ -17,11 +30,25 @@ export const prm =
             CAPTION : "Referans"
         }
     },
-    //cmbUrunGrup
+    //txtUrunGrup
     {
         TYPE : 2,
         ID :"txtUrunGrup",
-        VALUE : "",
+        VALUE : 
+        {
+            value : "",
+            validation :
+            {
+                grp : "frmItems",
+                val : 
+                [
+                    {
+                        type : "required",
+                        msg : "Ürün Grubu'nu boş geçemezsiniz !"
+                    }
+                ]
+            }
+        },
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "txtUrunGrup",
@@ -37,7 +64,21 @@ export const prm =
     {
         TYPE : 2,
         ID :"txtTedarikci",
-        VALUE : "",
+        VALUE : 
+        {
+            value : "",
+            validation :
+            {
+                grp : "frmItems",
+                val : 
+                [
+                    {
+                        type : "required",
+                        msg : "Tedarikçi boş geçemezsiniz !"
+                    }
+                ]
+            }
+        },
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "txtTedarikci",
@@ -53,7 +94,10 @@ export const prm =
     {
         TYPE : 2,
         ID :"cmbUrunCins",
-        VALUE : "1",
+        VALUE : 
+        {
+            value : "1"
+        },
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "cmbUrunCins",
@@ -69,7 +113,10 @@ export const prm =
     {
         TYPE : 2,
         ID :"txtBarkod",
-        VALUE : "",
+        VALUE : 
+        {
+            value : ""
+        },
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "txtBarkod",
@@ -85,7 +132,10 @@ export const prm =
     {
         TYPE : 2,
         ID :"cmbVergi",
-        VALUE : "5.5",
+        VALUE : 
+        {
+            value : "5.5"
+        },
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "cmbVergi",
@@ -101,7 +151,10 @@ export const prm =
     {
         TYPE : 2,
         ID :"cmbAnaBirim",
-        VALUE : "001",
+        VALUE : 
+        {
+            value : "001"
+        },
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "cmbAnaBirim",
@@ -117,7 +170,30 @@ export const prm =
     {
         TYPE : 2,
         ID :"txtAnaBirim",
-        VALUE : 2,
+        VALUE : 
+        {
+            value : 1,
+            validation :
+            {
+                grp : "frmItems",
+                val : 
+                [
+                    {
+                        type : "required",
+                        msg : "Ana birim çarpanı'ı boş geçemezsiniz !"
+                    },
+                    {
+                        type : "numeric",
+                        msg : "Ana birim çarpanı'na sayısal değer giriniz !"
+                    },
+                    {
+                        type : "range",
+                        msg : "Ana birim çarpanı bir den küçük olamaz !",
+                        min : 1
+                    }
+                ]
+            }
+        },
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "txtAnaBirim",
@@ -133,7 +209,10 @@ export const prm =
     {
         TYPE : 2,
         ID :"txtMensei",
-        VALUE : "TR",
+        VALUE : 
+        {
+            value : ""
+        },
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "txtMensei",
@@ -149,7 +228,10 @@ export const prm =
     {
         TYPE : 2,
         ID :"cmbAltBirim",
-        VALUE : "001",
+        VALUE : 
+        {
+            value : "001"
+        },
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "cmbAltBirim",
@@ -165,7 +247,30 @@ export const prm =
     {
         TYPE : 2,
         ID :"txtAltBirim",
-        VALUE : 1,
+        VALUE : 
+        {
+            value : 1,
+            validation :
+            {
+                grp : "frmItems",
+                val : 
+                [
+                    {
+                        type : "required",
+                        msg : "Alt birim çarpanı'ı boş geçemezsiniz !"
+                    },
+                    {
+                        type : "numeric",
+                        msg : "Alt birim çarpanı'na sayısal değer giriniz !"
+                    },
+                    {
+                        type : "range",
+                        msg : "Alt birim çarpanı sıfır ve sıfır dan küçük olamaz !",
+                        min : 0.01
+                    }
+                ]
+            }
+        },
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "txtAltBirim",
@@ -181,7 +286,10 @@ export const prm =
     {
         TYPE : 2,
         ID :"txtUrunAdi",
-        VALUE : "",
+        VALUE : 
+        {
+            value : ""
+        },
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "txtUrunAdi",
@@ -197,7 +305,10 @@ export const prm =
     {
         TYPE : 2,
         ID :"txtKisaAdi",
-        VALUE : "",
+        VALUE : 
+        {
+            value : ""
+        },
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "txtKisaAdi",
@@ -213,7 +324,10 @@ export const prm =
     {
         TYPE : 2,
         ID :"chkAktif",
-        VALUE : true,
+        VALUE : 
+        {
+            value : true
+        },
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "chkAktif",
@@ -229,7 +343,10 @@ export const prm =
     {
         TYPE : 2,
         ID :"chkKasaTartilsin",
-        VALUE : false,
+        VALUE : 
+        {
+            value : false
+        },
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "chkKasaTartilsin",
@@ -245,7 +362,10 @@ export const prm =
     {
         TYPE : 2,
         ID :"chkSatisBirlestir",
-        VALUE : false,
+        VALUE : 
+        {
+            value : false
+        },
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "chkSatisBirlestir",
@@ -261,7 +381,10 @@ export const prm =
     {
         TYPE : 2,
         ID :"chkTicketRest",
-        VALUE : false,
+        VALUE : 
+        {
+            value : false
+        },
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "chkTicketRest",
@@ -277,7 +400,22 @@ export const prm =
     {
         TYPE : 2,
         ID :"txtMaliyetFiyat",
-        VALUE : 0,
+        VALUE : 
+        {
+            value : 0,
+            validation :
+            {
+                grp : "frmItems",
+                val : 
+                [
+                    {
+                        type : "range",
+                        msg : "Sıfır değer giremezsiniz !",
+                        min : 0.01
+                    }
+                ]
+            }
+        },
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "txtMaliyetFiyat",
@@ -293,7 +431,22 @@ export const prm =
     {
         TYPE : 2,
         ID :"txtMinSatisFiyat",
-        VALUE : 0,
+        VALUE : 
+        {
+            value : 0,
+            validation :
+            {
+                grp : "frmItems",
+                val : 
+                [
+                    {
+                        type : "range",
+                        msg : "Sıfır değer giremezsiniz !",
+                        min : 0.01
+                    }
+                ]
+            }
+        },
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "txtMinSatisFiyat",
@@ -309,7 +462,22 @@ export const prm =
     {
         TYPE : 2,
         ID :"txtMaxSatisFiyat",
-        VALUE : 0,
+        VALUE : 
+        {
+            value : 0,
+            validation :
+            {
+                grp : "frmItems",
+                val : 
+                [
+                    {
+                        type : "range",
+                        msg : "Sıfır değer giremezsiniz !",
+                        min : 0.01
+                    }
+                ]
+            }
+        },
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "txtMaxSatisFiyat",
@@ -335,6 +503,38 @@ export const prm =
             TYPE : "text",
             PAGE_NAME : "Stok Tanımları",
             CAPTION : "Son Alış Fiyatı"
+        }
+    },
+    //Urun Grubuna Göre Menşei Validation
+    {
+        TYPE : 1,
+        ID :"UrunGrubuMenseiValidation",
+        VALUE : ['019','021'],
+        SPECIAL : "",
+        PAGE : "stk_01_001",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Stok Tanımları",
+            CAPTION : "Ürün Grubuna Göre Menşei Validation"
+        }
+    },
+    //Urun Grubuna Göre Min Max Yetki
+    {
+        TYPE : 1,
+        ID :"UrunGrubuMinMaxYetki",
+        VALUE : ['019','021'],
+        SPECIAL : "",
+        PAGE : "stk_01_001",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Stok Tanımları",
+            CAPTION : "Ürün Grubuna Göre Min Max Yetki"
         }
     },
     //#endregion

@@ -1,7 +1,6 @@
 import React from 'react';
 import CheckBox from 'devextreme-react/check-box';
-import Base from './base.js';
-import { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from 'devextreme-react/validator';
+import Base,{ Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from './base.js';
 
 export { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule }
 export default class NdCheckBox extends Base
@@ -13,20 +12,8 @@ export default class NdCheckBox extends Base
         this.state.value = typeof props.value != 'undefined' ? props.value : false
 
         this._onValueChanged = this._onValueChanged.bind(this);       
-        this.props.parent.on('onInit',(function()
-        {
-            //PARAMETRE DEĞERİ SET EDİLİYOR.
-            if(typeof props.param != 'undefined')
-            {   
-                let tmpVal = Boolean(props.param.getValue())
-                if(typeof props.param.getValue() == 'object')
-                {
-                    tmpVal = Boolean(props.param.getValue().value)
-                }     
-                this.value = tmpVal;
-            }
-        }).bind(this))
     }
+    //#region Private
     _onValueChanged(e) 
     {
         this.value = e.value;
@@ -34,7 +21,8 @@ export default class NdCheckBox extends Base
         {
             this.props.onValueChanged(e);
         }
-    } 
+    }     
+    //#endregion
     get value()
     {
         return this.state.value
@@ -72,7 +60,6 @@ export default class NdCheckBox extends Base
                     {
                         tmpData[tmpData.length-1][this.props.dt.field] = e
                     }
-                    
                 }
             }
         }
@@ -83,6 +70,7 @@ export default class NdCheckBox extends Base
         return(
             <CheckBox id={this.props.id} defaultValue={this.props.defaultValue} value={this.state.value} text={this.props.text} onValueChanged={this._onValueChanged}>
             {this.props.children}
+            {this.validationView()}
             </CheckBox>
         )
     }
