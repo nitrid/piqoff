@@ -5,14 +5,6 @@ import {datatable,param,access} from '../../core/core.js';
 import {prm} from '../meta/prm.js'
 import {acs} from '../meta/acs.js'
 
-class test
-{
-  init()
-  {
-    console.log(3333)
-  }
-}
-
 export default class Page extends React.Component
 {
   constructor(props)
