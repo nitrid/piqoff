@@ -455,8 +455,10 @@ export default class itemCard extends React.Component
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnDelete" parent={this} icon="trash" type="default"
-                                    onClick={()=>
+                                    onClick={async()=>
                                     {
+                                        this.itemsObj.dt('ITEMS').removeAt(0)
+                                        await this.itemsObj.dt('ITEMS').delete();
                                         console.log(this.itemsObj)
                                     }}/>
                                 </Item>
@@ -1500,10 +1502,10 @@ export default class itemCard extends React.Component
                                     title={'Tedarikçi Seçim'} 
                                     columnAutoWidth={true}
                                     allowColumnResizing={true}
-                                    data={{source:{select:{query:"SELECT GUID,CODE,NAME FROM CUSTOMERS WHERE TYPE = 1 "},sql:this.core.sql}}}
+                                    data={{source:{select:{query:"SELECT GUID,CODE,TITLE FROM CUSTOMER_VW_01 WHERE TYPE = 1 "},sql:this.core.sql}}}
                                     >           
                                     <Scrolling mode="virtual" />                         
-                                    <Column dataField="NAME" caption="NAME" width={650} defaultSortOrder="asc" />
+                                    <Column dataField="TITLE" caption="NAME" width={650} defaultSortOrder="asc" />
                                     <Column dataField="CODE" caption="CODE" width={150} />
                                     </NdPopGrid>
                                 </Item>

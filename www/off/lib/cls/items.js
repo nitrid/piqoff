@@ -109,6 +109,15 @@ export class itemsCls
             dataprm : ['GUID','CUSER','TYPE','SPECIAL','CODE','NAME','SNAME','VAT','COST_PRICE','MIN_PRICE','MAX_PRICE','STATUS','MAIN_GRP','SUB_GRP','ORGINS',
                        'SECTOR','RAYON','SHELF','WEIGHING','SALE_JOIN_LINE','TICKET_REST']
         } 
+        tmpDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEMS_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@UPDATE = 1, " + 
+                    "@GUID = @PGUID ", 
+            param : ['PCUSER:string|25','PGUID:string|50'],
+            dataprm : ['CUSER','GUID']
+        }
 
         this.ds.add(tmpDt);
         this.ds.add(this.itemUnit.dt('ITEM_UNIT'))
