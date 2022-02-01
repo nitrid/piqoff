@@ -421,14 +421,14 @@ export default class NdBase extends React.Component
                         },
                         onRemoved: function (key) 
                         {
-                            if(typeof tmpThis.props.data.onRemoved != 'undefined')
+                            if(typeof tmpThis.props.data != 'undefined' && typeof tmpThis.props.data.onRemoved != 'undefined')
                             {
                                 tmpThis.props.data.onRemoved(key)
                             }
                         },
                         onRemoving: function (key) 
                         {
-                            if(typeof tmpThis.props.data.onRemoving != 'undefined')
+                            if(typeof tmpThis.props.data != 'undefined' && typeof tmpThis.props.data.onRemoving != 'undefined')
                             {
                                 tmpThis.props.data.onRemoving(key,values)
                             }
