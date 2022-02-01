@@ -181,8 +181,8 @@ export class customerOfficalCls
         let tmpDt = new datatable('CUSTOMER_OFFICAL');
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [dbo].[CUSTOMER_OFFICAL_VW_01] WHERE ((CUSTOMER = @CUSTOMER) OR (@CUSTOMER = '00000000-0000-0000-0000-000000000000')) AND ((TYPE = @TYPE)) ",
-            param : ['CUSTOMER:string|50','TYPE:int']
+            query : "SELECT * FROM [dbo].[CUSTOMER_OFFICAL_VW_01] WHERE ((CUSTOMER = @CUSTOMER) OR (@CUSTOMER = '00000000-0000-0000-0000-000000000000')) ",
+            param : ['CUSTOMER:string|50']
         }
         tmpDt.insertCmd = 
         {
@@ -316,8 +316,8 @@ export class customerAdressCls
         let tmpDt = new datatable('CUSTOMER_ADRESS')
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [dbo].[CUSTOMER_ADRESS_VW_01] WHERE ((CUSTOMER = @CUSTOMER) OR (@CUSTOMER = '00000000-0000-0000-0000-000000000000')) AND ((TYPE = @TYPE))",
-            param : ['CUSTOMER:string|50','TYPE:int']
+            query : "SELECT * FROM [dbo].[CUSTOMER_ADRESS_VW_01] WHERE ((CUSTOMER = @CUSTOMER) OR (@CUSTOMER = '00000000-0000-0000-0000-000000000000')) ",
+            param : ['CUSTOMER:string|50']
         }
         tmpDt.insertCmd = 
         {

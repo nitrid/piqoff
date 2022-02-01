@@ -30,6 +30,7 @@ export default class CustomerCard extends React.Component
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.customerObj = new customersCls();
         this.prevCode = "";
+        
 
         this._onItemRendered = this._onItemRendered.bind(this)
         
@@ -93,6 +94,8 @@ export default class CustomerCard extends React.Component
         let tmpOffical = {...this.customerObj.customerOffical.empty}
         tmpOffical.CUSTOMER = this.customerObj.dt()[0].GUID 
         this.customerObj.customerOffical.addEmpty(tmpOffical)
+
+        this.txtTitle.readOnly = true
     }
     async getCustomer(pCode)
     {
@@ -158,7 +161,7 @@ export default class CustomerCard extends React.Component
         }
         if(e.itemData.title == "Yetkili")
         {        
-            await this.GrdOffical.dataRefresh({source:this.customerObj.customerOffical.dt('CUSTOMER_OFFICAL')});
+            await this.grdOffical.dataRefresh({source:this.customerObj.customerOffical.dt('CUSTOMER_OFFICAL')});
         }
     }
     render()
@@ -267,6 +270,20 @@ export default class CustomerCard extends React.Component
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
                                     data={{source:[{ID:0,VALUE:"Bireysel"},{ID:1,VALUE:"Firma"}]}}
+                                    onValueChanged={(async()=>
+                                            {
+                                                if(this.cmbType.value == 0)
+                                                {
+                                                    this.txtTitle.readOnly = true
+                                                    this.txtTitle.value = ""
+                                                    this.txtCode.value = ""
+                                                }
+                                                else if(this.cmbType.value == 1)
+                                                {
+                                                    this.txtTitle.readOnly = false
+                                                    this.txtCode.value = Math.floor(Date.now() / 1000)
+                                                }
+                                        }).bind(this)}
                                     //param={this.param.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
                                     //access={this.access.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
                                     />
@@ -359,74 +376,69 @@ export default class CustomerCard extends React.Component
                                  <Item>
                                     <Label text={"Ünvan"} alignment="right" />
                                     <NdTextBox id="txtTitle" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"TITLE"}}
-                                    button=
-                                    {
-                                        [
-                                            
-                                        ]
-                                    }
                                     onChange={(async()=>
                                     {
-                                        // let tmpResult = await this.checkCustomer(this.txtTitle.value)
-                                        // if(tmpResult == 3)
-                                        // {
-                                        //     this.txtTitle.value = "";
-                                        // }
+                                      
                                     }).bind(this)}
                                     //param={this.param.filter({ELEMENT:'txtTitle',USERS:this.user.CODE})}
                                     //access={this.access.filter({ELEMENT:'txtTitle',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmCustomers"}>
-                                            <RequiredRule message="Ünvan boş geçemezsiniz !" />
-                                        </Validator>  
                                     </NdTextBox>
                                 </Item>
                                 {/* txtAdi */}
                                 <Item>
                                     <Label text={"Adı "} alignment="right" />
-                                    <NdTextBox id="txtCariAdi" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"NAME"}}
+                                    <NdTextBox id="txtCariAdi" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"NAME",filter:{TYPE:0}}}
                                     maxLength={32}
-                                    />
+                                    >
+                                     <Validator validationGroup={"frmCustomers"}>
+                                            <RequiredRule message="Adı boş geçemezsiniz !" />
+                                        </Validator>  
+                                    </NdTextBox>
                                 </Item>
                                 {/* txtSoyAdi */}
                                 <Item>
                                     <Label text={"Soy Adı "} alignment="right" />
-                                        <NdTextBox id="txtCariSoyAdi" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"LAST_NAME"}}
+                                        <NdTextBox id="txtCariSoyAdi" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"LAST_NAME",filter:{TYPE:0}}}
                                         maxLength={32}
-                                        />
+                                        >
+                                     <Validator validationGroup={"frmCustomers"}>
+                                            <RequiredRule message="Soyadı boş geçemezsiniz !" />
+                                        </Validator>  
+                                    </NdTextBox>
                                 </Item>
                                  {/* txtPhone1 */}
                                  <Item>
                                     <Label text={"Telefon 1 "} alignment="right" />
-                                        <NdTextBox id="txtPhone1" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"PHONE1"}}
+                                        <NdTextBox id="txtPhone1" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"PHONE1",filter:{TYPE:0}}}
                                         maxLength={32}
                                        />
                                 </Item>
                                  {/* txtPhone2 */}
                                  <Item>
                                     <Label text={"Telefon 2 "} alignment="right" />
-                                        <NdTextBox id="txtPhone2" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"PHONE2"}}
+                                        <NdTextBox id="txtPhone2" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"PHONE2",filter:{TYPE:0}}}
                                         maxLength={32}
                                         />
                                 </Item>
                                  {/* txtGsmPhone */}
                                  <Item>
                                     <Label text={"Gsm Tel "} alignment="right" />
-                                        <NdTextBox id="txtGsmPhone" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"GSM_PHONE"}}
+                                        <NdTextBox id="txtGsmPhone" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"GSM_PHONE",filter:{TYPE:0}}}
                                         maxLength={32}
                                         />
                                 </Item>
                                  {/* txtOtherPhone */}
                                  <Item>
                                     <Label text={"Diğer Tel "} alignment="right" />
-                                        <NdTextBox id="txtOtherPhone" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"OTHER_PHONE"}}
+                                        <NdTextBox id="txtOtherPhone" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"OTHER_PHONE",filter:{TYPE:0}}}
                                         maxLength={32}
                                         />
                                 </Item>
                                  {/* txtEmail */}
                                  <Item>
                                     <Label text={"E-Mail "} alignment="right" />
-                                        <NdTextBox id="txtEmail" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"EMAIL"}}
+                                        <NdTextBox id="txtEmail" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"EMAIL",filter:{TYPE:0}}}
                                         maxLength={32}
                                         />
                                 </Item>
@@ -525,7 +537,6 @@ export default class CustomerCard extends React.Component
                                             </div>
                                         </div>
                                     </Item>                              
-                                    <Item title="Bilgi"></Item>
                                 </TabPanel>
                             </div>
                         </div> 
