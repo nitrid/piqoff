@@ -191,6 +191,7 @@ export class itemsCls
     {
         return new Promise(async resolve => 
         {
+            this.ds.delete()
             resolve(await this.ds.update()); 
         });
     }
@@ -266,7 +267,16 @@ export class itemUnitCls
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PITEM:string|50','PID:string|25','PFACTOR:float','PWEIGHT:float',
                      'PVOLUME:float','PWIDTH:float','PHEIGHT:float','PSIZE:float'],
             dataprm : ['GUID','CUSER','TYPE','ITEM_GUID','ID','FACTOR','WEIGHT','VOLUME','WIDTH','HEIGHT','SIZE']
-        } 
+        }
+        tmpDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_UNIT_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@UPDATE = 1, " + 
+                    "@GUID = @PGUID ", 
+            param : ['PCUSER:string|25','PGUID:string|50'],
+            dataprm : ['CUSER','GUID']
+        }
         this.ds.add(tmpDt);
     }
     //#endregion
@@ -413,6 +423,15 @@ export class itemPriceCls
                      'PPRICE:float','PQUANTITY:float','PCUSTOMER:string|50'],
             dataprm : ['GUID','CUSER','TYPE','ITEM_GUID','DEPOT','START_DATE','FINISH_DATE','PRICE','QUANTITY','CUSTOMER_GUID']
         } 
+        tmpDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_PRICE_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@UPDATE = 1, " + 
+                    "@GUID = @PGUID ", 
+            param : ['PCUSER:string|25','PGUID:string|50'],
+            dataprm : ['CUSER','GUID']
+        }
         tmpDt.noColumnEdit = ['VAT_EXT','GROSS_MARGIN','GROSS_MARGIN_RATE','NET_MARGIN','NET_MARGIN_RATE']
 
         this.ds.add(tmpDt);
@@ -558,6 +577,15 @@ export class itemBarcodeCls
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PITEM:string|50','PBARCODE:string|50','PUNIT:string|50'],
             dataprm : ['GUID','CUSER','TYPE','ITEM_GUID','BARCODE','UNIT_GUID']
         } 
+        tmpDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_BARCODE_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@UPDATE = 1, " + 
+                    "@GUID = @PGUID ", 
+            param : ['PCUSER:string|25','PGUID:string|50'],
+            dataprm : ['CUSER','GUID']
+        }
         this.ds.add(tmpDt);
     }
     //#endregion
@@ -697,6 +725,15 @@ export class itemMultiCodeCls
             param : ['PGUID:string|50','PCUSER:string|25','PITEM:string|50','PCUSTOMER:string|50','PCODE:string|25','PPRICE_GUID:string|50','PPRICE:float'],
             dataprm : ['GUID','CUSER','ITEM_GUID','CUSTOMER_GUID','MULTICODE','CUSTOMER_PRICE_GUID','CUSTOMER_PRICE']
         }
+        tmpDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_MULTICODE_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@UPDATE = 1, " + 
+                    "@GUID = @PGUID ", 
+            param : ['PCUSER:string|25','PGUID:string|50'],
+            dataprm : ['CUSER','GUID']
+        }
         this.ds.add(tmpDt);
     }
     //#endregion
@@ -825,6 +862,14 @@ export class itemImageCls
                     "@IMAGE = @PIMAGE ", 
             param : ['PGUID:string|50','PCUSER:string|25','PITEM:string|50','PIMAGE:string|max'],
             dataprm : ['GUID','CUSER','ITEM_GUID','IMAGE']
+        }
+        tmpDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_IMAGE_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@GUID = @PGUID ", 
+            param : ['PCUSER:string|25','PGUID:string|50'],
+            dataprm : ['CUSER','GUID']
         }
         this.ds.add(tmpDt);
     }

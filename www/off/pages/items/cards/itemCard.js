@@ -97,14 +97,24 @@ export default class itemCard extends React.Component
             this.btnBack.setState({disabled:true});
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:true});
-            this.btnDelete.setState({disabled:true});
-            this.btnCopy.setState({disabled:true});
-            this.btnPrint.setState({disabled:true});
+            this.btnDelete.setState({disabled:false});
+            this.btnCopy.setState({disabled:false});
+            this.btnPrint.setState({disabled:false});
             //ALT BİRİM FİYAT HESAPLAMASI
             this.underPrice()
             //MARGIN HESAPLAMASI
             this.grossMargin()                 
             this.netMargin()                 
+        })
+        this.itemsObj.ds.on('onDelete',(pTblName) =>
+        {            
+            console.log(pTblName)
+            this.btnBack.setState({disabled:false});
+            this.btnNew.setState({disabled:true});
+            this.btnSave.setState({disabled:false});
+            this.btnDelete.setState({disabled:false});
+            this.btnCopy.setState({disabled:false});
+            this.btnPrint.setState({disabled:false});
         })
 
         this.itemsObj.addEmpty();
@@ -429,7 +439,7 @@ export default class itemCard extends React.Component
                                                 }
                                                 
                                                 if((await this.itemsObj.save()) == 0)
-                                                {
+                                                {                                                    
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>Kayıt işleminiz başarılı !</div>)
                                                     await dialog(tmpConfObj1);
                                                 }
@@ -457,9 +467,20 @@ export default class itemCard extends React.Component
                                     <NdButton id="btnDelete" parent={this} icon="trash" type="default"
                                     onClick={async()=>
                                     {
-                                        this.itemsObj.dt('ITEMS').removeAt(0)
-                                        await this.itemsObj.dt('ITEMS').delete();
-                                        console.log(this.itemsObj)
+                                        let tmpConfObj =
+                                        {
+                                            id:'diaSave1',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:'Tamam',location:'before'},{id:"btn02",caption:'Vazgeç',location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>Kaydı silmek istediğinize eminmisiniz ?</div>)
+                                        }
+                                        
+                                        let pResult = await dialog(tmpConfObj);
+                                        if(pResult == 'btn01')
+                                        {
+                                            this.itemsObj.dt('ITEMS').removeAt(0)
+                                            await this.itemsObj.dt('ITEMS').delete();
+                                            this.init(); 
+                                        }
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -535,7 +556,7 @@ export default class itemCard extends React.Component
                                     width={'90%'}
                                     height={'90%'}
                                     title={'Stok Seçim'} 
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM ITEMS"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT CODE,NAME FROM ITEMS_VW_01"},sql:this.core.sql}}}
                                     button=
                                     {
                                         [
@@ -983,9 +1004,7 @@ export default class itemCard extends React.Component
                                                 <Column dataField="QUANTITY" caption="Miktar"/>
                                                 <Column dataField="VAT_EXT" caption="Vergi Hariç" dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>                                                
                                                 <Column dataField="PRICE" caption="Fiyat" dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
-                                                <Column dataField="GROSS_MARGIN" caption="Brüt Marj" dataType="string"
-                                                
-                                                />
+                                                <Column dataField="GROSS_MARGIN" caption="Brüt Marj" dataType="string"/>
                                                 <Column dataField="NET_MARGIN" caption="Net Marj" dataType="string" format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                             </NdGrid>
                                         </div>
