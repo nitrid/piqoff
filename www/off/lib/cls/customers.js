@@ -82,6 +82,15 @@ export class customersCls
                         'PSIRET_ID:string|25','PAPE_CODE:string|50','PTAX_OFFICE:string|25','PTAX_NO:string|25','PINT_VAT_NO:string|50','PTAX_TYPE:int'],
             dataprm : ['GUID','CUSER','TYPE','TITLE','CODE','GENUS','CUSTOMER_GRP','WEB','NOTE','SIRET_ID','APE_CODE','TAX_OFFICE','TAX_NO','INT_VAT_NO','TAX_TYPE']
         }
+        tmpDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_CUSTOMERS_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@UPDATE = 1, " + 
+                    "@GUID = @PGUID ", 
+            param : ['PCUSER:string|25','PGUID:string|50'],
+            dataprm : ['CUSER','GUID']
+        }
 
         this.ds.add(tmpDt);
         this.ds.add(this.customerOffical.dt('CUSTOMER_OFFICAL'))
@@ -220,6 +229,16 @@ export class customerOfficalCls
                     'PPHONE1:string|50','PPHONE2:string|50','PGSM_PHONE:string|50','POTHER_PHONE:string|50','PEMAIL:string|50'],
             dataprm : ['GUID','CUSER','TYPE','CUSTOMER','NAME','LAST_NAME','PHONE1','PHONE2','GSM_PHONE','OTHER_PHONE','EMAIL']
         }
+        tmpDt.deleteCmd = 
+        {
+            query : "[dbo].[PRD_CUSTOMER_OFFICAL_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@UPDATE = 1, " + 
+                    "@GUID = @PGUID ", 
+            param : ['PCUSER:string|25','PGUID:string|50'],
+            dataprm : ['CUSER','GUID']
+        }
+
         this.ds.add(tmpDt);
     }
     //#endregion
@@ -347,6 +366,16 @@ export class customerAdressCls
             param : ['PGUID:string|50','PCUSER:string|50','PTYPE:int','PCUSTOMER:string|50','PADRESS:string|500','PZIPCODE:string|10','PCITY:string|25','PCOUNTRY:string|5'],
             dataprm : ['GUID','CUSER','TYPE','CUSTOMER','ADRESS','ZIPCODE','CITY','COUNTRY']
         }
+        tmpDt.deleteCmd = 
+        {
+            query : "[dbo].[PRD_CUSTOMER_ADRESS_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@UPDATE = 1, " + 
+                    "@GUID = @PGUID ", 
+            param : ['PCUSER:string|25','PGUID:string|50'],
+            dataprm : ['CUSER','GUID']
+        }
+
         this.ds.add(tmpDt);
     }
     //#regionend

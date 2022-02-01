@@ -240,7 +240,8 @@ export default class CustomerCard extends React.Component
                                     <NdButton id="btnDelete" parent={this} icon="trash" type="default"
                                     onClick={()=>
                                     {
-                                        console.log(this.customerObj)
+                                        this.customerObj.dt('CUSTOMERS').removeAt(0)
+                                        await this.customerObj.dt('CUSTOMERS').delete();
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
