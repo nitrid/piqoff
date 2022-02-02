@@ -30,9 +30,11 @@ export default class CustomerCard extends React.Component
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.customerObj = new customersCls();
         this.prevCode = "";
+        this.state={officalVisible:true}
         
 
         this._onItemRendered = this._onItemRendered.bind(this)
+        this._cellRoleRender = this._cellRoleRender.bind(this)
         
     }
     async componentDidMount()
@@ -85,9 +87,18 @@ export default class CustomerCard extends React.Component
             this.btnBack.setState({disabled:true});
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:true});
-            this.btnDelete.setState({disabled:true});
-            this.btnCopy.setState({disabled:true});
-            this.btnPrint.setState({disabled:true});             
+            this.btnDelete.setState({disabled:false});
+            this.btnCopy.setState({disabled:false});
+            this.btnPrint.setState({disabled:false});          
+        })
+        this.customerObj.ds.on('onDelete',(pTblName) =>
+        {            
+            this.btnBack.setState({disabled:false});
+            this.btnNew.setState({disabled:true});
+            this.btnSave.setState({disabled:false});
+            this.btnDelete.setState({disabled:false});
+            this.btnCopy.setState({disabled:false});
+            this.btnPrint.setState({disabled:false});
         })
 
         this.customerObj.addEmpty();
@@ -96,6 +107,8 @@ export default class CustomerCard extends React.Component
         this.customerObj.customerOffical.addEmpty(tmpOffical)
 
         this.txtTitle.readOnly = true
+        this.setState({officalVisible:false})
+        
     }
     async getCustomer(pCode)
     {
@@ -147,10 +160,36 @@ export default class CustomerCard extends React.Component
             }
         });
     }
+    async checkZipcode(pCode)
+    {
+        return new Promise(async resolve =>
+        {
+            if(pCode !== '')
+            {
+                let tmpQuery = {
+                    query :"SELECT COUNTRY_CODE,PLACE FROM ZIPCODE WHERE ZIPCODE = @ZIPCODE ",
+                    param : ['ZIPCODE:string|50'],
+                    value : [pCode]
+                }
+                let tmpData = await this.core.sql.execute(tmpQuery) 
+                if(tmpData.length > 0)
+                {
+                    resolve(1)
+                }
+                else
+                {
+                    resolve(1) // KAYIT BULUNAMADI
+                }
+            }
+            else
+            {
+                resolve(0) //PARAMETRE BOŞ
+            }
+        });
+    }
     async _onCustomerRendered(e)
     {
         await this.core.util.waitUntil(10)
-        console.log(e)
     }
     async _onItemRendered(e)
     {
@@ -163,6 +202,28 @@ export default class CustomerCard extends React.Component
         {        
             await this.grdOffical.dataRefresh({source:this.customerObj.customerOffical.dt('CUSTOMER_OFFICAL')});
         }
+        if(e.itemData.title == "Yasal")
+        {        
+            await this.grdYasal.dataRefresh({source:this.customerObj.dt('CUSTOMERS')});
+        }
+    }
+    _cellRoleRender(e)
+    {
+        let onValueChanged = function(data)
+        {
+            e.setValue(data.value)
+        }
+        return (
+            <NdSelectBox 
+                parent={this}                             
+                id = "cmdTaxType"                             
+                displayExpr="VALUE"                       
+                valueExpr="ID"
+                onValueChanged={onValueChanged}
+                data={{source:[{ID:0,VALUE:"Bireysel"},{ID:1,VALUE:"Firma"}]}}
+            >
+            </NdSelectBox>
+        )
     }
     render()
     {
@@ -238,10 +299,24 @@ export default class CustomerCard extends React.Component
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnDelete" parent={this} icon="trash" type="default"
-                                    onClick={()=>
+                                    onClick={async()=>
                                     {
-                                        this.customerObj.dt('CUSTOMERS').removeAt(0)
-                                        await this.customerObj.dt('CUSTOMERS').delete();
+                                        
+                                        let tmpConfObj =
+                                        {
+                                            id:'diaSave1',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:'Tamam',location:'before'},{id:"btn02",caption:'Vazgeç',location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>Kaydı silmek istediğinize eminmisiniz ?</div>)
+                                        }
+                                        
+                                        let pResult = await dialog(tmpConfObj);
+                                        if(pResult == 'btn01')
+                                        {
+                                            this.customerObj.dt('CUSTOMERS').removeAt(0)
+                                            await this.customerObj.dt('CUSTOMERS').delete();
+                                            this.init(); 
+                                        }
+                                        
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -276,12 +351,14 @@ export default class CustomerCard extends React.Component
                                                 if(this.cmbType.value == 0)
                                                 {
                                                     this.txtTitle.readOnly = true
+                                                    this.setState({officalVisible:false})
                                                     this.txtTitle.value = ""
                                                     this.txtCode.value = ""
                                                 }
                                                 else if(this.cmbType.value == 1)
                                                 {
                                                     this.txtTitle.readOnly = false
+                                                    this.setState({officalVisible:true})
                                                     this.txtCode.value = Math.floor(Date.now() / 1000)
                                                 }
                                         }).bind(this)}
@@ -356,7 +433,7 @@ export default class CustomerCard extends React.Component
                                     width={'90%'}
                                     height={'90%'}
                                     title={'Cari Seçim'}
-                                    data={{source:{select:{query : "SELECT CODE,TITLE FROM CUSTOMER_VW_01"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT CODE,TITLE,NAME,LAST_NAME FROM CUSTOMER_VW_01"},sql:this.core.sql}}}
                                     button=
                                     {
                                         {
@@ -369,8 +446,10 @@ export default class CustomerCard extends React.Component
                                         }
                                     }
                                     >
-                                         <Column dataField="CODE" caption="CODE" width={150} />
-                                        <Column dataField="TITLE" caption="TITLE" width={650} defaultSortOrder="asc" />
+                                         <Column dataField="CODE" caption="KODU" width={150} />
+                                        <Column dataField="TITLE" caption="ÜNVAN" width={300} defaultSortOrder="asc" />
+                                        <Column dataField="NAME" caption="ADI" width={300} defaultSortOrder="asc" />
+                                        <Column dataField="LAST_NAME" caption="SOYADI" width={300} defaultSortOrder="asc" />
                                     </NdPopGrid>
                                 </Item>
                                  {/* txtTitle */}
@@ -399,7 +478,7 @@ export default class CustomerCard extends React.Component
                                 </Item>
                                 {/* txtSoyAdi */}
                                 <Item>
-                                    <Label text={"Soy Adı "} alignment="right" />
+                                    <Label text={"Soyadı "} alignment="right" />
                                         <NdTextBox id="txtCariSoyAdi" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"LAST_NAME",filter:{TYPE:0}}}
                                         maxLength={32}
                                         >
@@ -494,7 +573,31 @@ export default class CustomerCard extends React.Component
                                             </div>
                                         </div>
                                     </Item>   
-                                    <Item title="Yetkili">
+                                    <Item title="Yasal">
+                                        <div className='row px-2 py-2'>
+                                            <div className='col-12'>
+                                                <NdGrid parent={this} id={"grdYasal"} 
+                                                showBorders={true} 
+                                                columnsAutoWidth={true} 
+                                                allowColumnReordering={true} 
+                                                allowColumnResizing={true} 
+                                                height={'100%'} 
+                                                width={'100%'}
+                                                dbApply={false}
+                                                >
+                                                    <Paging defaultPageSize={5} />
+                                                    <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
+                                                    <Column dataField="SIRET_ID" caption="SIRET No"/>
+                                                    <Column dataField="APE_CODE" caption="APE Kodu"/>
+                                                    <Column dataField="TAX_OFFICE" caption="Vergi Dairesi"/>
+                                                    <Column dataField="TAX_NO" caption="Vergi No"/>
+                                                    <Column dataField="INT_VAT_NO" caption="Ulus. Kdv No:"/>
+                                                    <Column dataField="TAX_TYPE" caption="Vergi Tipi" editCellRender={this._cellRoleRender} />
+                                                </NdGrid>
+                                            </div>
+                                        </div>
+                                    </Item>  
+                                    <Item title="Yetkili" visible={this.state.officalVisible}>
                                         <div className='row px-2 py-2'>
                                             <div className='col-12'>
                                                 <Toolbar>
@@ -529,7 +632,7 @@ export default class CustomerCard extends React.Component
                                                     <Paging defaultPageSize={5} />
                                                     <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                                     <Column dataField="NAME" caption="Ad"/>
-                                                    <Column dataField="LAST_NAME" caption="Soy Ad"/>
+                                                    <Column dataField="LAST_NAME" caption="Soyad"/>
                                                     <Column dataField="PHONE1" caption="Telefon 1"/>
                                                     <Column dataField="PHONE2" caption="Telefon 2"/>
                                                     <Column dataField="GSM_PHONE" caption="GSM"/>
@@ -563,6 +666,14 @@ export default class CustomerCard extends React.Component
                                 <Item>
                                     <Label text={"Posta Kodu "} alignment="right" />
                                     <NdTextBox simple={true} parent={this} id="txtPopZipcode"
+                                     onChange={(async()=>
+                                        {
+                                            let tmpResult = await this.checkZipcode(this.txtPopZipcode.value)
+                                            if(tmpResult == 3)
+                                            {
+                                                this.txtCode.value = "";
+                                            }
+                                        }).bind(this)}
                                     />
                                 </Item>
                                 <Item>
@@ -576,7 +687,8 @@ export default class CustomerCard extends React.Component
                                     displayExpr="NAME"                       
                                     valueExpr="CODE"
                                     value="FR"
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY"},sql:this.core.sql}}}
+                                    searchEnabled={true}
+                                    data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY NAME ASC"},sql:this.core.sql}}}
                                     />
                                 </Item>
                                 <Item>
@@ -630,7 +742,7 @@ export default class CustomerCard extends React.Component
                                     <NdTextBox id={"txtPopName"} parent={this} simple={true} />
                                 </Item>
                                 <Item>
-                                    <Label text={"Soy Adı "} alignment="right" />
+                                    <Label text={"Soyadı "} alignment="right" />
                                     <NdTextBox simple={true} parent={this} id="txtPopLastName"
                                     />
                                 </Item>
