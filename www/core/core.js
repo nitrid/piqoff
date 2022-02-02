@@ -113,6 +113,7 @@ export class sql
             {
                 TmpQuery = arguments[0];
             }
+            console.log(TmpQuery.value)
             //PARAMETRE UNDEFINED CONTROL
             if(typeof(TmpQuery.value) != 'undefined')
             {

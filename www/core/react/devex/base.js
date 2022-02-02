@@ -15,7 +15,6 @@ export default class NdBase extends React.Component
         {
             data : typeof props.data == 'undefined' ? undefined : props.data
         }
-        
         // GÖRÜNÜR DURUMU. YETKİLENDİRME.
         if(typeof this.props.access != 'undefined' && typeof this.props.access.getValue().visible != 'undefined')
         {   
@@ -273,8 +272,8 @@ export default class NdBase extends React.Component
                     datatable : typeof tmpThis.data == 'undefined' || typeof tmpThis.data.datatable == 'undefined' ? undefined : tmpThis.data.datatable,
                     store : new CustomStore(
                     {
-                        load: () =>
-                        {                              
+                        load: (loadOption) =>
+                        {      
                             return new Promise(async resolve => 
                             {       
                                 // EĞER FONKSİYONA PARAMETRE GÖNDERİLMEMİŞ İSE VE STATE DEĞİŞKENİNDE DAHA ÖNCEDEN ATANMIŞ DATA SOURCE VARSA GRİD REFRESH EDİLİYOR.
@@ -297,7 +296,7 @@ export default class NdBase extends React.Component
                                 {
                                     tmpThis.state.data.source = e.source;
                                     tmpThis.state.data.datatable = e.source;                                                                       
-                                    //await tmpThis.state.data.datatable.refresh();                                        
+                                    //await tmpThis.state.data.datatable.refresh();    
                                 }
                                 // EĞER DATA SOURCE A QUERY SET GÖNDERİLMİŞ İSE
                                 else if (typeof e != 'undefined' && typeof e.source != 'undefined' && typeof e.source == 'object' && typeof e.source.sql != 'undefined' && typeof e.source.select != 'undefined')
@@ -326,7 +325,22 @@ export default class NdBase extends React.Component
                                     }
                                     else
                                     {
-                                        resolve({data: tmpThis.state.data.datatable.toArray(),totalCount:tmpThis.state.data.datatable.toArray().length});
+                                        if(typeof loadOption.searchValue != 'undefined' && loadOption.searchValue != null)
+                                        {
+                                            function filterByValue(array, string) 
+                                            {
+                                                return array.filter(o => Object.keys(o).some(k => o[k].toLowerCase().includes(string.toLowerCase())));
+                                            }
+
+                                            let tmpData = filterByValue(tmpThis.state.data.datatable.toArray(),loadOption.searchValue)
+                                            resolve({data: tmpData,totalCount:tmpData.length});
+                                        }
+                                        else
+                                        {
+                                            resolve({data: tmpThis.state.data.datatable.toArray(),totalCount:tmpThis.state.data.datatable.toArray().length});
+                                        }
+                                        
+                                        
                                     }
                                     
                                     mresolve()
@@ -336,6 +350,7 @@ export default class NdBase extends React.Component
                                     resolve({data: [],totalCount:0});
                                     mresolve()
                                 }
+                                tmpThis.search = typeof loadOption.searchOperation != 'undefined' ? loadOption : tmpThis.search
                             });
                         },
                         insert: (values) => 

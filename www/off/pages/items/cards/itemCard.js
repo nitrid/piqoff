@@ -108,7 +108,6 @@ export default class itemCard extends React.Component
         })
         this.itemsObj.ds.on('onDelete',(pTblName) =>
         {            
-            console.log(pTblName)
             this.btnBack.setState({disabled:false});
             this.btnNew.setState({disabled:true});
             this.btnSave.setState({disabled:false});
