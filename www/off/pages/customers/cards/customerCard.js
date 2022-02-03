@@ -107,6 +107,7 @@ export default class CustomerCard extends React.Component
         this.customerObj.customerOffical.addEmpty(tmpOffical)
 
         this.txtTitle.readOnly = true
+        this.txtCode.value = ''
         this.setState({officalVisible:false})
         
     }
@@ -164,6 +165,7 @@ export default class CustomerCard extends React.Component
     {
         return new Promise(async resolve =>
         {
+            console.log(pCode)
             if(pCode !== '')
             {
                 let tmpQuery = {
@@ -172,8 +174,11 @@ export default class CustomerCard extends React.Component
                     value : [pCode]
                 }
                 let tmpData = await this.core.sql.execute(tmpQuery) 
-                if(tmpData.length > 0)
+                if(tmpData.result.recordset.length > 0)
                 {
+                    
+                    this.txtPopCity.value = tmpData.result.recordset[0].PLACE
+                    this.cmbPopCountry.value = tmpData.result.recordset[0].COUNTRY_CODE
                     resolve(1)
                 }
                 else
@@ -671,7 +676,7 @@ export default class CustomerCard extends React.Component
                                             let tmpResult = await this.checkZipcode(this.txtPopZipcode.value)
                                             if(tmpResult == 3)
                                             {
-                                                this.txtCode.value = "";
+                                               
                                             }
                                         }).bind(this)}
                                     />
