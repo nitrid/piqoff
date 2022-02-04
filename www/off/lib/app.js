@@ -32,6 +32,8 @@ export default class App extends React.Component
         loadMessages(frMessages);
         loadMessages(trMessages);
         locale(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'));
+        i18n.changeLanguage(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'))
+        this.lang = i18n;  
         
         this.style =
         {
@@ -171,9 +173,7 @@ export default class App extends React.Component
         {
             App.instance.setState({connected:false});
             this.core.auth.logout()
-        })
-
-        this.lang = i18n;        
+        })              
     }
     menuClick(data)
     {

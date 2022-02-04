@@ -32,9 +32,7 @@ export default class itemCard extends React.Component
         this.itemsObj = new itemsCls();
         this.itemsPriceSupply = new itemPriceCls();        
         this.prevCode = "";
-
-        let m = this.lang.getFixedT('tr',null,'stk_01_001')
-        console.log(m)
+        
         this._onItemRendered = this._onItemRendered.bind(this)
     }    
     async componentDidMount()
@@ -121,9 +119,9 @@ export default class itemCard extends React.Component
         this.itemsObj.addEmpty();
 
         this.txtRef.value = Math.floor(Date.now() / 1000)
-        this.txtTedarikci.value = "";
-        this.txtTedarikci.displayValue = "";   
-        this.txtBarkod.readOnly = false;   
+        this.txtCustomer.value = "";
+        this.txtCustomer.displayValue = "";   
+        this.txtBarcode.readOnly = false;   
         this.imgFile.value = ""; 
         
         let tmpUnit = new unitCls();
@@ -163,7 +161,7 @@ export default class itemCard extends React.Component
         await this.itemsObj.load({CODE:pCode});
         //TEDARİKÇİ FİYAT GETİR İŞLEMİ.                
         await this.itemsPriceSupply.load({ITEM_CODE:pCode,TYPE:1})    
-        this.txtBarkod.readOnly = true;
+        this.txtBarcode.readOnly = true;
     }
     async checkItem(pCode)
     {
@@ -221,7 +219,7 @@ export default class itemCard extends React.Component
                 {
                     let tmpConfObj =
                     {
-                        id:'txtBarkod',
+                        id:'txtBarcode',
                         showTitle:true,
                         title:"Dikkat",
                         showCloseButton:true,
@@ -265,7 +263,7 @@ export default class itemCard extends React.Component
                 {
                     let tmpConfObj =
                     {
-                        id:'txtBarkod',
+                        id:'txtBarcode',
                         showTitle:true,
                         title:"Dikkat",
                         showCloseButton:true,
@@ -355,8 +353,8 @@ export default class itemCard extends React.Component
     }   
     itemGrpForOrginsValidCheck()
     {
-        let tmpData = this.prmObj.filter({ID:'UrunGrubuMenseiValidation'}).getValue()
-        if(typeof tmpData != 'undefined' && Array.isArray(tmpData) && typeof tmpData.find(x => x == this.txtUrunGrup.value) != 'undefined')
+        let tmpData = this.prmObj.filter({ID:'ItemGrpForOrginsValidation'}).getValue()
+        if(typeof tmpData != 'undefined' && Array.isArray(tmpData) && typeof tmpData.find(x => x == this.txtItemGrp.value) != 'undefined')
         {
             this.setState({isItemGrpForOrginsValid:true})
         }
@@ -367,8 +365,8 @@ export default class itemCard extends React.Component
     }
     itemGrpForMinMaxAccessCheck()
     {
-        let tmpData = this.prmObj.filter({ID:'UrunGrubuMinMaxYetki'}).getValue()
-        if(typeof tmpData != 'undefined' && Array.isArray(tmpData) && typeof tmpData.find(x => x == this.txtUrunGrup.value) != 'undefined')
+        let tmpData = this.prmObj.filter({ID:'ItemGrpForMinMaxAccess'}).getValue()
+        if(typeof tmpData != 'undefined' && Array.isArray(tmpData) && typeof tmpData.find(x => x == this.txtItemGrp.value) != 'undefined')
         {
             this.setState({isItemGrpForMinMaxAccess:true})
         }
@@ -506,7 +504,7 @@ export default class itemCard extends React.Component
                             <Form colCount={2} id="frmItems">
                                 {/* txtRef */}
                                 <Item>                                    
-                                    <Label text={"Referans "} alignment="right" />
+                                    <Label text={this.t("txtRef")} alignment="right" />
                                     <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.itemsObj.dt('ITEMS'),field:"CODE"}} 
                                     button=
                                     {
@@ -576,13 +574,13 @@ export default class itemCard extends React.Component
                                         <Column dataField="NAME" caption="NAME" width={650} defaultSortOrder="asc" />
                                     </NdPopGrid>
                                 </Item>
-                                {/* cmbUrunGrup */}
+                                {/* txtItemGrp */}
                                 <Item>
-                                    <Label text={"Ürün Grubu "} alignment="right" />
-                                    <NdTextBox simple={true} parent={this} id="txtUrunGrup" showClearButton={true} 
+                                    <Label text={this.t("txtItemGrp")} alignment="right" />
+                                    <NdTextBox simple={true} parent={this} id="txtItemGrp" showClearButton={true} 
                                     dt={{data:this.itemsObj.dt('ITEMS'),field:"MAIN_GRP",display:"MAIN_GRP_NAME"}}                                    
-                                    param={this.param.filter({ELEMENT:'txtUrunGrup',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'txtUrunGrup',USERS:this.user.CODE})}
+                                    param={this.param.filter({ELEMENT:'txtItemGrp',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'txtItemGrp',USERS:this.user.CODE})}
                                     displayValue={""}
                                     readOnly={true}
                                     button=
@@ -593,13 +591,13 @@ export default class itemCard extends React.Component
                                                 icon:'more',
                                                 onClick:()=>
                                                 {                                                    
-                                                    this.pg_txtUrunGrup.show()
-                                                    this.pg_txtUrunGrup.onClick = (data) =>
+                                                    this.pg_txtItemGrp.show()
+                                                    this.pg_txtItemGrp.onClick = (data) =>
                                                     {
                                                         if(data.length > 0)
                                                         {
-                                                            this.txtUrunGrup.value = data[0].CODE
-                                                            this.txtUrunGrup.displayValue = data[0].NAME
+                                                            this.txtItemGrp.value = data[0].CODE
+                                                            this.txtItemGrp.displayValue = data[0].NAME
                                                             this.itemGrpForOrginsValidCheck();
                                                             this.itemGrpForMinMaxAccessCheck();
                                                         }
@@ -612,7 +610,7 @@ export default class itemCard extends React.Component
                                     </NdTextBox>
                                     {/* ÜRÜN GRUP SEÇİM POPUP */}
                                     <div>
-                                        <NdPopGrid id={"pg_txtUrunGrup"} parent={this} container={"#root"} 
+                                        <NdPopGrid id={"pg_txtItemGrp"} parent={this} container={"#root"} 
                                         position={{of:'#root'}} 
                                         showTitle={true} 
                                         showBorders={true}
@@ -626,10 +624,10 @@ export default class itemCard extends React.Component
                                         </NdPopGrid>
                                     </div>
                                 </Item>
-                                {/* txtTedarikci */}
+                                {/* txtCustomer */}
                                 <Item>
                                     <Label text={"Tedarikçi "} alignment="right" />
-                                    <NdTextBox id="txtTedarikci" parent={this} simple={true}
+                                    <NdTextBox id="txtCustomer" parent={this} simple={true}
                                     dt={{data:this.itemsObj.dt('ITEM_MULTICODE'),field:"CUSTOMER_CODE",display:"CUSTOMER_NAME"}}
                                     readOnly={true}
                                     displayValue={""}
@@ -650,25 +648,25 @@ export default class itemCard extends React.Component
                                             }
                                         ]
                                     }
-                                    param={this.param.filter({ELEMENT:'txtTedarikci',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'txtTedarikci',USERS:this.user.CODE})}>
+                                    param={this.param.filter({ELEMENT:'txtCustomer',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'txtCustomer',USERS:this.user.CODE})}>
                                     </NdTextBox>
                                 </Item>
-                                {/* cmbUrunCins */}
+                                {/* cmbItemGenus */}
                                 <Item>
                                     <Label text={"Ürün Cinsi "} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbUrunCins" dt={{data:this.itemsObj.dt('ITEMS'),field:"TYPE"}}
+                                    <NdSelectBox simple={true} parent={this} id="cmbItemGenus" dt={{data:this.itemsObj.dt('ITEMS'),field:"TYPE"}}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
                                     data={{source:{select:{query:"SELECT ID,VALUE FROM ITEM_TYPE ORDER BY ID ASC"},sql:this.core.sql}}}
-                                    param={this.param.filter({ELEMENT:'cmbUrunCins',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'cmbUrunCins',USERS:this.user.CODE})}
+                                    param={this.param.filter({ELEMENT:'cmbItemGenus',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbItemGenus',USERS:this.user.CODE})}
                                     />
                                 </Item>
-                                {/* txtBarkod */}
+                                {/* txtBarcode */}
                                 <Item>
                                     <Label text={"Barkod "} alignment="right" />
-                                    <NdTextBox id="txtBarkod" parent={this} simple={true}
+                                    <NdTextBox id="txtBarcode" parent={this} simple={true}
                                     dt={{data:this.itemsObj.dt('ITEM_BARCODE'),field:"BARCODE"}}
                                     button=
                                     {
@@ -689,57 +687,57 @@ export default class itemCard extends React.Component
                                     }
                                     onChange={(async()=>
                                     {
-                                        await this.checkBarcode(this.txtBarkod.value)
+                                        await this.checkBarcode(this.txtBarcode.value)
                                     }).bind(this)}
-                                    param={this.param.filter({ELEMENT:'txtBarkod',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'txtBarkod',USERS:this.user.CODE})}
+                                    param={this.param.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
                                     >
                                     </NdTextBox>
                                 </Item>  
-                                {/* cmbVergi */}
+                                {/* cmbTax */}
                                 <Item>
                                     <Label text={"Vergi "} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbVergi" height='fit-content' dt={{data:this.itemsObj.dt('ITEMS'),field:"VAT"}}
+                                    <NdSelectBox simple={true} parent={this} id="cmbTax" height='fit-content' dt={{data:this.itemsObj.dt('ITEMS'),field:"VAT"}}
                                     displayExpr="VAT"                       
                                     valueExpr="VAT"
                                     data={{source:{select:{query:"SELECT VAT FROM VAT ORDER BY ID ASC"},sql:this.core.sql}}}
-                                    param={this.param.filter({ELEMENT:'cmbVergi',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'cmbVergi',USERS:this.user.CODE})}
+                                    param={this.param.filter({ELEMENT:'cmbTax',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbTax',USERS:this.user.CODE})}
                                     />
                                 </Item>                              
-                                {/* cmbAnaBirim */}
+                                {/* cmbMainUnit */}
                                 <Item>
                                     <Label text={"Ana Birim "} alignment="right" />
                                     <div className="row">
                                         <div className="col-4 pe-0">
-                                            <NdSelectBox simple={true} parent={this} id="cmbAnaBirim" height='fit-content' 
+                                            <NdSelectBox simple={true} parent={this} id="cmbMainUnit" height='fit-content' 
                                             dt={{data:this.itemsObj.dt('ITEM_UNIT'),field:"ID",display:"NAME",filter:{TYPE:0}}}
                                             style={{borderTopRightRadius:'0px',borderBottomRightRadius:'0px'}}
                                             displayExpr="NAME"                       
                                             valueExpr="ID"
                                             data={{source:{select:{query:"SELECT ID,NAME,SYMBOL FROM UNIT ORDER BY ID ASC"},sql:this.core.sql}}}
-                                            param={this.param.filter({ELEMENT:'cmbAnaBirim',USERS:this.user.CODE})}
-                                            access={this.access.filter({ELEMENT:'cmbAnaBirim',USERS:this.user.CODE})}
+                                            param={this.param.filter({ELEMENT:'cmbMainUnit',USERS:this.user.CODE})}
+                                            access={this.access.filter({ELEMENT:'cmbMainUnit',USERS:this.user.CODE})}
                                             />
                                         </div>
                                         <div className="col-5 ps-0">
-                                            <NdNumberBox id="txtAnaBirim" parent={this} simple={true} style={{borderTopLeftRadius:'0px',borderBottomLeftRadius:'0px'}} 
+                                            <NdNumberBox id="txtMainUnit" parent={this} simple={true} style={{borderTopLeftRadius:'0px',borderBottomLeftRadius:'0px'}} 
                                             showSpinButtons={true} step={1.0} format={"###.000"}
                                             dt={{data:this.itemsObj.dt('ITEM_UNIT'),field:"FACTOR",filter:{TYPE:0}}}
-                                            param={this.param.filter({ELEMENT:'txtAnaBirim',USERS:this.user.CODE})}
-                                            access={this.access.filter({ELEMENT:'txtAnaBirim',USERS:this.user.CODE})}>
+                                            param={this.param.filter({ELEMENT:'txtMainUnit',USERS:this.user.CODE})}
+                                            access={this.access.filter({ELEMENT:'txtMainUnit',USERS:this.user.CODE})}>
                                             </NdNumberBox>
                                         </div>
                                     </div>
                                 </Item>     
-                                {/* cmbMensei */}
+                                {/* txtOrigin */}
                                 <Item>
                                     <Label text={"Menşei "} alignment="right" />
-                                    <NdTextBox simple={true} parent={this} id="txtMensei" showClearButton={true} 
+                                    <NdTextBox simple={true} parent={this} id="txtOrigin" showClearButton={true} 
                                     dt={{data:this.itemsObj.dt('ITEMS'),field:"ORGINS",display:"ORGINS_NAME"}}
                                     data={{source:{select:{query:"SELECT CODE,NAME FROM COUNTRY ORDER BY CODE ASC"},sql:this.core.sql}}}
-                                    param={this.param.filter({ELEMENT:'txtMensei',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'txtMensei',USERS:this.user.CODE})}
+                                    param={this.param.filter({ELEMENT:'txtOrigin',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'txtOrigin',USERS:this.user.CODE})}
                                     displayValue={""}
                                     readOnly={true}
                                     button=
@@ -750,13 +748,13 @@ export default class itemCard extends React.Component
                                                 icon:'more',
                                                 onClick:()=>
                                                 {
-                                                    this.pg_txtMensei.show()
-                                                    this.pg_txtMensei.onClick = (data) =>
+                                                    this.pg_txtOrigin.show()
+                                                    this.pg_txtOrigin.onClick = (data) =>
                                                     {
                                                         if(data.length > 0)
                                                         {
-                                                            this.txtMensei.value = data[0].CODE
-                                                            this.txtMensei.displayValue = data[0].NAME
+                                                            this.txtOrigin.value = data[0].CODE
+                                                            this.txtOrigin.displayValue = data[0].NAME
                                                         }
                                                     }
                                                 }
@@ -769,7 +767,7 @@ export default class itemCard extends React.Component
                                     </NdTextBox>                                    
                                     {/* MENŞEİ SEÇİM POPUP */}
                                     <div>
-                                        <NdPopGrid id={"pg_txtMensei"} parent={this} container={"#root"} 
+                                        <NdPopGrid id={"pg_txtOrigin"} parent={this} container={"#root"} 
                                         position={{of:'#root'}} 
                                         showTitle={true} 
                                         showBorders={true}
@@ -783,27 +781,27 @@ export default class itemCard extends React.Component
                                         </NdPopGrid>
                                     </div>
                                 </Item>                           
-                                {/* cmbAltBirim */}
+                                {/* cmbUnderUnit */}
                                 <Item>
                                     <Label text={"Alt Birim "} alignment="right" />
                                     <div className="row">
                                         <div className="col-4 pe-0">
-                                            <NdSelectBox simple={true} parent={this} id="cmbAltBirim" height='fit-content' 
+                                            <NdSelectBox simple={true} parent={this} id="cmbUnderUnit" height='fit-content' 
                                             dt={{data:this.itemsObj.dt('ITEM_UNIT'),field:"ID",display:"NAME",filter:{TYPE:1}}}
                                             style={{borderTopRightRadius:'0px',borderBottomRightRadius:'0px'}}
                                             displayExpr="NAME"                       
                                             valueExpr="ID"
                                             data={{source:{select:{query:"SELECT ID,NAME,SYMBOL FROM UNIT ORDER BY ID ASC"},sql:this.core.sql}}}
-                                            param={this.param.filter({ELEMENT:'cmbAltBirim',USERS:this.user.CODE})}
-                                            access={this.access.filter({ELEMENT:'cmbAltBirim',USERS:this.user.CODE})}
+                                            param={this.param.filter({ELEMENT:'cmbUnderUnit',USERS:this.user.CODE})}
+                                            access={this.access.filter({ELEMENT:'cmbUnderUnit',USERS:this.user.CODE})}
                                             />
                                         </div>
                                         <div className="col-5 ps-0">
-                                            <NdNumberBox id="txtAltBirim" parent={this} simple={true} style={{borderTopLeftRadius:'0px',borderBottomLeftRadius:'0px'}} 
+                                            <NdNumberBox id="txtUnderUnit" parent={this} simple={true} style={{borderTopLeftRadius:'0px',borderBottomLeftRadius:'0px'}} 
                                             showSpinButtons={true} step={0.1} format={"##0.000"}
-                                            dt={{id:"txtAltBirim",data:this.itemsObj.dt('ITEM_UNIT'),field:"FACTOR",filter:{TYPE:1}}}
-                                            param={this.param.filter({ELEMENT:'txtAltBirim',USERS:this.user.CODE})}
-                                            access={this.access.filter({ELEMENT:'txtAltBirim',USERS:this.user.CODE})}>
+                                            dt={{id:"txtUnderUnit",data:this.itemsObj.dt('ITEM_UNIT'),field:"FACTOR",filter:{TYPE:1}}}
+                                            param={this.param.filter({ELEMENT:'txtUnderUnit',USERS:this.user.CODE})}
+                                            access={this.access.filter({ELEMENT:'txtUnderUnit',USERS:this.user.CODE})}>
                                             </NdNumberBox>
                                         </div>
                                         <div className="col-3 pe-0">
@@ -813,26 +811,26 @@ export default class itemCard extends React.Component
                                 </Item>   
                                 {/* Boş */}
                                 <Item> </Item>                             
-                                {/* txtUrunAdi */}
+                                {/* txtItemName */}
                                 <Item>
                                     <Label text={"Ürün Adı "} alignment="right" />
-                                    <NdTextBox id="txtUrunAdi" parent={this} simple={true} dt={{data:this.itemsObj.dt('ITEMS'),field:"NAME"}}
-                                    param={this.param.filter({ELEMENT:'txtUrunAdi',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'txtUrunAdi',USERS:this.user.CODE})}
+                                    <NdTextBox id="txtItemName" parent={this} simple={true} dt={{data:this.itemsObj.dt('ITEMS'),field:"NAME"}}
+                                    param={this.param.filter({ELEMENT:'txtItemName',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'txtItemName',USERS:this.user.CODE})}
                                     onValueChanged={(e)=>
                                         {
                                             if(e.value.length <= 32)
-                                                this.txtKisaAdi.value = e.value
+                                                this.txtShortName.value = e.value
                                         }
                                     }/>
                                 </Item>
-                                {/* txtKisaAdi */}
+                                {/* txtShortName */}
                                 <Item>
                                     <Label text={"Kısa Adı "} alignment="right" />
-                                        <NdTextBox id="txtKisaAdi" parent={this} simple={true} dt={{data:this.itemsObj.dt('ITEMS'),field:"SNAME"}}
+                                        <NdTextBox id="txtShortName" parent={this} simple={true} dt={{data:this.itemsObj.dt('ITEMS'),field:"SNAME"}}
                                         maxLength={32}
-                                        param={this.param.filter({ELEMENT:'txtKisaAdi',USERS:this.user.CODE})}
-                                        access={this.access.filter({ELEMENT:'txtKisaAdi',USERS:this.user.CODE})}/>
+                                        param={this.param.filter({ELEMENT:'txtShortName',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'txtShortName',USERS:this.user.CODE})}/>
                                 </Item>
                             </Form>
                         </div>
@@ -871,26 +869,26 @@ export default class itemCard extends React.Component
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Form colCount={6} id="frmChkBox">
-                                {/* chkAktif */}
+                                {/* chkActive */}
                                 <Item>
                                     <Label text={"Aktif "} alignment="right" />
-                                    <NdCheckBox id="chkAktif" parent={this} defaultValue={true} dt={{data:this.itemsObj.dt('ITEMS'),field:"STATUS"}}
-                                    param={this.param.filter({ELEMENT:'chkAktif',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'chkAktif',USERS:this.user.CODE})}/>
+                                    <NdCheckBox id="chkActive" parent={this} defaultValue={true} dt={{data:this.itemsObj.dt('ITEMS'),field:"STATUS"}}
+                                    param={this.param.filter({ELEMENT:'chkActive',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'chkActive',USERS:this.user.CODE})}/>
                                 </Item>
-                                {/* chkKasaTartilsin */}
+                                {/* chkCaseWeighed */}
                                 <Item>
                                     <Label text={"Kasada Tartılsın "} alignment="right" />
-                                    <NdCheckBox id="chkKasaTartilsin" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"WEIGHING"}}
-                                    param={this.param.filter({ELEMENT:'chkKasaTartilsin',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'chkKasaTartilsin',USERS:this.user.CODE})}/>
+                                    <NdCheckBox id="chkCaseWeighed" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"WEIGHING"}}
+                                    param={this.param.filter({ELEMENT:'chkCaseWeighed',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'chkCaseWeighed',USERS:this.user.CODE})}/>
                                 </Item>
-                                {/* chkSatisBirlestir */}
+                                {/* chkLineMerged */}
                                 <Item>
                                     <Label text={"Satış da Satır Birleştir "} alignment="right" />
-                                    <NdCheckBox id="chkSatisBirlestir" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"SALE_JOIN_LINE"}}
-                                    param={this.param.filter({ELEMENT:'chkSatisBirlestir',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'chkSatisBirlestir',USERS:this.user.CODE})}/>
+                                    <NdCheckBox id="chkLineMerged" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"SALE_JOIN_LINE"}}
+                                    param={this.param.filter({ELEMENT:'chkLineMerged',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'chkLineMerged',USERS:this.user.CODE})}/>
                                 </Item>
                                 {/* chkTicketRest */}
                                 <Item>
@@ -908,33 +906,33 @@ export default class itemCard extends React.Component
                                 <Item title="Fiyat">
                                     <div className='row px-2 py-2'>
                                         <div className='col-2'>
-                                            <NdNumberBox id="txtMaliyetFiyat" parent={this} title={"Maliyet Fiyatı"} titleAlign={"top"} dt={{data:this.itemsObj.dt('ITEMS'),field:"COST_PRICE"}}
+                                            <NdNumberBox id="txtCostPrice" parent={this} title={"Maliyet Fiyatı"} titleAlign={"top"} dt={{data:this.itemsObj.dt('ITEMS'),field:"COST_PRICE"}}
                                             format={"#,##0.000"} step={0.1}
-                                            param={this.param.filter({ELEMENT:'txtMaliyetFiyat',USERS:this.user.CODE})}
-                                            access={this.access.filter({ELEMENT:'txtMaliyetFiyat',USERS:this.user.CODE})}>
+                                            param={this.param.filter({ELEMENT:'txtCostPrice',USERS:this.user.CODE})}
+                                            access={this.access.filter({ELEMENT:'txtCostPrice',USERS:this.user.CODE})}>
                                             </NdNumberBox>
                                         </div>
                                         <div className='col-2'>
-                                            <NdNumberBox id="txtMinSatisFiyat" parent={this} title={"Min. Satış Fiyatı"} titleAlign={"top"} dt={{data:this.itemsObj.dt('ITEMS'),field:"MIN_PRICE"}}
+                                            <NdNumberBox id="txtMinSalePrice" parent={this} title={"Min. Satış Fiyatı"} titleAlign={"top"} dt={{data:this.itemsObj.dt('ITEMS'),field:"MIN_PRICE"}}
                                             format={"#,##0.000"} step={0.1}
                                             editable={this.state.isItemGrpForMinMaxAccess}
-                                            param={this.param.filter({ELEMENT:'txtMinSatisFiyat',USERS:this.user.CODE})}
-                                            access={this.access.filter({ELEMENT:'txtMinSatisFiyat',USERS:this.user.CODE})}>
+                                            param={this.param.filter({ELEMENT:'txtMinSalePrice',USERS:this.user.CODE})}
+                                            access={this.access.filter({ELEMENT:'txtMinSalePrice',USERS:this.user.CODE})}>
                                             </NdNumberBox>
                                         </div>
                                         <div className='col-2'>
-                                            <NdNumberBox id="txtMaxSatisFiyat" parent={this} title={"Max. Satış Fiyatı"} titleAlign={"top"} dt={{data:this.itemsObj.dt('ITEMS'),field:"MAX_PRICE"}}
+                                            <NdNumberBox id="txtMaxSalePrice" parent={this} title={"Max. Satış Fiyatı"} titleAlign={"top"} dt={{data:this.itemsObj.dt('ITEMS'),field:"MAX_PRICE"}}
                                             format={"#,##0.000"} step={0.1}
                                             editable={this.state.isItemGrpForMinMaxAccess}
-                                            param={this.param.filter({ELEMENT:'txtMaxSatisFiyat',USERS:this.user.CODE})}
-                                            access={this.access.filter({ELEMENT:'txtMaxSatisFiyat',USERS:this.user.CODE})}>
+                                            param={this.param.filter({ELEMENT:'txtMaxSalePrice',USERS:this.user.CODE})}
+                                            access={this.access.filter({ELEMENT:'txtMaxSalePrice',USERS:this.user.CODE})}>
                                             </NdNumberBox>
                                         </div>
                                         <div className='col-2'>
-                                            <NdNumberBox id="txtSonAlisFiyat" parent={this} title={"Son Alış Fiyatı"} titleAlign={"top"}
+                                            <NdNumberBox id="txtLastBuyPrice" parent={this} title={"Son Alış Fiyatı"} titleAlign={"top"}
                                             format={"#,##0.000"} step={0.1}
-                                            param={this.param.filter({ELEMENT:'txtSonAlisFiyat',USERS:this.user.CODE})}
-                                            access={this.access.filter({ELEMENT:'txtSonAlisFiyat',USERS:this.user.CODE})}/>
+                                            param={this.param.filter({ELEMENT:'txtLastBuyPrice',USERS:this.user.CODE})}
+                                            access={this.access.filter({ELEMENT:'txtLastBuyPrice',USERS:this.user.CODE})}/>
                                         </div>
                                         <div className='col-4'>
                                             <Toolbar>
@@ -1014,7 +1012,7 @@ export default class itemCard extends React.Component
                                 <Item title="Birim">
                                     <div className='row px-2 py-2'>
                                         <div className='col-2'>
-                                            <NdTextBox id="txtAltBirimFiyat" parent={this} title={"Alt Birim Fiyatı"} titleAlign={"top"}/>
+                                            <NdTextBox id="txtUnderUnitFiyat" parent={this} title={"Alt Birim Fiyatı"} titleAlign={"top"}/>
                                         </div>
                                         <div className='col-10'>
                                             <Toolbar>
@@ -1220,7 +1218,7 @@ export default class itemCard extends React.Component
                                                 if(e.validationGroup.validate().status == "valid")
                                                 {
                                                     //FİYAT GİRERKEN MALİYET FİYAT KONTROLÜ
-                                                    if(this.txtMaliyetFiyat.value != 0 && this.txtMaliyetFiyat.value >= this.txtPopFiyFiyat.value)
+                                                    if(this.txtCostPrice.value != 0 && this.txtCostPrice.value >= this.txtPopFiyFiyat.value)
                                                     {
                                                         let tmpConfObj =
                                                         {
@@ -1565,7 +1563,7 @@ export default class itemCard extends React.Component
                                                 }
                                                 else if(tmpResult == 1) //KAYIT YOK
                                                 {
-                                                    this.txtMaliyetFiyat.value = this.txtPopTedFiyat.value
+                                                    this.txtCostPrice.value = this.txtPopTedFiyat.value
                                                     this.itemsObj.itemMultiCode.addEmpty(tmpEmptyMulti);
                                                     this.popTedarikci.hide(); 
                                                 }

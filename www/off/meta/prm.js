@@ -29,10 +29,10 @@ export const prm =
             CAPTION : "Referans"
         }
     },
-    //txtUrunGrup
+    //txtItemGrp
     {
         TYPE : 2,
-        ID :"txtUrunGrup",
+        ID :"txtItemGrp",
         VALUE : 
         {
             value : "",
@@ -49,7 +49,7 @@ export const prm =
         },
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtUrunGrup",
+        ELEMENT : "txtItemGrp",
         APP : "OFF",
         VIEW : 
         {
@@ -58,10 +58,10 @@ export const prm =
             CAPTION : "Ürün Grup"
         }
     },
-    //txtTedarikci
+    //txtCustomer
     {
         TYPE : 2,
-        ID :"txtTedarikci",
+        ID :"txtCustomer",
         VALUE : 
         {
             value : "",
@@ -78,7 +78,7 @@ export const prm =
         },
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtTedarikci",
+        ELEMENT : "txtCustomer",
         APP : "OFF",
         VIEW : 
         {
@@ -87,17 +87,17 @@ export const prm =
             CAPTION : "Tedarikçi"
         }
     },
-    //cmbUrunCins
+    //cmbItemGenus
     {
         TYPE : 2,
-        ID :"cmbUrunCins",
+        ID :"cmbItemGenus",
         VALUE : 
         {
             value : "1"
         },
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "cmbUrunCins",
+        ELEMENT : "cmbItemGenus",
         APP : "OFF",
         VIEW : 
         {
@@ -106,17 +106,17 @@ export const prm =
             CAPTION : "Ürün Cinsi"
         }
     },
-    //txtBarkod
+    //txtBarcode
     {
         TYPE : 2,
-        ID :"txtBarkod",
+        ID :"txtBarcode",
         VALUE : 
         {
             value : ""
         },
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtBarkod",
+        ELEMENT : "txtBarcode",
         APP : "OFF",
         VIEW : 
         {
@@ -125,17 +125,17 @@ export const prm =
             CAPTION : "Barkod"
         }
     },
-    //cmbVergi
+    //cmbTax
     {
         TYPE : 2,
-        ID :"cmbVergi",
+        ID :"cmbTax",
         VALUE : 
         {
             value : "5.5"
         },
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "cmbVergi",
+        ELEMENT : "cmbTax",
         APP : "OFF",
         VIEW : 
         {
@@ -144,17 +144,17 @@ export const prm =
             CAPTION : "Vergi"
         }
     },
-    //cmbAnaBirim
+    //cmbMainUnit
     {
         TYPE : 2,
-        ID :"cmbAnaBirim",
+        ID :"cmbMainUnit",
         VALUE : 
         {
             value : "001"
         },
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "cmbAnaBirim",
+        ELEMENT : "cmbMainUnit",
         APP : "OFF",
         VIEW : 
         {
@@ -163,10 +163,10 @@ export const prm =
             CAPTION : "Ana Birim Tipi"
         }
     },
-    //txtAnaBirim
+    //txtMainUnit
     {
         TYPE : 2,
-        ID :"txtAnaBirim",
+        ID :"txtMainUnit",
         VALUE : 
         {
             value : 1,
@@ -191,7 +191,7 @@ export const prm =
         },
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtAnaBirim",
+        ELEMENT : "txtMainUnit",
         APP : "OFF",
         VIEW : 
         {
@@ -200,17 +200,17 @@ export const prm =
             CAPTION : "Ana Birim Çarpan"
         }
     },
-    //txtMensei
+    //txtOrigin
     {
         TYPE : 2,
-        ID :"txtMensei",
+        ID :"txtOrigin",
         VALUE : 
         {
             value : ""
         },
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtMensei",
+        ELEMENT : "txtOrigin",
         APP : "OFF",
         VIEW : 
         {
@@ -219,17 +219,17 @@ export const prm =
             CAPTION : "Menşei"
         }
     },
-    //cmbAltBirim
+    //cmbUnderUnit
     {
         TYPE : 2,
-        ID :"cmbAltBirim",
+        ID :"cmbUnderUnit",
         VALUE : 
         {
             value : "001"
         },
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "cmbAltBirim",
+        ELEMENT : "cmbUnderUnit",
         APP : "OFF",
         VIEW : 
         {
@@ -238,10 +238,10 @@ export const prm =
             CAPTION : "Alt Birim Tipi"
         }
     },
-    //txtAltBirim
+    //txtUnderUnit
     {
         TYPE : 2,
-        ID :"txtAltBirim",
+        ID :"txtUnderUnit",
         VALUE : 
         {
             value : 1,
@@ -266,7 +266,7 @@ export const prm =
         },
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtAltBirim",
+        ELEMENT : "txtUnderUnit",
         APP : "OFF",
         VIEW : 
         {
@@ -275,17 +275,17 @@ export const prm =
             CAPTION : "Alt Birim Çarpan"
         }
     },
-    //txtUrunAdi
+    //txtItemName
     {
         TYPE : 2,
-        ID :"txtUrunAdi",
+        ID :"txtItemName",
         VALUE : 
         {
             value : ""
         },
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtUrunAdi",
+        ELEMENT : "txtItemName",
         APP : "OFF",
         VIEW : 
         {
@@ -294,17 +294,17 @@ export const prm =
             CAPTION : "Ürün Adı"
         }
     },
-    //txtKisaAdi
+    //txtShortName
     {
         TYPE : 2,
-        ID :"txtKisaAdi",
+        ID :"txtShortName",
         VALUE : 
         {
             value : ""
         },
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtKisaAdi",
+        ELEMENT : "txtShortName",
         APP : "OFF",
         VIEW : 
         {
@@ -313,17 +313,17 @@ export const prm =
             CAPTION : "Kısa Adı"
         }
     },
-    //chkAktif
+    //chkActive
     {
         TYPE : 2,
-        ID :"chkAktif",
+        ID :"chkActive",
         VALUE : 
         {
             value : true
         },
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "chkAktif",
+        ELEMENT : "chkActive",
         APP : "OFF",
         VIEW : 
         {
@@ -332,17 +332,17 @@ export const prm =
             CAPTION : "Aktif"
         }
     },
-    //chkKasaTartilsin
+    //chkCaseWeighed
     {
         TYPE : 2,
-        ID :"chkKasaTartilsin",
+        ID :"chkCaseWeighed",
         VALUE : 
         {
             value : false
         },
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "chkKasaTartilsin",
+        ELEMENT : "chkCaseWeighed",
         APP : "OFF",
         VIEW : 
         {
@@ -351,17 +351,17 @@ export const prm =
             CAPTION : "Kasada Tartılsın"
         }
     },
-    //chkSatisBirlestir
+    //chkLineMerged
     {
         TYPE : 2,
-        ID :"chkSatisBirlestir",
+        ID :"chkLineMerged",
         VALUE : 
         {
             value : false
         },
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "chkSatisBirlestir",
+        ELEMENT : "chkLineMerged",
         APP : "OFF",
         VIEW : 
         {
@@ -389,10 +389,10 @@ export const prm =
             CAPTION : "Ticket Rest."
         }
     },
-    //txtMaliyetFiyat
+    //txtCostPrice
     {
         TYPE : 2,
-        ID :"txtMaliyetFiyat",
+        ID :"txtCostPrice",
         VALUE : 
         {
             value : 0,
@@ -411,7 +411,7 @@ export const prm =
         },
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtMaliyetFiyat",
+        ELEMENT : "txtCostPrice",
         APP : "OFF",
         VIEW : 
         {
@@ -420,10 +420,10 @@ export const prm =
             CAPTION : "Ticket Rest."
         }
     },
-    //txtMinSatisFiyat
+    //txtMinSalePrice
     {
         TYPE : 2,
-        ID :"txtMinSatisFiyat",
+        ID :"txtMinSalePrice",
         VALUE : 
         {
             value : 0,
@@ -442,7 +442,7 @@ export const prm =
         },
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtMinSatisFiyat",
+        ELEMENT : "txtMinSalePrice",
         APP : "OFF",
         VIEW : 
         {
@@ -451,10 +451,10 @@ export const prm =
             CAPTION : "Min. Satış Fiyatı"
         }
     },
-    //txtMaxSatisFiyat
+    //txtMaxSalePrice
     {
         TYPE : 2,
-        ID :"txtMaxSatisFiyat",
+        ID :"txtMaxSalePrice",
         VALUE : 
         {
             value : 0,
@@ -473,7 +473,7 @@ export const prm =
         },
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtMaxSatisFiyat",
+        ELEMENT : "txtMaxSalePrice",
         APP : "OFF",
         VIEW : 
         {
@@ -482,14 +482,14 @@ export const prm =
             CAPTION : "Max. Satış Fiyatı"
         }
     },
-    //txtSonAlisFiyat
+    //txtLastBuyPrice
     {
         TYPE : 2,
-        ID :"txtSonAlisFiyat",
+        ID :"txtLastBuyPrice",
         VALUE : 0,
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtSonAlisFiyat",
+        ELEMENT : "txtLastBuyPrice",
         APP : "OFF",
         VIEW : 
         {
@@ -501,7 +501,7 @@ export const prm =
     //Urun Grubuna Göre Menşei Validation
     {
         TYPE : 1,
-        ID :"UrunGrubuMenseiValidation",
+        ID :"ItemGrpForOrginsValidation",
         VALUE : ['019','021'],
         SPECIAL : "",
         PAGE : "stk_01_001",
@@ -517,7 +517,7 @@ export const prm =
     //Urun Grubuna Göre Min Max Yetki
     {
         TYPE : 1,
-        ID :"UrunGrubuMinMaxYetki",
+        ID :"ItemGrpForMinMaxAccess",
         VALUE : ['019','021'],
         SPECIAL : "",
         PAGE : "stk_01_001",

@@ -16,14 +16,14 @@ export const acs =
             CAPTION : "Referans"
         }
     },
-    //cmbUrunGrup
+    //txtItemGrp
     {
         TYPE : 1,
-        ID :"cmbUrunGrup",
+        ID :"txtItemGrp",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "cmbUrunGrup",
+        ELEMENT : "txtItemGrp",
         APP : "OFF",
         VIEW : 
         {
@@ -32,14 +32,14 @@ export const acs =
             CAPTION : "Urun Grubu"
         }
     },
-    //txtTedarikci
+    //txtCustomer
     {
         TYPE : 1,
-        ID :"txtTedarikci",
+        ID :"txtCustomer",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtTedarikci",
+        ELEMENT : "txtCustomer",
         APP : "OFF",
         VIEW : 
         {
@@ -48,7 +48,7 @@ export const acs =
             CAPTION : "Tedarikçi"
         }
     },
-    //cmbUrunCins
+    //cmbItemGenus
     {
         TYPE : 1,
         ID :"cmbUrunCins",
@@ -64,14 +64,14 @@ export const acs =
             CAPTION : "Urun Cinsi"
         }
     },
-    //txtBarkod
+    //txtBarcode
     {
         TYPE : 1,
-        ID :"txtBarkod",
+        ID :"txtBarcode",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtBarkod",
+        ELEMENT : "txtBarcode",
         APP : "OFF",
         VIEW : 
         {
@@ -80,14 +80,14 @@ export const acs =
             CAPTION : "Barkod"
         }
     },
-    //cmbVergi
+    //cmbTax
     {
         TYPE : 1,
-        ID :"cmbVergi",
+        ID :"cmbTax",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "cmbVergi",
+        ELEMENT : "cmbTax",
         APP : "OFF",
         VIEW : 
         {
@@ -96,14 +96,14 @@ export const acs =
             CAPTION : "Vergi"
         }
     },
-    //cmbAnaBirim
+    //cmbMainUnit
     {
         TYPE : 1,
-        ID :"cmbAnaBirim",
+        ID :"cmbMainUnit",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "cmbAnaBirim",
+        ELEMENT : "cmbMainUnit",
         APP : "OFF",
         VIEW : 
         {
@@ -112,14 +112,14 @@ export const acs =
             CAPTION : "Ana Birim"
         }
     },
-    //txtAnaBirim
+    //txtMainUnit
     {
         TYPE : 1,
-        ID :"txtAnaBirim",
+        ID :"txtMainUnit",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtAnaBirim",
+        ELEMENT : "txtMainUnit",
         APP : "OFF",
         VIEW : 
         {
@@ -128,14 +128,14 @@ export const acs =
             CAPTION : "Ana Birim Carpan"
         }
     },
-    //cmbMensei
+    //txtOrigin
     {
         TYPE : 1,
-        ID :"cmbMensei",
+        ID :"txtOrigin",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "cmbMensei",
+        ELEMENT : "txtOrigin",
         APP : "OFF",
         VIEW : 
         {
@@ -144,14 +144,14 @@ export const acs =
             CAPTION : "Menşei"
         }
     },
-    //cmbAltBirim
+    //cmbUnderUnit
     {
         TYPE : 1,
-        ID :"cmbAltBirim",
+        ID :"cmbUnderUnit",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "cmbAltBirim",
+        ELEMENT : "cmbUnderUnit",
         APP : "OFF",
         VIEW : 
         {
@@ -160,14 +160,14 @@ export const acs =
             CAPTION : "Alt Birim"
         }
     },
-    //txtAltBirim
+    //txtUnderUnit
     {
         TYPE : 1,
-        ID :"txtAltBirim",
+        ID :"txtUnderUnit",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtAltBirim",
+        ELEMENT : "txtUnderUnit",
         APP : "OFF",
         VIEW : 
         {
@@ -176,14 +176,14 @@ export const acs =
             CAPTION : "Alt Birim Carpan"
         }
     },
-    //txtUrunAdi
+    //txtItemName
     {
         TYPE : 1,
-        ID :"txtUrunAdi",
+        ID :"txtItemName",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtUrunAdi",
+        ELEMENT : "txtItemName",
         APP : "OFF",
         VIEW : 
         {
@@ -192,14 +192,14 @@ export const acs =
             CAPTION : "Urun Adı"
         }
     },
-    //txtKisaAdi
+    //txtShortName
     {
         TYPE : 1,
-        ID :"txtKisaAdi",
+        ID :"txtShortName",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtKisaAdi",
+        ELEMENT : "txtShortName",
         APP : "OFF",
         VIEW : 
         {
@@ -208,14 +208,14 @@ export const acs =
             CAPTION : "Kısa Adı"
         }
     },
-    //chkAktif
+    //chkActive
     {
         TYPE : 1,
-        ID :"chkAktif",
+        ID :"chkActive",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "chkAktif",
+        ELEMENT : "chkActive",
         APP : "OFF",
         VIEW : 
         {
@@ -224,14 +224,14 @@ export const acs =
             CAPTION : "Aktif"
         }
     },
-    //chkKasaTartilsin
+    //chkCaseWeighed
     {
         TYPE : 1,
-        ID :"chkKasaTartilsin",
+        ID :"chkCaseWeighed",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "chkKasaTartilsin",
+        ELEMENT : "chkCaseWeighed",
         APP : "OFF",
         VIEW : 
         {
@@ -240,14 +240,14 @@ export const acs =
             CAPTION : "Kasada Tartılsın"
         }
     },
-    //chkSatisBirlestir
+    //chkLineMerged
     {
         TYPE : 1,
-        ID :"chkSatisBirlestir",
+        ID :"chkLineMerged",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "chkSatisBirlestir",
+        ELEMENT : "chkLineMerged",
         APP : "OFF",
         VIEW : 
         {
@@ -272,14 +272,14 @@ export const acs =
             CAPTION : "Ticket Rest"
         }
     },
-    //txtMaliyetFiyat
+    //txtCostPrice
     {
         TYPE : 1,
-        ID :"txtMaliyetFiyat",
+        ID :"txtCostPrice",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtMaliyetFiyat",
+        ELEMENT : "txtCostPrice",
         APP : "OFF",
         VIEW : 
         {
@@ -288,14 +288,14 @@ export const acs =
             CAPTION : "Maliyet Fiyatı"
         }
     },
-    //txtMinSatisFiyat
+    //txtMinSalePrice
     {
         TYPE : 1,
-        ID :"txtMinSatisFiyat",
+        ID :"txtMinSalePrice",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtMinSatisFiyat",
+        ELEMENT : "txtMinSalePrice",
         APP : "OFF",
         VIEW : 
         {
@@ -304,14 +304,14 @@ export const acs =
             CAPTION : "Min. Satış Fiyatı"
         }
     },
-    //txtMaxSatisFiyat
+    //txtMaxSalePrice
     {
         TYPE : 1,
-        ID :"txtMaxSatisFiyat",
+        ID :"txtMaxSalePrice",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtMaxSatisFiyat",
+        ELEMENT : "txtMaxSalePrice",
         APP : "OFF",
         VIEW : 
         {
@@ -320,14 +320,14 @@ export const acs =
             CAPTION : "Max. Satış Fiyatı"
         }
     },
-    //txtSonAlisFiyat
+    //txtLastBuyPrice
     {
         TYPE : 1,
-        ID :"txtSonAlisFiyat",
+        ID :"txtLastBuyPrice",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtSonAlisFiyat",
+        ELEMENT : "txtLastBuyPrice",
         APP : "OFF",
         VIEW : 
         {
