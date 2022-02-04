@@ -248,7 +248,7 @@ export default class NdBase extends React.Component
                     this.value = tmpVal;
                 }
             }).bind(this))
-        }
+        }        
     }
     get data()
     {
