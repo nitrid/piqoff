@@ -32,7 +32,9 @@ export default class itemCard extends React.Component
         this.itemsObj = new itemsCls();
         this.itemsPriceSupply = new itemPriceCls();        
         this.prevCode = "";
-        console.log(this.lang)
+
+        let m = this.lang.getFixedT('tr',null,'stk_01_001')
+        console.log(m)
         this._onItemRendered = this._onItemRendered.bind(this)
     }    
     async componentDidMount()

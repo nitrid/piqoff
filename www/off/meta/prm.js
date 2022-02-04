@@ -14,7 +14,6 @@ export const prm =
                 [
                     {
                         type : "required",
-                        msg : "Referans'ı boş geçemezsiniz !"
                     }
                 ]
             }
@@ -43,8 +42,7 @@ export const prm =
                 val : 
                 [
                     {
-                        type : "required",
-                        msg : "Ürün Grubu'nu boş geçemezsiniz !"
+                        type : "required"
                     }
                 ]
             }
@@ -73,8 +71,7 @@ export const prm =
                 val : 
                 [
                     {
-                        type : "required",
-                        msg : "Tedarikçi boş geçemezsiniz !"
+                        type : "required"
                     }
                 ]
             }
@@ -179,12 +176,10 @@ export const prm =
                 val : 
                 [
                     {
-                        type : "required",
-                        msg : "Ana birim çarpanı'ı boş geçemezsiniz !"
+                        type : "required"
                     },
                     {
                         type : "numeric",
-                        msg : "Ana birim çarpanı'na sayısal değer giriniz !"
                     },
                     {
                         type : "range",
@@ -257,11 +252,9 @@ export const prm =
                 [
                     {
                         type : "required",
-                        msg : "Alt birim çarpanı'ı boş geçemezsiniz !"
                     },
                     {
                         type : "numeric",
-                        msg : "Alt birim çarpanı'na sayısal değer giriniz !"
                     },
                     {
                         type : "range",

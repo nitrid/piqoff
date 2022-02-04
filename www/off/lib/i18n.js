@@ -3,6 +3,7 @@ import {langTr} from '../meta/lang/tr.js'
 
 i18n.init(
 {
+    lng: 'en',
     resources: 
     {
         tr: 
