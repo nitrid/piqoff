@@ -1,5 +1,6 @@
 export const acs =
 [
+    //#region Stok Tanıtım
     //txtRef
     {
         TYPE : 1,
@@ -398,5 +399,184 @@ export const acs =
         PAGE : "stk_03_001",
         ELEMENT : "popgrid",
         APP : "OFF  "
+    },
+    //#endregion
+
+    //#region Cari Tanıtım
+    //cmbType
+    {
+        TYPE : 1,
+        ID :"cmbType",
+        VALUE : {visible:true,editable:true},
+        SPECIAL : "",
+        PAGE : "cri_01_001",
+        ELEMENT : "cmbType",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Cari Tanımları",
+            CAPTION : "Tip"
+        }
+    },
+    //cmbGenus
+    {
+        TYPE : 1,
+        ID :"cmbGenus",
+        VALUE : {visible:true,editable:true},
+        SPECIAL : "",
+        PAGE : "cri_01_001",
+        ELEMENT : "cmbGenus",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Cari Tanımları",
+            CAPTION : "Cinsi"
+        }
+    },
+    //txtCode
+    {
+        TYPE : 1,
+        ID :"txtCode",
+        VALUE : {visible:true,editable:true},
+        SPECIAL : "",
+        PAGE : "cri_01_001",
+        ELEMENT : "txtCode",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Cari Tanımları",
+            CAPTION : "Kodu"
+        }
+    },
+     //txtCustomerName
+     {
+        TYPE : 1,
+        ID :"txtCustomerName",
+        VALUE : {visible:true,editable:true},
+        SPECIAL : "",
+        PAGE : "cri_01_001",
+        ELEMENT : "txtCustomerName",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Cari Tanımları",
+            CAPTION : "Adı"
+        }
+    },
+    //txtCustomerLastname
+    {
+        TYPE : 1,
+        ID :"txtCustomerLastname",
+        VALUE : {visible:true,editable:true},
+        SPECIAL : "",
+        PAGE : "cri_01_001",
+        ELEMENT : "txtCustomerLastname",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Cari Tanımları",
+            CAPTION : "Soyadı"
+        }
+    },
+    //txtPhone1
+    {
+        TYPE : 1,
+        ID :"txtPhone1",
+        VALUE : {visible:true,editable:true},
+        SPECIAL : "",
+        PAGE : "cri_01_001",
+        ELEMENT : "txtPhone1",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Cari Tanımları",
+            CAPTION : "Telefon 1"
+        }
+    },
+    //txtPhone2
+    {
+        TYPE : 1,
+        ID :"txtPhone2",
+        VALUE : {visible:true,editable:true},
+        SPECIAL : "",
+        PAGE : "cri_01_001",
+        ELEMENT : "txtPhone2",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Cari Tanımları",
+            CAPTION : "Telefon 2"
+        }
+    },
+    //txtGsmPhone
+    {
+        TYPE : 1,
+        ID :"txtGsmPhone",
+        VALUE : {visible:true,editable:true},
+        SPECIAL : "",
+        PAGE : "cri_01_001",
+        ELEMENT : "txtGsmPhone",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Cari Tanımları",
+            CAPTION : "Gsm Tel"
+        }
+    },
+    //txtOtherPhone
+    {
+        TYPE : 1,
+        ID :"txtOtherPhone",
+        VALUE : {visible:true,editable:true},
+        SPECIAL : "",
+        PAGE : "cri_01_001",
+        ELEMENT : "txtOtherPhone",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Cari Tanımları",
+            CAPTION : "Diğer Tel"
+        }
+    },
+    //txtEmail
+    {
+        TYPE : 1,
+        ID :"txtEmail",
+        VALUE : {visible:true,editable:true},
+        SPECIAL : "",
+        PAGE : "cri_01_001",
+        ELEMENT : "txtEmail",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Cari Tanımları",
+            CAPTION : "E-Mail"
+        }
+    },
+    //txtWeb
+    {
+        TYPE : 1,
+        ID :"txtWeb",
+        VALUE : {visible:true,editable:true},
+        SPECIAL : "",
+        PAGE : "cri_01_001",
+        ELEMENT : "txtWeb",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Cari Tanımları",
+            CAPTION : "Web"
+        }
     },
 ]

@@ -538,4 +538,151 @@ export const prm =
         }
     },
     //#endregion
+
+    //#region Cari Tanıtım
+    //cmbType
+    {
+        TYPE : 2,
+        ID :"cmbType",
+        VALUE : 
+        {
+            value : "0"
+        },
+        SPECIAL : "",
+        PAGE : "cri_01_001",
+        ELEMENT : "cmbType",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Cari Tanımları",
+            CAPTION : "Tip"
+        }
+    },
+    //cmbType
+    {
+        TYPE : 2,
+        ID :"cmbGenus",
+        VALUE : 
+        {
+            value : "0"
+        },
+        SPECIAL : "",
+        PAGE : "cri_01_001",
+        ELEMENT : "cmbGenus",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Cari Tanımları",
+            CAPTION : "Cinsi"
+        }
+    },
+    //txtCode
+    {
+        TYPE : 2,
+        ID :"txtCode",
+        VALUE : 
+        {
+            validation :
+            {
+                grp : "frmCustomers",
+                val : 
+                [
+                    {
+                        type : "required",
+                        msg : "Kodu'ı boş geçemezsiniz !"
+                    }
+                ]
+            }
+        },
+        SPECIAL : "",
+        PAGE : "cri_01_001",
+        ELEMENT : "txtCode",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Cari Tanımları",
+            CAPTION : "Cinsi"
+        }
+    },
+    //txtCode
+    {
+        TYPE : 2,
+        ID :"txtTitle",
+        VALUE : 
+        {
+            
+        },
+        SPECIAL : "",
+        PAGE : "cri_01_001",
+        ELEMENT : "txtTitle",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Cari Tanımları",
+            CAPTION : "Ünvan"
+        }
+    },
+     //txtCustomerName
+     {
+        TYPE : 2,
+        ID :"txtCustomerName",
+        VALUE : 
+        {
+            validation :
+            {
+                grp : "frmCustomers",
+                val : 
+                [
+                    {
+                        type : "required",
+                        msg : "Adı boş geçemezsiniz !"
+                    }
+                ]
+            }
+        },
+        SPECIAL : "",
+        PAGE : "cri_01_001",
+        ELEMENT : "txtCustomerName",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Cari Tanımları",
+            CAPTION : "Adı"
+        }
+    },
+     //txtCustomerLastname
+     {
+        TYPE : 2,
+        ID :"txtCustomerLastname",
+        VALUE : 
+        {
+            validation :
+            {
+                grp : "frmCustomers",
+                val : 
+                [
+                    {
+                        type : "required",
+                        msg : "Soyadı boş geçemezsiniz !"
+                    }
+                ]
+            }
+        },
+        SPECIAL : "",
+        PAGE : "cri_01_001",
+        ELEMENT : "txtCustomerLastname",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Cari Tanımları",
+            CAPTION : "Soyadı"
+        }
+    },
+    //#endregion
 ]

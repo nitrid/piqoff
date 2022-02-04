@@ -209,7 +209,7 @@ export default class CustomerCard extends React.Component
         }
         if(e.itemData.title == "Yasal")
         {        
-            await this.grdYasal.dataRefresh({source:this.customerObj.dt('CUSTOMERS')});
+            await this.grdLegal.dataRefresh({source:this.customerObj.dt('CUSTOMERS')});
         }
     }
     _cellRoleRender(e)
@@ -422,8 +422,8 @@ export default class CustomerCard extends React.Component
                                             this.txtCode.value = "";
                                         }
                                     }).bind(this)}
-                                    //param={this.param.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
-                                    //access={this.access.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
+                                    param={this.param.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
                                     >
                                         <Validator validationGroup={"frmCustomers"}>
                                             <RequiredRule message="Kodu boş geçemezsiniz !" />
@@ -465,27 +465,31 @@ export default class CustomerCard extends React.Component
                                     {
                                       
                                     }).bind(this)}
-                                    //param={this.param.filter({ELEMENT:'txtTitle',USERS:this.user.CODE})}
-                                    //access={this.access.filter({ELEMENT:'txtTitle',USERS:this.user.CODE})}
+                                    param={this.param.filter({ELEMENT:'txtTitle',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'txtTitle',USERS:this.user.CODE})}
                                     >
                                     </NdTextBox>
                                 </Item>
-                                {/* txtAdi */}
+                                {/* txtCustomerName */}
                                 <Item>
                                     <Label text={"Adı "} alignment="right" />
-                                    <NdTextBox id="txtCariAdi" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"NAME",filter:{TYPE:0}}}
+                                    <NdTextBox id="txtCustomerName" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"NAME",filter:{TYPE:0}}}
                                     maxLength={32}
+                                    param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     >
                                      <Validator validationGroup={"frmCustomers"}>
                                             <RequiredRule message="Adı boş geçemezsiniz !" />
                                         </Validator>  
                                     </NdTextBox>
                                 </Item>
-                                {/* txtSoyAdi */}
+                                {/* txtCustomerLastname */}
                                 <Item>
                                     <Label text={"Soyadı "} alignment="right" />
-                                        <NdTextBox id="txtCariSoyAdi" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"LAST_NAME",filter:{TYPE:0}}}
+                                        <NdTextBox id="txtCustomerLastname" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"LAST_NAME",filter:{TYPE:0}}}
                                         maxLength={32}
+                                        param={this.param.filter({ELEMENT:'txtCustomerLastname',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'txtCustomerLastname',USERS:this.user.CODE})}
                                         >
                                      <Validator validationGroup={"frmCustomers"}>
                                             <RequiredRule message="Soyadı boş geçemezsiniz !" />
@@ -497,6 +501,7 @@ export default class CustomerCard extends React.Component
                                     <Label text={"Telefon 1 "} alignment="right" />
                                         <NdTextBox id="txtPhone1" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"PHONE1",filter:{TYPE:0}}}
                                         maxLength={32}
+                                        access={this.access.filter({ELEMENT:'txtPhone1',USERS:this.user.CODE})}
                                        />
                                 </Item>
                                  {/* txtPhone2 */}
@@ -504,6 +509,7 @@ export default class CustomerCard extends React.Component
                                     <Label text={"Telefon 2 "} alignment="right" />
                                         <NdTextBox id="txtPhone2" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"PHONE2",filter:{TYPE:0}}}
                                         maxLength={32}
+                                        access={this.access.filter({ELEMENT:'txtPhone2',USERS:this.user.CODE})}
                                         />
                                 </Item>
                                  {/* txtGsmPhone */}
@@ -511,6 +517,7 @@ export default class CustomerCard extends React.Component
                                     <Label text={"Gsm Tel "} alignment="right" />
                                         <NdTextBox id="txtGsmPhone" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"GSM_PHONE",filter:{TYPE:0}}}
                                         maxLength={32}
+                                         access={this.access.filter({ELEMENT:'txtGsmPhone',USERS:this.user.CODE})}
                                         />
                                 </Item>
                                  {/* txtOtherPhone */}
@@ -518,6 +525,7 @@ export default class CustomerCard extends React.Component
                                     <Label text={"Diğer Tel "} alignment="right" />
                                         <NdTextBox id="txtOtherPhone" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"OTHER_PHONE",filter:{TYPE:0}}}
                                         maxLength={32}
+                                         access={this.access.filter({ELEMENT:'txtOtherPhone',USERS:this.user.CODE})}
                                         />
                                 </Item>
                                  {/* txtEmail */}
@@ -525,6 +533,7 @@ export default class CustomerCard extends React.Component
                                     <Label text={"E-Mail "} alignment="right" />
                                         <NdTextBox id="txtEmail" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"EMAIL",filter:{TYPE:0}}}
                                         maxLength={32}
+                                         access={this.access.filter({ELEMENT:'txtEmail',USERS:this.user.CODE})}
                                         />
                                 </Item>
                                  {/* txtWev */}
@@ -532,6 +541,7 @@ export default class CustomerCard extends React.Component
                                     <Label text={"Web "} alignment="right" />
                                         <NdTextBox id="txtWeb" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"WEB"}} 
                                         maxLength={32}
+                                         access={this.access.filter({ELEMENT:'txtWeb',USERS:this.user.CODE})}
                                         />
                                 </Item>
                             </Form>
@@ -581,7 +591,7 @@ export default class CustomerCard extends React.Component
                                     <Item title="Yasal">
                                         <div className='row px-2 py-2'>
                                             <div className='col-12'>
-                                                <NdGrid parent={this} id={"grdYasal"} 
+                                                <NdGrid parent={this} id={"grdLegal"} 
                                                 showBorders={true} 
                                                 columnsAutoWidth={true} 
                                                 allowColumnReordering={true} 
