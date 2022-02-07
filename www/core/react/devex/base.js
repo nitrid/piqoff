@@ -304,16 +304,19 @@ export default class NdBase extends React.Component
                                 }
                                 // EĞER DATA SOURCE A QUERY SET GÖNDERİLMİŞ İSE
                                 else if (typeof e != 'undefined' && typeof e.source != 'undefined' && typeof e.source == 'object' && typeof e.source.sql != 'undefined' && typeof e.source.select != 'undefined')
-                                {             
-                                    tmpThis.state.data.source = e.source;
-                                    tmpThis.state.data.datatable = new datatable();
-                                    tmpThis.state.data.datatable.sql = e.source.sql
-                                    tmpThis.state.data.datatable.selectCmd = e.source.select;
-                                    tmpThis.state.data.datatable.insertCmd = e.source.insert;
-                                    tmpThis.state.data.datatable.updateCmd = e.source.update;
-                                    tmpThis.state.data.datatable.deleteCmd = e.source.delete;
-
-                                    await tmpThis.state.data.datatable.refresh()
+                                {           
+                                    if(typeof tmpThis.state.data.datatable == 'undefined' || typeof tmpThis.props.pageSize == 'undefined')
+                                    {
+                                        tmpThis.state.data.source = e.source;
+                                        tmpThis.state.data.datatable = new datatable();
+                                        tmpThis.state.data.datatable.sql = e.source.sql
+                                        tmpThis.state.data.datatable.selectCmd = e.source.select;
+                                        tmpThis.state.data.datatable.insertCmd = e.source.insert;
+                                        tmpThis.state.data.datatable.updateCmd = e.source.update;
+                                        tmpThis.state.data.datatable.deleteCmd = e.source.delete;
+    
+                                        await tmpThis.state.data.datatable.refresh()
+                                    }   
                                    
                                 }                                
                                 if(typeof tmpThis.state.data != 'undefined' && typeof tmpThis.state.data.datatable != 'undefined')

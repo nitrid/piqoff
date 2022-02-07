@@ -165,7 +165,6 @@ export default class CustomerCard extends React.Component
     {
         return new Promise(async resolve =>
         {
-            console.log(pCode)
             if(pCode !== '')
             {
                 let tmpQuery = {
@@ -681,23 +680,27 @@ export default class CustomerCard extends React.Component
                                 <Item>
                                     <Label text={"Posta Kodu "} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbPopZipcode"
-                                    displayExpr="NAME"                       
-                                    valueExpr="PLACE"
+                                    displayExpr="ZIPNAME"                       
+                                    valueExpr="ZIPCODE"
                                     value=""
                                     searchEnabled={true}
+                                    onValueChanged={(async()=>
+                                        {
+                                           console.log(this.cmbPopZipcode)
+                                    }).bind(this)}
                                     pageSize ={50}
-                                    data={{source:{select:{query : "SELECT [COUNTRY_CODE],[ZIPCODE],[PLACE],ZIPCODE + ' ' + PLACE AS NAME  FROM [dbo].[ZIPCODE]"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT [COUNTRY_CODE],[ZIPCODE],[PLACE],ZIPCODE + ' ' + PLACE AS ZIPNAME  FROM [dbo].[ZIPCODE]"},sql:this.core.sql}}}
                                     />
                                 </Item>
                                 <Item>
                                     <Label text={"Şehir "} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbPopCity"
-                                    displayExpr="NAME"                       
+                                    displayExpr="CITYNAME"                       
                                     valueExpr="PLACE"
                                     value=""
                                     searchEnabled={true}
                                     pageSize ={50}
-                                    data={{source:{select:{query : "SELECT [COUNTRY_CODE],[ZIPCODE],[PLACE],PLACE + ' ' + ZIPCODE AS NAME  FROM [dbo].[ZIPCODE]"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT COUNTRY_CODE,ZIPCODE,PLACE,PLACE + ' ' + ZIPCODE AS CITYNAME  FROM [dbo].[ZIPCODE]"},sql:this.core.sql}}}
                                     />
                                 </Item>
                                 <Item>
