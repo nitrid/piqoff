@@ -321,12 +321,17 @@ export default class NdBase extends React.Component
                                     //GROUP BY İÇİN YAPILDI
                                     if(!e.source instanceof datatable && typeof e.source.groupBy != 'undefined' && e.source.groupBy.length > 0)
                                     {
-                                        let tmpDt = new datatable()
-                                        tmpDt.import(tmpThis.state.data.datatable.toArray())
+                                        let tmpData = new datatable()
+                                        tmpData.import(tmpThis.state.data.datatable.toArray())
                                         
-                                        tmpDt = tmpDt.groupBy(e.source.groupBy) 
+                                        tmpData = tmpData.groupBy(e.source.groupBy).toArray()
+                                        // SELECTBOXDA GÖZÜKMESİ İSTENEN SATIR SAYISI İÇİN YAPILDI
+                                        if(typeof tmpThis.props.pageSize != 'undefined')
+                                        {
+                                            tmpData = tmpData.slice(0,tmpThis.props.pageSize)
+                                        }
 
-                                        resolve({data: tmpDt.toArray().slice(0,typeof tmpThis.props.pageSize == 'undefined' ? tmpDt.toArray().length : tmpThis.props.pageSize),totalCount:tmpDt.toArray().length});
+                                        resolve({data: tmpData,totalCount:tmpData.length});
                                     }
                                     else
                                     {
@@ -337,11 +342,22 @@ export default class NdBase extends React.Component
                                                 return array.filter(o => Object.keys(o).some(k => o[k].toLowerCase().includes(string.toLowerCase())));
                                             }
                                             let tmpData = filterByValue(tmpThis.state.data.datatable.toArray(),loadOption.searchValue)
-                                            resolve({data: tmpData.slice(0,typeof tmpThis.props.pageSize == 'undefined' ? tmpData.length : tmpThis.props.pageSize),totalCount:tmpData.length});
+                                            // SELECTBOXDA GÖZÜKMESİ İSTENEN SATIR SAYISI İÇİN YAPILDI
+                                            if(typeof tmpThis.props.pageSize != 'undefined')
+                                            {
+                                                tmpData = tmpData.slice(0,tmpThis.props.pageSize)
+                                            }
+                                            resolve({data: tmpData,totalCount:tmpData.length});
                                         }
                                         else
                                         {
-                                            resolve({data: tmpThis.state.data.datatable.toArray().slice(0,typeof tmpThis.props.pageSize == 'undefined' ? tmpThis.state.data.datatable.toArray().length : tmpThis.props.pageSize),totalCount:tmpThis.state.data.datatable.toArray().length});
+                                            let tmpData = tmpThis.state.data.datatable.toArray()
+                                            // SELECTBOXDA GÖZÜKMESİ İSTENEN SATIR SAYISI İÇİN YAPILDI
+                                            if(typeof tmpThis.props.pageSize != 'undefined')
+                                            {
+                                                tmpData = tmpData.slice(0,tmpThis.props.pageSize)
+                                            }
+                                            resolve({data: tmpData,totalCount:tmpData.length});
                                         }
                                         
                                         
