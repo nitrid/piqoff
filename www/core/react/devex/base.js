@@ -263,13 +263,14 @@ export default class NdBase extends React.Component
     {  
         return new Promise(mresolve => 
         {
-            let tmpThis = this;            
+            let tmpThis = this; 
             this.setState(
             { 
                 data : 
                 {
                     source : typeof tmpThis.data == 'undefined' || typeof tmpThis.data.source == 'undefined' ? undefined : tmpThis.data.source,
                     datatable : typeof tmpThis.data == 'undefined' || typeof tmpThis.data.datatable == 'undefined' ? undefined : tmpThis.data.datatable,
+                    
                     store : new CustomStore(
                     {
                         load: (loadOption) =>
@@ -300,7 +301,8 @@ export default class NdBase extends React.Component
                                 }
                                 // EĞER DATA SOURCE A QUERY SET GÖNDERİLMİŞ İSE
                                 else if (typeof e != 'undefined' && typeof e.source != 'undefined' && typeof e.source == 'object' && typeof e.source.sql != 'undefined' && typeof e.source.select != 'undefined')
-                                {                
+                                {             
+                                    
                                     tmpThis.state.data.source = e.source;
                                     tmpThis.state.data.datatable = new datatable();
                                     tmpThis.state.data.datatable.sql = e.source.sql
@@ -310,6 +312,7 @@ export default class NdBase extends React.Component
                                     tmpThis.state.data.datatable.deleteCmd = e.source.delete;
 
                                     await tmpThis.state.data.datatable.refresh()
+                                   
                                 }                                
                                 if(typeof tmpThis.state.data != 'undefined' && typeof tmpThis.state.data.datatable != 'undefined')
                                 {
@@ -321,7 +324,7 @@ export default class NdBase extends React.Component
                                         
                                         tmpDt = tmpDt.groupBy(e.source.groupBy) 
 
-                                        resolve({data: tmpDt.toArray(),totalCount:tmpDt.toArray().length});
+                                        resolve({data: tmpDt.toArray().slice(0,typeof tmpThis.props.pageSize == 'undefined' ? tmpDt.toArray().length : tmpThis.props.pageSize),totalCount:tmpDt.toArray().length});
                                     }
                                     else
                                     {
@@ -331,13 +334,12 @@ export default class NdBase extends React.Component
                                             {
                                                 return array.filter(o => Object.keys(o).some(k => o[k].toLowerCase().includes(string.toLowerCase())));
                                             }
-
                                             let tmpData = filterByValue(tmpThis.state.data.datatable.toArray(),loadOption.searchValue)
-                                            resolve({data: tmpData,totalCount:tmpData.length});
+                                            resolve({data: tmpData.slice(0,typeof tmpThis.props.pageSize == 'undefined' ? tmpData.length : tmpThis.props.pageSize),totalCount:tmpData.length});
                                         }
                                         else
                                         {
-                                            resolve({data: tmpThis.state.data.datatable.toArray(),totalCount:tmpThis.state.data.datatable.toArray().length});
+                                            resolve({data: tmpThis.state.data.datatable.toArray().slice(0,typeof tmpThis.props.pageSize == 'undefined' ? tmpThis.state.data.datatable.toArray().length : tmpThis.props.pageSize),totalCount:tmpThis.state.data.datatable.toArray().length});
                                         }
                                         
                                         
@@ -465,8 +467,9 @@ export default class NdBase extends React.Component
                             // }
 
                             return x
-                        }   
-                    })
+                        },
+                    }),
+                   
                 }
             });
         });

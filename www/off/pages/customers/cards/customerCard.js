@@ -177,7 +177,7 @@ export default class CustomerCard extends React.Component
                 if(tmpData.result.recordset.length > 0)
                 {
                     
-                    this.txtPopCity.value = tmpData.result.recordset[0].PLACE
+                    this.cmbPopCity.value = tmpData.result.recordset[0].PLACE
                     this.cmbPopCountry.value = tmpData.result.recordset[0].COUNTRY_CODE
                     resolve(1)
                 }
@@ -558,8 +558,8 @@ export default class CustomerCard extends React.Component
                                                         onClick={async ()=>
                                                         {
                                                             this.txtPopAdress.value = "";
-                                                            this.txtPopZipcode.value = "0";
-                                                            this.txtPopCity.value = "0";
+                                                            this.cmbPopZipcode.value = "";
+                                                            this.cmbPopCity.value = "";
                                                             this.cmbPopCountry.value = ''
                                                             this.popAdress.show();
                                                         }}/>
@@ -680,20 +680,24 @@ export default class CustomerCard extends React.Component
                                 </Item>
                                 <Item>
                                     <Label text={"Posta Kodu "} alignment="right" />
-                                    <NdTextBox simple={true} parent={this} id="txtPopZipcode"
-                                     onChange={(async()=>
-                                        {
-                                            let tmpResult = await this.checkZipcode(this.txtPopZipcode.value)
-                                            if(tmpResult == 3)
-                                            {
-                                               
-                                            }
-                                        }).bind(this)}
+                                    <NdSelectBox simple={true} parent={this} id="cmbPopZipcode"
+                                    displayExpr="NAME"                       
+                                    valueExpr="PLACE"
+                                    value=""
+                                    searchEnabled={true}
+                                    pageSize ={50}
+                                    data={{source:{select:{query : "SELECT [COUNTRY_CODE],[ZIPCODE],[PLACE],PLACE + ' ' + ZIPCODE AS NAME  FROM [dbo].[ZIPCODE]"},sql:this.core.sql}}}
                                     />
                                 </Item>
                                 <Item>
-                                    <Label text={"Şehir"} alignment="right" />
-                                    <NdTextBox simple={true} parent={this} id="txtPopCity"
+                                    <Label text={"Şehir "} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbPopCity"
+                                    displayExpr="NAME"                       
+                                    valueExpr="PLACE"
+                                    value=""
+                                    searchEnabled={true}
+                                    pageSize ={50}
+                                    data={{source:{select:{query : "SELECT [COUNTRY_CODE],[ZIPCODE],[PLACE],PLACE + ' ' + ZIPCODE AS NAME  FROM [dbo].[ZIPCODE]"},sql:this.core.sql}}}
                                     />
                                 </Item>
                                 <Item>
@@ -717,8 +721,8 @@ export default class CustomerCard extends React.Component
                                                 
                                                 tmpEmpty.TYPE = 0
                                                 tmpEmpty.ADRESS = this.txtPopAdress.value
-                                                tmpEmpty.ZIPCODE = this.txtPopZipcode.value
-                                                tmpEmpty.CITY = this.txtPopCity.value
+                                                tmpEmpty.ZIPCODE = this.cmbPopZipcode.value
+                                                tmpEmpty.CITY = this.cmbPopCity.value
                                                 tmpEmpty.COUNTRY = this.cmbPopCountry.value
                                                 tmpEmpty.CUSTOMER = this.customerObj.dt()[0].GUID 
 
