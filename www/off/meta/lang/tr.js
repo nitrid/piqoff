@@ -1,7 +1,9 @@
 export const langTr = 
 {
-    popGrid : {btnSelection:"Seç"},
-    stk_01_001 : 
+    popGrid: {btnSelection:"Seç"},
+    btnSave: "Kaydet",
+    btnCancel: "İptal",
+    stk_01_001: 
     {
         txtRef: "Referans",
         cmbItemGrp: "Ürün Grubu",
@@ -34,17 +36,46 @@ export const langTr =
             clmCode: "KODU",
             clmName: "ADI", 
         },
-        pg_txtPopTedKodu:
+        pg_txtPopCustomerCode:
         {
             title: "Ürün Grubu Seçim",
             clmCode: "KODU",
             clmName: "ADI", 
         },
-        popFiyat:
+        popPrice:
         {
             title: "Fiyat Ekle",
-            clmCode: "KODU",
-            clmName: "ADI", 
+            dtPopPriStartDate: "Baş.Tarih",
+            dtPopPriEndDate: "Bit.Tarih", 
+            txtPopPriQuantity: "Miktar",
+            txtPopPriPrice: "Fiyat"
+        },
+        popUnit:
+        {
+            title: "Birim Ekle",
+            cmbPopUnitType: "Tip",
+            cmbPopUnitName: "Birim Adı", 
+            txtPopUnitFactor: "Katsayı",
+            txtPopUnitWeight: "Ağırlık",
+            txtPopUnitVolume: "Hacim",
+            txtPopUnitWidth: "En",
+            txtPopUnitHeight: "Boy",
+            txtPopUnitSize: "Yükseklik"
+        },
+        popBarcode:
+        {
+            title: "Barkod Ekle",
+            txtPopBarcode: "Barkodu",
+            cmbPopBarUnit: "Birim", 
+            cmbPopBarType: "Tip"
+        },
+        popCustomer:
+        {
+            title: "Tedarikçi Ekle",
+            txtPopCustomerCode: "Kodu",
+            txtPopCustomerName: "Adı", 
+            txtPopCustomerItemCode: "Stok Kodu",
+            txtPopCustomerPrice: "Fiyat"
         },
     }
 }

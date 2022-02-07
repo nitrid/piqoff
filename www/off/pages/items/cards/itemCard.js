@@ -608,11 +608,11 @@ export default class itemCard extends React.Component
                                                 icon:'add',
                                                 onClick:()=>
                                                 {
-                                                    this.txtPopTedKodu.value = "";
-                                                    this.txtPopTedAdi.value = "";
-                                                    this.txtPopTedStokKodu.value = "";
-                                                    this.txtPopTedFiyat.value = "0";
-                                                    this.popTedarikci.show();
+                                                    this.txtPopCustomerCode.value = "";
+                                                    this.txtPopCustomerName.value = "";
+                                                    this.txtPopCustomerItemCode.value = "";
+                                                    this.txtPopCustomerPrice.value = "0";
+                                                    this.popCustomer.show();
                                                 }
                                             }
                                         ]
@@ -645,11 +645,11 @@ export default class itemCard extends React.Component
                                                 icon:'add',
                                                 onClick:async()=>
                                                 {
-                                                    await this.cmbPopBarBirim.dataRefresh({source : this.itemsObj.dt('ITEM_UNIT').where({TYPE:0})})
-                                                    this.txtPopBarkod.value = "";
-                                                    this.cmbPopBarTip.value = "0";
-                                                    this.cmbPopBarBirim.value = this.itemsObj.dt('ITEM_UNIT').where({TYPE:0}).length > 0 ? this.itemsObj.dt('ITEM_UNIT').where({TYPE:0})[0].GUID : ''
-                                                    this.popBarkod.show();
+                                                    await this.cmbPopBarUnit.dataRefresh({source : this.itemsObj.dt('ITEM_UNIT').where({TYPE:0})})
+                                                    this.txtPopBarcode.value = "";
+                                                    this.cmbPopBarType.value = "0";
+                                                    this.cmbPopBarUnit.value = this.itemsObj.dt('ITEM_UNIT').where({TYPE:0}).length > 0 ? this.itemsObj.dt('ITEM_UNIT').where({TYPE:0})[0].GUID : ''
+                                                    this.popBarcode.show();
                                                 }
                                             }
                                         ]
@@ -957,16 +957,16 @@ export default class itemCard extends React.Component
                                                     <Button icon="add"
                                                     onClick={()=>
                                                     {                                                        
-                                                        this.cmbPopBirimTip.value = "2"
-                                                        this.cmbPopBirimAdi.value = "001"
-                                                        this.txtPopBirimKatsayi.value = "0"
-                                                        this.txtPopBirimAgirlik.value = "0"
-                                                        this.txtPopBirimHacim.value = "0";
-                                                        this.txtPopBirimEn.value = "0";
-                                                        this.txtPopBirimBoy.value = "0"
-                                                        this.txtPopBirimYukseklik.value = "0"
+                                                        this.cmbPopUnitType.value = "2"
+                                                        this.cmbPopUnitName.value = "001"
+                                                        this.txtPopUnitFactor.value = "0"
+                                                        this.txtPopUnitWeight.value = "0"
+                                                        this.txtPopUnitVolume.value = "0";
+                                                        this.txtPopUnitWidth.value = "0";
+                                                        this.txtPopUnitHeight.value = "0"
+                                                        this.txtPopUnitSize.value = "0"
 
-                                                        this.popBirim.show();
+                                                        this.popUnit.show();
                                                     }}/>
                                                 </Item>
                                             </Toolbar>
@@ -1005,11 +1005,11 @@ export default class itemCard extends React.Component
                                                     <Button icon="add"
                                                     onClick={async ()=>
                                                     {
-                                                        await this.cmbPopBarBirim.dataRefresh({source : this.itemsObj.dt('ITEM_UNIT').where({TYPE:0})})
-                                                        this.txtPopBarkod.value = "";
-                                                        this.cmbPopBarTip.value = "0";
-                                                        this.cmbPopBarBirim.value = this.itemsObj.dt('ITEM_UNIT').where({TYPE:0}).length > 0 ? this.itemsObj.dt('ITEM_UNIT').where({TYPE:0})[0].GUID : ''
-                                                        this.popBarkod.show();
+                                                        await this.cmbPopBarUnit.dataRefresh({source : this.itemsObj.dt('ITEM_UNIT').where({TYPE:0})})
+                                                        this.txtPopBarcode.value = "";
+                                                        this.cmbPopBarType.value = "0";
+                                                        this.cmbPopBarUnit.value = this.itemsObj.dt('ITEM_UNIT').where({TYPE:0}).length > 0 ? this.itemsObj.dt('ITEM_UNIT').where({TYPE:0})[0].GUID : ''
+                                                        this.popBarcode.show();
                                                     }}/>
                                                 </Item>
                                             </Toolbar>
@@ -1049,9 +1049,9 @@ export default class itemCard extends React.Component
                                                     <Button icon="add"
                                                     onClick={()=>
                                                     {
-                                                        this.txtPopTedStokKodu.value = "";
-                                                        this.txtPopTedFiyat.value = "0";
-                                                        this.popTedarikci.show();
+                                                        this.txtPopCustomerItemCode.value = "";
+                                                        this.txtPopCustomerPrice.value = "0";
+                                                        this.popCustomer.show();
                                                     }}/>                                                                                                            
                                                 </Item>
                                             </Toolbar>
@@ -1112,7 +1112,7 @@ export default class itemCard extends React.Component
                         visible={false}                        
                         showCloseButton={true}
                         showTitle={true}
-                        title={"Fiyat Ekle"}
+                        title={this.t("popPrice.title")}
                         container={"#root"} 
                         width={'500'}
                         height={'320'}
@@ -1120,15 +1120,15 @@ export default class itemCard extends React.Component
                         >
                             <Form colCount={1} height={'fit-content'} id="frmPrice">
                                 <Item>
-                                    <Label text={"Baş.Tarih "} alignment="right" />
+                                    <Label text={this.t("popPrice.dtPopPriStartDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtPopPriStartDate"}/>
                                 </Item>
                                 <Item>
-                                    <Label text={"Bit.Tarih "} alignment="right" />
+                                    <Label text={this.t("popPrice.dtPopPriEndDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtPopPriEndDate"}/>
                                 </Item>
                                 <Item>
-                                    <Label text={"Miktar "} alignment="right" />
+                                    <Label text={this.t("popPrice.txtPopPriQuantity")} alignment="right" />
                                     <NdNumberBox id={"txtPopPriQuantity"} parent={this} simple={true}>
                                         <Validator validationGroup={"frmPrice"}>
                                             <RequiredRule message="Miktar'ı boş geçemezsiniz !" />
@@ -1137,7 +1137,7 @@ export default class itemCard extends React.Component
                                     </NdNumberBox>
                                 </Item>
                                 <Item>
-                                    <Label text={"Fiyat "} alignment="right" />
+                                    <Label text={this.t("popPrice.txtPopPriPrice")} alignment="right" />
                                     <NdNumberBox id={"txtPopPriPrice"} parent={this} simple={true}>
                                         <Validator validationGroup={"frmPrice"}>
                                             <RequiredRule message="Fiyat'ı boş geçemezsiniz !" />
@@ -1149,7 +1149,7 @@ export default class itemCard extends React.Component
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>
-                                            <NdButton text="Kaydet" type="normal" stylingMode="contained" width={'100%'} validationGroup="frmPrice"
+                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} validationGroup="frmPrice"
                                             onClick={async (e)=>
                                             {
                                                 if(e.validationGroup.validate().status == "valid")
@@ -1197,7 +1197,7 @@ export default class itemCard extends React.Component
                                             }}/>
                                         </div>
                                         <div className='col-6'>
-                                            <NdButton text="İptal" type="normal" stylingMode="contained" width={'100%'}
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
                                             onClick={()=>
                                             {
                                                 this.popPrice.hide();  
@@ -1210,11 +1210,11 @@ export default class itemCard extends React.Component
                     </div>
                     {/* BİRİM POPUP */}
                     <div>
-                        <NdPopUp parent={this} id={"popBirim"} 
+                        <NdPopUp parent={this} id={"popUnit"} 
                         visible={false}
                         showCloseButton={true}
                         showTitle={true}
-                        title={"Birim Ekle"}
+                        title={this.t("popUnit.title")}
                         container={"#root"} 
                         width={'500'}
                         height={'510'}
@@ -1222,8 +1222,8 @@ export default class itemCard extends React.Component
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
-                                    <Label text={"Tip "} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbPopBirimTip"
+                                    <Label text={this.t("popUnit.cmbPopUnitType")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbPopUnitType"
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
                                     value="2"
@@ -1231,8 +1231,8 @@ export default class itemCard extends React.Component
                                     />
                                 </Item>
                                 <Item>
-                                    <Label text={"Birim Adı "} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbPopBirimAdi"
+                                    <Label text={this.t("popUnit.cmbPopUnitName")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbPopUnitName"
                                     displayExpr="NAME"                       
                                     valueExpr="ID"
                                     value="001"
@@ -1240,58 +1240,58 @@ export default class itemCard extends React.Component
                                     />
                                 </Item>
                                 <Item>
-                                    <Label text={"Katsayı "} alignment="right" />
-                                    <NdTextBox id={"txtPopBirimKatsayi"} parent={this} simple={true} />
+                                    <Label text={this.t("popUnit.txtPopUnitFactor")} alignment="right" />
+                                    <NdTextBox id={"txtPopUnitFactor"} parent={this} simple={true} />
                                 </Item>
                                 <Item>
-                                    <Label text={"Ağırlık "} alignment="right" />
-                                    <NdTextBox id={"txtPopBirimAgirlik"} parent={this} simple={true} />
+                                    <Label text={this.t("popUnit.txtPopUnitWeight")} alignment="right" />
+                                    <NdTextBox id={"txtPopUnitWeight"} parent={this} simple={true} />
                                 </Item>
                                 <Item>
-                                    <Label text={"Hacim "} alignment="right" />
-                                    <NdTextBox id={"txtPopBirimHacim"} parent={this} simple={true} />
+                                    <Label text={this.t("popUnit.txtPopUnitVolume")} alignment="right" />
+                                    <NdTextBox id={"txtPopUnitVolume"} parent={this} simple={true} />
                                 </Item>
                                 <Item>
-                                    <Label text={"En "} alignment="right" />
-                                    <NdTextBox id={"txtPopBirimEn"} parent={this} simple={true} />
+                                    <Label text={this.t("popUnit.txtPopUnitWidth")} alignment="right" />
+                                    <NdTextBox id={"txtPopUnitWidth"} parent={this} simple={true} />
                                 </Item>
                                 <Item>
-                                    <Label text={"Boy "} alignment="right" />
-                                    <NdTextBox id={"txtPopBirimBoy"} parent={this} simple={true} />
+                                    <Label text={this.t("popUnit.txtPopUnitHeight")} alignment="right" />
+                                    <NdTextBox id={"txtPopUnitHeight"} parent={this} simple={true} />
                                 </Item>
                                 <Item>
-                                    <Label text={"Yükseklik "} alignment="right" />
-                                    <NdTextBox id={"txtPopBirimYukseklik"} parent={this} simple={true} />
+                                    <Label text={this.t("popUnit.txtPopUnitSize")} alignment="right" />
+                                    <NdTextBox id={"txtPopUnitSize"} parent={this} simple={true} />
                                 </Item>
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>
-                                            <NdButton text="Kaydet" type="normal" stylingMode="contained" width={'100%'} 
+                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
                                             onClick={async ()=>
                                             {
                                                 let tmpEmpty = {...this.itemsObj.itemUnit.empty};
                                                 
-                                                tmpEmpty.TYPE = this.cmbPopBirimTip.value
-                                                tmpEmpty.TYPE_NAME = this.cmbPopBirimTip.displayValue
-                                                tmpEmpty.ID = this.cmbPopBirimAdi.value
-                                                tmpEmpty.NAME = this.cmbPopBirimAdi.displayValue
-                                                tmpEmpty.FACTOR = this.txtPopBirimKatsayi.value
-                                                tmpEmpty.WEIGHT = this.txtPopBirimAgirlik.value
-                                                tmpEmpty.VOLUME = this.txtPopBirimHacim.value
-                                                tmpEmpty.WIDTH = this.txtPopBirimEn.value
-                                                tmpEmpty.HEIGHT = this.txtPopBirimBoy.value
-                                                tmpEmpty.SIZE = this.txtPopBirimYukseklik.value
+                                                tmpEmpty.TYPE = this.cmbPopUnitType.value
+                                                tmpEmpty.TYPE_NAME = this.cmbPopUnitType.displayValue
+                                                tmpEmpty.ID = this.cmbPopUnitName.value
+                                                tmpEmpty.NAME = this.cmbPopUnitName.displayValue
+                                                tmpEmpty.FACTOR = this.txtPopUnitFactor.value
+                                                tmpEmpty.WEIGHT = this.txtPopUnitWeight.value
+                                                tmpEmpty.VOLUME = this.txtPopUnitVolume.value
+                                                tmpEmpty.WIDTH = this.txtPopUnitWidth.value
+                                                tmpEmpty.HEIGHT = this.txtPopUnitHeight.value
+                                                tmpEmpty.SIZE = this.txtPopUnitSize.value
                                                 tmpEmpty.ITEM_GUID = this.itemsObj.dt()[0].GUID 
 
                                                 this.itemsObj.itemUnit.addEmpty(tmpEmpty); 
-                                                this.popBirim.hide();
+                                                this.popUnit.hide();
                                             }}/>
                                         </div>
                                         <div className='col-6'>
-                                            <NdButton text="İptal" type="normal" stylingMode="contained" width={'100%'}
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
                                             onClick={()=>
                                             {
-                                                this.popBirim.hide();  
+                                                this.popUnit.hide();  
                                             }}/>
                                         </div>
                                     </div>
@@ -1301,11 +1301,11 @@ export default class itemCard extends React.Component
                     </div>
                     {/* BARKOD POPUP */}
                     <div>
-                        <NdPopUp parent={this} id={"popBarkod"} 
+                        <NdPopUp parent={this} id={"popBarcode"} 
                         visible={false}
                         showCloseButton={true}
                         showTitle={true}
-                        title={"Barkod Ekle"}
+                        title={this.t("popBarcode.title")}
                         container={"#root"} 
                         width={'500'}
                         height={'275'}
@@ -1313,39 +1313,39 @@ export default class itemCard extends React.Component
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
-                                    <Label text={"Barkodu "} alignment="right" />
-                                    <NdTextBox id={"txtPopBarkod"} parent={this} simple={true} 
+                                    <Label text={this.t("popBarcode.txtPopBarcode")} alignment="right" />
+                                    <NdTextBox id={"txtPopBarcode"} parent={this} simple={true} 
                                     onValueChanged={(e)=>
                                     {
                                         if(parseInt(e.value) == NaN || parseInt(e.value).toString() != e.value)
                                         {
-                                            this.cmbPopBarTip.value = "2"
+                                            this.cmbPopBarType.value = "2"
                                             return;
                                         }
                                         if(e.value.length == 8)
                                         {                                            
-                                            this.cmbPopBarTip.value = "0"
+                                            this.cmbPopBarType.value = "0"
                                         }
                                         else if(e.value.length == 13)
                                         {
-                                            this.cmbPopBarTip.value = "1"
+                                            this.cmbPopBarType.value = "1"
                                         }
                                         else
                                         {
-                                            this.cmbPopBarTip.value = "2"
+                                            this.cmbPopBarType.value = "2"
                                         }
                                     }}/>
                                 </Item>
                                 <Item>
-                                    <Label text={"Birim "} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbPopBarBirim"
+                                    <Label text={this.t("popBarcode.cmbPopBarUnit")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbPopBarUnit"
                                     displayExpr="NAME"                       
                                     valueExpr="GUID"
                                     />
                                 </Item>
                                 <Item>
-                                    <Label text={"Tip "} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbPopBarTip"
+                                    <Label text={this.t("popBarcode.cmbPopBarType")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbPopBarType"
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
                                     value="0"
@@ -1355,7 +1355,7 @@ export default class itemCard extends React.Component
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>
-                                            <NdButton text="Kaydet" type="normal" stylingMode="contained" width={'100%'} 
+                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
                                             onClick={async ()=>
                                             {
                                                 let tmpEmpty = {...this.itemsObj.itemBarcode.empty};
@@ -1367,16 +1367,16 @@ export default class itemCard extends React.Component
                                                     tmpEmpty = this.itemsObj.itemBarcode.dt().find(x => x.BARCODE == '')
                                                 }
                                                 
-                                                tmpEmpty.BARCODE = this.txtPopBarkod.value
-                                                tmpEmpty.TYPE = this.cmbPopBarTip.value
-                                                tmpEmpty.UNIT_GUID = this.cmbPopBarBirim.value
-                                                tmpEmpty.UNIT_NAME = this.cmbPopBarBirim.displayValue
+                                                tmpEmpty.BARCODE = this.txtPopBarcode.value
+                                                tmpEmpty.TYPE = this.cmbPopBarType.value
+                                                tmpEmpty.UNIT_GUID = this.cmbPopBarUnit.value
+                                                tmpEmpty.UNIT_NAME = this.cmbPopBarUnit.displayValue
                                                 tmpEmpty.ITEM_GUID = this.itemsObj.dt()[0].GUID 
 
-                                                let tmpResult = await this.checkBarcode(this.txtPopBarkod.value)
+                                                let tmpResult = await this.checkBarcode(this.txtPopBarcode.value)
                                                 if(tmpResult == 2) //KAYIT VAR
                                                 {
-                                                    this.popBarkod.hide(); 
+                                                    this.popBarcode.hide(); 
                                                 }
                                                 else if(tmpResult == 1) //KAYIT YOK
                                                 {
@@ -1384,15 +1384,15 @@ export default class itemCard extends React.Component
                                                     {
                                                         this.itemsObj.itemBarcode.addEmpty(tmpEmpty);    
                                                     }
-                                                    this.popBarkod.hide(); 
+                                                    this.popBarcode.hide(); 
                                                 }
                                             }}/>
                                         </div>
                                         <div className='col-6'>
-                                            <NdButton text="İptal" type="normal" stylingMode="contained" width={'100%'}
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
                                             onClick={()=>
                                             {
-                                                this.popBarkod.hide();  
+                                                this.popBarcode.hide();  
                                             }}/>
                                         </div>
                                     </div>
@@ -1402,11 +1402,11 @@ export default class itemCard extends React.Component
                     </div>  
                     {/* TEDARİKÇİ POPUP */}
                     <div>
-                        <NdPopUp parent={this} id={"popTedarikci"} 
+                        <NdPopUp parent={this} id={"popCustomer"} 
                         visible={false}
                         showCloseButton={true}
                         showTitle={true}
-                        title={"Tedarikçi Ekle"}
+                        title={this.t("popCustomer.title")}
                         container={"#root"} 
                         width={'500'}
                         height={'320'}
@@ -1414,8 +1414,8 @@ export default class itemCard extends React.Component
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
-                                    <Label text={"Kodu "} alignment="right" />
-                                    <NdTextBox id={"txtPopTedKodu"} parent={this} simple={true}
+                                    <Label text={this.t("popCustomer.txtPopCustomerCode")} alignment="right" />
+                                    <NdTextBox id={"txtPopCustomerCode"} parent={this} simple={true}
                                     button=
                                     {
                                         [
@@ -1424,15 +1424,15 @@ export default class itemCard extends React.Component
                                                 icon:'more',
                                                 onClick:()=>
                                                 {                                                
-                                                    this.pg_txtPopTedKodu.show()
-                                                    this.pg_txtPopTedKodu.onClick = (data) =>
+                                                    this.pg_txtPopCustomerCode.show()
+                                                    this.pg_txtPopCustomerCode.onClick = (data) =>
                                                     {
                                                         if(data.length > 0)
                                                         {
-                                                            this.txtPopTedKodu.GUID = data[0].GUID
-                                                            this.txtPopTedKodu.value = data[0].CODE;
-                                                            this.txtPopTedAdi.value = data[0].NAME;
-                                                            console.log(this.txtPopTedKodu.GUID);
+                                                            this.txtPopCustomerCode.GUID = data[0].GUID
+                                                            this.txtPopCustomerCode.value = data[0].CODE;
+                                                            this.txtPopCustomerName.value = data[0].NAME;
+                                                            console.log(this.txtPopCustomerCode.GUID);
                                                         }
                                                     }
                                                 }
@@ -1448,69 +1448,69 @@ export default class itemCard extends React.Component
                                         ]
                                     }>                                        
                                     </NdTextBox>
-                                    <NdPopGrid id={"pg_txtPopTedKodu"} parent={this} container={".dx-multiview-wrapper"} 
+                                    <NdPopGrid id={"pg_txtPopCustomerCode"} parent={this} container={".dx-multiview-wrapper"} 
                                     position={{of:'#page'}} 
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}
                                     height={'90%'}
-                                    title={this.t("pg_txtPopTedKodu.title")} 
+                                    title={this.t("pg_txtPopCustomerCode.title")} 
                                     columnAutoWidth={true}
                                     allowColumnResizing={true}
                                     data={{source:{select:{query:"SELECT GUID,CODE,TITLE FROM CUSTOMER_VW_01 WHERE TYPE = 1 "},sql:this.core.sql}}}
                                     >           
                                     <Scrolling mode="virtual" />                         
-                                    <Column dataField="TITLE" caption={this.t("pg_txtPopTedKodu.clmName")} width={650} defaultSortOrder="asc" />
-                                    <Column dataField="CODE" caption={this.t("pg_txtPopTedKodu.clmCode")} width={150} />
+                                    <Column dataField="TITLE" caption={this.t("pg_txtPopCustomerCode.clmName")} width={650} defaultSortOrder="asc" />
+                                    <Column dataField="CODE" caption={this.t("pg_txtPopCustomerCode.clmCode")} width={150} />
                                     </NdPopGrid>
                                 </Item>
                                 <Item>
-                                    <Label text={"Adı "} alignment="right" />
-                                    <NdTextBox id={"txtPopTedAdi"} parent={this} simple={true} editable={true}/>
+                                    <Label text={this.t("popCustomer.txtPopCustomerName")} alignment="right" />
+                                    <NdTextBox id={"txtPopCustomerName"} parent={this} simple={true} editable={true}/>
                                 </Item>
                                 <Item>
-                                    <Label text={"Stok Kodu "} alignment="right" />
-                                    <NdTextBox id={"txtPopTedStokKodu"} parent={this} simple={true} />
+                                    <Label text={this.t("popCustomer.txtPopCustomerItemCode")} alignment="right" />
+                                    <NdTextBox id={"txtPopCustomerItemCode"} parent={this} simple={true} />
                                 </Item>
                                 <Item>
-                                    <Label text={"Fiyat "} alignment="right" />
-                                    <NdTextBox id={"txtPopTedFiyat"} parent={this} simple={true} />
+                                    <Label text={this.t("popCustomer.txtPopCustomerPrice")} alignment="right" />
+                                    <NdTextBox id={"txtPopCustomerPrice"} parent={this} simple={true} />
                                 </Item>
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>
-                                            <NdButton text="Kaydet" type="normal" stylingMode="contained" width={'100%'} 
+                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
                                             onClick={async ()=>
                                             {       
                                                 let tmpEmptyMulti = {...this.itemsObj.itemMultiCode.empty};
                                                 
                                                 tmpEmptyMulti.CUSER = this.core.auth.data.CODE,  
                                                 tmpEmptyMulti.ITEM_GUID = this.itemsObj.dt()[0].GUID 
-                                                tmpEmptyMulti.CUSTOMER_GUID = this.txtPopTedKodu.GUID                              
-                                                tmpEmptyMulti.CUSTOMER_CODE = this.txtPopTedKodu.value
-                                                tmpEmptyMulti.CUSTOMER_NAME = this.txtPopTedAdi.value
-                                                tmpEmptyMulti.MULTICODE = this.txtPopTedStokKodu.value
-                                                tmpEmptyMulti.CUSTOMER_PRICE = this.txtPopTedFiyat.value
+                                                tmpEmptyMulti.CUSTOMER_GUID = this.txtPopCustomerCode.GUID                              
+                                                tmpEmptyMulti.CUSTOMER_CODE = this.txtPopCustomerCode.value
+                                                tmpEmptyMulti.CUSTOMER_NAME = this.txtPopCustomerName.value
+                                                tmpEmptyMulti.MULTICODE = this.txtPopCustomerItemCode.value
+                                                tmpEmptyMulti.CUSTOMER_PRICE = this.txtPopCustomerPrice.value
                                                 tmpEmptyMulti.CUSTOMER_PRICE_DATE = moment(new Date()).format("DD/MM/YYYY HH:mm:ss")
 
-                                                let tmpResult = await this.checkMultiCode(this.txtPopTedStokKodu.value,this.txtPopTedKodu.value)
+                                                let tmpResult = await this.checkMultiCode(this.txtPopCustomerItemCode.value,this.txtPopCustomerCode.value)
                                                 if(tmpResult == 2) //KAYIT VAR
                                                 {
-                                                    this.popTedarikci.hide(); 
+                                                    this.popCustomer.hide(); 
                                                 }
                                                 else if(tmpResult == 1) //KAYIT YOK
                                                 {
-                                                    this.txtCostPrice.value = this.txtPopTedFiyat.value
+                                                    this.txtCostPrice.value = this.txtPopCustomerPrice.value
                                                     this.itemsObj.itemMultiCode.addEmpty(tmpEmptyMulti);
-                                                    this.popTedarikci.hide(); 
+                                                    this.popCustomer.hide(); 
                                                 }
                                             }}/>
                                         </div>
                                         <div className='col-6'>
-                                            <NdButton text="İptal" type="normal" stylingMode="contained" width={'100%'}
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
                                             onClick={()=>
                                             {
-                                                this.popTedarikci.hide();  
+                                                this.popCustomer.hide();  
                                             }}/>
                                         </div>
                                     </div>
