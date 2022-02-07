@@ -29,10 +29,10 @@ export const prm =
             CAPTION : "Referans"
         }
     },
-    //txtItemGrp
+    //cmbItemGrp
     {
         TYPE : 2,
-        ID :"txtItemGrp",
+        ID :"cmbItemGrp",
         VALUE : 
         {
             value : "",
@@ -49,7 +49,7 @@ export const prm =
         },
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtItemGrp",
+        ELEMENT : "cmbItemGrp",
         APP : "OFF",
         VIEW : 
         {
@@ -200,17 +200,17 @@ export const prm =
             CAPTION : "Ana Birim Çarpan"
         }
     },
-    //txtOrigin
+    //cmbOrigin
     {
         TYPE : 2,
-        ID :"txtOrigin",
+        ID :"cmbOrigin",
         VALUE : 
         {
             value : ""
         },
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtOrigin",
+        ELEMENT : "cmbOrigin",
         APP : "OFF",
         VIEW : 
         {

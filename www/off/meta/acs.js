@@ -17,14 +17,14 @@ export const acs =
             CAPTION : "Referans"
         }
     },
-    //txtItemGrp
+    //cmbItemGrp
     {
         TYPE : 1,
-        ID :"txtItemGrp",
+        ID :"cmbItemGrp",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtItemGrp",
+        ELEMENT : "cmbItemGrp",
         APP : "OFF",
         VIEW : 
         {
@@ -129,14 +129,14 @@ export const acs =
             CAPTION : "Ana Birim Carpan"
         }
     },
-    //txtOrigin
+    //cmbOrigin
     {
         TYPE : 1,
-        ID :"txtOrigin",
+        ID :"cmbOrigin",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
         PAGE : "stk_01_001",
-        ELEMENT : "txtOrigin",
+        ELEMENT : "cmbOrigin",
         APP : "OFF",
         VIEW : 
         {

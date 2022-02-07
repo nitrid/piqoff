@@ -1,16 +1,16 @@
 export const langTr = 
 {
-    test : "TEST",
+    popGrid : {btnSelection:"Seç"},
     stk_01_001 : 
     {
         txtRef: "Referans",
-        txtItemGrp: "Ürün Grubu",
+        cmbItemGrp: "Ürün Grubu",
         txtCustomer: "Tedarikçi",
         cmbItemGenus: "Ürün Cinsi",
         txtBarcode: "Barkod",
         cmbTax: "Vergi",
         cmbMainUnit: "Ana Birim",
-        txtOrigin: "Menşei",
+        cmbOrigin: "Menşei",
         cmbUnderUnit: "Alt Birim",
         txtItemName: "Ürün Adı",
         txtShortName: "Kısa Adı",
@@ -28,17 +28,23 @@ export const langTr =
         tabTitleCustomer: "Tedarikçi",
         tabTitleCustomerPrice: "Tedarikçi Fiyat",
         tabTitleInfo: "Bilgi",
-        test:
+        pg_txtRef:
         {
-            button : 
-            [
-                {
-                    txt001: "Tamam" ,
-                },
-                {
-                    txt001: "Vazgeç" ,
-                }
-            ]
-        }
+            title: "Ürün Grubu Seçim",
+            clmCode: "KODU",
+            clmName: "ADI", 
+        },
+        pg_txtPopTedKodu:
+        {
+            title: "Ürün Grubu Seçim",
+            clmCode: "KODU",
+            clmName: "ADI", 
+        },
+        popFiyat:
+        {
+            title: "Fiyat Ekle",
+            clmCode: "KODU",
+            clmName: "ADI", 
+        },
     }
 }
