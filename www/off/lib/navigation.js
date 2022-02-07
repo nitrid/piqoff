@@ -26,7 +26,7 @@ export default class Navigation extends React.Component
                 padding:'8px'
             }
         }
-        this.menu = menu;        
+        this.menu = menu(App.instance.lang);        
         
         this.state = 
         {

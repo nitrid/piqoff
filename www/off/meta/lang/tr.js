@@ -3,6 +3,50 @@ export const langTr =
     popGrid: {btnSelection:"Seç"},
     btnSave: "Kaydet",
     btnCancel: "İptal",
+    menu:
+    {
+        stk: "Stok",
+        cri: "Cari",
+        ftr: "Fatura",
+        stk_01: "Tanımlar",
+        stk_02: "Evraklar",
+        stk_03: "Listeler",
+        stk_04: "Raporlar",
+        stk_01_001: "Stok Tanımları",
+        stk_01_002: "Barkod Tanımları",
+        stk_01_003: "Fiyat Tanımları",
+        stk_01_004: "Birim Tanımları",
+        stk_01_005: "Multi Kod Tanımları",
+        stk_01_006: "Depo Tanımları",
+        stk_02_001: "Sayım Evrakı",
+        stk_02_002: "Depolar Arası Sevk",
+        stk_02_003: "Fire Giriş Çıkış Fişi",
+        stk_02_004: "Sarf Giriş Çıkış Fişi",
+        stk_03_001: "Stok Listesi",
+        stk_03_002: "Fiyat Listesi",
+        stk_03_003: "Barkod Listesi",
+        stk_03_004: "Depo Listesi",
+        stk_03_005: "Multi Kod Listesi",
+        cri_01: "Tanımlar",
+        cri_02: "Listeler",
+        cri_03: "Raporlar",
+        cri_01_001: "Cari Tanımları",
+        cri_01_002: "Adres Tanımları",
+        cri_01_003: "Grup Tanımları",
+        cri_02_001: "Cari Listesi",
+        cri_02_002: "Adres Listesi",
+        cri_02_003: "Grup Listesi",
+        ftr_01: "Listeler",
+        ftr_02: "Evraklar",
+        ftr_03: "Raporlar",
+        ftr_01_001: "Alış Fatura Listesi",
+        ftr_01_002: "Satış Fatura Listesi",
+        ftr_01_003: "Fiyat Farkı Fatura Listesi",
+        ftr_02_001: "Alış Faturası",
+        ftr_02_002: "Satış Faturası",
+        ftr_02_003: "Fiyat Farkı Faturası",
+        ftr_02_004: "Şubeler Arası Satış",
+    },
     stk_01_001: 
     {
         txtRef: "Referans",
@@ -77,5 +121,119 @@ export const langTr =
             txtPopCustomerItemCode: "Stok Kodu",
             txtPopCustomerPrice: "Fiyat"
         },
+        grdPrice: 
+        {
+            clmType: "Tip",
+            clmDepot: "Depo",
+            clmCustomerName: "Cari",
+            clmStartDate: "Baş.Tarih",
+            clmFinishDate: "Bit.Tarih",
+            clmQuantity: "Miktar",
+            clmVatExt: "Vergi Hariç",
+            clmPrice: "Fiyat",
+            clmGrossMargin: "Brüt Marj",
+            clmNetMargin: "Net Marj",
+        },
+        grdUnit: 
+        {
+            clmType: "Tip",
+            clmName: "Adı",
+            clmFactor: "Katsayı",
+            clmWeight: "Ağırlık",
+            clmVolume: "Hacim",
+            clmWidth: "En",
+            clmHeight: "Boy",
+            clmSize: "Yükseklik"
+        },
+        grdBarcode: 
+        {
+            clmBarcode: "Barkod",
+            clmUnit: "Birim",
+            clmType: "Tip"
+        },
+        grdCustomer: 
+        {
+            clmCode: "Kodu",
+            clmName: "Adı",
+            clmPriceUserName: "Kullanıcı",
+            clmPriceDate: "Son Fiyat Tarih",
+            clmPrice: "Fiyat",
+            clmMulticode: "Tedarikçi Stok Kodu"
+        },
+        grdCustomerPrice: 
+        {
+            clmUser: "Kullanıcı",
+            clmCode: "Kodu",
+            clmName: "Adı",
+            clmDate: "Son Fiyat Tarih",
+            clmPrice: "Fiyat",
+            clmMulticode: "Tedarikçi Stok Kodu"
+        },
+        msgRef:
+        {
+            title: "Dikkat",
+            btn01: "Ürüne Git",
+            btn02: "Tamam",
+            msg: "Girmiş olduğunuz stok sistem de kayıtlı !"
+        },
+        msgBarcode:
+        {
+            title: "Dikkat",
+            btn01: "Ürüne Git",
+            btn02: "Tamam",
+            msg: "Girmiş olduğunuz barkod sistem de kayıtlı !"
+        },
+        msgCustomer:
+        {
+            title: "Dikkat",
+            btn01: "Ürüne Git",
+            btn02: "Tamam",
+            msg: "Girmiş olduğunuz tedarikçi stok kodu sistem de kayıtlı !"
+        },
+        msgPriceSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen fiyat giriniz !"
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgCostPriceValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen alış fiyatından yüksek fiyat giriniz !"
+        },
+        msgPriceAdd:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        }
     }
 }
