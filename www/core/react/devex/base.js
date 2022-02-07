@@ -305,7 +305,6 @@ export default class NdBase extends React.Component
                                 // EĞER DATA SOURCE A QUERY SET GÖNDERİLMİŞ İSE
                                 else if (typeof e != 'undefined' && typeof e.source != 'undefined' && typeof e.source == 'object' && typeof e.source.sql != 'undefined' && typeof e.source.select != 'undefined')
                                 {             
-                                    
                                     tmpThis.state.data.source = e.source;
                                     tmpThis.state.data.datatable = new datatable();
                                     tmpThis.state.data.datatable.sql = e.source.sql
