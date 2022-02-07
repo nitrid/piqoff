@@ -686,7 +686,7 @@ export default class CustomerCard extends React.Component
                                     value=""
                                     searchEnabled={true}
                                     pageSize ={50}
-                                    data={{source:{select:{query : "SELECT [COUNTRY_CODE],[ZIPCODE],[PLACE],PLACE + ' ' + ZIPCODE AS NAME  FROM [dbo].[ZIPCODE]"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT [COUNTRY_CODE],[ZIPCODE],[PLACE],ZIPCODE + ' ' + PLACE AS NAME  FROM [dbo].[ZIPCODE]"},sql:this.core.sql}}}
                                     />
                                 </Item>
                                 <Item>
