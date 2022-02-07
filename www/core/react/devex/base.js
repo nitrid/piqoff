@@ -37,6 +37,9 @@ export default class NdBase extends React.Component
         if(typeof this.props.parent != 'undefined' && typeof this.props.id != 'undefined')
         {
             this.props.parent[this.props.id] = this
+            //DİL YAPISI ELEMENTLERE ATANIYOR.
+            this.lang = this.props.parent.lang
+            this.t = this.props.parent.t
         }
         // DATATABLE DEĞİŞTİĞİNDE YA DA YENİ SATIR EKLENDİĞİNDE BU DEĞİŞİKLİK ELEMENT E YANSITILIYOR.                
         if(typeof this.props.dt != 'undefined' && typeof this.props.dt.data != 'undefined' && typeof this.props.dt.field != 'undefined')
