@@ -175,14 +175,14 @@ export default class itemCard extends React.Component
                 {
                     let tmpConfObj =
                     {
-                        id:'txtRef',
+                        id:'msgRef',
                         showTitle:true,
-                        title:"Dikkat",
+                        title:this.t("msgRef.title"),
                         showCloseButton:true,
                         width:'500px',
                         height:'200px',
-                        button:[{id:"btn01",caption:'Ürüne Git',location:'before'},{id:"btn02",caption:'Tamam',location:'after'}],
-                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>Girmiş olduğunuz stok sistem de kayıtlı !</div>)
+                        button:[{id:"btn01",caption:this.t("msgRef.btn01"),location:'before'},{id:"btn02",caption:this.t("msgRef.btn02"),location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgRef.msg")}</div>)
                     }
                     
                     let pResult = await dialog(tmpConfObj);
@@ -219,14 +219,14 @@ export default class itemCard extends React.Component
                 {
                     let tmpConfObj =
                     {
-                        id:'txtBarcode',
+                        id:'msgBarcode',
                         showTitle:true,
-                        title:"Dikkat",
+                        title:this.t("msgBarcode.title"),
                         showCloseButton:true,
                         width:'500px',
                         height:'200px',
-                        button:[{id:"btn01",caption:'Ürüne Git',location:'before'},{id:"btn02",caption:'Tamam',location:'after'}],
-                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>Girmiş olduğunuz barkod sistem de kayıtlı !</div>)
+                        button:[{id:"btn01",caption:this.t("msgBarcode.btn01"),location:'before'},{id:"btn02",caption:this.t("msgBarcode.btn02"),location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcode.msg")}</div>)
                     }
                     
                     let pResult = await dialog(tmpConfObj);
@@ -263,14 +263,14 @@ export default class itemCard extends React.Component
                 {
                     let tmpConfObj =
                     {
-                        id:'txtBarcode',
+                        id:'msgCustomer',
                         showTitle:true,
-                        title:"Dikkat",
+                        title:this.t("msgCustomer.title"),
                         showCloseButton:true,
                         width:'500px',
                         height:'200px',
-                        button:[{id:"btn01",caption:'Ürüne Git',location:'before'},{id:"btn02",caption:'Tamam',location:'after'}],
-                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>Girmiş olduğunuz tedarikçi stok kodu sistem de kayıtlı !</div>)
+                        button:[{id:"btn01",caption:this.t("msgCustomer.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCustomer.btn02"),location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomer.msg")}</div>)
                     }
                     
                     let pResult = await dialog(tmpConfObj);
@@ -300,23 +300,23 @@ export default class itemCard extends React.Component
         await this.core.util.waitUntil(10)
         if(e.itemData.title == "Fiyat")
         {        
-            await this.grdFiyat.dataRefresh({source:this.itemsObj.itemPrice.dt('ITEM_PRICE')});
+            await this.grdPrice.dataRefresh({source:this.itemsObj.itemPrice.dt('ITEM_PRICE')});
         }
         else if(e.itemData.title == "Birim")
         {
-            await this.grdBirim.dataRefresh({source:this.itemsObj.itemUnit.dt('ITEM_UNIT')});
+            await this.grdUnit.dataRefresh({source:this.itemsObj.itemUnit.dt('ITEM_UNIT')});
         }
         else if(e.itemData.title == "Barkod")
         {
-            await this.grdBarkod.dataRefresh({source:this.itemsObj.itemBarcode.dt('ITEM_BARCODE')});
+            await this.grdBarcode.dataRefresh({source:this.itemsObj.itemBarcode.dt('ITEM_BARCODE')});
         }
         else if(e.itemData.title == "Tedarikçi")
         {
-            await this.grdTedarikci.dataRefresh({source:this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')});
+            await this.grdCustomer.dataRefresh({source:this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')});
         }
         else if(e.itemData.title == "Tedarikçi Fiyat")
         {
-            await this.grdTedarikciFiyat.dataRefresh({source:this.itemsPriceSupply.dt()});
+            await this.grdCustomerPrice.dataRefresh({source:this.itemsPriceSupply.dt()});
         }
     }
     underPrice()
@@ -411,9 +411,9 @@ export default class itemCard extends React.Component
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'diaSave3',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:'Tamam',location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>Lütfen fiyat giriniz !</div>)
+                                                    id:'msgPriceSave',showTitle:true,title:this.t("msgPriceSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgPriceSave.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPriceSave.msg")}</div>)
                                                 }
                                                 
                                                 await dialog(tmpConfObj);
@@ -423,9 +423,9 @@ export default class itemCard extends React.Component
                                             //************************************ */
                                             let tmpConfObj =
                                             {
-                                                id:'diaSave1',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:'Tamam',location:'before'},{id:"btn02",caption:'Vazgeç',location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>Kayıt etmek istediğinize eminmisiniz !</div>)
+                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
@@ -433,18 +433,18 @@ export default class itemCard extends React.Component
                                             {
                                                 let tmpConfObj1 =
                                                 {
-                                                    id:'diaSave2',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:'Tamam',location:'after'}],
+                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
                                                 
                                                 if((await this.itemsObj.save()) == 0)
                                                 {                                                    
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>Kayıt işleminiz başarılı !</div>)
+                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
                                                 }
                                                 else
                                                 {
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>Kayıt işleminiz başarısız !</div>)
+                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msgFailed")}</div>)
                                                     await dialog(tmpConfObj1);
                                                 }
                                             }
@@ -453,9 +453,9 @@ export default class itemCard extends React.Component
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'diaSave3',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:'Tamam',location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>Lütfen gerekli alanları doldurunuz !</div>)
+                                                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgSaveValid.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveValid.msg")}</div>)
                                             }
                                             
                                             await dialog(tmpConfObj);
@@ -468,9 +468,9 @@ export default class itemCard extends React.Component
                                     {
                                         let tmpConfObj =
                                         {
-                                            id:'diaSave1',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:'Tamam',location:'before'},{id:"btn02",caption:'Vazgeç',location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>Kaydı silmek istediğinize eminmisiniz ?</div>)
+                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
                                         }
                                         
                                         let pResult = await dialog(tmpConfObj);
@@ -890,7 +890,7 @@ export default class itemCard extends React.Component
                                     </div>
                                     <div className='row px-2 py-2'>
                                         <div className='col-12'>
-                                            <NdGrid parent={this} id={"grdFiyat"} 
+                                            <NdGrid parent={this} id={"grdPrice"} 
                                             showBorders={true} 
                                             columnsAutoWidth={true} 
                                             allowColumnReordering={true} 
@@ -912,10 +912,10 @@ export default class itemCard extends React.Component
                                             >
                                                 <Paging defaultPageSize={5} />
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                                <Column dataField="TYPE_NAME" caption="Tip" />
-                                                <Column dataField="DEPOT" caption="Depo" />
-                                                <Column dataField="CUSTOMER_NAME" caption="Cari"/>
-                                                <Column dataField="START_DATE" caption="Baş.Tarih" dataType="date" 
+                                                <Column dataField="TYPE_NAME" caption={this.t("grdPrice.clmType")} />
+                                                <Column dataField="DEPOT" caption={this.t("grdPrice.clmDepot")} />
+                                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdPrice.clmCustomerName")}/>
+                                                <Column dataField="START_DATE" caption={this.t("grdPrice.clmStartDate")} dataType="date" 
                                                 editorOptions={{value:null}}
                                                 cellRender={(e) => 
                                                 {
@@ -926,7 +926,7 @@ export default class itemCard extends React.Component
                                                     
                                                     return
                                                 }}/>
-                                                <Column dataField="FINISH_DATE" caption="Bit.Tarih" dataType="date"
+                                                <Column dataField="FINISH_DATE" caption={this.t("grdPrice.clmFinishDate")} dataType="date"
                                                 editorOptions={{value:null}}
                                                 cellRender={(e) => 
                                                 {
@@ -937,11 +937,11 @@ export default class itemCard extends React.Component
                                                     
                                                     return
                                                 }}/>
-                                                <Column dataField="QUANTITY" caption="Miktar"/>
-                                                <Column dataField="VAT_EXT" caption="Vergi Hariç" dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>                                                
-                                                <Column dataField="PRICE" caption="Fiyat" dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
-                                                <Column dataField="GROSS_MARGIN" caption="Brüt Marj" dataType="string"/>
-                                                <Column dataField="NET_MARGIN" caption="Net Marj" dataType="string" format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                                <Column dataField="QUANTITY" caption={this.t("grdPrice.clmQuantity")}/>
+                                                <Column dataField="VAT_EXT" caption={this.t("grdPrice.clmVatExt")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>                                                
+                                                <Column dataField="PRICE" caption={this.t("grdPrice.clmPrice")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                                <Column dataField="GROSS_MARGIN" caption={this.t("grdPrice.clmGrossMargin")} dataType="string"/>
+                                                <Column dataField="NET_MARGIN" caption={this.t("grdPrice.clmNetMargin")} dataType="string" format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                             </NdGrid>
                                         </div>
                                     </div>
@@ -974,7 +974,7 @@ export default class itemCard extends React.Component
                                     </div>
                                     <div className='row px-2 py-2'>
                                         <div className='col-12'>
-                                            <NdGrid parent={this} id={"grdBirim"} 
+                                            <NdGrid parent={this} id={"grdUnit"} 
                                             showBorders={true} 
                                             columnsAutoWidth={true} 
                                             allowColumnReordering={true} 
@@ -985,14 +985,14 @@ export default class itemCard extends React.Component
                                             >
                                                 <Paging defaultPageSize={5} />
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                                <Column dataField="TYPE_NAME" caption="Tip" />
-                                                <Column dataField="NAME" caption="Adı" />
-                                                <Column dataField="FACTOR" caption="Katsayı"/>
-                                                <Column dataField="WEIGHT" caption="Ağırlık"/>
-                                                <Column dataField="VOLUME" caption="Hacim"/>
-                                                <Column dataField="WIDTH" caption="En"/>
-                                                <Column dataField="HEIGHT" caption="Boy"/>
-                                                <Column dataField="SIZE" caption="Yükseklik"/>
+                                                <Column dataField="TYPE_NAME" caption={this.t("grdUnit.clmType")} />
+                                                <Column dataField="NAME" caption={this.t("grdUnit.clmName")} />
+                                                <Column dataField="FACTOR" caption={this.t("grdUnit.clmFactor")}/>
+                                                <Column dataField="WEIGHT" caption={this.t("grdUnit.clmWeight")}/>
+                                                <Column dataField="VOLUME" caption={this.t("grdUnit.clmVolume")}/>
+                                                <Column dataField="WIDTH" caption={this.t("grdUnit.clmWidth")}/>
+                                                <Column dataField="HEIGHT" caption={this.t("grdUnit.clmHeight")}/>
+                                                <Column dataField="SIZE" caption={this.t("grdUnit.clmSize")}/>
                                             </NdGrid>
                                         </div>
                                     </div>
@@ -1017,7 +1017,7 @@ export default class itemCard extends React.Component
                                     </div>
                                     <div className='row px-2 py-2'>
                                         <div className='col-12'>
-                                            <NdGrid parent={this} id={"grdBarkod"} 
+                                            <NdGrid parent={this} id={"grdBarcode"} 
                                             showBorders={true} 
                                             columnsAutoWidth={true} 
                                             allowColumnReordering={true} 
@@ -1028,9 +1028,9 @@ export default class itemCard extends React.Component
                                             >
                                                 <Paging defaultPageSize={5} />
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                                <Column dataField="BARCODE" caption="Barkod" />
-                                                <Column dataField="UNIT_NAME" caption="Birim" />
-                                                <Column dataField="TYPE_NAME" caption="Tip"/>
+                                                <Column dataField="BARCODE" caption={this.t("grdBarcode.clmBarcode")} />
+                                                <Column dataField="UNIT_NAME" caption={this.t("grdBarcode.clmUnit")} />
+                                                <Column dataField="TYPE_NAME" caption={this.t("grdBarcode.clmType")}/>
                                             </NdGrid>
                                         </div>
                                     </div>
@@ -1059,7 +1059,7 @@ export default class itemCard extends React.Component
                                     </div>
                                     <div className='row px-2 py-2'>
                                         <div className='col-12'>
-                                            <NdGrid parent={this} id={"grdTedarikci"} 
+                                            <NdGrid parent={this} id={"grdCustomer"} 
                                             showBorders={true} 
                                             columnsAutoWidth={true} 
                                             allowColumnReordering={true} 
@@ -1069,12 +1069,12 @@ export default class itemCard extends React.Component
                                             >
                                                 <Paging defaultPageSize={5} />
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                                <Column dataField="CUSTOMER_CODE" caption="Kodu" />
-                                                <Column dataField="CUSTOMER_NAME" caption="Adı" />
-                                                <Column dataField="CUSTOMER_PRICE_USER_NAME" caption="Kullanıcı" />
-                                                <Column dataField="CUSTOMER_PRICE_DATE" caption="Son Fiyat Tarih" allowEditing={false} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
-                                                <Column dataField="CUSTOMER_PRICE" caption="Fiyat" dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
-                                                <Column dataField="MULTICODE" caption="Tedarikçi Stok Kodu" />
+                                                <Column dataField="CUSTOMER_CODE" caption={this.t("grdCustomer.clmCode")} />
+                                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdCustomer.clmName")} />
+                                                <Column dataField="CUSTOMER_PRICE_USER_NAME" caption={this.t("grdCustomer.clmPriceUserName")} />
+                                                <Column dataField="CUSTOMER_PRICE_DATE" caption={this.t("grdCustomer.clmPriceDate")} allowEditing={false} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
+                                                <Column dataField="CUSTOMER_PRICE" caption={this.t("grdCustomer.clmPrice")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                                <Column dataField="MULTICODE" caption={this.t("grdCustomer.clmMulticode")} />
                                             </NdGrid>
                                         </div>
                                     </div>
@@ -1082,7 +1082,7 @@ export default class itemCard extends React.Component
                                 <Item title={this.t("tabTitleCustomerPrice")}>
                                     <div className='row px-2 py-2'>
                                         <div className='col-12'>
-                                            <NdGrid parent={this} id={"grdTedarikciFiyat"} 
+                                            <NdGrid parent={this} id={"grdCustomerPrice"} 
                                             showBorders={true} 
                                             columnsAutoWidth={true} 
                                             allowColumnReordering={true} 
@@ -1092,12 +1092,12 @@ export default class itemCard extends React.Component
                                             >
                                                 <Paging defaultPageSize={5} />
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                                <Column dataField="CUSER" caption="Kullanıcı" />
-                                                <Column dataField="CUSTOMER_CODE" caption="Kodu" />
-                                                <Column dataField="CUSTOMER_NAME" caption="Adı" />
-                                                <Column dataField="CHANGE_DATE" caption="Son Fiyat Tarih" allowEditing={false} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
-                                                <Column dataField="PRICE" caption="Fiyat" allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
-                                                <Column dataField="MULTICODE" caption="Tedarikçi Stok Kodu" />
+                                                <Column dataField="CUSER" caption={this.t("grdCustomerPrice.clmUser")} />
+                                                <Column dataField="CUSTOMER_CODE" caption={this.t("grdCustomerPrice.clmCode")} />
+                                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdCustomerPrice.clmName")} />
+                                                <Column dataField="CHANGE_DATE" caption={this.t("grdCustomerPrice.clmDate")} allowEditing={false} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
+                                                <Column dataField="PRICE" caption={this.t("grdCustomerPrice.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                                <Column dataField="MULTICODE" caption={this.t("grdCustomerPrice.clmMulticode")} />
                                             </NdGrid>
                                         </div>
                                     </div>
@@ -1159,9 +1159,9 @@ export default class itemCard extends React.Component
                                                     {
                                                         let tmpConfObj =
                                                         {
-                                                            id:'diaSave3',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                                            button:[{id:"btn01",caption:'Tamam',location:'after'}],
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>Lütfen alış fiyatından yüksek fiyat giriniz !</div>)
+                                                            id:'msgCostPriceValid',showTitle:true,title:this.t("msgCostPriceValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.t("msgCostPriceValid.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCostPriceValid.msg")}</div>)
                                                         }
                                                         
                                                         await dialog(tmpConfObj);
@@ -1187,9 +1187,9 @@ export default class itemCard extends React.Component
                                                 {
                                                     let tmpConfObj =
                                                     {
-                                                        id:'diaSave3',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:'Tamam',location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>Lütfen gerekli alanları doldurunuz !</div>)
+                                                        id:'msgPriceAdd',showTitle:true,title:this.t("msgPriceAdd.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.t("msgPriceAdd.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPriceAdd.msg")}</div>)
                                                     }
                                                     
                                                     await dialog(tmpConfObj);
