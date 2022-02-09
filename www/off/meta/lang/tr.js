@@ -235,5 +235,129 @@ export const langTr =
             btn01: "Tamam",
             msg: "Lütfen gerekli alanları doldurunuz !"
         }
+    },
+    cri_01_001:
+    {
+        cmbType :"Tip",
+        cmbGenus :"Cinsi",
+        txtCode : "Kodu",
+        txtTitle : "Ünvan",
+        txtCustomerName : "Adı",
+        txtCustomerLastname : "Soyadı",
+        txtPhone1 : "Telefon 1",
+        txtPhone2 : "Telefon 2",
+        txtGsmPhone : "Gsm Tel.",
+        txtOtherPhone : "Diğer Tel.",
+        txtEmail : "E-Mail",
+        txtWeb : "Web",
+        tabTitleAdress : "Adres",
+        tabTitleLegal : "Yasal",
+        tabTitleOffical : "Yetkili",
+        pg_txtCode : 
+        {
+            title : "Cari Seçim",
+            clmCode : "KODU",
+            clmTitle : "Ünvan",
+            clmName : "Adı",
+            clmLastName  : "Soyadı",
+
+
+        },
+        grdAdress : 
+        {
+            clmAdress : "Adres",
+            clmZipcode : "Posta Kodu",
+            clmCity :"Şehir",
+            clmCountry : "Ülke",
+        },
+        grdLegal : 
+        {
+            clmSiretID : "Siret ID",
+            clmApeCode : "Ape Kodu",
+            clmTaxOffice : "Vergi Dairesi",
+            clmTaxNo : "Vergi No",
+            clmIntVatNo : "Ulus. KDV No",
+            clmTaxType : "Vergi Tipi"
+        },
+        grdOffical : 
+        {
+            clmName :"Adı",
+            clmLastName : "Soyadı",
+            clmPhone1 : "Telefon 1",
+            clmPhone2 : "Telefon 2",
+            clmGsmPhone : "GSM Tel.",
+            clmEMail : "E-Mail"
+        },
+        popAdress : 
+        {
+            title : "Adres",
+            txtPopAdress : "Adres",
+            cmbPopZipcode :"Posta Kodu",
+            cmbPopCity :"Şehir",
+            cmbPopCountry :"Ülke",
+        },
+        popOffical : 
+        {
+            title : "Yetkili",
+            txtPopName : "Adı",
+            txtPopLastName : "Soyadı",
+            txtPopPhone1 :"Telefon 1",
+            txtPopPhone2 :"Telefon 2",
+            txtPopGsmPhone : "GSM Tel.",
+            txtPopOtherPhone : "Diğer Tel.",
+            txtPopMail :"E-Mail"
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        cmbTypeData : 
+        {
+            individual : "Bireysel",
+            company : "Firma"
+        },
+        cmbGenusData:
+        {
+            Customer : "Müşteri",
+            supplier : "Tedarikçi",
+            both : "Her İkisi",
+        },
+        cmbTaxTypeData : 
+        {
+            individual : "Bireysel",
+            company : "Firma"
+        },
+        msgCode : 
+        {
+            title: "Dikkat",
+            btn01: "Ürüne Git",
+            btn02: "Tamam",
+            msg : "Girmiş olduğunuz Cari sistem de kayıtlı !"
+        }
+
     }
+
 }

@@ -129,14 +129,14 @@ export default class CustomerCard extends React.Component
                 {
                     let tmpConfObj = 
                     {
-                        id: 'txtCode',
+                        id: 'msgCode',
                         showTitle:true,
-                        title:"Dikkat",
+                        title:this.t("msgCode.title"),
                         showCloseButton:true,
                         width:'500px',
                         height:'200px',
-                        button:[{id:"btn01",caption:'Cariye Git',location:'before'},{id:"btn02",caption:'Tamam',location:'after'}],
-                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>Girmiş olduğunuz Cari sistem de kayıtlı !</div>)
+                        button:[{id:"btn01",caption:this.t("msgCode.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCode.btn02"),location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCode.msg")}</div>)
                     }
     
                     let pResult = await dialog(tmpConfObj);
@@ -220,11 +220,11 @@ export default class CustomerCard extends React.Component
         return (
             <NdSelectBox 
                 parent={this}                             
-                id = "cmdTaxType"                             
+                id = "cmbTaxType"                             
                 displayExpr="VALUE"                       
                 valueExpr="ID"
                 onValueChanged={onValueChanged}
-                data={{source:[{ID:0,VALUE:"Bireysel"},{ID:1,VALUE:"Firma"}]}}
+                data={{source:[{ID:0,VALUE:this.t("cmbTaxTypeData.individual")},{ID:1,VALUE:this.t("cmbTaxTypeData.company")}]}}
             >
             </NdSelectBox>
         )
@@ -255,16 +255,16 @@ export default class CustomerCard extends React.Component
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmCustomers" //Değişecek
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmCustomers"
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'diaSave1',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:'Tamam',location:'before'},{id:"btn02",caption:'Vazgeç',location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>Kayıt etmek istediğinize eminmisiniz !</div>)
+                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
@@ -272,18 +272,18 @@ export default class CustomerCard extends React.Component
                                             {
                                                 let tmpConfObj1 =
                                                 {
-                                                    id:'diaSave2',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:'Tamam',location:'after'}],
+                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
                                                 
-                                                if((await this.customerObj.save()) == 0)
-                                                {
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>Kayıt işleminiz başarılı !</div>)
+                                                if((await this.itemsObj.save()) == 0)
+                                                {                                                    
+                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
                                                 }
                                                 else
                                                 {
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>Kayıt işleminiz başarısız !</div>)
+                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgFailed")}</div>)
                                                     await dialog(tmpConfObj1);
                                                 }
                                             }
@@ -292,9 +292,9 @@ export default class CustomerCard extends React.Component
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'diaSave3',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:'Tamam',location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>Lütfen gerekli alanları doldurunuz !</div>)
+                                                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgSaveValid.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveValid.msg")}</div>)
                                             }
                                             
                                             await dialog(tmpConfObj);
@@ -308,9 +308,9 @@ export default class CustomerCard extends React.Component
                                         
                                         let tmpConfObj =
                                         {
-                                            id:'diaSave1',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:'Tamam',location:'before'},{id:"btn02",caption:'Vazgeç',location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>Kaydı silmek istediğinize eminmisiniz ?</div>)
+                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
                                         }
                                         
                                         let pResult = await dialog(tmpConfObj);
@@ -345,11 +345,11 @@ export default class CustomerCard extends React.Component
                             <Form colCount={2} id="frmCustomers">
                                 {/* cmbType */}
                                 <Item>
-                                    <Label text={"Tip "} alignment="right" />
+                                    <Label text={this.t("cmbType")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbType" height='fit-content' dt={{data:this.customerObj.dt('CUSTOMERS'),field:"TYPE"}}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
-                                    data={{source:[{ID:0,VALUE:"Bireysel"},{ID:1,VALUE:"Firma"}]}}
+                                    data={{source:[{ID:0,VALUE:this.t("cmbTypeData.individual")},{ID:1,VALUE:this.t("cmbTypeData.company")}]}}
                                     onValueChanged={(async()=>
                                             {
                                                 if(this.cmbType.value == 0)
@@ -372,18 +372,18 @@ export default class CustomerCard extends React.Component
                                 </Item>       
                                 {/* cmbGenus */}
                                 <Item>
-                                    <Label text={"Cinsi "} alignment="right" />
+                                    <Label text={this.t("cmbGenus")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbGenus" height='fit-content' dt={{data:this.customerObj.dt('CUSTOMERS'),field:"GENUS"}}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
-                                    data={{source:[{ID:0,VALUE:"Müşteri"},{ID:1,VALUE:"Tedarikçi"},{ID:2,VALUE:"Her İkisi"}]}}
+                                    data={{source:[{ID:0,VALUE:this.t("cmbGenusData.Customer")},{ID:1,VALUE:this.t("cmbGenusData.supplier")},{ID:2,VALUE:this.t("cmbGenusData.both")}]}}
                                     //param={this.param.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
                                     //access={this.access.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
                                     />
                                 </Item>       
                                 {/* txtCode */}
                                 <Item>
-                                    <Label text={"Kod"} alignment="right" />
+                                    <Label text={this.t("txtCode")} alignment="right" />
                                     <NdTextBox id="txtCode" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"CODE"}}  
                                     button=
                                     {
@@ -436,7 +436,7 @@ export default class CustomerCard extends React.Component
                                     showBorders={true}
                                     width={'90%'}
                                     height={'90%'}
-                                    title={'Cari Seçim'}
+                                    title={this.t("pg_txtCode.title")} //
                                     data={{source:{select:{query : "SELECT CODE,TITLE,NAME,LAST_NAME FROM CUSTOMER_VW_01"},sql:this.core.sql}}}
                                     button=
                                     {
@@ -450,15 +450,15 @@ export default class CustomerCard extends React.Component
                                         }
                                     }
                                     >
-                                         <Column dataField="CODE" caption="KODU" width={150} />
-                                        <Column dataField="TITLE" caption="ÜNVAN" width={300} defaultSortOrder="asc" />
-                                        <Column dataField="NAME" caption="ADI" width={300} defaultSortOrder="asc" />
-                                        <Column dataField="LAST_NAME" caption="SOYADI" width={300} defaultSortOrder="asc" />
+                                         <Column dataField="CODE" caption={this.t("pg_txtCode.clmCode")} width={150} />
+                                        <Column dataField="TITLE" caption={this.t("pg_txtCode.clmTitle")} width={300} defaultSortOrder="asc" />
+                                        <Column dataField="NAME" caption={this.t("pg_txtCode.clmName")} width={300} defaultSortOrder="asc" />
+                                        <Column dataField="LAST_NAME" caption={this.t("pg_txtCode.clmLastName")} width={300} defaultSortOrder="asc" />
                                     </NdPopGrid>
                                 </Item>
                                  {/* txtTitle */}
                                  <Item>
-                                    <Label text={"Ünvan"} alignment="right" />
+                                    <Label text={this.t("txtTitle")} alignment="right" />
                                     <NdTextBox id="txtTitle" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"TITLE"}}
                                     onChange={(async()=>
                                     {
@@ -471,7 +471,7 @@ export default class CustomerCard extends React.Component
                                 </Item>
                                 {/* txtCustomerName */}
                                 <Item>
-                                    <Label text={"Adı "} alignment="right" />
+                                    <Label text={this.t("txtCustomerName")} alignment="right" />
                                     <NdTextBox id="txtCustomerName" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"NAME",filter:{TYPE:0}}}
                                     maxLength={32}
                                     param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
@@ -484,7 +484,7 @@ export default class CustomerCard extends React.Component
                                 </Item>
                                 {/* txtCustomerLastname */}
                                 <Item>
-                                    <Label text={"Soyadı "} alignment="right" />
+                                    <Label text={this.t("txtCustomerLastname")} alignment="right" />
                                         <NdTextBox id="txtCustomerLastname" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"LAST_NAME",filter:{TYPE:0}}}
                                         maxLength={32}
                                         param={this.param.filter({ELEMENT:'txtCustomerLastname',USERS:this.user.CODE})}
@@ -497,7 +497,7 @@ export default class CustomerCard extends React.Component
                                 </Item>
                                  {/* txtPhone1 */}
                                  <Item>
-                                    <Label text={"Telefon 1 "} alignment="right" />
+                                    <Label text={this.t("txtPhone1")} alignment="right" />
                                         <NdTextBox id="txtPhone1" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"PHONE1",filter:{TYPE:0}}}
                                         maxLength={32}
                                         access={this.access.filter({ELEMENT:'txtPhone1',USERS:this.user.CODE})}
@@ -505,7 +505,7 @@ export default class CustomerCard extends React.Component
                                 </Item>
                                  {/* txtPhone2 */}
                                  <Item>
-                                    <Label text={"Telefon 2 "} alignment="right" />
+                                    <Label text={this.t("txtPhone2")} alignment="right" />
                                         <NdTextBox id="txtPhone2" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"PHONE2",filter:{TYPE:0}}}
                                         maxLength={32}
                                         access={this.access.filter({ELEMENT:'txtPhone2',USERS:this.user.CODE})}
@@ -513,7 +513,7 @@ export default class CustomerCard extends React.Component
                                 </Item>
                                  {/* txtGsmPhone */}
                                  <Item>
-                                    <Label text={"Gsm Tel "} alignment="right" />
+                                    <Label text={this.t("txtGsmPhone")} alignment="right" />
                                         <NdTextBox id="txtGsmPhone" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"GSM_PHONE",filter:{TYPE:0}}}
                                         maxLength={32}
                                          access={this.access.filter({ELEMENT:'txtGsmPhone',USERS:this.user.CODE})}
@@ -521,7 +521,7 @@ export default class CustomerCard extends React.Component
                                 </Item>
                                  {/* txtOtherPhone */}
                                  <Item>
-                                    <Label text={"Diğer Tel "} alignment="right" />
+                                    <Label text={this.t("txtOtherPhone")} alignment="right" />
                                         <NdTextBox id="txtOtherPhone" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"OTHER_PHONE",filter:{TYPE:0}}}
                                         maxLength={32}
                                          access={this.access.filter({ELEMENT:'txtOtherPhone',USERS:this.user.CODE})}
@@ -529,15 +529,15 @@ export default class CustomerCard extends React.Component
                                 </Item>
                                  {/* txtEmail */}
                                  <Item>
-                                    <Label text={"E-Mail "} alignment="right" />
+                                    <Label text={this.t("txtEmail")} alignment="right" />
                                         <NdTextBox id="txtEmail" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"EMAIL",filter:{TYPE:0}}}
                                         maxLength={32}
                                          access={this.access.filter({ELEMENT:'txtEmail',USERS:this.user.CODE})}
                                         />
                                 </Item>
-                                 {/* txtWev */}
+                                 {/* txtWeb */}
                                  <Item>
-                                    <Label text={"Web "} alignment="right" />
+                                    <Label text={this.t("txtWeb")} alignment="right" />
                                         <NdTextBox id="txtWeb" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"WEB"}} 
                                         maxLength={32}
                                          access={this.access.filter({ELEMENT:'txtWeb',USERS:this.user.CODE})}
@@ -548,7 +548,7 @@ export default class CustomerCard extends React.Component
                         <div className='row px-2 pt-2'>
                             <div className='col-12'>
                                 <TabPanel height="100%" onItemRendered={this._onItemRendered}>
-                                    <Item title="Adres">
+                                    <Item title={this.t("tabTitleAdress")}>
                                         <div className='row px-2 py-2'>
                                             <div className='col-12'>
                                                 <Toolbar>
@@ -579,15 +579,15 @@ export default class CustomerCard extends React.Component
                                                 >
                                                     <Paging defaultPageSize={5} />
                                                     <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                                    <Column dataField="ADRESS" caption="Adres" />
-                                                    <Column dataField="ZIPCODE" caption="Posta Kodu" />
-                                                    <Column dataField="CITY" caption="Şehir"/>
-                                                    <Column dataField="COUNTRY" caption="Ülke"/>
+                                                    <Column dataField="ADRESS" caption={this.t("grdAdress.clmAdress")} />
+                                                    <Column dataField="ZIPCODE" caption={this.t("grdAdress.clmZipcode")} />
+                                                    <Column dataField="CITY" caption={this.t("grdAdress.clmCity")}/>
+                                                    <Column dataField="COUNTRY" caption={this.t("grdAdress.clmCountry")}/>
                                                 </NdGrid>
                                             </div>
                                         </div>
                                     </Item>   
-                                    <Item title="Yasal">
+                                    <Item title={this.t("tabTitleLegal")}>
                                         <div className='row px-2 py-2'>
                                             <div className='col-12'>
                                                 <NdGrid parent={this} id={"grdLegal"} 
@@ -601,17 +601,17 @@ export default class CustomerCard extends React.Component
                                                 >
                                                     <Paging defaultPageSize={5} />
                                                     <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                                    <Column dataField="SIRET_ID" caption="SIRET No"/>
-                                                    <Column dataField="APE_CODE" caption="APE Kodu"/>
-                                                    <Column dataField="TAX_OFFICE" caption="Vergi Dairesi"/>
-                                                    <Column dataField="TAX_NO" caption="Vergi No"/>
-                                                    <Column dataField="INT_VAT_NO" caption="Ulus. Kdv No:"/>
-                                                    <Column dataField="TAX_TYPE" caption="Vergi Tipi" editCellRender={this._cellRoleRender} />
+                                                    <Column dataField="SIRET_ID" caption={this.t("grdLegal.clmSiretID")}/>
+                                                    <Column dataField="APE_CODE" caption={this.t("grdLegal.clmApeCode")}/>
+                                                    <Column dataField="TAX_OFFICE" caption={this.t("grdLegal.clmTaxOffice")}/>
+                                                    <Column dataField="TAX_NO" caption={this.t("grdLegal.clmTaxNo")}/>
+                                                    <Column dataField="INT_VAT_NO" caption={this.t("grdLegal.clmIntVatNo")}/>
+                                                    <Column dataField="TAX_TYPE" caption={this.t("grdLegal.clmTaxType")} editCellRender={this._cellRoleRender} />
                                                 </NdGrid>
                                             </div>
                                         </div>
                                     </Item>  
-                                    <Item title="Yetkili" visible={this.state.officalVisible}>
+                                    <Item title={this.t("tabTitleOffical")} visible={this.state.officalVisible}>
                                         <div className='row px-2 py-2'>
                                             <div className='col-12'>
                                                 <Toolbar>
@@ -645,12 +645,12 @@ export default class CustomerCard extends React.Component
                                                 >
                                                     <Paging defaultPageSize={5} />
                                                     <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                                    <Column dataField="NAME" caption="Ad"/>
-                                                    <Column dataField="LAST_NAME" caption="Soyad"/>
-                                                    <Column dataField="PHONE1" caption="Telefon 1"/>
-                                                    <Column dataField="PHONE2" caption="Telefon 2"/>
-                                                    <Column dataField="GSM_PHONE" caption="GSM"/>
-                                                    <Column dataField="EMAIL" caption="E-Mail"/>
+                                                    <Column dataField="NAME" caption={this.t("grdOffical.clmName")}/>
+                                                    <Column dataField="LAST_NAME" caption={this.t("grdOffical.clmLastName")}/>
+                                                    <Column dataField="PHONE1" caption={this.t("grdOffical.clmPhone1")}/>
+                                                    <Column dataField="PHONE2" caption={this.t("grdOffical.clmPhone2")}/>
+                                                    <Column dataField="GSM_PHONE" caption={this.t("grdOffical.clmGsmPhone")}/>
+                                                    <Column dataField="EMAIL" caption={this.t("grdOffical.clmEMail")}/>
                                                 </NdGrid>
                                             </div>
                                         </div>
@@ -666,7 +666,7 @@ export default class CustomerCard extends React.Component
                         visible={false}
                         showCloseButton={true}
                         showTitle={true}
-                        title={"Adres Ekle"}
+                        title={this.t("popAdress.title")}
                         container={"#root"} 
                         width={'500'}
                         height={'350'}
@@ -674,11 +674,11 @@ export default class CustomerCard extends React.Component
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
-                                    <Label text={"Adresi "} alignment="right" />
+                                    <Label text={this.t("popAdress.txtPopAdress")} alignment="right" />
                                     <NdTextBox id={"txtPopAdress"} parent={this} simple={true} />
                                 </Item>
                                 <Item>
-                                    <Label text={"Posta Kodu "} alignment="right" />
+                                    <Label text={this.t("popAdress.cmbPopZipcode")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbPopZipcode"
                                     displayExpr="ZIPNAME"                       
                                     valueExpr="ZIPCODE"
@@ -693,7 +693,7 @@ export default class CustomerCard extends React.Component
                                     />
                                 </Item>
                                 <Item>
-                                    <Label text={"Şehir "} alignment="right" />
+                                    <Label text={this.t("popAdress.cmbPopCity")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbPopCity"
                                     displayExpr="CITYNAME"                       
                                     valueExpr="PLACE"
@@ -704,7 +704,7 @@ export default class CustomerCard extends React.Component
                                     />
                                 </Item>
                                 <Item>
-                                    <Label text={"Ülke "} alignment="right" />
+                                    <Label text={this.t("popAdress.cmbPopCountry")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbPopCountry"
                                     displayExpr="NAME"                       
                                     valueExpr="CODE"
@@ -716,7 +716,7 @@ export default class CustomerCard extends React.Component
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>
-                                            <NdButton text="Kaydet" type="normal" stylingMode="contained" width={'100%'} 
+                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
                                             onClick={async ()=>
                                             {
                                                 let tmpEmpty = {...this.customerObj.customerAdress.empty};
@@ -735,7 +735,7 @@ export default class CustomerCard extends React.Component
                                             }}/>
                                         </div>
                                         <div className='col-6'>
-                                            <NdButton text="İptal" type="normal" stylingMode="contained" width={'100%'}
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
                                             onClick={()=>
                                             {
                                                 this.popAdress.hide();  
@@ -752,51 +752,51 @@ export default class CustomerCard extends React.Component
                         visible={false}
                         showCloseButton={true}
                         showTitle={true}
-                        title={"Yetkili Ekle"}
+                        title={this.t("popOffical.title")}
                         container={"#root"} 
                         width={'500'}
-                        height={'350'}
+                        height={'500'}
                         position={{of:'#root'}}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
-                                    <Label text={"Adı "} alignment="right" />
+                                    <Label text={this.t("popOffical.txtPopName")}alignment="right" />
                                     <NdTextBox id={"txtPopName"} parent={this} simple={true} />
                                 </Item>
                                 <Item>
-                                    <Label text={"Soyadı "} alignment="right" />
+                                    <Label text={this.t("popOffical.txtPopLastName")} alignment="right" />
                                     <NdTextBox simple={true} parent={this} id="txtPopLastName"
                                     />
                                 </Item>
                                 <Item>
-                                    <Label text={"Telefon1"} alignment="right" />
+                                    <Label text={this.t("popOffical.txtPopPhone1")} alignment="right" />
                                     <NdTextBox simple={true} parent={this} id="txtPopPhone1"
                                     />
                                 </Item>
                                 <Item>
-                                    <Label text={"Telefon2"} alignment="right" />
+                                    <Label text={this.t("popOffical.txtPopPhone2")} alignment="right" />
                                     <NdTextBox simple={true} parent={this} id="txtPopPhone2"
                                     />
                                 </Item>
                                 <Item>
-                                    <Label text={"GSM"} alignment="right" />
+                                    <Label text={this.t("popOffical.txtPopGsmPhone")} alignment="right" />
                                     <NdTextBox simple={true} parent={this} id="txtPopGsmPhone"
                                     />
                                 </Item>
                                 <Item>
-                                    <Label text={"Diğer Telefon"} alignment="right" />
+                                    <Label text={this.t("popOffical.txtPopOtherPhone")} alignment="right" />
                                     <NdTextBox simple={true} parent={this} id="txtPopOtherPhone"
                                     />
                                 </Item>
                                 <Item>
-                                    <Label text={"E-Mail"} alignment="right" />
+                                    <Label text={this.t("popOffical.txtPopMail")} alignment="right" />
                                     <NdTextBox simple={true} parent={this} id="txtPopMail"
                                     />
                                 </Item>
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>
-                                            <NdButton text="Kaydet" type="normal" stylingMode="contained" width={'100%'} 
+                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
                                             onClick={async ()=>
                                             {
                                                 let tmpEmpty = {...this.customerObj.customerOffical.empty};
@@ -818,7 +818,7 @@ export default class CustomerCard extends React.Component
                                             }}/>
                                         </div>
                                         <div className='col-6'>
-                                            <NdButton text="İptal" type="normal" stylingMode="contained" width={'100%'}
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
                                             onClick={()=>
                                             {
                                                 this.popOffical.hide();  

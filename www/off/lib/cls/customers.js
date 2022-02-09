@@ -185,7 +185,7 @@ export class customerOfficalCls
 
         this._initDs();
     }
-    //#region Pricate
+    //#region Private
     _initDs()
     {
         let tmpDt = new datatable('CUSTOMER_OFFICAL');

@@ -304,8 +304,9 @@ export default class NdBase extends React.Component
                                 }
                                 // EĞER DATA SOURCE A QUERY SET GÖNDERİLMİŞ İSE
                                 else if (typeof e != 'undefined' && typeof e.source != 'undefined' && typeof e.source == 'object' && typeof e.source.sql != 'undefined' && typeof e.source.select != 'undefined')
-                                {           
-                                    if(typeof tmpThis.state.data.datatable == 'undefined' || typeof tmpThis.props.pageSize == 'undefined')
+                                {            
+                                    // BÜYÜK DATALARDA SÜREKLİ DATAYI GETİRMEMESİ İÇİN İF EKLENDİ
+                                    if(typeof tmpThis.state.data.datatable == 'undefined') //|| typeof tmpThis.props.pageSize == 'undefined')
                                     {
                                         tmpThis.state.data.source = e.source;
                                         tmpThis.state.data.datatable = new datatable();
