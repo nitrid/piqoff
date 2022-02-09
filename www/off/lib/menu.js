@@ -235,6 +235,45 @@ export const menu = (e) =>
                     expanded: false,
                 }
             ]
+        },
+        {
+            id: 'promo',
+            text: e.t('menu.promo'),//'Promosyon',
+            expanded: false,
+            items: 
+            [
+                {
+                    id: 'promo_01',
+                    text : e.t('menu.promo_01'),//'Tanımlar',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'promo_01_001',
+                            text: e.t('menu.promo_01_001'),//'Promosyon Tanımları',
+                            path: '../pages/items/items_list.js'
+                        }
+                    ]
+                },
+                {
+                    id: 'promo_02',
+                    text : e.t('menu.promo_02'),//'Listeler',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'promo_02_001',
+                            text: e.t('menu.promo_02_001'),//'Promosyon Listesi',
+                            path: '../pages/items/items_list.js'
+                        }
+                    ]
+                },
+                {
+                    id: 'promo_03',
+                    text : e.t('menu.promo_03'),//'Raporlar',
+                    expanded: false,
+                }
+            ]
         }
     ]
 }

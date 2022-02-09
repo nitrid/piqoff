@@ -5,9 +5,7 @@ export const langTr =
     btnCancel: "İptal",
     menu:
     {
-        stk: "Stok",
-        cri: "Cari",
-        ftr: "Fatura",
+        stk: "Stok",                
         stk_01: "Tanımlar",
         stk_02: "Evraklar",
         stk_03: "Listeler",
@@ -27,6 +25,7 @@ export const langTr =
         stk_03_003: "Barkod Listesi",
         stk_03_004: "Depo Listesi",
         stk_03_005: "Multi Kod Listesi",
+        cri: "Cari",
         cri_01: "Tanımlar",
         cri_02: "Listeler",
         cri_03: "Raporlar",
@@ -36,6 +35,7 @@ export const langTr =
         cri_02_001: "Cari Listesi",
         cri_02_002: "Adres Listesi",
         cri_02_003: "Grup Listesi",
+        ftr: "Fatura",
         ftr_01: "Listeler",
         ftr_02: "Evraklar",
         ftr_03: "Raporlar",
@@ -46,6 +46,12 @@ export const langTr =
         ftr_02_002: "Satış Faturası",
         ftr_02_003: "Fiyat Farkı Faturası",
         ftr_02_004: "Şubeler Arası Satış",
+        promo: "Promosyon",
+        promo_01: "Tanımlar",
+        promo_01_001: "Promosyon Tanımları",
+        promo_02: "Listeler",
+        promo_02_001: "Promosyon Listesi",
+        promo_03: "Raporlar",
     },
     stk_01_001: 
     {
