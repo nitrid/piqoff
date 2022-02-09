@@ -1,6 +1,6 @@
 import { core,dataset,datatable } from "../../../core/core.js";
 
-export class invoiceCls
+export class docCls
 {
     constructor()
     {
