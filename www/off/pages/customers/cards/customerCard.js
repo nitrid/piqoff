@@ -198,15 +198,15 @@ export default class CustomerCard extends React.Component
     async _onItemRendered(e)
     {
         await this.core.util.waitUntil(10)
-        if(e.itemData.title == "Adres")
+        if(e.itemData.title == this.t("tabTitleAdress"))
         {        
             await this.grdAdress.dataRefresh({source:this.customerObj.customerAdress.dt('CUSTOMER_ADRESS')});
         }
-        if(e.itemData.title == "Yetkili")
+        if(e.itemData.title == this.t("tabTitleOffical"))
         {        
             await this.grdOffical.dataRefresh({source:this.customerObj.customerOffical.dt('CUSTOMER_OFFICAL')});
         }
-        if(e.itemData.title == "Yasal")
+        if(e.itemData.title == this.t("tabTitleLegal"))
         {        
             await this.grdLegal.dataRefresh({source:this.customerObj.dt('CUSTOMERS')});
         }
@@ -366,8 +366,8 @@ export default class CustomerCard extends React.Component
                                                     this.txtCode.value = Math.floor(Date.now() / 1000)
                                                 }
                                         }).bind(this)}
-                                    //param={this.param.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
-                                    //access={this.access.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
+                                    param={this.param.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
                                     />
                                 </Item>       
                                 {/* cmbGenus */}
@@ -377,8 +377,8 @@ export default class CustomerCard extends React.Component
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
                                     data={{source:[{ID:0,VALUE:this.t("cmbGenusData.Customer")},{ID:1,VALUE:this.t("cmbGenusData.supplier")},{ID:2,VALUE:this.t("cmbGenusData.both")}]}}
-                                    //param={this.param.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
-                                    //access={this.access.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
+                                    param={this.param.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
                                     />
                                 </Item>       
                                 {/* txtCode */}
