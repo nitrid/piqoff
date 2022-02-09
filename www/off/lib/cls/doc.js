@@ -92,8 +92,8 @@ export class docCls
         }
 
         this.ds.add(tmpDt);
-        this.ds.add(this.docItemsCls.dt('DOC_ITEMS'))
-        this.ds.add(this.docCustomerCls.dt('DOC_CUSTOMER'))
+        this.ds.add(this.docItems.dt('DOC_ITEMS'))
+        this.ds.add(this.docCustomer.dt('DOC_CUSTOMER'))
     }
     //#endregion
     dt()
@@ -188,7 +188,7 @@ export class docItemsCls
             PRICE : 0,
             DISCOUNT : 0,
             VAT: 0,
-            DESCRIPTION = ''
+            DESCRIPTION : ''
         }
 
         this._initDs();
@@ -348,7 +348,7 @@ export class docCustomerCls
             OUTPUT : '00000000-0000-0000-0000-000000000000',
             PAY_TYPE : -1,
             AMOUNT : 0,
-            DESCRIPTION = ''
+            DESCRIPTION : ''
         }
 
         this._initDs();
