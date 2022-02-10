@@ -218,7 +218,7 @@ export default class salesInvoice extends React.Component
                         <div className="col-12">
                             <Form colCount={2} id="frmDoc">
                                 <Item>
-                                    <Label text={'Seri'} alignment="right" />
+                                    <Label text={'Seri-Sıra'} alignment="right" />
                                     <div className="row">
                                         <div className="col-4 pe-0">
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF",filter:{TYPE:0}}}
@@ -232,7 +232,7 @@ export default class salesInvoice extends React.Component
                                             </NdTextBox>
                                         </div>
                                         <div className="col-5 ps-0">
-                                            <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.customerObj.dt('DOC'),field:"REF_NO"}}  
+                                            <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}  
                                             button=
                                             {
                                                 [
