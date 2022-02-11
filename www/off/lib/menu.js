@@ -251,7 +251,7 @@ export const menu = (e) =>
                         {
                             id: 'promo_01_001',
                             text: e.t('menu.promo_01_001'),//'Promosyon Tanımları',
-                            path: '../pages/items/items_list.js'
+                            path: '../pages/promotion/cards/promotionCard.js'
                         }
                     ]
                 },
