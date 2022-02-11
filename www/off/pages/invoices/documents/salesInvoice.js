@@ -92,11 +92,26 @@ export default class salesInvoice extends React.Component
             this.btnCopy.setState({disabled:false});
             this.btnPrint.setState({disabled:false});
         })
+        let tmpDoc = {...this.docObj.empty}
+        tmpDoc.TYPE = 1
+        tmpDoc.DOC_TYPE = 20
+        tmpDoc.REBATE = 0
+        this.docObj.addEmpty(tmpDoc);
 
-        this.docObj.addEmpty();
-        let tmpItems = {...this.docObj.docItems.empty}
-        tmpItems.DOC_GUID = this.docObj.dt()[0].GUID
-        this.docObj.docItems.addEmpty(tmpItems)
+        let tmpDocItems = {...this.docObj.docItems.empty}
+        tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+        tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+        tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+        tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+        this.docObj.docItems.addEmpty(tmpDocItems)
+
+        let tmpDocCustomer = {...this.docObj.docCustomer.empty}
+        tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
+        tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
+        tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+        tmpDocCustomer.REBATE = this.docObj.dt()[0].REBATE
+        this.docObj.docCustomer.addEmpty(tmpDocCustomer)
+
     }
     async _onItemRendered(e)
     {
@@ -150,7 +165,7 @@ export default class salesInvoice extends React.Component
                                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
                                                 
-                                                if((await this.itemsObj.save()) == 0)
+                                                if((await this.docObj.save()) == 0)
                                                 {                                                    
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
@@ -298,10 +313,10 @@ export default class salesInvoice extends React.Component
                                 </Item>
                                 {/* BOŞ */}
                                 <Item> </Item>
-                                {/* txtCode */}
+                                {/* txtCustomerCode */}
                                 <Item>
-                                    <Label text={'Cari'} alignment="right" />
-                                    <NdTextBox id="txtCustomerCode" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"INPUT"}}  
+                                    <Label text={'Cari Kodu'} alignment="right" />
+                                    <NdTextBox id="txtCustomerCode" parent={this} simple={true} 
                                     button=
                                     {
                                         [
@@ -315,15 +330,18 @@ export default class salesInvoice extends React.Component
                                                     {
                                                         if(data.length > 0)
                                                         {
-                                                            this.getCustomer()
+                                                            this.docObj.dt()[0].INPUT = data[0].GUID
+                                                            this.txtCustomerCode.value = data[0].CODE
+                                                            this.txtCustomerName.value = data[0].LAST_NAME
+                                                            console.log(this.docObj.dt())
                                                         }
                                                     }
                                                 }
                                             },
                                         ]
                                     }
-                                    param={this.param.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
+                                    //param={this.param.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
+                                    //access={this.access.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
                                     >
                                         <Validator validationGroup={"frmCustomers"}>
                                             <RequiredRule message="Kodu boş geçemezsiniz !" />
@@ -338,7 +356,7 @@ export default class salesInvoice extends React.Component
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_txtCustomerCode.title")} //
-                                    data={{source:{select:{query : "SELECT CODE,TITLE,NAME,LAST_NAME FROM CUSTOMER_VW_01"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME FROM CUSTOMER_VW_01"},sql:this.core.sql}}}
                                     button=
                                     {
                                         {
@@ -357,12 +375,27 @@ export default class salesInvoice extends React.Component
                                         <Column dataField="LAST_NAME" caption={this.t("pg_txtCustomerCode.clmLastName")} width={300} defaultSortOrder="asc" />
                                     </NdPopGrid>
                                 </Item> 
-                                <Item>
+                                 {/* txtCustomerName */}
+                                 <Item>
+                                    <Label text={'Cari Adı'} alignment="right" />
+                                    <NdTextBox id="txtCustomerName" parent={this} simple={true}   
+                                    readOnly={true}
+                                    //param={this.param.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
+                                    //access={this.access.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
+                                    >
+                                    </NdTextBox>
+                                </Item> 
+                               
+                                 {/* BOŞ */}
+                                 <Item> </Item>
+                                 {/* Tarih */}
+                                 <Item>
                                     <Label text={'Tarih'} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"docDate"} dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}  />
                                 </Item>
                                  {/* BOŞ */}
-                                 <Item> </Item>
+                                 <Item colSpan={2}> </Item>
+                                 {/* GRİD */}
                                  <Item colSpan={3}>
                                     <NdGrid parent={this} id={"grdDoc"} 
                                     showBorders={true} 
@@ -386,6 +419,53 @@ export default class salesInvoice extends React.Component
                             </Form>
                         </div>
                     </div>
+                    <div className="row px-2 pt-2">
+                        <div className="col-12">
+                            <Form colCount={4} id="frmDoc">
+                                {/* Ara Toplam */}
+                                <Item colSpan={3}></Item>
+                                <Item  >
+                                <Label text={'Ara Toplam'} alignment="right" />
+                                    <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT",filter:{TYPE:0}}}
+                                    maxLength={32}
+                                    //param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
+                                    //access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
+                                    ></NdTextBox>
+                                </Item>
+                                {/* İndirim */}
+                                <Item colSpan={3}></Item>
+                                <Item>
+                                <Label text={'İndirim'} alignment="right" />
+                                    <NdTextBox id="txtDiscount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"DISCOUNT",filter:{TYPE:0}}}
+                                    maxLength={32}
+                                    //param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
+                                    //access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
+                                    ></NdTextBox>
+                                </Item>
+                                {/* KDV */}
+                                <Item colSpan={3}></Item>
+                                <Item>
+                                <Label text={'Kdv'} alignment="right" />
+                                    <NdTextBox id="txtVat" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"VAT",filter:{TYPE:0}}}
+                                    maxLength={32}
+                                    //param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
+                                    //access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
+                                    ></NdTextBox>
+                                </Item>
+                                {/* KDV */}
+                                <Item colSpan={3}></Item>
+                                <Item>
+                                <Label text={'Genel Tolam'} alignment="right" />
+                                    <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTAL",filter:{TYPE:0}}}
+                                    maxLength={32}
+                                    //param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
+                                    //access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
+                                    ></NdTextBox>
+                                </Item>
+                            </Form>
+                        </div>
+                    </div>
+                        
                 </ScrollView>
             </div>
         )
