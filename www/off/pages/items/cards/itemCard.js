@@ -42,7 +42,8 @@ export default class itemCard extends React.Component
     async init()
     {  
         this.prevCode = ""
-        this.itemsObj.clearAll();  
+        this.itemsObj.clearAll();
+
         this.itemsPriceSupply.clearAll();             
 
         this.itemsObj.ds.on('onAddRow',(pTblName,pData) =>
