@@ -92,11 +92,26 @@ export default class salesInvoice extends React.Component
             this.btnCopy.setState({disabled:false});
             this.btnPrint.setState({disabled:false});
         })
+        let tmpDoc = {...this.docObj.empty}
+        tmpDoc.TYPE = 1
+        tmpDoc.DOC_TYPE = 20
+        tmpDoc.REBATE = 0
+        this.docObj.addEmpty(tmpDoc);
 
-        this.docObj.addEmpty();
-        let tmpItems = {...this.docObj.docItems.empty}
-        tmpItems.DOC_GUID = this.docObj.dt()[0].GUID
-        this.docObj.docItems.addEmpty(tmpItems)
+        let tmpDocItems = {...this.docObj.docItems.empty}
+        tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+        tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+        tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+        tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+        this.docObj.docItems.addEmpty(tmpDocItems)
+
+        let tmpDocCustomer = {...this.docObj.docCustomer.empty}
+        tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
+        tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
+        tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+        tmpDocCustomer.REBATE = this.docObj.dt()[0].REBATE
+        this.docObj.docCustomer.addEmpty(tmpDocCustomer)
+
     }
     async _onItemRendered(e)
     {
@@ -150,7 +165,7 @@ export default class salesInvoice extends React.Component
                                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
                                                 
-                                                if((await this.itemsObj.save()) == 0)
+                                                if((await this.docObj.save()) == 0)
                                                 {                                                    
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
@@ -216,7 +231,8 @@ export default class salesInvoice extends React.Component
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={2} id="frmDoc">
+                            <Form colCount={3} id="frmDoc">
+                                {/* txtRef-Refno */}
                                 <Item>
                                     <Label text={'Seri-Sıra'} alignment="right" />
                                     <div className="row">
@@ -278,10 +294,178 @@ export default class salesInvoice extends React.Component
                                             </NdTextBox>
                                         </div>
                                     </div>
-                                </Item>       
+                                </Item>
+                                {/* cmbDepot */}
+                                <Item>
+                                    <Label text={'Depo'} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbDepot"
+                                    dt={{data:this.docObj.dt('DOC'),field:"OUTPUT"}}  
+                                    displayExpr="NAME"                       
+                                    valueExpr="GUID"
+                                    value=""
+                                    searchEnabled={true}
+                                    onValueChanged={(async()=>
+                                        {
+                                           console.log(this.cmbDepot)
+                                    }).bind(this)}
+                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}}}
+                                    />
+                                </Item>
+                                {/* BOŞ */}
+                                <Item> </Item>
+                                {/* txtCustomerCode */}
+                                <Item>
+                                    <Label text={'Cari Kodu'} alignment="right" />
+                                    <NdTextBox id="txtCustomerCode" parent={this} simple={true} 
+                                    button=
+                                    {
+                                        [
+                                            {
+                                                id:'01',
+                                                icon:'more',
+                                                onClick:()=>
+                                                {
+                                                    this.pg_txtCustomerCode.show()
+                                                    this.pg_txtCustomerCode.onClick = (data) =>
+                                                    {
+                                                        if(data.length > 0)
+                                                        {
+                                                            this.docObj.dt()[0].INPUT = data[0].GUID
+                                                            this.txtCustomerCode.value = data[0].CODE
+                                                            this.txtCustomerName.value = data[0].LAST_NAME
+                                                            console.log(this.docObj.dt())
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                        ]
+                                    }
+                                    //param={this.param.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
+                                    //access={this.access.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
+                                    >
+                                        <Validator validationGroup={"frmCustomers"}>
+                                            <RequiredRule message="Kodu boş geçemezsiniz !" />
+                                        </Validator>  
+                                    </NdTextBox>
+                                    {/*CARI SECIMI POPUP */}
+                                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                    visible={false}
+                                    position={{of:'#root'}} 
+                                    showTitle={true} 
+                                    showBorders={true}
+                                    width={'90%'}
+                                    height={'90%'}
+                                    title={this.t("pg_txtCustomerCode.title")} //
+                                    data={{source:{select:{query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME FROM CUSTOMER_VW_01"},sql:this.core.sql}}}
+                                    button=
+                                    {
+                                        {
+                                            id:'01',
+                                            icon:'more',
+                                            onClick:()=>
+                                            {
+                                                console.log(1111)
+                                            }
+                                        }
+                                    }
+                                    >
+                                        <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
+                                        <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={300} defaultSortOrder="asc" />
+                                        <Column dataField="NAME" caption={this.t("pg_txtCustomerCode.clmName")} width={300} defaultSortOrder="asc" />
+                                        <Column dataField="LAST_NAME" caption={this.t("pg_txtCustomerCode.clmLastName")} width={300} defaultSortOrder="asc" />
+                                    </NdPopGrid>
+                                </Item> 
+                                 {/* txtCustomerName */}
+                                 <Item>
+                                    <Label text={'Cari Adı'} alignment="right" />
+                                    <NdTextBox id="txtCustomerName" parent={this} simple={true}   
+                                    readOnly={true}
+                                    //param={this.param.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
+                                    //access={this.access.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
+                                    >
+                                    </NdTextBox>
+                                </Item> 
+                               
+                                 {/* BOŞ */}
+                                 <Item> </Item>
+                                 {/* Tarih */}
+                                 <Item>
+                                    <Label text={'Tarih'} alignment="right" />
+                                    <NdDatePicker simple={true}  parent={this} id={"docDate"} dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}  />
+                                </Item>
+                                 {/* BOŞ */}
+                                 <Item colSpan={2}> </Item>
+                                 {/* GRİD */}
+                                 <Item colSpan={3}>
+                                    <NdGrid parent={this} id={"grdDoc"} 
+                                    showBorders={true} 
+                                    columnsAutoWidth={true} 
+                                    allowColumnReordering={true} 
+                                    allowColumnResizing={true} 
+                                    height={'100%'} 
+                                    width={'100%'}
+                                    dbApply={false}
+                                    >
+                                        <Scrolling mode="infinite" />
+                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
+                                        <Column dataField="CODE" caption='Kodu'/>
+                                        <Column dataField="NAME" caption='Adı'/>
+                                        <Column dataField="PRICE" caption='Fiyat'/>
+                                        <Column dataField="QUANTITY" caption='Miktar'/>
+                                        <Column dataField="VAT" caption='Kdv'/>
+                                        <Column dataField="AMOUNT" caption='Tutar'/>
+                                    </NdGrid>
+                                </Item>
                             </Form>
                         </div>
                     </div>
+                    <div className="row px-2 pt-2">
+                        <div className="col-12">
+                            <Form colCount={4} id="frmDoc">
+                                {/* Ara Toplam */}
+                                <Item colSpan={3}></Item>
+                                <Item  >
+                                <Label text={'Ara Toplam'} alignment="right" />
+                                    <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT",filter:{TYPE:0}}}
+                                    maxLength={32}
+                                    //param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
+                                    //access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
+                                    ></NdTextBox>
+                                </Item>
+                                {/* İndirim */}
+                                <Item colSpan={3}></Item>
+                                <Item>
+                                <Label text={'İndirim'} alignment="right" />
+                                    <NdTextBox id="txtDiscount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"DISCOUNT",filter:{TYPE:0}}}
+                                    maxLength={32}
+                                    //param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
+                                    //access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
+                                    ></NdTextBox>
+                                </Item>
+                                {/* KDV */}
+                                <Item colSpan={3}></Item>
+                                <Item>
+                                <Label text={'Kdv'} alignment="right" />
+                                    <NdTextBox id="txtVat" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"VAT",filter:{TYPE:0}}}
+                                    maxLength={32}
+                                    //param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
+                                    //access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
+                                    ></NdTextBox>
+                                </Item>
+                                {/* KDV */}
+                                <Item colSpan={3}></Item>
+                                <Item>
+                                <Label text={'Genel Tolam'} alignment="right" />
+                                    <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTAL",filter:{TYPE:0}}}
+                                    maxLength={32}
+                                    //param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
+                                    //access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
+                                    ></NdTextBox>
+                                </Item>
+                            </Form>
+                        </div>
+                    </div>
+                        
                 </ScrollView>
             </div>
         )

@@ -1431,7 +1431,7 @@ export default class itemCard extends React.Component
                                                         {
                                                             this.txtPopCustomerCode.GUID = data[0].GUID
                                                             this.txtPopCustomerCode.value = data[0].CODE;
-                                                            this.txtPopCustomerName.value = data[0].NAME;
+                                                            this.txtPopCustomerName.value = data[0].TITLE;
                                                             console.log(this.txtPopCustomerCode.GUID);
                                                         }
                                                     }

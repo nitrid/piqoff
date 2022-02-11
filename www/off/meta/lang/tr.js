@@ -359,7 +359,7 @@ export const langTr =
         msgCode : 
         {
             title: "Dikkat",
-            btn01: "Ürüne Git",
+            btn01: "Cariye Git",
             btn02: "Tamam",
             msg : "Girmiş olduğunuz Cari sistem de kayıtlı !"
         }

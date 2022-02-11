@@ -9,6 +9,7 @@ export class docCls
         this.empty = {
             GUID : '00000000-0000-0000-0000-000000000000',
             CUSER : this.core.auth.data.CODE,
+            TYPE: -1,
             DOC_TYPE : -1,
             REBATE : -1,
             REF : '',
@@ -107,12 +108,14 @@ export class docCls
     }
     addEmpty()
     {
+        console.log(1)
         if(typeof this.dt('DOC') == 'undefined')
         {
             return;
         }
         let tmp = {}
-        if(typeof arguments.length > 0)
+
+        if(arguments.length > 0)
         {
             tmp = {...arguments[0]}            
         }
@@ -175,6 +178,7 @@ export class docItemsCls
             GUID : '00000000-0000-0000-0000-000000000000',
             CUSER : this.core.auth.data.CODE,
             DOC_GUID : '00000000-0000-0000-0000-000000000000',
+            TYPE : -1,
             DOC_TYPE : -1,
             REBATE : -1,
             REF : '',
@@ -224,7 +228,7 @@ export class docItemsCls
                     "@VAT = @PVAT, " +
                     "@DESCRIPTION  = @PDESCRIPTION ",
             param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|10','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','ITEM:string|50','PLINE_NO:int','PQUANTITY:float','PPRICE:float','PDISCOUNT:float','PVAT:float','PDESCRIPTION:string|100'],
+                        'POUTPUT:string|50','PITEM:string|50','PLINE_NO:int','PQUANTITY:float','PPRICE:float','PDISCOUNT:float','PVAT:float','PDESCRIPTION:string|100'],
             dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','ITEM','LINE_NO','QUANTITY','PRICE','DISCOUNT','VAT','DESCRIPTION']
         }
         tmpDt.updateCmd = 
@@ -249,7 +253,7 @@ export class docItemsCls
                     "@VAT = @PVAT, " +
                     "@DESCRIPTION  = @PDESCRIPTION ",
             param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|10','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','ITEM:string|50','PLINE_NO:int','PQUANTITY:float','PPRICE:float','PDISCOUNT:float','PVAT:float','PDESCRIPTION:string|100'],
+                        'POUTPUT:string|50','PITEM:string|50','PLINE_NO:int','PQUANTITY:float','PPRICE:float','PDISCOUNT:float','PVAT:float','PDESCRIPTION:string|100'],
             dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','ITEM','LINE_NO','QUANTITY','PRICE','DISCOUNT','VAT','DESCRIPTION']
         }
         tmpDt.deleteCmd = 
@@ -338,6 +342,7 @@ export class docCustomerCls
         this.empty = {
             GUID : '00000000-0000-0000-0000-000000000000',
             CUSER : this.core.auth.data.CODE,
+            TYPE: -1,
             DOC_GUID : '00000000-0000-0000-0000-000000000000',
             DOC_TYPE : -1,
             REBATE : -1,
