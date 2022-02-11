@@ -216,7 +216,8 @@ export default class salesInvoice extends React.Component
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={2} id="frmDoc">
+                            <Form colCount={3} id="frmDoc">
+                                {/* txtRef-Refno */}
                                 <Item>
                                     <Label text={'Seri-Sıra'} alignment="right" />
                                     <div className="row">
@@ -278,7 +279,110 @@ export default class salesInvoice extends React.Component
                                             </NdTextBox>
                                         </div>
                                     </div>
-                                </Item>       
+                                </Item>
+                                {/* cmbDepot */}
+                                <Item>
+                                    <Label text={'Depo'} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbDepot"
+                                    dt={{data:this.docObj.dt('DOC'),field:"OUTPUT"}}  
+                                    displayExpr="NAME"                       
+                                    valueExpr="GUID"
+                                    value=""
+                                    searchEnabled={true}
+                                    onValueChanged={(async()=>
+                                        {
+                                           console.log(this.cmbDepot)
+                                    }).bind(this)}
+                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}}}
+                                    />
+                                </Item>
+                                {/* BOŞ */}
+                                <Item> </Item>
+                                {/* txtCode */}
+                                <Item>
+                                    <Label text={'Cari'} alignment="right" />
+                                    <NdTextBox id="txtCustomerCode" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"INPUT"}}  
+                                    button=
+                                    {
+                                        [
+                                            {
+                                                id:'01',
+                                                icon:'more',
+                                                onClick:()=>
+                                                {
+                                                    this.pg_txtCustomerCode.show()
+                                                    this.pg_txtCustomerCode.onClick = (data) =>
+                                                    {
+                                                        if(data.length > 0)
+                                                        {
+                                                            this.getCustomer()
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                        ]
+                                    }
+                                    param={this.param.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
+                                    >
+                                        <Validator validationGroup={"frmCustomers"}>
+                                            <RequiredRule message="Kodu boş geçemezsiniz !" />
+                                        </Validator>  
+                                    </NdTextBox>
+                                    {/*CARI SECIMI POPUP */}
+                                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                    visible={false}
+                                    position={{of:'#root'}} 
+                                    showTitle={true} 
+                                    showBorders={true}
+                                    width={'90%'}
+                                    height={'90%'}
+                                    title={this.t("pg_txtCustomerCode.title")} //
+                                    data={{source:{select:{query : "SELECT CODE,TITLE,NAME,LAST_NAME FROM CUSTOMER_VW_01"},sql:this.core.sql}}}
+                                    button=
+                                    {
+                                        {
+                                            id:'01',
+                                            icon:'more',
+                                            onClick:()=>
+                                            {
+                                                console.log(1111)
+                                            }
+                                        }
+                                    }
+                                    >
+                                        <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
+                                        <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={300} defaultSortOrder="asc" />
+                                        <Column dataField="NAME" caption={this.t("pg_txtCustomerCode.clmName")} width={300} defaultSortOrder="asc" />
+                                        <Column dataField="LAST_NAME" caption={this.t("pg_txtCustomerCode.clmLastName")} width={300} defaultSortOrder="asc" />
+                                    </NdPopGrid>
+                                </Item> 
+                                <Item>
+                                    <Label text={'Tarih'} alignment="right" />
+                                    <NdDatePicker simple={true}  parent={this} id={"docDate"} dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}  />
+                                </Item>
+                                 {/* BOŞ */}
+                                 <Item> </Item>
+                                 <Item colSpan={3}>
+                                    <NdGrid parent={this} id={"grdDoc"} 
+                                    showBorders={true} 
+                                    columnsAutoWidth={true} 
+                                    allowColumnReordering={true} 
+                                    allowColumnResizing={true} 
+                                    height={'100%'} 
+                                    width={'100%'}
+                                    dbApply={false}
+                                    >
+                                        <Scrolling mode="infinite" />
+                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
+                                        <Column dataField="CODE" caption='Kodu'/>
+                                        <Column dataField="NAME" caption='Adı'/>
+                                        <Column dataField="PRICE" caption='Fiyat'/>
+                                        <Column dataField="QUANTITY" caption='Miktar'/>
+                                        <Column dataField="VAT" caption='Kdv'/>
+                                        <Column dataField="AMOUNT" caption='Tutar'/>
+                                    </NdGrid>
+                                </Item>
                             </Form>
                         </div>
                     </div>

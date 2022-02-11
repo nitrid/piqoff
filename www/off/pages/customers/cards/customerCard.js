@@ -366,8 +366,8 @@ export default class CustomerCard extends React.Component
                                                     this.txtCode.value = Math.floor(Date.now() / 1000)
                                                 }
                                         }).bind(this)}
-                                    param={this.param.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
+                                    //param={this.param.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
+                                    //access={this.access.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
                                     />
                                 </Item>       
                                 {/* cmbGenus */}
@@ -377,8 +377,8 @@ export default class CustomerCard extends React.Component
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
                                     data={{source:[{ID:0,VALUE:this.t("cmbGenusData.Customer")},{ID:1,VALUE:this.t("cmbGenusData.supplier")},{ID:2,VALUE:this.t("cmbGenusData.both")}]}}
-                                    param={this.param.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
+                                    //param={this.param.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
+                                    //access={this.access.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
                                     />
                                 </Item>       
                                 {/* txtCode */}
