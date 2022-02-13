@@ -16,7 +16,11 @@ export class docCls
             REF_NO : 0,
             DOC_DATE : moment(new Date(0)).format("DD/MM/YYYY"),
             INPUT : '00000000-0000-0000-0000-000000000000',
-            OUTPUT : '00000000-0000-0000-0000-000000000000',
+            INPUT_CODE : '',
+            INPUT_NAME : '',
+            OUTPUT : '',
+            OUTPUT_CODE : '',
+            OUTPUT_NAME : '',
             AMOUNT : 0,
             DISCOUNT : 0,
             VAT : 0,
@@ -35,7 +39,7 @@ export class docCls
         let tmpDt = new datatable('DOC')
         tmpDt.selectCmd =
         {
-            query : "SELECT * FROM DOC WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0))",
+            query : "SELECT * FROM DOC_vW_01 WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0))",
             param : ['GUID:string|50','REF:string|10','REF_NO:int']
         }
         tmpDt.insertCmd = 
@@ -145,15 +149,15 @@ export class docCls
                 tmpPrm.REF = typeof arguments[0].REF == 'undefined' ? '' : arguments[0].REF;
                 tmpPrm.REF_NO = typeof arguments[0].REF_NO == 'undefined' ? '' : arguments[0].REF_NO;
             }
-
+            console.log(tmpPrm)
             this.ds.get('DOC').selectCmd.value = Object.values(tmpPrm);
 
             await this.ds.get('DOC').refresh()
 
             if(this.ds.get('DOC').length > 0)
             {  
-                await this.docItemsCls.load({CUSTOMER:this.ds.get('DOC')[0].GUID})
-                await this.docCustomerCls.load({CUSTOMER:this.ds.get('DOC')[0].GUID})
+                await this.docItems.load({GUID:this.ds.get('DOC')[0].GUID})
+                await this.docCustomer.load({GUID:this.ds.get('DOC')[0].GUID})
             }
             resolve(this.ds.get('DOC'))
         });
@@ -185,14 +189,20 @@ export class docItemsCls
             REF_NO : 0,
             DOC_DATE : moment(new Date(0)).format("DD/MM/YYYY"),
             INPUT : '00000000-0000-0000-0000-000000000000',
+            INPUT_CODE : '',
+            INPUT_NAME : '',
             OUTPUT : '00000000-0000-0000-0000-000000000000',
+            OUTPUT_CODE : '',
+            OUTPUT_NAME : '',
             ITEM : '00000000-0000-0000-0000-000000000000',
             LINE_NO : 0,
-            QUANTITY : 0,
+            QUANTITY : 1,
             PRICE : 0,
             DISCOUNT : 0,
+            AMOUNT : 0,
             VAT: 0,
-            DESCRIPTION : ''
+            DESCRIPTION : '',
+            VAT_RATE : 0 
         }
 
         this._initDs();
@@ -204,7 +214,7 @@ export class docItemsCls
         tmpDt.selectCmd = 
         {
             query : "SELECT * FROM [dbo].[DOC_ITEMS_VW_01] WHERE ((DOC_GUID = @DOC_GUID) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000')) AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0))",
-            param : ['DOC_GUID:string|50']
+            param : ['DOC_GUID:string|50','REF:string|10','REF_NO:int']
         }
         tmpDt.insertCmd = 
         {
@@ -226,10 +236,11 @@ export class docItemsCls
                     "@PRICE  = @PPRICE, " +
                     "@DISCOUNT = @PDISCOUNT, " +
                     "@VAT = @PVAT, " +
+                    "@AMOUNT = @PAMOUNT, " +
                     "@DESCRIPTION  = @PDESCRIPTION ",
             param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|10','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PITEM:string|50','PLINE_NO:int','PQUANTITY:float','PPRICE:float','PDISCOUNT:float','PVAT:float','PDESCRIPTION:string|100'],
-            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','ITEM','LINE_NO','QUANTITY','PRICE','DISCOUNT','VAT','DESCRIPTION']
+                        'POUTPUT:string|50','PITEM:string|50','PLINE_NO:int','PQUANTITY:float','PPRICE:float','PDISCOUNT:float','PVAT:float','PAMOUNT:float','PDESCRIPTION:string|100'],
+            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','ITEM','LINE_NO','QUANTITY','PRICE','DISCOUNT','VAT','AMOUNT','DESCRIPTION']
         }
         tmpDt.updateCmd = 
         {
@@ -251,10 +262,11 @@ export class docItemsCls
                     "@PRICE  = @PPRICE, " +
                     "@DISCOUNT = @PDISCOUNT, " +
                     "@VAT = @PVAT, " +
+                    "@AMOUNT = @PAMOUNT, " +
                     "@DESCRIPTION  = @PDESCRIPTION ",
             param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|10','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PITEM:string|50','PLINE_NO:int','PQUANTITY:float','PPRICE:float','PDISCOUNT:float','PVAT:float','PDESCRIPTION:string|100'],
-            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','ITEM','LINE_NO','QUANTITY','PRICE','DISCOUNT','VAT','DESCRIPTION']
+                        'POUTPUT:string|50','PITEM:string|50','PLINE_NO:int','PQUANTITY:float','PPRICE:float','PDISCOUNT:float','PVAT:float','PAMOUNT:float','PDESCRIPTION:string|100'],
+            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','ITEM','LINE_NO','QUANTITY','PRICE','DISCOUNT','VAT','AMOUNT','DESCRIPTION']
         }
         tmpDt.deleteCmd = 
         {
@@ -365,7 +377,7 @@ export class docCustomerCls
         tmpDt.selectCmd = 
         {
             query : "SELECT * FROM [dbo].[DOC_CUSTOMER_VW_01] WHERE ((DOC_GUID = @DOC_GUID) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000')) AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0))",
-            param : ['DOC_GUID:string|50']
+            param : ['DOC_GUID:string|50','REF:string|10','REF_NO:int']
         }
         tmpDt.insertCmd = 
         {
@@ -385,7 +397,7 @@ export class docCustomerCls
                     "@AMOUNT = @PAMOUNT, "+
                     "@DESCRIPTION  = @PDESCRIPTION ",
             param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|10','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PAY_TYPE:int','PAMOUNT:float','PDESCRIPTION:string|100'],
+                        'POUTPUT:string|50','PPAY_TYPE:int','PAMOUNT:float','PDESCRIPTION:string|100'],
             dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','PAY_TYPE','AMOUNT','DESCRIPTION']
         }
         tmpDt.updateCmd = 
@@ -406,7 +418,7 @@ export class docCustomerCls
                     "@AMOUNT = @PAMOUNT, "+
                     "@DESCRIPTION  = @PDESCRIPTION ",
             param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|10','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PAY_TYPE:int','PAMOUNT:float','PDESCRIPTION:string|100'],
+                        'POUTPUT:string|50','PPAY_TYPE:int','PAMOUNT:float','PDESCRIPTION:string|100'],
             dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','PAY_TYPE','AMOUNT','DESCRIPTION']
         }
         tmpDt.deleteCmd = 

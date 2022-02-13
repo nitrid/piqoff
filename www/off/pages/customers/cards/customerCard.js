@@ -115,7 +115,6 @@ export default class CustomerCard extends React.Component
     {
         this.customerObj.clearAll()
         await this.customerObj.load({CODE:pCode});
-
     }
     async checkCustomer(pCode)
     {
