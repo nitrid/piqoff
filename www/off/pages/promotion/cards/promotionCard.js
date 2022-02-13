@@ -1,5 +1,6 @@
 import React from 'react';
 import App from '../../../lib/app.js';
+import {promotionCls} from '../../../lib/cls/promotion.js'
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
@@ -24,7 +25,18 @@ export default class promotionCard extends React.Component
         super()                
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
+
+        this.promoObj = new promotionCls();
     }   
+    async componentDidMount()
+    {
+        await this.core.util.waitUntil(0)
+        this.init(); 
+    }  
+    async init()
+    {
+        this.promoObj.clearAll();
+    }
     render()
     {
         return (
@@ -186,10 +198,28 @@ export default class promotionCard extends React.Component
                                     }}
                                     />
                                 </Item>
-                                {/* txtPrmQuantity */}
+                                {/* txtRstQuantity */}
                                 <Item colSpan={2}>                                    
-                                    <Label text={this.t("txtPrmQuantity")} alignment="right" />
-                                    <NdTextBox id="txtPrmQuantity" parent={this} simple={true} />     
+                                    <Label text={this.t("txtRstQuantity")} alignment="right" />
+                                    <NdTextBox id="txtRstQuantity" parent={this} simple={true} />     
+                                </Item>
+                                {/* cmbRstItemType */}
+                                <Item>
+                                    <Label text={this.t("cmbRstItemType")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbRstItemType"
+                                    displayExpr="NAME"                       
+                                    valueExpr="CODE"
+                                    value=""
+                                    data={{source:{select:{query : "SELECT CODE,NAME FROM ITEM_GROUP ORDER BY NAME ASC"},sql:this.core.sql}}}
+                                    onValueChanged={(e)=>
+                                    {
+                                    }}
+                                    />
+                                </Item>
+                                {/* txtRstItemQuantity */}
+                                <Item colSpan={2}>                                    
+                                    <Label text={this.t("txtRstItemQuantity")} alignment="right" />
+                                    <NdTextBox id="txtRstItemQuantity" parent={this} simple={true} />     
                                 </Item>
                             </Form>
                         </div>
