@@ -394,6 +394,23 @@ export const langTr =
             btn02: "Vazgeç",
             msg: "Kaydı silmek istediğinize eminmisiniz ?"
         },
+    },
+    promo_01_001: 
+    {
+        txtCode: "Kodu",
+        txtName: "Adı",
+        dtStartDate: "Baş.Tarih",
+        dtFinishDate: "Bit.Tarih",
+        cmbDepot: "Depo",
+        txtCustomerCode: "Cari Kodu",
+        txtCustomerName: "Cari Adı",
+        cmbPrmType: "Tipi",
+        txtPrmItem: "Kodu",
+        txtPrmQuantity: "Miktar",
+        txtPrmAmount: "Tutar",
+        cmbRstType: "Tipi",
+        txtRstQuantity: "Değer",
+        cmbRstItemType: "Kodu",
+        txtRstItemQuantity: "Miktar"
     }
-
 }
