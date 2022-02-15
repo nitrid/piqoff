@@ -151,6 +151,11 @@ export default class NdTextBox extends Base
         {
             $("#" + this.props.id + " > .dx-texteditor-container > .dx-texteditor-input-container").append($("#" + this.props.id + " > #dsp" + this.props.id))
         }
+        //BURAYA SONRA BAKILACAK - 16.02.2022 - KARACA
+        // if(typeof this.props.dt != 'undefined' && typeof this.props.dt.data != 'undefined' && typeof this.props.dt.field != 'undefined')
+        // {
+        //     this.onRefresh() 
+        // }
     }
     //#endregion
     get displayValue()

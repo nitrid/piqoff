@@ -43,11 +43,59 @@ export default class promotionCard extends React.Component
         this.promoObj.clearAll();
         this.promoObj.addEmpty();
         
+        this.promoObj.ds.on('onRefresh',async(pTblName)  =>
+        {            
+            
+        })
     }
     async getPromotion(pCode)
     {
         this.promoObj.clearAll();
         await this.promoObj.load({CODE:pCode});
+    }
+    async checkPromotion(pCode)
+    {
+        return new Promise(async resolve => 
+        {
+            if(pCode !== '')
+            {
+                let tmpData = await new promotionCls().load({CODE:pCode});
+    
+                if(tmpData.length > 0)
+                {
+                    let tmpConfObj =
+                    {
+                        id:'msgRef',
+                        showTitle:true,
+                        title:this.t("msgRef.title"),
+                        showCloseButton:true,
+                        width:'500px',
+                        height:'200px',
+                        button:[{id:"btn01",caption:this.t("msgRef.btn01"),location:'before'},{id:"btn02",caption:this.t("msgRef.btn02"),location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgRef.msg")}</div>)
+                    }
+                    
+                    let pResult = await dialog(tmpConfObj);
+                    if(pResult == 'btn01')
+                    {
+                        this.getPromotion(pCode)
+                        resolve(2) //KAYIT VAR
+                    }
+                    else
+                    {
+                        resolve(3) //TAMAM BUTONUNA BASILDI
+                    }
+                }
+                else
+                {
+                    resolve(1) //KAYIT BULUNMADI
+                }
+            }
+            else
+            {
+                resolve(0) //PARAMETRE BOŞ
+            }
+        });
     }
     render()
     {
@@ -61,6 +109,7 @@ export default class promotionCard extends React.Component
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
                                     onClick={()=>
                                     {
+                                        this.init();
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -114,6 +163,20 @@ export default class promotionCard extends React.Component
                                     <NdButton id="btnDelete" parent={this} icon="trash" type="default"
                                     onClick={async()=>
                                     {
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
+                                        }
+                                        
+                                        let pResult = await dialog(tmpConfObj);
+                                        if(pResult == 'btn01')
+                                        {
+                                            this.promoObj.dt().removeAt(0)
+                                            await this.promoObj.dt().delete();
+                                            this.init(); 
+                                        }
                                     }}/>
                                 </Item>
                             </Toolbar>
@@ -159,7 +222,11 @@ export default class promotionCard extends React.Component
                                     }
                                     onChange={(async()=>
                                     {
-                                        
+                                        let tmpResult = await this.checkPromotion(this.txtCode.value)
+                                        if(tmpResult == 3)
+                                        {
+                                            this.txtCode.value = "";
+                                        }
                                     }).bind(this)} 
                                     param={this.param.filter({ELEMENT:'txtCode',USERS:this.user.CODE})} 
                                     >     
@@ -175,11 +242,11 @@ export default class promotionCard extends React.Component
                                     showBorders={true}
                                     width={'90%'}
                                     height={'90%'}
-                                    title={this.t("txtCode.title")} 
+                                    title={this.t("pg_Grid.title")} 
                                     data={{source:{select:{query : "SELECT CODE,NAME FROM PROMOTION_VW_01 GROUP BY CODE,NAME"},sql:this.core.sql}}}
                                     >
-                                        <Column dataField="CODE" caption={this.t("pg_txtRef.clmCode")} width={150} />
-                                        <Column dataField="NAME" caption={this.t("pg_txtRef.clmName")} width={650} defaultSortOrder="asc" />
+                                        <Column dataField="CODE" caption={this.t("pg_Grid.clmCode")} width={150} />
+                                        <Column dataField="NAME" caption={this.t("pg_Grid.clmName")} width={650} defaultSortOrder="asc" />
                                     </NdPopGrid>    
                                 </Item>
                                 {/* txtName */}
@@ -207,11 +274,10 @@ export default class promotionCard extends React.Component
                                 <Item>
                                     <Label text={this.t("cmbDepot")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbDepot"
-                                    dt={{data:this.promoObj.dt(),field:"DEPOT"}}
-                                    displayExpr="NAME"                       
-                                    valueExpr="CODE"
-                                    value=""
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM DEPOT_VW_01 ORDER BY CODE ASC"},sql:this.core.sql}}}
+                                    dt={{data:this.promoObj.dt(),field:"DEPOT_GUID",display:"DEPOT_NAME"}}
+                                    displayExpr="DEPOT_NAME"                       
+                                    valueExpr="DEPOT_GUID"
+                                    data={{source:{select:{query : "SELECT GUID AS DEPOT_GUID,NAME AS DEPOT_NAME FROM DEPOT_VW_01 ORDER BY CODE ASC"},sql:this.core.sql}}}
                                     onValueChanged={(e)=>
                                     {
                                     }}
@@ -235,7 +301,7 @@ export default class promotionCard extends React.Component
                                                     {
                                                         if(data.length > 0)
                                                         {
-                                                            this.txtCustomerCode.GUID = data[0].GUID
+                                                            this.promoObj.dt()[0].CUSTOMER_GUID = data[0].GUID
                                                             this.txtCustomerCode.value = data[0].CODE;
                                                             this.txtCustomerName.value = data[0].TITLE;
                                                         }
@@ -256,14 +322,14 @@ export default class promotionCard extends React.Component
                                     showBorders={true}
                                     width={'90%'}
                                     height={'90%'}
-                                    title={this.t("pg_txtCustomerCode.title")} 
+                                    title={this.t("pg_Grid.title")} 
                                     columnAutoWidth={true}
                                     allowColumnResizing={true}
                                     data={{source:{select:{query:"SELECT GUID,CODE,TITLE FROM CUSTOMER_VW_01 WHERE TYPE = 1 "},sql:this.core.sql}}}
                                     >           
                                     <Scrolling mode="virtual" />                         
-                                    <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmName")} width={650} defaultSortOrder="asc" />
-                                    <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
+                                    <Column dataField="TITLE" caption={this.t("pg_Grid.clmName")} width={650} defaultSortOrder="asc" />
+                                    <Column dataField="CODE" caption={this.t("pg_Grid.clmCode")} width={150} />
                                     </NdPopGrid>
                                 </Item>
                                 {/* txtCustomerName */}
@@ -332,11 +398,11 @@ export default class promotionCard extends React.Component
                                     showBorders={true}
                                     width={'90%'}
                                     height={'90%'}
-                                    title={this.t("pg_txtPrmItem.title")} 
+                                    title={this.t("pg_Grid.title")} 
                                     data={{source:{select:{query : "SELECT GUID,CODE,NAME FROM ITEMS_VW_01"},sql:this.core.sql}}}
                                     >
-                                        <Column dataField="CODE" caption={this.t("pg_txtPrmItem.clmCode")} width={150} />
-                                        <Column dataField="NAME" caption={this.t("pg_txtPrmItem.clmName")} width={650} defaultSortOrder="asc" />
+                                        <Column dataField="CODE" caption={this.t("pg_Grid.clmCode")} width={150} />
+                                        <Column dataField="NAME" caption={this.t("pg_Grid.clmName")} width={650} defaultSortOrder="asc" />
                                     </NdPopGrid>
                                 </Item>     
                                 {/* txtPrmQuantity */}  
@@ -386,11 +452,11 @@ export default class promotionCard extends React.Component
                                     showBorders={true}
                                     width={'90%'}
                                     height={'90%'}
-                                    title={this.t("pg_txtPrmItemGrp.title")} 
+                                    title={this.t("pg_Grid.title")} 
                                     data={{source:{select:{query : "SELECT GUID,CODE,NAME FROM ITEM_GROUP"},sql:this.core.sql}}}
                                     >
-                                        <Column dataField="CODE" caption={this.t("pg_txtPrmItemGrp.clmCode")} width={150} />
-                                        <Column dataField="NAME" caption={this.t("pg_txtPrmItemGrp.clmName")} width={650} defaultSortOrder="asc" />
+                                        <Column dataField="CODE" caption={this.t("pg_Grid.clmCode")} width={150} />
+                                        <Column dataField="NAME" caption={this.t("pg_Grid.clmName")} width={650} defaultSortOrder="asc" />
                                     </NdPopGrid>
                                 </Item>     
                                 <EmptyItem /> 
@@ -418,11 +484,11 @@ export default class promotionCard extends React.Component
                                     displayExpr="NAME"                       
                                     valueExpr="ID"
                                     value={0}
-                                    data={{source:[{ID:0,NAME:"Fiyat"},{ID:1,NAME:"İskonto Tutar"},{ID:2,NAME:"İskonto Oran"},{ID:3,NAME:"Para Puan"},{ID:4,NAME:"Stok"}]}}
-                                    onValueChanged={(e)=>
+                                    data={{source:[{ID:0,NAME:"Fiyat"},{ID:1,NAME:"İskonto Tutar"},{ID:2,NAME:"İskonto Oran"},{ID:3,NAME:"Para Puan"},{ID:4,NAME:"Stok"}]}}  
+                                    onValueChanged={() =>
                                     {
-                                        this.setState({rstType:e.value})
-                                    }}
+                                        this.setState({rstType:this.promoObj.dt()[0].RST_T})
+                                    }}                                  
                                     />
                                 </Item>                                
                                 <EmptyItem/>
@@ -444,7 +510,8 @@ export default class promotionCard extends React.Component
                                 <Item>
                                     <Label text={this.t("txtRstItem")} alignment="right" />
                                     <NdTextBox id="txtRstItem" parent={this} simple={true} readOnly={true}
-                                    dt={{data:this.promoObj.dt(),field:"RST_ITEM"}}
+                                    dt={{data:this.promoObj.dt(),field:"RST_ITEM",display:"RST_NAME"}}
+                                    displayValue={""}
                                     button=
                                     {
                                         [
@@ -458,7 +525,7 @@ export default class promotionCard extends React.Component
                                                     {
                                                         if(data.length > 0)
                                                         {
-                                                            this.txtRstItem.GUID = data[0].GUID;
+                                                            this.promoObj.dt()[0].GUID = data[0].GUID;
                                                             this.txtRstItem.value = data[0].NAME
                                                         }
                                                     }
@@ -476,11 +543,11 @@ export default class promotionCard extends React.Component
                                     showBorders={true}
                                     width={'90%'}
                                     height={'90%'}
-                                    title={this.t("pg_txtRstItem.title")} 
+                                    title={this.t("pg_Grid.title")} 
                                     data={{source:{select:{query : "SELECT GUID,CODE,NAME FROM ITEMS_VW_01"},sql:this.core.sql}}}
                                     >
-                                        <Column dataField="CODE" caption={this.t("pg_txtRstItem.clmCode")} width={150} />
-                                        <Column dataField="NAME" caption={this.t("pg_txtRstItem.clmName")} width={650} defaultSortOrder="asc" />
+                                        <Column dataField="CODE" caption={this.t("pg_Grid.clmCode")} width={150} />
+                                        <Column dataField="NAME" caption={this.t("pg_Grid.clmName")} width={650} defaultSortOrder="asc" />
                                     </NdPopGrid>
                                 </Item>     
                                 {/* txtPrmQuantity */}  

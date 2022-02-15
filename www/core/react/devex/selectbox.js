@@ -115,7 +115,7 @@ export default class NdSelectBox extends Base
                 }
             }
         }
-
+        
         this.setState({value:e == null ? '' : e})
     }
     get displayValue()
@@ -126,7 +126,7 @@ export default class NdSelectBox extends Base
     {
         if(typeof this.state.data != 'undefined')
         {
-            await this.dataRefresh(this.state.data)                 
+            await this.dataRefresh(this.state.data)                         
         }
     }
     render()

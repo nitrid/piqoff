@@ -183,56 +183,9 @@ export default class NdBase extends React.Component
                 // }
             });
             this.props.dt.data.on('onRefresh',async () =>
-            {                
-                await core.instance.util.waitUntil(0)
-                if(this.props.dt.data.length > 0)
-                {                                     
-                    if(typeof this.props.dt.filter == 'undefined')
-                    {
-                        //TEXTBOX DISPLAY DEĞERİ SET EDİLİYOR
-                        if(typeof this.props.dt.display != 'undefined')
-                        {
-                            if(this.constructor.name == 'NdTextBox')
-                            {
-                                this.setState({displayValue:this.props.dt.data[0][this.props.dt.display]})
-                            }                            
-                        }
-                        if(this.constructor.name == 'NdImageUpload')
-                        {
-                            this.setState({textVisible: false,isDropZoneActive: false,imageSource: this.props.dt.data[0][this.props.dt.field]});
-                        }
-                        else
-                        {
-                            this.setState({value:this.props.dt.data[0][this.props.dt.field]})
-                        }
-                        
-                        this.props.dt.row = this.props.dt.data[0];
-                    }   
-                    else
-                    {
-                        if(this.props.dt.data.where(this.props.dt.filter).length > 0)
-                        {
-                            //TEXTBOX DISPLAY DEĞERİ SET EDİLİYOR
-                            if(typeof this.props.dt.display != 'undefined')
-                            {
-                                if(this.constructor.name == 'NdTextBox')
-                                {
-                                    this.setState({displayValue:this.props.dt.data.where(this.props.dt.filter)[0][this.props.dt.display]})
-                                }
-                            }
-                            if(this.constructor.name == 'NdImageUpload')
-                            {
-                                this.setState({textVisible: false,isDropZoneActive: false,imageSource: this.props.dt.data.where(this.props.dt.filter)[0][this.props.dt.field]});
-                            }
-                            else
-                            {
-                                this.setState({value:this.props.dt.data.where(this.props.dt.filter)[0][this.props.dt.field]})
-                            }
-                            
-                            this.props.dt.row = this.props.dt.data.where(this.props.dt.filter)[0];
-                        }
-                    }
-                }
+            {      
+                await core.instance.util.waitUntil(0)          
+                this.onRefresh();
             });
         }
 
@@ -261,6 +214,57 @@ export default class NdBase extends React.Component
         }
 
         return this.state.data;
+    }
+    onRefresh()
+    {        
+        if(this.props.dt.data.length > 0)
+        {                                     
+            if(typeof this.props.dt.filter == 'undefined')
+            {
+                //TEXTBOX DISPLAY DEĞERİ SET EDİLİYOR
+                if(typeof this.props.dt.display != 'undefined')
+                {
+                    if(this.constructor.name == 'NdTextBox')
+                    {
+                        this.setState({displayValue:this.props.dt.data[0][this.props.dt.display]})
+                    }                            
+                }
+                if(this.constructor.name == 'NdImageUpload')
+                {
+                    this.setState({textVisible: false,isDropZoneActive: false,imageSource: this.props.dt.data[0][this.props.dt.field]});
+                }
+                else
+                {
+                    this.setState({value:this.props.dt.data[0][this.props.dt.field]})
+                }
+                
+                this.props.dt.row = this.props.dt.data[0];
+            }   
+            else
+            {
+                if(this.props.dt.data.where(this.props.dt.filter).length > 0)
+                {
+                    //TEXTBOX DISPLAY DEĞERİ SET EDİLİYOR
+                    if(typeof this.props.dt.display != 'undefined')
+                    {
+                        if(this.constructor.name == 'NdTextBox')
+                        {
+                            this.setState({displayValue:this.props.dt.data.where(this.props.dt.filter)[0][this.props.dt.display]})
+                        }
+                    }
+                    if(this.constructor.name == 'NdImageUpload')
+                    {
+                        this.setState({textVisible: false,isDropZoneActive: false,imageSource: this.props.dt.data.where(this.props.dt.filter)[0][this.props.dt.field]});
+                    }
+                    else
+                    {
+                        this.setState({value:this.props.dt.data.where(this.props.dt.filter)[0][this.props.dt.field]})
+                    }
+                    
+                    this.props.dt.row = this.props.dt.data.where(this.props.dt.filter)[0];
+                }
+            }
+        }
     }
     dataRefresh(e)
     {  
@@ -306,7 +310,7 @@ export default class NdBase extends React.Component
                                 else if (typeof e != 'undefined' && typeof e.source != 'undefined' && typeof e.source == 'object' && typeof e.source.sql != 'undefined' && typeof e.source.select != 'undefined')
                                 {            
                                     // BÜYÜK DATALARDA SÜREKLİ DATAYI GETİRMEMESİ İÇİN İF EKLENDİ
-                                    if(typeof tmpThis.state.data.datatable == 'undefined' || typeof tmpThis.props.pageSize == 'undefined')
+                                    if(typeof tmpThis.state.data.datatable == 'undefined') //|| typeof tmpThis.props.pageSize == 'undefined')
                                     {
                                         tmpThis.state.data.source = e.source;
                                         tmpThis.state.data.datatable = new datatable();

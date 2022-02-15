@@ -547,9 +547,6 @@ export const langTr =
         validDepot : "Depo Seçmelisiniz",
         validCustomerCode : "Cari Kodu Boş Geçilemez",
         validDocDate : "Tarih Seçmelisiniz",
-
-
-
     },
     promo_01_001: 
     {
@@ -570,6 +567,19 @@ export const langTr =
         txtRstItem : "Stok",
         cmbRstItemType: "Tip",
         txtRstItemQuantity: "Değer",
+        pg_Grid:
+        {
+            title: "Seçim",
+            clmCode: "KODU",
+            clmName: "ADI", 
+        },
+        msgRef:
+        {
+            title: "Dikkat",
+            btn01: "Promosyona Git",
+            btn02: "Tamam",
+            msg: "Girmiş olduğunuz promosyon sistem de kayıtlı !"
+        },
         msgSave:
         {
             title: "Dikkat",
