@@ -775,6 +775,24 @@ export const prm =
             CAPTION : "Cari Adı"
         }
     },
+    {
+        TYPE : 1,
+        ID :"refForCustomerCode",
+        VALUE : 
+        {
+            value : false
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_001",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Alış Faturası",
+            CAPTION : "Seri Numarası İçin Cari Kodu Kullan"
+        }
+    },
     //#endregion
 
     //#region Alış Faturası
@@ -871,6 +889,24 @@ export const prm =
             TYPE : "text",
             PAGE_NAME : "Alış Faturası",
             CAPTION : "Cari Adı"
+        }
+    },
+    {
+        TYPE : 1,
+        ID :"refForCustomerCode",
+        VALUE : 
+        {
+            value : false
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_001",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Alış Faturası",
+            CAPTION : "Seri Numarası İçin Cari Kodu Kullan"
         }
     },
     //#endregion

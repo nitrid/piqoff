@@ -374,6 +374,7 @@ export const langTr =
         txtDiscount : "İndirim",
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
+        dtShipDate :"Sevk Tarihi",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -387,6 +388,8 @@ export const langTr =
             title : "Cari Seçimi",
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
         },
         pg_txtItemsCode : 
         {
@@ -437,6 +440,13 @@ export const langTr =
             btn01: "Tamam",
             btn02: "Vazgeç",
             msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgVatDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Vergiyi Sıfırlamak istediğinize eminmisiniz !"
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
@@ -458,6 +468,7 @@ export const langTr =
         txtDiscount : "İndirim",
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
+        dtShipDate :"Sevk Tarihi",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -471,6 +482,8 @@ export const langTr =
             title : "Cari Seçimi",
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
         },
         pg_txtItemsCode : 
         {
@@ -521,6 +534,13 @@ export const langTr =
             btn01: "Tamam",
             btn02: "Vazgeç",
             msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgVatDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Vergiyi Sıfırlamak istediğinize eminmisiniz !"
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
