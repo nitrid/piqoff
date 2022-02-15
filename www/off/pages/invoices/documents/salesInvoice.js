@@ -44,7 +44,6 @@ export default class salesInvoice extends React.Component
     }
     async init()
     {
-        console.log(this.param.filter({TYPE:1,USERS:this.user.CODE}))
         this.docObj.clearAll()
 
         this.docObj.ds.on('onAddRow',(pTblName,pData) =>
@@ -129,7 +128,6 @@ export default class salesInvoice extends React.Component
     {
         this.docObj.clearAll()
         await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:20});
-        console.log()
         this.txtCustomerCode.value = this.docObj.dt()[0].INPUT_CODE
         this.txtCustomerName.value = this.docObj.dt()[0].INPUT_NAME
         this.dtDocDate.value = this.docObj.dt()[0].DOC_DATE
@@ -149,7 +147,6 @@ export default class salesInvoice extends React.Component
     }
     async checkDoc(pGuid,pRef,pRefno)
     {
-        console.log(pGuid)
         return new Promise(async resolve =>
         {
             if(pRef !== '')
@@ -401,7 +398,6 @@ export default class salesInvoice extends React.Component
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     if(tmpData.result.recordset.length > 0)
                                                     {
-                                                        console.log(tmpData.result.recordset[0])
                                                         this.txtRefno.value = tmpData.result.recordset[0].REF_NO
                                                         this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
                                                     }
