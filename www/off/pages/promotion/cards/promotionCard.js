@@ -4,9 +4,8 @@ import {promotionCls} from '../../../lib/cls/promotion.js'
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
+import Form, { Label,Item,EmptyItem,GroupItem } from 'devextreme-react/form';
 import { Button } from 'devextreme-react/button';
-import { TextBox } from 'devextreme-react/text-box';
 
 import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
@@ -26,7 +25,8 @@ export default class promotionCard extends React.Component
         super() 
         this.state = 
         {
-            prmType:0
+            prmType:0,
+            rstType:0
         }               
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
@@ -37,90 +37,12 @@ export default class promotionCard extends React.Component
     {
         await this.core.util.waitUntil(0)
         this.init();
-        
-        //this.frmPromo.itemOption("tst1","visible", false)
-        console.log(this.frmPromo.itemOption("tst1"))
-    }
-    _txtPrmItemInit()
-    {
-        if(typeof this.txtPrmItem != 'undefined')
-        {
-            this.txtPrmItem.GUID = "";
-            this.txtPrmItem.value = "";
-        }
-        
-        let tmpQuery = ""
-
-        if(this.state.prmType == 0)
-        {
-            tmpQuery = "SELECT GUID,CODE,NAME FROM ITEMS_VW_01"
-        }
-        else if(this.state.prmType == 1)
-        {
-            tmpQuery = "SELECT GUID,CODE,NAME FROM ITEM_GROUP"
-        }
-
-        if(this.state.prmType < 2)
-        {
-            return(
-                <Item>
-                    <Label text={this.t("txtPrmItem")} alignment="right" />
-                    <NdTextBox id="txtPrmItem" parent={this} simple={true} readOnly={true}
-                    dt={{data:this.promoObj.dt(),field:"PRM_V"}}
-                    button=
-                    {
-                        [
-                            {
-                                id:'01',
-                                icon:'more',
-                                onClick:()=>
-                                {
-                                    this.pg_txtPrmItem.show()
-                                    this.pg_txtPrmItem.onClick = (data) =>
-                                    {
-                                        if(data.length > 0)
-                                        {
-                                            this.txtPrmItem.GUID = data[0].GUID;
-                                            this.txtPrmItem.value = data[0].NAME
-                                        }
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                    >     
-                    </NdTextBox> 
-                    {/* SEÇİM POPUP */}
-                    <NdPopGrid id={"pg_txtPrmItem"} parent={this} container={"#root"} 
-                    visible={false}
-                    position={{of:'#root'}} 
-                    showTitle={true} 
-                    showBorders={true}
-                    width={'90%'}
-                    height={'90%'}
-                    title={this.t("pg_txtPrmItem.title")} 
-                    data={{source:{select:{query : tmpQuery},sql:this.core.sql}}}
-                    >
-                        <Column dataField="CODE" caption={this.t("pg_txtPrmItem.clmCode")} width={150} />
-                        <Column dataField="NAME" caption={this.t("pg_txtPrmItem.clmName")} width={650} defaultSortOrder="asc" />
-                    </NdPopGrid>
-                </Item>                                                    
-            )
-        }
-        else
-        {
-            return (<EmptyItem/>)
-        }
-        
-    }  
-    _txtPrmQuantityInit()
-    {
-
     }
     async init()
     {
         this.promoObj.clearAll();
         this.promoObj.addEmpty();
+        
     }
     async getPromotion(pCode)
     {
@@ -142,9 +64,40 @@ export default class promotionCard extends React.Component
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmItems"
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmPromo"
                                     onClick={async (e)=>
                                     {
+                                        console.log(e.validationGroup)
+                                        if(e.validationGroup.validate().status == "valid")
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
+                                            }
+                                            
+                                            let pResult = await dialog(tmpConfObj);
+                                            if(pResult == 'btn01')
+                                            {
+                                                let tmpConfObj1 =
+                                                {
+                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                                }
+                                                
+                                                if((await this.itemsObj.save()) == 0)
+                                                {                                                    
+                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
+                                                    await dialog(tmpConfObj1);
+                                                }
+                                                else
+                                                {
+                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                                    await dialog(tmpConfObj1);
+                                                }
+                                            }
+                                        }
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -158,11 +111,9 @@ export default class promotionCard extends React.Component
                     </div>
                     <div className="row px-2 pt-2"> 
                         <div className="col-12">
-                            <Form colCount={3} id="frmPromo" 
-                            onInitialized={(e)=>
-                            {
-                                this.frmPromo = e.component
-                            }}>
+                            <Form colCount={3} id="frmPromo">
+                                <GroupItem colSpan={3}>
+                                <GroupItem colCount={3}>
                                 {/* txtCode */}
                                 <Item>                                    
                                     <Label text={this.t("txtCode")} alignment="right" />
@@ -308,6 +259,9 @@ export default class promotionCard extends React.Component
                                     dt={{data:this.promoObj.dt(),field:"CUSTOMER_NAME"}}
                                     />     
                                 </Item>
+                                </GroupItem>
+                                </GroupItem>
+                                <GroupItem colSpan={3} colCount={3} caption={"Promosyon Koşulları"}>
                                 {/* cmbPrmType */}
                                 <Item>
                                     <Label text={this.t("cmbPrmType")} alignment="right" />
@@ -323,16 +277,123 @@ export default class promotionCard extends React.Component
                                     }}
                                     />
                                 </Item>
-                                {/* txtPrmItem */}
-                                {/* {this._txtPrmItemInit()}             */}
+                                <EmptyItem />
+                                <EmptyItem />
+                                <GroupItem colSpan={3}>
+                                <GroupItem colCount={3} visible={this.state.prmType == 0 ? true : false}>
+                                {/* txtPrmItem */}                                
+                                <Item>
+                                    <Label text={this.t("txtPrmItem")} alignment="right" />
+                                    <NdTextBox id="txtPrmItem" parent={this} simple={true} readOnly={true}
+                                    dt={{data:this.promoObj.dt(),field:"PRM_V"}}
+                                    button=
+                                    {
+                                        [
+                                            {
+                                                id:'01',
+                                                icon:'more',
+                                                onClick:()=>
+                                                {
+                                                    this.pg_txtPrmItem.show()
+                                                    this.pg_txtPrmItem.onClick = (data) =>
+                                                    {
+                                                        if(data.length > 0)
+                                                        {
+                                                            this.txtPrmItem.GUID = data[0].GUID;
+                                                            this.txtPrmItem.value = data[0].NAME
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                    >     
+                                    </NdTextBox> 
+                                    {/* SEÇİM POPUP */}
+                                    <NdPopGrid id={"pg_txtPrmItem"} parent={this} container={"#root"} 
+                                    visible={false}
+                                    position={{of:'#root'}} 
+                                    showTitle={true} 
+                                    showBorders={true}
+                                    width={'90%'}
+                                    height={'90%'}
+                                    title={this.t("pg_txtPrmItem.title")} 
+                                    data={{source:{select:{query : "SELECT GUID,CODE,NAME FROM ITEMS_VW_01"},sql:this.core.sql}}}
+                                    >
+                                        <Column dataField="CODE" caption={this.t("pg_txtPrmItem.clmCode")} width={150} />
+                                        <Column dataField="NAME" caption={this.t("pg_txtPrmItem.clmName")} width={650} defaultSortOrder="asc" />
+                                    </NdPopGrid>
+                                </Item>     
                                 {/* txtPrmQuantity */}  
-                                <Item name={"tst1"}>                                                                    
-                                    <Label text={"this.state.prmType"} alignment="right" />
-                                    {/* <NdTextBox id="txtPrmAmount" parent={this} simple={true} 
+                                <Item>                                                                    
+                                    <Label text={this.t("txtPrmQuantity")} alignment="right" />
+                                    <NdTextBox id="txtPrmQuantity" parent={this} simple={true} 
                                     dt={{data:this.promoObj.dt(),field:"PRM_Q"}}
-                                    />      */}
-                                    <TextBox value={this.state.prmType}/>
-                                </Item>  
+                                    />     
+                                </Item> 
+                                <EmptyItem /> 
+                                </GroupItem>
+                                <GroupItem colCount={3} visible={this.state.prmType == 1 ? true : false}>
+                                {/* txtPrmItemGrp */}                                
+                                <Item>
+                                    <Label text={this.t("txtPrmItemGrp")} alignment="right" />
+                                    <NdTextBox id="txtPrmItemGrp" parent={this} simple={true} readOnly={true}
+                                    dt={{data:this.promoObj.dt(),field:"PRM_V"}}
+                                    button=
+                                    {
+                                        [
+                                            {
+                                                id:'01',
+                                                icon:'more',
+                                                onClick:()=>
+                                                {
+                                                    this.pg_txtPrmItemGrp.show()
+                                                    this.pg_txtPrmItemGrp.onClick = (data) =>
+                                                    {
+                                                        if(data.length > 0)
+                                                        {
+                                                            this.txtPrmItemGrp.GUID = data[0].GUID;
+                                                            this.txtPrmItemGrp.value = data[0].NAME
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                    >     
+                                    </NdTextBox> 
+                                    {/* SEÇİM POPUP */}
+                                    <NdPopGrid id={"pg_txtPrmItemGrp"} parent={this} container={"#root"} 
+                                    visible={false}
+                                    position={{of:'#root'}} 
+                                    showTitle={true} 
+                                    showBorders={true}
+                                    width={'90%'}
+                                    height={'90%'}
+                                    title={this.t("pg_txtPrmItemGrp.title")} 
+                                    data={{source:{select:{query : "SELECT GUID,CODE,NAME FROM ITEM_GROUP"},sql:this.core.sql}}}
+                                    >
+                                        <Column dataField="CODE" caption={this.t("pg_txtPrmItemGrp.clmCode")} width={150} />
+                                        <Column dataField="NAME" caption={this.t("pg_txtPrmItemGrp.clmName")} width={650} defaultSortOrder="asc" />
+                                    </NdPopGrid>
+                                </Item>     
+                                <EmptyItem /> 
+                                <EmptyItem /> 
+                                </GroupItem>
+                                <GroupItem colCount={3} visible={this.state.prmType == 2 ? true : false}>
+                                {/* txtPrmAmount */}  
+                                <Item>                                                                    
+                                    <Label text={this.t("txtPrmAmount")} alignment="right" />
+                                    <NdTextBox id="txtPrmAmount" parent={this} simple={true} 
+                                    dt={{data:this.promoObj.dt(),field:"PRM_Q"}}
+                                    />     
+                                </Item> 
+                                <EmptyItem /> 
+                                <EmptyItem /> 
+                                </GroupItem>
+                                </GroupItem>
+                                </GroupItem>           
+                                <GroupItem colSpan={3} colCount={3} caption={"Promosyon Sonuç"}>
                                 {/* cmbRstType */}
                                 <Item>
                                     <Label text={this.t("cmbRstType")} alignment="right" />
@@ -344,37 +405,102 @@ export default class promotionCard extends React.Component
                                     data={{source:[{ID:0,NAME:"Fiyat"},{ID:1,NAME:"İskonto Tutar"},{ID:2,NAME:"İskonto Oran"},{ID:3,NAME:"Para Puan"},{ID:4,NAME:"Stok"}]}}
                                     onValueChanged={(e)=>
                                     {
+                                        this.setState({rstType:e.value})
                                     }}
                                     />
-                                </Item>
+                                </Item>                                
+                                <EmptyItem/>
+                                <EmptyItem/>
+                                <GroupItem colSpan={3}>
+                                <GroupItem colCount={3} visible={this.state.rstType != 4 ? true : false}>
                                 {/* txtRstQuantity */}
-                                <Item colSpan={2}>                                    
+                                <Item>                                    
                                     <Label text={this.t("txtRstQuantity")} alignment="right" />
                                     <NdTextBox id="txtRstQuantity" parent={this} simple={true}
                                     dt={{data:this.promoObj.dt(),field:"RST_V"}} 
                                     />     
                                 </Item>
+                                <EmptyItem/>
+                                <EmptyItem/>
+                                </GroupItem>
+                                <GroupItem colCount={3} visible={this.state.rstType == 4 ? true : false}>
+                                {/* txtRstItem */}                                
+                                <Item>
+                                    <Label text={this.t("txtRstItem")} alignment="right" />
+                                    <NdTextBox id="txtRstItem" parent={this} simple={true} readOnly={true}
+                                    dt={{data:this.promoObj.dt(),field:"RST_ITEM"}}
+                                    button=
+                                    {
+                                        [
+                                            {
+                                                id:'01',
+                                                icon:'more',
+                                                onClick:()=>
+                                                {
+                                                    this.pg_txtRstItem.show()
+                                                    this.pg_txtRstItem.onClick = (data) =>
+                                                    {
+                                                        if(data.length > 0)
+                                                        {
+                                                            this.txtRstItem.GUID = data[0].GUID;
+                                                            this.txtRstItem.value = data[0].NAME
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                    >     
+                                    </NdTextBox> 
+                                    {/* SEÇİM POPUP */}
+                                    <NdPopGrid id={"pg_txtRstItem"} parent={this} container={"#root"} 
+                                    visible={false}
+                                    position={{of:'#root'}} 
+                                    showTitle={true} 
+                                    showBorders={true}
+                                    width={'90%'}
+                                    height={'90%'}
+                                    title={this.t("pg_txtRstItem.title")} 
+                                    data={{source:{select:{query : "SELECT GUID,CODE,NAME FROM ITEMS_VW_01"},sql:this.core.sql}}}
+                                    >
+                                        <Column dataField="CODE" caption={this.t("pg_txtRstItem.clmCode")} width={150} />
+                                        <Column dataField="NAME" caption={this.t("pg_txtRstItem.clmName")} width={650} defaultSortOrder="asc" />
+                                    </NdPopGrid>
+                                </Item>     
+                                {/* txtPrmQuantity */}  
+                                <Item>                                                                    
+                                    <Label text={this.t("txtPrmQuantity")} alignment="right" />
+                                    <NdTextBox id="txtPrmQuantity" parent={this} simple={true} 
+                                    dt={{data:this.promoObj.dt(),field:"RST_ITEM_Q"}}
+                                    />     
+                                </Item> 
+                                <EmptyItem /> 
                                 {/* cmbRstItemType */}
                                 <Item>
                                     <Label text={this.t("cmbRstItemType")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbRstItemType"
                                     dt={{data:this.promoObj.dt(),field:"RST_ITEM_T"}}
                                     displayExpr="NAME"                       
-                                    valueExpr="CODE"
-                                    value=""
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM ITEM_GROUP ORDER BY NAME ASC"},sql:this.core.sql}}}
+                                    valueExpr="ID"
+                                    value={0}
+                                    data={{source:[{ID:0,NAME:"Fiyat"},{ID:1,NAME:"İskonto Tutar"},{ID:2,NAME:"İskonto Oran"},{ID:3,NAME:"Para Puan"}]}}
                                     onValueChanged={(e)=>
                                     {
                                     }}
                                     />
                                 </Item>
                                 {/* txtRstItemQuantity */}
-                                <Item colSpan={2}>                                    
+                                <Item>                                    
                                     <Label text={this.t("txtRstItemQuantity")} alignment="right" />
                                     <NdTextBox id="txtRstItemQuantity" parent={this} simple={true} 
                                     dt={{data:this.promoObj.dt(),field:"RST_ITEM_V"}}
                                     />     
                                 </Item>
+                                <EmptyItem/>
+                                </GroupItem>
+                                </GroupItem>
+                                </GroupItem>                     
+                                
                             </Form>
                         </div>
                     </div>

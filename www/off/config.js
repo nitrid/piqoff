@@ -80,7 +80,8 @@ window.config =
     {
       sourceMaps: false,
       stage0: true,
-      react: true
+      react: true,
+      
     }
   };
   System.config(window.config);
