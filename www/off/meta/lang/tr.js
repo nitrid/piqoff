@@ -540,13 +540,42 @@ export const langTr =
         cmbDepot: "Depo",
         txtCustomerCode: "Cari Kodu",
         txtCustomerName: "Cari Adı",
-        cmbPrmType: "Tipi",
-        txtPrmItem: "Kodu",
+        cmbPrmType: "Promosyon Tipi",
+        txtPrmItem: "Stok",
+        txtPrmItemGrp: "Grup",
         txtPrmQuantity: "Miktar",
         txtPrmAmount: "Tutar",
         cmbRstType: "Tipi",
         txtRstQuantity: "Değer",
-        cmbRstItemType: "Kodu",
-        txtRstItemQuantity: "Miktar"
+        txtRstItem : "Stok",
+        cmbRstItemType: "Tip",
+        txtRstItemQuantity: "Değer",
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
     }
 }

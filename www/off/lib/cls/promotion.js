@@ -17,8 +17,8 @@ export class promotionCls
             LUSER_NAME : '',
             CODE : '',
             NAME : '',
-            START_DATE : moment(new Date()).format("DD/MM/YYYY"),
-            FINISH_DATE : moment(new Date()).format("DD/MM/YYYY"),
+            START_DATE : moment(new Date(0)).format("DD/MM/YYYY"),
+            FINISH_DATE : moment(new Date(0)).format("DD/MM/YYYY"),
             CUSTOMER_GUID : '00000000-0000-0000-0000-000000000000',
             CUSTOMER_CODE : '',
             CUSTOMER_NAME : '',
@@ -34,8 +34,10 @@ export class promotionCls
             RST_T : 0,
             RST_T_NAME : '',
             RST_V : '',
+            RST_ITEM : '',
             RST_CODE : '',
             RST_NAME : '',
+            RST_ITEM_Q : 0,
             RST_ITEM_T : 0,
             RST_ITEM_T_NAME : '',
             RST_ITEM_V: ''
@@ -68,14 +70,15 @@ export class promotionCls
                     "@PRM_Q = @PPRM_Q, " + 
                     "@RST_T = @PRST_T, " + 
                     "@RST_V = @PRST_V, " + 
-                    "@RST_Q = @PRST_Q, " + 
+                    "@RST_ITEM = @PRST_ITEM, " +
+                    "@RST_ITEM_Q = @PRST_ITEM_Q, " + 
                     "@RST_ITEM_T = @PRST_ITEM_T, " + 
                     "@RST_ITEM_V = @PRST_ITEM_V ", 
             param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|250','PSTART_DATE:date','PFINISH_DATE:date',
                      'PCUSTOMER:string|50','PDEPOT:string|50','PPRM_T:int','PPRM_V:string|max','PPRM_Q:float','PRST_T:int',
-                     'PRST_V:string|max','PRST_Q:float','PRST_ITEM_T:int','PRST_ITEM_V:string|max'],
+                     'PRST_V:string|max','PRST_ITEM:string|50','PRST_ITEM_Q:float','PRST_ITEM_T:int','PRST_ITEM_V:string|max'],
             dataprm : ['GUID','CUSER','CODE','NAME','START_DATE','FINISH_DATE','CUSTOMER','DEPOT','PRM_T','PRM_V','PRM_Q','RST_T',
-                       'RST_V','RST_Q','RST_ITEM_T','RST_ITEM_V']
+                       'RST_V','RST_ITEM','RST_ITEM_Q','RST_ITEM_T','RST_ITEM_V']
         } 
         tmpDt.updateCmd = 
         {
@@ -93,14 +96,15 @@ export class promotionCls
                     "@PRM_Q = @PPRM_Q, " + 
                     "@RST_T = @PRST_T, " + 
                     "@RST_V = @PRST_V, " + 
-                    "@RST_Q = @PRST_Q, " + 
+                    "@RST_ITEM = @PRST_ITEM, " + 
+                    "@RST_ITEM_Q = @PRST_ITEM_Q, " + 
                     "@RST_ITEM_T = @PRST_ITEM_T, " + 
                     "@RST_ITEM_V = @PRST_ITEM_V ", 
             param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|250','PSTART_DATE:date','PFINISH_DATE:date',
                     'PCUSTOMER:string|50','PDEPOT:string|50','PPRM_T:int','PPRM_V:string|max','PPRM_Q:float','PRST_T:int',
-                    'PRST_V:string|max','PRST_Q:float','PRST_ITEM_T:int','PRST_ITEM_V:string|max'],
+                    'PRST_V:string|max','PRST_ITEM:string|50','PRST_ITEM_Q:float','PRST_ITEM_T:int','PRST_ITEM_V:string|max'],
             dataprm : ['GUID','CUSER','CODE','NAME','START_DATE','FINISH_DATE','CUSTOMER','DEPOT','PRM_T','PRM_V','PRM_Q','RST_T',
-                       'RST_V','RST_Q','RST_ITEM_T','RST_ITEM_V']
+                       'RST_V','RST_ITEM','RST_ITEM_Q','RST_ITEM_T','RST_ITEM_V']
         } 
         tmpDt.deleteCmd = 
         {
