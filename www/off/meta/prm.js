@@ -678,4 +678,202 @@ export const prm =
         }
     },
     //#endregion
+
+    //#region Satış Faturası
+    //txtRef
+    {
+        TYPE : 2,
+        ID :"txtRef",
+        VALUE : 
+        {
+            value : "0"
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_002",
+        ELEMENT : "txtRef",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Satış Faturası",
+            CAPTION : "Seri"
+        }
+    },
+    //txtRefno
+    {
+        TYPE : 2,
+        ID :"txtRefno",
+        VALUE : 
+        {
+            value : "0"
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_002",
+        ELEMENT : "txtRefno",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "number",
+            PAGE_NAME : "Satış Faturası",
+            CAPTION : "Sıra"
+        }
+    },
+    //cmbDepot
+    {
+        TYPE : 2,
+        ID :"cmbDepot",
+        VALUE : 
+        {
+            value : ""
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_002",
+        ELEMENT : "cmbDepot",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Satış Faturası",
+            CAPTION : "Depo"
+        }
+    },
+    //txtCustomerCode
+    {
+        TYPE : 2,
+        ID :"txtCustomerCode",
+        VALUE : 
+        {
+            value : ""
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_002",
+        ELEMENT : "txtCustomerCode",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Satış Faturası",
+            CAPTION : "Cari Kodu"
+        }
+    },
+    // txtCustomerName
+    {
+        TYPE : 2,
+        ID :"txtCustomerName",
+        VALUE : 
+        {
+            value : ""
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_002",
+        ELEMENT : "txtCustomerName",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Satış Faturası",
+            CAPTION : "Cari Adı"
+        }
+    },
+    //#endregion
+
+    //#region Alış Faturası
+    //txtRef
+    {
+        TYPE : 2,
+        ID :"txtRef",
+        VALUE : 
+        {
+            value : "0"
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_001",
+        ELEMENT : "txtRef",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Alış Faturası",
+            CAPTION : "Seri"
+        }
+    },
+    //txtRefno
+    {
+        TYPE : 2,
+        ID :"txtRefno",
+        VALUE : 
+        {
+            value : "0"
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_001",
+        ELEMENT : "txtRefno",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "number",
+            PAGE_NAME : "Alış Faturası",
+            CAPTION : "Sıra"
+        }
+    },
+    //cmbDepot
+    {
+        TYPE : 2,
+        ID :"cmbDepot",
+        VALUE : 
+        {
+            value : ""
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_001",
+        ELEMENT : "cmbDepot",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Alış Faturası",
+            CAPTION : "Depo"
+        }
+    },
+    //txtCustomerCode
+    {
+        TYPE : 2,
+        ID :"txtCustomerCode",
+        VALUE : 
+        {
+            value : ""
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_001",
+        ELEMENT : "txtCustomerCode",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Alış Faturası",
+            CAPTION : "Cari Kodu"
+        }
+    },
+    // txtCustomerName
+    {
+        TYPE : 2,
+        ID :"txtCustomerName",
+        VALUE : 
+        {
+            value : ""
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_001",
+        ELEMENT : "txtCustomerName",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Alış Faturası",
+            CAPTION : "Cari Adı"
+        }
+    },
+    //#endregion
+    
+
 ]

@@ -579,4 +579,171 @@ export const acs =
             CAPTION : "Web"
         }
     },
+    //#endregion
+    
+    //#region Satış Faturası
+    //txtRef
+    {
+        TYPE : 1,
+        ID :"txtRef",
+        VALUE : {visible:true,editable:true},
+        SPECIAL : "",
+        PAGE : "ftr_02_002",
+        ELEMENT : "txtRef",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Satış Farurası",
+            CAPTION : "Seri"
+        }
+    },
+     //txtRefno
+     {
+        TYPE : 1,
+        ID :"txtRefno",
+        VALUE : {visible:true,editable:true},
+        SPECIAL : "",
+        PAGE : "ftr_02_002",
+        ELEMENT : "txtRefno",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Satış Farurası",
+            CAPTION : "Sıra"
+        }
+    },
+    //cmbDepot
+    {
+        TYPE : 1,
+        ID :"cmbDepot",
+        VALUE : {visible:true,editable:true},
+        SPECIAL : "",
+        PAGE : "ftr_02_002",
+        ELEMENT : "cmbDepot",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Satış Farurası",
+            CAPTION : "Depo"
+        }
+    },
+    //txtCustomerCode
+    {
+        TYPE : 1,
+        ID :"txtCustomerCode",
+        VALUE : {visible:true,editable:true},
+        SPECIAL : "",
+        PAGE : "ftr_02_002",
+        ELEMENT : "txtCustomerCode",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Satış Farurası",
+            CAPTION : "Cari Kodu"
+        }
+    },
+    //txtCustomerName
+    {
+        TYPE : 1,
+        ID :"txtCustomerName",
+        VALUE : {visible:true,editable:true},
+        SPECIAL : "",
+        PAGE : "ftr_02_002",
+        ELEMENT : "txtCustomerName",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Satış Farurası",
+            CAPTION : "Cari Adı"
+        }
+    },
+    //#endregion
+    
+    //#region Alış Faturası
+    //txtRef
+    {
+        TYPE : 1,
+        ID :"txtRef",
+        VALUE : {visible:true,editable:true},
+        SPECIAL : "",
+        PAGE : "ftr_02_001",
+        ELEMENT : "txtRef",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Alış Farurası",
+            CAPTION : "Seri"
+        }
+    },
+     //txtRefno
+     {
+        TYPE : 1,
+        ID :"txtRefno",
+        VALUE : {visible:true,editable:true},
+        SPECIAL : "",
+        PAGE : "ftr_02_001",
+        ELEMENT : "txtRefno",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Alış Farurası",
+            CAPTION : "Sıra"
+        }
+    },
+    //cmbDepot
+    {
+        TYPE : 1,
+        ID :"cmbDepot",
+        VALUE : {visible:true,editable:true},
+        SPECIAL : "",
+        PAGE : "ftr_02_001",
+        ELEMENT : "cmbDepot",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Alış Farurası",
+            CAPTION : "Depo"
+        }
+    },
+    //txtCustomerCode
+    {
+        TYPE : 1,
+        ID :"txtCustomerCode",
+        VALUE : {visible:true,editable:true},
+        SPECIAL : "",
+        PAGE : "ftr_02_001",
+        ELEMENT : "txtCustomerCode",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Alış Farurası",
+            CAPTION : "Cari Kodu"
+        }
+    },
+    //txtCustomerName
+    {
+        TYPE : 1,
+        ID :"txtCustomerName",
+        VALUE : {visible:true,editable:true},
+        SPECIAL : "",
+        PAGE : "ftr_02_001",
+        ELEMENT : "txtCustomerName",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Alış Farurası",
+            CAPTION : "Cari Adı"
+        }
+    },
+    //#endregion
 ]

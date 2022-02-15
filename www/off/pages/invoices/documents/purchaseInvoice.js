@@ -24,7 +24,7 @@ import tr from '../../../meta/lang/devexpress/tr.js';
 
 
 
-export default class salesInvoice extends React.Component
+export default class purchaseInvoice extends React.Component
 {
     constructor()
     {
@@ -97,7 +97,7 @@ export default class salesInvoice extends React.Component
         this.dtDocDate.value = moment(new Date())
 
         let tmpDoc = {...this.docObj.empty}
-        tmpDoc.TYPE = 1
+        tmpDoc.TYPE = 0
         tmpDoc.DOC_TYPE = 20
         tmpDoc.REBATE = 0
         tmpDoc.DOC_DATE =  moment(this.dtDocDate.value).format("DD/MM/YYYY") 
@@ -125,10 +125,9 @@ export default class salesInvoice extends React.Component
     async GetDoc(pGuid,pRef,pRefno)
     {
         this.docObj.clearAll()
-        await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:20});
-        console.log()
-        this.txtCustomerCode.value = this.docObj.dt()[0].INPUT_CODE
-        this.txtCustomerName.value = this.docObj.dt()[0].INPUT_NAME
+        await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:0,DOC_TYPE:20});
+        this.txtCustomerCode.value = this.docObj.dt()[0].OUTPUT_CODE
+        this.txtCustomerName.value = this.docObj.dt()[0].OUTPUT_NAME
         this.dtDocDate.value = this.docObj.dt()[0].DOC_DATE
         this.docObj.dt()[0].DOC_DATE = moment(this.dtDocDate.value).format("DD/MM/YYYY")
         this.txtRef.readOnly = true
@@ -219,9 +218,9 @@ export default class salesInvoice extends React.Component
                                         this.docObj.docItems.dt()[e.rowIndex].ITEM_NAME = data[0].NAME
                                         let tmpQuery = 
                                         {
-                                            query :"SELECT dbo.FN_PRICE_SALE(@CODE,1,GETDATE()) AS PRICE  ",
-                                            param : ['CODE:string|50'],
-                                            value : [data[0].CODE]
+                                            query :"SELECT dbo.FN_CUSTOMER_PRICE(@CODE,@CUSTOMER_GUID,1,GETDATE()) AS PRICE  ",
+                                            param : ['CODE:string|50','CUSTOMER_GUID:string|50'],
+                                            value : [data[0].CODE,this.docObj.dt()[0].OUTPUT]
                                         }
                                         let tmpData = await this.core.sql.execute(tmpQuery) 
                                         if(tmpData.result.recordset.length > 0)
@@ -381,7 +380,7 @@ export default class salesInvoice extends React.Component
                                                     this.docObj.docCustomer.dt()[0].REF = this.txtRef.value 
                                                     let tmpQuery = 
                                                     {
-                                                        query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 20 AND REF = @REF ",
+                                                        query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 0 AND DOC_TYPE = 20 AND REF = @REF ",
                                                         param : ['REF:string|50'],
                                                         value : [this.txtRef.value]
                                                     }
@@ -460,7 +459,7 @@ export default class salesInvoice extends React.Component
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_Docs.title")} 
-                                    data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 20"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME FROM DOC_VW_01 WHERE TYPE = 0 AND DOC_TYPE = 20"},sql:this.core.sql}}}
                                     button=
                                     {
                                         [
@@ -478,8 +477,8 @@ export default class salesInvoice extends React.Component
                                     >
                                         <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150} defaultSortOrder="asc"/>
                                         <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="INPUT_NAME" caption={this.t("pg_Docs.clmInputName")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="INPUT_CODE" caption={this.t("pg_Docs.clmInputCode")} width={300} defaultSortOrder="asc" />
+                                        <Column dataField="OUTPUT_NAME" caption={this.t("pg_Docs.clmOutputName")} width={300} defaultSortOrder="asc" />
+                                        <Column dataField="OUTPUT_CODE" caption={this.t("pg_Docs.clmOutputName")} width={300} defaultSortOrder="asc" />
                                         
                                     </NdPopGrid>
                                 </Item>
@@ -487,14 +486,14 @@ export default class salesInvoice extends React.Component
                                 <Item>
                                     <Label text={this.t("cmbDepot")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbDepot"
-                                    dt={{data:this.docObj.dt('DOC'),field:"OUTPUT"}}  
+                                    dt={{data:this.docObj.dt('DOC'),field:"INPUT"}}  
                                     displayExpr="NAME"                       
                                     valueExpr="GUID"
                                     value=""
                                     searchEnabled={true}
                                     onValueChanged={(async()=>
                                         {
-                                            this.docObj.docCustomer.dt()[0].OUTPUT = this.cmbDepot.value
+                                            this.docObj.docCustomer.dt()[0].INPUT = this.cmbDepot.value
                                         }).bind(this)}
                                     data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
@@ -524,8 +523,8 @@ export default class salesInvoice extends React.Component
                                                     {
                                                         if(data.length > 0)
                                                         {
-                                                            this.docObj.dt()[0].INPUT = data[0].GUID
-                                                            this.docObj.docCustomer.dt()[0].INPUT = data[0].GUID
+                                                            this.docObj.dt()[0].OUTPUT = data[0].GUID
+                                                            this.docObj.docCustomer.dt()[0].OUTPUT = data[0].GUID
                                                             this.txtCustomerCode.value = data[0].CODE
                                                             this.txtCustomerName.value = data[0].TITLE
                                                         }
@@ -637,9 +636,9 @@ export default class salesInvoice extends React.Component
                                                     this.docObj.docItems.dt()[(this.docObj.docItems.dt().length - 1)].ITEM_NAME = data[0].NAME
                                                     let tmpQuery = 
                                                     {
-                                                        query :"SELECT dbo.FN_PRICE_SALE(@CODE,1,GETDATE()) AS PRICE  ",
-                                                        param : ['CODE:string|50'],
-                                                        value : [data[0].CODE]
+                                                        query :"SELECT dbo.FN_CUSTOMER_PRICE(@CODE,@CUSTOMER_GUID,1,GETDATE()) AS PRICE  ",
+                                                        param : ['CODE:string|50','CUSTOMER_GUID:string|50'],
+                                                        value : [data[0].CODE,this.docObj.dt()[0].OUTPUT]
                                                     }
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     if(tmpData.result.recordset.length > 0)

@@ -15,7 +15,7 @@ export class docCls
             REF : '',
             REF_NO : 0,
             DOC_DATE : moment(new Date(0)).format("DD/MM/YYYY"),
-            INPUT : '00000000-0000-0000-0000-000000000000',
+            INPUT : '',
             INPUT_CODE : '',
             INPUT_NAME : '',
             OUTPUT : '',
@@ -39,8 +39,8 @@ export class docCls
         let tmpDt = new datatable('DOC')
         tmpDt.selectCmd =
         {
-            query : "SELECT * FROM DOC_vW_01 WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0))",
-            param : ['GUID:string|50','REF:string|10','REF_NO:int']
+            query : "SELECT * FROM DOC_vW_01 WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0)) AND ((TYPE = @TYPE) OR (@TYPE = -1)) AND ((TYPE = @TYPE) OR (@TYPE = -1)) ",
+            param : ['GUID:string|50','REF:string|10','REF_NO:int','TYPE:int','DOC_TYPE:int']
         }
         tmpDt.insertCmd = 
         {
@@ -142,14 +142,15 @@ export class docCls
         //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİR ÖRN: {CODE:''}
         return new Promise(async resolve =>
         {
-            let tmpPrm = {GUID:'00000000-0000-0000-0000-000000000000',REF:'',REF_NO:0}
+            let tmpPrm = {GUID:'00000000-0000-0000-0000-000000000000',REF:'',REF_NO:0,TYPE:-1,DOC_TYPE: -1}
             if(arguments.length > 0)
             {
                 tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '' : arguments[0].GUID;
                 tmpPrm.REF = typeof arguments[0].REF == 'undefined' ? '' : arguments[0].REF;
-                tmpPrm.REF_NO = typeof arguments[0].REF_NO == 'undefined' ? '' : arguments[0].REF_NO;
+                tmpPrm.REF_NO = typeof arguments[0].REF_NO == 'undefined' ? 0 : arguments[0].REF_NO;
+                tmpPrm.TYPE = typeof arguments[0].TYPE == 'undefined' ? -1 : arguments[0].TYPE;
+                tmpPrm.REF_NO = typeof arguments[0].REF_NO == 'undefined' ? -1 : arguments[0].REF_NO;
             }
-            console.log(tmpPrm)
             this.ds.get('DOC').selectCmd.value = Object.values(tmpPrm);
 
             await this.ds.get('DOC').refresh()

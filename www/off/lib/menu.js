@@ -210,7 +210,7 @@ export const menu = (e) =>
                         {
                             id: 'ftr_02_001',
                             text: e.t('menu.ftr_02_001'),//'Alış Faturası',
-                            path: '../pages/customers/cards/customerCard.js'
+                            path: '../pages/invoices/documents/purchaseInvoice.js'
                         },
                         {
                             id: 'ftr_02_002',
