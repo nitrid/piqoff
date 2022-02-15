@@ -911,5 +911,34 @@ export const prm =
     },
     //#endregion
     
-
+    //#region Promosyon
+    //txtRef
+    {
+        TYPE : 2,
+        ID :"txtCode",
+        VALUE : 
+        {
+            validation :
+            {
+                grp : "frmPromo",
+                val : 
+                [
+                    {
+                        type : "required",
+                    }
+                ]
+            }
+        },
+        SPECIAL : "",
+        PAGE : "stk_01_001",
+        ELEMENT : "txtCode",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Promosyon Tanımları",
+            CAPTION : "Kodu"
+        }
+    },
+    //#endregion
 ]

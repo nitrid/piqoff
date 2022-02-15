@@ -67,7 +67,6 @@ export default class promotionCard extends React.Component
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmPromo"
                                     onClick={async (e)=>
                                     {
-                                        console.log(e.validationGroup)
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             let tmpConfObj =
@@ -86,7 +85,7 @@ export default class promotionCard extends React.Component
                                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
                                                 
-                                                if((await this.itemsObj.save()) == 0)
+                                                if((await this.promoObj.save()) == 0)
                                                 {                                                    
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
@@ -98,6 +97,17 @@ export default class promotionCard extends React.Component
                                                 }
                                             }
                                         }
+                                        else
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgSaveValid.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveValid.msg")}</div>)
+                                            }
+                                            
+                                            await dialog(tmpConfObj);
+                                        } 
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -151,7 +161,11 @@ export default class promotionCard extends React.Component
                                     {
                                         
                                     }).bind(this)} 
+                                    param={this.param.filter({ELEMENT:'txtCode',USERS:this.user.CODE})} 
                                     >     
+                                        <Validator validationGroup={"frmPromo"}>
+                                            <RequiredRule />
+                                        </Validator>  
                                     </NdTextBox>  
                                     {/* PROMOSYON SEÇİM POPUP */}
                                     <NdPopGrid id={"pg_txtCode"} parent={this} container={"#root"} 
@@ -285,7 +299,8 @@ export default class promotionCard extends React.Component
                                 <Item>
                                     <Label text={this.t("txtPrmItem")} alignment="right" />
                                     <NdTextBox id="txtPrmItem" parent={this} simple={true} readOnly={true}
-                                    dt={{data:this.promoObj.dt(),field:"PRM_V"}}
+                                    dt={{data:this.promoObj.dt(),field:"PRM_V",display:"PRM_NAME"}}
+                                    displayValue={""}
                                     button=
                                     {
                                         [
@@ -299,8 +314,8 @@ export default class promotionCard extends React.Component
                                                     {
                                                         if(data.length > 0)
                                                         {
-                                                            this.txtPrmItem.GUID = data[0].GUID;
-                                                            this.txtPrmItem.value = data[0].NAME
+                                                            this.txtPrmItem.value = data[0].GUID;
+                                                            this.txtPrmItem.displayValue = data[0].NAME
                                                         }
                                                     }
                                                 }
@@ -338,7 +353,8 @@ export default class promotionCard extends React.Component
                                 <Item>
                                     <Label text={this.t("txtPrmItemGrp")} alignment="right" />
                                     <NdTextBox id="txtPrmItemGrp" parent={this} simple={true} readOnly={true}
-                                    dt={{data:this.promoObj.dt(),field:"PRM_V"}}
+                                    dt={{data:this.promoObj.dt(),field:"PRM_V",display:"PRM_NAME"}}
+                                    displayValue={""}
                                     button=
                                     {
                                         [
@@ -352,8 +368,8 @@ export default class promotionCard extends React.Component
                                                     {
                                                         if(data.length > 0)
                                                         {
-                                                            this.txtPrmItemGrp.GUID = data[0].GUID;
-                                                            this.txtPrmItemGrp.value = data[0].NAME
+                                                            this.txtPrmItemGrp.value = data[0].GUID;
+                                                            this.txtPrmItemGrp.displayValue = data[0].NAME
                                                         }
                                                     }
                                                 }
