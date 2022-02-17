@@ -846,7 +846,6 @@ export class param extends datatable
                             ]
                 } 
                 await this.refresh();
-                console.log(this)
             }
             resolve(this);
         });
