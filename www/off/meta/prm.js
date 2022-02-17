@@ -789,7 +789,7 @@ export const prm =
         VIEW : 
         {
             TYPE : "checkbox",
-            PAGE_NAME : "Alış Faturası",
+            PAGE_NAME : "Satış Faturası",
             CAPTION : "Seri Numarası İçin Cari Kodu Kullan"
         }
     },

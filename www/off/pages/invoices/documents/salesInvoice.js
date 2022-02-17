@@ -22,8 +22,6 @@ import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
 
-
-
 export default class salesInvoice extends React.Component
 {
     constructor()
@@ -36,6 +34,9 @@ export default class salesInvoice extends React.Component
         this._onItemRendered = this._onItemRendered.bind(this)
         this._cellRoleRender = this._cellRoleRender.bind(this)
         this._calculateTotal = this._calculateTotal.bind(this)
+
+        this.frmDocItems
+        this.docLocked
     }
     async componentDidMount()
     {
@@ -121,6 +122,7 @@ export default class salesInvoice extends React.Component
         this.txtRefno.readOnly = false
         this.docLocked = false
         
+        this.grdDocItems.devGrid.option('disabled',false)
         await this.grdDocItems.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
     }
     async _onItemRendered(e)
@@ -157,10 +159,13 @@ export default class salesInvoice extends React.Component
             }
 
             await dialog(tmpConfObj);
+            this.grdDocItems.devGrid.option('disabled',true)
+            this.frmDocItems.option('disabled',true)
         }
         else
         {
             this.docLocked = false
+            this.grdDocItems.devGrid.option('disabled',false)
         }
         
     }
@@ -426,7 +431,7 @@ export default class salesInvoice extends React.Component
                                     <NdButton id="btnCopy" parent={this} icon="copy" type="default"
                                     onClick={()=>
                                     {
-                                        this.grdDocItems.devGrid.option('disabled',true)
+                                        
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -601,7 +606,7 @@ export default class salesInvoice extends React.Component
                                                             this.docObj.docCustomer.dt()[0].INPUT = data[0].GUID
                                                             this.txtCustomerCode.value = data[0].CODE
                                                             this.txtCustomerName.value = data[0].TITLE
-                                                            let tmpData = this.prmObj.filter({ID:'refForCustomerCode',USERS:this.user.CODE,PAGE:'ftr_02_002'}).getValue()
+                                                            let tmpData = this.prmObj.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
                                                                 this.txtRef.setState({value:data[0].CODE});
@@ -699,7 +704,10 @@ export default class salesInvoice extends React.Component
                         {/* GRİD */}
                         <div className="row px-2 pt-2">
                             <div className="col-12">
-                                <Form colCount={1} >
+                                <Form colCount={1} onInitialized={(e)=>
+                                {
+                                    this.frmDocItems = e.component
+                                }}>
                                 <Item location="after">
                                     <Button icon="add"
                                     validationGroup="frmDoc"
@@ -850,7 +858,7 @@ export default class salesInvoice extends React.Component
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={4} id="frmDoc">
+                            <Form colCount={4} parent={this} id="frmDoc">
                                 {/* Ara Toplam */}
                                 <Item colSpan={3}></Item>
                                 <Item  >
@@ -1107,7 +1115,7 @@ export default class salesInvoice extends React.Component
                     title={this.t("pg_txtItemsCode.title")} //
                     data={{source:{select:{query : "SELECT GUID,CODE,NAME,VAT FROM ITEMS_VW_01"},sql:this.core.sql}}}
                     >
-                            <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
+                        <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
                         <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />
                 </NdPopGrid>
                                 
