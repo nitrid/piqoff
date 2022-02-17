@@ -237,6 +237,60 @@ export const menu = (e) =>
             ]
         },
         {
+            id: 'irs',
+            text: e.t('menu.irs'),//'İrsaliye',
+            expanded: false,
+            items: 
+            [
+                {
+                    id: 'irs_01',
+                    text : e.t('menu.irs_01'),//'Listeler',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'irs_01_001',
+                            text: e.t('menu.irs_01_001'),//'Alış İrsaliye Listesi',
+                            path: '../pages/customers/cards/customerCard.js'
+                        },
+                        {
+                            id: 'irs_01_002',
+                            text: e.t('menu.irs_01_002'),//'Satış İrsaliye Listesi',
+                            path: '../pages/customers/cards/customerCard.js'
+                        },
+                    ]
+                },
+                {
+                    id: 'irs_02',
+                    text : e.t('menu.irs_02'),//'Evraklar',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'irs_02_001',
+                            text: e.t('menu.irs_02_001'),//'Alış İrsaliye',
+                            path: '../pages/dispatch/documents/purchaseDispatch.js'
+                        },
+                        {
+                            id: 'irs_02_002',
+                            text: e.t('menu.irs_02_002'),//'Satış İrsaliye',
+                            path: '../pages/dispatch/documents/salesDispatch.js'
+                        },
+                        {
+                            id: 'irs_02_003',
+                            text: e.t('menu.irs_02_003'),//'Şubeler Arası Sevk',
+                            path: '../pages/customers/cards/customerCard.js'
+                        }
+                    ]
+                },
+                {
+                    id: 'irs_03',
+                    text : e.t('menu.irs_03'),//'Raporlar',
+                    expanded: false,
+                }
+            ]
+        },
+        {
             id: 'promo',
             text: e.t('menu.promo'),//'Promosyon',
             expanded: false,

@@ -42,7 +42,7 @@ export class docCls
         tmpDt.selectCmd =
         {
             query : "SELECT * FROM DOC_vW_01 WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0)) AND ((TYPE = @TYPE) OR (@TYPE = -1)) AND ((TYPE = @TYPE) OR (@TYPE = -1)) ",
-            param : ['GUID:string|50','REF:string|10','REF_NO:int','TYPE:int','DOC_TYPE:int']
+            param : ['GUID:string|50','REF:string|25','REF_NO:int','TYPE:int','DOC_TYPE:int']
         }
         tmpDt.insertCmd = 
         {
@@ -224,7 +224,7 @@ export class docItemsCls
         tmpDt.selectCmd = 
         {
             query : "SELECT * FROM [dbo].[DOC_ITEMS_VW_01] WHERE ((DOC_GUID = @DOC_GUID) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000')) AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0))",
-            param : ['DOC_GUID:string|50','REF:string|10','REF_NO:int']
+            param : ['DOC_GUID:string|50','REF:string|25','REF_NO:int']
         }
         tmpDt.insertCmd = 
         {
@@ -391,7 +391,7 @@ export class docCustomerCls
         tmpDt.selectCmd = 
         {
             query : "SELECT * FROM [dbo].[DOC_CUSTOMER_VW_01] WHERE ((DOC_GUID = @DOC_GUID) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000')) AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0))",
-            param : ['DOC_GUID:string|50','REF:string|10','REF_NO:int']
+            param : ['DOC_GUID:string|50','REF:string|25','REF_NO:int']
         }
         tmpDt.insertCmd = 
         {
