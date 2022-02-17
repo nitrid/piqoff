@@ -780,10 +780,10 @@ export const prm =
         ID :"refForCustomerCode",
         VALUE : 
         {
-            value : false
+            value : true
         },
         SPECIAL : "",
-        PAGE : "ftr_02_001",
+        PAGE : "ftr_02_002",
         ELEMENT : "",
         APP : "OFF",
         VIEW : 

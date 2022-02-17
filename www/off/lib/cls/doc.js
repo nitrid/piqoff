@@ -27,6 +27,7 @@ export class docCls
             VAT : 0,
             TOTAL : 0,
             DESCRIPTION : '',
+            LOCKED : 0
         }
 
         this.docItems = new docItemsCls();
@@ -61,10 +62,11 @@ export class docCls
                     "@DISCOUNT  = @PDISCOUNT, " +
                     "@VAT  = @PVAT, " +
                     "@TOTAL  = @PTOTAL, " +
-                    "@DESCRIPTION  = @PDESCRIPTION ",
-            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|10','PREF_NO:int','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PAMOUNT:float','PDISCOUNT:float','PVAT:float','PTOTAL:float','PDESCRIPTION:string|100'],
-            dataprm : ['GUID','CUSER','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','AMOUNT','DISCOUNT','VAT','TOTAL','DESCRIPTION']
+                    "@DESCRIPTION  = @PDESCRIPTION, " +
+                    "@LOCKED  = @PLOCKED ",
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
+                        'POUTPUT:string|50','PAMOUNT:float','PDISCOUNT:float','PVAT:float','PTOTAL:float','PDESCRIPTION:string|100','PLOCKED:int'],
+            dataprm : ['GUID','CUSER','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','AMOUNT','DISCOUNT','VAT','TOTAL','DESCRIPTION','LOCKED']
         }
         tmpDt.updateCmd = 
         {
@@ -84,10 +86,11 @@ export class docCls
                     "@DISCOUNT  = @PDISCOUNT, " +
                     "@VAT  = @PVAT, " +
                     "@TOTAL  = @PTOTAL, " +
-                    "@DESCRIPTION  = @PDESCRIPTION ",
-            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|10','PREF_NO:int','PDOC_DATE:date','PSHIPMENT_DATE:date',
-                    'PINPUT:string|50','POUTPUT:string|50','PAMOUNT:float','PDISCOUNT:float','PVAT:float','PTOTAL:float','PDESCRIPTION:string|100'],
-            dataprm : ['GUID','CUSER','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','AMOUNT','DISCOUNT','VAT','TOTAL','DESCRIPTION']
+                    "@DESCRIPTION  = @PDESCRIPTION, " +
+                    "@LOCKED  = @PLOCKED ",
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PSHIPMENT_DATE:date',
+                    'PINPUT:string|50','POUTPUT:string|50','PAMOUNT:float','PDISCOUNT:float','PVAT:float','PTOTAL:float','PDESCRIPTION:string|100','PLOCKED:int'],
+            dataprm : ['GUID','CUSER','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','AMOUNT','DISCOUNT','VAT','TOTAL','DESCRIPTION','LOCKED']
         }
         tmpDt.deleteCmd = 
         {
@@ -208,7 +211,8 @@ export class docItemsCls
             VAT: 0,
             AMOUNT : 0,
             DESCRIPTION : '',
-            VAT_RATE : 0 
+            VAT_RATE : 0 ,
+            DISCOUNT_RATE : 0,
         }
 
         this._initDs();
@@ -246,7 +250,7 @@ export class docItemsCls
                     "@VAT = @PVAT, " +
                     "@AMOUNT = @PAMOUNT, " +
                     "@DESCRIPTION  = @PDESCRIPTION ",
-            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|10','PREF_NO:int','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
+            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
                         'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|50','PLINE_NO:int','PQUANTITY:float','PPRICE:float','PDISCOUNT:float','PVAT:float','PAMOUNT:float','PDESCRIPTION:string|100'],
             dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','LINE_NO','QUANTITY','PRICE','DISCOUNT','VAT','AMOUNT','DESCRIPTION']
         }
@@ -274,7 +278,7 @@ export class docItemsCls
                     "@VAT = @PVAT, " +
                     "@AMOUNT = @PAMOUNT, " +
                     "@DESCRIPTION  = @PDESCRIPTION ",
-            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|10','PREF_NO:int','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
+            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
                         'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|50','PLINE_NO:int','PQUANTITY:float','PPRICE:float','PDISCOUNT:float','PVAT:float','PAMOUNT:float','PDESCRIPTION:string|100'],
             dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','LINE_NO','QUANTITY','PRICE','DISCOUNT','VAT','AMOUNT','DESCRIPTION']
         }
@@ -406,7 +410,7 @@ export class docCustomerCls
                     "@PAY_TYPE = @PPAY_TYPE, " +
                     "@AMOUNT = @PAMOUNT, "+
                     "@DESCRIPTION  = @PDESCRIPTION ",
-            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|10','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
+            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
                         'POUTPUT:string|50','PPAY_TYPE:int','PAMOUNT:float','PDESCRIPTION:string|100'],
             dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','PAY_TYPE','AMOUNT','DESCRIPTION']
         }
@@ -427,7 +431,7 @@ export class docCustomerCls
                     "@PAY_TYPE = @PPAY_TYPE, " +
                     "@AMOUNT = @PAMOUNT, "+
                     "@DESCRIPTION  = @PDESCRIPTION ",
-            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|10','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
+            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
                         'POUTPUT:string|50','PPAY_TYPE:int','PAMOUNT:float','PDESCRIPTION:string|100'],
             dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','PAY_TYPE','AMOUNT','DESCRIPTION']
         }
