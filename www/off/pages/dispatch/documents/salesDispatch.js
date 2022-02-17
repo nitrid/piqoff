@@ -1,6 +1,6 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { docCls,docItemsCls, docCustomerCls } from '../../../lib/cls/doc.js';
+import { docCls,docItemsCls } from '../../../lib/cls/doc.js';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
@@ -99,18 +99,10 @@ export default class salesInvoice extends React.Component
 
         let tmpDoc = {...this.docObj.empty}
         tmpDoc.TYPE = 1
-        tmpDoc.DOC_TYPE = 20
+        tmpDoc.DOC_TYPE = 40
         tmpDoc.DOC_DATE =  moment(this.dtDocDate.value).format("DD/MM/YYYY")
         tmpDoc.SHIPMENT_DATE = moment(this.dtShipDate.value).format("DD/MM/YYYY")
         this.docObj.addEmpty(tmpDoc);
-
-        let tmpDocCustomer = {...this.docObj.docCustomer.empty}
-        tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
-        tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
-        tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-        tmpDocCustomer.REBATE = this.docObj.dt()[0].REBATE
-        tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-        this.docObj.docCustomer.addEmpty(tmpDocCustomer)
 
         this.txtRef.readOnly = false
         this.txtRefno.readOnly = false
@@ -126,11 +118,10 @@ export default class salesInvoice extends React.Component
     async getDoc(pGuid,pRef,pRefno)
     {
         this.docObj.clearAll()
-        await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:20});
+        await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:40});
         this.dtDocDate.value = this.docObj.dt()[0].DOC_DATE
         this.dtShipDate.value = this.docObj.dt()[0].SHIPMENT_DATE
         this.docObj.dt()[0].DOC_DATE = moment(this.dtDocDate.value).format("DD/MM/YYYY")
-        this.docObj.docCustomer.dt()[0].DOC_DATE = moment(this.dtDocDate.value).format("DD/MM/YYYY")
         this.docObj.dt()[0].SHIPMENT_DATE = moment(this.dtShipDate.value).format("DD/MM/YYYY")
         for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
         {
@@ -216,7 +207,6 @@ export default class salesInvoice extends React.Component
             this.docObj.dt()[0].VAT += parseFloat((this.docObj.docItems.dt()[i].VAT).toFixed(2))
             this.docObj.dt()[0].TOTAL +=  parseFloat((this.docObj.docItems.dt()[i].AMOUNT).toFixed(2))
         }
-        this.docObj.docCustomer.dt()[0].AMOUNT = this.docObj.dt()[0].TOTAL
     }
     _cellRoleRender(e)
     {
@@ -450,10 +440,9 @@ export default class salesInvoice extends React.Component
                                             onValueChanged={(async()=>
                                                 {
                                                     this.docObj.dt()[0].REF = this.txtRef.value 
-                                                    this.docObj.docCustomer.dt()[0].REF = this.txtRef.value 
                                                     let tmpQuery = 
                                                     {
-                                                        query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 20 AND REF = @REF ",
+                                                        query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 40 AND REF = @REF ",
                                                         param : ['REF:string|25'],
                                                         value : [this.txtRef.value]
                                                     }
@@ -461,7 +450,6 @@ export default class salesInvoice extends React.Component
                                                     if(tmpData.result.recordset.length > 0)
                                                     {
                                                         this.txtRefno.value = tmpData.result.recordset[0].REF_NO
-                                                        this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
                                                     }
                                             }).bind(this)}
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
@@ -506,7 +494,6 @@ export default class salesInvoice extends React.Component
                                             }
                                             onChange={(async()=>
                                             {
-                                                this.docObj.docCustomer.dt()[0].REF_NO = this.txtRefno.value
                                                 let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
                                                 if(tmpResult == 3)
                                                 {
@@ -531,7 +518,7 @@ export default class salesInvoice extends React.Component
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_Docs.title")} 
-                                    data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 20"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 40"},sql:this.core.sql}}}
                                     button=
                                     {
                                         [
@@ -565,7 +552,7 @@ export default class salesInvoice extends React.Component
                                     searchEnabled={true}
                                     onValueChanged={(async()=>
                                         {
-                                            this.docObj.docCustomer.dt()[0].OUTPUT = this.cmbDepot.value
+                                            
                                         }).bind(this)}
                                     data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
@@ -597,7 +584,6 @@ export default class salesInvoice extends React.Component
                                                         if(data.length > 0)
                                                         {
                                                             this.docObj.dt()[0].INPUT = data[0].GUID
-                                                            this.docObj.docCustomer.dt()[0].INPUT = data[0].GUID
                                                             this.docObj.dt()[0].INPUT_CODE = data[0].CODE
                                                             this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
                                                             let tmpData = this.prmObj.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
@@ -669,7 +655,6 @@ export default class salesInvoice extends React.Component
                                     onValueChanged={(async()=>
                                         {
                                             this.docObj.dt()[0].DOC_DATE = moment(this.dtDocDate.value).format("DD/MM/YYYY") 
-                                            this.docObj.docCustomer.dt()[0].DOC_DATE = moment(this.dtDocDate.value).format("DD/MM/YYYY") 
                                     }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmDoc"}>
