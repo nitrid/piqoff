@@ -787,6 +787,24 @@ export class datatable
             return tmpDt;
         }
     }
+    sum()
+    {
+        let tmpVal = 0;
+        if(arguments.length > 0)
+        {
+            tmpVal = this.reduce((a,b) =>
+            {
+                return {[arguments[0]] : a[arguments[0]] + b[arguments[0]]}
+            },{[arguments[0]]:0})[arguments[0]]
+
+            if(arguments.length == 2)
+            {
+                tmpVal = parseFloat(tmpVal.toFixed(arguments[1]));
+            }
+        }
+
+        return tmpVal;
+    }
 }
 export class param extends datatable
 {

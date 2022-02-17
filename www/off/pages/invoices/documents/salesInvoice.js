@@ -31,12 +31,11 @@ export default class salesInvoice extends React.Component
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.docObj = new docCls();
 
-        this._onItemRendered = this._onItemRendered.bind(this)
         this._cellRoleRender = this._cellRoleRender.bind(this)
         this._calculateTotal = this._calculateTotal.bind(this)
 
         this.frmDocItems = undefined;
-        this.docLocked = false;
+        this.docLocked = false;        
     }
     async componentDidMount()
     {
@@ -117,10 +116,6 @@ export default class salesInvoice extends React.Component
         this.frmDocItems.option('disabled',false)
         await this.grdDocItems.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
     }
-    async _onItemRendered(e)
-    {
-        await this.core.util.waitUntil(2)
-    }
     async getDoc(pGuid,pRef,pRefno)
     {
         this.docObj.clearAll()
@@ -128,7 +123,7 @@ export default class salesInvoice extends React.Component
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
-        this._calculateTotal
+        
         if(this.docObj.dt()[0].LOCKED == 1)
         {
             this.docLocked = true
@@ -200,11 +195,13 @@ export default class salesInvoice extends React.Component
         this.docObj.dt()[0].TOTAL = 0;
         for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
         {
-            this.docObj.dt()[0].AMOUNT +=  parseFloat((this.docObj.docItems.dt()[i].PRICE * this.docObj.docItems.dt()[i].QUANTITY).toFixed(2))
-            this.docObj.dt()[0].DISCOUNT += parseFloat((this.docObj.docItems.dt()[i].DISCOUNT).toFixed(2))
-            this.docObj.dt()[0].VAT += parseFloat((this.docObj.docItems.dt()[i].VAT).toFixed(2))
-            this.docObj.dt()[0].TOTAL +=  parseFloat((this.docObj.docItems.dt()[i].AMOUNT).toFixed(2))
+            this.docObj.dt()[0].AMOUNT += parseFloat((this.docObj.docItems.dt()[i].PRICE * this.docObj.docItems.dt()[i].QUANTITY).toFixed(2))
         }
+
+        this.docObj.dt()[0].DISCOUNT = this.docObj.docItems.dt().sum("DISCOUNT",2)
+        this.docObj.dt()[0].VAT = this.docObj.docItems.dt().sum("VAT",2)
+        this.docObj.dt()[0].TOTAL = this.docObj.docItems.dt().sum("AMOUNT",2)
+
         this.docObj.docCustomer.dt()[0].AMOUNT = this.docObj.dt()[0].TOTAL
     }
     _cellRoleRender(e)
@@ -212,7 +209,8 @@ export default class salesInvoice extends React.Component
         if(e.column.dataField == "ITEM_CODE")
         {
             return (
-                <NdTextBox id={"txtGrdItemsCode"+e.rowIndex} parent={this} simple={true}
+                <NdTextBox id={"txtGrdItemsCode"+e.rowIndex} parent={this} simple={true} 
+                value={e.value}
                 button=
                 {
                     [
@@ -226,26 +224,7 @@ export default class salesInvoice extends React.Component
                                 {
                                     if(data.length > 0)
                                     {
-                                        this.docObj.docItems.dt()[e.rowIndex].ITEM_CODE = data[0].CODE
-                                        this.docObj.docItems.dt()[e.rowIndex].ITEM = data[0].GUID
-                                        this.docObj.docItems.dt()[e.rowIndex].VAT_RATE = data[0].VAT
-                                        this.docObj.docItems.dt()[e.rowIndex].ITEM_NAME = data[0].NAME
-                                        let tmpQuery = 
-                                        {
-                                            query :"SELECT dbo.FN_PRICE_SALE(@CODE,1,GETDATE()) AS PRICE  ",
-                                            param : ['CODE:string|50'],
-                                            value : [data[0].CODE]
-                                        }
-                                        let tmpData = await this.core.sql.execute(tmpQuery) 
-                                        if(tmpData.result.recordset.length > 0)
-                                        {
-                                            this.docObj.docItems.dt()[e.rowIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(2))
-                                            this.docObj.docItems.dt()[e.rowIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (data[0].VAT / 100)).toFixed(2))
-                                            this.docObj.docItems.dt()[e.rowIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE + this.docObj.docItems.dt()[e.rowIndex].VAT).toFixed(2))
-                                            this._calculateTotal()
-                                            this.grdDocItems.devGrid.focus(this.grdDocItems.devGrid.getCellElement(e.rowIndex,e.columnIndex))
-                                        }
-                                        
+                                        this.addItem(pData,e.rowIndex)
                                     }
                                 }
                             }
@@ -268,7 +247,27 @@ export default class salesInvoice extends React.Component
         { 
             return (<NdTextBox id={"txtGrdAmount" +e.rowIndex} parent={this} simple={true} readOnly={true}/>)
         }
-        
+    }
+    async addItem(pData,pIndex)
+    {
+        this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
+        this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID
+        this.docObj.docItems.dt()[pIndex].VAT_RATE = pData.VAT
+        this.docObj.docItems.dt()[pIndex].ITEM_NAME = pData.NAME
+        let tmpQuery = 
+        {
+            query :"SELECT dbo.FN_PRICE_SALE(@CODE,1,GETDATE()) AS PRICE",
+            param : ['CODE:string|50'],
+            value : [pData.CODE]
+        }
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        if(tmpData.result.recordset.length > 0)
+        {
+            this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(2))
+            this.docObj.docItems.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100)).toFixed(2))
+            this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE + this.docObj.docItems.dt()[pIndex].VAT).toFixed(2))
+            this._calculateTotal()
+        }
     }
     render()
     {
@@ -437,21 +436,21 @@ export default class salesInvoice extends React.Component
                                             readOnly={true}
                                             maxLength={32}
                                             onValueChanged={(async()=>
+                                            {
+                                                this.docObj.dt()[0].REF = this.txtRef.value 
+                                                this.docObj.docCustomer.dt()[0].REF = this.txtRef.value 
+                                                let tmpQuery = 
                                                 {
-                                                    this.docObj.dt()[0].REF = this.txtRef.value 
-                                                    this.docObj.docCustomer.dt()[0].REF = this.txtRef.value 
-                                                    let tmpQuery = 
-                                                    {
-                                                        query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 20 AND REF = @REF ",
-                                                        param : ['REF:string|25'],
-                                                        value : [this.txtRef.value]
-                                                    }
-                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    if(tmpData.result.recordset.length > 0)
-                                                    {
-                                                        this.txtRefno.value = tmpData.result.recordset[0].REF_NO
-                                                        this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
-                                                    }
+                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 20 AND REF = @REF ",
+                                                    param : ['REF:string|25'],
+                                                    value : [this.txtRef.value]
+                                                }
+                                                let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                if(tmpData.result.recordset.length > 0)
+                                                {
+                                                    this.txtRefno.value = tmpData.result.recordset[0].REF_NO
+                                                    this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
+                                                }
                                             }).bind(this)}
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
@@ -687,10 +686,10 @@ export default class salesInvoice extends React.Component
                     {/* Grid */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                                <Form colCount={1} onInitialized={(e)=>
-                                {
-                                    this.frmDocItems = e.component
-                                }}>
+                            <Form colCount={1} onInitialized={(e)=>
+                            {
+                                this.frmDocItems = e.component
+                            }}>
                                 <Item location="after">
                                     <Button icon="add"
                                     validationGroup="frmDoc"
@@ -718,28 +717,9 @@ export default class salesInvoice extends React.Component
                                             {
                                                 if(data.length > 0)
                                                 {
-                                                    this.docObj.docItems.dt()[(this.docObj.docItems.dt().length - 1)].ITEM_CODE = data[0].CODE
-                                                    this.docObj.docItems.dt()[(this.docObj.docItems.dt().length - 1)].ITEM = data[0].GUID
-                                                    this.docObj.docItems.dt()[(this.docObj.docItems.dt().length - 1)].VAT_RATE = data[0].VAT
-                                                    this.docObj.docItems.dt()[(this.docObj.docItems.dt().length - 1)].ITEM_NAME = data[0].NAME
-                                                    let tmpQuery = 
-                                                    {
-                                                        query :"SELECT dbo.FN_PRICE_SALE(@CODE,1,GETDATE()) AS PRICE  ",
-                                                        param : ['CODE:string|50'],
-                                                        value : [data[0].CODE]
-                                                    }
-                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    if(tmpData.result.recordset.length > 0)
-                                                    {
-                                                        this.docObj.docItems.dt()[(this.docObj.docItems.dt().length - 1)].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(2))
-                                                        this.docObj.docItems.dt()[(this.docObj.docItems.dt().length - 1)].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (data[0].VAT / 100)).toFixed(2))
-                                                        this.docObj.docItems.dt()[(this.docObj.docItems.dt().length - 1)].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE + this.docObj.docItems.dt()[(this.docObj.docItems.dt().length - 1)].VAT).toFixed(2))
-                                                        this._calculateTotal()
-                                                    }
-                                                    
+                                                    this.addItem(data[0],this.docObj.docItems.dt().length - 1)
                                                 }
                                             }
-                                            
                                         }
                                         else
                                         {
@@ -752,10 +732,9 @@ export default class salesInvoice extends React.Component
                                             
                                             await dialog(tmpConfObj);
                                         }
-                                        
                                     }}/>
                                 </Item>
-                                 <Item onItemRendered={this._onItemRendered}>
+                                 <Item>
                                     <NdGrid parent={this} id={"grdDocItems"} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 
@@ -820,10 +799,7 @@ export default class salesInvoice extends React.Component
                                         this._calculateTotal()
                                     }}
                                     >
-                                        <KeyboardNavigation
-                                        editOnKeyPress={true}
-                                        enterKeyAction={'moveFocus'}
-                                        enterKeyDirection={'row'} />
+                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                                         <Scrolling mode="infinite" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                         <Column dataField="ITEM_CODE" caption={this.t("grdDocItems.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>

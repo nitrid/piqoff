@@ -118,7 +118,6 @@ export class docCls
     }
     addEmpty()
     {
-        console.log(1)
         if(typeof this.dt('DOC') == 'undefined')
         {
             return;

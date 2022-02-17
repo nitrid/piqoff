@@ -172,7 +172,7 @@ export default class App extends React.Component
         {
             App.instance.setState({connected:false});
             this.core.auth.logout()
-        })              
+        })         
     }
     menuClick(data)
     {
