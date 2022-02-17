@@ -100,8 +100,6 @@ export default class salesInvoice extends React.Component
         let tmpDoc = {...this.docObj.empty}
         tmpDoc.TYPE = 1
         tmpDoc.DOC_TYPE = 40
-        tmpDoc.DOC_DATE =  moment(this.dtDocDate.value).format("DD/MM/YYYY")
-        tmpDoc.SHIPMENT_DATE = moment(this.dtShipDate.value).format("DD/MM/YYYY")
         this.docObj.addEmpty(tmpDoc);
 
         this.txtRef.readOnly = false
@@ -119,15 +117,6 @@ export default class salesInvoice extends React.Component
     {
         this.docObj.clearAll()
         await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:40});
-        this.dtDocDate.value = this.docObj.dt()[0].DOC_DATE
-        this.dtShipDate.value = this.docObj.dt()[0].SHIPMENT_DATE
-        this.docObj.dt()[0].DOC_DATE = moment(this.dtDocDate.value).format("DD/MM/YYYY")
-        this.docObj.dt()[0].SHIPMENT_DATE = moment(this.dtShipDate.value).format("DD/MM/YYYY")
-        for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
-        {
-            this.docObj.docItems.dt()[i].DOC_DATE = moment(this.dtDocDate.value).format("DD/MM/YYYY")
-            this.docObj.docItems.dt()[i].SHIPMENT_DATE =  moment(this.dtShipDate.value).format("DD/MM/YYYY")
-        }
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
         this._calculateTotal
@@ -651,10 +640,9 @@ export default class salesInvoice extends React.Component
                                 <Item>
                                     <Label text={this.t("dtDocDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
-                                    //dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
+                                    dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
                                     onValueChanged={(async()=>
                                         {
-                                            this.docObj.dt()[0].DOC_DATE = moment(this.dtDocDate.value).format("DD/MM/YYYY") 
                                     }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmDoc"}>
@@ -666,9 +654,9 @@ export default class salesInvoice extends React.Component
                                 <Item>
                                     <Label text={this.t("dtShipDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtShipDate"}
+                                    dt={{data:this.docObj.dt('DOC'),field:"SHIPMENT_DATE"}}
                                     onValueChanged={(async()=>
                                     {
-                                        this.docObj.dt()[0].SHIPMENT_DATE = moment(this.dtShipDate.value).format("DD/MM/YYYY") 
                                     }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmDoc"}>
