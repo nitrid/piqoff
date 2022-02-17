@@ -358,8 +358,8 @@ export class itemPriceCls
             ITEM_CODE : '',
             ITEM_NAME : '',
             DEPOT : '0',
-            START_DATE : moment(new Date(0)).format("DD/MM/YYYY"),
-            FINISH_DATE : moment(new Date(0)).format("DD/MM/YYYY"),
+            START_DATE : moment(new Date(0)).format("YYYY-MM-DD"),
+            FINISH_DATE : moment(new Date(0)).format("YYYY-MM-DD"),
             PRICE : 0,
             QUANTITY : 0,
             CUSTOMER_GUID : '00000000-0000-0000-0000-000000000000',
@@ -482,8 +482,8 @@ export class itemPriceCls
                 ITEM_CODE : '',
                 TYPE : -1,
                 DEPOT : '',
-                START_DATE : moment(new Date(0)).format("DD/MM/YYYY"),
-                FINISH_DATE : moment(new Date(0)).format("DD/MM/YYYY"),
+                START_DATE : moment(new Date(0)).format("YYYY-MM-DD"),
+                FINISH_DATE : moment(new Date(0)).format("YYYY-MM-DD"),
                 QUANTITY : -1,
                 CUSTOMER_CODE : '',
                 CUSTOMER_GUID : '00000000-0000-0000-0000-000000000000',
@@ -495,8 +495,8 @@ export class itemPriceCls
                 tmpPrm.ITEM_CODE = typeof arguments[0].ITEM_CODE == 'undefined' ? '' : arguments[0].ITEM_CODE;
                 tmpPrm.TYPE = typeof arguments[0].TYPE == 'undefined' ? -1 : arguments[0].TYPE;
                 tmpPrm.DEPOT = typeof arguments[0].DEPOT == 'undefined' ? '' : arguments[0].DEPOT;
-                tmpPrm.START_DATE = typeof arguments[0].START_DATE == 'undefined' ? moment(new Date(0)).format("DD/MM/YYYY")  : arguments[0].START_DATE;
-                tmpPrm.FINISH_DATE = typeof arguments[0].FINISH_DATE == 'undefined' ? moment(new Date(0)).format("DD/MM/YYYY")  : arguments[0].FINISH_DATE;
+                tmpPrm.START_DATE = typeof arguments[0].START_DATE == 'undefined' ? moment(new Date(0)).format("YYYY-MM-DD")  : arguments[0].START_DATE;
+                tmpPrm.FINISH_DATE = typeof arguments[0].FINISH_DATE == 'undefined' ? moment(new Date(0)).format("YYYY-MM-DD")  : arguments[0].FINISH_DATE;
                 tmpPrm.QUANTITY = typeof arguments[0].QUANTITY == 'undefined' ? -1 : arguments[0].QUANTITY;
                 tmpPrm.CUSTOMER_CODE = typeof arguments[0].CUSTOMER_CODE == 'undefined' ? '' : arguments[0].CUSTOMER_CODE;
                 tmpPrm.CUSTOMER_GUID = typeof arguments[0].CUSTOMER_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].CUSTOMER_GUID;

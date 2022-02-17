@@ -5,8 +5,6 @@ import enMessages from '../meta/lang/devexpress/en.js';
 import frMessages from '../meta/lang/devexpress/fr.js';
 import trMessages from '../meta/lang/devexpress/tr.js';
 import { locale, loadMessages, formatMessage } from 'devextreme/localization';
-import moment from 'moment';
-// import momLocFr from 'moment-localization-fr'
 import i18n from './i18n.js'
 import Drawer from 'devextreme-react/drawer';
 import Toolbar from 'devextreme-react/toolbar';
@@ -34,6 +32,7 @@ export default class App extends React.Component
         locale(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'));
         i18n.changeLanguage(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'))
         this.lang = i18n;  
+        moment.locale(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'));
         
         this.style =
         {
