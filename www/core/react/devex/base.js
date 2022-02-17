@@ -109,7 +109,7 @@ export default class NdBase extends React.Component
                 }
             });
             this.props.dt.data.on('onNew',async (e) =>
-            {                                        
+            {                                                      
                 await core.instance.util.waitUntil(0)   
                 if(typeof Object.keys(e).find(x => x === this.props.dt.field) != 'undefined')
                 {  
@@ -183,7 +183,7 @@ export default class NdBase extends React.Component
                 // }
             });
             this.props.dt.data.on('onRefresh',async () =>
-            {      
+            {                      
                 await core.instance.util.waitUntil(0)          
                 this.onRefresh();
             });

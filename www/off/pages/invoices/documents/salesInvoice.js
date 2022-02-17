@@ -4,7 +4,7 @@ import { docCls,docItemsCls, docCustomerCls } from '../../../lib/cls/doc.js';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item } from 'devextreme-react/form';
+import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
 import TabPanel from 'devextreme-react/tab-panel';
 import { Button } from 'devextreme-react/button';
 
@@ -35,15 +35,13 @@ export default class salesInvoice extends React.Component
         this._cellRoleRender = this._cellRoleRender.bind(this)
         this._calculateTotal = this._calculateTotal.bind(this)
 
-        this.frmDocItems
-        this.docLocked
+        this.frmDocItems = undefined;
+        this.docLocked = false;
     }
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
         this.init()
-
-        
     }
     async init()
     {
@@ -53,7 +51,6 @@ export default class salesInvoice extends React.Component
         {
             if(pData.stat == 'new')
             {
-                
                 this.btnNew.setState({disabled:false});
                 this.btnBack.setState({disabled:false});
                 this.btnNew.setState({disabled:false});
@@ -103,7 +100,6 @@ export default class salesInvoice extends React.Component
         let tmpDoc = {...this.docObj.empty}
         tmpDoc.TYPE = 1
         tmpDoc.DOC_TYPE = 20
-        tmpDoc.REBATE = 0
         tmpDoc.DOC_DATE =  moment(this.dtDocDate.value).format("DD/MM/YYYY")
         tmpDoc.SHIPMENT_DATE = moment(this.dtShipDate.value).format("DD/MM/YYYY")
         this.docObj.addEmpty(tmpDoc);
@@ -129,7 +125,7 @@ export default class salesInvoice extends React.Component
     {
         await this.core.util.waitUntil(2)
     }
-    async GetDoc(pGuid,pRef,pRefno)
+    async getDoc(pGuid,pRef,pRefno)
     {
         this.docObj.clearAll()
         await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:20});
@@ -167,7 +163,6 @@ export default class salesInvoice extends React.Component
             this.docLocked = false
             this.grdDocItems.devGrid.option('disabled',false)
         }
-        
     }
     async checkDoc(pGuid,pRef,pRefno)
     {
@@ -194,7 +189,7 @@ export default class salesInvoice extends React.Component
                     let pResult = await dialog(tmpConfObj);
                     if(pResult == 'btn01')
                     {
-                        this.GetDoc(pGuid,pRef,pRefno)
+                        this.getDoc(pGuid,pRef,pRefno)
                         resolve(2) //KAYIT VAR
                     }
                     else
@@ -296,7 +291,8 @@ export default class salesInvoice extends React.Component
         return(
             <div>
                 <ScrollView>
-                <div className="row px-2 pt-2">
+                    {/* Toolbar */}
+                    <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
@@ -444,6 +440,7 @@ export default class salesInvoice extends React.Component
                             </Toolbar>
                         </div>
                     </div>
+                    {/* Form */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Form colCount={3} id="frmDoc">
@@ -495,7 +492,7 @@ export default class salesInvoice extends React.Component
                                                             {
                                                                 if(data.length > 0)
                                                                 {
-                                                                    this.GetDoc(data[0].GUID,data[0].REF,data[0].REF_NO)
+                                                                    this.getDoc(data[0].GUID,data[0].REF,data[0].REF_NO)
                                                                 }
                                                             }
                                                                    
@@ -583,8 +580,8 @@ export default class salesInvoice extends React.Component
                                         </Validator> 
                                     </NdSelectBox>
                                 </Item>
-                                {/* BOŞ */}
-                                <Item> </Item>
+                                {/* Boş */}
+                                <EmptyItem />
                                 {/* txtCustomerCode */}
                                 <Item>
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
@@ -654,8 +651,8 @@ export default class salesInvoice extends React.Component
                                         
                                     </NdPopGrid>
                                 </Item> 
-                                 {/* txtCustomerName */}
-                                 <Item>
+                                {/* txtCustomerName */}
+                                <Item>
                                     <Label text={this.t("txtCustomerName")} alignment="right" />
                                     <NdTextBox id="txtCustomerName" parent={this} simple={true}   
                                     readOnly={true}
@@ -664,13 +661,13 @@ export default class salesInvoice extends React.Component
                                     >
                                     </NdTextBox>
                                 </Item> 
-                               
-                                 {/* BOŞ */}
-                                 <Item> </Item>
-                                 {/* dtDocDate */}
-                                 <Item>
+                                {/* Boş */}
+                                <EmptyItem />
+                                {/* dtDocDate */}
+                                <Item>
                                     <Label text={this.t("dtDocDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
+                                    //dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
                                     onValueChanged={(async()=>
                                         {
                                             this.docObj.dt()[0].DOC_DATE = moment(this.dtDocDate.value).format("DD/MM/YYYY") 
@@ -687,8 +684,8 @@ export default class salesInvoice extends React.Component
                                     <Label text={this.t("dtShipDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtShipDate"}
                                     onValueChanged={(async()=>
-                                        {
-                                            this.docObj.dt()[0].SHIPMENT_DATE = moment(this.dtShipDate.value).format("DD/MM/YYYY") 
+                                    {
+                                        this.docObj.dt()[0].SHIPMENT_DATE = moment(this.dtShipDate.value).format("DD/MM/YYYY") 
                                     }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmDoc"}>
@@ -696,14 +693,14 @@ export default class salesInvoice extends React.Component
                                         </Validator> 
                                     </NdDatePicker>
                                 </Item>
-                                 {/* BOŞ */}
-                                 <Item> </Item>
-                                 </Form>
-                            </div>
+                                {/* Boş */}
+                                <EmptyItem />
+                            </Form>
                         </div>
-                        {/* GRİD */}
-                        <div className="row px-2 pt-2">
-                            <div className="col-12">
+                    </div>
+                    {/* Grid */}
+                    <div className="row px-2 pt-2">
+                        <div className="col-12">
                                 <Form colCount={1} onInitialized={(e)=>
                                 {
                                     this.frmDocItems = e.component
@@ -946,7 +943,7 @@ export default class salesInvoice extends React.Component
                             </Form>
                         </div>
                     </div>
-                    {/* İNDİRİM POPUP */}
+                    {/* İndirim PopUp */}
                     <div>
                         <NdPopUp parent={this} id={"popDiscount"} 
                         visible={false}
@@ -1039,7 +1036,7 @@ export default class salesInvoice extends React.Component
                             </Form>
                         </NdPopUp>
                     </div>  
-                     {/* YÖNETİCİ ŞİFRESİ POPUP */}
+                     {/* Yönetici PopUp */}
                      <div>
                         <NdPopUp parent={this} id={"popPassword"} 
                         visible={false}
@@ -1104,8 +1101,7 @@ export default class salesInvoice extends React.Component
                             </Form>
                         </NdPopUp>
                     </div> 
-                </ScrollView>
-                <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={"#root"}
+                    <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={"#root"}
                     visible={false}
                     position={{of:'#root'}} 
                     showTitle={true} 
@@ -1117,8 +1113,8 @@ export default class salesInvoice extends React.Component
                     >
                         <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
                         <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />
-                </NdPopGrid>
-                                
+                    </NdPopGrid>
+                </ScrollView>                
             </div>
         )
     }
