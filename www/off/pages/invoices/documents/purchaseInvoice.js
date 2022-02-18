@@ -33,6 +33,7 @@ export default class salesInvoice extends React.Component
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
         this._calculateTotal = this._calculateTotal.bind(this)
+        this._getItems = this._getItems.bind(this)
 
         this.frmDocItems = undefined;
         this.docLocked = false;        
@@ -143,6 +144,7 @@ export default class salesInvoice extends React.Component
             this.docLocked = false
             this.frmDocItems.option('disabled',false)
         }
+        this._getItems()
     }
     async checkDoc(pGuid,pRef,pRefno)
     {
@@ -305,6 +307,24 @@ export default class salesInvoice extends React.Component
             this._calculateTotal()
         }
     }
+    async _getItems()
+    {
+        let tmpSource =
+        {
+            source : 
+            {
+                groupBy : this.groupList,
+                select : 
+                {
+                    query : "SELECT GUID,CODE,NAME,VAT,ISNULL((SELECT MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = @CUSTOMER_GUID),'') AS MULTICODE FROM ITEMS_VW_01 ",
+                    param : ['CUSTOMER_GUID:string|250'],
+                    value : [this.docObj.dt()[0].OUTPUT]
+                },
+                sql : this.core.sql
+            }
+        }
+        this.pg_txtItemsCode.setSource(tmpSource)
+    }
     render()
     {
         return(
@@ -329,7 +349,7 @@ export default class salesInvoice extends React.Component
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmSalesInv"
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmPurcInv"
                                     onClick={async (e)=>
                                     {
                                         if(this.docLocked == true)
@@ -462,7 +482,7 @@ export default class salesInvoice extends React.Component
                     {/* Form */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id="frmSalesInv">
+                            <Form colCount={3} id="frmPurcInv">
                                 {/* txtRef-Refno */}
                                 <Item>
                                     <Label text={this.t("txtRefRefno")} alignment="right" />
@@ -491,7 +511,7 @@ export default class salesInvoice extends React.Component
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmSalesInv"}>
+                                            <Validator validationGroup={"frmPurcInv"}>
                                                     <RequiredRule message={this.t("validRef")} />
                                                 </Validator>  
                                             </NdTextBox>
@@ -540,7 +560,7 @@ export default class salesInvoice extends React.Component
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmSalesInv"}>
+                                            <Validator validationGroup={"frmPurcInv"}>
                                                     <RequiredRule message={this.t("validRefNo")} />
                                                 </Validator> 
                                             </NdTextBox>
@@ -595,7 +615,7 @@ export default class salesInvoice extends React.Component
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmSalesInv"}>
+                                        <Validator validationGroup={"frmPurcInv"}>
                                             <RequiredRule message={this.t("validDepot")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -630,6 +650,7 @@ export default class salesInvoice extends React.Component
                                                                 this.txtRef.setState({value:data[0].CODE});
                                                                 this.txtRef.props.onValueChanged()
                                                             }
+                                                            this._getItems()
                                                         }
                                                     }
                                                 }
@@ -639,7 +660,7 @@ export default class salesInvoice extends React.Component
                                     param={this.param.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmSalesInv"}>
+                                        <Validator validationGroup={"frmPurcInv"}>
                                             <RequiredRule message={this.t("validCustomerCode")} />
                                         </Validator>  
                                     </NdTextBox>
@@ -695,7 +716,7 @@ export default class salesInvoice extends React.Component
                                             this.docObj.docCustomer.dt()[0].DOC_DATE = moment(this.dtDocDate.value).format("DD/MM/YYYY") 
                                     }).bind(this)}
                                     >
-                                        <Validator validationGroup={"frmSalesInv"}>
+                                        <Validator validationGroup={"frmPurcInv"}>
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
@@ -709,7 +730,7 @@ export default class salesInvoice extends React.Component
                                     {
                                     }).bind(this)}
                                     >
-                                        <Validator validationGroup={"frmSalesInv"}>
+                                        <Validator validationGroup={"frmPurcInv"}>
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
@@ -728,7 +749,7 @@ export default class salesInvoice extends React.Component
                             }}>
                                 <Item location="after">
                                     <Button icon="add"
-                                    validationGroup="frmSalesInv"
+                                    validationGroup="frmPurcInv"
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -855,7 +876,7 @@ export default class salesInvoice extends React.Component
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={4} parent={this} id="frmSalesInv">
+                            <Form colCount={4} parent={this} id="frmPurcInv">
                                 {/* Ara Toplam */}
                                 <Item colSpan={3}></Item>
                                 <Item  >
@@ -1110,10 +1131,10 @@ export default class salesInvoice extends React.Component
                     width={'90%'}
                     height={'90%'}
                     title={this.t("pg_txtItemsCode.title")} //
-                    data={{source:{select:{query : "SELECT GUID,CODE,NAME,VAT FROM ITEMS_VW_01"},sql:this.core.sql}}}
                     >
-                        <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
-                        <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />
+                        <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={200}/>
+                        <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc"/>
+                        <Column dataField="MULTICODE" caption={this.t("pg_txtItemsCode.clmMulticode")} width={200}/>
                     </NdPopGrid>
                 </ScrollView>                
             </div>

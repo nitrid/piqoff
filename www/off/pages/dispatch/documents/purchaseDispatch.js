@@ -33,6 +33,7 @@ export default class salesInvoice extends React.Component
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
         this._calculateTotal = this._calculateTotal.bind(this)
+        this._getItems = this._getItems.bind(this)
 
         this.frmDocItems = undefined;
         this.docLocked = false;        
@@ -135,6 +136,7 @@ export default class salesInvoice extends React.Component
             this.docLocked = false
             this.frmDocItems.option('disabled',false)
         }
+        this._getItems()
     }
     async checkDoc(pGuid,pRef,pRefno)
     {
@@ -291,7 +293,26 @@ export default class salesInvoice extends React.Component
             this.docObj.docItems.dt()[pIndex].TOTAL = parseFloat((tmpData.result.recordset[0].PRICE + this.docObj.docItems.dt()[pIndex].VAT).toFixed(2))
             this._calculateTotal()
         }
+        console.log(this.docObj.docItems.dt()[pIndex].PRICE)
     }
+    async _getItems()
+    {
+        let tmpSource =
+        {
+            source : 
+            {
+                groupBy : this.groupList,
+                select : 
+                {
+                    query : "SELECT GUID,CODE,NAME,VAT,ISNULL((SELECT MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = @CUSTOMER_GUID),'') AS MULTICODE FROM ITEMS_VW_01 ",
+                    param : ['CUSTOMER_GUID:string|250'],
+                    value : [this.docObj.dt()[0].OUTPUT]
+                },
+                sql : this.core.sql
+            }
+        }
+        this.pg_txtItemsCode.setSource(tmpSource)
+    } 
     render()
     {
         return(
@@ -612,6 +633,7 @@ export default class salesInvoice extends React.Component
                                                                 this.txtRef.setState({value:data[0].CODE});
                                                                 this.txtRef.props.onValueChanged()
                                                             }
+                                                            this._getItems()
                                                         }
                                                     }
                                                 }
@@ -1089,10 +1111,10 @@ export default class salesInvoice extends React.Component
                     width={'90%'}
                     height={'90%'}
                     title={this.t("pg_txtItemsCode.title")} //
-                    data={{source:{select:{query : "SELECT GUID,CODE,NAME,VAT FROM ITEMS_VW_01"},sql:this.core.sql}}}
                     >
                         <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
                         <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />
+                        <Column dataField="MULTICODE" caption={this.t("pg_txtItemsCode.clmMulticode")} width={200}/>
                     </NdPopGrid>
                 </ScrollView>                
             </div>

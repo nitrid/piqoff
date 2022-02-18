@@ -568,6 +568,7 @@ export const langTr =
             title : "Stok Seçimi",
             clmCode :  "STOK KODU",
             clmName : "STOK ADI",
+            clmMulticode : "TEDARİKÇİ KODU",
         },
         grdDocItems: 
         {
@@ -797,6 +798,7 @@ export const langTr =
             title : "Stok Seçimi",
             clmCode :  "STOK KODU",
             clmName : "STOK ADI",
+            clmMulticode : "TEDARİKÇİ KODU"
         },
         grdDocItems: 
         {
