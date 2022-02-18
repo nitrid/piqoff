@@ -44,7 +44,8 @@ export default class salesInvoice extends React.Component
     }
     async init()
     {
-        console.log(this.prmObj.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue())
+        this.pg_txtItemsCode.dataRefresh({data:{source:{select:{query : "SELECT GUID,CODE,NAME,VAT FROM ITEMS_VW_01"},sql:this.core.sql}}})
+        console.log(this.pg_txtItemsCode.data)
         this.docObj.clearAll()
 
         this.docObj.ds.on('onAddRow',(pTblName,pData) =>
@@ -1090,7 +1091,6 @@ export default class salesInvoice extends React.Component
                     width={'90%'}
                     height={'90%'}
                     title={this.t("pg_txtItemsCode.title")} //
-                    data={{source:{select:{query : "SELECT GUID,CODE,NAME,VAT FROM ITEMS_VW_01"},sql:this.core.sql}}}
                     >
                         <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
                         <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />
