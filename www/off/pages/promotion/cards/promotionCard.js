@@ -46,7 +46,7 @@ export default class promotionCard extends React.Component
         this.promoObj.ds.on('onRefresh',async(pTblName)  =>
         {            
             
-        })
+        })        
     }
     async getPromotion(pCode)
     {
@@ -583,7 +583,6 @@ export default class promotionCard extends React.Component
                                 </GroupItem>
                                 </GroupItem>
                                 </GroupItem>                     
-                                
                             </Form>
                         </div>
                     </div>

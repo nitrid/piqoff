@@ -157,6 +157,14 @@ export default class NdPopGrid extends Base
         this.popup = this["pop_" + this.props.id];
         this.grid = await this._isGrid();
     }
+    componentWillReceiveProps(pProps) 
+    {
+        // this.setState(
+        //     {
+        //         show : pProps.visible,
+        //     }
+        // )       
+    } 
     setTitle(pVal)
     {
         this.popup.setTitle(pVal)
@@ -173,14 +181,13 @@ export default class NdPopGrid extends Base
         this["pop_" + this.props.id].hide();
         //this.setState({show:false})
     }
-    componentWillReceiveProps(pProps) 
+    setSource(pSource)
     {
-        // this.setState(
-        //     {
-        //         show : pProps.visible,
-        //     }
-        // )       
-    }  
+        return new Promise(async resolve => 
+        {
+            resolve(await this["grid_" + this.props.id].dataRefresh(pSource))
+        });        
+    } 
     render()
     {
         return (
