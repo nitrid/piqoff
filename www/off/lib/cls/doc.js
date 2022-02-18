@@ -41,7 +41,7 @@ export class docCls
         let tmpDt = new datatable('DOC')
         tmpDt.selectCmd =
         {
-            query : "SELECT * FROM DOC_vW_01 WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0)) AND ((TYPE = @TYPE) OR (@TYPE = -1)) AND ((TYPE = @TYPE) OR (@TYPE = -1)) ",
+            query : "SELECT * FROM DOC_VW_01 WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0)) AND ((TYPE = @TYPE) OR (@TYPE = -1)) AND ((TYPE = @TYPE) OR (@TYPE = -1)) ",
             param : ['GUID:string|50','REF:string|25','REF_NO:int','TYPE:int','DOC_TYPE:int']
         }
         tmpDt.insertCmd = 
@@ -150,19 +150,20 @@ export class docCls
             let tmpPrm = {GUID:'00000000-0000-0000-0000-000000000000',REF:'',REF_NO:0,TYPE:-1,DOC_TYPE: -1}
             if(arguments.length > 0)
             {
-                tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '' : arguments[0].GUID;
+                tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
                 tmpPrm.REF = typeof arguments[0].REF == 'undefined' ? '' : arguments[0].REF;
                 tmpPrm.REF_NO = typeof arguments[0].REF_NO == 'undefined' ? 0 : arguments[0].REF_NO;
                 tmpPrm.TYPE = typeof arguments[0].TYPE == 'undefined' ? -1 : arguments[0].TYPE;
                 tmpPrm.REF_NO = typeof arguments[0].REF_NO == 'undefined' ? -1 : arguments[0].REF_NO;
             }
+            console.log(tmpPrm)
             this.ds.get('DOC').selectCmd.value = Object.values(tmpPrm);
 
             await this.ds.get('DOC').refresh()
 
             if(this.ds.get('DOC').length > 0)
             {  
-                await this.docItems.load({GUID:this.ds.get('DOC')[0].GUID})
+                await this.docItems.load({GUID:this.ds.get('DOC')[0].GUID,INVOICE_GUID:tmpPrm.INVOICE_GUID})
                 await this.docCustomer.load({GUID:this.ds.get('DOC')[0].GUID})
             }
             resolve(this.ds.get('DOC'))
@@ -209,9 +210,12 @@ export class docItemsCls
             DISCOUNT : 0,
             VAT: 0,
             AMOUNT : 0,
+            TOTAL : 0,
             DESCRIPTION : '',
+            INVOICE_GUID : '00000000-0000-0000-0000-000000000000',
             VAT_RATE : 0 ,
             DISCOUNT_RATE : 0,
+            DISPATCH_NO : ''
         }
 
         this._initDs();
@@ -222,7 +226,7 @@ export class docItemsCls
         let tmpDt = new datatable('DOC_ITEMS');
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [dbo].[DOC_ITEMS_VW_01] WHERE ((DOC_GUID = @DOC_GUID) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000')) AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0))",
+            query : "SELECT * FROM [dbo].[DOC_ITEMS_VW_01] WHERE (((DOC_GUID = @DOC_GUID) OR (INVOICE_GUID = @DOC_GUID)) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000'))  AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0))",
             param : ['DOC_GUID:string|50','REF:string|25','REF_NO:int']
         }
         tmpDt.insertCmd = 
@@ -248,10 +252,12 @@ export class docItemsCls
                     "@DISCOUNT = @PDISCOUNT, " +
                     "@VAT = @PVAT, " +
                     "@AMOUNT = @PAMOUNT, " +
-                    "@DESCRIPTION  = @PDESCRIPTION ",
+                    "@TOTAL = @PTOTAL, " +
+                    "@DESCRIPTION  = @PDESCRIPTION, " +
+                    "@INVOICE_GUID  = @PINVOICE_GUID ",
             param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|50','PLINE_NO:int','PQUANTITY:float','PPRICE:float','PDISCOUNT:float','PVAT:float','PAMOUNT:float','PDESCRIPTION:string|100'],
-            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','LINE_NO','QUANTITY','PRICE','DISCOUNT','VAT','AMOUNT','DESCRIPTION']
+                        'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|50','PLINE_NO:int','PQUANTITY:float','PPRICE:float','PDISCOUNT:float','PVAT:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PINVOICE_GUID:string|50'],
+            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','LINE_NO','QUANTITY','PRICE','DISCOUNT','VAT','AMOUNT','TOTAL','DESCRIPTION','INVOICE_GUID']
         }
         tmpDt.updateCmd = 
         {
@@ -276,10 +282,12 @@ export class docItemsCls
                     "@DISCOUNT = @PDISCOUNT, " +
                     "@VAT = @PVAT, " +
                     "@AMOUNT = @PAMOUNT, " +
-                    "@DESCRIPTION  = @PDESCRIPTION ",
+                    "@TOTAL = @PTOTAL, " +
+                    "@DESCRIPTION  = @PDESCRIPTION, " +
+                    "@INVOICE_GUID  = @PINVOICE_GUID ",
             param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|50','PLINE_NO:int','PQUANTITY:float','PPRICE:float','PDISCOUNT:float','PVAT:float','PAMOUNT:float','PDESCRIPTION:string|100'],
-            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','LINE_NO','QUANTITY','PRICE','DISCOUNT','VAT','AMOUNT','DESCRIPTION']
+                        'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|50','PLINE_NO:int','PQUANTITY:float','PPRICE:float','PDISCOUNT:float','PVAT:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PINVOICE_GUID:string|50'],
+            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','LINE_NO','QUANTITY','PRICE','DISCOUNT','VAT','AMOUNT','TOTAL','DESCRIPTION','INVOICE_GUID']
         }
         tmpDt.deleteCmd = 
         {
@@ -342,6 +350,7 @@ export class docItemsCls
                 tmpPrm.REF_NO = typeof arguments[0].REF_NO == 'undefined' ? '' : arguments[0].REF_NO;
             }
 
+            console.log(tmpPrm)
             this.ds.get('DOC_ITEMS').selectCmd.value = Object.values(tmpPrm);
 
             await this.ds.get('DOC_ITEMS').refresh();

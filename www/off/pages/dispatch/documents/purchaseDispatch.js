@@ -44,6 +44,7 @@ export default class salesInvoice extends React.Component
     }
     async init()
     {
+        console.log(this.prmObj.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue())
         this.docObj.clearAll()
 
         this.docObj.ds.on('onAddRow',(pTblName,pData) =>
@@ -97,7 +98,7 @@ export default class salesInvoice extends React.Component
         this.dtShipDate.value = moment(new Date())
 
         let tmpDoc = {...this.docObj.empty}
-        tmpDoc.TYPE = 1
+        tmpDoc.TYPE = 0
         tmpDoc.DOC_TYPE = 40
         this.docObj.addEmpty(tmpDoc);
 
@@ -111,7 +112,7 @@ export default class salesInvoice extends React.Component
     async getDoc(pGuid,pRef,pRefno)
     {
         this.docObj.clearAll()
-        await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:40});
+        await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:0,DOC_TYPE:40});
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
@@ -277,9 +278,9 @@ export default class salesInvoice extends React.Component
         this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
         let tmpQuery = 
         {
-            query :"SELECT dbo.FN_PRICE_SALE(@CODE,1,GETDATE()) AS PRICE",
-            param : ['CODE:string|50'],
-            value : [pData.CODE]
+            query :"SELECT CUSTOMER_PRICE AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
+            param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50'],
+            value : [pData.CODE,this.docObj.dt()[0].OUTPUT]
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
         if(tmpData.result.recordset.length > 0)
@@ -315,7 +316,7 @@ export default class salesInvoice extends React.Component
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmSalesDis"
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmSalesInv"
                                     onClick={async (e)=>
                                     {
                                         if(this.docLocked == true)
@@ -448,7 +449,7 @@ export default class salesInvoice extends React.Component
                     {/* Form */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id="frmSalesDis">
+                            <Form colCount={3} id="frmSalesInv">
                                 {/* txtRef-Refno */}
                                 <Item>
                                     <Label text={this.t("txtRefRefno")} alignment="right" />
@@ -462,7 +463,7 @@ export default class salesInvoice extends React.Component
                                                 this.docObj.dt()[0].REF = this.txtRef.value 
                                                 let tmpQuery = 
                                                 {
-                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 40 AND REF = @REF ",
+                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 0 AND DOC_TYPE = 40 AND REF = @REF ",
                                                     param : ['REF:string|25'],
                                                     value : [this.txtRef.value]
                                                 }
@@ -475,7 +476,7 @@ export default class salesInvoice extends React.Component
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmSalesDis"}>
+                                            <Validator validationGroup={"frmSalesInv"}>
                                                     <RequiredRule message={this.t("validRef")} />
                                                 </Validator>  
                                             </NdTextBox>
@@ -523,7 +524,7 @@ export default class salesInvoice extends React.Component
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmSalesDis"}>
+                                            <Validator validationGroup={"frmSalesInv"}>
                                                     <RequiredRule message={this.t("validRefNo")} />
                                                 </Validator> 
                                             </NdTextBox>
@@ -538,7 +539,7 @@ export default class salesInvoice extends React.Component
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_Docs.title")} 
-                                    data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 40"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME FROM DOC_VW_01 WHERE TYPE = 0 AND DOC_TYPE = 40"},sql:this.core.sql}}}
                                     button=
                                     {
                                         [
@@ -556,8 +557,8 @@ export default class salesInvoice extends React.Component
                                     >
                                         <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150} defaultSortOrder="asc"/>
                                         <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="INPUT_NAME" caption={this.t("pg_Docs.clmInputName")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="INPUT_CODE" caption={this.t("pg_Docs.clmInputCode")} width={300} defaultSortOrder="asc" />
+                                        <Column dataField="OUTPUT_NAME" caption={this.t("pg_Docs.clmOutputName")} width={300} defaultSortOrder="asc" />
+                                        <Column dataField="OUTPUT_CODE" caption={this.t("pg_Docs.clmOutputCode")} width={300} defaultSortOrder="asc" />
                                         
                                     </NdPopGrid>
                                 </Item>
@@ -565,7 +566,7 @@ export default class salesInvoice extends React.Component
                                 <Item>
                                     <Label text={this.t("cmbDepot")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbDepot"
-                                    dt={{data:this.docObj.dt('DOC'),field:"OUTPUT"}}  
+                                    dt={{data:this.docObj.dt('DOC'),field:"INPUT"}}  
                                     displayExpr="NAME"                       
                                     valueExpr="GUID"
                                     value=""
@@ -577,7 +578,7 @@ export default class salesInvoice extends React.Component
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmSalesDis"}>
+                                        <Validator validationGroup={"frmSalesInv"}>
                                             <RequiredRule message={this.t("validDepot")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -588,7 +589,7 @@ export default class salesInvoice extends React.Component
                                 <Item>
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
                                     <NdTextBox id="txtCustomerCode" parent={this} simple={true} 
-                                    dt={{data:this.docObj.dt('DOC'),field:"INPUT_CODE"}} 
+                                    dt={{data:this.docObj.dt('DOC'),field:"OUTPUT_CODE"}} 
                                     button=
                                     {
                                         [
@@ -602,9 +603,9 @@ export default class salesInvoice extends React.Component
                                                     {
                                                         if(data.length > 0)
                                                         {
-                                                            this.docObj.dt()[0].INPUT = data[0].GUID
-                                                            this.docObj.dt()[0].INPUT_CODE = data[0].CODE
-                                                            this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
+                                                            this.docObj.dt()[0].OUTPUT = data[0].GUID
+                                                            this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
+                                                            this.docObj.dt()[0].OUTPUT_NAME = data[0].TITLE
                                                             let tmpData = this.prmObj.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
@@ -620,7 +621,7 @@ export default class salesInvoice extends React.Component
                                     param={this.param.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmSalesDis"}>
+                                        <Validator validationGroup={"frmSalesInv"}>
                                             <RequiredRule message={this.t("validCustomerCode")} />
                                         </Validator>  
                                     </NdTextBox>
@@ -657,7 +658,7 @@ export default class salesInvoice extends React.Component
                                 <Item>
                                     <Label text={this.t("txtCustomerName")} alignment="right" />
                                     <NdTextBox id="txtCustomerName" parent={this} simple={true}  
-                                    dt={{data:this.docObj.dt('DOC'),field:"INPUT_NAME"}} 
+                                    dt={{data:this.docObj.dt('DOC'),field:"OUTPUT_NAME"}} 
                                     readOnly={true}
                                     param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
@@ -675,7 +676,7 @@ export default class salesInvoice extends React.Component
                                         {
                                     }).bind(this)}
                                     >
-                                        <Validator validationGroup={"frmSalesDis"}>
+                                        <Validator validationGroup={"frmSalesInv"}>
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
@@ -689,7 +690,7 @@ export default class salesInvoice extends React.Component
                                     {
                                     }).bind(this)}
                                     >
-                                        <Validator validationGroup={"frmSalesDis"}>
+                                        <Validator validationGroup={"frmSalesInv"}>
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
@@ -708,7 +709,7 @@ export default class salesInvoice extends React.Component
                             }}>
                                 <Item location="after">
                                     <Button icon="add"
-                                    validationGroup="frmSalesDis"
+                                    validationGroup="frmSalesInv"
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -719,6 +720,26 @@ export default class salesInvoice extends React.Component
                                             {
                                                 if(data.length > 0)
                                                 {
+                                                    console.log(this.grdDocItems)
+                                                    let tmpQuery = 
+                                                    {
+                                                        query :"SELECT MULTICODE,CUSTOMER_PRICE AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
+                                                        param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50'],
+                                                        value : [data[0].CODE,this.docObj.dt()[0].OUTPUT]
+                                                    }
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    if(tmpData.result.recordset.length == 0)
+                                                    {
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'msgCustomerNotFound',showTitle:true,title:this.t("msgCustomerNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.t("msgCustomerNotFound.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerNotFound.msg")}</div>)
+                                                        }
+                                            
+                                                        await dialog(tmpConfObj);
+                                                        return
+                                                    }
                                                     let tmpDocItems = {...this.docObj.docItems.empty}
                                                     tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
                                                     tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
@@ -727,8 +748,8 @@ export default class salesInvoice extends React.Component
                                                     tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
                                                     tmpDocItems.REF = this.docObj.dt()[0].REF
                                                     tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                                                    tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
                                                     tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                    tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
                                                     tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
                                                     tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
                                                     this.docObj.docItems.addEmpty(tmpDocItems)
@@ -813,7 +834,7 @@ export default class salesInvoice extends React.Component
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={4} parent={this} id="frmSalesDis">
+                            <Form colCount={4} parent={this} id="frmSalesInv">
                                 {/* Ara Toplam */}
                                 <Item colSpan={3}></Item>
                                 <Item  >
