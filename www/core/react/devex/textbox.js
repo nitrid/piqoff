@@ -61,11 +61,12 @@ export default class NdTextBox extends Base
             this.props.onFocusOut();
         }
     }
-    _onChange()
+    _onChange(e)
     {
+        this.value = e.value;
         if(typeof this.props.onChange != 'undefined')
         {
-            this.props.onChange();
+            this.props.onChange(e);
         }
     }
     _buttonView()
