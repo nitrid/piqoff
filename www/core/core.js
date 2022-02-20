@@ -2,29 +2,19 @@ export class core
 {        
     static instance = null;
 
-    constructor(pUrl)
+    constructor(pIo)
     {   
         if(!core.instance)
         {
             core.instance = this;
         }
         
-        if(typeof pUrl == 'object')
+        try
         {
-            try
-            {
-                this.socket = pUrl;
-            }
-            catch (error) {}
+            this.socket = pIo;
         }
-        else if(typeof pUrl == 'string')
-        {
-            try
-            {
-                this.socket = io(pUrl,{timeout:100000});
-            }
-            catch (error) {}
-        }
+        catch (error) {}
+
         if(typeof this.socket == 'undefined')
         {
             console.log("socket not defined")
@@ -104,6 +94,8 @@ export class sql
     {    
         return new Promise(resolve => 
         {
+            core.instance.emit('onExecuting');
+            
             let TmpQuery = ""
             if(typeof arguments[0] == 'undefined')
             {
@@ -120,6 +112,7 @@ export class sql
                 {
                     if(typeof TmpQuery.value[i] == 'undefined')
                     {
+                        core.instance.emit('onExecuted');
                         resolve({result : {err: "Parametre değerlerinde problem oluştu ! "}})
                     }
                 }
@@ -127,6 +120,8 @@ export class sql
 
             core.instance.socket.emit('sql',TmpQuery,(data) =>
             {
+                core.instance.emit('onExecuted');
+
                 if(typeof data.auth_err == 'undefined')
                 {
                     resolve(data); 
@@ -796,7 +791,6 @@ export class datatable
             {
                 return {[arguments[0]] : a[arguments[0]] + b[arguments[0]]}
             },{[arguments[0]]:0})[arguments[0]]
-
 
             if(arguments.length == 2)
             {

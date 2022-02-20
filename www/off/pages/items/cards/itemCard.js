@@ -114,7 +114,7 @@ export default class itemCard extends React.Component
             this.btnDelete.setState({disabled:false});
             this.btnCopy.setState({disabled:false});
             this.btnPrint.setState({disabled:false});
-        })
+        })        
 
         this.itemsObj.addEmpty();
 
@@ -376,10 +376,10 @@ export default class itemCard extends React.Component
         }
     }
     render()
-    {   
+    {           
         return (
             <div>                
-                <ScrollView>
+                <ScrollView>                    
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>

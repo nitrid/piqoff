@@ -57,13 +57,13 @@ export default class Page extends React.Component
       }
       //***********************************************/      
       return obj;
-    }))
+    }))    
   }
   render()
   {
     return(
       <React.Fragment>
-        <React.Suspense fallback={<div style={{position: 'relative',margin:'auto',top: '40%',left:'50%'}}><LoadIndicator height={40} width={40} /></div>}>
+        <React.Suspense fallback={<div style={{position: 'relative',margin:'auto',top: '40%',left:'50%'}}><LoadIndicator height={40} width={40} /></div>}>          
           <this.page data={this.props.data}/>
         </React.Suspense>
       </React.Fragment>

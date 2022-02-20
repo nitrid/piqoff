@@ -11,6 +11,7 @@ import Toolbar from 'devextreme-react/toolbar';
 import TextBox from 'devextreme-react/text-box';
 import Button from 'devextreme-react/button';
 import SelectBox from 'devextreme-react/select-box';
+import { LoadPanel } from 'devextreme-react/load-panel';
 
 import HTMLReactParser from 'html-react-parser';
 
@@ -61,7 +62,8 @@ export default class App extends React.Component
                 headers : 'Warning',
                 title : 'Sunucu ile bağlantı kuruluyor.',
             },
-            vtadi : ''
+            vtadi : '',
+            isExecute:false
         }
         this.toolbarItems = 
         [
@@ -172,7 +174,16 @@ export default class App extends React.Component
         {
             App.instance.setState({connected:false});
             this.core.auth.logout()
-        })         
+        })    
+        
+        this.core.on('onExecuting',()=>
+        {
+            this.setState({isExecute:true})
+        })
+        this.core.on('onExecuted',()=>
+        {
+            this.setState({isExecute:false})
+        })
     }
     menuClick(data)
     {
@@ -284,6 +295,14 @@ export default class App extends React.Component
         
         return (
             <div>
+                <LoadPanel
+                shadingColor="rgba(0,0,0,0.4)"
+                position={{ of: '#root' }}
+                visible={this.state.isExecute}
+                showIndicator={true}
+                shading={true}
+                showPane={true}
+                />
                 <div className="top-bar">
                     <Toolbar className="main-toolbar" items={this.toolbarItems }/>
                 </div>
