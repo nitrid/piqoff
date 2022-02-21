@@ -163,7 +163,7 @@ export class docCls
 
             if(this.ds.get('DOC').length > 0)
             {  
-                await this.docItems.load({GUID:this.ds.get('DOC')[0].GUID,INVOICE_GUID:tmpPrm.INVOICE_GUID})
+                await this.docItems.load({DOC_GUID:this.ds.get('DOC')[0].GUID,INVOICE_GUID:tmpPrm.INVOICE_GUID})
                 await this.docCustomer.load({GUID:this.ds.get('DOC')[0].GUID})
             }
             resolve(this.ds.get('DOC'))
@@ -203,6 +203,7 @@ export class docItemsCls
             OUTPUT_CODE : '',
             OUTPUT_NAME : '',
             ITEM : '00000000-0000-0000-0000-000000000000',
+            ITEM_CODE : '',
             ITEM_NAME : '',
             LINE_NO : 0,
             QUANTITY : 1,
@@ -226,8 +227,8 @@ export class docItemsCls
         let tmpDt = new datatable('DOC_ITEMS');
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [dbo].[DOC_ITEMS_VW_01] WHERE (((DOC_GUID = @DOC_GUID) OR (INVOICE_GUID = @DOC_GUID)) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000'))  AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0))",
-            param : ['DOC_GUID:string|50','REF:string|25','REF_NO:int']
+            query : "SELECT * FROM [dbo].[DOC_ITEMS_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND (((DOC_GUID = @DOC_GUID) OR (INVOICE_GUID = @DOC_GUID)) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000'))  AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0))",
+            param : ['GUID:string|50','DOC_GUID:string|50','REF:string|25','REF_NO:int']
         }
         tmpDt.insertCmd = 
         {
@@ -314,6 +315,7 @@ export class docItemsCls
     }
     addEmpty()
     {
+        console.log(arguments[1])
         if(typeof this.dt('DOC_ITEMS') == 'undefined')
         {
             return;
@@ -327,8 +329,11 @@ export class docItemsCls
         {
             tmp = {...this.empty}
         }
-        tmp.GUID = datatable.uuidv4()
-        this.dt('DOC_ITEMS').push(tmp)
+        if(typeof arguments[1] == 'undefined' || arguments[1] == true)
+        {
+            tmp.GUID = datatable.uuidv4()
+        }
+        this.dt('DOC_ITEMS').push(tmp,arguments[1])
     }
     clearAll()
     {
@@ -342,15 +347,15 @@ export class docItemsCls
         //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİR.
         return new Promise(async resolve =>
         {
-            let tmpPrm = {GUID:'00000000-0000-0000-0000-000000000000',REF:'',REF_NO:0}
+            let tmpPrm = {GUID:'00000000-0000-0000-0000-000000000000',DOC_GUID:'00000000-0000-0000-0000-000000000000',REF:'',REF_NO:0}
             if(arguments.length > 0)
             {
-                tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '' : arguments[0].GUID;
+                tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
+                tmpPrm.DOC_GUID = typeof arguments[0].DOC_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].DOC_GUID;
                 tmpPrm.REF = typeof arguments[0].REF == 'undefined' ? '' : arguments[0].REF;
-                tmpPrm.REF_NO = typeof arguments[0].REF_NO == 'undefined' ? '' : arguments[0].REF_NO;
+                tmpPrm.REF_NO = typeof arguments[0].REF_NO == 'undefined' ? 0 : arguments[0].REF_NO;
             }
 
-            console.log(tmpPrm)
             this.ds.get('DOC_ITEMS').selectCmd.value = Object.values(tmpPrm);
 
             await this.ds.get('DOC_ITEMS').refresh();

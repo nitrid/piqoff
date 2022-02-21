@@ -55,6 +55,13 @@ export const langTr =
         irs_02_001: "Alış İrsaliyesi",
         irs_02_002: "Satış İrsaliyesi",
         irs_02_003: "Şubeler Arası Sevk",
+        fns : "Finans",
+        fns_01 : "Listeler",
+        fns_01_001: "Ödeme Listesi",
+        fns_01_002 : "Tahsilat Listesi",
+        fns_02 : "Evraklar",
+        fns_02_001 : "Ödeme",
+        fns_02_002 : "Tahsilat",
         promo: "Promosyon",
         promo_01: "Tanımlar",
         promo_01_001: "Promosyon Tanımları",
@@ -384,6 +391,7 @@ export const langTr =
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
         dtShipDate :"Sevk Tarihi",
+        getDispatch : "İrsaliye Getir",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -405,6 +413,16 @@ export const langTr =
             title : "Stok Seçimi",
             clmCode :  "STOK KODU",
             clmName : "STOK ADI",
+        },
+        pg_dispatchGrid : 
+        {
+            title : "İrsaliye Seçimi",
+            clmReferans : "Seri - Sıra",
+            clmCode : "Kodu",
+            clmName : "Adı",
+            clmQuantity : "Miktar",
+            clmPrice : "Fiyat",
+            clmTotal : "Tutar"
         },
         grdDocItems: 
         {
@@ -547,6 +565,7 @@ export const langTr =
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
         dtShipDate :"Sevk Tarihi",
+        getDispatch : "İrsaliye Getir",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -569,6 +588,16 @@ export const langTr =
             clmCode :  "STOK KODU",
             clmName : "STOK ADI",
             clmMulticode : "TEDARİKÇİ KODU",
+        },
+        pg_dispatchGrid : 
+        {
+            title : "İrsaliye Seçimi",
+            clmReferans : "Seri - Sıra",
+            clmCode : "Kodu",
+            clmName : "Adı",
+            clmQuantity : "Miktar",
+            clmPrice : "Fiyat",
+            clmTotal : "Tutar"
         },
         grdDocItems: 
         {

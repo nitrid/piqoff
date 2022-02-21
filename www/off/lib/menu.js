@@ -291,6 +291,55 @@ export const menu = (e) =>
             ]
         },
         {
+            id: 'fns',
+            text: e.t('menu.fns'),//'Finans',
+            expanded: false,
+            items: 
+            [
+                {
+                    id: 'fns_01',
+                    text : e.t('menu.fns_01'),//'Listeler',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'fns_01_001',
+                            text: e.t('menu.fns_01_001'),//'Ödeme Listesi',
+                            path: '../pages/customers/cards/customerCard.js'
+                        },
+                        {
+                            id: 'fns_01_002',
+                            text: e.t('menu.fns_01_002'),//'Tahsilat Listesi',
+                            path: '../pages/customers/cards/customerCard.js'
+                        },
+                    ]
+                },
+                {
+                    id: 'fns_02',
+                    text : e.t('menu.fns_02'),//'Evraklar',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'fns_02_001',
+                            text: e.t('menu.fns_02_001'),//'Ödeme',
+                            path: '../pages/customers/cards/customerCard.js'
+                        },
+                        {
+                            id: 'fns_02_002',
+                            text: e.t('menu.fns_02_002'),//'Tahsilat',
+                            path: '../pages/customers/cards/customerCard.js'
+                        },
+                    ]
+                },
+                {
+                    id: 'fns_03',
+                    text : e.t('menu.irs_03'),//'Raporlar',
+                    expanded: false,
+                }
+            ]
+        },
+        {
             id: 'promo',
             text: e.t('menu.promo'),//'Promosyon',
             expanded: false,

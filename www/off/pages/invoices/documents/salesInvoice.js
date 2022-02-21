@@ -5,6 +5,7 @@ import { docCls,docItemsCls, docCustomerCls } from '../../../lib/cls/doc.js';
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
+import ContextMenu from 'devextreme-react/context-menu';
 import TabPanel from 'devextreme-react/tab-panel';
 import { Button } from 'devextreme-react/button';
 
@@ -33,9 +34,12 @@ export default class salesInvoice extends React.Component
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
         this._calculateTotal = this._calculateTotal.bind(this)
+        this._getDispatch = this._getDispatch.bind(this)
 
         this.frmDocItems = undefined;
         this.docLocked = false;        
+
+        this.rightItems = [{ text: this.t("getDispatch"), }]
     }
     async componentDidMount()
     {
@@ -78,7 +82,7 @@ export default class salesInvoice extends React.Component
         {            
             this.btnBack.setState({disabled:true});
             this.btnNew.setState({disabled:false});
-            this.btnSave.setState({disabled:true});
+            this.btnSave.setState({disabled:false});
             this.btnDelete.setState({disabled:false});
             this.btnCopy.setState({disabled:false});
             this.btnPrint.setState({disabled:false});          
@@ -301,6 +305,66 @@ export default class salesInvoice extends React.Component
             this.docObj.docItems.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100)).toFixed(2))
             this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(2))
             this.docObj.docItems.dt()[pIndex].TOTAL = parseFloat((tmpData.result.recordset[0].PRICE + this.docObj.docItems.dt()[pIndex].VAT).toFixed(2))
+            this._calculateTotal()
+        }
+    }
+    async _getDispatch()
+    {
+        let tmpSource =
+        {
+            source : 
+            {
+                groupBy : this.groupList,
+                select : 
+                {
+                    query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND INVOICE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND DOC_TYPE IN(40)",
+                    param : ['INPUT:string|50'],
+                    value : [this.docObj.dt()[0].INPUT]
+                },
+                sql : this.core.sql
+            }
+        }
+        await this.pg_dispatchGrid.setSource(tmpSource)
+        this.pg_dispatchGrid.show()
+        this.pg_dispatchGrid.onClick = async(data) =>
+        {
+            for (let i = 0; i < data.length; i++) 
+            {
+                let tmpDocItems = {...this.docObj.docItems.empty}
+                tmpDocItems.GUID = data[i].GUID
+                tmpDocItems.DOC_GUID = data[i].DOC_GUID
+                tmpDocItems.TYPE = data[i].TYPE
+                tmpDocItems.DOC_TYPE = data[i].DOC_TYPE
+                tmpDocItems.REBATE = data[i].REBATE
+                tmpDocItems.LINE_NO = data[i].LINE_NO
+                tmpDocItems.REF = data[i].REF
+                tmpDocItems.REF_NO = data[i].REF_NO
+                tmpDocItems.DOC_DATE = data[i].DOC_DATE
+                tmpDocItems.SHIPMENT_DATE = data[i].SHIPMENT_DATE
+                tmpDocItems.INPUT = data[i].INPUT
+                tmpDocItems.INPUT_CODE = data[i].INPUT_CODE
+                tmpDocItems.INPUT_NAME = data[i].INPUT_NAME
+                tmpDocItems.OUTPUT = data[i].OUTPUT
+                tmpDocItems.OUTPUT_CODE = data[i].OUTPUT_CODE
+                tmpDocItems.OUTPUT_NAME = data[i].OUTPUT_NAME
+                tmpDocItems.ITEM = data[i].ITEM
+                tmpDocItems.ITEM_CODE = data[i].ITEM_CODE
+                tmpDocItems.ITEM_NAME = data[i].ITEM_NAME
+                tmpDocItems.PRICE = data[i].PRICE
+                tmpDocItems.QUANTITY = data[i].QUANTITY
+                tmpDocItems.VAT = data[i].VAT
+                tmpDocItems.AMOUNT = data[i].AMOUNT
+                tmpDocItems.TOTAL = data[i].TOTAL
+                tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
+                tmpDocItems.INVOICE_GUID = this.docObj.dt()[0].GUID
+                tmpDocItems.VAT_RATE = data[i].VAT_RATE
+                tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
+                tmpDocItems.DISPATCH_NO = data[i].DISPATCH_NO
+
+                await this.docObj.docItems.addEmpty(tmpDocItems,false)
+                this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].stat = 'edit'
+            }
+            this.docObj.docItems.dt().emit('onRefresh')
             this._calculateTotal()
         }
     }
@@ -772,6 +836,7 @@ export default class salesInvoice extends React.Component
                                     }}/>
                                 </Item>
                                  <Item>
+                                 <React.Fragment>
                                     <NdGrid parent={this} id={"grdDocItems"} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 
@@ -826,9 +891,18 @@ export default class salesInvoice extends React.Component
                                         <Column dataField="DISCOUNT_RATE" caption={this.t("grdDocItems.clmDiscountRate")} dataType={'number'} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="VAT" caption={this.t("grdDocItems.clmVat")} format={{ style: "currency", currency: "EUR",precision: 2}} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="TOTAL" caption={this.t("grdDocItems.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 2}} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="DISPATCH_NO" caption={this.t("grdDocItems.clmDispatch")}  editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="DISPATCH_NO" caption={this.t("grdDocItems.clmDispatch")} width={200} editCellRender={this._cellRoleRender}/>
 
                                     </NdGrid>
+                                    <ContextMenu
+                                    dataSource={this.rightItems}
+                                    width={200}
+                                    target="#grdDocItems"
+                                    onItemClick={(async(e)=>
+                                    {
+                                        this._getDispatch()
+                                    }).bind(this)} />
+                                </React.Fragment>    
                                 </Item>
                             </Form>
                         </div>
@@ -1082,6 +1156,24 @@ export default class salesInvoice extends React.Component
                             </Form>
                         </NdPopUp>
                     </div> 
+                     {/* İrsaliye Grid */}
+                    <NdPopGrid id={"pg_dispatchGrid"} parent={this} container={"#root"}
+                        visible={false}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        showBorders={true}
+                        width={'90%'}
+                        height={'90%'}
+                        selection={{mode:"multiple"}}
+                        title={this.t("pg_dispatchGrid.title")} //
+                        >
+                            <Column dataField="REFERANS" caption={this.t("pg_dispatchGrid.clmReferans")} width={200} defaultSortOrder="asc"/>
+                            <Column dataField="ITEM_CODE" caption={this.t("pg_dispatchGrid.clmCode")} width={200}/>
+                            <Column dataField="ITEM_NAME" caption={this.t("pg_dispatchGrid.clmName")} width={300} />
+                            <Column dataField="QUANTITY" caption={this.t("pg_dispatchGrid.clmQuantity")} width={300} />
+                            <Column dataField="PRICE" caption={this.t("pg_dispatchGrid.clmPrice")} width={300} />
+                            <Column dataField="TOTAL" caption={this.t("pg_dispatchGrid.clmTotal")} width={300} />
+                        </NdPopGrid>
                     <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={"#root"}
                     visible={false}
                     position={{of:'#root'}} 
