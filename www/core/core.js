@@ -344,13 +344,11 @@ export class dataset
         return new Promise(async resolve => 
         {
             let tmpQuerys = [];
-            console.log(this)
             for (let i = 0; i < this.length; i++) 
             {
                 let tmp = this.get(i).toCommands();
                 tmp.forEach(e => 
                 {
-                    console.log(e)
                     tmpQuerys.push(e)    
                 });
             }
@@ -463,7 +461,7 @@ export class datatable
         } 
     }
     //#endregion
-    push(pItem,pIsNew,pIsEdit)
+    push(pItem,pIsNew)
     {     
         pItem = new Proxy(pItem, 
         {
