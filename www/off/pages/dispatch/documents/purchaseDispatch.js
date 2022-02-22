@@ -326,7 +326,7 @@ export default class salesInvoice extends React.Component
                                     <NdButton id="btnBack" parent={this} icon="revert" type="default"
                                         onClick={()=>
                                         {
-
+                                            this.getDoc(this.docObj.dt()[0].GUID,this.docObj.dt()[0].REF,this.docObj.dt()[0].REF_NO)
                                         }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
