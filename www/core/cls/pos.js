@@ -133,13 +133,13 @@ export class posCls
     }
     load()
     {
-        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ ÖRN: {CODE:''}
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ ÖRN: {GUID:''}
         return new Promise(async resolve => 
         {
-            let tmpPrm = {CODE:''}
+            let tmpPrm = {GUID:''}
             if(arguments.length > 0)
             {
-                tmpPrm.CODE = typeof arguments[0].CODE == 'undefined' ? '' : arguments[0].CODE;
+                tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '' : arguments[0].GUID;
             }
 
             this.ds.get('POS').selectCmd.value = Object.values(tmpPrm);
@@ -148,8 +148,8 @@ export class posCls
             
             if(this.ds.get('POS').length > 0)
             {
-                await this.posSale.load({POS:this.ds.get('POS')[0].GUID})
-                await this.posPayment.load({POS:this.ds.get('POS')[0].GUID,TYPE:0})
+                await this.posSale.load({POS_GUID:this.ds.get('POS')[0].GUID})
+                await this.posPayment.load({POS_GUID:this.ds.get('POS')[0].GUID,TYPE:0})
             }
             resolve(this.ds.get('POS'));    
         });
@@ -240,41 +240,42 @@ export class posSaleCls
                     "@SUBTOTAL = @PSUBTOTAL ", 
             param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PBARCODE:string|50','PUNIT:string|50',
                      'PQUANTITY:float','PPRICE:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int'],
-            dataprm : ['GUID','CUSER','POS_GUID','LINE_NO','ITEM','BARCODE','UNIT','QUANTITY','PRICE','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','SUBTOTAL']
+            dataprm : ['GUID','CUSER','POS_GUID','LINE_NO','ITEM_GUID','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','SUBTOTAL']
         } 
         tmpDt.updateCmd = 
         {
-            query : "EXEC [dbo].[PRD_POS_UPDATE] " + 
+            query : "EXEC [dbo].[PRD_POS_SALE_UPDATE] " + 
                     "@GUID = @PGUID, " +
                     "@CUSER = @PCUSER, " + 
-                    "@SAFE = @PSAFE, " +
-                    "@DEPOT = @PDEPOT, " +
-                    "@TYPE = @PTYPE, " +                      
-                    "@DOC_DATE = @PDOC_DATE, " + 
-                    "@CUSTOMER = @PCUSTOMER, " + 
+                    "@POS = @PPOS, " +
+                    "@LINE_NO = @PLINE_NO, " +
+                    "@ITEM = @PITEM, " +                      
+                    "@BARCODE = @PBARCODE, " + 
+                    "@UNIT = @PUNIT, " + 
+                    "@QUANTITY = @PQUANTITY, " + 
+                    "@PRICE = @PPRICE, " + 
                     "@AMOUNT = @PAMOUNT, " + 
                     "@DISCOUNT = @PDISCOUNT, " + 
                     "@LOYALTY = @PLOYALTY, " + 
                     "@VAT = @PVAT, " + 
                     "@TOTAL = @PTOTAL, " + 
-                    "@STATUS = @PSTATUS ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PSAFE:string|25','PDEPOT:string|50','PTYPE:int','PDOC_DATE:date','PCUSTOMER:string|50',
-                     'PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSTATUS:int'],
-            dataprm : ['GUID','CUSER','SAFE','DEPOT_GUID','TYPE','DOC_DATE','CUSTOMER_GUID','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','STATUS']
+                    "@SUBTOTAL = @PSUBTOTAL ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PBARCODE:string|50','PUNIT:string|50',
+                     'PQUANTITY:float','PPRICE:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int'],
+            dataprm : ['GUID','CUSER','POS_GUID','LINE_NO','ITEM_GUID','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','SUBTOTAL']
         } 
         tmpDt.deleteCmd = 
         {
-            query : "EXEC [dbo].[PRD_POS_DELETE] " + 
+            query : "EXEC [dbo].[PRD_POS_SALE_DELETE] " + 
                     "@CUSER = @PCUSER, " + 
-                    "@UPDATE = 1, " + 
-                    "@GUID = @PGUID ", 
-            param : ['PCUSER:string|25','PGUID:string|50'],
-            dataprm : ['CUSER','GUID']
+                    "@UPDATE = 1, " +
+                    "@GUID = @PGUID, " + 
+                    "@POS_GUID = @PPOS_GUID ", 
+            param : ['PCUSER:string|25','PGUID:string|50','PPOS_GUID:string|50'],
+            dataprm : ['CUSER','GUID','POS_GUID']
         }
 
         this.ds.add(tmpDt);
-        this.ds.add(this.posSale.dt('POS_SALE'))
-        this.ds.add(this.posPayment.dt('POS_PAYMENT'))
     }
     //#endregion
     dt()
@@ -288,7 +289,7 @@ export class posSaleCls
     }
     addEmpty()
     {
-        if(typeof this.dt('POS') == 'undefined')
+        if(typeof this.dt('POS_SALE') == 'undefined')
         {
             return;
         }
@@ -302,7 +303,7 @@ export class posSaleCls
             tmp = {...this.empty}
         }
         tmp.GUID = datatable.uuidv4();
-        this.dt('POS').push(tmp)
+        this.dt('POS_SALE').push(tmp)
     }
     clearAll()
     {
@@ -313,25 +314,165 @@ export class posSaleCls
     }
     load()
     {
-        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ ÖRN: {CODE:''}
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ ÖRN: {GUID:'',POS_GUID:''}
         return new Promise(async resolve => 
         {
-            let tmpPrm = {CODE:''}
+            let tmpPrm = {GUID:'',POS_GUID:''}
             if(arguments.length > 0)
             {
-                tmpPrm.CODE = typeof arguments[0].CODE == 'undefined' ? '' : arguments[0].CODE;
+                tmpPrm.POS_GUID = typeof arguments[0].POS_GUID == 'undefined' ? '' : arguments[0].POS_GUID;
             }
 
-            this.ds.get('POS').selectCmd.value = Object.values(tmpPrm);
+            this.ds.get('POS_SALE').selectCmd.value = Object.values(tmpPrm);
               
-            await this.ds.get('POS').refresh();
+            await this.ds.get('POS_SALE').refresh();
             
-            if(this.ds.get('POS').length > 0)
+            resolve(this.ds.get('POS_SALE'));    
+        });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            this.ds.delete()
+            resolve(await this.ds.update()); 
+        });
+    }
+}
+export class posPaymentCls
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds = new dataset();
+        this.empty = 
+        {
+            GUID : '00000000-0000-0000-0000-000000000000',
+            CUSER : this.core.auth.data.CODE,
+            LUSER : this.core.auth.data.CODE,
+            POS_GUID : '00000000-0000-0000-0000-000000000000',
+            SAFE : '',
+            DEPOT_GUID : '00000000-0000-0000-0000-000000000000',
+            DEPOT_CODE : '',
+            DEPOT_NAME : '',
+            TYPE : '0',
+            DOC_DATE : moment(new Date()).format("YYYY-MM-DD"),
+            CUSTOMER_GUID : '00000000-0000-0000-0000-000000000000',
+            CUSTOMER_CODE : '',
+            CUSTOMER_NAME : '',
+            PAY_TYPE : 0,
+            LINE_NO : 0,
+            AMOUNT : 0,
+            CHANGE : 0,
+            GRAND_AMOUNT : 0,
+            GRAND_DISCOUNT : 0,
+            GRAND_LOYALTY : 0,
+            GRAND_VAT : 0,
+            GRAND_TOTAL : 0,
+            STATUS : 0
+        }
+
+        this._initDs();
+    }
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('POS_PAYMENT');            
+        tmpDt.selectCmd = 
+        {
+            query : "SELECT * FROM [dbo].[POS_PAYMENT_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '')) AND ((POS_GUID = @POS_GUID) OR (@POS_GUID = ''))",
+            param : ['GUID:string|50','POS_GUID:string|50']
+        } 
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_POS_PAYMENT_INSERT] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@POS = @PPOS, " +
+                    "@TYPE = @PTYPE, " +
+                    "@LINE_NO = @PLINE_NO, " +
+                    "@AMOUNT = @PAMOUNT, " + 
+                    "@CHANGE = @PCHANGE ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
+            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE']
+        } 
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_POS_PAYMENT_UPDATE] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@POS = @PPOS, " +
+                    "@TYPE = @PTYPE, " +
+                    "@LINE_NO = @PLINE_NO, " +
+                    "@AMOUNT = @PAMOUNT, " + 
+                    "@CHANGE = @PCHANGE ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
+            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE']
+        } 
+        tmpDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_POS_PAYMENT_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@UPDATE = 1, " +
+                    "@GUID = @PGUID, " + 
+                    "@POS_GUID = @PPOS_GUID ", 
+            param : ['PCUSER:string|25','PGUID:string|50','PPOS_GUID:string|50'],
+            dataprm : ['CUSER','GUID','POS_GUID']
+        }
+
+        this.ds.add(tmpDt);
+    }
+    //#endregion
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0]);
+        }
+
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('POS_PAYMENT') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {}
+        if(typeof arguments.length > 0)
+        {
+            tmp = {...arguments[0]}            
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('POS_PAYMENT').push(tmp)
+    }
+    clearAll()
+    {
+        for (let i = 0; i < this.ds.length; i++) 
+        {
+            this.dt(i).clear()
+        }
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ ÖRN: {GUID:'',POS_GUID:''}
+        return new Promise(async resolve => 
+        {
+            let tmpPrm = {GUID:'',POS_GUID:''}
+            if(arguments.length > 0)
             {
-                await this.posSale.load({POS:this.ds.get('POS')[0].GUID})
-                await this.posPayment.load({POS:this.ds.get('POS')[0].GUID,TYPE:0})
+                tmpPrm.POS_GUID = typeof arguments[0].POS_GUID == 'undefined' ? '' : arguments[0].POS_GUID;
             }
-            resolve(this.ds.get('POS'));    
+
+            this.ds.get('POS_PAYMENT').selectCmd.value = Object.values(tmpPrm);
+              
+            await this.ds.get('POS_PAYMENT').refresh();
+            
+            resolve(this.ds.get('POS_PAYMENT'));    
         });
     }
     save()
