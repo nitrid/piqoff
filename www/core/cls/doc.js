@@ -1,4 +1,4 @@
-import { core,dataset,datatable } from "../../../core/core.js";
+import { core,dataset,datatable } from "../core.js";
 
 export class docCls
 {

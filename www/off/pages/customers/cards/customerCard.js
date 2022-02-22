@@ -1,6 +1,6 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { customersCls,customerAdressCls, customerOfficalCls } from '../../../lib/cls/customers.js';
+import { customersCls,customerAdressCls, customerOfficalCls } from '../../../../core/cls/customers.js';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';

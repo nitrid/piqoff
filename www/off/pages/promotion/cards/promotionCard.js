@@ -1,6 +1,6 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import {promotionCls} from '../../../lib/cls/promotion.js'
+import {promotionCls} from '../../../../core/cls/promotion.js'
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
