@@ -262,30 +262,6 @@ export default class salesInvoice extends React.Component
                 </NdTextBox>
             )
         }
-        else if(e.column.dataField == "ITEM_NAME")
-        { 
-            return (<NdNumberBox id={"txtGrdItemsName" +e.rowIndex} parent={this} simple={true} readOnly={true}/>)
-        }
-        else if(e.column.dataField == "VAT")
-        { 
-            return (<NdNumberBox id={"txtGrdVat" +e.rowIndex} parent={this} simple={true} readOnly={true}/>)
-        }
-        else if(e.column.dataField == "AMOUNT")
-        { 
-            return (<NdNumberBox id={"txtGrdAmount" +e.rowIndex} parent={this} simple={true} readOnly={true}/>)
-        }
-        else if(e.column.dataField == "TOTAL")
-        { 
-            return (<NdNumberBox id={"txtGrdTotal" +e.rowIndex} parent={this} simple={true} readOnly={true}/>)
-        }
-        else if(e.column.dataField == "VAT_RATE")
-        { 
-            return (<NdNumberBox id={"txtVatRate" +e.rowIndex} parent={this} simple={true} readOnly={true}/>)
-        }
-        else if(e.column.dataField == "DISPATCH_NO")
-        { 
-            return (<NdTextBox id={"txtDispatch" +e.rowIndex} parent={this} simple={true} readOnly={true}/>)
-        }
     }
     async addItem(pData,pIndex)
     {
@@ -955,7 +931,7 @@ export default class salesInvoice extends React.Component
                                             this.docObj.docItems.dt()[e.row.rowIndex].TOTAL = parseFloat((((e.row.data.PRICE * e.row.data.QUANTITY) - e.row.data.DISCOUNT) +this.docObj.docItems.dt()[e.row.rowIndex].VAT).toFixed(2))
                                             if(this.docObj.docItems.dt()[e.row.rowIndex].DISCOUNT > 0)
                                             {
-                                                this.docObj.docItems.dt()[e.row.rowIndex].DISCOUNT_RATE = parseFloat(100 - ((((e.row.data.PRICE * e.row.data.QUANTITY) - e.row.data.DISCOUNT) / (e.row.data.PRICE * e.row.data.QUANTITY)) * 100).toFixed(2))
+                                                this.docObj.docItems.dt()[e.row.rowIndex].DISCOUNT_RATE = parseFloat((100 - ((((e.row.data.PRICE * e.row.data.QUANTITY) - e.row.data.DISCOUNT) / (e.row.data.PRICE * e.row.data.QUANTITY)) * 100)).toFixed(2))
                                             }
                                             this._calculateTotal()
                                             
@@ -968,16 +944,17 @@ export default class salesInvoice extends React.Component
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                                         <Scrolling mode="infinite" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdDocItems.clmCreateDate")} width={200} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdDocItems.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdDocItems.clmItemName")} width={400} />
                                         <Column dataField="PRICE" caption={this.t("grdDocItems.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                         <Column dataField="QUANTITY" caption={this.t("grdDocItems.clmQuantity")} dataType={'number'}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdDocItems.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="AMOUNT" caption={this.t("grdDocItems.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
                                         <Column dataField="DISCOUNT" caption={this.t("grdDocItems.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
-                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdDocItems.clmDiscountRate")} dataType={'number'} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="VAT" caption={this.t("grdDocItems.clmVat")} format={{ style: "currency", currency: "EUR",precision: 2}} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="TOTAL" caption={this.t("grdDocItems.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 2}} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="DISPATCH_NO" caption={this.t("grdDocItems.clmDispatch")}  width={200} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdDocItems.clmDiscountRate")} dataType={'number'} allowEditing={false}/>
+                                        <Column dataField="VAT" caption={this.t("grdDocItems.clmVat")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
+                                        <Column dataField="TOTAL" caption={this.t("grdDocItems.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
+                                        <Column dataField="DISPATCH_NO" caption={this.t("grdDocItems.clmDispatch")}  width={200} allowEditing={false}/>
                                     </NdGrid>
                                     <ContextMenu
                                     dataSource={this.rightItems}

@@ -198,7 +198,7 @@ export default class salesInvoice extends React.Component
                         {
                             let tmpQuery = 
                             {
-                                query :"SELECT GUID,CODE,NAME,VAT FROM ITEMS_VW_01 WHERE CODE = @CODE",
+                                query :"SELECT GUID,CODE,NAME,VAT,COST_PRICE FROM ITEMS_VW_01 WHERE CODE = @CODE",
                                 param : ['CODE:string|50'],
                                 value : [r.component._changedValue]
                             }
@@ -244,26 +244,6 @@ export default class salesInvoice extends React.Component
                 </NdTextBox>
             )
         }
-        else if(e.column.dataField == "ITEM_NAME")
-        { 
-            return (<NdNumberBox id={"txtGrdItemsName" +e.rowIndex} parent={this} simple={true} readOnly={true}/>)
-        }
-        else if(e.column.dataField == "VAT")
-        { 
-            return (<NdNumberBox id={"txtGrdVat" +e.rowIndex} parent={this} simple={true} readOnly={true}/>)
-        }
-        else if(e.column.dataField == "AMOUNT")
-        { 
-            return (<NdNumberBox id={"txtGrdAmount" +e.rowIndex} parent={this} simple={true} readOnly={true}/>)
-        }
-        else if(e.column.dataField == "TOTAL")
-        { 
-            return (<NdNumberBox id={"txtGrdTotal" +e.rowIndex} parent={this} simple={true} readOnly={true}/>)
-        }
-        else if(e.column.dataField == "VAT_RATE")
-        { 
-            return (<NdNumberBox id={"txtVatRate" +e.rowIndex} parent={this} simple={true} readOnly={true}/>)
-        }
     }
     async addItem(pData,pIndex)
     {
@@ -271,21 +251,22 @@ export default class salesInvoice extends React.Component
         this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID
         this.docObj.docItems.dt()[pIndex].VAT_RATE = pData.VAT
         this.docObj.docItems.dt()[pIndex].ITEM_NAME = pData.NAME
+        this.docObj.docItems.dt()[pIndex].COST_PRICE = pData.COST_PRICE
         this.docObj.docItems.dt()[pIndex].DISCOUNT = 0
         this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
         let tmpQuery = 
         {
-            query :"SELECT dbo.FN_PRICE_SALE(@CODE,1,GETDATE()) AS PRICE",
+            query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@CODE,1,GETDATE()) AS PRICE",
             param : ['CODE:string|50'],
             value : [pData.CODE]
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
         if(tmpData.result.recordset.length > 0)
         {
-            this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(2))
-            this.docObj.docItems.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100)).toFixed(2))
-            this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(2))
-            this.docObj.docItems.dt()[pIndex].TOTAL = parseFloat((tmpData.result.recordset[0].PRICE + this.docObj.docItems.dt()[pIndex].VAT).toFixed(2))
+            this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
+            this.docObj.docItems.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100)).toFixed(3))
+            this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
+            this.docObj.docItems.dt()[pIndex].TOTAL = parseFloat((tmpData.result.recordset[0].PRICE + this.docObj.docItems.dt()[pIndex].VAT).toFixed(3))
             this._calculateTotal()
         }
     }
@@ -812,6 +793,19 @@ export default class salesInvoice extends React.Component
                                     onEditorPrepared={(e)=>{
                                         if(e.name== 'PRICE' || e.name == 'QUANTITY' || e.name == 'DISCOUNT' || e.name == 'DISCOUNT_RATE')
                                         {
+                                            if(e.row.data.COST_PRICE > e.row.data.PRICE )
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgDiscount',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgDiscount.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"msgDiscount.msg"}</div>)
+                                                }
+                                            
+                                                dialog(tmpConfObj);
+                                                this.docObj.docItems.dt()[e.row.rowIndex].DISCOUNT = 0 
+                                                return
+                                            }
                                             if(e.row.data.DISCOUNT > (e.row.data.PRICE * e.row.data.QUANTITY))
                                             {
                                                 let tmpConfObj =
@@ -827,13 +821,13 @@ export default class salesInvoice extends React.Component
                                             }
                                             if(this.docObj.docItems.dt()[e.row.rowIndex].VAT > 0)
                                             {
-                                                this.docObj.docItems.dt()[e.row.rowIndex].VAT = parseFloat(((((e.row.data.PRICE * e.row.data.QUANTITY) - e.row.data.DISCOUNT) * (e.row.data.VAT_RATE) / 100)).toFixed(2));
+                                                this.docObj.docItems.dt()[e.row.rowIndex].VAT = parseFloat(((((e.row.data.PRICE * e.row.data.QUANTITY) - e.row.data.DISCOUNT) * (e.row.data.VAT_RATE) / 100)).toFixed(3));
                                             }
-                                            this.docObj.docItems.dt()[e.row.rowIndex].AMOUNT = parseFloat((e.row.data.PRICE * e.row.data.QUANTITY).toFixed(2))
-                                            this.docObj.docItems.dt()[e.row.rowIndex].TOTAL = parseFloat((((e.row.data.PRICE * e.row.data.QUANTITY) - e.row.data.DISCOUNT) +this.docObj.docItems.dt()[e.row.rowIndex].VAT).toFixed(2))
+                                            this.docObj.docItems.dt()[e.row.rowIndex].AMOUNT = parseFloat((e.row.data.PRICE * e.row.data.QUANTITY).toFixed(3))
+                                            this.docObj.docItems.dt()[e.row.rowIndex].TOTAL = parseFloat((((e.row.data.PRICE * e.row.data.QUANTITY) - e.row.data.DISCOUNT) +this.docObj.docItems.dt()[e.row.rowIndex].VAT).toFixed(3))
                                             if(this.docObj.docItems.dt()[e.row.rowIndex].DISCOUNT > 0)
                                             {
-                                                this.docObj.docItems.dt()[e.row.rowIndex].DISCOUNT_RATE = parseFloat(100 - ((((e.row.data.PRICE * e.row.data.QUANTITY) - e.row.data.DISCOUNT) / (e.row.data.PRICE * e.row.data.QUANTITY)) * 100).toFixed(2))
+                                                this.docObj.docItems.dt()[e.row.rowIndex].DISCOUNT_RATE = parseFloat((100 - ((((e.row.data.PRICE * e.row.data.QUANTITY) - e.row.data.DISCOUNT) / (e.row.data.PRICE * e.row.data.QUANTITY)) * 100)).toFixed(3))
                                             }
                                             this._calculateTotal()
                                             
@@ -846,15 +840,16 @@ export default class salesInvoice extends React.Component
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                                         <Scrolling mode="infinite" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdDocItems.clmCreateDate")} width={200} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdDocItems.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdDocItems.clmItemName")} width={400} />
-                                        <Column dataField="PRICE" caption={this.t("grdDocItems.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                        <Column dataField="PRICE" caption={this.t("grdDocItems.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
                                         <Column dataField="QUANTITY" caption={this.t("grdDocItems.clmQuantity")} dataType={'number'}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdDocItems.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="DISCOUNT" caption={this.t("grdDocItems.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                        <Column dataField="AMOUNT" caption={this.t("grdDocItems.clmAmount")} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                        <Column dataField="DISCOUNT" caption={this.t("grdDocItems.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
                                         <Column dataField="DISCOUNT_RATE" caption={this.t("grdDocItems.clmDiscountRate")} dataType={'number'} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="VAT" caption={this.t("grdDocItems.clmVat")} format={{ style: "currency", currency: "EUR",precision: 2}} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="TOTAL" caption={this.t("grdDocItems.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 2}} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="VAT" caption={this.t("grdDocItems.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                        <Column dataField="TOTAL" caption={this.t("grdDocItems.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
                                     </NdGrid>
                                 </Item>
                             </Form>
@@ -888,7 +883,7 @@ export default class salesInvoice extends React.Component
                                                 {
                                                     if(this.docObj.dt()[0].DISCOUNT > 0 )
                                                     {
-                                                        this.txtDiscountPercent.value  = parseFloat((100 - (((this.docObj.dt()[0].AMOUNT - this.docObj.dt()[0].DISCOUNT) / this.docObj.dt()[0].AMOUNT) * 100)).toFixed(2))
+                                                        this.txtDiscountPercent.value  = parseFloat((100 - (((this.docObj.dt()[0].AMOUNT - this.docObj.dt()[0].DISCOUNT) / this.docObj.dt()[0].AMOUNT) * 100)).toFixed(3))
                                                         this.txtDiscountPrice.value = this.docObj.dt()[0].DISCOUNT
                                                     }
                                                     this.popDiscount.show()
@@ -983,7 +978,7 @@ export default class salesInvoice extends React.Component
                                                         this.txtDiscountPrice.value = 0;
                                                         return
                                                     }
-                                                    this.txtDiscountPrice.value =  parseFloat((this.docObj.dt()[0].AMOUNT * this.txtDiscountPercent.value / 100).toFixed(2))
+                                                    this.txtDiscountPrice.value =  parseFloat((this.docObj.dt()[0].AMOUNT * this.txtDiscountPercent.value / 100).toFixed(3))
                                             }).bind(this)}
                                     ></NdNumberBox>
                                 </Item>
@@ -1007,7 +1002,7 @@ export default class salesInvoice extends React.Component
                                                 this.txtDiscountPrice.value = 0;
                                                 return
                                             }
-                                            this.txtDiscountPercent.value = parseFloat((100 - (((this.docObj.dt()[0].AMOUNT - this.txtDiscountPrice.value) / this.docObj.dt()[0].AMOUNT) * 100)).toFixed(2))
+                                            this.txtDiscountPercent.value = parseFloat((100 - (((this.docObj.dt()[0].AMOUNT - this.txtDiscountPrice.value) / this.docObj.dt()[0].AMOUNT) * 100)).toFixed(3))
                                     }).bind(this)}
                                 ></NdNumberBox>
                                 </Item>
@@ -1020,12 +1015,12 @@ export default class salesInvoice extends React.Component
                                                 for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
                                                 {
                                                     this.docObj.docItems.dt()[i].DISCOUNT_RATE = this.txtDiscountPercent.value
-                                                    this.docObj.docItems.dt()[i].DISCOUNT =  parseFloat((((this.docObj.docItems.dt()[i].PRICE * this.docObj.docItems.dt()[i].QUANTITY) * this.txtDiscountPercent.value) / 100).toFixed(2))
+                                                    this.docObj.docItems.dt()[i].DISCOUNT =  parseFloat((((this.docObj.docItems.dt()[i].PRICE * this.docObj.docItems.dt()[i].QUANTITY) * this.txtDiscountPercent.value) / 100).toFixed(3))
                                                     if(this.docObj.docItems.dt()[i].VAT > 0)
                                                     {
-                                                        this.docObj.docItems.dt()[i].VAT = parseFloat(((this.docObj.docItems.dt()[i].PRICE * this.docObj.docItems.dt()[i].QUANTITY) * (this.docObj.docItems.dt()[i].VAT_RATE / 100)).toFixed(2))
+                                                        this.docObj.docItems.dt()[i].VAT = parseFloat(((this.docObj.docItems.dt()[i].PRICE * this.docObj.docItems.dt()[i].QUANTITY) * (this.docObj.docItems.dt()[i].VAT_RATE / 100)).toFixed(3))
                                                     }
-                                                    this.docObj.docItems.dt()[i].TOTAL = parseFloat(((this.docObj.docItems.dt()[i].PRICE * this.docObj.docItems.dt()[i].QUANTITY) + this.docObj.docItems.dt()[i].VAT - this.docObj.docItems.dt()[i].DISCOUNT).toFixed(2))
+                                                    this.docObj.docItems.dt()[i].TOTAL = parseFloat(((this.docObj.docItems.dt()[i].PRICE * this.docObj.docItems.dt()[i].QUANTITY) + this.docObj.docItems.dt()[i].VAT - this.docObj.docItems.dt()[i].DISCOUNT).toFixed(3))
                                                 }
                                                 this._calculateTotal()
                                                 this.popDiscount.hide(); 
@@ -1117,7 +1112,7 @@ export default class salesInvoice extends React.Component
                     width={'90%'}
                     height={'90%'}
                     title={this.t("pg_txtItemsCode.title")} //
-                    data={{source:{select:{query : "SELECT GUID,CODE,NAME,VAT FROM ITEMS_VW_01"},sql:this.core.sql}}}
+                    data={{source:{select:{query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE FROM ITEMS_VW_01"},sql:this.core.sql}}}
                     >
                         <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
                         <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />

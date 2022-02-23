@@ -188,6 +188,7 @@ export class docItemsCls
         this.empty = {
             GUID : '00000000-0000-0000-0000-000000000000',
             CUSER : this.core.auth.data.CODE,
+            CDATE_FORMAT :  moment(new Date()).format("YYYY-MM-DD"),
             DOC_GUID : '00000000-0000-0000-0000-000000000000',
             TYPE : -1,
             DOC_TYPE : -1,
@@ -216,7 +217,8 @@ export class docItemsCls
             INVOICE_GUID : '00000000-0000-0000-0000-000000000000',
             VAT_RATE : 0 ,
             DISCOUNT_RATE : 0,
-            DISPATCH_NO : ''
+            DISPATCH_NO : '',
+            COST_PRICE : 0,
         }
 
         this._initDs();

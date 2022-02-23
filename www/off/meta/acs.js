@@ -3,7 +3,7 @@ export const acs =
     //#region Stok Tanıtım
     //txtRef
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"txtRef",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -19,7 +19,7 @@ export const acs =
     },
     //cmbItemGrp
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"cmbItemGrp",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -35,7 +35,7 @@ export const acs =
     },
     //txtCustomer
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"txtCustomer",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -51,7 +51,7 @@ export const acs =
     },
     //cmbItemGenus
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"cmbUrunCins",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -67,7 +67,7 @@ export const acs =
     },
     //txtBarcode
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"txtBarcode",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -83,7 +83,7 @@ export const acs =
     },
     //cmbTax
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"cmbTax",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -99,7 +99,7 @@ export const acs =
     },
     //cmbMainUnit
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"cmbMainUnit",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -115,7 +115,7 @@ export const acs =
     },
     //txtMainUnit
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"txtMainUnit",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -131,7 +131,7 @@ export const acs =
     },
     //cmbOrigin
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"cmbOrigin",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -147,7 +147,7 @@ export const acs =
     },
     //cmbUnderUnit
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"cmbUnderUnit",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -163,7 +163,7 @@ export const acs =
     },
     //txtUnderUnit
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"txtUnderUnit",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -179,7 +179,7 @@ export const acs =
     },
     //txtItemName
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"txtItemName",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -195,7 +195,7 @@ export const acs =
     },
     //txtShortName
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"txtShortName",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -211,7 +211,7 @@ export const acs =
     },
     //chkActive
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"chkActive",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -227,7 +227,7 @@ export const acs =
     },
     //chkCaseWeighed
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"chkCaseWeighed",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -243,7 +243,7 @@ export const acs =
     },
     //chkLineMerged
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"chkLineMerged",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -259,7 +259,7 @@ export const acs =
     },
     //chkTicketRest
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"chkTicketRest",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -275,7 +275,7 @@ export const acs =
     },
     //txtCostPrice
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"txtCostPrice",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -291,7 +291,7 @@ export const acs =
     },
     //txtMinSalePrice
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"txtMinSalePrice",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -307,7 +307,7 @@ export const acs =
     },
     //txtMaxSalePrice
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"txtMaxSalePrice",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -323,7 +323,7 @@ export const acs =
     },
     //txtLastBuyPrice
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"txtLastBuyPrice",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -338,7 +338,7 @@ export const acs =
         }
     },
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"popgrid",
         VALUE : 
         {
@@ -368,7 +368,7 @@ export const acs =
         APP : "ADMIN"
     },
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"StokGrid",
         VIEW : {PAGE_NAME :'STOK GRID'},
         VALUE : 
@@ -405,7 +405,7 @@ export const acs =
     //#region Cari Tanıtım
     //cmbType
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"cmbType",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -421,7 +421,7 @@ export const acs =
     },
     //cmbGenus
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"cmbGenus",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -437,7 +437,7 @@ export const acs =
     },
     //txtCode
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"txtCode",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -453,7 +453,7 @@ export const acs =
     },
      //txtCustomerName
      {
-        TYPE : 1,
+        TYPE : 2,
         ID :"txtCustomerName",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -469,7 +469,7 @@ export const acs =
     },
     //txtCustomerLastname
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"txtCustomerLastname",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -485,7 +485,7 @@ export const acs =
     },
     //txtPhone1
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"txtPhone1",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -501,7 +501,7 @@ export const acs =
     },
     //txtPhone2
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"txtPhone2",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -517,7 +517,7 @@ export const acs =
     },
     //txtGsmPhone
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"txtGsmPhone",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -533,7 +533,7 @@ export const acs =
     },
     //txtOtherPhone
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"txtOtherPhone",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -549,7 +549,7 @@ export const acs =
     },
     //txtEmail
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"txtEmail",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -565,7 +565,7 @@ export const acs =
     },
     //txtWeb
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"txtWeb",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -584,7 +584,7 @@ export const acs =
     //#region Satış Faturası
     //txtRef
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"txtRef",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -600,7 +600,7 @@ export const acs =
     },
      //txtRefno
      {
-        TYPE : 1,
+        TYPE : 2,
         ID :"txtRefno",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -616,7 +616,7 @@ export const acs =
     },
     //cmbDepot
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"cmbDepot",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -632,7 +632,7 @@ export const acs =
     },
     //txtCustomerCode
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"txtCustomerCode",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -648,7 +648,7 @@ export const acs =
     },
     //txtCustomerName
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"txtCustomerName",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -667,7 +667,7 @@ export const acs =
     //#region Alış Faturası
     //txtRef
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"txtRef",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -683,7 +683,7 @@ export const acs =
     },
      //txtRefno
      {
-        TYPE : 1,
+        TYPE : 2,
         ID :"txtRefno",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -699,7 +699,7 @@ export const acs =
     },
     //cmbDepot
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"cmbDepot",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -715,7 +715,7 @@ export const acs =
     },
     //txtCustomerCode
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"txtCustomerCode",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",
@@ -731,7 +731,7 @@ export const acs =
     },
     //txtCustomerName
     {
-        TYPE : 1,
+        TYPE : 2,
         ID :"txtCustomerName",
         VALUE : {visible:true,editable:true},
         SPECIAL : "",

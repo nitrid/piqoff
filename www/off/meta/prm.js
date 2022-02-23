@@ -891,6 +891,7 @@ export const prm =
             CAPTION : "Cari Adı"
         }
     },
+    // refForCustomerCode
     {
         TYPE : 1,
         ID :"refForCustomerCode",

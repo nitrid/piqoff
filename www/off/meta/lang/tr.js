@@ -435,7 +435,8 @@ export const langTr =
             clmVat : "KDV",
             clmAmount : "Tutar",
             clmTotal : "Genel Toplam",
-            clmDispatch : "İrsaliye No"
+            clmDispatch : "İrsaliye No",
+            clmCreateDate: "Kayıt Tarihi"
 
         },
         popDiscount : 
@@ -616,8 +617,8 @@ export const langTr =
             clmVat : "KDV",
             clmAmount : "Tutar",
             clmTotal : "Genel Toplam",
-            clmDispatch : "İrsaliye No"
-
+            clmDispatch : "İrsaliye No",
+            clmCreateDate: "Kayıt Tarihi"
         },
         popDiscount : 
         {
@@ -851,7 +852,8 @@ export const langTr =
             clmDiscountRate : "İndirim %",
             clmVat : "KDV",
             clmAmount : "Tutar",
-            clmTotal : "Genel Toplam"
+            clmTotal : "Genel Toplam",
+            clmCreateDate: "Kayıt Tarihi"
 
         },
         popDiscount : 
@@ -1031,8 +1033,8 @@ export const langTr =
             clmDiscountRate : "İndirim %",
             clmVat : "KDV",
             clmAmount : "Tutar",
-            clmTotal : "Genel Toplam"
-
+            clmTotal : "Genel Toplam",
+            clmCreateDate: "Kayıt Tarihi"
         },
         popDiscount : 
         {
