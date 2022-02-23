@@ -544,6 +544,12 @@ export const langTr =
             btn01: "Tamam",
             msg: "Stok Bulunmadı !!"
         },
+        msgNotCustomer:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Cari Bulunmadı !!"
+        },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
         validDepot : "Depo Seçmelisiniz",
@@ -724,6 +730,12 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Seçilen Ürün Cariye Tanımlı Değil !"
+        },
+        msgNotCustomer:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Cari Bulunmadı !!"
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
@@ -924,6 +936,12 @@ export const langTr =
             btn01: "Tamam",
             msg: "Şifreniz Hatalı !"
         },
+        msgLockedType2:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Faturaya Çevirilmiş Evrak Kilidi Açılamaz"
+        },
         msgGetLocked:
         {
             title: "Dikkat",
@@ -953,6 +971,12 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Seçilen Ürün Cariye Tanımlı Değil !"
+        },
+        msgNotCustomer:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Cari Bulunmadı !!"
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
@@ -1092,6 +1116,12 @@ export const langTr =
             btn01: "Tamam",
             msg: "Şifreniz Hatalı !"
         },
+        msgLockedType2:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Faturaya Çevirilmiş Evrak Kilidi Açılamaz"
+        },
         msgGetLocked:
         {
             title: "Dikkat",
@@ -1115,6 +1145,12 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Stok Bulunmadı !!"
+        },
+        msgNotCustomer:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Cari Bulunmadı !!"
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",

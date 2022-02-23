@@ -93,8 +93,6 @@ export default class salesInvoice extends React.Component
             this.btnPrint.setState({disabled:false});
         })
 
-        this.dtDocDate.value = moment(new Date())
-        this.dtShipDate.value = moment(new Date())
 
         let tmpDoc = {...this.docObj.empty}
         tmpDoc.TYPE = 1
@@ -116,7 +114,7 @@ export default class salesInvoice extends React.Component
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
         
-        if(this.docObj.dt()[0].LOCKED == 1)
+        if(this.docObj.dt()[0].LOCKED != 0)
         {
             this.docLocked = true
             let tmpConfObj =
@@ -421,9 +419,20 @@ export default class salesInvoice extends React.Component
                                             }
                                             
                                         }
-                                        else
+                                        else if(this.docObj.dt()[0].LOCKED == 1)
                                         {
                                             this.popPassword.show()
+                                        }
+                                        else if(this.docObj.dt()[0].LOCKED == 2)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgLockedType2',showTitle:true,title:this.t("msgLockedType2.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgLockedType2.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgLockedType2.msg")}</div>)
+                                            }
+
+                                            await dialog(tmpConfObj);
                                         }
                                         
                                     }}/>
@@ -589,6 +598,46 @@ export default class salesInvoice extends React.Component
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
                                     <NdTextBox id="txtCustomerCode" parent={this} simple={true} 
                                     dt={{data:this.docObj.dt('DOC'),field:"INPUT_CODE"}} 
+                                    onChange={(async(r)=>
+                                    {
+                                        if(r.event.isTrusted == true)
+                                        {
+                                            let tmpQuery = 
+                                            {
+                                                query :"SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE CODE = @CODE",
+                                                param : ['CODE:string|50'],
+                                                value : [r.component._changedValue]
+                                            }
+                                            let tmpData = await this.core.sql.execute(tmpQuery) 
+                                            if(tmpData.result.recordset.length > 0)
+                                            {
+                                                this.docObj.dt()[0].INPUT = tmpData.result.recordset[0].GUID
+                                                this.docObj.dt()[0].INPUT_CODE = tmpData.result.recordset[0].CODE
+                                                this.docObj.dt()[0].INPUT_NAME = tmpData.result.recordset[0].TITLE
+                                                let tmpDatas = this.prmObj.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                                if(typeof tmpDatas != 'undefined' && tmpDatas.value ==  true)
+                                                {
+                                                    this.txtRef.setState({value:tmpData.result.recordset[0].CODE});
+                                                    this.txtRef.props.onValueChanged()
+                                                }
+                                            }
+                                            else
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgNotCustomer',showTitle:true,title:this.t("msgNotCustomer.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgNotCustomer.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotCustomer.msg")}</div>)
+                                                }
+                                    
+                                                await dialog(tmpConfObj);
+
+                                                this.docObj.dt()[0].INPUT = ''
+                                                this.docObj.dt()[0].INPUT_CODE = ''
+                                                this.docObj.dt()[0].INPUT_NAME = ''
+                                            }
+                                        }
+                                    }).bind(this)}
                                     button=
                                     {
                                         [
