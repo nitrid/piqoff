@@ -219,12 +219,17 @@ export const menu = (e) =>
                         },
                         {
                             id: 'ftr_02_003',
-                            text: e.t('menu.ftr_02_003'),//'Fiyat Farkı Faturası',
-                            path: '../pages/customers/cards/customerCard.js'
+                            text: e.t('menu.ftr_02_003'),//'İade Faturası',
+                            path: '../pages/invoices/documents/rebateInvoice.js'
                         },
                         {
                             id: 'ftr_02_004',
-                            text: e.t('menu.ftr_02_004'),//'Şubeler Arası Satış',
+                            text: e.t('menu.ftr_02_004'),//'Fiyat Farkı Faturası',
+                            path: '../pages/invoices/documents/priceDifferenceInvoıces.js'
+                        },
+                        {
+                            id: 'ftr_02_005',
+                            text: e.t('menu.ftr_02_005'),//'Şubeler Arası Satış',
                             path: '../pages/customers/cards/customerCard.js'
                         }
                     ]

@@ -30,6 +30,7 @@ export default class salesInvoice extends React.Component
         super()
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
+        this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.docObj = new docCls();
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
@@ -222,7 +223,7 @@ export default class salesInvoice extends React.Component
                             }
                             let tmpData = await this.core.sql.execute(tmpQuery) 
                             if(tmpData.result.recordset.length > 0)
-                            {
+                            {   
                                 this.addItem(tmpData.result.recordset[0],e.rowIndex)
                             }
                             else
@@ -844,7 +845,6 @@ export default class salesInvoice extends React.Component
                                             {
                                                 if(data.length > 0)
                                                 {
-                                                    console.log(this.grdDocItems)
                                                     let tmpQuery = 
                                                     {
                                                         query :"SELECT MULTICODE,CUSTOMER_PRICE AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
@@ -863,6 +863,29 @@ export default class salesInvoice extends React.Component
                                             
                                                         await dialog(tmpConfObj);
                                                         return
+                                                    }
+                                                    for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+                                                    {
+                                                        if(this.docObj.docItems.dt()[i].ITEM_CODE == data[0].CODE)
+                                                        {
+                                                            let tmpConfObj = 
+                                                            {
+                                                                id:'msgCombineItem',showTitle:true,title:this.t("msgCombineItem.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                                button:[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}],
+                                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>)
+                                                            }
+                                                            let pResult = await dialog(tmpConfObj);
+                                                            if(pResult == 'btn01')
+                                                            {
+                                                                this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + 1
+                                                                this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100))).toFixed(3))
+                                                                this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
+                                                                this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
+                                                                this._calculateTotal()
+                                                                return
+                                                            }
+                                                            
+                                                        }
                                                     }
                                                     let tmpDocItems = {...this.docObj.docItems.empty}
                                                     tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
@@ -906,36 +929,38 @@ export default class salesInvoice extends React.Component
                                     height={'100%'} 
                                     width={'100%'}
                                     dbApply={false}
-                                    onEditorPrepared={(e)=>{
-                                        if(e.name== 'PRICE' || e.name == 'QUANTITY' || e.name == 'DISCOUNT')
+                                    onRowUpdated={async(e)=>{
+                                        console.log(e)
+                                        let rowIndex = e.component.getRowIndexByKey(e.key)
+
+                                        if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                         {
-                                            
-                                            if(e.row.data.DISCOUNT > (e.row.data.PRICE * e.row.data.QUANTITY))
-                                            {
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgDiscount',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgDiscount.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"msgDiscount.msg"}</div>)
-                                                }
-                                            
-                                                dialog(tmpConfObj);
-                                                this.docObj.docItems.dt()[e.row.rowIndex].DISCOUNT = 0 
-                                                return
-                                            }
-                                            if(this.docObj.docItems.dt()[e.row.rowIndex].VAT > 0)
-                                            {
-                                                this.docObj.docItems.dt()[e.row.rowIndex].VAT = parseFloat(((((e.row.data.PRICE * e.row.data.QUANTITY) - e.row.data.DISCOUNT) * (e.row.data.VAT_RATE) / 100)).toFixed(2));
-                                            }
-                                            this.docObj.docItems.dt()[e.row.rowIndex].AMOUNT = parseFloat((e.row.data.PRICE * e.row.data.QUANTITY).toFixed(2))
-                                            this.docObj.docItems.dt()[e.row.rowIndex].TOTAL = parseFloat((((e.row.data.PRICE * e.row.data.QUANTITY) - e.row.data.DISCOUNT) +this.docObj.docItems.dt()[e.row.rowIndex].VAT).toFixed(2))
-                                            if(this.docObj.docItems.dt()[e.row.rowIndex].DISCOUNT > 0)
-                                            {
-                                                this.docObj.docItems.dt()[e.row.rowIndex].DISCOUNT_RATE = parseFloat((100 - ((((e.row.data.PRICE * e.row.data.QUANTITY) - e.row.data.DISCOUNT) / (e.row.data.PRICE * e.row.data.QUANTITY)) * 100)).toFixed(2))
-                                            }
-                                            this._calculateTotal()
-                                            
+                                            e.key.DISCOUNT = parseFloat((((this.docObj.docItems.dt()[rowIndex].AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(3))
                                         }
+                                        if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDiscount',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgDiscount.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"msgDiscount.msg"}</div>)
+                                            }
+                                        
+                                            dialog(tmpConfObj);
+                                            this.docObj.docItems.dt()[rowIndex].DISCOUNT = 0 
+                                            return
+                                        }
+                                        if(this.docObj.docItems.dt()[rowIndex].VAT > 0)
+                                        {
+                                            this.docObj.docItems.dt()[rowIndex].VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(2));
+                                        }
+                                        this.docObj.docItems.dt()[rowIndex].AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(2))
+                                        this.docObj.docItems.dt()[rowIndex].TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +this.docObj.docItems.dt()[rowIndex].VAT).toFixed(2))
+                                        if(this.docObj.docItems.dt()[rowIndex].DISCOUNT > 0)
+                                        {
+                                            this.docObj.docItems.dt()[rowIndex].DISCOUNT_RATE = parseFloat((100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100)).toFixed(2))
+                                        }
+                                        this._calculateTotal()
                                     }}
                                     onRowRemoved={(e)=>{
                                         this._calculateTotal()
@@ -951,7 +976,7 @@ export default class salesInvoice extends React.Component
                                         <Column dataField="QUANTITY" caption={this.t("grdDocItems.clmQuantity")} dataType={'number'}/>
                                         <Column dataField="AMOUNT" caption={this.t("grdDocItems.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
                                         <Column dataField="DISCOUNT" caption={this.t("grdDocItems.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
-                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdDocItems.clmDiscountRate")} dataType={'number'} allowEditing={false}/>
+                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdDocItems.clmDiscountRate")} dataType={'number'} />
                                         <Column dataField="VAT" caption={this.t("grdDocItems.clmVat")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
                                         <Column dataField="TOTAL" caption={this.t("grdDocItems.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
                                         <Column dataField="DISPATCH_NO" caption={this.t("grdDocItems.clmDispatch")}  width={200} allowEditing={false}/>

@@ -34,6 +34,7 @@ export default class NdGrid extends Base
         this._onCellPrepared = this._onCellPrepared.bind(this);   
         this._onRowDblClick = this._onRowDblClick.bind(this);      
         this._onEditorPrepared = this._onEditorPrepared.bind(this);
+        this._onRowPrepared = this._onRowPrepared.bind(this);
     }
     //#region Private
     _onInitialized(e) 
@@ -152,6 +153,13 @@ export default class NdGrid extends Base
             this.props.onEditorPrepared(e);
         }             
     }
+    _onRowPrepared(e)
+    {
+        if(typeof this.props.onRowPrepared != 'undefined')
+        {
+            this.props.onRowPrepared(e);
+        }  
+    }
     //#endregion
     componentDidUpdate()
     {
@@ -250,6 +258,7 @@ export default class NdGrid extends Base
                 headerFilter={this.state.headerFilter}
                 selection={this.state.selection}
                 onEditorPrepared={this._onEditorPrepared}
+                onRowPrepared = {this._onRowPrepared}
                 >
                     {this.props.children}
                 </DataGrid>
@@ -275,6 +284,7 @@ export default class NdGrid extends Base
                     headerFilter={this.state.headerFilter}
                     selection={this.state.selection}
                     onEditorPrepared={this._onEditorPrepared}
+                    onRowPrepared = {this._onRowPrepared}
                     >
                         {this.props.children}
                 </DataGrid>

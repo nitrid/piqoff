@@ -30,11 +30,14 @@ export default class salesInvoice extends React.Component
         super()
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
+        this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.docObj = new docCls();
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
         this._calculateTotal = this._calculateTotal.bind(this)
         this._getDispatch = this._getDispatch.bind(this)
+        this._calculateTotalMargin = this._calculateTotalMargin.bind(this)
+        this._calculateMargin = this._calculateMargin.bind(this)
 
         this.frmDocItems = undefined;
         this.docLocked = false;        
@@ -124,6 +127,8 @@ export default class salesInvoice extends React.Component
     {
         this.docObj.clearAll()
         await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:20});
+        this._calculateMargin()
+        this._calculateTotalMargin()
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
@@ -199,6 +204,29 @@ export default class salesInvoice extends React.Component
         this.docObj.dt()[0].TOTAL = this.docObj.docItems.dt().sum("TOTAL",2)
 
         this.docObj.docCustomer.dt()[0].AMOUNT = this.docObj.dt()[0].TOTAL
+    }
+    async _calculateTotalMargin()
+    {
+        let tmpTotalCost = 0
+
+        for (let  i= 0; i < this.docObj.docItems.dt().length; i++) 
+        {
+            tmpTotalCost += this.docObj.docItems.dt()[i].COST_PRICE * this.docObj.docItems.dt()[i].QUANTITY
+        }
+        let tmpMargin = ((this.docObj.dt()[0].TOTAL - this.docObj.dt()[0].VAT) - tmpTotalCost)
+        let tmpMarginRate = (tmpMargin / (this.docObj.dt()[0].TOTAL - this.docObj.dt()[0].VAT)) * 100
+        this.docObj.dt()[0].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+        console.log(this.docObj.dt()[0].MARGIN)
+    }
+    async _calculateMargin()
+    {
+        for(let  i= 0; i < this.docObj.docItems.dt().length; i++)
+        {
+            let tmpMargin = (this.docObj.docItems.dt()[i].TOTAL - this.docObj.docItems.dt()[i].VAT) - (this.docObj.docItems.dt()[i].COST_PRICE * this.docObj.docItems.dt()[i].QUANTITY)
+            let tmpMarginRate = (tmpMargin /(this.docObj.docItems.dt()[i].TOTAL - this.docObj.docItems.dt()[i].VAT)) * 100
+            this.docObj.docItems.dt()[i].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+        }
+       
     }
     _cellRoleRender(e)
     {
@@ -594,7 +622,7 @@ export default class salesInvoice extends React.Component
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_Docs.title")} 
-                                    data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 20"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 20 AND REBATE = 0"},sql:this.core.sql}}}
                                     button=
                                     {
                                         [
@@ -821,6 +849,29 @@ export default class salesInvoice extends React.Component
                                             {
                                                 if(data.length > 0)
                                                 {
+                                                    for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+                                                    {
+                                                        if(this.docObj.docItems.dt()[i].ITEM_CODE == data[0].CODE)
+                                                        {
+                                                            let tmpConfObj = 
+                                                            {
+                                                                id:'msgCombineItem',showTitle:true,title:this.t("msgCombineItem.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                                button:[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}],
+                                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>)
+                                                            }
+                                                            let pResult = await dialog(tmpConfObj);
+                                                            if(pResult == 'btn01')
+                                                            {
+                                                                this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + 1
+                                                                this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100))).toFixed(3))
+                                                                this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
+                                                                this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
+                                                                this._calculateTotal()
+                                                                return
+                                                            }
+                                                            
+                                                        }
+                                                    }
                                                     let tmpDocItems = {...this.docObj.docItems.empty}
                                                     tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
                                                     tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
@@ -863,35 +914,77 @@ export default class salesInvoice extends React.Component
                                     height={'100%'} 
                                     width={'100%'}
                                     dbApply={false}
-                                    onEditorPrepared={(e)=>{
-                                        if(e.name== 'PRICE' || e.name == 'QUANTITY' || e.name == 'DISCOUNT' || e.name == 'DISCOUNT_RATE')
+                                    onRowUpdated={async(e)=>{
+                                        let rowIndex = e.component.getRowIndexByKey(e.key)
+
+                                        if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                         {
-                                            if(e.row.data.DISCOUNT > (e.row.data.PRICE * e.row.data.QUANTITY))
+                                            e.key.DISCOUNT = parseFloat((((this.docObj.docItems.dt()[rowIndex].AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(3))
+                                        }
+                                        if(e.key.COST_PRICE > e.key.PRICE )
+                                        {
+                                            let tmpData = this.acsobj.filter({ID:'underMinCostPrice',USERS:this.user.CODE}).getValue()
+                                            if(typeof tmpData != 'undefined' && tmpData ==  true)
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgDiscount',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgDiscount.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"msgDiscount.msg"}</div>)
+                                                    id:'msgUnderPrice1',showTitle:true,title:this.t("msgUnderPrice1.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgUnderPrice1.btn01"),location:'before'},{id:"btn02",caption:this.t("msgUnderPrice1.btn02"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgUnderPrice1.msg")}</div>)
                                                 }
-                                            
+                                                
+                                                let pResult = await dialog(tmpConfObj);
+                                                if(pResult == 'btn01')
+                                                {
+                                                    
+                                                }
+                                                else if(pResult == 'btn02')
+                                                {
+                                                    return
+                                                }
+                                            }
+                                            else
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgUnderPrice2',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgUnderPrice2.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"msgUnderPrice2.msg"}</div>)
+                                                }
                                                 dialog(tmpConfObj);
-                                                this.docObj.docItems.dt()[e.row.rowIndex].DISCOUNT = 0 
                                                 return
                                             }
-                                            if(this.docObj.docItems.dt()[e.row.rowIndex].VAT > 0)
-                                            {
-                                                this.docObj.docItems.dt()[e.row.rowIndex].VAT = parseFloat(((((e.row.data.PRICE * e.row.data.QUANTITY) - e.row.data.DISCOUNT) * (e.row.data.VAT_RATE) / 100)).toFixed(3));
-                                            }
-                                            this.docObj.docItems.dt()[e.row.rowIndex].AMOUNT = parseFloat((e.row.data.PRICE * e.row.data.QUANTITY).toFixed(3))
-                                            this.docObj.docItems.dt()[e.row.rowIndex].TOTAL = parseFloat((((e.row.data.PRICE * e.row.data.QUANTITY) - e.row.data.DISCOUNT) +this.docObj.docItems.dt()[e.row.rowIndex].VAT).toFixed(3))
-                                            if(this.docObj.docItems.dt()[e.row.rowIndex].DISCOUNT > 0)
-                                            {
-                                                this.docObj.docItems.dt()[e.row.rowIndex].DISCOUNT_RATE = parseFloat(100 - ((((e.row.data.PRICE * e.row.data.QUANTITY) - e.row.data.DISCOUNT) / (e.row.data.PRICE * e.row.data.QUANTITY)) * 100).toFixed(3))
-                                            }
-                                            this._calculateTotal()
-                                            
                                         }
+                                        if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDiscount',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgDiscount.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"msgDiscount.msg"}</div>)
+                                            }
+                                        
+                                            dialog(tmpConfObj);
+                                            this.docObj.docItems.dt()[rowIndex].DISCOUNT = 0 
+                                            return
+                                        }
+                                        if(this.docObj.docItems.dt()[rowIndex].VAT > 0)
+                                        {
+                                            this.docObj.docItems.dt()[rowIndex].VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(3));
+                                        }
+                                        this.docObj.docItems.dt()[rowIndex].AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3))
+                                        this.docObj.docItems.dt()[rowIndex].TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +this.docObj.docItems.dt()[rowIndex].VAT).toFixed(3))
+                                       
+                                        let tmpMargin = (this.docObj.docItems.dt()[rowIndex].TOTAL - this.docObj.docItems.dt()[rowIndex].VAT) - (this.docObj.docItems.dt()[rowIndex].COST_PRICE * this.docObj.docItems.dt()[rowIndex].QUANTITY)
+                                        let tmpMarginRate = (tmpMargin /(this.docObj.docItems.dt()[rowIndex].TOTAL - this.docObj.docItems.dt()[rowIndex].VAT)) * 100
+                                        this.docObj.docItems.dt()[rowIndex].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+                                        if(this.docObj.docItems.dt()[rowIndex].DISCOUNT > 0)
+                                        {
+                                            this.docObj.docItems.dt()[rowIndex].DISCOUNT_RATE = parseFloat(100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100).toFixed(3))
+                                        }
+                                        this._calculateTotal()
+                                            
+                                        
                                     }}
                                     onRowRemoved={(e)=>{
                                         this._calculateTotal()
@@ -900,14 +993,15 @@ export default class salesInvoice extends React.Component
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                                         <Scrolling mode="infinite" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdDocItems.clmCreateDate")} width={200} allowEditing={false}/>
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdDocItems.clmCreateDate")} width={150} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdDocItems.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdDocItems.clmItemName")} width={400} />
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdDocItems.clmItemName")} width={350} />
                                         <Column dataField="PRICE" caption={this.t("grdDocItems.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
                                         <Column dataField="QUANTITY" caption={this.t("grdDocItems.clmQuantity")} dataType={'number'}/>
                                         <Column dataField="AMOUNT" caption={this.t("grdDocItems.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
                                         <Column dataField="DISCOUNT" caption={this.t("grdDocItems.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdDocItems.clmDiscountRate")} dataType={'number'} allowEditing={false}/>
+                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdDocItems.clmDiscountRate")} dataType={'number'}/>
+                                        <Column dataField="MARGIN" caption={this.t("grdDocItems.clmMargin")} width={150} allowEditing={false}/>
                                         <Column dataField="VAT" caption={this.t("grdDocItems.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
                                         <Column dataField="TOTAL" caption={this.t("grdDocItems.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
                                         <Column dataField="DISPATCH_NO" caption={this.t("grdDocItems.clmDispatch")} width={200} allowEditing={false}/>
@@ -964,6 +1058,15 @@ export default class salesInvoice extends React.Component
                                     }
                                     ></NdTextBox>
                                 </Item>
+                                {/* Ara Toplam */}
+                                <Item colSpan={3}></Item>
+                                <Item  >
+                                <Label text={this.t("txtMargin")} alignment="right" />
+                                    <NdTextBox id="txtMargin" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"MARGIN"}}
+                                    maxLength={32}
+                                   
+                                    ></NdTextBox>
+                                </Item>
                                 {/* KDV */}
                                 <Item colSpan={3}></Item>
                                 <Item>
@@ -1003,7 +1106,7 @@ export default class salesInvoice extends React.Component
                                     }
                                     ></NdTextBox>
                                 </Item>
-                                {/* KDV */}
+                                {/* Toplam */}
                                 <Item colSpan={3}></Item>
                                 <Item>
                                 <Label text={this.t("txtTotal")} alignment="right" />
@@ -1093,7 +1196,9 @@ export default class salesInvoice extends React.Component
                                                     }
                                                     this.docObj.docItems.dt()[i].TOTAL = parseFloat(((this.docObj.docItems.dt()[i].PRICE * this.docObj.docItems.dt()[i].QUANTITY) + this.docObj.docItems.dt()[i].VAT - this.docObj.docItems.dt()[i].DISCOUNT).toFixed(3))
                                                 }
+                                                this._calculateMargin()
                                                 this._calculateTotal()
+                                                this._calculateTotalMargin()
                                                 this.popDiscount.hide(); 
                                             }}/>
                                         </div>

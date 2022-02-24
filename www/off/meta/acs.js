@@ -746,4 +746,189 @@ export const acs =
         }
     },
     //#endregion
+
+    //#region Satış İrsaliyesi
+    //txtRef
+    {
+        TYPE : 2,
+        ID :"txtRef",
+        VALUE : {visible:true,editable:true},
+        SPECIAL : "",
+        PAGE : "irs_02_002",
+        ELEMENT : "txtRef",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Satış İrsaliyesi",
+            CAPTION : "Seri"
+        }
+    },
+     //txtRefno
+     {
+        TYPE : 2,
+        ID :"txtRefno",
+        VALUE : {visible:true,editable:true},
+        SPECIAL : "",
+        PAGE : "irs_02_002",
+        ELEMENT : "txtRefno",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Satış İrsaliyesi",
+            CAPTION : "Sıra"
+        }
+    },
+    //cmbDepot
+    {
+        TYPE : 2,
+        ID :"cmbDepot",
+        VALUE : {visible:true,editable:true},
+        SPECIAL : "",
+        PAGE : "irs_02_002",
+        ELEMENT : "cmbDepot",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Satış İrsaliyesi",
+            CAPTION : "Depo"
+        }
+    },
+    //txtCustomerCode
+    {
+        TYPE : 2,
+        ID :"txtCustomerCode",
+        VALUE : {visible:true,editable:true},
+        SPECIAL : "",
+        PAGE : "irs_02_002",
+        ELEMENT : "txtCustomerCode",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Satış İrsaliyesi",
+            CAPTION : "Cari Kodu"
+        }
+    },
+    //txtCustomerName
+    {
+        TYPE : 2,
+        ID :"txtCustomerName",
+        VALUE : {visible:true,editable:true},
+        SPECIAL : "",
+        PAGE : "irs_02_002",
+        ELEMENT : "txtCustomerName",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Satış İrsaliyesi",
+            CAPTION : "Cari Adı"
+        }
+    },
+    //#endregion
+        
+    //#region Alış Faturası
+    //txtRef
+    {
+        TYPE : 2,
+        ID :"txtRef",
+        VALUE : {visible:true,editable:true},
+        SPECIAL : "",
+        PAGE : "irs_02_001",
+        ELEMENT : "txtRef",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Alış İrsaliyesi",
+            CAPTION : "Seri"
+        }
+    },
+     //txtRefno
+     {
+        TYPE : 2,
+        ID :"txtRefno",
+        VALUE : {visible:true,editable:true},
+        SPECIAL : "",
+        PAGE : "irs_02_001",
+        ELEMENT : "txtRefno",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Alış İrsaliyesi",
+            CAPTION : "Sıra"
+        }
+    },
+    //cmbDepot
+    {
+        TYPE : 2,
+        ID :"cmbDepot",
+        VALUE : {visible:true,editable:true},
+        SPECIAL : "",
+        PAGE : "irs_02_001",
+        ELEMENT : "cmbDepot",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Alış İrsaliyesi",
+            CAPTION : "Depo"
+        }
+    },
+    //txtCustomerCode
+    {
+        TYPE : 2,
+        ID :"txtCustomerCode",
+        VALUE : {visible:true,editable:true},
+        SPECIAL : "",
+        PAGE : "irs_02_001",
+        ELEMENT : "txtCustomerCode",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Alış İrsaliyesi",
+            CAPTION : "Cari Kodu"
+        }
+    },
+    //txtCustomerName
+    {
+        TYPE : 2,
+        ID :"txtCustomerName",
+        VALUE : {visible:true,editable:true},
+        SPECIAL : "",
+        PAGE : "irs_02_001",
+        ELEMENT : "txtCustomerName",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Alış İrsaliyesi",
+            CAPTION : "Cari Adı"
+        }
+    },
+    
+    //#region Kullanıcı Yetkileri
+        // underMinCostPrice
+        {
+            TYPE : 1,
+            ID :"underMinCostPrice",
+            VALUE : true,
+            SPECIAL : "",
+            PAGE : "irs_02_002",
+            ELEMENT : "",
+            APP : "OFF",
+            VIEW : 
+            {
+                TYPE : "boolean",
+                PAGE_NAME : "Satış İrsaliyesi",
+                CAPTION : "Maliyetten Düşük Fiyata Satış Yapabilir"
+            }
+        },
+    //#endregion
+
 ]

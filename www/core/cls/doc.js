@@ -27,7 +27,8 @@ export class docCls
             VAT : 0,
             TOTAL : 0,
             DESCRIPTION : '',
-            LOCKED : 0
+            LOCKED : 0,
+            MARGIN : 0,
         }
 
         this.docItems = new docItemsCls();
@@ -156,7 +157,6 @@ export class docCls
                 tmpPrm.TYPE = typeof arguments[0].TYPE == 'undefined' ? -1 : arguments[0].TYPE;
                 tmpPrm.REF_NO = typeof arguments[0].REF_NO == 'undefined' ? -1 : arguments[0].REF_NO;
             }
-            console.log(tmpPrm)
             this.ds.get('DOC').selectCmd.value = Object.values(tmpPrm);
 
             await this.ds.get('DOC').refresh()
@@ -219,6 +219,7 @@ export class docItemsCls
             DISCOUNT_RATE : 0,
             DISPATCH_NO : '',
             COST_PRICE : 0,
+            MARGIN : 0,
         }
 
         this._initDs();
@@ -317,7 +318,6 @@ export class docItemsCls
     }
     addEmpty()
     {
-        console.log(arguments[1])
         if(typeof this.dt('DOC_ITEMS') == 'undefined')
         {
             return;
