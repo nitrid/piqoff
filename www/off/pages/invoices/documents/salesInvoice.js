@@ -916,7 +916,7 @@ export default class salesInvoice extends React.Component
                                     dbApply={false}
                                     onRowUpdated={async(e)=>{
                                         let rowIndex = e.component.getRowIndexByKey(e.key)
-
+                                        console.log(e)
                                         if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                         {
                                             e.key.DISCOUNT = parseFloat((((this.docObj.docItems.dt()[rowIndex].AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(3))
@@ -940,6 +940,7 @@ export default class salesInvoice extends React.Component
                                                 }
                                                 else if(pResult == 'btn02')
                                                 {
+                                                    e.component.cancelEditData()
                                                     return
                                                 }
                                             }

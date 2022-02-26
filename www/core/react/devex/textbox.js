@@ -136,7 +136,7 @@ export default class NdTextBox extends Base
                 onEnterKey={this._onEnterKey} onFocusIn={this._onFocusIn} onFocusOut={this._onFocusOut}
                 onChange={this._onChange}
                 onInitialized={this._onInitialized}
-                value={this.state.value.toString()} 
+                value={typeof this.state.value == 'undefined' ? '' : this.state.value.toString()} 
                 readOnly={this.state.readOnly}
                 disabled={typeof this.props.editable == 'undefined' ? this.state.editable : this.props.editable}>                    
                     {this.props.children}

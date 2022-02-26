@@ -858,7 +858,8 @@ export default class salesInvoice extends React.Component
                                     height={'100%'} 
                                     width={'100%'}
                                     dbApply={false}
-                                    onRowUpdated={async(e)=>{
+                                    onRowUpdated={async(e)=>
+                                    {
                                         let rowIndex = e.component.getRowIndexByKey(e.key)
 
                                         if(typeof e.data.DISCOUNT_RATE != 'undefined')
