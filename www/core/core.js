@@ -101,11 +101,11 @@ export class sql
             let TmpQuery = ""
             if(typeof arguments[0] == 'undefined')
             {
-                TmpQuery = {...this.query}
+                TmpQuery = this.query
             }
             else
             {
-                TmpQuery = {...arguments[0]};
+                TmpQuery = arguments[0];
             }
             //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 28.02.2022
             if(core.instance.offline)
@@ -131,7 +131,6 @@ export class sql
                 core.instance.socket.emit('sql',TmpQuery,(data) =>
                 {
                     core.instance.emit('onExecuted');
-
                     if(typeof data.auth_err == 'undefined')
                     {
                         resolve(data); 
