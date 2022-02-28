@@ -1,7 +1,7 @@
 /*!
- * @license :jsstore - V4.3.7 - 02/08/2021
+ * @license :jsstore - V4.3.8 - 10/02/2022
  * https://github.com/ujjwalguptaofficial/JsStore
- * Copyright (c) 2021 @Ujjwal Gupta; Licensed MIT
+ * Copyright (c) 2022 @Ujjwal Gupta; Licensed MIT
  */
 var JsStoreWorker =
 /******/
@@ -1062,9 +1062,7 @@ function (modules) {
         return true;
       } else {
         switch (typeof value) {
-          case 'string':
-            return value.length === 0;
-
+          // case 'string': return value.length === 0;
           case 'number':
             return isNaN(value);
         }
