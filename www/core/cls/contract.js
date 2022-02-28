@@ -58,7 +58,7 @@ export class contractCls
                     "@PRICE = @PPRICE ",
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PSTART_DATE:date','PFINISH_DATE:date',
                      'PCUSTOMER:string|50','PDEPOT:string|50','PITEM:string|50','PQUANTITY:float','PPRICE:float'],
-            dataprm : ['GUID','CUSER','NAME','START_DATE','FINISH_DATE','CUSTOMER','DEPOT','ITEM','QUANTITY','PRICE']
+            dataprm : ['GUID','CUSER','TYPE','START_DATE','FINISH_DATE','CUSTOMER','DEPOT','ITEM','QUANTITY','PRICE']
         } 
         tmpDt.updateCmd = 
         {
@@ -73,9 +73,9 @@ export class contractCls
                     "@ITEM = @PITEM, " +
                     "@QUANTITY = @PQUANTITY, " +
                     "@PRICE = @PPRICE ",
-            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PTYPE:int','PSTART_DATE:date','PFINISH_DATE:date',
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PSTART_DATE:date','PFINISH_DATE:date',
                     'PCUSTOMER:string|50','PDEPOT:string|50','PITEM:string|50','PQUANTITY:float','PPRICE:float'],
-           dataprm : ['GUID','CUSER','CODE','NAME','START_DATE','FINISH_DATE','CUSTOMER','ITEM','QUANTITY','PRICE']
+            dataprm : ['GUID','CUSER','TYPE','START_DATE','FINISH_DATE','CUSTOMER','DEPOT','ITEM','QUANTITY','PRICE']
         } 
         tmpDt.deleteCmd = 
         {
@@ -138,7 +138,7 @@ export class contractCls
             if(arguments.length > 0)
             {
                 tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
-                tmpPrm.CODE = typeof arguments[0].CUSTOMER == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].CUSTOMER;
+                tmpPrm.CUSTOMER = typeof arguments[0].CUSTOMER == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].CUSTOMER;
             }
             this.ds.get('SALES_CONTRACT').selectCmd.value = Object.values(tmpPrm)
 

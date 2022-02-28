@@ -29,6 +29,7 @@ export default class promotionCard extends React.Component
         this.contractObj = new contractCls();
 
         this._getItems = this._getItems.bind(this)
+        this._getContracts = this._getContracts.bind(this)
 
         
     } 
@@ -60,7 +61,11 @@ export default class promotionCard extends React.Component
             }
         }
         this.pg_txtPopItemsCode.setSource(tmpSource)
-    } 
+    }
+    async _getContracts()
+    {
+        await this.contractObj.load({GUID:'00000000-0000-0000-0000-000000000000',CUSTOMER:this.txtCustomerCode.GUID});
+    }
     render()
     {
         return(
@@ -158,7 +163,8 @@ export default class promotionCard extends React.Component
                                                 this.txtCustomerCode.GUID = tmpData.result.recordset[0].GUID
                                                 this.txtCustomerCode.value = tmpData.result.recordset[0].CODE;
                                                 this.txtCustomerName.value = tmpData.result.recordset[0].TITLE;
-                    
+                                                
+                                                this._getContracts()
                                                 this._getItems()
                                             }
                                             else
@@ -194,6 +200,7 @@ export default class promotionCard extends React.Component
                                                             this.txtCustomerCode.value = data[0].CODE;
                                                             this.txtCustomerName.value = data[0].TITLE;
                                                             
+                                                            this._getContracts()
                                                             this._getItems()
                                                         }
                                                     }
@@ -328,8 +335,28 @@ export default class promotionCard extends React.Component
                                         <Column dataField="ITEM_NAME" caption={this.t("grdContracts.clmItemName")} width={350} />
                                         <Column dataField="PRICE" caption={this.t("grdContracts.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                         <Column dataField="QUANTITY" caption={this.t("grdContracts.clmQuantity")} dataType={'number'}/>
-                                        <Column dataField="START_DATE" caption={this.t("grdContracts.clmStartDate")} />
-                                        <Column dataField="FINISH_DATE" caption={this.t("grdContracts.clmFinishDate")} />
+                                        <Column dataField="START_DATE" caption={this.t("grdContracts.clmStartDate")} 
+                                        editorOptions={{value:null}}
+                                        cellRender={(e) => 
+                                        {
+                                            if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
+                                            {
+                                                return e.text
+                                            }
+                                            
+                                            return
+                                        }}/>
+                                        <Column dataField="FINISH_DATE" caption={this.t("grdContracts.clmFinishDate")}
+                                         editorOptions={{value:null}}
+                                         cellRender={(e) => 
+                                         {
+                                             if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
+                                             {
+                                                 return e.text
+                                             }
+                                             
+                                             return
+                                         }}/>
                                         <Column dataField="DEPOT_NAME" caption={this.t("grdContracts.clmDepotName")} />
                                     </NdGrid>
                                 </Item>
