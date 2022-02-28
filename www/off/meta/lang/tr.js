@@ -56,6 +56,14 @@ export const langTr =
         irs_02_001: "Alış İrsaliyesi",
         irs_02_002: "Satış İrsaliyesi",
         irs_02_003: "Şubeler Arası Sevk",
+        cnt : "Anlaşmalar",
+        cnt_01 : "Listeler",
+        cnt_01_001: "Alış Anlaşmaları Listesi",
+        cnt_01_002 : "Satış Anlaşmaları Listesi",
+        cnt_02 : "Evraklar",
+        cnt_02_001 : "Alış Anlaşması",
+        cnt_02_002 : "Şatış Anlaşması",
+        cnt_03 : "Raporlar",
         fns : "Finans",
         fns_01 : "Listeler",
         fns_01_001: "Ödeme Listesi",
@@ -63,6 +71,7 @@ export const langTr =
         fns_02 : "Evraklar",
         fns_02_001 : "Ödeme",
         fns_02_002 : "Tahsilat",
+        fns_03 : "Raporlar",
         promo: "Promosyon",
         promo_01: "Tanımlar",
         promo_01_001: "Promosyon Tanımları",
@@ -1602,6 +1611,97 @@ export const langTr =
         validDepot : "Depo Seçmelisiniz",
         validCustomerCode : "Cari Kodu Boş Geçilemez",
         validDocDate : "Tarih Seçmelisiniz",
+
+
+
+    },
+    cnt_02_001 :
+    {
+        cmbDepot: "Depo",
+        txtCustomerCode : "Cari Kodu",
+        txtCustomerName : "Cari Adı",
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        pg_txtPopItemsCode : 
+        {
+            title : "Stok Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+            clmMulticode : "TEDARİKÇİ KODU"
+        },
+        msgContractValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Cari Seçmeden Satır Eklenemez !"
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgNotCustomer:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Cari Bulunmadı !!"
+        },
+        grdContracts: 
+        {
+            clmItemCode: "Kodu",
+            clmItemName: "Adı",
+            clmPrice: "Fiyat",
+            clmQuantity : "Miktar",
+            clmStartDate : "Başlangıç",
+            clmFinishDate : "Bitiş",
+            clmCreateDate: "Kayıt Tarihi",
+        },
+        popItems: 
+        {
+            title: "Anlaşma Ekle",
+            txtPopItemsCode : "Stok Kodu",
+            txtPopItemsName: "Stok Adı",
+            txtPopItemsPrice : "Fiyat",
+            txtPopItemsQuantity : "Miktar",
+            dtPopStartDate :"Başlangıç",
+            dtPopEndDate : "Bitiş"
+        },
+        pg_txtPopItemsCode :
+        {
+            title :"Stok Seçimi",
+            clmCode : "Kodu",
+            clmName : "Adı",
+            clmMulticode : "Tedarikçi Kodu"
+        },
+        validCustomerCode : "Cari Kodu Boş Geçilemez",
 
 
 
