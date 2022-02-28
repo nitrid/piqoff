@@ -1683,6 +1683,7 @@ export const langTr =
             clmStartDate : "Başlangıç",
             clmFinishDate : "Bitiş",
             clmCreateDate: "Kayıt Tarihi",
+            clmDepotName : "Depo",
         },
         popItems: 
         {
