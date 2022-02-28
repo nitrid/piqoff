@@ -297,7 +297,7 @@ export default class salesInvoice extends React.Component
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT GUID,CODE,NAME,VAT,ISNULL((SELECT MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = @CUSTOMER_GUID),'') AS MULTICODE FROM ITEMS_VW_01 ",
+                    query : "SELECT GUID,CODE,NAME,VAT,ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = @CUSTOMER_GUID),'') AS MULTICODE FROM ITEMS_VW_01 ",
                     param : ['CUSTOMER_GUID:string|250'],
                     value : [this.docObj.dt()[0].OUTPUT]
                 },

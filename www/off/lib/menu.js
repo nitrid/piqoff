@@ -296,6 +296,55 @@ export const menu = (e) =>
             ]
         },
         {
+            id: 'cnt',
+            text: e.t('menu.cnt'),//'Finans',
+            expanded: false,
+            items: 
+            [
+                {
+                    id: 'cnt_01',
+                    text : e.t('menu.cnt_01'),//'Listeler',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'cnt_01_001',
+                            text: e.t('menu.cnt_01_001'),//'Alış Anlaşma Listesi',
+                            path: '../pages/customers/cards/customerCard.js'
+                        },
+                        {
+                            id: 'cnt_01_002',
+                            text: e.t('menu.cnt_01_002'),//'Satış Anlaşma Listesi',
+                            path: '../pages/customers/cards/customerCard.js'
+                        },
+                    ]
+                },
+                {
+                    id: 'cnt_02',
+                    text : e.t('menu.cnt_02'),//'Evraklar',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'cnt_02_001',
+                            text: e.t('menu.cnt_02_001'),//'Alış Anlaşma',
+                            path: '../pages/contracts/cards/purchaseContract.js'
+                        },
+                        {
+                            id: 'cnt_02_002',
+                            text: e.t('menu.cnt_02_002'),//'Şatış Anlaşma',
+                            path: '../pages/customers/cards/customerCard.js'
+                        },
+                    ]
+                },
+                {
+                    id: 'cnt_03',
+                    text : e.t('menu.cnt_03'),//'Raporlar',
+                    expanded: false,
+                }
+            ]
+        },
+        {
             id: 'fns',
             text: e.t('menu.fns'),//'Finans',
             expanded: false,
@@ -339,7 +388,7 @@ export const menu = (e) =>
                 },
                 {
                     id: 'fns_03',
-                    text : e.t('menu.irs_03'),//'Raporlar',
+                    text : e.t('menu.fns_03'),//'Raporlar',
                     expanded: false,
                 }
             ]

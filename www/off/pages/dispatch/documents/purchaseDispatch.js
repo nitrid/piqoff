@@ -46,7 +46,6 @@ export default class salesInvoice extends React.Component
     }
     async init()
     {
-        console.log(this.prmObj.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue())
         this.docObj.clearAll()
 
         this.docObj.ds.on('onAddRow',(pTblName,pData) =>
@@ -285,7 +284,7 @@ export default class salesInvoice extends React.Component
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT GUID,CODE,NAME,VAT,ISNULL((SELECT MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = @CUSTOMER_GUID),'') AS MULTICODE FROM ITEMS_VW_01 ",
+                    query : "SELECT GUID,CODE,NAME,VAT,ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = @CUSTOMER_GUID),'') AS MULTICODE FROM ITEMS_VW_01 ",
                     param : ['CUSTOMER_GUID:string|250'],
                     value : [this.docObj.dt()[0].OUTPUT]
                 },
@@ -687,7 +686,7 @@ export default class salesInvoice extends React.Component
                                     showBorders={true}
                                     width={'90%'}
                                     height={'90%'}
-                                    title={this.t("pg_txtCustomerCode.title")} //
+                                    title={this.t("pg_txtCustomerCode.title")} 
                                     data={{source:{select:{query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01"},sql:this.core.sql}}}
                                     button=
                                     {

@@ -1175,7 +1175,6 @@ export default class itemCard extends React.Component
                                                     tmpEmpty.TYPE_NAME = 'Standart'
                                                     tmpEmpty.ITEM_GUID = this.itemsObj.dt()[0].GUID 
                                                     tmpEmpty.DEPOT = "0"
-                                                    console.log(this.dtPopPriStartDate.value)
                                                     tmpEmpty.START_DATE = this.dtPopPriStartDate.value
                                                     tmpEmpty.FINISH_DATE = this.dtPopPriEndDate.value
                                                     tmpEmpty.PRICE = this.txtPopPriPrice.value
