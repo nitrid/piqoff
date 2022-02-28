@@ -1,7 +1,7 @@
 /*!
- * @license :jsstore - V4.3.5 - 08/07/2021
+ * @license :jsstore - V4.3.8 - 10/02/2022
  * https://github.com/ujjwalguptaofficial/JsStore
- * Copyright (c) 2021 @Ujjwal Gupta; Licensed MIT
+ * Copyright (c) 2022 @Ujjwal Gupta; Licensed MIT
  */
 var JsStore =
 /******/
@@ -664,14 +664,14 @@ function (modules) {
         this.eventBus_ = new EventBus(this); // these apis have special permissions. These apis dont wait for database open.
 
         this.whiteListApi_ = [API.InitDb, API.OpenDb, API.Get, API.Set, API.ChangeLogStatus, API.Terminate, API.DropDb];
-        this.isRuningInWorker = true;
+        this.isWorker = true;
         this.logger = new LogHelper(null);
 
         if (worker) {
           this.worker_ = worker;
           this.worker_.onmessage = this.onMessageFromWorker_.bind(this);
         } else {
-          this.isRuningInWorker = false;
+          this.isWorker = false;
           this.initQueryManager_();
         }
       }
@@ -714,7 +714,7 @@ function (modules) {
               case API.Terminate:
                 this.isConOpened_ = false;
 
-                if (this.isRuningInWorker === true) {
+                if (this.isWorker === true) {
                   this.worker_.terminate();
                 }
 
@@ -906,7 +906,7 @@ function (modules) {
           query: request.query
         };
 
-        if (this.isRuningInWorker === true) {
+        if (this.isWorker === true) {
           this.worker_.postMessage(requestForWorker);
         } else {
           this.queryManager.run(requestForWorker);

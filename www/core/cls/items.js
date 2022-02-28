@@ -6,9 +6,10 @@ export class itemsCls
     {
         this.core = core.instance;
         this.ds = new dataset();
-        this.empty = {
+        this.empty = 
+        {
             GUID : '00000000-0000-0000-0000-000000000000',
-            CUSER : this.core.auth.data.CODE,
+            CUSER : this.core.auth.data == null ? '' : this.core.auth.data.CODE,
             TYPE : '0',
             SPECIAL : '',
             CODE : '',
@@ -47,7 +48,13 @@ export class itemsCls
         tmpDt.selectCmd = 
         {
             query : "SELECT * FROM [dbo].[ITEMS_VW_01] WHERE ((CODE = @CODE) OR (@CODE = ''))",
-            param : ['CODE:string|25']
+            param : ['CODE:string|25'],
+            local : 
+            {
+                type : "select",
+                from : "ITEMS",
+                where : {CODE : ""}
+            }
         } 
         tmpDt.insertCmd = 
         {
@@ -77,7 +84,38 @@ export class itemsCls
                      'PCOST_PRICE:float','PMIN_PRICE:float','PMAX_PRICE:float','PSTATUS:bit','PMAIN:string|50','PSUB:string|50',
                      'PORGINS:string|50','PSECTOR:string|50','PRAYON:string|50','PSHELF:string|50','PWEIGHING:bit','PSALE_JOIN_LINE:bit','PTICKET_REST:bit'],
             dataprm : ['GUID','CUSER','TYPE','SPECIAL','CODE','NAME','SNAME','VAT','COST_PRICE','MIN_PRICE','MAX_PRICE','STATUS','MAIN_GRP','SUB_GRP','ORGINS','SECTOR','RAYON',
-                       'SHELF','WEIGHING','SALE_JOIN_LINE','TICKET_REST']
+                       'SHELF','WEIGHING','SALE_JOIN_LINE','TICKET_REST'],
+            local : 
+            {
+                type : "insert",
+                into : "ITEMS",
+                values : 
+                [
+                    {
+                        GUID : {map:'GUID'},
+                        CUSER : {map:'CUSER'},
+                        TYPE : {map:'TYPE'},
+                        SPECIAL : {map:'SPECIAL'},
+                        CODE : {map:'CODE'},
+                        NAME : {map:'NAME'},
+                        SNAME : {map:'SNAME'},
+                        VAT : {map:'VAT'},
+                        COST_PRICE : {map:'COST_PRICE'},
+                        MIN_PRICE : {map:'MIN_PRICE'},
+                        MAX_PRICE : {map:'MAX_PRICE'},
+                        STATUS : {map:'STATUS'},
+                        MAIN_GRP : {map:'MAIN_GRP'},
+                        SUB_GRP : {map:'SUB_GRP'},
+                        ORGINS : {map:'ORGINS'},
+                        SECTOR : {map:'SECTOR'},
+                        RAYON : {map:'RAYON'},
+                        SHELF : {map:'SHELF'},
+                        WEIGHING : {map:'WEIGHING'},
+                        SALE_JOIN_LINE : {map:'SALE_JOIN_LINE'},
+                        TICKET_REST : {map:'TICKET_REST'}
+                    }
+                ]
+            }
         } 
         tmpDt.updateCmd = 
         {
@@ -107,7 +145,36 @@ export class itemsCls
                      'PCOST_PRICE:float','PMIN_PRICE:float','PMAX_PRICE:float','PSTATUS:bit','PMAIN:string|50','PSUB:string|50',
                      'PORGINS:string|50','PSECTOR:string|50','PRAYON:string|50','PSHELF:string|50','PWEIGHING:bit','PSALE_JOIN_LINE:bit','PTICKET_REST:bit'],
             dataprm : ['GUID','CUSER','TYPE','SPECIAL','CODE','NAME','SNAME','VAT','COST_PRICE','MIN_PRICE','MAX_PRICE','STATUS','MAIN_GRP','SUB_GRP','ORGINS',
-                       'SECTOR','RAYON','SHELF','WEIGHING','SALE_JOIN_LINE','TICKET_REST']
+                       'SECTOR','RAYON','SHELF','WEIGHING','SALE_JOIN_LINE','TICKET_REST'],
+            local : 
+            {
+                type : "update",
+                in : "ITEMS",
+                set : 
+                {
+                    CUSER : {map:'CUSER'},
+                    TYPE  : {map:'TYPE'},
+                    SPECIAL : {map:'SPECIAL'},
+                    CODE : {map:'CODE'},
+                    NAME : {map:'NAME'},
+                    SNAME : {map:'SNAME'},
+                    VAT : {map:'VAT'},
+                    COST_PRICE : {map:'COST_PRICE'},
+                    MIN_PRICE : {map:'MIN_PRICE'},
+                    MAX_PRICE : {map:'MAX_PRICE'},
+                    STATUS : {map:'STATUS'},
+                    MAIN : {map:'MAIN'},
+                    SUB : {map:'SUB'},
+                    ORGINS : {map:'ORGINS'},
+                    SECTOR : {map:'SECTOR'},
+                    RAYON : {map:'RAYON'},
+                    SHELF : {map:'SHELF'},
+                    WEIGHING : {map:'WEIGHING'},
+                    SALE_JOIN_LINE : {map:'SALE_JOIN_LINE'},
+                    TICKET_REST : {map:'TICKET_REST'}
+                },
+                where : {GUID : {map:'GUID'}}
+            }
         } 
         tmpDt.deleteCmd = 
         {
@@ -116,7 +183,13 @@ export class itemsCls
                     "@UPDATE = 1, " + 
                     "@GUID = @PGUID ", 
             param : ['PCUSER:string|25','PGUID:string|50'],
-            dataprm : ['CUSER','GUID']
+            dataprm : ['CUSER','GUID'],
+            local : 
+            {
+                type : "delete",
+                from : "ITEMS",
+                where : {GUID : {map:'GUID'}}
+            }
         }
 
         this.ds.add(tmpDt);
@@ -171,6 +244,11 @@ export class itemsCls
             {
                 tmpPrm.CODE = typeof arguments[0].CODE == 'undefined' ? '' : arguments[0].CODE;
             }
+            //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 26.02.2022
+            if(typeof this.ds.get('ITEMS').selectCmd.local != 'undefined')
+            {
+                this.ds.get('ITEMS').selectCmd.local.where.CODE = tmpPrm.CODE
+            }
 
             this.ds.get('ITEMS').selectCmd.value = Object.values(tmpPrm);
               
@@ -202,10 +280,11 @@ export class itemUnitCls
     {
         this.core = core.instance;
         this.ds = new dataset();
-        this.empty = {
+        this.empty = 
+        {
             GUID : '00000000-0000-0000-0000-000000000000',
-            CUSER : this.core.auth.data.CODE,
-            CUSER_NAME : this.core.auth.data.NAME,
+            CUSER : this.core.auth.data == null ? '' : this.core.auth.data.CODE,
+            CUSER_NAME : this.core.auth.data == null ? '' : this.core.auth.data.NAME,
             TYPE : 0,
             TYPE_NAME : '',
             ID : '0',
@@ -348,10 +427,11 @@ export class itemPriceCls
     {
         this.core = core.instance;
         this.ds = new dataset();
-        this.empty = {
+        this.empty = 
+        {
             GUID : '00000000-0000-0000-0000-000000000000',
-            CUSER : this.core.auth.data.CODE,
-            CUSER_NAME : this.core.auth.data.NAME,
+            CUSER : this.core.auth.data == null ? '' : this.core.auth.data.CODE,
+            CUSER_NAME : this.core.auth.data == null ? '' : this.core.auth.data.NAME,
             TYPE : 0,
             TYPE_NAME : '',
             ITEM_GUID : '00000000-0000-0000-0000-000000000000',
@@ -521,10 +601,11 @@ export class itemBarcodeCls
     {
         this.core = core.instance;
         this.ds = new dataset();
-        this.empty = {
+        this.empty = 
+        {
             GUID : '00000000-0000-0000-0000-000000000000',
-            CUSER : this.core.auth.data.CODE,
-            CUSER_NAME : this.core.auth.data.NAME,
+            CUSER : this.core.auth.data == null ? '' : this.core.auth.data.CODE,
+            CUSER_NAME : this.core.auth.data == null ? '' : this.core.auth.data.NAME,
             BARCODE : '',
             TYPE : 0,
             TYPE_NAME : 'EAN13',
@@ -664,9 +745,10 @@ export class itemMultiCodeCls
     {
         this.core = core.instance;
         this.ds = new dataset();
-        this.empty = {
+        this.empty = 
+        {
             GUID:'00000000-0000-0000-0000-000000000000',
-            CUSER: this.core.auth.data.CODE,
+            CUSER: this.core.auth.data == null ? '' : this.core.auth.data.CODE,
             ITEM_GUID : '00000000-0000-0000-0000-000000000000',            
             ITEM_CODE : '',            
             ITEM_NAME : '',
@@ -677,7 +759,7 @@ export class itemMultiCodeCls
             CUSTOMER_PRICE_GUID : '00000000-0000-0000-0000-000000000000',
             CUSTOMER_PRICE : '0',
             CUSTOMER_PRICE_DATE : moment(new Date(0)).format("DD/MM/YYYY HH:mm:ss"),
-            CUSTOMER_PRICE_USER_NAME : this.core.auth.data.NAME
+            CUSTOMER_PRICE_USER_NAME : this.core.auth.data == null ? '' : this.core.auth.data.NAME
         }
         
         this._initDs();
@@ -822,7 +904,7 @@ export class itemImageCls
         this.empty = 
         {
             GUID:'00000000-0000-0000-0000-000000000000',
-            CUSER: this.core.auth.data.CODE,
+            CUSER: this.core.auth.data == null ? '' : this.core.auth.data.CODE,
             ITEM_GUID : '00000000-0000-0000-0000-000000000000',            
             ITEM_CODE : '',            
             ITEM_NAME : '',

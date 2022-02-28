@@ -1,23 +1,18 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import {core, datatable} from '../../core/core.js'
 import enMessages from '../meta/lang/devexpress/en.js';
 import frMessages from '../meta/lang/devexpress/fr.js';
 import trMessages from '../meta/lang/devexpress/tr.js';
 import { locale, loadMessages, formatMessage } from 'devextreme/localization';
 import i18n from './i18n.js'
-import Drawer from 'devextreme-react/drawer';
-import {Toolbar} from 'devextreme-react/toolbar';
-import Form, { Label,Item,EmptyItem,GroupItem } from 'devextreme-react/form';
 import TextBox from 'devextreme-react/text-box';
 import Button from 'devextreme-react/button';
-import SelectBox from 'devextreme-react/select-box';
 import { LoadPanel } from 'devextreme-react/load-panel';
 
 import HTMLReactParser from 'html-react-parser';
 
 import Login from './login.js'
-
+import Pos from '../pages/Pos.js'
 export default class App extends React.Component
 {
     static instance = null;
@@ -33,7 +28,7 @@ export default class App extends React.Component
         i18n.changeLanguage(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'))
         this.lang = i18n;  
         moment.locale(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'));
-        
+
         this.style =
         {
             splash_body : 
@@ -173,24 +168,7 @@ export default class App extends React.Component
             App.instance.setState({connected:false});
             this.core.auth.logout()
         })
-        
-        this.core.on('onExecuting',()=>
-        {
-            console.log('onExecuting')
-        })    
-        this.core.on('onExecuted',()=>
-        {
-            console.log('onExecuted')
-        })       
-    }
-    async componentDidMount()
-    {
-        console.log(22)
-        let tmpDt = new datatable()
-        tmpDt.selectCmd = "SELECT * FROM ITEMS"
-        await tmpDt.refresh()
-        console.log(33)
-    }
+    }    
     menuClick(data)
     {
         if(typeof data.path != 'undefined')
@@ -309,12 +287,7 @@ export default class App extends React.Component
                 shading={true}
                 showPane={true}
                 />
-                <div className="top-bar" style={{backgroundColor:"#3498db"}}>
-                    AAAA       
-                </div>
-                <div>
-                    TEST
-                </div>
+                <Pos/>
             </div>
         );
     }
