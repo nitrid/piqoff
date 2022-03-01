@@ -70,7 +70,12 @@ export const menu = (e) =>
                             id: 'stk_02_004',
                             text: e.t('menu.stk_02_004'),//'Sarf Giriş Çıkış Fişi',
                             path: '../pages/customers/cards/customerCard.js'
-                        }
+                        },
+                        {
+                            id: 'stk_02_005',
+                            text: e.t('menu.stk_02_005'),//'İade Deposuna Sevk',
+                            path: '../pages/items/documents/rebateDoc.js'
+                        },
                     ]
                 },
                 {
@@ -283,7 +288,12 @@ export const menu = (e) =>
                         },
                         {
                             id: 'irs_02_003',
-                            text: e.t('menu.irs_02_003'),//'Şubeler Arası Sevk',
+                            text: e.t('menu.irs_02_003'),//'İade İrsaliyesi',
+                            path: '../pages/dispatch/documents/rebateDispatch.js'
+                        },
+                        {
+                            id: 'irs_02_004',
+                            text: e.t('menu.irs_02_004'),//'Şubeler Arası Sevk',
                             path: '../pages/customers/cards/customerCard.js'
                         }
                     ]

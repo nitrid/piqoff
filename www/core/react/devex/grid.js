@@ -222,7 +222,7 @@ export default class NdGrid extends Base
                 allowColumnResizing : pProps.allowColumnResizing,
                 editOnKeyPress : pProps.editOnKeyPress,
                 enterKeyAction : pProps.enterKeyAction,
-                enterKeyDirection : pProps.enterKeyDirection
+                enterKeyDirection : pProps.enterKeyDirection,
             }
         )
     }  

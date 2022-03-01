@@ -310,7 +310,7 @@ export default class NdBase extends React.Component
                                 else if (typeof e != 'undefined' && typeof e.source != 'undefined' && typeof e.source == 'object' && typeof e.source.sql != 'undefined' && typeof e.source.select != 'undefined')
                                 {          
                                     // BÜYÜK DATALARDA SÜREKLİ DATAYI GETİRMEMESİ İÇİN İF EKLENDİ
-                                    if(typeof tmpThis.state.data.datatable == 'undefined') //|| typeof tmpThis.props.pageSize == 'undefined')
+                                    if(typeof tmpThis.state.data.datatable == 'undefined' || typeof tmpThis.props.notRefresh == 'undefined')
                                     {
                                         tmpThis.state.data.source = e.source;
                                         tmpThis.state.data.datatable = new datatable();
