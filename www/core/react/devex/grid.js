@@ -247,6 +247,8 @@ export default class NdGrid extends Base
                 columnAutoWidth={this.props.columnAutoWidth} 
                 allowColumnReordering={this.props.allowColumnReordering} 
                 allowColumnResizing={this.props.allowColumnResizing} 
+                showRowLines={typeof this.props.showRowLines == 'undefined' ? true : false}
+                showColumnLines={typeof this.props.showColumnLines == 'undefined' ? true : false}
                 height={this.props.height} 
                 width={this.props.width}
                 onInitialized={this._onInitialized} onSelectionChanged={this._onSelectionChanged} 

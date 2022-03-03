@@ -15,6 +15,7 @@ export default class NdButton extends Base
         this.state.type = props.type;
         this.state.stylingMode = props.stylingMode;
         this.state.disabled = props.disabled;
+        this.state.elementAttr = props.elementAttr;
 
         this._onClick = this._onClick.bind(this);
     }
@@ -47,6 +48,7 @@ export default class NdButton extends Base
             onClick={this._onClick}
             validationGroup={this.props.validationGroup}
             disabled={this.state.disabled}
+            elementAttr={this.state.elementAttr}
             />
         )
     }
