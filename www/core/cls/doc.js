@@ -33,6 +33,7 @@ export class docCls
 
         this.docItems = new docItemsCls();
         this.docCustomer = new docCustomerCls();
+        this.checkCls = new checkCls();
 
         this._initDs();
     }
@@ -106,6 +107,7 @@ export class docCls
         this.ds.add(tmpDt);
         this.ds.add(this.docItems.dt('DOC_ITEMS'))
         this.ds.add(this.docCustomer.dt('DOC_CUSTOMER'))
+        this.ds.add(this.checkCls.dt('CHECK'))
     }
     //#endregion
     dt()
@@ -383,18 +385,23 @@ export class docCustomerCls
         this.empty = {
             GUID : '00000000-0000-0000-0000-000000000000',
             CUSER : this.core.auth.data.CODE,
-            TYPE: -1,
+            TYPE: 0,
             DOC_GUID : '00000000-0000-0000-0000-000000000000',
-            DOC_TYPE : -1,
-            REBATE : -1,
+            DOC_TYPE : 0,
+            REBATE : 0,
             REF : '',
             REF_NO : 0,
             DOC_DATE : moment(new Date(0)).format("YYYY-MM-DD"),
             INPUT : '00000000-0000-0000-0000-000000000000',
+            INPUT_CODE : '',
+            INPUT_NAME : '',
             OUTPUT : '00000000-0000-0000-0000-000000000000',
+            OUTPUT_CODE : '',
+            OUTPUT_NAME : '',
             PAY_TYPE : -1,
             AMOUNT : 0,
-            DESCRIPTION : ''
+            DESCRIPTION : '',
+            INVOICE_GUID : '00000000-0000-0000-0000-000000000000'
         }
 
         this._initDs();
@@ -424,10 +431,11 @@ export class docCustomerCls
                     "@OUTPUT = @POUTPUT, " +
                     "@PAY_TYPE = @PPAY_TYPE, " +
                     "@AMOUNT = @PAMOUNT, "+
-                    "@DESCRIPTION  = @PDESCRIPTION ",
+                    "@DESCRIPTION  = @PDESCRIPTION, " +
+                    "@INVOICE_GUID = @PINVOICE_GUID ",
             param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PPAY_TYPE:int','PAMOUNT:float','PDESCRIPTION:string|100'],
-            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','PAY_TYPE','AMOUNT','DESCRIPTION']
+                        'POUTPUT:string|50','PPAY_TYPE:int','PAMOUNT:float','PDESCRIPTION:string|100','PINVOICE_GUID:string|50'],
+            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','PAY_TYPE','AMOUNT','DESCRIPTION','INVOICE_GUID']
         }
         tmpDt.updateCmd = 
         {
@@ -445,17 +453,18 @@ export class docCustomerCls
                     "@OUTPUT = @POUTPUT, " +
                     "@PAY_TYPE = @PPAY_TYPE, " +
                     "@AMOUNT = @PAMOUNT, "+
-                    "@DESCRIPTION  = @PDESCRIPTION ",
+                    "@DESCRIPTION  = @PDESCRIPTION, " +
+                    "@INVOICE_GUID = @PINVOICE_GUID ",
             param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PPAY_TYPE:int','PAMOUNT:float','PDESCRIPTION:string|100'],
-            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','PAY_TYPE','AMOUNT','DESCRIPTION']
+                        'POUTPUT:string|50','PPAY_TYPE:int','PAMOUNT:float','PDESCRIPTION:string|100','PINVOICE_GUID:string|50'],
+            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','PAY_TYPE','AMOUNT','DESCRIPTION','INVOICE_GUID']
         }
         tmpDt.deleteCmd = 
         {
             query : "[dbo].[PRD_DOC_CUSTOMER_DELETE] " + 
                     "@CUSER = @PCUSER, " + 
                     "@UPDATE = 1, " + 
-                    "@GUID = @PGUID " + 
+                    "@GUID = @PGUID, " + 
                     "@DOC_GUID = @PDOC_GUID ", 
             param : ['PCUSER:string|25','PGUID:string|50','PDOC_GUID:string|50'],
             dataprm : ['CUSER','GUID','DOC_GUID']
@@ -516,6 +525,148 @@ export class docCustomerCls
             await this.ds.get('DOC_CUSTOMER').refresh();
 
             resolve(this.ds.get('DOC_CUSTOMER'));
+            
+        });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            resolve(await this.ds.update()); 
+        });
+    }
+}
+export class checkCls 
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds =  new dataset()
+        this.empty = {
+            GUID : '00000000-0000-0000-0000-000000000000',
+            CUSER : this.core.auth.data.CODE,
+            DOC_GUID : '00000000-0000-0000-0000-000000000000',
+            REF : '',
+            DOC_DATE : moment(new Date()).format("YYYY-MM-DD"),
+            CHECK_DATE : moment(new Date()).format("YYYY-MM-DD"),
+            CUSTOMER : '00000000-0000-0000-0000-000000000000',
+            AMOUNT : 0,
+            SAFE : '00000000-0000-0000-0000-000000000000',
+            BREAK : 0,
+            BREAK_DATE : moment(new Date(0)).format("YYYY-MM-DD"),
+        }
+
+        this._initDs();
+    }
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('CHECK');
+        tmpDt.selectCmd = 
+        {
+            query : "SELECT * FROM [dbo].[CHECK_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((REF = @REF) OR (@REF = '')) ",
+            param : ['DOC_GUID:string|50','REF:string|25']
+        }
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_CHECK_INSERT] " +
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " +
+                    "@DOC_GUID = @PDOC_GUID, " + 
+                    "@REF = @PREF, " +
+                    "@DOC_DATE = @PDOC_DATE, " + 
+                    "@CHECK_DATE = @PCHECK_DATE, " +
+                    "@CUSTOMER = @PCUSTOMER, " +
+                    "@AMOUNT = @PAMOUNT, " +
+                    "@SAFE = @PSAFE, "+
+                    "@BREAK = @PBREAK, "+
+                    "@BREAK_DATE  = @PBREAK_DATE ",
+            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PREF:string|25','PDOC_DATE:date','PCHECK_DATE:date','PCUSTOMER:string|50',
+                        'PAMOUNT:float','PSAFE:string|50','PBREAK:string|50','PBREAK_DATE:date'],
+            dataprm : ['GUID','CUSER','DOC_GUID','REF','DOC_DATE','CHECK_DATE','CUSTOMER','AMOUNT','SAFE','BREAK','BREAK_DATE']
+        }
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_CHECK_UPDATE] " +
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " +
+                    "@DOC_GUID = @PDOC_GUID, " + 
+                    "@REF = @PREF, " +
+                    "@DOC_DATE = @PDOC_DATE, " + 
+                    "@CHECK_DATE = @PCHECK_DATE, " +
+                    "@CUSTOMER = @PCUSTOMER, " +
+                    "@AMOUNT = @PAMOUNT, " +
+                    "@SAFE = @PSAFE, "+
+                    "@BREAK = @PBREAK, "+
+                    "@BREAK_DATE  = @PBREAK_DATE ",
+            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PREF:string|25','PDOC_DATE:date','PCHECK_DATE:date','PCUSTOMER:string|50',
+                        'PAMOUNT:float','PSAFE:string|50','PBREAK:string|50','PBREAK_DATE:date'],
+            dataprm : ['GUID','CUSER','DOC_GUID','REF','DOC_DATE','CHECK_DATE','CUSTOMER','AMOUNT','SAFE','BREAK','BREAK_DATE']
+        }
+        tmpDt.deleteCmd = 
+        {
+            query : "[dbo].[PRD_CHECK_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@UPDATE = 1, " + 
+                    "@GUID = @PGUID " ,
+            param : ['PCUSER:string|25','PGUID:string|50'],
+            dataprm : ['CUSER','GUID']
+        }
+
+        this.ds.add(tmpDt);
+    }
+    //#region
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0])
+        }
+
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('CHECK') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {};
+        if(arguments.length > 0)
+        {
+            tmp = {...arguments[0]}
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        tmp.GUID = datatable.uuidv4()
+        this.dt('CHECK').push(tmp)
+    }
+    clearAll()
+    {
+        for(let i = 0; i < this.ds.length; i++)
+        {
+            this.dt(i).clear()
+        }
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİR.
+        return new Promise(async resolve =>
+        {
+            let tmpPrm = {GUID:'00000000-0000-0000-0000-000000000000',REF:''}
+            if(arguments.length > 0)
+            {
+                tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '' : arguments[0].GUID;
+                tmpPrm.REF = typeof arguments[0].REF == 'undefined' ? '' : arguments[0].REF;
+            }
+
+            this.ds.get('CHECK').selectCmd.value = Object.values(tmpPrm);
+
+            await this.ds.get('CHECK').refresh();
+
+            resolve(this.ds.get('CHECK'));
             
         });
     }

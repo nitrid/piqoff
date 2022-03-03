@@ -248,7 +248,6 @@ export default class promotionCard extends React.Component
                                 <Item>
                                     <Label text={this.t("txtCustomerName")} alignment="right" />
                                     <NdTextBox id="txtCustomerName" parent={this} simple={true}  
-                                    dt={{data:this.contractObj.dt('SALES_CONTRACT'),field:"CUSTOMER_NAME"}} 
                                     readOnly={true}
                                     param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
@@ -316,6 +315,7 @@ export default class promotionCard extends React.Component
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
+                                    filterRow={{visible:true}}
                                     height={'100%'} 
                                     width={'100%'}
                                     dbApply={false}
@@ -388,7 +388,7 @@ export default class promotionCard extends React.Component
                                                 onClick:()=>
                                                 {                  
                                                     this.txtPopItemsQuantity.value = 1 
-                                                    this.txtPopItemsCode.value =''
+                                                    this.txtPopItemsCode.value = ''
                                                     this.txtPopItemsName.value = ''
                                                     this.txtPopItemsPrice.value = ''
                                                                               
@@ -404,14 +404,6 @@ export default class promotionCard extends React.Component
                                                     }
                                                 }
                                             },
-                                            {
-                                                id:'02',
-                                                icon:'add',
-                                                onClick:()=>
-                                                {                                                
-                                                   
-                                                }
-                                            }
                                         ]
                                     }>       
                                     <Validator validationGroup={"frmItems"}>

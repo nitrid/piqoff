@@ -688,6 +688,7 @@ export default class CustomerCard extends React.Component
                                            console.log(this.cmbPopZipcode)
                                     }).bind(this)}
                                     pageSize ={50}
+                                    notRefresh = {true}
                                     data={{source:{select:{query : "SELECT [COUNTRY_CODE],[ZIPCODE],[PLACE],ZIPCODE + ' ' + PLACE AS ZIPNAME  FROM [dbo].[ZIPCODE]"},sql:this.core.sql}}}
                                     />
                                 </Item>
@@ -699,6 +700,7 @@ export default class CustomerCard extends React.Component
                                     value=""
                                     searchEnabled={true}
                                     pageSize ={50}
+                                    notRefresh = {true}
                                     data={{source:{select:{query : "SELECT COUNTRY_CODE,ZIPCODE,PLACE,PLACE + ' ' + ZIPCODE AS CITYNAME  FROM [dbo].[ZIPCODE]"},sql:this.core.sql}}}
                                     />
                                 </Item>

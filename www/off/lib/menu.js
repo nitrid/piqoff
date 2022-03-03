@@ -70,7 +70,12 @@ export const menu = (e) =>
                             id: 'stk_02_004',
                             text: e.t('menu.stk_02_004'),//'Sarf Giriş Çıkış Fişi',
                             path: '../pages/customers/cards/customerCard.js'
-                        }
+                        },
+                        {
+                            id: 'stk_02_005',
+                            text: e.t('menu.stk_02_005'),//'İade Deposuna Sevk',
+                            path: '../pages/items/documents/rebateDoc.js'
+                        },
                     ]
                 },
                 {
@@ -283,7 +288,12 @@ export const menu = (e) =>
                         },
                         {
                             id: 'irs_02_003',
-                            text: e.t('menu.irs_02_003'),//'Şubeler Arası Sevk',
+                            text: e.t('menu.irs_02_003'),//'İade İrsaliyesi',
+                            path: '../pages/dispatch/documents/rebateDispatch.js'
+                        },
+                        {
+                            id: 'irs_02_004',
+                            text: e.t('menu.irs_02_004'),//'Şubeler Arası Sevk',
                             path: '../pages/customers/cards/customerCard.js'
                         }
                     ]
@@ -297,7 +307,7 @@ export const menu = (e) =>
         },
         {
             id: 'cnt',
-            text: e.t('menu.cnt'),//'Finans',
+            text: e.t('menu.cnt'),//'Anlaşmalar',
             expanded: false,
             items: 
             [
@@ -310,7 +320,7 @@ export const menu = (e) =>
                         {
                             id: 'cnt_01_001',
                             text: e.t('menu.cnt_01_001'),//'Alış Anlaşma Listesi',
-                            path: '../pages/customers/cards/customerCard.js'
+                            path: '../pages/finance/documents/payment.js'
                         },
                         {
                             id: 'cnt_01_002',
@@ -377,12 +387,12 @@ export const menu = (e) =>
                         {
                             id: 'fns_02_001',
                             text: e.t('menu.fns_02_001'),//'Ödeme',
-                            path: '../pages/customers/cards/customerCard.js'
+                            path: '../pages/finance/documents/payment.js'
                         },
                         {
                             id: 'fns_02_002',
                             text: e.t('menu.fns_02_002'),//'Tahsilat',
-                            path: '../pages/customers/cards/customerCard.js'
+                            path: '../pages/finance/documents/collection.js'
                         },
                     ]
                 },

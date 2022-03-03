@@ -5,6 +5,7 @@ import { docCls,docItemsCls, docCustomerCls } from '../../../../core/cls/doc.js'
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
+import ContextMenu from 'devextreme-react/context-menu';
 import TabPanel from 'devextreme-react/tab-panel';
 import { Button } from 'devextreme-react/button';
 
@@ -34,11 +35,12 @@ export default class salesInvoice extends React.Component
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
         this._calculateTotal = this._calculateTotal.bind(this)
-        this._calculateTotalMargin = this._calculateTotalMargin.bind(this)
-        this._calculateMargin = this._calculateMargin.bind(this)
+        this._getRebate = this._getRebate.bind(this)
 
         this.frmDocItems = undefined;
         this.docLocked = false;        
+
+        this.rightItems = [{ text: this.t("getRebate"), }]
     }
     async componentDidMount()
     {
@@ -100,6 +102,7 @@ export default class salesInvoice extends React.Component
         let tmpDoc = {...this.docObj.empty}
         tmpDoc.TYPE = 1
         tmpDoc.DOC_TYPE = 40
+        tmpDoc.REBATE = 1
         this.docObj.addEmpty(tmpDoc);
 
         this.txtRef.readOnly = false
@@ -301,6 +304,54 @@ export default class salesInvoice extends React.Component
             this._calculateTotal()
         }
     }
+    async _getRebate()
+    {
+        let tmpSource =
+        {
+            source : 
+            {
+                groupBy : this.groupList,
+                select : 
+                {
+                    query : "SELECT *,[dbo].[FN_DEPOT_QUANTITY]([ITEM_GUID],@DEPOT,GETDATE()) AS QUANTITY FROM ITEM_MULTICODE_VW_01 WHERE [dbo].[FN_DEPOT_QUANTITY]([ITEM_GUID],@DEPOT,GETDATE()) > 0 AND CUSTOMER_GUID = @CUSTOMER",
+                    param : ['DEPOT:string|50','CUSTOMER:string|50'],
+                    value : [this.docObj.dt()[0].OUTPUT,this.docObj.dt()[0].INPUT]
+                },
+                sql : this.core.sql
+            }
+        }
+        await this.pg_RebateGrid.setSource(tmpSource)
+        this.pg_RebateGrid.show()
+        this.pg_RebateGrid.onClick = async(data) =>
+        {
+            for (let i = 0; i < data.length; i++) 
+            {
+                let tmpDocItems = {...this.docObj.docItems.empty}
+                tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                tmpDocItems.REF = this.docObj.dt()[0].REF
+                tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                tmpDocItems.ITEM = data[i].ITEM_GUID
+                tmpDocItems.ITEM_CODE = data[i].ITEM_CODE
+                tmpDocItems.ITEM_NAME = data[i].ITEM_NAME
+                tmpDocItems.PRICE = data[i].CUSTOMER_PRICE
+                tmpDocItems.QUANTITY = data[i].QUANTITY
+                tmpDocItems.AMOUNT = parseFloat((data[i].CUSTOMER_PRICE * data[i].QUANTITY).toFixed(3))
+                tmpDocItems.TOTAL = parseFloat((data[i].CUSTOMER_PRICE * data[i].QUANTITY).toFixed(3))
+
+                await this.docObj.docItems.addEmpty(tmpDocItems,false)
+            }
+            this.docObj.docItems.dt().emit('onRefresh')
+            this._calculateTotal()
+        }
+    }
     render()
     {
         return(
@@ -483,7 +534,7 @@ export default class salesInvoice extends React.Component
                                                 this.docObj.dt()[0].REF = this.txtRef.value 
                                                 let tmpQuery = 
                                                 {
-                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 40  REF = @REF ",
+                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 40 REF = @REF ",
                                                     param : ['REF:string|25'],
                                                     value : [this.txtRef.value]
                                                 }
@@ -559,7 +610,7 @@ export default class salesInvoice extends React.Component
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_Docs.title")} 
-                                    data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 40 AND REBATE = 0"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 40 AND REBATE = 1"},sql:this.core.sql}}}
                                     button=
                                     {
                                         [
@@ -594,7 +645,7 @@ export default class salesInvoice extends React.Component
                                     onValueChanged={(async()=>
                                         {
                                         }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE = 1"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
@@ -836,6 +887,7 @@ export default class salesInvoice extends React.Component
                                     }}/>
                                 </Item>
                                  <Item>
+                                 <React.Fragment>
                                     <NdGrid parent={this} id={"grdDocItems"} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 
@@ -847,45 +899,6 @@ export default class salesInvoice extends React.Component
                                     onRowUpdated={async(e)=>{
                                         let rowIndex = e.component.getRowIndexByKey(e.key)
 
-                                        if(typeof e.data.DISCOUNT_RATE != 'undefined')
-                                        {
-                                            e.key.DISCOUNT = parseFloat((((this.docObj.docItems.dt()[rowIndex].AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(3))
-                                        }
-
-                                        if(e.key.COST_PRICE > e.key.PRICE )
-                                        {
-                                            let tmpData = this.acsobj.filter({ID:'underMinCostPrice',USERS:this.user.CODE}).getValue()
-                                            if(typeof tmpData != 'undefined' && tmpData ==  true)
-                                            {
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgUnderPrice1',showTitle:true,title:this.t("msgUnderPrice1.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgUnderPrice1.btn01"),location:'before'},{id:"btn02",caption:this.t("msgUnderPrice1.btn02"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgUnderPrice1.msg")}</div>)
-                                                }
-                                                
-                                                let pResult = await dialog(tmpConfObj);
-                                                if(pResult == 'btn01')
-                                                {
-                                                    
-                                                }
-                                                else if(pResult == 'btn02')
-                                                {
-                                                    return
-                                                }
-                                            }
-                                            else
-                                            {
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgUnderPrice2',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgUnderPrice2.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"msgUnderPrice2.msg"}</div>)
-                                                }
-                                                dialog(tmpConfObj);
-                                                return
-                                            }
-                                        }
                                         if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
                                         {
                                             let tmpConfObj =
@@ -906,14 +919,11 @@ export default class salesInvoice extends React.Component
                                         this.docObj.docItems.dt()[rowIndex].AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3))
                                         this.docObj.docItems.dt()[rowIndex].TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +this.docObj.docItems.dt()[rowIndex].VAT).toFixed(3))
 
-                                        let tmpMargin = (this.docObj.docItems.dt()[rowIndex].TOTAL - this.docObj.docItems.dt()[rowIndex].VAT) - (this.docObj.docItems.dt()[rowIndex].COST_PRICE * this.docObj.docItems.dt()[rowIndex].QUANTITY)
-                                        let tmpMarginRate = (tmpMargin /(this.docObj.docItems.dt()[rowIndex].TOTAL - this.docObj.docItems.dt()[rowIndex].VAT)) * 100
-                                        this.docObj.docItems.dt()[rowIndex].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+                                        
                                         if(this.docObj.docItems.dt()[rowIndex].DISCOUNT > 0)
                                         {
                                             this.docObj.docItems.dt()[rowIndex].DISCOUNT_RATE = parseFloat((100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100)).toFixed(3))
                                         }
-                                        console.log(this.docObj.docItems.dt()[rowIndex].MARGIN)
                                         this._calculateTotal()
                                        
                                     }}
@@ -930,12 +940,18 @@ export default class salesInvoice extends React.Component
                                         <Column dataField="PRICE" caption={this.t("grdDocItems.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
                                         <Column dataField="QUANTITY" caption={this.t("grdDocItems.clmQuantity")} dataType={'number'}/>
                                         <Column dataField="AMOUNT" caption={this.t("grdDocItems.clmAmount")} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                        <Column dataField="DISCOUNT" caption={this.t("grdDocItems.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdDocItems.clmDiscountRate")} dataType={'number'} />
-                                        <Column dataField="MARGIN" caption={this.t("grdDocItems.clmMargin")} width={150} allowEditing={false}/>
                                         <Column dataField="VAT" caption={this.t("grdDocItems.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
                                         <Column dataField="TOTAL" caption={this.t("grdDocItems.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
                                     </NdGrid>
+                                    <ContextMenu
+                                    dataSource={this.rightItems}
+                                    width={200}
+                                    target="#grdDocItems"
+                                    onItemClick={(async(e)=>
+                                    {
+                                        this._getRebate()
+                                    }).bind(this)} />
+                                </React.Fragment> 
                                 </Item>
                             </Form>
                         </div>
@@ -1191,6 +1207,22 @@ export default class salesInvoice extends React.Component
                             </Form>
                         </NdPopUp>
                     </div> 
+                     {/* İrsaliye Grid */}
+                   <NdPopGrid id={"pg_RebateGrid"} parent={this} container={"#root"}
+                    visible={false}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    selection={{mode:"multiple"}}
+                    title={this.t("pg_RebateGrid.title")} //
+                    >
+                        <Column dataField="ITEM_CODE" caption={this.t("pg_RebateGrid.clmCode")} width={200}/>
+                        <Column dataField="ITEM_NAME" caption={this.t("pg_RebateGrid.clmName")} width={300} />
+                        <Column dataField="QUANTITY" caption={this.t("pg_RebateGrid.clmQuantity")} width={300} />
+                    </NdPopGrid>
+                    {/* Stok */}
                     <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={"#root"}
                     visible={false}
                     position={{of:'#root'}} 

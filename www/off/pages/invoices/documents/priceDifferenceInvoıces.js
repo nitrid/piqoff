@@ -35,6 +35,9 @@ export default class salesInvoice extends React.Component
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
         this._calculateTotal = this._calculateTotal.bind(this)
+        this._getContract = this._getContract.bind(this)
+
+        this.rightItems = [{ text: this.t("getContract"), }]
 
         this.frmDocItems = undefined;
         this.docLocked = false;        
@@ -307,6 +310,82 @@ export default class salesInvoice extends React.Component
             this._calculateTotal()
         }
     }
+    async _getContract()
+    {
+        console.log(this.docObj.dt()[0].INPUT)
+        let tmpSource =
+        {
+            source : 
+            {
+                groupBy : this.groupList,
+                select : 
+                {
+                    query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_VW_01 WHERE OUTPUT = @OUTPUT AND TYPE = 0 AND DOC_TYPE = 20 ORDER BY DOC_DATE DESC",
+                    param : ['OUTPUT:string|50'],
+                    value : [this.docObj.dt()[0].INPUT]
+                },
+                sql : this.core.sql
+            }
+        }
+        await this.pg_contractGrid.setSource(tmpSource)
+        this.pg_contractGrid.show()
+        this.pg_contractGrid.onClick = async(data) =>
+        {
+            let tmpItems = []
+            for (let i = 0; i < data.length; i++) 
+            {
+                let tmpQuery = 
+                {
+                    query :"SELECT * FROM DOC_ITEMS_VW_01 WHERE (((DOC_GUID = @DOC_GUID) OR (INVOICE_GUID = @DOC_GUID)) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000'))  ",
+                    param : ['DOC_GUID:string|50'],
+                    value : [data[i].GUID]
+                }
+                let tmpData = await this.core.sql.execute(tmpQuery) 
+                if(tmpData.result.recordset.length > 0)
+                {
+                    tmpItems.push(tmpData.result.recordset)
+                }      
+            }
+            
+            for (let i = 0; i < tmpItems.length; i++)
+            {
+                for(let x = 0; x < tmpItems[i].length; x++)
+                {
+                    let tmpQuery = 
+                    {
+                        query :"SELECT [dbo].[FN_CONTRACT_PRICE](@ITEM,@CUSTOMER,@QUANTITY,GETDATE(),@TYPE) AS PRICE  ",
+                        param : ['ITEM:string|50','CUSTOMER:string|50','QUANTITY:float','TYPE:int'],
+                        value : [tmpItems[i][x].ITEM,tmpItems[i][x].OUTPUT,tmpItems[i][x].QUANTITY,0]
+                    }
+                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                    if(tmpData.result.recordset[0].PRICE < tmpItems[i][x].PRICE && tmpData.result.recordset[0].PRICE != 0)
+                    {
+                        let tmpDocItems = {...this.docObj.docItems.empty}
+                        tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                        tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                        tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                        tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                        tmpDocItems.REF = this.docObj.dt()[0].REF
+                        tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                        tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                        tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                        tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                        tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                        tmpDocItems.ITEM = tmpItems[i][x].ITEM
+                        tmpDocItems.ITEM_CODE = tmpItems[i][x].ITEM_CODE
+                        tmpDocItems.ITEM_NAME = tmpItems[i][x].ITEM_NAME
+                        tmpDocItems.PRICE = (tmpItems[i][x].PRICE - tmpData.result.recordset[0].PRICE)
+                        tmpDocItems.AMOUNT = (tmpItems[i][x].PRICE - tmpData.result.recordset[0].PRICE) * tmpItems[i][x].QUANTITY
+                        tmpDocItems.TOTAL = (tmpItems[i][x].PRICE - tmpData.result.recordset[0].PRICE) * tmpItems[i][x].QUANTITY
+                        this.docObj.docItems.addEmpty(tmpDocItems)
+                        this.txtRef.readOnly = true
+                        this.txtRefno.readOnly = true
+                    }
+                }
+            }
+            this._calculateTotal()
+        }
+    }
     render()
     {
         return(
@@ -557,7 +636,7 @@ export default class salesInvoice extends React.Component
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_Docs.title")} 
-                                    data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 21 AND REBATE = 1 "},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 21 AND REBATE = 0 "},sql:this.core.sql}}}
                                     button=
                                     {
                                         [
@@ -846,6 +925,7 @@ export default class salesInvoice extends React.Component
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
+                                    headerFilter={{visible:true}}
                                     height={'100%'} 
                                     width={'100%'}
                                     dbApply={false}
@@ -923,19 +1003,26 @@ export default class salesInvoice extends React.Component
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                                         <Scrolling mode="infinite" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdDocItems.clmCreateDate")} width={200} allowEditing={false}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdDocItems.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdDocItems.clmItemName")} width={400} />
-                                        <Column dataField="PRICE" caption={this.t("grdDocItems.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdDocItems.clmQuantity")} dataType={'number'}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdDocItems.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
-                                        <Column dataField="DISCOUNT" caption={this.t("grdDocItems.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdDocItems.clmDiscountRate")} dataType={'number'}/>
-                                        <Column dataField="VAT" caption={this.t("grdDocItems.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
-                                        <Column dataField="TOTAL" caption={this.t("grdDocItems.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdDocItems.clmCreateDate")} width={200} allowEditing={false} headerFilter={{visible:true}}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdDocItems.clmItemCode")} width={150} editCellRender={this._cellRoleRender} headerFilter={{visible:true}}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdDocItems.clmItemName")} width={400} headerFilter={{visible:true}}/>
+                                        <Column dataField="PRICE" caption={this.t("grdDocItems.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} headerFilter={{visible:true}}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdDocItems.clmQuantity")} dataType={'number'} headerFilter={{visible:true}}/>
+                                        <Column dataField="AMOUNT" caption={this.t("grdDocItems.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
+                                        <Column dataField="DISCOUNT" caption={this.t("grdDocItems.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} headerFilter={{visible:true}}/>
+                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdDocItems.clmDiscountRate")} dataType={'number'} headerFilter={{visible:true}}/>
+                                        <Column dataField="VAT" caption={this.t("grdDocItems.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
+                                        <Column dataField="TOTAL" caption={this.t("grdDocItems.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
 
                                     </NdGrid>
-                                   
+                                    <ContextMenu
+                                    dataSource={this.rightItems}
+                                    width={200}
+                                    target="#grdDocItems"
+                                    onItemClick={(async(e)=>
+                                    {
+                                        this._getContract()
+                                    }).bind(this)} />
                                 </React.Fragment>    
                                 </Item>
                             </Form>
@@ -1193,7 +1280,7 @@ export default class salesInvoice extends React.Component
                         </NdPopUp>
                     </div> 
                      {/* İrsaliye Grid */}
-                    <NdPopGrid id={"pg_dispatchGrid"} parent={this} container={"#root"}
+                    <NdPopGrid id={"pg_contractGrid"} parent={this} container={"#root"}
                         visible={false}
                         position={{of:'#root'}} 
                         showTitle={true} 
@@ -1201,15 +1288,13 @@ export default class salesInvoice extends React.Component
                         width={'90%'}
                         height={'90%'}
                         selection={{mode:"multiple"}}
-                        title={this.t("pg_dispatchGrid.title")} //
+                        title={this.t("pg_contractGrid.title")} //
                         >
-                            <Column dataField="REFERANS" caption={this.t("pg_dispatchGrid.clmReferans")} width={200} defaultSortOrder="asc"/>
-                            <Column dataField="ITEM_CODE" caption={this.t("pg_dispatchGrid.clmCode")} width={200}/>
-                            <Column dataField="ITEM_NAME" caption={this.t("pg_dispatchGrid.clmName")} width={300} />
-                            <Column dataField="QUANTITY" caption={this.t("pg_dispatchGrid.clmQuantity")} width={300} />
-                            <Column dataField="PRICE" caption={this.t("pg_dispatchGrid.clmPrice")} width={300} />
-                            <Column dataField="TOTAL" caption={this.t("pg_dispatchGrid.clmTotal")} width={300} />
-                        </NdPopGrid>
+                            <Column dataField="REFERANS" caption={this.t("pg_contractGrid.clmReferans")} width={200} defaultSortOrder="asc"/>
+                            <Column dataField="TOTAL" caption={this.t("pg_contractGrid.clmTotal")} width={300} />
+                            <Column dataField="DOC_DATE_CONVERT" caption={this.t("pg_contractGrid.clmDocDate")} width={300} />
+                    </NdPopGrid>
+                    {/* Stok Grid */}
                     <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={"#root"}
                     visible={false}
                     position={{of:'#root'}} 
