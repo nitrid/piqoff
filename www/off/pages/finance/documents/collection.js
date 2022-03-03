@@ -98,9 +98,9 @@ export default class salesInvoice extends React.Component
         this.dtDocDate.value = moment(new Date())
 
         let tmpDoc = {...this.docObj.empty}
-        tmpDoc.TYPE = 0
+        tmpDoc.TYPE = 1
         tmpDoc.DOC_TYPE = 200
-        tmpDoc.INPUT = '00000000-0000-0000-0000-000000000000'
+        tmpDoc.OUTPUT = '00000000-0000-0000-0000-000000000000'
         this.docObj.addEmpty(tmpDoc);
 
         
@@ -360,7 +360,7 @@ export default class salesInvoice extends React.Component
                                                 this.docObj.dt()[0].REF = this.txtRef.value 
                                                 let tmpQuery = 
                                                 {
-                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 0 AND DOC_TYPE = 200 AND REF = @REF ",
+                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 200 AND REF = @REF ",
                                                     param : ['REF:string|25'],
                                                     value : [this.txtRef.value]
                                                 }
@@ -436,7 +436,7 @@ export default class salesInvoice extends React.Component
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_Docs.title")} 
-                                    data={{source:{select:{query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME FROM DOC_VW_01 WHERE TYPE = 0 AND DOC_TYPE = 200"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 200"},sql:this.core.sql}}}
                                     button=
                                     {
                                         [
@@ -454,8 +454,8 @@ export default class salesInvoice extends React.Component
                                     >
                                         <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150} defaultSortOrder="asc"/>
                                         <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="OUTPUT_NAME" caption={this.t("pg_Docs.clmOutputName")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="OUTPUT_CODE" caption={this.t("pg_Docs.clmOutputCode")} width={300} defaultSortOrder="asc" />
+                                        <Column dataField="INPUT_NAME" caption={this.t("pg_Docs.clmInputName")} width={300} defaultSortOrder="asc" />
+                                        <Column dataField="INPUT_CODE" caption={this.t("pg_Docs.clmInputCode")} width={300} defaultSortOrder="asc" />
                                         
                                     </NdPopGrid>
                                 </Item>
@@ -480,7 +480,7 @@ export default class salesInvoice extends React.Component
                                 <Item>
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
                                     <NdTextBox id="txtCustomerCode" parent={this} simple={true} 
-                                    dt={{data:this.docObj.dt('DOC'),field:"OUTPUT_CODE"}} 
+                                    dt={{data:this.docObj.dt('DOC'),field:"INPUT_CODE"}} 
                                     onChange={(async(r)=>
                                         {
                                             if(r.event.isTrusted == true)
@@ -494,9 +494,9 @@ export default class salesInvoice extends React.Component
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
                                                 if(tmpData.result.recordset.length > 0)
                                                 {
-                                                    this.docObj.dt()[0].OUTPUT = tmpData.result.recordset[0].GUID
-                                                    this.docObj.dt()[0].OUTPUT_CODE = tmpData.result.recordset[0].CODE
-                                                    this.docObj.dt()[0].OUTPUT_NAME = tmpData.result.recordset[0].TITLE
+                                                    this.docObj.dt()[0].INPUT = tmpData.result.recordset[0].GUID
+                                                    this.docObj.dt()[0].INPUT_CODE = tmpData.result.recordset[0].CODE
+                                                    this.docObj.dt()[0].INPUT_NAME = tmpData.result.recordset[0].TITLE
                                                     let tmpDatas = this.prmObj.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                     if(typeof tmpDatas != 'undefined' && tmpDatas.value ==  true)
                                                     {
@@ -516,9 +516,9 @@ export default class salesInvoice extends React.Component
                                                    
                                                     await dialog(tmpConfObj);
 
-                                                    this.docObj.dt()[0].OUTPUT = ''
-                                                    this.docObj.dt()[0].OUTPUT_CODE = ''
-                                                    this.docObj.dt()[0].OUTPUT_NAME = ''
+                                                    this.docObj.dt()[0].INPUT = ''
+                                                    this.docObj.dt()[0].INPUT_CODE = ''
+                                                    this.docObj.dt()[0].INPUT_NAME = ''
                                                 }
                                             }
                                         }).bind(this)}
@@ -535,9 +535,9 @@ export default class salesInvoice extends React.Component
                                                     {
                                                         if(data.length > 0)
                                                         {
-                                                            this.docObj.dt()[0].OUTPUT = data[0].GUID
-                                                            this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
-                                                            this.docObj.dt()[0].OUTPUT_NAME = data[0].TITLE
+                                                            this.docObj.dt()[0].INPUT = data[0].GUID
+                                                            this.docObj.dt()[0].INPUT_CODE = data[0].CODE
+                                                            this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
                                                             let tmpData = this.prmObj.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
@@ -590,7 +590,7 @@ export default class salesInvoice extends React.Component
                                 <Item>
                                     <Label text={this.t("txtCustomerName")} alignment="right" />
                                     <NdTextBox id="txtCustomerName" parent={this} simple={true}  
-                                    dt={{data:this.docObj.dt('DOC'),field:"OUTPUT_NAME"}} 
+                                    dt={{data:this.docObj.dt('DOC'),field:"INPUT_NAME"}} 
                                     readOnly={true}
                                     param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
@@ -702,7 +702,7 @@ export default class salesInvoice extends React.Component
                                         <Scrolling mode="infinite" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdDocPayments.clmCreateDate")} width={200} allowEditing={false}/>
-                                        <Column dataField="INPUT_NAME" caption={this.t("grdDocPayments.clmInputName")} allowEditing={false}/>
+                                        <Column dataField="OUTPUT_NAME" caption={this.t("grdDocPayments.clmOutputName")} allowEditing={false}/>
                                         <Column dataField="AMOUNT" caption={this.t("grdDocPayments.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} />
                                         <Column dataField="DESCRIPTION" caption={this.t("grdDocPayments.clmDescription")} />
                                     </NdGrid>
@@ -809,9 +809,9 @@ export default class salesInvoice extends React.Component
                                                     tmpDocCustomer.REF_NO = this.docObj.dt()[0].REF_NO
                                                     tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
                                                     tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                    tmpDocCustomer.INPUT = this.cmbCashSafe.value
-                                                    tmpDocCustomer.INPUT_NAME = this.cmbCashSafe.displayValue
-                                                    tmpDocCustomer.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                    tmpDocCustomer.OUTPUT = this.cmbCashSafe.value
+                                                    tmpDocCustomer.OUTPUT_NAME = this.cmbCashSafe.displayValue
+                                                    tmpDocCustomer.INPUT = this.docObj.dt()[0].INPUT
                                                     tmpDocCustomer.PAY_TYPE = 0
                                                     tmpDocCustomer.AMOUNT = this.numCash.value
                                                     tmpDocCustomer.DESCRIPTION = this.cashDescription.value
@@ -920,9 +920,9 @@ export default class salesInvoice extends React.Component
                                                     tmpDocCustomer.REF_NO = this.docObj.dt()[0].REF_NO
                                                     tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
                                                     tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                    tmpDocCustomer.INPUT = this.cmbCheckSafe.value
-                                                    tmpDocCustomer.INPUT_NAME = this.cmbCheckSafe.displayValue
-                                                    tmpDocCustomer.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                    tmpDocCustomer.OUTPUT = this.cmbCheckSafe.value
+                                                    tmpDocCustomer.OUTPUT_NAME = this.cmbCheckSafe.displayValue
+                                                    tmpDocCustomer.INPUT = this.docObj.dt()[0].INPUT
                                                     tmpDocCustomer.PAY_TYPE = 1
                                                     tmpDocCustomer.AMOUNT = this.numcheck.value
                                                     tmpDocCustomer.DESCRIPTION = this.checkDescription.value
@@ -933,7 +933,7 @@ export default class salesInvoice extends React.Component
                                                     tmpCheck.REF = checkReference.value
                                                     tmpCheck.DOC_DATE =  this.docObj.dt()[0].DOC_DATE
                                                     tmpCheck.CHECK_DATE =  this.docObj.dt()[0].DOC_DATE
-                                                    tmpCheck.CUSTOMER =   this.docObj.dt()[0].OUTPUT
+                                                    tmpCheck.CUSTOMER =   this.docObj.dt()[0].INPUT
                                                     tmpCheck.AMOUNT =  this.numcheck.value
                                                     tmpCheck.SAFE =  this.cmbCheckSafe.value
                                                     this.docObj.checkCls.addEmpty(tmpCheck)
@@ -1029,9 +1029,9 @@ export default class salesInvoice extends React.Component
                                                     tmpDocCustomer.REF_NO = this.docObj.dt()[0].REF_NO
                                                     tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
                                                     tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                    tmpDocCustomer.INPUT = this.cmbBank.value
-                                                    tmpDocCustomer.INPUT_NAME = this.cmbBank.displayValue
-                                                    tmpDocCustomer.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                    tmpDocCustomer.OUTPUT = this.cmbBank.value
+                                                    tmpDocCustomer.OUTPUT_NAME = this.cmbBank.displayValue
+                                                    tmpDocCustomer.INPUT = this.docObj.dt()[0].INPUT
                                                     tmpDocCustomer.PAY_TYPE = 2
                                                     tmpDocCustomer.AMOUNT = this.numBank.value
                                                     tmpDocCustomer.DESCRIPTION = this.bankDescription.value

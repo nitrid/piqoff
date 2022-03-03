@@ -307,7 +307,7 @@ export const menu = (e) =>
         },
         {
             id: 'cnt',
-            text: e.t('menu.cnt'),//'Finans',
+            text: e.t('menu.cnt'),//'Anlaşmalar',
             expanded: false,
             items: 
             [
@@ -320,7 +320,7 @@ export const menu = (e) =>
                         {
                             id: 'cnt_01_001',
                             text: e.t('menu.cnt_01_001'),//'Alış Anlaşma Listesi',
-                            path: '../pages/customers/cards/customerCard.js'
+                            path: '../pages/finance/documents/payment.js'
                         },
                         {
                             id: 'cnt_01_002',
@@ -387,12 +387,12 @@ export const menu = (e) =>
                         {
                             id: 'fns_02_001',
                             text: e.t('menu.fns_02_001'),//'Ödeme',
-                            path: '../pages/customers/cards/customerCard.js'
+                            path: '../pages/finance/documents/payment.js'
                         },
                         {
                             id: 'fns_02_002',
                             text: e.t('menu.fns_02_002'),//'Tahsilat',
-                            path: '../pages/customers/cards/customerCard.js'
+                            path: '../pages/finance/documents/collection.js'
                         },
                     ]
                 },
