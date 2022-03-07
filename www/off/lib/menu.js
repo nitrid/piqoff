@@ -398,7 +398,25 @@ export const menu = (e) =>
                 },
                 {
                     id: 'fns_03',
-                    text : e.t('menu.fns_03'),//'Raporlar',
+                    text : e.t('menu.fns_03'),//'Kasalar İşlemleri',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'fns_03_001',
+                            text: e.t('menu.fns_03_001'),//'Ödeme',
+                            path: '../pages/finance/documents/payment.js'
+                        },
+                        {
+                            id: 'fns_03_002',
+                            text: e.t('menu.fns_03_002'),//'Tahsilat',
+                            path: '../pages/finance/documents/collection.js'
+                        },
+                    ]
+                },
+                {
+                    id: 'fns_04',
+                    text : e.t('menu.fns_04'),//'Raporlar',
                     expanded: false,
                 }
             ]

@@ -115,7 +115,7 @@ export default class salesInvoice extends React.Component
     async getDoc(pGuid,pRef,pRefno)
     {
         this.docObj.clearAll()
-        await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:0,DOC_TYPE:200});
+        await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:200});
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true

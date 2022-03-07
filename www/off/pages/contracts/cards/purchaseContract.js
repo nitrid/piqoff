@@ -271,7 +271,7 @@ export default class promotionCard extends React.Component
                                     onValueChanged={(async()=>
                                         {
                                         }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE = 0"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
@@ -421,9 +421,9 @@ export default class promotionCard extends React.Component
                                     allowColumnResizing={true}
                                     >           
                                     <Scrolling mode="virtual" />                         
-                                    <Column dataField="CODE" caption={this.t("txtPopItemsCode.clmCode")} width={150} />
-                                    <Column dataField="NAME" caption={this.t("txtPopItemsCode.clmName")} width={300} defaultSortOrder="asc" />
-                                    <Column dataField="MULTICODE" caption={this.t("txtPopItemsCode.clmMulticode")} width={200}/>
+                                    <Column dataField="CODE" caption={this.t("pg_txtPopItemsCode.clmCode")} width={150} />
+                                    <Column dataField="NAME" caption={this.t("pg_txtPopItemsCode.clmName")} width={300} defaultSortOrder="asc" />
+                                    <Column dataField="MULTICODE" caption={this.t("pg_txtPopItemsCode.clmMulticode")} width={200}/>
                                     </NdPopGrid>
                                     
                                 </Item>

@@ -36,13 +36,14 @@ export default class salesInvoice extends React.Component
         this._cellRoleRender = this._cellRoleRender.bind(this)
         this._calculateTotal = this._calculateTotal.bind(this)
         this._getDispatch = this._getDispatch.bind(this)
+        this._getPayment = this._getPayment.bind(this)
         this._calculateTotalMargin = this._calculateTotalMargin.bind(this)
         this._calculateMargin = this._calculateMargin.bind(this)
 
         this.frmDocItems = undefined;
         this.docLocked = false;        
 
-        this.rightItems = [{ text: this.t("getDispatch"), }]
+        this.rightItems = [{ text: this.t("getDispatch"), },{ text: this.t("getPayment"), }]
     }
     async componentDidMount()
     {
@@ -371,6 +372,25 @@ export default class salesInvoice extends React.Component
             this.docObj.docItems.dt().emit('onRefresh')
             this._calculateTotal()
         }
+    }
+    async _getPayment()
+    {
+        let tmpSource =
+        {
+            source : 
+            {
+                groupBy : this.groupList,
+                select : 
+                {
+                    query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_CUSTOMER_VW_01 WHERE INPUT = @INPUT AND INVOICE_GUID =@INVOICE_GUID AND TYPE = 1 AND DOC_TYPE IN(200)",
+                    param : ['INPUT:string|50','INVOICE_GUID:string|50'],
+                    value : [this.docObj.dt()[0].INPUT.this.docObj.dt()[0].GUID]
+                },
+                sql : this.core.sql
+            }
+        }
+        await this.pg_Payment.setSource(tmpSource)
+        this.pg_Payment.show()
     }
     render()
     {
@@ -1015,7 +1035,16 @@ export default class salesInvoice extends React.Component
                                     target="#grdDocItems"
                                     onItemClick={(async(e)=>
                                     {
-                                        this._getDispatch()
+                                        console.log(e)
+                                        if(e.itemData.text == this.t("getDispatch"))
+                                        {
+                                            this._getDispatch()
+                                        }
+                                        if(e.itemData.text == this.t("getDispatch"))
+                                        {
+                                            this._getDispatch()
+                                        }
+                                        
                                     }).bind(this)} />
                                 </React.Fragment>    
                                 </Item>
@@ -1216,7 +1245,7 @@ export default class salesInvoice extends React.Component
                             </Form>
                         </NdPopUp>
                     </div>  
-                     {/* Yönetici PopUp */}
+                    {/* Yönetici PopUp */}
                      <div>
                         <NdPopUp parent={this} id={"popPassword"} 
                         visible={false}
@@ -1282,7 +1311,7 @@ export default class salesInvoice extends React.Component
                             </Form>
                         </NdPopUp>
                     </div> 
-                     {/* İrsaliye Grid */}
+                    {/* İrsaliye Grid */}
                     <NdPopGrid id={"pg_dispatchGrid"} parent={this} container={"#root"}
                         visible={false}
                         position={{of:'#root'}} 
@@ -1300,6 +1329,7 @@ export default class salesInvoice extends React.Component
                             <Column dataField="PRICE" caption={this.t("pg_dispatchGrid.clmPrice")} width={300} />
                             <Column dataField="TOTAL" caption={this.t("pg_dispatchGrid.clmTotal")} width={300} />
                         </NdPopGrid>
+                    {/* Stok Grid */}
                     <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={"#root"}
                     visible={false}
                     position={{of:'#root'}} 
@@ -1313,6 +1343,22 @@ export default class salesInvoice extends React.Component
                         <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
                         <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />
                     </NdPopGrid>
+                     {/* Tahsilat Grid */}
+                     <NdPopGrid id={"pg_Payment"} parent={this} container={"#root"}
+                        visible={false}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        showBorders={true}
+                        width={'90%'}
+                        height={'90%'}
+                        selection={{mode:"multiple"}}
+                        title={this.t("pg_Payment.title")} //
+                        >
+                            <Column dataField="REFERANS" caption={this.t("pg_Payment.clmReferans")} width={200} defaultSortOrder="asc"/>
+                            <Column dataField="AMOUNT" caption={this.t("pg_Payment.clmAmount")} width={300} />
+                            <Column dataField="OUTPUT" caption={this.t("pg_Payment.clmOutput")} width={300} />
+                            <Column dataField="PAY_TYPE_NAME" caption={this.t("pg_Payment.clmPayName")} width={300} />
+                        </NdPopGrid>
                 </ScrollView>                
             </div>
         )

@@ -73,7 +73,10 @@ export const langTr =
         fns_02 : "Evraklar",
         fns_02_001 : "Ödeme",
         fns_02_002 : "Tahsilat",
-        fns_03 : "Raporlar",
+        fns_03 : "Kasa İşlemieri",
+        fns_03_001 : "Kasa Tanıtım",
+        fns_03_002 : "Kasa Durumları",
+        fns_04 : "Raporlar",
         promo: "Promosyon",
         promo_01: "Tanımlar",
         promo_01_001: "Promosyon Tanımları",
@@ -524,6 +527,7 @@ export const langTr =
         txtTotal : "Genel Toplam",
         dtShipDate :"Sevk Tarihi",
         getDispatch : "İrsaliye Getir",
+        getPaymnet : "Ödemeler",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -733,6 +737,7 @@ export const langTr =
         txtTotal : "Genel Toplam",
         dtShipDate :"Sevk Tarihi",
         getDispatch : "İrsaliye Getir",
+        getPaymnet : "Tahsilatlar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -764,6 +769,14 @@ export const langTr =
             clmQuantity : "Miktar",
             clmPrice : "Fiyat",
             clmTotal : "Tutar"
+        },
+        pg_Payment : 
+        {
+            title : "Tahsilatlar",
+            clmReferans : "Seri - Sıra",
+            clmPayName : "Ödeme Tipi",
+            clmOutput : "Kasa",
+            clmAmount : "Tutar"
         },
         grdDocItems: 
         {
@@ -1735,6 +1748,7 @@ export const langTr =
     },
     irs_02_003 :
     {
+        getRebate : "İade Deposundan Getir",
         txtRefRefno : "Seri-Sıra",
         cmbDepot: "Depo",
         txtCustomerCode : "Cari Kodu",
