@@ -41,7 +41,7 @@ export default class salesInvoice extends React.Component
         this.frmDocItems = undefined;
         this.docLocked = false;        
 
-        this.rightItems = [{ text: this.t("getDispatch"), }]
+        this.rightItems = [{ text: this.t("getDispatch"), },{ text: this.t("Ödemeler"), }]
     }
     async componentDidMount()
     {
@@ -988,7 +988,10 @@ export default class salesInvoice extends React.Component
                                     target="#grdDocItems"
                                     onItemClick={(async(e)=>
                                     {
-                                        this._getDispatch()
+                                        if(e.itemData.text == this.t("getDispatch"))
+                                        {
+                                            this._getDispatch()
+                                        }
                                     }).bind(this)} />
                                 </React.Fragment>     
                                 </Item>
