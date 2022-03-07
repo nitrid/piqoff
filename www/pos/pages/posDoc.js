@@ -8,7 +8,7 @@ import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule
 import NdGrid,{Column,Editing,Paging,Scrolling} from '../../core/react/devex/grid.js';
 import NdButton from '../../core/react/devex/button.js';
 
-export default class Pos extends React.Component
+export default class posDoc extends React.Component
 {
     constructor()
     {

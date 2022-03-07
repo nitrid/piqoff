@@ -12,7 +12,7 @@ import { LoadPanel } from 'devextreme-react/load-panel';
 import HTMLReactParser from 'html-react-parser';
 
 import Login from './login.js'
-import Pos from '../pages/Pos.js'
+import Pos from '../pages/posDoc.js'
 export default class App extends React.Component
 {
     static instance = null;
