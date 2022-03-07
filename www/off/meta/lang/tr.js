@@ -1735,6 +1735,7 @@ export const langTr =
     },
     irs_02_003 :
     {
+        getRebate : "İade Deposundan Getir",
         txtRefRefno : "Seri-Sıra",
         cmbDepot: "Depo",
         txtCustomerCode : "Cari Kodu",
