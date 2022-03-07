@@ -524,6 +524,7 @@ export const langTr =
         txtTotal : "Genel Toplam",
         dtShipDate :"Sevk Tarihi",
         getDispatch : "İrsaliye Getir",
+        getPaymnet : "Ödemeler",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -733,6 +734,7 @@ export const langTr =
         txtTotal : "Genel Toplam",
         dtShipDate :"Sevk Tarihi",
         getDispatch : "İrsaliye Getir",
+        getPaymnet : "Tahsilatlar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -764,6 +766,14 @@ export const langTr =
             clmQuantity : "Miktar",
             clmPrice : "Fiyat",
             clmTotal : "Tutar"
+        },
+        pg_Payment : 
+        {
+            title : "Tahsilatlar",
+            clmReferans : "Seri - Sıra",
+            clmPayName : "Ödeme Tipi",
+            clmOutput : "Kasa",
+            clmAmount : "Tutar"
         },
         grdDocItems: 
         {
