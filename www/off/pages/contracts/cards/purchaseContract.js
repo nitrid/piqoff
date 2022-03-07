@@ -421,9 +421,9 @@ export default class promotionCard extends React.Component
                                     allowColumnResizing={true}
                                     >           
                                     <Scrolling mode="virtual" />                         
-                                    <Column dataField="CODE" caption={this.t("txtPopItemsCode.clmCode")} width={150} />
-                                    <Column dataField="NAME" caption={this.t("txtPopItemsCode.clmName")} width={300} defaultSortOrder="asc" />
-                                    <Column dataField="MULTICODE" caption={this.t("txtPopItemsCode.clmMulticode")} width={200}/>
+                                    <Column dataField="CODE" caption={this.t("pg_txtPopItemsCode.clmCode")} width={150} />
+                                    <Column dataField="NAME" caption={this.t("pg_txtPopItemsCode.clmName")} width={300} defaultSortOrder="asc" />
+                                    <Column dataField="MULTICODE" caption={this.t("pg_txtPopItemsCode.clmMulticode")} width={200}/>
                                     </NdPopGrid>
                                     
                                 </Item>
