@@ -87,3 +87,7 @@
 {
     height: fit-content;
 }
+.dx-buttongroup-wrapper
+{
+    flex-flow: column nowrap;
+}
