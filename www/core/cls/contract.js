@@ -40,8 +40,8 @@ export class contractCls
         let tmpDt = new datatable('SALES_CONTRACT');            
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [dbo].[SALES_CONTRACT_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((CUSTOMER = @CUSTOMER) OR (@CUSTOMER = '00000000-0000-0000-0000-000000000000'))",
-            param : ['GUID:string|50','CUSTOMER:string|50']
+            query : "SELECT * FROM [dbo].[SALES_CONTRACT_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((CUSTOMER = @CUSTOMER) OR (@CUSTOMER = '00000000-0000-0000-0000-000000000000')) AND TYPE = @TYPE",
+            param : ['GUID:string|50','CUSTOMER:string|50','TYPE:int']
         } 
         tmpDt.insertCmd = 
         {
@@ -132,13 +132,15 @@ export class contractCls
             let tmpPrm = 
             {
                 GUID : '00000000-0000-0000-0000-000000000000',
-                CUSTOMER : '00000000-0000-0000-0000-000000000000'
+                CUSTOMER : '00000000-0000-0000-0000-000000000000',
+                TYPE : 0
             }          
 
             if(arguments.length > 0)
             {
                 tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
                 tmpPrm.CUSTOMER = typeof arguments[0].CUSTOMER == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].CUSTOMER;
+                tmpPrm.TYPE = typeof arguments[0].TYPE == 'undefined' ? 0 : arguments[0].TYPE;
             }
             this.ds.get('SALES_CONTRACT').selectCmd.value = Object.values(tmpPrm)
 

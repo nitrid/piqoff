@@ -110,6 +110,7 @@ export const langTr =
         tabTitleBarcode: "Barkod",
         tabTitleCustomer: "Tedarikçi",
         tabTitleCustomerPrice: "Tedarikçi Fiyat",
+        tabTitleSalesContract: "Satış Anlaşmaları",
         tabTitleInfo: "Bilgi",
         pg_txtRef:
         {
@@ -197,7 +198,7 @@ export const langTr =
             clmPrice: "Fiyat",
             clmMulticode: "Tedarikçi Stok Kodu"
         },
-        grdCustomerPrice: 
+        grdSalesContract: 
         {
             clmUser: "Kullanıcı",
             clmCode: "Kodu",
@@ -205,6 +206,14 @@ export const langTr =
             clmDate: "Son Fiyat Tarih",
             clmPrice: "Fiyat",
             clmMulticode: "Tedarikçi Stok Kodu"
+        },
+        grdCustomerPrice: 
+        {
+            clmUser: "Kullanıcı",
+            clmCode: "Kodu",
+            clmName: "Adı",
+            clmDate: "Son Fiyat Tarih",
+            clmPrice: "Fiyat",
         },
         msgRef:
         {
@@ -527,7 +536,19 @@ export const langTr =
         txtTotal : "Genel Toplam",
         dtShipDate :"Sevk Tarihi",
         getDispatch : "İrsaliye Getir",
-        getPaymnet : "Ödemeler",
+        getPayment : "Ödemeler",
+        cash : "Tutar",
+        description :"Açıklama",
+        checkReference : "Referans",
+        btnCash : "Nakit",
+        btnCheck : "Çek",
+        btnBank : "Havale",
+        cmbCashSafe : "Nakit Kasası",
+        cmbCheckSafe : "Çek Kasası",
+        cmbBank : "Banka Seçimi",
+        txtPayInvoıceTotal : "Fatura Tutarı",
+        txtPayTotal : "Ödeme Toplamı",
+        txtRemainder : "Kalan",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -576,6 +597,18 @@ export const langTr =
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj"
         },
+        grdInvoicePayment: 
+        {
+            clmInputName: "Kasa",
+            clmTypeName: "Tipi",
+            clmPrice: "Fiyat",
+            clmCreateDate: "Kayıt Tarihi",
+
+        },
+        popPayment:
+        {
+            title: "Ödemeler",
+        },
         popDiscount : 
         {
             title: "Evrak İndirimi",
@@ -593,6 +626,12 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
+        },
+        msgMoreAmount:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Kalan Tutardan Fazla Ödeme Girilemez !"
         },
         msgSave:
         {
@@ -714,6 +753,21 @@ export const langTr =
             btn02: "Yeni Ekle",
             msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Satırlar Birleştirilsin mi ?"
         },
+        popCash : 
+        {
+            title: "Nakit Girişi",
+            btnApprove : "Ekle"
+        },
+        popCheck : 
+        {
+            title: "Çek Girişi",
+            btnApprove : "Ekle"
+        },
+        popBank : 
+        {
+            title: "Havale Girişi",
+            btnApprove : "Ekle"
+        },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
         validDepot : "Depo Seçmelisiniz",
@@ -737,7 +791,19 @@ export const langTr =
         txtTotal : "Genel Toplam",
         dtShipDate :"Sevk Tarihi",
         getDispatch : "İrsaliye Getir",
-        getPaymnet : "Tahsilatlar",
+        getPayment : "Tahsilatlar",
+        cash : "Tutar",
+        description :"Açıklama",
+        checkReference : "Referans",
+        btnCash : "Nakit",
+        btnCheck : "Çek",
+        btnBank : "Havale",
+        cmbCashSafe : "Nakit Kasası",
+        cmbCheckSafe : "Çek Kasası",
+        cmbBank : "Banka Seçimi",
+        txtPayInvoıceTotal : "Fatura Tutarı",
+        txtPayTotal : "Tahsilat Toplamı",
+        txtRemainder : "Kalan",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -770,14 +836,6 @@ export const langTr =
             clmPrice : "Fiyat",
             clmTotal : "Tutar"
         },
-        pg_Payment : 
-        {
-            title : "Tahsilatlar",
-            clmReferans : "Seri - Sıra",
-            clmPayName : "Ödeme Tipi",
-            clmOutput : "Kasa",
-            clmAmount : "Tutar"
-        },
         grdDocItems: 
         {
             clmItemCode: "Kodu",
@@ -793,6 +851,18 @@ export const langTr =
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj"
 
+        },
+        grdInvoicePayment: 
+        {
+            clmInputName: "Kasa",
+            clmTypeName: "Tipi",
+            clmPrice: "Fiyat",
+            clmCreateDate: "Kayıt Tarihi",
+
+        },
+        popPayment:
+        {
+            title: "Tahsilatlar",
         },
         popDiscount : 
         {
@@ -811,6 +881,12 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
+        },
+        msgMoreAmount:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Kalan Tutardan Fazla Tahsilat Girilemez !"
         },
         msgSave:
         {
@@ -912,6 +988,21 @@ export const langTr =
             btn01: "Birleştir",
             btn02: "Yeni Ekle",
             msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Satırlar Birleştirilsin mi ?"
+        },
+        popCash : 
+        {
+            title: "Nakit Girişi",
+            btnApprove : "Ekle"
+        },
+        popCheck : 
+        {
+            title: "Çek Girişi",
+            btnApprove : "Ekle"
+        },
+        popBank : 
+        {
+            title: "Havale Girişi",
+            btnApprove : "Ekle"
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
@@ -2023,12 +2114,93 @@ export const langTr =
             dtPopStartDate :"Başlangıç",
             dtPopEndDate : "Bitiş"
         },
-        pg_txtPopItemsCode :
+        pg_txtPopItemsCode : 
         {
-            title :"Stok Seçimi",
-            clmCode : "Kodu",
-            clmName : "Adı",
-            clmMulticode : "Tedarikçi Kodu"
+            title : "Stok Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+            clmMulticode : "TEDARİKÇİ KODU"
+        },
+        validCustomerCode : "Cari Kodu Boş Geçilemez",
+    },
+    cnt_02_002 :
+    {
+        cmbDepot: "Depo",
+        txtCustomerCode : "Cari Kodu",
+        txtCustomerName : "Cari Adı",
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        pg_txtPopItemsCode : 
+        {
+            title : "Stok Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+        },
+        msgContractValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Cari Seçmeden Satır Eklenemez !"
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgNotCustomer:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Cari Bulunmadı !!"
+        },
+        grdContracts: 
+        {
+            clmItemCode: "Kodu",
+            clmItemName: "Adı",
+            clmPrice: "Fiyat",
+            clmQuantity : "Miktar",
+            clmStartDate : "Başlangıç",
+            clmFinishDate : "Bitiş",
+            clmCreateDate: "Kayıt Tarihi",
+            clmDepotName : "Depo",
+        },
+        popItems: 
+        {
+            title: "Anlaşma Ekle",
+            txtPopItemsCode : "Stok Kodu",
+            txtPopItemsName: "Stok Adı",
+            txtPopItemsPrice : "Fiyat",
+            txtPopItemsQuantity : "Miktar",
+            dtPopStartDate :"Başlangıç",
+            dtPopEndDate : "Bitiş"
         },
         pg_txtPopItemsCode : 
         {
@@ -2067,8 +2239,8 @@ export const langTr =
             title : "Evrak Seçimi",
             clmRef : "SERİ",
             clmRefNo : "SIRA",
-            clmOutputName : "CARİ ADI",
-            clmOutputCode  : "CARİ KODU",
+            clmInputName : "CARİ ADI",
+            clmInputCode  : "CARİ KODU",
         },
         pg_txtCustomerCode : 
         {
@@ -2082,7 +2254,7 @@ export const langTr =
         {
             clmCreateDate: "Kayıt Tarihi",
             clmAmount : "Tutar",
-            clmInputName : "Kasa/Banka",
+            clmOutputName : "Kasa/Banka",
             clmDescription : "Açıklama"
         },
         msgDocValid:
@@ -2186,12 +2358,8 @@ export const langTr =
         txtCustomerName : "Cari Adı",
         dtDocDate : "Tarih",
         txtAmount : "Tutar",
-        txtDiscount : "İndirim",
-        txtMargin : "Marj",
-        txtVat : "Kdv",
         txtTotal : "Genel Toplam",
         dtShipDate :"Sevk Tarihi",
-        getDispatch : "İrsaliye Getir",
         cash : "Tutar",
         description :"Açıklama",
         checkReference : "Referans",
@@ -2203,8 +2371,8 @@ export const langTr =
             title : "Evrak Seçimi",
             clmRef : "SERİ",
             clmRefNo : "SIRA",
-            clmInputName : "CARİ ADI",
-            clmInputCode  : "CARİ KODU",
+            clmOutputName : "CARİ ADI",
+            clmOutputCode  : "CARİ KODU",
         },
         pg_txtCustomerCode : 
         {
@@ -2218,7 +2386,7 @@ export const langTr =
         {
             clmCreateDate: "Kayıt Tarihi",
             clmAmount : "Tutar",
-            clmOutputName : "Kasa/Banka",
+            clmInputName : "Kasa/Banka",
             clmDescription : "Açıklama"
         },
         msgDocValid:

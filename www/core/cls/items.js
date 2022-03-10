@@ -437,7 +437,9 @@ export class itemPriceCls
             ITEM_GUID : '00000000-0000-0000-0000-000000000000',
             ITEM_CODE : '',
             ITEM_NAME : '',
-            DEPOT : '0',
+            DEPOT : '00000000-0000-0000-0000-000000000000',
+            DEPOT_CODE : '',
+            DEPOT_NAME : '',
             START_DATE : moment(new Date(0)).format("YYYY-MM-DD"),
             FINISH_DATE : moment(new Date(0)).format("YYYY-MM-DD"),
             PRICE : 0,
@@ -446,6 +448,7 @@ export class itemPriceCls
             CUSTOMER_CODE : '',
             CUSTOMER_NAME : '',
             CHANGE_DATE : moment(new Date(0)).format("DD/MM/YYYY HH:mm:ss"),
+            CDATE_FORMAT : ''
         }
 
         this._initDs();
@@ -460,13 +463,13 @@ export class itemPriceCls
                     "WHERE ((ITEM_GUID = @ITEM_GUID) OR (@ITEM_GUID = '00000000-0000-0000-0000-000000000000')) AND " + 
                     "((ITEM_CODE = @ITEM_CODE) OR (@ITEM_CODE = '')) AND " + 
                     "((TYPE = @TYPE) OR (@TYPE = -1)) AND " + 
-                    "((DEPOT = @DEPOT) OR (@DEPOT = '')) AND " +
+                    "((DEPOT = @DEPOT) OR (@DEPOT = '00000000-0000-0000-0000-000000000000')) AND " +
                     "((START_DATE >= @START_DATE) OR (CONVERT(NVARCHAR(10),@START_DATE,112) = '19700101')) AND " +
                     "((FINISH_DATE <= @FINISH_DATE) OR (CONVERT(NVARCHAR(10),@FINISH_DATE,112) = '19700101')) AND " + 
                     "((QUANTITY = @QUANTITY) OR (@QUANTITY = -1)) AND " +
                     "((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND " + 
                     "((CUSTOMER_GUID = @CUSTOMER_GUID) OR (@CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000'))",
-            param : ['ITEM_GUID:string|50','ITEM_CODE:string|25','TYPE:int','DEPOT:string|25','START_DATE:date','FINISH_DATE:date',
+            param : ['ITEM_GUID:string|50','ITEM_CODE:string|25','TYPE:int','DEPOT:string|50','START_DATE:date','FINISH_DATE:date',
                      'QUANTITY:float','CUSTOMER_CODE:string|25','CUSTOMER_GUID:string|50']
         }
         tmpDt.insertCmd = 
@@ -482,7 +485,7 @@ export class itemPriceCls
                     "@PRICE = @PPRICE, " + 
                     "@QUANTITY = @PQUANTITY, " + 
                     "@CUSTOMER = @PCUSTOMER ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PITEM:string|50','PDEPOT:string|25','PSTART_DATE:date','PFINISH_DATE:date',
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PITEM:string|50','PDEPOT:string|50','PSTART_DATE:date','PFINISH_DATE:date',
                      'PPRICE:float','PQUANTITY:float','PCUSTOMER:string|50'],
             dataprm : ['GUID','CUSER','TYPE','ITEM_GUID','DEPOT','START_DATE','FINISH_DATE','PRICE','QUANTITY','CUSTOMER_GUID']
         } 
@@ -499,7 +502,7 @@ export class itemPriceCls
                     "@PRICE = @PPRICE, " + 
                     "@QUANTITY = @PQUANTITY, " + 
                     "@CUSTOMER = @PCUSTOMER ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PITEM:string|50','PDEPOT:string|25','PSTART_DATE:date','PFINISH_DATE:date',
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PITEM:string|50','PDEPOT:string|50','PSTART_DATE:date','PFINISH_DATE:date',
                      'PPRICE:float','PQUANTITY:float','PCUSTOMER:string|50'],
             dataprm : ['GUID','CUSER','TYPE','ITEM_GUID','DEPOT','START_DATE','FINISH_DATE','PRICE','QUANTITY','CUSTOMER_GUID']
         } 
@@ -561,26 +564,27 @@ export class itemPriceCls
                 ITEM_GUID : '00000000-0000-0000-0000-000000000000',
                 ITEM_CODE : '',
                 TYPE : -1,
-                DEPOT : '',
+                DEPOT : '00000000-0000-0000-0000-000000000000',
                 START_DATE : moment(new Date(0)).format("YYYY-MM-DD"),
                 FINISH_DATE : moment(new Date(0)).format("YYYY-MM-DD"),
                 QUANTITY : -1,
                 CUSTOMER_CODE : '',
                 CUSTOMER_GUID : '00000000-0000-0000-0000-000000000000',
-            }          
+            }         
 
             if(arguments.length > 0)
             {
                 tmpPrm.ITEM_GUID = typeof arguments[0].ITEM_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].ITEM_GUID;
                 tmpPrm.ITEM_CODE = typeof arguments[0].ITEM_CODE == 'undefined' ? '' : arguments[0].ITEM_CODE;
                 tmpPrm.TYPE = typeof arguments[0].TYPE == 'undefined' ? -1 : arguments[0].TYPE;
-                tmpPrm.DEPOT = typeof arguments[0].DEPOT == 'undefined' ? '' : arguments[0].DEPOT;
+                tmpPrm.DEPOT = typeof arguments[0].DEPOT == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].DEPOT;
                 tmpPrm.START_DATE = typeof arguments[0].START_DATE == 'undefined' ? moment(new Date(0)).format("YYYY-MM-DD")  : arguments[0].START_DATE;
                 tmpPrm.FINISH_DATE = typeof arguments[0].FINISH_DATE == 'undefined' ? moment(new Date(0)).format("YYYY-MM-DD")  : arguments[0].FINISH_DATE;
                 tmpPrm.QUANTITY = typeof arguments[0].QUANTITY == 'undefined' ? -1 : arguments[0].QUANTITY;
                 tmpPrm.CUSTOMER_CODE = typeof arguments[0].CUSTOMER_CODE == 'undefined' ? '' : arguments[0].CUSTOMER_CODE;
                 tmpPrm.CUSTOMER_GUID = typeof arguments[0].CUSTOMER_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].CUSTOMER_GUID;
             }
+            console.log(tmpPrm)
             this.ds.get('ITEM_PRICE').selectCmd.value = Object.values(tmpPrm)
 
             await this.ds.get('ITEM_PRICE').refresh();
@@ -591,6 +595,7 @@ export class itemPriceCls
     {
         return new Promise(async resolve => 
         {
+            this.ds.delete()
             resolve(await this.ds.update()); 
         });
     }

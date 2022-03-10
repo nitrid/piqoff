@@ -29,7 +29,8 @@ export default class itemCard extends React.Component
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.itemsObj = new itemsCls();
-        this.itemsPriceSupply = new itemPriceCls();        
+        this.itemsPriceSupply = new itemPriceCls();   
+        this.itemsPriceSalesCont = new itemPriceCls();        
         this.prevCode = "";
         
         this._onItemRendered = this._onItemRendered.bind(this)
@@ -44,7 +45,8 @@ export default class itemCard extends React.Component
         this.prevCode = ""
         this.itemsObj.clearAll();
 
-        this.itemsPriceSupply.clearAll();             
+        this.itemsPriceSupply.clearAll();     
+        this.itemsPriceSalesCont.clearAll();        
 
         this.itemsObj.ds.on('onAddRow',(pTblName,pData) =>
         {            
@@ -160,7 +162,8 @@ export default class itemCard extends React.Component
         this.itemsObj.clearAll();
         await this.itemsObj.load({CODE:pCode});
         //TEDARİKÇİ FİYAT GETİR İŞLEMİ.                
-        await this.itemsPriceSupply.load({ITEM_CODE:pCode,TYPE:1})    
+        await this.itemsPriceSupply.load({ITEM_CODE:pCode,TYPE:1})  
+        await this.itemsPriceSalesCont.load({ITEM_CODE:pCode,TYPE:2})  
         this.txtBarcode.readOnly = true;
     }
     async checkItem(pCode)
@@ -317,6 +320,10 @@ export default class itemCard extends React.Component
         else if(e.itemData.title == "Tedarikçi Fiyat")
         {
             await this.grdCustomerPrice.dataRefresh({source:this.itemsPriceSupply.dt()});
+        }
+        else if(e.itemData.title == this.t("tabTitleSalesContract"))
+        {
+            await this.grdCustomerPrice.dataRefresh({source:this.itemsPriceSalesCont.dt()});
         }
     }
     underPrice()
@@ -913,7 +920,7 @@ export default class itemCard extends React.Component
                                                 <Paging defaultPageSize={5} />
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                                 <Column dataField="TYPE_NAME" caption={this.t("grdPrice.clmType")} />
-                                                <Column dataField="DEPOT" caption={this.t("grdPrice.clmDepot")} />
+                                                <Column dataField="DEPOT_NAME" caption={this.t("grdPrice.clmDepot")} />
                                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdPrice.clmCustomerName")}/>
                                                 <Column dataField="START_DATE" caption={this.t("grdPrice.clmStartDate")} dataType="date" 
                                                 editorOptions={{value:null}}
@@ -1102,6 +1109,28 @@ export default class itemCard extends React.Component
                                         </div>
                                     </div>
                                 </Item>
+                                <Item title={this.t("tabTitleSalesContract")}>
+                                    <div className='row px-2 py-2'>
+                                        <div className='col-12'>
+                                            <NdGrid parent={this} id={"grdSalesContract"} 
+                                            showBorders={true} 
+                                            columnsAutoWidth={true} 
+                                            allowColumnReordering={true} 
+                                            allowColumnResizing={true} 
+                                            height={'100%'} 
+                                            width={'100%'}
+                                            >
+                                                <Paging defaultPageSize={5} />
+                                                <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
+                                                <Column dataField="CUSER" caption={this.t("grdSalesContract.clmUser")} />
+                                                <Column dataField="CUSTOMER_CODE" caption={this.t("grdSalesContract.clmCode")} />
+                                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdSalesContract.clmName")} />
+                                                <Column dataField="CHANGE_DATE" caption={this.t("grdSalesContract.clmDate")} allowEditing={false} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
+                                                <Column dataField="PRICE" caption={this.t("grdSalesContract.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                            </NdGrid>
+                                        </div>
+                                    </div>
+                                </Item>
                                 <Item title={this.t("tabTitleInfo")}></Item>
                             </TabPanel>
                         </div>
@@ -1174,7 +1203,7 @@ export default class itemCard extends React.Component
                                                     tmpEmpty.TYPE = 0
                                                     tmpEmpty.TYPE_NAME = 'Standart'
                                                     tmpEmpty.ITEM_GUID = this.itemsObj.dt()[0].GUID 
-                                                    tmpEmpty.DEPOT = "0"
+                                                    tmpEmpty.DEPOT = '00000000-0000-0000-0000-000000000000'
                                                     tmpEmpty.START_DATE = this.dtPopPriStartDate.value
                                                     tmpEmpty.FINISH_DATE = this.dtPopPriEndDate.value
                                                     tmpEmpty.PRICE = this.txtPopPriPrice.value
