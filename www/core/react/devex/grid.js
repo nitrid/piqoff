@@ -16,6 +16,8 @@ export default class NdGrid extends Base
         this.state.filterRow = typeof props.filterRow == 'undefined' ? {} : props.filterRow
         this.state.headerFilter = typeof props.headerFilter == 'undefined' ? {} : props.headerFilter
         this.state.selection = typeof props.selection == 'undefined' ? {} : props.selection
+        this.state.paging = typeof props.paging == 'undefined' ? {} : props.paging
+        this.state.pager = typeof props.pager == 'undefined' ? {} : props.pager
 
         this._onInitialized = this._onInitialized.bind(this);
         this._onSelectionChanged = this._onSelectionChanged.bind(this);
@@ -286,6 +288,7 @@ export default class NdGrid extends Base
                     filterRow={this.state.filterRow}
                     headerFilter={this.state.headerFilter}
                     selection={this.state.selection}
+                    pager={this.state.pager}
                     onEditorPrepared={this._onEditorPrepared}
                     onRowPrepared = {this._onRowPrepared}
                     >

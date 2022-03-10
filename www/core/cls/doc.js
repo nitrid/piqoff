@@ -29,6 +29,7 @@ export class docCls
             DESCRIPTION : '',
             LOCKED : 0,
             MARGIN : 0,
+            PAYMENT_DOC_GUID : 0,
         }
 
         this.docItems = new docItemsCls();
@@ -43,8 +44,10 @@ export class docCls
         let tmpDt = new datatable('DOC')
         tmpDt.selectCmd =
         {
-            query : "SELECT * FROM DOC_VW_01 WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0)) AND ((TYPE = @TYPE) OR (@TYPE = -1)) AND ((TYPE = @TYPE) OR (@TYPE = -1)) ",
-            param : ['GUID:string|50','REF:string|25','REF_NO:int','TYPE:int','DOC_TYPE:int']
+            query : "SELECT * FROM DOC_VW_01 WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND " + 
+            " ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0)) AND ((TYPE = @TYPE) OR (@TYPE = -1)) AND ((TYPE = @TYPE) OR (@TYPE = -1)) AND" +
+            "((PAYMENT_DOC_GUID = @PAYMENT_DOC_GUID) OR (@PAYMENT_DOC_GUID = '00000000-0000-0000-0000-000000000000')) " ,
+            param : ['GUID:string|50','REF:string|25','REF_NO:int','TYPE:int','DOC_TYPE:int','PAYMENT_DOC_GUID:string|50']
         }
         tmpDt.insertCmd = 
         {
@@ -150,14 +153,15 @@ export class docCls
         //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİR ÖRN: {CODE:''}
         return new Promise(async resolve =>
         {
-            let tmpPrm = {GUID:'00000000-0000-0000-0000-000000000000',REF:'',REF_NO:0,TYPE:-1,DOC_TYPE: -1}
+            let tmpPrm = {GUID:'00000000-0000-0000-0000-000000000000',REF:'',REF_NO:0,TYPE:-1,DOC_TYPE: -1,PAYMENT_DOC_GUID:'00000000-0000-0000-0000-000000000000'}
             if(arguments.length > 0)
             {
                 tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
                 tmpPrm.REF = typeof arguments[0].REF == 'undefined' ? '' : arguments[0].REF;
                 tmpPrm.REF_NO = typeof arguments[0].REF_NO == 'undefined' ? 0 : arguments[0].REF_NO;
                 tmpPrm.TYPE = typeof arguments[0].TYPE == 'undefined' ? -1 : arguments[0].TYPE;
-                tmpPrm.REF_NO = typeof arguments[0].REF_NO == 'undefined' ? -1 : arguments[0].REF_NO;
+                tmpPrm.DOC_TYPE = typeof arguments[0].DOC_TYPE == 'undefined' ? -1 : arguments[0].DOC_TYPE;
+                tmpPrm.PAYMENT_DOC_GUID = typeof arguments[0].PAYMENT_DOC_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].PAYMENT_DOC_GUID;
             }
             this.ds.get('DOC').selectCmd.value = Object.values(tmpPrm);
 
@@ -385,6 +389,7 @@ export class docCustomerCls
         this.empty = {
             GUID : '00000000-0000-0000-0000-000000000000',
             CUSER : this.core.auth.data.CODE,
+            CDATE_FORMAT :  moment(new Date()).format("YYYY-MM-DD"),
             TYPE: 0,
             DOC_GUID : '00000000-0000-0000-0000-000000000000',
             DOC_TYPE : 0,
@@ -399,6 +404,7 @@ export class docCustomerCls
             OUTPUT_CODE : '',
             OUTPUT_NAME : '',
             PAY_TYPE : -1,
+            PAY_TYPE_NAME : '',
             AMOUNT : 0,
             DESCRIPTION : '',
             INVOICE_GUID : '00000000-0000-0000-0000-000000000000'
@@ -412,8 +418,9 @@ export class docCustomerCls
         let tmpDt = new datatable('DOC_CUSTOMER');
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [dbo].[DOC_CUSTOMER_VW_01] WHERE ((DOC_GUID = @DOC_GUID) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000')) AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0))",
-            param : ['DOC_GUID:string|50','REF:string|25','REF_NO:int']
+            query : "SELECT * FROM [dbo].[DOC_CUSTOMER_VW_01] WHERE ((DOC_GUID = @DOC_GUID) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000')) AND ((DOC_TYPE = @DOC_TYPE) OR (@DOC_TYPE = -1)) AND " +
+            " ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0)) AND ((INVOICE_GUID = @INVOICE_GUID) OR (@INVOICE_GUID = '00000000-0000-0000-0000-000000000000'))",
+            param : ['DOC_GUID:string|50','DOC_TYPE:int','REF:string|25','REF_NO:int','INVOICE_GUID:string|50']
         }
         tmpDt.insertCmd = 
         {
@@ -512,14 +519,17 @@ export class docCustomerCls
         //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİR.
         return new Promise(async resolve =>
         {
-            let tmpPrm = {GUID:'00000000-0000-0000-0000-000000000000',REF:'',REF_NO:0}
+            let tmpPrm = {GUID:'00000000-0000-0000-0000-000000000000',DOC_TYPE:-1,REF:'',REF_NO:0,INVOICE_GUID:'00000000-0000-0000-0000-000000000000'}
             if(arguments.length > 0)
             {
-                tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '' : arguments[0].GUID;
+                tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
+                tmpPrm.DOC_TYPE = typeof arguments[0].DOC_TYPE == 'undefined' ? -1 : arguments[0].DOC_TYPE;
                 tmpPrm.REF = typeof arguments[0].REF == 'undefined' ? '' : arguments[0].REF;
-                tmpPrm.REF_NO = typeof arguments[0].REF_NO == 'undefined' ? '' : arguments[0].REF_NO;
+                tmpPrm.REF_NO = typeof arguments[0].REF_NO == 'undefined' ? 0 : arguments[0].REF_NO;
+                tmpPrm.INVOICE_GUID = typeof arguments[0].INVOICE_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].INVOICE_GUID;
             }
 
+            console.log(tmpPrm)
             this.ds.get('DOC_CUSTOMER').selectCmd.value = Object.values(tmpPrm);
 
             await this.ds.get('DOC_CUSTOMER').refresh();

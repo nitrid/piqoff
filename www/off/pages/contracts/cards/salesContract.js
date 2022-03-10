@@ -53,9 +53,8 @@ export default class promotionCard extends React.Component
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT GUID,CODE,NAME,VAT,ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = @CUSTOMER_GUID),'') AS MULTICODE FROM ITEMS_VW_01 ",
-                    param : ['CUSTOMER_GUID:string|250'],
-                    value : [this.txtCustomerCode.GUID]
+                    query : "SELECT GUID,CODE,NAME,VAT FROM ITEMS_VW_01 ",
+
                 },
                 sql : this.core.sql
             }
@@ -64,7 +63,7 @@ export default class promotionCard extends React.Component
     }
     async _getContracts()
     {
-        await this.itemPriceObj.load({ITEM_GUID:'00000000-0000-0000-0000-000000000000',CUSTOMER_GUID:this.txtCustomerCode.GUID,TYPE:1});
+        await this.itemPriceObj.load({ITEM_GUID:'00000000-0000-0000-0000-000000000000',CUSTOMER_GUID:this.txtCustomerCode.GUID,TYPE:2});
     }
     render()
     {
@@ -449,7 +448,7 @@ export default class promotionCard extends React.Component
                                                     let tmpEmpty = {...this.itemPriceObj.empty};
                                                     
                                                     tmpEmpty.CUSER = this.core.auth.data.CODE,  
-                                                    tmpEmpty.TYPE = 1,  
+                                                    tmpEmpty.TYPE = 2,  
                                                     tmpEmpty.ITEM_GUID = this.txtPopItemsCode.GUID
                                                     tmpEmpty.ITEM_CODE = this.txtPopItemsCode.value
                                                     tmpEmpty.ITEM_NAME = this.txtPopItemsName.value

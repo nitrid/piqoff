@@ -343,7 +343,7 @@ export const menu = (e) =>
                         {
                             id: 'cnt_02_002',
                             text: e.t('menu.cnt_02_002'),//'Şatış Anlaşma',
-                            path: '../pages/customers/cards/customerCard.js'
+                            path: '../pages/contracts/cards/salesContract.js'
                         },
                     ]
                 },
