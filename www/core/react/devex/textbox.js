@@ -132,6 +132,7 @@ export default class NdTextBox extends Base
             <TextBox id={this.props.id} showClearButton={this.state.showClearButton} height='fit-content' 
                 maxLength={this.props.maxLength}
                 style={this.props.style}
+                elementAttr={this.props.elementAttr}
                 valueChangeEvent="keyup" onValueChanged={this._onValueChanged} 
                 onEnterKey={this._onEnterKey} onFocusIn={this._onFocusIn} onFocusOut={this._onFocusOut}
                 onChange={this._onChange}

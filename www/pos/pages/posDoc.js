@@ -3,10 +3,13 @@ import { itemsCls } from '../../core/cls/items.js';
 import App from '../lib/app.js';
 
 import Form, { Label,Item } from 'devextreme-react/form';
+import { ButtonGroup } from 'devextreme-react/button-group';
 
 import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../core/react/devex/textbox.js';
 import NdGrid,{Column,Editing,Paging,Scrolling} from '../../core/react/devex/grid.js';
-import NdButton from '../../core/react/devex/button.js';
+import NbButton from '../../core/react/bootstrap/button.js';
+import NdPopUp from '../../core/react/devex/popup.js';
+import NbNumberBoard from '../../core/react/bootstrap/numberboard.js';
 
 export default class posDoc extends React.Component
 {
@@ -14,65 +17,68 @@ export default class posDoc extends React.Component
     {
         super() 
         this.core = App.instance.core;
+        this.lang = App.instance.lang;
+        this.t = App.instance.lang.getFixedT(null,null,"this.props.data.id")
     }
     async componentDidMount()
     {
-        let tmpDb = 
-        {
-            name : 'POS',
-            tables :
-            [
-                {
-                    name : 'ITEMS',
-                    columns : 
-                    {
-                        GUID : {dataType:"string"},
-                        CDATE : {dataType:"date_time"},
-                        CUSER : {dataType:"string"},
-                        LDATE : {dataType:"date_time"},
-                        LUSER : {dataType:"string"},
-                        TYPE : {dataType:"string"},
-                        SPECIAL : {dataType:"string"},
-                        CODE : {dataType:"string"},
-                        NAME : {dataType:"string"},
-                        SNAME : {dataType:"string"},
-                        VAT : {dataType:"number"},
-                        COST_PRICE : {dataType:"number"},
-                        MIN_PRICE : {dataType:"number"},
-                        MAX_PRICE : {dataType:"number"},
-                        STATUS : {dataType:"boolean"},
-                        MAIN_GRP : {dataType:"string"},
-                        MAIN_GRP_NAME : {dataType:"string"},
-                        SUB_GRP : {dataType:"string"},
-                        ORGINS : {dataType:"string"},
-                        ORGINS_NAME : {dataType:"string"},
-                        SECTOR : {dataType:"string"},
-                        RAYON : {dataType:"string"},
-                        SHELF : {dataType:"string"},
-                        WEIGHING : {dataType:"boolean"},
-                        SALE_JOIN_LINE : {dataType:"boolean"},
-                        TICKET_REST: {dataType:"boolean"},
-                    } 
-                }
-            ]
-        }
-        await this.core.local.init(tmpDb);
-        console.log(111)
-        let tmpItems = new itemsCls
-        await tmpItems.load()
-        this.core.offline = true
+        console.log(this)
+        // let tmpDb = 
+        // {
+        //     name : 'POS',
+        //     tables :
+        //     [
+        //         {
+        //             name : 'ITEMS',
+        //             columns : 
+        //             {
+        //                 GUID : {dataType:"string"},
+        //                 CDATE : {dataType:"date_time"},
+        //                 CUSER : {dataType:"string"},
+        //                 LDATE : {dataType:"date_time"},
+        //                 LUSER : {dataType:"string"},
+        //                 TYPE : {dataType:"string"},
+        //                 SPECIAL : {dataType:"string"},
+        //                 CODE : {dataType:"string"},
+        //                 NAME : {dataType:"string"},
+        //                 SNAME : {dataType:"string"},
+        //                 VAT : {dataType:"number"},
+        //                 COST_PRICE : {dataType:"number"},
+        //                 MIN_PRICE : {dataType:"number"},
+        //                 MAX_PRICE : {dataType:"number"},
+        //                 STATUS : {dataType:"boolean"},
+        //                 MAIN_GRP : {dataType:"string"},
+        //                 MAIN_GRP_NAME : {dataType:"string"},
+        //                 SUB_GRP : {dataType:"string"},
+        //                 ORGINS : {dataType:"string"},
+        //                 ORGINS_NAME : {dataType:"string"},
+        //                 SECTOR : {dataType:"string"},
+        //                 RAYON : {dataType:"string"},
+        //                 SHELF : {dataType:"string"},
+        //                 WEIGHING : {dataType:"boolean"},
+        //                 SALE_JOIN_LINE : {dataType:"boolean"},
+        //                 TICKET_REST: {dataType:"boolean"},
+        //             } 
+        //         }
+        //     ]
+        // }
+        // await this.core.local.init(tmpDb);
+        // console.log(111)
+        // let tmpItems = new itemsCls
+        // await tmpItems.load()
+        // this.core.offline = true
 
-        Object.setPrototypeOf(tmpItems.dt('ITEMS')[0],{stat:'new'})
+        // Object.setPrototypeOf(tmpItems.dt('ITEMS')[0],{stat:'new'})
         
-        await tmpItems.save()
-        await tmpItems.load()
-        tmpItems.dt('ITEMS')[0].CODE = '1453'
-        await tmpItems.save()
-        await tmpItems.load()
-        tmpItems.dt('ITEMS').removeAt(0)
-        await tmpItems.save()
-        await tmpItems.load()
-        console.log(tmpItems.dt('ITEMS'))
+        // await tmpItems.save()
+        // await tmpItems.load()
+        // tmpItems.dt('ITEMS')[0].CODE = '1453'
+        // await tmpItems.save()
+        // await tmpItems.load()
+        // tmpItems.dt('ITEMS').removeAt(0)
+        // await tmpItems.save()
+        // await tmpItems.load()
+        // console.log(tmpItems.dt('ITEMS'))
     }
     render()
     {
@@ -263,152 +269,182 @@ export default class posDoc extends React.Component
                             <div className='col-12'>
                                 {/* Line 1 */}
                                 <div className='row px-2'>
-                                    {/* Payment */}
+                                    {/* Total */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btnTotal"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}
+                                        onClick={()=>
+                                        {                                                        
+                                            this.popTotal.show();
+                                        }}>
                                             <i className="text-white fa-solid fa-euro-sign" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                     {/* Credit Card */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}
+                                        onClick={()=>
+                                        {                                                        
+                                            this.popCardPay.show();
+                                        }}>
                                             <i className="text-white fa-solid fa-credit-card" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                     {/* 7 */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-primary btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btnKey7"} parent={this} keyBtn={{textbox:"txtBarcode",key:"7"}} 
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:'70px',width:'100%'}}>
                                             <i className="text-white fa-solid fa-7" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                     {/* 8 */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-primary btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btnKey8"} parent={this} keyBtn={{textbox:"txtBarcode",key:"8"}} 
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:'70px',width:'100%'}}>
                                             <i className="text-white fa-solid fa-8" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                     {/* 9 */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-primary btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btnKey9"} parent={this} keyBtn={{textbox:"txtBarcode",key:"9"}} 
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:'70px',width:'100%'}}>
                                             <i className="text-white fa-solid fa-9" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                     {/* Check */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-primary btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-primary btn-block my-1" style={{height:'70px',width:'100%'}}>
                                             <i className="text-white fa-solid fa-check" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                 </div>  
                                 {/* Line 2 */}
                                 <div className='row px-2'>
                                     {/* Safe Open */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}
+                                        onClick={()=>
+                                        {                             
+                                            this.popAccessPass.show();
+                                        }}
+                                        >
                                             <i className="text-white fa-solid fa-inbox" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                     {/* Cash */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}>
                                             <i className="text-white fa-solid fa-money-bill-1" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                     {/* 4 */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-primary btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btnKey4"} parent={this} keyBtn={{textbox:"txtBarcode",key:"4"}} 
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:'70px',width:'100%'}}>
                                             <i className="text-white fa-solid fa-4" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                     {/* 5 */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-primary btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btnKey5"} parent={this} keyBtn={{textbox:"txtBarcode",key:"5"}} 
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:'70px',width:'100%'}}>
                                             <i className="text-white fa-solid fa-5" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                     {/* 6 */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-primary btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btnKey6"} parent={this} keyBtn={{textbox:"txtBarcode",key:"6"}} 
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:'70px',width:'100%'}}>
                                             <i className="text-white fa-solid fa-6" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                     {/* Backspace */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-primary btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btnKeyBs"} parent={this} keyBtn={{textbox:"txtBarcode",key:"Backspace"}} 
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:'70px',width:'100%'}}>
                                             <i className="text-white fa-solid fa-delete-left" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                 </div> 
                                 {/* Line 3 */}
                                 <div className='row px-2'>
                                     {/* Percent */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}
+                                        onClick={()=>
+                                        {                                                        
+                                            this.popPrice.show();
+                                        }}>
                                             <i className="text-white fa-solid fa-percent" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                     {/* Ticket */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}>
                                             <i className="text-white fa-solid fa-ticket" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                     {/* 1 */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-primary btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btnKey1"} parent={this} keyBtn={{textbox:"txtBarcode",key:"1"}} 
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:'70px',width:'100%'}}>
                                             <i className="text-white fa-solid fa-1" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                     {/* 2 */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-primary btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btnKey2"} parent={this} keyBtn={{textbox:"txtBarcode",key:"2"}} 
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:'70px',width:'100%'}}>
                                             <i className="text-white fa-solid fa-2" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                     {/* 3 */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-primary btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btnKey3"} parent={this} keyBtn={{textbox:"txtBarcode",key:"3"}} 
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:'70px',width:'100%'}}>
                                             <i className="text-white fa-solid fa-3" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                     {/* X */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-primary btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btnKeyX"} parent={this} keyBtn={{textbox:"txtBarcode",key:"*"}} 
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:'70px',width:'100%'}}>
                                             <i className="text-white fa-solid fa-xmark" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                 </div> 
                                 {/* Line 4 */}
                                 <div className='row px-2'>
                                     {/* Calculator */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}>
                                             <i className="text-white fa-solid fa-calculator" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                     {/* Info */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}>
                                             <i className="text-white fa-solid fa-circle-info" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                     {/* . */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-primary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'26pt'}}>.</button>
+                                        <NbButton id={"btnKeyDot"} parent={this} keyBtn={{textbox:"txtBarcode",key:"."}}
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'26pt'}}>.</NbButton>
                                     </div>
                                     {/* 0 */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-primary btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btnKey0"} parent={this} keyBtn={{textbox:"txtBarcode",key:"0"}}
+                                        className="form-group btn btn-primary btn-block my-1" style={{height:'70px',width:'100%'}}>
                                             <i className="text-white fa-solid fa-0" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                     {/* -1 */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-primary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'20pt'}}>-1</button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-primary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'20pt'}}>-1</NbButton>
                                     </div>
                                     {/* +1 */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-primary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'20pt'}}>+1</button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-primary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'20pt'}}>+1</NbButton>
                                     </div>
                                 </div> 
                             </div>
@@ -423,247 +459,577 @@ export default class posDoc extends React.Component
                                 <div className='row px-2'>
                                     {/* Up */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-success btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-success btn-block my-1" style={{height:'70px',width:'100%'}}>
                                             <i className="text-white fa-solid fa-arrow-up" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                     {/* Plu 1 */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-success btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}>FRUITS LEGUMES PC</button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-success btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}>FRUITS LEGUMES PC</NbButton>
                                     </div>
                                     {/* Plu 2 */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-success btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}>FRUITS LEGUMES KG</button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-success btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}>FRUITS LEGUMES KG</NbButton>
                                     </div>
                                     {/* Plu 3 */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-success btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}>EPICERIE</button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-success btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}>EPICERIE</NbButton>
                                     </div>
                                     {/* Plu 4 */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-success btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}>PATISSERIE ORIENTALE</button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-success btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}>PATISSERIE ORIENTALE</NbButton>
                                     </div>
                                     {/* Plu 5 */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-success btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}>SACHET CAISSE</button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-success btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}>SACHET CAISSE</NbButton>
                                     </div>
                                 </div>  
                                 {/* Line 2 */}
                                 <div className='row px-2'>
                                     {/* Down */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-success btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-success btn-block my-1" style={{height:'70px',width:'100%'}}>
                                             <i className="text-white fa-solid fa-arrow-down" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                     {/* Plu 6 */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-success btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}>PIDE X2</button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-success btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}>PIDE X2</NbButton>
                                     </div>
                                     {/* Plu 7 */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-success btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}>Boucherie / Charcuterie</button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-success btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}>Boucherie / Charcuterie</NbButton>
                                     </div>
                                     {/* Plu 8 */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-success btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}>NAPPE TRANSPARENTE</button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-success btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}>NAPPE TRANSPARENTE</NbButton>
                                     </div>
                                     {/* Plu 9 */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-success btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}>PAIN KEBAB LOT X5</button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-success btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}>PAIN KEBAB LOT X5</NbButton>
                                     </div>
                                     {/* Plu 10 */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-success btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}>OLIVES AU CHOIX KG</button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-success btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}>OLIVES AU CHOIX KG</NbButton>
                                     </div>
                                 </div>  
                                 {/* Line 3 */}
                                 <div className='row px-2'>
                                     {/* Delete */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-danger btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-danger btn-block my-1" style={{height:'70px',width:'100%'}}>
                                             <i className="text-white fa-solid fa-eraser" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                     {/* Category 1 */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-info btn-block my-1 text-white" style={{height:'70px',width:'100%',fontSize:'10pt'}}>1</button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1 text-white" style={{height:'70px',width:'100%',fontSize:'10pt'}}>1</NbButton>
                                     </div>
                                     {/* Category 2 */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-info btn-block my-1 text-white" style={{height:'70px',width:'100%',fontSize:'10pt'}}>PAIN</button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1 text-white" style={{height:'70px',width:'100%',fontSize:'10pt'}}>PAIN</NbButton>
                                     </div>
                                     {/* Category 3 */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-info btn-block my-1 text-white" style={{height:'70px',width:'100%',fontSize:'10pt'}}>FRUIT</button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1 text-white" style={{height:'70px',width:'100%',fontSize:'10pt'}}>FRUIT</NbButton>
                                     </div>
                                     {/* Category 4 */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-info btn-block my-1 text-white" style={{height:'70px',width:'100%',fontSize:'10pt'}}>BONBON</button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1 text-white" style={{height:'70px',width:'100%',fontSize:'10pt'}}>BONBON</NbButton>
                                     </div>
                                     {/* Category 5 */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-info btn-block my-1 text-white" style={{height:'70px',width:'100%',fontSize:'10pt'}}></button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1 text-white" style={{height:'70px',width:'100%',fontSize:'10pt'}}></NbButton>
                                     </div>
                                 </div>    
                                 {/* Line 4 */}
                                 <div className='row px-2'>
                                     {/* Line Delete */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-danger btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-danger btn-block my-1" style={{height:'70px',width:'100%'}}>
                                             <i className="text-white fa-solid fa-outdent" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                     {/* Image Plu 1 */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-dark btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}>FRUIT ET LEGUMES</button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-dark btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}>FRUIT ET LEGUMES</NbButton>
                                     </div>
                                     {/* Image Plu 2 */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-dark btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}>PAIN</button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-dark btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}>PAIN</NbButton>
                                     </div>
                                     {/* Image Plu 3 */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-dark btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}>BOISSON</button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-dark btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}>BOISSON</NbButton>
                                     </div>
                                     {/* Image Plu 4 */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-dark btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}>HYGIENE</button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-dark btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}>HYGIENE</NbButton>
                                     </div>
                                     {/* Image Plu 5 */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-dark btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}></button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-dark btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}></NbButton>
                                     </div>
                                 </div>    
                                 {/* Line 5 */}
                                 <div className='row px-2'>
                                     {/* Item Return */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-danger btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-danger btn-block my-1" style={{height:'70px',width:'100%'}}>
                                             <i className="text-white fa-solid fa-retweet" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                     {/* Subtotal */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}>
                                             <i className="text-white fa-solid fa-plus-minus" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                     {/* Blank */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-secondary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}></button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}></NbButton>
                                     </div>
                                     {/* Blank */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-secondary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}></button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}></NbButton>
                                     </div>
                                     {/* Blank */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-secondary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}></button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}></NbButton>
                                     </div>
                                     {/* Blank */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-secondary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}></button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}></NbButton>
                                     </div>
                                 </div>
                                 {/* Line 6 */}
                                 <div className='row px-2'>
                                     {/* Park List */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-warning btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-warning btn-block my-1" style={{height:'70px',width:'100%'}}>
                                             <i className="text-white fa-solid fa-arrow-up-right-from-square" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                     {/* Advance */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}>
                                             <i className="text-white fa-solid fa-circle-dollar-to-slot" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                     {/* Blank */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-secondary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}></button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}></NbButton>
                                     </div>
                                     {/* Blank */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-secondary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}></button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}></NbButton>
                                     </div>
                                     {/* Blank */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-secondary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}></button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}></NbButton>
                                     </div>
                                     {/* Blank */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-secondary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}></button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}></NbButton>
                                     </div>
                                 </div>
                                 {/* Line 7 */}
                                 <div className='row px-2'>
                                     {/* Park */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-warning btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-warning btn-block my-1" style={{height:'70px',width:'100%'}}>
                                             <i className="text-white fa-solid fa-arrow-right-to-bracket" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                     {/* Customer Point */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}>
                                             <i className="text-white fa-solid fa-gift" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                     {/* Blank */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-secondary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}></button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}></NbButton>
                                     </div>
                                     {/* Blank */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-secondary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}></button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}></NbButton>
                                     </div>
                                     {/* Blank */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-secondary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}></button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}></NbButton>
                                     </div>
                                     {/* Blank */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-secondary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}></button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}></NbButton>
                                     </div>
                                 </div>
                                 {/* Line 8 */}
                                 <div className='row px-2'>
                                     {/* Get Customer */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}>
                                             <i className="text-white fa-solid fa-circle-user" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                     {/* Customer List */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}>
                                             <i className="text-white fa-solid fa-users" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                     {/* Print */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}>
                                             <i className="text-white fa-solid fa-print" style={{fontSize: '24px'}} />
-                                        </button>
+                                        </NbButton>
                                     </div>
                                     {/* Blank */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-secondary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}></button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}></NbButton>
                                     </div>
                                     {/* Blank */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-secondary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}></button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}></NbButton>
                                     </div>
                                     {/* Blank */}
                                     <div className="col-2 px-1">
-                                        <button className="form-group btn btn-secondary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}></button>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}></NbButton>
                                     </div>
                                 </div>       
                             </div>
                         </div>
                     </div>
+                </div>
+                {/* Total Popup */}
+                <div>
+                    <NdPopUp parent={this} id={"popTotal"} 
+                    visible={false}                        
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={"Ara Toplam"}
+                    container={"#root"} 
+                    width={'600'}
+                    height={'590'}
+                    position={{of:'#root'}}
+                    >
+                        <div className='row'>
+                            <div className='col-12'>
+                                {/* Top Total Indicator */}
+                                <div className='row'>
+                                    <div className='col-4'>
+                                        <p className='text-primary text-start m-0'>Toplam : <span className='text-dark'>12.94€</span></p>    
+                                    </div>
+                                    <div className='col-4'>
+                                        <p className='text-primary text-start m-0'>Kalan : <span className='text-dark'>12.94€</span></p>    
+                                    </div>
+                                    <div className='col-4'>
+                                        <p className='text-primary text-start m-0'>Para Üstü : <span className='text-dark'>12.94€</span></p>    
+                                    </div>
+                                </div>
+                                <div className='row pt-2'>
+                                    {/* Payment Type Selection */}
+                                    <div className="col-2">
+                                        
+                                    </div>
+                                    {/* Payment Grid */}
+                                    <div className="col-7">
+                                        <div className="row">
+                                            <div className='col-12'>
+                                                <NdGrid parent={this} id={"grdPay"} 
+                                                showBorders={true} 
+                                                columnsAutoWidth={true} 
+                                                allowColumnReordering={true} 
+                                                allowColumnResizing={true} 
+                                                showRowLines={true}
+                                                showColumnLines={true}
+                                                showColumnHeaders={false}
+                                                height={'138px'} 
+                                                width={'100%'}
+                                                dbApply={false}
+                                                data={{source:[{TYPE_NAME:'ESC',AMOUNT:100.99}]}}
+                                                onRowPrepared=
+                                                {
+                                                    (e)=>
+                                                    {
+                                                        e.rowElement.style.fontSize = '13px';
+                                                        e.rowElement.style.backgroundColor = '#ecf0f1'
+                                                    }
+                                                }
+                                                >
+                                                    <Column dataField="TYPE_NAME" caption={"NO"} width={100} alignment={"center"}/>
+                                                    <Column dataField="AMOUNT" caption={"TUTAR"} width={40}/>                                                
+                                                </NdGrid>
+                                            </div>
+                                        </div>
+                                        <div className='row pt-1'>
+                                            <div className="col-12">
+                                                <NdTextBox id="txtPopTotal" parent={this} simple={true} elementAttr={{style:'font-size:15pt;font-weight:bold;border:3px solid #428bca;'}}>     
+                                                </NdTextBox> 
+                                            </div>
+                                        </div>                                        
+                                    </div>
+                                    {/* Cash Button Group */}
+                                    <div className="col-3">
+                                        {/* 1 € */}
+                                        <div className="row pb-1">
+                                            <div className="col-12">
+                                                <NbButton id={"btnPopTotalCash1"} parent={this} className="btn btn-block" 
+                                                style={{height:'60px',width:'100%',backgroundImage:'url(css/img/1€.png)',backgroundRepeat:'no-repeat',backgroundSize:'55% 100%',backgroundPosition: 'center',borderColor:'#6c757d'}}
+                                                onClick={()=>
+                                                {                                                        
+                                                    
+                                                }}/>
+                                            </div>
+                                        </div>
+                                        {/* 2 € */}
+                                        <div className="row py-1">
+                                            <div className="col-12">
+                                                <NbButton id={"btnPopTotalCash2"} parent={this} className="btn btn-block" 
+                                                style={{height:'60px',width:'100%',backgroundImage:'url(css/img/2€.png)',backgroundRepeat:'no-repeat',backgroundSize:'55% 100%',backgroundPosition: 'center',borderColor:'#6c757d'}}
+                                                onClick={()=>
+                                                {                                                        
+                                                    
+                                                }}/>
+                                            </div>
+                                        </div>
+                                        {/* 5 € */}
+                                        <div className="row py-1">
+                                            <div className="col-12">
+                                                <NbButton id={"btnPopTotalCash5"} parent={this} className="btn btn-block" 
+                                                style={{height:'60px',width:'100%',backgroundImage:'url(css/img/5€.jfif)',backgroundSize:'cover',borderColor:'#6c757d'}}
+                                                onClick={()=>
+                                                {                                                        
+                                                    
+                                                }}/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className='row pt-1'>
+                                    {/* Number Board */}
+                                    <div className='col-6'>
+                                        <NbNumberBoard id={'numPopTotal'} parent={this} textobj="txtPopTotal" span={1} buttonHeight={'60px'}/>
+                                    </div>
+                                    <div className='col-6'>
+                                        <div className='row pb-1'>
+                                            {/* T.R Detail */}
+                                            <div className="col-6">
+                                                <NbButton id={"btnPopTotalTRDetail"} parent={this} className="form-group btn btn-danger btn-block" style={{height:'60px',width:'100%'}}>
+                                                    T.R Detay
+                                                </NbButton>
+                                            </div>
+                                            {/* 10 € */}
+                                            <div className="col-6">
+                                                <NbButton id={"btnPopTotalCash10"} parent={this} className="btn btn-block" 
+                                                style={{height:'60px',width:'100%',backgroundImage:'url(css/img/10€.jpg)',backgroundSize:'cover',borderColor:'#6c757d'}}
+                                                onClick={()=>
+                                                {                                                        
+                                                    
+                                                }}/>
+                                            </div>
+                                        </div>
+                                        <div className='row py-1'>
+                                            {/* Line Delete */}
+                                            <div className="col-6">
+                                                <NbButton id={"btnPopTotalLineDel"} parent={this} className="form-group btn btn-danger btn-block" style={{height:'60px',width:'100%'}}>
+                                                    Satır İptal
+                                                </NbButton>
+                                            </div>
+                                            {/* 20 € */}
+                                            <div className="col-6">
+                                                <NbButton id={"btnPopTotalCash20"} parent={this} className="btn btn-block" 
+                                                style={{height:'60px',width:'100%',backgroundImage:'url(css/img/20€.jpg)',backgroundSize:'cover',borderColor:'#6c757d'}}
+                                                onClick={()=>
+                                                {                                                        
+                                                    
+                                                }}/>
+                                            </div>
+                                        </div>
+                                        <div className='row py-1'>
+                                            {/* Cancel */}
+                                            <div className="col-6">
+                                                <NbButton id={"btnPopTotalCancel"} parent={this} className="form-group btn btn-danger btn-block" style={{height:'60px',width:'100%'}}>
+                                                    Vazgeç
+                                                </NbButton>
+                                            </div>
+                                            {/* 50 € */}
+                                            <div className="col-6">
+                                                <NbButton id={"btnPopTotalCash50"} parent={this} className="btn btn-block" 
+                                                style={{height:'60px',width:'100%',backgroundImage:'url(css/img/50€.jpg)',backgroundSize:'cover',borderColor:'#6c757d'}}
+                                                onClick={()=>
+                                                {                                                        
+                                                    
+                                                }}/>
+                                            </div>
+                                        </div>
+                                        <div className='row py-1'>
+                                            {/* Okey */}
+                                            <div className="col-6">
+                                                <NbButton id={"btnPopTotalOkey"} parent={this} className="form-group btn btn-success btn-block" style={{height:'60px',width:'100%'}}>
+                                                    <i className="text-white fa-solid fa-check" style={{fontSize: '24px'}} />
+                                                </NbButton>
+                                            </div>
+                                            {/* 100 € */}
+                                            <div className="col-6">
+                                                <NbButton id={"btnPopTotalCash100"} parent={this} className="btn btn-block" 
+                                                style={{height:'60px',width:'100%',backgroundImage:'url(css/img/100€.jpg)',backgroundSize:'cover',borderColor:'#6c757d'}}
+                                                onClick={()=>
+                                                {                                                        
+                                                    
+                                                }}/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </NdPopUp>
+                </div>
+                {/* Card Pay Popup */}
+                <div>
+                    <NdPopUp parent={this} id={"popCardPay"} 
+                    visible={false}                        
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={"Kart Ödeme"}
+                    container={"#root"} 
+                    width={'300'}
+                    height={'500'}
+                    position={{of:'#root'}}
+                    >
+                        <div className='row'>
+                            <div className='col-12'>
+                               {/* Top Total Indicator */}
+                               <div className='row'>
+                                    <div className='col-6'>
+                                        <p className='text-primary text-start m-0'>Toplam : <span className='text-dark'>12.94€</span></p>    
+                                    </div>
+                                    <div className='col-6'>
+                                        <p className='text-primary text-start m-0'>Kalan : <span className='text-dark'>12.94€</span></p>    
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                        <div className='row pt-1'>
+                            <div className="col-12">
+                                <NdTextBox id="txtPopCardPay" parent={this} simple={true} elementAttr={{style:'font-size:15pt;font-weight:bold;border:3px solid #428bca;'}}>     
+                                </NdTextBox> 
+                            </div>
+                        </div> 
+                        <div className='row pt-2'>
+                            {/* Number Board */}
+                            <div className='col-12'>
+                                <NbNumberBoard id={'numPopCardPay'} parent={this} textobj="txtPopCardPay" span={1} buttonHeight={'60px'}/>
+                            </div>
+                        </div>
+                        <div className='row pt-2'>
+                            <div className="col-12">
+                                <NbButton id={"btnPopCardPaySend"} parent={this} className="form-group btn btn-danger btn-block" style={{height:'60px',width:'100%'}}>
+                                    Gönder
+                                </NbButton>
+                            </div>
+                        </div>
+                    </NdPopUp>
+                </div>
+                {/* Access Pass Popup */}
+                <div>
+                    <NdPopUp parent={this} id={"popAccessPass"} 
+                    visible={false}                        
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={"Yetkili Şifresi Giriniz"}
+                    container={"#root"} 
+                    width={'300'}
+                    height={'500'}
+                    position={{of:'#root'}}
+                    >
+                        <div className='row pt-1'>
+                            <div className="col-12">
+                                <NdTextBox id="txtPopAccessPass" parent={this} simple={true}>     
+                                </NdTextBox> 
+                            </div>
+                        </div> 
+                        <div className='row pt-2'>
+                            {/* Number Board */}
+                            <div className='col-12'>
+                                <NbNumberBoard id={'numPopAccessPass'} parent={this} textobj="txtPopAccessPass" span={1} buttonHeight={'60px'}/>
+                            </div>
+                        </div>
+                        <div className='row pt-2'>
+                            <div className="col-12">
+                                <NbButton id={"btnPopAccessPass"} parent={this} className="form-group btn btn-success btn-block" style={{height:'60px',width:'100%'}}>
+                                    <i className="text-white fa-solid fa-check" style={{fontSize: '24px'}} />
+                                </NbButton>
+                            </div>
+                        </div>
+                    </NdPopUp>
+                </div>
+                {/* Quantity Popup */}
+                <div>
+                    <NdPopUp parent={this} id={"popQuantity"} 
+                    visible={false}                        
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={"Miktar"}
+                    container={"#root"} 
+                    width={'300'}
+                    height={'500'}
+                    position={{of:'#root'}}
+                    >
+                        <div className='row pt-1'>
+                            <div className="col-12">
+                                <NdTextBox id="txtPopQuantity" parent={this} simple={true}>     
+                                </NdTextBox> 
+                            </div>
+                        </div> 
+                        <div className='row pt-2'>
+                            {/* Number Board */}
+                            <div className='col-12'>
+                                <NbNumberBoard id={'numPopQuantity'} parent={this} textobj="txtPopQuantity" span={1} buttonHeight={'60px'}/>
+                            </div>
+                        </div>
+                        <div className='row pt-2'>
+                            <div className="col-12">
+                                <NbButton id={"btnPopQuantity"} parent={this} className="form-group btn btn-success btn-block" style={{height:'60px',width:'100%'}}>
+                                    <i className="text-white fa-solid fa-check" style={{fontSize: '24px'}} />
+                                </NbButton>
+                            </div>
+                        </div>
+                    </NdPopUp>
+                </div>
+                {/* Price Popup */}
+                <div>
+                    <NdPopUp parent={this} id={"popPrice"} 
+                    visible={false}                        
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={"Fiyat"}
+                    container={"#root"} 
+                    width={'300'}
+                    height={'500'}
+                    position={{of:'#root'}}
+                    >
+                        <div className='row pt-1'>
+                            <div className="col-12">
+                                <NdTextBox id="txtPopPrice" parent={this} simple={true}>     
+                                </NdTextBox> 
+                            </div>
+                        </div> 
+                        <div className='row pt-2'>
+                            {/* Number Board */}
+                            <div className='col-12'>
+                                <NbNumberBoard id={'numPopPrice'} parent={this} textobj="txtPopPrice" span={1} buttonHeight={'60px'}/>
+                            </div>
+                        </div>
+                        <div className='row pt-2'>
+                            <div className="col-12">
+                                <NbButton id={"btnPopPrice"} parent={this} className="form-group btn btn-success btn-block" style={{height:'60px',width:'100%'}}>
+                                    <i className="text-white fa-solid fa-check" style={{fontSize: '24px'}} />
+                                </NbButton>
+                            </div>
+                        </div>
+                    </NdPopUp>
                 </div>
             </div>
         )
