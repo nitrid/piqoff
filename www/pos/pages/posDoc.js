@@ -9,7 +9,9 @@ import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule
 import NdGrid,{Column,Editing,Paging,Scrolling} from '../../core/react/devex/grid.js';
 import NbButton from '../../core/react/bootstrap/button.js';
 import NdPopUp from '../../core/react/devex/popup.js';
-import NbNumberBoard from '../../core/react/bootstrap/numberboard.js';
+import NbNumberboard from '../../core/react/bootstrap/numberboard.js';
+import NbKeyboard from '../../core/react/bootstrap/keyboard.js';
+import NbCalculator from '../../core/react/bootstrap/calculator.js';
 
 export default class posDoc extends React.Component
 {
@@ -148,14 +150,7 @@ export default class posDoc extends React.Component
                                             icon:'more',
                                             onClick:()=>
                                             {
-                                                this.pg_txtRef.show()
-                                                this.pg_txtRef.onClick = (data) =>
-                                                {
-                                                    if(data.length > 0)
-                                                    {
-                                                        this.getItem(data[0].CODE)
-                                                    }
-                                                }
+                                                this.popItemList.show()
                                             }
                                         },
                                         {
@@ -332,7 +327,11 @@ export default class posDoc extends React.Component
                                     </div>
                                     {/* Cash */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}
+                                        onClick={()=>
+                                        {                             
+                                            this.popCashPay.show();
+                                        }}>
                                             <i className="text-white fa-solid fa-money-bill-1" style={{fontSize: '24px'}} />
                                         </NbButton>
                                     </div>
@@ -372,14 +371,18 @@ export default class posDoc extends React.Component
                                         <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}
                                         onClick={()=>
                                         {                                                        
-                                            this.popPrice.show();
+                                            
                                         }}>
                                             <i className="text-white fa-solid fa-percent" style={{fontSize: '24px'}} />
                                         </NbButton>
                                     </div>
                                     {/* Ticket */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}
+                                        onClick={()=>
+                                        {                                                        
+                                            this.popTicket.show();
+                                        }}>
                                             <i className="text-white fa-solid fa-ticket" style={{fontSize: '24px'}} />
                                         </NbButton>
                                     </div>
@@ -416,7 +419,11 @@ export default class posDoc extends React.Component
                                 <div className='row px-2'>
                                     {/* Calculator */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}
+                                        onClick={()=>
+                                        {                                                        
+                                            this.Calculator.show();
+                                        }}>
                                             <i className="text-white fa-solid fa-calculator" style={{fontSize: '24px'}} />
                                         </NbButton>
                                     </div>
@@ -606,7 +613,11 @@ export default class posDoc extends React.Component
                                 <div className='row px-2'>
                                     {/* Park List */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-warning btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-warning btn-block my-1" style={{height:'70px',width:'100%'}}
+                                        onClick={()=>
+                                        {                                                        
+                                            this.popParkList.show();
+                                        }}>
                                             <i className="text-white fa-solid fa-arrow-up-right-from-square" style={{fontSize: '24px'}} />
                                         </NbButton>
                                     </div>
@@ -674,7 +685,11 @@ export default class posDoc extends React.Component
                                     </div>
                                     {/* Customer List */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}
+                                        onClick={()=>
+                                        {                             
+                                            this.popCustomerList.show();
+                                        }}>
                                             <i className="text-white fa-solid fa-users" style={{fontSize: '24px'}} />
                                         </NbButton>
                                     </div>
@@ -809,7 +824,7 @@ export default class posDoc extends React.Component
                                 <div className='row pt-1'>
                                     {/* Number Board */}
                                     <div className='col-6'>
-                                        <NbNumberBoard id={'numPopTotal'} parent={this} textobj="txtPopTotal" span={1} buttonHeight={'60px'}/>
+                                        <NbNumberboard id={'numPopTotal'} parent={this} textobj="txtPopTotal" span={1} buttonHeight={'60px'}/>
                                     </div>
                                     <div className='col-6'>
                                         <div className='row pb-1'>
@@ -898,9 +913,9 @@ export default class posDoc extends React.Component
                     height={'500'}
                     position={{of:'#root'}}
                     >
+                        {/* Top Total Indicator */}
                         <div className='row'>
                             <div className='col-12'>
-                               {/* Top Total Indicator */}
                                <div className='row'>
                                     <div className='col-6'>
                                         <p className='text-primary text-start m-0'>Toplam : <span className='text-dark'>12.94€</span></p>    
@@ -911,18 +926,20 @@ export default class posDoc extends React.Component
                                 </div> 
                             </div>
                         </div>
+                        {/* txtPopCardPay */}
                         <div className='row pt-1'>
                             <div className="col-12">
                                 <NdTextBox id="txtPopCardPay" parent={this} simple={true} elementAttr={{style:'font-size:15pt;font-weight:bold;border:3px solid #428bca;'}}>     
                                 </NdTextBox> 
                             </div>
                         </div> 
-                        <div className='row pt-2'>
-                            {/* Number Board */}
+                        {/* numPopCardPay */}
+                        <div className='row pt-2'>                            
                             <div className='col-12'>
-                                <NbNumberBoard id={'numPopCardPay'} parent={this} textobj="txtPopCardPay" span={1} buttonHeight={'60px'}/>
+                                <NbNumberboard id={'numPopCardPay'} parent={this} textobj="txtPopCardPay" span={1} buttonHeight={'60px'}/>
                             </div>
                         </div>
+                        {/* btnPopCardPaySend */}
                         <div className='row pt-2'>
                             <div className="col-12">
                                 <NbButton id={"btnPopCardPaySend"} parent={this} className="form-group btn btn-danger btn-block" style={{height:'60px',width:'100%'}}>
@@ -930,6 +947,137 @@ export default class posDoc extends React.Component
                                 </NbButton>
                             </div>
                         </div>
+                    </NdPopUp>
+                </div>
+                {/* Cash Pay Popup */}
+                <div>
+                    <NdPopUp parent={this} id={"popCashPay"} 
+                    visible={false}                        
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={"Nakit Ödeme"}
+                    container={"#root"} 
+                    width={'600'}
+                    height={'570'}
+                    position={{of:'#root'}}
+                    >
+                        <div className='row'>
+                            <div className='col-9'>
+                                {/* Top Total Indicator */}
+                                <div className='row pb-3'>
+                                    <div className='col-6'>
+                                        <p className='text-primary text-start m-0'>Toplam : <span className='text-dark'>0</span></p>    
+                                    </div>
+                                    <div className='col-6'>
+                                        <p className='text-primary text-start m-0'>Kalan : <span className='text-dark'>0</span></p>    
+                                    </div>
+                                </div>
+                                {/* txtPopCashPay */}
+                                <div className='row pt-5'>
+                                    <div className="col-12">
+                                        <NdTextBox id="txtPopCashPay" parent={this} simple={true} elementAttr={{style:'font-size:15pt;font-weight:bold;border:3px solid #428bca;'}}>     
+                                        </NdTextBox> 
+                                    </div>
+                                </div>
+                                {/* numPopCashPay */}
+                                <div className='row pt-2'>                            
+                                    <div className='col-12'>
+                                        <NbNumberboard id={'numPopCashPay'} parent={this} textobj="txtPopPrice" span={1} buttonHeight={'60px'}/>
+                                    </div>
+                                </div>
+                                {/* numPopCashPay */}
+                                <div className='row pt-2'>
+                                    <div className="col-12">
+                                        <NbButton id={"btnPopCashPayOk"} parent={this} className="form-group btn btn-success btn-block" style={{height:'60px',width:'100%'}}>
+                                            <i className="text-white fa-solid fa-check" style={{fontSize: '24px'}} />
+                                        </NbButton>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='col-3'>
+                                <div className='row'>
+                                    <div className="col-12">
+                                        {/* 1 € */}
+                                        <div className="row pb-1">
+                                            <div className="col-12">
+                                                <NbButton id={"btnPopCashPay1"} parent={this} className="btn btn-block" 
+                                                style={{height:'60px',width:'100%',backgroundImage:'url(css/img/1€.png)',backgroundRepeat:'no-repeat',backgroundSize:'55% 100%',backgroundPosition: 'center',borderColor:'#6c757d'}}
+                                                onClick={()=>
+                                                {                                                        
+                                                    
+                                                }}/>
+                                            </div>
+                                        </div>
+                                        {/* 2 € */}
+                                        <div className="row py-1">
+                                            <div className="col-12">
+                                                <NbButton id={"btnPopCashPay2"} parent={this} className="btn btn-block" 
+                                                style={{height:'60px',width:'100%',backgroundImage:'url(css/img/2€.png)',backgroundRepeat:'no-repeat',backgroundSize:'55% 100%',backgroundPosition: 'center',borderColor:'#6c757d'}}
+                                                onClick={()=>
+                                                {                                                        
+                                                    
+                                                }}/>
+                                            </div>
+                                        </div>
+                                        {/* 5 € */}
+                                        <div className="row py-1">
+                                            <div className="col-12">
+                                                <NbButton id={"btnPopCashPay5"} parent={this} className="btn btn-block" 
+                                                style={{height:'60px',width:'100%',backgroundImage:'url(css/img/5€.jfif)',backgroundSize:'cover',borderColor:'#6c757d'}}
+                                                onClick={()=>
+                                                {                                                        
+                                                    
+                                                }}/>
+                                            </div>
+                                        </div>
+                                        {/* 10 € */}
+                                        <div className="row py-1">
+                                            <div className="col-12">
+                                                <NbButton id={"btnPopCashPay10"} parent={this} className="btn btn-block" 
+                                                style={{height:'60px',width:'100%',backgroundImage:'url(css/img/10€.jpg)',backgroundSize:'cover',borderColor:'#6c757d'}}
+                                                onClick={()=>
+                                                {                                                        
+                                                    
+                                                }}/>
+                                            </div>
+                                        </div>
+                                        {/* 20 € */}
+                                        <div className="row py-1">
+                                            <div className="col-12">
+                                                <NbButton id={"btnPopCashPay20"} parent={this} className="btn btn-block" 
+                                                style={{height:'60px',width:'100%',backgroundImage:'url(css/img/20€.jpg)',backgroundSize:'cover',borderColor:'#6c757d'}}
+                                                onClick={()=>
+                                                {                                                        
+                                                    
+                                                }}/>
+                                            </div>
+                                        </div>
+                                        {/* 50 € */}
+                                        <div className="row py-1">
+                                            <div className="col-12">
+                                                <NbButton id={"btnPopCashPay50"} parent={this} className="btn btn-block" 
+                                                style={{height:'60px',width:'100%',backgroundImage:'url(css/img/50€.jpg)',backgroundSize:'cover',borderColor:'#6c757d'}}
+                                                onClick={()=>
+                                                {                                                        
+                                                    
+                                                }}/>
+                                            </div>
+                                        </div>
+                                        {/* 100 € */}
+                                        <div className="row py-1">
+                                            <div className="col-12">
+                                                <NbButton id={"btnPopCashPay100"} parent={this} className="btn btn-block" 
+                                                style={{height:'60px',width:'100%',backgroundImage:'url(css/img/100€.jpg)',backgroundSize:'cover',borderColor:'#6c757d'}}
+                                                onClick={()=>
+                                                {                                                        
+                                                    
+                                                }}/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                                                
                     </NdPopUp>
                 </div>
                 {/* Access Pass Popup */}
@@ -953,7 +1101,7 @@ export default class posDoc extends React.Component
                         <div className='row pt-2'>
                             {/* Number Board */}
                             <div className='col-12'>
-                                <NbNumberBoard id={'numPopAccessPass'} parent={this} textobj="txtPopAccessPass" span={1} buttonHeight={'60px'}/>
+                                <NbNumberboard id={'numPopAccessPass'} parent={this} textobj="txtPopAccessPass" span={1} buttonHeight={'60px'}/>
                             </div>
                         </div>
                         <div className='row pt-2'>
@@ -986,7 +1134,7 @@ export default class posDoc extends React.Component
                         <div className='row pt-2'>
                             {/* Number Board */}
                             <div className='col-12'>
-                                <NbNumberBoard id={'numPopQuantity'} parent={this} textobj="txtPopQuantity" span={1} buttonHeight={'60px'}/>
+                                <NbNumberboard id={'numPopQuantity'} parent={this} textobj="txtPopQuantity" span={1} buttonHeight={'60px'}/>
                             </div>
                         </div>
                         <div className='row pt-2'>
@@ -1010,27 +1158,369 @@ export default class posDoc extends React.Component
                     height={'500'}
                     position={{of:'#root'}}
                     >
+                        {/* txtPopPrice */}
                         <div className='row pt-1'>
                             <div className="col-12">
                                 <NdTextBox id="txtPopPrice" parent={this} simple={true}>     
                                 </NdTextBox> 
                             </div>
-                        </div> 
+                        </div>
+                        {/* numPopPrice */}
                         <div className='row pt-2'>
-                            {/* Number Board */}
                             <div className='col-12'>
-                                <NbNumberBoard id={'numPopPrice'} parent={this} textobj="txtPopPrice" span={1} buttonHeight={'60px'}/>
+                                <NbNumberboard id={'numPopPrice'} parent={this} textobj="txtPopPrice" span={1} buttonHeight={'60px'}/>
                             </div>
                         </div>
+                        {/* btnPopPriceOk */}
                         <div className='row pt-2'>
                             <div className="col-12">
-                                <NbButton id={"btnPopPrice"} parent={this} className="form-group btn btn-success btn-block" style={{height:'60px',width:'100%'}}>
+                                <NbButton id={"btnPopPriceOk"} parent={this} className="form-group btn btn-success btn-block" style={{height:'60px',width:'100%'}}>
                                     <i className="text-white fa-solid fa-check" style={{fontSize: '24px'}} />
                                 </NbButton>
                             </div>
                         </div>
                     </NdPopUp>
+                </div>  
+                {/* Customer List Popup */}
+                <div>
+                    <NdPopUp parent={this} id={"popCustomerList"} 
+                    visible={false}                        
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={"Müşteri Listesi"}
+                    container={"#root"} 
+                    width={'900'}
+                    height={'650'}
+                    position={{of:'#root'}}
+                    >
+                        {/* txtPopCustomerList */}
+                        <div className='row pb-1'>
+                            <div className='col-12'>
+                                <NdTextBox id="txtPopCustomerList" parent={this} simple={true} 
+                                button=
+                                {
+                                    [
+                                        {
+                                            id:'01',
+                                            icon:'more',
+                                            onClick:()=>
+                                            {
+                                                
+                                            }
+                                        }
+                                    ]
+                                }
+                                onChange={(async()=>
+                                {
+                                    let tmpResult = await this.checkItem(this.txtRef.value)
+                                    if(tmpResult == 3)
+                                    {
+                                        this.txtRef.value = "";
+                                    }
+                                }).bind(this)} 
+                                >     
+                                </NdTextBox>  
+                            </div>                            
+                        </div>
+                        {/* grdPopCustomerList */}
+                        <div className='row py-1'>
+                            <div className='12'>
+                                <NdGrid parent={this} id={"grdPopCustomerList"} 
+                                showBorders={true} 
+                                columnsAutoWidth={true} 
+                                allowColumnReordering={true} 
+                                allowColumnResizing={true} 
+                                height={'220px'} 
+                                width={'100%'}
+                                dbApply={false}
+                                data={{source:[{TYPE_NAME:0},{TYPE_NAME:1},{TYPE_NAME:2},{TYPE_NAME:3},{TYPE_NAME:4},{TYPE_NAME:5},{TYPE_NAME:6},{TYPE_NAME:7},{TYPE_NAME:8},{TYPE_NAME:9}]}}
+                                onRowPrepared=
+                                {
+                                    (e)=>
+                                    {
+                                        if(e.rowType == "header")
+                                        {
+                                            e.rowElement.style.fontWeight = 'bold';    
+                                        }
+                                        e.rowElement.style.fontSize = '13px';
+                                    }
+                                }
+                                onCellPrepared=
+                                {
+                                    (e)=>
+                                    {
+                                        e.cellElement.style.padding = '4px'
+                                    }
+                                }
+                                >
+                                    <Column dataField="TYPE_NAME" caption={"NO"} width={40} alignment={"center"}/>
+                                    <Column dataField="DEPOT" caption={"ADI"} width={350} />
+                                    <Column dataField="CUSTOMER_NAME" caption={"MIKTAR"} width={100}/>
+                                    <Column dataField="QUANTITY" caption={"FIYAT"} width={100}/>
+                                    <Column dataField="VAT_EXT" caption={"TUTAR"} width={100}/>                                                
+                                </NdGrid>
+                            </div>
+                        </div>
+                        {/* Button Group */}
+                        <div className='row py-1'>
+                            {/* btnPopCustomerListSelect */}
+                            <div className='col-6'>
+                                <NbButton id={"btnPopCustomerListSelect"} parent={this} className="form-group btn btn-success btn-block" 
+                                style={{height:'45px',width:'100%',fontSize:'16px'}}>Seç</NbButton> 
+                            </div>
+                            {/* btnPopCustomerList */}
+                            <div className='col-6'>
+                                <NbButton id={"btnPopCustomerList"} parent={this} className="form-group btn btn-success btn-block" 
+                                style={{height:'45px',width:'100%',fontSize:'16px'}}>Listele</NbButton>
+                            </div>
+                        </div>
+                        {/* keyPopCustomerList */}
+                        <div className='row pt-1'>
+                            <NbKeyboard id={'keyPopCustomerList'} parent={this} textobj="txtPopCustomerList" span={1} buttonHeight={'40px'}/>
+                        </div>
+                    </NdPopUp>
                 </div>
+                {/* Item List Popup */}
+                <div>
+                    <NdPopUp parent={this} id={"popItemList"} 
+                    visible={false}                        
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={"Ürün Listesi"}
+                    container={"#root"} 
+                    width={'900'}
+                    height={'650'}
+                    position={{of:'#root'}}
+                    >
+                        {/* txtPopItemList */}
+                        <div className='row pb-1'>
+                            <div className='col-12'>
+                                <NdTextBox id="txtPopItemList" parent={this} simple={true} 
+                                button=
+                                {
+                                    [
+                                        {
+                                            id:'01',
+                                            icon:'more',
+                                            onClick:()=>
+                                            {
+                                                
+                                            }
+                                        }
+                                    ]
+                                }
+                                onChange={(async()=>
+                                {
+                                    let tmpResult = await this.checkItem(this.txtRef.value)
+                                    if(tmpResult == 3)
+                                    {
+                                        this.txtRef.value = "";
+                                    }
+                                }).bind(this)} 
+                                >     
+                                </NdTextBox>  
+                            </div>                            
+                        </div>
+                        {/* grdPopItemList */}
+                        <div className='row py-1'>
+                            <div className='12'>
+                                <NdGrid parent={this} id={"grdPopItemList"} 
+                                showBorders={true} 
+                                columnsAutoWidth={true} 
+                                allowColumnReordering={true} 
+                                allowColumnResizing={true} 
+                                height={'220px'} 
+                                width={'100%'}
+                                dbApply={false}
+                                data={{source:[{TYPE_NAME:0},{TYPE_NAME:1},{TYPE_NAME:2},{TYPE_NAME:3},{TYPE_NAME:4},{TYPE_NAME:5},{TYPE_NAME:6},{TYPE_NAME:7},{TYPE_NAME:8},{TYPE_NAME:9}]}}
+                                onRowPrepared=
+                                {
+                                    (e)=>
+                                    {
+                                        if(e.rowType == "header")
+                                        {
+                                            e.rowElement.style.fontWeight = 'bold';    
+                                        }
+                                        e.rowElement.style.fontSize = '13px';
+                                    }
+                                }
+                                onCellPrepared=
+                                {
+                                    (e)=>
+                                    {
+                                        e.cellElement.style.padding = '4px'
+                                    }
+                                }
+                                >
+                                    <Column dataField="TYPE_NAME" caption={"NO"} width={40} alignment={"center"}/>
+                                    <Column dataField="DEPOT" caption={"ADI"} width={350} />
+                                    <Column dataField="CUSTOMER_NAME" caption={"MIKTAR"} width={100}/>
+                                    <Column dataField="QUANTITY" caption={"FIYAT"} width={100}/>
+                                    <Column dataField="VAT_EXT" caption={"TUTAR"} width={100}/>                                                
+                                </NdGrid>
+                            </div>
+                        </div>
+                        {/* Button Group */}
+                        <div className='row py-1'>
+                            {/* btnPopItemListSelect */}
+                            <div className='col-6'>
+                                <NbButton id={"btnPopItemListSelect"} parent={this} className="form-group btn btn-success btn-block" 
+                                style={{height:'45px',width:'100%',fontSize:'16px'}}>Seç</NbButton> 
+                            </div>
+                            {/* btnPopItemList */}
+                            <div className='col-6'>
+                                <NbButton id={"btnPopItemList"} parent={this} className="form-group btn btn-success btn-block" 
+                                style={{height:'45px',width:'100%',fontSize:'16px'}}>Listele</NbButton>
+                            </div>
+                        </div>
+                        {/* keyPopItemList */}
+                        <div className='row pt-1'>
+                            <NbKeyboard id={'keyPopItemList'} parent={this} textobj="txtPopItemList" span={1} buttonHeight={'40px'}/>
+                        </div>
+                    </NdPopUp>
+                </div>  
+                {/* Park List Popup */}
+                <div>
+                    <NdPopUp parent={this} id={"popParkList"} 
+                    visible={false}                        
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={"Park daki İşlemler"}
+                    container={"#root"} 
+                    width={'900'}
+                    height={'580'}
+                    position={{of:'#root'}}
+                    >
+                        {/* grdPopParkList */}
+                        <div className='row py-1'>
+                            <div className='12'>
+                                <NdGrid parent={this} id={"grdPopParkList"} 
+                                showBorders={true} 
+                                columnsAutoWidth={true} 
+                                allowColumnReordering={true} 
+                                allowColumnResizing={true} 
+                                height={'425px'} 
+                                width={'100%'}
+                                dbApply={false}
+                                data={{source:[{TYPE_NAME:0},{TYPE_NAME:1},{TYPE_NAME:2},{TYPE_NAME:3},{TYPE_NAME:4},{TYPE_NAME:5},{TYPE_NAME:6},{TYPE_NAME:7},{TYPE_NAME:8},{TYPE_NAME:9}]}}
+                                onRowPrepared=
+                                {
+                                    (e)=>
+                                    {
+                                        if(e.rowType == "header")
+                                        {
+                                            e.rowElement.style.fontWeight = 'bold';    
+                                        }
+                                        e.rowElement.style.fontSize = '13px';
+                                    }
+                                }
+                                onCellPrepared=
+                                {
+                                    (e)=>
+                                    {
+                                        e.cellElement.style.padding = '4px'
+                                    }
+                                }
+                                >
+                                    <Column dataField="TYPE_NAME" caption={"NO"} width={40} alignment={"center"}/>
+                                    <Column dataField="DEPOT" caption={"ADI"} width={350} />
+                                    <Column dataField="CUSTOMER_NAME" caption={"MIKTAR"} width={100}/>
+                                    <Column dataField="QUANTITY" caption={"FIYAT"} width={100}/>
+                                    <Column dataField="VAT_EXT" caption={"TUTAR"} width={100}/>                                                
+                                </NdGrid>
+                            </div>
+                        </div>
+                        {/* btnPopParkListSelect */}
+                        <div className='row py-1'>
+                            <div className='col-12'>
+                                <NbButton id={"btnPopParkListSelect"} parent={this} className="form-group btn btn-success btn-block" 
+                                style={{height:'45px',width:'100%',fontSize:'16px'}}>Seç</NbButton> 
+                            </div>
+                        </div>
+                    </NdPopUp>
+                </div>  
+                {/* Ticket Popup */}
+                <div>
+                    <NdPopUp parent={this} id={"popTicket"} 
+                    visible={false}                        
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={"Ticket Giriş"}
+                    container={"#root"} 
+                    width={'900'}
+                    height={'580'}
+                    position={{of:'#root'}}
+                    >
+                        {/* txtPopTicket */}
+                        <div className='row'>
+                            <div className="col-12">
+                                <NdTextBox id="txtPopTicket" parent={this} simple={true} elementAttr={{style:'font-size:15pt;font-weight:bold;border:3px solid #428bca;'}}>     
+                                </NdTextBox> 
+                            </div>
+                        </div>
+                        {/* grdPopTicketList */}
+                        <div className='row py-1'>
+                            <div className='12'>
+                                <NdGrid parent={this} id={"grdPopTicketList"} 
+                                showBorders={true} 
+                                columnsAutoWidth={true} 
+                                allowColumnReordering={true} 
+                                allowColumnResizing={true} 
+                                height={'280px'} 
+                                width={'100%'}
+                                dbApply={false}
+                                data={{source:[{TYPE_NAME:0},{TYPE_NAME:1},{TYPE_NAME:2},{TYPE_NAME:3},{TYPE_NAME:4},{TYPE_NAME:5},{TYPE_NAME:6},{TYPE_NAME:7},{TYPE_NAME:8},{TYPE_NAME:9}]}}
+                                onRowPrepared=
+                                {
+                                    (e)=>
+                                    {
+                                        if(e.rowType == "header")
+                                        {
+                                            e.rowElement.style.fontWeight = 'bold';    
+                                        }
+                                        e.rowElement.style.fontSize = '13px';
+                                    }
+                                }
+                                onCellPrepared=
+                                {
+                                    (e)=>
+                                    {
+                                        e.cellElement.style.padding = '4px'
+                                    }
+                                }
+                                >
+                                    <Column dataField="TYPE_NAME" caption={"NO"} width={40} alignment={"center"}/>
+                                    <Column dataField="DEPOT" caption={"ADI"} width={350} />
+                                    <Column dataField="CUSTOMER_NAME" caption={"MIKTAR"} width={100}/>
+                                    <Column dataField="QUANTITY" caption={"FIYAT"} width={100}/>
+                                    <Column dataField="VAT_EXT" caption={"TUTAR"} width={100}/>                                                
+                                </NdGrid>
+                            </div>
+                        </div>
+                        {/* Last Read */}
+                        <div className='row py-1'>
+                            <div className='col-12'>
+                                <h3 className='text-primary text-center'>Son Okutulan : <span className='text-dark'>0.00 €</span></h3>    
+                            </div>
+                        </div>
+                        {/* Total Read */}
+                        <div className='row py-1'>
+                            <div className='col-12'>
+                                <h3 className='text-primary text-center'>Toplam Okutulan : <span className='text-dark'>0.00 €</span></h3>    
+                            </div>
+                        </div>
+                        {/* Rest */}
+                        <div className='row py-1'>
+                            <div className='col-12'>
+                                <h3 className='text-primary text-center'>Kalan Ödeme : <span className='text-dark'>0.00 €</span></h3>    
+                            </div>
+                        </div>
+                    </NdPopUp>
+                </div>     
+                {/* Calculator Popup */}
+                <div>
+                    <NbCalculator parent={this} id={"Calculator"}></NbCalculator>
+                </div>           
             </div>
         )
     }
