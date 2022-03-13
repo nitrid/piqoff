@@ -1,6 +1,6 @@
 import React from 'react';
-import NbBase from './base.js';
-import NbButton from './button.js';
+import NbBase from '../../core/react/bootstrap/base.js';
+import NbButton from '../../core/react/bootstrap/button.js';
 
 export default class NbKeyboard extends NbBase
 {

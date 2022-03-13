@@ -9,9 +9,12 @@ import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule
 import NdGrid,{Column,Editing,Paging,Scrolling} from '../../core/react/devex/grid.js';
 import NbButton from '../../core/react/bootstrap/button.js';
 import NdPopUp from '../../core/react/devex/popup.js';
-import NbNumberboard from '../../core/react/bootstrap/numberboard.js';
-import NbKeyboard from '../../core/react/bootstrap/keyboard.js';
-import NbCalculator from '../../core/react/bootstrap/calculator.js';
+import NbNumberboard from '../tools/numberboard.js';
+import NbKeyboard from '../tools/keyboard.js';
+import NbCalculator from '../tools/calculator.js';
+import NbPopUp from '../../core/react/bootstrap/popup.js';
+import NdDatePicker from '../../core/react/devex/datepicker.js';
+import NdSelectBox from '../../core/react/devex/selectbox.js';
 
 export default class posDoc extends React.Component
 {
@@ -366,12 +369,12 @@ export default class posDoc extends React.Component
                                 </div> 
                                 {/* Line 3 */}
                                 <div className='row px-2'>
-                                    {/* Percent */}
+                                    {/* Discount */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}
                                         onClick={()=>
                                         {                                                        
-                                            
+                                            this.popDiscount.show()
                                         }}>
                                             <i className="text-white fa-solid fa-percent" style={{fontSize: '24px'}} />
                                         </NbButton>
@@ -559,7 +562,13 @@ export default class posDoc extends React.Component
                                     </div>
                                     {/* Image Plu 1 */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-dark btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}>FRUIT ET LEGUMES</NbButton>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-dark btn-block my-1" style={{height:'70px',width:'100%',fontSize:'10pt'}}
+                                        onClick={()=>
+                                        {                                                        
+                                            this.popPluGroup.show();
+                                        }}>
+                                            FRUIT ET LEGUMES
+                                        </NbButton>
                                     </div>
                                     {/* Image Plu 2 */}
                                     <div className="col-2 px-1">
@@ -695,7 +704,11 @@ export default class posDoc extends React.Component
                                     </div>
                                     {/* Print */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:'70px',width:'100%'}}
+                                        onClick={()=>
+                                        {                                                        
+                                            this.popLastSaleList.show();
+                                        }}>
                                             <i className="text-white fa-solid fa-print" style={{fontSize: '24px'}} />
                                         </NbButton>
                                     </div>
@@ -1132,7 +1145,7 @@ export default class posDoc extends React.Component
                             </div>
                         </div> 
                         <div className='row pt-2'>
-                            {/* Number Board */}
+                            {/* numPopQuantity */}
                             <div className='col-12'>
                                 <NbNumberboard id={'numPopQuantity'} parent={this} textobj="txtPopQuantity" span={1} buttonHeight={'60px'}/>
                             </div>
@@ -1520,7 +1533,434 @@ export default class posDoc extends React.Component
                 {/* Calculator Popup */}
                 <div>
                     <NbCalculator parent={this} id={"Calculator"}></NbCalculator>
-                </div>           
+                </div>      
+                {/* Discount Popup */}     
+                <div>
+                    <NdPopUp parent={this} id={"popDiscount"} 
+                    visible={false}                        
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={"İskonto"}
+                    container={"#root"} 
+                    width={'600'}
+                    height={'580'}
+                    position={{of:'#root'}}
+                    >
+                        {/* Discount Header */}
+                        <div className='row pb-1'>
+                            <div className='col-4'>
+
+                            </div>
+                            <div className='col-4'>
+                                <div className='row'>
+                                    <div className='col-12'>
+                                        <h3 className='text-danger text-center'>Öncesi</h3>    
+                                    </div>
+                                </div>
+                                <div className='row'>
+                                    <div className='col-12'>
+                                        <h3 className='text-primary text-center'>51.95 €</h3>    
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='col-4'>
+                                <div className='row'>
+                                    <div className='col-12'>
+                                        <h3 className='text-danger text-center'>Sonrası</h3>    
+                                    </div>
+                                </div>
+                                <div className='row'>
+                                    <div className='col-12'>
+                                        <h3 className='text-primary text-center'>51.95 €</h3>    
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {/* Discount Input */}
+                        <div className='row py-1'>
+                            {/* txtPopDiscountAmount */}
+                            <div className="col-6">
+                                <NdTextBox id="txtPopDiscountAmount" parent={this} simple={true} elementAttr={{style:'font-size:15pt;font-weight:bold;border:3px solid #428bca;'}}>     
+                                </NdTextBox> 
+                            </div>
+                            {/* txtPopDiscountPercent */}
+                            <div className="col-6">
+                                <NdTextBox id="txtPopDiscountPercent" parent={this} simple={true} elementAttr={{style:'font-size:15pt;font-weight:bold;border:3px solid #428bca;'}}>     
+                                </NdTextBox> 
+                            </div>
+                        </div>
+                        {/* Discount Number Board */}
+                        <div className='row py-1'>
+                            <div className='col-9'>
+                                {/* numPopDiscount */}
+                                <div className='row pb-1'>
+                                    <div className='col-12'>
+                                        <NbNumberboard id={'numPopDiscount'} parent={this} textobj="txtPopDiscountAmount" span={1} buttonHeight={'60px'}/>
+                                    </div>
+                                </div>
+                                <div className='row pt-1'>
+                                    {/* btnPopDiscountDel */}
+                                    <div className='col-4 pe-1'>
+                                        <NbButton id={"btnPopDiscountDel"} parent={this} className="form-group btn btn-danger btn-block" style={{height:'60px',width:'100%'}}>
+                                            <i className="text-white fa-solid fa-eraser" style={{fontSize: '24px'}} />
+                                        </NbButton>
+                                    </div>
+                                    {/* btnPopDiscountOk */}
+                                    <div className='col-8 ps-1'>
+                                        <NbButton id={"btnPopDiscountOk"} parent={this} className="form-group btn btn-success btn-block" style={{height:'60px',width:'100%'}}>
+                                            <i className="text-white fa-solid fa-check" style={{fontSize: '24px'}} />
+                                        </NbButton>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='col-3'>
+                                {/* btnPopDiscount10 */}
+                                <div className='row pb-1'>
+                                    <div className='col-12 ps-1'>
+                                        <NbButton id={"btnPopDiscount10"} parent={this} className="form-group btn btn-primary btn-block" style={{height:'60px',width:'100%',fontSize: '20px'}}>
+                                        % 10
+                                        </NbButton>
+                                    </div>
+                                </div>
+                                {/* btnPopDiscount20 */}
+                                <div className='row py-1'>
+                                    <div className='col-12 ps-1'>
+                                        <NbButton id={"btnPopDiscount20"} parent={this} className="form-group btn btn-primary btn-block" style={{height:'60px',width:'100%',fontSize: '20px'}}>
+                                        % 20
+                                        </NbButton>
+                                    </div>
+                                </div>
+                                {/* btnPopDiscount30 */}
+                                <div className='row py-1'>
+                                    <div className='col-12 ps-1'>
+                                        <NbButton id={"btnPopDiscount30"} parent={this} className="form-group btn btn-primary btn-block" style={{height:'60px',width:'100%',fontSize: '20px'}}>
+                                        % 30
+                                        </NbButton>
+                                    </div>
+                                </div>
+                                {/* btnPopDiscount40 */}
+                                <div className='row py-1'>
+                                    <div className='col-12 ps-1'>
+                                        <NbButton id={"btnPopDiscount40"} parent={this} className="form-group btn btn-primary btn-block" style={{height:'60px',width:'100%',fontSize: '20px'}}>
+                                        % 40
+                                        </NbButton>
+                                    </div>
+                                </div>
+                                {/* btnPopDiscount50 */}
+                                <div className='row py-1'>
+                                    <div className='col-12 ps-1'>
+                                        <NbButton id={"btnPopDiscount50"} parent={this} className="form-group btn btn-primary btn-block" style={{height:'60px',width:'100%',fontSize: '20px'}}>
+                                        % 50
+                                        </NbButton>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </NdPopUp>
+                </div>
+                {/* Last Sale List Popup */} 
+                <div>
+                    <NbPopUp id="popLastSaleList" parent={this} title={"Son Satış Listesi"}>
+                        {/* Tool Button Group */} 
+                        <div className="row pb-1">
+                            <div className="offset-10 col-2">
+                                <div className="row px-2">
+                                    {/* btnPopLastSaleTRest */}
+                                    <div className="col-4 p-1">
+                                        <NbButton id={"btnPopLastSaleTRest"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"50px",width:"100%"}}>
+                                            <i className="text-white fa-solid fa-utensils" style={{fontSize: "16px"}} />
+                                        </NbButton>
+                                    </div>
+                                    {/* btnPopLastSaleFile */}
+                                    <div className="col-4 p-1">
+                                        <NbButton id={"btnPopLastSaleFile"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"50px",width:"100%"}}>
+                                            <i className="text-white fa-solid fa-file-lines" style={{fontSize: "16px"}} />
+                                        </NbButton>
+                                    </div>
+                                    {/* btnPopLastSalePrint */}
+                                    <div className="col-4 p-1">
+                                        <NbButton id={"btnPopLastSalePrint"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"50px",width:"100%"}}>
+                                            <i className="text-white fa-solid fa-print" style={{fontSize: "16px"}} />
+                                        </NbButton>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {/* Filter */}
+                        <div className="row py-1">
+                            {/* dtPopLastSaleStartDate */} 
+                            <div className="col-2">
+                                <NdDatePicker simple={true}  parent={this} id={"dtPopLastSaleStartDate"}/>
+                            </div>
+                            {/* dtPopLastSaleFinishDate */} 
+                            <div className="col-2">
+                                <NdDatePicker simple={true}  parent={this} id={"dtPopLastSaleFinishDate"}/>
+                            </div>
+                            {/* cmbPopLastSalePayType */} 
+                            <div className="col-2">
+                                <NdSelectBox simple={true} parent={this} id="cmbPopLastSalePayType"/>
+                            </div>
+                            {/* btnPopLastSaleSearch */} 
+                            <div className="col-1">
+                                <NbButton id={"btnPopLastSaleSearch"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"36px",width:"100%"}}>
+                                    <i className="text-white fa-solid fa-magnifying-glass" style={{fontSize: "16px"}} />
+                                </NbButton>
+                            </div>
+                        </div>
+                        {/* grdLastSale */}
+                        <div className="row py-1">
+                            <div className='col-12'>
+                                <NdGrid parent={this} id={"grdLastSale"} 
+                                showBorders={true} 
+                                columnsAutoWidth={true} 
+                                allowColumnReordering={true} 
+                                allowColumnResizing={true} 
+                                showRowLines={true}
+                                showColumnLines={true}
+                                height={'250px'} 
+                                width={'100%'}
+                                dbApply={false}
+                                data={{source:[{TYPE_NAME:'ESC',AMOUNT:100.99}]}}
+                                onRowPrepared=
+                                {
+                                    (e)=>
+                                    {
+                                        if(e.rowType == "header")
+                                        {
+                                            e.rowElement.style.fontWeight = 'bold';    
+                                        }
+                                        e.rowElement.style.fontSize = '13px';
+                                    }
+                                }
+                                onCellPrepared=
+                                {
+                                    (e)=>
+                                    {
+                                        e.cellElement.style.padding = '4px'
+                                    }
+                                }
+                                >
+                                    <Column dataField="XX" caption={"TARIH"} width={100}/>
+                                    <Column dataField="AMOUNT" caption={"SAAT"} width={100}/>    
+                                    <Column dataField="XX" caption={"SERI"} width={40}/>
+                                    <Column dataField="XX" caption={"SIRA"} width={40}/> 
+                                    <Column dataField="XX" caption={"SATIR"} width={40}/>
+                                    <Column dataField="XX" caption={"MÜŞTERİ"} width={200}/> 
+                                    <Column dataField="XX" caption={"KULLANICI"} width={100}/>
+                                    <Column dataField="XX" caption={"INDIRIM"} width={100}/> 
+                                    <Column dataField="XX" caption={"SADAKAT"} width={100}/>
+                                    <Column dataField="AMOUNT" caption={"TUTAR"} width={100}/>                                             
+                                </NdGrid>
+                            </div>
+                        </div>
+                        <div className="row py-1">
+                            {/* grdLastSaleItem */}
+                            <div className="col-6">
+                                <NdGrid parent={this} id={"grdLastSaleItem"} 
+                                showBorders={true} 
+                                columnsAutoWidth={true} 
+                                allowColumnReordering={true} 
+                                allowColumnResizing={true} 
+                                showRowLines={true}
+                                showColumnLines={true}
+                                height={'250px'} 
+                                width={'100%'}
+                                dbApply={false}
+                                data={{source:[{TYPE_NAME:'ESC',AMOUNT:100.99}]}}
+                                onRowPrepared=
+                                {
+                                    (e)=>
+                                    {
+                                        if(e.rowType == "header")
+                                        {
+                                            e.rowElement.style.fontWeight = 'bold';    
+                                        }
+                                        e.rowElement.style.fontSize = '13px';
+                                    }
+                                }
+                                onCellPrepared=
+                                {
+                                    (e)=>
+                                    {
+                                        e.cellElement.style.padding = '4px'
+                                    }
+                                }
+                                >
+                                    <Column dataField="XX" caption={"BARKOD"} width={120}/>
+                                    <Column dataField="XX" caption={"NAME"} width={200}/>    
+                                    <Column dataField="XX" caption={"MIKTAR"} width={50}/>
+                                    <Column dataField="XX" caption={"FIYAT"} width={50}/> 
+                                    <Column dataField="AMOUNT" caption={"TUTAR"} width={100}/>
+                                </NdGrid>
+                            </div>
+                            {/* grdLastSalePay */}
+                            <div className="col-6">
+                                <NdGrid parent={this} id={"grdLastSalePay"} 
+                                showBorders={true} 
+                                columnsAutoWidth={true} 
+                                allowColumnReordering={true} 
+                                allowColumnResizing={true} 
+                                showRowLines={true}
+                                showColumnLines={true}
+                                height={'250px'} 
+                                width={'100%'}
+                                dbApply={false}
+                                data={{source:[{TYPE_NAME:'ESC',AMOUNT:100.99}]}}
+                                onRowPrepared=
+                                {
+                                    (e)=>
+                                    {
+                                        if(e.rowType == "header")
+                                        {
+                                            e.rowElement.style.fontWeight = 'bold';    
+                                        }
+                                        e.rowElement.style.fontSize = '13px';
+                                    }
+                                }
+                                onCellPrepared=
+                                {
+                                    (e)=>
+                                    {
+                                        e.cellElement.style.padding = '4px'
+                                    }
+                                }
+                                >
+                                    <Column dataField="XX" caption={"TIP"} width={200}/>
+                                    <Column dataField="XX" caption={"AMOUNT"} width={100}/>    
+                                    <Column dataField="XX" caption={"CHANGE"} width={100}/>
+                                </NdGrid>
+                            </div>
+                        </div>
+                    </NbPopUp>
+                </div>
+                {/* Plu Group Popup */}
+                <div>
+                    <NbPopUp id="popPluGroup" parent={this} title={""}>
+                        {/* Alphabet Button Group */}
+                        <div className="row py-1">
+                            <NbButton id={"btnPopPluGroup01"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>A</NbButton>
+                            <NbButton id={"btnPopPluGroup02"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>B</NbButton>
+                            <NbButton id={"btnPopPluGroup03"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>C</NbButton>
+                            <NbButton id={"btnPopPluGroup04"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>D</NbButton>
+                            <NbButton id={"btnPopPluGroup05"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>E</NbButton>
+                            <NbButton id={"btnPopPluGroup06"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>F</NbButton>
+                            <NbButton id={"btnPopPluGroup07"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>G</NbButton>
+                            <NbButton id={"btnPopPluGroup08"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>H</NbButton>
+                            <NbButton id={"btnPopPluGroup09"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>I</NbButton>
+                            <NbButton id={"btnPopPluGroup10"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>J</NbButton>
+                            <NbButton id={"btnPopPluGroup11"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>K</NbButton>
+                            <NbButton id={"btnPopPluGroup12"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>L</NbButton>
+                            <NbButton id={"btnPopPluGroup13"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>M</NbButton>
+                            <NbButton id={"btnPopPluGroup14"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>N</NbButton>
+                            <NbButton id={"btnPopPluGroup15"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>O</NbButton>
+                            <NbButton id={"btnPopPluGroup16"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>Q</NbButton>
+                            <NbButton id={"btnPopPluGroup17"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>P</NbButton>
+                            <NbButton id={"btnPopPluGroup18"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>R</NbButton>
+                            <NbButton id={"btnPopPluGroup19"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>S</NbButton>
+                            <NbButton id={"btnPopPluGroup20"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>T</NbButton>
+                            <NbButton id={"btnPopPluGroup21"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>U</NbButton>
+                            <NbButton id={"btnPopPluGroup22"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>V</NbButton>
+                            <NbButton id={"btnPopPluGroup23"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>W</NbButton>
+                            <NbButton id={"btnPopPluGroup24"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>Y</NbButton>
+                            <NbButton id={"btnPopPluGroup25"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>Z</NbButton>
+                            <NbButton id={"btnPopPluGroup26"} parent={this} className="form-group btn btn-primary me-1" style={{height:"55px",width:"55px"}}>ALL</NbButton>
+                        </div>
+                        <div className="row py-1">
+                            <div className="col-2 ps-0 pe-1">
+                                <NbButton id={"btnPopPluGroup01"} parent={this} className="form-group btn btn-success btn-block" 
+                                style={{height:"100px",width:"100%",fontSize:"14px",backgroundSize:"100% 100%",padding:"0px",position:"relative"}}>
+                                    <div style={{backgroundColor:"rgba(47, 198, 26, 0.5)",position:"relative",bottom:"32px",height:"35px",borderBottomRightRadius:"0.215rem",borderBottomLeftRadius:"0.215rem"}}>
+                                        <div style={{fontSize:"12px",color:"black",fontWeight:"bold"}}>
+                                        POMME RED DELICIOUS
+                                        </div>                                            
+                                    </div>
+                                    <div style={{position:"absolute",bottom:"0",right:"5px",fontSize:"12px",color:"black",fontWeight:"bold"}}>
+                                    ES 4.99€
+                                    </div>   
+                                </NbButton>
+                            </div>
+                            <div className="col-2 px-1">
+                                <NbButton id={"btnPopPluGroup01"} parent={this} className="form-group btn btn-success btn-block" 
+                                style={{height:"100px",width:"100%",fontSize:"14px",backgroundSize:"100% 100%",padding:"0px",position:"relative"}}>
+                                    <div style={{backgroundColor:"rgba(47, 198, 26, 0.5)",position:"relative",bottom:"32px",height:"35px",borderBottomRightRadius:"0.215rem",borderBottomLeftRadius:"0.215rem"}}>
+                                        <div style={{fontSize:"12px",color:"black",fontWeight:"bold"}}>
+                                        POMME RED DELICIOUS
+                                        </div>                                            
+                                    </div>
+                                    <div style={{position:"absolute",bottom:"0",right:"5px",fontSize:"12px",color:"black",fontWeight:"bold"}}>
+                                    ES 4.99€
+                                    </div>   
+                                </NbButton>
+                            </div>
+                            <div className="col-2 px-1">
+                                <NbButton id={"btnPopPluGroup01"} parent={this} className="form-group btn btn-success btn-block" 
+                                style={{height:"100px",width:"100%",fontSize:"14px",backgroundSize:"100% 100%",padding:"0px",position:"relative"}}>
+                                    <div style={{backgroundColor:"rgba(47, 198, 26, 0.5)",position:"relative",bottom:"32px",height:"35px",borderBottomRightRadius:"0.215rem",borderBottomLeftRadius:"0.215rem"}}>
+                                        <div style={{fontSize:"12px",color:"black",fontWeight:"bold"}}>
+                                        POMME RED DELICIOUS
+                                        </div>                                            
+                                    </div>
+                                    <div style={{position:"absolute",bottom:"0",right:"5px",fontSize:"12px",color:"black",fontWeight:"bold"}}>
+                                    ES 4.99€
+                                    </div>   
+                                </NbButton>
+                            </div>
+                            <div className="col-2 px-1">
+                                <NbButton id={"btnPopPluGroup01"} parent={this} className="form-group btn btn-success btn-block" 
+                                style={{height:"100px",width:"100%",fontSize:"14px",backgroundSize:"100% 100%",padding:"0px",position:"relative"}}>
+                                    <div style={{backgroundColor:"rgba(47, 198, 26, 0.5)",position:"relative",bottom:"32px",height:"35px",borderBottomRightRadius:"0.215rem",borderBottomLeftRadius:"0.215rem"}}>
+                                        <div style={{fontSize:"12px",color:"black",fontWeight:"bold"}}>
+                                        POMME RED DELICIOUS
+                                        </div>                                            
+                                    </div>
+                                    <div style={{position:"absolute",bottom:"0",right:"5px",fontSize:"12px",color:"black",fontWeight:"bold"}}>
+                                    ES 4.99€
+                                    </div>   
+                                </NbButton>
+                            </div>
+                            <div className="col-2 px-1">
+                                <NbButton id={"btnPopPluGroup01"} parent={this} className="form-group btn btn-success btn-block" 
+                                style={{height:"100px",width:"100%",fontSize:"14px",backgroundSize:"100% 100%",padding:"0px",position:"relative"}}>
+                                    <div style={{backgroundColor:"rgba(47, 198, 26, 0.5)",position:"relative",bottom:"32px",height:"35px",borderBottomRightRadius:"0.215rem",borderBottomLeftRadius:"0.215rem"}}>
+                                        <div style={{fontSize:"12px",color:"black",fontWeight:"bold"}}>
+                                        POMME RED DELICIOUS
+                                        </div>                                            
+                                    </div>
+                                    <div style={{position:"absolute",bottom:"0",right:"5px",fontSize:"12px",color:"black",fontWeight:"bold"}}>
+                                    ES 4.99€
+                                    </div>   
+                                </NbButton>
+                            </div>
+                            <div className="col-2 ps-1 pe-0">
+                                <NbButton id={"btnPopPluGroup01"} parent={this} className="form-group btn btn-success btn-block" 
+                                style={{height:"100px",width:"100%",fontSize:"14px",backgroundSize:"100% 100%",padding:"0px",position:"relative"}}>
+                                    <div style={{backgroundColor:"rgba(47, 198, 26, 0.5)",position:"relative",bottom:"32px",height:"35px",borderBottomRightRadius:"0.215rem",borderBottomLeftRadius:"0.215rem"}}>
+                                        <div style={{fontSize:"12px",color:"black",fontWeight:"bold"}}>
+                                        POMME RED DELICIOUS
+                                        </div>                                            
+                                    </div>
+                                    <div style={{position:"absolute",bottom:"0",right:"5px",fontSize:"12px",color:"black",fontWeight:"bold"}}>
+                                    ES 4.99€
+                                    </div>   
+                                </NbButton>
+                            </div>
+                        </div>
+                        <div className="row py-1">
+                            {/* btnPopPluGroupLeft */}
+                            <div className="col-1 ps-0 pe-1">
+                                <NbButton id={"btnPopPluGroupLeft"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"60px",width:"100%"}}>
+                                    <i className="text-white fa-solid fa-arrow-left" style={{fontSize: "24px"}} />
+                                </NbButton>
+                            </div>
+                            {/* btnPopPluGroupRight */}
+                            <div className="col-1 px-1">
+                                <NbButton id={"btnPopPluGroupRight"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"60px",width:"100%"}}>
+                                    <i className="text-white fa-solid fa-arrow-right" style={{fontSize: "24px"}} />
+                                </NbButton>
+                            </div>
+                        </div>
+                    </NbPopUp>
+                </div>
             </div>
         )
     }

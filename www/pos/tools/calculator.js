@@ -1,9 +1,8 @@
 import React from 'react';
-import NbBase from './base.js';
-import NbButton from './button.js';
-import NdPopUp from '../devex/popup.js';
-import NdTextBox from '../devex/textbox.js';
-import NdGrid,{Column,Editing,Paging,Scrolling} from '../devex/grid.js';
+import NbBase from '../../core/react/bootstrap/base.js';
+import NbButton from '../../core/react/bootstrap/button.js';
+import NdPopUp from '../../core/react/devex/popup.js';
+import NdTextBox from '../../core/react/devex/textbox.js';
 
 export default class NbCalculator extends NbBase
 {
