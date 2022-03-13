@@ -121,7 +121,7 @@ export default class salesInvoice extends React.Component
         this.docLocked = false
         
         this.frmDocItems.option('disabled',false)
-        await this.grdDocItems.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
+        await this.grdDiffInv.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -355,9 +355,11 @@ export default class salesInvoice extends React.Component
                     {
                         query :"SELECT [dbo].[FN_CONTRACT_PRICE](@ITEM,@CUSTOMER,@QUANTITY,GETDATE(),@TYPE) AS PRICE  ",
                         param : ['ITEM:string|50','CUSTOMER:string|50','QUANTITY:float','TYPE:int'],
-                        value : [tmpItems[i][x].ITEM,tmpItems[i][x].OUTPUT,tmpItems[i][x].QUANTITY,0]
+                        value : [tmpItems[i][x].ITEM,tmpItems[i][x].OUTPUT,tmpItems[i][x].QUANTITY,1]
                     }
                     let tmpData = await this.core.sql.execute(tmpQuery) 
+                    console.log(tmpItems[i][x].PRICE)
+                    console.log( tmpData.result.recordset[0].PRICE)
                     if(tmpData.result.recordset[0].PRICE < tmpItems[i][x].PRICE && tmpData.result.recordset[0].PRICE != 0)
                     {
                         let tmpDocItems = {...this.docObj.docItems.empty}
@@ -374,9 +376,12 @@ export default class salesInvoice extends React.Component
                         tmpDocItems.ITEM = tmpItems[i][x].ITEM
                         tmpDocItems.ITEM_CODE = tmpItems[i][x].ITEM_CODE
                         tmpDocItems.ITEM_NAME = tmpItems[i][x].ITEM_NAME
+                        tmpDocItems.QUANTITY = tmpItems[i][x].QUANTITY
                         tmpDocItems.PRICE = (tmpItems[i][x].PRICE - tmpData.result.recordset[0].PRICE)
                         tmpDocItems.AMOUNT = (tmpItems[i][x].PRICE - tmpData.result.recordset[0].PRICE) * tmpItems[i][x].QUANTITY
-                        tmpDocItems.TOTAL = (tmpItems[i][x].PRICE - tmpData.result.recordset[0].PRICE) * tmpItems[i][x].QUANTITY
+                        tmpDocItems.VAT = parseFloat((tmpDocItems.AMOUNT * (tmpItems[i][x].VAT_RATE / 100)).toFixed(3))
+                        tmpDocItems.TOTAL = ((tmpItems[i][x].PRICE - tmpData.result.recordset[0].PRICE) * tmpItems[i][x].QUANTITY) + tmpDocItems.VAT
+                        tmpDocItems.INVOICE_GUID = tmpItems[i].DOC_GUID
                         this.docObj.docItems.addEmpty(tmpDocItems)
                         this.txtRef.readOnly = true
                         this.txtRefno.readOnly = true
@@ -662,7 +667,7 @@ export default class salesInvoice extends React.Component
                                 {/* cmbDepot */}
                                 <Item>
                                     <Label text={this.t("cmbDepot")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbDepot"
+                                    <NdSelectBox simple={true} parent={this} id="cmbDepot" notRefresh = {true}
                                     dt={{data:this.docObj.dt('DOC'),field:"OUTPUT"}}  
                                     displayExpr="NAME"                       
                                     valueExpr="GUID"
@@ -686,7 +691,7 @@ export default class salesInvoice extends React.Component
                                 {/* txtCustomerCode */}
                                 <Item>
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
-                                    <NdTextBox id="txtCustomerCode" parent={this} simple={true} 
+                                    <NdTextBox id="txtCustomerCode" parent={this} simple={true}  notRefresh = {true}
                                     dt={{data:this.docObj.dt('DOC'),field:"INPUT_CODE"}} 
                                     onChange={(async(r)=>
                                         {
@@ -824,20 +829,7 @@ export default class salesInvoice extends React.Component
                                         </Validator> 
                                     </NdDatePicker>
                                 </Item>
-                                {/* dtShipDate */}
-                                <Item>
-                                    <Label text={this.t("dtShipDate")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtShipDate"}
-                                    dt={{data:this.docObj.dt('DOC'),field:"SHIPMENT_DATE"}}
-                                    onValueChanged={(async()=>
-                                    {
-                                    }).bind(this)}
-                                    >
-                                        <Validator validationGroup={"frmRebateInv"}>
-                                            <RequiredRule message={this.t("validDocDate")} />
-                                        </Validator> 
-                                    </NdDatePicker>
-                                </Item>
+                               
                                 {/* Boş */}
                                 <EmptyItem />
                             </Form>
@@ -920,7 +912,7 @@ export default class salesInvoice extends React.Component
                                 </Item>
                                  <Item>
                                  <React.Fragment>
-                                    <NdGrid parent={this} id={"grdDocItems"} 
+                                    <NdGrid parent={this} id={"grdDiffInv"} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
@@ -1003,22 +995,22 @@ export default class salesInvoice extends React.Component
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                                         <Scrolling mode="infinite" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdDocItems.clmCreateDate")} width={200} allowEditing={false} headerFilter={{visible:true}}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdDocItems.clmItemCode")} width={150} editCellRender={this._cellRoleRender} headerFilter={{visible:true}}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdDocItems.clmItemName")} width={400} headerFilter={{visible:true}}/>
-                                        <Column dataField="PRICE" caption={this.t("grdDocItems.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} headerFilter={{visible:true}}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdDocItems.clmQuantity")} dataType={'number'} headerFilter={{visible:true}}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdDocItems.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
-                                        <Column dataField="DISCOUNT" caption={this.t("grdDocItems.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} headerFilter={{visible:true}}/>
-                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdDocItems.clmDiscountRate")} dataType={'number'} headerFilter={{visible:true}}/>
-                                        <Column dataField="VAT" caption={this.t("grdDocItems.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
-                                        <Column dataField="TOTAL" caption={this.t("grdDocItems.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdDiffInv.clmCreateDate")} width={200} allowEditing={false} headerFilter={{visible:true}}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdDiffInv.clmItemCode")} width={150} editCellRender={this._cellRoleRender} headerFilter={{visible:true}}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdDiffInv.clmItemName")} width={400} headerFilter={{visible:true}}/>
+                                        <Column dataField="PRICE" caption={this.t("grdDiffInv.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} headerFilter={{visible:true}}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdDiffInv.clmQuantity")} dataType={'number'} headerFilter={{visible:true}}/>
+                                        <Column dataField="AMOUNT" caption={this.t("grdDiffInv.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
+                                        <Column dataField="VAT" caption={this.t("grdDiffInv.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
+                                        <Column dataField="TOTAL" caption={this.t("grdDiffInv.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
+                                        <Column dataField="CONNECT_REF" caption={this.t("grdDiffInv.clmInvNo")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
+                                        <Column dataField="CONNECT_DOC_DATE" caption={this.t("grdDiffInv.clmInvDate")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
 
                                     </NdGrid>
                                     <ContextMenu
                                     dataSource={this.rightItems}
                                     width={200}
-                                    target="#grdDocItems"
+                                    target="#grdDiffInv"
                                     onItemClick={(async(e)=>
                                     {
                                         this._getContract()

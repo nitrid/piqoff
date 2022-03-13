@@ -107,7 +107,7 @@ export default class salesInvoice extends React.Component
         this.docLocked = false
         
         this.frmDocItems.option('disabled',false)
-        await this.grdDocItems.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
+        await this.grdSlsDispatch.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -585,7 +585,7 @@ export default class salesInvoice extends React.Component
                                 {/* cmbDepot */}
                                 <Item>
                                     <Label text={this.t("cmbDepot")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbDepot"
+                                    <NdSelectBox simple={true} parent={this} id="cmbDepot" notRefresh = {true}
                                     dt={{data:this.docObj.dt('DOC'),field:"OUTPUT"}}  
                                     displayExpr="NAME"                       
                                     valueExpr="GUID"
@@ -608,7 +608,7 @@ export default class salesInvoice extends React.Component
                                 {/* txtCustomerCode */}
                                 <Item>
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
-                                    <NdTextBox id="txtCustomerCode" parent={this} simple={true} 
+                                    <NdTextBox id="txtCustomerCode" parent={this} simple={true}  notRefresh = {true}
                                     dt={{data:this.docObj.dt('DOC'),field:"INPUT_CODE"}} 
                                     onChange={(async(r)=>
                                     {
@@ -836,7 +836,7 @@ export default class salesInvoice extends React.Component
                                     }}/>
                                 </Item>
                                  <Item>
-                                    <NdGrid parent={this} id={"grdDocItems"} 
+                                    <NdGrid parent={this} id={"grdSlsDispatch"} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
@@ -924,17 +924,17 @@ export default class salesInvoice extends React.Component
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                                         <Scrolling mode="infinite" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdDocItems.clmCreateDate")} width={150} allowEditing={false}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdDocItems.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdDocItems.clmItemName")} width={350} />
-                                        <Column dataField="PRICE" caption={this.t("grdDocItems.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdDocItems.clmQuantity")} dataType={'number'}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdDocItems.clmAmount")} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                        <Column dataField="DISCOUNT" caption={this.t("grdDocItems.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdDocItems.clmDiscountRate")} dataType={'number'} />
-                                        <Column dataField="MARGIN" caption={this.t("grdDocItems.clmMargin")} width={150} allowEditing={false}/>
-                                        <Column dataField="VAT" caption={this.t("grdDocItems.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
-                                        <Column dataField="TOTAL" caption={this.t("grdDocItems.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsDispatch.clmCreateDate")} width={150} allowEditing={false}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdSlsDispatch.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdSlsDispatch.clmItemName")} width={350} />
+                                        <Column dataField="PRICE" caption={this.t("grdSlsDispatch.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdSlsDispatch.clmQuantity")} dataType={'number'}/>
+                                        <Column dataField="AMOUNT" caption={this.t("grdSlsDispatch.clmAmount")} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                        <Column dataField="DISCOUNT" caption={this.t("grdSlsDispatch.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsDispatch.clmDiscountRate")} dataType={'number'} />
+                                        <Column dataField="MARGIN" caption={this.t("grdSlsDispatch.clmMargin")} width={150} allowEditing={false}/>
+                                        <Column dataField="VAT" caption={this.t("grdSlsDispatch.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                        <Column dataField="TOTAL" caption={this.t("grdSlsDispatch.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
                                     </NdGrid>
                                 </Item>
                             </Form>

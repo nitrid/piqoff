@@ -123,7 +123,7 @@ export default class salesInvoice extends React.Component
         this.docLocked = false
         
         this.frmDocItems.option('disabled',false)
-        await this.grdDocItems.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
+        await this.grdPurcInv.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
         await this.grdInvoicePayment.dataRefresh({source:this.paymentObj.docCustomer.dt()});
     }
     async getDoc(pGuid,pRef,pRefno)
@@ -360,7 +360,7 @@ export default class salesInvoice extends React.Component
                 tmpDocItems.INVOICE_GUID = this.docObj.dt()[0].GUID
                 tmpDocItems.VAT_RATE = data[i].VAT_RATE
                 tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
-                tmpDocItems.DISPATCH_NO = data[i].DISPATCH_NO
+                tmpDocItems.CONNECT_REF = data[i].CONNECT_REF
 
                 await this.docObj.docItems.addEmpty(tmpDocItems,false)
                 this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].stat = 'edit'
@@ -751,7 +751,7 @@ export default class salesInvoice extends React.Component
                                 {/* cmbDepot */}
                                 <Item>
                                     <Label text={this.t("cmbDepot")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbDepot"
+                                    <NdSelectBox simple={true} parent={this} id="cmbDepot" notRefresh = {true}
                                     dt={{data:this.docObj.dt('DOC'),field:"INPUT"}}  
                                     displayExpr="NAME"                       
                                     valueExpr="GUID"
@@ -775,7 +775,7 @@ export default class salesInvoice extends React.Component
                                 {/* txtCustomerCode */}
                                 <Item>
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
-                                    <NdTextBox id="txtCustomerCode" parent={this} simple={true} 
+                                    <NdTextBox id="txtCustomerCode" parent={this} simple={true}  notRefresh = {true}
                                     dt={{data:this.docObj.dt('DOC'),field:"OUTPUT_CODE"}} 
                                     onChange={(async(r)=>
                                         {
@@ -1029,7 +1029,7 @@ export default class salesInvoice extends React.Component
                                 </Item>
                                  <Item>
                                  <React.Fragment>
-                                    <NdGrid parent={this} id={"grdDocItems"} 
+                                    <NdGrid parent={this} id={"grdPurcInv"} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
@@ -1078,22 +1078,22 @@ export default class salesInvoice extends React.Component
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                                         <Scrolling mode="infinite" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdDocItems.clmCreateDate")} width={200} allowEditing={false} allowHeaderFiltering={false}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdDocItems.clmItemCode")} width={150} editCellRender={this._cellRoleRender} allowHeaderFiltering={false}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdDocItems.clmItemName")} width={400} allowHeaderFiltering={false}/>
-                                        <Column dataField="PRICE" caption={this.t("grdDocItems.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} allowHeaderFiltering={false}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdDocItems.clmQuantity")} dataType={'number'} allowHeaderFiltering={false}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdDocItems.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} allowHeaderFiltering={false}/>
-                                        <Column dataField="DISCOUNT" caption={this.t("grdDocItems.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} allowHeaderFiltering={false}/>
-                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdDocItems.clmDiscountRate")} dataType={'number'} allowHeaderFiltering={false}/>
-                                        <Column dataField="VAT" caption={this.t("grdDocItems.clmVat")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} allowHeaderFiltering={false}/>
-                                        <Column dataField="TOTAL" caption={this.t("grdDocItems.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} allowHeaderFiltering={false}/>
-                                        <Column dataField="DISPATCH_NO" caption={this.t("grdDocItems.clmDispatch")}  width={200} allowEditing={false}/>
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcInv.clmCreateDate")} width={200} allowEditing={false} allowHeaderFiltering={false}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdPurcInv.clmItemCode")} width={150} editCellRender={this._cellRoleRender} allowHeaderFiltering={false}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdPurcInv.clmItemName")} width={400} allowHeaderFiltering={false}/>
+                                        <Column dataField="PRICE" caption={this.t("grdPurcInv.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} allowHeaderFiltering={false}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdPurcInv.clmQuantity")} dataType={'number'} allowHeaderFiltering={false}/>
+                                        <Column dataField="AMOUNT" caption={this.t("grdPurcInv.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} allowHeaderFiltering={false}/>
+                                        <Column dataField="DISCOUNT" caption={this.t("grdPurcInv.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} allowHeaderFiltering={false}/>
+                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdPurcInv.clmDiscountRate")} dataType={'number'} allowHeaderFiltering={false}/>
+                                        <Column dataField="VAT" caption={this.t("grdPurcInv.clmVat")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} allowHeaderFiltering={false}/>
+                                        <Column dataField="TOTAL" caption={this.t("grdPurcInv.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} allowHeaderFiltering={false}/>
+                                        <Column dataField="CONNECT_REF" caption={this.t("grdPurcInv.clmDispatch")}  width={200} allowEditing={false}/>
                                     </NdGrid>
                                     <ContextMenu
                                     dataSource={this.rightItems}
                                     width={200}
-                                    target="#grdDocItems"
+                                    target="#grdPurcInv"
                                     onItemClick={(async(e)=>
                                     {
                                         if(e.itemData.text == this.t("getDispatch"))

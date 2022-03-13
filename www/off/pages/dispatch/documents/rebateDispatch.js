@@ -110,7 +110,7 @@ export default class salesInvoice extends React.Component
         this.docLocked = false
         
         this.frmDocItems.option('disabled',false)
-        await this.grdDocItems.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
+        await this.grdRebtDispatch.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -346,7 +346,7 @@ export default class salesInvoice extends React.Component
                 tmpDocItems.AMOUNT = parseFloat((data[i].CUSTOMER_PRICE * data[i].QUANTITY).toFixed(3))
                 tmpDocItems.TOTAL = parseFloat((data[i].CUSTOMER_PRICE * data[i].QUANTITY).toFixed(3))
 
-                await this.docObj.docItems.addEmpty(tmpDocItems,false)
+                await this.docObj.docItems.addEmpty(tmpDocItems)
             }
             this.docObj.docItems.dt().emit('onRefresh')
             this._calculateTotal()
@@ -636,7 +636,7 @@ export default class salesInvoice extends React.Component
                                 {/* cmbDepot */}
                                 <Item>
                                     <Label text={this.t("cmbDepot")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbDepot"
+                                    <NdSelectBox simple={true} parent={this} id="cmbDepot" notRefresh = {true}
                                     dt={{data:this.docObj.dt('DOC'),field:"OUTPUT"}}  
                                     displayExpr="NAME"                       
                                     valueExpr="GUID"
@@ -659,7 +659,7 @@ export default class salesInvoice extends React.Component
                                 {/* txtCustomerCode */}
                                 <Item>
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
-                                    <NdTextBox id="txtCustomerCode" parent={this} simple={true} 
+                                    <NdTextBox id="txtCustomerCode" parent={this} simple={true}  notRefresh = {true}
                                     dt={{data:this.docObj.dt('DOC'),field:"INPUT_CODE"}} 
                                     onChange={(async(r)=>
                                     {
@@ -888,7 +888,7 @@ export default class salesInvoice extends React.Component
                                 </Item>
                                  <Item>
                                  <React.Fragment>
-                                    <NdGrid parent={this} id={"grdDocItems"} 
+                                    <NdGrid parent={this} id={"grdRebtDispatch"} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
@@ -934,19 +934,19 @@ export default class salesInvoice extends React.Component
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                                         <Scrolling mode="infinite" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdDocItems.clmCreateDate")} width={150} allowEditing={false}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdDocItems.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdDocItems.clmItemName")} width={350} />
-                                        <Column dataField="PRICE" caption={this.t("grdDocItems.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdDocItems.clmQuantity")} dataType={'number'}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdDocItems.clmAmount")} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                        <Column dataField="VAT" caption={this.t("grdDocItems.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
-                                        <Column dataField="TOTAL" caption={this.t("grdDocItems.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdRebtDispatch.clmCreateDate")} width={150} allowEditing={false}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdRebtDispatch.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdRebtDispatch.clmItemName")} width={350} />
+                                        <Column dataField="PRICE" caption={this.t("grdRebtDispatch.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdRebtDispatch.clmQuantity")} dataType={'number'}/>
+                                        <Column dataField="AMOUNT" caption={this.t("grdRebtDispatch.clmAmount")} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                        <Column dataField="VAT" caption={this.t("grdRebtDispatch.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                        <Column dataField="TOTAL" caption={this.t("grdRebtDispatch.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
                                     </NdGrid>
                                     <ContextMenu
                                     dataSource={this.rightItems}
                                     width={200}
-                                    target="#grdDocItems"
+                                    target="#grdRebtDispatch"
                                     onItemClick={(async(e)=>
                                     {
                                         this._getRebate()

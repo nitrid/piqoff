@@ -42,7 +42,8 @@ export const langTr =
         ftr_03: "Raporlar",
         ftr_01_001: "Alış Fatura Listesi",
         ftr_01_002: "Satış Fatura Listesi",
-        ftr_01_003: "Fiyat Farkı Fatura Listesi",
+        ftr_01_003: "İade Fatura Listesi",
+        ftr_01_004: "Fiyat Farkı Fatura Listesi",
         ftr_02_001: "Alış Faturası",
         ftr_02_002: "Satış Faturası",
         ftr_02_003: "İade Faturası",
@@ -54,10 +55,12 @@ export const langTr =
         irs_03: "Raporlar",
         irs_01_001: "Alış İrsaliye Listesi",
         irs_01_002: "Satış İrsaliye Listesi",
+        irs_01_003: "İade İrsaliye Listesi",
         irs_02_001: "Alış İrsaliyesi",
         irs_02_002: "Satış İrsaliyesi",
         irs_02_003: "İade İrsaliyesi",
-        irs_02_004: "Şubeler Arası Sevk",
+        operation : "Operasyonlar",
+        operation_01 : "İade Operasyonları",
         cnt : "Anlaşmalar",
         cnt_01 : "Listeler",
         cnt_01_001: "Alış Anlaşmaları Listesi",
@@ -522,6 +525,88 @@ export const langTr =
         }
 
     },
+    ftr_01_001 :
+    {
+        cmbCustomer :"Cari",
+        btnGet :"Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        grdPurcIvcList: 
+        {
+            clmRef: "Seri",
+            clmRefNo: "Sıra",
+            clmPrice: "Fiyat",
+            clmOutputCode : "Cari Kodu",
+            clmOutputName : "Cari Adı",
+            clmDate: "Tarih",
+            clmVat : "KDV",
+            clmAmount : "Tutar",
+            clmTotal : "Toplam",
+            clmInputName : "Depo",
+        },
+
+    },
+    ftr_01_002 :
+    {
+        cmbCustomer :"Cari",
+        btnGet :"Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        grdSlsIvcList: 
+        {
+            clmRef: "Seri",
+            clmRefNo: "Sıra",
+            clmPrice: "Fiyat",
+            clmInputCode : "Cari Kodu",
+            clmInputName : "Cari Adı",
+            clmDate: "Tarih",
+            clmVat : "KDV",
+            clmAmount : "Tutar",
+            clmTotal : "Toplam",
+            clmOutputName :"Depo",
+        },
+
+    },
+    ftr_01_003 :
+    {
+        cmbCustomer :"Cari",
+        btnGet :"Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        grdSlsIvcList: 
+        {
+            clmRef: "Seri",
+            clmRefNo: "Sıra",
+            clmPrice: "Fiyat",
+            clmInputCode : "Cari Kodu",
+            clmInputName : "Cari Adı",
+            clmDate: "Tarih",
+            clmVat : "KDV",
+            clmAmount : "Tutar",
+            clmTotal : "Toplam",
+        },
+
+    },
+    ftr_01_004 :
+    {
+        cmbCustomer :"Cari",
+        btnGet :"Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        grdSlsIvcList: 
+        {
+            clmRef: "Seri",
+            clmRefNo: "Sıra",
+            clmPrice: "Fiyat",
+            clmInputCode : "Cari Kodu",
+            clmInputName : "Cari Adı",
+            clmDate: "Tarih",
+            clmVat : "KDV",
+            clmAmount : "Tutar",
+            clmTotal : "Toplam",
+        },
+
+    },
     ftr_02_001 :
     {
         txtRefRefno : "Seri-Sıra",
@@ -582,7 +667,7 @@ export const langTr =
             clmPrice : "Fiyat",
             clmTotal : "Tutar"
         },
-        grdDocItems: 
+        grdPurcInv: 
         {
             clmItemCode: "Kodu",
             clmItemName: "Adı",
@@ -836,7 +921,7 @@ export const langTr =
             clmPrice : "Fiyat",
             clmTotal : "Tutar"
         },
-        grdDocItems: 
+        grdSlsInv: 
         {
             clmItemCode: "Kodu",
             clmItemName: "Adı",
@@ -1059,7 +1144,7 @@ export const langTr =
             clmPrice : "Fiyat",
             clmTotal : "Tutar"
         },
-        grdDocItems: 
+        grdRebtInv: 
         {
             clmItemCode: "Kodu",
             clmItemName: "Adı",
@@ -1246,7 +1331,7 @@ export const langTr =
             clmDocDate : "Evrak Tarihi",
             clmTotal : "Tutar"
         },
-        grdDocItems: 
+        grdDiffInv: 
         {
             clmItemCode: "Kodu",
             clmItemName: "Adı",
@@ -1257,9 +1342,9 @@ export const langTr =
             clmVat : "KDV",
             clmAmount : "Tutar",
             clmTotal : "Genel Toplam",
-            clmDispatch : "İrsaliye No",
             clmCreateDate: "Kayıt Tarihi",
-            clmMargin :"Marj"
+            clmInvNo : "Fatura No",
+            clmInvDate : "Fatura Tarihi"
 
         },
         popDiscount : 
@@ -1450,6 +1535,68 @@ export const langTr =
             msg: "Kaydı silmek istediğinize eminmisiniz ?"
         },
     },
+    irs_01_001 :
+    {
+        cmbCustomer :"Cari",
+        btnGet :"Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        grdPurcDisList: 
+        {
+            clmRef: "Seri",
+            clmRefNo: "Sıra",
+            clmPrice: "Fiyat",
+            clmOutputCode : "Cari Kodu",
+            clmOutputName : "Cari Adı",
+            clmDate: "Tarih",
+            clmVat : "KDV",
+            clmAmount : "Tutar",
+            clmTotal : "Toplam",
+            clmInputName : "Depo",
+        },
+
+    },
+    irs_01_002 :
+    {
+        cmbCustomer :"Cari",
+        btnGet :"Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        grdSlsDisList: 
+        {
+            clmRef: "Seri",
+            clmRefNo: "Sıra",
+            clmPrice: "Fiyat",
+            clmInputCode : "Cari Kodu",
+            clmInputName : "Cari Adı",
+            clmDate: "Tarih",
+            clmVat : "KDV",
+            clmAmount : "Tutar",
+            clmTotal : "Toplam",
+            clmOutputName :"Depo",
+        },
+
+    },
+    irs_01_003 :
+    {
+        cmbCustomer :"Cari",
+        btnGet :"Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        grdSlsDisList: 
+        {
+            clmRef: "Seri",
+            clmRefNo: "Sıra",
+            clmPrice: "Fiyat",
+            clmInputCode : "Cari Kodu",
+            clmInputName : "Cari Adı",
+            clmDate: "Tarih",
+            clmVat : "KDV",
+            clmAmount : "Tutar",
+            clmTotal : "Toplam",
+        },
+
+    },
     irs_02_001 :
     {
         txtRefRefno : "Seri-Sıra",
@@ -1486,7 +1633,7 @@ export const langTr =
             clmName : "STOK ADI",
             clmMulticode : "TEDARİKÇİ KODU"
         },
-        grdDocItems: 
+        grdPurcDispatch: 
         {
             clmItemCode: "Kodu",
             clmItemName: "Adı",
@@ -1676,7 +1823,7 @@ export const langTr =
             clmCode :  "STOK KODU",
             clmName : "STOK ADI",
         },
-        grdDocItems: 
+        grdSlsDispatch: 
         {
             clmItemCode: "Kodu",
             clmItemName: "Adı",
@@ -1873,7 +2020,7 @@ export const langTr =
             clmCode :  "STOK KODU",
             clmName : "STOK ADI",
         },
-        grdDocItems: 
+        grdRebtDispatch: 
         {
             clmItemCode: "Kodu",
             clmItemName: "Adı",
@@ -2033,6 +2180,40 @@ export const langTr =
 
 
 
+    },
+    cnt_01_001 :
+    {
+        cmbCustomer : "Cari",
+        btnGet : "Getir",
+        grdPurcContList: 
+        {
+            clmCreateDate: "Kayıt Tarihi",
+            clmCode: "Stok Kodu",
+            clmName: "Stok Adı",
+            clmCustomerName : "Cari Adı",
+            clmPrıce : "Fiyat",
+            clmQuantity: "Miktar",
+            clmStartDate : "Başlangıç",
+            clmFinishDate :"Bitiş",
+            clmDepot : "Depo"
+        },
+    },
+    cnt_01_002 :
+    {
+        cmbCustomer : "Cari",
+        btnGet : "Getir",
+        grdPurcContList: 
+        {
+            clmCreateDate: "Kayıt Tarihi",
+            clmCode: "Stok Kodu",
+            clmName: "Stok Adı",
+            clmCustomerName : "Cari Adı",
+            clmPrıce : "Fiyat",
+            clmQuantity: "Miktar",
+            clmStartDate : "Başlangıç",
+            clmFinishDate :"Bitiş",
+            clmDepot : "Depo"
+        },
     },
     cnt_02_001 :
     {
@@ -2210,6 +2391,44 @@ export const langTr =
             clmMulticode : "TEDARİKÇİ KODU"
         },
         validCustomerCode : "Cari Kodu Boş Geçilemez",
+    },
+    fns_01_001 :
+    {
+        cmbCustomer :"Cari",
+        btnGet :"Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        grdPayList: 
+        {
+            clmRef: "Seri",
+            clmRefNo: "Sıra",
+            clmPrice: "Fiyat",
+            clmInputCode : "Cari Kodu",
+            clmInputName : "Cari Adı",
+            clmDate: "Tarih",
+            clmTotal : "Tutar",
+            clmOutputName :"Kasa/Banka",
+        },
+
+    },
+    fns_01_002 :
+    {
+        cmbCustomer :"Cari",
+        btnGet :"Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        grdColList: 
+        {
+            clmRef: "Seri",
+            clmRefNo: "Sıra",
+            clmPrice: "Fiyat",
+            clmOutputCode : "Cari Kodu",
+            clmOutputName : "Cari Adı",
+            clmDate: "Tarih",
+            clmTotal : "Tutar",
+            clmInputName :"Kasa/Banka",
+        },
+
     },
     fns_02_001 :
     {
@@ -2484,6 +2703,7 @@ export const langTr =
         txtCode : "Kodu",
         txtName :"Adı",
         cmbType :"Tip",
+        validCode :"Kodu Boş Geçemezsiniz !",
         cmbTypeData : 
         {
             cash : "Nakit",
@@ -2532,4 +2752,82 @@ export const langTr =
         }
       
     },
+    fns_03_002 :
+    {
+        txtCode : "Kodu",
+        txtName :"Adı",
+        txtIban :"Iban",
+        validCode :"Kodu Boş Geçemezsiniz !",
+        pg_txtCode : 
+        {
+            title : "Kasa Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI",
+            clmIban : "IBAN",
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgCode : 
+        {
+            title: "Dikkat",
+            btn01: "Kasaya Git",
+            btn02: "Tamam",
+            msg : "Girmiş olduğunuz Kasa sistem de kayıtlı !"
+        }
+      
+    },
+    operation_01 : 
+    {
+        cmbDepot : 'Depo',
+        btnGet : 'Getir',
+        btnInvoice : 'Faturaya Çevir',
+        btnDispatch : 'İrsaliyeye Çevir',
+        grdRebateList : 
+        {
+            clmCode: "Kodu",
+            clmName : "Adı",
+            clmQuantity : "Miktar",
+            clmCustomer : "Cari",
+            clmPrice : "Fiyat"
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Onayla",
+            btn02: "Vazgeç",
+            msg: "Seçili Satırları İade Etmek İstediğinize Eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: " Serisi İle Evraklarınız Oluşturuldu..!",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+    }
 }

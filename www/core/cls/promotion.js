@@ -151,7 +151,9 @@ export class promotionCls
     {
         for (let i = 0; i < this.ds.length; i++) 
         {
+            console.log(i)
             this.dt(i).clear()
+            console.log(i)
         }
     }
     load()

@@ -29,7 +29,7 @@ export class docCls
             DESCRIPTION : '',
             LOCKED : 0,
             MARGIN : 0,
-            PAYMENT_DOC_GUID : 0,
+            PAYMENT_DOC_GUID : '00000000-0000-0000-0000-000000000000',
         }
 
         this.docItems = new docItemsCls();
@@ -223,7 +223,8 @@ export class docItemsCls
             INVOICE_GUID : '00000000-0000-0000-0000-000000000000',
             VAT_RATE : 0 ,
             DISCOUNT_RATE : 0,
-            DISPATCH_NO : '',
+            CONNECT_REF : '',
+            CONNECT_DOC_DATE : '',
             COST_PRICE : 0,
             MARGIN : 0,
         }

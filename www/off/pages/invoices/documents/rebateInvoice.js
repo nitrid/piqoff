@@ -118,7 +118,7 @@ export default class salesInvoice extends React.Component
         this.docLocked = false
         
         this.frmDocItems.option('disabled',false)
-        await this.grdDocItems.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
+        await this.grdRebtInv.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -583,7 +583,7 @@ export default class salesInvoice extends React.Component
                                 {/* cmbDepot */}
                                 <Item>
                                     <Label text={this.t("cmbDepot")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbDepot"
+                                    <NdSelectBox simple={true} parent={this} id="cmbDepot" notRefresh = {true}
                                     dt={{data:this.docObj.dt('DOC'),field:"OUTPUT"}}  
                                     displayExpr="NAME"                       
                                     valueExpr="GUID"
@@ -607,7 +607,7 @@ export default class salesInvoice extends React.Component
                                 {/* txtCustomerCode */}
                                 <Item>
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
-                                    <NdTextBox id="txtCustomerCode" parent={this} simple={true} 
+                                    <NdTextBox id="txtCustomerCode" parent={this} simple={true}  notRefresh = {true}
                                     dt={{data:this.docObj.dt('DOC'),field:"INPUT_CODE"}} 
                                     onChange={(async(r)=>
                                         {
@@ -841,7 +841,7 @@ export default class salesInvoice extends React.Component
                                 </Item>
                                  <Item>
                                  <React.Fragment>
-                                    <NdGrid parent={this} id={"grdDocItems"} 
+                                    <NdGrid parent={this} id={"grdRebtInv"} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
@@ -928,16 +928,16 @@ export default class salesInvoice extends React.Component
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                                         <Scrolling mode="infinite" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdDocItems.clmCreateDate")} width={200} allowEditing={false}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdDocItems.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdDocItems.clmItemName")} width={400} />
-                                        <Column dataField="PRICE" caption={this.t("grdDocItems.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdDocItems.clmQuantity")} dataType={'number'}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdDocItems.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
-                                        <Column dataField="DISCOUNT" caption={this.t("grdDocItems.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdDocItems.clmDiscountRate")} dataType={'number'}/>
-                                        <Column dataField="VAT" caption={this.t("grdDocItems.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
-                                        <Column dataField="TOTAL" caption={this.t("grdDocItems.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdRebtInv.clmCreateDate")} width={200} allowEditing={false}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdRebtInv.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdRebtInv.clmItemName")} width={400} />
+                                        <Column dataField="PRICE" caption={this.t("grdRebtInv.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdRebtInv.clmQuantity")} dataType={'number'}/>
+                                        <Column dataField="AMOUNT" caption={this.t("grdRebtInv.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                        <Column dataField="DISCOUNT" caption={this.t("grdRebtInv.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdRebtInv.clmDiscountRate")} dataType={'number'}/>
+                                        <Column dataField="VAT" caption={this.t("grdRebtInv.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                        <Column dataField="TOTAL" caption={this.t("grdRebtInv.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
 
                                     </NdGrid>
                                    

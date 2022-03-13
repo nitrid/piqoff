@@ -1,6 +1,6 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { safeCls} from '../../../../core/cls/finance.js';
+import { bankCls} from '../../../../core/cls/finance.js';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
@@ -21,14 +21,14 @@ import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 
-export default class safeCard extends React.Component
+export default class BankCard extends React.Component
 {
     constructor()
     {
         super()
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
-        this.safeObj = new safeCls();
+        this.bankObj = new bankCls();
         this.prevCode = "";
     }
     async componentDidMount()
@@ -38,10 +38,10 @@ export default class safeCard extends React.Component
     }
     async init()
     {
-        this.safeObj.clearAll();
-        this.safeObj.addEmpty();
+        this.bankObj.clearAll();
+        this.bankObj.addEmpty();
 
-        this.safeObj.ds.on('onAddRow',(pTblName,pData) =>
+        this.bankObj.ds.on('onAddRow',(pTblName,pData) =>
         {
             if(pData.stat == 'new')
             {
@@ -62,7 +62,7 @@ export default class safeCard extends React.Component
                 this.btnPrint.setState({disabled:false});
             }
         })
-        this.safeObj.ds.on('onEdit',(pTblName,pData) =>
+        this.bankObj.ds.on('onEdit',(pTblName,pData) =>
         {            
             if(pData.rowData.stat == 'edit')
             {
@@ -76,9 +76,9 @@ export default class safeCard extends React.Component
                 pData.rowData.CUSER = this.user.CODE
             }                 
         })
-        this.safeObj.ds.on('onRefresh',(pTblName) =>
+        this.bankObj.ds.on('onRefresh',(pTblName) =>
         {            
-            this.prevCode = this.safeObj.dt('SAFE').length > 0 ? this.safeObj.dt('SAFE')[0].CODE : '';
+            this.prevCode = this.bankObj.dt('BANK').length > 0 ? this.bankObj.dt('BANK')[0].CODE : '';
             this.btnBack.setState({disabled:true});
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:true});
@@ -86,7 +86,7 @@ export default class safeCard extends React.Component
             this.btnCopy.setState({disabled:false});
             this.btnPrint.setState({disabled:false});          
         })
-        this.safeObj.ds.on('onDelete',(pTblName) =>
+        this.bankObj.ds.on('onDelete',(pTblName) =>
         {            
             this.btnBack.setState({disabled:false});
             this.btnNew.setState({disabled:true});
@@ -96,18 +96,18 @@ export default class safeCard extends React.Component
             this.btnPrint.setState({disabled:false});
         })
     }
-    async getSafe(pCode)
+    async getBank(pCode)
     {
-        this.safeObj.clearAll()
-        await this.safeObj.load({CODE:pCode});
+        this.bankObj.clearAll()
+        await this.bankObj.load({CODE:pCode});
     }
-    async checkSafe(pCode)
+    async checkBank(pCode)
     {
         return new Promise(async resolve =>
         {
             if(pCode !== '')
             {
-                let tmpData = await this.safeObj.load({CODE:pCode});
+                let tmpData = await this.bankObj.load({CODE:pCode});
 
                 if(tmpData.length > 0)
                 {
@@ -126,7 +126,7 @@ export default class safeCard extends React.Component
                     let pResult = await dialog(tmpConfObj);
                     if(pResult == 'btn01')
                     {
-                        this.getSafe(pCode)
+                        this.getBank(pCode)
                         resolve(2) //KAYIT VAR
                     }
                     else
@@ -159,7 +159,7 @@ export default class safeCard extends React.Component
                                         {
                                             if(this.prevCode != '')
                                             {
-                                                this.getSafe(this.prevCode); 
+                                                this.getBank(this.prevCode); 
                                             }
                                         }}/>
                                 </Item>
@@ -172,7 +172,7 @@ export default class safeCard extends React.Component
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmSafe"
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmBank"
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -233,8 +233,8 @@ export default class safeCard extends React.Component
                                         let pResult = await dialog(tmpConfObj);
                                         if(pResult == 'btn01')
                                         {
-                                            this.safeObj.dt('SAFE').removeAt(0)
-                                            await this.safeObj.dt('SAFE').delete();
+                                            this.bankObj.dt('BANK').removeAt(0)
+                                            await this.bankObj.dt('BANK').delete();
                                             this.init(); 
                                         }
                                         
@@ -259,11 +259,11 @@ export default class safeCard extends React.Component
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id="frmSafe">
+                            <Form colCount={3} id="frmBank">
                                  {/* txtCode */}
                                  <Item>
                                     <Label text={this.t("txtCode")} alignment="right" />
-                                    <NdTextBox id="txtCode" parent={this} simple={true} dt={{data:this.safeObj.dt('SAFE'),field:"CODE"}}  
+                                    <NdTextBox id="txtCode" parent={this} simple={true} dt={{data:this.bankObj.dt('BANK'),field:"CODE"}}  
                                     button=
                                     {
                                         [
@@ -277,7 +277,7 @@ export default class safeCard extends React.Component
                                                     {
                                                         if(data.length > 0)
                                                         {
-                                                            this.getSafe(data[0].CODE)
+                                                            this.getBank(data[0].CODE)
                                                         }
                                                     }
                                                 }
@@ -294,7 +294,7 @@ export default class safeCard extends React.Component
                                     }
                                     onChange={(async()=>
                                     {
-                                        let tmpResult = await this.checkSafe(this.txtCode.value)
+                                        let tmpResult = await this.checkBank(this.txtCode.value)
                                         if(tmpResult == 3)
                                         {
                                             this.txtCode.value = "";
@@ -303,7 +303,7 @@ export default class safeCard extends React.Component
                                     param={this.param.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmSafe"}>
+                                        <Validator validationGroup={"frmBank"}>
                                             <RequiredRule message={this.t("validCode")} />
                                         </Validator>  
                                     </NdTextBox>
@@ -316,7 +316,7 @@ export default class safeCard extends React.Component
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_txtCode.title")} //
-                                    data={{source:{select:{query : "SELECT CODE,NAME,TYPE_NAME FROM SAFE_VW_01"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT CODE,NAME,IBAN FROM BANK_VW_01"},sql:this.core.sql}}}
                                     button=
                                     {
                                         {
@@ -331,13 +331,13 @@ export default class safeCard extends React.Component
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_txtCode.clmCode")} width={150} />
                                         <Column dataField="NAME" caption={this.t("pg_txtCode.clmName")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="TYPE_NAME" caption={this.t("pg_txtCode.clmType")} width={300} defaultSortOrder="asc" />
+                                        <Column dataField="IBAN" caption={this.t("pg_txtCode.clmIban")} width={300} defaultSortOrder="asc" />
                                     </NdPopGrid>
                                 </Item>
                                 {/* txtTitle */}
                                 <Item>
                                     <Label text={this.t("txtName")} alignment="right" />
-                                    <NdTextBox id="txtTitle" parent={this} simple={true} dt={{data:this.safeObj.dt('SAFE'),field:"NAME"}}
+                                    <NdTextBox id="txtTitle" parent={this} simple={true} dt={{data:this.bankObj.dt('BANK'),field:"NAME"}}
                                     onChange={(async()=>
                                     {
                                       
@@ -348,21 +348,19 @@ export default class safeCard extends React.Component
                                     </NdTextBox>
                                 </Item>
                                 <EmptyItem />
-                                {/* cmbType */}
-                                <Item>
-                                    <Label text={this.t("cmbType")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbType" height='fit-content' dt={{data:this.safeObj.dt('SAFE'),field:"TYPE"}}
-                                    displayExpr="VALUE"                       
-                                    valueExpr="ID"
-                                    data={{source:[{ID:0,VALUE:this.t("cmbTypeData.cash")},{ID:1,VALUE:this.t("cmbTypeData.check")}]}}
-                                    onValueChanged={(async()=>
-                                            {
-                                               
-                                        }).bind(this)}
-                                    //param={this.param.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
-                                    //access={this.access.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
-                                    />
-                                </Item>          
+                               {/* txtIban */}
+                               <Item>
+                                    <Label text={this.t("txtIban")} alignment="right" />
+                                    <NdTextBox id="txtIban" parent={this} simple={true} dt={{data:this.bankObj.dt('BANK'),field:"IBAN"}}
+                                    onChange={(async()=>
+                                    {
+                                      
+                                    }).bind(this)}
+                                    param={this.param.filter({ELEMENT:'txtIban',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'txtIban',USERS:this.user.CODE})}
+                                    >
+                                    </NdTextBox>
+                                </Item>
                             </Form>
                         </div>
                     </div>

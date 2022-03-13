@@ -192,17 +192,22 @@ export const menu = (e) =>
                         {
                             id: 'ftr_01_001',
                             text: e.t('menu.ftr_01_001'),//'Alış Fatura Listesi',
-                            path: '../pages/customers/cards/customerCard.js'
+                            path: '../pages/invoices/lists/purchaseInvList.js'
                         },
                         {
                             id: 'ftr_01_002',
                             text: e.t('menu.ftr_01_002'),//'Satış Fatura Listesi',
-                            path: '../pages/customers/cards/customerCard.js'
+                            path: '../pages/invoices/lists/salesInvList.js'
                         },
                         {
                             id: 'ftr_01_003',
-                            text: e.t('menu.ftr_01_003'),//'Fiyat Farkı Fatura Listesi',
-                            path: '../pages/customers/cards/customerCard.js'
+                            text: e.t('menu.ftr_01_003'),//'iade Fatura Listesi',
+                            path: '../pages/invoices/lists/rebateInvList.js'
+                        },
+                        {
+                            id: 'ftr_01_004',
+                            text: e.t('menu.ftr_01_004'),//'Fiyat Farkı Fatura Listesi',
+                            path: '../pages/invoices/lists/priceDiffInvList.js'
                         }
                     ]
                 },
@@ -230,7 +235,7 @@ export const menu = (e) =>
                         {
                             id: 'ftr_02_004',
                             text: e.t('menu.ftr_02_004'),//'Fiyat Farkı Faturası',
-                            path: '../pages/invoices/documents/priceDifferenceInvoıces.js'
+                            path: '../pages/invoices/documents/priceDifferenceInvoice.js'
                         },
                         // {
                         //     id: 'ftr_02_005',
@@ -261,12 +266,17 @@ export const menu = (e) =>
                         {
                             id: 'irs_01_001',
                             text: e.t('menu.irs_01_001'),//'Alış İrsaliye Listesi',
-                            path: '../pages/customers/cards/customerCard.js'
+                            path: '../pages/dispatch/lists/purchaseDisList.js'
                         },
                         {
                             id: 'irs_01_002',
                             text: e.t('menu.irs_01_002'),//'Satış İrsaliye Listesi',
-                            path: '../pages/customers/cards/customerCard.js'
+                            path: '../pages/dispatch/lists/salesDisList.js'
+                        },
+                        {
+                            id: 'irs_01_003',
+                            text: e.t('menu.irs_01_003'),//'İade İrsaliye Listesi',
+                            path: '../pages/dispatch/lists/rebateDisList.js'
                         },
                     ]
                 },
@@ -306,6 +316,19 @@ export const menu = (e) =>
             ]
         },
         {
+            id: 'operation',
+            text: e.t('menu.operation'),//'Promosyon',
+            expanded: false,
+            items: 
+            [
+                {
+                    id: 'operation_01',
+                    text : e.t('menu.operation_01'),//'İade Operasyonları',
+                    path: '../pages/operation/operations/rebateOperation.js'
+                },
+            ]
+        },
+        {
             id: 'cnt',
             text: e.t('menu.cnt'),//'Anlaşmalar',
             expanded: false,
@@ -320,12 +343,12 @@ export const menu = (e) =>
                         {
                             id: 'cnt_01_001',
                             text: e.t('menu.cnt_01_001'),//'Alış Anlaşma Listesi',
-                            path: '../pages/finance/documents/payment.js'
+                            path: '../pages/contracts/lists/purchaseContList.js'
                         },
                         {
                             id: 'cnt_01_002',
                             text: e.t('menu.cnt_01_002'),//'Satış Anlaşma Listesi',
-                            path: '../pages/customers/cards/customerCard.js'
+                            path: '../pages/contracts/lists/salesContList.js'
                         },
                     ]
                 },
@@ -369,12 +392,12 @@ export const menu = (e) =>
                         {
                             id: 'fns_01_001',
                             text: e.t('menu.fns_01_001'),//'Ödeme Listesi',
-                            path: '../pages/customers/cards/customerCard.js'
+                            path: '../pages/finance/lists/paymentList.js'
                         },
                         {
                             id: 'fns_01_002',
                             text: e.t('menu.fns_01_002'),//'Tahsilat Listesi',
-                            path: '../pages/customers/cards/customerCard.js'
+                            path: '../pages/finance/lists/collectionList.js'
                         },
                     ]
                 },
@@ -410,7 +433,7 @@ export const menu = (e) =>
                         {
                             id: 'fns_03_002',
                             text: e.t('menu.fns_03_002'),//'Tahsilat',
-                            path: '../pages/finance/documents/collection.js'
+                            path: '../pages/finance/cards/bankCard.js'
                         },
                     ]
                 },

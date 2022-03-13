@@ -99,6 +99,7 @@ export class safeCls
         {
             console.log(i)
             this.dt(i).clear()
+            console.log(i)
         }
     }
     load()
