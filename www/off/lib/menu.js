@@ -232,11 +232,11 @@ export const menu = (e) =>
                             text: e.t('menu.ftr_02_004'),//'Fiyat Farkı Faturası',
                             path: '../pages/invoices/documents/priceDifferenceInvoıces.js'
                         },
-                        {
-                            id: 'ftr_02_005',
-                            text: e.t('menu.ftr_02_005'),//'Şubeler Arası Satış',
-                            path: '../pages/customers/cards/customerCard.js'
-                        }
+                        // {
+                        //     id: 'ftr_02_005',
+                        //     text: e.t('menu.ftr_02_005'),//'Şubeler Arası Satış',
+                        //     path: '../pages/customers/cards/customerCard.js'
+                        // }
                     ]
                 },
                 {
@@ -291,11 +291,11 @@ export const menu = (e) =>
                             text: e.t('menu.irs_02_003'),//'İade İrsaliyesi',
                             path: '../pages/dispatch/documents/rebateDispatch.js'
                         },
-                        {
-                            id: 'irs_02_004',
-                            text: e.t('menu.irs_02_004'),//'Şubeler Arası Sevk',
-                            path: '../pages/customers/cards/customerCard.js'
-                        }
+                        // {
+                        //     id: 'irs_02_004',
+                        //     text: e.t('menu.irs_02_004'),//'Şubeler Arası Sevk',
+                        //     path: '../pages/customers/cards/customerCard.js'
+                        // }
                     ]
                 },
                 {
@@ -398,14 +398,14 @@ export const menu = (e) =>
                 },
                 {
                     id: 'fns_03',
-                    text : e.t('menu.fns_03'),//'Kasalar İşlemleri',
+                    text : e.t('menu.fns_03'),//'Kasa - Banka İşlemleri',
                     expanded: false,
                     items: 
                     [
                         {
                             id: 'fns_03_001',
-                            text: e.t('menu.fns_03_001'),//'Ödeme',
-                            path: '../pages/finance/documents/payment.js'
+                            text: e.t('menu.fns_03_001'),//'Kasa Tanıtım',
+                            path: '../pages/finance/cards/safeCard.js'
                         },
                         {
                             id: 'fns_03_002',

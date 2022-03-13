@@ -73,9 +73,9 @@ export const langTr =
         fns_02 : "Evraklar",
         fns_02_001 : "Ödeme",
         fns_02_002 : "Tahsilat",
-        fns_03 : "Kasa İşlemieri",
+        fns_03 : "Kasa - Banka İşlemieri",
         fns_03_001 : "Kasa Tanıtım",
-        fns_03_002 : "Kasa Durumları",
+        fns_03_002 : "Banka Tanıtım",
         fns_04 : "Raporlar",
         promo: "Promosyon",
         promo_01: "Tanımlar",
@@ -2478,5 +2478,58 @@ export const langTr =
         validDepot : "Depo Seçmelisiniz",
         validCustomerCode : "Cari Kodu Boş Geçilemez",
         validDocDate : "Tarih Seçmelisiniz",
+    },
+    fns_03_001 :
+    {
+        txtCode : "Kodu",
+        txtName :"Adı",
+        cmbType :"Tip",
+        cmbTypeData : 
+        {
+            cash : "Nakit",
+            check : "Çek"
+        },
+        pg_txtCode : 
+        {
+            title : "Kasa Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI",
+            clmType : "TİPİ",
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgCode : 
+        {
+            title: "Dikkat",
+            btn01: "Kasaya Git",
+            btn02: "Tamam",
+            msg : "Girmiş olduğunuz Kasa sistem de kayıtlı !"
+        }
+      
     },
 }
