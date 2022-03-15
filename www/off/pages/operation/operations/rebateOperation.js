@@ -35,8 +35,6 @@ export default class itemList extends React.Component
        
         this._btnGetClick = this._btnGetClick.bind(this)
         this._btnSave = this._btnSave.bind(this)
-        this._btnDispatchSave = this._btnDispatchSave.bind(this)
-        this._btnInvoiceSave = this._btnInvoiceSave.bind(this)
         this._toGroupByCustomer = this._toGroupByCustomer.bind(this)
         this.txtRef = Math.floor(Date.now() / 1000)
     }
@@ -74,14 +72,6 @@ export default class itemList extends React.Component
         
         await this.grdRebateList.dataRefresh(tmpSource)
     }
-    _btnDispatchSave()
-    {
-        this._btnSave(0)
-    }
-    _btnInvoiceSave()
-    {
-        this._btnSave(1)
-    }
     async _btnSave(pType)
     {
         let tmpConfObj =
@@ -107,7 +97,7 @@ export default class itemList extends React.Component
                 tmpDoc.TYPE = 1
                 tmpDoc.DOC_TYPE = 40
                 tmpDoc.REBATE = 1
-                tmpDoc.REF = 'RRR'
+                tmpDoc.REF = this.txtRef
                 tmpDoc.REF_NO = (this.docObj.dt().length + 1)
                 tmpDoc.OUTPUT = this.cmbDepot.value
                 tmpDoc.INPUT = Object.keys(tmpCustomer)[i]
@@ -247,10 +237,10 @@ export default class itemList extends React.Component
                             
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnInvoice")} type="default" width="100%" onClick={this._btnInvoiceSave}></NdButton>
+                            <NdButton text={this.t("btnInvoice")} type="default" width="100%" onClick={()=>{this._btnSave(1)}}></NdButton>
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnDispatch")} type="default" width="100%" onClick={this._btnDispatchSave}></NdButton>
+                            <NdButton text={this.t("btnDispatch")} type="default" width="100%" onClick={()=>{this._btnSave(0)}}></NdButton>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">

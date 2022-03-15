@@ -527,7 +527,15 @@ export const langTr =
     },
     ftr_01_001 :
     {
-        cmbCustomer :"Cari",
+        txtCustomerCode : "Cari",
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
         btnGet :"Getir",
         dtFirst : "İlk Tarih",
         dtLast : "Son Tarih",
@@ -548,7 +556,15 @@ export const langTr =
     },
     ftr_01_002 :
     {
-        cmbCustomer :"Cari",
+        txtCustomerCode : "Cari",
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
         btnGet :"Getir",
         dtFirst : "İlk Tarih",
         dtLast : "Son Tarih",
@@ -569,7 +585,15 @@ export const langTr =
     },
     ftr_01_003 :
     {
-        cmbCustomer :"Cari",
+        txtCustomerCode : "Cari",
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
         btnGet :"Getir",
         dtFirst : "İlk Tarih",
         dtLast : "Son Tarih",
@@ -589,7 +613,15 @@ export const langTr =
     },
     ftr_01_004 :
     {
-        cmbCustomer :"Cari",
+        txtCustomerCode : "Cari",
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
         btnGet :"Getir",
         dtFirst : "İlk Tarih",
         dtLast : "Son Tarih",
@@ -1541,6 +1573,15 @@ export const langTr =
         btnGet :"Getir",
         dtFirst : "İlk Tarih",
         dtLast : "Son Tarih",
+        txtCustomerCode : "Cari",
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
         grdPurcDisList: 
         {
             clmRef: "Seri",
@@ -1562,6 +1603,15 @@ export const langTr =
         btnGet :"Getir",
         dtFirst : "İlk Tarih",
         dtLast : "Son Tarih",
+        txtCustomerCode : "Cari",
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
         grdSlsDisList: 
         {
             clmRef: "Seri",
@@ -1583,6 +1633,15 @@ export const langTr =
         btnGet :"Getir",
         dtFirst : "İlk Tarih",
         dtLast : "Son Tarih",
+        txtCustomerCode : "Cari",
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
         grdSlsDisList: 
         {
             clmRef: "Seri",
@@ -2183,7 +2242,15 @@ export const langTr =
     },
     cnt_01_001 :
     {
-        cmbCustomer : "Cari",
+        txtCustomerCode : "Cari",
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
         btnGet : "Getir",
         grdPurcContList: 
         {
@@ -2200,7 +2267,15 @@ export const langTr =
     },
     cnt_01_002 :
     {
-        cmbCustomer : "Cari",
+        txtCustomerCode : "Cari",
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
         btnGet : "Getir",
         grdPurcContList: 
         {
@@ -2394,7 +2469,15 @@ export const langTr =
     },
     fns_01_001 :
     {
-        cmbCustomer :"Cari",
+        txtCustomerCode : "Cari",
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
         btnGet :"Getir",
         dtFirst : "İlk Tarih",
         dtLast : "Son Tarih",
@@ -2413,7 +2496,15 @@ export const langTr =
     },
     fns_01_002 :
     {
-        cmbCustomer :"Cari",
+        txtCustomerCode : "Cari",
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
         btnGet :"Getir",
         dtFirst : "İlk Tarih",
         dtLast : "Son Tarih",
