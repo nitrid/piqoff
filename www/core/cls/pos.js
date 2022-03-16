@@ -320,6 +320,7 @@ export class posSaleCls
             let tmpPrm = {GUID:'',POS_GUID:''}
             if(arguments.length > 0)
             {
+                tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '' : arguments[0].GUID;
                 tmpPrm.POS_GUID = typeof arguments[0].POS_GUID == 'undefined' ? '' : arguments[0].POS_GUID;
             }
 
@@ -465,6 +466,7 @@ export class posPaymentCls
             let tmpPrm = {GUID:'',POS_GUID:''}
             if(arguments.length > 0)
             {
+                tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '' : arguments[0].GUID;
                 tmpPrm.POS_GUID = typeof arguments[0].POS_GUID == 'undefined' ? '' : arguments[0].POS_GUID;
             }
 
@@ -473,6 +475,191 @@ export class posPaymentCls
             await this.ds.get('POS_PAYMENT').refresh();
             
             resolve(this.ds.get('POS_PAYMENT'));    
+        });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            this.ds.delete()
+            resolve(await this.ds.update()); 
+        });
+    }
+}
+export class posPluCls
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds = new dataset();
+        this.empty = 
+        {
+            GUID : '00000000-0000-0000-0000-000000000000',
+            CUSER : this.core.auth.data.CODE,
+            LUSER : this.core.auth.data.CODE,
+            TYPE : 0,
+            TYPE_NAME : '',
+            NAME : '',
+            LINK : '00000000-0000-0000-0000-000000000000',
+            LINK_CODE : '',
+            LINK_NAME : '',
+            LOCATION : 0,
+            GROUP_INDEX : 0
+        }
+
+        this._initDs();
+    }
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('PLU');            
+        tmpDt.selectCmd = 
+        {
+            query : "SELECT * FROM [dbo].[PLU_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((CUSER = @CUSER) OR (@CUSER = '')) AND " + 
+                    "((TYPE = @TYPE) OR (@TYPE = -1)) ORDER BY LOCATION ASC",
+            param : ['GUID:string|50','CUSER:string|25','TYPE:int'],
+            local : 
+            {
+                type : "select",
+                from : "PLU",
+                where : {GUID : "",CUSER : "",TYPE : 0}
+            }
+        } 
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_PLU_INSERT] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@TYPE = @PTYPE, " +
+                    "@NAME = @PNAME, " +
+                    "@LINK = @PLINK, " +
+                    "@LOCATION = @PLOCATION, " + 
+                    "@GROUP_INDEX = @PGROUP_INDEX ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PNAME:string|50','PLINK:string|50','PLOCATION:int','PGROUP_INDEX:int'],
+            dataprm : ['GUID','CUSER','TYPE','NAME','LINK','LOCATION','GROUP_INDEX'],
+            local : 
+            {
+                type : "insert",
+                into : "PLU",
+                values : 
+                [
+                    {
+                        GUID : {map:'GUID'},
+                        CUSER : {map:'CUSER'},
+                        TYPE : {map:'TYPE'},
+                        NAME : {map:'NAME'},
+                        LINK : {map:'LINK'},
+                        LOCATION : {map:'LOCATION'},
+                        GROUP_INDEX : {map:'GROUP_INDEX'}
+                    }
+                ]
+            }
+        } 
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_PLU_UPDATE] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@TYPE = @PTYPE, " +
+                    "@NAME = @PNAME, " +
+                    "@LINK = @PLINK, " +
+                    "@LOCATION = @PLOCATION, " + 
+                    "@GROUP_INDEX = @PGROUP_INDEX ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PNAME:string|50','PLINK:string|50','PLOCATION:int','PGROUP_INDEX:int'],
+            dataprm : ['GUID','CUSER','TYPE','NAME','LINK','LOCATION','GROUP_INDEX'],
+            local : 
+            {
+                type : "update",
+                in : "PLU",
+                set : 
+                {
+                    CUSER : {map:'CUSER'},
+                    TYPE : {map:'TYPE'},
+                    NAME : {map:'NAME'},
+                    LINK : {map:'LINK'},
+                    LOCATION : {map:'LOCATION'},
+                    GROUP_INDEX : {map:'GROUP_INDEX'}
+                },
+                where : {GUID : {map:'GUID'}}
+            }
+        } 
+        tmpDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_PLU_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@UPDATE = 1, " +
+                    "@GUID = @PGUID, " + 
+                    "@TYPE = @PTYPE ", 
+            param : ['PCUSER:string|25','PGUID:string|50','PTYPE:int'],
+            dataprm : ['CUSER','GUID','TYPE'],
+            local : 
+            {
+                type : "delete",
+                from : "PLU",
+                where : 
+                {
+                    CUSER : {map:'CUSER'},
+                    GUID : {map:'GUID'},
+                    TYPE : {map:'TYPE'}
+                }
+            }
+        }
+
+        this.ds.add(tmpDt);
+    }
+    //#endregion
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0]);
+        }
+
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('PLU') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {}
+        if(typeof arguments.length > 0)
+        {
+            tmp = {...arguments[0]}            
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('PLU').push(tmp)
+    }
+    clearAll()
+    {
+        for (let i = 0; i < this.ds.length; i++) 
+        {
+            this.dt(i).clear()
+        }
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ ÖRN: {GUID:'',CUSER:'',TYPE:-1}
+        return new Promise(async resolve => 
+        {
+            let tmpPrm = {GUID:'00000000-0000-0000-0000-000000000000',CUSER:'',TYPE:-1}
+            if(arguments.length > 0)
+            {
+                tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
+                tmpPrm.CUSER = typeof arguments[0].CUSER == 'undefined' ? '' : arguments[0].CUSER;
+                tmpPrm.TYPE = typeof arguments[0].TYPE == 'undefined' ? -1 : arguments[0].TYPE;
+            }
+
+            this.ds.get('PLU').selectCmd.value = Object.values(tmpPrm);
+              
+            await this.ds.get('PLU').refresh();
+            
+            resolve(this.ds.get('PLU'));    
         });
     }
     save()
