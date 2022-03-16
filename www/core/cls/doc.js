@@ -302,7 +302,7 @@ export class docItemsCls
         }
         tmpDt.deleteCmd = 
         {
-            query : "[dbo].[PRD_DOC_ITEMS_DELETE] " + 
+            query : "EXEC [dbo].[PRD_DOC_ITEMS_DELETE] " + 
                     "@CUSER = @PCUSER, " + 
                     "@UPDATE = 1, " + 
                     "@GUID = @PGUID, " + 
@@ -377,6 +377,7 @@ export class docItemsCls
     {
         return new Promise(async resolve => 
         {
+            this.ds.delete()
             resolve(await this.ds.update()); 
         });
     }
@@ -543,6 +544,7 @@ export class docCustomerCls
     {
         return new Promise(async resolve => 
         {
+            this.ds.delete()
             resolve(await this.ds.update()); 
         });
     }
@@ -685,6 +687,7 @@ export class checkCls
     {
         return new Promise(async resolve => 
         {
+            this.ds.delete()
             resolve(await this.ds.update()); 
         });
     }

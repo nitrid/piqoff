@@ -605,7 +605,7 @@ export default class CustomerCard extends React.Component
                                                     <Column dataField="TAX_OFFICE" caption={this.t("grdLegal.clmTaxOffice")}/>
                                                     <Column dataField="TAX_NO" caption={this.t("grdLegal.clmTaxNo")}/>
                                                     <Column dataField="INT_VAT_NO" caption={this.t("grdLegal.clmIntVatNo")}/>
-                                                    <Column dataField="TAX_TYPE" caption={this.t("grdLegal.clmTaxType")} editCellRender={this._cellRoleRender} />
+                                                    <Column dataField="TAX_TYPE" caption={this.t("grdLegal.clmTaxType")} editCellRender={this._cellRoleRender}/>
                                                 </NdGrid>
                                             </div>
                                         </div>

@@ -217,6 +217,7 @@ export default class promotionCard extends React.Component
                                     </NdTextBox>
                                     {/*CARI SECIMI POPUP */}
                                     <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                    notRefresh = {true}
                                     visible={false}
                                     position={{of:'#root'}} 
                                     showTitle={true} 
@@ -323,8 +324,8 @@ export default class promotionCard extends React.Component
                                     {
                                        
                                     }}
-                                    onRowRemoved={(e)=>{
-                                        
+                                    onRowRemoved={async (e)=>{
+                                        await this.itemPriceObj.save()
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />

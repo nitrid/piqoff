@@ -13,6 +13,7 @@ import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
+import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 
 export default class itemList extends React.Component
 {
@@ -52,6 +53,7 @@ export default class itemList extends React.Component
     {
         this.dtFirst.value=moment(new Date(0)).format("YYYY-MM-DD");
         this.dtLast.value=moment(new Date(0)).format("YYYY-MM-DD");
+        this.txtCustomerCode.CODE = ''
     }
     _columnListBox(e)
     {
@@ -130,7 +132,7 @@ export default class itemList extends React.Component
                             "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
                             " AND TYPE = 1 AND DOC_TYPE = 21  AND REBATE = 0 ",
                     param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
-                    value : [this.cmbCustomer.value,this.dtFirst.value,this.dtLast.value]
+                    value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
                 },
                 sql : this.core.sql
             }
@@ -186,17 +188,61 @@ export default class itemList extends React.Component
                                     </NdDatePicker>
                                 </Item>
                                 <Item>
-                                    <Label text={this.t("cmbCustomer")} alignment="right" />
-                                        <NdSelectBox simple={true} parent={this} id="cmbCustomer" showClearButton={true}
-                                        pageSize ={50}
-                                        notRefresh = {true}
-                                        displayExpr="INPUT_NAME"                       
-                                        valueExpr="INPUT_CODE"
-                                        value=""
-                                        data={{source: {select : {query:"SELECT INPUT_CODE,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 21 AND REBATE = 0 GROUP BY  INPUT_NAME,INPUT_CODE ORDER BY INPUT_NAME ASC"},sql : this.core.sql}}}
-                                        // onValueChanged={onValueChanged}
-                                        />
-                                </Item>
+                                <Label text={this.t("txtCustomerCode")} alignment="right" />
+                                <NdTextBox id="txtCustomerCode" parent={this} simple={true}
+                                button=
+                                {
+                                    [
+                                        {
+                                            id:'01',
+                                            icon:'more',
+                                            onClick:()=>
+                                            {
+                                                this.pg_txtCustomerCode.show()
+                                                this.pg_txtCustomerCode.onClick = (data) =>
+                                                {
+                                                    if(data.length > 0)
+                                                    {
+                                                        this.txtCustomerCode.setState({value:data[0].TITLE})
+                                                        this.txtCustomerCode.CODE = data[0].CODE
+                                                    }
+                                                }
+                                            }
+                                        },
+                                    ]
+                                }
+                                >
+                                </NdTextBox>
+                                {/*CARI SECIMI POPUP */}
+                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                notRefresh = {true}
+                                visible={false}
+                                position={{of:'#root'}} 
+                                showTitle={true} 
+                                showBorders={true}
+                                width={'90%'}
+                                height={'90%'}
+                                title={this.t("pg_txtCustomerCode.title")} //
+                                data={{source:{select:{query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE GENUS IN(1,2)"},sql:this.core.sql}}}
+                                button=
+                                {
+                                    {
+                                        id:'01',
+                                        icon:'more',
+                                        onClick:()=>
+                                        {
+                                            console.log(1111)
+                                        }
+                                    }
+                                }
+                                >
+                                    <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
+                                    <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
+                                    <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
+                                    <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>
+                                    
+                                </NdPopGrid>
+                                </Item> 
                             </Form>
                         </div>
                     </div>

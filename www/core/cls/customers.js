@@ -306,6 +306,7 @@ export class customerOfficalCls
     {
         return new Promise(async resolve =>
         {
+            this.ds.delete()
             resolve(await this.ds.update())
         });
     }
@@ -443,6 +444,7 @@ export class customerAdressCls
     {
         return new Promise(async resolve => 
         {
+            this.ds.delete()
             resolve(await this.ds.update()); 
         });
     }
