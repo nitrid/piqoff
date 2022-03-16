@@ -2894,6 +2894,15 @@ export const langTr =
     },
     operation_01 : 
     {
+        txtCustomerCode : "Cari",
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
         cmbDepot : 'Depo',
         btnGet : 'Getir',
         btnInvoice : 'Faturaya Çevir',
@@ -2920,5 +2929,12 @@ export const langTr =
             msgSuccess: " Serisi İle Evraklarınız Oluşturuldu..!",
             msgFailed: "Kayıt işleminiz başarısız !"
         },
+        msgDublicateItem : 
+        {
+            title: " Dikkat",
+            btn01 : "Tamam",
+            msg : "Ürünü Birden Fazla Cari İçin Seçilmiş Lütfen Kontol Ediniz"
+
+        }
     }
 }

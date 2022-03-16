@@ -21,6 +21,7 @@ export default class NdPopGrid extends Base
         this.state.height = typeof props.height == 'undefined' ? 'auto' : props.height
         this.state.position = typeof props.position == 'undefined' ? undefined : props.position
         
+        
         this.state.columns = typeof props.columns == 'undefined' ? undefined : props.columns
         this.state.filterRow = typeof props.filterRow == 'undefined' ? {visible:true} : props.filterRow
         this.state.headerFilter = typeof props.headerFilter == 'undefined' ? {visible:true} : props.headerFilter
@@ -236,6 +237,7 @@ export default class NdPopGrid extends Base
                             editing={this.state.editing}  
                             param={this.param.grid} 
                             access={this.access.grid}
+                            notRefresh = {this.props.notRefresh}
                             >                            
                             {this.props.children}
                             </NdGrid>

@@ -1098,8 +1098,9 @@ export default class salesInvoice extends React.Component
                                             
                                         
                                     }}
-                                    onRowRemoved={(e)=>{
+                                    onRowRemoved={async (e)=>{
                                         this._calculateTotal()
+                                        await this.docObj.save()
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />

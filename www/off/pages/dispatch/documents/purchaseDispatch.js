@@ -600,7 +600,7 @@ export default class salesInvoice extends React.Component
                                 {/* txtCustomerCode */}
                                 <Item>
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
-                                    <NdTextBox id="txtCustomerCode" parent={this} simple={true}  notRefresh = {true}
+                                    <NdTextBox id="txtCustomerCode" parent={this} simple={true}  
                                     dt={{data:this.docObj.dt('DOC'),field:"OUTPUT_CODE"}} 
                                     onChange={(async(r)=>
                                     {
@@ -680,6 +680,7 @@ export default class salesInvoice extends React.Component
                                     </NdTextBox>
                                     {/*CARI SECIMI POPUP */}
                                     <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                    notRefresh = {true}
                                     visible={false}
                                     position={{of:'#root'}} 
                                     showTitle={true} 
@@ -890,8 +891,9 @@ export default class salesInvoice extends React.Component
                                         }
                                         this._calculateTotal()
                                     }}
-                                    onRowRemoved={(e)=>{
+                                    onRowRemoved={async (e)=>{
                                         this._calculateTotal()
+                                        await this.docObj.save()
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />

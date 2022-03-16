@@ -100,7 +100,6 @@ export default class salesInvoice extends React.Component
         })
 
         this.dtDocDate.value = moment(new Date())
-        this.dtShipDate.value = moment(new Date())
 
         let tmpDoc = {...this.docObj.empty}
         tmpDoc.TYPE = 1
@@ -502,7 +501,6 @@ export default class salesInvoice extends React.Component
                                         if(this.docObj.dt()[0].LOCKED == 0)
                                         {
                                             this.docObj.dt()[0].LOCKED = 1
-                                            await this.docObj.save()
                                             if((await this.docObj.save()) == 0)
                                             {                                                    
                                                 let tmpConfObj =
@@ -667,7 +665,7 @@ export default class salesInvoice extends React.Component
                                 {/* cmbDepot */}
                                 <Item>
                                     <Label text={this.t("cmbDepot")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbDepot" notRefresh = {true}
+                                    <NdSelectBox simple={true} parent={this} id="cmbDepot" notRefresh={true}
                                     dt={{data:this.docObj.dt('DOC'),field:"OUTPUT"}}  
                                     displayExpr="NAME"                       
                                     valueExpr="GUID"
@@ -691,7 +689,7 @@ export default class salesInvoice extends React.Component
                                 {/* txtCustomerCode */}
                                 <Item>
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
-                                    <NdTextBox id="txtCustomerCode" parent={this} simple={true}  notRefresh = {true}
+                                    <NdTextBox id="txtCustomerCode" parent={this} simple={true}
                                     dt={{data:this.docObj.dt('DOC'),field:"INPUT_CODE"}} 
                                     onChange={(async(r)=>
                                         {
@@ -774,6 +772,7 @@ export default class salesInvoice extends React.Component
                                     </NdTextBox>
                                     {/*CARI SECIMI POPUP */}
                                     <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                    notRefresh={true}
                                     visible={false}
                                     position={{of:'#root'}} 
                                     showTitle={true} 
@@ -988,8 +987,9 @@ export default class salesInvoice extends React.Component
                                             
                                         
                                     }}
-                                    onRowRemoved={(e)=>{
+                                    onRowRemoved={async (e)=>{
                                         this._calculateTotal()
+                                        await this.docObj.save()
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />

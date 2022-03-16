@@ -189,7 +189,7 @@ export default class itemList extends React.Component
                                 </Item>
                                 <Item>
                                 <Label text={this.t("txtCustomerCode")} alignment="right" />
-                                <NdTextBox id="txtCustomerCode" parent={this} simple={true}  notRefresh = {true}
+                                <NdTextBox id="txtCustomerCode" parent={this} simple={true}
                                 button=
                                 {
                                     [
@@ -215,6 +215,7 @@ export default class itemList extends React.Component
                                 </NdTextBox>
                                 {/*CARI SECIMI POPUP */}
                                 <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                notRefresh = {true}
                                 visible={false}
                                 position={{of:'#root'}} 
                                 showTitle={true} 

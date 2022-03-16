@@ -50,7 +50,7 @@ export default class itemList extends React.Component
         this.docObj.clearAll()
 
         this.txtRef = Math.floor(Date.now() / 1000)
-        this._btnGetClick()
+        this.txtCustomerCode.CODE = ''
     }
     async _btnGetClick()
     {
@@ -59,12 +59,12 @@ export default class itemList extends React.Component
         {
             source : 
             {
-                groupBy : this.groupList,
                 select : 
                 {
-                    query :"SELECT *,[dbo].[FN_DEPOT_QUANTITY]([ITEM_GUID],@DEPOT,GETDATE()) AS QUANTITY FROM ITEM_MULTICODE_VW_01 WHERE [dbo].[FN_DEPOT_QUANTITY]([ITEM_GUID],@DEPOT,GETDATE()) > 0 ",
-                    param : ['DEPOT:string|50'],
-                    value : [this.cmbDepot.value]
+                    query :"SELECT *,[dbo].[FN_DEPOT_QUANTITY]([ITEM_GUID],@DEPOT,GETDATE()) AS QUANTITY FROM ITEM_MULTICODE_VW_01 WHERE [dbo].[FN_DEPOT_QUANTITY]([ITEM_GUID],@DEPOT,GETDATE()) > 0 "+
+                    " AND ((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = ''))",
+                    param : ['DEPOT:string|50','CUSTOMER_CODE:string|50'],
+                    value : [this.cmbDepot.value,this.txtCustomerCode.CODE]
                 },
                 sql : this.core.sql
             }
@@ -74,6 +74,24 @@ export default class itemList extends React.Component
     }
     async _btnSave(pType)
     {
+        let tmpItem = await this._toGroupByCustomer(this.grdRebateList.getSelectedData(),'ITEM_CODE')
+        for(let i = 0; i < Object.values(tmpItem).length; i++)
+        {
+           if(Object.values(tmpItem)[i].length > 1)
+           {
+               console.log(Object.values(tmpItem)[i][0].ITEM_NAME)
+                let tmpConfObj =
+                {
+                    id:'msgDublicateItem',showTitle:true,title:this.t("msgDublicateItem.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.t("msgDublicateItem.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{Object.values(tmpItem)[i][0].ITEM_NAME + ' ' + this.t("msgDublicateItem.msg")}</div>)
+                }
+            
+                await dialog(tmpConfObj);
+                return
+           }
+        }
+
         let tmpConfObj =
         {
             id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -145,6 +163,7 @@ export default class itemList extends React.Component
                     tmpDocItems.DOC_DATE = this.docObj.dt()[this.docObj.dt().length - 1].DOC_DATE
                     tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[this.docObj.dt().length - 1].SHIPMENT_DATE
                     tmpDocItems.ITEM = this.grdRebateList.getSelectedData()[x].ITEM_GUID
+                    tmpDocItems.ITEM_NAME = this.grdRebateList.getSelectedData()[x].ITEM_NAME
                     tmpDocItems.PRICE = this.grdRebateList.getSelectedData()[x].CUSTOMER_PRICE
                     tmpDocItems.QUANTITY = this.grdRebateList.getSelectedData()[x].QUANTITY
                     tmpDocItems.AMOUNT = (this.grdRebateList.getSelectedData()[x].CUSTOMER_PRICE * this.grdRebateList.getSelectedData()[x].QUANTITY)
@@ -172,7 +191,9 @@ export default class itemList extends React.Component
         {                                                    
             tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.txtRef + this.t("msgSaveResult.msgSuccess")}</div>)
             await dialog(tmpConfObj1);
-            this.Init()
+            this.docObj.clearAll()
+            this.txtRef = Math.floor(Date.now() / 1000)
+            this._btnGetClick()
         }
         else
         {
@@ -211,6 +232,7 @@ export default class itemList extends React.Component
                                     valueExpr="GUID"
                                     value=""
                                     searchEnabled={true}
+                                    notRefresh = {true}
                                     onValueChanged={(async()=>
                                         {
                                         }).bind(this)}
@@ -224,20 +246,84 @@ export default class itemList extends React.Component
                                     </NdSelectBox>
                                 </Item>
                                 <Item>
-                                <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
+                                
                                 </Item>
+                                <Item>
+                                <Label text={this.t("txtCustomerCode")} alignment="right" />
+                                <NdTextBox id="txtCustomerCode" parent={this} simple={true}  notRefresh = {true}
+                                button=
+                                {
+                                    [
+                                        {
+                                            id:'01',
+                                            icon:'more',
+                                            onClick:()=>
+                                            {
+                                                this.pg_txtCustomerCode.show()
+                                                this.pg_txtCustomerCode.onClick = (data) =>
+                                                {
+                                                    if(data.length > 0)
+                                                    {
+                                                        this.txtCustomerCode.setState({value:data[0].TITLE})
+                                                        this.txtCustomerCode.CODE = data[0].CODE
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        {
+                                            id:'02',
+                                            icon:'clear',
+                                            onClick:()=>
+                                            {
+                                                this.txtCustomerCode.setState({value:''})
+                                                this.txtCustomerCode.CODE =''
+                                            }
+                                        },
+                                    ]
+                                }
+                                >
+                                </NdTextBox>
+                                {/*CARI SECIMI POPUP */}
+                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                visible={false}
+                                position={{of:'#root'}} 
+                                showTitle={true} 
+                                showBorders={true}
+                                width={'90%'}
+                                height={'90%'}
+                                title={this.t("pg_txtCustomerCode.title")} //
+                                data={{source:{select:{query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE GENUS IN(1,2)"},sql:this.core.sql}}}
+                                button=
+                                {
+                                    {
+                                        id:'01',
+                                        icon:'more',
+                                        onClick:()=>
+                                        {
+                                            console.log(1111)
+                                        }
+                                    }
+                                }
+                                >
+                                    <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
+                                    <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
+                                    <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
+                                    <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>
+                                    
+                                </NdPopGrid>
+                                </Item> 
                             </Form>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-3">
-                           
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
                         </div>
                         <div className="col-3">
                             
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnInvoice")} type="default" width="100%" onClick={()=>{this._btnSave(1)}}></NdButton>
+                            {/* <NdButton text={this.t("btnInvoice")} type="default" width="100%" onClick={()=>{this._btnSave(1)}}></NdButton> */}
                         </div>
                         <div className="col-3">
                             <NdButton text={this.t("btnDispatch")} type="default" width="100%" onClick={()=>{this._btnSave(0)}}></NdButton>

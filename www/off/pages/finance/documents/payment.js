@@ -609,6 +609,7 @@ export default class salesInvoice extends React.Component
                                     </NdTextBox>
                                     {/*CARI SECIMI POPUP */}
                                     <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                    notRefresh = {true}
                                     visible={false}
                                     position={{of:'#root'}} 
                                     showTitle={true} 
@@ -744,8 +745,9 @@ export default class salesInvoice extends React.Component
 
                                         this._calculateTotal()
                                     }}
-                                    onRowRemoved={(e)=>{
+                                    onRowRemoved={async (e)=>{
                                         this._calculateTotal()
+                                        await this.docObj.save()
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
