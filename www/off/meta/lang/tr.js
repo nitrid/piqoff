@@ -59,6 +59,14 @@ export const langTr =
         irs_02_001: "Alış İrsaliyesi",
         irs_02_002: "Satış İrsaliyesi",
         irs_02_003: "İade İrsaliyesi",
+        sip: "Sipariş",
+        sip_01: "Listeler",
+        sip_02: "Evraklar",
+        sip_03: "Raporlar",
+        sip_01_001: "Alış Sipariş Listesi",
+        sip_01_002: "Satış Sipariş Listesi",
+        sip_02_001: "Alış Sipariş",
+        sip_02_002: "Satış Sipariş",
         operation : "Operasyonlar",
         operation_01 : "İade Operasyonları",
         cnt : "Anlaşmalar",
@@ -307,7 +315,7 @@ export const langTr =
             clmCode :  "STOK KODU",
             clmName : "STOK ADI",
         },
-        grdDocItems: 
+        grdRebItems: 
         {
             clmItemCode: "Kodu",
             clmItemName: "Adı",
@@ -1143,7 +1151,19 @@ export const langTr =
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
         dtShipDate :"Sevk Tarihi",
-        getContract : "Anlaşmadan Getir",
+        getPayment : "Tahsilatlar",
+        cash : "Tutar",
+        description :"Açıklama",
+        checkReference : "Referans",
+        btnCash : "Nakit",
+        btnCheck : "Çek",
+        btnBank : "Havale",
+        cmbCashSafe : "Nakit Kasası",
+        cmbCheckSafe : "Çek Kasası",
+        cmbBank : "Banka Seçimi",
+        txtPayInvoıceTotal : "Fatura Tutarı",
+        txtPayTotal : "Tahsilat Toplamı",
+        txtRemainder : "Kalan",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -1192,6 +1212,18 @@ export const langTr =
             clmMargin :"Marj"
 
         },
+        grdInvoicePayment: 
+        {
+            clmInputName: "Kasa",
+            clmTypeName: "Tipi",
+            clmPrice: "Fiyat",
+            clmCreateDate: "Kayıt Tarihi",
+
+        },
+        popPayment:
+        {
+            title: "Tahsilatlar",
+        },
         popDiscount : 
         {
             title: "Evrak İndirimi",
@@ -1209,6 +1241,12 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
+        },
+        msgMoreAmount:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Kalan Tutardan Fazla Tahsilat Girilemez !"
         },
         msgSave:
         {
@@ -1311,6 +1349,21 @@ export const langTr =
             btn02: "Yeni Ekle",
             msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Satırlar Birleştirilsin mi ?"
         },
+        popCash : 
+        {
+            title: "Nakit Girişi",
+            btnApprove : "Ekle"
+        },
+        popCheck : 
+        {
+            title: "Çek Girişi",
+            btnApprove : "Ekle"
+        },
+        popBank : 
+        {
+            title: "Havale Girişi",
+            btnApprove : "Ekle"
+        },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
         validDepot : "Depo Seçmelisiniz",
@@ -1334,6 +1387,19 @@ export const langTr =
         txtTotal : "Genel Toplam",
         dtShipDate :"Sevk Tarihi",
         getContract : "Anlaşmadan Getir",
+        getPayment : "Tahsilatlar",
+        cash : "Tutar",
+        description :"Açıklama",
+        checkReference : "Referans",
+        btnCash : "Nakit",
+        btnCheck : "Çek",
+        btnBank : "Havale",
+        cmbCashSafe : "Nakit Kasası",
+        cmbCheckSafe : "Çek Kasası",
+        cmbBank : "Banka Seçimi",
+        txtPayInvoıceTotal : "Fatura Tutarı",
+        txtPayTotal : "Tahsilat Toplamı",
+        txtRemainder : "Kalan",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -1379,6 +1445,18 @@ export const langTr =
             clmInvDate : "Fatura Tarihi"
 
         },
+        grdInvoicePayment: 
+        {
+            clmInputName: "Kasa",
+            clmTypeName: "Tipi",
+            clmPrice: "Fiyat",
+            clmCreateDate: "Kayıt Tarihi",
+
+        },
+        popPayment:
+        {
+            title: "Tahsilatlar",
+        },
         popDiscount : 
         {
             title: "Evrak İndirimi",
@@ -1430,6 +1508,12 @@ export const langTr =
             btn01: "Tamam",
             btn02: "Vazgeç",
             msg: "Vergiyi Sıfırlamak istediğinize eminmisiniz !"
+        },
+        msgMoreAmount:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Kalan Tutardan Fazla Tahsilat Girilemez !"
         },
         msgDiscountPrice:
         {
@@ -1497,6 +1581,21 @@ export const langTr =
             btn01: "Birleştir",
             btn02: "Yeni Ekle",
             msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Satırlar Birleştirilsin mi ?"
+        },
+        popCash : 
+        {
+            title: "Nakit Girişi",
+            btnApprove : "Ekle"
+        },
+        popCheck : 
+        {
+            title: "Çek Girişi",
+            btnApprove : "Ekle"
+        },
+        popBank : 
+        {
+            title: "Havale Girişi",
+            btnApprove : "Ekle"
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",

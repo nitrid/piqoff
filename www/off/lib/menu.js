@@ -316,6 +316,57 @@ export const menu = (e) =>
             ]
         },
         {
+            id: 'sip',
+            text: e.t('menu.sip'),//'İrsaliye',
+            expanded: false,
+            items: 
+            [
+                {
+                    id: 'sip_01',
+                    text : e.t('menu.sip_01'),//'Listeler',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'sip_01_001',
+                            text: e.t('menu.sip_01_001'),//'Alış Sİpariş Listesi',
+                            path: '../pages/orders/lists/purchaseOrdList.js'
+                        },
+                        {
+                            id: 'sip_01_002',
+                            text: e.t('menu.sip_01_002'),//'Satış Sİpariş Listesi',
+                            path: '../pages/orders/lists/salesOrdList.js'
+                        },
+                    ]
+                },
+                {
+                    id: 'sip_02',
+                    text : e.t('menu.sip_02'),//'Evraklar',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'sip_02_001',
+                            text: e.t('menu.sip_02_001'),//'Alış Sİpariş',
+                            path: '../pages/orders/documents/purchaseOrder.js'
+                        },
+                        {
+                            id: 'sip_02_002',
+                            text: e.t('menu.sip_02_002'),//'Satış Sipariş',
+                            path: '../pages/orders/documents/salesOrder.js'
+                        },
+    
+            
+                    ]
+                },
+                {
+                    id: 'sip_03',
+                    text : e.t('menu.sip_03'),//'Raporlar',
+                    expanded: false,
+                }
+            ]
+        },
+        {
             id: 'operation',
             text: e.t('menu.operation'),//'Promosyon',
             expanded: false,

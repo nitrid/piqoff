@@ -264,7 +264,7 @@ export default class salesInvoice extends React.Component
                                 {
                                     if(data.length > 0)
                                     {
-                                        this.addItem(pData,e.rowIndex)
+                                        this.addItem(data[0],e.rowIndex)
                                     }
                                 }
                             }
@@ -391,6 +391,10 @@ export default class salesInvoice extends React.Component
                                             await dialog(tmpConfObj);
                                             return
                                         }
+                                        if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
+                                        {
+                                            await this.grdRebtDispatch.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                        }
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             let tmpConfObj =
@@ -463,7 +467,10 @@ export default class salesInvoice extends React.Component
                                         if(this.docObj.dt()[0].LOCKED == 0)
                                         {
                                             this.docObj.dt()[0].LOCKED = 1
-                                            await this.docObj.save()
+                                            if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
+                                            {
+                                                await this.grdRebtDispatch.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                            }
                                             if((await this.docObj.save()) == 0)
                                             {                                                    
                                                 let tmpConfObj =
@@ -826,53 +833,30 @@ export default class salesInvoice extends React.Component
                                     {
                                         if(e.validationGroup.validate().status == "valid")
                                         {
-                                            
-                                            this.pg_txtItemsCode.show()
-                                            this.pg_txtItemsCode.onClick = async(data) =>
+                                            if(typeof this.docObj.docItems.dt()[0] != 'undefined')
                                             {
-                                                if(data.length > 0)
-                                                { 
-                                                    for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
-                                                    {
-                                                        if(this.docObj.docItems.dt()[i].ITEM_CODE == data[0].CODE)
-                                                        {
-                                                            let tmpConfObj = 
-                                                            {
-                                                                id:'msgCombineItem',showTitle:true,title:this.t("msgCombineItem.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                                button:[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}],
-                                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>)
-                                                            }
-                                                            let pResult = await dialog(tmpConfObj);
-                                                            if(pResult == 'btn01')
-                                                            {
-                                                                this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + 1
-                                                                this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100))).toFixed(3))
-                                                                this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
-                                                                this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
-                                                                this._calculateTotal()
-                                                                return
-                                                            }
-                                                            
-                                                        }
-                                                    }
-                                                    let tmpDocItems = {...this.docObj.docItems.empty}
-                                                    tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                                                    tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                                                    tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                    tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                    tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                                                    tmpDocItems.REF = this.docObj.dt()[0].REF
-                                                    tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                                                    tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                                                    tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                    tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                    tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                                                    this.docObj.docItems.addEmpty(tmpDocItems)
-                                                    this.txtRef.readOnly = true
-                                                    this.txtRefno.readOnly = true
-                                                    this.addItem(data[0],this.docObj.docItems.dt().length - 1)
+                                                if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
+                                                {
+                                                    return
                                                 }
                                             }
+                                           
+                                            let tmpDocItems = {...this.docObj.docItems.empty}
+                                            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                                            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                                            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                            tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                                            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                                            tmpDocItems.REF = this.docObj.dt()[0].REF
+                                            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                                            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                                            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                            tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                                            this.txtRef.readOnly = true
+                                            this.txtRefno.readOnly = true
+                                            this.docObj.docItems.addEmpty(tmpDocItems)
+                                            
                                         }
                                         else
                                         {
@@ -935,7 +919,7 @@ export default class salesInvoice extends React.Component
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                                         <Scrolling mode="infinite" />
-                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
+                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdRebtDispatch.clmCreateDate")} width={150} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdRebtDispatch.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdRebtDispatch.clmItemName")} width={350} />
