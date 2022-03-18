@@ -215,8 +215,8 @@ export default class NbKeyboard extends NbBase
                         className="form-group btn btn-primary btn-block" style={{height:this.state.buttonHeight,width:'100%',fontSize:'16px'}}>-</NbButton> 
                     </div>
                     <div className={'col-1 py-' + this.state.span + ' ps-' + this.state.span}>
-                        <NbButton id={"btn" + this.props.id + "47"} parent={this} keyBtn={{textbox:this.props.textobj,key:"%"}} 
-                        className="form-group btn btn-primary btn-block" style={{height:this.state.buttonHeight,width:'100%',fontSize:'16px'}}>%</NbButton> 
+                        <NbButton id={"btn" + this.props.id + "47"} parent={this} keyBtn={{textbox:this.props.textobj,key:"*"}} 
+                        className="form-group btn btn-primary btn-block" style={{height:this.state.buttonHeight,width:'100%',fontSize:'16px'}}>*</NbButton> 
                     </div>
                 </div>
                 <div className='row'>

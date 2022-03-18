@@ -682,6 +682,7 @@ export class datatable
         let tmpIndex = -1;
         if(arguments.length > 0 && typeof arguments[0] == 'object')
         {
+            console.log(arguments[0])
             tmpIndex = this.indexOf(arguments[0]);
         }
         else if(arguments.length > 0 && typeof arguments[0] == 'number')
