@@ -240,6 +240,7 @@ export default class NbPluButtonGrp extends NbBase
                         return;                        
                     }
                 }
+                this.txtGroupEntry.value = ""
                 this.popGroupEntry.show()
             }        
             else if(pType == 1)
