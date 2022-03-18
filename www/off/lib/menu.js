@@ -317,7 +317,7 @@ export const menu = (e) =>
         },
         {
             id: 'sip',
-            text: e.t('menu.sip'),//'İrsaliye',
+            text: e.t('menu.sip'),//'Sipariş',
             expanded: false,
             items: 
             [
@@ -329,12 +329,12 @@ export const menu = (e) =>
                     [
                         {
                             id: 'sip_01_001',
-                            text: e.t('menu.sip_01_001'),//'Alış Sİpariş Listesi',
+                            text: e.t('menu.sip_01_001'),//'Alış Sipariş Listesi',
                             path: '../pages/orders/lists/purchaseOrdList.js'
                         },
                         {
                             id: 'sip_01_002',
-                            text: e.t('menu.sip_01_002'),//'Satış Sİpariş Listesi',
+                            text: e.t('menu.sip_01_002'),//'Satış Sipariş Listesi',
                             path: '../pages/orders/lists/salesOrdList.js'
                         },
                     ]
