@@ -504,7 +504,7 @@ export default class posDoc extends React.Component
                                         </div>
                                     </div>
                                     <div className="col-10">
-                                        <NbPluButtonGrp id="pluBtnGrp" parent={this}></NbPluButtonGrp>
+                                        <NbPluButtonGrp id="pluBtnGrp" parent={this} />
                                     </div>
                                 </div>  
                                 {/* Line 5 */}
@@ -1660,15 +1660,15 @@ export default class posDoc extends React.Component
                                     }
                                 }
                                 >
-                                    <Column dataField="XX" caption={"TARIH"} width={100}/>
-                                    <Column dataField="AMOUNT" caption={"SAAT"} width={100}/>    
-                                    <Column dataField="XX" caption={"SERI"} width={40}/>
-                                    <Column dataField="XX" caption={"SIRA"} width={40}/> 
-                                    <Column dataField="XX" caption={"SATIR"} width={40}/>
-                                    <Column dataField="XX" caption={"MÜŞTERİ"} width={200}/> 
-                                    <Column dataField="XX" caption={"KULLANICI"} width={100}/>
-                                    <Column dataField="XX" caption={"INDIRIM"} width={100}/> 
-                                    <Column dataField="XX" caption={"SADAKAT"} width={100}/>
+                                    <Column dataField="XX1" caption={"TARIH"} width={100}/>
+                                    <Column dataField="X11" caption={"SAAT"} width={100}/>    
+                                    <Column dataField="XX2" caption={"SERI"} width={40}/>
+                                    <Column dataField="XX3" caption={"SIRA"} width={40}/> 
+                                    <Column dataField="XX4" caption={"SATIR"} width={40}/>
+                                    <Column dataField="XX5" caption={"MÜŞTERİ"} width={200}/> 
+                                    <Column dataField="XX6" caption={"KULLANICI"} width={100}/>
+                                    <Column dataField="XX7" caption={"INDIRIM"} width={100}/> 
+                                    <Column dataField="XX8" caption={"SADAKAT"} width={100}/>
                                     <Column dataField="AMOUNT" caption={"TUTAR"} width={100}/>                                             
                                 </NdGrid>
                             </div>
@@ -1706,10 +1706,10 @@ export default class posDoc extends React.Component
                                     }
                                 }
                                 >
-                                    <Column dataField="XX" caption={"BARKOD"} width={120}/>
-                                    <Column dataField="XX" caption={"NAME"} width={200}/>    
-                                    <Column dataField="XX" caption={"MIKTAR"} width={50}/>
-                                    <Column dataField="XX" caption={"FIYAT"} width={50}/> 
+                                    <Column dataField="XX1" caption={"BARKOD"} width={120}/>
+                                    <Column dataField="XX2" caption={"NAME"} width={200}/>    
+                                    <Column dataField="XX3" caption={"MIKTAR"} width={50}/>
+                                    <Column dataField="XX4" caption={"FIYAT"} width={50}/> 
                                     <Column dataField="AMOUNT" caption={"TUTAR"} width={100}/>
                                 </NdGrid>
                             </div>
@@ -1745,9 +1745,9 @@ export default class posDoc extends React.Component
                                     }
                                 }
                                 >
-                                    <Column dataField="XX" caption={"TIP"} width={200}/>
-                                    <Column dataField="XX" caption={"AMOUNT"} width={100}/>    
-                                    <Column dataField="XX" caption={"CHANGE"} width={100}/>
+                                    <Column dataField="XX1" caption={"TIP"} width={200}/>
+                                    <Column dataField="XX2" caption={"AMOUNT"} width={100}/>    
+                                    <Column dataField="XX3" caption={"CHANGE"} width={100}/>
                                 </NdGrid>
                             </div>
                         </div>
