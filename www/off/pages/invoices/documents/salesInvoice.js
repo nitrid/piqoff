@@ -55,6 +55,7 @@ export default class salesInvoice extends React.Component
     async init()
     {
         this.docObj.clearAll()
+        this.paymentObj.clearAll()
 
         this.docObj.ds.on('onAddRow',(pTblName,pData) =>
         {
@@ -126,11 +127,12 @@ export default class salesInvoice extends React.Component
         this.frmDocItems.option('disabled',false)
         await this.grdSlsInv.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
         await this.grdInvoicePayment.dataRefresh({source:this.paymentObj.docCustomer.dt()});
-        
+        console.log(this.grdSlsInv.devGrid)
     }
     async getDoc(pGuid,pRef,pRefno)
     {
         this.docObj.clearAll()
+        this.paymentObj.clearAll()
         await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:20});
         this._calculateMargin()
         this._calculateTotalMargin()
@@ -156,6 +158,7 @@ export default class salesInvoice extends React.Component
             this.docLocked = false
             this.frmDocItems.option('disabled',false)
         }
+        this._getPayment(this.docObj.dt()[0].GUID)
     }
     async checkDoc(pGuid,pRef,pRefno)
     {
@@ -221,7 +224,6 @@ export default class salesInvoice extends React.Component
         let tmpMargin = ((this.docObj.dt()[0].TOTAL - this.docObj.dt()[0].VAT) - tmpTotalCost)
         let tmpMarginRate = (tmpMargin / (this.docObj.dt()[0].TOTAL - this.docObj.dt()[0].VAT)) * 100
         this.docObj.dt()[0].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
-        console.log(this.docObj.dt()[0].MARGIN)
     }
     async _calculateMargin()
     {
@@ -281,7 +283,7 @@ export default class salesInvoice extends React.Component
                                 {
                                     if(data.length > 0)
                                     {
-                                        this.addItem(pData,e.rowIndex)
+                                        this.addItem(data[0],e.rowIndex)
                                     }
                                 }
                             }
@@ -295,6 +297,29 @@ export default class salesInvoice extends React.Component
     }
     async addItem(pData,pIndex)
     {
+        for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+        {
+            if(this.docObj.docItems.dt()[i].ITEM_CODE == pData.CODE)
+            {
+                let tmpConfObj = 
+                {
+                    id:'msgCombineItem',showTitle:true,title:this.t("msgCombineItem.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>)
+                }
+                let pResult = await dialog(tmpConfObj);
+                if(pResult == 'btn01')
+                {
+                    this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + 1
+                    this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100))).toFixed(3))
+                    this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
+                    this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
+                    this._calculateTotal()
+                    return
+                }
+                
+            }
+        }
         this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
         this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID
         this.docObj.docItems.dt()[pIndex].VAT_RATE = pData.VAT
@@ -382,15 +407,17 @@ export default class salesInvoice extends React.Component
         await this.paymentObj.load({PAYMENT_DOC_GUID:this.docObj.dt()[0].GUID});
         if(this.paymentObj.dt().length > 0)
         {
-            let tmpRemainder = this.docObj.dt()[0].TOTAL - this.paymentObj.dt()[0].TOTAL
+            let tmpRemainder = (this.docObj.dt()[0].TOTAL - this.paymentObj.dt()[0].TOTAL).toFixed(2)
             this.txtRemainder.setState({value:tmpRemainder});
+            this.txtMainRemainder.setState({value:tmpRemainder});
+            
         }
         else
         {
             this.txtRemainder.setState({value:this.docObj.dt()[0].TOTAL});
+            this.txtMainRemainder.setState({value:this.docObj.dt()[0].TOTAL});
         }
        
-        this.popPayment.show()
     }
     async _addPayment(pType,pAmount)
     {
@@ -480,7 +507,8 @@ export default class salesInvoice extends React.Component
             {
               
             }
-            this._getPayment()
+            await this._getPayment()
+            this.popPayment.show()
     }
     render()
     {
@@ -520,6 +548,10 @@ export default class salesInvoice extends React.Component
                                 
                                             await dialog(tmpConfObj);
                                             return
+                                        }
+                                        if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
+                                        {
+                                            await this.grdSlsInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                         }
                                         if(e.validationGroup.validate().status == "valid")
                                         {
@@ -593,7 +625,10 @@ export default class salesInvoice extends React.Component
                                         if(this.docObj.dt()[0].LOCKED == 0)
                                         {
                                             this.docObj.dt()[0].LOCKED = 1
-                                            await this.docObj.save()
+                                            if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
+                                            {
+                                                await this.grdSlsInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                            }
                                             if((await this.docObj.save()) == 0)
                                             {                                                    
                                                 let tmpConfObj =
@@ -953,53 +988,30 @@ export default class salesInvoice extends React.Component
                                     {
                                         if(e.validationGroup.validate().status == "valid")
                                         {
-                                            
-                                            this.pg_txtItemsCode.show()
-                                            this.pg_txtItemsCode.onClick = async(data) =>
+                                            if(typeof this.docObj.docItems.dt()[0] != 'undefined')
                                             {
-                                                if(data.length > 0)
+                                                if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                                 {
-                                                    for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
-                                                    {
-                                                        if(this.docObj.docItems.dt()[i].ITEM_CODE == data[0].CODE)
-                                                        {
-                                                            let tmpConfObj = 
-                                                            {
-                                                                id:'msgCombineItem',showTitle:true,title:this.t("msgCombineItem.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                                button:[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}],
-                                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>)
-                                                            }
-                                                            let pResult = await dialog(tmpConfObj);
-                                                            if(pResult == 'btn01')
-                                                            {
-                                                                this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + 1
-                                                                this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100))).toFixed(3))
-                                                                this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
-                                                                this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
-                                                                this._calculateTotal()
-                                                                return
-                                                            }
-                                                            
-                                                        }
-                                                    }
-                                                    let tmpDocItems = {...this.docObj.docItems.empty}
-                                                    tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                                                    tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                                                    tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                    tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                    tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                                                    tmpDocItems.REF = this.docObj.dt()[0].REF
-                                                    tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                                                    tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                                                    tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                    tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                    tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                                                    this.docObj.docItems.addEmpty(tmpDocItems)
-                                                    this.txtRef.readOnly = true
-                                                    this.txtRefno.readOnly = true
-                                                    this.addItem(data[0],this.docObj.docItems.dt().length - 1)
+                                                    return
                                                 }
                                             }
+                                           
+                                            let tmpDocItems = {...this.docObj.docItems.empty}
+                                            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                                            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                                            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                            tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                                            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                                            tmpDocItems.REF = this.docObj.dt()[0].REF
+                                            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                                            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                                            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                            tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                                            this.txtRef.readOnly = true
+                                            this.txtRefno.readOnly = true
+                                            this.docObj.docItems.addEmpty(tmpDocItems)
+                                
                                         }
                                         else
                                         {
@@ -1105,7 +1117,7 @@ export default class salesInvoice extends React.Component
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                                         <Scrolling mode="infinite" />
-                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
+                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsInv.clmCreateDate")} width={150} allowEditing={false} headerFilter={{visible:true}}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdSlsInv.clmItemCode")} width={150} editCellRender={this._cellRoleRender} headerFilter={{visible:true}}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdSlsInv.clmItemName")} width={350} headerFilter={{visible:true}}/>
@@ -1126,14 +1138,14 @@ export default class salesInvoice extends React.Component
                                     target="#grdSlsInv"
                                     onItemClick={(async(e)=>
                                     {
-                                        console.log(e)
                                         if(e.itemData.text == this.t("getDispatch"))
                                         {
                                             this._getDispatch()
                                         }
                                         else if(e.itemData.text == this.t("getPayment"))
                                         {
-                                            this._getPayment()
+                                            await this._getPayment()
+                                            this.popPayment.show()
                                         }
                                         
                                     }).bind(this)} />
@@ -1236,6 +1248,22 @@ export default class salesInvoice extends React.Component
                                     maxLength={32}
                                     //param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                     //access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
+                                    ></NdTextBox>
+                                </Item>
+                                {/* Ödeme Toplam */}
+                                <Item colSpan={3}></Item>
+                                <Item>
+                                <Label text={this.t("txtPayTotal")} alignment="right" />
+                                    <NdTextBox id="txtPayTotal" parent={this} simple={true} readOnly={true} dt={{data:this.paymentObj.dt('DOC'),field:"TOTAL"}}
+                                    maxLength={32}
+                                    ></NdTextBox>
+                                </Item>
+                                {/* Kalan */}
+                                <Item colSpan={3}></Item>
+                                <Item>
+                                <Label text={this.t("txtRemainder")} alignment="right" />
+                                    <NdTextBox id="txtMainRemainder" parent={this} simple={true} readOnly={true}
+                                    maxLength={32}
                                     ></NdTextBox>
                                 </Item>
                             </Form>
@@ -1422,6 +1450,7 @@ export default class salesInvoice extends React.Component
                         </NdPopGrid>
                     {/* Stok Grid */}
                     <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={"#root"}
+                    notRefresh ={true}
                     visible={false}
                     position={{of:'#root'}} 
                     showTitle={true} 
@@ -1484,12 +1513,13 @@ export default class salesInvoice extends React.Component
                                     height={'75%'} 
                                     width={'100%'}
                                     dbApply={false}
-                                    onRowRemoved={(e)=>{
+                                    onRowRemoved={async (e)=>{
                                         this.popPayment.hide()
                                         this.paymentObj.dt()[0].AMOUNT = this.paymentObj.docCustomer.dt().sum("AMOUNT",2)
                                         this.paymentObj.dt()[0].TOTAL = this.paymentObj.docCustomer.dt().sum("AMOUNT",2)
                                         this.paymentObj.save()
-                                        this._getPayment()
+                                        await this._getPayment()
+                                        this.popPayment.show()
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
