@@ -15,6 +15,10 @@ export default class NbPopUp extends NbBase
     {
         $('#' + this.props.id).modal('show')
     }
+    hide()
+    {
+        $('#' + this.props.id).modal('hide')
+    }
     render()
     {
         return(

@@ -10,12 +10,18 @@ var utilities = require('./utilities');
 module.exports = function attributesToProps(attributes) {
   attributes = attributes || {};
 
+  var valueOnlyInputs = {
+    reset: true,
+    submit: true
+  };
+
   var attributeName;
   var attributeNameLowerCased;
   var attributeValue;
   var propName;
   var propertyInfo;
   var props = {};
+  var inputIsValueOnly = attributes.type && valueOnlyInputs[attributes.type];
 
   for (attributeName in attributes) {
     attributeValue = attributes[attributeName];
@@ -28,11 +34,22 @@ module.exports = function attributesToProps(attributes) {
 
     // convert HTML/SVG attribute to React prop
     attributeNameLowerCased = attributeName.toLowerCase();
-    propName = reactProperty.possibleStandardNames[attributeNameLowerCased];
+    propName = getPropName(attributeNameLowerCased);
 
     if (propName) {
-      props[propName] = attributeValue;
       propertyInfo = reactProperty.getPropertyInfo(propName);
+
+      // convert attribute to uncontrolled component prop (e.g., `value` to `defaultValue`)
+      // https://reactjs.org/docs/uncontrolled-components.html
+      if (
+        (propName === 'checked' || propName === 'value') &&
+        !inputIsValueOnly
+      ) {
+        propName = getPropName('default' + attributeNameLowerCased);
+      }
+
+      props[propName] = attributeValue;
+
       switch (propertyInfo && propertyInfo.type) {
         case reactProperty.BOOLEAN:
           props[propName] = true;
@@ -57,3 +74,13 @@ module.exports = function attributesToProps(attributes) {
 
   return props;
 };
+
+/**
+ * Gets prop name from lowercased attribute name.
+ *
+ * @param {string} attributeName - Lowercased attribute name.
+ * @return {string}
+ */
+function getPropName(attributeName) {
+  return reactProperty.possibleStandardNames[attributeName];
+}

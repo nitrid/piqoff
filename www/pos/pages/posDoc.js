@@ -26,7 +26,11 @@ export default class posDoc extends React.Component
         super() 
         this.core = App.instance.core;
         this.lang = App.instance.lang;
-        this.t = App.instance.lang.getFixedT(null,null,"this.props.data.id")        
+        this.t = App.instance.lang.getFixedT(null,null,"this.props.data.id")
+        this.state =
+        {
+            pluEdit:false
+        }      
     }
     async componentDidMount()
     {        
@@ -137,6 +141,41 @@ export default class posDoc extends React.Component
                                     <span className="text-light">12:12:04</span>
                                 </div> 
                             </div>
+                        </div>
+                        <div className="col-1 offset-3 px-1">
+                            <NbButton id={"btnRefresh"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
+                            onClick={()=>
+                            {                                                        
+                                document.location.reload()
+                            }}>
+                                <i className="text-white fa-solid fa-arrows-rotate" style={{fontSize: "16px"}} />
+                            </NbButton>
+                        </div>
+                        <div className="col-1 px-1">
+                            <NbButton id={"btnPluEdit"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
+                            onClick={()=>
+                            {       
+                                if(this.pluBtnGrp.edit)
+                                {
+                                    this.pluBtnGrp.edit = false
+                                }                              
+                                else
+                                {
+                                    this.pluBtnGrp.edit = true
+                                }                   
+                                this.setState({pluEdit:this.pluBtnGrp.edit})
+                            }}>
+                                <i className={this.state.pluEdit == true ? "text-white fa-solid fa-lock-open" : "text-white fa-solid fa-lock"} style={{fontSize: "16px"}} />
+                            </NbButton>
+                        </div>
+                        <div className="col-1 ps-1 pe-3">
+                            <NbButton id={"btnClose"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
+                            onClick={()=>
+                            {                                                        
+                                
+                            }}>
+                                <i className="text-white fa-solid fa-power-off" style={{fontSize: "16px"}} />
+                            </NbButton>
                         </div>
                     </div>       
                 </div>
@@ -504,7 +543,11 @@ export default class posDoc extends React.Component
                                         </div>
                                     </div>
                                     <div className="col-10">
-                                        <NbPluButtonGrp id="pluBtnGrp" parent={this} />
+                                        <NbPluButtonGrp id="pluBtnGrp" parent={this} 
+                                        onSelection={(pItem)=>
+                                        {
+                                            console.log(pItem)
+                                        }}/>
                                     </div>
                                 </div>  
                                 {/* Line 5 */}
@@ -1752,135 +1795,7 @@ export default class posDoc extends React.Component
                             </div>
                         </div>
                     </NbPopUp>
-                </div>
-                {/* Plu Group Popup */}
-                <div>
-                    <NbPopUp id="popPluGroup" parent={this} title={""}>
-                        {/* Alphabet Button Group */}
-                        <div className="row py-1">
-                            <NbButton id={"btnPopPluGroup01"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>A</NbButton>
-                            <NbButton id={"btnPopPluGroup02"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>B</NbButton>
-                            <NbButton id={"btnPopPluGroup03"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>C</NbButton>
-                            <NbButton id={"btnPopPluGroup04"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>D</NbButton>
-                            <NbButton id={"btnPopPluGroup05"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>E</NbButton>
-                            <NbButton id={"btnPopPluGroup06"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>F</NbButton>
-                            <NbButton id={"btnPopPluGroup07"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>G</NbButton>
-                            <NbButton id={"btnPopPluGroup08"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>H</NbButton>
-                            <NbButton id={"btnPopPluGroup09"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>I</NbButton>
-                            <NbButton id={"btnPopPluGroup10"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>J</NbButton>
-                            <NbButton id={"btnPopPluGroup11"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>K</NbButton>
-                            <NbButton id={"btnPopPluGroup12"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>L</NbButton>
-                            <NbButton id={"btnPopPluGroup13"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>M</NbButton>
-                            <NbButton id={"btnPopPluGroup14"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>N</NbButton>
-                            <NbButton id={"btnPopPluGroup15"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>O</NbButton>
-                            <NbButton id={"btnPopPluGroup16"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>Q</NbButton>
-                            <NbButton id={"btnPopPluGroup17"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>P</NbButton>
-                            <NbButton id={"btnPopPluGroup18"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>R</NbButton>
-                            <NbButton id={"btnPopPluGroup19"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>S</NbButton>
-                            <NbButton id={"btnPopPluGroup20"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>T</NbButton>
-                            <NbButton id={"btnPopPluGroup21"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>U</NbButton>
-                            <NbButton id={"btnPopPluGroup22"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>V</NbButton>
-                            <NbButton id={"btnPopPluGroup23"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>W</NbButton>
-                            <NbButton id={"btnPopPluGroup24"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>Y</NbButton>
-                            <NbButton id={"btnPopPluGroup25"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}}>Z</NbButton>
-                            <NbButton id={"btnPopPluGroup26"} parent={this} className="form-group btn btn-primary me-1" style={{height:"55px",width:"55px"}}>ALL</NbButton>
-                        </div>
-                        <div className="row py-1">
-                            <div className="col-2 ps-0 pe-1">
-                                <NbButton id={"btnPopPluGroup01"} parent={this} className="form-group btn btn-success btn-block" 
-                                style={{height:"100px",width:"100%",fontSize:"14px",backgroundSize:"100% 100%",padding:"0px",position:"relative"}}>
-                                    <div style={{backgroundColor:"rgba(47, 198, 26, 0.5)",position:"relative",bottom:"32px",height:"35px",borderBottomRightRadius:"0.215rem",borderBottomLeftRadius:"0.215rem"}}>
-                                        <div style={{fontSize:"12px",color:"black",fontWeight:"bold"}}>
-                                        POMME RED DELICIOUS
-                                        </div>                                            
-                                    </div>
-                                    <div style={{position:"absolute",bottom:"0",right:"5px",fontSize:"12px",color:"black",fontWeight:"bold"}}>
-                                    ES 4.99€
-                                    </div>   
-                                </NbButton>
-                            </div>
-                            <div className="col-2 px-1">
-                                <NbButton id={"btnPopPluGroup01"} parent={this} className="form-group btn btn-success btn-block" 
-                                style={{height:"100px",width:"100%",fontSize:"14px",backgroundSize:"100% 100%",padding:"0px",position:"relative"}}>
-                                    <div style={{backgroundColor:"rgba(47, 198, 26, 0.5)",position:"relative",bottom:"32px",height:"35px",borderBottomRightRadius:"0.215rem",borderBottomLeftRadius:"0.215rem"}}>
-                                        <div style={{fontSize:"12px",color:"black",fontWeight:"bold"}}>
-                                        POMME RED DELICIOUS
-                                        </div>                                            
-                                    </div>
-                                    <div style={{position:"absolute",bottom:"0",right:"5px",fontSize:"12px",color:"black",fontWeight:"bold"}}>
-                                    ES 4.99€
-                                    </div>   
-                                </NbButton>
-                            </div>
-                            <div className="col-2 px-1">
-                                <NbButton id={"btnPopPluGroup01"} parent={this} className="form-group btn btn-success btn-block" 
-                                style={{height:"100px",width:"100%",fontSize:"14px",backgroundSize:"100% 100%",padding:"0px",position:"relative"}}>
-                                    <div style={{backgroundColor:"rgba(47, 198, 26, 0.5)",position:"relative",bottom:"32px",height:"35px",borderBottomRightRadius:"0.215rem",borderBottomLeftRadius:"0.215rem"}}>
-                                        <div style={{fontSize:"12px",color:"black",fontWeight:"bold"}}>
-                                        POMME RED DELICIOUS
-                                        </div>                                            
-                                    </div>
-                                    <div style={{position:"absolute",bottom:"0",right:"5px",fontSize:"12px",color:"black",fontWeight:"bold"}}>
-                                    ES 4.99€
-                                    </div>   
-                                </NbButton>
-                            </div>
-                            <div className="col-2 px-1">
-                                <NbButton id={"btnPopPluGroup01"} parent={this} className="form-group btn btn-success btn-block" 
-                                style={{height:"100px",width:"100%",fontSize:"14px",backgroundSize:"100% 100%",padding:"0px",position:"relative"}}>
-                                    <div style={{backgroundColor:"rgba(47, 198, 26, 0.5)",position:"relative",bottom:"32px",height:"35px",borderBottomRightRadius:"0.215rem",borderBottomLeftRadius:"0.215rem"}}>
-                                        <div style={{fontSize:"12px",color:"black",fontWeight:"bold"}}>
-                                        POMME RED DELICIOUS
-                                        </div>                                            
-                                    </div>
-                                    <div style={{position:"absolute",bottom:"0",right:"5px",fontSize:"12px",color:"black",fontWeight:"bold"}}>
-                                    ES 4.99€
-                                    </div>   
-                                </NbButton>
-                            </div>
-                            <div className="col-2 px-1">
-                                <NbButton id={"btnPopPluGroup01"} parent={this} className="form-group btn btn-success btn-block" 
-                                style={{height:"100px",width:"100%",fontSize:"14px",backgroundSize:"100% 100%",padding:"0px",position:"relative"}}>
-                                    <div style={{backgroundColor:"rgba(47, 198, 26, 0.5)",position:"relative",bottom:"32px",height:"35px",borderBottomRightRadius:"0.215rem",borderBottomLeftRadius:"0.215rem"}}>
-                                        <div style={{fontSize:"12px",color:"black",fontWeight:"bold"}}>
-                                        POMME RED DELICIOUS
-                                        </div>                                            
-                                    </div>
-                                    <div style={{position:"absolute",bottom:"0",right:"5px",fontSize:"12px",color:"black",fontWeight:"bold"}}>
-                                    ES 4.99€
-                                    </div>   
-                                </NbButton>
-                            </div>
-                            <div className="col-2 ps-1 pe-0">
-                                <NbButton id={"btnPopPluGroup01"} parent={this} className="form-group btn btn-success btn-block" 
-                                style={{height:"100px",width:"100%",fontSize:"14px",backgroundSize:"100% 100%",padding:"0px",position:"relative"}}>
-                                    <div style={{backgroundColor:"rgba(47, 198, 26, 0.5)",position:"relative",bottom:"32px",height:"35px",borderBottomRightRadius:"0.215rem",borderBottomLeftRadius:"0.215rem"}}>
-                                        <div style={{fontSize:"12px",color:"black",fontWeight:"bold"}}>
-                                        POMME RED DELICIOUS
-                                        </div>                                            
-                                    </div>
-                                    <div style={{position:"absolute",bottom:"0",right:"5px",fontSize:"12px",color:"black",fontWeight:"bold"}}>
-                                    ES 4.99€
-                                    </div>   
-                                </NbButton>
-                            </div>
-                        </div>
-                        <div className="row py-1">
-                            {/* btnPopPluGroupLeft */}
-                            <div className="col-1 ps-0 pe-1">
-                                <NbButton id={"btnPopPluGroupLeft"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"60px",width:"100%"}}>
-                                    <i className="text-white fa-solid fa-arrow-left" style={{fontSize: "24px"}} />
-                                </NbButton>
-                            </div>
-                            {/* btnPopPluGroupRight */}
-                            <div className="col-1 px-1">
-                                <NbButton id={"btnPopPluGroupRight"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"60px",width:"100%"}}>
-                                    <i className="text-white fa-solid fa-arrow-right" style={{fontSize: "24px"}} />
-                                </NbButton>
-                            </div>
-                        </div>
-                    </NbPopUp>
-                </div>
+                </div>                
             </div>
         )
     }
