@@ -1,6 +1,6 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { docCls,docItemsCls, docCustomerCls } from '../../../../core/cls/doc.js';
+import { docCls,docOrdersCls, docCustomerCls } from '../../../../core/cls/doc.js';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
@@ -22,7 +22,7 @@ import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
 
-export default class salesDispatch extends React.Component
+export default class salesOrder extends React.Component
 {
     constructor()
     {
@@ -37,13 +37,18 @@ export default class salesDispatch extends React.Component
         this._calculateTotalMargin = this._calculateTotalMargin.bind(this)
         this._calculateMargin = this._calculateMargin.bind(this)
 
-        this.frmDocItems = undefined;
+        this.frmdocOrders = undefined;
         this.docLocked = false;        
+       
     }
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
         this.init()
+        if(typeof this.pagePrm != 'undefined')
+        {
+            this.getDoc(this.pagePrm.GUID,'',0)
+        }
     }
     async init()
     {
@@ -99,20 +104,21 @@ export default class salesDispatch extends React.Component
 
         let tmpDoc = {...this.docObj.empty}
         tmpDoc.TYPE = 1
-        tmpDoc.DOC_TYPE = 40
+        tmpDoc.DOC_TYPE = 60
         this.docObj.addEmpty(tmpDoc);
 
         this.txtRef.readOnly = false
         this.txtRefno.readOnly = false
         this.docLocked = false
         
-        this.frmDocItems.option('disabled',false)
-        await this.grdSlsDispatch.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
+        this.frmdocOrders.option('disabled',false)
+        await this.grdSlsOrder.dataRefresh({source:this.docObj.docOrders.dt('DOC_ORDERS')});
     }
     async getDoc(pGuid,pRef,pRefno)
     {
+        console.log(pGuid)
         this.docObj.clearAll()
-        await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:40});
+        await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:60});
         this._calculateMargin()
         this._calculateTotalMargin()
 
@@ -130,12 +136,12 @@ export default class salesDispatch extends React.Component
             }
 
             await dialog(tmpConfObj);
-            this.frmDocItems.option('disabled',true)
+            this.frmdocOrders.option('disabled',true)
         }
         else
         {
             this.docLocked = false
-            this.frmDocItems.option('disabled',false)
+            this.frmdocOrders.option('disabled',false)
         }
     }
     async checkDoc(pGuid,pRef,pRefno)
@@ -184,19 +190,19 @@ export default class salesDispatch extends React.Component
     }
     async _calculateTotal()
     {
-        this.docObj.dt()[0].AMOUNT = this.docObj.docItems.dt().sum("AMOUNT",2)
-        this.docObj.dt()[0].DISCOUNT = this.docObj.docItems.dt().sum("DISCOUNT",2)
-        this.docObj.dt()[0].VAT = this.docObj.docItems.dt().sum("VAT",2)
-        this.docObj.dt()[0].TOTAL = this.docObj.docItems.dt().sum("TOTAL",2)
+        this.docObj.dt()[0].AMOUNT = this.docObj.docOrders.dt().sum("AMOUNT",2)
+        this.docObj.dt()[0].DISCOUNT = this.docObj.docOrders.dt().sum("DISCOUNT",2)
+        this.docObj.dt()[0].VAT = this.docObj.docOrders.dt().sum("VAT",2)
+        this.docObj.dt()[0].TOTAL = this.docObj.docOrders.dt().sum("TOTAL",2)
         this._calculateTotalMargin()
     }
     async _calculateTotalMargin()
     {
         let tmpTotalCost = 0
 
-        for (let  i= 0; i < this.docObj.docItems.dt().length; i++) 
+        for (let  i= 0; i < this.docObj.docOrders.dt().length; i++) 
         {
-            tmpTotalCost += this.docObj.docItems.dt()[i].COST_PRICE * this.docObj.docItems.dt()[i].QUANTITY
+            tmpTotalCost += this.docObj.docOrders.dt()[i].COST_PRICE * this.docObj.docOrders.dt()[i].QUANTITY
         }
         let tmpMargin = ((this.docObj.dt()[0].TOTAL - this.docObj.dt()[0].VAT) - tmpTotalCost)
         let tmpMarginRate = ((( this.docObj.dt()[0].TOTAL - this.docObj.dt()[0].VAT) - tmpTotalCost) - (this.docObj.dt()[0].TOTAL - this.docObj.dt()[0].VAT)) * 100
@@ -204,11 +210,11 @@ export default class salesDispatch extends React.Component
     }
     async _calculateMargin()
     {
-        for(let  i= 0; i < this.docObj.docItems.dt().length; i++)
+        for(let  i= 0; i < this.docObj.docOrders.dt().length; i++)
         {
-            let tmpMargin = (this.docObj.docItems.dt()[i].TOTAL - this.docObj.docItems.dt()[i].VAT) - (this.docObj.docItems.dt()[i].COST_PRICE * this.docObj.docItems.dt()[i].QUANTITY)
-            let tmpMarginRate = (tmpMargin /(this.docObj.docItems.dt()[i].TOTAL - this.docObj.docItems.dt()[i].VAT)) * 100
-            this.docObj.docItems.dt()[i].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+            let tmpMargin = (this.docObj.docOrders.dt()[i].TOTAL - this.docObj.docOrders.dt()[i].VAT) - (this.docObj.docOrders.dt()[i].COST_PRICE * this.docObj.docOrders.dt()[i].QUANTITY)
+            let tmpMarginRate = (tmpMargin /(this.docObj.docOrders.dt()[i].TOTAL - this.docObj.docOrders.dt()[i].VAT)) * 100
+            this.docObj.docOrders.dt()[i].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
         }
        
     }
@@ -275,9 +281,9 @@ export default class salesDispatch extends React.Component
     }
     async addItem(pData,pIndex)
     {
-        for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+        for (let i = 0; i < this.docObj.docOrders.dt().length; i++) 
         {
-            if(this.docObj.docItems.dt()[i].ITEM_CODE == pData.CODE)
+            if(this.docObj.docOrders.dt()[i].ITEM_CODE == pData.CODE)
             {
                 let tmpConfObj = 
                 {
@@ -288,23 +294,23 @@ export default class salesDispatch extends React.Component
                 let pResult = await dialog(tmpConfObj);
                 if(pResult == 'btn01')
                 {
-                    this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + 1
-                    this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100))).toFixed(3))
-                    this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
-                    this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
+                    this.docObj.docOrders.dt()[i].QUANTITY = this.docObj.docOrders.dt()[i].QUANTITY + 1
+                    this.docObj.docOrders.dt()[i].VAT = parseFloat((this.docObj.docOrders.dt()[i].VAT + (this.docObj.docOrders.dt()[i].PRICE * (this.docObj.docOrders.dt()[i].VAT_RATE / 100))).toFixed(3))
+                    this.docObj.docOrders.dt()[i].AMOUNT = parseFloat((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE).toFixed(3))
+                    this.docObj.docOrders.dt()[i].TOTAL = parseFloat((((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE) - this.docObj.docOrders.dt()[i].DISCOUNT) + this.docObj.docOrders.dt()[i].VAT).toFixed(3))
                     this._calculateTotal()
                     return
                 }
                 
             }
         }
-        this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
-        this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID
-        this.docObj.docItems.dt()[pIndex].VAT_RATE = pData.VAT
-        this.docObj.docItems.dt()[pIndex].ITEM_NAME = pData.NAME
-        this.docObj.docItems.dt()[pIndex].COST_PRICE = pData.COST_PRICE
-        this.docObj.docItems.dt()[pIndex].DISCOUNT = 0
-        this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
+        this.docObj.docOrders.dt()[pIndex].ITEM_CODE = pData.CODE
+        this.docObj.docOrders.dt()[pIndex].ITEM = pData.GUID
+        this.docObj.docOrders.dt()[pIndex].VAT_RATE = pData.VAT
+        this.docObj.docOrders.dt()[pIndex].ITEM_NAME = pData.NAME
+        this.docObj.docOrders.dt()[pIndex].COST_PRICE = pData.COST_PRICE
+        this.docObj.docOrders.dt()[pIndex].DISCOUNT = 0
+        this.docObj.docOrders.dt()[pIndex].DISCOUNT_RATE = 0
         let tmpQuery = 
         {
             query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@CODE,1,GETDATE()) AS PRICE",
@@ -314,13 +320,13 @@ export default class salesDispatch extends React.Component
         let tmpData = await this.core.sql.execute(tmpQuery) 
         if(tmpData.result.recordset.length > 0)
         {
-            let tmpMargin = tmpData.result.recordset[0].PRICE - this.docObj.docItems.dt()[pIndex].COST_PRICE
-            let tmpMarginRate = ((tmpData.result.recordset[0].PRICE - this.docObj.docItems.dt()[pIndex].COST_PRICE) - tmpData.result.recordset[0].PRICE) * 100
-            this.docObj.docItems.dt()[pIndex].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
-            this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
-            this.docObj.docItems.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100)).toFixed(3))
-            this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
-            this.docObj.docItems.dt()[pIndex].TOTAL = parseFloat((tmpData.result.recordset[0].PRICE + this.docObj.docItems.dt()[pIndex].VAT).toFixed(3))
+            let tmpMargin = tmpData.result.recordset[0].PRICE - this.docObj.docOrders.dt()[pIndex].COST_PRICE
+            let tmpMarginRate = ((tmpData.result.recordset[0].PRICE - this.docObj.docOrders.dt()[pIndex].COST_PRICE) - tmpData.result.recordset[0].PRICE) * 100
+            this.docObj.docOrders.dt()[pIndex].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+            this.docObj.docOrders.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
+            this.docObj.docOrders.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100)).toFixed(3))
+            this.docObj.docOrders.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
+            this.docObj.docOrders.dt()[pIndex].TOTAL = parseFloat((tmpData.result.recordset[0].PRICE + this.docObj.docOrders.dt()[pIndex].VAT).toFixed(3))
             this._calculateTotal()
         }
     }
@@ -363,9 +369,9 @@ export default class salesDispatch extends React.Component
                                             await dialog(tmpConfObj);
                                             return
                                         }
-                                        if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
+                                        if(this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1].ITEM_CODE == '')
                                         {
-                                            await this.grdSlsDispatch.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                            await this.grdSlsOrder.devGrid.deleteRow(this.docObj.docOrders.dt().length - 1)
                                         }
                                         if(e.validationGroup.validate().status == "valid")
                                         {
@@ -439,9 +445,9 @@ export default class salesDispatch extends React.Component
                                         if(this.docObj.dt()[0].LOCKED == 0)
                                         {
                                             this.docObj.dt()[0].LOCKED = 1
-                                            if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
+                                            if(this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1].ITEM_CODE == '')
                                             {
-                                                await this.grdSlsDispatch.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                                await this.grdSlsOrder.devGrid.deleteRow(this.docObj.docOrders.dt().length - 1)
                                             }
                                             if((await this.docObj.save()) == 0)
                                             {                                                    
@@ -513,7 +519,7 @@ export default class salesDispatch extends React.Component
                                                 this.docObj.dt()[0].REF = this.txtRef.value 
                                                 let tmpQuery = 
                                                 {
-                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 40  REF = @REF ",
+                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 60 AND REF = @REF ",
                                                     param : ['REF:string|25'],
                                                     value : [this.txtRef.value]
                                                 }
@@ -589,7 +595,7 @@ export default class salesDispatch extends React.Component
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_Docs.title")} 
-                                    data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 40 AND REBATE = 0"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 60 AND REBATE = 0"},sql:this.core.sql}}}
                                     button=
                                     {
                                         [
@@ -772,20 +778,8 @@ export default class salesDispatch extends React.Component
                                         </Validator> 
                                     </NdDatePicker>
                                 </Item>
-                                {/* dtShipDate */}
-                                <Item>
-                                    <Label text={this.t("dtShipDate")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtShipDate"}
-                                    dt={{data:this.docObj.dt('DOC'),field:"SHIPMENT_DATE"}}
-                                    onValueChanged={(async()=>
-                                    {
-                                    }).bind(this)}
-                                    >
-                                        <Validator validationGroup={"frmSalesDis"}>
-                                            <RequiredRule message={this.t("validDocDate")} />
-                                        </Validator> 
-                                    </NdDatePicker>
-                                </Item>
+                                 {/* Boş */}
+                                 <EmptyItem />
                                 {/* Boş */}
                                 <EmptyItem />
                             </Form>
@@ -796,7 +790,7 @@ export default class salesDispatch extends React.Component
                         <div className="col-12">
                             <Form colCount={1} onInitialized={(e)=>
                             {
-                                this.frmDocItems = e.component
+                                this.frmdocOrders = e.component
                             }}>
                                 <Item location="after">
                                     <Button icon="add"
@@ -805,29 +799,27 @@ export default class salesDispatch extends React.Component
                                     {
                                         if(e.validationGroup.validate().status == "valid")
                                         {
-                                            if(typeof this.docObj.docItems.dt()[0] != 'undefined')
+                                            if(typeof this.docObj.docOrders.dt()[0] != 'undefined')
                                             {
-                                                if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
+                                                if(this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1].ITEM_CODE == '')
                                                 {
                                                     return
                                                 }
                                             }
                                            
-                                            let tmpDocItems = {...this.docObj.docItems.empty}
-                                            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                                            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                                            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                            tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                                            tmpDocItems.REF = this.docObj.dt()[0].REF
-                                            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                                            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                                            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                            tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                                            let tmpdocOrders = {...this.docObj.docOrders.empty}
+                                            tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
+                                            tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
+                                            tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                            tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
+                                            tmpdocOrders.REF = this.docObj.dt()[0].REF
+                                            tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
+                                            tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                            tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
+                                            tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
                                             this.txtRef.readOnly = true
                                             this.txtRefno.readOnly = true
-                                            this.docObj.docItems.addEmpty(tmpDocItems)
+                                            this.docObj.docOrders.addEmpty(tmpdocOrders)
                                         }
                                         else
                                         {
@@ -843,7 +835,7 @@ export default class salesDispatch extends React.Component
                                     }}/>
                                 </Item>
                                  <Item>
-                                    <NdGrid parent={this} id={"grdSlsDispatch"} 
+                                    <NdGrid parent={this} id={"grdSlsOrder"} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
@@ -856,7 +848,7 @@ export default class salesDispatch extends React.Component
 
                                         if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                         {
-                                            e.key.DISCOUNT = parseFloat((((this.docObj.docItems.dt()[rowIndex].AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(3))
+                                            e.key.DISCOUNT = parseFloat((((this.docObj.docOrders.dt()[rowIndex].AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(3))
                                         }
 
                                         if(e.key.COST_PRICE > e.key.PRICE )
@@ -903,24 +895,24 @@ export default class salesDispatch extends React.Component
                                             }
                                         
                                             dialog(tmpConfObj);
-                                            this.docObj.docItems.dt()[rowIndex].DISCOUNT = 0 
+                                            this.docObj.docOrders.dt()[rowIndex].DISCOUNT = 0 
                                             return
                                         }
-                                        if(this.docObj.docItems.dt()[rowIndex].VAT > 0)
+                                        if(this.docObj.docOrders.dt()[rowIndex].VAT > 0)
                                         {
-                                            this.docObj.docItems.dt()[rowIndex].VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(3));
+                                            this.docObj.docOrders.dt()[rowIndex].VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(3));
                                         }
-                                        this.docObj.docItems.dt()[rowIndex].AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3))
-                                        this.docObj.docItems.dt()[rowIndex].TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +this.docObj.docItems.dt()[rowIndex].VAT).toFixed(3))
+                                        this.docObj.docOrders.dt()[rowIndex].AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3))
+                                        this.docObj.docOrders.dt()[rowIndex].TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +this.docObj.docOrders.dt()[rowIndex].VAT).toFixed(3))
 
-                                        let tmpMargin = (this.docObj.docItems.dt()[rowIndex].TOTAL - this.docObj.docItems.dt()[rowIndex].VAT) - (this.docObj.docItems.dt()[rowIndex].COST_PRICE * this.docObj.docItems.dt()[rowIndex].QUANTITY)
-                                        let tmpMarginRate = (tmpMargin /(this.docObj.docItems.dt()[rowIndex].TOTAL - this.docObj.docItems.dt()[rowIndex].VAT)) * 100
-                                        this.docObj.docItems.dt()[rowIndex].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
-                                        if(this.docObj.docItems.dt()[rowIndex].DISCOUNT > 0)
+                                        let tmpMargin = (this.docObj.docOrders.dt()[rowIndex].TOTAL - this.docObj.docOrders.dt()[rowIndex].VAT) - (this.docObj.docOrders.dt()[rowIndex].COST_PRICE * this.docObj.docOrders.dt()[rowIndex].QUANTITY)
+                                        let tmpMarginRate = (tmpMargin /(this.docObj.docOrders.dt()[rowIndex].TOTAL - this.docObj.docOrders.dt()[rowIndex].VAT)) * 100
+                                        this.docObj.docOrders.dt()[rowIndex].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+                                        if(this.docObj.docOrders.dt()[rowIndex].DISCOUNT > 0)
                                         {
-                                            this.docObj.docItems.dt()[rowIndex].DISCOUNT_RATE = parseFloat((100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100)).toFixed(3))
+                                            this.docObj.docOrders.dt()[rowIndex].DISCOUNT_RATE = parseFloat((100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100)).toFixed(3))
                                         }
-                                        console.log(this.docObj.docItems.dt()[rowIndex].MARGIN)
+                                        console.log(this.docObj.docOrders.dt()[rowIndex].MARGIN)
                                         this._calculateTotal()
                                        
                                     }}
@@ -932,17 +924,17 @@ export default class salesDispatch extends React.Component
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                                         <Scrolling mode="infinite" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsDispatch.clmCreateDate")} width={150} allowEditing={false}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdSlsDispatch.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdSlsDispatch.clmItemName")} width={350} />
-                                        <Column dataField="PRICE" caption={this.t("grdSlsDispatch.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdSlsDispatch.clmQuantity")} dataType={'number'}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdSlsDispatch.clmAmount")} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                        <Column dataField="DISCOUNT" caption={this.t("grdSlsDispatch.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsDispatch.clmDiscountRate")} dataType={'number'} />
-                                        <Column dataField="MARGIN" caption={this.t("grdSlsDispatch.clmMargin")} width={150} allowEditing={false}/>
-                                        <Column dataField="VAT" caption={this.t("grdSlsDispatch.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
-                                        <Column dataField="TOTAL" caption={this.t("grdSlsDispatch.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsOrder.clmCreateDate")} width={150} allowEditing={false}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdSlsOrder.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdSlsOrder.clmItemName")} width={350} />
+                                        <Column dataField="PRICE" caption={this.t("grdSlsOrder.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdSlsOrder.clmQuantity")} dataType={'number'}/>
+                                        <Column dataField="AMOUNT" caption={this.t("grdSlsOrder.clmAmount")} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                        <Column dataField="DISCOUNT" caption={this.t("grdSlsOrder.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsOrder.clmDiscountRate")} dataType={'number'} />
+                                        <Column dataField="MARGIN" caption={this.t("grdSlsOrder.clmMargin")} width={150} allowEditing={false}/>
+                                        <Column dataField="VAT" caption={this.t("grdSlsOrder.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                        <Column dataField="TOTAL" caption={this.t("grdSlsOrder.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
                                     </NdGrid>
                                 </Item>
                             </Form>
@@ -1011,11 +1003,11 @@ export default class salesDispatch extends React.Component
                                                     let pResult = await dialog(tmpConfObj);
                                                     if(pResult == 'btn01')
                                                     {
-                                                        for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+                                                        for (let i = 0; i < this.docObj.docOrders.dt().length; i++) 
                                                         {
-                                                            this.docObj.docItems.dt()[i].VAT = 0  
-                                                            this.docObj.docItems.dt()[i].VAT_RATE = 0
-                                                            this.docObj.docItems.dt()[i].TOTAL = (this.docObj.docItems.dt()[i].PRICE * this.docObj.docItems.dt()[i].QUANTITY) - this.docObj.docItems.dt()[i].DISCOUNT
+                                                            this.docObj.docOrders.dt()[i].VAT = 0  
+                                                            this.docObj.docOrders.dt()[i].VAT_RATE = 0
+                                                            this.docObj.docOrders.dt()[i].TOTAL = (this.docObj.docOrders.dt()[i].PRICE * this.docObj.docOrders.dt()[i].QUANTITY) - this.docObj.docOrders.dt()[i].DISCOUNT
                                                             this._calculateTotal()
                                                         }
                                                     }
@@ -1105,15 +1097,15 @@ export default class salesDispatch extends React.Component
                                             <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
                                             onClick={async ()=>
                                             {       
-                                                for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+                                                for (let i = 0; i < this.docObj.docOrders.dt().length; i++) 
                                                 {
-                                                    this.docObj.docItems.dt()[i].DISCOUNT_RATE = this.txtDiscountPercent.value
-                                                    this.docObj.docItems.dt()[i].DISCOUNT =  parseFloat((((this.docObj.docItems.dt()[i].PRICE * this.docObj.docItems.dt()[i].QUANTITY) * this.txtDiscountPercent.value) / 100).toFixed(3))
-                                                    if(this.docObj.docItems.dt()[i].VAT > 0)
+                                                    this.docObj.docOrders.dt()[i].DISCOUNT_RATE = this.txtDiscountPercent.value
+                                                    this.docObj.docOrders.dt()[i].DISCOUNT =  parseFloat((((this.docObj.docOrders.dt()[i].PRICE * this.docObj.docOrders.dt()[i].QUANTITY) * this.txtDiscountPercent.value) / 100).toFixed(3))
+                                                    if(this.docObj.docOrders.dt()[i].VAT > 0)
                                                     {
-                                                        this.docObj.docItems.dt()[i].VAT = parseFloat(((this.docObj.docItems.dt()[i].PRICE * this.docObj.docItems.dt()[i].QUANTITY) * (this.docObj.docItems.dt()[i].VAT_RATE / 100)).toFixed(3))
+                                                        this.docObj.docOrders.dt()[i].VAT = parseFloat(((this.docObj.docOrders.dt()[i].PRICE * this.docObj.docOrders.dt()[i].QUANTITY) * (this.docObj.docOrders.dt()[i].VAT_RATE / 100)).toFixed(3))
                                                     }
-                                                    this.docObj.docItems.dt()[i].TOTAL = parseFloat(((this.docObj.docItems.dt()[i].PRICE * this.docObj.docItems.dt()[i].QUANTITY) + this.docObj.docItems.dt()[i].VAT - this.docObj.docItems.dt()[i].DISCOUNT).toFixed(3))
+                                                    this.docObj.docOrders.dt()[i].TOTAL = parseFloat(((this.docObj.docOrders.dt()[i].PRICE * this.docObj.docOrders.dt()[i].QUANTITY) + this.docObj.docOrders.dt()[i].VAT - this.docObj.docOrders.dt()[i].DISCOUNT).toFixed(3))
                                                 }
                                                 this._calculateMargin()
                                                 this._calculateTotal()
@@ -1162,7 +1154,7 @@ export default class salesDispatch extends React.Component
                                                 if(this.txtPassword.value == '1234')
                                                 {
                                                     this.docObj.dt()[0].LOCKED = 0
-                                                    this.frmDocItems.option('disabled',false)
+                                                    this.frmdocOrders.option('disabled',false)
                                                     this.docLocked = false
                                                     let tmpConfObj =
                                                     {

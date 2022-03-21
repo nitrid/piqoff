@@ -35,6 +35,7 @@ export class docCls
         this.docItems = new docItemsCls();
         this.docCustomer = new docCustomerCls();
         this.checkCls = new checkCls();
+        this.docOrders = new docOrdersCls();
 
         this._initDs();
     }
@@ -111,6 +112,7 @@ export class docCls
         this.ds.add(this.docItems.dt('DOC_ITEMS'))
         this.ds.add(this.docCustomer.dt('DOC_CUSTOMER'))
         this.ds.add(this.checkCls.dt('CHECK'))
+        this.ds.add(this.docOrders.dt('DOC_ORDERS'))
     }
     //#endregion
     dt()
@@ -171,6 +173,7 @@ export class docCls
             {  
                 await this.docItems.load({DOC_GUID:this.ds.get('DOC')[0].GUID,INVOICE_GUID:tmpPrm.INVOICE_GUID})
                 await this.docCustomer.load({GUID:this.ds.get('DOC')[0].GUID})
+                await this.docOrders.load({DOC_GUID:this.ds.get('DOC')[0].GUID})
             }
             resolve(this.ds.get('DOC'))
         });
@@ -531,7 +534,6 @@ export class docCustomerCls
                 tmpPrm.INVOICE_GUID = typeof arguments[0].INVOICE_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].INVOICE_GUID;
             }
 
-            console.log(tmpPrm)
             this.ds.get('DOC_CUSTOMER').selectCmd.value = Object.values(tmpPrm);
 
             await this.ds.get('DOC_CUSTOMER').refresh();
@@ -680,6 +682,198 @@ export class checkCls
             await this.ds.get('CHECK').refresh();
 
             resolve(this.ds.get('CHECK'));
+            
+        });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            this.ds.delete()
+            resolve(await this.ds.update()); 
+        });
+    }
+}
+export class docOrdersCls
+{
+    
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds =  new dataset()
+        this.empty = {
+            GUID : '00000000-0000-0000-0000-000000000000',
+            CUSER : this.core.auth.data.CODE,
+            CDATE_FORMAT :  moment(new Date()).format("YYYY-MM-DD"),
+            DOC_GUID : '00000000-0000-0000-0000-000000000000',
+            TYPE : -1,
+            DOC_TYPE : -1,
+            REF : '',
+            REF_NO : 0,
+            DOC_DATE : moment(new Date(0)).format("YYYY-MM-DD"),
+            INPUT : '00000000-0000-0000-0000-000000000000',
+            INPUT_CODE : '',
+            INPUT_NAME : '',
+            OUTPUT : '00000000-0000-0000-0000-000000000000',
+            OUTPUT_CODE : '',
+            OUTPUT_NAME : '',
+            ITEM : '00000000-0000-0000-0000-000000000000',
+            ITEM_CODE : '',
+            ITEM_NAME : '',
+            LINE_NO : 0,
+            QUANTITY : 1,
+            COMP_QUANTITY : 0,
+            PRICE : 0,
+            DISCOUNT : 0,
+            VAT: 0,
+            AMOUNT : 0,
+            TOTAL : 0,
+            DESCRIPTION : '',
+            SHIPMENT_GUID : '00000000-0000-0000-0000-000000000000',
+            VAT_RATE : 0 ,
+            DISCOUNT_RATE : 0,
+            COST_PRICE : 0,
+            MARGIN : 0,
+        }
+
+        this._initDs();
+    }
+    //#region private
+    _initDs()
+    {
+        let tmpDt = new datatable('DOC_ORDERS');
+        tmpDt.selectCmd = 
+        {
+            query : "SELECT * FROM [dbo].[DOC_ORDERS_VW_01] WHERE ((DOC_GUID = @DOC_GUID) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000')) AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0))",
+            param : ['DOC_GUID:string|50','REF:string|25','REF_NO:int']
+        }
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_DOC_ORDERS_INSERT] " +
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " +
+                    "@DOC_GUID = @PDOC_GUID, " + 
+                    "@TYPE = @PTYPE, " +
+                    "@DOC_TYPE = @PDOC_TYPE, " +
+                    "@REF = @PREF, " +
+                    "@REF_NO = @PREF_NO, " +
+                    "@DOC_DATE = @PDOC_DATE, " + 
+                    "@INPUT = @PINPUT, " +
+                    "@OUTPUT = @POUTPUT, " +
+                    "@ITEM  = @PITEM, " +
+                    "@ITEM_NAME  = @PITEM_NAME, " +
+                    "@LINE_NO  = @PLINE_NO, " +
+                    "@QUANTITY  = @PQUANTITY, " +
+                    "@COMP_QUANTITY  = @PCOMP_QUANTITY, " +
+                    "@PRICE  = @PPRICE, " +
+                    "@DISCOUNT = @PDISCOUNT, " +
+                    "@VAT = @PVAT, " +
+                    "@AMOUNT = @PAMOUNT, " +
+                    "@TOTAL = @PTOTAL, " +
+                    "@DESCRIPTION  = @PDESCRIPTION, " +
+                    "@SHIPMENT_GUID  = @PSHIPMENT_GUID ",
+            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
+                        'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|50','PLINE_NO:int','PQUANTITY:float','PCOMP_QUANTITY:float','PPRICE:float','PDISCOUNT:float','PVAT:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PSHIPMENT_GUID:string|50'],
+            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','LINE_NO','QUANTITY','COMP_QUANTITY','PRICE','DISCOUNT','VAT','AMOUNT','TOTAL','DESCRIPTION','SHIPMENT_GUID']
+        }
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_DOC_ORDERS_UPDATE] " +
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " +
+                    "@DOC_GUID = @PDOC_GUID, " + 
+                    "@TYPE = @PTYPE, " +
+                    "@DOC_TYPE = @PDOC_TYPE, " +
+                    "@REF = @PREF, " +
+                    "@REF_NO = @PREF_NO, " +
+                    "@DOC_DATE = @PDOC_DATE, " + 
+                    "@INPUT = @PINPUT, " +
+                    "@OUTPUT = @POUTPUT, " +
+                    "@ITEM  = @PITEM, " +
+                    "@ITEM_NAME  = @PITEM_NAME, " +
+                    "@LINE_NO  = @PLINE_NO, " +
+                    "@QUANTITY  = @PQUANTITY, " +
+                    "@COMP_QUANTITY  = @PCOMP_QUANTITY, " +
+                    "@PRICE  = @PPRICE, " +
+                    "@DISCOUNT = @PDISCOUNT, " +
+                    "@VAT = @PVAT, " +
+                    "@AMOUNT = @PAMOUNT, " +
+                    "@TOTAL = @PTOTAL, " +
+                    "@DESCRIPTION  = @PDESCRIPTION, " +
+                    "@SHIPMENT_GUID  = @PSHIPMENT_GUID ",
+            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
+                        'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|50','PLINE_NO:int','PQUANTITY:float','PCOMP_QUANTITY:float','PPRICE:float','PDISCOUNT:float','PVAT:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PSHIPMENT_GUID:string|50'],
+            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','LINE_NO','QUANTITY','COMP_QUANTITY','PRICE','DISCOUNT','VAT','AMOUNT','TOTAL','DESCRIPTION','SHIPMENT_GUID']
+        }
+        tmpDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_DOC_ORDERS_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@UPDATE = 1, " + 
+                    "@GUID = @PGUID, " + 
+                    "@DOC_GUID = @PDOC_GUID ", 
+            param : ['PCUSER:string|25','PGUID:string|50','PDOC_GUID:string|50'],
+            dataprm : ['CUSER','GUID','DOC_GUID']
+        }
+
+        this.ds.add(tmpDt);
+    }
+    //#region
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0])
+        }
+
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('DOC_ORDERS') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {};
+        if(arguments.length > 0)
+        {
+            tmp = {...arguments[0]}
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        if(typeof arguments[1] == 'undefined' || arguments[1] == true)
+        {
+            tmp.GUID = datatable.uuidv4()
+        }
+        this.dt('DOC_ORDERS').push(tmp,arguments[1])
+    }
+    clearAll()
+    {
+        for(let i = 0; i < this.ds.length; i++)
+        {
+            this.dt(i).clear()
+        }
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİR.
+        return new Promise(async resolve =>
+        {
+            let tmpPrm = {DOC_GUID:'00000000-0000-0000-0000-000000000000',REF:'',REF_NO:0}
+            if(arguments.length > 0)
+            {
+                tmpPrm.DOC_GUID = typeof arguments[0].DOC_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].DOC_GUID;
+                tmpPrm.REF = typeof arguments[0].REF == 'undefined' ? '' : arguments[0].REF;
+                tmpPrm.REF_NO = typeof arguments[0].REF_NO == 'undefined' ? 0 : arguments[0].REF_NO;
+            }
+
+            this.ds.get('DOC_ORDERS').selectCmd.value = Object.values(tmpPrm);
+
+            await this.ds.get('DOC_ORDERS').refresh();
+
+            resolve(this.ds.get('DOC_ORDERS'));
             
         });
     }
