@@ -5,7 +5,6 @@
 [![NPM version](https://img.shields.io/npm/v/html-react-parser.svg)](https://www.npmjs.com/package/html-react-parser)
 [![Build Status](https://github.com/remarkablemark/html-react-parser/workflows/build/badge.svg?branch=master)](https://github.com/remarkablemark/html-react-parser/actions?query=workflow%3Abuild)
 [![codecov](https://codecov.io/gh/remarkablemark/html-react-parser/branch/master/graph/badge.svg?token=wosFd1DBIR)](https://codecov.io/gh/remarkablemark/html-react-parser)
-[![Dependency status](https://david-dm.org/remarkablemark/html-react-parser.svg)](https://david-dm.org/remarkablemark/html-react-parser)
 [![NPM downloads](https://img.shields.io/npm/dm/html-react-parser.svg?style=flat-square)](https://www.npmjs.com/package/html-react-parser)
 [![Discord](https://img.shields.io/discord/422421589582282752.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/njExwXdrRJ)
 
@@ -26,7 +25,7 @@ const parse = require('html-react-parser');
 parse('<p>Hello, World!</p>'); // React.createElement('p', {}, 'Hello, World!')
 ```
 
-[Repl.it](https://repl.it/@remarkablemark/html-react-parser) | [JSFiddle](https://jsfiddle.net/remarkablemark/7v86d800/) | [CodeSandbox](https://codesandbox.io/s/940pov1l4w) | [TypeScript](https://codesandbox.io/s/html-react-parser-z0kp6) | [Examples](https://github.com/remarkablemark/html-react-parser/tree/master/examples)
+[Replit](https://replit.com/@remarkablemark/html-react-parser) | [JSFiddle](https://jsfiddle.net/remarkablemark/7v86d800/) | [CodeSandbox](https://codesandbox.io/s/940pov1l4w) | [TypeScript](https://codesandbox.io/s/html-react-parser-z0kp6) | [Examples](https://github.com/remarkablemark/html-react-parser/tree/master/examples)
 
 <details>
 <summary>Table of Contents</summary>
@@ -51,7 +50,6 @@ parse('<p>Hello, World!</p>'); // React.createElement('p', {}, 'Hello, World!')
   - [Parser throws an error](#parser-throws-an-error)
   - [Is SSR supported?](#is-ssr-supported)
   - [Elements aren't nested correctly](#elements-arent-nested-correctly)
-  - [Warning: validateDOMNesting(...): Whitespace text nodes cannot appear as a child of table](#warning-validatedomnesting-whitespace-text-nodes-cannot-appear-as-a-child-of-table)
   - [Don't change case of tags](#dont-change-case-of-tags)
   - [TS Error: Property 'attribs' does not exist on type 'DOMNode'](#ts-error-property-attribs-does-not-exist-on-type-domnode)
   - [Can I enable `trim` for certain elements?](#can-i-enable-trim-for-certain-elements)
@@ -188,8 +186,7 @@ parse('<p id="replace">text</p>', {
 For TypeScript projects, you may need to check that `domNode` is an instance of domhandler's `Element`:
 
 ```tsx
-import { HTMLReactParserOptions } from 'html-react-parser';
-import { Element } from 'domhandler/lib/node';
+import { HTMLReactParserOptions, Element } from 'html-react-parser';
 
 const options: HTMLReactParserOptions = {
   replace: domNode => {
@@ -200,11 +197,11 @@ const options: HTMLReactParserOptions = {
 };
 ```
 
-If you're having issues with `domNode instanceof Element`, try this [alternative solution](https://github.com/remarkablemark/html-react-parser/issues/221#issuecomment-771600574).
+If you're having issues take a look at our [Create React App example](./examples/create-react-app-typescript/src/App.tsx).
 
 #### replace element and children
 
-Replace the element and its children (see [demo](https://repl.it/@remarkablemark/html-react-parser-replace-example)):
+Replace the element and its children (see [demo](https://replit.com/@remarkablemark/html-react-parser-replace-example)):
 
 ```jsx
 import parse, { domToReact } from 'html-react-parser';
@@ -285,7 +282,7 @@ HTML output:
 
 #### replace and remove element
 
-[Exclude](https://repl.it/@remarkablemark/html-react-parser-56) an element from rendering by replacing it with `<React.Fragment>`:
+[Exclude](https://replit.com/@remarkablemark/html-react-parser-56) an element from rendering by replacing it with `<React.Fragment>`:
 
 ```jsx
 parse('<p><br id="remove"></p>', {
@@ -353,16 +350,16 @@ By default, whitespace is preserved:
 parse('<br>\n'); // [React.createElement('br'), '\n']
 ```
 
+But certain elements like `<table>` will strip out invalid whitespace:
+
+```js
+parse('<table>\n</table>'); // React.createElement('table')
+```
+
 To remove whitespace, enable the `trim` option:
 
 ```js
 parse('<br>\n', { trim: true }); // React.createElement('br')
-```
-
-This fixes the warning:
-
-```
-Warning: validateDOMNesting(...): Whitespace text nodes cannot appear as a child of <table>. Make sure you don't have any extra whitespace between tags on each line of your source code.
 ```
 
 However, intentional whitespace may be stripped out:
@@ -417,7 +414,7 @@ If the parser throws an erorr, check if your arguments are valid. See ["Does inv
 
 ### Is SSR supported?
 
-Yes, server-side rendering on Node.js is supported by this library. See [demo](https://repl.it/@remarkablemark/html-react-parser-SSR).
+Yes, server-side rendering on Node.js is supported by this library. See [demo](https://replit.com/@remarkablemark/html-react-parser-SSR).
 
 ### Elements aren't nested correctly
 
@@ -428,10 +425,6 @@ parse('<div /><div />'); // returns single element instead of array of elements
 ```
 
 See [#158](https://github.com/remarkablemark/html-react-parser/issues/158).
-
-### Warning: validateDOMNesting(...): Whitespace text nodes cannot appear as a child of table
-
-Enable the [trim](#trim) option. See [#155](https://github.com/remarkablemark/html-react-parser/issues/155).
 
 ### Don't change case of tags
 
@@ -452,7 +445,7 @@ parse('<CustomElement>', options); // React.createElement('CustomElement')
 > Warning: <CustomElement> is using incorrect casing. Use PascalCase for React components, or lowercase for HTML elements.
 > ```
 
-See [#62](https://github.com/remarkablemark/html-react-parser/issues/62) and [example](https://repl.it/@remarkablemark/html-react-parser-62).
+See [#62](https://github.com/remarkablemark/html-react-parser/issues/62) and [example](https://replit.com/@remarkablemark/html-react-parser-62).
 
 ### TS Error: Property 'attribs' does not exist on type 'DOMNode'
 

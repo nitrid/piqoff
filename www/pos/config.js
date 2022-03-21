@@ -19,7 +19,7 @@ window.config =
       'react-dom': 'npm:react-dom/umd/react-dom.development.js',
       'react-router-dom': 'npm:react-router-dom/react-router-dom.js',
       'prop-types': 'npm:prop-types/prop-types.js',
-      'html-react-parser': 'npm:html-react-parser/dist/html-react-parser.min.js',
+      'html-react-parser': 'npm:html-react-parser/dist/html-react-parser.js',
       'rrule': 'npm:rrule/dist/es5/rrule.js',
       'luxon': 'npm:luxon/build/global/luxon.min.js',
       'es6-object-assign': 'npm:es6-object-assign',

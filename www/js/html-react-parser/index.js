@@ -1,6 +1,11 @@
-var domToReact = require('./lib/dom-to-react');
-var attributesToProps = require('./lib/attributes-to-props');
+var domToReact = require('./lib/dom-to-react.js');
+var attributesToProps = require('./lib/attributes-to-props.js');
 var htmlToDOM = require('html-dom-parser');
+
+// support backwards compatibility for ES Module
+htmlToDOM =
+  /* istanbul ignore next */
+  typeof htmlToDOM.default === 'function' ? htmlToDOM.default : htmlToDOM;
 
 var domParserOptions = { lowerCaseAttributeNames: false };
 
@@ -31,6 +36,7 @@ function HTMLReactParser(html, options) {
 HTMLReactParser.domToReact = domToReact;
 HTMLReactParser.htmlToDOM = htmlToDOM;
 HTMLReactParser.attributesToProps = attributesToProps;
+HTMLReactParser.Element = require('domhandler/lib/node').Element;
 
 // support CommonJS and ES Modules
 module.exports = HTMLReactParser;

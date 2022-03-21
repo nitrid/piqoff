@@ -2,7 +2,7 @@
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('react')) :
 	typeof define === 'function' && define.amd ? define(['react'], factory) :
 	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.HTMLReactParser = factory(global.React));
-}(this, (function (require$$0) { 'use strict';
+})(this, (function (require$$0) { 'use strict';
 
 	function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
@@ -1181,7 +1181,7 @@
 	exports["default"] = StyleToJS;
 	}(cjs));
 
-	var React$1 = require$$0__default['default'];
+	var React$1 = require$$0__default["default"];
 	var styleToJS = cjs.default;
 
 	/**
@@ -1279,11 +1279,37 @@
 	 */
 	var PRESERVE_CUSTOM_ATTRIBUTES = React$1.version.split('.')[0] >= 16;
 
+	// Taken from
+	// https://github.com/facebook/react/blob/cae635054e17a6f107a39d328649137b83f25972/packages/react-dom/src/client/validateDOMNesting.js#L213
+	var elementsWithNoTextChildren = new Set([
+	  'tr',
+	  'tbody',
+	  'thead',
+	  'tfoot',
+	  'colgroup',
+	  'table',
+	  'head',
+	  'html',
+	  'frameset'
+	]);
+
+	/**
+	 * Checks if the given node can contain text nodes
+	 *
+	 * @param {DomElement} node
+	 * @returns {boolean}
+	 */
+	function canTextBeChildOfNode$1(node) {
+	  return !elementsWithNoTextChildren.has(node.name);
+	}
+
 	var utilities$3 = {
 	  PRESERVE_CUSTOM_ATTRIBUTES: PRESERVE_CUSTOM_ATTRIBUTES,
 	  invertObject: invertObject,
 	  isCustomComponent: isCustomComponent,
-	  setStyleProp: setStyleProp$1
+	  setStyleProp: setStyleProp$1,
+	  canTextBeChildOfNode: canTextBeChildOfNode$1,
+	  elementsWithNoTextChildren: elementsWithNoTextChildren
 	};
 
 	var reactProperty = lib$1;
@@ -1298,12 +1324,18 @@
 	var attributesToProps$2 = function attributesToProps(attributes) {
 	  attributes = attributes || {};
 
+	  var valueOnlyInputs = {
+	    reset: true,
+	    submit: true
+	  };
+
 	  var attributeName;
 	  var attributeNameLowerCased;
 	  var attributeValue;
 	  var propName;
 	  var propertyInfo;
 	  var props = {};
+	  var inputIsValueOnly = attributes.type && valueOnlyInputs[attributes.type];
 
 	  for (attributeName in attributes) {
 	    attributeValue = attributes[attributeName];
@@ -1316,11 +1348,22 @@
 
 	    // convert HTML/SVG attribute to React prop
 	    attributeNameLowerCased = attributeName.toLowerCase();
-	    propName = reactProperty.possibleStandardNames[attributeNameLowerCased];
+	    propName = getPropName(attributeNameLowerCased);
 
 	    if (propName) {
-	      props[propName] = attributeValue;
 	      propertyInfo = reactProperty.getPropertyInfo(propName);
+
+	      // convert attribute to uncontrolled component prop (e.g., `value` to `defaultValue`)
+	      // https://reactjs.org/docs/uncontrolled-components.html
+	      if (
+	        (propName === 'checked' || propName === 'value') &&
+	        !inputIsValueOnly
+	      ) {
+	        propName = getPropName('default' + attributeNameLowerCased);
+	      }
+
+	      props[propName] = attributeValue;
+
 	      switch (propertyInfo && propertyInfo.type) {
 	        case reactProperty.BOOLEAN:
 	          props[propName] = true;
@@ -1346,11 +1389,22 @@
 	  return props;
 	};
 
-	var React = require$$0__default['default'];
+	/**
+	 * Gets prop name from lowercased attribute name.
+	 *
+	 * @param {string} attributeName - Lowercased attribute name.
+	 * @return {string}
+	 */
+	function getPropName(attributeName) {
+	  return reactProperty.possibleStandardNames[attributeName];
+	}
+
+	var React = require$$0__default["default"];
 	var attributesToProps$1 = attributesToProps$2;
 	var utilities$1 = utilities$3;
 
 	var setStyleProp = utilities$1.setStyleProp;
+	var canTextBeChildOfNode = utilities$1.canTextBeChildOfNode;
 
 	/**
 	 * Converts DOM nodes to JSX element(s).
@@ -1371,11 +1425,11 @@
 
 	  var result = [];
 	  var node;
+	  var isWhitespace;
 	  var hasReplace = typeof options.replace === 'function';
 	  var replaceElement;
 	  var props;
 	  var children;
-	  var data;
 	  var trim = options.trim;
 
 	  for (var i = 0, len = nodes.length; i < len; i++) {
@@ -1399,15 +1453,23 @@
 	    }
 
 	    if (node.type === 'text') {
-	      // if trim option is enabled, skip whitespace text nodes
-	      if (trim) {
-	        data = node.data.trim();
-	        if (data) {
-	          result.push(node.data);
-	        }
-	      } else {
-	        result.push(node.data);
+	      isWhitespace = !node.data.trim().length;
+
+	      if (isWhitespace && node.parent && !canTextBeChildOfNode(node.parent)) {
+	        // We have a whitespace node that can't be nested in its parent
+	        // so skip it
+	        continue;
 	      }
+
+	      if (trim && isWhitespace) {
+	        // Trim is enabled and we have a whitespace node
+	        // so skip it
+	        continue;
+	      }
+
+	      // We have a text node that's not whitespace and it can be nested
+	      // in its parent so add it to the results
+	      result.push(node.data);
 	      continue;
 	    }
 
@@ -1645,6 +1707,10 @@
 	    }
 	    Object.defineProperty(Node.prototype, "nodeType", {
 	        // Read-only aliases
+	        /**
+	         * [DOM spec](https://dom.spec.whatwg.org/#dom-node-nodetype)-compatible
+	         * node {@link type}.
+	         */
 	        get: function () {
 	            var _a;
 	            return (_a = nodeTypes.get(this.type)) !== null && _a !== void 0 ? _a : 1;
@@ -1654,6 +1720,10 @@
 	    });
 	    Object.defineProperty(Node.prototype, "parentNode", {
 	        // Read-write aliases for properties
+	        /**
+	         * Same as {@link parent}.
+	         * [DOM spec](https://dom.spec.whatwg.org)-compatible alias.
+	         */
 	        get: function () {
 	            return this.parent;
 	        },
@@ -1664,6 +1734,10 @@
 	        configurable: true
 	    });
 	    Object.defineProperty(Node.prototype, "previousSibling", {
+	        /**
+	         * Same as {@link prev}.
+	         * [DOM spec](https://dom.spec.whatwg.org)-compatible alias.
+	         */
 	        get: function () {
 	            return this.prev;
 	        },
@@ -1674,6 +1748,10 @@
 	        configurable: true
 	    });
 	    Object.defineProperty(Node.prototype, "nextSibling", {
+	        /**
+	         * Same as {@link next}.
+	         * [DOM spec](https://dom.spec.whatwg.org)-compatible alias.
+	         */
 	        get: function () {
 	            return this.next;
 	        },
@@ -1711,6 +1789,10 @@
 	        return _this;
 	    }
 	    Object.defineProperty(DataNode.prototype, "nodeValue", {
+	        /**
+	         * Same as {@link data}.
+	         * [DOM spec](https://dom.spec.whatwg.org)-compatible alias.
+	         */
 	        get: function () {
 	            return this.data;
 	        },
@@ -1774,6 +1856,7 @@
 	    }
 	    Object.defineProperty(NodeWithChildren.prototype, "firstChild", {
 	        // Aliases
+	        /** First child of the node. */
 	        get: function () {
 	            var _a;
 	            return (_a = this.children[0]) !== null && _a !== void 0 ? _a : null;
@@ -1782,6 +1865,7 @@
 	        configurable: true
 	    });
 	    Object.defineProperty(NodeWithChildren.prototype, "lastChild", {
+	        /** Last child of the node. */
 	        get: function () {
 	            return this.children.length > 0
 	                ? this.children[this.children.length - 1]
@@ -1791,6 +1875,10 @@
 	        configurable: true
 	    });
 	    Object.defineProperty(NodeWithChildren.prototype, "childNodes", {
+	        /**
+	         * Same as {@link children}.
+	         * [DOM spec](https://dom.spec.whatwg.org)-compatible alias.
+	         */
 	        get: function () {
 	            return this.children;
 	        },
@@ -1838,6 +1926,10 @@
 	    }
 	    Object.defineProperty(Element.prototype, "tagName", {
 	        // DOM Level 1 aliases
+	        /**
+	         * Same as {@link name}.
+	         * [DOM spec](https://dom.spec.whatwg.org)-compatible alias.
+	         */
 	        get: function () {
 	            return this.name;
 	        },
@@ -1941,6 +2033,9 @@
 	        var children = recursive ? cloneChildren(node.children) : [];
 	        var clone_1 = new Element$1(node.name, __assign({}, node.attribs), children);
 	        children.forEach(function (child) { return (child.parent = clone_1); });
+	        if (node.namespace != null) {
+	            clone_1.namespace = node.namespace;
+	        }
 	        if (node["x-attribsNamespace"]) {
 	            clone_1["x-attribsNamespace"] = __assign({}, node["x-attribsNamespace"]);
 	        }
@@ -1974,10 +2069,13 @@
 	        result = instruction;
 	    }
 	    else {
-	        throw new Error("Not implemented yet: " + node.type);
+	        throw new Error("Not implemented yet: ".concat(node.type));
 	    }
 	    result.startIndex = node.startIndex;
 	    result.endIndex = node.endIndex;
+	    if (node.sourceCodeLocation != null) {
+	        result.sourceCodeLocation = node.sourceCodeLocation;
+	    }
 	    return result;
 	}
 	node.cloneNode = cloneNode;
@@ -2337,6 +2435,11 @@
 	var attributesToProps = attributesToProps$2;
 	var htmlToDOM = htmlToDom;
 
+	// support backwards compatibility for ES Module
+	htmlToDOM =
+	  /* istanbul ignore next */
+	  typeof htmlToDOM.default === 'function' ? htmlToDOM.default : htmlToDOM;
+
 	var domParserOptions = { lowerCaseAttributeNames: false };
 
 	/**
@@ -2366,6 +2469,7 @@
 	HTMLReactParser.domToReact = domToReact;
 	HTMLReactParser.htmlToDOM = htmlToDOM;
 	HTMLReactParser.attributesToProps = attributesToProps;
+	HTMLReactParser.Element = node.Element;
 
 	// support CommonJS and ES Modules
 	htmlReactParser$1.exports = HTMLReactParser;
@@ -2375,5 +2479,5 @@
 
 	return htmlReactParser;
 
-})));
+}));
 //# sourceMappingURL=html-react-parser.js.map
