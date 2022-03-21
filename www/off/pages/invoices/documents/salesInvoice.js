@@ -821,7 +821,7 @@ export default class salesInvoice extends React.Component
                                 {/* txtCustomerCode */}
                                 <Item>
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
-                                    <NdTextBox id="txtCustomerCode" parent={this} simple={true}  notRefresh = {true}
+                                    <NdTextBox id="txtCustomerCode" parent={this} simple={true} 
                                     dt={{data:this.docObj.dt('DOC'),field:"INPUT_CODE"}} 
                                     onChange={(async(r)=>
                                         {
@@ -911,7 +911,19 @@ export default class salesInvoice extends React.Component
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_txtCustomerCode.title")} //
-                                    data={{source:{select:{query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01"},sql:this.core.sql}}}
+                                    search={true}
+                                    data = 
+                                    {{
+                                        source:
+                                        {
+                                            select:
+                                            {
+                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                                                param : ['VAL:string|50']
+                                            },
+                                            sql:this.core.sql
+                                        }
+                                    }}
                                     button=
                                     {
                                         {
@@ -1462,7 +1474,19 @@ export default class salesInvoice extends React.Component
                     width={'90%'}
                     height={'90%'}
                     title={this.t("pg_txtItemsCode.title")} //
-                    data={{source:{select:{query : "SELECT GUID,CODE,NAME,VAT FROM ITEMS_VW_01"},sql:this.core.sql}}}
+                    search={true}
+                    data = 
+                    {{
+                        source:
+                        {
+                            select:
+                            {
+                                query : "SELECT GUID,CODE,NAME,VAT FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                param : ['VAL:string|50']
+                            },
+                            sql:this.core.sql
+                        }
+                    }}
                     >
                         <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
                         <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />

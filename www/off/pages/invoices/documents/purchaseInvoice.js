@@ -343,16 +343,16 @@ export default class salesInvoice extends React.Component
     {
         let tmpSource =
         {
-            source : 
+            source:
             {
-                groupBy : this.groupList,
-                select : 
+                select:
                 {
-                    query : "SELECT GUID,CODE,NAME,VAT,ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = @CUSTOMER_GUID),'') AS MULTICODE FROM ITEMS_VW_01 ",
-                    param : ['CUSTOMER_GUID:string|250'],
-                    value : [this.docObj.dt()[0].OUTPUT]
+                    query : "SELECT GUID,CODE,NAME,VAT," + 
+                    "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
+                    " FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) " ,
+                    param : ['VAL:string|50']
                 },
-                sql : this.core.sql
+                sql:this.core.sql
             }
         }
         this.pg_txtItemsCode.setSource(tmpSource)
@@ -924,7 +924,19 @@ export default class salesInvoice extends React.Component
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_txtCustomerCode.title")} //
-                                    data={{source:{select:{query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01"},sql:this.core.sql}}}
+                                    search={true}
+                                    data = 
+                                    {{
+                                        source:
+                                        {
+                                            select:
+                                            {
+                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                                                param : ['VAL:string|50']
+                                            },
+                                            sql:this.core.sql
+                                        }
+                                    }}
                                     button=
                                     {
                                         {
@@ -1420,6 +1432,7 @@ export default class salesInvoice extends React.Component
                     width={'90%'}
                     height={'90%'}
                     title={this.t("pg_txtItemsCode.title")} //
+                    search={true}
                     >
                         <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={200}/>
                         <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc"/>

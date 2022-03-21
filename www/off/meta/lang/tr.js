@@ -1,6 +1,6 @@
 export const langTr = 
 {
-    popGrid: {btnSelection:"Seç"},
+    popGrid: {btnSelection:"Seç",btnSearch:"Listele"},
     btnSave: "Kaydet",
     btnCancel: "İptal",
     menu:

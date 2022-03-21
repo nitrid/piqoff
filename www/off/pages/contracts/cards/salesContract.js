@@ -28,7 +28,6 @@ export default class promotionCard extends React.Component
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.itemPriceObj = new itemPriceCls();
 
-        this._getItems = this._getItems.bind(this)
         this._getContracts = this._getContracts.bind(this)
 
         
@@ -43,23 +42,6 @@ export default class promotionCard extends React.Component
         this.itemPriceObj.clearAll();
              
         await this.grdContracts.dataRefresh({source:this.itemPriceObj.dt('ITEM_PRICE')});
-    }
-    async _getItems()
-    {
-        let tmpSource =
-        {
-            source : 
-            {
-                groupBy : this.groupList,
-                select : 
-                {
-                    query : "SELECT GUID,CODE,NAME,VAT FROM ITEMS_VW_01 ",
-
-                },
-                sql : this.core.sql
-            }
-        }
-        this.pg_txtPopItemsCode.setSource(tmpSource)
     }
     async _getContracts()
     {
@@ -164,7 +146,6 @@ export default class promotionCard extends React.Component
                                                 this.txtCustomerName.value = tmpData.result.recordset[0].TITLE;
                                                 
                                                 this._getContracts()
-                                                this._getItems()
                                             }
                                             else
                                             {
@@ -200,7 +181,6 @@ export default class promotionCard extends React.Component
                                                             this.txtCustomerName.value = data[0].TITLE;
                                                             
                                                             this._getContracts()
-                                                            this._getItems()
                                                         }
                                                     }
                                                 }
@@ -216,7 +196,6 @@ export default class promotionCard extends React.Component
                                     </NdTextBox>
                                     {/*CARI SECIMI POPUP */}
                                     <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
-                                    notRefresh = {true}
                                     visible={false}
                                     position={{of:'#root'}} 
                                     showTitle={true} 
@@ -224,23 +203,24 @@ export default class promotionCard extends React.Component
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_txtCustomerCode.title")} //
-                                    data={{source:{select:{query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01"},sql:this.core.sql}}}
-                                    button=
-                                    {
+                                    search={true}
+                                    data = 
+                                    {{
+                                        source:
                                         {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
+                                            select:
                                             {
-                                                console.log(1111)
-                                            }
+                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                                                param : ['VAL:string|50']
+                                            },
+                                            sql:this.core.sql
                                         }
-                                    }
+                                    }}
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
                                         <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
                                         <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
-                                        <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} filterType={"include"} filterValues={['Tedarikçi']}/>
+                                        <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>
                                         
                                     </NdPopGrid>
                                 </Item> 
@@ -503,10 +483,22 @@ export default class promotionCard extends React.Component
                     width={'90%'}
                     height={'90%'}
                     title={this.t("pg_txtPopItemsCode.title")} //
+                    search={true}
+                    data = 
+                    {{
+                        source:
+                        {
+                            select:
+                            {
+                                query : "SELECT GUID,CODE,NAME FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                param : ['VAL:string|50']
+                            },
+                            sql:this.core.sql
+                        }
+                    }}
                     >           
                     <Column dataField="CODE" caption={this.t("pg_txtPopItemsCode.clmCode")} width={150} />
                     <Column dataField="NAME" caption={this.t("pg_txtPopItemsCode.clmName")} width={300} defaultSortOrder="asc" />
-                    <Column dataField="MULTICODE" caption={this.t("pg_txtPopItemsCode.clmMulticode")} width={200}/>
                     </NdPopGrid>
                                     
                 </ScrollView>

@@ -48,16 +48,16 @@ export default class promotionCard extends React.Component
     {
         let tmpSource =
         {
-            source : 
+            source:
             {
-                groupBy : this.groupList,
-                select : 
+                select:
                 {
-                    query : "SELECT GUID,CODE,NAME,VAT,ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = @CUSTOMER_GUID),'') AS MULTICODE FROM ITEMS_VW_01 ",
-                    param : ['CUSTOMER_GUID:string|250'],
-                    value : [this.txtCustomerCode.GUID]
+                    query : "SELECT GUID,CODE,NAME,VAT," + 
+                    "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.txtCustomerCode.GUID+"'),'') AS MULTICODE"+
+                    " FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) " ,
+                    param : ['VAL:string|50']
                 },
-                sql : this.core.sql
+                sql:this.core.sql
             }
         }
         this.pg_txtPopItemsCode.setSource(tmpSource)
@@ -217,7 +217,6 @@ export default class promotionCard extends React.Component
                                     </NdTextBox>
                                     {/*CARI SECIMI POPUP */}
                                     <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
-                                    notRefresh = {true}
                                     visible={false}
                                     position={{of:'#root'}} 
                                     showTitle={true} 
@@ -225,7 +224,19 @@ export default class promotionCard extends React.Component
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_txtCustomerCode.title")} //
-                                    data={{source:{select:{query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01"},sql:this.core.sql}}}
+                                    search={true}
+                                    data = 
+                                    {{
+                                        source:
+                                        {
+                                            select:
+                                            {
+                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                                                param : ['VAL:string|50']
+                                            },
+                                            sql:this.core.sql
+                                        }
+                                    }}
                                     button=
                                     {
                                         {
@@ -241,7 +252,7 @@ export default class promotionCard extends React.Component
                                         <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
                                         <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
                                         <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
-                                        <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} filterType={"include"} filterValues={['Tedarikçi']}/>
+                                        <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>
                                         
                                     </NdPopGrid>
                                 </Item> 
@@ -504,6 +515,7 @@ export default class promotionCard extends React.Component
                     width={'90%'}
                     height={'90%'}
                     title={this.t("pg_txtPopItemsCode.title")} //
+                    search={true}
                     >           
                     <Column dataField="CODE" caption={this.t("pg_txtPopItemsCode.clmCode")} width={150} />
                     <Column dataField="NAME" caption={this.t("pg_txtPopItemsCode.clmName")} width={300} defaultSortOrder="asc" />

@@ -177,7 +177,7 @@ export default class itemList extends React.Component
                             <Form colCount={2} id="frmCriter">
                             <Item>
                                 <Label text={this.t("txtCustomerCode")} alignment="right" />
-                                <NdTextBox id="txtCustomerCode" parent={this} simple={true}  notRefresh = {true}
+                                <NdTextBox id="txtCustomerCode" parent={this} simple={true} 
                                 button=
                                 {
                                     [
@@ -210,7 +210,19 @@ export default class itemList extends React.Component
                                 width={'90%'}
                                 height={'90%'}
                                 title={this.t("pg_txtCustomerCode.title")} //
-                                data={{source:{select:{query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01"},sql:this.core.sql}}}
+                                search={true}
+                                data = 
+                                {{
+                                    source:
+                                    {
+                                        select:
+                                        {
+                                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                                            param : ['VAL:string|50']
+                                        },
+                                        sql:this.core.sql
+                                    }
+                                }}
                                 button=
                                 {
                                     {

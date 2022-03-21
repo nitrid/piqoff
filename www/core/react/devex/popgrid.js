@@ -2,6 +2,7 @@ import React from 'react';
 import NdPopUp from './popup.js';
 import NdGrid,{Column,ColumnChooser,ColumnFixing,Pager,Paging,Scrolling,Selection,Editing,FilterRow,SearchPanel,HeaderFilter,Popup,Toolbar,Item} from './grid.js';
 import NdButton from './button.js';
+import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from './textbox.js'
 import Base from './base.js';
 import { access,param } from '../../core.js';
 
@@ -120,6 +121,53 @@ export default class NdPopGrid extends Base
             )
         }
     }
+    _formView()
+    {
+        if(typeof this.props.search == 'undefined' || this.props.search == false)
+        {
+            return (
+                <div className="row">
+                <div className="col-12 py-2">
+                    <NdButton parent={this} id={"btn2_" + this.props.id} text={this.lang.t('popGrid.btnSelection')} width={'100%'} type={"default"}
+                        onClick={this._onClick}
+                        param={this.param.btn} 
+                        access={this.access.btn} 
+                    />
+                </div>
+                </div>
+            )
+        }
+        else
+        {
+            return (
+                <div className="row">
+                    <div className="row pb-1">
+                        <div className="col-12">
+                            <NdTextBox id={"txt" + this.props.id} parent={this} simple={true} 
+                            onChange={(async()=>{this.getData()}).bind(this)}
+                            />     
+                        </div>                            
+                    </div>           
+                    <div className="row">
+                        <div className="col-6 py-2">
+                            <NdButton parent={this} id={"btn1_" + this.props.id} text={this.lang.t('popGrid.btnSearch')} width={'100%'} type={"default"}
+                                onClick={()=> {this.getData()}}
+                                param={this.param.btn} 
+                                access={this.access.btn} 
+                            />
+                        </div>
+                        <div className="col-6 py-2">
+                            <NdButton parent={this} id={"btn2_" + this.props.id} text={this.lang.t('popGrid.btnSelection')} width={'100%'} type={"default"}
+                                onClick={this._onClick}
+                                param={this.param.btn} 
+                                access={this.access.btn} 
+                            />
+                        </div>
+                    </div>
+                </div>   
+            )
+        }
+    }
     _onSelectionChanged(e) 
     {
         if(typeof this.props.onSelectionChanged != 'undefined')
@@ -172,10 +220,22 @@ export default class NdPopGrid extends Base
     }    
     async show()
     {
-        //this.setState({show:true})
-        this["pop_" + this.props.id].show();
-        this.grid = await this._isGrid();
-        await this.grid.dataRefresh(this.state.data)
+        
+        if(typeof this.props.search == 'undefined' || this.props.search == false)
+        {
+            console.log(11)
+            //this.setState({show:true})
+            this["pop_" + this.props.id].show();
+            this.grid = await this._isGrid();
+            await this.grid.dataRefresh(this.state.data)
+        }
+        else
+        {
+            console.log(12)
+            await this.grid.dataRefresh({source:[]})
+            this["pop_" + this.props.id].show();
+        }
+       
     }
     hide()
     {
@@ -184,11 +244,23 @@ export default class NdPopGrid extends Base
     }
     setSource(pSource)
     {
-        return new Promise(async resolve => 
-        {
-            resolve(await this["grid_" + this.props.id].dataRefresh(pSource))
-        });        
+        this.SourceData = pSource   
     } 
+    async getData()
+    {
+        let tmpQuery
+        if(typeof this.data == 'undefined' )
+        {
+            tmpQuery = this.SourceData
+        }
+        else
+        {
+            tmpQuery =  {...this.data}
+        }
+        tmpQuery.source.select.value = []
+        tmpQuery.source.select.value.push(this["txt" + this.props.id].value.replaceAll('*','%')+'%')
+        await this.grid.dataRefresh(tmpQuery)
+    }
     render()
     {
         return (
@@ -205,16 +277,8 @@ export default class NdPopGrid extends Base
                     height={this.state.height}
                     position={this.state.position}
                 >
-                    {this._buttonView()}                 
-                    <div className="row">
-                        <div className="col-12 py-2">
-                            <NdButton parent={this} id={"btn_" + this.props.id} text={this.lang.t('popGrid.btnSelection')} width={'100%'} type={"default"}
-                                onClick={this._onClick}
-                                param={this.param.btn} 
-                                access={this.access.btn} 
-                            />
-                        </div>
-                    </div>
+                    {this._buttonView()}
+                    {this._formView()}      
                     <div className="row" style={{height:"89%"}}>
                         <div className="col-12">
                             <NdGrid parent={this} id={"grid_" + this.props.id} 
