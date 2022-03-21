@@ -536,6 +536,7 @@ export const langTr =
     ftr_01_001 :
     {
         txtCustomerCode : "Cari",
+        menu:"Alış Faturası",
         pg_txtCustomerCode : 
         {
             title : "Cari Seçimi",
@@ -565,6 +566,7 @@ export const langTr =
     ftr_01_002 :
     {
         txtCustomerCode : "Cari",
+        menu:"Satış Faturası",
         pg_txtCustomerCode : 
         {
             title : "Cari Seçimi",
@@ -594,6 +596,7 @@ export const langTr =
     ftr_01_003 :
     {
         txtCustomerCode : "Cari",
+        menu:"İade Faturası",
         pg_txtCustomerCode : 
         {
             title : "Cari Seçimi",
@@ -622,6 +625,7 @@ export const langTr =
     ftr_01_004 :
     {
         txtCustomerCode : "Cari",
+        menu:"Fiyat Farkı Faturası",
         pg_txtCustomerCode : 
         {
             title : "Cari Seçimi",
@@ -1673,6 +1677,7 @@ export const langTr =
         dtFirst : "İlk Tarih",
         dtLast : "Son Tarih",
         txtCustomerCode : "Cari",
+        menu:"Alış İrsaliyesi",
         pg_txtCustomerCode : 
         {
             title : "Cari Seçimi",
@@ -1703,6 +1708,7 @@ export const langTr =
         dtFirst : "İlk Tarih",
         dtLast : "Son Tarih",
         txtCustomerCode : "Cari",
+        menu:"Satış İrsaliyesi",
         pg_txtCustomerCode : 
         {
             title : "Cari Seçimi",
@@ -1733,6 +1739,7 @@ export const langTr =
         dtFirst : "İlk Tarih",
         dtLast : "Son Tarih",
         txtCustomerCode : "Cari",
+        menu:"İade İrsaliyesi",
         pg_txtCustomerCode : 
         {
             title : "Cari Seçimi",
@@ -2791,6 +2798,7 @@ export const langTr =
     cnt_01_001 :
     {
         txtCustomerCode : "Cari",
+        menu : "Alış Anlaşması",
         pg_txtCustomerCode : 
         {
             title : "Cari Seçimi",
@@ -2816,6 +2824,7 @@ export const langTr =
     cnt_01_002 :
     {
         txtCustomerCode : "Cari",
+        menu : "Satış Anlaşması",
         pg_txtCustomerCode : 
         {
             title : "Cari Seçimi",

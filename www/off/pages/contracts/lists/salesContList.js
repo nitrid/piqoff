@@ -160,11 +160,11 @@ export default class itemList extends React.Component
                                         onClick: async () => 
                                         {
                                             App.instance.menuClick(
-                                            {
-                                                id: 'ftr_02_002',
-                                                text: this.t('menu.ftr_02_002'),
-                                                path: '../pages/invoices/documents/salesInvoice.js'
-                                            })
+                                                {
+                                                    id: 'cnt_01_002',
+                                                    text: this.t('menu'),
+                                                    path: '../pages/contracts/cards/salesContract.js'
+                                                })
                                         }
                                     }    
                                 } />

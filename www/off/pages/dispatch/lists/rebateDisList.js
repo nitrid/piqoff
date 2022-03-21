@@ -161,9 +161,9 @@ export default class itemList extends React.Component
                                         {
                                             App.instance.menuClick(
                                             {
-                                                id: 'ftr_02_003',
-                                                text: this.t('menu.ftr_02_003'),
-                                                path: '../pages/invoices/documents/rebateInvoice.js'
+                                                id: 'irs_02_003',
+                                                text: this.t('menu'),
+                                                path: '../pages/dispatch/documents/rebateDispatch.js',
                                             })
                                         }
                                     }    
@@ -276,6 +276,16 @@ export default class itemList extends React.Component
                             columnAutoWidth={true}
                             allowColumnReordering={true}
                             allowColumnResizing={true}
+                            onRowDblClick={async(e)=>
+                                {
+                                    App.instance.menuClick(
+                                        {
+                                            id: 'irs_02_003',
+                                            text: this.t('menu'),
+                                            path: '../pages/dispatch/documents/rebateDispatch.js',
+                                            pagePrm:{GUID:e.data.GUID}
+                                        })
+                                }}
                             >                            
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />

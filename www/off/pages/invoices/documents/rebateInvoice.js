@@ -48,6 +48,10 @@ export default class salesInvoice extends React.Component
     {
         await this.core.util.waitUntil(0)
         this.init()
+        if(typeof this.pagePrm != 'undefined')
+        {
+            this.getDoc(this.pagePrm.GUID,'',0)
+        }
     }
     async init()
     {
@@ -300,9 +304,9 @@ export default class salesInvoice extends React.Component
         this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
         let tmpQuery = 
         {
-            query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@CODE,1,GETDATE()) AS PRICE",
-            param : ['CODE:string|50'],
-            value : [pData.CODE]
+            query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,1,GETDATE()) AS PRICE",
+            param : ['GUID:string|50'],
+            value : [pData.GUID]
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
         if(tmpData.result.recordset.length > 0)
