@@ -264,6 +264,10 @@ export default class NdTextBox extends Base
     {
         this.setState({readOnly:e})
     }
+    focus()
+    {
+        this.dev.focus();
+    }
     render()
     {        
         // YETKİLENDİRMEDEN GELEN GÖRÜNÜR GÖRÜNMEZ DURUMU. DEĞER BASE DEN GELİYOR.

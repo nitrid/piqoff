@@ -1,5 +1,4 @@
 import React from "react";
-import { itemsCls } from "../../core/cls/items.js";
 import App from "../lib/app.js";
 
 import Form, { Label,Item } from "devextreme-react/form";
@@ -16,8 +15,13 @@ import NbPopUp from "../../core/react/bootstrap/popup.js";
 import NdDatePicker from "../../core/react/devex/datepicker.js";
 import NdSelectBox from "../../core/react/devex/selectbox.js";
 import NbPluButtonGrp from "../tools/plubuttongrp.js";
+import { dialog } from "../../core/react/devex/dialog.js";
 
 import { posCls,posSaleCls,posPaymentCls,posPluCls } from "../../core/cls/pos.js";
+import { itemsCls } from "../../core/cls/items.js";
+import { dataset,datatable,param,access } from "../../core/core.js";
+import {prm} from '../meta/prm.js'
+import {acs} from '../meta/acs.js'
 
 export default class posDoc extends React.Component
 {
@@ -26,158 +30,219 @@ export default class posDoc extends React.Component
         super() 
         this.core = App.instance.core;
         this.lang = App.instance.lang;
-        this.t = App.instance.lang.getFixedT(null,null,"this.props.data.id")
+        this.t = App.instance.lang.getFixedT(null,null,"pos")
+        this.prmObj = new param(prm);
+
         this.state =
         {
-            pluEdit:false
+            isPluEdit:false,
+            isBtnGetCustomer:false,
+            isBtnInfo:false
         }      
+        document.onkeydown = (e) =>
+        {
+            //EĞER TXTBARCODE ELEMENT HARİCİNDE BAŞKA BİR İNPUT A FOKUSLANILMIŞSA FONKSİYONDAN ÇIKILIYOR.
+            if(document.activeElement.type == 'text' && document.activeElement.parentElement.parentElement.parentElement.id != 'txtBarcode')
+            {
+                return
+            }
+            
+            this.txtBarcode.focus()
+            if(e.which == 38) //UP
+            {
+                
+            }
+            else if(e.which == 40) //DOWN
+            {
+                
+            }
+            else if(e.which == 123) //F12
+            {
+                
+            }
+        }     
+        
+        this.init()
     }
     async componentDidMount()
     {        
-        // let tmpDb = 
-        // {
-        //     name : "POS",
-        //     tables :
-        //     [
-        //         {
-        //             name : "ITEMS",
-        //             columns : 
-        //             {
-        //                 GUID : {dataType:"string"},
-        //                 CDATE : {dataType:"date_time"},
-        //                 CUSER : {dataType:"string"},
-        //                 LDATE : {dataType:"date_time"},
-        //                 LUSER : {dataType:"string"},
-        //                 TYPE : {dataType:"string"},
-        //                 SPECIAL : {dataType:"string"},
-        //                 CODE : {dataType:"string"},
-        //                 NAME : {dataType:"string"},
-        //                 SNAME : {dataType:"string"},
-        //                 VAT : {dataType:"number"},
-        //                 COST_PRICE : {dataType:"number"},
-        //                 MIN_PRICE : {dataType:"number"},
-        //                 MAX_PRICE : {dataType:"number"},
-        //                 STATUS : {dataType:"boolean"},
-        //                 MAIN_GRP : {dataType:"string"},
-        //                 MAIN_GRP_NAME : {dataType:"string"},
-        //                 SUB_GRP : {dataType:"string"},
-        //                 ORGINS : {dataType:"string"},
-        //                 ORGINS_NAME : {dataType:"string"},
-        //                 SECTOR : {dataType:"string"},
-        //                 RAYON : {dataType:"string"},
-        //                 SHELF : {dataType:"string"},
-        //                 WEIGHING : {dataType:"boolean"},
-        //                 SALE_JOIN_LINE : {dataType:"boolean"},
-        //                 TICKET_REST: {dataType:"boolean"},
-        //             } 
-        //         }
-        //     ]
-        // }
-        // await this.core.local.init(tmpDb);
-        // console.log(111)
-        // let tmpItems = new itemsCls
-        // await tmpItems.load()
-        // this.core.offline = true
-
-        // Object.setPrototypeOf(tmpItems.dt("ITEMS")[0],{stat:"new"})
         
-        // await tmpItems.save()
-        // await tmpItems.load()
-        // tmpItems.dt("ITEMS")[0].CODE = "1453"
-        // await tmpItems.save()
-        // await tmpItems.load()
-        // tmpItems.dt("ITEMS").removeAt(0)
-        // await tmpItems.save()
-        // await tmpItems.load()
-        // console.log(tmpItems.dt("ITEMS"))
+    }
+    async init()
+    {
+        await this.prmObj.load({PAGE:"pos",APP:'POS'})        
+    }
+    async getItem(pCode)
+    {
+        let tmpQuantity = 1
+        let tmpPrice = 0
+        if(pCode == '')
+        {
+            return
+        }
+        //EĞER CARİ SEÇ BUTONUNA BASILDIYSA CARİ BARKODDAN SEÇİLECEK.
+        if(this.state.isBtnGetCustomer)
+        {
+
+        }
+        //******************************************************** */
+        //BARKOD X MİKTAR İŞLEMİ.
+        if(pCode.indexOf("*") != -1)
+        {
+            if(pCode.split("*")[0] == "")
+            {
+                document.getElementById("Sound").play();
+                let tmpConfObj =
+                {
+                    id:'msgAlert',
+                    showTitle:true,
+                    title:"Uyarı",
+                    showCloseButton:true,
+                    width:'500px',
+                    height:'200px',
+                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Miktar sıfır giremezsiniz !"}</div>)
+                }
+                await dialog(tmpConfObj);
+                this.txtBarcode.value = "";
+                return
+            }
+            tmpQuantity = pCode.split("*")[0];
+            pCode = pCode.split("*")[1];
+        }
+        //******************************************************** */
+        //BARKOD DESENİ
+        let tmpBarPattern = this.getBarPattern(pCode)
+        tmpPrice = typeof tmpBarPattern.price == 'undefined' || tmpBarPattern.price == 0 ? tmpPrice : tmpBarPattern.price
+        tmpQuantity = typeof tmpBarPattern.quantity == 'undefined' || tmpBarPattern.quantity == 0 ? tmpQuantity : tmpBarPattern.quantity
+        pCode = tmpBarPattern.barcode
+        console.log(tmpPrice)
+        //******************************************************** */
+        //SARI ETIKET BARKODU
+
+        //******************************************************** */
+        
+    }
+    getBarPattern(pBarcode)
+    {
+        let tmpPrm = this.prmObj.filter({ID:'BarcodePattern'}).getValue();
+        
+        if(typeof tmpPrm == 'undefined' || tmpPrm.length == 0)
+        {            
+            return {barcode:pBarcode}
+        }
+        //201234012550 0211234012550
+        for (let i = 0; i < tmpPrm.length; i++) 
+        {
+            let tmpFlag = tmpPrm[i].substring(0,tmpPrm[i].indexOf('N'))
+
+            if(tmpFlag != '' && tmpPrm[i].length == pBarcode.length && pBarcode.substring(0,tmpFlag.length) == tmpFlag)
+            {
+                let tmpMoney = pBarcode.substring(tmpPrm[i].indexOf('M'),tmpPrm[i].lastIndexOf('M') + 1)
+                let tmpCent = pBarcode.substring(tmpPrm[i].indexOf('C'),tmpPrm[i].lastIndexOf('C') + 1)
+                let tmpKg = pBarcode.substring(tmpPrm[i].indexOf('K'),tmpPrm[i].lastIndexOf('K') + 1)
+                let tmpGram = pBarcode.substring(tmpPrm[i].indexOf('G'),tmpPrm[i].lastIndexOf('G') + 1)
+                
+                return {
+                    barcode : pBarcode.substring(0,tmpPrm[i].lastIndexOf('N') + 1),
+                    price : parseFloat((tmpMoney == '' ? "0" : tmpMoney) + "." + (tmpCent == '' ? "0" : tmpCent)),
+                    quantity : parseFloat((tmpKg == '' ? "0" : tmpKg) + "." + (tmpGram == '' ? "0" : tmpGram))
+                }
+            }
+        }
+
+        return {barcode : pBarcode}
     }
     render()
     {
         return(
             <div>                
                 <div className="top-bar row">
-                    <div className="row m-2">
-                        <div className="col-1">
-                            <img src="./css/img/logo2.png" width="50px" height="50px"/>
-                        </div>
-                        <div className="col-1">
-                            <div className="row" style={{height:"25px"}}>
-                                <div className="col-12">
-                                    <i className="text-white fa-solid fa-user p-2"></i>
-                                    <span className="text-white">TEST1</span>
-                                </div>    
+                    <div className="col-12">                    
+                        <div className="row m-2">
+                            <div className="col-1">
+                                <img src="./css/img/logo2.png" width="50px" height="50px"/>
                             </div>
-                            <div className="row" style={{height:"25px"}}>
-                                <div className="col-12">
-                                    <i className="text-light fa-solid fa-tv p-2"></i>
-                                    <span className="text-light">004</span>
-                                </div> 
+                            <div className="col-1">
+                                <div className="row" style={{height:"25px"}}>
+                                    <div className="col-12">
+                                        <i className="text-white fa-solid fa-user p-2"></i>
+                                        <span className="text-white">TEST1</span>
+                                    </div>    
+                                </div>
+                                <div className="row" style={{height:"25px"}}>
+                                    <div className="col-12">
+                                        <i className="text-light fa-solid fa-tv p-2"></i>
+                                        <span className="text-light">004</span>
+                                    </div> 
+                                </div>
+                            </div>
+                            <div className="col-2">
+                                <div className="row" style={{height:"25px"}}>
+                                    <div className="col-12">                                
+                                        <i className="text-white fa-solid fa-circle-user p-2"></i>
+                                        <span className="text-white">ALI KEMAL KARACA</span>
+                                    </div>    
+                                </div>
+                                <div className="row" style={{height:"25px"}}>
+                                    <div className="col-12">
+                                        <i className="text-light fa-solid fa-user-plus p-2"></i>
+                                        <span className="text-light">0</span>
+                                    </div> 
+                                </div>
+                            </div>
+                            <div className="col-2">
+                                <div className="row" style={{height:"25px"}}>
+                                    <div className="col-12">
+                                        <i className="text-white fa-solid fa-calendar p-2"></i>
+                                        <span className="text-white">03.03.2022</span>
+                                    </div>    
+                                </div>
+                                <div className="row" style={{height:"25px"}}>
+                                    <div className="col-12">
+                                        <i className="text-light fa-solid fa-clock p-2"></i>
+                                        <span className="text-light">12:12:04</span>
+                                    </div> 
+                                </div>
+                            </div>
+                            <div className="col-1 offset-3 px-1">
+                                <NbButton id={"btnRefresh"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
+                                onClick={()=>
+                                {                                                        
+                                    document.location.reload()
+                                }}>
+                                    <i className="text-white fa-solid fa-arrows-rotate" style={{fontSize: "16px"}} />
+                                </NbButton>
+                            </div>
+                            <div className="col-1 px-1">
+                                <NbButton id={"btnPluEdit"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
+                                onClick={()=>
+                                {       
+                                    if(this.pluBtnGrp.edit)
+                                    {
+                                        this.pluBtnGrp.edit = false
+                                        this.pluBtnGrp.save()                   
+                                    }                              
+                                    else
+                                    {
+                                        this.pluBtnGrp.edit = true
+                                    }                   
+                                    this.setState({isPluEdit:this.pluBtnGrp.edit})
+                                }}>
+                                    <i className={this.state.isPluEdit == true ? "text-white fa-solid fa-lock-open" : "text-white fa-solid fa-lock"} style={{fontSize: "16px"}} />
+                                </NbButton>
+                            </div>
+                            <div className="col-1 ps-1 pe-3">
+                                <NbButton id={"btnClose"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
+                                onClick={()=>
+                                {                                                        
+                                    
+                                }}>
+                                    <i className="text-white fa-solid fa-power-off" style={{fontSize: "16px"}} />
+                                </NbButton>
                             </div>
                         </div>
-                        <div className="col-2">
-                            <div className="row" style={{height:"25px"}}>
-                                <div className="col-12">                                
-                                    <i className="text-white fa-solid fa-circle-user p-2"></i>
-                                    <span className="text-white">ALI KEMAL KARACA</span>
-                                </div>    
-                            </div>
-                            <div className="row" style={{height:"25px"}}>
-                                <div className="col-12">
-                                    <i className="text-light fa-solid fa-user-plus p-2"></i>
-                                    <span className="text-light">0</span>
-                                </div> 
-                            </div>
-                        </div>
-                        <div className="col-2">
-                            <div className="row" style={{height:"25px"}}>
-                                <div className="col-12">
-                                    <i className="text-white fa-solid fa-calendar p-2"></i>
-                                    <span className="text-white">03.03.2022</span>
-                                </div>    
-                            </div>
-                            <div className="row" style={{height:"25px"}}>
-                                <div className="col-12">
-                                    <i className="text-light fa-solid fa-clock p-2"></i>
-                                    <span className="text-light">12:12:04</span>
-                                </div> 
-                            </div>
-                        </div>
-                        <div className="col-1 offset-3 px-1">
-                            <NbButton id={"btnRefresh"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
-                            onClick={()=>
-                            {                                                        
-                                document.location.reload()
-                            }}>
-                                <i className="text-white fa-solid fa-arrows-rotate" style={{fontSize: "16px"}} />
-                            </NbButton>
-                        </div>
-                        <div className="col-1 px-1">
-                            <NbButton id={"btnPluEdit"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
-                            onClick={()=>
-                            {       
-                                if(this.pluBtnGrp.edit)
-                                {
-                                    this.pluBtnGrp.edit = false
-                                }                              
-                                else
-                                {
-                                    this.pluBtnGrp.edit = true
-                                }                   
-                                this.setState({pluEdit:this.pluBtnGrp.edit})
-                            }}>
-                                <i className={this.state.pluEdit == true ? "text-white fa-solid fa-lock-open" : "text-white fa-solid fa-lock"} style={{fontSize: "16px"}} />
-                            </NbButton>
-                        </div>
-                        <div className="col-1 ps-1 pe-3">
-                            <NbButton id={"btnClose"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
-                            onClick={()=>
-                            {                                                        
-                                
-                            }}>
-                                <i className="text-white fa-solid fa-power-off" style={{fontSize: "16px"}} />
-                            </NbButton>
-                        </div>
-                    </div>       
+                    </div>   
                 </div>
                 <div className="row p-2">
                     {/* Left Column */}
@@ -207,13 +272,9 @@ export default class posDoc extends React.Component
                                         }
                                     ]
                                 }
-                                onChange={(async()=>
+                                onChange={(async(e)=>
                                 {
-                                    let tmpResult = await this.checkItem(this.txtRef.value)
-                                    if(tmpResult == 3)
-                                    {
-                                        this.txtRef.value = "";
-                                    }
+                                    this.getItem(this.txtBarcode.value)
                                 }).bind(this)} 
                                 >     
                                 </NdTextBox>  
@@ -473,7 +534,18 @@ export default class posDoc extends React.Component
                                     </div>
                                     {/* Info */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        <NbButton id={"btn"} parent={this} className={this.state.isBtnInfo == true ? "form-group btn btn-danger btn-block my-1" : "form-group btn btn-info btn-block my-1"} style={{height:"70px",width:"100%"}}
+                                        onClick={()=>
+                                        {
+                                            if(this.state.isBtnInfo)
+                                            {
+                                                this.setState({isBtnInfo:false})
+                                            }
+                                            else
+                                            {
+                                                this.setState({isBtnInfo:true})
+                                            }
+                                        }}>
                                             <i className="text-white fa-solid fa-circle-info" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
@@ -546,7 +618,7 @@ export default class posDoc extends React.Component
                                         <NbPluButtonGrp id="pluBtnGrp" parent={this} 
                                         onSelection={(pItem)=>
                                         {
-                                            console.log(pItem)
+                                            this.txtBarcode.value = pItem;
                                         }}/>
                                     </div>
                                 </div>  
@@ -651,7 +723,18 @@ export default class posDoc extends React.Component
                                 <div className="row px-2">
                                     {/* Get Customer */}
                                     <div className="col px-1">
-                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        <NbButton id={"btnGetCustomer"} parent={this} className={this.state.isBtnGetCustomer == true ? "form-group btn btn-danger btn-block my-1" : "form-group btn btn-info btn-block my-1"} style={{height:"70px",width:"100%"}}
+                                        onClick={()=>
+                                        {
+                                            if(this.state.isBtnGetCustomer)
+                                            {
+                                                this.setState({isBtnGetCustomer:false})
+                                            }
+                                            else
+                                            {
+                                                this.setState({isBtnGetCustomer:true})
+                                            }
+                                        }}>
                                             <i className="text-white fa-solid fa-circle-user" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>

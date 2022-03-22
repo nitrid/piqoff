@@ -12,13 +12,6 @@ import { datatable } from "../../core/core.js";
 import { dialog } from "../../core/react/devex/dialog.js";
 import App from "../lib/app.js";
 
-class Tst extends React.Component
-{
-    render()
-    {
-        return(<div>AAAAA</div>)
-    }
-}
 export default class NbPluButtonGrp extends NbBase
 {
     constructor(props)
@@ -54,6 +47,10 @@ export default class NbPluButtonGrp extends NbBase
         this.setCategory(this.isCategory)        
         await this.pluImageDt.refresh()
         this.setState({isLoading:false})
+    }
+    save()
+    {
+        this.pluObj.save();
     }
     setCategory(pIndex)
     {
@@ -268,8 +265,8 @@ export default class NbPluButtonGrp extends NbBase
                     </NbButton>
                 </div>
             )
-
-            if(i % 6 == 5 || i == tmpPageEnd)
+            
+            if(i % 6 == 5 || i == (tmpPageEnd-1))
             {
                 tmpView.push(<div key={i} className='row py-1'>{tmpColumn}</div>)
                 tmpColumn = []
@@ -624,7 +621,6 @@ export default class NbPluButtonGrp extends NbBase
                                 <NbButton id={"btnLeft" + this.props.id} parent={this} className="form-group btn btn-primary btn-block" style={{height:"60px",width:"100%"}}
                                 onClick={()=>
                                 {
-                                    let tmpPageCount = Math.ceil(this.state.btnPluImageGrp.length / 24)
                                     this.setState({pluImageCurrentPage:this.state.pluImageCurrentPage == 1 ? 1 : this.state.pluImageCurrentPage - 1})
                                 }}>
                                     <i className="text-white fa-solid fa-arrow-left" style={{fontSize: "24px"}} />
