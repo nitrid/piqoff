@@ -697,7 +697,7 @@ export default class CustomerCard extends React.Component
                                     searchEnabled={true}
                                     onValueChanged={(async()=>
                                         {
-                                           console.log(this.cmbPopZipcode)
+                                           
                                     }).bind(this)}
                                     pageSize ={50}
                                     notRefresh = {true}
