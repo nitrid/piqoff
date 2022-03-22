@@ -325,7 +325,19 @@ export default class promotionCard extends React.Component
                                     title={this.t("pg_Grid.title")} 
                                     columnAutoWidth={true}
                                     allowColumnResizing={true}
-                                    data={{source:{select:{query:"SELECT GUID,CODE,TITLE FROM CUSTOMER_VW_01 WHERE TYPE = 1 "},sql:this.core.sql}}}
+                                    search={true}
+                                    data = 
+                                    {{
+                                        source:
+                                        {
+                                            select:
+                                            {
+                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                                                param : ['VAL:string|50']
+                                            },
+                                            sql:this.core.sql
+                                        }
+                                    }}
                                     >           
                                     <Scrolling mode="virtual" />                         
                                     <Column dataField="TITLE" caption={this.t("pg_Grid.clmName")} width={650} defaultSortOrder="asc" />
@@ -399,7 +411,19 @@ export default class promotionCard extends React.Component
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_Grid.title")} 
-                                    data={{source:{select:{query : "SELECT GUID,CODE,NAME FROM ITEMS_VW_01"},sql:this.core.sql}}}
+                                    search={true}
+                                    data = 
+                                    {{
+                                        source:
+                                        {
+                                            select:
+                                            {
+                                                query : "SELECT GUID,CODE,NAME,VAT FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                                param : ['VAL:string|50']
+                                            },
+                                            sql:this.core.sql
+                                        }
+                                    }}
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_Grid.clmCode")} width={150} />
                                         <Column dataField="NAME" caption={this.t("pg_Grid.clmName")} width={650} defaultSortOrder="asc" />

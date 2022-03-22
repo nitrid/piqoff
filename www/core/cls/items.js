@@ -740,6 +740,7 @@ export class itemBarcodeCls
     {
         return new Promise(async resolve => 
         {
+            this.ds.delete()
             resolve(await this.ds.update()); 
         });
     }

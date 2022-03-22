@@ -562,7 +562,19 @@ export default class itemCard extends React.Component
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_txtRef.title")} 
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM ITEMS_VW_01"},sql:this.core.sql}}}
+                                    search={true}
+                                    data = 
+                                    {{
+                                        source:
+                                        {
+                                            select:
+                                            {
+                                                query : "SELECT GUID,CODE,NAME FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                                param : ['VAL:string|50']
+                                            },
+                                            sql:this.core.sql
+                                        }
+                                    }}
                                     button=
                                     {
                                         [
@@ -1486,7 +1498,19 @@ export default class itemCard extends React.Component
                                     title={this.t("pg_txtPopCustomerCode.title")} 
                                     columnAutoWidth={true}
                                     allowColumnResizing={true}
-                                    data={{source:{select:{query:"SELECT GUID,CODE,TITLE FROM CUSTOMER_VW_01 WHERE TYPE = 1 "},sql:this.core.sql}}}
+                                    search={true}
+                                    data = 
+                                    {{
+                                        source:
+                                        {
+                                            select:
+                                            {
+                                                query : "SELECT GUID,CODE,TITLE FROM CUSTOMER_VW_01 WHERE TYPE = 1 AND UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                                                param : ['VAL:string|50']
+                                            },
+                                            sql:this.core.sql
+                                        }
+                                    }}
                                     >           
                                     <Scrolling mode="virtual" />                         
                                     <Column dataField="TITLE" caption={this.t("pg_txtPopCustomerCode.clmName")} width={650} defaultSortOrder="asc" />

@@ -1,6 +1,6 @@
 export const langTr = 
 {
-    popGrid: {btnSelection:"Seç"},
+    popGrid: {btnSelection:"Seç",btnSearch:"Listele"},
     btnSave: "Kaydet",
     btnCancel: "İptal",
     menu:
@@ -293,6 +293,64 @@ export const langTr =
             msg: "Lütfen gerekli alanları doldurunuz !"
         }
     },
+    stk_01_002: 
+    {
+        txtBarcode: "Barkod",
+        txtItem: "Stok Kodu",
+        txtItemName: "Stok Adı",
+        cmbBarUnit: "Birim",
+        txtBarUnitFactor: "Katsayı",
+        cmbPopBarType : "Tip",
+        pg_txtItem:
+        {
+            title: "Ürün Seçim",
+            clmCode: "KODU",
+            clmName: "ADI", 
+        },
+        pg_txtBarcode:
+        {
+            title: "Barkod Seçim",
+            clmBarcode: "BARKOD",
+            clmItemName: "STOK ADI", 
+            clmItemCode: "STOK KODU"
+        },
+       
+      
+        msgBarcode:
+        {
+            title: "Dikkat",
+            btn01: "Barkoda Git",
+            btn02: "Tamam",
+            msg: "Girmiş olduğunuz barkod sistem de kayıtlı !"
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+    },
     stk_02_005 :
     {
         txtRefRefno : "Seri-Sıra",
@@ -536,6 +594,7 @@ export const langTr =
     ftr_01_001 :
     {
         txtCustomerCode : "Cari",
+        menu:"Alış Faturası",
         pg_txtCustomerCode : 
         {
             title : "Cari Seçimi",
@@ -565,6 +624,7 @@ export const langTr =
     ftr_01_002 :
     {
         txtCustomerCode : "Cari",
+        menu:"Satış Faturası",
         pg_txtCustomerCode : 
         {
             title : "Cari Seçimi",
@@ -594,6 +654,7 @@ export const langTr =
     ftr_01_003 :
     {
         txtCustomerCode : "Cari",
+        menu:"İade Faturası",
         pg_txtCustomerCode : 
         {
             title : "Cari Seçimi",
@@ -622,6 +683,7 @@ export const langTr =
     ftr_01_004 :
     {
         txtCustomerCode : "Cari",
+        menu:"Fiyat Farkı Faturası",
         pg_txtCustomerCode : 
         {
             title : "Cari Seçimi",
@@ -1673,6 +1735,7 @@ export const langTr =
         dtFirst : "İlk Tarih",
         dtLast : "Son Tarih",
         txtCustomerCode : "Cari",
+        menu:"Alış İrsaliyesi",
         pg_txtCustomerCode : 
         {
             title : "Cari Seçimi",
@@ -1703,6 +1766,7 @@ export const langTr =
         dtFirst : "İlk Tarih",
         dtLast : "Son Tarih",
         txtCustomerCode : "Cari",
+        menu:"Satış İrsaliyesi",
         pg_txtCustomerCode : 
         {
             title : "Cari Seçimi",
@@ -1733,6 +1797,7 @@ export const langTr =
         dtFirst : "İlk Tarih",
         dtLast : "Son Tarih",
         txtCustomerCode : "Cari",
+        menu:"İade İrsaliyesi",
         pg_txtCustomerCode : 
         {
             title : "Cari Seçimi",
@@ -2791,6 +2856,7 @@ export const langTr =
     cnt_01_001 :
     {
         txtCustomerCode : "Cari",
+        menu : "Alış Anlaşması",
         pg_txtCustomerCode : 
         {
             title : "Cari Seçimi",
@@ -2816,6 +2882,7 @@ export const langTr =
     cnt_01_002 :
     {
         txtCustomerCode : "Cari",
+        menu : "Satış Anlaşması",
         pg_txtCustomerCode : 
         {
             title : "Cari Seçimi",

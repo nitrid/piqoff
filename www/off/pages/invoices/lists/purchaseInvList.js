@@ -164,7 +164,7 @@ export default class itemList extends React.Component
                                             App.instance.menuClick(
                                             {
                                                 id: 'ftr_02_001',
-                                                text: this.t('menu.ftr_02_001'),
+                                                text: this.t('menu'),
                                                 path: '../pages/invoices/documents/purchaseInvoice.js'
                                             })
                                         }
@@ -218,7 +218,6 @@ export default class itemList extends React.Component
                                 </NdTextBox>
                                 {/*CARI SECIMI POPUP */}
                                 <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
-                                notRefresh = {true}
                                 visible={false}
                                 position={{of:'#root'}} 
                                 showTitle={true} 
@@ -226,7 +225,19 @@ export default class itemList extends React.Component
                                 width={'90%'}
                                 height={'90%'}
                                 title={this.t("pg_txtCustomerCode.title")} //
-                                data={{source:{select:{query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE GENUS IN(1,2)"},sql:this.core.sql}}}
+                                search={true}
+                                data = 
+                                {{
+                                    source:
+                                    {
+                                        select:
+                                        {
+                                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                                            param : ['VAL:string|50']
+                                        },
+                                        sql:this.core.sql
+                                    }
+                                }}
                                 button=
                                 {
                                     {
@@ -279,6 +290,16 @@ export default class itemList extends React.Component
                             columnAutoWidth={true}
                             allowColumnReordering={true}
                             allowColumnResizing={true}
+                            onRowDblClick={async(e)=>
+                                {
+                                    App.instance.menuClick(
+                                        {
+                                            id: 'ftr_02_001',
+                                            text: this.t('menu'),
+                                            path: '../pages/invoices/documents/purchaseInvoice.js',
+                                            pagePrm:{GUID:e.data.GUID}
+                                        })
+                                }}
                             >                            
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
