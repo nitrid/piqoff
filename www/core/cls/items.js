@@ -584,7 +584,6 @@ export class itemPriceCls
                 tmpPrm.CUSTOMER_CODE = typeof arguments[0].CUSTOMER_CODE == 'undefined' ? '' : arguments[0].CUSTOMER_CODE;
                 tmpPrm.CUSTOMER_GUID = typeof arguments[0].CUSTOMER_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].CUSTOMER_GUID;
             }
-            console.log(tmpPrm)
             this.ds.get('ITEM_PRICE').selectCmd.value = Object.values(tmpPrm)
 
             await this.ds.get('ITEM_PRICE').refresh();
@@ -1111,6 +1110,149 @@ export class unitCls
             
             await this.ds.get('UNIT').refresh();
             resolve(this.ds.get('UNIT'));    
+        });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            resolve(await this.ds.update()); 
+        });
+    }
+}
+export class editItemCls 
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds = new dataset();
+        this.empty = 
+        {
+            GUID : '00000000-0000-0000-0000-000000000000',
+            CUSER : this.core.auth.data == null ? '' : this.core.auth.data.CODE,
+            TYPE : '0',
+            SPECIAL : '',
+            CODE : '',
+            NAME : '',
+            SNAME : '',
+            VAT : 5.5,
+            COST_PRICE : 0,
+            MIN_PRICE : 0,
+            MAX_PRICE : 0,
+            STATUS : true,
+            MAIN_GRP : '',
+            MAIN_GRP_NAME : '',
+            SUB_GRP : '',
+            ORGINS : '',
+            ORGINS_NAME : '',
+            SECTOR : '',
+            RAYON : '',
+            SHELF : '',
+            WEIGHING : false,
+            SALE_JOIN_LINE : true,
+            TICKET_REST: false,
+            BARCODE : '',
+            UNIT_NAME : '',
+            UNIT_FACTOR : '',
+            CUSTOMER: '00000000-0000-0000-0000-000000000000',
+            CUSTOMER_CODE : '',
+            CUSTOMER_NAME : ''
+        }
+
+        this._initDs();
+    }
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('ITEM_EDIT');            
+        tmpDt.selectCmd = 
+        {
+            query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE (CODE) LIKE (@CODE) AND " + 
+                    "(NAME) LIKE (@NAME) AND ((CUSTOMER_GUID = @CUSTOMER) OR (@CUSTOMER = '00000000-0000-0000-0000-000000000000')) AND ((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) ",
+            param : ['CODE:string|50','NAME:string|50','CUSTOMER:string|50','MAIN_GRP:string|25']
+        }
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_COLLECTIVE_ITEMS_EDIT] " + 
+                    "@GUID = @PGUID, " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@CODE = @PCODE, " + 
+                    "@NAME = @PNAME, " + 
+                    "@VAT = @PVAT, " + 
+                    "@COST_PRICE = @PCOST_PRICE, " + 
+                    "@STATUS = @PSTATUS, " + 
+                    "@ORGINS = @PORGINS, " + 
+                    "@BARCODE = @PBARCODE, " +
+                    "@BARCODE_GUID = @PBARCODE_GUID, " +
+                    "@MULTICODE = @PMULTICODE, " +
+                    "@CUSTOMER_PRICE = @PCUSTOMER_PRICE, " +
+                    "@PRICE_SALE = @PPRICE_SALE, " +
+                    "@CUSTOMER_GUID = @PCUSTOMER_GUID, " +
+                    "@CUSTOMER_PRICE_GUID = @PCUSTOMER_PRICE_GUID, " +
+                    "@PRICE_SALE_GUID = @PPRICE_SALE_GUID " ,
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|250','PVAT:float',
+                     'PCOST_PRICE:float','PSTATUS:bit','PORGINS:string|50','PBARCODE:string|50','PBARCODE_GUID:string|50','PMULTICODE:string|50','PCUSTOMER_PRICE:string|50',
+                    'PPRICE_SALE:float','PCUSTOMER_GUID:string|50','PCUSTOMER_PRICE_GUID:string|50','PPRICE_SALE_GUID:string|50'],
+            dataprm : ['GUID','CUSER','CODE','NAME','VAT','COST_PRICE','STATUS','ORGINS',
+                       'BARCODE','BARCODE_GUID','MULTICODE','CUSTOMER_PRICE','PRICE_SALE','CUSTOMER_GUID','CUSTOMER_PRICE_GUID','PRICE_SALE_GUID'],
+        } 
+
+        this.ds.add(tmpDt);
+    }
+    //#endregion
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0]);
+        }
+
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('ITEM_EDIT') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {}
+        if(arguments.length > 0)
+        {
+            tmp = {...arguments[0]}
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('ITEM_EDIT').push(tmp)
+    }
+    clearAll()
+    {
+        for (let i = 0; i < this.ds.length; i++) 
+        {
+            this.dt(i).clear()
+        }
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ ÖRN: {ID:'',NAME:'',SYMBOL:''}
+        return new Promise(async resolve => 
+        {
+            let tmpPrm = {CODE:'%',NAME:'%',CUSTOMER:'00000000-0000-0000-0000-000000000000',MAIN_GRP:''}
+           
+            if(arguments.length > 0)
+            {
+                tmpPrm.CODE = typeof arguments[0].CODE == 'undefined' ? '%' : arguments[0].CODE;
+                tmpPrm.NAME = typeof arguments[0].NAME == 'undefined' ? '%' : arguments[0].NAME;  
+                tmpPrm.CUSTOMER = typeof arguments[0].CUSTOMER == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].CUSTOMER;
+                tmpPrm.MAIN_GRP = typeof arguments[0].MAIN_GRP == 'undefined' ? '' : arguments[0].MAIN_GRP;
+            }
+            
+            this.ds.get('ITEM_EDIT').selectCmd.value = Object.values(tmpPrm)
+            
+            await this.ds.get('ITEM_EDIT').refresh();
+            resolve(this.ds.get('ITEM_EDIT'));    
         });
     }
     save()

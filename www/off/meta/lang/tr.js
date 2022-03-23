@@ -9,7 +9,8 @@ export const langTr =
         stk_01: "Tanımlar",
         stk_02: "Evraklar",
         stk_03: "Listeler",
-        stk_04: "Raporlar",
+        stk_04: "Operasyonlar",
+        stk_05: "Raporlar",
         stk_01_001: "Stok Tanımları",
         stk_01_002: "Barkod Tanımları",
         stk_01_003: "Fiyat Tanımları",
@@ -26,6 +27,8 @@ export const langTr =
         stk_03_003: "Barkod Listesi",
         stk_03_004: "Depo Listesi",
         stk_03_005: "Multi Kod Listesi",
+        stk_04_001: "Toplu Stok Düzenleme",
+        stk_04_002: "İade Operasyonları",
         cri: "Cari",
         cri_01: "Tanımlar",
         cri_02: "Listeler",
@@ -67,8 +70,6 @@ export const langTr =
         sip_01_002: "Satış Sipariş Listesi",
         sip_02_001: "Alış Sipariş",
         sip_02_002: "Satış Sipariş",
-        operation : "Operasyonlar",
-        operation_01 : "İade Operasyonları",
         cnt : "Anlaşmalar",
         cnt_01 : "Listeler",
         cnt_01_001: "Alış Anlaşmaları Listesi",
@@ -469,6 +470,94 @@ export const langTr =
         validCustomerCode : "Cari Kodu Boş Geçilemez",
         validDocDate : "Tarih Seçmelisiniz",
 
+    },
+    stk_04_001 : 
+    {
+        txtCustomerCode : "Cari",
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        cmbItemGroup : 'Ürün Grubu',
+        btnGet : 'Getir',
+        txtCode : 'Ürün Kodu',
+        txtName : 'Ürün Adı',
+        grdItemList : 
+        {
+            clmCode: "Kodu",
+            clmName : "Adı",
+            clmBarcode : "Barkod",
+            clmMulticode : "Multicode",
+            clmCustomerName : "Cari",
+            clmCustomerPrice : "T. Fiyatı",
+            clmPriceSale : "Satış Fiyatı",
+            clmVat : "Vergi",
+            clmOrgins : "Orgin",
+            clmStatus : "Aktif"
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Onayla",
+            btn02: "Vazgeç",
+            msg: "Kayıt Etmek İstediğinize Eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: " Kayıt Başarılı..!",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+    },
+    stk_04_002 : 
+    {
+        txtCustomerCode : "Cari",
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        cmbDepot : 'Depo',
+        btnGet : 'Getir',
+        btnInvoice : 'Faturaya Çevir',
+        btnDispatch : 'İrsaliyeye Çevir',
+        grdRebateList : 
+        {
+            clmCode: "Kodu",
+            clmName : "Adı",
+            clmQuantity : "Miktar",
+            clmCustomer : "Cari",
+            clmPrice : "Fiyat"
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Onayla",
+            btn02: "Vazgeç",
+            msg: "Seçili Satırları İade Etmek İstediğinize Eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: " Serisi İle Evraklarınız Oluşturuldu..!",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgDublicateItem : 
+        {
+            title: " Dikkat",
+            btn01 : "Tamam",
+            msg : "Ürünü Birden Fazla Cari İçin Seçilmiş Lütfen Kontol Ediniz"
+
+        }
     },
     cri_01_001:
     {
@@ -3507,49 +3596,5 @@ export const langTr =
         }
       
     },
-    operation_01 : 
-    {
-        txtCustomerCode : "Cari",
-        pg_txtCustomerCode : 
-        {
-            title : "Cari Seçimi",
-            clmCode :  "CARİ KODU",
-            clmTitle : "CARİ ADI",
-            clmTypeName : "TİPİ",
-            clmGenusName : "CİNSİ"
-        },
-        cmbDepot : 'Depo',
-        btnGet : 'Getir',
-        btnInvoice : 'Faturaya Çevir',
-        btnDispatch : 'İrsaliyeye Çevir',
-        grdRebateList : 
-        {
-            clmCode: "Kodu",
-            clmName : "Adı",
-            clmQuantity : "Miktar",
-            clmCustomer : "Cari",
-            clmPrice : "Fiyat"
-        },
-        msgSave:
-        {
-            title: "Dikkat",
-            btn01: "Onayla",
-            btn02: "Vazgeç",
-            msg: "Seçili Satırları İade Etmek İstediğinize Eminmisiniz !"
-        },
-        msgSaveResult:
-        {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msgSuccess: " Serisi İle Evraklarınız Oluşturuldu..!",
-            msgFailed: "Kayıt işleminiz başarısız !"
-        },
-        msgDublicateItem : 
-        {
-            title: " Dikkat",
-            btn01 : "Tamam",
-            msg : "Ürünü Birden Fazla Cari İçin Seçilmiş Lütfen Kontol Ediniz"
-
-        }
-    }
+   
 }

@@ -113,7 +113,25 @@ export const menu = (e) =>
                 },
                 {
                     id: 'stk_04',
-                    text : e.t('menu.stk_04'),//'Raporlar',
+                    text: e.t('menu.stk_04'),//'Promosyon',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'stk_04_001',
+                            text : e.t('menu.stk_04_001'),//'Toplu Stok Düzenleme',
+                            path: '../pages/items/operations/collectiveItemEdit.js'
+                        },
+                        {
+                            id: 'stk_04_002',
+                            text : e.t('menu.stk_04_002'),//'İade Operasyonları',
+                            path: '../pages/items/operations/rebateOperation.js'
+                        },
+                    ]
+                },
+                {
+                    id: 'stk_05',
+                    text : e.t('menu.stk_05'),//'Raporlar',
                     expanded: false,
                 }
             ]
@@ -366,19 +384,7 @@ export const menu = (e) =>
                 }
             ]
         },
-        {
-            id: 'operation',
-            text: e.t('menu.operation'),//'Promosyon',
-            expanded: false,
-            items: 
-            [
-                {
-                    id: 'operation_01',
-                    text : e.t('menu.operation_01'),//'İade Operasyonları',
-                    path: '../pages/operation/operations/rebateOperation.js'
-                },
-            ]
-        },
+        
         {
             id: 'cnt',
             text: e.t('menu.cnt'),//'Anlaşmalar',
