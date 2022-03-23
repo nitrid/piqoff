@@ -312,15 +312,17 @@ export default class collectiveItemEdit extends React.Component
                             columnAutoWidth={true}
                             allowColumnReordering={true}
                             allowColumnResizing={true}
+                            height={'100%'} 
+                            width={'100%'}
                             >                            
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
                                 <Editing mode="cell" allowUpdating={true} allowDeleting={false} confirmDelete={false}/>
                                 <Column dataField="CODE" caption={this.t("grdItemList.clmCode")} visible={true} width={150} allowEditing={false}/> 
-                                <Column dataField="NAME" caption={this.t("grdItemList.clmName")} visible={true} width={250} /> 
+                                <Column dataField="NAME" caption={this.t("grdItemList.clmName")} visible={true}  /> 
                                 <Column dataField="BARCODE" caption={this.t("grdItemList.clmBarcode")} visible={true} width={150}/> 
                                 <Column dataField="MULTICODE" caption={this.t("grdItemList.clmMulticode")} visible={true} width={150}/> 
-                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdItemList.clmCustomerName")} visible={true} width={250} allowEditing={false}/> 
+                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdItemList.clmCustomerName")} visible={true}  allowEditing={false}/> 
                                 <Column dataField="CUSTOMER_PRICE" caption={this.t("grdItemList.clmCustomerPrice")} visible={true} width={100}/> 
                                 <Column dataField="PRICE_SALE" caption={this.t("grdItemList.clmPriceSale")} visible={true} width={100} /> 
                                 <Column dataField="VAT" caption={this.t("grdItemList.clmVat")} visible={true} width={100} editCellRender={this._cellRoleRender}/>    

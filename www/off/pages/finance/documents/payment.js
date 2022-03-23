@@ -681,6 +681,8 @@ export default class salesInvoice extends React.Component
                                     {
                                         if(e.validationGroup.validate().status == "valid")
                                         {
+                                            this.numCash.setState({value:0});
+                                            this.cashDescription.setState({value:''});
                                             this.popCash.show()
                                         }
                                         else
@@ -703,6 +705,9 @@ export default class salesInvoice extends React.Component
                                     {
                                         if(e.validationGroup.validate().status == "valid")
                                         {
+                                            this.checkReference.setState({value:''});
+                                            this.numcheck.setState({value:0});
+                                            this.checkDescription.setState({value:''});
                                             this.popCheck.show()
                                         }
                                         else
@@ -725,6 +730,8 @@ export default class salesInvoice extends React.Component
                                     {
                                         if(e.validationGroup.validate().status == "valid")
                                         {
+                                            this.numBank.setState({value:0});
+                                            this.bankDescription.setState({value:''});
                                             this.popBank.show()
                                         }
                                         else
@@ -818,6 +825,7 @@ export default class salesInvoice extends React.Component
                                     valueExpr="GUID"
                                     value=""
                                     searchEnabled={true}
+                                    notRefresh={true}
                                     onValueChanged={(async()=>
                                         {
 
@@ -905,6 +913,7 @@ export default class salesInvoice extends React.Component
                                     valueExpr="GUID"
                                     value=""
                                     searchEnabled={true}
+                                    notRefresh={true}
                                     onValueChanged={(async()=>
                                         {
 
@@ -1002,6 +1011,7 @@ export default class salesInvoice extends React.Component
                                     valueExpr="GUID"
                                     value=""
                                     searchEnabled={true}
+                                    notRefresh={true}
                                     onValueChanged={(async()=>
                                         {
 

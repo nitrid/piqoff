@@ -1457,6 +1457,8 @@ export default class salesInvoice extends React.Component
                                     onClick={async (e)=>
                                     {
                                         this.popPayment.hide()
+                                        this.numCash.setState({value:0});
+                                        this.cashDescription.setState({value:''});
                                         this.popCash.show()
                                     }}/>
                                 </Item>
@@ -1466,6 +1468,9 @@ export default class salesInvoice extends React.Component
                                     onClick={async (e)=>
                                     {
                                         this.popPayment.hide()
+                                        this.checkReference.setState({value:''});
+                                        this.numcheck.setState({value:0});
+                                        this.checkDescription.setState({value:''});
                                         this.popCheck.show()
                                     }}/>
                                 </Item>
@@ -1475,6 +1480,8 @@ export default class salesInvoice extends React.Component
                                     onClick={async (e)=>
                                     {
                                         this.popPayment.hide()
+                                        this.numBank.setState({value:0});
+                                        this.bankDescription.setState({value:''});
                                         this.popBank.show()
                                     }}/>
                                 </Item>
