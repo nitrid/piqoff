@@ -38,7 +38,7 @@ export class safeCls
                     "@CUSER = @PCUSER, " + 
                     "@CODE = @PCODE, " + 
                     "@NAME = @PNAME, " + 
-                    "@TYPE = @PTYPE, ",
+                    "@TYPE = @PTYPE ",
             param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PTYPE:int'],
             dataprm : ['GUID','CUSER','CODE','NAME','TYPE']
         } 
@@ -49,7 +49,7 @@ export class safeCls
             "@CUSER = @PCUSER, " + 
             "@CODE = @PCODE, " + 
             "@NAME = @PNAME, " + 
-            "@TYPE = @PTYPE, ",
+            "@TYPE = @PTYPE ",
             param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PTYPE:int'],
             dataprm : ['GUID','CUSER','CODE','NAME','TYPE']
         } 
@@ -97,9 +97,7 @@ export class safeCls
     {
         for (let i = 0; i < this.ds.length; i++) 
         {
-            console.log(i)
             this.dt(i).clear()
-            console.log(i)
         }
     }
     load()
@@ -173,7 +171,7 @@ export class bankCls
                     "@CODE = @PCODE, " + 
                     "@NAME = @PNAME, " + 
                     "@IBAN = @PIBAN, " + 
-                    "@TYPE = @PTYPE, ",
+                    "@TYPE = @PTYPE ",
             param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PIBAN:string|50','PTYPE:int'],
             dataprm : ['GUID','CUSER','CODE','NAME','IBAN','TYPE']
         } 
@@ -185,7 +183,7 @@ export class bankCls
                     "@CODE = @PCODE, " + 
                     "@NAME = @PNAME, " + 
                     "@IBAN = @PIBAN, " + 
-                    "@TYPE = @PTYPE, ",
+                    "@TYPE = @PTYPE ",
             param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PIBAN:string|50','PTYPE:int'],
             dataprm : ['GUID','CUSER','CODE','NAME','IBAN','TYPE']
         } 

@@ -3794,6 +3794,7 @@ export const langTr =
         txtName :"Adı",
         txtIban :"Iban",
         validCode :"Kodu Boş Geçemezsiniz !",
+        validIban : "Iban Boş Geçilemez !",
         pg_txtCode : 
         {
             title : "Kasa Seçimi",
