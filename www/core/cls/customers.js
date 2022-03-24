@@ -21,7 +21,6 @@ export class customersCls
             TAX_NO : '',
             INT_VAT_NO : '',
             TAX_TYPE : 0
-
         }
 
         this.customerOffical = new customerOfficalCls();

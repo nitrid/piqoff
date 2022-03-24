@@ -32,12 +32,15 @@ export default class posDoc extends React.Component
         this.lang = App.instance.lang;
         this.t = App.instance.lang.getFixedT(null,null,"pos")
         this.prmObj = new param(prm);
+        this.posObj = new posCls();
 
         this.state =
         {
             isPluEdit:false,
             isBtnGetCustomer:false,
-            isBtnInfo:false
+            isBtnInfo:false,
+            CustomerName:'',
+            CustomerPoint:0
         }      
         document.onkeydown = (e) =>
         {
@@ -70,12 +73,14 @@ export default class posDoc extends React.Component
     }
     async init()
     {
-        await this.prmObj.load({PAGE:"pos",APP:'POS'})        
+        await this.prmObj.load({PAGE:"pos",APP:'POS'})
+        this.posObj.addEmpty()
     }
     async getItem(pCode)
     {
         let tmpQuantity = 1
         let tmpPrice = 0
+        
         if(pCode == '')
         {
             return
@@ -83,7 +88,47 @@ export default class posDoc extends React.Component
         //EĞER CARİ SEÇ BUTONUNA BASILDIYSA CARİ BARKODDAN SEÇİLECEK.
         if(this.state.isBtnGetCustomer)
         {
+            //TICKET REST. SADAKAT PUAN KULLANIMI PARAMETRESI
+            if(this.prmObj.filter({ID:'UseTicketRestLoyalty',TYPE:0}).getValue() == true)
+            {
+                //#BAK
+            }
+            let tmpCustomerDt = new datatable(); 
+            tmpCustomerDt.selectCmd = 
+            {
+                query : "SELECT GUID,CODE,TITLE,ADRESS,0 AS CUSTOMER_POINT FROM [dbo].[CUSTOMER_VW_02] WHERE CODE = @CODE",
+                param : ['CODE:string|50']
+            }
+            tmpCustomerDt.selectCmd.value = [pCode]
+            await tmpCustomerDt.refresh();
 
+            if(tmpCustomerDt.length > 0)
+            {
+                this.posObj.dt().CUSTOMER_GUID = tmpCustomerDt[0].GUID
+                this.posObj.dt().CUSTOMER_CODE = tmpCustomerDt[0].CODE
+                this.posObj.dt().CUSTOMER_NAME = tmpCustomerDt[0].TITLE
+                
+                this.setState({CustomerName:tmpCustomerDt[0].TITLE,CustomerPoint:tmpCustomerDt[0].CUSTOMER_POINT})
+            }
+            else
+            {
+                let tmpConfObj =
+                {
+                    id:'msgAlert',
+                    showTitle:true,
+                    title:"Dikkat",
+                    showCloseButton:true,
+                    width:'500px',
+                    height:'200px',
+                    button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Müşteri bulunamadı !"}</div>)
+                }
+                
+                await dialog(tmpConfObj);
+            }
+            this.setState({isBtnGetCustomer:false})
+            this.txtBarcode.value = ""; 
+            return;
         }
         //******************************************************** */
         //BARKOD X MİKTAR İŞLEMİ.
@@ -116,16 +161,94 @@ export default class posDoc extends React.Component
         tmpPrice = typeof tmpBarPattern.price == 'undefined' || tmpBarPattern.price == 0 ? tmpPrice : tmpBarPattern.price
         tmpQuantity = typeof tmpBarPattern.quantity == 'undefined' || tmpBarPattern.quantity == 0 ? tmpQuantity : tmpBarPattern.quantity
         pCode = tmpBarPattern.barcode
-        console.log(tmpPrice)
         //******************************************************** */
-        //SARI ETIKET BARKODU
-
+        //UNIQ BARKODU
+        //#BAK
         //******************************************************** */
+        //ÜRÜN GETİRME
+        let tmpItemsDt = new datatable(); 
+        tmpItemsDt.selectCmd = 
+        {
+            query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE CODE = @CODE OR BARCODE = @CODE OR MULTICODE = @CODE",
+            param : ['CODE:string|25']
+        }
+        tmpItemsDt.selectCmd.value = [pCode]
+        await tmpItemsDt.refresh();
+        if(tmpItemsDt.length > 0)
+        {            
+            //FIYAT GETİRME
+            let tmpPriceDt = new datatable()
+            tmpPriceDt.selectCmd = 
+            {
+                query : "SELECT dbo.FN_PRICE_SALE(@GUID,@QUANTITY,GETDATE()) AS PRICE",
+                param : ['GUID:string|50','QUANTITY:float']
+            }
+            tmpPriceDt.selectCmd.value = [tmpItemsDt[0].GUID,tmpQuantity]
+            await tmpPriceDt.refresh();
+            if(tmpPriceDt.length > 0 && tmpPrice == 0)
+            {
+                tmpPrice = tmpPriceDt[0].PRICE
+                //FİYAT GÖR
+                if(this.state.isBtnInfo)
+                {
+                    let tmpConfObj =
+                    {
+                        id:'msgAlert',
+                        showTitle:true,
+                        title:"Bilgi",
+                        showCloseButton:true,
+                        width:'500px',
+                        height:'250px',
+                        button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                        content:(<div><h3 className="text-primary text-center">{tmpItemsDt[0].NAME}</h3><h3 className="text-danger text-center">{tmpPrice + " EUR"}</h3></div>)
+                    }
+                    await dialog(tmpConfObj);
+                    this.txtBarcode.value = "";
+                    this.setState({isBtnInfo:false})
+                    return;
+                }
+                //**************************************************** */
+            }
+            //**************************************************** */
+            //EĞER ÜRÜN TERAZİLİ İSE
+            if(tmpItemsDt[0].WEIGHING)
+            {
+                if(tmpPrice > 0)
+                {
+                    //#BAK
+                }
+                else
+                {
+                    //#BAK
+                }
+            }
+        }
+        else
+        {
+            document.getElementById("Sound").play(); 
+            let tmpConfObj =
+            {
+                id:'msgAlert',
+                showTitle:true,
+                title:"Uyarı",
+                showCloseButton:true,
+                width:'500px',
+                height:'200px',
+                button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Okuttuğunuz Barkod Sistemde Bulunamadı !"}</div>)
+            }
+            await dialog(tmpConfObj);
+            $scope.TxtBarkod = "";
+        }
+        //******************************************************** */
+    }
+    async saleRowAdd()
+    {
         
     }
     getBarPattern(pBarcode)
     {
-        let tmpPrm = this.prmObj.filter({ID:'BarcodePattern'}).getValue();
+        let tmpPrm = this.prmObj.filter({ID:'BarcodePattern',TYPE:0}).getValue();
         
         if(typeof tmpPrm == 'undefined' || tmpPrm.length == 0)
         {            
@@ -181,13 +304,13 @@ export default class posDoc extends React.Component
                                 <div className="row" style={{height:"25px"}}>
                                     <div className="col-12">                                
                                         <i className="text-white fa-solid fa-circle-user p-2"></i>
-                                        <span className="text-white">ALI KEMAL KARACA</span>
+                                        <span className="text-white">{this.state.CustomerName}</span>
                                     </div>    
                                 </div>
                                 <div className="row" style={{height:"25px"}}>
                                     <div className="col-12">
                                         <i className="text-light fa-solid fa-user-plus p-2"></i>
-                                        <span className="text-light">0</span>
+                                        <span className="text-light">{this.state.CustomerPoint}</span>
                                     </div> 
                                 </div>
                             </div>
