@@ -872,9 +872,9 @@ export default class salesInvoice extends React.Component
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
-                                                {this._addPayment(0)
+                                                {   
+                                                    this._addPayment(0)
                                                     this.popCash.hide();  
-                                                    
                                                 }
                                                 
                                             }}/>

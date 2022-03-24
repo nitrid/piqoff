@@ -17,7 +17,8 @@ export class safeCls
             LUSER_NAME : '',
             CODE : '',
             NAME : '',
-            TYPE : 0
+            TYPE : 0,
+           
         }
 
         this._initDs();
@@ -38,7 +39,8 @@ export class safeCls
                     "@CUSER = @PCUSER, " + 
                     "@CODE = @PCODE, " + 
                     "@NAME = @PNAME, " + 
-                    "@TYPE = @PTYPE ",
+                    "@TYPE = @PTYPE, " ,
+                   
             param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PTYPE:int'],
             dataprm : ['GUID','CUSER','CODE','NAME','TYPE']
         } 
@@ -49,7 +51,7 @@ export class safeCls
             "@CUSER = @PCUSER, " + 
             "@CODE = @PCODE, " + 
             "@NAME = @PNAME, " + 
-            "@TYPE = @PTYPE ",
+            "@TYPE = @PTYPE, " ,
             param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PTYPE:int'],
             dataprm : ['GUID','CUSER','CODE','NAME','TYPE']
         } 
@@ -149,6 +151,11 @@ export class bankCls
             CODE : '',
             NAME : '',
             IBAN : '',
+            ADRESS : '',
+            PHONE : '',
+            SWIFT : '',
+            CURRENCY :'',
+            OFFICAL : '',
             TYPE : 0
         }
 
@@ -171,9 +178,15 @@ export class bankCls
                     "@CODE = @PCODE, " + 
                     "@NAME = @PNAME, " + 
                     "@IBAN = @PIBAN, " + 
-                    "@TYPE = @PTYPE ",
-            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PIBAN:string|50','PTYPE:int'],
-            dataprm : ['GUID','CUSER','CODE','NAME','IBAN','TYPE']
+                    "@TYPE = @PTYPE, " +
+                    "@ADRESS  = @PADRESS, " +
+                    "@PHONE = @PPHONE, " +
+                    "@SWIFT = @PSWIFT, " +
+                    "@CURRENCY = @PCURRENCY, " +
+                    "@OFFICAL = @POFFICAL ",
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PIBAN:string|50','PTYPE:int','PADRESS:string|250','PPHONE:string|15','PSWIFT:string|25',
+            'PCURRENCY:string|10','POFFICAL:string|50'],
+            dataprm : ['GUID','CUSER','CODE','NAME','IBAN','TYPE','ADRESS','PHONE','SWIFT','CURRENCY','OFFICAL']
         } 
         tmpDt.updateCmd = 
         {
@@ -183,9 +196,15 @@ export class bankCls
                     "@CODE = @PCODE, " + 
                     "@NAME = @PNAME, " + 
                     "@IBAN = @PIBAN, " + 
-                    "@TYPE = @PTYPE ",
-            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PIBAN:string|50','PTYPE:int'],
-            dataprm : ['GUID','CUSER','CODE','NAME','IBAN','TYPE']
+                    "@TYPE = @PTYPE, " +
+                    "@ADRESS  = @PADRESS, " +
+                    "@PHONE = @PPHONE, " +
+                    "@SWIFT = @PSWIFT, " +
+                    "@CURRENCY = @PCURRENCY, " +
+                    "@OFFICAL = @POFFICAL ",
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PIBAN:string|50','PTYPE:int','PADRESS:string|250','PPHONE:string|15','PSWIFT:string|25',
+            'PCURRENCY:string|10','POFFICAL:string|50'],
+            dataprm : ['GUID','CUSER','CODE','NAME','IBAN','TYPE','ADRESS','PHONE','SWIFT','CURRENCY','OFFICAL']
         } 
         tmpDt.deleteCmd = 
         {

@@ -196,7 +196,7 @@ export default class salesInvoice extends React.Component
                         {
                             let tmpQuery = 
                             {
-                                query :"SELECT GUID,CODE,NAME,VAT,COST_PRICE FROM ITEMS_VW_01 WHERE CODE = @CODE",
+                                query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
                                 param : ['CODE:string|50'],
                                 value : [r.component._changedValue]
                             }
@@ -556,6 +556,7 @@ export default class salesInvoice extends React.Component
                                     valueExpr="GUID"
                                     value=""
                                     searchEnabled={true}
+                                    notRefresh = {true}
                                     onValueChanged={(async()=>
                                         {
                                         }).bind(this)}
@@ -672,7 +673,6 @@ export default class salesInvoice extends React.Component
                     showBorders={true}
                     width={'90%'}
                     height={'90%'}
-                    notRefrefsh = {true}
                     title={this.t("pg_txtItemsCode.title")} //
                     search={true}
                     data = 

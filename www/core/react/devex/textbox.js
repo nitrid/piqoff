@@ -25,7 +25,8 @@ export default class NdTextBox extends Base
         this._onEnterKey = this._onEnterKey.bind(this);
         this._onFocusIn = this._onFocusIn.bind(this);
         this._onFocusOut = this._onFocusOut.bind(this);
-        this._onChange = this._onChange.bind(this);     
+        this._onChange = this._onChange.bind(this);   
+        this._onKeyDown = this._onKeyDown.bind(this);     
     }
     //#region Private
     _onInitialized(e) 
@@ -67,6 +68,14 @@ export default class NdTextBox extends Base
         if(typeof this.props.onChange != 'undefined')
         {
             this.props.onChange(e);
+        }
+    }
+    _onKeyDown(e)
+    {
+        this.value = e.value;
+        if(typeof this.props.onKeyDown != 'undefined')
+        {
+            this.props.onKeyDown(e);
         }
     }
     _buttonView()
@@ -136,6 +145,7 @@ export default class NdTextBox extends Base
                 valueChangeEvent="keyup" onValueChanged={this._onValueChanged} 
                 onEnterKey={this._onEnterKey} onFocusIn={this._onFocusIn} onFocusOut={this._onFocusOut}
                 onChange={this._onChange}
+                onKeyDown={this._onKeyDown}
                 onInitialized={this._onInitialized}
                 value={typeof this.state.value == 'undefined' ? '' : this.state.value.toString()} 
                 readOnly={this.state.readOnly}

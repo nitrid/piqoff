@@ -3795,6 +3795,11 @@ export const langTr =
         txtIban :"Iban",
         validCode :"Kodu Boş Geçemezsiniz !",
         validIban : "Iban Boş Geçilemez !",
+        cmbCurrentyType :"Döviz",
+        txtSwift: "Swift",
+        txtOffical :"Yetkili",
+        txtPhone :  "Telefon",
+        txtAdress :"Adres",
         pg_txtCode : 
         {
             title : "Kasa Seçimi",

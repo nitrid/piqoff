@@ -189,13 +189,17 @@ export default class salesInvoice extends React.Component
             return (
                 <NdTextBox id={"txtGrdItemsCode"+e.rowIndex} parent={this} simple={true} 
                 value={e.value}
+                onKeyDown={(z)=>
+                {
+                    console.log(z)
+                }}
                 onChange={(async(r)=>
                     {
                         if(typeof r.event.isTrusted == 'undefined')
                         {
                             let tmpQuery = 
                             {
-                                query :"SELECT GUID,CODE,NAME,VAT,COST_PRICE FROM ITEMS_VW_01 WHERE CODE = @CODE",
+                                query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
                                 param : ['CODE:string|50'],
                                 value : [r.component._changedValue]
                             }
@@ -694,7 +698,6 @@ export default class salesInvoice extends React.Component
                     showBorders={true}
                     width={'90%'}
                     height={'90%'}
-                    notRefrefsh = {true}
                     title={this.t("pg_txtItemsCode.title")} //
                     search={true}
                     data = 

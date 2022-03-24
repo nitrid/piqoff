@@ -36,7 +36,9 @@ export default class NdGrid extends Base
         this._onCellPrepared = this._onCellPrepared.bind(this);   
         this._onRowDblClick = this._onRowDblClick.bind(this);      
         this._onEditorPrepared = this._onEditorPrepared.bind(this);
+        this._onEditorPreparing = this._onEditorPreparing.bind(this);
         this._onRowPrepared = this._onRowPrepared.bind(this);
+        this._onKeyDown = this._onKeyDown.bind(this); 
     }
     //#region Private
     _onInitialized(e) 
@@ -147,6 +149,20 @@ export default class NdGrid extends Base
         {
             this.props.onRowDblClick(e);
         }
+    }
+    _onKeyDown(e)
+    {
+        if(typeof this.props.onKeyDown != 'undefined')
+        {
+            this.props.onKeyDown(e);
+        }
+    }
+    _onEditorPreparing(e)
+    {
+        if(typeof this.props.onEditorPreparing != 'undefined')
+        {
+            this.props.onEditorPreparing(e);
+        }             
     }
     _onEditorPrepared(e)
     {
@@ -259,10 +275,12 @@ export default class NdGrid extends Base
                 onRowUpdating={this._onRowUpdating} onRowUpdated={this._onRowUpdated} onRowRemoving={this._onRowRemoving} onRowRemoved={this._onRowRemoved}
                 onSaving={this._onSaving} onSaved={this._onSaved} onEditCanceling={this._onEditCanceling} onEditCanceled={this._onEditCanceled}
                 onCellPrepared={this._onCellPrepared} onRowDblClick={this._onRowDblClick}
+                onKeyDown = {this._onKeyDown}
                 filterRow={this.state.filterRow}
                 headerFilter={this.state.headerFilter}
                 selection={this.state.selection}
                 onEditorPrepared={this._onEditorPrepared}
+                onEditorPreparing={this._onEditorPreparing}
                 onRowPrepared = {this._onRowPrepared}
                 >
                     {this.props.children}
@@ -290,6 +308,7 @@ export default class NdGrid extends Base
                     selection={this.state.selection}
                     pager={this.state.pager}
                     onEditorPrepared={this._onEditorPrepared}
+                    onEditorPreparing={this._onEditorPreparing}
                     onRowPrepared = {this._onRowPrepared}
                     >
                         {this.props.children}
