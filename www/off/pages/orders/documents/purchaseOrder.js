@@ -208,7 +208,7 @@ export default class salesInvoice extends React.Component
                         {
                             let tmpQuery = 
                             {
-                                query :"SELECT GUID,CODE,NAME,VAT FROM ITEMS_VW_01 WHERE CODE = @CODE",
+                                query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
                                 param : ['CODE:string|50'],
                                 value : [r.component._changedValue]
                             }

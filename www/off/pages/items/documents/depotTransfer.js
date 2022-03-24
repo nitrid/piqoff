@@ -34,7 +34,7 @@ export default class salesInvoice extends React.Component
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
 
-        this.frmDocItems = undefined;
+        this.frmTrnsfItems = undefined;
         this.docLocked = false;        
     }
     async componentDidMount()
@@ -97,15 +97,15 @@ export default class salesInvoice extends React.Component
         let tmpDoc = {...this.docObj.empty}
         tmpDoc.TYPE = 2
         tmpDoc.DOC_TYPE = 2
-        tmpDoc.REBATE = 1
+        tmpDoc.REBATE = 0
         this.docObj.addEmpty(tmpDoc);
 
         this.txtRef.readOnly = false
         this.txtRefno.readOnly = false
         this.docLocked = false
         
-        this.frmDocItems.option('disabled',false)
-        await this.grdRebItems.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
+        this.frmTrnsfItems.option('disabled',false)
+        await this.grdTrnsfItems.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -126,12 +126,12 @@ export default class salesInvoice extends React.Component
             }
 
             await dialog(tmpConfObj);
-            this.frmDocItems.option('disabled',true)
+            this.frmTrnsfItems.option('disabled',true)
         }
         else
         {
             this.docLocked = false
-            this.frmDocItems.option('disabled',false)
+            this.frmTrnsfItems.option('disabled',false)
         }
     }
     async checkDoc(pGuid,pRef,pRefno)
@@ -189,10 +189,6 @@ export default class salesInvoice extends React.Component
             return (
                 <NdTextBox id={"txtGrdItemsCode"+e.rowIndex} parent={this} simple={true} 
                 value={e.value}
-                onKeyDown={(z)=>
-                {
-                    console.log(z)
-                }}
                 onChange={(async(r)=>
                     {
                         if(typeof r.event.isTrusted == 'undefined')
@@ -281,7 +277,7 @@ export default class salesInvoice extends React.Component
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmSalesDis"
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmTrnsfr"
                                     onClick={async (e)=>
                                     {
                                         if(this.docLocked == true)
@@ -298,7 +294,7 @@ export default class salesInvoice extends React.Component
                                         }
                                         if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                         {
-                                            await this.grdRebItems.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                            await this.grdTrnsfItems.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                         }
                                         if(e.validationGroup.validate().status == "valid")
                                         {
@@ -374,7 +370,7 @@ export default class salesInvoice extends React.Component
                                             this.docObj.dt()[0].LOCKED = 1
                                             if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
-                                                await this.grdRebItems.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                                await this.grdTrnsfItems.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                             }
                                             if((await this.docObj.save()) == 0)
                                             {                                                    
@@ -432,7 +428,7 @@ export default class salesInvoice extends React.Component
                     {/* Form */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id="frmSalesDis">
+                            <Form colCount={3} id="frmTrnsfr">
                                 {/* txtRef-Refno */}
                                 <Item>
                                     <Label text={this.t("txtRefRefno")} alignment="right" />
@@ -459,7 +455,7 @@ export default class salesInvoice extends React.Component
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmSalesDis"}>
+                                            <Validator validationGroup={"frmTrnsfr"}>
                                                     <RequiredRule message={this.t("validRef")} />
                                                 </Validator>  
                                             </NdTextBox>
@@ -507,7 +503,7 @@ export default class salesInvoice extends React.Component
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmSalesDis"}>
+                                            <Validator validationGroup={"frmTrnsfr"}>
                                                     <RequiredRule message={this.t("validRefNo")} />
                                                 </Validator> 
                                             </NdTextBox>
@@ -522,7 +518,7 @@ export default class salesInvoice extends React.Component
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_Docs.title")} 
-                                    data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 2 AND DOC_TYPE = 2 AND REBATE = 1"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 2 AND DOC_TYPE = 2 AND REBATE = 0"},sql:this.core.sql}}}
                                     button=
                                     {
                                         [
@@ -552,8 +548,8 @@ export default class salesInvoice extends React.Component
                                 <EmptyItem />
                                {/* cmbDepot */}
                                <Item>
-                                    <Label text={this.t("cmbDepot1")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbDepot1"
+                                    <Label text={this.t("cmbOutDepot")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbOutDepot"
                                     dt={{data:this.docObj.dt('DOC'),field:"OUTPUT"}}  
                                     displayExpr="NAME"                       
                                     valueExpr="GUID"
@@ -561,20 +557,32 @@ export default class salesInvoice extends React.Component
                                     searchEnabled={true}
                                     onValueChanged={(async()=>
                                         {
+                                            if(this.cmbOutDepot.value == this.cmbInDepot.value)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgDblDepot',showTitle:true,title:this.t("msgDblDepot.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgDblDepot.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDblDepot.msg")}</div>)
+                                                }
+                                            
+                                                await dialog(tmpConfObj);
+                                                this.cmbOutDepot.setState({value:''});
+                                            }
                                         }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE = 0"},sql:this.core.sql}}}
-                                    param={this.param.filter({ELEMENT:'cmbDepot1',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'cmbDepot1',USERS:this.user.CODE})}
+                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 "},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbOutDepot',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbOutDepot',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmSalesDis"}>
+                                        <Validator validationGroup={"frmTrnsfr"}>
                                             <RequiredRule message={this.t("validDepot")} />
                                         </Validator> 
                                     </NdSelectBox>
                                 </Item>
                                {/* cmbDepot */}
                                <Item>
-                                    <Label text={this.t("cmbDepot2")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbDepot2"
+                                    <Label text={this.t("cmbInDepot")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbInDepot"
                                     dt={{data:this.docObj.dt('DOC'),field:"INPUT"}}  
                                     displayExpr="NAME"                       
                                     valueExpr="GUID"
@@ -582,12 +590,24 @@ export default class salesInvoice extends React.Component
                                     searchEnabled={true}
                                     onValueChanged={(async()=>
                                         {
+                                            if(this.cmbOutDepot.value == this.cmbInDepot.value)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgDblDepot',showTitle:true,title:this.t("msgDblDepot.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgDblDepot.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDblDepot.msg")}</div>)
+                                                }
+                                            
+                                                await dialog(tmpConfObj);
+                                                this.cmbInDepot.setState({value:''});
+                                            }
                                         }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE = 1"},sql:this.core.sql}}}
-                                    param={this.param.filter({ELEMENT:'cmbDepot2',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'cmbDepot2',USERS:this.user.CODE})}
+                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 "},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbInDepot',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbInDepot',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmSalesDis"}>
+                                        <Validator validationGroup={"frmTrnsfr"}>
                                             <RequiredRule message={this.t("validDepot")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -603,7 +623,7 @@ export default class salesInvoice extends React.Component
                                         {
                                     }).bind(this)}
                                     >
-                                        <Validator validationGroup={"frmSalesDis"}>
+                                        <Validator validationGroup={"frmTrnsfr"}>
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
@@ -616,11 +636,11 @@ export default class salesInvoice extends React.Component
                         <div className="col-12">
                             <Form colCount={1} onInitialized={(e)=>
                             {
-                                this.frmDocItems = e.component
+                                this.frmTrnsfItems = e.component
                             }}>
                                 <Item location="after">
                                     <Button icon="add"
-                                    validationGroup="frmSalesDis"
+                                    validationGroup="frmTrnsfr"
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -663,7 +683,7 @@ export default class salesInvoice extends React.Component
                                     }}/>
                                 </Item>
                                  <Item>
-                                    <NdGrid parent={this} id={"grdRebItems"} 
+                                    <NdGrid parent={this} id={"grdTrnsfItems"} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
@@ -681,11 +701,11 @@ export default class salesInvoice extends React.Component
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                                         <Scrolling mode="infinite" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdRebItems.clmCreateDate")} width={150} allowEditing={false}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdRebItems.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdRebItems.clmItemName")} width={350} />
-                                        <Column dataField="QUANTITY" caption={this.t("grdRebItems.clmQuantity")} dataType={'number'} width={150}/>
-                                        <Column dataField="DESCRIPTION" caption={this.t("grdRebItems.clmDescription")} />
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdTrnsfItems.clmCreateDate")} width={150} allowEditing={false}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdTrnsfItems.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdTrnsfItems.clmItemName")} width={350} />
+                                        <Column dataField="QUANTITY" caption={this.t("grdTrnsfItems.clmQuantity")} dataType={'number'} width={150}/>
+                                        <Column dataField="DESCRIPTION" caption={this.t("grdTrnsfItems.clmDescription")} />
                                     </NdGrid>
                                 </Item>
                             </Form>

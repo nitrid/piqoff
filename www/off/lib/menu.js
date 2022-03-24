@@ -59,18 +59,18 @@ export const menu = (e) =>
                         {
                             id: 'stk_02_002',
                             text: e.t('menu.stk_02_002'),//'Depolar Arası Sevk',
-                            path: '../pages/customers/cards/customerCard.js'
+                            path: '../pages/items/documents/depotTransfer.js'
                         },
                         {
                             id: 'stk_02_003',
                             text: e.t('menu.stk_02_003'),//'Fire Giriş Çıkış Fişi',
-                            path: '../pages/customers/cards/customerCard.js'
+                            path: '../pages/items/documents/outageDoc.js'
                         },
-                        {
-                            id: 'stk_02_004',
-                            text: e.t('menu.stk_02_004'),//'Sarf Giriş Çıkış Fişi',
-                            path: '../pages/customers/cards/customerCard.js'
-                        },
+                        // {
+                        //     id: 'stk_02_004',
+                        //     text: e.t('menu.stk_02_004'),//'Sarf Giriş Çıkış Fişi',
+                        //     path: '../pages/customers/cards/customerCard.js'
+                        // },
                         {
                             id: 'stk_02_005',
                             text: e.t('menu.stk_02_005'),//'İade Deposuna Sevk',

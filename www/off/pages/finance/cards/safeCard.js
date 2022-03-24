@@ -107,9 +107,15 @@ export default class safeCard extends React.Component
         {
             if(pCode !== '')
             {
-                let tmpData = await this.safeObj.load({CODE:pCode});
+                let tmpQuery = 
+                {
+                    query :"SELECT * FROM SAFE_VW_01 WHERE CODE = @CODE",
+                    param : ['CODE:string|50'],
+                    value : [pCode]
+                }
+                let tmpData = await this.core.sql.execute(tmpQuery) 
 
-                if(tmpData.length > 0)
+                if(tmpData.result.recordset.length > 0)
                 {
                     let tmpConfObj = 
                     {
@@ -193,7 +199,7 @@ export default class safeCard extends React.Component
                                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
                                                 
-                                                if((await this.itemsObj.save()) == 0)
+                                                if((await this.safeObj.save()) == 0)
                                                 {                                                    
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);

@@ -79,7 +79,6 @@ export default class itemList extends React.Component
         {
            if(Object.values(tmpItem)[i].length > 1)
            {
-               console.log(Object.values(tmpItem)[i][0].ITEM_NAME)
                 let tmpConfObj =
                 {
                     id:'msgDublicateItem',showTitle:true,title:this.t("msgDublicateItem.title"),showCloseButton:true,width:'500px',height:'200px',

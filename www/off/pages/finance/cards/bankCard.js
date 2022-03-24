@@ -107,9 +107,15 @@ export default class BankCard extends React.Component
         {
             if(pCode !== '')
             {
-                let tmpData = await this.bankObj.load({CODE:pCode});
+                let tmpQuery = 
+                {
+                    query :"SELECT * FROM BANK_VW_01 WHERE CODE = @CODE",
+                    param : ['CODE:string|50'],
+                    value : [pCode]
+                }
+                let tmpData = await this.core.sql.execute(tmpQuery) 
 
-                if(tmpData.length > 0)
+                if(tmpData.result.recordset.length > 0)
                 {
                     let tmpConfObj = 
                     {
@@ -193,7 +199,7 @@ export default class BankCard extends React.Component
                                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
                                                 
-                                                if((await this.itemsObj.save()) == 0)
+                                                if((await this.bankObj.save()) == 0)
                                                 {                                                    
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
@@ -359,8 +365,74 @@ export default class BankCard extends React.Component
                                     param={this.param.filter({ELEMENT:'txtIban',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtIban',USERS:this.user.CODE})}
                                     >
+                                         <Validator validationGroup={"frmBank"}>
+                                            <RequiredRule message={this.t("validIban")} />
+                                        </Validator>  
                                     </NdTextBox>
                                 </Item>
+                                {/* txtSwift */}
+                               <Item>
+                                    <Label text={this.t("txtSwift")} alignment="right" />
+                                    <NdTextBox id="txtSwift" parent={this} simple={true} dt={{data:this.bankObj.dt('BANK'),field:"SWIFT"}}
+                                    onChange={(async()=>
+                                    {
+                                      
+                                    }).bind(this)}
+                                    >
+                                    </NdTextBox>
+                                </Item>
+                                <EmptyItem />
+                                {/* cmbCurrentyType */}
+                                <Item>
+                                    <Label text={this.t("cmbCurrentyType")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbCurrentyType" height='fit-content' dt={{data:this.bankObj.dt('BANK'),field:"CURRENCY"}}
+                                    displayExpr="NAME"                       
+                                    valueExpr="CODE"
+                                    data={{source:{select:{query : "SELECT * FROM CURRENCY_TYPE"},sql:this.core.sql}}}
+                                    onValueChanged={(async()=>
+                                            {
+                                               
+                                        }).bind(this)}
+                                    />
+                                </Item>
+                                 {/* txtOffical */}
+                               <Item>
+                                    <Label text={this.t("txtOffical")} alignment="right" />
+                                    <NdTextBox id="txtOffical" parent={this} simple={true} dt={{data:this.bankObj.dt('BANK'),field:"OFFICAL"}}
+                                    onChange={(async()=>
+                                    {
+                                      
+                                    }).bind(this)}
+                                    >
+                                    </NdTextBox>
+                                </Item>
+                                <EmptyItem />
+                                {/* txtAdress */}
+                                <Item colSpan={2}>
+                                    <Label text={this.t("txtAdress")} alignment="right" />
+                                    <NdTextBox id="txtAdress" parent={this} simple={true} dt={{data:this.bankObj.dt('BANK'),field:"ADRESS"}}
+                                    onChange={(async()=>
+                                    {
+                                      
+                                    }).bind(this)}
+                                    >
+                                    </NdTextBox>
+                                </Item>
+                                <EmptyItem />
+                                 {/* txtPhone */}
+                               <Item>
+                                    <Label text={this.t("txtPhone")} alignment="right" />
+                                    <NdTextBox id="txtPhone" parent={this} simple={true} dt={{data:this.bankObj.dt('BANK'),field:"PHONE"}}
+                                    onChange={(async()=>
+                                    {
+                                      
+                                    }).bind(this)}
+                                    >
+                                    </NdTextBox>
+                                </Item>
+                                
+                                  
+                               
                             </Form>
                         </div>
                     </div>
