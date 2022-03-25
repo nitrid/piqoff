@@ -223,6 +223,24 @@ export default class salesDispatch extends React.Component
             return (
                 <NdTextBox id={"txtGrdItemsCode"+e.rowIndex} parent={this} simple={true} 
                 value={e.value}
+                onKeyDown={async(k)=>
+                    {
+                        if(k.event.key == 'F10')
+                        {
+                            await this.pg_txtItemsCode.setVal(e.value)
+                            this.pg_txtItemsCode.onClick = async(data) =>
+                            {
+                                if(data.length > 0)
+                                {
+                                    this.addItem(data[0],e.rowIndex)
+                                }
+                            }
+                        }
+                    }}
+                    onValueChanged={(v)=>
+                    {
+                        e.value = v.value
+                    }}
                 onChange={(async(r)=>
                     {
                         if(typeof r.event.isTrusted == 'undefined')
@@ -517,7 +535,7 @@ export default class salesDispatch extends React.Component
                                                 this.docObj.dt()[0].REF = this.txtRef.value 
                                                 let tmpQuery = 
                                                 {
-                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 40  REF = @REF ",
+                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 40 AND REF = @REF ",
                                                     param : ['REF:string|25'],
                                                     value : [this.txtRef.value]
                                                 }
