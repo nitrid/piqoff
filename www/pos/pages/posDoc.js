@@ -295,39 +295,47 @@ export default class posDoc extends React.Component
         let tmpVat = Number(parseFloat(tmpAmount *  Number(parseFloat(pItemData.VAT / 100).toFixed(3))).toFixed(2))
         let tmpTotal = Number(parseFloat(tmpAmount + tmpVat).toFixed(2))
 
-        console.log(this.posObj.posSale.dt().where({ITEM_GUID:pItemData.GUID}))
+        let tmpControl = this.posObj.posSale.dt().where({ITEM_GUID:pItemData.GUID})
+        
+        if(tmpControl.length > 0)
+        {
+            await this.saleRowUpdate(tmpControl,pQuantity,pPrice,pItemData.VAT,pItemData.UNIT_FACTOR)
+        }
+        else
+        {
+            this.posObj.posSale.addEmpty()
+            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
+            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].SAFE = ''
+            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DEPOT_GUID = '00000000-0000-0000-0000-000000000000'
+            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DEPOT_CODE = ''
+            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DEPOT_NAME = ''
+            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].TYPE = 0
+            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].CUSTOMER_GUID = this.posObj.dt()[0].CUSTOMER_GUID
+            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].CUSTOMER_CODE = this.posObj.dt()[0].CUSTOMER_CODE
+            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].CUSTOMER_NAME = this.posObj.dt()[0].CUSTOMER_NAME
+            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].LINE_NO = this.posObj.posSale.dt().length
+            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ITEM_GUID = pItemData.GUID
+            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ITEM_CODE = pItemData.CODE
+            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ITEM_NAME = pItemData.NAME
+            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].BARCODE_GUID = pItemData.BARCODE_GUID
+            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_GUID = '00000000-0000-0000-0000-000000000000'
+            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_NAME = pItemData.UNIT_NAME
+            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_FACTOR = pItemData.UNIT_FACTOR
+            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].QUANTITY = tmpQuantity
+            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].PRICE = pPrice
+            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].AMOUNT = tmpAmount
+            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DISCOUNT = 0
+            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].LOYALTY = 0
+            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].VAT = tmpVat
+            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].TOTAL = tmpTotal
+            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].SUBTOTAL = 0
+            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_AMOUNT = 0
+            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_DISCOUNT = 0
+            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_LOYALTY = 0
+            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_VAT = 0
+            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_TOTAL = 0
+        }
 
-        this.posObj.posSale.addEmpty()
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].SAFE = ''
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DEPOT_GUID = '00000000-0000-0000-0000-000000000000'
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DEPOT_CODE = ''
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DEPOT_NAME = ''
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].TYPE = 0
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].CUSTOMER_GUID = this.posObj.dt()[0].CUSTOMER_GUID
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].CUSTOMER_CODE = this.posObj.dt()[0].CUSTOMER_CODE
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].CUSTOMER_NAME = this.posObj.dt()[0].CUSTOMER_NAME
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].LINE_NO = this.posObj.posSale.dt().length
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ITEM_GUID = pItemData.GUID
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ITEM_CODE = pItemData.CODE
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ITEM_NAME = pItemData.NAME
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].BARCODE_GUID = pItemData.BARCODE_GUID
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_GUID = '00000000-0000-0000-0000-000000000000'
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_NAME = pItemData.UNIT_NAME
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_FACTOR = pItemData.UNIT_FACTOR
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].QUANTITY = tmpQuantity
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].PRICE = pPrice
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].AMOUNT = tmpAmount
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DISCOUNT = 0
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].LOYALTY = 0
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].VAT = tmpVat
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].TOTAL = tmpTotal
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].SUBTOTAL = 0
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_AMOUNT = 0
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_DISCOUNT = 0
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_LOYALTY = 0
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_VAT = 0
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_TOTAL = 0
 
         this.posObj.dt()[this.posObj.dt().length - 1].SAFE = ''
         this.posObj.dt()[this.posObj.dt().length - 1].DEPOT_GUID = '00000000-0000-0000-0000-000000000000'
@@ -340,6 +348,19 @@ export default class posDoc extends React.Component
         this.posObj.dt()[this.posObj.dt().length - 1].VAT = Number(parseFloat(this.posObj.posSale.dt().sum('VAT',2)).toFixed(2))
         this.posObj.dt()[this.posObj.dt().length - 1].TOTAL = Number(parseFloat(this.posObj.posSale.dt().sum('TOTAL',2)).toFixed(2))
 
+        this.calGrandTotal();
+    }
+    saleRowUpdate(pData,pQuantity,pPrice,pVat,pFactor)
+    {
+        let tmpQuantity = Number((parseFloat(pQuantity * pFactor) + pData[0].QUANTITY).toFixed(3))
+        let tmpAmount = Number((parseFloat(pPrice * tmpQuantity) + pData[0].AMOUNT).toFixed(2))
+        let tmpVat = Number(parseFloat(tmpAmount *  Number(parseFloat(pVat / 100).toFixed(3))).toFixed(2))
+        let tmpTotal = Number(parseFloat(tmpAmount + tmpVat).toFixed(2))
+
+        pData[0].QUANTITY = tmpQuantity
+        pData[0].AMOUNT = tmpAmount
+        pData[0].VAT = tmpVat
+        pData[0].TOTAL = tmpTotal
         this.calGrandTotal();
     }
     calGrandTotal()
