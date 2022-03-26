@@ -529,7 +529,7 @@ export const menu = (e) =>
                         {
                             id: 'promo_02_001',
                             text: e.t('menu.promo_02_001'),//'Promosyon Listesi',
-                            path: '../pages/items/items_list.js'
+                            path: '../pages/test.js'
                         }
                     ]
                 },

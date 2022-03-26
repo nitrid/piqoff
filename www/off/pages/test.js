@@ -8,8 +8,6 @@ import NdDatePicker from '../../core/react/devex/datepicker.js';
 import App from '../lib/app.js';
 import { datatable } from '../../core/core.js';
 import TextBox from 'devextreme-react/text-box';
-import { items } from '../lib/piqlib/piqlib.js';
-import NdInputGroup from '../../core/react/devex/inputgroup.js';
 
 export default class Test extends React.Component
 {
@@ -19,7 +17,7 @@ export default class Test extends React.Component
         
         this.core = App.instance.core;
         //this.sysprm = this.param.
-        this.onSelectionChanged = this.onSelectionChanged.bind(this);
+        //this.onSelectionChanged = this.onSelectionChanged.bind(this);
         //console.log(Button)
         
         //console.log(this.access.filter({ELEMENT:'txtSeri',USERS:this.user.CODE}))
@@ -36,7 +34,20 @@ export default class Test extends React.Component
     }
     async componentDidMount() 
     {        
-        this.popgrid.show()
+        //this.popgrid.show()
+
+        this.core.socket.emit('devprint',"{TYPE:'PRINT',PATH:'C:\\\\Project\\\\piqoff\\\\plugins\\\\devprint\\\\repx\\\\test\\\\test.repx',DATA:[{KODU:'001'}]}",(pResult) => 
+        {
+            console.log(pResult)
+            if(pResult.split('|')[0] != 'ERR')
+            {
+                var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
+                mywindow.onload = function() 
+                {
+                    mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                }   
+            }
+        });
         //this.txtSeri.value = "aa"
         //this.txtSira.value = "100"
         // await this.access.save()
@@ -88,123 +99,11 @@ export default class Test extends React.Component
         // }
         // await this.sbDepo.dataRefresh(tmp)
     }
-    onSelectionChanged(e)
-    {
-        if(e.selectedRowsData.length > 0)
-        {
-            this.txtSira.value = e.selectedRowsData[0].ROLE
-        }
-    }
     render()
     {
         return (
             <div>
-                <div className="row py-3">
-                    <div className = "col-1">
-                        <label>DENEME</label>
-                    </div>
-                    <div className="col-3">
-                        <NdTextBox id="txtSeri" parent={this} title={"Seri :"} titleAlign={"left"}
-                            lang={"tr"} 
-                            param={this.param.filter({ELEMENT:'txtSeri',USERS:this.user.CODE})} 
-                            access={this.access.filter({ELEMENT:'txtSeri',USERS:this.user.CODE})} />
-                    </div>
-                    <div className="col-3">
-                        <NdTextBox id="txtSira" parent={this}
-                            param={this.param.filter({ELEMENT:'txtSira',USERS:this.user.CODE})} 
-                            access={this.access.filter({ELEMENT:'txtSira',USERS:this.user.CODE})} 
-                            popgrid=
-                            {
-                                {
-                                    data:{source: {select : {query:"SELECT * FROM USERS "},sql : this.core.sql}},
-                                    position:{of:"#page"},
-                                    width:'90%', 
-                                    height:'90%',
-                                    key:'CODE',
-                                    onClick:this.onClick
-                                }
-                            }
-                            />
-                    </div>
-                    <div className="col-3">
-                        <NdDatePicker id="txtBelge" parent={this} title={"Tarih :"}
-                                param={this.param.filter({ELEMENT:'txtBelge',USERS:this.user.CODE})} 
-                                access={this.access.filter({ELEMENT:'txtBelge',USERS:this.user.CODE})} />
-                    </div>
-                </div>
-                <div className="row">
-                    {/* <div className="col-4">
-                        <NdSelectBox 
-                        parent={this}                             
-                        id = "sbDepo"                             
-                        displayExpr = "NAME"                       
-                        valueExpr = "CODE"      
-                        defaultValue = "Ali"
-                        // store = {[{"KEY":"MAHİR","VALUE":"001"},{"KEY":"FURKAN","VALUE":"002"}]} 
-                        option={{title:"Depo :",titleAlign:"left"}} ></NdSelectBox>
-                    </div> */}
-                    <NdInputGroup id={"igCheck"}></NdInputGroup>
-                </div>
-                <div className="row">
-                    <div className="col-12">
-                        {/* <NdGrid id="test" parent={this} onSelectionChanged={this.onSelectionChanged} 
-                           selection={{mode:"multiple"}} data={{source: {select : {query:"SELECT * FROM USERS "},sql : this.core.sql}}}
-                           filterRow={{visible:true}} headerFilter={{visible:true}}
-                           param={this.param.filter({ELEMENT:'test',USERS:this.user.CODE})} 
-                           access={this.access.filter({ELEMENT:'test',USERS:this.user.CODE})}
-                           editing=
-                           {
-                               {
-                                    mode:"batch",
-                                    allowUpdating:true,
-                                    allowAdding:true,
-                                    allowDeleting:true
-                               }
-                           }
-                           columns=
-                           {
-                               [
-                                    {
-                                        dataField:"CODE",
-                                        caption:"KODU"
-                                    },
-                                    {
-                                        dataField:"NAME",
-                                        caption:"ADI"
-                                    }
-                               ]
-                           }
-                        > 
-                        </NdGrid> */}
-                    </div>
-                </div>
-                <div>
-                    {/* <NdPopUp id="pop" parent={this} showTitle={true} container={".dx-multiview-wrapper"} of={"#page"} width={'90%'} height={'90%'} title={'Bilgi'} showCloseButton={true} visible={true}>
-                    
-                    </NdPopUp> */}
-                </div>
-                <div>
-                    <NdPopGrid id="popgrid" parent={this} container={".dx-multiview-wrapper"} position={{of:"#page"}} width={'90%'} height={'90%'}
-                        showTitle={true} title={"Bilgi"} columnWidth={200}
-                        data={{source: {select : {query:"SELECT * FROM USERS "},sql : this.core.sql}}}
-                        param={this.param.filter({ELEMENT:'popgrid',USERS:this.user.CODE})} 
-                        access={this.access.filter({ELEMENT:'popgrid',USERS:this.user.CODE})}
-                        // columns=
-                        // {
-                        //     [
-                        //         {
-                        //             dataField:"ID",
-                        //             caption:"ID"
-                        //         },
-                        //         {
-                        //             dataField:"VALUE",
-                        //             caption:"VALUE"
-                        //         }
-                        //     ]
-                        // }
-                    >
-                    </NdPopGrid>
-                </div>
+                Test
             </div>
         )
     }
