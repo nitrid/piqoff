@@ -299,7 +299,7 @@ export default class posDoc extends React.Component
         
         if(tmpControl.length > 0)
         {
-            await this.saleRowUpdate(tmpControl,pQuantity,pPrice,pItemData.VAT,pItemData.UNIT_FACTOR)
+            await this.saleRowUpdate(tmpControl[0],pItemData,pQuantity,pPrice)
         }
         else
         {
@@ -336,7 +336,6 @@ export default class posDoc extends React.Component
             this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_TOTAL = 0
         }
 
-
         this.posObj.dt()[this.posObj.dt().length - 1].SAFE = ''
         this.posObj.dt()[this.posObj.dt().length - 1].DEPOT_GUID = '00000000-0000-0000-0000-000000000000'
         this.posObj.dt()[this.posObj.dt().length - 1].DEPOT_CODE = ''
@@ -350,18 +349,17 @@ export default class posDoc extends React.Component
 
         this.calGrandTotal();
     }
-    saleRowUpdate(pData,pQuantity,pPrice,pVat,pFactor)
+    saleRowUpdate(pData,pItemData,pQuantity,pPrice)
     {
-        let tmpQuantity = Number((parseFloat(pQuantity * pFactor) + pData[0].QUANTITY).toFixed(3))
-        let tmpAmount = Number((parseFloat(pPrice * tmpQuantity) + pData[0].AMOUNT).toFixed(2))
-        let tmpVat = Number(parseFloat(tmpAmount *  Number(parseFloat(pVat / 100).toFixed(3))).toFixed(2))
+        let tmpQuantity = Number((parseFloat(pQuantity * pItemData.UNIT_FACTOR) + pData.QUANTITY).toFixed(3))
+        let tmpAmount = Number((parseFloat(pPrice * tmpQuantity) + pData.AMOUNT).toFixed(2))
+        let tmpVat = Number(parseFloat(tmpAmount *  Number(parseFloat(pItemData.VAT / 100).toFixed(3))).toFixed(2))
         let tmpTotal = Number(parseFloat(tmpAmount + tmpVat).toFixed(2))
 
-        pData[0].QUANTITY = tmpQuantity
-        pData[0].AMOUNT = tmpAmount
-        pData[0].VAT = tmpVat
-        pData[0].TOTAL = tmpTotal
-        this.calGrandTotal();
+        pData.QUANTITY = tmpQuantity
+        pData.AMOUNT = tmpAmount
+        pData.VAT = tmpVat
+        pData.TOTAL = tmpTotal
     }
     calGrandTotal()
     {
