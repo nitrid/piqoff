@@ -189,12 +189,27 @@ export default class salesInvoice extends React.Component
             return (
                 <NdTextBox id={"txtGrdItemsCode"+e.rowIndex} parent={this} simple={true} 
                 value={e.value}
-                onKeyDown={(z)=>
+                onKeyDown={async(k)=>
                 {
-                    console.log(z)
+                    if(k.event.key == 'F10')
+                    {
+                        await this.pg_txtItemsCode.setVal(e.value)
+                        this.pg_txtItemsCode.onClick = async(data) =>
+                        {
+                            if(data.length > 0)
+                            {
+                                this.addItem(data[0],e.rowIndex)
+                            }
+                        }
+                    }
+                }}
+                onValueChanged={(v)=>
+                {
+                    e.value = v.value
                 }}
                 onChange={(async(r)=>
                     {
+                        
                         if(typeof r.event.isTrusted == 'undefined')
                         {
                             let tmpQuery = 

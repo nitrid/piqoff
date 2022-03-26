@@ -330,7 +330,6 @@ export default class BankCard extends React.Component
                                             icon:'more',
                                             onClick:()=>
                                             {
-                                                console.log(1111)
                                             }
                                         }
                                     }

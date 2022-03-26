@@ -131,7 +131,6 @@ export default class salesInvoice extends React.Component
         this.frmDocItems.option('disabled',false)
         await this.grdSlsInv.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
         await this.grdInvoicePayment.dataRefresh({source:this.paymentObj.docCustomer.dt()});
-        console.log(this.grdSlsInv.devGrid)
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -246,6 +245,24 @@ export default class salesInvoice extends React.Component
             return (
                 <NdTextBox id={"txtGrdItemsCode"+e.rowIndex} parent={this} simple={true} 
                 value={e.value}
+                onKeyDown={async(k)=>
+                    {
+                        if(k.event.key == 'F10')
+                        {
+                            await this.pg_txtItemsCode.setVal(e.value)
+                            this.pg_txtItemsCode.onClick = async(data) =>
+                            {
+                                if(data.length > 0)
+                                {
+                                    this.addItem(data[0],e.rowIndex)
+                                }
+                            }
+                        }
+                    }}
+                    onValueChanged={(v)=>
+                    {
+                        e.value = v.value
+                    }}
                 onChange={(async(r)=>
                     {
                         if(typeof r.event.isTrusted == 'undefined')
@@ -931,7 +948,6 @@ export default class salesInvoice extends React.Component
                                             icon:'more',
                                             onClick:()=>
                                             {
-                                                console.log(1111)
                                             }
                                         }
                                     }
@@ -1055,7 +1071,6 @@ export default class salesInvoice extends React.Component
                                     dbApply={false}
                                     onRowUpdated={async(e)=>{
                                         let rowIndex = e.component.getRowIndexByKey(e.key)
-                                        console.log(e)
                                         if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                         {
                                             e.key.DISCOUNT = parseFloat((((this.docObj.docItems.dt()[rowIndex].AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(3))
@@ -1466,7 +1481,6 @@ export default class salesInvoice extends React.Component
                         </NdPopGrid>
                     {/* Stok Grid */}
                     <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={"#root"}
-                    notRefresh ={true}
                     visible={false}
                     position={{of:'#root'}} 
                     showTitle={true} 

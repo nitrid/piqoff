@@ -35,6 +35,8 @@ export default class NdPopGrid extends Base
         this._onSelectionChanged = this._onSelectionChanged.bind(this);
         this._onClick = this._onClick.bind(this);
         this._onRowDblClick = this._onRowDblClick.bind(this);
+        this.setSource = this.setSource.bind(this);
+        this.setVal = this.setVal.bind(this);
 
         this.access = {}
         this.param = {}
@@ -223,7 +225,6 @@ export default class NdPopGrid extends Base
         
         if(typeof this.props.search == 'undefined' || this.props.search == false)
         {
-            console.log(11)
             //this.setState({show:true})
             this["pop_" + this.props.id].show();
             this.grid = await this._isGrid();
@@ -231,8 +232,8 @@ export default class NdPopGrid extends Base
         }
         else
         {
-            console.log(12)
             await this.grid.dataRefresh({source:[]})
+            this["txt" + this.props.id].setState({value:''})
             this["pop_" + this.props.id].show();
         }
        
@@ -242,9 +243,19 @@ export default class NdPopGrid extends Base
         this["pop_" + this.props.id].hide();
         //this.setState({show:false})
     }
-    setSource(pSource)
+    async setVal(pValue)
     {
-        this.SourceData = pSource   
+        if(typeof pValue != 'undefined')
+        {
+            
+            this["pop_" + this.props.id].show();
+            this["txt" + this.props.id].setState({value:pValue})
+            await this.getData()
+        }
+    }
+    async setSource(pSource)
+    {
+        this.SourceData = pSource  
     } 
     async getData()
     {
