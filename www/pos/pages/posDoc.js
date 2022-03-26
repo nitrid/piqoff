@@ -15,6 +15,7 @@ import NbPopUp from "../../core/react/bootstrap/popup.js";
 import NdDatePicker from "../../core/react/devex/datepicker.js";
 import NdSelectBox from "../../core/react/devex/selectbox.js";
 import NbPluButtonGrp from "../tools/plubuttongrp.js";
+import NbPopNumber from "../tools/popnumber.js";
 import { dialog } from "../../core/react/devex/dialog.js";
 
 import { posCls,posSaleCls,posPaymentCls,posPluCls } from "../../core/cls/pos.js";
@@ -39,8 +40,16 @@ export default class posDoc extends React.Component
             isPluEdit:false,
             isBtnGetCustomer:false,
             isBtnInfo:false,
-            CustomerName:'',
-            CustomerPoint:0
+            customerName:'',
+            customerPoint:0,
+            totalRowCount:0,
+            totalItemCount:0,
+            totalLoyalty:0,
+            totalTicRest:0,
+            totalSub:0,
+            totalVat:0,
+            totalDiscount:0,
+            totalGrand:0
         }      
         document.onkeydown = (e) =>
         {
@@ -73,14 +82,16 @@ export default class posDoc extends React.Component
     }
     async init()
     {
+        this.posObj = new posCls();
         await this.prmObj.load({PAGE:"pos",APP:'POS'})
         this.posObj.addEmpty()
+
+        await this.grdList.dataRefresh({source:this.posObj.posSale.dt()});
     }
     async getItem(pCode)
     {
         let tmpQuantity = 1
         let tmpPrice = 0
-        
         if(pCode == '')
         {
             return
@@ -108,7 +119,7 @@ export default class posDoc extends React.Component
                 this.posObj.dt().CUSTOMER_CODE = tmpCustomerDt[0].CODE
                 this.posObj.dt().CUSTOMER_NAME = tmpCustomerDt[0].TITLE
                 
-                this.setState({CustomerName:tmpCustomerDt[0].TITLE,CustomerPoint:tmpCustomerDt[0].CUSTOMER_POINT})
+                this.setState({customerName:tmpCustomerDt[0].TITLE,customerPoint:tmpCustomerDt[0].CUSTOMER_POINT})
             }
             else
             {
@@ -215,13 +226,48 @@ export default class posDoc extends React.Component
             {
                 if(tmpPrice > 0)
                 {
-                    //#BAK
+                    //TERAZİYE İSTEK YAPILIYOR.
+                    let tmpWResult = await this.getWeighing()
+                    if(typeof tmpWResult != 'undefined')
+                    {
+                        tmpQuantity = tmpWResult
+                    }
+                    else
+                    {
+                        this.txtBarcode.value = "";
+                        return
+                    }
                 }
                 else
-                {
-                    //#BAK
+                {   
+                    //EĞER OKUTULAN BARKODUN FİYAT SIFIR İSE KULLANICIYA FİYAT 
+                    let tmpResult = await this.popNumber.show('Fiyat',0)
+                    if(typeof tmpResult != 'undefined' && tmpResult != '')
+                    {
+                        tmpPrice = tmpResult
+                        //FİYAT GİRİLMİŞ İSE TERAZİYE İSTEK YAPILIYOR.
+                        let tmpWResult = await this.getWeighing()
+                        if(typeof tmpWResult != 'undefined')
+                        {
+                            tmpQuantity = tmpWResult
+                        }
+                        else
+                        {
+                            this.txtBarcode.value = "";
+                            return
+                        }
+                    }
+                    else
+                    {
+                        //POPUP KAPATILMIŞ İSE YADA FİYAT BOŞ GİRİLMİŞ İSE...
+                        this.txtBarcode.value = "";
+                        return
+                    }
                 }
             }
+            //**************************************************** */
+            this.saleRowAdd(tmpItemsDt[0],tmpQuantity,tmpPrice)
+            this.txtBarcode.value = ""
         }
         else
         {
@@ -238,12 +284,113 @@ export default class posDoc extends React.Component
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Okuttuğunuz Barkod Sistemde Bulunamadı !"}</div>)
             }
             await dialog(tmpConfObj);
-            $scope.TxtBarkod = "";
+            this.txtBarcode.value = "";
         }
-        //******************************************************** */
+        //******************************************************** */        
     }
-    async saleRowAdd()
+    async saleRowAdd(pItemData,pQuantity,pPrice)
     {
+        let tmpQuantity = Number(parseFloat(pQuantity * pItemData.UNIT_FACTOR).toFixed(3))
+        let tmpAmount = Number(parseFloat(pPrice * tmpQuantity).toFixed(2))
+        let tmpVat = Number(parseFloat(tmpAmount *  Number(parseFloat(pItemData.VAT / 100).toFixed(3))).toFixed(2))
+        let tmpTotal = Number(parseFloat(tmpAmount + tmpVat).toFixed(2))
+
+        console.log(this.posObj.posSale.dt().where({ITEM_GUID:pItemData.GUID}))
+
+        this.posObj.posSale.addEmpty()
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].SAFE = ''
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DEPOT_GUID = '00000000-0000-0000-0000-000000000000'
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DEPOT_CODE = ''
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DEPOT_NAME = ''
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].TYPE = 0
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].CUSTOMER_GUID = this.posObj.dt()[0].CUSTOMER_GUID
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].CUSTOMER_CODE = this.posObj.dt()[0].CUSTOMER_CODE
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].CUSTOMER_NAME = this.posObj.dt()[0].CUSTOMER_NAME
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].LINE_NO = this.posObj.posSale.dt().length
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ITEM_GUID = pItemData.GUID
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ITEM_CODE = pItemData.CODE
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ITEM_NAME = pItemData.NAME
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].BARCODE_GUID = pItemData.BARCODE_GUID
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_GUID = '00000000-0000-0000-0000-000000000000'
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_NAME = pItemData.UNIT_NAME
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_FACTOR = pItemData.UNIT_FACTOR
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].QUANTITY = tmpQuantity
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].PRICE = pPrice
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].AMOUNT = tmpAmount
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DISCOUNT = 0
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].LOYALTY = 0
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].VAT = tmpVat
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].TOTAL = tmpTotal
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].SUBTOTAL = 0
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_AMOUNT = 0
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_DISCOUNT = 0
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_LOYALTY = 0
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_VAT = 0
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_TOTAL = 0
+
+        this.posObj.dt()[this.posObj.dt().length - 1].SAFE = ''
+        this.posObj.dt()[this.posObj.dt().length - 1].DEPOT_GUID = '00000000-0000-0000-0000-000000000000'
+        this.posObj.dt()[this.posObj.dt().length - 1].DEPOT_CODE = ''
+        this.posObj.dt()[this.posObj.dt().length - 1].DEPOT_NAME = ''
+        this.posObj.dt()[this.posObj.dt().length - 1].TYPE = 0
+        this.posObj.dt()[this.posObj.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.posSale.dt().sum('AMOUNT',2)).toFixed(2))
+        this.posObj.dt()[this.posObj.dt().length - 1].DISCOUNT = 0
+        this.posObj.dt()[this.posObj.dt().length - 1].LOYALTY = 0
+        this.posObj.dt()[this.posObj.dt().length - 1].VAT = Number(parseFloat(this.posObj.posSale.dt().sum('VAT',2)).toFixed(2))
+        this.posObj.dt()[this.posObj.dt().length - 1].TOTAL = Number(parseFloat(this.posObj.posSale.dt().sum('TOTAL',2)).toFixed(2))
+
+        this.calGrandTotal();
+    }
+    calGrandTotal()
+    {
+        this.setState(
+            {
+                totalRowCount:this.posObj.posSale.dt().length,
+                totalItemCount:this.posObj.posSale.dt().sum('QUANTITY',2),
+                totalLoyalty:this.posObj.dt()[0].LOYALTY,
+                totalTicRest:0,
+                totalSub:this.posObj.dt()[0].AMOUNT,
+                totalVat:this.posObj.dt()[0].VAT,
+                totalDiscount:this.posObj.dt()[0].DISCOUNT,
+                totalGrand:this.posObj.dt()[0].TOTAL
+            }
+        )
+    }
+    getWeighing()
+    {
+        //#BAK BURAYA TERAZİ ENTEGRASYONU EKLENECEK
+        return new Promise(async resolve => 
+        {
+            let tmpConfObj =
+            {
+                id:'msgAlert',
+                showTitle:true,
+                title:"Uyarı",
+                showCloseButton:true,
+                width:'500px',
+                height:'200px',
+                button:[{id:"btn01",caption:"Miktar Giriş",location:'before'},{id:"btn02",caption:"Vazgeç",location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Teraziden cevap bekleniyor."}</div>)
+            }
+            let tmpResult = await dialog(tmpConfObj);
+            if(tmpResult == 'btn01')
+            {
+                let tmpResult = await this.popNumber.show('Miktar',0)
+                if(typeof tmpResult != 'undefined' && tmpResult != '')
+                {
+                    resolve(tmpResult)
+                }
+                else
+                {
+                    resolve()
+                }
+            }
+            else if(tmpResult == 'btn02')
+            {
+                resolve()
+            }
+        });
         
     }
     getBarPattern(pBarcode)
@@ -304,13 +451,13 @@ export default class posDoc extends React.Component
                                 <div className="row" style={{height:"25px"}}>
                                     <div className="col-12">                                
                                         <i className="text-white fa-solid fa-circle-user p-2"></i>
-                                        <span className="text-white">{this.state.CustomerName}</span>
+                                        <span className="text-white">{this.state.customerName}</span>
                                     </div>    
                                 </div>
                                 <div className="row" style={{height:"25px"}}>
                                     <div className="col-12">
                                         <i className="text-light fa-solid fa-user-plus p-2"></i>
-                                        <span className="text-light">{this.state.CustomerPoint}</span>
+                                        <span className="text-light">{this.state.customerPoint}</span>
                                     </div> 
                                 </div>
                             </div>
@@ -414,7 +561,6 @@ export default class posDoc extends React.Component
                                 height={"156px"} 
                                 width={"100%"}
                                 dbApply={false}
-                                data={{source:[{TYPE_NAME:0},{TYPE_NAME:1},{TYPE_NAME:2},{TYPE_NAME:3},{TYPE_NAME:4},{TYPE_NAME:5},{TYPE_NAME:6},{TYPE_NAME:7},{TYPE_NAME:8},{TYPE_NAME:9}]}}
                                 onRowPrepared=
                                 {
                                     (e)=>
@@ -434,11 +580,11 @@ export default class posDoc extends React.Component
                                     }
                                 }
                                 >
-                                    <Column dataField="TYPE_NAME" caption={"NO"} width={40} alignment={"center"}/>
-                                    <Column dataField="DEPOT" caption={"ADI"} width={350} />
-                                    <Column dataField="CUSTOMER_NAME" caption={"MIKTAR"} width={100}/>
-                                    <Column dataField="QUANTITY" caption={"FIYAT"} width={100}/>
-                                    <Column dataField="VAT_EXT" caption={"TUTAR"} width={100}/>                                                
+                                    <Column dataField="LINE_NO" caption={"NO"} width={40} alignment={"center"} defaultSortOrder="desc"/>
+                                    <Column dataField="ITEM_NAME" caption={"ADI"} width={350} />
+                                    <Column dataField="QUANTITY" caption={"MIKTAR"} width={100}/>
+                                    <Column dataField="PRICE" caption={"FIYAT"} width={100}/>
+                                    <Column dataField="AMOUNT" caption={"TUTAR"} width={100}/>                                                
                                 </NdGrid>
                             </div>
                         </div>
@@ -447,44 +593,44 @@ export default class posDoc extends React.Component
                             <div className="col-6">
                                 <div className="row">
                                     <div className="col-3">
-                                        <p className="text-primary text-start m-0">T.Satır : <span className="text-dark">0</span></p>    
+                                        <p className="text-primary text-start m-0">T.Satır : <span className="text-dark">{this.state.totalRowCount}</span></p>    
                                     </div>
                                     <div className="col-6">
-                                        <p className="text-primary text-start m-0">T.Ürün Mik.: <span className="text-dark">0</span></p>    
+                                        <p className="text-primary text-start m-0">T.Ürün Mik.: <span className="text-dark">{this.state.totalItemCount}</span></p>    
                                     </div>
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-start m-0">Sadakat İndirim : <span className="text-dark">0.00 €</span></p>    
+                                        <p className="text-primary text-start m-0">Sadakat İndirim : <span className="text-dark">{parseFloat(this.state.totalLoyalty).toFixed(2)} €</span></p>    
                                     </div>
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-start m-0">Ticket Rest.: <span className="text-dark">0.00 €</span></p>    
+                                        <p className="text-primary text-start m-0">Ticket Rest.: <span className="text-dark">{parseFloat(this.state.totalTicRest).toFixed(2)} €</span></p>    
                                     </div>
                                 </div>
                             </div>
                             <div className="col-6">
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-end m-0">Ara Toplam : <span className="text-dark">0.00 €</span></p>    
+                                        <p className="text-primary text-end m-0">Ara Toplam : <span className="text-dark">{parseFloat(this.state.totalSub).toFixed(2)} €</span></p>    
                                     </div>
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-end m-0">Kdv : <span className="text-dark">0.00 €</span></p>    
+                                        <p className="text-primary text-end m-0">Kdv : <span className="text-dark">{parseFloat(this.state.totalVat).toFixed(2)} €</span></p>    
                                     </div>
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-end m-0">İndirim : <span className="text-dark">0.00 €</span></p>    
+                                        <p className="text-primary text-end m-0">İndirim : <span className="text-dark">{parseFloat(this.state.totalDiscount).toFixed(2)} €</span></p>    
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div className="row">
                             <div className="col-12">
-                                <p className="fs-2 fw-bold text-center m-0">0.00 €</p>
+                                <p className="fs-2 fw-bold text-center m-0">{parseFloat(this.state.totalGrand).toFixed(2)} €</p>
                             </div>
                         </div>
                         {/* Button Console */}
@@ -545,9 +691,9 @@ export default class posDoc extends React.Component
                                     {/* Safe Open */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
-                                        onClick={()=>
+                                        onClick={async ()=>
                                         {                             
-                                            this.popAccessPass.show();
+                                            this.popAccessPass.show();                                            
                                         }}
                                         >
                                             <i className="text-white fa-solid fa-inbox" style={{fontSize: "24px"}} />
@@ -1295,38 +1441,9 @@ export default class posDoc extends React.Component
                         </div>
                     </NdPopUp>
                 </div>
-                {/* Quantity Popup */}
+                {/* Number Popup */}
                 <div>
-                    <NdPopUp parent={this} id={"popQuantity"} 
-                    visible={false}                        
-                    showCloseButton={true}
-                    showTitle={true}
-                    title={"Miktar"}
-                    container={"#root"} 
-                    width={"300"}
-                    height={"500"}
-                    position={{of:"#root"}}
-                    >
-                        <div className="row pt-1">
-                            <div className="col-12">
-                                <NdTextBox id="txtPopQuantity" parent={this} simple={true}>     
-                                </NdTextBox> 
-                            </div>
-                        </div> 
-                        <div className="row pt-2">
-                            {/* numPopQuantity */}
-                            <div className="col-12">
-                                <NbNumberboard id={"numPopQuantity"} parent={this} textobj="txtPopQuantity" span={1} buttonHeight={"60px"}/>
-                            </div>
-                        </div>
-                        <div className="row pt-2">
-                            <div className="col-12">
-                                <NbButton id={"btnPopQuantity"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}>
-                                    <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
-                                </NbButton>
-                            </div>
-                        </div>
-                    </NdPopUp>
+                    <NbPopNumber id={"popNumber"} parent={this}/>
                 </div>
                 {/* Price Popup */}
                 <div>
