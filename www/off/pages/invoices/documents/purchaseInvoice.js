@@ -1592,7 +1592,7 @@ export default class salesInvoice extends React.Component
                                     param={this.param.filter({ELEMENT:'cmbCashSafe',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbCashSafe',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmCash"}>
+                                        <Validator validationGroup={"frmPurcInvCash"}>
                                             <RequiredRule message={this.t("ValidCash")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -1605,7 +1605,7 @@ export default class salesInvoice extends React.Component
                                         param={this.param.filter({ELEMENT:'numCash',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'numCash',USERS:this.user.CODE})}
                                         >
-                                        <Validator validationGroup={"frmCash"}>
+                                        <Validator validationGroup={"frmPurcInvCash"}>
                                             <RequiredRule message={this.t("ValidCash")} />
                                         </Validator>  
                                         </NdNumberBox>
@@ -1626,7 +1626,7 @@ export default class salesInvoice extends React.Component
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.t("popCash.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                            validationGroup="frmCash"
+                                            validationGroup="frmPurcInvCash"
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
@@ -1678,7 +1678,7 @@ export default class salesInvoice extends React.Component
                                     param={this.param.filter({ELEMENT:'cmbCheckSafe',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbCheckSafe',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmCheck"}>
+                                        <Validator validationGroup={"frmPurcInvCheck"}>
                                             <RequiredRule message={this.t("ValidCash")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -1702,7 +1702,7 @@ export default class salesInvoice extends React.Component
                                         param={this.param.filter({ELEMENT:'numcheck',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'numcheck',USERS:this.user.CODE})}
                                         >
-                                        <Validator validationGroup={"frmCheck"}>
+                                        <Validator validationGroup={"frmPurcInvCheck"}>
                                             <RequiredRule message={this.t("ValidCash")} />
                                         </Validator>  
                                         </NdNumberBox>
@@ -1723,7 +1723,7 @@ export default class salesInvoice extends React.Component
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.t("popCheck.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                            validationGroup="frmCheck"
+                                            validationGroup="frmPurcInvCheck"
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
@@ -1774,7 +1774,7 @@ export default class salesInvoice extends React.Component
                                     param={this.param.filter({ELEMENT:'cmbBank',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbBank',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmBank"}>
+                                        <Validator validationGroup={"frmPurcInvBank"}>
                                             <RequiredRule message={this.t("validBank")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -1787,7 +1787,7 @@ export default class salesInvoice extends React.Component
                                         param={this.param.filter({ELEMENT:'numBank',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'numBank',USERS:this.user.CODE})}
                                         >
-                                        <Validator validationGroup={"frmBank"}>
+                                        <Validator validationGroup={"frmPurcInvBank"}>
                                             <RequiredRule message={this.t("ValidCash")} />
                                         </Validator>  
                                         </NdNumberBox>
@@ -1808,7 +1808,7 @@ export default class salesInvoice extends React.Component
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.t("popBank.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                            validationGroup="frmCheck"
+                                            validationGroup="frmPurcInvCheck"
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")

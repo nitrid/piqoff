@@ -551,7 +551,7 @@ export default class salesInvoice extends React.Component
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmRebateInv"
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmPriceDiffInv"
                                     onClick={async (e)=>
                                     {
                                         if(this.docLocked == true)
@@ -691,7 +691,7 @@ export default class salesInvoice extends React.Component
                     {/* Form */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id="frmRebateInv">
+                            <Form colCount={3} id="frmPriceDiffInv">
                                 {/* txtRef-Refno */}
                                 <Item>
                                     <Label text={this.t("txtRefRefno")} alignment="right" />
@@ -720,7 +720,7 @@ export default class salesInvoice extends React.Component
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmRebateInv"}>
+                                            <Validator validationGroup={"frmPriceDiffInv"}>
                                                     <RequiredRule message={this.t("validRef")} />
                                                 </Validator>  
                                             </NdTextBox>
@@ -769,7 +769,7 @@ export default class salesInvoice extends React.Component
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmRebateInv"}>
+                                            <Validator validationGroup={"frmPriceDiffInv"}>
                                                     <RequiredRule message={this.t("validRefNo")} />
                                                 </Validator> 
                                             </NdTextBox>
@@ -824,7 +824,7 @@ export default class salesInvoice extends React.Component
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmRebateInv"}>
+                                        <Validator validationGroup={"frmPriceDiffInv"}>
                                             <RequiredRule message={this.t("validDepot")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -911,7 +911,7 @@ export default class salesInvoice extends React.Component
                                     param={this.param.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmRebateInv"}>
+                                        <Validator validationGroup={"frmPriceDiffInv"}>
                                             <RequiredRule message={this.t("validCustomerCode")} />
                                         </Validator>  
                                     </NdTextBox>
@@ -979,7 +979,7 @@ export default class salesInvoice extends React.Component
                                             this.docObj.docCustomer.dt()[0].DOC_DATE = moment(this.dtDocDate.value).format("DD/MM/YYYY") 
                                     }).bind(this)}
                                     >
-                                        <Validator validationGroup={"frmRebateInv"}>
+                                        <Validator validationGroup={"frmPriceDiffInv"}>
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
@@ -999,7 +999,7 @@ export default class salesInvoice extends React.Component
                             }}>
                                 <Item location="after">
                                     <Button icon="add"
-                                    validationGroup="frmRebateInv"
+                                    validationGroup="frmPriceDiffInv"
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -1164,7 +1164,7 @@ export default class salesInvoice extends React.Component
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={4} parent={this} id="frmRebateInv">
+                            <Form colCount={4} parent={this} id="frmPriceDiffInv">
                                 {/* Ara Toplam */}
                                 <Item colSpan={3}></Item>
                                 <Item  >
@@ -1606,7 +1606,7 @@ export default class salesInvoice extends React.Component
                                     param={this.param.filter({ELEMENT:'cmbCashSafe',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbCashSafe',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmCash"}>
+                                        <Validator validationGroup={"frmDiffCash"}>
                                             <RequiredRule message={this.t("ValidCash")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -1619,7 +1619,7 @@ export default class salesInvoice extends React.Component
                                         param={this.param.filter({ELEMENT:'numCash',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'numCash',USERS:this.user.CODE})}
                                         >
-                                        <Validator validationGroup={"frmCash"}>
+                                        <Validator validationGroup={"frmDiffCash"}>
                                             <RequiredRule message={this.t("ValidCash")} />
                                         </Validator>  
                                         </NdNumberBox>
@@ -1640,7 +1640,7 @@ export default class salesInvoice extends React.Component
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.t("popCash.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                            validationGroup="frmCash"
+                                            validationGroup="frmDiffCash"
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
@@ -1692,7 +1692,7 @@ export default class salesInvoice extends React.Component
                                     param={this.param.filter({ELEMENT:'cmbCheckSafe',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbCheckSafe',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmCheck"}>
+                                        <Validator validationGroup={"frmDiffCheck"}>
                                             <RequiredRule message={this.t("ValidCash")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -1716,7 +1716,7 @@ export default class salesInvoice extends React.Component
                                         param={this.param.filter({ELEMENT:'numcheck',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'numcheck',USERS:this.user.CODE})}
                                         >
-                                        <Validator validationGroup={"frmCheck"}>
+                                        <Validator validationGroup={"frmDiffCheck"}>
                                             <RequiredRule message={this.t("ValidCash")} />
                                         </Validator>  
                                         </NdNumberBox>
@@ -1737,7 +1737,7 @@ export default class salesInvoice extends React.Component
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.t("popCheck.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                            validationGroup="frmCheck"
+                                            validationGroup="frmDiffCheck"
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
@@ -1788,7 +1788,7 @@ export default class salesInvoice extends React.Component
                                     param={this.param.filter({ELEMENT:'cmbBank',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbBank',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmBank"}>
+                                        <Validator validationGroup={"frmDiffBank"}>
                                             <RequiredRule message={this.t("validBank")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -1801,7 +1801,7 @@ export default class salesInvoice extends React.Component
                                         param={this.param.filter({ELEMENT:'numBank',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'numBank',USERS:this.user.CODE})}
                                         >
-                                        <Validator validationGroup={"frmBank"}>
+                                        <Validator validationGroup={"frmDiffBank"}>
                                             <RequiredRule message={this.t("ValidCash")} />
                                         </Validator>  
                                         </NdNumberBox>
@@ -1822,7 +1822,7 @@ export default class salesInvoice extends React.Component
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.t("popBank.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                            validationGroup="frmCheck"
+                                            validationGroup="frmDiffCheck"
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")

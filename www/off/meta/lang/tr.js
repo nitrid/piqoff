@@ -3,6 +3,7 @@ export const langTr =
     popGrid: {btnSelection:"Seç",btnSearch:"Listele"},
     btnSave: "Kaydet",
     btnCancel: "İptal",
+    btnPrint :"Yazdır",
     menu:
     {
         stk: "Stok",                
@@ -2762,6 +2763,12 @@ export const langTr =
             clmAmount : "Tutar",
             clmTotal : "Toplam",
             clmInputName : "Depo",
+        },
+        popDesign : 
+        {
+            title: "Evrak İndirimi",
+            design : "Dizayn seçimi",
+            lang : "Evrak Dili"
         },
 
     },

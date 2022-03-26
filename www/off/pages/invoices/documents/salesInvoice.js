@@ -42,7 +42,7 @@ export default class salesInvoice extends React.Component
         this._calculateMargin = this._calculateMargin.bind(this)
         this._addPayment = this._addPayment.bind(this)
 
-        this.frmDocItems = undefined;
+        this.frmSalesInv = undefined;
         this.docLocked = false;        
 
         this.rightItems = [{ text: this.t("getDispatch"), },{ text: this.t("getPayment"), }]
@@ -128,7 +128,7 @@ export default class salesInvoice extends React.Component
         this.txtRefno.readOnly = false
         this.docLocked = false
         
-        this.frmDocItems.option('disabled',false)
+        this.frmSalesInv.option('disabled',false)
         await this.grdSlsInv.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
         await this.grdInvoicePayment.dataRefresh({source:this.paymentObj.docCustomer.dt()});
     }
@@ -154,12 +154,12 @@ export default class salesInvoice extends React.Component
             }
 
             await dialog(tmpConfObj);
-            this.frmDocItems.option('disabled',true)
+            this.frmSalesInv.option('disabled',true)
         }
         else
         {
             this.docLocked = false
-            this.frmDocItems.option('disabled',false)
+            this.frmSalesInv.option('disabled',false)
         }
         this._getPayment(this.docObj.dt()[0].GUID)
     }
@@ -1011,7 +1011,7 @@ export default class salesInvoice extends React.Component
                         <div className="col-12">
                             <Form colCount={1} onInitialized={(e)=>
                             {
-                                this.frmDocItems = e.component
+                                this.frmSalesInv = e.component
                             }}>
                                 <Item location="after">
                                     <Button icon="add"
@@ -1424,7 +1424,7 @@ export default class salesInvoice extends React.Component
                                                 if(this.txtPassword.value == '1234')
                                                 {
                                                     this.docObj.dt()[0].LOCKED = 0
-                                                    this.frmDocItems.option('disabled',false)
+                                                    this.frmSalesInv.option('disabled',false)
                                                     this.docLocked = false
                                                     let tmpConfObj =
                                                     {
@@ -1641,7 +1641,7 @@ export default class salesInvoice extends React.Component
                                     param={this.param.filter({ELEMENT:'cmbCashSafe',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbCashSafe',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmCash"}>
+                                        <Validator validationGroup={"frmSlsInvCash"}>
                                             <RequiredRule message={this.t("ValidCash")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -1654,7 +1654,7 @@ export default class salesInvoice extends React.Component
                                         param={this.param.filter({ELEMENT:'numCash',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'numCash',USERS:this.user.CODE})}
                                         >
-                                        <Validator validationGroup={"frmCash"}>
+                                        <Validator validationGroup={"frmSlsInvCash"}>
                                             <RequiredRule message={this.t("ValidCash")} />
                                         </Validator>  
                                         </NdNumberBox>
@@ -1675,7 +1675,7 @@ export default class salesInvoice extends React.Component
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.t("popCash.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                            validationGroup="frmCash"
+                                            validationGroup="frmSlsInvCash"
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
@@ -1727,7 +1727,7 @@ export default class salesInvoice extends React.Component
                                     param={this.param.filter({ELEMENT:'cmbCheckSafe',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbCheckSafe',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmCheck"}>
+                                        <Validator validationGroup={"frmSlsInvCheck"}>
                                             <RequiredRule message={this.t("ValidCash")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -1751,7 +1751,7 @@ export default class salesInvoice extends React.Component
                                         param={this.param.filter({ELEMENT:'numcheck',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'numcheck',USERS:this.user.CODE})}
                                         >
-                                        <Validator validationGroup={"frmCheck"}>
+                                        <Validator validationGroup={"frmSlsInvCheck"}>
                                             <RequiredRule message={this.t("ValidCash")} />
                                         </Validator>  
                                         </NdNumberBox>
@@ -1772,7 +1772,7 @@ export default class salesInvoice extends React.Component
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.t("popCheck.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                            validationGroup="frmCheck"
+                                            validationGroup="frmSlsInvCheck"
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
@@ -1823,7 +1823,7 @@ export default class salesInvoice extends React.Component
                                     param={this.param.filter({ELEMENT:'cmbBank',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbBank',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmBank"}>
+                                        <Validator validationGroup={"frmslsInvBank"}>
                                             <RequiredRule message={this.t("validBank")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -1836,7 +1836,7 @@ export default class salesInvoice extends React.Component
                                         param={this.param.filter({ELEMENT:'numBank',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'numBank',USERS:this.user.CODE})}
                                         >
-                                        <Validator validationGroup={"frmBank"}>
+                                        <Validator validationGroup={"frmslsInvBank"}>
                                             <RequiredRule message={this.t("ValidCash")} />
                                         </Validator>  
                                         </NdNumberBox>
@@ -1857,7 +1857,7 @@ export default class salesInvoice extends React.Component
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.t("popBank.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                            validationGroup="frmCheck"
+                                            validationGroup="frmSlsInvCheck"
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")

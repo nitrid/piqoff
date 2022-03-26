@@ -83,7 +83,7 @@ export default class promotionCard extends React.Component
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmContract"
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmPurcContract"
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -211,7 +211,7 @@ export default class promotionCard extends React.Component
                                     param={this.param.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmContract"}>
+                                        <Validator validationGroup={"frmPurcContract"}>
                                             <RequiredRule message={this.t("validCustomerCode")} />
                                         </Validator>  
                                     </NdTextBox>
@@ -297,11 +297,11 @@ export default class promotionCard extends React.Component
                         <div className="col-12">
                             <Form colCount={1} onInitialized={(e)=>
                             {
-                                this.frmContract = e.component
+                                this.frmPurcContract = e.component
                             }}>
                                 <Item location="after">
                                     <Button icon="add"
-                                    validationGroup="frmContract"
+                                    validationGroup="frmPurcContract"
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -420,7 +420,7 @@ export default class promotionCard extends React.Component
                                             },
                                         ]
                                     }>       
-                                    <Validator validationGroup={"frmItems"}>
+                                    <Validator validationGroup={"frmPurcContItems"}>
                                             <RequiredRule message={this.t("validItemsCode")} />
                                     </Validator>                                 
                                     </NdTextBox>
@@ -433,7 +433,7 @@ export default class promotionCard extends React.Component
                                 <Item>
                                     <Label text={this.t("popItems.txtPopItemsPrice")} alignment="right" />
                                     <NdTextBox id={"txtPopItemsPrice"} parent={this} simple={true} >
-                                        <Validator validationGroup={"frmItems"}>
+                                        <Validator validationGroup={"frmPurcContItems"}>
                                                 <RequiredRule message={this.t("validItemPrice")} />
                                         </Validator>
                                     </NdTextBox>
@@ -453,7 +453,7 @@ export default class promotionCard extends React.Component
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} validationGroup="frmItems"
+                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} validationGroup="frmPurcContItems"
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
