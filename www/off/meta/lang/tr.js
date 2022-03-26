@@ -2844,7 +2844,8 @@ export const langTr =
             clmAmount : "Tutar",
             clmTotal : "Genel Toplam",
             clmCreateDate: "Kayıt Tarihi",
-            clmMargin :"Marj"
+            clmMargin :"Marj",
+            clmMulticode :"T. Kodu"
 
         },
         popDiscount : 

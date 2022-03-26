@@ -734,6 +734,7 @@ export class docOrdersCls
             DISCOUNT_RATE : 0,
             COST_PRICE : 0,
             MARGIN : 0,
+            MULTICODE : '',
         }
 
         this._initDs();

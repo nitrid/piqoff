@@ -323,6 +323,7 @@ export default class salesInvoice extends React.Component
         this.docObj.docOrders.dt()[pIndex].ITEM_NAME = pData.NAME
         this.docObj.docOrders.dt()[pIndex].DISCOUNT = 0
         this.docObj.docOrders.dt()[pIndex].DISCOUNT_RATE = 0
+        this.docObj.docOrders.dt()[pIndex].MULTICODE = tmpCheckData.result.recordset[0].MULTICODE
         let tmpQuery = 
         {
             query :"SELECT CUSTOMER_PRICE AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
@@ -927,6 +928,7 @@ export default class salesInvoice extends React.Component
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcOrders.clmCreateDate")} width={200} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdPurcOrders.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="MULTICODE" caption={this.t("grdPurcOrders.clmMulticode")} width={150}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdPurcOrders.clmItemName")} width={400} />
                                         <Column dataField="PRICE" caption={this.t("grdPurcOrders.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                         <Column dataField="QUANTITY" caption={this.t("grdPurcOrders.clmQuantity")} dataType={'number'}/>
