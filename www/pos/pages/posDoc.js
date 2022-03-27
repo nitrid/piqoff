@@ -49,7 +49,10 @@ export default class posDoc extends React.Component
             totalSub:0,
             totalVat:0,
             totalDiscount:0,
-            totalGrand:0
+            totalGrand:0,
+            payTotal:0,
+            payChange:0,
+            payRest:0
         }      
         document.onkeydown = (e) =>
         {
@@ -87,6 +90,22 @@ export default class posDoc extends React.Component
         this.posObj.addEmpty()
 
         await this.grdList.dataRefresh({source:this.posObj.posSale.dt()});
+        await this.grdPay.dataRefresh({source:this.posObj.posPay.dt()});
+    }
+    getItemDb(pCode)
+    {
+        return new Promise(async resolve => 
+        {
+            let tmpDt = new datatable(); 
+            tmpDt.selectCmd = 
+            {
+                query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE CODE = @CODE OR BARCODE = @CODE OR MULTICODE = @CODE",
+                param : ['CODE:string|25']
+            }
+            tmpDt.selectCmd.value = [pCode]
+            await tmpDt.refresh();
+            resolve(tmpDt)
+        });
     }
     async getItem(pCode)
     {
@@ -177,14 +196,7 @@ export default class posDoc extends React.Component
         //#BAK
         //******************************************************** */
         //ÜRÜN GETİRME
-        let tmpItemsDt = new datatable(); 
-        tmpItemsDt.selectCmd = 
-        {
-            query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE CODE = @CODE OR BARCODE = @CODE OR MULTICODE = @CODE",
-            param : ['CODE:string|25']
-        }
-        tmpItemsDt.selectCmd.value = [pCode]
-        await tmpItemsDt.refresh();
+        let tmpItemsDt = await this.getItemDb(pCode)
         if(tmpItemsDt.length > 0)
         {            
             //FIYAT GETİRME
@@ -266,7 +278,32 @@ export default class posDoc extends React.Component
                 }
             }
             //**************************************************** */
-            this.saleRowAdd(tmpItemsDt[0],tmpQuantity,tmpPrice)
+            //FİYAT TANIMSIZ YADA SIFIR İSE
+            //**************************************************** */
+            if(tmpPrice == 0)
+            {
+                let tmpConfObj =
+                {
+                    id:'msgAlert',
+                    showTitle:true,
+                    title:"Uyarı",
+                    showCloseButton:true,
+                    width:'500px',
+                    height:'200px',
+                    button:[{id:"btn01",caption:"Evet",location:'before'},{id:"btn02",caption:"Hayır",location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Ürünün fiyat bilgisi tanımsız ! Devam etmek istermisiniz ?"}</div>)
+                }
+                let tmpMsgResult = await dialog(tmpConfObj);
+                if(tmpMsgResult == 'btn02')
+                {
+                    this.txtBarcode.value = ""
+                    return
+                }
+            }
+            //**************************************************** */
+            tmpItemsDt[0].QUANTITY = tmpQuantity
+            tmpItemsDt[0].PRICE = tmpPrice
+            this.saleAdd(tmpItemsDt[0])
             this.txtBarcode.value = ""
         }
         else
@@ -288,93 +325,142 @@ export default class posDoc extends React.Component
         }
         //******************************************************** */        
     }
-    async saleRowAdd(pItemData,pQuantity,pPrice)
+    async saleAdd(pItemData)
     {
-        let tmpQuantity = Number(parseFloat(pQuantity * pItemData.UNIT_FACTOR).toFixed(3))
-        let tmpAmount = Number(parseFloat(pPrice * tmpQuantity).toFixed(2))
-        let tmpVat = Number(parseFloat(tmpAmount *  Number(parseFloat(pItemData.VAT / 100).toFixed(3))).toFixed(2))
-        let tmpTotal = Number(parseFloat(tmpAmount + tmpVat).toFixed(2))
-
-        let tmpControl = this.posObj.posSale.dt().where({ITEM_GUID:pItemData.GUID})
-        
-        if(tmpControl.length > 0)
+        let tmpRowData = this.isRowMerge('SALE',pItemData)
+        //SATIR BİRLEŞTİR        
+        if(typeof tmpRowData != 'undefined')
         {
-            await this.saleRowUpdate(tmpControl[0],pItemData,pQuantity,pPrice)
+            pItemData.QUANTITY = Number(parseFloat((pItemData.QUANTITY * pItemData.UNIT_FACTOR) + tmpRowData.QUANTITY).toFixed(3))
+            this.saleRowUpdate(tmpRowData,pItemData)
         }
         else
         {
-            this.posObj.posSale.addEmpty()
-            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
-            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].SAFE = ''
-            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DEPOT_GUID = '00000000-0000-0000-0000-000000000000'
-            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DEPOT_CODE = ''
-            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DEPOT_NAME = ''
-            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].TYPE = 0
-            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].CUSTOMER_GUID = this.posObj.dt()[0].CUSTOMER_GUID
-            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].CUSTOMER_CODE = this.posObj.dt()[0].CUSTOMER_CODE
-            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].CUSTOMER_NAME = this.posObj.dt()[0].CUSTOMER_NAME
-            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].LINE_NO = this.posObj.posSale.dt().length
-            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ITEM_GUID = pItemData.GUID
-            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ITEM_CODE = pItemData.CODE
-            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ITEM_NAME = pItemData.NAME
-            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].BARCODE_GUID = pItemData.BARCODE_GUID
-            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_GUID = '00000000-0000-0000-0000-000000000000'
-            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_NAME = pItemData.UNIT_NAME
-            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_FACTOR = pItemData.UNIT_FACTOR
-            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].QUANTITY = tmpQuantity
-            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].PRICE = pPrice
-            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].AMOUNT = tmpAmount
-            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DISCOUNT = 0
-            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].LOYALTY = 0
-            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].VAT = tmpVat
-            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].TOTAL = tmpTotal
-            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].SUBTOTAL = 0
-            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_AMOUNT = 0
-            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_DISCOUNT = 0
-            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_LOYALTY = 0
-            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_VAT = 0
-            this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_TOTAL = 0
+            pItemData.QUANTITY = Number(parseFloat(pItemData.QUANTITY * pItemData.UNIT_FACTOR).toFixed(3))
+            this.saleRowAdd(pItemData)
         }
+    }
+    saleRowAdd(pItemData)
+    {           
+        pItemData.AMOUNT = Number(parseFloat(pItemData.PRICE * pItemData.QUANTITY).toFixed(2))
+        pItemData.VAT_AMOUNT = Number(parseFloat(pItemData.AMOUNT *  Number(parseFloat(pItemData.VAT / 100).toFixed(3))).toFixed(2))
+        pItemData.TOTAL = Number(parseFloat(pItemData.AMOUNT + pItemData.VAT_AMOUNT).toFixed(2))
 
-        this.posObj.dt()[this.posObj.dt().length - 1].SAFE = ''
-        this.posObj.dt()[this.posObj.dt().length - 1].DEPOT_GUID = '00000000-0000-0000-0000-000000000000'
-        this.posObj.dt()[this.posObj.dt().length - 1].DEPOT_CODE = ''
-        this.posObj.dt()[this.posObj.dt().length - 1].DEPOT_NAME = ''
-        this.posObj.dt()[this.posObj.dt().length - 1].TYPE = 0
-        this.posObj.dt()[this.posObj.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.posSale.dt().sum('AMOUNT',2)).toFixed(2))
-        this.posObj.dt()[this.posObj.dt().length - 1].DISCOUNT = 0
-        this.posObj.dt()[this.posObj.dt().length - 1].LOYALTY = 0
-        this.posObj.dt()[this.posObj.dt().length - 1].VAT = Number(parseFloat(this.posObj.posSale.dt().sum('VAT',2)).toFixed(2))
-        this.posObj.dt()[this.posObj.dt().length - 1].TOTAL = Number(parseFloat(this.posObj.posSale.dt().sum('TOTAL',2)).toFixed(2))
+        this.posObj.posSale.addEmpty()
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].SAFE = ''
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DEPOT_GUID = '00000000-0000-0000-0000-000000000000'
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DEPOT_CODE = ''
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DEPOT_NAME = ''
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].TYPE = 0
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].CUSTOMER_GUID = this.posObj.dt()[0].CUSTOMER_GUID
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].CUSTOMER_CODE = this.posObj.dt()[0].CUSTOMER_CODE
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].CUSTOMER_NAME = this.posObj.dt()[0].CUSTOMER_NAME
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].LINE_NO = this.posObj.posSale.dt().length
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ITEM_GUID = pItemData.GUID
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ITEM_CODE = pItemData.CODE
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ITEM_NAME = pItemData.NAME
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].BARCODE_GUID = pItemData.BARCODE_GUID
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].BARCODE = pItemData.BARCODE
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_GUID = '00000000-0000-0000-0000-000000000000'
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_NAME = pItemData.UNIT_NAME
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_FACTOR = pItemData.UNIT_FACTOR
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].QUANTITY = pItemData.QUANTITY
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].PRICE = pItemData.PRICE
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].AMOUNT = pItemData.AMOUNT
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DISCOUNT = 0
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].LOYALTY = 0
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].VAT = pItemData.VAT_AMOUNT
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].TOTAL = pItemData.TOTAL
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].SUBTOTAL = 0
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_AMOUNT = 0
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_DISCOUNT = 0
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_LOYALTY = 0
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_VAT = 0
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_TOTAL = 0
 
         this.calGrandTotal();
     }
-    saleRowUpdate(pData,pItemData,pQuantity,pPrice)
+    saleRowUpdate(pRowData,pItemData)
     {
-        let tmpQuantity = Number((parseFloat(pQuantity * pItemData.UNIT_FACTOR) + pData.QUANTITY).toFixed(3))
-        let tmpAmount = Number((parseFloat(pPrice * tmpQuantity) + pData.AMOUNT).toFixed(2))
-        let tmpVat = Number(parseFloat(tmpAmount *  Number(parseFloat(pItemData.VAT / 100).toFixed(3))).toFixed(2))
-        let tmpTotal = Number(parseFloat(tmpAmount + tmpVat).toFixed(2))
+        pItemData.AMOUNT = Number(parseFloat(pItemData.PRICE * pItemData.QUANTITY).toFixed(2))
+        pItemData.VAT_AMOUNT = Number(parseFloat(pItemData.AMOUNT *  Number(parseFloat(pItemData.VAT / 100).toFixed(3))).toFixed(2))
+        pItemData.TOTAL = Number(parseFloat(pItemData.AMOUNT + pItemData.VAT_AMOUNT).toFixed(2))
+        
+        pRowData.QUANTITY = pItemData.QUANTITY
+        pRowData.PRICE = pItemData.PRICE
+        pRowData.AMOUNT = pItemData.AMOUNT
+        pRowData.VAT = pItemData.VAT_AMOUNT
+        pRowData.TOTAL = pItemData.TOTAL
 
-        pData.QUANTITY = tmpQuantity
-        pData.AMOUNT = tmpAmount
-        pData.VAT = tmpVat
-        pData.TOTAL = tmpTotal
+        this.calGrandTotal();
+    }
+    payAdd(pType,pAmount)
+    {
+        let tmpRowData = this.isRowMerge('PAY',{TYPE:pType})
+        //SATIR BİRLEŞTİR        
+        if(typeof tmpRowData != 'undefined')
+        {
+            this.payRowUpdate(tmpRowData,{AMOUNT:Number(parseFloat(Number(pAmount) + tmpRowData.AMOUNT).toFixed(2)),CHANGE:0})
+        }
+        else
+        {
+            this.payRowAdd({PAY_TYPE:pType,AMOUNT:pAmount,CHANGE:0})
+        }
+    }
+    payRowAdd(pPayData)
+    {
+        let tmpTypeName = ""
+        if(pPayData.PAY_TYPE == 0)
+            tmpTypeName = "ESC"
+        else if(pPayData.PAY_TYPE == 1)
+            tmpTypeName = "CB"
+        else if(pPayData.PAY_TYPE == 2)
+            tmpTypeName = "CHQ"
+        
+        this.posObj.posPay.addEmpty()
+        this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
+        this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE = pPayData.PAY_TYPE
+        this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE_NAME = tmpTypeName
+        this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].LINE_NO = this.posObj.posPay.dt().length
+        this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = Number(parseFloat(pPayData.AMOUNT).toFixed(2))
+        this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].CHANGE = pPayData.CHANGE
+
+        this.calGrandTotal();
+    }
+    payRowUpdate(pRowData,pPayData)
+    {
+        pRowData.AMOUNT = pPayData.AMOUNT
+        pRowData.CHANGE = pPayData.CHANGE
+
+        this.calGrandTotal();
     }
     calGrandTotal()
     {
-        this.setState(
-            {
-                totalRowCount:this.posObj.posSale.dt().length,
-                totalItemCount:this.posObj.posSale.dt().sum('QUANTITY',2),
-                totalLoyalty:this.posObj.dt()[0].LOYALTY,
-                totalTicRest:0,
-                totalSub:this.posObj.dt()[0].AMOUNT,
-                totalVat:this.posObj.dt()[0].VAT,
-                totalDiscount:this.posObj.dt()[0].DISCOUNT,
-                totalGrand:this.posObj.dt()[0].TOTAL
-            }
-        )
+        if(this.posObj.dt().length > 0)
+        {
+            this.posObj.dt()[this.posObj.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.posSale.dt().sum('AMOUNT',2)).toFixed(2))
+            this.posObj.dt()[this.posObj.dt().length - 1].DISCOUNT = 0
+            this.posObj.dt()[this.posObj.dt().length - 1].LOYALTY = 0
+            this.posObj.dt()[this.posObj.dt().length - 1].VAT = Number(parseFloat(this.posObj.posSale.dt().sum('VAT',2)).toFixed(2))
+            this.posObj.dt()[this.posObj.dt().length - 1].TOTAL = Number(parseFloat(this.posObj.posSale.dt().sum('TOTAL',2)).toFixed(2))
+            
+            this.setState(
+                {
+                    totalRowCount:this.posObj.posSale.dt().length,
+                    totalItemCount:this.posObj.posSale.dt().sum('QUANTITY',2),
+                    totalLoyalty:this.posObj.dt()[0].LOYALTY,
+                    totalTicRest:0,
+                    totalSub:this.posObj.dt()[0].AMOUNT,
+                    totalVat:this.posObj.dt()[0].VAT,
+                    totalDiscount:this.posObj.dt()[0].DISCOUNT,
+                    totalGrand:this.posObj.dt()[0].TOTAL,
+                    payTotal:this.posObj.posPay.dt().sum('AMOUNT',2),
+                    payChange:(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) >= 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2)) * -1,
+                    payRest:(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2))
+                }
+            )
+        }        
     }
     getWeighing()
     {
@@ -410,7 +496,6 @@ export default class posDoc extends React.Component
                 resolve()
             }
         });
-        
     }
     getBarPattern(pBarcode)
     {
@@ -441,6 +526,31 @@ export default class posDoc extends React.Component
         }
 
         return {barcode : pBarcode}
+    }
+    isRowMerge(pType,pData)
+    {
+        if(pType == 'SALE')
+        {
+            let tmpData = this.posObj.posSale.dt().where({ITEM_GUID:pData.GUID})
+            //BURAYA SUBTOTAL KONTROLÜ DE EKLENECEK
+            if(tmpData.length > 0)
+            {
+                if(pData.SALE_JOIN_LINE == 1 && pData.WEIGHING == 0)
+                {
+                    return tmpData[0]
+                }
+            }
+        }
+        else if(pType == "PAY")
+        {
+            let tmpData = this.posObj.posPay.dt().where({TYPE:pData.TYPE})
+            if(tmpData.length > 0)
+            {
+                return tmpData[0]
+            }
+        }
+
+        return
     }
     render()
     {
@@ -580,6 +690,7 @@ export default class posDoc extends React.Component
                                 height={"156px"} 
                                 width={"100%"}
                                 dbApply={false}
+                                selection={{mode:"single"}}
                                 onRowPrepared=
                                 {
                                     (e)=>
@@ -598,6 +709,43 @@ export default class posDoc extends React.Component
                                         e.cellElement.style.padding = "4px"
                                     }
                                 }
+                                onCellClick={async (e)=>
+                                {
+                                    if(e.column.dataField == "QUANTITY")
+                                    {
+                                        if(this.prmObj.filter({ID:'QuantityEdit',TYPE:0}).getValue() == true)
+                                        {
+                                            let tmpResult = await this.popNumber.show('Miktar',e.value)
+                                            if(typeof tmpResult != 'undefined' && tmpResult != '')
+                                            {
+                                                let tmpDt = await this.getItemDb(e.key.ITEM_CODE)
+                                                if(tmpDt.length > 0)
+                                                {
+                                                    tmpDt[0].QUANTITY = tmpResult
+                                                    tmpDt[0].PRICE = e.key.PRICE
+                                                    this.saleRowUpdate(e.key,tmpDt[0])
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if(e.column.dataField == "PRICE")
+                                    {
+                                        if(this.prmObj.filter({ID:'PriceEdit',TYPE:0}).getValue() == true)
+                                        {
+                                            let tmpResult = await this.popNumber.show('Fiyat',e.value)
+                                            if(typeof tmpResult != 'undefined' && tmpResult != '')
+                                            {
+                                                let tmpDt = await this.getItemDb(e.key.ITEM_CODE)
+                                                if(tmpDt.length > 0)
+                                                {
+                                                    tmpDt[0].QUANTITY = e.key.QUANTITY
+                                                    tmpDt[0].PRICE = tmpResult
+                                                    this.saleRowUpdate(e.key,tmpDt[0])
+                                                }
+                                            }
+                                        }
+                                    }
+                                }}
                                 >
                                     <Column dataField="LINE_NO" caption={"NO"} width={40} alignment={"center"} defaultSortOrder="desc"/>
                                     <Column dataField="ITEM_NAME" caption={"ADI"} width={350} />
@@ -660,8 +808,22 @@ export default class posDoc extends React.Component
                                     {/* Total */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnTotal"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
-                                        onClick={()=>
-                                        {                                                        
+                                        onClick={async ()=>
+                                        {
+                                            if(this.posObj.posSale.dt().length == 0)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgAlert',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Satış işlemi yapmadan tahsilat giremezsiniz !"}</div>)
+                                                }
+                                                let tmpMsgResult = await dialog(tmpConfObj);
+                                                if(tmpMsgResult == 'btn01')
+                                                {
+                                                    return
+                                                }
+                                            }
                                             this.popTotal.show();
                                         }}>
                                             <i className="text-white fa-solid fa-euro-sign" style={{fontSize: "24px"}} />
@@ -1080,13 +1242,13 @@ export default class posDoc extends React.Component
                                 {/* Top Total Indicator */}
                                 <div className="row">
                                     <div className="col-4">
-                                        <p className="text-primary text-start m-0">Toplam : <span className="text-dark">12.94€</span></p>    
+                                        <p className="text-primary text-start m-0">Toplam : <span className="text-dark">{parseFloat(this.state.totalGrand).toFixed(2)} €</span></p>    
                                     </div>
                                     <div className="col-4">
-                                        <p className="text-primary text-start m-0">Kalan : <span className="text-dark">12.94€</span></p>    
+                                        <p className="text-primary text-start m-0">Kalan : <span className="text-dark">{parseFloat(this.state.payRest).toFixed(2)} €</span></p>    
                                     </div>
                                     <div className="col-4">
-                                        <p className="text-primary text-start m-0">Para Üstü : <span className="text-dark">12.94€</span></p>    
+                                        <p className="text-primary text-start m-0">Para Üstü : <span className="text-dark">{parseFloat(this.state.payChange).toFixed(2)}€</span></p>    
                                     </div>
                                 </div>
                                 <div className="row pt-2">
@@ -1109,7 +1271,6 @@ export default class posDoc extends React.Component
                                                 height={"138px"} 
                                                 width={"100%"}
                                                 dbApply={false}
-                                                data={{source:[{TYPE_NAME:"ESC",AMOUNT:100.99}]}}
                                                 onRowPrepared=
                                                 {
                                                     (e)=>
@@ -1119,8 +1280,8 @@ export default class posDoc extends React.Component
                                                     }
                                                 }
                                                 >
-                                                    <Column dataField="TYPE_NAME" caption={"NO"} width={100} alignment={"center"}/>
-                                                    <Column dataField="AMOUNT" caption={"TUTAR"} width={40}/>                                                
+                                                    <Column dataField="PAY_TYPE_NAME" width={100} alignment={"center"}/>
+                                                    <Column dataField="AMOUNT" width={40}/>                                                
                                                 </NdGrid>
                                             </div>
                                         </div>
@@ -1228,7 +1389,11 @@ export default class posDoc extends React.Component
                                         <div className="row py-1">
                                             {/* Okey */}
                                             <div className="col-6">
-                                                <NbButton id={"btnPopTotalOkey"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}>
+                                                <NbButton id={"btnPopTotalOkey"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
+                                                onClick={()=>
+                                                {
+                                                    this.payAdd(0,this.txtPopTotal.value);
+                                                }}>
                                                     <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
                                                 </NbButton>
                                             </div>
