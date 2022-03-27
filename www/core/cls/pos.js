@@ -29,7 +29,7 @@ export class posCls
         }
 
         this.posSale = new posSaleCls();
-        this.posPayment = new posPaymentCls();
+        this.posPay = new posPaymentCls();
 
         this._initDs();
     }
@@ -94,7 +94,7 @@ export class posCls
 
         this.ds.add(tmpDt);
         this.ds.add(this.posSale.dt('POS_SALE'))
-        this.ds.add(this.posPayment.dt('POS_PAYMENT'))
+        this.ds.add(this.posPay.dt('POS_PAYMENT'))
     }
     //#endregion
     dt()
@@ -149,7 +149,7 @@ export class posCls
             if(this.ds.get('POS').length > 0)
             {
                 await this.posSale.load({POS_GUID:this.ds.get('POS')[0].GUID})
-                await this.posPayment.load({POS_GUID:this.ds.get('POS')[0].GUID,TYPE:0})
+                await this.posPay.load({POS_GUID:this.ds.get('POS')[0].GUID,TYPE:0})
             }
             resolve(this.ds.get('POS'));    
         });
@@ -362,6 +362,7 @@ export class posPaymentCls
             CUSTOMER_CODE : '',
             CUSTOMER_NAME : '',
             PAY_TYPE : 0,
+            PAY_TYPE_NAME : '',
             LINE_NO : 0,
             AMOUNT : 0,
             CHANGE : 0,
