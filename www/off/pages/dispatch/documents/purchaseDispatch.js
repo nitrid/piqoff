@@ -381,7 +381,7 @@ export default class salesInvoice extends React.Component
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmSalesInv"
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmPurcDispatch"
                                     onClick={async (e)=>
                                     {
                                         if(this.docLocked == true)
@@ -532,7 +532,7 @@ export default class salesInvoice extends React.Component
                     {/* Form */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id="frmSalesInv">
+                            <Form colCount={3} id="frmPurcDispatch">
                                 {/* txtRef-Refno */}
                                 <Item>
                                     <Label text={this.t("txtRefRefno")} alignment="right" />
@@ -559,7 +559,7 @@ export default class salesInvoice extends React.Component
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmSalesInv"}>
+                                            <Validator validationGroup={"frmPurcDispatch"}>
                                                     <RequiredRule message={this.t("validRef")} />
                                                 </Validator>  
                                             </NdTextBox>
@@ -607,7 +607,7 @@ export default class salesInvoice extends React.Component
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmSalesInv"}>
+                                            <Validator validationGroup={"frmPurcDispatch"}>
                                                     <RequiredRule message={this.t("validRefNo")} />
                                                 </Validator> 
                                             </NdTextBox>
@@ -661,7 +661,7 @@ export default class salesInvoice extends React.Component
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmSalesInv"}>
+                                        <Validator validationGroup={"frmPurcDispatch"}>
                                             <RequiredRule message={this.t("validDepot")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -745,7 +745,7 @@ export default class salesInvoice extends React.Component
                                     param={this.param.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmSalesInv"}>
+                                        <Validator validationGroup={"frmPurcDispatch"}>
                                             <RequiredRule message={this.t("validCustomerCode")} />
                                         </Validator>  
                                     </NdTextBox>
@@ -812,7 +812,7 @@ export default class salesInvoice extends React.Component
                                         {
                                     }).bind(this)}
                                     >
-                                        <Validator validationGroup={"frmSalesInv"}>
+                                        <Validator validationGroup={"frmPurcDispatch"}>
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
@@ -826,7 +826,7 @@ export default class salesInvoice extends React.Component
                                     {
                                     }).bind(this)}
                                     >
-                                        <Validator validationGroup={"frmSalesInv"}>
+                                        <Validator validationGroup={"frmPurcDispatch"}>
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
@@ -845,7 +845,7 @@ export default class salesInvoice extends React.Component
                             }}>
                                 <Item location="after">
                                     <Button icon="add"
-                                    validationGroup="frmSalesInv"
+                                    validationGroup="frmPurcDispatch"
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -955,7 +955,7 @@ export default class salesInvoice extends React.Component
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={4} parent={this} id="frmSalesInv">
+                            <Form colCount={4} parent={this} id="frmPurcDispatch">
                                 {/* Ara Toplam */}
                                 <Item colSpan={3}></Item>
                                 <Item  >
