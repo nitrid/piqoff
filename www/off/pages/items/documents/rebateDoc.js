@@ -633,6 +633,33 @@ export default class salesInvoice extends React.Component
                             {
                                 this.frmDocItems = e.component
                             }}>
+                               
+                                 <Item>
+                                    <NdGrid parent={this} id={"grdRebItems"} 
+                                    showBorders={true} 
+                                    columnsAutoWidth={true} 
+                                    allowColumnReordering={true} 
+                                    allowColumnResizing={true} 
+                                    height={'100%'} 
+                                    width={'100%'}
+                                    dbApply={false}
+                                    onRowUpdated={async(e)=>{
+                                       
+                                    }}
+                                    onRowRemoved={(e)=>{
+
+                                    }}
+                                    >
+                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
+                                        <Scrolling mode="infinite" />
+                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdRebItems.clmCreateDate")} width={150} allowEditing={false}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdRebItems.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdRebItems.clmItemName")} width={350} />
+                                        <Column dataField="QUANTITY" caption={this.t("grdRebItems.clmQuantity")} dataType={'number'} width={150}/>
+                                        <Column dataField="DESCRIPTION" caption={this.t("grdRebItems.clmDescription")} />
+                                    </NdGrid>
+                                </Item>
                                 <Item location="after">
                                     <Button icon="add"
                                     validationGroup="frmSalesDis"
@@ -676,32 +703,6 @@ export default class salesInvoice extends React.Component
                                             await dialog(tmpConfObj);
                                         }
                                     }}/>
-                                </Item>
-                                 <Item>
-                                    <NdGrid parent={this} id={"grdRebItems"} 
-                                    showBorders={true} 
-                                    columnsAutoWidth={true} 
-                                    allowColumnReordering={true} 
-                                    allowColumnResizing={true} 
-                                    height={'100%'} 
-                                    width={'100%'}
-                                    dbApply={false}
-                                    onRowUpdated={async(e)=>{
-                                       
-                                    }}
-                                    onRowRemoved={(e)=>{
-
-                                    }}
-                                    >
-                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
-                                        <Scrolling mode="infinite" />
-                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdRebItems.clmCreateDate")} width={150} allowEditing={false}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdRebItems.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdRebItems.clmItemName")} width={350} />
-                                        <Column dataField="QUANTITY" caption={this.t("grdRebItems.clmQuantity")} dataType={'number'} width={150}/>
-                                        <Column dataField="DESCRIPTION" caption={this.t("grdRebItems.clmDescription")} />
-                                    </NdGrid>
                                 </Item>
                             </Form>
                         </div>

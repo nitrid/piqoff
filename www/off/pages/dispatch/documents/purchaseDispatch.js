@@ -286,12 +286,14 @@ export default class salesInvoice extends React.Component
             let tmpConfObj =
             {
                 id:'msgCustomerNotFound',showTitle:true,title:this.t("msgCustomerNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
-                button:[{id:"btn01",caption:this.t("msgCustomerNotFound.btn01"),location:'after'}],
+                button:[{id:"btn01",caption:this.t("msgCustomerNotFound.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCustomerNotFound.btn02"),location:'after'}],
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerNotFound.msg")}</div>)
             }
-
-            await dialog(tmpConfObj);
-            return
+            let pResult = await dialog(tmpConfObj);
+            if(pResult == 'btn02')
+            {
+                return
+            }
         }
         for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
         {
@@ -843,58 +845,14 @@ export default class salesInvoice extends React.Component
                             {
                                 this.frmDocItems = e.component
                             }}>
-                                <Item location="after">
-                                    <Button icon="add"
-                                    validationGroup="frmPurcDispatch"
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            
-                                            if(typeof this.docObj.docItems.dt()[0] != 'undefined')
-                                            {
-                                                if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
-                                                {
-                                                    return
-                                                }
-                                            }
-                                           
-                                            let tmpDocItems = {...this.docObj.docItems.empty}
-                                            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                                            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                                            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                            tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                                            tmpDocItems.REF = this.docObj.dt()[0].REF
-                                            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                                            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                                            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                            tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                                            this.txtRef.readOnly = true
-                                            this.txtRefno.readOnly = true
-                                            this.docObj.docItems.addEmpty(tmpDocItems)
-                                        }
-                                        else
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
-                                        }
-                                    }}/>
-                                </Item>
+                                
                                  <Item>
                                     <NdGrid parent={this} id={"grdPurcDispatch"} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
-                                    height={'100%'} 
+                                    height={'400'} 
                                     width={'100%'}
                                     dbApply={false}
                                     onRowUpdated={async(e)=>
@@ -957,7 +915,51 @@ export default class salesInvoice extends React.Component
                         <div className="col-12">
                             <Form colCount={4} parent={this} id="frmPurcDispatch">
                                 {/* Ara Toplam */}
-                                <Item colSpan={3}></Item>
+                                <Item location="after" colSpan={3}>
+                                    <Button icon="add"
+                                    validationGroup="frmPurcDispatch"
+                                    onClick={async (e)=>
+                                    {
+                                        if(e.validationGroup.validate().status == "valid")
+                                        {
+                                            
+                                            if(typeof this.docObj.docItems.dt()[0] != 'undefined')
+                                            {
+                                                if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
+                                                {
+                                                    return
+                                                }
+                                            }
+                                           
+                                            let tmpDocItems = {...this.docObj.docItems.empty}
+                                            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                                            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                                            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                            tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                                            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                                            tmpDocItems.REF = this.docObj.dt()[0].REF
+                                            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                                            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                                            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                            tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                                            this.txtRef.readOnly = true
+                                            this.txtRefno.readOnly = true
+                                            this.docObj.docItems.addEmpty(tmpDocItems)
+                                        }
+                                        else
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
+                                            }
+                                            
+                                            await dialog(tmpConfObj);
+                                        }
+                                    }}/>
+                                </Item>
                                 <Item  >
                                 <Label text={this.t("txtAmount")} alignment="right" />
                                     <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}

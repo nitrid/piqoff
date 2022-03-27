@@ -22,13 +22,14 @@ export default class itemList extends React.Component
 
         this.state = 
         {
-            columnListValue : ['CDATE_FORMAT','ITEM_CODE','ITEM_NAME','CUSTOMER_NAME','PRICE','QUANTITY']
+            columnListValue : ['CDATE_FORMAT','LUSER_NAME','ITEM_CODE','ITEM_NAME','CUSTOMER_NAME','PRICE','QUANTITY']
         }
         
         this.core = App.instance.core;
         this.columnListData = 
         [
             {CODE : "CDATE_FORMAT",NAME : this.t("grdPurcContList.clmCreateDate")},
+            {CODE : "LUSER_NAME",NAME : this.t("grdPurcContList.clmUser")},
             {CODE : "ITEM_CODE",NAME : this.t("grdPurcContList.clmCode")},
             {CODE : "ITEM_NAME",NAME : this.t("grdPurcContList.clmName")}, 
             {CODE : "CUSTOMER_NAME",NAME : this.t("grdPurcContList.clmCustomerName")},                                   
@@ -63,6 +64,10 @@ export default class itemList extends React.Component
                 if(typeof e.value.find(x => x == 'CDATE_FORMAT') != 'undefined')
                 {
                     this.groupList.push('CDATE_FORMAT')
+                }
+                if(typeof e.value.find(x => x == 'LUSER_NAME') != 'undefined')
+                {
+                    this.groupList.push('LUSER_NAME')
                 }
                 if(typeof e.value.find(x => x == 'ITEM_CODE') != 'undefined')
                 {
@@ -275,10 +280,11 @@ export default class itemList extends React.Component
                             allowColumnReordering={true}
                             allowColumnResizing={true}
                             >                            
-                                <Paging defaultPageSize={20} />
+                                <Paging defaultPageSize={10} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
 
                                 <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcContList.clmCreateDate")} visible={true} width={200}/> 
+                                <Column dataField="LUSER_NAME" caption={this.t("grdPurcContList.clmUser")} visible={true} width={200}/>
                                 <Column dataField="ITEM_CODE" caption={this.t("grdPurcContList.clmCode")} visible={true} width={200}/> 
                                 <Column dataField="ITEM_NAME" caption={this.t("grdPurcContList.clmName")} visible={true}/> 
                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdPurcContList.clmCustomerName")} visible={true}/> 

@@ -1242,7 +1242,8 @@ export const langTr =
         msgCustomerNotFound:
         {
             title: "Dikkat",
-            btn01: "Tamam",
+            btn01: "Devam Et",
+            btn02: "Vazgeç",
             msg: "Seçilen Ürün Cariye Tanımlı Değil !"
         },
         msgNotCustomer:
@@ -2317,7 +2318,8 @@ export const langTr =
         msgCustomerNotFound:
         {
             title: "Dikkat",
-            btn01: "Tamam",
+            btn01: "Devam Et",
+            btn02: "Vazgeç",
             msg: "Seçilen Ürün Cariye Tanımlı Değil !"
         },
         msgNotCustomer:
@@ -2764,12 +2766,7 @@ export const langTr =
             clmTotal : "Toplam",
             clmInputName : "Depo",
         },
-        popDesign : 
-        {
-            title: "Evrak İndirimi",
-            design : "Dizayn seçimi",
-            lang : "Evrak Dili"
-        },
+       
 
     },
     sip_01_002 :
@@ -2852,7 +2849,8 @@ export const langTr =
             clmTotal : "Genel Toplam",
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
-            clmMulticode :"T. Kodu"
+            clmMulticode :"T. Kodu",
+            clmBarcode :"Barkodu"
 
         },
         popDiscount : 
@@ -2866,6 +2864,12 @@ export const langTr =
             title: "Evrakı Açmak İçin Yönetici Şifresini Girmelisiniz",
             Password : "Şifre",
             btnApprove : "Onayla"
+        },
+        popDesign : 
+        {
+            title: "Dizayn seçimi",
+            design : "Dizayn",
+            lang : "Evrak Dili"
         },
         msgDocValid:
         {
@@ -2970,7 +2974,8 @@ export const langTr =
         msgCustomerNotFound:
         {
             title: "Dikkat",
-            btn01: "Tamam",
+            btn01: "Devam Et",
+            btn02: "Vazgeç",
             msg: "Seçilen Ürün Cariye Tanımlı Değil !"
         },
         msgNotCustomer:
@@ -3214,7 +3219,8 @@ export const langTr =
             clmQuantity: "Miktar",
             clmStartDate : "Başlangıç",
             clmFinishDate :"Bitiş",
-            clmDepot : "Depo"
+            clmDepot : "Depo",
+            clmUser : "Kullanıcı"
         },
     },
     cnt_01_002 :
@@ -3240,7 +3246,8 @@ export const langTr =
             clmQuantity: "Miktar",
             clmStartDate : "Başlangıç",
             clmFinishDate :"Bitiş",
-            clmDepot : "Depo"
+            clmDepot : "Depo",
+             clmUser : "Kullanıcı"
         },
     },
     cnt_02_001 :

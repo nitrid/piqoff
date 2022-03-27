@@ -287,12 +287,14 @@ export default class salesInvoice extends React.Component
             let tmpConfObj =
             {
                 id:'msgCustomerNotFound',showTitle:true,title:this.t("msgCustomerNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
-                button:[{id:"btn01",caption:this.t("msgCustomerNotFound.btn01"),location:'after'}],
+                button:[{id:"btn01",caption:this.t("msgCustomerNotFound.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCustomerNotFound.btn02"),location:'after'}],
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerNotFound.msg")}</div>)
             }
-
-            await dialog(tmpConfObj);
-            return
+            let pResult = await dialog(tmpConfObj);
+            if(pResult == 'btn02')
+            {
+                return
+            }
         }
         for (let i = 0; i < this.docObj.docOrders.dt().length; i++) 
         {
@@ -383,7 +385,7 @@ export default class salesInvoice extends React.Component
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmSalesInv"
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmPurcOrder"
                                     onClick={async (e)=>
                                     {
                                         if(this.docLocked == true)
@@ -534,7 +536,7 @@ export default class salesInvoice extends React.Component
                     {/* Form */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id="frmSalesInv">
+                            <Form colCount={3} id="frmPurcOrder">
                                 {/* txtRef-Refno */}
                                 <Item>
                                     <Label text={this.t("txtRefRefno")} alignment="right" />
@@ -561,7 +563,7 @@ export default class salesInvoice extends React.Component
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmSalesInv"}>
+                                            <Validator validationGroup={"frmPurcOrder"}>
                                                     <RequiredRule message={this.t("validRef")} />
                                                 </Validator>  
                                             </NdTextBox>
@@ -609,7 +611,7 @@ export default class salesInvoice extends React.Component
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmSalesInv"}>
+                                            <Validator validationGroup={"frmPurcOrder"}>
                                                     <RequiredRule message={this.t("validRefNo")} />
                                                 </Validator> 
                                             </NdTextBox>
@@ -663,7 +665,7 @@ export default class salesInvoice extends React.Component
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmSalesInv"}>
+                                        <Validator validationGroup={"frmPurcOrder"}>
                                             <RequiredRule message={this.t("validDepot")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -747,7 +749,7 @@ export default class salesInvoice extends React.Component
                                     param={this.param.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmSalesInv"}>
+                                        <Validator validationGroup={"frmPurcOrder"}>
                                             <RequiredRule message={this.t("validCustomerCode")} />
                                         </Validator>  
                                     </NdTextBox>
@@ -814,7 +816,7 @@ export default class salesInvoice extends React.Component
                                         {
                                     }).bind(this)}
                                     >
-                                        <Validator validationGroup={"frmSalesInv"}>
+                                        <Validator validationGroup={"frmPurcOrder"}>
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
@@ -833,56 +835,14 @@ export default class salesInvoice extends React.Component
                             {
                                 this.frmdocOrders = e.component
                             }}>
-                                <Item location="after">
-                                    <Button icon="add"
-                                    validationGroup="frmSalesInv"
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            
-                                            if(typeof this.docObj.docOrders.dt()[0] != 'undefined')
-                                            {
-                                                if(this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1].ITEM_CODE == '')
-                                                {
-                                                    return
-                                                }
-                                            }
-                                           
-                                            let tmpdocOrders = {...this.docObj.docOrders.empty}
-                                            tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
-                                            tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
-                                            tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                            tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
-                                            tmpdocOrders.REF = this.docObj.dt()[0].REF
-                                            tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
-                                            tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                            tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
-                                            tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                            this.txtRef.readOnly = true
-                                            this.txtRefno.readOnly = true
-                                            this.docObj.docOrders.addEmpty(tmpdocOrders)
-                                        }
-                                        else
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
-                                        }
-                                    }}/>
-                                </Item>
+                                
                                  <Item>
                                     <NdGrid parent={this} id={"grdPurcOrders"} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
-                                    height={'100%'} 
+                                    height={'400'} 
                                     width={'100%'}
                                     dbApply={false}
                                     onRowUpdated={async(e)=>
@@ -926,10 +886,11 @@ export default class salesInvoice extends React.Component
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                                         <Scrolling mode="infinite" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcOrders.clmCreateDate")} width={200} allowEditing={false}/>
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcOrders.clmCreateDate")} width={180} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdPurcOrders.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="MULTICODE" caption={this.t("grdPurcOrders.clmMulticode")} width={150}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdPurcOrders.clmItemName")} width={400} />
+                                        <Column dataField="ITEM_BARCODE" caption={this.t("grdPurcOrders.clmBarcode")} width={150} allowEditing={false}/>
                                         <Column dataField="PRICE" caption={this.t("grdPurcOrders.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                         <Column dataField="QUANTITY" caption={this.t("grdPurcOrders.clmQuantity")} dataType={'number'}/>
                                         <Column dataField="AMOUNT" caption={this.t("grdPurcOrders.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
@@ -944,9 +905,51 @@ export default class salesInvoice extends React.Component
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={4} parent={this} id="frmSalesInv">
-                                {/* Ara Toplam */}
-                                <Item colSpan={3}></Item>
+                            <Form colCount={4} parent={this} id="frmPurcOrder">
+                                {/* Ara Toplam-Stok Ekle */}
+                                <Item location="after" colSpan={3}>
+                                    <Button icon="add"
+                                    validationGroup="frmPurcOrder"
+                                    onClick={async (e)=>
+                                    {
+                                        if(e.validationGroup.validate().status == "valid")
+                                        {
+                                            
+                                            if(typeof this.docObj.docOrders.dt()[0] != 'undefined')
+                                            {
+                                                if(this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1].ITEM_CODE == '')
+                                                {
+                                                    return
+                                                }
+                                            }
+                                           
+                                            let tmpdocOrders = {...this.docObj.docOrders.empty}
+                                            tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
+                                            tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
+                                            tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                            tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
+                                            tmpdocOrders.REF = this.docObj.dt()[0].REF
+                                            tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
+                                            tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                            tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
+                                            tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                            this.txtRef.readOnly = true
+                                            this.txtRefno.readOnly = true
+                                            this.docObj.docOrders.addEmpty(tmpdocOrders)
+                                        }
+                                        else
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
+                                            }
+                                            
+                                            await dialog(tmpConfObj);
+                                        }
+                                    }}/>
+                                </Item>
                                 <Item  >
                                 <Label text={this.t("txtAmount")} alignment="right" />
                                     <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}
@@ -1279,18 +1282,19 @@ export default class salesInvoice extends React.Component
                                                         var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
                                                         mywindow.onload = function() 
                                                         {
+                                                            console.log(11)
                                                             mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
                                                         }   
                                                     }
                                                 });
-                                                this.popDiscount.hide();  
+                                                this.popDesign.hide();  
                                             }}/>
                                         </div>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
                                             onClick={()=>
                                             {
-                                                this.popDiscount.hide();  
+                                                this.popDesign.hide();  
                                             }}/>
                                         </div>
                                     </div>

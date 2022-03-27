@@ -328,7 +328,7 @@ export default class promotionCard extends React.Component
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
                                     filterRow={{visible:true}}
-                                    height={'100%'} 
+                                    height={'500'} 
                                     width={'100%'}
                                     dbApply={false}
                                     onRowUpdated={async(e)=>

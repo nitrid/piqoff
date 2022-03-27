@@ -755,7 +755,7 @@ export default class salesInvoice extends React.Component
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
-                                    height={'100%'} 
+                                    height={'500'} 
                                     width={'100%'}
                                     dbApply={false}
                                     onRowUpdated={async(e)=>{

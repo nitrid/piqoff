@@ -832,55 +832,14 @@ export default class salesOrder extends React.Component
                             {
                                 this.frmdocOrders = e.component
                             }}>
-                                <Item location="after">
-                                    <Button icon="add"
-                                    validationGroup="frmSalesDis"
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            if(typeof this.docObj.docOrders.dt()[0] != 'undefined')
-                                            {
-                                                if(this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1].ITEM_CODE == '')
-                                                {
-                                                    return
-                                                }
-                                            }
-                                           
-                                            let tmpdocOrders = {...this.docObj.docOrders.empty}
-                                            tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
-                                            tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
-                                            tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                            tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
-                                            tmpdocOrders.REF = this.docObj.dt()[0].REF
-                                            tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
-                                            tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                            tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
-                                            tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                            this.txtRef.readOnly = true
-                                            this.txtRefno.readOnly = true
-                                            this.docObj.docOrders.addEmpty(tmpdocOrders)
-                                        }
-                                        else
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
-                                        }
-                                    }}/>
-                                </Item>
+                               
                                  <Item>
                                     <NdGrid parent={this} id={"grdSlsOrder"} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
-                                    height={'100%'} 
+                                    height={'400'} 
                                     width={'100%'}
                                     dbApply={false}
                                     onRowUpdated={async(e)=>{
@@ -984,7 +943,48 @@ export default class salesOrder extends React.Component
                         <div className="col-12">
                             <Form colCount={4} parent={this} id="frmSalesDis">
                                 {/* Ara Toplam */}
-                                <Item colSpan={3}></Item>
+                                <Item location="after" colSpan={3}>
+                                    <Button icon="add"
+                                    validationGroup="frmSalesDis"
+                                    onClick={async (e)=>
+                                    {
+                                        if(e.validationGroup.validate().status == "valid")
+                                        {
+                                            if(typeof this.docObj.docOrders.dt()[0] != 'undefined')
+                                            {
+                                                if(this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1].ITEM_CODE == '')
+                                                {
+                                                    return
+                                                }
+                                            }
+                                           
+                                            let tmpdocOrders = {...this.docObj.docOrders.empty}
+                                            tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
+                                            tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
+                                            tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                            tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
+                                            tmpdocOrders.REF = this.docObj.dt()[0].REF
+                                            tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
+                                            tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                            tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
+                                            tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                            this.txtRef.readOnly = true
+                                            this.txtRefno.readOnly = true
+                                            this.docObj.docOrders.addEmpty(tmpdocOrders)
+                                        }
+                                        else
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
+                                            }
+                                            
+                                            await dialog(tmpConfObj);
+                                        }
+                                    }}/>
+                                </Item>
                                 <Item  >
                                 <Label text={this.t("txtAmount")} alignment="right" />
                                     <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}
