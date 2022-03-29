@@ -34,7 +34,7 @@ export default class salesInvoice extends React.Component
         this.docObj = new docCls();
 
         this._calculateTotal = this._calculateTotal.bind(this)
-        this._addPayment = this._addPayment.bind(this)
+        this._addVirement = this._addVirement.bind(this)
        
 
         this.docLocked = false;        
@@ -99,9 +99,10 @@ export default class salesInvoice extends React.Component
         this.dtDocDate.value = moment(new Date())
 
         let tmpDoc = {...this.docObj.empty}
-        tmpDoc.TYPE = 0
-        tmpDoc.DOC_TYPE = 200
+        tmpDoc.TYPE = 2
+        tmpDoc.DOC_TYPE = 201
         tmpDoc.INPUT = '00000000-0000-0000-0000-000000000000'
+        tmpDoc.OUTPUT = '00000000-0000-0000-0000-000000000000'
         this.docObj.addEmpty(tmpDoc);
 
         
@@ -110,13 +111,13 @@ export default class salesInvoice extends React.Component
         this.txtRefno.readOnly = false
         this.docLocked = false
         
-        this.frmCollection.option('disabled',false)
-        await this.grdDocPayments.dataRefresh({source:this.docObj.docCustomer.dt('DOC_CUSTOMER')});
+        this.frmPayment.option('disabled',false)
+        await this.grdDocVirement.dataRefresh({source:this.docObj.docCustomer.dt('DOC_CUSTOMER')});
     }
     async getDoc(pGuid,pRef,pRefno)
     {
         this.docObj.clearAll()
-        await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:0,DOC_TYPE:200});
+        await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:2,DOC_TYPE:201});
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
@@ -132,12 +133,12 @@ export default class salesInvoice extends React.Component
             }
 
             await dialog(tmpConfObj);
-            this.frmCollection.option('disabled',true)
+            this.frmPayment.option('disabled',true)
         }
         else
         {
             this.docLocked = false
-            this.frmCollection.option('disabled',false)
+            this.frmPayment.option('disabled',false)
         }
     }
     async checkDoc(pGuid,pRef,pRefno)
@@ -189,7 +190,7 @@ export default class salesInvoice extends React.Component
         this.docObj.dt()[0].AMOUNT = this.docObj.docCustomer.dt().sum("AMOUNT",2)
         this.docObj.dt()[0].TOTAL = this.docObj.docCustomer.dt().sum("AMOUNT",2)
     }
-    async _addPayment(pType)
+    async _addVirement(pType)
     {
         let tmpDocCustomer = {...this.docObj.docCustomer.empty}
             tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
@@ -198,44 +199,51 @@ export default class salesInvoice extends React.Component
             tmpDocCustomer.REF_NO = this.docObj.dt()[0].REF_NO
             tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
             tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-            tmpDocCustomer.OUTPUT = this.docObj.dt()[0].OUTPUT                                        
 
-            if(pType == 0)
+            if(pType == 20)
             {
-                tmpDocCustomer.INPUT = this.cmbCashSafe.value
-                tmpDocCustomer.INPUT_NAME = this.cmbCashSafe.displayValue
-                tmpDocCustomer.PAY_TYPE = 0
-                tmpDocCustomer.AMOUNT = this.numCash.value
-                tmpDocCustomer.DESCRIPTION = this.cashDescription.value
+                tmpDocCustomer.OUTPUT = this.cmbSafeToSafe.value
+                tmpDocCustomer.OUTPUT_NAME = this.cmbSafeToSafe.displayValue
+                tmpDocCustomer.INPUT = this.cmbSafeToSafe2.value
+                tmpDocCustomer.INPUT_NAME = this.cmbSafeToSafe2.displayValue
+                tmpDocCustomer.PAY_TYPE = pType
+                tmpDocCustomer.AMOUNT = this.safeToSafeAmount.value
+                tmpDocCustomer.DESCRIPTION = this.safeToSafeDescription.value
             }
-            else if (pType == 1)
+            else if(pType == 21)
             {
-                tmpDocCustomer.INPUT = this.cmbCheckSafe.value
-                tmpDocCustomer.INPUT_NAME = this.cmbCheckSafe.displayValue
-                tmpDocCustomer.PAY_TYPE = 1
-                tmpDocCustomer.AMOUNT = this.numcheck.value
-                tmpDocCustomer.DESCRIPTION = this.checkDescription.value
-
-                let tmpCheck = {...this.docObj.checkCls.empty}
-                tmpCheck.DOC_GUID = this.docObj.dt()[0].GUID
-                tmpCheck.REF = checkReference.value
-                tmpCheck.DOC_DATE =  this.docObj.dt()[0].DOC_DATE
-                tmpCheck.CHECK_DATE =  this.docObj.dt()[0].DOC_DATE
-                tmpCheck.CUSTOMER =   this.docObj.dt()[0].OUTPUT
-                tmpCheck.AMOUNT =  this.numcheck.value
-                tmpCheck.SAFE =  this.cmbCheckSafe.value
-                this.docObj.checkCls.addEmpty(tmpCheck)
+                tmpDocCustomer.OUTPUT = this.cmbSafeToBank.value
+                tmpDocCustomer.OUTPUT_NAME = this.cmbSafeToBank.displayValue
+                tmpDocCustomer.INPUT = this.cmbSafeToBank2.value
+                tmpDocCustomer.INPUT_NAME = this.cmbSafeToBank2.displayValue
+                tmpDocCustomer.PAY_TYPE = pType
+                tmpDocCustomer.AMOUNT = this.safeToBankAmount.value
+                tmpDocCustomer.DESCRIPTION = this.safeToBankDescription.value
             }
-            else if (pType == 1)
+            else if(pType == 22)
             {
-                tmpDocCustomer.INPUT = this.cmbBank.value
-                tmpDocCustomer.INPUT_NAME = this.cmbBank.displayValue
-                tmpDocCustomer.PAY_TYPE = 2
-                tmpDocCustomer.AMOUNT = this.numBank.value
-                tmpDocCustomer.DESCRIPTION = this.bankDescription.value
+                tmpDocCustomer.OUTPUT = this.cmbBankToSafe.value
+                tmpDocCustomer.OUTPUT_NAME = this.cmbBankToSafe.displayValue
+                tmpDocCustomer.INPUT = this.cmbBankToSafe2.value
+                tmpDocCustomer.INPUT_NAME = this.cmbBankToSafe2.displayValue
+                tmpDocCustomer.PAY_TYPE = pType
+                tmpDocCustomer.AMOUNT = this.bankToSafeAmount.value
+                tmpDocCustomer.DESCRIPTION = this.bankToSafeDescription.value
+            }
+            else if(pType == 23)
+            {
+                tmpDocCustomer.OUTPUT = this.cmbBankToBank.value
+                tmpDocCustomer.OUTPUT_NAME = this.cmbBankToBank.displayValue
+                tmpDocCustomer.INPUT = this.cmbBankToBank2.value
+                tmpDocCustomer.INPUT_NAME = this.cmbBankToBank2.displayValue
+                tmpDocCustomer.PAY_TYPE = pType
+                tmpDocCustomer.AMOUNT = this.bankToBankAmount.value
+                tmpDocCustomer.DESCRIPTION = this.bankToBankDescription.value
             }
 
             this.docObj.docCustomer.addEmpty(tmpDocCustomer)
+
+          
             this._calculateTotal()
     }
     render()
@@ -263,7 +271,7 @@ export default class salesInvoice extends React.Component
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmCollection"
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmVirement"
                                     onClick={async (e)=>
                                     {
                                         if(this.docLocked == true)
@@ -350,7 +358,6 @@ export default class salesInvoice extends React.Component
                                         if(this.docObj.dt()[0].LOCKED == 0)
                                         {
                                             this.docObj.dt()[0].LOCKED = 1
-                                            await this.docObj.save()
                                             if((await this.docObj.save()) == 0)
                                             {                                                    
                                                 let tmpConfObj =
@@ -396,7 +403,7 @@ export default class salesInvoice extends React.Component
                     {/* Form */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id="frmCollection">
+                            <Form colCount={3} id="frmPayment">
                                 {/* txtRef-Refno */}
                                 <Item>
                                     <Label text={this.t("txtRefRefno")} alignment="right" />
@@ -410,7 +417,7 @@ export default class salesInvoice extends React.Component
                                                 this.docObj.dt()[0].REF = this.txtRef.value 
                                                 let tmpQuery = 
                                                 {
-                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 0 AND DOC_TYPE = 200 AND REF = @REF ",
+                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 2 AND DOC_TYPE = 201 AND REF = @REF ",
                                                     param : ['REF:string|25'],
                                                     value : [this.txtRef.value]
                                                 }
@@ -423,7 +430,7 @@ export default class salesInvoice extends React.Component
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmCollection"}>
+                                            <Validator validationGroup={"frmVirement"}>
                                                     <RequiredRule message={this.t("validRef")} />
                                                 </Validator>  
                                             </NdTextBox>
@@ -471,7 +478,7 @@ export default class salesInvoice extends React.Component
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmCollection"}>
+                                            <Validator validationGroup={"frmVirement"}>
                                                     <RequiredRule message={this.t("validRefNo")} />
                                                 </Validator> 
                                             </NdTextBox>
@@ -486,7 +493,7 @@ export default class salesInvoice extends React.Component
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_Docs.title")} 
-                                    data={{source:{select:{query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME FROM DOC_VW_01 WHERE TYPE = 0 AND DOC_TYPE = 200"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT GUID,REF,REF_NO,DOC_DATE_CONVERT FROM DOC_VW_01 WHERE TYPE = 2 AND DOC_TYPE = 201"},sql:this.core.sql}}}
                                     button=
                                     {
                                         [
@@ -504,8 +511,7 @@ export default class salesInvoice extends React.Component
                                     >
                                         <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150} defaultSortOrder="asc"/>
                                         <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="OUTPUT_NAME" caption={this.t("pg_Docs.clmOutputName")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="OUTPUT_CODE" caption={this.t("pg_Docs.clmOutputCode")} width={300} defaultSortOrder="asc" />
+                                        <Column dataField="DOC_DATE_CONVERT" caption={this.t("pg_Docs.clmDate")} width={300} defaultSortOrder="asc" />
                                         
                                     </NdPopGrid>
                                 </Item>
@@ -519,171 +525,33 @@ export default class salesInvoice extends React.Component
                                             
                                     }).bind(this)}
                                     >
-                                        <Validator validationGroup={"frmCollection"}>
+                                        <Validator validationGroup={"frmVirement"}>
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
                                 </Item>
-                                 {/* Boş */}
-                                 <EmptyItem />
-                                {/* txtCustomerCode */}
-                                <Item>
-                                    <Label text={this.t("txtCustomerCode")} alignment="right" />
-                                    <NdTextBox id="txtCustomerCode" parent={this} simple={true} 
-                                    dt={{data:this.docObj.dt('DOC'),field:"OUTPUT_CODE"}} 
-                                    onChange={(async(r)=>
-                                        {
-                                            if(r.event.isTrusted == true)
-                                            {
-                                                let tmpQuery = 
-                                                {
-                                                    query :"SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE CODE = @CODE",
-                                                    param : ['CODE:string|50'],
-                                                    value : [r.component._changedValue]
-                                                }
-                                                let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                if(tmpData.result.recordset.length > 0)
-                                                {
-                                                    this.docObj.dt()[0].OUTPUT = tmpData.result.recordset[0].GUID
-                                                    this.docObj.dt()[0].OUTPUT_CODE = tmpData.result.recordset[0].CODE
-                                                    this.docObj.dt()[0].OUTPUT_NAME = tmpData.result.recordset[0].TITLE
-                                                    let tmpDatas = this.prmObj.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
-                                                    if(typeof tmpDatas != 'undefined' && tmpDatas.value ==  true)
-                                                    {
-                                                        this.txtRef.setState({value:tmpData.result.recordset[0].CODE});
-                                                        this.txtRef.props.onValueChanged()
-                                                    }
-                                                    
-                                                }
-                                                else
-                                                {
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgNotCustomer',showTitle:true,title:this.t("msgNotCustomer.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:this.t("msgNotCustomer.btn01"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotCustomer.msg")}</div>)
-                                                    }
-                                                   
-                                                    await dialog(tmpConfObj);
-
-                                                    this.docObj.dt()[0].OUTPUT = ''
-                                                    this.docObj.dt()[0].OUTPUT_CODE = ''
-                                                    this.docObj.dt()[0].OUTPUT_NAME = ''
-                                                }
-                                            }
-                                        }).bind(this)}
-                                    button=
-                                    {
-                                        [
-                                            {
-                                                id:'01',
-                                                icon:'more',
-                                                onClick:()=>
-                                                {
-                                                    this.pg_txtCustomerCode.show()
-                                                    this.pg_txtCustomerCode.onClick = (data) =>
-                                                    {
-                                                        if(data.length > 0)
-                                                        {
-                                                            this.docObj.dt()[0].OUTPUT = data[0].GUID
-                                                            this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
-                                                            this.docObj.dt()[0].OUTPUT_NAME = data[0].TITLE
-                                                            let tmpData = this.prmObj.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
-                                                            if(typeof tmpData != 'undefined' && tmpData.value ==  true)
-                                                            {
-                                                                this.txtRef.setState({value:data[0].CODE});
-                                                                this.txtRef.props.onValueChanged()
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            },
-                                        ]
-                                    }
-                                    param={this.param.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
-                                    >
-                                        <Validator validationGroup={"frmCollection"}>
-                                            <RequiredRule message={this.t("validCustomerCode")} />
-                                        </Validator>  
-                                    </NdTextBox>
-                                    {/*CARI SECIMI POPUP */}
-                                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
-                                    visible={false}
-                                    position={{of:'#root'}} 
-                                    showTitle={true} 
-                                    showBorders={true}
-                                    width={'90%'}
-                                    height={'90%'}
-                                    title={this.t("pg_txtCustomerCode.title")} //
-                                    search={true}
-                                    data = 
-                                    {{
-                                        source:
-                                        {
-                                            select:
-                                            {
-                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
-                                                param : ['VAL:string|50']
-                                            },
-                                            sql:this.core.sql
-                                        }
-                                    }}
-                                    button=
-                                    {
-                                        {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
-                                            {
-                                                console.log(1111)
-                                            }
-                                        }
-                                    }
-                                    >
-                                        <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
-                                        <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
-                                        <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
-                                        <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} filterType={"include"} filterValues={['Tedarikçi']}/>
-                                        
-                                    </NdPopGrid>
-                                </Item> 
-                                {/* txtCustomerName */}
-                                <Item>
-                                    <Label text={this.t("txtCustomerName")} alignment="right" />
-                                    <NdTextBox id="txtCustomerName" parent={this} simple={true}  
-                                    dt={{data:this.docObj.dt('DOC'),field:"OUTPUT_NAME"}} 
-                                    readOnly={true}
-                                    param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
-                                </Item> 
-                                {/* Boş */}
-                                <EmptyItem />
-                                
-                                {/* Boş */}
-                                <EmptyItem />
                             </Form>
                         </div>
                     </div>
                     {/* Grid */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={10} onInitialized={(e)=>
+                            <Form colCount={4} onInitialized={(e)=>
                             {
-                                this.frmCollection = e.component
+                                this.frmPayment = e.component
                             }}>
                                 <Item location="after">
-                                    <Button icon="add" text={this.t("btnCash")}
-                                    validationGroup="frmCollection"
+                                    <Button icon="add" text={this.t("btnSafeToSafe")}
+                                    validationGroup="frmVirement"
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
                                         {
-                                            this.numCash.setState({value:0});
-                                            this.cashDescription.setState({value:''});
-                                            this.popCash.show()
+                                            this.cmbSafeToSafe.setState({value:''});
+                                            this.cmbSafeToSafe2.setState({value:''});
+                                            this.safeToSafeAmount.setState({value:0});
+                                            this.safeToSafeDescription.setState({value:''});
+                                            this.popSafeToSafe.show()
                                         }
                                         else
                                         {
@@ -699,16 +567,17 @@ export default class salesInvoice extends React.Component
                                     }}/>
                                 </Item>
                                 <Item location="after">
-                                    <Button icon="add" text={this.t("btnCheck")}
-                                    validationGroup="frmCollection"
+                                    <Button icon="add" text={this.t("btnSafeToBank")}
+                                    validationGroup="frmVirement"
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
                                         {
-                                            this.checkReference.setState({value:''});
-                                            this.numcheck.setState({value:0});
-                                            this.checkDescription.setState({value:''});
-                                            this.popCheck.show()
+                                            this.cmbSafeToBank.setState({value:''});
+                                            this.cmbSafeToBank2.setState({value:''});
+                                            this.safeToBankAmount.setState({value:0});
+                                            this.safeToBankDescription.setState({value:''});
+                                            this.popSafeToBank.show()
                                         }
                                         else
                                         {
@@ -724,15 +593,17 @@ export default class salesInvoice extends React.Component
                                     }}/>
                                 </Item>
                                 <Item location="after">
-                                    <Button icon="add" text={this.t("btnBank")} width={200}
-                                    validationGroup="frmCollection"
+                                    <Button icon="add" text={this.t("btnBankToSafe")}
+                                    validationGroup="frmVirement"
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
                                         {
-                                            this.numBank.setState({value:0});
-                                            this.bankDescription.setState({value:''});
-                                            this.popBank.show()
+                                            this.cmbBankToSafe.setState({value:''});
+                                            this.cmbBankToSafe2.setState({value:''});
+                                            this.bankToSafeAmount.setState({value:0});
+                                            this.bankToSafeDescription.setState({value:''});
+                                            this.popBankToSafe.show()
                                         }
                                         else
                                         {
@@ -747,10 +618,35 @@ export default class salesInvoice extends React.Component
                                         }
                                     }}/>
                                 </Item>
-                                <EmptyItem colSpan={7}/>
-                                 <Item colSpan={10}>
+                                <Item location="after">
+                                    <Button icon="add" text={this.t("btnBankToBank")}
+                                    validationGroup="frmVirement"
+                                    onClick={async (e)=>
+                                    {
+                                        if(e.validationGroup.validate().status == "valid")
+                                        {
+                                            this.cmbBankToBank.setState({value:''});
+                                            this.cmbBankToBank2.setState({value:''});
+                                            this.bankToBankAmount.setState({value:0});
+                                            this.bankToBankDescription.setState({value:''});
+                                            this.popBankToBank.show()
+                                        }
+                                        else
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
+                                            }
+                                            
+                                            await dialog(tmpConfObj);
+                                        }
+                                    }}/>
+                                </Item>
+                                 <Item colSpan={4}>
                                  <React.Fragment>
-                                    <NdGrid parent={this} id={"grdDocPayments"} 
+                                    <NdGrid parent={this} id={"grdDocVirement"} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
@@ -771,15 +667,16 @@ export default class salesInvoice extends React.Component
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                                         <Scrolling mode="infinite" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdDocPayments.clmCreateDate")} width={200} allowEditing={false}/>
-                                        <Column dataField="INPUT_NAME" caption={this.t("grdDocPayments.clmInputName")} allowEditing={false}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdDocPayments.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} />
-                                        <Column dataField="DESCRIPTION" caption={this.t("grdDocPayments.clmDescription")} />
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdDocVirement.clmCreateDate")} width={200} allowEditing={false}/>
+                                        <Column dataField="OUTPUT_NAME" caption={this.t("grdDocVirement.clmOutputName")} allowEditing={false}/>
+                                        <Column dataField="INPUT_NAME" caption={this.t("grdDocVirement.clmInputName")} allowEditing={false}/>
+                                        <Column dataField="AMOUNT" caption={this.t("grdDocVirement.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} />
+                                        <Column dataField="DESCRIPTION" caption={this.t("grdDocVirement.clmDescription")} />
                                     </NdGrid>
                                     <ContextMenu
                                     dataSource={this.rightItems}
                                     width={200}
-                                    target="#grdDocPayments"
+                                    target="#grdDocVirement"
                                     onItemClick={(async(e)=>
                                     {
                                     }).bind(this)} />
@@ -790,7 +687,7 @@ export default class salesInvoice extends React.Component
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={4} parent={this} id="frmCollection">                            
+                            <Form colCount={4} parent={this} id="frmPayment">                            
                                 {/* TOPLAM */}
                                 <Item colSpan={3}></Item>
                                 <Item>
@@ -804,110 +701,23 @@ export default class salesInvoice extends React.Component
                             </Form>
                         </div>
                     </div>
-                     {/* Cash PopUp */}
-                     <div>
-                        <NdPopUp parent={this} id={"popCash"} 
-                        visible={false}
-                        showCloseButton={true}
-                        showTitle={true}
-                        title={this.t("popCash.title")}
-                        container={"#root"} 
-                        width={'500'}
-                        height={'300'}
-                        position={{of:'#root'}}
-                        >
-                            <Form colCount={1} height={'fit-content'}>
-                                {/* cmbCashSafe */}
-                                <Item>
-                                    <Label text={this.t("cmbCashSafe")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbCashSafe"
-                                    displayExpr="NAME"                       
-                                    valueExpr="GUID"
-                                    value=""
-                                    searchEnabled={true}
-                                    notRefresh={true}
-                                    onValueChanged={(async()=>
-                                        {
-
-                                        }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM SAFE_VW_01 WHERE TYPE = 0"},sql:this.core.sql}}}
-                                    param={this.param.filter({ELEMENT:'cmbCashSafe',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'cmbCashSafe',USERS:this.user.CODE})}
-                                    >
-                                        <Validator validationGroup={"frmCollCash"}>
-                                            <RequiredRule message={this.t("ValidCash")} />
-                                        </Validator> 
-                                    </NdSelectBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("cash")} alignment="right" />
-                                    <div className="col-4 pe-0">
-                                        <NdNumberBox id="numCash" parent={this} simple={true}
-                                        maxLength={32}                                        
-                                        param={this.param.filter({ELEMENT:'numCash',USERS:this.user.CODE})}
-                                        access={this.access.filter({ELEMENT:'numCash',USERS:this.user.CODE})}
-                                        >
-                                        <Validator validationGroup={"frmCollCash"}>
-                                            <RequiredRule message={this.t("ValidCash")} />
-                                        </Validator>  
-                                        </NdNumberBox>
-                                    </div>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("description")} alignment="right" />
-                                    <div className="col-12 pe-0">
-                                        <NdTextBox id="cashDescription" parent={this} simple={true} width={500}
-                                        maxLength={32}                                        
-                                        param={this.param.filter({ELEMENT:'cashDescription',USERS:this.user.CODE})}
-                                        access={this.access.filter({ELEMENT:'cashDescription',USERS:this.user.CODE})}
-                                        >
-                                        </NdTextBox>
-                                    </div>
-                                </Item>
-                                <Item>
-                                    <div className='row'>
-                                        <div className='col-6'>
-                                            <NdButton text={this.t("popCash.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                            validationGroup="frmCollCash"
-                                            onClick={async (e)=>
-                                            {       
-                                                if(e.validationGroup.validate().status == "valid")
-                                                {   
-                                                    this._addPayment(0)
-                                                    this.popCash.hide();  
-                                                }
-                                                
-                                            }}/>
-                                        </div>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popCash.hide();  
-                                            }}/>
-                                        </div>
-                                    </div>
-                                </Item>
-                            </Form>
-                        </NdPopUp>
-                    </div> 
-                      {/* check PopUp */}
+                      {/* Kasadan Kasaya */}
                       <div>
-                        <NdPopUp parent={this} id={"popCheck"} 
+                        <NdPopUp parent={this} id={"popSafeToSafe"} 
                         visible={false}
                         showCloseButton={true}
                         showTitle={true}
-                        title={this.t("popCheck.title")}
+                        title={this.t("popSafeToSafe.title")}
                         container={"#root"} 
                         width={'500'}
                         height={'300'}
                         position={{of:'#root'}}
                         >
                             <Form colCount={1} height={'fit-content'}>
-                                {/* cmbCashSafe */}
+                                {/* cmbSafe */}
                                 <Item>
-                                    <Label text={this.t("cmbCheckSafe")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbCheckSafe"
+                                    <Label text={this.t("cmbSafe")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbSafeToSafe"
                                     displayExpr="NAME"                       
                                     valueExpr="GUID"
                                     value=""
@@ -915,96 +725,32 @@ export default class salesInvoice extends React.Component
                                     notRefresh={true}
                                     onValueChanged={(async()=>
                                         {
-
-                                        }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM SAFE_VW_01 WHERE TYPE = 1"},sql:this.core.sql}}}
-                                    param={this.param.filter({ELEMENT:'cmbCheckSafe',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'cmbCheckSafe',USERS:this.user.CODE})}
-                                    >
-                                        <Validator validationGroup={"frmCollCheck"}>
-                                            <RequiredRule message={this.t("ValidCash")} />
-                                        </Validator> 
-                                    </NdSelectBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("checkReference")} alignment="right" />
-                                    <div className="col-12 pe-0">
-                                        <NdTextBox id="checkReference" parent={this} simple={true} width={500}
-                                        maxLength={32}                                        
-                                        param={this.param.filter({ELEMENT:'checkReference',USERS:this.user.CODE})}
-                                        access={this.access.filter({ELEMENT:'checkReference',USERS:this.user.CODE})}
-                                        >
-                                        </NdTextBox>
-                                    </div>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("cash")} alignment="right" />
-                                    <div className="col-4 pe-0">
-                                        <NdNumberBox id="numcheck" parent={this} simple={true}
-                                        maxLength={32}                                        
-                                        param={this.param.filter({ELEMENT:'numcheck',USERS:this.user.CODE})}
-                                        access={this.access.filter({ELEMENT:'numcheck',USERS:this.user.CODE})}
-                                        >
-                                        <Validator validationGroup={"frmCollCheck"}>
-                                            <RequiredRule message={this.t("ValidCash")} />
-                                        </Validator>  
-                                        </NdNumberBox>
-                                    </div>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("description")} alignment="right" />
-                                    <div className="col-12 pe-0">
-                                        <NdTextBox id="checkDescription" parent={this} simple={true} width={500}
-                                        maxLength={32}                                        
-                                        param={this.param.filter({ELEMENT:'checkDescription',USERS:this.user.CODE})}
-                                        access={this.access.filter({ELEMENT:'checkDescription',USERS:this.user.CODE})}
-                                        >
-                                        </NdTextBox>
-                                    </div>
-                                </Item>
-                                <Item>
-                                    <div className='row'>
-                                        <div className='col-6'>
-                                            <NdButton text={this.t("popCheck.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                            validationGroup="frmCollCheck"
-                                            onClick={async (e)=>
-                                            {       
-                                                if(e.validationGroup.validate().status == "valid")
-                                                {
-                                                    this._addPayment(1)
-                                                    this.popCheck.hide(); 
-                                                }
-                                            }}/>
-                                        </div>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
+                                            if(this.cmbSafeToSafe.value == this.cmbSafeToSafe2.value)
                                             {
-                                                this.popCheck.hide();  
-                                            }}/>
-                                        </div>
-                                    </div>
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgDblAccount',showTitle:true,title:this.t("msgDblAccount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgDblAccount.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDblAccount.msg")}</div>)
+                                                }
+                                            
+                                                await dialog(tmpConfObj);
+                                                this.cmbSafeToSafe.setState({value:''});
+                                            }
+                                        }).bind(this)}
+                                    data={{source:{select:{query : "SELECT * FROM SAFE_VW_01"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbSafeToSafe',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbSafeToSafe',USERS:this.user.CODE})}
+                                    >
+                                        <Validator validationGroup={"frmCaseToCase"}>
+                                            <RequiredRule message={this.t("validSafe")} />
+                                        </Validator> 
+                                    </NdSelectBox>
                                 </Item>
-                            </Form>
-                        </NdPopUp>
-                    </div> 
-                    {/* bank PopUp */}
-                    <div>
-                        <NdPopUp parent={this} id={"popBank"} 
-                        visible={false}
-                        showCloseButton={true}
-                        showTitle={true}
-                        title={this.t("popBank.title")}
-                        container={"#root"} 
-                        width={'500'}
-                        height={'300'}
-                        position={{of:'#root'}}
-                        >
-                            <Form colCount={1} height={'fit-content'}>
-                                {/* cmbCashSafe */}
-                                <Item>
-                                    <Label text={this.t("cmbBank")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbBank"
+                                   {/* cmbSafe2 */}
+                                   <Item>
+                                    <Label text={this.t("cmbSafe2")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbSafeToSafe2"
                                     displayExpr="NAME"                       
                                     valueExpr="GUID"
                                     value=""
@@ -1012,27 +758,38 @@ export default class salesInvoice extends React.Component
                                     notRefresh={true}
                                     onValueChanged={(async()=>
                                         {
-
+                                            if(this.cmbSafeToSafe.value == this.cmbSafeToSafe2.value)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgDblAccount',showTitle:true,title:this.t("msgDblAccount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgDblAccount.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDblAccount.msg")}</div>)
+                                                }
+                                            
+                                                await dialog(tmpConfObj);
+                                                this.cmbSafeToSafe2.setState({value:''});
+                                            }
                                         }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM BANK_VW_01 WHERE TYPE = 0"},sql:this.core.sql}}}
-                                    param={this.param.filter({ELEMENT:'cmbBank',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'cmbBank',USERS:this.user.CODE})}
+                                    data={{source:{select:{query : "SELECT * FROM SAFE_VW_01"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbSafeToSafe2',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbSafeToSafe2',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmCollBank"}>
-                                            <RequiredRule message={this.t("validBank")} />
+                                        <Validator validationGroup={"frmCaseToCase"}>
+                                            <RequiredRule message={this.t("validSafe")} />
                                         </Validator> 
                                     </NdSelectBox>
                                 </Item>
                                 <Item>
-                                    <Label text={this.t("cash")} alignment="right" />
+                                    <Label text={this.t("amount")} alignment="right" />
                                     <div className="col-4 pe-0">
-                                        <NdNumberBox id="numBank" parent={this} simple={true}
+                                        <NdNumberBox id="safeToSafeAmount" parent={this} simple={true}
                                         maxLength={32}                                        
-                                        param={this.param.filter({ELEMENT:'numBank',USERS:this.user.CODE})}
-                                        access={this.access.filter({ELEMENT:'numBank',USERS:this.user.CODE})}
+                                        param={this.param.filter({ELEMENT:'safeToSafeAmount',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'safeToSafeAmount',USERS:this.user.CODE})}
                                         >
-                                        <Validator validationGroup={"frmCollBank"}>
-                                            <RequiredRule message={this.t("ValidCash")} />
+                                        <Validator validationGroup={"frmCaseToCase"}>
+                                            <RequiredRule message={this.t("ValidAmount")} />
                                         </Validator>  
                                         </NdNumberBox>
                                     </div>
@@ -1040,10 +797,10 @@ export default class salesInvoice extends React.Component
                                 <Item>
                                     <Label text={this.t("description")} alignment="right" />
                                     <div className="col-12 pe-0">
-                                        <NdTextBox id="bankDescription" parent={this} simple={true} width={500}
+                                        <NdTextBox id="safeToSafeDescription" parent={this} simple={true} width={500}
                                         maxLength={32}                                        
-                                        param={this.param.filter({ELEMENT:'bankDescription',USERS:this.user.CODE})}
-                                        access={this.access.filter({ELEMENT:'bankDescription',USERS:this.user.CODE})}
+                                        param={this.param.filter({ELEMENT:'safeToSafeDescription',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'safeToSafeDescription',USERS:this.user.CODE})}
                                         >
                                         </NdTextBox>
                                     </div>
@@ -1051,15 +808,13 @@ export default class salesInvoice extends React.Component
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>
-                                            <NdButton text={this.t("popBank.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                            validationGroup="frmCollCheck"
+                                            <NdButton text={this.t("popSafeToSafe.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
+                                            validationGroup="frmCaseToCase"
                                             onClick={async (e)=>
                                             {       
-                                                if(e.validationGroup.validate().status == "valid")
-                                                {
-                                                    this._addPayment(2)
-                                                    this.popBank.hide(); 
-                                                }
+                                               
+                                                    this._addVirement(20)
+                                                    this.popSafeToSafe.hide(); 
                                                 
                                             }}/>
                                         </div>
@@ -1067,7 +822,390 @@ export default class salesInvoice extends React.Component
                                             <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
                                             onClick={()=>
                                             {
-                                                this.popBank.hide();  
+                                                this.popSafeToSafe.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div> 
+                    {/* Kasadan Bankaya */}
+                    <div>
+                        <NdPopUp parent={this} id={"popSafeToBank"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popSafeToBank.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'300'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                {/* cmbSafe */}
+                                <Item>
+                                    <Label text={this.t("cmbSafe")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbSafeToBank"
+                                    displayExpr="NAME"                       
+                                    valueExpr="GUID"
+                                    value=""
+                                    searchEnabled={true}
+                                    notRefresh={true}
+                                    onValueChanged={(async()=>
+                                        {
+                                            if(this.cmbSafeToBank.value == this.cmbSafeToBank2.value)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgDblAccount',showTitle:true,title:this.t("msgDblAccount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgDblAccount.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDblAccount.msg")}</div>)
+                                                }
+                                            
+                                                await dialog(tmpConfObj);
+                                                this.cmbSafeToBank.setState({value:''});
+                                            }
+                                        }).bind(this)}
+                                    data={{source:{select:{query : "SELECT * FROM SAFE_VW_01"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbSafeToBank',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbSafeToBank',USERS:this.user.CODE})}
+                                    >
+                                        <Validator validationGroup={"frmSafeToBank"}>
+                                            <RequiredRule message={this.t("validSafe")} />
+                                        </Validator> 
+                                    </NdSelectBox>
+                                </Item>
+                                   {/* cmbSafe2 */}
+                                   <Item>
+                                    <Label text={this.t("cmbSafe2")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbSafeToBank2"
+                                    displayExpr="NAME"                       
+                                    valueExpr="GUID"
+                                    value=""
+                                    searchEnabled={true}
+                                    notRefresh={true}
+                                    onValueChanged={(async()=>
+                                        {
+                                            if(this.cmbSafeToBank.value == this.cmbSafeToBank2.value)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgDblAccount',showTitle:true,title:this.t("msgDblAccount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgDblAccount.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDblAccount.msg")}</div>)
+                                                }
+                                            
+                                                await dialog(tmpConfObj);
+                                                this.cmbSafeToBank2.setState({value:''});
+                                            }
+                                        }).bind(this)}
+                                    data={{source:{select:{query : "SELECT * FROM BANK_VW_01"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbSafeToBank2',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbSafeToBank2',USERS:this.user.CODE})}
+                                    >
+                                        <Validator validationGroup={"frmSafeToBank"}>
+                                            <RequiredRule message={this.t("validSafe")} />
+                                        </Validator> 
+                                    </NdSelectBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("amount")} alignment="right" />
+                                    <div className="col-4 pe-0">
+                                        <NdNumberBox id="safeToBankAmount" parent={this} simple={true}
+                                        maxLength={32}                                        
+                                        param={this.param.filter({ELEMENT:'safeToBankAmount',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'safeToBankAmount  ',USERS:this.user.CODE})}
+                                        >
+                                        <Validator validationGroup={"frmSafeToBank"}>
+                                            <RequiredRule message={this.t("ValidAmount")} />
+                                        </Validator>  
+                                        </NdNumberBox>
+                                    </div>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("description")} alignment="right" />
+                                    <div className="col-12 pe-0">
+                                        <NdTextBox id="safeToBankDescription" parent={this} simple={true} width={500}
+                                        maxLength={32}                                        
+                                        param={this.param.filter({ELEMENT:'safeToBankDescription',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'safeToBankDescription',USERS:this.user.CODE})}
+                                        >
+                                        </NdTextBox>
+                                    </div>
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("popSafeToBank.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
+                                            validationGroup="frmCollCheck"
+                                            onClick={async (e)=>
+                                            {       
+                                                    this._addVirement(21)
+                                                    this.popSafeToBank.hide(); 
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popSafeToBank.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div> 
+                    {/* Bankadan Kasaya */}
+                    <div>
+                        <NdPopUp parent={this} id={"popBankToSafe"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popBankToSafe.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'300'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                {/* cmbSafe */}
+                                <Item>
+                                    <Label text={this.t("cmbSafe")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbBankToSafe"
+                                    displayExpr="NAME"                       
+                                    valueExpr="GUID"
+                                    value=""
+                                    searchEnabled={true}
+                                    notRefresh={true}
+                                    onValueChanged={(async()=>
+                                        {
+                                            if(this.cmbBankToSafe.value == this.cmbBankToSafe2.value)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgDblAccount',showTitle:true,title:this.t("msgDblAccount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgDblAccount.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDblAccount.msg")}</div>)
+                                                }
+                                            
+                                                await dialog(tmpConfObj);
+                                                this.cmbBankToSafe.setState({value:''});
+                                            }
+                                        }).bind(this)}
+                                    data={{source:{select:{query : "SELECT * FROM BANK_VW_01"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbBankToSafe',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbBankToSafe',USERS:this.user.CODE})}
+                                    >
+                                        <Validator validationGroup={"frmBankToSafe"}>
+                                            <RequiredRule message={this.t("validSafe")} />
+                                        </Validator> 
+                                    </NdSelectBox>
+                                </Item>
+                                {/* cmbSafe2 */}
+                                <Item>
+                                    <Label text={this.t("cmbSafe2")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbBankToSafe2"
+                                    displayExpr="NAME"                       
+                                    valueExpr="GUID"
+                                    value=""
+                                    searchEnabled={true}
+                                    notRefresh={true}
+                                    onValueChanged={(async()=>
+                                        {
+                                            if(this.cmbBankToSafe.value == this.cmbBankToSafe2.value)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgDblAccount',showTitle:true,title:this.t("msgDblAccount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgDblAccount.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDblAccount.msg")}</div>)
+                                                }
+                                            
+                                                await dialog(tmpConfObj);
+                                                this.cmbBankToSafe2.setState({value:''});
+                                            }
+                                        }).bind(this)}
+                                    data={{source:{select:{query : "SELECT * FROM SAFE_VW_01"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbBankToSafe2',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbBankToSafe2',USERS:this.user.CODE})}
+                                    >
+                                        <Validator validationGroup={"frmBankToSafe"}>
+                                            <RequiredRule message={this.t("validSafe")} />
+                                        </Validator> 
+                                    </NdSelectBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("amount")} alignment="right" />
+                                    <div className="col-4 pe-0">
+                                        <NdNumberBox id="bankToSafeAmount" parent={this} simple={true}
+                                        maxLength={32}                                        
+                                        param={this.param.filter({ELEMENT:'bankToSafeAmount',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'bankToSafeAmount  ',USERS:this.user.CODE})}
+                                        >
+                                        <Validator validationGroup={"frmBankToSafe"}>
+                                            <RequiredRule message={this.t("ValidAmount")} />
+                                        </Validator>  
+                                        </NdNumberBox>
+                                    </div>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("description")} alignment="right" />
+                                    <div className="col-12 pe-0">
+                                        <NdTextBox id="bankToSafeDescription" parent={this} simple={true} width={500}
+                                        maxLength={32}                                        
+                                        param={this.param.filter({ELEMENT:'bankToSafeDescription',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'bankToSafeDescription',USERS:this.user.CODE})}
+                                        >
+                                        </NdTextBox>
+                                    </div>
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("popBankToSafe.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
+                                            validationGroup="frmCollCheck"
+                                            onClick={async (e)=>
+                                            {       
+                                                this._addVirement(22)
+                                                this.popBankToSafe.hide(); 
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popBankToSafe.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div> 
+                      {/* Bankadan Bankaya */}
+                      <div>
+                        <NdPopUp parent={this} id={"popBankToBank"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popBankToBank.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'300'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                {/* cmbSafe */}
+                                <Item>
+                                    <Label text={this.t("cmbSafe")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbBankToBank"
+                                    displayExpr="NAME"                       
+                                    valueExpr="GUID"
+                                    value=""
+                                    searchEnabled={true}
+                                    notRefresh={true}
+                                    onValueChanged={(async()=>
+                                        {
+                                            if(this.cmbBankToBank.value == this.cmbBankToBank2.value)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgDblAccount',showTitle:true,title:this.t("msgDblAccount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgDblAccount.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDblAccount.msg")}</div>)
+                                                }
+                                            
+                                                await dialog(tmpConfObj);
+                                                this.cmbBankToBank.setState({value:''});
+                                            }
+                                        }).bind(this)}
+                                    data={{source:{select:{query : "SELECT * FROM BANK_VW_01"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbBankToBank',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbBankToBank',USERS:this.user.CODE})}
+                                    >
+                                        <Validator validationGroup={"frmBankToBank"}>
+                                            <RequiredRule message={this.t("validSafe")} />
+                                        </Validator> 
+                                    </NdSelectBox>
+                                </Item>
+                                {/* cmbSafe2 */}
+                                <Item>
+                                    <Label text={this.t("cmbSafe2")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbBankToBank2"
+                                    displayExpr="NAME"                       
+                                    valueExpr="GUID"
+                                    value=""
+                                    searchEnabled={true}
+                                    notRefresh={true}
+                                    onValueChanged={(async()=>
+                                        {
+                                            if(this.cmbBankToBank.value == this.cmbBankToBank2.value)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgDblAccount',showTitle:true,title:this.t("msgDblAccount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgDblAccount.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDblAccount.msg")}</div>)
+                                                }
+                                            
+                                                await dialog(tmpConfObj);
+                                                this.cmbBankToBank2.setState({value:''});
+                                            }
+                                        }).bind(this)}
+                                    data={{source:{select:{query : "SELECT * FROM BANK_VW_01"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbBankToBank2',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbBankToBank2',USERS:this.user.CODE})}
+                                    >
+                                        <Validator validationGroup={"frmBankToBank"}>
+                                            <RequiredRule message={this.t("validSafe")} />
+                                        </Validator> 
+                                    </NdSelectBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("amount")} alignment="right" />
+                                    <div className="col-4 pe-0">
+                                        <NdNumberBox id="bankToBankAmount" parent={this} simple={true}
+                                        maxLength={32}                                        
+                                        param={this.param.filter({ELEMENT:'bankToBankAmount',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'bankToBankAmount  ',USERS:this.user.CODE})}
+                                        >
+                                        <Validator validationGroup={"frmBankToBank"}>
+                                            <RequiredRule message={this.t("ValidAmount")} />
+                                        </Validator>  
+                                        </NdNumberBox>
+                                    </div>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("description")} alignment="right" />
+                                    <div className="col-12 pe-0">
+                                        <NdTextBox id="bankToBankDescription" parent={this} simple={true} width={500}
+                                        maxLength={32}                                        
+                                        param={this.param.filter({ELEMENT:'bankToBankDescription',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'bankToBankDescription',USERS:this.user.CODE})}
+                                        >
+                                        </NdTextBox>
+                                    </div>
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("popBankToBank.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
+                                            validationGroup="frmCollCheck"
+                                            onClick={async (e)=>
+                                            {       
+                                              
+                                                this._addVirement(23)
+                                                this.popBankToBank.hide(); 
+                                                
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popBankToBank.hide();  
                                             }}/>
                                         </div>
                                     </div>

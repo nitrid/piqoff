@@ -23,18 +23,18 @@ export default class itemList extends React.Component
 
         this.state = 
         {
-            columnListValue : ['REF','REF_NO','OUTPUT_NAME','DOC_DATE_CONVERT','TOTAL']
+            columnListValue : ['REF','REF_NO','OUTPUT_NAME','INPUT_NAME','AMOUNT','DOC_DATE_CONVERT']
         }
         
         this.core = App.instance.core;
         this.columnListData = 
         [
-            {CODE : "REF",NAME : this.t("grdColList.clmRef")},
-            {CODE : "REF_NO",NAME : this.t("grdColList.clmRefNo")},
-            {CODE : "OUTPUT_CODE",NAME : this.t("grdColList.clmOutputCode")},                                   
-            {CODE : "OUTPUT_NAME",NAME : this.t("grdColList.clmOutputName")},
-            {CODE : "DOC_DATE_CONVERT",NAME : this.t("grdColList.clmDate")},
-            {CODE : "TOTAL",NAME : this.t("grdColList.clmTotal")},
+            {CODE : "REF",NAME : this.t("grdSafeList.clmRef")},
+            {CODE : "REF_NO",NAME : this.t("grdSafeList.clmRefNo")},
+            {CODE : "OUTPUT_NAME",NAME : this.t("grdSafeList.clmOutputName")},                                   
+            {CODE : "INPUT_NAME",NAME : this.t("grdSafeList.clmInputName")},
+            {CODE : "DOC_DATE_CONVERT",NAME : this.t("grdSafeList.clmDate")},
+            {CODE : "AMOUNT",NAME : this.t("grdSafeList.clmAmount")},
         ]
         this.groupList = [];
         this._btnGetClick = this._btnGetClick.bind(this)
@@ -51,7 +51,6 @@ export default class itemList extends React.Component
     {
         this.dtFirst.value=moment(new Date(0)).format("YYYY-MM-DD");
         this.dtLast.value=moment(new Date(0)).format("YYYY-MM-DD");
-        this.txtCustomerCode.CODE = ''
     }
     _columnListBox(e)
     {
@@ -68,6 +67,10 @@ export default class itemList extends React.Component
                 {
                     this.groupList.push('REF_NO')
                 }                
+                if(typeof e.value.find(x => x == 'INPUT_NAME') != 'undefined')
+                {
+                    this.groupList.push('INPUT_NAME')
+                }
                 if(typeof e.value.find(x => x == 'OUTPUT_NAME') != 'undefined')
                 {
                     this.groupList.push('OUTPUT_NAME')
@@ -76,20 +79,20 @@ export default class itemList extends React.Component
                 {
                     this.groupList.push('DOC_DATE_CONVERT')
                 }
-                if(typeof e.value.find(x => x == 'TOTAL') != 'undefined')
+                if(typeof e.value.find(x => x == 'AMOUNT') != 'undefined')
                 {
-                    this.groupList.push('TOTAL')
+                    this.groupList.push('AMOUNT')
                 }
                 
-                for (let i = 0; i < this.grdColList.devGrid.columnCount(); i++) 
+                for (let i = 0; i < this.grdSafeList.devGrid.columnCount(); i++) 
                 {
-                    if(typeof e.value.find(x => x == this.grdColList.devGrid.columnOption(i).name) == 'undefined')
+                    if(typeof e.value.find(x => x == this.grdSafeList.devGrid.columnOption(i).name) == 'undefined')
                     {
-                        this.grdColList.devGrid.columnOption(i,'visible',false)
+                        this.grdSafeList.devGrid.columnOption(i,'visible',false)
                     }
                     else
                     {
-                        this.grdColList.devGrid.columnOption(i,'visible',true)
+                        this.grdSafeList.devGrid.columnOption(i,'visible',true)
                     }
                 }
 
@@ -117,7 +120,18 @@ export default class itemList extends React.Component
     }
     async _btnGetClick()
     {
-        
+        if(this.cmbSafe.value == '')
+        {
+            let tmpConfObj =
+            {
+                id:'msgNotBank',showTitle:true,title:this.t("msgNotBank.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgNotBank.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotBank.msg")}</div>)
+            }
+
+            await dialog(tmpConfObj);
+            return
+        }
         let tmpSource =
         {
             source : 
@@ -125,20 +139,31 @@ export default class itemList extends React.Component
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT * FROM DOC_VW_01 " +
-                            "WHERE ((OUTPUT_CODE = @OUTPUT_CODE) OR (@OUTPUT_CODE = '')) AND "+ 
+                    query : "SELECT * FROM DOC_CUSTOMER_VW_01 " +
+                            "WHERE ((INPUT = @SAFE) OR (OUTPUT = @SAFE)) AND  "+ 
                             "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
-                            " AND TYPE = 0 AND DOC_TYPE = 200 ",
-                    param : ['OUTPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
-                    value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
+                            " AND  DOC_TYPE IN(200,201) ",
+                    param : ['SAFE:string|50','FIRST_DATE:date','LAST_DATE:date'],
+                    value : [this.cmbSafe.value,this.dtFirst.value,this.dtLast.value]
                 },
                 sql : this.core.sql
             }
         }
         
-        await this.grdColList.dataRefresh(tmpSource)
-        let tmpTotal =  this.grdColList.data.datatable.sum("AMOUNT",2)
-        this.txtTotal.setState({value:tmpTotal + ' €'});
+        await this.grdSafeList.dataRefresh(tmpSource)
+        let tmpQuery = 
+        {
+            query :"SELECT [dbo].[FN_SAFE_AMOUNT](@SAFE,GETDATE()) AS TOTAL",
+            param : ['SAFE:string|50'],
+            value : [this.cmbSafe.value]
+        }
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        if(tmpData.result.recordset.length > 0)
+        {
+            let txtTotal = tmpData.result.recordset[0].TOTAL
+            this.txtAmount.setState({value:txtTotal + ' €'});
+        }
+      
     }
     render()
     {
@@ -160,9 +185,9 @@ export default class itemList extends React.Component
                                         {
                                             App.instance.menuClick(
                                             {
-                                                id: 'fns_02_002',
+                                                id: 'fns_02_001',
                                                 text: this.t('menu'),
-                                                path: '../pages/finance/documents/collection.js'
+                                                path: '../pages/finance/documents/payment.js'
                                             })
                                         }
                                     }    
@@ -187,73 +212,24 @@ export default class itemList extends React.Component
                                     >
                                     </NdDatePicker>
                                 </Item>
-                                <Item>
-                                <Label text={this.t("txtCustomerCode")} alignment="right" />
-                                <NdTextBox id="txtCustomerCode" parent={this} simple={true}  notRefresh = {true}
-                                button=
-                                {
-                                    [
+                                 {/* cmbSafe */}
+                                 <Item>
+                                    <Label text={this.t("cmbSafe")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbSafe" notRefresh = {true}
+                                    displayExpr="NAME"                       
+                                    valueExpr="GUID"
+                                    value=""
+                                    searchEnabled={true}
+                                    onValueChanged={(async()=>
                                         {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
-                                            {
-                                                this.pg_txtCustomerCode.show()
-                                                this.pg_txtCustomerCode.onClick = (data) =>
-                                                {
-                                                    if(data.length > 0)
-                                                    {
-                                                        this.txtCustomerCode.setState({value:data[0].TITLE})
-                                                        this.txtCustomerCode.CODE = data[0].CODE
-                                                    }
-                                                }
-                                            }
-                                        },
-                                    ]
-                                }
-                                >
-                                </NdTextBox>
-                                {/*CARI SECIMI POPUP */}
-                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
-                                visible={false}
-                                position={{of:'#root'}} 
-                                showTitle={true} 
-                                showBorders={true}
-                                width={'90%'}
-                                height={'90%'}
-                                title={this.t("pg_txtCustomerCode.title")} //
-                                search={true}
-                                data = 
-                                {{
-                                    source:
-                                    {
-                                        select:
-                                        {
-                                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
-                                            param : ['VAL:string|50']
-                                        },
-                                        sql:this.core.sql
-                                    }
-                                }}
-                                button=
-                                {
-                                    {
-                                        id:'01',
-                                        icon:'more',
-                                        onClick:()=>
-                                        {
-                                            console.log(1111)
-                                        }
-                                    }
-                                }
-                                >
-                                    <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
-                                    <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
-                                    <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
-                                    <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>
-                                    
-                                </NdPopGrid>
-                                </Item> 
+                                        }).bind(this)}
+                                    data={{source:{select:{query : "SELECT * FROM SAFE_VW_01"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbSafe',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbSafe',USERS:this.user.CODE})}
+                                    >
+                                       
+                                    </NdSelectBox>
+                                </Item>
                             </Form>
                         </div>
                     </div>
@@ -279,7 +255,7 @@ export default class itemList extends React.Component
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <NdGrid id="grdColList" parent={this} 
+                            <NdGrid id="grdSafeList" parent={this} 
                             selection={{mode:"multiple"}} 
                             showBorders={true}
                             filterRow={{visible:true}} 
@@ -291,26 +267,33 @@ export default class itemList extends React.Component
                                 <Paging defaultPageSize={10} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
 
-                                <Column dataField="REF" caption={this.t("grdColList.clmRef")} visible={true} width={200}/> 
-                                <Column dataField="REF_NO" caption={this.t("grdColList.clmRefNo")} visible={true} width={100}/> 
-                                <Column dataField="OUTPUT_CODE" caption={this.t("grdColList.clmOutputCode")} visible={false}/> 
-                                <Column dataField="OUTPUT_NAME" caption={this.t("grdColList.clmOutputName")} visible={true}/> 
-                                <Column dataField="DOC_DATE_CONVERT" caption={this.t("grdColList.clmDate")} visible={true} width={200}/> 
-                                <Column dataField="TOTAL" caption={this.t("grdColList.clmTotal")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}/>              
+                                <Column dataField="REF" caption={this.t("grdSafeList.clmRef")} visible={true} width={200}/> 
+                                <Column dataField="REF_NO" caption={this.t("grdSafeList.clmRefNo")} visible={true} width={100}/> 
+                                <Column dataField="OUTPUT_NAME" caption={this.t("grdSafeList.clmOutputName")} visible={true}/> 
+                                <Column dataField="INPUT_NAME" caption={this.t("grdSafeList.clmInputName")} visible={true}/> 
+                                <Column dataField="AMOUNT" caption={this.t("grdSafeList.clmAmount")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
+                                <Column dataField="DOC_DATE" caption={this.t("grdSafeList.clmDate")} visible={true} width={200}
+                                editorOptions={{value:null}}
+                                cellRender={(e) => 
+                                {
+                                    if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
+                                    {
+                                        return moment(e.value).format("YYYY-MM-DD")
+                                    }
+                                    
+                                    return
+                                }}/> 
                             </NdGrid>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={4} parent={this} >                            
+                            <Form colCount={4} parent={this}>                            
                                 {/* TOPLAM */}
                                 <Item colSpan={3}></Item>
                                 <Item>
-                                <Label text={this.t("txtTotal")} alignment="right" />
-                                    <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true}
-                                    maxLength={32}
-                                    param={this.param.filter({ELEMENT:'txtTotal',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'txtTotal',USERS:this.user.CODE})}
+                                <Label text={this.t("txtAmount")} alignment="right" />
+                                    <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true}
                                     ></NdTextBox>
                                 </Item>
                             </Form>
