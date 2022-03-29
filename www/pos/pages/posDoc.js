@@ -16,6 +16,7 @@ import NdDatePicker from "../../core/react/devex/datepicker.js";
 import NdSelectBox from "../../core/react/devex/selectbox.js";
 import NbPluButtonGrp from "../tools/plubuttongrp.js";
 import NbPopNumber from "../tools/popnumber.js";
+import NbRadioButton from "../../core/react/bootstrap/radiogroup.js";
 import { dialog } from "../../core/react/devex/dialog.js";
 
 import { posCls,posSaleCls,posPaymentCls,posPluCls } from "../../core/cls/pos.js";
@@ -395,17 +396,49 @@ export default class posDoc extends React.Component
 
         this.calGrandTotal();
     }
-    payAdd(pType,pAmount)
+    async payAdd(pType,pAmount)
     {
-        let tmpRowData = this.isRowMerge('PAY',{TYPE:pType})
-        //SATIR BİRLEŞTİR        
-        if(typeof tmpRowData != 'undefined')
+        if(this.state.payRest > 0)
         {
-            this.payRowUpdate(tmpRowData,{AMOUNT:Number(parseFloat(Number(pAmount) + tmpRowData.AMOUNT).toFixed(2)),CHANGE:0})
-        }
-        else
+            //KREDİ KARTI İSE
+            if(pType == 1)
+            {
+                let tmpConfObj =
+                {
+                    id:'msgAlert',
+                    showTitle:true,
+                    title:"Uyarı",
+                    showCloseButton:true,
+                    width:'500px',
+                    height:'200px',
+                    button:[{id:"btn01",caption:"Tekrar",location:'before'},{id:"btn02",caption:"Vazgeç",location:'center'},{id:"btn03",caption:"Zorla",location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Kart cihazından cevap bekleniyor."}</div>)
+                }
+                let tmpResult = await dialog(tmpConfObj);
+                if(tmpResult == 'btn01')
+                {
+                    
+                }
+                else if(tmpResult == 'btn02')
+                {
+                    return
+                }
+            }
+            let tmpRowData = this.isRowMerge('PAY',{TYPE:pType})
+            //SATIR BİRLEŞTİR        
+            if(typeof tmpRowData != 'undefined')
+            {
+                this.payRowUpdate(tmpRowData,{AMOUNT:Number(parseFloat(Number(pAmount) + tmpRowData.AMOUNT).toFixed(2)),CHANGE:0})
+            }
+            else
+            {
+                this.payRowAdd({PAY_TYPE:pType,AMOUNT:pAmount,CHANGE:0})
+            }            
+        }    
+        
+        if(this.state.payRest == 0)
         {
-            this.payRowAdd({PAY_TYPE:pType,AMOUNT:pAmount,CHANGE:0})
+            console.log("Satış Kapandı")
         }
     }
     payRowAdd(pPayData)
@@ -445,6 +478,9 @@ export default class posDoc extends React.Component
             this.posObj.dt()[this.posObj.dt().length - 1].VAT = Number(parseFloat(this.posObj.posSale.dt().sum('VAT',2)).toFixed(2))
             this.posObj.dt()[this.posObj.dt().length - 1].TOTAL = Number(parseFloat(this.posObj.posSale.dt().sum('TOTAL',2)).toFixed(2))
             
+            this.state.payChange = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) >= 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2)) * -1
+            this.state.payRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2)); 
+            
             this.setState(
                 {
                     totalRowCount:this.posObj.posSale.dt().length,
@@ -456,10 +492,14 @@ export default class posDoc extends React.Component
                     totalDiscount:this.posObj.dt()[0].DISCOUNT,
                     totalGrand:this.posObj.dt()[0].TOTAL,
                     payTotal:this.posObj.posPay.dt().sum('AMOUNT',2),
-                    payChange:(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) >= 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2)) * -1,
-                    payRest:(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2))
+                    payChange:this.state.payChange,
+                    payRest:this.state.payRest
                 }
             )
+            
+            this.txtPopTotal.value = parseFloat(this.state.payRest).toFixed(2)
+            this.txtPopCardPay.value = parseFloat(this.state.payRest).toFixed(2)
+            this.txtPopCashPay.value = parseFloat(this.state.payRest).toFixed(2)            
         }        
     }
     getWeighing()
@@ -823,7 +863,8 @@ export default class posDoc extends React.Component
                                                 {
                                                     return
                                                 }
-                                            }
+                                            }                 
+                                            this.rbtnPayType.value = 0                                                                       
                                             this.popTotal.show();
                                         }}>
                                             <i className="text-white fa-solid fa-euro-sign" style={{fontSize: "24px"}} />
@@ -1253,8 +1294,31 @@ export default class posDoc extends React.Component
                                 </div>
                                 <div className="row pt-2">
                                     {/* Payment Type Selection */}
-                                    <div className="col-2">
-                                        
+                                    <div className="col-2 pe-1">
+                                        <NbRadioButton id={"rbtnPayType"} parent={this} 
+                                        button={
+                                            [
+                                                {
+                                                    id:"btn01",
+
+                                                    style:{height:'66px',width:'100%'},
+                                                    icon:"fa-money-bill-1",
+                                                    text:"ESC"
+                                                },
+                                                {
+                                                    id:"btn02",
+                                                    style:{height:'66px',width:'100%'},
+                                                    icon:"fa-credit-card",
+                                                    text:"CB"
+                                                },
+                                                {
+                                                    id:"btn03",
+                                                    style:{height:'66px',width:'100%'},
+                                                    icon:"fa-rectangle-list",
+                                                    text:"CHQ"
+                                                }
+                                            ]
+                                        }/>
                                     </div>
                                     {/* Payment Grid */}
                                     <div className="col-7">
@@ -1271,12 +1335,19 @@ export default class posDoc extends React.Component
                                                 height={"138px"} 
                                                 width={"100%"}
                                                 dbApply={false}
+                                                selection={{mode:"single"}}
                                                 onRowPrepared=
                                                 {
                                                     (e)=>
                                                     {
                                                         e.rowElement.style.fontSize = "13px";
-                                                        e.rowElement.style.backgroundColor = "#ecf0f1"
+                                                    }
+                                                }
+                                                onRowRemoved=
+                                                {
+                                                    (e) =>
+                                                    {
+                                                        this.calGrandTotal();
                                                     }
                                                 }
                                                 >
@@ -1299,10 +1370,7 @@ export default class posDoc extends React.Component
                                             <div className="col-12">
                                                 <NbButton id={"btnPopTotalCash1"} parent={this} className="btn btn-block" 
                                                 style={{height:"60px",width:"100%",backgroundImage:"url(css/img/1€.png)",backgroundRepeat:"no-repeat",backgroundSize:"55% 100%",backgroundPosition: "center",borderColor:"#6c757d"}}
-                                                onClick={()=>
-                                                {                                                        
-                                                    
-                                                }}/>
+                                                onClick={()=>{this.rbtnPayType.value = 0;this.payAdd(0,1)}}/>
                                             </div>
                                         </div>
                                         {/* 2 € */}
@@ -1310,10 +1378,7 @@ export default class posDoc extends React.Component
                                             <div className="col-12">
                                                 <NbButton id={"btnPopTotalCash2"} parent={this} className="btn btn-block" 
                                                 style={{height:"60px",width:"100%",backgroundImage:"url(css/img/2€.png)",backgroundRepeat:"no-repeat",backgroundSize:"55% 100%",backgroundPosition: "center",borderColor:"#6c757d"}}
-                                                onClick={()=>
-                                                {                                                        
-                                                    
-                                                }}/>
+                                                onClick={()=>{this.rbtnPayType.value = 0;this.payAdd(0,2)}}/>
                                             </div>
                                         </div>
                                         {/* 5 € */}
@@ -1321,10 +1386,7 @@ export default class posDoc extends React.Component
                                             <div className="col-12">
                                                 <NbButton id={"btnPopTotalCash5"} parent={this} className="btn btn-block" 
                                                 style={{height:"60px",width:"100%",backgroundImage:"url(css/img/5€.jfif)",backgroundSize:"cover",borderColor:"#6c757d"}}
-                                                onClick={()=>
-                                                {                                                        
-                                                    
-                                                }}/>
+                                                onClick={()=>{this.rbtnPayType.value = 0;this.payAdd(0,5)}}/>
                                             </div>
                                         </div>
                                     </div>
@@ -1346,16 +1408,20 @@ export default class posDoc extends React.Component
                                             <div className="col-6">
                                                 <NbButton id={"btnPopTotalCash10"} parent={this} className="btn btn-block" 
                                                 style={{height:"60px",width:"100%",backgroundImage:"url(css/img/10€.jpg)",backgroundSize:"cover",borderColor:"#6c757d"}}
-                                                onClick={()=>
-                                                {                                                        
-                                                    
-                                                }}/>
+                                                onClick={()=>{this.rbtnPayType.value = 0;this.payAdd(0,10)}}/>
                                             </div>
                                         </div>
                                         <div className="row py-1">
                                             {/* Line Delete */}
                                             <div className="col-6">
-                                                <NbButton id={"btnPopTotalLineDel"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}>
+                                                <NbButton id={"btnPopTotalLineDel"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
+                                                onClick={()=>
+                                                {
+                                                    if(this.grdPay.devGrid.getSelectedRowKeys().length > 0)
+                                                    {
+                                                        this.grdPay.devGrid.deleteRow(this.grdPay.devGrid.getRowIndexByKey(this.grdPay.devGrid.getSelectedRowKeys()[0]))
+                                                    }
+                                                }}>
                                                     Satır İptal
                                                 </NbButton>
                                             </div>
@@ -1363,16 +1429,14 @@ export default class posDoc extends React.Component
                                             <div className="col-6">
                                                 <NbButton id={"btnPopTotalCash20"} parent={this} className="btn btn-block" 
                                                 style={{height:"60px",width:"100%",backgroundImage:"url(css/img/20€.jpg)",backgroundSize:"cover",borderColor:"#6c757d"}}
-                                                onClick={()=>
-                                                {                                                        
-                                                    
-                                                }}/>
+                                                onClick={()=>{this.rbtnPayType.value = 0;this.payAdd(0,20)}}/>
                                             </div>
                                         </div>
                                         <div className="row py-1">
                                             {/* Cancel */}
                                             <div className="col-6">
-                                                <NbButton id={"btnPopTotalCancel"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}>
+                                                <NbButton id={"btnPopTotalCancel"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
+                                                onClick={()=>{this.popTotal.hide()}}>
                                                     Vazgeç
                                                 </NbButton>
                                             </div>
@@ -1380,20 +1444,14 @@ export default class posDoc extends React.Component
                                             <div className="col-6">
                                                 <NbButton id={"btnPopTotalCash50"} parent={this} className="btn btn-block" 
                                                 style={{height:"60px",width:"100%",backgroundImage:"url(css/img/50€.jpg)",backgroundSize:"cover",borderColor:"#6c757d"}}
-                                                onClick={()=>
-                                                {                                                        
-                                                    
-                                                }}/>
+                                                onClick={()=>{this.rbtnPayType.value = 0;this.payAdd(0,50)}}/>
                                             </div>
                                         </div>
                                         <div className="row py-1">
                                             {/* Okey */}
                                             <div className="col-6">
                                                 <NbButton id={"btnPopTotalOkey"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
-                                                onClick={()=>
-                                                {
-                                                    this.payAdd(0,this.txtPopTotal.value);
-                                                }}>
+                                                onClick={()=>{this.payAdd(this.rbtnPayType.value,this.txtPopTotal.value)}}>
                                                     <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
                                                 </NbButton>
                                             </div>
@@ -1401,10 +1459,7 @@ export default class posDoc extends React.Component
                                             <div className="col-6">
                                                 <NbButton id={"btnPopTotalCash100"} parent={this} className="btn btn-block" 
                                                 style={{height:"60px",width:"100%",backgroundImage:"url(css/img/100€.jpg)",backgroundSize:"cover",borderColor:"#6c757d"}}
-                                                onClick={()=>
-                                                {                                                        
-                                                    
-                                                }}/>
+                                                onClick={()=>{this.rbtnPayType.value = 0;this.payAdd(0,100)}}/>
                                             </div>
                                         </div>
                                     </div>
@@ -1422,7 +1477,7 @@ export default class posDoc extends React.Component
                     title={"Kart Ödeme"}
                     container={"#root"} 
                     width={"300"}
-                    height={"500"}
+                    height={"510"}
                     position={{of:"#root"}}
                     >
                         {/* Top Total Indicator */}
@@ -1430,10 +1485,10 @@ export default class posDoc extends React.Component
                             <div className="col-12">
                                <div className="row">
                                     <div className="col-6">
-                                        <p className="text-primary text-start m-0">Toplam : <span className="text-dark">12.94€</span></p>    
+                                        <p className="text-primary text-start m-0">Toplam : <span className="text-dark">{parseFloat(this.state.totalGrand).toFixed(2)} €</span></p>    
                                     </div>
                                     <div className="col-6">
-                                        <p className="text-primary text-start m-0">Kalan : <span className="text-dark">12.94€</span></p>    
+                                        <p className="text-primary text-start m-0">Kalan : <span className="text-dark">{parseFloat(this.state.payRest).toFixed(2)} €</span></p>    
                                     </div>
                                 </div> 
                             </div>
@@ -1454,7 +1509,8 @@ export default class posDoc extends React.Component
                         {/* btnPopCardPaySend */}
                         <div className="row pt-2">
                             <div className="col-12">
-                                <NbButton id={"btnPopCardPaySend"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}>
+                                <NbButton id={"btnPopCardPaySend"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
+                                onClick={()=>{this.payAdd(1,this.txtPopCardPay.value)}}>
                                     Gönder
                                 </NbButton>
                             </div>
@@ -1478,10 +1534,10 @@ export default class posDoc extends React.Component
                                 {/* Top Total Indicator */}
                                 <div className="row pb-3">
                                     <div className="col-6">
-                                        <p className="text-primary text-start m-0">Toplam : <span className="text-dark">0</span></p>    
+                                        <p className="text-primary text-start m-0">Toplam : <span className="text-dark">{parseFloat(this.state.totalGrand).toFixed(2)} €</span></p>    
                                     </div>
                                     <div className="col-6">
-                                        <p className="text-primary text-start m-0">Kalan : <span className="text-dark">0</span></p>    
+                                        <p className="text-primary text-start m-0">Kalan : <span className="text-dark">{parseFloat(this.state.payRest).toFixed(2)} €</span></p>    
                                     </div>
                                 </div>
                                 {/* txtPopCashPay */}
@@ -1494,13 +1550,14 @@ export default class posDoc extends React.Component
                                 {/* numPopCashPay */}
                                 <div className="row pt-2">                            
                                     <div className="col-12">
-                                        <NbNumberboard id={"numPopCashPay"} parent={this} textobj="txtPopPrice" span={1} buttonHeight={"60px"}/>
+                                        <NbNumberboard id={"numPopCashPay"} parent={this} textobj="txtPopCashPay" span={1} buttonHeight={"60px"}/>
                                     </div>
                                 </div>
                                 {/* numPopCashPay */}
                                 <div className="row pt-2">
                                     <div className="col-12">
-                                        <NbButton id={"btnPopCashPayOk"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}>
+                                        <NbButton id={"btnPopCashPayOk"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
+                                        onClick={()=>{this.payAdd(0,this.txtPopCashPay.value)}}>
                                             <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
@@ -1514,10 +1571,7 @@ export default class posDoc extends React.Component
                                             <div className="col-12">
                                                 <NbButton id={"btnPopCashPay1"} parent={this} className="btn btn-block" 
                                                 style={{height:"60px",width:"100%",backgroundImage:"url(css/img/1€.png)",backgroundRepeat:"no-repeat",backgroundSize:"55% 100%",backgroundPosition: "center",borderColor:"#6c757d"}}
-                                                onClick={()=>
-                                                {                                                        
-                                                    
-                                                }}/>
+                                                onClick={()=>{this.payAdd(0,1)}}/>
                                             </div>
                                         </div>
                                         {/* 2 € */}
@@ -1525,10 +1579,7 @@ export default class posDoc extends React.Component
                                             <div className="col-12">
                                                 <NbButton id={"btnPopCashPay2"} parent={this} className="btn btn-block" 
                                                 style={{height:"60px",width:"100%",backgroundImage:"url(css/img/2€.png)",backgroundRepeat:"no-repeat",backgroundSize:"55% 100%",backgroundPosition: "center",borderColor:"#6c757d"}}
-                                                onClick={()=>
-                                                {                                                        
-                                                    
-                                                }}/>
+                                                onClick={()=>{this.payAdd(0,2)}}/>
                                             </div>
                                         </div>
                                         {/* 5 € */}
@@ -1536,10 +1587,7 @@ export default class posDoc extends React.Component
                                             <div className="col-12">
                                                 <NbButton id={"btnPopCashPay5"} parent={this} className="btn btn-block" 
                                                 style={{height:"60px",width:"100%",backgroundImage:"url(css/img/5€.jfif)",backgroundSize:"cover",borderColor:"#6c757d"}}
-                                                onClick={()=>
-                                                {                                                        
-                                                    
-                                                }}/>
+                                                onClick={()=>{this.payAdd(0,5)}}/>
                                             </div>
                                         </div>
                                         {/* 10 € */}
@@ -1547,10 +1595,7 @@ export default class posDoc extends React.Component
                                             <div className="col-12">
                                                 <NbButton id={"btnPopCashPay10"} parent={this} className="btn btn-block" 
                                                 style={{height:"60px",width:"100%",backgroundImage:"url(css/img/10€.jpg)",backgroundSize:"cover",borderColor:"#6c757d"}}
-                                                onClick={()=>
-                                                {                                                        
-                                                    
-                                                }}/>
+                                                onClick={()=>{this.payAdd(0,10)}}/>
                                             </div>
                                         </div>
                                         {/* 20 € */}
@@ -1558,10 +1603,7 @@ export default class posDoc extends React.Component
                                             <div className="col-12">
                                                 <NbButton id={"btnPopCashPay20"} parent={this} className="btn btn-block" 
                                                 style={{height:"60px",width:"100%",backgroundImage:"url(css/img/20€.jpg)",backgroundSize:"cover",borderColor:"#6c757d"}}
-                                                onClick={()=>
-                                                {                                                        
-                                                    
-                                                }}/>
+                                                onClick={()=>{this.payAdd(0,20)}}/>
                                             </div>
                                         </div>
                                         {/* 50 € */}
@@ -1569,10 +1611,7 @@ export default class posDoc extends React.Component
                                             <div className="col-12">
                                                 <NbButton id={"btnPopCashPay50"} parent={this} className="btn btn-block" 
                                                 style={{height:"60px",width:"100%",backgroundImage:"url(css/img/50€.jpg)",backgroundSize:"cover",borderColor:"#6c757d"}}
-                                                onClick={()=>
-                                                {                                                        
-                                                    
-                                                }}/>
+                                                onClick={()=>{this.payAdd(0,50)}}/>
                                             </div>
                                         </div>
                                         {/* 100 € */}
@@ -1580,10 +1619,7 @@ export default class posDoc extends React.Component
                                             <div className="col-12">
                                                 <NbButton id={"btnPopCashPay100"} parent={this} className="btn btn-block" 
                                                 style={{height:"60px",width:"100%",backgroundImage:"url(css/img/100€.jpg)",backgroundSize:"cover",borderColor:"#6c757d"}}
-                                                onClick={()=>
-                                                {                                                        
-                                                    
-                                                }}/>
+                                                onClick={()=>{this.payAdd(0,100)}}/>
                                             </div>
                                         </div>
                                     </div>
