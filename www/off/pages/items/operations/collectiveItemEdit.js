@@ -315,7 +315,7 @@ export default class collectiveItemEdit extends React.Component
                             height={'100%'} 
                             width={'100%'}
                             >                            
-                                <Paging defaultPageSize={20} />
+                                <Paging defaultPageSize={14} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
                                 <Editing mode="cell" allowUpdating={true} allowDeleting={false} confirmDelete={false}/>
                                 <Column dataField="CODE" caption={this.t("grdItemList.clmCode")} visible={true} width={150} allowEditing={false}/> 

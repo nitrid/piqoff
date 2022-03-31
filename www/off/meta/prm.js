@@ -942,4 +942,27 @@ export const prm =
         }
     },
     //#endregion
+
+    //#region Satış Anlaşması
+    // maxDiscount
+    {
+        TYPE : 1,
+        ID :"maxDiscount",
+        VALUE : 
+        {
+            value : 30
+        },
+        SPECIAL : "",
+        PAGE : "cnt_02_002",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Satış Anlaşması",
+            CAPTION : "İzin Verilen En Yüksek İndirim Yüzde"
+        }
+    },
+    //#endregion
+
 ]

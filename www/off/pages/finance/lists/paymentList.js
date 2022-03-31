@@ -137,6 +137,8 @@ export default class itemList extends React.Component
         }
         
         await this.grdPayList.dataRefresh(tmpSource)
+        let tmpTotal =  this.grdPayList.data.datatable.sum("AMOUNT",2)
+        this.txtTotal.setState({value:tmpTotal + ' €'});
     }
     render()
     {
@@ -158,9 +160,9 @@ export default class itemList extends React.Component
                                         {
                                             App.instance.menuClick(
                                             {
-                                                id: 'ftr_02_002',
-                                                text: this.t('menu.ftr_02_002'),
-                                                path: '../pages/invoices/documents/salesInvoice.js'
+                                                id: 'fns_02_001',
+                                                text: this.t('menu'),
+                                                path: '../pages/finance/documents/payment.js'
                                             })
                                         }
                                     }    
@@ -286,7 +288,7 @@ export default class itemList extends React.Component
                             allowColumnReordering={true}
                             allowColumnResizing={true}
                             >                            
-                                <Paging defaultPageSize={20} />
+                                <Paging defaultPageSize={10} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
 
                                 <Column dataField="REF" caption={this.t("grdPayList.clmRef")} visible={true} width={200}/> 
@@ -296,6 +298,19 @@ export default class itemList extends React.Component
                                 <Column dataField="DOC_DATE_CONVERT" caption={this.t("grdPayList.clmDate")} visible={true} width={200}/> 
                                 <Column dataField="TOTAL" caption={this.t("grdPayList.clmTotal")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}/>              
                             </NdGrid>
+                        </div>
+                    </div>
+                    <div className="row px-2 pt-2">
+                        <div className="col-12">
+                            <Form colCount={4} parent={this}>                            
+                                {/* TOPLAM */}
+                                <Item colSpan={3}></Item>
+                                <Item>
+                                <Label text={this.t("txtTotal")} alignment="right" />
+                                    <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true}
+                                    ></NdTextBox>
+                                </Item>
+                            </Form>
                         </div>
                     </div>
                 </ScrollView>

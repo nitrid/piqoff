@@ -456,6 +456,16 @@ export const menu = (e) =>
                             text: e.t('menu.fns_01_002'),//'Tahsilat Listesi',
                             path: '../pages/finance/lists/collectionList.js'
                         },
+                        {
+                            id: 'fns_01_003',
+                            text: e.t('menu.fns_01_003'),//'Tahsilat Listesi',
+                            path: '../pages/finance/lists/bankList.js'
+                        },
+                        {
+                            id: 'fns_01_004',
+                            text: e.t('menu.fns_01_004'),//'Tahsilat Listesi',
+                            path: '../pages/finance/lists/safeList.js'
+                        },
                     ]
                 },
                 {
@@ -491,6 +501,11 @@ export const menu = (e) =>
                             id: 'fns_03_002',
                             text: e.t('menu.fns_03_002'),//'Tahsilat',
                             path: '../pages/finance/cards/bankCard.js'
+                        },
+                        {
+                            id: 'fns_03_003',
+                            text: e.t('menu.fns_03_003'),//'Tahsilat',
+                            path: '../pages/finance/documents/virement.js'
                         },
                     ]
                 },

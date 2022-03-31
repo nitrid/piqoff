@@ -274,6 +274,10 @@ export default class promotionCard extends React.Component
                                     {
                                         if(e.validationGroup.validate().status == "valid")
                                         {
+                                            this.txtPopItemsQuantity.setState({value:1})
+                                            this.txtPopItemsCode.setState({value:''})
+                                            this.txtPopItemsName.setState({value:''})
+                                            this.txtPopItemsPrice.setState({value:0})
                                             this.popItems.show()
                                         }
                                         else
@@ -372,7 +376,6 @@ export default class promotionCard extends React.Component
                                                     this.txtPopItemsQuantity.value = 1 
                                                     this.txtPopItemsCode.value = ''
                                                     this.txtPopItemsName.value = ''
-                                                    this.txtPopItemsPrice.value = ''
                                                                               
                                                     this.pg_txtPopItemsCode.show()
                                                     this.pg_txtPopItemsCode.onClick = (data) =>
@@ -382,6 +385,7 @@ export default class promotionCard extends React.Component
                                                             this.txtPopItemsCode.GUID = data[0].GUID
                                                             this.txtPopItemsCode.value = data[0].CODE;
                                                             this.txtPopItemsName.value = data[0].NAME;
+                                                            this.txtPopItemsCode.PRICE = data[0].PRICE;
                                                         }
                                                     }
                                                 }
@@ -426,6 +430,24 @@ export default class promotionCard extends React.Component
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
                                                 {
+                                                    let tmpDatas = this.prmObj.filter({ID:'maxDiscount',USERS:this.user.CODE}).getValue()
+                                                    if(typeof tmpDatas != 'undefined' && tmpDatas.value > 0)
+                                                    {
+                                                        if(this.txtPopItemsPrice.value < (this.txtPopItemsCode.PRICE - (this.txtPopItemsCode.PRICE * tmpDatas.value / 100)))
+                                                        {
+                                                            let tmpConfObj =
+                                                            {
+                                                                id:'msgDiscount',showTitle:true,title:this.t("msgDiscount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                                button:[{id:"btn01",caption:this.t("msgDiscount.btn01"),location:'after'}],
+                                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscount.msg") + (this.txtPopItemsCode.PRICE - (this.txtPopItemsCode.PRICE * tmpDatas.value / 100))}</div>)
+                                                            }
+                                                        
+                                                            dialog(tmpConfObj);
+                                                            this.docObj.docItems.dt()[rowIndex].DISCOUNT = 0 
+                                                            return
+                                                        }
+                                                       
+                                                    }
                                                     let tmpEmpty = {...this.itemPriceObj.empty};
                                                     
                                                     tmpEmpty.CUSER = this.core.auth.data.CODE,  
@@ -490,7 +512,7 @@ export default class promotionCard extends React.Component
                         {
                             select:
                             {
-                                query : "SELECT GUID,CODE,NAME FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                query : "SELECT GUID,CODE,NAME,COST_PRICE,(select dbo.FN_PRICE_SALE_VAT_EXT(GUID,1,GETDATE())) AS PRICE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
                                 param : ['VAL:string|50']
                             },
                             sql:this.core.sql
@@ -498,7 +520,9 @@ export default class promotionCard extends React.Component
                     }}
                     >           
                     <Column dataField="CODE" caption={this.t("pg_txtPopItemsCode.clmCode")} width={150} />
-                    <Column dataField="NAME" caption={this.t("pg_txtPopItemsCode.clmName")} width={300} defaultSortOrder="asc" />
+                    <Column dataField="NAME" caption={this.t("pg_txtPopItemsCode.clmName")} width={500} defaultSortOrder="asc" />
+                    <Column dataField="COST_PRICE" caption={this.t("pg_txtPopItemsCode.clmCostPrice")} width={300}  />
+                    <Column dataField="PRICE" caption={this.t("pg_txtPopItemsCode.clmSalesPrice")} width={300}  />
                     </NdPopGrid>
                                     
                 </ScrollView>

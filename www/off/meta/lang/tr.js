@@ -83,12 +83,15 @@ export const langTr =
         fns_01 : "Listeler",
         fns_01_001: "Ödeme Listesi",
         fns_01_002 : "Tahsilat Listesi",
+        fns_01_003 : "Banka Hareketleri Listesi",
+        fns_01_004 : "Kasa Hareketleri Listesi",
         fns_02 : "Evraklar",
         fns_02_001 : "Ödeme",
         fns_02_002 : "Tahsilat",
         fns_03 : "Kasa - Banka İşlemieri",
         fns_03_001 : "Kasa Tanıtım",
         fns_03_002 : "Banka Tanıtım",
+        fns_03_003 : "Hesaplar Arası Virman",
         fns_04 : "Raporlar",
         promo: "Promosyon",
         promo_01: "Tanımlar",
@@ -3330,13 +3333,6 @@ export const langTr =
             dtPopStartDate :"Başlangıç",
             dtPopEndDate : "Bitiş"
         },
-        pg_txtPopItemsCode : 
-        {
-            title : "Stok Seçimi",
-            clmCode :  "STOK KODU",
-            clmName : "STOK ADI",
-            clmMulticode : "TEDARİKÇİ KODU"
-        },
         validCustomerCode : "Cari Kodu Boş Geçilemez",
     },
     cnt_02_002 :
@@ -3344,6 +3340,7 @@ export const langTr =
         cmbDepot: "Depo",
         txtCustomerCode : "Cari Kodu",
         txtCustomerName : "Cari Adı",
+        validItemsCode : "Stok Seçimi",
         pg_txtCustomerCode : 
         {
             title : "Cari Seçimi",
@@ -3357,6 +3354,8 @@ export const langTr =
             title : "Stok Seçimi",
             clmCode :  "STOK KODU",
             clmName : "STOK ADI",
+            clmCostPrice : "ALIŞ FİYATI",
+            clmSalesPrice :"SATIŞ FİYATI"
         },
         msgContractValid:
         {
@@ -3418,18 +3417,19 @@ export const langTr =
             dtPopStartDate :"Başlangıç",
             dtPopEndDate : "Bitiş"
         },
-        pg_txtPopItemsCode : 
+        msgDiscount:
         {
-            title : "Stok Seçimi",
-            clmCode :  "STOK KODU",
-            clmName : "STOK ADI",
-            clmMulticode : "TEDARİKÇİ KODU"
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "İzin Verilen Tutardan Yüksek İndirim Yapılamaz.!! İzin Verilen Tutar : "
         },
         validCustomerCode : "Cari Kodu Boş Geçilemez",
     },
     fns_01_001 :
     {
         txtCustomerCode : "Cari",
+        menu  : "Ödeme",
+        txtTotal : "Toplam",
         pg_txtCustomerCode : 
         {
             title : "Cari Seçimi",
@@ -3457,6 +3457,8 @@ export const langTr =
     fns_01_002 :
     {
         txtCustomerCode : "Cari",
+        txtTotal : "Toplam",
+        menu : "Tahsilat",
         pg_txtCustomerCode : 
         {
             title : "Cari Seçimi",
@@ -3481,9 +3483,50 @@ export const langTr =
         },
 
     },
+    fns_01_003 :
+    {
+        cmbBank : "Hesap",
+        txtAmount : "Banka Bakiyesi",
+        menu : "Tahsilat",
+        btnGet :"Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        grdBankList: 
+        {
+            clmRef: "Seri",
+            clmRefNo: "Sıra",
+            clmOutputName : "Çıkış Hesabı",
+            clmInputName : "Giriş Hesabı",
+            clmDate: "Tarih",
+            clmAmount : "Tutar",
+            clmDate : "Tarih",
+        },
+
+    },
+    fns_01_004 :
+    {
+        cmbSafe : "Hesap",
+        txtAmount : "Kasa Bakiyesi",
+        menu : "Tahsilat",
+        btnGet :"Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        grdSafeList: 
+        {
+            clmRef: "Seri",
+            clmRefNo: "Sıra",
+            clmOutputName : "Çıkış Hesabı",
+            clmInputName : "Giriş Hesabı",
+            clmDate: "Tarih",
+            clmAmount : "Tutar",
+            clmDate : "Tarih",
+        },
+
+    },
     fns_02_001 :
     {
         txtRefRefno : "Seri-Sıra",
+        menu  : "Ödeme",
         cmbDepot: "Depo",
         cmbCashSafe : "Nakit Kasası",
         cmbCheckSafe : "Çek Kasası",
@@ -3620,6 +3663,7 @@ export const langTr =
     fns_02_002 :
     {
         txtRefRefno : "Seri-Sıra",
+        menu : "Tahsilat",
         cmbDepot: "Depo",
         cmbCashSafe : "Nakit Kasası",
         cmbCheckSafe : "Çek Kasası",
@@ -3858,5 +3902,130 @@ export const langTr =
         }
       
     },
-   
+    fns_03_003 :
+    {
+        txtRefRefno : "Seri-Sıra",
+        cmbOutAccount: "Çıkış Hesabı",
+        cmbInAccount: "Giriş Hesabı",
+        dtDocDate : "Tarih",
+        txtAmount : "Tutar",
+        txtTotal : "Genel Toplam",
+        description :"Açıklama",
+        amount : "Tutar",
+        cmbSafe : "Çıkış Hesabı",
+        cmbSafe2 : "Giriş Hesabı",
+        btnSafeToSafe : "Kasalar Arası ",
+        btnSafeToBank : "Kasadan Bankaya ",
+        btnBankToSafe : "Bankadan Kasaya ",
+        btnBankToBank : "Bankalar Arası ",
+        pg_Docs : 
+        {
+            title : "Evrak Seçimi",
+            clmRef : "SERİ",
+            clmRefNo : "SIRA",
+           clmDate : "TARİH"
+        },
+        grdDocVirement: 
+        {
+            clmCreateDate: "Kayıt Tarihi",
+            clmAmount : "Tutar",
+            clmInputName : "Giriş Hesabı",
+            clmOutputName : "Çıkış Hesabı",
+            clmDescription : "Açıklama"
+        },
+        msgDocValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgLocked:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kayıt Edildi Ve Kilitlendi !"
+        },
+        msgPasswordSucces:
+        {
+            title: "Başarılı",
+            btn01: "Tamam",
+            msg: "Evrakın Kilidi Açıldı !",
+        },
+        msgPasswordWrong:
+        {
+            title: "Başarısız",
+            btn01: "Tamam",
+            msg: "Şifreniz Hatalı !"
+        },
+        msgGetLocked:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
+        },
+        msgDoclocked:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kilidi Açılmadan Kayıt Edilemez !"
+        },
+        msgDblAccount:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Giriş Ve Çıkış Hesapları Aynı Olamaz !"
+        },
+        popSafeToSafe: 
+        {
+            title: "Kasadan Kasaya Virman",
+            btnApprove : "Ekle",
+        },
+        popSafeToBank: 
+        {
+            title: "Kasadan Bankaya Virman",
+            btnApprove : "Ekle",
+        },
+        popBankToSafe: 
+        {
+            title: "Bankadan Kasaya Virman",
+            btnApprove : "Ekle",
+        },
+        popBankToBank: 
+        {
+            title: "Bankadan Bankaya Virman",
+            btnApprove : "Ekle",
+        },
+        
+        validRef :"Seri Boş Geçilemez",
+        validRefNo : "Sıra Boş Geçilemez",
+        validAccount : "Hesap Seçmelisiniz",
+        validDocDate : "Tarih Seçmelisiniz",
+    },
 }
