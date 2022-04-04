@@ -57,7 +57,9 @@ export default class posDoc extends React.Component
             totalGrand:0,
             payTotal:0,
             payChange:0,
-            payRest:0
+            payRest:0,
+            discountBefore:0,
+            discountAfter:0
         }      
         document.onkeydown = (e) =>
         {
@@ -487,8 +489,8 @@ export default class posDoc extends React.Component
         if(this.posObj.dt().length > 0)
         {
             this.posObj.dt()[this.posObj.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.posSale.dt().sum('AMOUNT',2)).toFixed(2))
-            this.posObj.dt()[this.posObj.dt().length - 1].DISCOUNT = 0
-            this.posObj.dt()[this.posObj.dt().length - 1].LOYALTY = 0
+            this.posObj.dt()[this.posObj.dt().length - 1].DISCOUNT = Number(parseFloat(this.posObj.posSale.dt().sum('DISCOUNT',2)).toFixed(2))
+            this.posObj.dt()[this.posObj.dt().length - 1].LOYALTY = Number(parseFloat(this.posObj.posSale.dt().sum('LOYALTY',2)).toFixed(2))
             this.posObj.dt()[this.posObj.dt().length - 1].VAT = Number(parseFloat(this.posObj.posSale.dt().sum('VAT',2)).toFixed(2))
             this.posObj.dt()[this.posObj.dt().length - 1].TOTAL = Number(parseFloat(this.posObj.posSale.dt().sum('TOTAL',2)).toFixed(2))
             
@@ -718,16 +720,33 @@ export default class posDoc extends React.Component
                                         {
                                             id:"02",
                                             icon:"arrowdown",
-                                            onClick:()=>
+                                            onClick:async ()=>
                                             {
-                                                this.popBarcodeList.show()
+                                                if(this.txtBarcode.value != '')
+                                                {
+                                                    let tmpDt = new datatable(); 
+                                                    tmpDt.selectCmd = 
+                                                    {
+                                                        query : "SELECT BARCODE,NAME,PRICE_SALE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE LIKE '%' + @BARCODE",
+                                                        param : ['BARCODE:string|25']
+                                                    }
+                                                    tmpDt.selectCmd.value = [this.txtBarcode.value]
+                                                    await tmpDt.refresh();
+                                                    
+                                                    await this.grdBarcodeList.dataRefresh({source:tmpDt});
+                                                    this.popBarcodeList.show()
+                                                    this.txtBarcode.value = ""
+                                                }
                                             }
                                         }
                                     ]
                                 }
-                                onChange={(async(e)=>
-                                {
-                                    this.getItem(this.txtBarcode.value)
+                                onKeyDown={(async(e)=>
+                                {                                    
+                                    if(e.event.key == 'Enter')
+                                    {
+                                        this.getItem(this.txtBarcode.value)
+                                    }
                                 }).bind(this)} 
                                 >     
                                 </NdTextBox>  
@@ -992,7 +1011,9 @@ export default class posDoc extends React.Component
                                     <div className="col-2 px-1">
                                         <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
                                         onClick={()=>
-                                        {                                                        
+                                        {   
+                                            this.rbtnDisType.value = 0
+                                            this.rbtnDisType._onClick(0)
                                             this.popDiscount.show()
                                         }}>
                                             <i className="text-white fa-solid fa-percent" style={{fontSize: "24px"}} />
@@ -1838,7 +1859,7 @@ export default class posDoc extends React.Component
                     title={"Barkod Listesi"}
                     container={"#root"} 
                     width={"600"}
-                    height={"380"}
+                    height={"400"}
                     position={{of:"#root"}}
                     >
                         {/* grdBarcodeList */}
@@ -1849,7 +1870,7 @@ export default class posDoc extends React.Component
                                 columnsAutoWidth={true} 
                                 allowColumnReordering={true} 
                                 allowColumnResizing={true} 
-                                height={"285px"} 
+                                height={"305px"} 
                                 width={"100%"}
                                 dbApply={false}
                                 selection={{mode:"single"}}
@@ -1864,6 +1885,12 @@ export default class posDoc extends React.Component
                                 onCellPrepared={(e)=>
                                 {
                                     e.cellElement.style.padding = "4px"
+                                }}
+                                onSelectionChanged={(e)=>
+                                {
+                                    this.txtBarcode.value = e.currentSelectedRowKeys[0].BARCODE
+                                    this.getItem(e.currentSelectedRowKeys[0].BARCODE)
+                                    this.popBarcodeList.hide()
                                 }}
                                 >
                                     <Column dataField="BARCODE" caption={"BARCODE"} width={100}/>
@@ -2031,7 +2058,46 @@ export default class posDoc extends React.Component
                         {/* Discount Header */}
                         <div className="row pb-1">
                             <div className="col-4">
+                                <NbRadioButton id={"rbtnDisType"} parent={this} 
+                                button={
+                                [
+                                    {
+                                        id:"btn01",
 
+                                        style:{height:'40px',width:'100%'},
+                                        text:"Evrak"
+                                    },
+                                    {
+                                        id:"btn02",
+                                        style:{height:'40px',width:'100%'},
+                                        text:"Satır"
+                                    }
+                                ]}
+                                onClick={(e)=>
+                                {
+                                    let tmpData = {}
+                                    if(e == 0) //EVRAK SEÇİLİ İSE
+                                    {
+                                        tmpData = this.posObj.dt()[0]
+                                    }
+                                    else if(e == 1) //SATIR SEÇİLİ İSE
+                                    {
+                                        if(this.grdList.devGrid.getSelectedRowsData().length > 0)
+                                        {
+                                            tmpData = this.grdList.devGrid.getSelectedRowsData()[0]
+                                        }
+                                    }
+
+                                    let tmpDiscount = Number(parseFloat(tmpData.DISCOUNT).toFixed(2))
+                                    let tmpBefore = Number(parseFloat(tmpData.TOTAL + tmpData.DISCOUNT).toFixed(2));
+                                    this.setState(
+                                    {
+                                        discountBefore:tmpBefore,
+                                        discountAfter:tmpData.TOTAL
+                                    })       
+                                    this.txtPopDiscountPercent.value = parseFloat((tmpDiscount / tmpBefore) * 100).toFixed(2)
+                                    this.txtPopDiscountAmount.value = parseFloat(tmpDiscount).toFixed(2)    
+                                }}/>
                             </div>
                             <div className="col-4">
                                 <div className="row">
@@ -2041,7 +2107,7 @@ export default class posDoc extends React.Component
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <h3 className="text-primary text-center">51.95 €</h3>    
+                                        <h3 className="text-primary text-center">{parseFloat(this.state.discountBefore).toFixed(2)} €</h3>    
                                     </div>
                                 </div>
                             </div>
@@ -2053,23 +2119,39 @@ export default class posDoc extends React.Component
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <h3 className="text-primary text-center">51.95 €</h3>    
+                                        <h3 className="text-primary text-center">{parseFloat(this.state.discountAfter).toFixed(2)} €</h3>    
                                     </div>
                                 </div>
                             </div>
                         </div>
                         {/* Discount Input */}
                         <div className="row py-1">
-                            {/* txtPopDiscountAmount */}
-                            <div className="col-6">
-                                <NdTextBox id="txtPopDiscountAmount" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}>     
-                                </NdTextBox> 
-                            </div>
                             {/* txtPopDiscountPercent */}
                             <div className="col-6">
-                                <NdTextBox id="txtPopDiscountPercent" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}>     
+                                <NdTextBox id="txtPopDiscountPercent" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}
+                                onFocusIn={()=>{this.numPopDiscount.textobj = "txtPopDiscountPercent"}}
+                                onValueChanged={(e)=>
+                                {
+                                    if(this.numPopDiscount.textobj == "txtPopDiscountPercent")
+                                    {
+                                        this.txtPopDiscountAmount.value = parseFloat(this.state.discountBefore * Number(e.value / 100)).toFixed(2)
+                                    }
+                                }}>     
                                 </NdTextBox> 
                             </div>
+                            {/* txtPopDiscountAmount */}
+                            <div className="col-6">
+                                <NdTextBox id="txtPopDiscountAmount" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}
+                                onFocusIn={()=>{this.numPopDiscount.textobj = "txtPopDiscountAmount"}}
+                                onValueChanged={(e)=>
+                                {
+                                    if(this.numPopDiscount.textobj == "txtPopDiscountAmount")
+                                    {
+                                        this.txtPopDiscountPercent.value = parseFloat(Number(parseFloat(e.value / this.state.discountBefore).toFixed(3)) * 100).toFixed(2)
+                                    }
+                                }}>     
+                                </NdTextBox> 
+                            </div>                            
                         </div>
                         {/* Discount Number Board */}
                         <div className="row py-1">
@@ -2077,7 +2159,7 @@ export default class posDoc extends React.Component
                                 {/* numPopDiscount */}
                                 <div className="row pb-1">
                                     <div className="col-12">
-                                        <NbNumberboard id={"numPopDiscount"} parent={this} textobj="txtPopDiscountAmount" span={1} buttonHeight={"60px"}/>
+                                        <NbNumberboard id={"numPopDiscount"} parent={this} textobj="txtPopDiscountPercent" span={1} buttonHeight={"60px"}/>
                                     </div>
                                 </div>
                                 <div className="row pt-1">
@@ -2089,7 +2171,62 @@ export default class posDoc extends React.Component
                                     </div>
                                     {/* btnPopDiscountOk */}
                                     <div className="col-8 ps-1">
-                                        <NbButton id={"btnPopDiscountOk"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}>
+                                        <NbButton id={"btnPopDiscountOk"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
+                                        onClick={async ()=>
+                                        {
+                                            if(this.posObj.posPay.dt().length > 0)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"İndirim Yapmadan Önce Lütfen Tüm Ödemeleri Siliniz !"}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                                return
+                                            }
+                                            if(this.txtPopDiscountAmount.value <= 0 || this.txtPopDiscountPercent <= 0)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Sıfır İskonto Yapılamaz !"}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                                return;
+                                            }
+                                            if(this.state.discountAfter < 0)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Tutardan Fazla İskonto Yapılamaz.!"}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                                return;
+                                            }
+
+                                            if(this.rbtnDisType.value == 0) //EVRAK İSKONTO
+                                            {                                                                                                
+                                                for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
+                                                {
+                                                    let tmpDiscountRate = Number(parseFloat(this.txtPopDiscountPercent.value / 100).toFixed(3))
+                                                    let tmpTotal = Number(parseFloat(this.posObj.posSale.dt()[i].TOTAL + this.posObj.posSale.dt()[i].DISCOUNT).toFixed(2))
+
+                                                    this.posObj.posSale.dt()[i].DISCOUNT = Number(parseFloat(tmpTotal * tmpDiscountRate).toFixed(2))
+                                                    this.posObj.posSale.dt()[i].VAT = Number(parseFloat(this.posObj.posSale.dt()[i].VAT - (this.posObj.posSale.dt()[i].VAT * tmpDiscountRate)).toFixed(2))
+                                                    this.posObj.posSale.dt()[i].TOTAL = Number(parseFloat(tmpTotal - (tmpTotal * tmpDiscountRate)).toFixed(2))
+                                                }
+                                                this.calGrandTotal()
+                                            }
+                                            else if(this.rbtnDisType.value == 1) //SATIR İSKONTO
+                                            {
+
+                                            }
+                                            this.popDiscount.hide()
+                                        }}>
                                             <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
@@ -2099,7 +2236,8 @@ export default class posDoc extends React.Component
                                 {/* btnPopDiscount10 */}
                                 <div className="row pb-1">
                                     <div className="col-12 ps-1">
-                                        <NbButton id={"btnPopDiscount10"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"60px",width:"100%",fontSize: "20px"}}>
+                                        <NbButton id={"btnPopDiscount10"} parent={this} className="form-group btn btn-primary btn-block" 
+                                        onClick={()=>{this.txtPopDiscountPercent.value = 10}} style={{height:"60px",width:"100%",fontSize: "20px"}}>
                                         % 10
                                         </NbButton>
                                     </div>
@@ -2107,7 +2245,8 @@ export default class posDoc extends React.Component
                                 {/* btnPopDiscount20 */}
                                 <div className="row py-1">
                                     <div className="col-12 ps-1">
-                                        <NbButton id={"btnPopDiscount20"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"60px",width:"100%",fontSize: "20px"}}>
+                                        <NbButton id={"btnPopDiscount20"} parent={this} className="form-group btn btn-primary btn-block" 
+                                        onClick={()=>{this.txtPopDiscountPercent.value = 20}} style={{height:"60px",width:"100%",fontSize: "20px"}}>
                                         % 20
                                         </NbButton>
                                     </div>
@@ -2115,7 +2254,8 @@ export default class posDoc extends React.Component
                                 {/* btnPopDiscount30 */}
                                 <div className="row py-1">
                                     <div className="col-12 ps-1">
-                                        <NbButton id={"btnPopDiscount30"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"60px",width:"100%",fontSize: "20px"}}>
+                                        <NbButton id={"btnPopDiscount30"} parent={this} className="form-group btn btn-primary btn-block" 
+                                        onClick={()=>{this.txtPopDiscountPercent.value = 30}} style={{height:"60px",width:"100%",fontSize: "20px"}}>
                                         % 30
                                         </NbButton>
                                     </div>
@@ -2123,7 +2263,8 @@ export default class posDoc extends React.Component
                                 {/* btnPopDiscount40 */}
                                 <div className="row py-1">
                                     <div className="col-12 ps-1">
-                                        <NbButton id={"btnPopDiscount40"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"60px",width:"100%",fontSize: "20px"}}>
+                                        <NbButton id={"btnPopDiscount40"} parent={this} className="form-group btn btn-primary btn-block" 
+                                        onClick={()=>{this.txtPopDiscountPercent.value = 40}} style={{height:"60px",width:"100%",fontSize: "20px"}}>
                                         % 40
                                         </NbButton>
                                     </div>
@@ -2131,7 +2272,8 @@ export default class posDoc extends React.Component
                                 {/* btnPopDiscount50 */}
                                 <div className="row py-1">
                                     <div className="col-12 ps-1">
-                                        <NbButton id={"btnPopDiscount50"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"60px",width:"100%",fontSize: "20px"}}>
+                                        <NbButton id={"btnPopDiscount50"} parent={this} className="form-group btn btn-primary btn-block" 
+                                        onClick={()=>{this.txtPopDiscountPercent.value = 50}} style={{height:"60px",width:"100%",fontSize: "20px"}}>
                                         % 50
                                         </NbButton>
                                     </div>

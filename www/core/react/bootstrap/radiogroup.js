@@ -16,6 +16,7 @@ export default class NbRadioButton extends NbBase
             ],
             value : 0
         }
+        this._onClick = this._onClick.bind(this)
     }
     get value()
     {
@@ -30,6 +31,13 @@ export default class NbRadioButton extends NbBase
         this.state.btnClass[e] = ""
 
         this.setState({btnClass:this.state.btnClass,value:e})
+    }
+    _onClick(e)
+    {
+        if(typeof this.props.onClick != 'undefined')
+        {
+            this.props.onClick(e)
+        }
     }
     _buttonView()
     {
@@ -77,6 +85,7 @@ export default class NbRadioButton extends NbBase
                         this.state.btnClass[i] = ""
 
                         this.setState({btnClass:this.state.btnClass,value:i})
+                        this._onClick(i)
                     }}>
                         {tmpIconFn(this.props.button[i].icon)}
                         {tmpTextFn(this.props.button[i].text)}
