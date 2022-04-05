@@ -22,7 +22,7 @@ import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
 
-export default class salesInvoice extends React.Component
+export default class purchaseOrder extends React.Component
 {
     constructor()
     {
@@ -204,7 +204,7 @@ export default class salesInvoice extends React.Component
                 value={e.value}
                 onKeyDown={async(k)=>
                     {
-                        if(k.event.key == 'F10')
+                        if(k.event.key == 'F10' || k.event.key == 'ArrowRight')
                         {
                             await this.pg_txtItemsCode.setVal(e.value)
                             this.pg_txtItemsCode.onClick = async(data) =>
@@ -1231,7 +1231,7 @@ export default class salesInvoice extends React.Component
                                     onValueChanged={(async()=>
                                         {
                                         }).bind(this)}
-                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = 'SIPARIS'"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '60'"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     >

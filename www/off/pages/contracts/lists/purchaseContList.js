@@ -15,7 +15,7 @@ import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 
-export default class itemList extends React.Component
+export default class purchaseContList extends React.Component
 {
     constructor(props)
     {

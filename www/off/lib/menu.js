@@ -1,5 +1,6 @@
 export const menu = (e) => 
 {
+    console.log(e)
     return [
         {
             id: 'stk',
@@ -52,6 +53,11 @@ export const menu = (e) =>
                     items: 
                     [
                         {
+                            id: 'stk_02_004',
+                            text: e.t('menu.stk_02_004'),//'Sarf Giriş Çıkış Fişi',
+                            path: '../pages/items/documents/labelPrinting.js'
+                        },
+                        {
                             id: 'stk_02_001',
                             text: e.t('menu.stk_02_001'),//'Sayım Evrakı',
                             path: '../pages/customers/cards/customerCard.js'
@@ -66,11 +72,6 @@ export const menu = (e) =>
                             text: e.t('menu.stk_02_003'),//'Fire Giriş Çıkış Fişi',
                             path: '../pages/items/documents/outageDoc.js'
                         },
-                        // {
-                        //     id: 'stk_02_004',
-                        //     text: e.t('menu.stk_02_004'),//'Sarf Giriş Çıkış Fişi',
-                        //     path: '../pages/customers/cards/customerCard.js'
-                        // },
                         {
                             id: 'stk_02_005',
                             text: e.t('menu.stk_02_005'),//'İade Deposuna Sevk',

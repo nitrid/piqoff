@@ -257,7 +257,7 @@ export default class safeCard extends React.Component
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                     onClick={()=>
                                     {
-                                        
+                                        this.popDesign.show()
                                     }}/>
                                 </Item>
                             </Toolbar>

@@ -14,7 +14,7 @@ import NdButton from '../../../../core/react/devex/button.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 
-export default class itemList extends React.Component
+export default class salesContList extends React.Component
 {
     constructor(props)
     {

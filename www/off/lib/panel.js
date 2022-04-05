@@ -35,11 +35,11 @@ export default class Panel extends React.Component
       selectedIndex: this.state.dataSource.length
     });    
   }
-  closeButtonHandler(e)
+  closePage()
   {
     const newPages = [...this.state.dataSource];
     const index = this.state.selectedIndex;
-
+    
     newPages.splice(index, 1);
 
     this.setState(
@@ -50,15 +50,13 @@ export default class Panel extends React.Component
   }
   renderTitle(e) 
   {
-    this.closeButtonHandler = this.closeButtonHandler.bind(this)
-    
     return (
       <React.Fragment>
         <div>
           <span>
             {e.text}
           </span>
-          {<i className="dx-icon dx-icon-close" onClick={this.closeButtonHandler} />}
+          {<i className="dx-icon dx-icon-close" onClick={()=>{this.onClose()}} />}
         </div>
       </React.Fragment>
     );
