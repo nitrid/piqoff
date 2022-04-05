@@ -17,6 +17,7 @@ import NdSelectBox from "../../core/react/devex/selectbox.js";
 import NbPluButtonGrp from "../tools/plubuttongrp.js";
 import NbPopNumber from "../tools/popnumber.js";
 import NbRadioButton from "../../core/react/bootstrap/radiogroup.js";
+import NbPosPopGrid from "../tools/pospopgrid.js";
 import { dialog } from "../../core/react/devex/dialog.js";
 
 import { posCls,posSaleCls,posPaymentCls,posPluCls } from "../../core/cls/pos.js";
@@ -33,11 +34,14 @@ export default class posDoc extends React.Component
         this.core = App.instance.core;
         this.lang = App.instance.lang;
         this.t = App.instance.lang.getFixedT(null,null,"pos")
+        this.user = this.core.auth.data
         this.prmObj = new param(prm);
         this.posObj = new posCls();
-
+        
         this.state =
         {
+            time:"00:00:00",
+            date:"00.00.0000",
             isPluEdit:false,
             isBtnGetCustomer:false,
             isBtnInfo:false,
@@ -53,7 +57,9 @@ export default class posDoc extends React.Component
             totalGrand:0,
             payTotal:0,
             payChange:0,
-            payRest:0
+            payRest:0,
+            discountBefore:0,
+            discountAfter:0
         }      
         document.onkeydown = (e) =>
         {
@@ -77,7 +83,6 @@ export default class posDoc extends React.Component
                 
             }
         }     
-        
         this.init()
     }
     async componentDidMount()
@@ -86,6 +91,11 @@ export default class posDoc extends React.Component
     }
     async init()
     {
+        setInterval(()=>
+        {
+            this.setState({time:moment(new Date(),"HH:mm:ss").format("HH:mm:ss"),date:new Date().toLocaleDateString('tr-TR',{ year: 'numeric', month: 'numeric', day: 'numeric' })})
+        },1000)
+
         this.posObj = new posCls();
         await this.prmObj.load({PAGE:"pos",APP:'POS'})
         this.posObj.addEmpty()
@@ -339,7 +349,12 @@ export default class posDoc extends React.Component
         {
             pItemData.QUANTITY = Number(parseFloat(pItemData.QUANTITY * pItemData.UNIT_FACTOR).toFixed(3))
             this.saleRowAdd(pItemData)
-        }
+        }        
+        //HER EKLEME İŞLEMİNDEN SONRA İLK SATIR SEÇİLİYOR.
+        setTimeout(() => 
+        {
+            this.grdList.devGrid.selectRowsByIndexes(0)
+        }, 100);
     }
     saleRowAdd(pItemData)
     {           
@@ -372,6 +387,7 @@ export default class posDoc extends React.Component
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DISCOUNT = 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].LOYALTY = 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].VAT = pItemData.VAT_AMOUNT
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].VAT_RATE = pItemData.VAT
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].TOTAL = pItemData.TOTAL
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].SUBTOTAL = 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_AMOUNT = 0
@@ -384,15 +400,15 @@ export default class posDoc extends React.Component
     }
     saleRowUpdate(pRowData,pItemData)
     {
-        pItemData.AMOUNT = Number(parseFloat(pItemData.PRICE * pItemData.QUANTITY).toFixed(2))
-        pItemData.VAT_AMOUNT = Number(parseFloat(pItemData.AMOUNT *  Number(parseFloat(pItemData.VAT / 100).toFixed(3))).toFixed(2))
-        pItemData.TOTAL = Number(parseFloat(pItemData.AMOUNT + pItemData.VAT_AMOUNT).toFixed(2))
+        let tmpAmount = Number(parseFloat(pItemData.PRICE * pItemData.QUANTITY).toFixed(2))
+        let tmpVat = Number(parseFloat(tmpAmount *  Number(parseFloat(pRowData.VAT_RATE / 100).toFixed(3))).toFixed(2))
+        let tmpTotal = Number(parseFloat(tmpAmount + tmpVat).toFixed(2))
         
         pRowData.QUANTITY = pItemData.QUANTITY
         pRowData.PRICE = pItemData.PRICE
-        pRowData.AMOUNT = pItemData.AMOUNT
-        pRowData.VAT = pItemData.VAT_AMOUNT
-        pRowData.TOTAL = pItemData.TOTAL
+        pRowData.AMOUNT = tmpAmount
+        pRowData.VAT = tmpVat
+        pRowData.TOTAL = tmpTotal
 
         this.calGrandTotal();
     }
@@ -473,8 +489,8 @@ export default class posDoc extends React.Component
         if(this.posObj.dt().length > 0)
         {
             this.posObj.dt()[this.posObj.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.posSale.dt().sum('AMOUNT',2)).toFixed(2))
-            this.posObj.dt()[this.posObj.dt().length - 1].DISCOUNT = 0
-            this.posObj.dt()[this.posObj.dt().length - 1].LOYALTY = 0
+            this.posObj.dt()[this.posObj.dt().length - 1].DISCOUNT = Number(parseFloat(this.posObj.posSale.dt().sum('DISCOUNT',2)).toFixed(2))
+            this.posObj.dt()[this.posObj.dt().length - 1].LOYALTY = Number(parseFloat(this.posObj.posSale.dt().sum('LOYALTY',2)).toFixed(2))
             this.posObj.dt()[this.posObj.dt().length - 1].VAT = Number(parseFloat(this.posObj.posSale.dt().sum('VAT',2)).toFixed(2))
             this.posObj.dt()[this.posObj.dt().length - 1].TOTAL = Number(parseFloat(this.posObj.posSale.dt().sum('TOTAL',2)).toFixed(2))
             
@@ -606,7 +622,7 @@ export default class posDoc extends React.Component
                                 <div className="row" style={{height:"25px"}}>
                                     <div className="col-12">
                                         <i className="text-white fa-solid fa-user p-2"></i>
-                                        <span className="text-white">TEST1</span>
+                                        <span className="text-white">{this.user.CODE}</span>
                                     </div>    
                                 </div>
                                 <div className="row" style={{height:"25px"}}>
@@ -634,13 +650,13 @@ export default class posDoc extends React.Component
                                 <div className="row" style={{height:"25px"}}>
                                     <div className="col-12">
                                         <i className="text-white fa-solid fa-calendar p-2"></i>
-                                        <span className="text-white">03.03.2022</span>
+                                        <span className="text-white">{this.state.date}</span>
                                     </div>    
                                 </div>
                                 <div className="row" style={{height:"25px"}}>
                                     <div className="col-12">
                                         <i className="text-light fa-solid fa-clock p-2"></i>
-                                        <span className="text-light">12:12:04</span>
+                                        <span className="text-light">{this.state.time}</span>
                                     </div> 
                                 </div>
                             </div>
@@ -704,16 +720,33 @@ export default class posDoc extends React.Component
                                         {
                                             id:"02",
                                             icon:"arrowdown",
-                                            onClick:()=>
+                                            onClick:async ()=>
                                             {
-                                                this.txtRef.value = Math.floor(Date.now() / 1000)
+                                                if(this.txtBarcode.value != '')
+                                                {
+                                                    let tmpDt = new datatable(); 
+                                                    tmpDt.selectCmd = 
+                                                    {
+                                                        query : "SELECT BARCODE,NAME,PRICE_SALE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE LIKE '%' + @BARCODE",
+                                                        param : ['BARCODE:string|25']
+                                                    }
+                                                    tmpDt.selectCmd.value = [this.txtBarcode.value]
+                                                    await tmpDt.refresh();
+                                                    
+                                                    await this.grdBarcodeList.dataRefresh({source:tmpDt});
+                                                    this.popBarcodeList.show()
+                                                    this.txtBarcode.value = ""
+                                                }
                                             }
                                         }
                                     ]
                                 }
-                                onChange={(async(e)=>
-                                {
-                                    this.getItem(this.txtBarcode.value)
+                                onKeyDown={(async(e)=>
+                                {                                    
+                                    if(e.event.key == 'Enter')
+                                    {
+                                        this.getItem(this.txtBarcode.value)
+                                    }
                                 }).bind(this)} 
                                 >     
                                 </NdTextBox>  
@@ -721,7 +754,7 @@ export default class posDoc extends React.Component
                         </div>
                         {/* grdList */}
                         <div className="row">
-                            <div className="12">
+                            <div className="col-12">
                                 <NdGrid parent={this} id={"grdList"} 
                                 showBorders={true} 
                                 columnsAutoWidth={true} 
@@ -731,40 +764,29 @@ export default class posDoc extends React.Component
                                 width={"100%"}
                                 dbApply={false}
                                 selection={{mode:"single"}}
-                                onRowPrepared=
+                                onRowPrepared={(e)=>
                                 {
-                                    (e)=>
+                                    if(e.rowType == "header")
                                     {
-                                        if(e.rowType == "header")
-                                        {
-                                            e.rowElement.style.fontWeight = "bold";    
-                                        }
-                                        e.rowElement.style.fontSize = "13px";
+                                        e.rowElement.style.fontWeight = "bold";    
                                     }
-                                }
-                                onCellPrepared=
+                                    e.rowElement.style.fontSize = "13px";                                        
+                                }}
+                                onCellPrepared={(e)=>
                                 {
-                                    (e)=>
-                                    {
-                                        e.cellElement.style.padding = "4px"
-                                    }
-                                }
+                                    e.cellElement.style.padding = "4px"
+                                }}
                                 onCellClick={async (e)=>
                                 {
                                     if(e.column.dataField == "QUANTITY")
                                     {
                                         if(this.prmObj.filter({ID:'QuantityEdit',TYPE:0}).getValue() == true)
-                                        {
+                                        {                                            
                                             let tmpResult = await this.popNumber.show('Miktar',e.value)
                                             if(typeof tmpResult != 'undefined' && tmpResult != '')
                                             {
-                                                let tmpDt = await this.getItemDb(e.key.ITEM_CODE)
-                                                if(tmpDt.length > 0)
-                                                {
-                                                    tmpDt[0].QUANTITY = tmpResult
-                                                    tmpDt[0].PRICE = e.key.PRICE
-                                                    this.saleRowUpdate(e.key,tmpDt[0])
-                                                }
+                                                let tmpData = {QUANTITY:tmpResult,PRICE:e.key.PRICE}
+                                                this.saleRowUpdate(e.key,tmpData)
                                             }
                                         }
                                     }
@@ -775,13 +797,8 @@ export default class posDoc extends React.Component
                                             let tmpResult = await this.popNumber.show('Fiyat',e.value)
                                             if(typeof tmpResult != 'undefined' && tmpResult != '')
                                             {
-                                                let tmpDt = await this.getItemDb(e.key.ITEM_CODE)
-                                                if(tmpDt.length > 0)
-                                                {
-                                                    tmpDt[0].QUANTITY = e.key.QUANTITY
-                                                    tmpDt[0].PRICE = tmpResult
-                                                    this.saleRowUpdate(e.key,tmpDt[0])
-                                                }
+                                                let tmpData = {QUANTITY:e.key.QUANTITY,PRICE:tmpResult}
+                                                this.saleRowUpdate(e.key,tmpData)
                                             }
                                         }
                                     }
@@ -873,8 +890,22 @@ export default class posDoc extends React.Component
                                     {/* Credit Card */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
-                                        onClick={()=>
-                                        {                                                        
+                                        onClick={async ()=>
+                                        {                  
+                                            if(this.posObj.posSale.dt().length == 0)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgAlert',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Satış işlemi yapmadan tahsilat giremezsiniz !"}</div>)
+                                                }
+                                                let tmpMsgResult = await dialog(tmpConfObj);
+                                                if(tmpMsgResult == 'btn01')
+                                                {
+                                                    return
+                                                }
+                                            }                                       
                                             this.popCardPay.show();
                                         }}>
                                             <i className="text-white fa-solid fa-credit-card" style={{fontSize: "24px"}} />
@@ -924,8 +955,22 @@ export default class posDoc extends React.Component
                                     {/* Cash */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
-                                        onClick={()=>
-                                        {                             
+                                        onClick={async ()=>
+                                        {           
+                                            if(this.posObj.posSale.dt().length == 0)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgAlert',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Satış işlemi yapmadan tahsilat giremezsiniz !"}</div>)
+                                                }
+                                                let tmpMsgResult = await dialog(tmpConfObj);
+                                                if(tmpMsgResult == 'btn01')
+                                                {
+                                                    return
+                                                }
+                                            }                   
                                             this.popCashPay.show();
                                         }}>
                                             <i className="text-white fa-solid fa-money-bill-1" style={{fontSize: "24px"}} />
@@ -966,7 +1011,9 @@ export default class posDoc extends React.Component
                                     <div className="col-2 px-1">
                                         <NbButton id={"btn"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
                                         onClick={()=>
-                                        {                                                        
+                                        {   
+                                            this.rbtnDisType.value = 0
+                                            this.rbtnDisType._onClick(0)
                                             this.popDiscount.show()
                                         }}>
                                             <i className="text-white fa-solid fa-percent" style={{fontSize: "24px"}} />
@@ -1054,11 +1101,38 @@ export default class posDoc extends React.Component
                                     </div>
                                     {/* -1 */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"20pt"}}>-1</NbButton>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"20pt"}}
+                                        onClick={async ()=>
+                                        {
+                                            if(this.grdList.devGrid.getSelectedRowsData().length > 0)
+                                            {
+                                                if(this.grdList.devGrid.getSelectedRowsData()[0].QUANTITY > 1)
+                                                {
+                                                    let tmpData = 
+                                                    {
+                                                        QUANTITY:this.grdList.devGrid.getSelectedRowsData()[0].QUANTITY - 1,
+                                                        PRICE:this.grdList.devGrid.getSelectedRowsData()[0].PRICE
+                                                    }
+                                                    this.saleRowUpdate(this.grdList.devGrid.getSelectedRowsData()[0],tmpData)
+                                                }
+                                            }
+                                        }}>-1</NbButton>
                                     </div>
                                     {/* +1 */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"20pt"}}>+1</NbButton>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-primary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"20pt"}}
+                                        onClick={async ()=>
+                                        {
+                                            if(this.grdList.devGrid.getSelectedRowsData().length > 0)
+                                            {
+                                                let tmpData = 
+                                                {
+                                                    QUANTITY:this.grdList.devGrid.getSelectedRowsData()[0].QUANTITY + 1,
+                                                    PRICE:this.grdList.devGrid.getSelectedRowsData()[0].PRICE
+                                                }
+                                                this.saleRowUpdate(this.grdList.devGrid.getSelectedRowsData()[0],tmpData)
+                                            }
+                                        }}>+1</NbButton>
                                     </div>
                                 </div> 
                             </div>
@@ -1075,7 +1149,18 @@ export default class posDoc extends React.Component
                                         {/* Up */}
                                         <div className="row">                                            
                                             <div className="col-12 px-1">
-                                                <NbButton id={"btn"} parent={this} className="form-group btn btn-success btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                                <NbButton id={"btn"} parent={this} className="form-group btn btn-success btn-block my-1" style={{height:"70px",width:"100%"}}
+                                                onClick={()=>
+                                                {
+                                                    if(this.grdList.devGrid.getSelectedRowKeys().length > 0)
+                                                    {
+                                                        let tmpRowIndex = this.grdList.devGrid.getRowIndexByKey(this.grdList.devGrid.getSelectedRowKeys()[0]);
+                                                        if(tmpRowIndex > 0)
+                                                        {
+                                                            this.grdList.devGrid.selectRowsByIndexes(tmpRowIndex - 1)
+                                                        }
+                                                    }
+                                                }}>
                                                     <i className="text-white fa-solid fa-arrow-up" style={{fontSize: "24px"}} />
                                                 </NbButton>
                                             </div>
@@ -1083,7 +1168,18 @@ export default class posDoc extends React.Component
                                         {/* Down */}
                                         <div className="row">
                                             <div className="col-12 px-1">
-                                                <NbButton id={"btn"} parent={this} className="form-group btn btn-success btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                                <NbButton id={"btn"} parent={this} className="form-group btn btn-success btn-block my-1" style={{height:"70px",width:"100%"}}
+                                                onClick={()=>
+                                                {
+                                                    if(this.grdList.devGrid.getSelectedRowKeys().length > 0)
+                                                    {
+                                                        let tmpRowIndex = this.grdList.devGrid.getRowIndexByKey(this.grdList.devGrid.getSelectedRowKeys()[0]);
+                                                        if(tmpRowIndex < (this.grdList.devGrid.totalCount() - 1))
+                                                        {
+                                                            this.grdList.devGrid.selectRowsByIndexes(tmpRowIndex + 1)
+                                                        }
+                                                    }
+                                                }}>
                                                     <i className="text-white fa-solid fa-arrow-down" style={{fontSize: "24px"}} />
                                                 </NbButton>
                                             </div>
@@ -1110,6 +1206,7 @@ export default class posDoc extends React.Component
                                         onSelection={(pItem)=>
                                         {
                                             this.txtBarcode.value = pItem;
+                                            this.getItem(pItem)
                                         }}/>
                                     </div>
                                 </div>  
@@ -1702,202 +1799,108 @@ export default class posDoc extends React.Component
                 </div>  
                 {/* Customer List Popup */}
                 <div>
-                    <NdPopUp parent={this} id={"popCustomerList"} 
-                    visible={false}                        
-                    showCloseButton={true}
-                    showTitle={true}
-                    title={"Müşteri Listesi"}
-                    container={"#root"} 
-                    width={"900"}
-                    height={"650"}
-                    position={{of:"#root"}}
-                    >
-                        {/* txtPopCustomerList */}
-                        <div className="row pb-1">
-                            <div className="col-12">
-                                <NdTextBox id="txtPopCustomerList" parent={this} simple={true} 
-                                button=
-                                {
-                                    [
-                                        {
-                                            id:"01",
-                                            icon:"more",
-                                            onClick:()=>
-                                            {
-                                                
-                                            }
-                                        }
-                                    ]
-                                }
-                                onChange={(async()=>
-                                {
-                                    let tmpResult = await this.checkItem(this.txtRef.value)
-                                    if(tmpResult == 3)
-                                    {
-                                        this.txtRef.value = "";
-                                    }
-                                }).bind(this)} 
-                                >     
-                                </NdTextBox>  
-                            </div>                            
-                        </div>
-                        {/* grdPopCustomerList */}
-                        <div className="row py-1">
-                            <div className="12">
-                                <NdGrid parent={this} id={"grdPopCustomerList"} 
-                                showBorders={true} 
-                                columnsAutoWidth={true} 
-                                allowColumnReordering={true} 
-                                allowColumnResizing={true} 
-                                height={"220px"} 
-                                width={"100%"}
-                                dbApply={false}
-                                data={{source:[{TYPE_NAME:0},{TYPE_NAME:1},{TYPE_NAME:2},{TYPE_NAME:3},{TYPE_NAME:4},{TYPE_NAME:5},{TYPE_NAME:6},{TYPE_NAME:7},{TYPE_NAME:8},{TYPE_NAME:9}]}}
-                                onRowPrepared=
-                                {
-                                    (e)=>
-                                    {
-                                        if(e.rowType == "header")
-                                        {
-                                            e.rowElement.style.fontWeight = "bold";    
-                                        }
-                                        e.rowElement.style.fontSize = "13px";
-                                    }
-                                }
-                                onCellPrepared=
-                                {
-                                    (e)=>
-                                    {
-                                        e.cellElement.style.padding = "4px"
-                                    }
-                                }
-                                >
-                                    <Column dataField="TYPE_NAME" caption={"NO"} width={40} alignment={"center"}/>
-                                    <Column dataField="DEPOT" caption={"ADI"} width={350} />
-                                    <Column dataField="CUSTOMER_NAME" caption={"MIKTAR"} width={100}/>
-                                    <Column dataField="QUANTITY" caption={"FIYAT"} width={100}/>
-                                    <Column dataField="VAT_EXT" caption={"TUTAR"} width={100}/>                                                
-                                </NdGrid>
-                            </div>
-                        </div>
-                        {/* Button Group */}
-                        <div className="row py-1">
-                            {/* btnPopCustomerListSelect */}
-                            <div className="col-6">
-                                <NbButton id={"btnPopCustomerListSelect"} parent={this} className="form-group btn btn-success btn-block" 
-                                style={{height:"45px",width:"100%",fontSize:"16px"}}>Seç</NbButton> 
-                            </div>
-                            {/* btnPopCustomerList */}
-                            <div className="col-6">
-                                <NbButton id={"btnPopCustomerList"} parent={this} className="form-group btn btn-success btn-block" 
-                                style={{height:"45px",width:"100%",fontSize:"16px"}}>Listele</NbButton>
-                            </div>
-                        </div>
-                        {/* keyPopCustomerList */}
-                        <div className="row pt-1">
-                            <NbKeyboard id={"keyPopCustomerList"} parent={this} textobj="txtPopCustomerList" span={1} buttonHeight={"40px"}/>
-                        </div>
-                    </NdPopUp>
+                    <NbPosPopGrid id={"popCustomerList"} parent={this} width={"900"} height={"650"} position={"#root"} title={"Müşteri Listesi"}
+                    data={{source:
+                    {
+                        select:
+                        {
+                            query : "SELECT GUID,CODE,TITLE,ADRESS,0 AS CUSTOMER_POINT FROM [dbo].[CUSTOMER_VW_02] WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                            param : ['VAL:string|50']
+                        },
+                        sql:this.core.sql
+                    }}}
+                    onSelection={(pData)=>
+                    {
+                        if(pData.length > 0)
+                        {
+                            this.posObj.dt().CUSTOMER_GUID = pData[0].GUID
+                            this.posObj.dt().CUSTOMER_CODE = pData[0].CODE
+                            this.posObj.dt().CUSTOMER_NAME = pData[0].TITLE
+                            
+                            this.setState({customerName:pData[0].TITLE,customerPoint:pData[0].CUSTOMER_POINT})
+                        }
+                    }}>
+                        <Column dataField="CODE" caption={"CODE"} width={100} />
+                        <Column dataField="TITLE" caption={"NAME"} width={250} />
+                        <Column dataField="ADRESS" caption={"ADRESS"} width={350}/>
+                        <Column dataField="CUSTOMER_POINT" caption={"POINT"} width={100}/>
+                    </NbPosPopGrid>
                 </div>
                 {/* Item List Popup */}
                 <div>
-                    <NdPopUp parent={this} id={"popItemList"} 
+                    <NbPosPopGrid id={"popItemList"} parent={this} width={"900"} height={"650"} position={"#root"} title={"Ürün Listesi"}
+                    data={{source:
+                    {
+                        select:
+                        {
+                            query : "SELECT CODE,NAME FROM [dbo].[ITEMS_VW_01] WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                            param : ['VAL:string|50']
+                        },
+                        sql:this.core.sql
+                    }}}
+                    onSelection={(pData)=>
+                    {
+                        if(pData.length > 0)
+                        {
+                            this.txtBarcode.value = pData[0].CODE;
+                            this.getItem(pData[0].CODE)
+                        }
+                    }}>
+                        <Column dataField="CODE" caption={"CODE"} width={100} />
+                        <Column dataField="NAME" caption={"NAME"} width={250} />
+                    </NbPosPopGrid>
+                </div>  
+                {/* Barcode List Popup */}
+                <div>
+                    <NdPopUp parent={this} id={"popBarcodeList"} 
                     visible={false}                        
                     showCloseButton={true}
                     showTitle={true}
-                    title={"Ürün Listesi"}
+                    title={"Barkod Listesi"}
                     container={"#root"} 
-                    width={"900"}
-                    height={"650"}
+                    width={"600"}
+                    height={"400"}
                     position={{of:"#root"}}
                     >
-                        {/* txtPopItemList */}
-                        <div className="row pb-1">
+                        {/* grdBarcodeList */}
+                        <div className="row">
                             <div className="col-12">
-                                <NdTextBox id="txtPopItemList" parent={this} simple={true} 
-                                button=
-                                {
-                                    [
-                                        {
-                                            id:"01",
-                                            icon:"more",
-                                            onClick:()=>
-                                            {
-                                                
-                                            }
-                                        }
-                                    ]
-                                }
-                                onChange={(async()=>
-                                {
-                                    let tmpResult = await this.checkItem(this.txtRef.value)
-                                    if(tmpResult == 3)
-                                    {
-                                        this.txtRef.value = "";
-                                    }
-                                }).bind(this)} 
-                                >     
-                                </NdTextBox>  
-                            </div>                            
-                        </div>
-                        {/* grdPopItemList */}
-                        <div className="row py-1">
-                            <div className="12">
-                                <NdGrid parent={this} id={"grdPopItemList"} 
+                                <NdGrid parent={this} id={"grdBarcodeList"} 
                                 showBorders={true} 
                                 columnsAutoWidth={true} 
                                 allowColumnReordering={true} 
                                 allowColumnResizing={true} 
-                                height={"220px"} 
+                                height={"305px"} 
                                 width={"100%"}
                                 dbApply={false}
-                                data={{source:[{TYPE_NAME:0},{TYPE_NAME:1},{TYPE_NAME:2},{TYPE_NAME:3},{TYPE_NAME:4},{TYPE_NAME:5},{TYPE_NAME:6},{TYPE_NAME:7},{TYPE_NAME:8},{TYPE_NAME:9}]}}
-                                onRowPrepared=
+                                selection={{mode:"single"}}
+                                onRowPrepared={(e)=>
                                 {
-                                    (e)=>
+                                    if(e.rowType == "header")
                                     {
-                                        if(e.rowType == "header")
-                                        {
-                                            e.rowElement.style.fontWeight = "bold";    
-                                        }
-                                        e.rowElement.style.fontSize = "13px";
+                                        e.rowElement.style.fontWeight = "bold";    
                                     }
-                                }
-                                onCellPrepared=
+                                    e.rowElement.style.fontSize = "13px";                                        
+                                }}
+                                onCellPrepared={(e)=>
                                 {
-                                    (e)=>
-                                    {
-                                        e.cellElement.style.padding = "4px"
-                                    }
-                                }
+                                    e.cellElement.style.padding = "4px"
+                                }}
+                                onSelectionChanged={(e)=>
+                                {
+                                    this.txtBarcode.value = e.currentSelectedRowKeys[0].BARCODE
+                                    this.getItem(e.currentSelectedRowKeys[0].BARCODE)
+                                    this.popBarcodeList.hide()
+                                }}
                                 >
-                                    <Column dataField="TYPE_NAME" caption={"NO"} width={40} alignment={"center"}/>
-                                    <Column dataField="DEPOT" caption={"ADI"} width={350} />
-                                    <Column dataField="CUSTOMER_NAME" caption={"MIKTAR"} width={100}/>
-                                    <Column dataField="QUANTITY" caption={"FIYAT"} width={100}/>
-                                    <Column dataField="VAT_EXT" caption={"TUTAR"} width={100}/>                                                
+                                    <Column dataField="BARCODE" caption={"BARCODE"} width={100}/>
+                                    <Column dataField="NAME" caption={"NAME"} width={350} />
+                                    <Column dataField="PRICE" caption={"PRICE"} width={100}/>
                                 </NdGrid>
                             </div>
                         </div>
-                        {/* Button Group */}
-                        <div className="row py-1">
-                            {/* btnPopItemListSelect */}
-                            <div className="col-6">
-                                <NbButton id={"btnPopItemListSelect"} parent={this} className="form-group btn btn-success btn-block" 
-                                style={{height:"45px",width:"100%",fontSize:"16px"}}>Seç</NbButton> 
-                            </div>
-                            {/* btnPopItemList */}
-                            <div className="col-6">
-                                <NbButton id={"btnPopItemList"} parent={this} className="form-group btn btn-success btn-block" 
-                                style={{height:"45px",width:"100%",fontSize:"16px"}}>Listele</NbButton>
-                            </div>
-                        </div>
-                        {/* keyPopItemList */}
-                        <div className="row pt-1">
-                            <NbKeyboard id={"keyPopItemList"} parent={this} textobj="txtPopItemList" span={1} buttonHeight={"40px"}/>
-                        </div>
-                    </NdPopUp>
-                </div>  
+                    </NdPopUp>    
+                </div>
                 {/* Park List Popup */}
                 <div>
                     <NdPopUp parent={this} id={"popParkList"} 
@@ -1912,7 +1915,7 @@ export default class posDoc extends React.Component
                     >
                         {/* grdPopParkList */}
                         <div className="row py-1">
-                            <div className="12">
+                            <div className="col-12">
                                 <NdGrid parent={this} id={"grdPopParkList"} 
                                 showBorders={true} 
                                 columnsAutoWidth={true} 
@@ -1967,11 +1970,11 @@ export default class posDoc extends React.Component
                     title={"Ticket Giriş"}
                     container={"#root"} 
                     width={"900"}
-                    height={"580"}
+                    height={"585"}
                     position={{of:"#root"}}
                     >
                         {/* txtPopTicket */}
-                        <div className="row">
+                        <div className="row py-1">
                             <div className="col-12">
                                 <NdTextBox id="txtPopTicket" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}>     
                                 </NdTextBox> 
@@ -1979,7 +1982,7 @@ export default class posDoc extends React.Component
                         </div>
                         {/* grdPopTicketList */}
                         <div className="row py-1">
-                            <div className="12">
+                            <div className="col-12">
                                 <NdGrid parent={this} id={"grdPopTicketList"} 
                                 showBorders={true} 
                                 columnsAutoWidth={true} 
@@ -2055,7 +2058,46 @@ export default class posDoc extends React.Component
                         {/* Discount Header */}
                         <div className="row pb-1">
                             <div className="col-4">
+                                <NbRadioButton id={"rbtnDisType"} parent={this} 
+                                button={
+                                [
+                                    {
+                                        id:"btn01",
 
+                                        style:{height:'40px',width:'100%'},
+                                        text:"Evrak"
+                                    },
+                                    {
+                                        id:"btn02",
+                                        style:{height:'40px',width:'100%'},
+                                        text:"Satır"
+                                    }
+                                ]}
+                                onClick={(e)=>
+                                {
+                                    let tmpData = {}
+                                    if(e == 0) //EVRAK SEÇİLİ İSE
+                                    {
+                                        tmpData = this.posObj.dt()[0]
+                                    }
+                                    else if(e == 1) //SATIR SEÇİLİ İSE
+                                    {
+                                        if(this.grdList.devGrid.getSelectedRowsData().length > 0)
+                                        {
+                                            tmpData = this.grdList.devGrid.getSelectedRowsData()[0]
+                                        }
+                                    }
+
+                                    let tmpDiscount = Number(parseFloat(tmpData.DISCOUNT).toFixed(2))
+                                    let tmpBefore = Number(parseFloat(tmpData.TOTAL + tmpData.DISCOUNT).toFixed(2));
+                                    this.setState(
+                                    {
+                                        discountBefore:tmpBefore,
+                                        discountAfter:tmpData.TOTAL
+                                    })       
+                                    this.txtPopDiscountPercent.value = parseFloat((tmpDiscount / tmpBefore) * 100).toFixed(2)
+                                    this.txtPopDiscountAmount.value = parseFloat(tmpDiscount).toFixed(2)    
+                                }}/>
                             </div>
                             <div className="col-4">
                                 <div className="row">
@@ -2065,7 +2107,7 @@ export default class posDoc extends React.Component
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <h3 className="text-primary text-center">51.95 €</h3>    
+                                        <h3 className="text-primary text-center">{parseFloat(this.state.discountBefore).toFixed(2)} €</h3>    
                                     </div>
                                 </div>
                             </div>
@@ -2077,23 +2119,39 @@ export default class posDoc extends React.Component
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <h3 className="text-primary text-center">51.95 €</h3>    
+                                        <h3 className="text-primary text-center">{parseFloat(this.state.discountAfter).toFixed(2)} €</h3>    
                                     </div>
                                 </div>
                             </div>
                         </div>
                         {/* Discount Input */}
                         <div className="row py-1">
-                            {/* txtPopDiscountAmount */}
-                            <div className="col-6">
-                                <NdTextBox id="txtPopDiscountAmount" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}>     
-                                </NdTextBox> 
-                            </div>
                             {/* txtPopDiscountPercent */}
                             <div className="col-6">
-                                <NdTextBox id="txtPopDiscountPercent" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}>     
+                                <NdTextBox id="txtPopDiscountPercent" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}
+                                onFocusIn={()=>{this.numPopDiscount.textobj = "txtPopDiscountPercent"}}
+                                onValueChanged={(e)=>
+                                {
+                                    if(this.numPopDiscount.textobj == "txtPopDiscountPercent")
+                                    {
+                                        this.txtPopDiscountAmount.value = parseFloat(this.state.discountBefore * Number(e.value / 100)).toFixed(2)
+                                    }
+                                }}>     
                                 </NdTextBox> 
                             </div>
+                            {/* txtPopDiscountAmount */}
+                            <div className="col-6">
+                                <NdTextBox id="txtPopDiscountAmount" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}
+                                onFocusIn={()=>{this.numPopDiscount.textobj = "txtPopDiscountAmount"}}
+                                onValueChanged={(e)=>
+                                {
+                                    if(this.numPopDiscount.textobj == "txtPopDiscountAmount")
+                                    {
+                                        this.txtPopDiscountPercent.value = parseFloat(Number(parseFloat(e.value / this.state.discountBefore).toFixed(3)) * 100).toFixed(2)
+                                    }
+                                }}>     
+                                </NdTextBox> 
+                            </div>                            
                         </div>
                         {/* Discount Number Board */}
                         <div className="row py-1">
@@ -2101,7 +2159,7 @@ export default class posDoc extends React.Component
                                 {/* numPopDiscount */}
                                 <div className="row pb-1">
                                     <div className="col-12">
-                                        <NbNumberboard id={"numPopDiscount"} parent={this} textobj="txtPopDiscountAmount" span={1} buttonHeight={"60px"}/>
+                                        <NbNumberboard id={"numPopDiscount"} parent={this} textobj="txtPopDiscountPercent" span={1} buttonHeight={"60px"}/>
                                     </div>
                                 </div>
                                 <div className="row pt-1">
@@ -2113,7 +2171,62 @@ export default class posDoc extends React.Component
                                     </div>
                                     {/* btnPopDiscountOk */}
                                     <div className="col-8 ps-1">
-                                        <NbButton id={"btnPopDiscountOk"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}>
+                                        <NbButton id={"btnPopDiscountOk"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
+                                        onClick={async ()=>
+                                        {
+                                            if(this.posObj.posPay.dt().length > 0)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"İndirim Yapmadan Önce Lütfen Tüm Ödemeleri Siliniz !"}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                                return
+                                            }
+                                            if(this.txtPopDiscountAmount.value <= 0 || this.txtPopDiscountPercent <= 0)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Sıfır İskonto Yapılamaz !"}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                                return;
+                                            }
+                                            if(this.state.discountAfter < 0)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Tutardan Fazla İskonto Yapılamaz.!"}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                                return;
+                                            }
+
+                                            if(this.rbtnDisType.value == 0) //EVRAK İSKONTO
+                                            {                                                                                                
+                                                for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
+                                                {
+                                                    let tmpDiscountRate = Number(parseFloat(this.txtPopDiscountPercent.value / 100).toFixed(3))
+                                                    let tmpTotal = Number(parseFloat(this.posObj.posSale.dt()[i].TOTAL + this.posObj.posSale.dt()[i].DISCOUNT).toFixed(2))
+
+                                                    this.posObj.posSale.dt()[i].DISCOUNT = Number(parseFloat(tmpTotal * tmpDiscountRate).toFixed(2))
+                                                    this.posObj.posSale.dt()[i].VAT = Number(parseFloat(this.posObj.posSale.dt()[i].VAT - (this.posObj.posSale.dt()[i].VAT * tmpDiscountRate)).toFixed(2))
+                                                    this.posObj.posSale.dt()[i].TOTAL = Number(parseFloat(tmpTotal - (tmpTotal * tmpDiscountRate)).toFixed(2))
+                                                }
+                                                this.calGrandTotal()
+                                            }
+                                            else if(this.rbtnDisType.value == 1) //SATIR İSKONTO
+                                            {
+
+                                            }
+                                            this.popDiscount.hide()
+                                        }}>
                                             <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
@@ -2123,7 +2236,8 @@ export default class posDoc extends React.Component
                                 {/* btnPopDiscount10 */}
                                 <div className="row pb-1">
                                     <div className="col-12 ps-1">
-                                        <NbButton id={"btnPopDiscount10"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"60px",width:"100%",fontSize: "20px"}}>
+                                        <NbButton id={"btnPopDiscount10"} parent={this} className="form-group btn btn-primary btn-block" 
+                                        onClick={()=>{this.txtPopDiscountPercent.value = 10}} style={{height:"60px",width:"100%",fontSize: "20px"}}>
                                         % 10
                                         </NbButton>
                                     </div>
@@ -2131,7 +2245,8 @@ export default class posDoc extends React.Component
                                 {/* btnPopDiscount20 */}
                                 <div className="row py-1">
                                     <div className="col-12 ps-1">
-                                        <NbButton id={"btnPopDiscount20"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"60px",width:"100%",fontSize: "20px"}}>
+                                        <NbButton id={"btnPopDiscount20"} parent={this} className="form-group btn btn-primary btn-block" 
+                                        onClick={()=>{this.txtPopDiscountPercent.value = 20}} style={{height:"60px",width:"100%",fontSize: "20px"}}>
                                         % 20
                                         </NbButton>
                                     </div>
@@ -2139,7 +2254,8 @@ export default class posDoc extends React.Component
                                 {/* btnPopDiscount30 */}
                                 <div className="row py-1">
                                     <div className="col-12 ps-1">
-                                        <NbButton id={"btnPopDiscount30"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"60px",width:"100%",fontSize: "20px"}}>
+                                        <NbButton id={"btnPopDiscount30"} parent={this} className="form-group btn btn-primary btn-block" 
+                                        onClick={()=>{this.txtPopDiscountPercent.value = 30}} style={{height:"60px",width:"100%",fontSize: "20px"}}>
                                         % 30
                                         </NbButton>
                                     </div>
@@ -2147,7 +2263,8 @@ export default class posDoc extends React.Component
                                 {/* btnPopDiscount40 */}
                                 <div className="row py-1">
                                     <div className="col-12 ps-1">
-                                        <NbButton id={"btnPopDiscount40"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"60px",width:"100%",fontSize: "20px"}}>
+                                        <NbButton id={"btnPopDiscount40"} parent={this} className="form-group btn btn-primary btn-block" 
+                                        onClick={()=>{this.txtPopDiscountPercent.value = 40}} style={{height:"60px",width:"100%",fontSize: "20px"}}>
                                         % 40
                                         </NbButton>
                                     </div>
@@ -2155,7 +2272,8 @@ export default class posDoc extends React.Component
                                 {/* btnPopDiscount50 */}
                                 <div className="row py-1">
                                     <div className="col-12 ps-1">
-                                        <NbButton id={"btnPopDiscount50"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"60px",width:"100%",fontSize: "20px"}}>
+                                        <NbButton id={"btnPopDiscount50"} parent={this} className="form-group btn btn-primary btn-block" 
+                                        onClick={()=>{this.txtPopDiscountPercent.value = 50}} style={{height:"60px",width:"100%",fontSize: "20px"}}>
                                         % 50
                                         </NbButton>
                                     </div>

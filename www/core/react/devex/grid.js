@@ -91,7 +91,7 @@ export default class NdGrid extends Base
         }             
     }
     async _onRowUpdated(e)
-    {
+    {        
         if(typeof this.props.onRowUpdated != 'undefined')
         {
             this.props.onRowUpdated(e);
@@ -324,8 +324,10 @@ export default class NdGrid extends Base
                     width={this.props.width}
                     onInitialized={this._onInitialized} onSelectionChanged={this._onSelectionChanged} 
                     onInitNewRow={this._onInitNewRow} onEditingStart={this._onEditingStart} onRowInserting={this._onRowInserting} onRowInserted={this._onRowInserted}
-                    onRowUpdating={this._onRowUpdating} onRowUpdated={this._onRowUpdated} onRowRemoving={this._onRowRemoving} onRowRemoved={this._onRowRemoved} 
+                    onRowUpdating={this._onRowUpdating} onRowUpdated={this._onRowUpdated} onRowRemoving={this._onRowRemoving} onRowRemoved={this._onRowRemoved}
                     onSaving={this._onSaving} onSaved={this._onSaved} onEditCanceling={this._onEditCanceling} onEditCanceled={this._onEditCanceled}
+                    onCellPrepared={this._onCellPrepared} onRowDblClick={this._onRowDblClick} onKeyDown = {this._onKeyDown}
+                    onCellClick={this._onCellClick} onCellDblClick={this._onCellDblClick} onRowClick={this._onRowClick}
                     columns={this.state.columns}
                     filterRow={this.state.filterRow}
                     headerFilter={this.state.headerFilter}

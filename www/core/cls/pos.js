@@ -199,6 +199,7 @@ export class posSaleCls
             DISCOUNT : 0,
             LOYALTY : 0,
             VAT : 0,
+            VAT_RATE : 0,
             TOTAL : 0,
             SUBTOTAL : 0,
             GRAND_AMOUNT : 0,

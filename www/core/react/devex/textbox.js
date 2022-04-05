@@ -264,7 +264,8 @@ export default class NdTextBox extends Base
                 }
             }
         }
-        this.setState({value:e.toString()})        
+        this.setState({value:e.toString()})                
+        this.dev.option('value',e.toString()) 
     } 
     get readOnly()
     {
