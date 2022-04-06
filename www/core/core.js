@@ -723,6 +723,7 @@ export class datatable
                 }
                 else
                 {
+                    console.log(this.selectCmd)
                     console.log(TmpData.result.err)
                 }                
             }

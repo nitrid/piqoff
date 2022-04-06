@@ -322,7 +322,6 @@ export default class NdBase extends React.Component
     
                                         await tmpThis.state.data.datatable.refresh()
                                     }   
-                                   
                                 }                                
                                 if(typeof tmpThis.state.data != 'undefined' && typeof tmpThis.state.data.datatable != 'undefined')
                                 {

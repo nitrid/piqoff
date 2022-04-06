@@ -31,12 +31,12 @@ export default class posDoc extends React.Component
     constructor()
     {
         super() 
-        this.core = App.instance.core;
-        this.lang = App.instance.lang;
+        this.core = App.instance.core
+        this.lang = App.instance.lang
         this.t = App.instance.lang.getFixedT(null,null,"pos")
         this.user = this.core.auth.data
-        this.prmObj = new param(prm);
-        this.posObj = new posCls();
+        this.prmObj = new param(prm)
+        this.posObj = new posCls()
         
         this.state =
         {
@@ -90,18 +90,26 @@ export default class posDoc extends React.Component
         
     }
     async init()
-    {
-        setInterval(()=>
-        {
-            this.setState({time:moment(new Date(),"HH:mm:ss").format("HH:mm:ss"),date:new Date().toLocaleDateString('tr-TR',{ year: 'numeric', month: 'numeric', day: 'numeric' })})
-        },1000)
-
+    {                
         this.posObj = new posCls();
         await this.prmObj.load({PAGE:"pos",APP:'POS'})
+
         this.posObj.addEmpty()
+        this.posObj.dt()[this.posObj.dt().length - 1].DEVICE = '001'
 
         await this.grdList.dataRefresh({source:this.posObj.posSale.dt()});
         await this.grdPay.dataRefresh({source:this.posObj.posPay.dt()});
+
+        setInterval(()=>
+        {
+            this.setState({time:moment(new Date(),"HH:mm:ss").format("HH:mm:ss"),date:new Date().toLocaleDateString('tr-TR',{ year: 'numeric', month: 'numeric', day: 'numeric' })})
+        },1000)        
+    }
+    async getDoc(pGuid)
+    {
+        await this.posObj.load({GUID:pGuid})
+
+        this.calGrandTotal()
     }
     getItemDb(pCode)
     {
@@ -111,9 +119,9 @@ export default class posDoc extends React.Component
             tmpDt.selectCmd = 
             {
                 query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE CODE = @CODE OR BARCODE = @CODE OR MULTICODE = @CODE",
-                param : ['CODE:string|25']
+                param : ['CODE:string|25'],
+                value: [pCode]
             }
-            tmpDt.selectCmd.value = [pCode]
             await tmpDt.refresh();
             resolve(tmpDt)
         });
@@ -484,7 +492,7 @@ export default class posDoc extends React.Component
 
         this.calGrandTotal();
     }
-    calGrandTotal()
+    async calGrandTotal()
     {
         if(this.posObj.dt().length > 0)
         {
@@ -516,7 +524,8 @@ export default class posDoc extends React.Component
             this.txtPopTotal.value = parseFloat(this.state.payRest).toFixed(2)
             this.txtPopCardPay.value = parseFloat(this.state.payRest).toFixed(2)
             this.txtPopCashPay.value = parseFloat(this.state.payRest).toFixed(2)            
-        }        
+        } 
+        await this.posObj.save()       
     }
     getWeighing()
     {
@@ -1246,8 +1255,15 @@ export default class posDoc extends React.Component
                                     {/* Park List */}
                                     <div className="col px-1">
                                         <NbButton id={"btn"} parent={this} className="form-group btn btn-warning btn-block my-1" style={{height:"70px",width:"100%"}}
-                                        onClick={()=>
-                                        {                                                        
+                                        onClick={async ()=>
+                                        {            
+                                            let tmpParkDt = new datatable()
+                                            tmpParkDt.selectCmd =
+                                            {
+                                                query : "SELECT GUID,LUSER_NAME,LDATE,TOTAL FROM POS_VW_01 WHERE STATUS = 0",
+                                            }
+                                            await tmpParkDt.refresh();
+                                            await this.grdPopParkList.dataRefresh({source:tmpParkDt});             
                                             this.popParkList.show();
                                         }}>
                                             <i className="text-white fa-solid fa-arrow-up-right-from-square" style={{fontSize: "24px"}} />
@@ -1924,31 +1940,24 @@ export default class posDoc extends React.Component
                                 height={"425px"} 
                                 width={"100%"}
                                 dbApply={false}
-                                data={{source:[{TYPE_NAME:0},{TYPE_NAME:1},{TYPE_NAME:2},{TYPE_NAME:3},{TYPE_NAME:4},{TYPE_NAME:5},{TYPE_NAME:6},{TYPE_NAME:7},{TYPE_NAME:8},{TYPE_NAME:9}]}}
-                                onRowPrepared=
+                                selection={{mode:"single"}}
+                                onRowPrepared={(e)=>
                                 {
-                                    (e)=>
+                                    if(e.rowType == "header")
                                     {
-                                        if(e.rowType == "header")
-                                        {
-                                            e.rowElement.style.fontWeight = "bold";    
-                                        }
-                                        e.rowElement.style.fontSize = "13px";
+                                        e.rowElement.style.fontWeight = "bold";    
                                     }
-                                }
-                                onCellPrepared=
+                                    e.rowElement.style.fontSize = "13px";
+                                }}
+                                onCellPrepared={(e)=>
                                 {
-                                    (e)=>
-                                    {
-                                        e.cellElement.style.padding = "4px"
-                                    }
-                                }
+                                    e.cellElement.style.padding = "4px"
+                                }}
                                 >
-                                    <Column dataField="TYPE_NAME" caption={"NO"} width={40} alignment={"center"}/>
-                                    <Column dataField="DEPOT" caption={"ADI"} width={350} />
-                                    <Column dataField="CUSTOMER_NAME" caption={"MIKTAR"} width={100}/>
-                                    <Column dataField="QUANTITY" caption={"FIYAT"} width={100}/>
-                                    <Column dataField="VAT_EXT" caption={"TUTAR"} width={100}/>                                                
+                                    <Column dataField="LUSER_NAME" caption={"USER"} width={120} alignment={"center"}/>
+                                    <Column dataField="LDATE" caption={"DATE"} width={150} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"} />
+                                    <Column dataField="TOTAL" caption={"AMOUNT"} width={100}/>
+                                    <Column dataField="DESCRIPTION" caption={"DESCRIPTION"} width={400}/>
                                 </NdGrid>
                             </div>
                         </div>
@@ -1956,7 +1965,15 @@ export default class posDoc extends React.Component
                         <div className="row py-1">
                             <div className="col-12">
                                 <NbButton id={"btnPopParkListSelect"} parent={this} className="form-group btn btn-success btn-block" 
-                                style={{height:"45px",width:"100%",fontSize:"16px"}}>Seç</NbButton> 
+                                style={{height:"45px",width:"100%",fontSize:"16px"}}
+                                onClick={()=>
+                                {
+                                    if(this.grdPopParkList.devGrid.getSelectedRowsData().length > 0)
+                                    {
+                                        this.getDoc(this.grdPopParkList.devGrid.getSelectedRowsData()[0].GUID)
+                                        this.popParkList.hide()
+                                    }
+                                }}>Seç</NbButton> 
                             </div>
                         </div>
                     </NdPopUp>
@@ -2089,12 +2106,11 @@ export default class posDoc extends React.Component
                                     }
 
                                     let tmpDiscount = Number(parseFloat(tmpData.DISCOUNT).toFixed(2))
-                                    let tmpBefore = Number(parseFloat(tmpData.TOTAL + tmpData.DISCOUNT).toFixed(2));
-                                    this.setState(
-                                    {
-                                        discountBefore:tmpBefore,
-                                        discountAfter:tmpData.TOTAL
-                                    })       
+                                    let tmpBefore = Number(parseFloat(tmpData.AMOUNT).toFixed(2));
+                                    let tmpAfter = Number(parseFloat(tmpData.AMOUNT - tmpData.DISCOUNT).toFixed(2))
+                                    
+                                    this.setState({discountBefore:tmpBefore,discountAfter:tmpAfter})       
+                                    
                                     this.txtPopDiscountPercent.value = parseFloat((tmpDiscount / tmpBefore) * 100).toFixed(2)
                                     this.txtPopDiscountAmount.value = parseFloat(tmpDiscount).toFixed(2)    
                                 }}/>
@@ -2165,7 +2181,23 @@ export default class posDoc extends React.Component
                                 <div className="row pt-1">
                                     {/* btnPopDiscountDel */}
                                     <div className="col-4 pe-1">
-                                        <NbButton id={"btnPopDiscountDel"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}>
+                                        <NbButton id={"btnPopDiscountDel"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
+                                        onClick={()=>
+                                        {
+                                            for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
+                                            {
+                                                let tmpAmount = Number(parseFloat(this.posObj.posSale.dt()[i].AMOUNT - this.posObj.posSale.dt()[i].LOYALTY).toFixed(2))
+                                                
+                                                let tmpVat = Number(parseFloat(this.posObj.posSale.dt()[i].AMOUNT * (this.posObj.posSale.dt()[i].VAT_RATE / 100)))
+                                                let tmpTotal = Number(parseFloat(tmpAmount + tmpVat).toFixed(2))
+                                                
+                                                this.posObj.posSale.dt()[i].DISCOUNT = 0
+                                                this.posObj.posSale.dt()[i].VAT = tmpVat
+                                                this.posObj.posSale.dt()[i].TOTAL = tmpTotal
+                                            }
+                                            this.calGrandTotal()
+                                            this.popDiscount.hide()
+                                        }}>
                                             <i className="text-white fa-solid fa-eraser" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
@@ -2212,19 +2244,37 @@ export default class posDoc extends React.Component
                                             {                                                                                                
                                                 for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
                                                 {
-                                                    let tmpDiscountRate = Number(parseFloat(this.txtPopDiscountPercent.value / 100).toFixed(3))
-                                                    let tmpTotal = Number(parseFloat(this.posObj.posSale.dt()[i].TOTAL + this.posObj.posSale.dt()[i].DISCOUNT).toFixed(2))
-
-                                                    this.posObj.posSale.dt()[i].DISCOUNT = Number(parseFloat(tmpTotal * tmpDiscountRate).toFixed(2))
-                                                    this.posObj.posSale.dt()[i].VAT = Number(parseFloat(this.posObj.posSale.dt()[i].VAT - (this.posObj.posSale.dt()[i].VAT * tmpDiscountRate)).toFixed(2))
-                                                    this.posObj.posSale.dt()[i].TOTAL = Number(parseFloat(tmpTotal - (tmpTotal * tmpDiscountRate)).toFixed(2))
-                                                }
-                                                this.calGrandTotal()
+                                                    let tmpDiscountRate = Number(parseFloat(this.txtPopDiscountPercent.value / 100).toFixed(3))                                                    
+                                                    let tmpDiscount = Number(parseFloat(this.posObj.posSale.dt()[i].AMOUNT * tmpDiscountRate).toFixed(2))
+                                                    let tmpAmount = Number(parseFloat(this.posObj.posSale.dt()[i].AMOUNT - (tmpDiscount + this.posObj.posSale.dt()[i].LOYALTY)).toFixed(2))
+                                                    
+                                                    let tmpVat = Number(parseFloat(tmpAmount * (this.posObj.posSale.dt()[i].VAT_RATE / 100)))
+                                                    let tmpTotal = Number(parseFloat(tmpAmount + tmpVat).toFixed(2))
+                                                    
+                                                    this.posObj.posSale.dt()[i].DISCOUNT = tmpDiscount
+                                                    this.posObj.posSale.dt()[i].VAT = tmpVat
+                                                    this.posObj.posSale.dt()[i].TOTAL = tmpTotal
+                                                }                                                
                                             }
                                             else if(this.rbtnDisType.value == 1) //SATIR İSKONTO
                                             {
+                                                if(this.grdList.devGrid.getSelectedRowsData().length > 0)
+                                                {
+                                                    let tmpData = this.grdList.devGrid.getSelectedRowsData()[0]
 
+                                                    let tmpDiscountRate = Number(parseFloat(this.txtPopDiscountPercent.value / 100).toFixed(3))                                                    
+                                                    let tmpDiscount = Number(parseFloat(tmpData.AMOUNT * tmpDiscountRate).toFixed(2))
+                                                    let tmpAmount = Number(parseFloat(tmpData.AMOUNT - (tmpDiscount + tmpData.LOYALTY)).toFixed(2))
+                                                    
+                                                    let tmpVat = Number(parseFloat(tmpAmount * (tmpData.VAT_RATE / 100)))
+                                                    let tmpTotal = Number(parseFloat(tmpAmount + tmpVat).toFixed(2))
+                                                    
+                                                    tmpData.DISCOUNT = tmpDiscount
+                                                    tmpData.VAT = tmpVat
+                                                    tmpData.TOTAL = tmpTotal
+                                                }
                                             }
+                                            this.calGrandTotal()
                                             this.popDiscount.hide()
                                         }}>
                                             <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />

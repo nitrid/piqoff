@@ -11,7 +11,7 @@ export class posCls
             GUID : '00000000-0000-0000-0000-000000000000',
             CUSER : this.core.auth.data.CODE,
             LUSER : this.core.auth.data.CODE,
-            SAFE : '',
+            DEVICE : '',
             DEPOT_GUID : '00000000-0000-0000-0000-000000000000',
             DEPOT_CODE : '',
             DEPOT_NAME : '',
@@ -39,7 +39,7 @@ export class posCls
         let tmpDt = new datatable('POS');            
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [dbo].[POS_VW_01] WHERE ((GUID = @GUID) OR (@GUID = ''))",
+            query : "SELECT * FROM [dbo].[POS_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000'))",
             param : ['GUID:string|50']
         } 
         tmpDt.insertCmd = 
@@ -47,7 +47,7 @@ export class posCls
             query : "EXEC [dbo].[PRD_POS_INSERT] " + 
                     "@GUID = @PGUID, " +
                     "@CUSER = @PCUSER, " + 
-                    "@SAFE = @PSAFE, " +
+                    "@DEVICE = @PDEVICE, " +
                     "@DEPOT = @PDEPOT, " +
                     "@TYPE = @PTYPE, " +                      
                     "@DOC_DATE = @PDOC_DATE, " + 
@@ -58,16 +58,16 @@ export class posCls
                     "@VAT = @PVAT, " + 
                     "@TOTAL = @PTOTAL, " + 
                     "@STATUS = @PSTATUS ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PSAFE:string|25','PDEPOT:string|50','PTYPE:int','PDOC_DATE:date','PCUSTOMER:string|50',
+            param : ['PGUID:string|50','PCUSER:string|25','PDEVICE:string|25','PDEPOT:string|50','PTYPE:int','PDOC_DATE:date','PCUSTOMER:string|50',
                      'PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSTATUS:int'],
-            dataprm : ['GUID','CUSER','SAFE','DEPOT_GUID','TYPE','DOC_DATE','CUSTOMER_GUID','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','STATUS']
+            dataprm : ['GUID','CUSER','DEVICE','DEPOT_GUID','TYPE','DOC_DATE','CUSTOMER_GUID','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','STATUS']
         } 
         tmpDt.updateCmd = 
         {
             query : "EXEC [dbo].[PRD_POS_UPDATE] " + 
                     "@GUID = @PGUID, " +
                     "@CUSER = @PCUSER, " + 
-                    "@SAFE = @PSAFE, " +
+                    "@DEVICE = @PDEVICE, " +
                     "@DEPOT = @PDEPOT, " +
                     "@TYPE = @PTYPE, " +                      
                     "@DOC_DATE = @PDOC_DATE, " + 
@@ -78,9 +78,9 @@ export class posCls
                     "@VAT = @PVAT, " + 
                     "@TOTAL = @PTOTAL, " + 
                     "@STATUS = @PSTATUS ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PSAFE:string|25','PDEPOT:string|50','PTYPE:int','PDOC_DATE:date','PCUSTOMER:string|50',
+            param : ['PGUID:string|50','PCUSER:string|25','PDEVICE:string|25','PDEPOT:string|50','PTYPE:int','PDOC_DATE:date','PCUSTOMER:string|50',
                      'PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSTATUS:int'],
-            dataprm : ['GUID','CUSER','SAFE','DEPOT_GUID','TYPE','DOC_DATE','CUSTOMER_GUID','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','STATUS']
+            dataprm : ['GUID','CUSER','DEVICE','DEPOT_GUID','TYPE','DOC_DATE','CUSTOMER_GUID','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','STATUS']
         } 
         tmpDt.deleteCmd = 
         {
@@ -139,7 +139,7 @@ export class posCls
             let tmpPrm = {GUID:''}
             if(arguments.length > 0)
             {
-                tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '' : arguments[0].GUID;
+                tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
             }
 
             this.ds.get('POS').selectCmd.value = Object.values(tmpPrm);
@@ -149,7 +149,7 @@ export class posCls
             if(this.ds.get('POS').length > 0)
             {
                 await this.posSale.load({POS_GUID:this.ds.get('POS')[0].GUID})
-                await this.posPay.load({POS_GUID:this.ds.get('POS')[0].GUID,TYPE:0})
+                await this.posPay.load({POS_GUID:this.ds.get('POS')[0].GUID})
             }
             resolve(this.ds.get('POS'));    
         });
@@ -218,7 +218,7 @@ export class posSaleCls
         let tmpDt = new datatable('POS_SALE');            
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [dbo].[POS_SALE_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '')) AND ((POS_GUID = @POS_GUID) OR (@POS_GUID = ''))",
+            query : "SELECT * FROM [dbo].[POS_SALE_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((POS_GUID = @POS_GUID) OR (@POS_GUID = '00000000-0000-0000-0000-000000000000'))",
             param : ['GUID:string|50','POS_GUID:string|50']
         } 
         tmpDt.insertCmd = 
@@ -321,8 +321,8 @@ export class posSaleCls
             let tmpPrm = {GUID:'',POS_GUID:''}
             if(arguments.length > 0)
             {
-                tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '' : arguments[0].GUID;
-                tmpPrm.POS_GUID = typeof arguments[0].POS_GUID == 'undefined' ? '' : arguments[0].POS_GUID;
+                tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
+                tmpPrm.POS_GUID = typeof arguments[0].POS_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].POS_GUID;
             }
 
             this.ds.get('POS_SALE').selectCmd.value = Object.values(tmpPrm);
@@ -383,7 +383,7 @@ export class posPaymentCls
         let tmpDt = new datatable('POS_PAYMENT');            
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [dbo].[POS_PAYMENT_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '')) AND ((POS_GUID = @POS_GUID) OR (@POS_GUID = ''))",
+            query : "SELECT * FROM [dbo].[POS_PAYMENT_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((POS_GUID = @POS_GUID) OR (@POS_GUID = '00000000-0000-0000-0000-000000000000'))",
             param : ['GUID:string|50','POS_GUID:string|50']
         } 
         tmpDt.insertCmd = 
@@ -468,8 +468,8 @@ export class posPaymentCls
             let tmpPrm = {GUID:'',POS_GUID:''}
             if(arguments.length > 0)
             {
-                tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '' : arguments[0].GUID;
-                tmpPrm.POS_GUID = typeof arguments[0].POS_GUID == 'undefined' ? '' : arguments[0].POS_GUID;
+                tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
+                tmpPrm.POS_GUID = typeof arguments[0].POS_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].POS_GUID;
             }
 
             this.ds.get('POS_PAYMENT').selectCmd.value = Object.values(tmpPrm);
