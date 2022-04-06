@@ -22,7 +22,7 @@ import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
 
-export default class salesInvoice extends React.Component
+export default class outageDoc extends React.Component
 {
     constructor()
     {
@@ -192,7 +192,7 @@ export default class salesInvoice extends React.Component
                 value={e.value}
                 onKeyDown={async(k)=>
                     {
-                        if(k.event.key == 'F10')
+                        if(k.event.key == 'F10' || k.event.key == 'ArrowRight')
                         {
                             await this.pg_txtItemsCode.setVal(e.value)
                             this.pg_txtItemsCode.onClick = async(data) =>
@@ -438,7 +438,7 @@ export default class salesInvoice extends React.Component
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                     onClick={()=>
                                     {
-                                        
+                                        this.popDesign.show()
                                     }}/>
                                 </Item>
                             </Toolbar>

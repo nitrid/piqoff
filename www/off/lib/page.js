@@ -4,6 +4,8 @@ import App from '../lib/app.js';
 import {datatable,param,access} from '../../core/core.js';
 import {prm} from '../meta/prm.js'
 import {acs} from '../meta/acs.js'
+import { dialog } from '../../../../core/react/devex/dialog.js';
+
 
 export default class Page extends React.Component
 {
@@ -56,6 +58,22 @@ export default class Page extends React.Component
                   callbacks[x](pParams);
               }
           } 
+      }
+      App.instance.panel.onClose = async () =>
+      {
+        
+          let tmpConfObj =
+          {
+              id:'msgClose',showTitle:true,title:("Dikkat"),showCloseButton:true,width:'500px',height:'200px',
+              button:[{id:"btn01",caption:("Evet"),location:'before'},{id:"btn02",caption:("Hayır"),location:'after'}],
+              content:(<div style={{textAlign:"center",fontSize:"20px"}}>{("Sayfayı Kapatmak İstediğinize Eminmisiniz?")}</div>)
+          }
+          
+          let pResult = await dialog(tmpConfObj);
+          if(pResult == 'btn01')
+          {
+              App.instance.panel.closePage()
+          }
       }
       //***********************************************/      
       return obj;

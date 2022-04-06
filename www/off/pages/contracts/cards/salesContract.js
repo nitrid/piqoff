@@ -18,7 +18,7 @@ import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 
-export default class promotionCard extends React.Component
+export default class salesContract extends React.Component
 {
     constructor()
     {
@@ -114,7 +114,7 @@ export default class promotionCard extends React.Component
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                     onClick={()=>
                                     {
-                                        
+                                        this.popDesign.show()
                                     }}/>
                                 </Item>
                             </Toolbar>

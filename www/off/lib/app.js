@@ -190,6 +190,7 @@ export default class App extends React.Component
         if(typeof data.path != 'undefined')
         {
             Panel.instance.addPage(data);
+            this.panel = Panel.instance
         }
     }
     textValueChanged(e) 

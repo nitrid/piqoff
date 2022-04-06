@@ -15,7 +15,7 @@ import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 
-export default class itemList extends React.Component
+export default class rebateInvList extends React.Component
 {
     constructor(props)
     {

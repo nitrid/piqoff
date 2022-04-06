@@ -21,7 +21,7 @@ export const langTr =
         stk_02_001: "Sayım Evrakı",
         stk_02_002: "Depolar Arası Sevk",
         stk_02_003: "Fire Çıkış Fişi",
-        stk_02_004: "Sarf Giriş Çıkış Fişi",
+        stk_02_004: "Etiket Basımı",
         stk_02_005: "İade Deposuna Sevk",
         stk_03_001: "Stok Listesi",
         stk_03_002: "Fiyat Listesi",
@@ -589,6 +589,137 @@ export const langTr =
             btn01: "Birleştir",
             btn02: "Yeni Ekle",
             msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Satırlar Birleştirilsin mi ?"
+        },
+        validRef :"Seri Boş Geçilemez",
+        validRefNo : "Sıra Boş Geçilemez",
+        validDepot : "Depo Seçmelisiniz",
+        validCustomerCode : "Cari Kodu Boş Geçilemez",
+        validDocDate : "Tarih Seçmelisiniz",
+
+    },
+    stk_02_004 :
+    {
+        txtRefRefno : "Seri-Sıra",
+        design : "Dizayn",
+        txtPage : "Sayfa",
+        txtFreeLabel : "Boş Alan",
+        txtLineCount : "Okutulan Satır",
+        chkLastChange : "Son yazdırma tarihinden itibaren değişenler",
+        chkSelectChange : "Seçilen tarihten itibaren değişenler",
+        chkGroup : "Grup",
+        chkCustomer : "Tedarikçi Ürünleri",
+        chkAllItems : "Tüm Ürünler",
+        AddItems : "Ekle",
+        pg_Docs : 
+        {
+            title : "Evrak Seçimi",
+            clmRef : "SERİ",
+            clmRefNo : "SIRA",
+        },
+        pg_txtItemsCode : 
+        {
+            title : "Stok Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+        },
+        grdLabelQueue: 
+        {
+            clmItemCode: "Kodu",
+            clmBarcode : "Barkod",
+            clmItemName: "Adı",
+            clmItemGrpName : "Ürün Grubu",
+            clmPrice: "Fiyat",
+            clmUnderUnit : "Alt Birim",
+            clmUnderUnit : "Alt Birim",
+            clmUnderUnitPrice : "Alt Birim Fiyatı",
+            clmDescription :"Açıklama"
+        },
+        msgDocValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
+        },
+        msgAddItems:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Seçmiş olduğunuz kritere uygun ürünler eklenecektir.Onaylıyormusunuz ?"
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgLocked:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kayıt Edildi Ve Kilitlendi !"
+        },
+        msgPasswordSucces:
+        {
+            title: "Başarılı",
+            btn01: "Tamam",
+            msg: "Evrakın Kilidi Açıldı !",
+        },
+        msgPasswordWrong:
+        {
+            title: "Başarısız",
+            btn01: "Tamam",
+            msg: "Şifreniz Hatalı !"
+        },
+        msgGetLocked:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
+        },
+        msgDoclocked:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kilidi Açılmadan Kayıt Edilemez !"
+        },
+        msgItemNotFound:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Stok Bulunmadı !!"
+        },
+        msgCombineItem:
+        {
+            title: "Dikkat",
+            btn01: "Birleştir",
+            btn02: "Yeni Ekle",
+            msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Satırlar Birleştirilsin mi ?"
+        },
+        popWizard : 
+        {
+            title : "Ürün Seçme Sihirbazı",
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
