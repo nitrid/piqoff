@@ -30,6 +30,7 @@ export class posCls
 
         this.posSale = new posSaleCls();
         this.posPay = new posPaymentCls();
+        this.posExtra = new posExtraCls();
 
         this._initDs();
     }
@@ -95,6 +96,7 @@ export class posCls
         this.ds.add(tmpDt);
         this.ds.add(this.posSale.dt('POS_SALE'))
         this.ds.add(this.posPay.dt('POS_PAYMENT'))
+        this.ds.add(this.posExtra.dt('POS_EXTRA'))
     }
     //#endregion
     dt()
@@ -150,6 +152,7 @@ export class posCls
             {
                 await this.posSale.load({POS_GUID:this.ds.get('POS')[0].GUID})
                 await this.posPay.load({POS_GUID:this.ds.get('POS')[0].GUID})
+                await this.posExtra.load({POS_GUID:this.ds.get('POS')[0].GUID})
             }
             resolve(this.ds.get('POS'));    
         });
@@ -662,6 +665,179 @@ export class posPluCls
             await this.ds.get('PLU').refresh();
             
             resolve(this.ds.get('PLU'));    
+        });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            this.ds.delete()
+            resolve(await this.ds.update()); 
+        });
+    }
+}
+export class posExtraCls
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds = new dataset();
+        this.empty = 
+        {
+            GUID : '00000000-0000-0000-0000-000000000000',
+            CUSER : this.core.auth.data.CODE,
+            LUSER : this.core.auth.data.CODE,
+            TAG : '',
+            POS_GUID : '00000000-0000-0000-0000-000000000000',
+            LINE_NO : 0,
+            DESCRIPTION : ''
+        }
+
+        this._initDs();
+    }
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('POS_EXTRA');            
+        tmpDt.selectCmd = 
+        {
+            query : "SELECT * FROM [dbo].[POS_EXTRA_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((POS_GUID = @POS_GUID) OR (@POS_GUID = '00000000-0000-0000-0000-000000000000'))",
+            param : ['GUID:string|50','POS_GUID:string|50'],
+            local : 
+            {
+                type : "select",
+                from : "POS_EXTRA",
+                where : {GUID : "",POS_GUID : ""}
+            }
+        } 
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@TAG = @PTAG, " +
+                    "@POS_GUID = @PPOS_GUID, " +
+                    "@LINE_NO = @PLINE_NO, " +
+                    "@DESCRIPTION = @PDESCRIPTION ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_NO:int','PDESCRIPTION:string|max'],
+            dataprm : ['GUID','CUSER','TAG','POS_GUID','LINE_NO','DESCRIPTION'],
+            local : 
+            {
+                type : "insert",
+                into : "POS_EXTRA",
+                values : 
+                [
+                    {
+                        GUID : {map:'GUID'},
+                        CUSER : {map:'CUSER'},
+                        TAG : {map:'TAG'},
+                        POS_GUID : {map:'POS_GUID'},
+                        LINE_NO : {map:'LINE_NO'},
+                        DESCRIPTION : {map:'DESCRIPTION'}
+                    }
+                ]
+            }
+        } 
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_POS_EXTRA_UPDATE] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@TAG = @PTAG, " +
+                    "@POS_GUID = @PPOS_GUID, " +
+                    "@LINE_NO = @PLINE_NO, " +
+                    "@DESCRIPTION = @PDESCRIPTION ",  
+            param : ['PGUID:string|50','PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_NO:int','PDESCRIPTION:string|max'],
+            dataprm : ['GUID','CUSER','TAG','POS_GUID','LINE_NO','DESCRIPTION'],
+            local : 
+            {
+                type : "update",
+                in : "POS_EXTRA",
+                set : 
+                {
+                    CUSER : {map:'CUSER'},
+                    TAG : {map:'TAG'},
+                    POS_GUID : {map:'POS_GUID'},
+                    LINE_NO : {map:'LINE_NO'},
+                    DESCRIPTION : {map:'DESCRIPTION'}
+                },
+                where : {GUID : {map:'GUID'}}
+            }
+        } 
+        tmpDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_POS_EXTRA_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@UPDATE = 1, " +
+                    "@GUID = @PGUID, " , 
+            param : ['PCUSER:string|25','PGUID:string|50'],
+            dataprm : ['CUSER','GUID'],
+            local : 
+            {
+                type : "delete",
+                from : "POS_EXTRA",
+                where : 
+                {
+                    CUSER : {map:'CUSER'},
+                    GUID : {map:'GUID'}
+                }
+            }
+        }
+
+        this.ds.add(tmpDt);
+    }
+    //#endregion
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0]);
+        }
+
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('POS_EXTRA') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {}
+        if(typeof arguments.length > 0)
+        {
+            tmp = {...arguments[0]}            
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('POS_EXTRA').push(tmp)
+    }
+    clearAll()
+    {
+        for (let i = 0; i < this.ds.length; i++) 
+        {
+            this.dt(i).clear()
+        }
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ ÖRN: {GUID:'',POS_GUID:''}
+        return new Promise(async resolve => 
+        {
+            let tmpPrm = {GUID:'00000000-0000-0000-0000-000000000000',POS_GUID:'00000000-0000-0000-0000-000000000000'}
+            if(arguments.length > 0)
+            {
+                tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
+                tmpPrm.POS_GUID = typeof arguments[0].POS_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].POS_GUID;
+            }
+
+            this.ds.get('POS_EXTRA').selectCmd.value = Object.values(tmpPrm);
+              
+            await this.ds.get('POS_EXTRA').refresh();
+            
+            resolve(this.ds.get('POS_EXTRA'));    
         });
     }
     save()
