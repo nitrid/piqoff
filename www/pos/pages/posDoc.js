@@ -86,13 +86,9 @@ export default class posDoc extends React.Component
         }     
         this.init()
     }
-    async componentDidMount()
-    {        
-        
-    }
     async init()
     {                
-        this.posObj = new posCls();
+        this.posObj.clearAll()
         await this.prmObj.load({PAGE:"pos",APP:'POS'})
 
         this.posObj.addEmpty()
@@ -104,13 +100,14 @@ export default class posDoc extends React.Component
         setInterval(()=>
         {
             this.setState({time:moment(new Date(),"HH:mm:ss").format("HH:mm:ss"),date:new Date().toLocaleDateString('tr-TR',{ year: 'numeric', month: 'numeric', day: 'numeric' })})
-        },1000)        
+        },1000) 
+
+        await this.calcGrandTotal(false)       
     }
     async getDoc(pGuid)
     {
         await this.posObj.load({GUID:pGuid})
-
-        this.calcGrandTotal()
+        await this.calcGrandTotal()
     }
     getItemDb(pCode)
     {
@@ -345,41 +342,6 @@ export default class posDoc extends React.Component
         }
         //******************************************************** */        
     }
-    async calcGrandTotal()
-    {
-        if(this.posObj.dt().length > 0)
-        {
-            this.posObj.dt()[this.posObj.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.posSale.dt().sum('AMOUNT',2)).toFixed(2))
-            this.posObj.dt()[this.posObj.dt().length - 1].DISCOUNT = Number(parseFloat(this.posObj.posSale.dt().sum('DISCOUNT',2)).toFixed(2))
-            this.posObj.dt()[this.posObj.dt().length - 1].LOYALTY = Number(parseFloat(this.posObj.posSale.dt().sum('LOYALTY',2)).toFixed(2))
-            this.posObj.dt()[this.posObj.dt().length - 1].VAT = Number(parseFloat(this.posObj.posSale.dt().sum('VAT',2)).toFixed(2))
-            this.posObj.dt()[this.posObj.dt().length - 1].TOTAL = Number(parseFloat(this.posObj.posSale.dt().sum('TOTAL',2)).toFixed(2))
-            
-            this.state.payChange = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) >= 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2)) * -1
-            this.state.payRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2)); 
-            
-            this.setState(
-                {
-                    totalRowCount:this.posObj.posSale.dt().length,
-                    totalItemCount:this.posObj.posSale.dt().sum('QUANTITY',2),
-                    totalLoyalty:this.posObj.dt()[0].LOYALTY,
-                    totalTicRest:0,
-                    totalSub:this.posObj.dt()[0].AMOUNT,
-                    totalVat:this.posObj.dt()[0].VAT,
-                    totalDiscount:this.posObj.dt()[0].DISCOUNT,
-                    totalGrand:this.posObj.dt()[0].TOTAL,
-                    payTotal:this.posObj.posPay.dt().sum('AMOUNT',2),
-                    payChange:this.state.payChange,
-                    payRest:this.state.payRest
-                }
-            )
-            
-            this.txtPopTotal.value = parseFloat(this.state.payRest).toFixed(2)
-            this.txtPopCardPay.value = parseFloat(this.state.payRest).toFixed(2)
-            this.txtPopCashPay.value = parseFloat(this.state.payRest).toFixed(2)            
-        } 
-        await this.posObj.save()       
-    }
     getWeighing()
     {
         //#BAK BURAYA TERAZİ ENTEGRASYONU EKLENECEK
@@ -445,6 +407,50 @@ export default class posDoc extends React.Component
 
         return {barcode : pBarcode}
     }
+    async calcGrandTotal(pSave)
+    {
+        return new Promise(async resolve => 
+        {
+            if(this.posObj.dt().length > 0)
+            {
+                this.posObj.dt()[this.posObj.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.posSale.dt().sum('AMOUNT',2)).toFixed(2))
+                this.posObj.dt()[this.posObj.dt().length - 1].DISCOUNT = Number(parseFloat(this.posObj.posSale.dt().sum('DISCOUNT',2)).toFixed(2))
+                this.posObj.dt()[this.posObj.dt().length - 1].LOYALTY = Number(parseFloat(this.posObj.posSale.dt().sum('LOYALTY',2)).toFixed(2))
+                this.posObj.dt()[this.posObj.dt().length - 1].VAT = Number(parseFloat(this.posObj.posSale.dt().sum('VAT',2)).toFixed(2))
+                this.posObj.dt()[this.posObj.dt().length - 1].TOTAL = Number(parseFloat(this.posObj.posSale.dt().sum('TOTAL',2)).toFixed(2))
+                
+                this.state.payChange = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) >= 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2)) * -1
+                this.state.payRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2)); 
+                
+                this.setState(
+                    {
+                        totalRowCount:this.posObj.posSale.dt().length,
+                        totalItemCount:this.posObj.posSale.dt().sum('QUANTITY',2),
+                        totalLoyalty:this.posObj.dt()[0].LOYALTY,
+                        totalTicRest:0,
+                        totalSub:this.posObj.dt()[0].AMOUNT,
+                        totalVat:this.posObj.dt()[0].VAT,
+                        totalDiscount:this.posObj.dt()[0].DISCOUNT,
+                        totalGrand:this.posObj.dt()[0].TOTAL,
+                        payTotal:this.posObj.posPay.dt().sum('AMOUNT',2),
+                        payChange:this.state.payChange,
+                        payRest:this.state.payRest
+                    }
+                )
+                
+                this.txtPopTotal.value = parseFloat(this.state.payRest).toFixed(2)
+                this.txtPopCardPay.value = parseFloat(this.state.payRest).toFixed(2)
+                this.txtPopCashPay.value = parseFloat(this.state.payRest).toFixed(2)            
+            }
+    
+            if(typeof pSave == 'undefined' || pSave)
+            {
+                await this.posObj.save()
+            }
+
+            resolve()
+        });
+    }    
     isRowMerge(pType,pData)
     {
         if(pType == 'SALE')
@@ -490,7 +496,7 @@ export default class posDoc extends React.Component
             this.grdList.devGrid.selectRowsByIndexes(0)
         }, 100);
     }
-    saleRowAdd(pItemData)
+    async saleRowAdd(pItemData)
     {           
         pItemData.AMOUNT = Number(parseFloat(pItemData.PRICE * pItemData.QUANTITY).toFixed(2))
         pItemData.VAT_AMOUNT = Number(parseFloat(pItemData.AMOUNT *  Number(parseFloat(pItemData.VAT / 100).toFixed(3))).toFixed(2))
@@ -530,9 +536,9 @@ export default class posDoc extends React.Component
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_VAT = 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_TOTAL = 0
 
-        this.calcGrandTotal();
+        await this.calcGrandTotal();
     }
-    saleRowUpdate(pRowData,pItemData)
+    async saleRowUpdate(pRowData,pItemData)
     {
         let tmpAmount = Number(parseFloat(pItemData.PRICE * pItemData.QUANTITY).toFixed(2))
         let tmpVat = Number(parseFloat(tmpAmount *  Number(parseFloat(pRowData.VAT_RATE / 100).toFixed(3))).toFixed(2))
@@ -544,7 +550,7 @@ export default class posDoc extends React.Component
         pRowData.VAT = tmpVat
         pRowData.TOTAL = tmpTotal
 
-        this.calcGrandTotal();
+        await this.calcGrandTotal();
     }
     async payAdd(pType,pAmount)
     {
@@ -578,45 +584,115 @@ export default class posDoc extends React.Component
             //SATIR BİRLEŞTİR        
             if(typeof tmpRowData != 'undefined')
             {
-                this.payRowUpdate(tmpRowData,{AMOUNT:Number(parseFloat(Number(pAmount) + tmpRowData.AMOUNT).toFixed(2)),CHANGE:0})
+                await this.payRowUpdate(tmpRowData,{AMOUNT:Number(parseFloat(Number(pAmount) + tmpRowData.AMOUNT).toFixed(2)),CHANGE:0})
             }
             else
             {
-                this.payRowAdd({PAY_TYPE:pType,AMOUNT:pAmount,CHANGE:0})
+                await this.payRowAdd({PAY_TYPE:pType,AMOUNT:pAmount,CHANGE:0})
             }            
         }    
         
         if(this.state.payRest == 0)
         {
-            console.log("Satış Kapandı")
+            this.posObj.dt()[0].STATUS = 1
+            await this.calcGrandTotal()
+            this.popTotal.hide()
+
+            if(this.state.payChange > 0)
+            {
+                let tmpConfObj =
+                {
+                    id:'msgAlert',
+                    showTitle:true,
+                    title:"Bilgi",
+                    showCloseButton:true,
+                    width:'500px',
+                    height:'250px',
+                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                    content:(<div><h3 className="text-danger text-center">{this.state.payChange + " EUR"}</h3><h3 className="text-primary text-center">Para üstü veriniz.</h3></div>)
+                }
+                await dialog(tmpConfObj);
+            }
+            
+            this.init()
         }
     }
     payRowAdd(pPayData)
     {
-        let tmpTypeName = ""
-        if(pPayData.PAY_TYPE == 0)
-            tmpTypeName = "ESC"
-        else if(pPayData.PAY_TYPE == 1)
-            tmpTypeName = "CB"
-        else if(pPayData.PAY_TYPE == 2)
-            tmpTypeName = "CHQ"
-        
-        this.posObj.posPay.addEmpty()
-        this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
-        this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE = pPayData.PAY_TYPE
-        this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE_NAME = tmpTypeName
-        this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].LINE_NO = this.posObj.posPay.dt().length
-        this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = Number(parseFloat(pPayData.AMOUNT).toFixed(2))
-        this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].CHANGE = pPayData.CHANGE
-
-        this.calcGrandTotal();
+        return new Promise(async resolve => 
+        {
+            let tmpTypeName = ""
+            if(pPayData.PAY_TYPE == 0)
+                tmpTypeName = "ESC"
+            else if(pPayData.PAY_TYPE == 1)
+                tmpTypeName = "CB"
+            else if(pPayData.PAY_TYPE == 2)
+                tmpTypeName = "CHQ"
+            
+            this.posObj.posPay.addEmpty()
+            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
+            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE = pPayData.PAY_TYPE
+            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE_NAME = tmpTypeName
+            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].LINE_NO = this.posObj.posPay.dt().length
+            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = Number(parseFloat(pPayData.AMOUNT).toFixed(2))
+            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].CHANGE = pPayData.CHANGE
+    
+            await this.calcGrandTotal();
+            resolve()
+        });
     }
     payRowUpdate(pRowData,pPayData)
     {
-        pRowData.AMOUNT = pPayData.AMOUNT
-        pRowData.CHANGE = pPayData.CHANGE
-
-        this.calcGrandTotal();
+        return new Promise(async resolve => 
+        {
+            pRowData.AMOUNT = pPayData.AMOUNT
+            pRowData.CHANGE = pPayData.CHANGE
+    
+            await this.calcGrandTotal();
+            resolve()
+        });
+    }
+    descSave(pTag,pDesc,pLineNo)
+    {
+        return new Promise(async resolve => 
+        {
+            let tmpDt = this.posObj.posExtra.dt().where({TAG:pTag})
+            if(tmpDt.length > 0)
+            {
+                tmpDt[0].DESCRIPTION = pDesc
+            }
+            else
+            {
+                this.posObj.posExtra.addEmpty()
+                this.posObj.posExtra.dt()[this.posObj.posExtra.dt().length - 1].TAG = pTag
+                this.posObj.posExtra.dt()[this.posObj.posExtra.dt().length - 1].POS_GUID = this.posObj.dt()[this.posObj.dt().length - 1].GUID
+                this.posObj.posExtra.dt()[this.posObj.posExtra.dt().length - 1].LINE_NO = pLineNo
+                this.posObj.posExtra.dt()[this.posObj.posExtra.dt().length - 1].DESCRIPTION = pDesc
+            }
+            await this.posObj.save()
+            resolve()
+        });
+    }
+    async delete()
+    {
+        this.posObj.dt().removeAt(0)
+        await this.posObj.save()
+        this.init()
+    }
+    async rowDelete()
+    {
+        if(this.posObj.posSale.dt().length > 1)
+        {
+            if(this.grdList.devGrid.getSelectedRowKeys().length > 0)
+            {
+                this.grdList.devGrid.deleteRow(this.grdList.devGrid.getRowIndexByKey(this.grdList.devGrid.getSelectedRowKeys()[0]))
+            }
+            await this.calcGrandTotal()
+        }
+        else
+        {
+            this.delete()
+        }
     }
     render()
     {
@@ -814,6 +890,7 @@ export default class posDoc extends React.Component
                                     }
                                 }}
                                 >
+                                    <Editing confirmDelete={false}/>
                                     <Column dataField="LINE_NO" caption={"NO"} width={40} alignment={"center"} defaultSortOrder="desc"/>
                                     <Column dataField="ITEM_NAME" caption={"ADI"} width={350} />
                                     <Column dataField="QUANTITY" caption={"MIKTAR"} width={100}/>
@@ -1198,11 +1275,21 @@ export default class posDoc extends React.Component
                                         <div className="row">                                            
                                             <div className="col-12 px-1">
                                                 <NbButton id={"btnDelete"} parent={this} className="form-group btn btn-danger btn-block my-1" style={{height:"70px",width:"100%"}}
-                                                onClick={()=>
+                                                onClick={async()=>
                                                 {
                                                     if(this.posObj.posSale.dt().length > 0)
                                                     {
-                                                        this.popParkDesc.show()
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:"Tamam",location:'before'},{id:"btn02",caption:"İptal",location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Evrakı iptal etmek istediğinize eminmisiniz ?"}</div>)
+                                                        }
+                                                        let tmpResult = await dialog(tmpConfObj);
+                                                        if(tmpResult == "btn01")
+                                                        {
+                                                            this.popDeleteDesc.show()
+                                                        }
                                                     }
                                                 }}>
                                                     <i className="text-white fa-solid fa-eraser" style={{fontSize: "24px"}} />
@@ -1212,7 +1299,24 @@ export default class posDoc extends React.Component
                                         {/* Line Delete */}
                                         <div className="row">                                            
                                             <div className="col-12 px-1">
-                                                <NbButton id={"btnLineDelete"} parent={this} className="form-group btn btn-danger btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                                <NbButton id={"btnLineDelete"} parent={this} className="form-group btn btn-danger btn-block my-1" style={{height:"70px",width:"100%"}}
+                                                onClick={async ()=>
+                                                {
+                                                    if(this.grdList.devGrid.getSelectedRowKeys().length > 0)
+                                                    {
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:"Tamam",location:'before'},{id:"btn02",caption:"İptal",location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Satırı iptal etmek istediğinize eminmisiniz ?"}</div>)
+                                                        }
+                                                        let tmpResult = await dialog(tmpConfObj);
+                                                        if(tmpResult == "btn01")
+                                                        {
+                                                            this.popRowDeleteDesc.show()
+                                                        }
+                                                    }
+                                                }}>
                                                     <i className="text-white fa-solid fa-outdent" style={{fontSize: "24px"}} />
                                                 </NbButton>
                                             </div>
@@ -1466,20 +1570,14 @@ export default class posDoc extends React.Component
                                                 width={"100%"}
                                                 dbApply={false}
                                                 selection={{mode:"single"}}
-                                                onRowPrepared=
+                                                onRowPrepared={(e)=>
                                                 {
-                                                    (e)=>
-                                                    {
-                                                        e.rowElement.style.fontSize = "13px";
-                                                    }
-                                                }
-                                                onRowRemoved=
+                                                    e.rowElement.style.fontSize = "13px";
+                                                }}
+                                                onRowRemoved={async (e) =>
                                                 {
-                                                    (e) =>
-                                                    {
-                                                        this.calcGrandTotal();
-                                                    }
-                                                }
+                                                    await this.calcGrandTotal();
+                                                }}
                                                 >
                                                     <Column dataField="PAY_TYPE_NAME" width={100} alignment={"center"}/>
                                                     <Column dataField="AMOUNT" width={40}/>                                                
@@ -2199,7 +2297,7 @@ export default class posDoc extends React.Component
                                     {/* btnPopDiscountDel */}
                                     <div className="col-4 pe-1">
                                         <NbButton id={"btnPopDiscountDel"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
-                                        onClick={()=>
+                                        onClick={async ()=>
                                         {
                                             for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
                                             {
@@ -2212,7 +2310,7 @@ export default class posDoc extends React.Component
                                                 this.posObj.posSale.dt()[i].VAT = tmpVat
                                                 this.posObj.posSale.dt()[i].TOTAL = tmpTotal
                                             }
-                                            this.calcGrandTotal()
+                                            await this.calcGrandTotal()
                                             this.popDiscount.hide()
                                         }}>
                                             <i className="text-white fa-solid fa-eraser" style={{fontSize: "24px"}} />
@@ -2291,7 +2389,7 @@ export default class posDoc extends React.Component
                                                     tmpData.TOTAL = tmpTotal
                                                 }
                                             }
-                                            this.calcGrandTotal()
+                                            await this.calcGrandTotal()
                                             this.popDiscount.hide()
                                         }}>
                                             <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
@@ -2546,62 +2644,66 @@ export default class posDoc extends React.Component
                             text:"K.Kartı Geçmedi"
                         }
                     ]}
-                    onClick={(e)=>
+                    onClick={async (e)=>
                     {
-                        let tmpDt = this.posObj.posExtra.dt().where({TAG:"PARK DESC"})
-                        if(tmpDt.length > 0)
-                        {
-                            tmpDt[0].DESCRIPTION = e
-                        }
-                        else
-                        {
-                            this.posObj.posExtra.addEmpty()
-                            this.posObj.posExtra.dt()[this.posObj.posExtra.dt().length - 1].TAG = "PARK DESC"
-                            this.posObj.posExtra.dt()[this.posObj.posExtra.dt().length - 1].POS_GUID = this.posObj.dt()[this.posObj.dt().length - 1].GUID
-                            this.posObj.posExtra.dt()[this.posObj.posExtra.dt().length - 1].LINE_NO = 0
-                            this.posObj.posExtra.dt()[this.posObj.posExtra.dt().length - 1].DESCRIPTION = e
-                        }
-                        this.calcGrandTotal()
+                        await this.descSave("PARK DESC",e,0)
+                        this.init()
                     }}></NbPopDescboard>
                 </div>
                 {/* Delete Description Popup */} 
                 <div>
-                    <NbPopDescboard id={"popDeleteDesc"} parent={this} width={"900"} height={"540"} position={"#root"} head={"Park Açıklaması"} title={"Lütfen Açıklama Giriniz"}
+                    <NbPopDescboard id={"popDeleteDesc"} parent={this} width={"900"} height={"540"} position={"#root"} head={"Silme İşlemi Açıklaması"} title={"Lütfen Silme Nedeninizi Giriniz"}
                     button={
                     [
                         {
                             id:"btn01",
-                            text:"Yetersiz Ödeme"
+                            text:"Alış Verişten Vazgeçti"
                         },
                         {
                             id:"btn02",
-                            text:"Ek Alış Veriş"
+                            text:"Yetersiz Ödeme"
                         },
                         {
                             id:"btn03",
-                            text:"Mağaza Personeli"
+                            text:"K.Karti Yetersiz Bakiye"
                         },
                         {
                             id:"btn04",
-                            text:"K.Kartı Geçmedi"
+                            text:"Test Amaçlı"
                         }
                     ]}
-                    onClick={(e)=>
+                    onClick={async (e)=>
                     {
-                        let tmpDt = this.posObj.posExtra.dt().where({TAG:"PARK DESC"})
-                        if(tmpDt.length > 0)
+                        await this.descSave("FULL DELETE",e,0)
+                        this.delete()
+                    }}></NbPopDescboard>
+                </div>
+                {/* Row Delete Description Popup */} 
+                <div>
+                    <NbPopDescboard id={"popRowDeleteDesc"} parent={this} width={"900"} height={"540"} position={"#root"} head={"Satır Silme İşlemi Açıklaması"} title={"Lütfen Silme Nedeninizi Giriniz"}
+                    button={
+                    [
                         {
-                            tmpDt[0].DESCRIPTION = e
-                        }
-                        else
+                            id:"btn01",
+                            text:"Üründen Vazgeçti"
+                        },
                         {
-                            this.posObj.posExtra.addEmpty()
-                            this.posObj.posExtra.dt()[this.posObj.posExtra.dt().length - 1].TAG = "PARK DESC"
-                            this.posObj.posExtra.dt()[this.posObj.posExtra.dt().length - 1].POS_GUID = this.posObj.dt()[this.posObj.dt().length - 1].GUID
-                            this.posObj.posExtra.dt()[this.posObj.posExtra.dt().length - 1].LINE_NO = 0
-                            this.posObj.posExtra.dt()[this.posObj.posExtra.dt().length - 1].DESCRIPTION = e
+                            id:"btn02",
+                            text:"Fiyat Hatalı"
+                        },
+                        {
+                            id:"btn03",
+                            text:"Hatalı Ürün"
+                        },
+                        {
+                            id:"btn04",
+                            text:"Test Amaçlı Okutma"
                         }
-                        this.calcGrandTotal()
+                    ]}
+                    onClick={async (e)=>
+                    {
+                        await this.descSave("ROW DELETE",e,this.grdList.devGrid.getSelectedRowKeys()[0].LINE_NO)
+                        this.rowDelete()
                     }}></NbPopDescboard>
                 </div>
             </div>
