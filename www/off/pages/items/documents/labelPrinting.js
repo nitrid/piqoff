@@ -509,11 +509,21 @@ export default class labelPrinting extends React.Component
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="default" 
                                     onClick={async(e)=>
                                     {
-                                       
-                                            if(this.lblObj.dt()[this.lblObj.dt().length - 1].CODE == '')
-                                            {
-                                                await this.grdLabelQueue.devGrid.deleteRow(this.lblObj.dt().length - 1)
-                                            }
+                                        if(this.lblObj.dt()[this.lblObj.dt().length - 1].CODE == '')
+                                        {
+                                            await this.grdLabelQueue.devGrid.deleteRow(this.lblObj.dt().length - 1)
+                                        }
+
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
+                                        }
+                                        
+                                        let pResult = await dialog(tmpConfObj);
+                                        if(pResult == 'btn01')
+                                        {
                                             let Data = {data:this.lblObj.dt().toArray()}
                                             let tmpLbl = {...this.lblObj.empty}
                                             tmpLbl.REF = this.txtRef.value
@@ -522,36 +532,24 @@ export default class labelPrinting extends React.Component
                                             this.lblObj.clearAll()
                                             this.lblObj.addEmpty(tmpLbl);
 
-
-                                            let tmpConfObj =
+                                            let tmpConfObj1 =
                                             {
-                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
+                                                id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                             }
                                             
-                                            let pResult = await dialog(tmpConfObj);
-                                            if(pResult == 'btn01')
-                                            {
-                                                let tmpConfObj1 =
-                                                {
-                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                                                }
-                                                
-                                                if((await this.lblObj.save()) == 0)
-                                                {                       
-                                                    await this.lblObj.load({GUID:this.lblObj.dt()[0].GUID});                             
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                                    await dialog(tmpConfObj1);
-                                                }
-                                                else
-                                                {
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgFailed")}</div>)
-                                                    await dialog(tmpConfObj1);
-                                                }
+                                            if((await this.lblObj.save()) == 0)
+                                            {                       
+                                                await this.lblObj.load({GUID:this.lblObj.dt()[0].GUID});                             
+                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
+                                                await dialog(tmpConfObj1);
                                             }
-                                       
+                                            else
+                                            {
+                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                                await dialog(tmpConfObj1);
+                                            }
+                                        }
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">

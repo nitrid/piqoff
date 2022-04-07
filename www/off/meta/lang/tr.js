@@ -356,6 +356,60 @@ export const langTr =
             msg: "Kaydı silmek istediğinize eminmisiniz ?"
         },
     },
+    stk_01_006 :
+    {
+        txtCode : "Kodu",
+        txtName :"Adı",
+        cmbType :"Tip",
+        validCode :"Kodu Boş Geçemezsiniz !",
+        cmbTypeData : 
+        {
+            normal : "Normal",
+            rebate : "İade"
+        },
+        pg_txtCode : 
+        {
+            title : "Depo Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI",
+            clmType : "TİPİ",
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgCode : 
+        {
+            title: "Dikkat",
+            btn01: "Kasaya Git",
+            btn02: "Tamam",
+            msg : "Girmiş olduğunuz Kasa sistem de kayıtlı !"
+        }
+      
+    },
     stk_02_002 :
     {
         txtRefRefno : "Seri-Sıra",
@@ -846,6 +900,94 @@ export const langTr =
         validCustomerCode : "Cari Kodu Boş Geçilemez",
         validDocDate : "Tarih Seçmelisiniz",
 
+    },
+    stk_03_001 : 
+    {
+        txtItemName : "Ürün Adı",
+        txtBarkod : "Barkod",
+        cmbCustomer : "Tedarikçi",
+        cmbMainGrp : "Ürün Grubu",
+        btnCheck : "Aktif",
+        btnGet :"Getir",
+        grdListe : 
+        {
+            clmCode: "ürün Kodu",
+            clmName : "Ürün Adı",
+            clmMainGrp : "Ürün Grubu",
+            clmCustomer : "Cari",
+            clmSname : "Ürün Kısa Adı",
+            clmMulticode : "T. Kodu",
+            clmUnit : "Birim",
+            clmBarcode : "Barkod",
+            clmCostPrice : "Maliyet Fiyatı",
+            clmVat : "Vergi",
+            clmMinPrice : "Minimum Satış Fiyatı",
+            clmMaxPrice : "Maximum Satış Fiyatı",
+            clmStatus : "Durum",
+
+        },
+    },
+    stk_03_002 : 
+    {
+        cmbCustomer : "Cari",
+        txtItemName : "Ürün Adı",
+        cmbMainGrp : "Ürün Grubu",
+        btnCheck : "Aktif",
+        btnGet :"Getir",
+        grdListe : 
+        {
+            clmCode: "Kodu",
+            clmName : "Adı",
+            clmMainGrp : "Ürün Grubu",
+            clmPrice : "Fiyat",
+            clmCustomer : "Cari",
+            clmQuantity : "Miktar",
+            clmChange : "Değişim Tarihi",
+            clmStartDate : "Vergi",
+            clmFinishDate : "Orgin",
+        },
+    },
+    stk_03_003 : 
+    {
+        cmbCustomer : "Cari",
+        txtItemName : "Ürün Adı",
+        cmbMainGrp : "Ürün Grubu",
+        btnCheck : "Aktif",
+        btnGet :"Getir",
+        grdListe : 
+        {
+            clmCode: "Kodu",
+            clmName : "Adı",
+            clmBarcode : "Barkod",
+            clmUnit : "Birim",
+            clmMainGrp : "Ürün Grubu",
+        },
+    },
+    stk_03_005 : 
+    {
+        txtItemName : "Ürün Adı",
+        txtBarkod : "Barkod",
+        cmbCustomer : "Tedarikçi",
+        cmbMainGrp : "Ürün Grubu",
+        btnCheck : "Aktif",
+        btnGet :"Getir",
+        grdListe : 
+        {
+            clmCode: "ürün Kodu",
+            clmName : "Ürün Adı",
+            clmMainGrp : "Ürün Grubu",
+            clmCustomer : "Cari",
+            clmSname : "Ürün Kısa Adı",
+            clmMulticode : "Tedarikçi Kodu",
+            clmUnit : "Birim",
+            clmBarcode : "Barkod",
+            clmCostPrice : "Maliyet Fiyatı",
+            clmVat : "Vergi",
+            clmMinPrice : "Minimum Satış Fiyatı",
+            clmMaxPrice : "Maximum Satış Fiyatı",
+            clmStatus : "Durum",
+
+        },
     },
     stk_04_001 : 
     {

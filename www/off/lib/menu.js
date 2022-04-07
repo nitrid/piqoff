@@ -1,6 +1,5 @@
 export const menu = (e) => 
 {
-    console.log(e)
     return [
         {
             id: 'stk',
@@ -24,25 +23,25 @@ export const menu = (e) =>
                             text: e.t('menu.stk_01_002'),//'Barkod Tanımları',
                             path: '../pages/items/cards/barcodeCard.js'
                         },
-                        {
-                            id: 'stk_01_003',
-                            text: e.t('menu.stk_01_003'),//'Fiyat Tanımları',
-                            path: '../pages/customers/cards/customerCard.js'
-                        },
-                        {
-                            id: 'stk_01_004',
-                            text: e.t('menu.stk_01_004'),//'Birim Tanımları',
-                            path: '../pages/customers/cards/customerCard.js'
-                        },
-                        {
-                            id: 'stk_01_005',
-                            text: e.t('menu.stk_01_005'),//'Multi Kod Tanımları',
-                            path: '../pages/customers/cards/customerCard.js'
-                        },
+                        // {
+                        //     id: 'stk_01_003',
+                        //     text: e.t('menu.stk_01_003'),//'Fiyat Tanımları',
+                        //     path: '../pages/customers/cards/customerCard.js'
+                        // },
+                        // {
+                        //     id: 'stk_01_004',
+                        //     text: e.t('menu.stk_01_004'),//'Birim Tanımları',
+                        //     path: '../pages/customers/cards/customerCard.js'
+                        // },
+                        // {
+                        //     id: 'stk_01_005',
+                        //     text: e.t('menu.stk_01_005'),//'Multi Kod Tanımları',
+                        //     path: '../pages/customers/cards/customerCard.js'
+                        // },
                         {
                             id: 'stk_01_006',
                             text: e.t('menu.stk_01_006'),//'Depo Tanımları',
-                            path: '../pages/customers/cards/customerCard.js'
+                            path: '../pages/items/cards/depotCard.js'
                         },
                     ]
                 },
@@ -100,15 +99,15 @@ export const menu = (e) =>
                             text: e.t('menu.stk_03_003'),//'Barkod Listesi',
                             path: '../pages/items/lists/barcodeList.js'
                         },
-                        {
-                            id: 'stk_03_004',
-                            text: e.t('menu.stk_03_004'),//'Depo Listesi',
-                            path: '../pages/items/lists/depotList.js'
-                        },
+                        // {
+                        //     id: 'stk_03_004',
+                        //     text: e.t('menu.stk_03_004'),//'Depo Listesi',
+                        //     path: '../pages/items/lists/depotList.js'
+                        // },
                         {
                             id: 'stk_03_005',
                             text: e.t('menu.stk_03_005'),//'Multi Kod Listesi',
-                            path: '../pages/customers/cards/customerCard.js'
+                            path: '../pages/items/lists/multicodeList.js'
                         },
                     ]
                 },

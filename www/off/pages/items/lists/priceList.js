@@ -27,15 +27,15 @@ export default class itemList extends React.Component
         this.core = App.instance.core;
         this.columnListData = 
         [
-            {CODE : "ITEM_CODE",NAME : "ÜRÜN KODU"},
-            {CODE : "ITEM_NAME",NAME : "ÜRÜN GRUBU"},                                   
-            {CODE : "CUSTOMER_NAME",NAME : "TEDARİKÇİ"},
-            {CODE : "PRICE",NAME : "FİYATI"},    
-            {CODE : "MAIN_GRP_NAME",NAME : "ÜRÜN GRUBU"},
-            {CODE : "QUANTITY",NAME : "MİKTAR"},
-            {CODE : "CHANGE",NAME : "SON DEĞİŞİM TARİHİ"},
-            {CODE : "START",NAME : "BAŞLANGIÇ TARİHİ"},
-            {CODE : "FINISH",NAME : "BİTİŞ TARİHİ"}
+            {CODE : "ITEM_CODE",NAME : this.t("grdListe.clmCode")},
+            {CODE : "ITEM_NAME",NAME : this.t("grdListe.clmName")},                                   
+            {CODE : "CUSTOMER_NAME",NAME : this.t("grdListe.clmCustomer")},
+            {CODE : "PRICE",NAME : this.t("grdListe.clmPrice")},    
+            {CODE : "MAIN_GRP_NAME",NAME : this.t("grdListe.clmMainGrp")},
+            {CODE : "QUANTITY",NAME : this.t("grdListe.clmQuantity")},
+            {CODE : "CHANGE",NAME :this.t("grdListe.clmChange")},
+            {CODE : "START",NAME : this.t("grdListe.clmStartDate")},
+            {CODE : "FINISH",NAME : this.t("grdListe.clmFinishDate")}
         ]
         this.groupList = [];
         this._btnGetirClick = this._btnGetirClick.bind(this)
@@ -110,8 +110,6 @@ export default class itemList extends React.Component
     }
     async _btnGetirClick()
     {
-        
-        
         let tmpSource =
         {
             source : 
@@ -170,21 +168,21 @@ export default class itemList extends React.Component
                         <div className="col-12">
                             <Form colCount={2} id="frmKriter">
                                 <Item>
-                                    <Label text={"Tedarikçi "} alignment="right" />
-                                        <NdSelectBox simple={true} parent={this} id="cmbTedarikci" showClearButton={true}
-                                        displayExpr="NAME"                       
+                                    <Label text={this.t("cmbCustomer")} alignment="right" />
+                                        <NdSelectBox simple={true} parent={this} id="cmbTedarikci" showClearButton={true} notRefresh={true}  searchEnabled={true}
+                                        displayExpr="TITLE"                       
                                         valueExpr="CODE"
-                                        data={{source: {select : {query:"SELECT CODE,NAME FROM CUSTOMERS WHERE TYPE = 1 ORDER BY NAME ASC"},sql : this.core.sql}}}
+                                        data={{source: {select : {query:"SELECT CODE,TITLE FROM CUSTOMER_VW_01 WHERE TYPE IN(1,2) ORDER BY TITLE ASC"},sql : this.core.sql}}}
                                         // onValueChanged={onValueChanged}
                                         />
                                 </Item>
                                 <Item>
-                                    <Label text={"Ürün Adı "} alignment="right" />
+                                    <Label text={this.t("txtItemName")} alignment="right" />
                                         <NdTextBox id="txtUrunAdi" parent={this} simple={true} />
                                 </Item>
                                 <Item>
-                                    <Label text={"Ürün Grubu "} alignment="right" />
-                                        <NdSelectBox simple={true} parent={this} id="cmbUrunGrup" showClearButton={true}
+                                    <Label text={this.t("cmbMainGrp")} alignment="right" />
+                                        <NdSelectBox simple={true} parent={this} id="cmbUrunGrup" showClearButton={true} notRefresh={true}  searchEnabled={true}
                                         displayExpr="NAME"                       
                                         valueExpr="CODE"
                                         data={{source: {select : {query:"SELECT CODE,NAME FROM ITEM_GROUP ORDER BY NAME ASC"},sql : this.core.sql}}}
@@ -193,7 +191,7 @@ export default class itemList extends React.Component
                                 </Item>
                                 <Item> </Item>
                                 <Item>
-                                    <Label text={"Aktif "} alignment="right" />
+                                    <Label text={this.t("btnCheck")} alignment="right" />
                                         <NdCheckBox id="chkAktif" parent={this} defaultValue={true}></NdCheckBox>
                                 </Item>
                             </Form>
@@ -216,7 +214,7 @@ export default class itemList extends React.Component
                             
                         </div>
                         <div className="col-3">
-                            <NdButton text="Getir" type="success" width="100%" onClick={this._btnGetirClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetirClick}></NdButton>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -233,15 +231,15 @@ export default class itemList extends React.Component
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
 
-                                <Column dataField="ITEM_CODE" caption="ÜRÜN KODU" visible={true}/> 
-                                <Column dataField="ITEM_NAME" caption="ÜRÜN TAM ADI" visible={true}/> 
-                                <Column dataField="MAIN_GRP_NAME" caption="ÜRÜN GRUBU" visible={true}/> 
-                                <Column dataField="PRICE" caption="FİYATI" visible={true}/> 
-                                <Column dataField="CUSTOMER_NAME" caption="TEDARİKÇİ" visible={true}/> 
-                                <Column dataField="QUANTITY" caption="MİKTAR" visible={true}/> 
-                                <Column dataField="CHANGE" caption="SON DEĞİŞİM TARİHİ" visible={false}/> 
-                                <Column dataField="START" caption="BAŞLANGIÇ TARİHİ" visible={false}/> 
-                                <Column dataField="FINISH" caption="BİTİŞ TARİHİ" visible={false}/> 
+                                <Column dataField="ITEM_CODE" caption={this.t("grdListe.clmCode")} visible={true}/> 
+                                <Column dataField="ITEM_NAME" caption={this.t("grdListe.clmName")} visible={true}/> 
+                                <Column dataField="MAIN_GRP_NAME" caption={this.t("grdListe.clmMainGrp")} visible={true}/> 
+                                <Column dataField="PRICE" caption={this.t("grdListe.clmPrice")} visible={true}/> 
+                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdListe.clmCustomer")} visible={true}/> 
+                                <Column dataField="QUANTITY" caption={this.t("grdListe.clmQuantity")} visible={true}/> 
+                                <Column dataField="CHANGE" caption={this.t("grdListe.clmChange")} visible={false}/> 
+                                <Column dataField="START" caption={this.t("grdListe.clmStartDate")} visible={false}/> 
+                                <Column dataField="FINISH" caption={this.t("grdListe.clmFinishDate")} visible={false}/> 
 
                                
                             </NdGrid>

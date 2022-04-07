@@ -21,18 +21,17 @@ export default class barcodeList extends React.Component
 
         this.state = 
         {
-            columnListValue : ['NAME','CODE','BARCODE','UNIT_NAME']
+            columnListValue : ['ITEM_NAME','ITEM_CODE','BARCODE','UNIT_NAME']
         }
         
         this.core = App.instance.core;
         this.columnListData = 
         [
-            {CODE : "BARCODE",NAME : "BARKODU"},
-            {CODE : "CODE",NAME : "ÜRÜN KODU"},
-            {CODE : "NAME",NAME : "ÜRÜN TAM ADI"},
-            {CODE : "MAIN_GRP_NAME",NAME : "ÜRÜN GRUBU"},                                   
-            {CODE : "UNIT_NAME",NAME : "BİRİM"},
-            {CODE : "CODE",NAME : "ÜRÜN KODU"},
+            {CODE : "BARCODE",NAME : this.t("grdListe.clmBarcode")},
+            {CODE : "ITEM_CODE",NAME : this.t("grdListe.clmCode")},
+            {CODE : "ITEM_NAME",NAME : this.t("grdListe.clmName")},
+            {CODE : "MAIN_GRP_NAME",NAME : this.t("grdListe.clmMainGrp")},                                   
+            {CODE : "UNIT_NAME",NAME : this.t("grdListe.clmUnit")},
         ]
         this.groupList = [];
         this._btnGetirClick = this._btnGetirClick.bind(this)
@@ -62,9 +61,9 @@ export default class barcodeList extends React.Component
                 {
                     this.groupList.push('BARCODE')
                 }                
-                if(typeof e.value.find(x => x == 'CODE') != 'undefined')
+                if(typeof e.value.find(x => x == 'ITEM_CODE') != 'undefined')
                 {
-                    this.groupList.push('CODE')
+                    this.groupList.push('ITEM_CODE')
                 }
                 
                 for (let i = 0; i < this.grdListe.devGrid.columnCount(); i++) 
@@ -103,16 +102,7 @@ export default class barcodeList extends React.Component
     }
     async _btnGetirClick()
     {
-        // let TmpVal = ""
-        
-        // for (let i = 0; i < this.txtBarkod.value.split(' ').length; i++) 
-        // {
-        //     TmpVal += "'" + this.txtBarkod.value.split(' ')[i] + "'"
-        //     if(this.txtBarkod.value.split(' ').length > 1 && i !=  (this.txtBarkod.value.split(' ').length - 1))
-        //     {
-        //         TmpVal += ","
-        //     }
-        // }
+        console.log(11)
         
         let tmpSource =
         {
@@ -121,15 +111,14 @@ export default class barcodeList extends React.Component
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT * FROM BARCODE_VW_01 WHERE ((NAME like @NAME + '%') OR (@NAME = '')) AND " +
+                    query : "SELECT * FROM ITEM_BARCODE_VW_01 WHERE ((ITEM_NAME like @ITEM_NAME + '%') OR (@ITEM_NAME = '')) AND " +
                             " ((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = ''))  ",
-                    param : ['NAME:string|250','MAIN_GRP:string|25'],
+                    param : ['ITEM_NAME:string|250','MAIN_GRP:string|25'],
                     value : [this.txtUrunAdi.value,this.cmbUrunGrup.value]
                 },
                 sql : this.core.sql
             }
         }
-        console.log(this.txtBarkod.value)
         await this.grdListe.dataRefresh(tmpSource)
         
     }
@@ -167,12 +156,12 @@ export default class barcodeList extends React.Component
                         <div className="col-12">
                             <Form colCount={2} id="frmKriter">
                                 <Item>
-                                    <Label text={"Ürün Adı "} alignment="right" />
+                                    <Label text={this.t("txtItemName")} alignment="right" />
                                         <NdTextBox id="txtUrunAdi" parent={this} simple={true} />
                                 </Item>
                                 <Item>
-                                    <Label text={"Ürün Grubu "} alignment="right" />
-                                        <NdSelectBox simple={true} parent={this} id="cmbUrunGrup" showClearButton={true}
+                                    <Label text={this.t("cmbMainGrp")} alignment="right" />
+                                        <NdSelectBox simple={true} parent={this} id="cmbUrunGrup" showClearButton={true} notRefresh={true}  searchEnabled={true}
                                         displayExpr="NAME"                       
                                         valueExpr="CODE"
                                         data={{source: {select : {query:"SELECT CODE,NAME FROM ITEM_GROUP ORDER BY NAME ASC"},sql : this.core.sql}}}
@@ -204,7 +193,7 @@ export default class barcodeList extends React.Component
                             
                         </div>
                         <div className="col-3">
-                            <NdButton text="Getir" type="success" width="100%" onClick={this._btnGetirClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetirClick}></NdButton>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -218,14 +207,14 @@ export default class barcodeList extends React.Component
                             allowColumnReordering={true}
                             allowColumnResizing={true}
                             >                            
-                                <Paging defaultPageSize={20} />
+                                <Paging defaultPageSize={10} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
 
-                                <Column dataField="CODE" caption="ÜRÜN KODU" visible={true}/> 
-                                <Column dataField="NAME" caption="ÜRÜN TAM ADI" visible={true}/> 
-                                <Column dataField="BARCODE" caption="BARKODU" visible={true}/> 
-                                <Column dataField="UNIT_NAME" caption="BİRİM" visible={true}/> 
-                                <Column dataField="MAIN_GRP_NAME" caption="ÜRÜN GRUBU" visible={true}/> 
+                                <Column dataField="ITEM_CODE" caption={this.t("grdListe.clmCode")} visible={true}/> 
+                                <Column dataField="ITEM_NAME" caption={this.t("grdListe.clmName")} visible={true}/> 
+                                <Column dataField="BARCODE" caption={this.t("grdListe.clmBarcode")} visible={true}/> 
+                                <Column dataField="UNIT_NAME" caption={this.t("grdListe.clmUnit")} visible={true}/> 
+                                <Column dataField="MAIN_GRP_NAME" caption={this.t("grdListe.clmMainGrp")} visible={true}/> 
                                
                                           
                             </NdGrid>

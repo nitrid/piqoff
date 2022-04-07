@@ -1,6 +1,6 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { safeCls} from '../../../../core/cls/finance.js';
+import { depotCls} from '../../../../core/cls/items.js';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
@@ -21,14 +21,14 @@ import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 
-export default class safeCard extends React.Component
+export default class DepotCard extends React.Component
 {
     constructor()
     {
         super()
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
-        this.safeObj = new safeCls();
+        this.depotObj = new depotCls();
         this.prevCode = "";
     }
     async componentDidMount()
@@ -38,10 +38,10 @@ export default class safeCard extends React.Component
     }
     async init()
     {
-        this.safeObj.clearAll();
-        this.safeObj.addEmpty();
+        this.depotObj.clearAll();
+        this.depotObj.addEmpty();
 
-        this.safeObj.ds.on('onAddRow',(pTblName,pData) =>
+        this.depotObj.ds.on('onAddRow',(pTblName,pData) =>
         {
             if(pData.stat == 'new')
             {
@@ -62,7 +62,7 @@ export default class safeCard extends React.Component
                 this.btnPrint.setState({disabled:false});
             }
         })
-        this.safeObj.ds.on('onEdit',(pTblName,pData) =>
+        this.depotObj.ds.on('onEdit',(pTblName,pData) =>
         {            
             if(pData.rowData.stat == 'edit')
             {
@@ -76,9 +76,9 @@ export default class safeCard extends React.Component
                 pData.rowData.CUSER = this.user.CODE
             }                 
         })
-        this.safeObj.ds.on('onRefresh',(pTblName) =>
+        this.depotObj.ds.on('onRefresh',(pTblName) =>
         {            
-            this.prevCode = this.safeObj.dt('SAFE').length > 0 ? this.safeObj.dt('SAFE')[0].CODE : '';
+            this.prevCode = this.depotObj.dt('DEPOT').length > 0 ? this.depotObj.dt('DEPOT')[0].CODE : '';
             this.btnBack.setState({disabled:true});
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:true});
@@ -86,7 +86,7 @@ export default class safeCard extends React.Component
             this.btnCopy.setState({disabled:false});
             this.btnPrint.setState({disabled:false});          
         })
-        this.safeObj.ds.on('onDelete',(pTblName) =>
+        this.depotObj.ds.on('onDelete',(pTblName) =>
         {            
             this.btnBack.setState({disabled:false});
             this.btnNew.setState({disabled:true});
@@ -96,12 +96,12 @@ export default class safeCard extends React.Component
             this.btnPrint.setState({disabled:false});
         })
     }
-    async getSafe(pCode)
+    async getDepot(pCode)
     {
-        this.safeObj.clearAll()
-        await this.safeObj.load({CODE:pCode});
+        this.depotObj.clearAll()
+        await this.depotObj.load({CODE:pCode});
     }
-    async checkSafe(pCode)
+    async checkDepot(pCode)
     {
         return new Promise(async resolve =>
         {
@@ -109,7 +109,7 @@ export default class safeCard extends React.Component
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT * FROM SAFE_VW_01 WHERE CODE = @CODE",
+                    query :"SELECT * FROM DEPOT_VW_01 WHERE CODE = @CODE",
                     param : ['CODE:string|50'],
                     value : [pCode]
                 }
@@ -132,7 +132,7 @@ export default class safeCard extends React.Component
                     let pResult = await dialog(tmpConfObj);
                     if(pResult == 'btn01')
                     {
-                        this.getSafe(pCode)
+                        this.getDepot(pCode)
                         resolve(2) //KAYIT VAR
                     }
                     else
@@ -165,7 +165,7 @@ export default class safeCard extends React.Component
                                         {
                                             if(this.prevCode != '')
                                             {
-                                                this.getSafe(this.prevCode); 
+                                                this.getDepot(this.prevCode); 
                                             }
                                         }}/>
                                 </Item>
@@ -178,7 +178,7 @@ export default class safeCard extends React.Component
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmSafe"
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmDepot"
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -199,7 +199,7 @@ export default class safeCard extends React.Component
                                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
                                                 
-                                                if((await this.safeObj.save()) == 0)
+                                                if((await this.depotObj.save()) == 0)
                                                 {                                                    
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
@@ -239,8 +239,8 @@ export default class safeCard extends React.Component
                                         let pResult = await dialog(tmpConfObj);
                                         if(pResult == 'btn01')
                                         {
-                                            this.safeObj.dt('SAFE').removeAt(0)
-                                            await this.safeObj.dt('SAFE').delete();
+                                            this.depotObj.dt('DEPOT').removeAt(0)
+                                            await this.depotObj.dt('DEPOT').delete();
                                             this.init(); 
                                         }
                                         
@@ -265,11 +265,11 @@ export default class safeCard extends React.Component
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id="frmSafe">
+                            <Form colCount={3} id="frmDepot">
                                  {/* txtCode */}
                                  <Item>
                                     <Label text={this.t("txtCode")} alignment="right" />
-                                    <NdTextBox id="txtCode" parent={this} simple={true} dt={{data:this.safeObj.dt('SAFE'),field:"CODE"}}  
+                                    <NdTextBox id="txtCode" parent={this} simple={true} dt={{data:this.depotObj.dt('DEPOT'),field:"CODE"}}  
                                     button=
                                     {
                                         [
@@ -283,7 +283,7 @@ export default class safeCard extends React.Component
                                                     {
                                                         if(data.length > 0)
                                                         {
-                                                            this.getSafe(data[0].CODE)
+                                                            this.getDepot(data[0].CODE)
                                                         }
                                                     }
                                                 }
@@ -300,7 +300,7 @@ export default class safeCard extends React.Component
                                     }
                                     onChange={(async()=>
                                     {
-                                        let tmpResult = await this.checkSafe(this.txtCode.value)
+                                        let tmpResult = await this.checkDepot(this.txtCode.value)
                                         if(tmpResult == 3)
                                         {
                                             this.txtCode.value = "";
@@ -309,7 +309,7 @@ export default class safeCard extends React.Component
                                     param={this.param.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmSafe"}>
+                                        <Validator validationGroup={"frmDepot"}>
                                             <RequiredRule message={this.t("validCode")} />
                                         </Validator>  
                                     </NdTextBox>
@@ -322,7 +322,7 @@ export default class safeCard extends React.Component
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_txtCode.title")} //
-                                    data={{source:{select:{query : "SELECT CODE,NAME,TYPE_NAME FROM SAFE_VW_01"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT CODE,NAME FROM DEPOT_VW_01"},sql:this.core.sql}}}
                                     button=
                                     {
                                         {
@@ -337,13 +337,12 @@ export default class safeCard extends React.Component
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_txtCode.clmCode")} width={150} />
                                         <Column dataField="NAME" caption={this.t("pg_txtCode.clmName")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="TYPE_NAME" caption={this.t("pg_txtCode.clmType")} width={300} defaultSortOrder="asc" />
                                     </NdPopGrid>
                                 </Item>
                                 {/* txtTitle */}
                                 <Item>
                                     <Label text={this.t("txtName")} alignment="right" />
-                                    <NdTextBox id="txtTitle" parent={this} simple={true} dt={{data:this.safeObj.dt('SAFE'),field:"NAME"}}
+                                    <NdTextBox id="txtTitle" parent={this} simple={true} dt={{data:this.depotObj.dt('DEPOT'),field:"NAME"}}
                                     onChange={(async()=>
                                     {
                                       
@@ -357,10 +356,10 @@ export default class safeCard extends React.Component
                                 {/* cmbType */}
                                 <Item>
                                     <Label text={this.t("cmbType")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbType" height='fit-content' dt={{data:this.safeObj.dt('SAFE'),field:"TYPE"}}
+                                    <NdSelectBox simple={true} parent={this} id="cmbType" height='fit-content' dt={{data:this.depotObj.dt('DEPOT'),field:"TYPE"}}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
-                                    data={{source:[{ID:0,VALUE:this.t("cmbTypeData.cash")},{ID:1,VALUE:this.t("cmbTypeData.check")}]}}
+                                    data={{source:[{ID:0,VALUE:this.t("cmbTypeData.normal")},{ID:1,VALUE:this.t("cmbTypeData.rebate")}]}}
                                     onValueChanged={(async()=>
                                             {
                                                

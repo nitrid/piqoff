@@ -13,7 +13,7 @@ import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 
-export default class itemList extends React.Component
+export default class multicodeList extends React.Component
 {
     constructor(props)
     {
@@ -21,25 +21,17 @@ export default class itemList extends React.Component
 
         this.state = 
         {
-            columnListValue : ['NAME','CODE','BARCODE','MULTICODE','CUSTOMER_NAME']
+            columnListValue : ['NAME','CODE','MAIN_GRP_NAME','MULTICODE','CUSTOMER_NAME']
         }
         
         this.core = App.instance.core;
         this.columnListData = 
         [
             {CODE : "NAME",NAME : this.t("grdListe.clmName")},
-            {CODE : "SNAME",NAME : this.t("grdListe.clmSname")},
             {CODE : "MAIN_GRP_NAME",NAME : this.t("grdListe.clmMainGrp")},                        
-            {CODE : "UNIT_NAME",NAME :  this.t("grdListe.clmUnit")},
             {CODE : "CODE",NAME :  this.t("grdListe.clmCode")},
-            {CODE : "BARCODE",NAME :  this.t("grdListe.clmBarcode")},
             {CODE : "MULTICODE",NAME : this.t("grdListe.clmMulticode")},
             {CODE : "CUSTOMER_NAME",NAME :  this.t("grdListe.clmCustomer")},
-            {CODE : "COST_PRICE",NAME :  this.t("grdListe.clmCostPrice")},
-            {CODE : "VAT",NAME :  this.t("grdListe.clmVat")},  
-            {CODE : "MIN_PRICE",NAME :  this.t("grdListe.clmMinPrice")},
-            {CODE : "MAX_PRICE",NAME :  this.t("grdListe.clmMaxPrice")},
-            {CODE : "STATUS",NAME :  this.t("grdListe.clmStatus")},
         ]
         this.groupList = [];
         this._btnGetirClick = this._btnGetirClick.bind(this)
@@ -114,16 +106,6 @@ export default class itemList extends React.Component
     }
     async _btnGetirClick()
     {
-        let TmpVal = ""
-        
-        for (let i = 0; i < this.txtBarkod.value.split(' ').length; i++) 
-        {
-            TmpVal += "'" + this.txtBarkod.value.split(' ')[i] + "'"
-            if(this.txtBarkod.value.split(' ').length > 1 && i !=  (this.txtBarkod.value.split(' ').length - 1))
-            {
-                TmpVal += ","
-            }
-        }
         
         let tmpSource =
         {
@@ -132,30 +114,18 @@ export default class itemList extends React.Component
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 " +
-                            "WHERE {0} " +
-                            "((NAME = @NAME) OR (@NAME = '')) AND " +
+                    query : "SELECT * FROM ITEM_MULTICODE_VW_01 " +
+                            "WHERE " +
+                            "((ITEM_NAME = @ITEM_NAME) OR (@ITEM_NAME = '')) AND " +
                             "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) AND " +
                             "((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = ''))",
-                    param : ['NAME:string|250','MAIN_GRP:string|25','CUSTOMER_CODE:string|25'],
+                    param : ['ITEM_NAME:string|250','MAIN_GRP:string|25','CUSTOMER_CODE:string|25'],
                     value : [this.txtUrunAdi.value,this.cmbUrunGrup.value,this.cmbTedarikci.value]
                 },
                 sql : this.core.sql
             }
         }
         
-        if(this.txtBarkod.value == '')
-        {
-            tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "")
-        }
-        else if(this.txtBarkod.value.split(' ').length > 1)
-        {
-            tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE IN (" + TmpVal + ")) OR (BARCODE IN (" + TmpVal + ")) OR (MULTICODE IN (" + TmpVal + "))) AND")
-        }
-        else
-        {
-            tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE LIKE " + TmpVal + " + '%') OR (BARCODE LIKE " + TmpVal + " + '%') OR (MULTICODE LIKE " + TmpVal + " + '%')) AND")
-        }
         await this.grdListe.dataRefresh(tmpSource)
     }
     render()
@@ -166,7 +136,7 @@ export default class itemList extends React.Component
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
-                                <Item location="after"
+                                {/* <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
                                 options=
@@ -178,23 +148,19 @@ export default class itemList extends React.Component
                                         {
                                             App.instance.menuClick(
                                             {
-                                                id: 'stk_01_001',
+                                                id: 'stk_01_005',
                                                 text: 'Stok Tanımları',
                                                 path: '../pages/items/cards/itemCard.js'
                                             })
                                         }
                                     }    
-                                } />
+                                } /> */}
                             </Toolbar>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Form colCount={2} id="frmKriter">
-                                <Item>
-                                    <Label text={this.t("txtBarkod")} alignment="right" />
-                                        <NdTextBox id="txtBarkod" parent={this} simple={true} />
-                                </Item>
                                 <Item>
                                     <Label text={this.t("cmbCustomer")} alignment="right" />
                                         <NdSelectBox simple={true} parent={this} id="cmbTedarikci" showClearButton={true} notRefresh={true}  searchEnabled={true}
@@ -259,19 +225,11 @@ export default class itemList extends React.Component
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
 
-                                <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true}/> 
-                                <Column dataField="NAME" caption={this.t("grdListe.clmName")} visible={true}/> 
-                                <Column dataField="BARCODE" caption={this.t("grdListe.clmBarcode")} visible={true}/> 
-                                <Column dataField="SNAME" caption={this.t("grdListe.clmSname")} visible={false}/> 
-                                <Column dataField="MAIN_GRP_NAME" caption={this.t("grdListe.clmMainGrp")} visible={false}/> 
-                                <Column dataField="VAT" caption={this.t("grdListe.clmVat")} visible={false}/> 
-                                <Column dataField="COST_PRICE" caption={this.t("grdListe.clmCostPrice")} visible={false}/> 
-                                <Column dataField="MIN_PRICE" caption={this.t("grdListe.clmMinPrice")} visible={false}/> 
-                                <Column dataField="MAX_PRICE" caption={this.t("grdListe.clmMaxPrice")} visible={false}/> 
-                                <Column dataField="UNIT_NAME" caption={this.t("grdListe.clmUnit")} visible={false}/> 
+                                <Column dataField="ITEM_CODE" caption={this.t("grdListe.clmCode")} visible={true}/> 
+                                <Column dataField="ITEM_NAME" caption={this.t("grdListe.clmName")} visible={true}/> 
                                 <Column dataField="MULTICODE" caption={this.t("grdListe.clmMulticode")} visible={true}/> 
+                                <Column dataField="MAIN_GRP_NAME" caption={this.t("grdListe.clmMainGrp")} visible={true}/> 
                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdListe.clmCustomer")} visible={true}/> 
-                                <Column dataField="STATUS" caption={this.t("grdListe.clmStatus")} visible={false}/>                             
                             </NdGrid>
                         </div>
                     </div>
