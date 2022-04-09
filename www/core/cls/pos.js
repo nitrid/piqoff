@@ -849,3 +849,72 @@ export class posExtraCls
         });
     }
 }
+export class posDeviceCls
+{
+    constructor()
+    {
+        if(typeof require != 'undefined')
+        {
+            this.escpos = require('escpos');
+            this.escpos.Serial = require('escpos-serialport');
+            this.escpos.Screen = require('escpos-screen');
+            this.escpos.USB = require('escpos-usb');
+            this.path = require('path')
+        }
+
+        this.lcdPort = "";
+        this.scalePort = "";
+        this.payCardPort = "";
+    }
+    lcdPrint(pData)
+    {
+        if(typeof require == 'undefined')
+        {
+            return
+        }
+
+        let device  = new this.escpos.Serial(this.lcdPort, { baudRate: 9600, autoOpen: false });
+        let options = { encoding: "GB18030" /* default */ }
+        let usbScreen = new this.escpos.Screen(device,options);
+
+        device.open(function(error)
+        {
+            usbScreen.blink(pData.blink);
+            usbScreen.clear();
+            usbScreen.text(pData.text).close();
+        });
+    }
+    lcdClear()
+    {
+        if(typeof require == 'undefined')
+        {
+            return
+        }
+
+        let device  = new this.escpos.Serial(this.LCDPort, { baudRate: 9600, autoOpen: false });
+        let options = { encoding: "GB18030" /* default */ }
+        let usbScreen = new this.escpos.Screen(device,options);
+
+        device.open(function(error)
+        {
+            usbScreen.clear();
+        });
+    }
+    caseOpen()
+    {
+        if(typeof require == 'undefined')
+        {
+            return
+        }
+
+        let device  = new this.escpos.USB();
+        let options = { encoding: "GB18030" /* default */ }
+        let printer = new this.escpos.Printer(device, options);
+
+        device.open(function(error)
+        {
+            printer.cashdraw(2);
+            printer.close();
+        })
+    }
+}

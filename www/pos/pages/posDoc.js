@@ -21,7 +21,7 @@ import NbPosPopGrid from "../tools/pospopgrid.js";
 import NbPopDescboard from "../tools/popdescboard.js";
 import { dialog } from "../../core/react/devex/dialog.js";
 
-import { posCls,posSaleCls,posPaymentCls,posPluCls } from "../../core/cls/pos.js";
+import { posCls,posSaleCls,posPaymentCls,posPluCls,posDeviceCls } from "../../core/cls/pos.js";
 import { itemsCls } from "../../core/cls/items.js";
 import { dataset,datatable,param,access } from "../../core/core.js";
 import {prm} from '../meta/prm.js'
@@ -38,6 +38,7 @@ export default class posDoc extends React.Component
         this.user = this.core.auth.data
         this.prmObj = new param(prm)
         this.posObj = new posCls()
+        this.posDevice = new posDeviceCls();
         
         this.state =
         {
@@ -94,6 +95,12 @@ export default class posDoc extends React.Component
         this.posObj.addEmpty()
         this.posObj.dt()[this.posObj.dt().length - 1].DEVICE = '001'
 
+        this.posDevice.lcdPort = this.prmObj.filter({ID:'LCDPort',TYPE:0,SPECIAL:"001"}).getValue()
+        this.posDevice.scalePort = this.prmObj.filter({ID:'ScalePort',TYPE:0,SPECIAL:"001"}).getValue()
+        this.posDevice.payCardPort = this.prmObj.filter({ID:'PayCardPort',TYPE:0,SPECIAL:"001"}).getValue()
+
+        console.log(this.posDevice)
+        this.posDevice.caseOpen()
         await this.grdList.dataRefresh({source:this.posObj.posSale.dt()});
         await this.grdPay.dataRefresh({source:this.posObj.posPay.dt()});
 
