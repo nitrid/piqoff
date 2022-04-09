@@ -98,8 +98,6 @@ export default class posDoc extends React.Component
         this.posDevice.lcdPort = this.prmObj.filter({ID:'LCDPort',TYPE:0,SPECIAL:"001"}).getValue()
         this.posDevice.scalePort = this.prmObj.filter({ID:'ScalePort',TYPE:0,SPECIAL:"001"}).getValue()
         this.posDevice.payCardPort = this.prmObj.filter({ID:'PayCardPort',TYPE:0,SPECIAL:"001"}).getValue()
-
-        console.log(this.posDevice)
         this.posDevice.caseOpen()
         await this.grdList.dataRefresh({source:this.posObj.posSale.dt()});
         await this.grdPay.dataRefresh({source:this.posObj.posPay.dt()});
@@ -263,7 +261,7 @@ export default class posDoc extends React.Component
                 if(tmpPrice > 0)
                 {
                     //TERAZİYE İSTEK YAPILIYOR.
-                    let tmpWResult = await this.getWeighing()
+                    let tmpWResult = await this.getWeighing(tmpPrice)
                     if(typeof tmpWResult != 'undefined')
                     {
                         tmpQuantity = tmpWResult
@@ -349,11 +347,13 @@ export default class posDoc extends React.Component
         }
         //******************************************************** */        
     }
-    getWeighing()
+    getWeighing(pPrice)
     {
         //#BAK BURAYA TERAZİ ENTEGRASYONU EKLENECEK
         return new Promise(async resolve => 
         {
+            let tmpWeigh = await this.posDevice.mettlerScaleSend(pPrice)
+
             let tmpConfObj =
             {
                 id:'msgAlert',
