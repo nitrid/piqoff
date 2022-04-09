@@ -98,7 +98,7 @@ export default class posDoc extends React.Component
         this.posDevice.lcdPort = this.prmObj.filter({ID:'LCDPort',TYPE:0,SPECIAL:"001"}).getValue()
         this.posDevice.scalePort = this.prmObj.filter({ID:'ScalePort',TYPE:0,SPECIAL:"001"}).getValue()
         this.posDevice.payCardPort = this.prmObj.filter({ID:'PayCardPort',TYPE:0,SPECIAL:"001"}).getValue()
-        this.posDevice.caseOpen()
+        
         await this.grdList.dataRefresh({source:this.posObj.posSale.dt()});
         await this.grdPay.dataRefresh({source:this.posObj.posPay.dt()});
 
@@ -1039,8 +1039,9 @@ export default class posDoc extends React.Component
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnSafeOpen"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
                                         onClick={async ()=>
-                                        {                             
-                                            this.popAccessPass.show();                                            
+                                        {
+                                            this.posDevice.caseOpen();
+                                            //this.popAccessPass.show();                                            
                                         }}
                                         >
                                             <i className="text-white fa-solid fa-inbox" style={{fontSize: "24px"}} />
