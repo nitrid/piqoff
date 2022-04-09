@@ -106,7 +106,6 @@ export default class posDoc extends React.Component
         {
             this.setState({time:moment(new Date(),"HH:mm:ss").format("HH:mm:ss"),date:new Date().toLocaleDateString('tr-TR',{ year: 'numeric', month: 'numeric', day: 'numeric' })})
         },1000) 
-
         await this.calcGrandTotal(false)       
     }
     async getDoc(pGuid)
