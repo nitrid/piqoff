@@ -907,16 +907,11 @@ export class posDeviceCls
         {
             return
         }
-        console.log(1)
         let device  = new this.escpos.USB();
-        console.log(2)
         let options = { encoding: "GB18030" /* default */ }
-        console.log(3)
         let printer = new this.escpos.Printer(device, options);
-        console.log(4)
         device.open(function(error)
         {
-            console.log(5)
             printer.cashdraw(2);
             printer.close();
         })
@@ -952,6 +947,7 @@ export class posDeviceCls
 
         return new Promise(function(resolve)
         {
+            console.log(this)
             let port = new this.serialport(this.scalePort,{baudRate:9600,dataBits:7,parity:'odd',stopBits:1});
             let TmpPrice = parseInt(pPrice * 100).toString().padStart(6,'0');
             //TERAZİYE FİYAT GÖNDERİLİYOR.
