@@ -352,7 +352,7 @@ export default class posDoc extends React.Component
         return new Promise(async resolve => 
         {
             let tmpWeigh = await this.posDevice.mettlerScaleSend(pPrice)
-
+            console.log(tmpWeigh)
             let tmpConfObj =
             {
                 id:'msgAlert',
