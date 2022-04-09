@@ -171,7 +171,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"LCDPort",
-        VALUE : "COM2",
+        VALUE : "COM4",
         SPECIAL : "001",
         PAGE : "pos",
         ELEMENT : "",
@@ -187,7 +187,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"ScalePort",
-        VALUE : "COM4",
+        VALUE : "COM2",
         SPECIAL : "001",
         PAGE : "pos",
         ELEMENT : "",
