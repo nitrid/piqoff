@@ -945,7 +945,7 @@ export class posDeviceCls
             return (pData << pDistance) | (pData >> (16 - pDistance));
         }
 
-        return new Promise(function(resolve)
+        return new Promise((resolve) =>
         {
             console.log(this)
             let port = new this.serialport(this.scalePort,{baudRate:9600,dataBits:7,parity:'odd',stopBits:1});
