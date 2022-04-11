@@ -324,7 +324,6 @@ export default class posDoc extends React.Component
             //**************************************************** */
             tmpItemsDt[0].QUANTITY = tmpQuantity
             tmpItemsDt[0].PRICE = tmpPrice
-            console.log(6 + " - " + moment().format("HH:mm:ss SSS"))
             this.saleAdd(tmpItemsDt[0])
             this.txtBarcode.value = ""
         }
@@ -544,7 +543,6 @@ export default class posDoc extends React.Component
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_TOTAL = 0
 
         await this.calcGrandTotal();
-        console.log("saleRowAdd - " + moment().format("HH:mm:ss SSS"))
     }
     async saleRowUpdate(pRowData,pItemData)
     {
@@ -559,7 +557,6 @@ export default class posDoc extends React.Component
         pRowData.TOTAL = tmpTotal
 
         await this.calcGrandTotal();
-        console.log("saleRowUpdate - " + moment().format("HH:mm:ss SSS"))
     }
     async payAdd(pType,pAmount)
     {
@@ -899,10 +896,10 @@ export default class posDoc extends React.Component
                                 >
                                     <Editing confirmDelete={false}/>
                                     <Column dataField="LINE_NO" caption={"NO"} width={40} alignment={"center"} defaultSortOrder="desc"/>
-                                    <Column dataField="ITEM_NAME" caption={"ADI"} width={350} />
-                                    <Column dataField="QUANTITY" caption={"MIKTAR"} width={100}/>
-                                    <Column dataField="PRICE" caption={"FIYAT"} width={100}/>
-                                    <Column dataField="AMOUNT" caption={"TUTAR"} width={100}/>                                                
+                                    <Column dataField="ITEM_NAME" caption={"ADI"} width={250} />
+                                    <Column dataField="QUANTITY" caption={"MIKTAR"} width={60}/>
+                                    <Column dataField="PRICE" caption={"FIYAT"} width={60}/>
+                                    <Column dataField="AMOUNT" caption={"TUTAR"} width={60}/>                                                
                                 </NdGrid>
                             </div>
                         </div>
