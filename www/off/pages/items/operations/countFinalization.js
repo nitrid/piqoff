@@ -48,7 +48,9 @@ export default class countFinalization extends React.Component
     {
         this.docObj.clearAll()
 
-        this.txtRef = Math.floor(Date.now() / 1000)
+        this.txtRef = Math.floor(Date.now() / 1000);
+        this.dtFirstDate.value =  moment(new Date()).format("YYYY-MM-DD");
+        this.dtLastDate.value =  moment(new Date()).format("YYYY-MM-DD");
     }
     async _btnGetClick()
     {
@@ -59,18 +61,18 @@ export default class countFinalization extends React.Component
             {
                 select : 
                 {
-                    query :"SELECT *,[dbo].[FN_DEPOT_QUANTITY]([ITEM_GUID],@DEPOT,GETDATE()) AS QUANTITY FROM ITEM_MULTICODE_VW_01 WHERE [dbo].[FN_DEPOT_QUANTITY]([ITEM_GUID],@DEPOT,GETDATE()) > 0 "+
-                    " AND ((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = ''))",
-                    param : ['DEPOT:string|50','CUSTOMER_CODE:string|50'],
-                    value : [this.cmbDepot.value,this.txtCustomerCode.CODE]
+                    query :"SELECT REF,REF_NO,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE,SUM(QUANTITY) AS QUANTITY FROM ITEM_COUNT_VW_01 "+
+                    " WHERE DEPOT = @DEPOT AND DOC_DATE >=@FIRSTDATE AND DOC_DATE <= @LASTDATE  GROUP BY REF,REF_NO,DOC_DATE",
+                    param : ['DEPOT:string|50','FIRSTDATE:date','LASTDATE:date'],
+                    value : [this.cmbDepot.value,this.dtFirstDate.value,this.dtLastDate.value]
                 },
                 sql : this.core.sql
             }
         }
         
-        await this.grdRebateList.dataRefresh(tmpSource)
+        await this.grdCountDocument.dataRefresh(tmpSource)
     }
-    async _btnSave(pType)
+    async _btnSave()
     {
         let tmpConfObj1 =
         {
@@ -112,9 +114,9 @@ export default class countFinalization extends React.Component
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={2} id="frmCriter">
+                            <Form colCount={3} id="frmCriter">
                                {/* cmbDepot */}
-                               <Item>
+                               <Item colSpan={2}>
                                     <Label text={this.t("cmbDepot")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbDepot"
                                     dt={{data:this.docObj.dt('DOC'),field:"OUTPUT"}}  
@@ -126,7 +128,7 @@ export default class countFinalization extends React.Component
                                     onValueChanged={(async()=>
                                         {
                                         }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE = 1"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
@@ -139,7 +141,22 @@ export default class countFinalization extends React.Component
                                 
                                 </Item>
                                 <Item>
-
+                                <Label text={this.t("dtFirstDate")} alignment="right" />
+                                    <NdDatePicker simple={true}  parent={this} id={"dtFirstDate"}
+                                    onValueChanged={(async()=>
+                                        {
+                                    }).bind(this)}
+                                    >
+                                    </NdDatePicker>
+                                </Item> 
+                                <Item>
+                                <Label text={this.t("dtLastDate")} alignment="right" />
+                                    <NdDatePicker simple={true}  parent={this} id={"dtLastDate"}
+                                    onValueChanged={(async()=>
+                                    {
+                                    }).bind(this)}
+                                    >
+                                    </NdDatePicker>
                                 </Item> 
                             </Form>
                         </div>
@@ -155,13 +172,15 @@ export default class countFinalization extends React.Component
                            
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnDispatch")} type="default" width="100%" onClick={()=>{this._btnSave(0)}}></NdButton>
+                            <NdButton text={this.t("btnDispatch")} type="default" width="100%" onClick={()=>{this._btnSave()}}></NdButton>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <NdGrid id="grdRebateList" parent={this} 
+                            <NdGrid id="grdCountDocument" parent={this} 
                             selection={{mode:"multiple"}} 
+                            height={'100%'} 
+                            width={'100%'}
                             showBorders={true}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
@@ -169,15 +188,13 @@ export default class countFinalization extends React.Component
                             allowColumnReordering={true}
                             allowColumnResizing={true}
                             >                            
-                                <Paging defaultPageSize={20} />
+                                <Paging defaultPageSize={15} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
 
-                                <Column dataField="ITEM_CODE" caption={this.t("grdRebateList.clmCode")} visible={true} width={200}/> 
-                                <Column dataField="ITEM_NAME" caption={this.t("grdRebateList.clmName")} visible={true} width={300}/> 
-                                <Column dataField="QUANTITY" caption={this.t("grdRebateList.clmQuantity")} visible={true}/> 
-                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdRebateList.clmCustomer")} visible={true}/> 
-                                <Column dataField="CUSTOMER_PRICE" caption={this.t("grdRebateList.clmPrice")} visible={true}/> 
-                                          
+                                <Column dataField="REF" caption={this.t("grdCountDocument.clmRef")} visible={true} /> 
+                                <Column dataField="REF_NO" caption={this.t("grdCountDocument.clmRefNo")} visible={true}/> 
+                                <Column dataField="DOC_DATE" caption={this.t("grdCountDocument.clmDate")} visible={true}/> 
+                                <Column dataField="QUANTITY" caption={this.t("grdCountDocument.clmQuantity")} visible={true}/>                                           
                             </NdGrid>
                         </div>
                     </div>
