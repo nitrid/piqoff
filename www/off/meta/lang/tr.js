@@ -30,6 +30,7 @@ export const langTr =
         stk_03_005: "Multi Kod Listesi",
         stk_04_001: "Toplu Stok Düzenleme",
         stk_04_002: "İade Operasyonları",
+        stk_04_003 : "Sayım Kesinleştirme",
         cri: "Cari",
         cri_01: "Tanımlar",
         cri_02: "Listeler",
@@ -409,6 +410,123 @@ export const langTr =
             msg : "Girmiş olduğunuz Kasa sistem de kayıtlı !"
         }
       
+    },
+    stk_02_001 :
+    {
+        txtRefRefno : "Seri-Sıra",
+        cmbDepot: "Sayım Deposu",
+        dtDocDate : "Tarih",
+        pg_Docs : 
+        {
+            title : "Evrak Seçimi",
+            clmRef : "SERİ",
+            clmRefNo : "SIRA",
+            clmDocDate : "TARIH",
+            clmInputName : "GİRİŞ",
+            clmOutputName : "ÇIKIŞ",
+        },
+        pg_txtItemsCode : 
+        {
+            title : "Stok Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+        },
+        grdItemCount: 
+        {
+            clmItemCode: "Kodu",
+            clmItemName: "Adı",
+            clmQuantity : "Miktar",
+            clmCreateDate: "Kayıt Tarihi",
+            clmDescription :"Açıklama"
+        },
+        popPassword : 
+        {
+            title: "Evrakı Açmak İçin Yönetici Şifresini Girmelisiniz",
+            Password : "Şifre",
+            btnApprove : "Onayla"
+        },
+        msgDocValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgLocked:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kayıt Edildi Ve Kilitlendi !"
+        },
+        msgPasswordSucces:
+        {
+            title: "Başarılı",
+            btn01: "Tamam",
+            msg: "Evrakın Kilidi Açıldı !",
+        },
+        msgPasswordWrong:
+        {
+            title: "Başarısız",
+            btn01: "Tamam",
+            msg: "Şifreniz Hatalı !"
+        },
+        msgGetLocked:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
+        },
+        msgDoclocked:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kilidi Açılmadan Kayıt Edilemez !"
+        },
+        msgItemNotFound:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Stok Bulunmadı !!"
+        },
+        msgCombineItem:
+        {
+            title: "Dikkat",
+            btn01: "Birleştir",
+            btn02: "Yeni Ekle",
+            msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Satırlar Birleştirilsin mi ?"
+        },
+        validRef :"Seri Boş Geçilemez",
+        validRefNo : "Sıra Boş Geçilemez",
+        validDepot : "Depo Seçmelisiniz",
+        validCustomerCode : "Cari Kodu Boş Geçilemez",
+        validDocDate : "Tarih Seçmelisiniz",
+
     },
     stk_02_002 :
     {
@@ -1197,6 +1315,117 @@ export const langTr =
             msg : "Girmiş olduğunuz Cari sistem de kayıtlı !"
         }
 
+    },
+    cri_01_002:
+    {
+        txtCode : "Kodu",
+        txtTitle : "Ünvan",
+        txtCustomerName : "Adı",
+        tabTitleAdress : "Adres",
+        pg_txtCode : 
+        {
+            title : "Cari Seçim",
+            clmCode : "KODU",
+            clmTitle : "Ünvan",
+            clmName : "Adı",
+            clmLastName  : "Soyadı",
+        },
+        grdAdress : 
+        {
+            clmAdress : "Adres",
+            clmZipcode : "Posta Kodu",
+            clmCity :"Şehir",
+            clmCountry : "Ülke",
+        },
+        popAdress : 
+        {
+            title : "Adres",
+            txtPopAdress : "Adres",
+            cmbPopZipcode :"Posta Kodu",
+            cmbPopCity :"Şehir",
+            cmbPopCountry :"Ülke",
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgCode : 
+        {
+            title: "Dikkat",
+            btn01: "Cariye Git",
+            btn02: "Tamam",
+            msg : "Girmiş olduğunuz Cari sistem de kayıtlı !"
+        }
+
+    },
+    cri_02_001:
+    {
+        txtCustomerName : "Cari Adı",
+        cmbGenus :"Cinsi",
+        menu: "Cari Tanımları",
+        btnGet : "Getir",
+        grdListe : 
+        {
+            clmCode: "Cari Kodu",
+            clmTitle : "Ünvan",
+            clmType : "Tipi",
+            clmGenus : "Cinsi",
+        },
+        cmbGenusData:
+        {
+            allGenus : "Hepsi",
+            Customer : "Müşteri",
+            supplier : "Tedarikçi",
+            both : "Her İkisi",
+        },
+    },
+    cri_02_002:
+    {
+        txtCustomerName : "Cari Adı",
+        cmbGenus :"Cinsi",
+        menu: "Cari Tanımları",
+        btnGet : "Getir",
+        grdListe : 
+        {
+            clmCode: "Cari Kodu",
+            clmTitle : "Ünvan",
+            clmType : "Tipi",
+            clmGenus : "Cinsi",
+            clmAddress : "Adres",
+            clmCity : "Şehir",
+            clmCountry : "Ülke",
+            clmZipcode : "Posta Kodu"
+        },
+        cmbGenusData:
+        {
+            allGenus : "Hepsi",
+            Customer : "Müşteri",
+            supplier : "Tedarikçi",
+            both : "Her İkisi",
+        },
     },
     ftr_01_001 :
     {

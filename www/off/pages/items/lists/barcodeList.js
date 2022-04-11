@@ -207,7 +207,7 @@ export default class barcodeList extends React.Component
                             allowColumnReordering={true}
                             allowColumnResizing={true}
                             >                            
-                                <Paging defaultPageSize={10} />
+                                <Paging defaultPageSize={15} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
 
                                 <Column dataField="ITEM_CODE" caption={this.t("grdListe.clmCode")} visible={true}/> 

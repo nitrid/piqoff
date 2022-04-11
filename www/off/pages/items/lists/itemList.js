@@ -256,7 +256,7 @@ export default class itemList extends React.Component
                             allowColumnReordering={true}
                             allowColumnResizing={true}
                             >                            
-                                <Paging defaultPageSize={20} />
+                                <Paging defaultPageSize={15} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
 
                                 <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true}/> 
