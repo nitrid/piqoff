@@ -13,7 +13,7 @@ import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 
-export default class multicodeList extends React.Component
+export default class barcodeList extends React.Component
 {
     constructor(props)
     {
@@ -21,17 +21,16 @@ export default class multicodeList extends React.Component
 
         this.state = 
         {
-            columnListValue : ['ITEM_NAME','ITEM_CODE','MAIN_GRP_NAME','MULTICODE','CUSTOMER_NAME']
+            columnListValue : ['CODE','TITLE','TYPE_NAME','GENUS_NAME']
         }
         
         this.core = App.instance.core;
         this.columnListData = 
         [
-            {CODE : "ITEM_NAME",NAME : this.t("grdListe.clmName")},
-            {CODE : "MAIN_GRP_NAME",NAME : this.t("grdListe.clmMainGrp")},                        
-            {CODE : "ITEM_CODE",NAME :  this.t("grdListe.clmCode")},
-            {CODE : "MULTICODE",NAME : this.t("grdListe.clmMulticode")},
-            {CODE : "CUSTOMER_NAME",NAME :  this.t("grdListe.clmCustomer")},
+            {CODE : "CODE",NAME : this.t("grdListe.clmCode")},
+            {CODE : "TITLE",NAME : this.t("grdListe.clmTitle")},
+            {CODE : "TYPE_NAME",NAME : this.t("grdListe.clmType")},
+            {CODE : "GENUS_NAME",NAME : this.t("grdListe.clmGenus")},                                   
         ]
         this.groupList = [];
         this._btnGetirClick = this._btnGetirClick.bind(this)
@@ -41,33 +40,31 @@ export default class multicodeList extends React.Component
     {
         setTimeout(async () => 
         {
-            // this.test.data.source.groupBy = ["NAME"]
-            // await this.test.dataRefresh()
-            //console.log(this.test.data.datatable)
-            // this.test.data.store.load().then(
-            //     (data) => { console.log(data)},
-            //     (error) => { /* Handle the "error" here */ }
-            // );
+
         }, 1000);
     }
     _columnListBox(e)
     {
         let onOptionChanged = (e) =>
         {
-            if (e.name == 'selectedItemKeys') 
+            if (e.name == 'selectedBarcodeKeys') 
             {
                 this.groupList = [];
-                if(typeof e.value.find(x => x == 'MULTICODE') != 'undefined')
-                {
-                    this.groupList.push('MULTICODE')
-                }
-                if(typeof e.value.find(x => x == 'BARCODE') != 'undefined')
-                {
-                    this.groupList.push('BARCODE')
-                }                
                 if(typeof e.value.find(x => x == 'CODE') != 'undefined')
                 {
                     this.groupList.push('CODE')
+                }                
+                if(typeof e.value.find(x => x == 'TITLE') != 'undefined')
+                {
+                    this.groupList.push('TITLE')
+                }
+                if(typeof e.value.find(x => x == 'TYPE_NAME') != 'undefined')
+                {
+                    this.groupList.push('TYPE_NAME')
+                }
+                if(typeof e.value.find(x => x == 'GENUS_NAME') != 'undefined')
+                {
+                    this.groupList.push('GENUS_NAME')
                 }
                 
                 for (let i = 0; i < this.grdListe.devGrid.columnCount(); i++) 
@@ -106,6 +103,7 @@ export default class multicodeList extends React.Component
     }
     async _btnGetirClick()
     {
+        console.log(11)
         
         let tmpSource =
         {
@@ -114,19 +112,16 @@ export default class multicodeList extends React.Component
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT * FROM ITEM_MULTICODE_VW_01 " +
-                            "WHERE " +
-                            "((ITEM_NAME = @ITEM_NAME) OR (@ITEM_NAME = '')) AND " +
-                            "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) AND " +
-                            "((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = ''))",
-                    param : ['ITEM_NAME:string|250','MAIN_GRP:string|25','CUSTOMER_CODE:string|25'],
-                    value : [this.txtUrunAdi.value,this.cmbUrunGrup.value,this.cmbTedarikci.value]
+                    query : "SELECT * FROM CUSTOMER_VW_01 WHERE ((TITLE like '%' + @CUSTOMER_NAME + '%') OR (@CUSTOMER_NAME = '')) AND " +
+                            " ((GENUS = @GENUS) OR (@GENUS = -1))  ",
+                    param : ['CUSTOMER_NAME:string|250','GENUS:string|25'],
+                    value : [this.txtCustomerName.value,this.cmbGenus.value]
                 },
                 sql : this.core.sql
             }
         }
-        
         await this.grdListe.dataRefresh(tmpSource)
+        
     }
     render()
     {
@@ -136,7 +131,7 @@ export default class multicodeList extends React.Component
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
-                                {/* <Item location="after"
+                                <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
                                 options=
@@ -148,13 +143,13 @@ export default class multicodeList extends React.Component
                                         {
                                             App.instance.menuClick(
                                             {
-                                                id: 'stk_01_005',
-                                                text: 'Stok Tanımları',
-                                                path: '../pages/items/cards/itemCard.js'
+                                                id: 'cri_01_001',
+                                                text: this.t('menu'),
+                                                path: '../pages/customers/cards/customerCard.js'
                                             })
                                         }
                                     }    
-                                } /> */}
+                                } />
                             </Toolbar>
                         </div>
                     </div>
@@ -162,32 +157,19 @@ export default class multicodeList extends React.Component
                         <div className="col-12">
                             <Form colCount={2} id="frmKriter">
                                 <Item>
-                                    <Label text={this.t("cmbCustomer")} alignment="right" />
-                                        <NdSelectBox simple={true} parent={this} id="cmbTedarikci" showClearButton={true} notRefresh={true}  searchEnabled={true}
-                                        displayExpr="TITLE"                       
-                                        valueExpr="CODE"
-                                        data={{source: {select : {query:"SELECT CODE,TITLE FROM CUSTOMER_VW_01 WHERE TYPE IN(1,2) ORDER BY TITLE ASC"},sql : this.core.sql}}}
-                                        // onValueChanged={onValueChanged}
-                                        />
+                                    <Label text={this.t("txtCustomerName")} alignment="right" />
+                                        <NdTextBox id="txtCustomerName" parent={this} simple={true} />
                                 </Item>
                                 <Item>
-                                    <Label text={this.t("txtItemName")} alignment="right" />
-                                        <NdTextBox id="txtUrunAdi" parent={this} simple={true} />
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("cmbMainGrp")} alignment="right" />
-                                        <NdSelectBox simple={true} parent={this} id="cmbUrunGrup" showClearButton={true} notRefresh={true}  searchEnabled={true}
-                                        displayExpr="NAME"                       
-                                        valueExpr="CODE"
-                                        data={{source: {select : {query:"SELECT CODE,NAME FROM ITEM_GROUP ORDER BY NAME ASC"},sql : this.core.sql}}}
-                                        // onValueChanged={onValueChanged}
-                                        />
-                                </Item>
+                                    <Label text={this.t("cmbGenus")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbGenus" height='fit-content'
+                                    displayExpr="VALUE"                       
+                                    valueExpr="ID"
+                                    value={-1}
+                                    data={{source:[{ID:-1,VALUE:this.t("cmbGenusData.allGenus")},{ID:0,VALUE:this.t("cmbGenusData.Customer")},{ID:1,VALUE:this.t("cmbGenusData.supplier")},{ID:2,VALUE:this.t("cmbGenusData.both")}]}}
+                                    />
+                                </Item>       
                                 <Item> </Item>
-                                <Item>
-                                    <Label text={this.t("btnCheck")} alignment="right" />
-                                        <NdCheckBox id="chkAktif" parent={this} defaultValue={true}></NdCheckBox>
-                                </Item>
                             </Form>
                         </div>
                     </div>
@@ -225,11 +207,10 @@ export default class multicodeList extends React.Component
                                 <Paging defaultPageSize={15} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
 
-                                <Column dataField="ITEM_CODE" caption={this.t("grdListe.clmCode")} visible={true}/> 
-                                <Column dataField="ITEM_NAME" caption={this.t("grdListe.clmName")} visible={true}/> 
-                                <Column dataField="MULTICODE" caption={this.t("grdListe.clmMulticode")} visible={true}/> 
-                                <Column dataField="MAIN_GRP_NAME" caption={this.t("grdListe.clmMainGrp")} visible={true}/> 
-                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdListe.clmCustomer")} visible={true}/> 
+                                <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true}/> 
+                                <Column dataField="TITLE" caption={this.t("grdListe.clmTitle")} visible={true}/> 
+                                <Column dataField="TYPE_NAME" caption={this.t("grdListe.clmType")} visible={true}/> 
+                                <Column dataField="GENUS_NAME" caption={this.t("grdListe.clmGenus")} visible={true}/> 
                             </NdGrid>
                         </div>
                     </div>

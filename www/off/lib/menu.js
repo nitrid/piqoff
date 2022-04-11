@@ -59,7 +59,7 @@ export const menu = (e) =>
                         {
                             id: 'stk_02_001',
                             text: e.t('menu.stk_02_001'),//'Sayım Evrakı',
-                            path: '../pages/customers/cards/customerCard.js'
+                            path: '../pages/items/documents/itemCount.js'
                         },
                         {
                             id: 'stk_02_002',
@@ -127,6 +127,11 @@ export const menu = (e) =>
                             text : e.t('menu.stk_04_002'),//'İade Operasyonları',
                             path: '../pages/items/operations/rebateOperation.js'
                         },
+                        {
+                            id: 'stk_04_003',
+                            text : e.t('menu.stk_04_003'),//'Sayım Kesinleştirme',
+                            path: '../pages/items/operations/countFinalization.js'
+                        },
                     ]
                 },
                 {
@@ -156,13 +161,13 @@ export const menu = (e) =>
                         {
                             id: 'cri_01_002',
                             text: e.t('menu.cri_01_002'),//'Adres Tanımları',
-                            path: '../pages/customers/cards/customerCard.js'
+                            path: '../pages/customers/cards/customerAddressCard.js'
                         },
-                        {
-                            id: 'cri_01_003',
-                            text: e.t('menu.cri_01_003'),//'Grup Tanımları',
-                            path: '../pages/customers/cards/customerCard.js'
-                        }
+                        // {
+                        //     id: 'cri_01_003',
+                        //     text: e.t('menu.cri_01_003'),//'Grup Tanımları',
+                        //     path: '../pages/customers/cards/customerCard.js'
+                        // }
                     ]
                 },
                 {
@@ -174,18 +179,18 @@ export const menu = (e) =>
                         {
                             id: 'cri_02_001',
                             text: e.t('menu.cri_02_001'),//'Cari Listesi',
-                            path: '../pages/customers/cards/customerCard.js'
+                            path: '../pages/customers/lists/customerList.js'
                         },
                         {
                             id: 'cri_02_002',
                             text: e.t('menu.cri_02_002'),//'Adres Listesi',
-                            path: '../pages/customers/cards/customerCard.js'
+                            path: '../pages/customers/lists/customerAddressList.js'
                         },
-                        {
-                            id: 'cri_02_003',
-                            text: e.t('menu.cri_02_003'),//'Grup Listesi',
-                            path: '../pages/customers/cards/customerCard.js'
-                        }
+                        // {
+                        //     id: 'cri_02_003',
+                        //     text: e.t('menu.cri_02_003'),//'Grup Listesi',
+                        //     path: '../pages/customers/cards/customerCard.js'
+                        // }
                     ]
                 },
                 {
