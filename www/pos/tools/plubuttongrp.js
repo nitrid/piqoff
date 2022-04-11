@@ -132,7 +132,7 @@ export default class NbPluButtonGrp extends NbBase
                 (
                     <div key={"btnGroup" + this.props.id + i} className="col px-1">
                         <NbButton id={"btnGroup" + this.props.id + i} parent={this} className="form-group btn btn-dark btn-block my-1" 
-                        style={{height:"70px",width:"100%",fontSize:"10pt"}}
+                        style={{height:"70px",width:"100%",fontSize:"12px",padding:"5px",maxWidth:"75.33px"}}
                         onClick={()=>{this._onClick(i,2)}}>
                         </NbButton>
                     </div>
@@ -144,7 +144,7 @@ export default class NbPluButtonGrp extends NbBase
                 (
                     <div key={"btnGroup" + this.props.id + i} className="col px-1">
                         <NbButton id={"btnGroup" + this.props.id + i} parent={this} className="form-group btn btn-dark btn-block my-1" 
-                        style={{height:"70px",width:"100%",fontSize:"10pt"}}
+                        style={{height:"70px",width:"100%",fontSize:"12px",padding:"5px",maxWidth:"75.33px"}}
                         onClick={()=>{this._onClick(i,2,tmpData[0])}}>
                         {tmpData[0].NAME}
                         </NbButton>
@@ -169,7 +169,7 @@ export default class NbPluButtonGrp extends NbBase
                 tmpView.push
                 (
                     <div key={"btnPlu" + this.props.id + i} className="col px-1">
-                        <NbButton id={"btnPlu" + this.props.id + i} className="form-group btn btn-success btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}
+                        <NbButton id={"btnPlu" + this.props.id + i} className="form-group btn btn-success btn-block my-1" style={{height:"70px",width:"100%",fontSize:"12px",padding:"5px",maxWidth:"75.33px"}}
                         onClick={()=>{this._onClick(i,1)}}>
                         </NbButton>
                     </div>
@@ -180,7 +180,7 @@ export default class NbPluButtonGrp extends NbBase
                 tmpView.push
                 (
                     <div key={"btnPlu" + this.props.id + i} className="col px-1">
-                        <NbButton id={"btnPlu" + this.props.id + i} className="form-group btn btn-success btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}
+                        <NbButton id={"btnPlu" + this.props.id + i} className="form-group btn btn-success btn-block my-1" style={{height:"70px",width:"100%",fontSize:"12px",padding:"5px",maxWidth:"75.33px"}}
                         onClick={()=>{this._onClick(i,1,tmpData[0])}}>
                         {tmpData[0].NAME}
                         </NbButton>
@@ -205,7 +205,7 @@ export default class NbPluButtonGrp extends NbBase
                 tmpView.push
                 (
                     <div key={"btnPlu" + this.props.id + i} className="col px-1">
-                        <NbButton id={"btnPlu" + this.props.id + i} className="form-group btn btn-success btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}
+                        <NbButton id={"btnPlu" + this.props.id + i} className="form-group btn btn-success btn-block my-1" style={{height:"70px",width:"100%",fontSize:"12px",padding:"5px",maxWidth:"75.33px"}}
                         onClick={()=>{this._onClick(i,1)}}>
                         </NbButton>
                     </div>
@@ -216,7 +216,7 @@ export default class NbPluButtonGrp extends NbBase
                 tmpView.push
                 (
                     <div key={"btnPlu" + this.props.id + i} className="col px-1">
-                        <NbButton id={"btnPlu" + this.props.id + i} className="form-group btn btn-success btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}
+                        <NbButton id={"btnPlu" + this.props.id + i} className="form-group btn btn-success btn-block my-1" style={{height:"70px",width:"100%",fontSize:"12px",padding:"5px",maxWidth:"75.33px"}}
                         onClick={()=>{this._onClick(i,1,tmpData[0])}}>
                         {tmpData[0].NAME}
                         </NbButton>

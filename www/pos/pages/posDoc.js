@@ -324,6 +324,7 @@ export default class posDoc extends React.Component
             //**************************************************** */
             tmpItemsDt[0].QUANTITY = tmpQuantity
             tmpItemsDt[0].PRICE = tmpPrice
+            console.log(6 + " - " + moment().format("HH:mm:ss SSS"))
             this.saleAdd(tmpItemsDt[0])
             this.txtBarcode.value = ""
         }
@@ -543,6 +544,7 @@ export default class posDoc extends React.Component
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_TOTAL = 0
 
         await this.calcGrandTotal();
+        console.log("saleRowAdd - " + moment().format("HH:mm:ss SSS"))
     }
     async saleRowUpdate(pRowData,pItemData)
     {
@@ -557,6 +559,7 @@ export default class posDoc extends React.Component
         pRowData.TOTAL = tmpTotal
 
         await this.calcGrandTotal();
+        console.log("saleRowUpdate - " + moment().format("HH:mm:ss SSS"))
     }
     async payAdd(pType,pAmount)
     {
@@ -710,7 +713,7 @@ export default class posDoc extends React.Component
                             <div className="col-1">
                                 <img src="./css/img/logo2.png" width="50px" height="50px"/>
                             </div>
-                            <div className="col-1">
+                            <div className="col-2">
                                 <div className="row" style={{height:"25px"}}>
                                     <div className="col-12">
                                         <i className="text-white fa-solid fa-user p-2"></i>
@@ -752,7 +755,7 @@ export default class posDoc extends React.Component
                                     </div> 
                                 </div>
                             </div>
-                            <div className="col-1 offset-3 px-1">
+                            <div className="col-1 offset-2 px-1">
                                 <NbButton id={"btnRefresh"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
                                 onClick={()=>
                                 {                                                        
@@ -798,41 +801,39 @@ export default class posDoc extends React.Component
                         <div className="row">
                             <div className="col-12">
                                 <NdTextBox id="txtBarcode" parent={this} simple={true} 
-                                button=
-                                {
-                                    [
+                                button={
+                                [
+                                    {
+                                        id:"01",
+                                        icon:"more",
+                                        onClick:()=>
                                         {
-                                            id:"01",
-                                            icon:"more",
-                                            onClick:()=>
-                                            {
-                                                this.popItemList.show()
-                                            }
-                                        },
+                                            this.popItemList.show()
+                                        }
+                                    },
+                                    {
+                                        id:"02",
+                                        icon:"arrowdown",
+                                        onClick:async ()=>
                                         {
-                                            id:"02",
-                                            icon:"arrowdown",
-                                            onClick:async ()=>
+                                            if(this.txtBarcode.value != '')
                                             {
-                                                if(this.txtBarcode.value != '')
+                                                let tmpDt = new datatable(); 
+                                                tmpDt.selectCmd = 
                                                 {
-                                                    let tmpDt = new datatable(); 
-                                                    tmpDt.selectCmd = 
-                                                    {
-                                                        query : "SELECT BARCODE,NAME,PRICE_SALE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE LIKE '%' + @BARCODE",
-                                                        param : ['BARCODE:string|25']
-                                                    }
-                                                    tmpDt.selectCmd.value = [this.txtBarcode.value]
-                                                    await tmpDt.refresh();
-                                                    
-                                                    await this.grdBarcodeList.dataRefresh({source:tmpDt});
-                                                    this.popBarcodeList.show()
-                                                    this.txtBarcode.value = ""
+                                                    query : "SELECT BARCODE,NAME,PRICE_SALE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE LIKE '%' + @BARCODE",
+                                                    param : ['BARCODE:string|25']
                                                 }
+                                                tmpDt.selectCmd.value = [this.txtBarcode.value]
+                                                await tmpDt.refresh();
+                                                
+                                                await this.grdBarcodeList.dataRefresh({source:tmpDt});
+                                                this.popBarcodeList.show()
+                                                this.txtBarcode.value = ""
                                             }
                                         }
-                                    ]
-                                }
+                                    }
+                                ]}
                                 onKeyDown={(async(e)=>
                                 {                                    
                                     if(e.event.key == 'Enter')
@@ -909,11 +910,11 @@ export default class posDoc extends React.Component
                         <div className="row">
                             <div className="col-6">
                                 <div className="row">
-                                    <div className="col-3">
+                                    <div className="col-6">
                                         <p className="text-primary text-start m-0">T.Satır : <span className="text-dark">{this.state.totalRowCount}</span></p>    
                                     </div>
                                     <div className="col-6">
-                                        <p className="text-primary text-start m-0">T.Ürün Mik.: <span className="text-dark">{this.state.totalItemCount}</span></p>    
+                                        <p className="text-primary text-start m-0">T.Mik.: <span className="text-dark">{this.state.totalItemCount}</span></p>    
                                     </div>
                                 </div>
                                 <div className="row">
