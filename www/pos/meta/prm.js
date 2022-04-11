@@ -166,6 +166,54 @@ export const prm =
             PAGE_NAME : "Pos",
             CAPTION : "Fiyat Düzenle"
         }
+    },
+    //LCD Port
+    {
+        TYPE : 0,
+        ID :"LCDPort",
+        VALUE : "COM4",
+        SPECIAL : "001",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "LCD Port"
+        }
+    },
+    //Scale Port
+    {
+        TYPE : 0,
+        ID :"ScalePort",
+        VALUE : "COM2",
+        SPECIAL : "001",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Terazi Port"
+        }
+    },
+    //PayCard Port
+    {
+        TYPE : 0,
+        ID :"PayCardPort",
+        VALUE : "COM6",
+        SPECIAL : "001",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "K.Kart Port"
+        }
     }
     //#endregion
 ]
