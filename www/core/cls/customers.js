@@ -35,7 +35,7 @@ export class customersCls
         tmpDt.selectCmd =
         {
             query : "SELECT * FROM CUSTOMER_VW_01 WHERE ((CODE = @CODE) OR (@CODE = ''))",
-            param : ['CODE:string|25,']
+            param : ['CODE:string|25']
         }
         tmpDt.insertCmd = 
         {

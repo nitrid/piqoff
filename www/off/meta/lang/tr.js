@@ -1195,6 +1195,45 @@ export const langTr =
 
         }
     },
+    stk_04_003 : 
+    {
+        cmbDepot : "Depo",
+        chkNotCountItems : "Sayılmayan Ürünler Sıfırlansın",
+        btnGet : 'Getir',
+        btnAddCount : "Sayımı Birleştir",
+        dtFirstDate :"İlk Tarih",
+        dtLastDate : "Son Tarih",
+        popCount : 
+        {
+            title : "Cari Seçimi",
+        },
+        grdCountDocument : 
+        {
+            clmRef: "Seri",
+            clmRefNo : "Sıra",
+            clmQuantity : "Toplam Miktar",
+            clmDate : "Tarih",
+        },
+        grdCountItems : 
+        {
+            clmName: "Adı",
+            clmCode : "Kodu",
+            clmQuantity : "Sayılan Miktar",
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: " Serisi İle Evrakınız Oluşturuldu..!",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgNotItems:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: " Depo Miktarları Güncel !! Yeni Kayıt Oluşturulmadı",
+        },
+    },
     cri_01_001:
     {
         cmbType :"Tip",

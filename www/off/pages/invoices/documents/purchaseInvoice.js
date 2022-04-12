@@ -1560,8 +1560,7 @@ export default class purchaseInvoice extends React.Component
                                 </Item>
                             </Form>
                         </div>
-                    </div>
-                            
+                            </div>
                         </NdPopUp>
                     </div> 
                      {/* Cash PopUp */}
