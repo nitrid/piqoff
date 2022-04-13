@@ -370,7 +370,7 @@ export default class posDoc extends React.Component
     {
         return new Promise(async resolve => 
         {                        
-            this.msgWeighing.show().then((e) =>
+            this.msgWeighing.show().then(async (e) =>
             {
                 if(e == 'btn01')
                 {
@@ -591,7 +591,7 @@ export default class posDoc extends React.Component
             //KREDİ KARTI İSE
             if(pType == 1)
             {
-                this.msgCardPayment.show().then((e) =>
+                this.msgCardPayment.show().then(async (e) =>
                 {
                     if(e == 'btn01')
                     {
