@@ -104,7 +104,6 @@ export default class NdDialog extends Base
         )
     }
 }
-
 export const dialog = function()
 {            
     return new Promise(async resolve => 
@@ -140,7 +139,7 @@ export const dialog = function()
                 </div>
             </NdDialog>
         )
-
+        
         ReactDOM.render(tmpJsx,document.body.appendChild(document.createElement('div',{id:'dialog'})));
         resolve(await tmpObj.current.show())
     });
