@@ -1047,7 +1047,7 @@ export class posDeviceCls
         {
             return
         }
-        
+
         let ack = false;
         let oneShoot = false;
         let payMethod = "card"
