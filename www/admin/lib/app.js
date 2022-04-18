@@ -1,14 +1,17 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import {core} from '../../core/core.js'
+import enMessages from '../meta/lang/devexpress/en.js';
+import frMessages from '../meta/lang/devexpress/fr.js';
+import trMessages from '../meta/lang/devexpress/tr.js';
 import { locale, loadMessages, formatMessage } from 'devextreme/localization';
-import moment from 'moment';
-// import momLocFr from 'moment-localization-fr'
-
+import i18n from './i18n.js'
 import Drawer from 'devextreme-react/drawer';
 import Toolbar from 'devextreme-react/toolbar';
 import TextBox from 'devextreme-react/text-box';
 import Button from 'devextreme-react/button';
+import SelectBox from 'devextreme-react/select-box';
+import { LoadPanel } from 'devextreme-react/load-panel';
 
 import HTMLReactParser from 'html-react-parser';
 
@@ -24,8 +27,14 @@ export default class App extends React.Component
     {
         super();
 
-        locale('en');
-
+        loadMessages(enMessages);
+        loadMessages(frMessages);
+        loadMessages(trMessages);
+        locale(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'));
+        i18n.changeLanguage(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'))
+        this.lang = i18n;  
+        moment.locale(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'));
+        
         this.style =
         {
             splash_body : 
@@ -53,18 +62,49 @@ export default class App extends React.Component
                 headers : 'Warning',
                 title : 'Sunucu ile bağlantı kuruluyor.',
             },
-            vtadi : ''
+            vtadi : '',
+            isExecute:false
         }
         this.toolbarItems = 
-        [{
-            widget : 'dxButton',
-            location : 'before',
-            options : 
+        [
             {
-                icon : 'menu',
-                onClick : () => this.setState({opened: !this.state.opened})
+                widget : 'dxButton',
+                location : 'before',
+                options : 
+                {
+                    icon : 'menu',
+                    onClick : () => this.setState({opened: !this.state.opened})
+                }
+            },
+            {
+                widget : 'dxSelectBox',
+                location : 'after',
+                options : 
+                {
+                    width: 80,
+                    items: [{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"tr",text:"TR"}],
+                    valueExpr: 'id',
+                    displayExpr: 'text',
+                    value: localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'),
+                    onValueChanged: (args) => 
+                    {
+                        localStorage.setItem('lang',args.value)
+                        i18n.changeLanguage(args.value)
+                        locale(args.value)
+                        window.location.reload()
+                    }
+                }
+            },
+            {
+                widget : 'dxButton',
+                location : 'after',
+                options : 
+                {
+                    icon : 'refresh',
+                    onClick : () => window.location.reload()
+                }
             }
-        }];
+        ];
         
         this.core = new core(io(window.location.origin,{timeout:100000}));
         this.textValueChanged = this.textValueChanged.bind(this)
@@ -134,6 +174,15 @@ export default class App extends React.Component
         {
             App.instance.setState({connected:false});
             this.core.auth.logout()
+        })    
+        
+        this.core.on('onExecuting',()=>
+        {
+            this.setState({isExecute:true})
+        })
+        this.core.on('onExecuted',()=>
+        {
+            this.setState({isExecute:false})
         })
     }
     menuClick(data)
@@ -141,6 +190,7 @@ export default class App extends React.Component
         if(typeof data.path != 'undefined')
         {
             Panel.instance.addPage(data);
+            this.panel = Panel.instance
         }
     }
     textValueChanged(e) 
@@ -246,6 +296,14 @@ export default class App extends React.Component
         
         return (
             <div>
+                <LoadPanel
+                shadingColor="rgba(0,0,0,0.4)"
+                position={{ of: '#root' }}
+                visible={this.state.isExecute}
+                showIndicator={true}
+                shading={true}
+                showPane={true}
+                />
                 <div className="top-bar">
                     <Toolbar className="main-toolbar" items={this.toolbarItems }/>
                 </div>

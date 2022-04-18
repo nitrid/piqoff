@@ -272,29 +272,27 @@ export default class countFinalization extends React.Component
                                     </NdDatePicker>
                                 </Item> 
                                 <Item>
-                                <Label text={this.t("dtLastDate")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtLastDate"}
-                                    onValueChanged={(async()=>
-                                    {
-                                    }).bind(this)}
-                                    >
-                                    </NdDatePicker>
+                                    <Label text={this.t("dtLastDate")} alignment="right" />
+                                        <NdDatePicker simple={true}  parent={this} id={"dtLastDate"}
+                                        onValueChanged={(async()=>
+                                        {
+                                        }).bind(this)}
+                                        >
+                                        </NdDatePicker>
                                 </Item> 
-                                 <Item>
-                                
-                                </Item>
-                                <Item>
+                                <Item location="right">
                                     <NdCheckBox id="chkNotCountItems" parent={this} defaultValue={false}
                                     param={this.param.filter({ELEMENT:'chkNotCountItems',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'chkNotCountItems',USERS:this.user.CODE})}/>
-                                     <Label text={this.t("chkNotCountItems")} alignment="left" />
+                                    <Label text={this.t("chkNotCountItems")} alignment="right" />
                                 </Item>
+                                
                             </Form>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick} validationGroup="frmPurcOrder"></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick} validationGroup="frmValidCount"></NdButton>
                         </div>
                         <div className="col-3">
                             

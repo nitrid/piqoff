@@ -40,6 +40,7 @@ window.config =
       'inferno-extras': 'npm:inferno-extras/dist/inferno-extras.min.js',
       'moment' : 'npm:moment/moment.js',
       'react-bootstrap' : 'npm:react-bootstrap/cjs',
+      'i18next' : 'npm:i18next/i18next.js',
       // SystemJS plugins
       'plugin-babel': 'npm:systemjs-plugin-babel/plugin-babel.js',
       'systemjs-babel-build': 'npm:systemjs-plugin-babel/systemjs-babel-browser.js'

@@ -22,7 +22,7 @@ export const menu =
             {
                 id: 'P0002',
                 text: 'Kullanıcılar',
-                path: '../pages/users.js'
+                path: '../pages/userPage.js'
             },
             {
                 id: 'P0003',

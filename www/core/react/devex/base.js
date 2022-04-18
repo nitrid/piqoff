@@ -271,6 +271,7 @@ export default class NdBase extends React.Component
         return new Promise(mresolve => 
         {
             let tmpThis = this; 
+
             this.setState(
             { 
                 data : 
@@ -435,14 +436,14 @@ export default class NdBase extends React.Component
                         },
                         onInserted: function (values,key) 
                         {
-                            if(typeof tmpThis.props.data.onInserted != 'undefined')
+                            if(typeof tmpThis.props.data != 'undefined' && typeof tmpThis.props.data.onInserted != 'undefined')
                             {
                                 tmpThis.props.data.onInserted(values,key)
                             }
                         },
                         onInserting: function (values,key) 
                         {
-                            if(typeof tmpThis.props.data.onInserting != 'undefined')
+                            if(typeof tmpThis.props.data != 'undefined' && typeof tmpThis.props.data.onInserting != 'undefined')
                             {
                                 tmpThis.props.data.onInserting(values,key)
                             }
@@ -455,7 +456,7 @@ export default class NdBase extends React.Component
                             }
                         },
                         onUpdating: function (key, values) 
-                        {                            
+                        {                           
                             if(typeof tmpThis.props.data != 'undefined' && typeof tmpThis.props.data.onUpdating != 'undefined')
                             {
                                 tmpThis.props.data.onUpdating(key,values)
