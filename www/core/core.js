@@ -1481,3 +1481,24 @@ Number.prototype.rate2Num = function(pNum,pDigit)
     }
     return 0
 }
+//* STRING DEĞERİN SONUNA YADA BAŞINA BOŞLUK ATAR pLen = KARAKTER BOŞLUK SAYISI pType = s (BAŞINA) e (SONUNA) */
+String.prototype.space = function(pLen,pType)
+{
+    let tmpData = this
+    if(tmpData.length > pLen)
+    {
+        tmpData = tmpData.toString().substring(0,pLen);
+    }
+    if(typeof pType == 'undefined')
+    {
+        return tmpData.toString().padEnd(pLen,' ');
+    }
+    if(pType == "e")
+    {
+        return tmpData.toString().padEnd(pLen,' ');
+    }
+    else if(pType == "s")
+    {
+        return tmpData.toString().padStart(pLen,' ');
+    }
+}

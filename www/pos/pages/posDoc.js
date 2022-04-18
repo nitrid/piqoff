@@ -3,6 +3,7 @@ import App from "../lib/app.js";
 
 import Form, { Label,Item } from "devextreme-react/form";
 import { ButtonGroup } from "devextreme-react/button-group";
+import { LoadPanel } from 'devextreme-react/load-panel';
 
 import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from "../../core/react/devex/textbox.js";
 import NdGrid,{Column,Editing,Paging,Scrolling} from "../../core/react/devex/grid.js";
@@ -19,7 +20,7 @@ import NbPopNumber from "../tools/popnumber.js";
 import NbRadioButton from "../../core/react/bootstrap/radiogroup.js";
 import NbPosPopGrid from "../tools/pospopgrid.js";
 import NbPopDescboard from "../tools/popdescboard.js";
-import { dialog } from "../../core/react/devex/dialog.js";
+import NdDialog,{ dialog } from "../../core/react/devex/dialog.js";
 
 import { posCls,posSaleCls,posPaymentCls,posPluCls,posDeviceCls } from "../../core/cls/pos.js";
 import { itemsCls } from "../../core/cls/items.js";
@@ -47,6 +48,7 @@ export default class posDoc extends React.Component
             isPluEdit:false,
             isBtnGetCustomer:false,
             isBtnInfo:false,
+            isLoading:false,
             customerName:'',
             customerPoint:0,
             totalRowCount:0,
@@ -62,12 +64,22 @@ export default class posDoc extends React.Component
             payRest:0,
             discountBefore:0,
             discountAfter:0
-        }      
+        }   
+
         document.onkeydown = (e) =>
         {
             //EĞER TXTBARCODE ELEMENT HARİCİNDE BAŞKA BİR İNPUT A FOKUSLANILMIŞSA FONKSİYONDAN ÇIKILIYOR.
-            if(document.activeElement.type == 'text' && document.activeElement.parentElement.parentElement.parentElement.id != 'txtBarcode')
+            // if(document.activeElement.type == 'text' && document.activeElement.parentElement.parentElement.parentElement.id != 'txtBarcode')
+            // {
+            //     return
+            // }
+            //EĞER FORMUN ÖNÜNDE POPUP YADA LOADING PANEL VARSA BARCODE TEXTBOX ÇALIŞMIYOR.
+            if(document.getElementsByClassName("dx-overlay-wrapper").length > 0)
             {
+                if(e.key == "Enter")
+                {
+                    document.getElementById("Sound").play();
+                }
                 return
             }
             
@@ -84,7 +96,8 @@ export default class posDoc extends React.Component
             {
                 
             }
-        }     
+        }
+
         this.init()
     }
     async init()
@@ -105,6 +118,12 @@ export default class posDoc extends React.Component
         setInterval(()=>
         {
             this.setState({time:moment(new Date(),"HH:mm:ss").format("HH:mm:ss"),date:new Date().toLocaleDateString('tr-TR',{ year: 'numeric', month: 'numeric', day: 'numeric' })})
+            
+            this.posDevice.lcdPrint
+            ({
+                blink : 0,
+                text :  "Bonjour".space(20) + moment(new Date()).format("DD.MM.YYYY").space(20)
+            })
         },1000) 
         await this.calcGrandTotal(false)       
     }
@@ -129,13 +148,16 @@ export default class posDoc extends React.Component
         });
     }
     async getItem(pCode)
-    {
+    {        
+        this.txtBarcode.value = ""; 
         let tmpQuantity = 1
-        let tmpPrice = 0
+        let tmpPrice = 0        
+
         if(pCode == '')
         {
             return
         }
+        this.setState({isLoading:true})
         //EĞER CARİ SEÇ BUTONUNA BASILDIYSA CARİ BARKODDAN SEÇİLECEK.
         if(this.state.isBtnGetCustomer)
         {
@@ -177,8 +199,7 @@ export default class posDoc extends React.Component
                 
                 await dialog(tmpConfObj);
             }
-            this.setState({isBtnGetCustomer:false})
-            this.txtBarcode.value = ""; 
+            this.setState({isBtnGetCustomer:false,isLoading:false})
             return;
         }
         //******************************************************** */
@@ -200,7 +221,7 @@ export default class posDoc extends React.Component
                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Miktar sıfır giremezsiniz !"}</div>)
                 }
                 await dialog(tmpConfObj);
-                this.txtBarcode.value = "";
+                this.setState({isLoading:false})
                 return
             }
             tmpQuantity = pCode.split("*")[0];
@@ -247,8 +268,7 @@ export default class posDoc extends React.Component
                         content:(<div><h3 className="text-primary text-center">{tmpItemsDt[0].NAME}</h3><h3 className="text-danger text-center">{tmpPrice + " EUR"}</h3></div>)
                     }
                     await dialog(tmpConfObj);
-                    this.txtBarcode.value = "";
-                    this.setState({isBtnInfo:false})
+                    this.setState({isBtnInfo:false,isLoading:false})
                     return;
                 }
                 //**************************************************** */
@@ -267,7 +287,7 @@ export default class posDoc extends React.Component
                     }
                     else
                     {
-                        this.txtBarcode.value = "";
+                        this.setState({isLoading:false})
                         return
                     }
                 }
@@ -286,14 +306,14 @@ export default class posDoc extends React.Component
                         }
                         else
                         {
-                            this.txtBarcode.value = "";
+                            this.setState({isLoading:false})
                             return
                         }
                     }
                     else
                     {
                         //POPUP KAPATILMIŞ İSE YADA FİYAT BOŞ GİRİLMİŞ İSE...
-                        this.txtBarcode.value = "";
+                        this.setState({isLoading:false})
                         return
                     }
                 }
@@ -317,7 +337,7 @@ export default class posDoc extends React.Component
                 let tmpMsgResult = await dialog(tmpConfObj);
                 if(tmpMsgResult == 'btn02')
                 {
-                    this.txtBarcode.value = ""
+                    this.setState({isLoading:false})
                     return
                 }
             }
@@ -325,7 +345,7 @@ export default class posDoc extends React.Component
             tmpItemsDt[0].QUANTITY = tmpQuantity
             tmpItemsDt[0].PRICE = tmpPrice
             this.saleAdd(tmpItemsDt[0])
-            this.txtBarcode.value = ""
+            this.setState({isLoading:false})
         }
         else
         {
@@ -342,45 +362,41 @@ export default class posDoc extends React.Component
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Okuttuğunuz Barkod Sistemde Bulunamadı !"}</div>)
             }
             await dialog(tmpConfObj);
-            this.txtBarcode.value = "";
+            this.setState({isLoading:false})
         }
-        //******************************************************** */        
+        //******************************************************** */    
     }
     getWeighing(pPrice)
     {
-        //#BAK BURAYA TERAZİ ENTEGRASYONU EKLENECEK
         return new Promise(async resolve => 
-        {
-            let tmpWeigh = await this.posDevice.mettlerScaleSend(pPrice)
-            console.log(tmpWeigh)
-            let tmpConfObj =
+        {                        
+            this.msgWeighing.show().then(async (e) =>
             {
-                id:'msgAlert',
-                showTitle:true,
-                title:"Uyarı",
-                showCloseButton:true,
-                width:'500px',
-                height:'200px',
-                button:[{id:"btn01",caption:"Miktar Giriş",location:'before'},{id:"btn02",caption:"Vazgeç",location:'after'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Teraziden cevap bekleniyor."}</div>)
-            }
-            let tmpResult = await dialog(tmpConfObj);
-            if(tmpResult == 'btn01')
-            {
-                let tmpResult = await this.popNumber.show('Miktar',0)
-                if(typeof tmpResult != 'undefined' && tmpResult != '')
+                if(e == 'btn01')
                 {
-                    resolve(tmpResult)
+                    let tmpResult = await this.popNumber.show('Miktar',0)
+                    if(typeof tmpResult != 'undefined' && tmpResult != '')
+                    {
+                        resolve(tmpResult)
+                    }
+                    else
+                    {
+                        resolve()
+                    }
                 }
-                else
+                else if(e == 'btn02')
                 {
                     resolve()
                 }
-            }
-            else if(tmpResult == 'btn02')
+            })
+
+            let tmpWeigh = await this.posDevice.mettlerScaleSend(pPrice)
+
+            if(typeof tmpWeigh != 'undefined')
             {
-                resolve()
-            }
+                this.msgWeighing.hide()
+                resolve(tmpWeigh)
+            } 
         });
     }
     getBarPattern(pBarcode)
@@ -446,14 +462,24 @@ export default class posDoc extends React.Component
                 
                 this.txtPopTotal.value = parseFloat(this.state.payRest).toFixed(2)
                 this.txtPopCardPay.value = parseFloat(this.state.payRest).toFixed(2)
-                this.txtPopCashPay.value = parseFloat(this.state.payRest).toFixed(2)            
+                this.txtPopCashPay.value = parseFloat(this.state.payRest).toFixed(2)   
+
+                if(this.posObj.posSale.dt().length > 0)
+                {
+                    this.posDevice.lcdPrint
+                    ({
+                        blink : 0,
+                        text :  this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ITEM_NAME.toString().space(11) + " " + 
+                                (parseFloat(this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].PRICE).toFixed(2) + "EUR").space(8,"s") +
+                                "TOTAL : " + (parseFloat(this.state.payRest).toFixed(2) + "EUR").space(12,"s")
+                    })
+                }
             }
     
             if(typeof pSave == 'undefined' || pSave)
             {
                 await this.posObj.save()
             }
-
             resolve()
         });
     }    
@@ -565,24 +591,33 @@ export default class posDoc extends React.Component
             //KREDİ KARTI İSE
             if(pType == 1)
             {
-                let tmpConfObj =
+                this.msgCardPayment.show().then(async (e) =>
                 {
-                    id:'msgAlert',
-                    showTitle:true,
-                    title:"Uyarı",
-                    showCloseButton:true,
-                    width:'500px',
-                    height:'200px',
-                    button:[{id:"btn01",caption:"Tekrar",location:'before'},{id:"btn02",caption:"Vazgeç",location:'center'},{id:"btn03",caption:"Zorla",location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Kart cihazından cevap bekleniyor."}</div>)
+                    if(e == 'btn01')
+                    {
+                        if((await this.payCard(pAmount)))
+                        {
+                            this.msgCardPayment.hide()
+                        }
+                        else
+                        {
+                            this.msgCardPayment.hide()
+                            return
+                        }
+                    }
+                    else if(e == 'btn02')
+                    {
+                        return
+                    }
+                })
+                
+                if((await this.payCard(pAmount)))
+                {
+                    this.msgCardPayment.hide()
                 }
-                let tmpResult = await dialog(tmpConfObj);
-                if(tmpResult == 'btn01')
+                else
                 {
-                    
-                }
-                else if(tmpResult == 'btn02')
-                {
+                    this.msgCardPayment.hide()
                     return
                 }
             }
@@ -600,6 +635,12 @@ export default class posDoc extends React.Component
         
         if(this.state.payRest == 0)
         {
+            this.posDevice.lcdPrint
+            ({
+                blink : 0,
+                text :  "A tres bientot".space(20)
+            })
+
             this.posObj.dt()[0].STATUS = 1
             await this.calcGrandTotal()
             this.popTotal.hide()
@@ -658,6 +699,44 @@ export default class posDoc extends React.Component
             resolve()
         });
     }
+    payCard(pAmount)
+    {
+        return new Promise(async resolve => 
+        {
+            let tmpCardPay = await this.posDevice.cardPayment(pAmount)
+
+            if(typeof tmpCardPay != 'undefined')
+            {
+                if(tmpCardPay.tag == "response")
+                {
+                    if(JSON.parse(tmpCardPay.msg).transaction_result != 0)
+                    {
+                        this.msgCardPayment.hide()
+                        let tmpConfObj =
+                        {
+                            id:'msgAlert',showTitle:true,title:"Bilgi",showCloseButton:true,width:'500px',height:'250px',
+                            button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Ödeme gerçekleşmedi !"}</div>)
+                        }
+                        await dialog(tmpConfObj);
+                        resolve(false)
+                    }
+                    else
+                    {
+                        resolve(true)
+                    }
+                }
+                else
+                {
+                    resolve(false)
+                }
+            }
+            else
+            {
+                resolve(false)
+            }
+        });
+    }
     descSave(pTag,pDesc,pLineNo)
     {
         return new Promise(async resolve => 
@@ -703,7 +782,16 @@ export default class posDoc extends React.Component
     render()
     {
         return(
-            <div>                
+            <div>
+                <LoadPanel
+                shadingColor="rgba(0,0,0,0.4)"
+                position={{ of: '#root' }}
+                visible={this.state.isLoading}
+                showIndicator={false}
+                shading={true}
+                showPane={false}
+                message={""}
+                />               
                 <div className="top-bar row">
                     <div className="col-12">                    
                         <div className="row m-2">
@@ -832,10 +920,10 @@ export default class posDoc extends React.Component
                                     }
                                 ]}
                                 onKeyDown={(async(e)=>
-                                {                                    
+                                {    
                                     if(e.event.key == 'Enter')
-                                    {
-                                        this.getItem(this.txtBarcode.value)
+                                    {                                        
+                                        this.getItem(this.txtBarcode.dev.option("text"))
                                     }
                                 }).bind(this)} 
                                 >     
@@ -2710,6 +2798,42 @@ export default class posDoc extends React.Component
                         await this.descSave("ROW DELETE",e,this.grdList.devGrid.getSelectedRowKeys()[0].LINE_NO)
                         this.rowDelete()
                     }}></NbPopDescboard>
+                </div>
+                {/* Alert Weighing Popup */} 
+                <div>
+                    <NdDialog id={"msgWeighing"} container={"#root"} parent={this}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    title={"Uyarı"} 
+                    showCloseButton={false}
+                    width={"500px"}
+                    height={"200px"}
+                    button={[{id:"btn01",caption:"Miktar Giriş",location:'before'},{id:"btn02",caption:"Vazgeç",location:'after'}]}
+                    >
+                        <div className="row">
+                            <div className="col-12 py-2">
+                                <div style={{textAlign:"center",fontSize:"20px"}}>{"Teraziden cevap bekleniyor."}</div>
+                            </div>
+                        </div>
+                    </NdDialog>
+                </div>
+                {/* Alert Card Payment Popup */} 
+                <div>
+                    <NdDialog id={"msgCardPayment"} container={"#root"} parent={this}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    title={"Uyarı"} 
+                    showCloseButton={false}
+                    width={"500px"}
+                    height={"200px"}
+                    button={[{id:"btn01",caption:"Tekrar",location:'before'},{id:"btn02",caption:"Vazgeç",location:'center'},{id:"btn03",caption:"Zorla",location:'after'}]}
+                    >
+                        <div className="row">
+                            <div className="col-12 py-2">
+                                <div style={{textAlign:"center",fontSize:"20px"}}>{"Kart cihazından cevap bekleniyor."}</div>
+                            </div>
+                        </div>
+                    </NdDialog>
                 </div>
             </div>
         )

@@ -72,7 +72,6 @@ export default class NdTextBox extends Base
     }
     _onKeyDown(e)
     {
-        this.value = e.value;
         if(typeof this.props.onKeyDown != 'undefined')
         {
             this.props.onKeyDown(e);
