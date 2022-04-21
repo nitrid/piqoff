@@ -191,8 +191,8 @@ export default class UserParam extends React.Component
                         id="form"
                         >
                             <GroupItem colCount={2}>
-                                <Item render={this._cmbParamRender}><Label text={"Parametre "} /></Item>
                                 <Item render={this._cmbUserRender}><Label text={"Kullanıcı "} /></Item>
+                                <Item render={this._cmbParamRender}><Label text={"Parametre "} /></Item>
                             </GroupItem>
                             {this._grpRender()}
                         </Form>

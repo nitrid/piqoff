@@ -1,6 +1,6 @@
 import React from 'react';
 import App from '../lib/app.js';
-import NdGrid,{Column,Editing,Popup,Paging,Scrolling,KeyboardNavigation,} from  '../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Popup,Paging,Scrolling,KeyboardNavigation,Lookup} from  '../../core/react/devex/grid.js';
 import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
 import NdSelectBox from '../../core/react/devex/selectbox.js';
 import { userCls } from '../../core/cls/users.js';
@@ -13,27 +13,13 @@ export default class userPage extends React.Component
 
         this.core = App.instance.core;
         this.userObj = new userCls()
+        this.RoleCmb = [{CODE: 'Administrator', NAME: 'Administrator'}, {CODE: 'User', NAME: 'User'}]
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
     }
     _cellRoleRender(e)
     {
-        let onValueChanged = function(data)
-        {
-            e.setValue(data.value)
-        }
-        return (
-            <NdSelectBox 
-                parent={this}                             
-                id = "cmbRole"                             
-                displayExpr = "NAME"                       
-                valueExpr = "CODE"      
-                defaultValue = {e.value}
-                onValueChanged={onValueChanged}
-                data={{source: {select : {query:"SELECT CODE,NAME FROM ROLE"},sql : this.core.sql}}}
-            >
-            </NdSelectBox>
-        )
+       
     }
     async init()
     {
@@ -67,7 +53,7 @@ export default class userPage extends React.Component
                     allowDeleting={true}>
                     <Popup title={this.t("UserEdit")} showTitle={true} width={700} height={525} />
                     <Form>
-                    <Item itemType="group" colCount={2} colSpan={2}>
+                    <Item itemType="group" colCount={2}>
                         <Item dataField="CODE" />
                         <Item dataField="NAME" />
                         <Item dataField="PWD" />
@@ -76,11 +62,12 @@ export default class userPage extends React.Component
                     </Item>
                     </Form>
                 </Editing>
-                <Column dataField="CODE" caption="CODE" />
-                <Column dataField="NAME" caption="NAME" />
-                <Column dataField="PWD" caption="PWD" visible={false}/>
-                <Column dataField="ROLE" caption="ROLE" editCellRender={this._cellRoleRender} />
-                <Column dataField="STATUS" caption="STATUS" dataType="boolean" />
+                <Column dataField="CODE" caption={this.t("grdUserList.clmCode")} />
+                <Column dataField="NAME" caption={this.t("grdUserList.clmName")} />
+                <Column dataField="PWD" caption={this.t("grdUserList.clmPwd")} visible={false}/>
+                <Column dataField="ROLE" caption={this.t("grdUserList.clmRole")} >
+                <Lookup dataSource={this.RoleCmb} valueExpr="CODE" displayExpr="CODE" /> </Column>
+                <Column dataField="STATUS" caption={this.t("grdUserList.clmStatus")} dataType="boolean" />
                 </NdGrid>
                 </div>
             </div>
