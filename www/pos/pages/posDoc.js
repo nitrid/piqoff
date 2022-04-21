@@ -139,7 +139,7 @@ export default class posDoc extends React.Component
             let tmpDt = new datatable(); 
             tmpDt.selectCmd = 
             {
-                query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE CODE = @CODE OR BARCODE = @CODE OR MULTICODE = @CODE",
+                query : "SELECT *,@CODE AS INPUT FROM ITEMS_POS_VW_01 WHERE CODE = @CODE OR BARCODE = @CODE OR MULTICODE = @CODE OR UNIQ_CODE = @CODE",
                 param : ['CODE:string|25'],
                 value: [pCode]
             }
@@ -232,16 +232,20 @@ export default class posDoc extends React.Component
         let tmpBarPattern = this.getBarPattern(pCode)
         tmpPrice = typeof tmpBarPattern.price == 'undefined' || tmpBarPattern.price == 0 ? tmpPrice : tmpBarPattern.price
         tmpQuantity = typeof tmpBarPattern.quantity == 'undefined' || tmpBarPattern.quantity == 0 ? tmpQuantity : tmpBarPattern.quantity
-        pCode = tmpBarPattern.barcode
-        //******************************************************** */
-        //UNIQ BARKODU
-        //#BAK
-        //******************************************************** */
+        pCode = tmpBarPattern.barcode        
         //ÜRÜN GETİRME
         let tmpItemsDt = await this.getItemDb(pCode)
         if(tmpItemsDt.length > 0)
         {            
-            //FIYAT GETİRME
+            //******************************************************** */
+            //UNIQ BARKODU
+            if(tmpItemsDt[0].UNIQ_CODE == tmpItemsDt[0].INPUT)
+            {
+                tmpQuantity = tmpItemsDt[0].UNIQ_QUANTITY
+                tmpPrice = tmpItemsDt[0].UNIQ_PRICE
+            }
+            //******************************************************** */
+            //FIYAT GETİRME 
             let tmpPriceDt = new datatable()
             tmpPriceDt.selectCmd = 
             {
@@ -491,7 +495,8 @@ export default class posDoc extends React.Component
             //BURAYA SUBTOTAL KONTROLÜ DE EKLENECEK
             if(tmpData.length > 0)
             {
-                if(pData.SALE_JOIN_LINE == 1 && pData.WEIGHING == 0)
+                //UNIQ ÜRÜN İÇİN pData.INPUT == pData.UNIQ_CODE
+                if(pData.SALE_JOIN_LINE == 1 && pData.WEIGHING == 0 && pData.INPUT != pData.UNIQ_CODE)
                 {
                     return tmpData[0]
                 }
@@ -567,6 +572,7 @@ export default class posDoc extends React.Component
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_LOYALTY = 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_VAT = 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_TOTAL = 0
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].INPUT = pItemData.INPUT
 
         await this.calcGrandTotal();
     }

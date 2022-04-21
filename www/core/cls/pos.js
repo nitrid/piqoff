@@ -241,10 +241,11 @@ export class posSaleCls
                     "@LOYALTY = @PLOYALTY, " + 
                     "@VAT = @PVAT, " + 
                     "@TOTAL = @PTOTAL, " + 
-                    "@SUBTOTAL = @PSUBTOTAL ", 
+                    "@SUBTOTAL = @PSUBTOTAL " + 
+                    "@INPUT = @PINPUT ", 
             param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PBARCODE:string|50','PUNIT:string|50',
-                     'PQUANTITY:float','PPRICE:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int'],
-            dataprm : ['GUID','CUSER','POS_GUID','LINE_NO','ITEM_GUID','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','SUBTOTAL']
+                     'PQUANTITY:float','PPRICE:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int','PINPUT:string|25'],
+            dataprm : ['GUID','CUSER','POS_GUID','LINE_NO','ITEM_GUID','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','SUBTOTAL','INPUT']
         } 
         tmpDt.updateCmd = 
         {
