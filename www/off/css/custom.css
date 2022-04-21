@@ -7,18 +7,19 @@
 }
 .main-toolbar
 {
-    background-color: #ecf0f1;
+    background-color: #2a2a2a;
     padding: 5px 10px;
     border-bottom: 1px solid #bdc3c7
 }
 .dx-drawer-panel-content
 {
-    background-color:#ecf0f1;
+    background-color:#484848;
     border-right: 1px solid #bdc3c7;
 }
 .main-drawer
 {
     padding-top: 46px;
+    background-color:#4d4d4d;
 }
 .dx-tabpanel-tabs
 {
@@ -84,4 +85,16 @@
 .dx-form-group-content
 {
     height: fit-content;
+}
+#dsp-textbox
+{
+    position:'absolute';    
+    z-index: 1;
+    border-radius:'4px';
+    height:'100%';
+    padding:'5px';
+    margin:'2px';
+    width:'100%';
+    white-space: 'nowrap';
+    overflow: 'hidden'
 }

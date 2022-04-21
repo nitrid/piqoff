@@ -118,36 +118,49 @@ export default class barcodeCard extends React.Component
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmItems"
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmBarcode"
                                     onClick={async (e)=>
                                     {
-                                        console.log(this.itemBarcodeObj.dt()[0])
-                                        let tmpConfObj =
+                                        if(e.validationGroup.validate().status == "valid")
                                         {
-                                            id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
-                                        }
-                                        
-                                        let pResult = await dialog(tmpConfObj);
-                                        if(pResult == 'btn01')
-                                        {
-                                            let tmpConfObj1 =
+                                            let tmpConfObj =
                                             {
-                                                id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
                                             }
                                             
-                                            if((await this.itemBarcodeObj.save()) == 0)
-                                            {                                                    
-                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                                await dialog(tmpConfObj1);
-                                            }
-                                            else
+                                            let pResult = await dialog(tmpConfObj);
+                                            if(pResult == 'btn01')
                                             {
-                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgFailed")}</div>)
-                                                await dialog(tmpConfObj1);
+                                                let tmpConfObj1 =
+                                                {
+                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                                }
+                                                
+                                                if((await this.itemBarcodeObj.save()) == 0)
+                                                {                                                    
+                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
+                                                    await dialog(tmpConfObj1);
+                                                }
+                                                else
+                                                {
+                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                                    await dialog(tmpConfObj1);
+                                                }
+                                            }          
+                                        }                              
+                                        else
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgSaveValid.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveValid.msg")}</div>)
                                             }
+                                            
+                                            await dialog(tmpConfObj);
                                         }                               
                                     }}/>
                                 </Item>
@@ -190,11 +203,11 @@ export default class barcodeCard extends React.Component
                     </div>
                     <div className="row px-2 pt-2">                        
                         <div className="col-9">
-                            <Form colCount={2} id="frmItems">
+                            <Form colCount={2} id="frmBarcode">
                                 {/* txtBarcode */}
                                 <Item>                                    
                                     <Label text={this.t("txtBarcode")} alignment="right" />
-                                    <NdTextBox id="txtBarcode" parent={this} simple={true} dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"BARCODE"}}  validationGroup="frmItems"
+                                    <NdTextBox id="txtBarcode" parent={this} simple={true} dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"BARCODE"}}  validationGroup="frmBarcode"
                                     button=
                                     {
                                         [
@@ -299,7 +312,7 @@ export default class barcodeCard extends React.Component
                                 {/* txtItem */}
                                 <Item>                                    
                                     <Label text={this.t("txtItem")} alignment="right" />
-                                    <NdTextBox id="txtItem" parent={this} simple={true} dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"ITEM_CODE"}}  validationGroup="frmItems"
+                                    <NdTextBox id="txtItem" parent={this} simple={true} dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"ITEM_CODE"}}  validationGroup="frmBarcode"
                                     readOnly={true}
                                     button=
                                     {
@@ -330,7 +343,10 @@ export default class barcodeCard extends React.Component
                                             },
                                         ]
                                     }                       
-                                    >     
+                                    >   
+                                    <Validator validationGroup={"frmBarcode"}>
+                                            <RequiredRule message={this.t("validCode")} />
+                                    </Validator>    
                                     </NdTextBox>      
                                     {/* STOK SEÇİM POPUP */}
                                     <NdPopGrid id={"pg_txtItem"} parent={this} container={"#root"} 

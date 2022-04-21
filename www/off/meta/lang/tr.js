@@ -356,6 +356,7 @@ export const langTr =
             btn02: "Vazgeç",
             msg: "Kaydı silmek istediğinize eminmisiniz ?"
         },
+        validCode :"Stok Seçmelisiniz",
     },
     stk_01_006 :
     {
@@ -645,11 +646,7 @@ export const langTr =
             btn02: "Yeni Ekle",
             msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Satırlar Birleştirilsin mi ?"
         },
-        validRef :"Seri Boş Geçilemez",
-        validRefNo : "Sıra Boş Geçilemez",
-        validDepot : "Depo Seçmelisiniz",
-        validCustomerCode : "Cari Kodu Boş Geçilemez",
-        validDocDate : "Tarih Seçmelisiniz",
+       
 
     },
     stk_02_003 :

@@ -117,20 +117,7 @@ export default class NdTextBox extends Base
         if(typeof this.props.displayValue != 'undefined')
         {
             return (
-                <div id={"dsp" + this.props.id}  style={
-                    {
-                        position:'absolute',
-                        backgroundColor:'white',
-                        zIndex: 1,
-                        borderRadius:'4px',
-                        height:'100%',
-                        padding:'5px',
-                        margin:'2px',
-                        width:'100%',
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden'
-                    }
-                }>{this.state.displayValue}</div>
+                <div id={"dsp" + this.props.id}  className="dsp-textbox">{this.state.displayValue}</div>
             )            
         }
     }

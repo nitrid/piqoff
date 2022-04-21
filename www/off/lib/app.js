@@ -178,7 +178,7 @@ export default class App extends React.Component
         
         this.core.on('onExecuting',()=>
         {
-            this.setState({isExecute:true})
+            //this.setState({isExecute:true})
         })
         this.core.on('onExecuted',()=>
         {
