@@ -20,11 +20,13 @@ export class core
             console.log("socket not defined")
             return;
         }
-
+        
+        this.offline = false;
         this.listeners = Object();        
         this.sql = new sql();
+        this.local = new local();
         this.auth = new auth();
-        this.util = new util();
+        this.util = new util();                
 
         this.ioEvents();        
     }    
@@ -68,7 +70,7 @@ export class sql
 {
     constructor()
     {
-        this.query = "";
+        this.query = "";        
     }
     try()
     {
@@ -92,8 +94,10 @@ export class sql
     }
     execute()
     {    
-        return new Promise(resolve => 
+        return new Promise(async resolve => 
         {
+            core.instance.emit('onExecuting');
+            
             let TmpQuery = ""
             if(typeof arguments[0] == 'undefined')
             {
@@ -103,32 +107,207 @@ export class sql
             {
                 TmpQuery = arguments[0];
             }
-            //PARAMETRE UNDEFINED CONTROL
-            if(typeof(TmpQuery.value) != 'undefined')
+            //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 28.02.2022
+            if(core.instance.offline)
             {
-                for (let i = 0; i < TmpQuery.value.length; i++) 
+                core.instance.emit('onExecuted');
+                resolve(await core.instance.local.execute(TmpQuery));                
+            }
+            else
+            {
+                //PARAMETRE UNDEFINED CONTROL
+                if(typeof(TmpQuery.value) != 'undefined')
                 {
-                    if(typeof TmpQuery.value[i] == 'undefined')
+                    for (let i = 0; i < TmpQuery.value.length; i++) 
                     {
-                        resolve({result : {err: "Parametre değerlerinde problem oluştu ! "}})
+                        if(typeof TmpQuery.value[i] == 'undefined')
+                        {
+                            core.instance.emit('onExecuted');
+                            resolve({result : {err: "Parametre değerlerinde problem oluştu ! "}})
+                        }
                     }
                 }
-            }
 
-            core.instance.socket.emit('sql',TmpQuery,(data) =>
-            {
-                if(typeof data.auth_err == 'undefined')
+                core.instance.socket.emit('sql',TmpQuery,(data) =>
                 {
-                    resolve(data); 
-                }
-                else
-                {
-                    //BURADA HATA SAYFASINA YÖNLENDİRME ÇALIŞACAK.
-                    console.log(data.auth_err);
-                    resolve([]);
-                }
-            });
+                    core.instance.emit('onExecuted');
+                    if(typeof data.auth_err == 'undefined')
+                    {
+                        resolve(data); 
+                    }
+                    else
+                    {
+                        //BURADA HATA SAYFASINA YÖNLENDİRME ÇALIŞACAK.
+                        console.log(data.auth_err);
+                        resolve([]);
+                    }
+                });
+            }
         });
+    }
+}
+export class local
+{
+    constructor()
+    {
+        if(typeof JsStore != 'undefined')
+        {
+            this.conn = new JsStore.Connection(new Worker("../js/jsstore.worker.js"))
+        }
+    }
+    async init(pDb)
+    {
+        if(typeof this.conn != 'undefined')
+        {
+            let tmpResult = await this.conn.initDb(pDb)
+            
+            if(tmpResult)
+            {
+                console.log('Database created and connection is opened')
+                return true
+            }
+            else
+            {
+                console.log('Connection is opened')
+                return true
+            }
+        }
+        else
+        {
+            console.log('jsstore is undefined')
+        }
+        return false
+    }
+    async insert(pQuery)
+    {
+        return new Promise(async resolve => 
+        {
+            if(typeof this.conn != 'undefined')
+            {
+                //BURAYA ONLINE SORGUSU İLE QUERY GÖNDERİLEBİLİR ONUN İÇİN LOCAL KONTROL VAR. (pQuery.local != 'undefined' ? pQuery.local : pQuery)
+                let tmpResult = await this.conn.insert(typeof pQuery.local != 'undefined' ? pQuery.local : pQuery)
+                if(tmpResult > 0)
+                {
+                    resolve({result:{state:true}})
+                }
+            }
+            else
+            {
+                console.log('jsstore is undefined')
+            }
+            resolve({result:{state:false}})
+        });
+    }
+    async select(pQuery)
+    {
+        return new Promise(async resolve => 
+        {
+            if(typeof this.conn != 'undefined')
+            {
+                //BURAYA ONLINE SORGUSU İLE QUERY GÖNDERİLEBİLİR ONUN İÇİN LOCAL KONTROL VAR. (pQuery.local != 'undefined' ? pQuery.local : pQuery)
+                let tmpResult = await this.conn.select(typeof pQuery.local != 'undefined' ? pQuery.local : pQuery); 
+                if(tmpResult.length > 0)
+                {
+                    resolve({result:tmpResult})
+                }
+            }
+            else
+            {
+                console.log('jsstore is undefined')
+            }
+            resolve({result:[]})
+        });
+    }
+    async update(pQuery)
+    {
+        return new Promise(async resolve => 
+        {
+            if(typeof this.conn != 'undefined')
+            {
+                //BURAYA ONLINE SORGUSU İLE QUERY GÖNDERİLEBİLİR ONUN İÇİN LOCAL KONTROL VAR. (pQuery.local != 'undefined' ? pQuery.local : pQuery)
+                let tmpResult = await this.conn.update(typeof pQuery.local != 'undefined' ? pQuery.local : pQuery)
+                if(tmpResult > 0)
+                {
+                    resolve({result:{state:true}})
+                }
+            }
+            else
+            {
+                console.log('jsstore is undefined')
+            }
+            resolve({result:{state:false}});
+        });
+    }
+    async remove(pQuery)
+    {
+        return new Promise(async resolve => 
+        {
+            if(typeof this.conn != 'undefined')
+            {
+                //BURAYA ONLINE SORGUSU İLE QUERY GÖNDERİLEBİLİR ONUN İÇİN LOCAL KONTROL VAR. (pQuery.local != 'undefined' ? pQuery.local : pQuery)
+                let tmpResult = await this.conn.remove(typeof pQuery.local != 'undefined' ? pQuery.local : pQuery)
+                if(tmpResult > 0)
+                {
+                    resolve({result:{state:true}})
+                }
+            }
+            else
+            {
+                console.log('jsstore is undefined')
+            }
+            resolve({result:{state:false}});
+        });
+    }
+    async execute(pQuery)
+    {
+        return new Promise(async resolve => 
+        {
+            if(Array.isArray(pQuery))
+            {
+                for (let i = 0; i < pQuery.length; i++) 
+                {
+                    if(typeof pQuery[i].local != 'undefined')
+                    {
+                        if(pQuery[i].local.type == 'insert')
+                        {                                        
+                            await this.insert(pQuery[i].local);
+                        } 
+                        else if(pQuery[i].local.type == 'update')
+                        {                                        
+                            await this.update(pQuery[i].local);
+                        } 
+                        else if(pQuery[i].local.type == 'delete')
+                        {                                        
+                            await this.delete(pQuery[i].local);
+                        }      
+                    }
+                }
+                resolve({result:{state:true}})
+            }
+            else
+            {
+                if(typeof pQuery.local != 'undefined')
+                {
+                    if(pQuery.local.type == 'select')
+                    {
+                        resolve(await this.select(pQuery.local))
+                    }
+                    else if(pQuery.local.type == 'insert')
+                    {
+                        resolve(await this.insert(pQuery.local))
+                    } 
+                    else if(pQuery.local.type == 'update')
+                    {
+                        resolve(await this.update(pQuery.local))
+                    } 
+                    else if(pQuery.local.type == 'delete')
+                    {
+                        resolve(await this.delete(pQuery.local))
+                    }                       
+                }
+                resolve({result:{}});
+            }
+        });        
     }
 }
 export class auth 
@@ -151,30 +330,17 @@ export class auth
                 TmpData.push(arguments[0],arguments[1],arguments[2])
             }
 
-            if(TmpData.length > 0 && TmpData[0] == '')
-            {
-                if(typeof window != 'undefined')
-                        window.sessionStorage.removeItem('auth')
-                    
-                    this.data = null
-                    resolve(false)
-            }
-            
             core.instance.socket.emit('login',TmpData,async (data) =>
             {
                 if(data.length > 0)
                 {
                     this.data = data[0]
-                    if(typeof window != 'undefined')
-                        window.sessionStorage.setItem('auth',data[0].SHA)
-
+                    window.sessionStorage.setItem('auth',data[0].SHA)
                     resolve(true)
                 }
-                else 
+                else
                 {
-                    if(typeof window != 'undefined')
-                        window.sessionStorage.removeItem('auth')
-                    
+                    window.sessionStorage.removeItem('auth')
                     this.data = null
                     resolve(false)
                 }
@@ -360,7 +526,7 @@ export class dataset
                     tmpQuerys.push(e)    
                 });
             }
-
+            
             let tmpResult = await this.sql.execute(tmpQuerys)
             if(typeof tmpResult.result.err == 'undefined')
             {
@@ -557,6 +723,7 @@ export class datatable
                 }
                 else
                 {
+                    console.log(this.selectCmd)
                     console.log(TmpData.result.err)
                 }                
             }
@@ -581,10 +748,43 @@ export class datatable
                 if(this[i].stat == 'new')
                 {
                     tmpQuery = {...this.insertCmd}
+                    //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 28.02.2022
+                    if(typeof tmpQuery.local != 'undefined' && typeof tmpQuery.local.values != 'undefined' && tmpQuery.local.values.length > 0)
+                    {
+                        for (let x = 0; x < Object.keys(tmpQuery.local.values[0]).length; x++) 
+                        {
+                            let tmpKey = Object.keys(tmpQuery.local.values[0])[x]
+                            let tmpMap = Object.values(tmpQuery.local.values[0])[x]
+                            tmpQuery.local.values[0][tmpKey] = this[i][tmpMap.map]
+                        }
+                    }
                 }
                 else if(this[i].stat == 'edit')
                 {
                     tmpQuery = {...this.updateCmd}
+                    //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 28.02.2022
+                    if(typeof tmpQuery.local != 'undefined' && typeof tmpQuery.local.set != 'undefined')
+                    {
+                        //SET
+                        for (let x = 0; x < Object.keys(tmpQuery.local.set).length; x++) 
+                        {
+                            let tmpKey = Object.keys(tmpQuery.local.set)[x]
+                            let tmpMap = Object.values(tmpQuery.local.set)[x]
+                            tmpQuery.local.set[tmpKey] = this[i][tmpMap.map]
+                        }
+                        
+                    }
+                    //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 28.02.2022
+                    if(typeof tmpQuery.local != 'undefined' && typeof tmpQuery.local.where != 'undefined')
+                    {
+                        //WHERE
+                        for (let x = 0; x < Object.keys(tmpQuery.local.where).length; x++) 
+                        {
+                            let tmpKey = Object.keys(tmpQuery.local.where)[x]
+                            let tmpMap = Object.values(tmpQuery.local.where)[x]
+                            tmpQuery.local.where[tmpKey] = this[i][tmpMap.map]
+                        }
+                    }
                 }
             
                 if(typeof tmpQuery != 'undefined')
@@ -625,7 +825,7 @@ export class datatable
         return new Promise(async resolve => 
         {
             let tmpQuerys = undefined;
-
+            
             if(typeof arguments[0] == 'undefined' || arguments[0] == '')
             {
                 tmpQuerys = this.toCommands();
@@ -634,7 +834,7 @@ export class datatable
             {
                 tmpQuerys = this.toCommands(arguments[0]);
             }
-
+            
             let tmpResult = await this.sql.execute(tmpQuerys)
             if(typeof tmpResult.result.err == 'undefined')
             {
@@ -662,6 +862,45 @@ export class datatable
                 {                    
                     let tmpQuery = undefined;
                     tmpQuery = {...this.deleteCmd}
+                    //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 28.02.2022
+                    if(typeof tmpQuery.local != 'undefined' && tmpQuery.local.type == 'update')
+                    {
+                        if(typeof tmpQuery.local.set != 'undefined')
+                        {
+                            //SET
+                            for (let x = 0; x < Object.keys(tmpQuery.local.set).length; x++) 
+                            {
+                                let tmpKey = Object.keys(tmpQuery.local.set)[x]
+                                let tmpMap = Object.values(tmpQuery.local.set)[x]
+                                tmpQuery.local.set[tmpKey] = this._deleteList[i][tmpMap.map]
+                            }                            
+                        }
+                        if(typeof tmpQuery.local.where != 'undefined')
+                        {
+                            //WHERE
+                            for (let x = 0; x < Object.keys(tmpQuery.local.where).length; x++) 
+                            {
+                                let tmpKey = Object.keys(tmpQuery.local.where)[x]
+                                let tmpMap = Object.values(tmpQuery.local.where)[x]
+                                tmpQuery.local.where[tmpKey] = this._deleteList[i][tmpMap.map]
+                            }
+                        }
+                    }
+                    //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 28.02.2022
+                    if(typeof tmpQuery.local != 'undefined' && tmpQuery.local.type == 'delete')
+                    {
+                        if(typeof tmpQuery.local.where != 'undefined')
+                        {
+                            //WHERE
+                            for (let x = 0; x < Object.keys(tmpQuery.local.where).length; x++) 
+                            {
+                                let tmpKey = Object.keys(tmpQuery.local.where)[x]
+                                let tmpMap = Object.values(tmpQuery.local.where)[x]
+                                tmpQuery.local.where[tmpKey] = this._deleteList[i][tmpMap.map]
+                            }
+                        }
+                    }
+
                     tmpQuery.value = [];
 
                     if(typeof tmpQuery.param == 'undefined')
@@ -802,7 +1041,7 @@ export class datatable
 
             if(arguments.length == 2)
             {
-                tmpVal = parseFloat(tmpVal.toFixed(arguments[1]));
+                tmpVal = parseFloat(tmpVal).toFixed(arguments[1]);
             }
         }
 
@@ -1241,4 +1480,25 @@ Number.prototype.rate2Num = function(pNum,pDigit)
         }                 
     }
     return 0
+}
+//* STRING DEĞERİN SONUNA YADA BAŞINA BOŞLUK ATAR pLen = KARAKTER BOŞLUK SAYISI pType = s (BAŞINA) e (SONUNA) */
+String.prototype.space = function(pLen,pType)
+{
+    let tmpData = this
+    if(tmpData.length > pLen)
+    {
+        tmpData = tmpData.toString().substring(0,pLen);
+    }
+    if(typeof pType == 'undefined')
+    {
+        return tmpData.toString().padEnd(pLen,' ');
+    }
+    if(pType == "e")
+    {
+        return tmpData.toString().padEnd(pLen,' ');
+    }
+    else if(pType == "s")
+    {
+        return tmpData.toString().padStart(pLen,' ');
+    }
 }
