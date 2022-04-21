@@ -329,18 +329,22 @@ export class auth
             {
                 TmpData.push(arguments[0],arguments[1],arguments[2])
             }
-
+            
             core.instance.socket.emit('login',TmpData,async (data) =>
             {
                 if(data.length > 0)
                 {
                     this.data = data[0]
-                    window.sessionStorage.setItem('auth',data[0].SHA)
+                    if(typeof window != 'undefined')
+                        window.sessionStorage.setItem('auth',data[0].SHA)
+
                     resolve(true)
                 }
-                else
+                else 
                 {
-                    window.sessionStorage.removeItem('auth')
+                    if(typeof window != 'undefined')
+                        window.sessionStorage.removeItem('auth')
+                    
                     this.data = null
                     resolve(false)
                 }
