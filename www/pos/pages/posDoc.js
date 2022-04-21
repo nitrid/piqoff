@@ -245,7 +245,7 @@ export default class posDoc extends React.Component
                 tmpPrice = tmpItemsDt[0].UNIQ_PRICE
             }
             //******************************************************** */
-            //FIYAT GETİRME 
+            //FIYAT GETİRME
             let tmpPriceDt = new datatable()
             tmpPriceDt.selectCmd = 
             {
@@ -572,7 +572,6 @@ export default class posDoc extends React.Component
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_LOYALTY = 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_VAT = 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_TOTAL = 0
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].INPUT = pItemData.INPUT
 
         await this.calcGrandTotal();
     }
