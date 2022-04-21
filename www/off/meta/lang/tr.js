@@ -101,6 +101,12 @@ export const langTr =
         promo_02_001: "Promosyon Listesi",
         promo_03: "Raporlar",
     },
+    login:
+    {
+        login:"Giriş",
+        logout : "Çıkış",
+        selectUser : "Kullanıcı Seçim",
+    },
     stk_01_001: 
     {
         txtRef: "Referans",
