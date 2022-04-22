@@ -1047,10 +1047,10 @@ export class posDeviceCls
         {
             return
         }
-
+        
         let ack = false;
         let oneShoot = false;
-        let payMethod = "card"
+        let payMethod = "card";
 
         let generate_lrc = function(real_msg_with_etx)
         {
@@ -1091,14 +1091,19 @@ export class posDeviceCls
                         };
                         
                         let msg = Object.keys(tmpData).map( k => tmpData[k] ).join('');
-                        if (msg.length > 34) return console.log('ERR. : failed data > 34 characters.', msg);
+                        if (msg.length > 34) 
+                        {
+                            resolve({tag:"response",msg:"error"});                 
+                            port.close();               
+                            console.log('ERR. : failed data > 34 characters.', msg);
+                            return
+                        }
                         let real_msg_with_etx = msg.toString().concat(String.fromCharCode(3));//ETX
                         
                         let lrc = generate_lrc(real_msg_with_etx);
                         //STX + msg + lrc
                         let tpe_msg = (String.fromCharCode(2)).concat(real_msg_with_etx).concat(String.fromCharCode(lrc));
                         port.write(tpe_msg)
-    
                         ack = true;
                     }
                 }
@@ -1108,12 +1113,14 @@ export class posDeviceCls
                 }
                 else if(String.fromCharCode(data[0]) == String.fromCharCode(5))
                 {
-                    port.write(String.fromCharCode(6))
+                    port.write(String.fromCharCode(6));
                 }
                 else if(data.length >= 25)
                 {
                     if(oneShoot)
                     {
+                        port.close();
+                        resolve({tag:"response",msg:"error"});   
                         return;
                     }
     
@@ -1138,9 +1145,21 @@ export class posDeviceCls
                     };
 
                     resolve({tag:"response",msg:JSON.stringify(response)});   
+                    port.close();
                 }
             });
+
             port.write(String.fromCharCode(5));
+
+            setTimeout(()=>
+            { 
+                if(port.isOpen)
+                {
+                    port.close(); 
+                }
+            }, 65000);
+
+            return port.on("close", resolve)
         });
         
     }

@@ -4616,7 +4616,7 @@ export const langTr =
             btnApprove : "Ekle",
         },
         
-        validRef :"Seri Boş Geçilemez",
+        validRef : "Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
         validAccount : "Hesap Seçmelisiniz",
         validDocDate : "Tarih Seçmelisiniz",

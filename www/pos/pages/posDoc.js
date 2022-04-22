@@ -161,6 +161,10 @@ export default class posDoc extends React.Component
         {
             return
         }
+        if(pCode.substring(0,1) == 'F')
+        {
+            pCode = pCode.substring(1,pCode.length)
+        }
         this.setState({isLoading:true})
         //EĞER CARİ SEÇ BUTONUNA BASILDIYSA CARİ BARKODDAN SEÇİLECEK.
         if(this.state.isBtnGetCustomer)
@@ -605,6 +609,7 @@ export default class posDoc extends React.Component
             //KREDİ KARTI İSE
             if(pType == 1)
             {
+                this.popCardPay.hide()
                 this.msgCardPayment.show().then(async (e) =>
                 {
                     if(e == 'btn01')
@@ -885,7 +890,8 @@ export default class posDoc extends React.Component
                                 <NbButton id={"btnClose"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
                                 onClick={()=>
                                 {                                                        
-                                    
+                                    this.core.auth.logout()
+                                    window.location.reload()
                                 }}>
                                     <i className="text-white fa-solid fa-power-off" style={{fontSize: "16px"}} />
                                 </NbButton>
