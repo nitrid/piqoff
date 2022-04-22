@@ -36,6 +36,7 @@ export default class NdPopGrid extends Base
         this._onClick = this._onClick.bind(this);
         this._onRowDblClick = this._onRowDblClick.bind(this);
         this.setSource = this.setSource.bind(this);
+        this.setData = this.setData.bind(this);
         this.setVal = this.setVal.bind(this);
 
         this.access = {}
@@ -271,6 +272,10 @@ export default class NdPopGrid extends Base
         tmpQuery.source.select.value = []
         tmpQuery.source.select.value.push(this["txt" + this.props.id].value.replaceAll('*','%')+'%')
         await this.grid.dataRefresh(tmpQuery)
+    }
+    async setData(pData)
+    {
+        await this.grid.dataRefresh({source:pData})
     }
     render()
     {

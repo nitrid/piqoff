@@ -2,8 +2,12 @@ import React from 'react';
 import App from './app.js'
 import TextBox from 'devextreme-react/text-box';
 import Button from 'devextreme-react/button';
+import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../core/react/devex/textbox.js'
 import NdSelectBox from '../../core/react/devex/selectbox.js';
+import NdPopGrid from '../../core/react/devex/popgrid.js';
+import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation} from '../../../../core/react/devex/grid.js';
 import i18n from './i18n.js'
+import NbKeyboard from "../tools/keyboard.js";
 import { locale, loadMessages, formatMessage } from 'devextreme/localization';
 
 export default class Login extends React.Component
@@ -25,6 +29,15 @@ export default class Login extends React.Component
                 top: '30%',
                 width: '400px',
                 height: 'fit-content',
+            },
+            keyboardBox :
+            {
+                position: 'relative',
+                backgroundColor : '#0d6efd',        
+                margin:'auto',
+                top: '30%',
+                width: '90%',
+                height: 'fit-content',
             }
         }  
         this.state = 
@@ -34,8 +47,10 @@ export default class Login extends React.Component
             alert: ''
         }  
         this.core = App.instance.core;    
+        this.lang = App.instance.lang;
 
         this.onLoginClick = this.onLoginClick.bind(this)
+        this.getUserList = this.getUserList.bind(this)
         this.textValueChanged = this.textValueChanged.bind(this)
     }
     textValueChanged(e) 
@@ -65,13 +80,28 @@ export default class Login extends React.Component
             }
             else
             {
-                this.setState({logined:false,alert:'Kullanıcının giriş yetkisi yok !'})
+                this.setState({logined:false,alert:this.lang.t("msgNotAccess")})
             }
         }
         else
         {
-            this.setState({logined:false,alert:'Kullanıcı yada şifre geçersiz !'})
+            this.setState({logined:false,alert:this.lang.t("msgInvalidUser")})
         }
+    }
+    async getUserList()
+    {
+        let tmpData = await this.core.auth.getUserList()
+        await this.pg_users.setData(tmpData)
+        this.pg_users.show()
+        this.pg_users.onClick = (data) =>
+        {
+            this.setState({kullanici: data[0].CODE});
+            this.Kullanici.setState({value:data[0].CODE})
+        }
+    }
+    closePage()
+    {
+        window.close()
     }
     render()
     {
@@ -86,7 +116,7 @@ export default class Login extends React.Component
                             </div>
                         </div>
                         <div className="dx-field">
-                            <div className="dx-field-label">Dil Seçimi</div>
+                            <div className="dx-field-label">{this.lang.t("txtLangSelect")}</div>
                             <div className="dx-field-value">
                             <NdSelectBox simple={true} parent={this} id="cmbType" height='fit-content'
                                     displayExpr="text"                       
@@ -104,15 +134,17 @@ export default class Login extends React.Component
                             </div>
                         </div>
                         <div className="dx-field">
-                            <div className="dx-field-label">Kullanıcı Adı</div>
+                            <div className="dx-field-label">{this.lang.t("txtUser")}</div>
                             <div className="dx-field-value">
-                                <TextBox id="Kullanici" showClearButton={true} height='fit-content' valueChangeEvent="keyup" onValueChanged={this.textValueChanged} />
+                                <NdTextBox id="Kullanici" parent={this} showClearButton={true} height='fit-content' valueChangeEvent="keyup" onValueChanged={this.textValueChanged}  
+                                onFocusIn={()=>{this.keyboard.textobj = "Kullanici",console.log(this)}}/>
                             </div>
                         </div>
                         <div className="dx-field">
-                            <div className="dx-field-label">Şifre</div>
+                            <div className="dx-field-label">{this.lang.t("txtPass")}</div>
                             <div className="dx-field-value">
-                                <TextBox id="Sifre" mode="password" showClearButton={true} height='fit-content' valueChangeEvent="keyup" onValueChanged={this.textValueChanged} />
+                                <NdTextBox id="Sifre" parent={this} mode="password" showClearButton={true} height='fit-content' valueChangeEvent="keyup" onValueChanged={this.textValueChanged} 
+                                onFocusIn={()=>{this.keyboard.textobj = "Sifre",console.log(this)}}/>
                             </div>
                         </div>
                         <div className="row py-1">
@@ -121,10 +153,10 @@ export default class Login extends React.Component
                                     <Button
                                         width={'100%'}
                                         height='fit-content'
-                                        text="Kullanıcı Seçim"
+                                        text={this.lang.t("btnUserSelect")}
                                         type="success"
                                         stylingMode="contained"
-                                        onClick={this.onLoginClick}
+                                        onClick={this.getUserList}
                                     />
                                 </div>
                             </div>
@@ -135,7 +167,7 @@ export default class Login extends React.Component
                                     <Button
                                         width={'100%'}
                                         height='fit-content'
-                                        text="Giriş"
+                                        text={this.lang.t("btnLogin")}
                                         type="default"
                                         stylingMode="contained"
                                         onClick={this.onLoginClick}
@@ -147,10 +179,10 @@ export default class Login extends React.Component
                                     <Button
                                         width={'100%'}
                                         height='fit-content'
-                                        text="Çıkış"
+                                        text={this.lang.t("btnLogout")}
                                         type="danger"
                                         stylingMode="contained"
-                                        onClick={this.onLoginClick}
+                                        onClick={this.closePage}
                                     />
                                 </div>
                             </div>
@@ -168,8 +200,26 @@ export default class Login extends React.Component
                                     />
                                 </div>
                             </div>
+                            
                         </div>
+                        
+                        <NdPopGrid id={"pg_users"} parent={this} container={"#root"}
+                        visible={false}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        showBorders={true}
+                        width={'50%'}
+                        height={'90%'}
+                        title="Kullanıcı Listesi"
+                        >
+                            <Column dataField="CODE" caption="CODE" width={150} defaultSortOrder="asc"/>
+                            <Column dataField="NAME" caption="NAME" width={150} defaultSortOrder="asc" />                            
+                        </NdPopGrid>
+                        
                    </div>
+                </div>
+                <div className="card" style={this.style.keyboardBox}>
+                <NbKeyboard id={"keyboard"} parent={this}  textobj="Kullanici"/>
                 </div>
             </div>
         )
