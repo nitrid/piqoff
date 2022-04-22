@@ -10,12 +10,22 @@ export default class NbKeyboard extends NbBase
         this.state =
         {
             span: typeof this.props.span == 'undefined' ? '0' : this.props.span,
-            buttonHeight : typeof this.props.buttonHeight == 'undefined' ? '60px' : this.props.buttonHeight
+            buttonHeight : typeof this.props.buttonHeight == 'undefined' ? '60px' : this.props.buttonHeight,
+            textobj : this.props.textobj
         }
         if(typeof this.props.textobj != 'undefined')
         {
             this[this.props.textobj] = this.props.parent[this.props.textobj]
         }
+    }
+    get textobj()
+    {
+        return this.state.textobj
+    }
+    set textobj(e)
+    {
+        this.setState({textobj:e})
+        this[e] = this.props.parent[e]
     }
     render()
     {

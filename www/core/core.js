@@ -351,6 +351,24 @@ export class auth
             });
         })
     }
+    getUserList()
+    {
+        return new Promise(resolve => 
+        {   
+            console.log('core-core')
+            core.instance.socket.emit('getUserList',async (data) =>
+            {
+                if(data.length > 0)
+                {
+                    resolve(data)
+                }
+                else 
+                {
+                    resolve([])
+                }
+            });
+        })
+    }
     logout()
     {
         window.sessionStorage.removeItem('auth');

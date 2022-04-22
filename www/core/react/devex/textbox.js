@@ -15,6 +15,7 @@ export default class NdTextBox extends Base
 
         this.state.value = typeof props.value == 'undefined' ? ''  : props.value
         this.state.title = typeof props.title == 'undefined' ? '' : props.title
+        this.state.mode = typeof props.mode == 'undefined' ? 'text' : props.mode
         this.state.displayValue = typeof props.displayValue == 'undefined' ? '' : props.displayValue
         this.state.titleAlign = typeof props.titleAlign == 'undefined' ? 'left' : props.titleAlign
         this.state.showClearButton = typeof props.showClearButton == 'undefined' ? false : props.showClearButton
@@ -124,7 +125,7 @@ export default class NdTextBox extends Base
     _txtView()
     {                        
         return (
-            <TextBox id={this.props.id} showClearButton={this.state.showClearButton} height='fit-content' 
+            <TextBox id={this.props.id} mode={this.state.mode} showClearButton={this.state.showClearButton} height='fit-content' 
                 maxLength={this.props.maxLength}
                 style={this.props.style}
                 elementAttr={this.props.elementAttr}

@@ -3,6 +3,14 @@ export const langTr =
     popGrid: {btnSelection:"Seç"},
     btnSave: "Kaydet",
     btnCancel: "İptal",
+    txtLangSelect : "Dil Seçimi",
+    txtUser : "Kullanıcı",
+    txtPass : "Şifre",
+    btnUserSelect : "Kullanıcı Seçimi",
+    btnLogin : "Giriş",
+    btnLogout : "Çıkış",
+    msgNotAccess :"Kullanıcının Giriş Yetkisi Yok.",
+    msgInvalidUser : "Kullanıcı Adı veya Şifre Hatalı.",
     menu:
     {
         stk: "Stok",                
