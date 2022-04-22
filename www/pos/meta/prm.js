@@ -171,7 +171,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"LCDPort",
-        VALUE : "COM4",
+        VALUE : "COM7",
         SPECIAL : "001",
         PAGE : "pos",
         ELEMENT : "",
@@ -203,7 +203,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"PayCardPort",
-        VALUE : "COM6",
+        VALUE : "COM8",
         SPECIAL : "001",
         PAGE : "pos",
         ELEMENT : "",

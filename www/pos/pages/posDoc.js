@@ -117,14 +117,18 @@ export default class posDoc extends React.Component
 
         setInterval(()=>
         {
-            this.setState({time:moment(new Date(),"HH:mm:ss").format("HH:mm:ss"),date:new Date().toLocaleDateString('tr-TR',{ year: 'numeric', month: 'numeric', day: 'numeric' })})
-            
+            this.setState({time:moment(new Date(),"HH:mm:ss").format("HH:mm:ss"),date:new Date().toLocaleDateString('tr-TR',{ year: 'numeric', month: 'numeric', day: 'numeric' })})                        
+        },1000)
+
+        setTimeout(() => 
+        {
             this.posDevice.lcdPrint
             ({
                 blink : 0,
                 text :  "Bonjour".space(20) + moment(new Date()).format("DD.MM.YYYY").space(20)
-            })
-        },1000) 
+            })    
+        }, 1000);
+        
         await this.calcGrandTotal(false)       
     }
     async getDoc(pGuid)
@@ -287,7 +291,7 @@ export default class posDoc extends React.Component
                     let tmpWResult = await this.getWeighing(tmpPrice)
                     if(typeof tmpWResult != 'undefined')
                     {
-                        tmpQuantity = tmpWResult
+                        tmpQuantity = tmpWResult.Result.Scale
                     }
                     else
                     {
@@ -395,12 +399,17 @@ export default class posDoc extends React.Component
             })
 
             let tmpWeigh = await this.posDevice.mettlerScaleSend(pPrice)
-
-            if(typeof tmpWeigh != 'undefined')
+            console.log(tmpWeigh)
+            if(typeof tmpWeigh != 'undefined' && tmpWeigh != null)
             {
                 this.msgWeighing.hide()
                 resolve(tmpWeigh)
             } 
+            else
+            {
+                this.msgWeighing.hide()
+                resolve()
+            }
         });
     }
     getBarPattern(pBarcode)

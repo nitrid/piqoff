@@ -1055,10 +1055,12 @@ export class posDeviceCls
         let generate_lrc = function(real_msg_with_etx)
         {
             let lrc = 0, text = real_msg_with_etx.split('');
-
-            for (i in text)
+            for (let i in text)
             {
-                lrc ^= text[i].charCodeAt(0);
+                if(typeof text[i].charCodeAt != 'undefined')
+                {
+                    lrc ^= text[i].charCodeAt(0);
+                }
             }
 
             console.log('lrc => ', lrc);
@@ -1088,13 +1090,13 @@ export class posDeviceCls
                             'auto': 'B010'
                         };
                         
-                        msg = Object.keys(tmpData).map( k => tmpData[k] ).join('');
+                        let msg = Object.keys(tmpData).map( k => tmpData[k] ).join('');
                         if (msg.length > 34) return console.log('ERR. : failed data > 34 characters.', msg);
-                        let real_msg_with_etx = msg.concat(String.fromCharCode(3));//ETX
+                        let real_msg_with_etx = msg.toString().concat(String.fromCharCode(3));//ETX
                         
                         let lrc = generate_lrc(real_msg_with_etx);
                         //STX + msg + lrc
-                        tpe_msg = (String.fromCharCode(2)).concat(real_msg_with_etx).concat(String.fromCharCode(lrc));
+                        let tpe_msg = (String.fromCharCode(2)).concat(real_msg_with_etx).concat(String.fromCharCode(lrc));
                         port.write(tpe_msg)
     
                         ack = true;
@@ -1138,7 +1140,6 @@ export class posDeviceCls
                     resolve({tag:"response",msg:JSON.stringify(response)});   
                 }
             });
-    
             port.write(String.fromCharCode(5));
         });
         
