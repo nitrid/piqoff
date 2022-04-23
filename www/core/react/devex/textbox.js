@@ -27,12 +27,13 @@ export default class NdTextBox extends Base
         this._onFocusIn = this._onFocusIn.bind(this);
         this._onFocusOut = this._onFocusOut.bind(this);
         this._onChange = this._onChange.bind(this);   
-        this._onKeyDown = this._onKeyDown.bind(this);     
+        this._onKeyDown = this._onKeyDown.bind(this);   
     }
     //#region Private
     _onInitialized(e) 
     {
-        this.dev = e.component;        
+        this.dev = e.component;    
+        console.log(1)    
     }
     _onValueChanged(e) 
     {           

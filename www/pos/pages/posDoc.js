@@ -165,7 +165,6 @@ export default class posDoc extends React.Component
         {
             pCode = pCode.substring(1,pCode.length)
         }
-        this.setState({isLoading:true})
         //EĞER CARİ SEÇ BUTONUNA BASILDIYSA CARİ BARKODDAN SEÇİLECEK.
         if(this.state.isBtnGetCustomer)
         {
@@ -207,7 +206,7 @@ export default class posDoc extends React.Component
                 
                 await dialog(tmpConfObj);
             }
-            this.setState({isBtnGetCustomer:false,isLoading:false})
+            this.setState({isBtnGetCustomer:false})
             return;
         }
         //******************************************************** */
@@ -229,7 +228,6 @@ export default class posDoc extends React.Component
                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Miktar sıfır giremezsiniz !"}</div>)
                 }
                 await dialog(tmpConfObj);
-                this.setState({isLoading:false})
                 return
             }
             tmpQuantity = pCode.split("*")[0];
@@ -280,7 +278,7 @@ export default class posDoc extends React.Component
                         content:(<div><h3 className="text-primary text-center">{tmpItemsDt[0].NAME}</h3><h3 className="text-danger text-center">{tmpPrice + " EUR"}</h3></div>)
                     }
                     await dialog(tmpConfObj);
-                    this.setState({isBtnInfo:false,isLoading:false})
+                    this.setState({isBtnInfo:false})
                     return;
                 }
                 //**************************************************** */
@@ -299,7 +297,6 @@ export default class posDoc extends React.Component
                     }
                     else
                     {
-                        this.setState({isLoading:false})
                         return
                     }
                 }
@@ -318,14 +315,12 @@ export default class posDoc extends React.Component
                         }
                         else
                         {
-                            this.setState({isLoading:false})
                             return
                         }
                     }
                     else
                     {
                         //POPUP KAPATILMIŞ İSE YADA FİYAT BOŞ GİRİLMİŞ İSE...
-                        this.setState({isLoading:false})
                         return
                     }
                 }
@@ -349,7 +344,6 @@ export default class posDoc extends React.Component
                 let tmpMsgResult = await dialog(tmpConfObj);
                 if(tmpMsgResult == 'btn02')
                 {
-                    this.setState({isLoading:false})
                     return
                 }
             }
@@ -357,7 +351,6 @@ export default class posDoc extends React.Component
             tmpItemsDt[0].QUANTITY = tmpQuantity
             tmpItemsDt[0].PRICE = tmpPrice
             this.saleAdd(tmpItemsDt[0])
-            this.setState({isLoading:false})
         }
         else
         {
@@ -374,7 +367,6 @@ export default class posDoc extends React.Component
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Okuttuğunuz Barkod Sistemde Bulunamadı !"}</div>)
             }
             await dialog(tmpConfObj);
-            this.setState({isLoading:false})
         }
         //******************************************************** */    
     }
@@ -910,7 +902,7 @@ export default class posDoc extends React.Component
                                 [
                                     {
                                         id:"01",
-                                        icon:"more",
+                                        icon:"fa-solid fa-magnifying-glass-plus",
                                         onClick:()=>
                                         {
                                             this.popItemList.show()
@@ -918,7 +910,7 @@ export default class posDoc extends React.Component
                                     },
                                     {
                                         id:"02",
-                                        icon:"arrowdown",
+                                        icon:"fa-solid fa-barcode",
                                         onClick:async ()=>
                                         {
                                             if(this.txtBarcode.value != '')
@@ -962,6 +954,7 @@ export default class posDoc extends React.Component
                                 width={"100%"}
                                 dbApply={false}
                                 selection={{mode:"single"}}
+                                loadPanel={{enabled:false}}
                                 onRowPrepared={(e)=>
                                 {
                                     if(e.rowType == "header")
@@ -1082,6 +1075,7 @@ export default class posDoc extends React.Component
                                             }                 
                                             this.rbtnPayType.value = 0                                                                       
                                             this.popTotal.show();
+                                            this.txtPopTotal.newStart = true;
                                         }}>
                                             <i className="text-white fa-solid fa-euro-sign" style={{fontSize: "24px"}} />
                                         </NbButton>
@@ -1106,6 +1100,7 @@ export default class posDoc extends React.Component
                                                 }
                                             }                                       
                                             this.popCardPay.show();
+                                            this.txtPopCardPay.newStart = true;
                                         }}>
                                             <i className="text-white fa-solid fa-credit-card" style={{fontSize: "24px"}} />
                                         </NbButton>
@@ -1172,6 +1167,7 @@ export default class posDoc extends React.Component
                                                 }
                                             }                   
                                             this.popCashPay.show();
+                                            this.txtPopCashPay.newStart = true;
                                         }}>
                                             <i className="text-white fa-solid fa-money-bill-1" style={{fontSize: "24px"}} />
                                         </NbButton>
@@ -2006,41 +2002,6 @@ export default class posDoc extends React.Component
                 <div>
                     <NbPopNumber id={"popNumber"} parent={this}/>
                 </div>
-                {/* Price Popup */}
-                <div>
-                    <NdPopUp parent={this} id={"popPrice"} 
-                    visible={false}                        
-                    showCloseButton={true}
-                    showTitle={true}
-                    title={"Fiyat"}
-                    container={"#root"} 
-                    width={"300"}
-                    height={"500"}
-                    position={{of:"#root"}}
-                    >
-                        {/* txtPopPrice */}
-                        <div className="row pt-1">
-                            <div className="col-12">
-                                <NdTextBox id="txtPopPrice" parent={this} simple={true}>     
-                                </NdTextBox> 
-                            </div>
-                        </div>
-                        {/* numPopPrice */}
-                        <div className="row pt-2">
-                            <div className="col-12">
-                                <NbNumberboard id={"numPopPrice"} parent={this} textobj="txtPopPrice" span={1} buttonHeight={"60px"}/>
-                            </div>
-                        </div>
-                        {/* btnPopPriceOk */}
-                        <div className="row pt-2">
-                            <div className="col-12">
-                                <NbButton id={"btnPopPriceOk"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}>
-                                    <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
-                                </NbButton>
-                            </div>
-                        </div>
-                    </NdPopUp>
-                </div>  
                 {/* Customer List Popup */}
                 <div>
                     <NbPosPopGrid id={"popCustomerList"} parent={this} width={"900"} height={"650"} position={"#root"} title={"Müşteri Listesi"}

@@ -19,11 +19,29 @@ export default class NbButton extends NbBase
         {
             if(this.props.keyBtn.key == 'Backspace')
             {
-                this.props.parent[this.props.keyBtn.textbox].value = this.props.parent[this.props.keyBtn.textbox].value.substring(0,this.props.parent[this.props.keyBtn.textbox].value.length - 1)
+                //EKRAN YENİ AÇILDIĞINDA BUTONA BASTIĞINDA TEXTBOX A İLK DEĞER ATAMASI
+                if(typeof this.props.parent[this.props.keyBtn.textbox].newStart != 'undefined' && this.props.parent[this.props.keyBtn.textbox].newStart)
+                {
+                    this.props.parent[this.props.keyBtn.textbox].value = ""
+                    this.props.parent[this.props.keyBtn.textbox].newStart = false;
+                }
+                else
+                {
+                    this.props.parent[this.props.keyBtn.textbox].value = this.props.parent[this.props.keyBtn.textbox].value.substring(0,this.props.parent[this.props.keyBtn.textbox].value.length - 1)
+                }
             }
             else
             {
-                this.props.parent[this.props.keyBtn.textbox].value = this.props.parent[this.props.keyBtn.textbox].value + this.props.keyBtn.key
+                //EKRAN YENİ AÇILDIĞINDA BUTONA BASTIĞINDA TEXTBOX A İLK DEĞER ATAMASI
+                if(typeof this.props.parent[this.props.keyBtn.textbox].newStart != 'undefined' && this.props.parent[this.props.keyBtn.textbox].newStart)
+                {
+                    this.props.parent[this.props.keyBtn.textbox].value = this.props.keyBtn.key
+                    this.props.parent[this.props.keyBtn.textbox].newStart = false;
+                }
+                else
+                {
+                    this.props.parent[this.props.keyBtn.textbox].value = this.props.parent[this.props.keyBtn.textbox].value + this.props.keyBtn.key
+                }
             }
         }
     }

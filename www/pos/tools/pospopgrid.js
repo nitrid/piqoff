@@ -42,8 +42,8 @@ export default class NbPosPopGrid extends NbBase
     }
     async show()
     {
-        this["txt" + this.props.id].value = ""
-        await this["grd" + this.props.id].dataRefresh({source:[]})
+        //this["txt" + this.props.id].value = ""
+        //await this["grd" + this.props.id].dataRefresh({source:[]})
         this[this.props.id].show()
     }
     render()
@@ -105,6 +105,11 @@ export default class NbPosPopGrid extends NbBase
                     </div>
                     <div className="row py-1">
                         <div className="col-6">
+                            <NbButton id={"btnList" + this.props.id} parent={this} className="form-group btn btn-success btn-block" 
+                            style={{height:"45px",width:"100%",fontSize:"16px"}}
+                            onClick={async ()=>{this.getData()}}>Listele</NbButton>
+                        </div>
+                        <div className="col-6">
                             <NbButton id={"btnSelect" + this.props.id} parent={this} className="form-group btn btn-success btn-block" 
                             style={{height:"45px",width:"100%",fontSize:"16px"}}
                             onClick={async ()=>
@@ -112,12 +117,7 @@ export default class NbPosPopGrid extends NbBase
                                 this._onSelection(this["grd" + this.props.id].devGrid.getSelectedRowsData())
                                 this[this.props.id].hide()
                             }}>Seç</NbButton> 
-                        </div>
-                        <div className="col-6">
-                            <NbButton id={"btnList" + this.props.id} parent={this} className="form-group btn btn-success btn-block" 
-                            style={{height:"45px",width:"100%",fontSize:"16px"}}
-                            onClick={async ()=>{this.getData()}}>Listele</NbButton>
-                        </div>
+                        </div>                        
                     </div>
                     <div className="row pt-1">
                         <NbKeyboard id={"key" + this.props.id} parent={this} textobj={"txt" + this.props.id} span={1} buttonHeight={"40px"}/>

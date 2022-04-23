@@ -292,6 +292,7 @@ export default class NdGrid extends Base
                 showRowLines={typeof this.props.showRowLines == 'undefined' ? true : this.props.showRowLines}
                 showColumnLines={typeof this.props.showColumnLines == 'undefined' ? true : this.props.showColumnLines}
                 showColumnHeaders={typeof this.props.showColumnHeaders == 'undefined' ? true : this.props.showColumnHeaders}
+                loadPanel={this.props.loadPanel}
                 height={this.props.height} 
                 width={this.props.width}
                 onInitialized={this._onInitialized} onSelectionChanged={this._onSelectionChanged} 
@@ -305,7 +306,7 @@ export default class NdGrid extends Base
                 selection={this.state.selection}
                 onEditorPrepared={this._onEditorPrepared}
                 onEditorPreparing={this._onEditorPreparing}
-                onRowPrepared = {this._onRowPrepared}
+                onRowPrepared = {this._onRowPrepared}                
                 >
                     {this.props.children}
                 </DataGrid>
@@ -322,6 +323,7 @@ export default class NdGrid extends Base
                     allowColumnResizing={this.props.allowColumnResizing} 
                     height={this.props.height} 
                     width={this.props.width}
+                    loadPanel={this.props.loadPanel}
                     onInitialized={this._onInitialized} onSelectionChanged={this._onSelectionChanged} 
                     onInitNewRow={this._onInitNewRow} onEditingStart={this._onEditingStart} onRowInserting={this._onRowInserting} onRowInserted={this._onRowInserted}
                     onRowUpdating={this._onRowUpdating} onRowUpdated={this._onRowUpdated} onRowRemoving={this._onRowRemoving} onRowRemoved={this._onRowRemoved}

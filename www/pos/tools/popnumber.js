@@ -15,6 +15,7 @@ export default class NbPopNumber extends NbBase
     {
         this[this.props.id].setTitle(typeof pTitle == 'undefined' ? '' : pTitle);
         this["txt" + this.props.id].value = typeof pValue == 'undefined' ? 0 : pValue
+        this["txt" + this.props.id].newStart = true;
         this[this.props.id].show();
         return new Promise(async resolve => 
         {
