@@ -28,12 +28,8 @@ export default class NdTextBox extends Base
         this._onFocusIn = this._onFocusIn.bind(this);
         this._onFocusOut = this._onFocusOut.bind(this);
         this._onChange = this._onChange.bind(this);   
-<<<<<<< Updated upstream
-        this._onKeyDown = this._onKeyDown.bind(this);   
-=======
         this._onKeyDown = this._onKeyDown.bind(this);     
         this._onKeyUp = this._onKeyUp.bind(this);     
->>>>>>> Stashed changes
     }
     //#region Private
     _onInitialized(e) 
