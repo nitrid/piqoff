@@ -16,6 +16,7 @@ export default class NdTextBox extends Base
         this.state.value = typeof props.value == 'undefined' ? ''  : props.value
         this.state.title = typeof props.title == 'undefined' ? '' : props.title
         this.state.mode = typeof props.mode == 'undefined' ? 'text' : props.mode
+        this.state.placeholder = typeof props.placeholder == 'undefined' ? '' : props.placeholder
         this.state.displayValue = typeof props.displayValue == 'undefined' ? '' : props.displayValue
         this.state.titleAlign = typeof props.titleAlign == 'undefined' ? 'left' : props.titleAlign
         this.state.showClearButton = typeof props.showClearButton == 'undefined' ? false : props.showClearButton
@@ -27,7 +28,12 @@ export default class NdTextBox extends Base
         this._onFocusIn = this._onFocusIn.bind(this);
         this._onFocusOut = this._onFocusOut.bind(this);
         this._onChange = this._onChange.bind(this);   
+<<<<<<< Updated upstream
         this._onKeyDown = this._onKeyDown.bind(this);   
+=======
+        this._onKeyDown = this._onKeyDown.bind(this);     
+        this._onKeyUp = this._onKeyUp.bind(this);     
+>>>>>>> Stashed changes
     }
     //#region Private
     _onInitialized(e) 
@@ -79,6 +85,13 @@ export default class NdTextBox extends Base
             this.props.onKeyDown(e);
         }
     }
+    _onKeyUp(e)
+    {
+        if(typeof this.props.onKeyUp != 'undefined')
+        {
+            this.props.onKeyUp(e);
+        }
+    }
     _buttonView()
     {
         if(typeof this.props.button != 'undefined')
@@ -128,12 +141,14 @@ export default class NdTextBox extends Base
         return (
             <TextBox id={this.props.id} mode={this.state.mode} showClearButton={this.state.showClearButton} height='fit-content' 
                 maxLength={this.props.maxLength}
+                placeholder={this.state.placeholder}
                 style={this.props.style}
                 elementAttr={this.props.elementAttr}
                 valueChangeEvent="keyup" onValueChanged={this._onValueChanged} 
                 onEnterKey={this._onEnterKey} onFocusIn={this._onFocusIn} onFocusOut={this._onFocusOut}
                 onChange={this._onChange}
                 onKeyDown={this._onKeyDown}
+                onKeyUp={this._onKeyUp}
                 onInitialized={this._onInitialized}
                 value={typeof this.state.value == 'undefined' ? '' : this.state.value.toString()} 
                 readOnly={this.state.readOnly}

@@ -227,20 +227,20 @@ export default class rebateDispatch extends React.Component
                 <NdTextBox id={"txtGrdItemsCode"+e.rowIndex} parent={this} simple={true} 
                 value={e.value}
                 onKeyDown={async(k)=>
+                {
+                    console.log(k)
+                    if(k.event.key == 'F10' || k.event.key == 'ArrowRight')
                     {
-                        console.log(k)
-                        if(k.event.key == 'F10' || k.event.key == 'ArrowRight')
+                        await this.pg_txtItemsCode.setVal(e.value)
+                        this.pg_txtItemsCode.onClick = async(data) =>
                         {
-                            await this.pg_txtItemsCode.setVal(e.value)
-                            this.pg_txtItemsCode.onClick = async(data) =>
+                            if(data.length > 0)
                             {
-                                if(data.length > 0)
-                                {
-                                    this.addItem(data[0],e.rowIndex)
-                                }
+                                this.addItem(data[0],e.rowIndex)
                             }
                         }
-                    }}
+                    }
+                }}
                     onValueChanged={(v)=>
                     {
                         e.value = v.value
