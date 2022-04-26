@@ -39,6 +39,10 @@ export default class itemCard extends React.Component
     {
         await this.core.util.waitUntil(0)
         this.init(); 
+        if(typeof this.pagePrm != 'undefined')
+        {
+            this.getItem(this.pagePrm.CODE)
+        }
     }    
     async init()
     {  

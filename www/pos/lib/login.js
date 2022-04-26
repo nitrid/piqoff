@@ -295,7 +295,7 @@ export default class Login extends React.Component
                                 />
                             </Item>
                             <Item>
-                            <NdTextBox id="cardRead" parent={this} simple={true} showClearButton={true} height='fit-content' onValueChanged={this.textValueChanged}  
+                            <NdTextBox id="cardRead" parent={this} simple={true}  mode="password" showClearButton={true} height='fit-content' onValueChanged={this.textValueChanged}  
                                 placeholder={this.lang.t("txtCardRead")}
                                 onKeyUp={async(k)=>
                                 {

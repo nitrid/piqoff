@@ -46,39 +46,6 @@ export const menu = (e) =>
                     ]
                 },
                 {
-                    id: 'stk_02',
-                    text : e.t('menu.stk_02'),//'Evraklar',
-                    expanded: false,
-                    items: 
-                    [
-                        {
-                            id: 'stk_02_004',
-                            text: e.t('menu.stk_02_004'),//'Sarf Giriş Çıkış Fişi',
-                            path: '../pages/items/documents/labelPrinting.js'
-                        },
-                        {
-                            id: 'stk_02_001',
-                            text: e.t('menu.stk_02_001'),//'Sayım Evrakı',
-                            path: '../pages/items/documents/itemCount.js'
-                        },
-                        {
-                            id: 'stk_02_002',
-                            text: e.t('menu.stk_02_002'),//'Depolar Arası Sevk',
-                            path: '../pages/items/documents/depotTransfer.js'
-                        },
-                        {
-                            id: 'stk_02_003',
-                            text: e.t('menu.stk_02_003'),//'Fire Giriş Çıkış Fişi',
-                            path: '../pages/items/documents/outageDoc.js'
-                        },
-                        {
-                            id: 'stk_02_005',
-                            text: e.t('menu.stk_02_005'),//'İade Deposuna Sevk',
-                            path: '../pages/items/documents/rebateDoc.js'
-                        },
-                    ]
-                },
-                {
                     id: 'stk_03',
                     text : e.t('menu.stk_03'),//'Listeler',
                     expanded: false,
@@ -108,6 +75,39 @@ export const menu = (e) =>
                             id: 'stk_03_005',
                             text: e.t('menu.stk_03_005'),//'Multi Kod Listesi',
                             path: '../pages/items/lists/multicodeList.js'
+                        },
+                    ]
+                },
+                {
+                    id: 'stk_02',
+                    text : e.t('menu.stk_02'),//'Evraklar',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'stk_02_004',
+                            text: e.t('menu.stk_02_004'),//'Sarf Giriş Çıkış Fişi',
+                            path: '../pages/items/documents/labelPrinting.js'
+                        },
+                        {
+                            id: 'stk_02_001',
+                            text: e.t('menu.stk_02_001'),//'Sayım Evrakı',
+                            path: '../pages/items/documents/itemCount.js'
+                        },
+                        {
+                            id: 'stk_02_002',
+                            text: e.t('menu.stk_02_002'),//'Depolar Arası Sevk',
+                            path: '../pages/items/documents/depotTransfer.js'
+                        },
+                        {
+                            id: 'stk_02_003',
+                            text: e.t('menu.stk_02_003'),//'Fire Giriş Çıkış Fişi',
+                            path: '../pages/items/documents/outageDoc.js'
+                        },
+                        {
+                            id: 'stk_02_005',
+                            text: e.t('menu.stk_02_005'),//'İade Deposuna Sevk',
+                            path: '../pages/items/documents/rebateDoc.js'
                         },
                     ]
                 },

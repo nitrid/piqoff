@@ -115,6 +115,11 @@ export default class itemList extends React.Component
     async _btnGetirClick()
     {
         let TmpVal = ""
+        if(this.txtUrunAdi.value != '' && this.txtUrunAdi.value.slice(-1) != '*')
+        {
+            let tmpUrunAdi = this.txtUrunAdi.value + '*'
+            this.txtUrunAdi.setState({value:tmpUrunAdi})
+        }
         
         for (let i = 0; i < this.txtBarkod.value.split(' ').length; i++) 
         {
@@ -134,11 +139,11 @@ export default class itemList extends React.Component
                 {
                     query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 " +
                             "WHERE {0} " +
-                            "((NAME = @NAME) OR (@NAME = '')) AND " +
+                            "((NAME LIKE @NAME +'%') OR (@NAME = '')) AND " +
                             "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) AND " +
                             "((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = ''))",
                     param : ['NAME:string|250','MAIN_GRP:string|25','CUSTOMER_CODE:string|25'],
-                    value : [this.txtUrunAdi.value,this.cmbUrunGrup.value,this.cmbTedarikci.value]
+                    value : [this.txtUrunAdi.value.replaceAll("*", "%"),this.cmbUrunGrup.value,this.cmbTedarikci.value]
                 },
                 sql : this.core.sql
             }
@@ -193,7 +198,7 @@ export default class itemList extends React.Component
                             <Form colCount={2} id="frmKriter">
                                 <Item>
                                     <Label text={this.t("txtBarkod")} alignment="right" />
-                                        <NdTextBox id="txtBarkod" parent={this} simple={true} />
+                                        <NdTextBox id="txtBarkod" parent={this} simple={true}  onEnterKey={this._btnGetirClick}/>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("cmbCustomer")} alignment="right" />
@@ -201,12 +206,11 @@ export default class itemList extends React.Component
                                         displayExpr="TITLE"                       
                                         valueExpr="CODE"
                                         data={{source: {select : {query:"SELECT CODE,TITLE FROM CUSTOMER_VW_01 WHERE TYPE IN(1,2) ORDER BY TITLE ASC"},sql : this.core.sql}}}
-                                        // onValueChanged={onValueChanged}
                                         />
                                 </Item>
                                 <Item>
                                     <Label text={this.t("txtItemName")} alignment="right" />
-                                        <NdTextBox id="txtUrunAdi" parent={this} simple={true} />
+                                        <NdTextBox id="txtUrunAdi" parent={this} simple={true} onEnterKey={this._btnGetirClick}/>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("cmbMainGrp")} alignment="right" />
@@ -214,7 +218,6 @@ export default class itemList extends React.Component
                                         displayExpr="NAME"                       
                                         valueExpr="CODE"
                                         data={{source: {select : {query:"SELECT CODE,NAME FROM ITEM_GROUP ORDER BY NAME ASC"},sql : this.core.sql}}}
-                                        // onValueChanged={onValueChanged}
                                         />
                                 </Item>
                                 <Item> </Item>
@@ -255,7 +258,17 @@ export default class itemList extends React.Component
                             columnAutoWidth={true}
                             allowColumnReordering={true}
                             allowColumnResizing={true}
-                            >                            
+                            onRowDblClick={async(e)=>
+                            {
+                                App.instance.menuClick(
+                                    {
+                                        id: 'stk_01_001',
+                                        text: e.data.NAME.substring(0,10),
+                                        path: '../pages/items/cards/itemCard.js',
+                                        pagePrm:{CODE:e.data.CODE}
+                                    })
+                            }}
+                            >                                    
                                 <Paging defaultPageSize={15} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
 
