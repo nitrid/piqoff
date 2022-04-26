@@ -1311,7 +1311,7 @@ export class depotCls
                     "@CUSER = @PCUSER, " + 
                     "@CODE = @PCODE, " + 
                     "@NAME = @PNAME, " + 
-                    "@TYPE = @PTYPE, " ,
+                    "@TYPE = @PTYPE " ,
                    
             param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PTYPE:int'],
             dataprm : ['GUID','CUSER','CODE','NAME','TYPE']
@@ -1323,7 +1323,7 @@ export class depotCls
             "@CUSER = @PCUSER, " + 
             "@CODE = @PCODE, " + 
             "@NAME = @PNAME, " + 
-            "@TYPE = @PTYPE, " ,
+            "@TYPE = @PTYPE " ,
             param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PTYPE:int'],
             dataprm : ['GUID','CUSER','CODE','NAME','TYPE']
         } 

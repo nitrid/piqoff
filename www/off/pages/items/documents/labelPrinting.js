@@ -88,8 +88,8 @@ export default class labelPrinting extends React.Component
 
         let tmpLbl = {...this.lblObj.empty}
         this.lblObj.addEmpty(tmpLbl);
-        this.txtRef.props.onValueChanged()
-        this.txtRef.readOnly = false
+        this.txtSer.props.onValueChanged()
+        this.txtSer.readOnly = false
         this.txtRefno.readOnly = false
         this.dtSelectChange.value =  moment(new Date()).format("YYYY-MM-DD"),
         
@@ -100,7 +100,7 @@ export default class labelPrinting extends React.Component
         this.lblObj.clearAll()
         await this.lblObj.load({GUID:pGuid});
 
-        this.txtRef.readOnly = true
+        this.txtSer.readOnly = true
         this.txtRefno.readOnly = true
     }
     async AddWizardItems()
@@ -526,7 +526,7 @@ export default class labelPrinting extends React.Component
                                         {
                                             let Data = {data:this.lblObj.dt().toArray()}
                                             let tmpLbl = {...this.lblObj.empty}
-                                            tmpLbl.REF = this.txtRef.value
+                                            tmpLbl.REF = this.txtSer.value
                                             tmpLbl.REF_NO = this.txtRefno.value
                                             tmpLbl.DATA  = JSON.stringify(Data)
                                             this.lblObj.clearAll()
@@ -614,22 +614,22 @@ export default class labelPrinting extends React.Component
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Form colCount={3} id="frmLabelQeueu">
-                                {/* txtRef-Refno */}
+                                {/* txtSer-Refno */}
                                 <Item>
                                     <Label text={this.t("txtRefRefno")} alignment="right" />
                                     <div className="row">
                                         <div className="col-4 pe-0">
-                                            <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.lblObj.dt('LABEL_QUEUE'),field:"REF"}}
+                                            <NdTextBox id="txtSer" parent={this} simple={true} dt={{data:this.lblObj.dt('LABEL_QUEUE'),field:"REF"}}
                                             readOnly={true}
                                             maxLength={32}
                                             onValueChanged={(async()=>
                                             {
-                                                this.lblObj.dt()[0].REF = this.txtRef.value 
+                                                this.lblObj.dt()[0].REF = this.txtSer.value 
                                                 let tmpQuery = 
                                                 {
                                                     query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM LABEL_QUEUE WHERE  REF = @REF ",
                                                     param : ['REF:string|25'],
-                                                    value : [this.txtRef.value]
+                                                    value : [this.txtSer.value]
                                                 }
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
                                                 if(tmpData.result.recordset.length > 0)
@@ -637,8 +637,8 @@ export default class labelPrinting extends React.Component
                                                     this.txtRefno.value = tmpData.result.recordset[0].REF_NO
                                                 }
                                             }).bind(this)}
-                                            param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
-                                            access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
+                                            param={this.param.filter({ELEMENT:'txtSer',USERS:this.user.CODE})}
+                                            access={this.access.filter({ELEMENT:'txtSer',USERS:this.user.CODE})}
                                             >
                                             <Validator validationGroup={"frmLabelQeueu"}>
                                                     <RequiredRule message={this.t("validRef")} />
@@ -679,7 +679,7 @@ export default class labelPrinting extends React.Component
                                             }
                                             onChange={(async()=>
                                             {
-                                                let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
+                                                let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtSer.value,this.txtRefno.value)
                                                 if(tmpResult == 3)
                                                 {
                                                     this.txtRefno.value = "";
@@ -844,7 +844,7 @@ export default class labelPrinting extends React.Component
                                             let tmpDocItems = {...this.lblObj.empty}
                                             tmpDocItems.REF = this.lblObj.dt()[0].REF
                                             tmpDocItems.REF_NO = this.lblObj.dt()[0].REF_NO
-                                            this.txtRef.readOnly = true
+                                            this.txtSer.readOnly = true
                                             this.txtRefno.readOnly = true
                                             this.lblObj.addEmpty(tmpDocItems)
                                         }
