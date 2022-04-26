@@ -103,6 +103,19 @@ export default class App extends React.Component
                     icon : 'refresh',
                     onClick : () => window.location.reload()
                 }
+            },
+            {
+                widget : 'dxButton',
+                location : 'after',
+                options : 
+                {
+                    icon : 'clear',
+                    onClick : () => 
+                    {                                                        
+                        this.core.auth.logout()
+                        window.location.reload()
+                    }
+                }
             }
         ];
         
