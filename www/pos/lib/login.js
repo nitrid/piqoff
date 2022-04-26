@@ -303,7 +303,7 @@ export default class Login extends React.Component
                                     {
                                       setTimeout(() => {
                                           this.cardRead.value = ''
-                                      }, 5000);
+                                      }, 500);
                                     }
                                     else
                                     {

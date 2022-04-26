@@ -4,6 +4,16 @@ export const langTr =
     btnSave: "Kaydet",
     btnCancel: "İptal",
     btnPrint :"Yazdır",
+    btnOk: "Tamam",
+    txtLangSelect : "Dil Seçimi",
+    txtUser : "Kullanıcı",
+    txtPass : "Şifre",
+    btnUserSelect : "Kullanıcı Seçimi",
+    btnLogin : "Giriş",
+    btnLogout : "Çıkış",
+    msgNotAccess :"Kullanıcının Giriş Yetkisi Yok.",
+    msgInvalidUser : "Kullanıcı Adı veya Şifre Hatalı.",
+    txtCardRead :"Lütfen Kullanıcı Kartınızı Okutunuz.",
     menu:
     {
         stk: "Stok",                
