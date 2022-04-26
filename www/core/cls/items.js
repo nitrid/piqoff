@@ -1142,7 +1142,12 @@ export class editItemCls
             STATUS : true,
             MAIN_GRP : '',
             MAIN_GRP_NAME : '',
-            SUB_GRP : '',
+            MAIN_UNIT_NAME : '',
+            UNDER_UNIT_NAME: '',
+            UNDER_FACTOR : 1,
+            UNDER_UNIT_GUID : '00000000-0000-0000-0000-000000000000',
+            UNDER_UNIT_ID : '',
+            MAIN_UNIT_ID : '',
             ORGINS : '',
             ORGINS_NAME : '',
             SECTOR : '',
@@ -1167,7 +1172,7 @@ export class editItemCls
         let tmpDt = new datatable('ITEM_EDIT');            
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE (CODE) LIKE (@CODE) AND " + 
+            query : "SELECT * FROM ITEMS_EDIT_VW_01 WHERE (CODE) LIKE (@CODE) AND " + 
                     "(NAME) LIKE (@NAME) AND ((CUSTOMER_GUID = @CUSTOMER) OR (@CUSTOMER = '00000000-0000-0000-0000-000000000000')) AND ((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) ",
             param : ['CODE:string|50','NAME:string|50','CUSTOMER:string|50','MAIN_GRP:string|25']
         }
@@ -1189,14 +1194,18 @@ export class editItemCls
                     "@PRICE_SALE = @PPRICE_SALE, " +
                     "@CUSTOMER_GUID = @PCUSTOMER_GUID, " +
                     "@CUSTOMER_PRICE_GUID = @PCUSTOMER_PRICE_GUID, " +
-                    "@PRICE_SALE_GUID = @PPRICE_SALE_GUID " ,
+                    "@PRICE_SALE_GUID = @PPRICE_SALE_GUID, " +
+                    "@UNDER_UNIT_GUID = @PUNDER_UNIT_GUID, " +
+                    "@MAIN_UNIT_ID = @PMAIN_UNIT_ID, " +
+                    "@UNDER_FACTOR = @PUNDER_FACTOR, " +
+                    "@UNDER_UNIT_ID = PUNDER_UNIT_ID ",
             param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|250','PVAT:float',
                      'PCOST_PRICE:float','PSTATUS:bit','PORGINS:string|50','PBARCODE:string|50','PBARCODE_GUID:string|50','PMULTICODE:string|50','PCUSTOMER_PRICE:string|50',
-                    'PPRICE_SALE:float','PCUSTOMER_GUID:string|50','PCUSTOMER_PRICE_GUID:string|50','PPRICE_SALE_GUID:string|50'],
+                    'PPRICE_SALE:float','PCUSTOMER_GUID:string|50','PCUSTOMER_PRICE_GUID:string|50','PPRICE_SALE_GUID:string|50','PUNDER_UNIT_GUID:string|50','PMAIN_UNIT_ID:string|10','PUNDER_FACTOR:float','PUNDER_UNIT_ID:string|10'],
             dataprm : ['GUID','CUSER','CODE','NAME','VAT','COST_PRICE','STATUS','ORGINS',
-                       'BARCODE','BARCODE_GUID','MULTICODE','CUSTOMER_PRICE','PRICE_SALE','CUSTOMER_GUID','CUSTOMER_PRICE_GUID','PRICE_SALE_GUID'],
+                       'BARCODE','BARCODE_GUID','MULTICODE','CUSTOMER_PRICE','PRICE_SALE','CUSTOMER_GUID','CUSTOMER_PRICE_GUID','PRICE_SALE_GUID',
+                        'UNDER_UNIT_GUID','MAIN_UNIT_ID','UNDER_FACTOR','UNDER_UNIT_ID'],
         } 
-
         this.ds.add(tmpDt);
     }
     //#endregion

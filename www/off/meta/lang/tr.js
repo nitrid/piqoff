@@ -1146,7 +1146,10 @@ export const langTr =
             clmPriceSale : "Satış Fiyatı",
             clmVat : "Vergi",
             clmOrgins : "Orgin",
-            clmStatus : "Aktif"
+            clmStatus : "Aktif",
+            clmUnderUnit : "Alt Birim",
+            clmMainUnit : 'Ana Birim',
+            clmUnderFactor : "Katsayı",
         },
         msgSave:
         {
