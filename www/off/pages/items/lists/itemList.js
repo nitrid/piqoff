@@ -283,7 +283,7 @@ export default class itemList extends React.Component
                                 <Item> </Item>
                                 <Item>
                                     <Label text={this.t("btnCheck")} alignment="right" />
-                                        <NdCheckBox id="chkAktif" parent={this} defaultValue={true}></NdCheckBox>
+                                        <NdCheckBox id="chkAktif" parent={this} value={true}></NdCheckBox>
                                 </Item>
                             </Form>
                         </div>
@@ -299,7 +299,7 @@ export default class itemList extends React.Component
                             />
                         </div>
                         <div className="col-3">
-                        <NdCheckBox id="chkMasterBarcode" parent={this} text={this.t("chkMasterBarcode")}  defaultValue={true}></NdCheckBox>
+                        <NdCheckBox id="chkMasterBarcode" parent={this} text={this.t("chkMasterBarcode")}  value={true} ></NdCheckBox>
                         </div>
                         <div className="col-3">
                             
