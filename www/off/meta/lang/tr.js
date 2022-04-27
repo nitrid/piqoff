@@ -1040,9 +1040,10 @@ export const langTr =
         cmbMainGrp : "Ürün Grubu",
         btnCheck : "Aktif",
         btnGet :"Getir",
+        chkMasterBarcode : "Barkodları Birleştir",
         grdListe : 
         {
-            clmCode: "ürün Kodu",
+            clmCode: "Ürün Kodu",
             clmName : "Ürün Adı",
             clmMainGrp : "Ürün Grubu",
             clmCustomer : "Cari",
@@ -1051,10 +1052,14 @@ export const langTr =
             clmUnit : "Birim",
             clmBarcode : "Barkod",
             clmCostPrice : "Maliyet Fiyatı",
+            clmPriceSale : "Satış Fiyatı",
             clmVat : "Vergi",
             clmMinPrice : "Minimum Satış Fiyatı",
             clmMaxPrice : "Maximum Satış Fiyatı",
             clmStatus : "Durum",
+            clmNetMargin : "Net Marj",
+            clmMargin : "Brüt Marj"
+
 
         },
     },
@@ -1104,7 +1109,7 @@ export const langTr =
         btnGet :"Getir",
         grdListe : 
         {
-            clmCode: "ürün Kodu",
+            clmCode: "Ürün Kodu",
             clmName : "Ürün Adı",
             clmMainGrp : "Ürün Grubu",
             clmCustomer : "Cari",

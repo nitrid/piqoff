@@ -56,26 +56,26 @@ export const menu = (e) =>
                             text: e.t('menu.stk_03_001'),//'Stok Listesi',
                             path: '../pages/items/lists/itemList.js'
                         },
-                        {
-                            id: 'stk_03_002',
-                            text: e.t('menu.stk_03_002'),//'Fiyat Listesi',
-                            path: '../pages/items/lists/priceList.js'
-                        },
-                        {
-                            id: 'stk_03_003',
-                            text: e.t('menu.stk_03_003'),//'Barkod Listesi',
-                            path: '../pages/items/lists/barcodeList.js'
-                        },
+                        // {
+                        //     id: 'stk_03_002',
+                        //     text: e.t('menu.stk_03_002'),//'Fiyat Listesi',
+                        //     path: '../pages/items/lists/priceList.js'
+                        // },
+                        // {
+                        //     id: 'stk_03_003',
+                        //     text: e.t('menu.stk_03_003'),//'Barkod Listesi',
+                        //     path: '../pages/items/lists/barcodeList.js'
+                        // },
                         // {
                         //     id: 'stk_03_004',
                         //     text: e.t('menu.stk_03_004'),//'Depo Listesi',
                         //     path: '../pages/items/lists/depotList.js'
                         // },
-                        {
-                            id: 'stk_03_005',
-                            text: e.t('menu.stk_03_005'),//'Multi Kod Listesi',
-                            path: '../pages/items/lists/multicodeList.js'
-                        },
+                        // {
+                        //     id: 'stk_03_005',
+                        //     text: e.t('menu.stk_03_005'),//'Multi Kod Listesi',
+                        //     path: '../pages/items/lists/multicodeList.js'
+                        // },
                     ]
                 },
                 {

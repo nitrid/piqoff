@@ -88,10 +88,14 @@ export default class labelPrinting extends React.Component
 
         let tmpLbl = {...this.lblObj.empty}
         this.lblObj.addEmpty(tmpLbl);
+        this.txtSer.value = this.user.CODE
         this.txtSer.props.onValueChanged()
         this.txtSer.readOnly = false
         this.txtRefno.readOnly = false
         this.dtSelectChange.value =  moment(new Date()).format("YYYY-MM-DD"),
+        this.txtSer.readOnly = true
+        this.calculateCount()
+        
         
         await this.grdLabelQueue.dataRefresh({source:this.lblObj.dt('LABEL_QUEUE')});
     }
@@ -102,6 +106,28 @@ export default class labelPrinting extends React.Component
 
         this.txtSer.readOnly = true
         this.txtRefno.readOnly = true
+    }
+    async getDocs(pType)
+    {
+        let tmpQuery = 
+        {
+            query : "SELECT GUID,REF,REF_NO FROM LABEL_QUEUE WHERE STATUS IN("+pType+") AND REF = '" +this.txtSer.value+"' " 
+        }
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        let tmpRows = []
+        if(tmpData.result.recordset.length > 0)
+        {
+            tmpRows = tmpData.result.recordset
+        }
+        await this.pg_Docs.setData(tmpRows)
+        this.pg_Docs.show()
+        this.pg_Docs.onClick = (data) =>
+        {
+            if(data.length > 0)
+            {
+                this.getDoc(data[0].GUID)
+            }
+        }
     }
     async AddWizardItems()
     {
@@ -656,15 +682,7 @@ export default class labelPrinting extends React.Component
                                                         icon:'more',
                                                         onClick:()=>
                                                         {
-                                                            this.pg_Docs.show()
-                                                            this.pg_Docs.onClick = (data) =>
-                                                            {
-                                                                if(data.length > 0)
-                                                                {
-                                                                    this.getDoc(data[0].GUID)
-                                                                }
-                                                            }
-                                                                   
+                                                            this.getDocs(0)   
                                                         }
                                                     },
                                                     {
@@ -703,7 +721,6 @@ export default class labelPrinting extends React.Component
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_Docs.title")} 
-                                    data={{source:{select:{query : "SELECT GUID,REF,REF_NO FROM LABEL_QUEUE WHERE STATUS = 0"},sql:this.core.sql}}}
                                     button=
                                     {
                                         [
@@ -712,7 +729,8 @@ export default class labelPrinting extends React.Component
                                                 icon:'more',
                                                 onClick:()=>
                                                 {
-                                                   
+                                                   this.pg_Docs.hide()
+                                                   this.getDocs('0,1')
                                                 }
                                             }
                                         ]
