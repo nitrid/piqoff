@@ -21,7 +21,7 @@ export default class itemList extends React.Component
 
         this.state = 
         {
-            columnListValue : ['NAME','CODE','BARCODE','MULTICODE','CUSTOMER_NAME']
+            columnListValue : ['NAME','CODE','BARCODE','MULTICODE','CUSTOMER_NAME','PRICE_SALE','VAT','MAIN_GRP_NAME']
         }
         
         this.core = App.instance.core;
@@ -299,7 +299,7 @@ export default class itemList extends React.Component
                             />
                         </div>
                         <div className="col-3">
-                        <NdCheckBox id="chkMasterBarcode" parent={this} text={this.t("chkMasterBarcode")}  defaultValue={false}></NdCheckBox>
+                        <NdCheckBox id="chkMasterBarcode" parent={this} text={this.t("chkMasterBarcode")}  defaultValue={true}></NdCheckBox>
                         </div>
                         <div className="col-3">
                             
@@ -336,9 +336,9 @@ export default class itemList extends React.Component
                                 <Column dataField="NAME" caption={this.t("grdListe.clmName")} visible={true} defaultSortOrder="asc" /> 
                                 <Column dataField="BARCODE" caption={this.t("grdListe.clmBarcode")} visible={true}/> 
                                 <Column dataField="SNAME" caption={this.t("grdListe.clmSname")} visible={false}/> 
-                                <Column dataField="MAIN_GRP_NAME" caption={this.t("grdListe.clmMainGrp")} visible={false}/> 
-                                <Column dataField="VAT" caption={this.t("grdListe.clmVat")} visible={false}/> 
-                                <Column dataField="PRICE_SALE" caption={this.t("grdListe.clmPriceSale")} visible={false}/> 
+                                <Column dataField="MAIN_GRP_NAME" caption={this.t("grdListe.clmMainGrp")} visible={true}/> 
+                                <Column dataField="VAT" caption={this.t("grdListe.clmVat")} visible={true}/> 
+                                <Column dataField="PRICE_SALE" caption={this.t("grdListe.clmPriceSale")} visible={true}/> 
                                 <Column dataField="COST_PRICE" caption={this.t("grdListe.clmCostPrice")} visible={false}/> 
                                 <Column dataField="MARGIN" caption={this.t("grdListe.clmMargin")} visible={false}/> 
                                 <Column dataField="NETMARGIN" caption={this.t("grdListe.clmNetMargin")} visible={false}/> 
