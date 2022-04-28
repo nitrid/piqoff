@@ -5,6 +5,10 @@ export const langTr =
     btnCancel: "İptal",
     btnPrint :"Yazdır",
     btnOk: "Tamam",
+    msgWarning: "Dikkat",
+    btnYes : "Evet",
+    btnNo : "Hayır",
+    msgClose : "Sayfayı Kapatmak İstediğinize Eminmisiniz ?",
     txtLangSelect : "Dil Seçimi",
     txtUser : "Kullanıcı",
     txtPass : "Şifre",
@@ -439,8 +443,7 @@ export const langTr =
             clmRef : "SERİ",
             clmRefNo : "SIRA",
             clmDocDate : "TARIH",
-            clmInputName : "GİRİŞ",
-            clmOutputName : "ÇIKIŞ",
+            clmDocDate : "DEPO/MAĞAZA",
         },
         pg_txtItemsCode : 
         {

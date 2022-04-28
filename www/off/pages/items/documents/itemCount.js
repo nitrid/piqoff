@@ -421,6 +421,31 @@ export default class itemCount extends React.Component
                                         this.popDesign.show()
                                     }}/>
                                 </Item>
+                                <Item location="after"
+                                locateInMenu="auto"
+                                widget="dxButton"
+                                options=
+                                {
+                                    {
+                                        type: 'default',
+                                        icon: 'clear',
+                                        onClick: async () => 
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
+                                            }
+                                            
+                                            let pResult = await dialog(tmpConfObj);
+                                            if(pResult == 'btn01')
+                                            {
+                                                App.instance.panel.closePage()
+                                            }
+                                        }
+                                    }    
+                                } />
                             </Toolbar>
                         </div>
                     </div>
@@ -534,8 +559,8 @@ export default class itemCount extends React.Component
                                     >
                                         <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150} defaultSortOrder="asc"/>
                                         <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={300} defaultSortOrder="asc" />                                        
-                                        <Column dataField="DEPOT_NAME" caption={this.t("pg_Docs.clmdepotName")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="DOC_DATE" caption={this.t("pg_Docs.lcmDocDate")} width={300} defaultSortOrder="asc" />
+                                        <Column dataField="DEPOT_NAME" caption={this.t("pg_Docs.clmDepotName")} width={300} defaultSortOrder="asc" />
+                                        <Column dataField="DOC_DATE" caption={this.t("pg_Docs.clmDocDate")} width={300} defaultSortOrder="asc" />
                                         
                                     </NdPopGrid>
                                 </Item>
