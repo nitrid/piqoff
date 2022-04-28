@@ -313,25 +313,10 @@ export default class barcodeCard extends React.Component
                                         [
                                             {
                                                 id:'01',
-                                                icon:'more',
-                                                onClick:()=>
-                                                {
-                                                    this.pg_txtBarcode.show()
-                                                    this.pg_txtBarcode.onClick = (data) =>
-                                                    {
-                                                        if(data.length > 0)
-                                                        {
-                                                            this.getBarcode(data[0].BARCODE)
-                                                        }
-                                                    }
-                                                }
-                                            },
-                                            {
-                                                id:'02',
                                                 icon:'arrowdown',
                                                 onClick:()=>
                                                 {
-                                                    this.txtBarcode.value = Math.floor(Date.now() / 1000)
+                                                    this.txtBarcode.value = Math.floor(Date.now() / 10)
                                                 }
                                             }
                                         ]
