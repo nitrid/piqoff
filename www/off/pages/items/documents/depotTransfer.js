@@ -65,7 +65,7 @@ export default class depotTransfer extends React.Component
             if(pData.rowData.stat == 'edit')
             {
                 this.btnBack.setState({disabled:false});
-                this.btnNew.setState({disabled:false});
+                this.btnNew.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
                 this.btnCopy.setState({disabled:false});
@@ -81,7 +81,7 @@ export default class depotTransfer extends React.Component
             this.btnSave.setState({disabled:true});
             this.btnDelete.setState({disabled:false});
             this.btnCopy.setState({disabled:false});
-            this.btnPrint.setState({disabled:false});          
+            this.btnPrint.setState({disabled:false});       
         })
         this.docObj.ds.on('onDelete',(pTblName) =>
         {            

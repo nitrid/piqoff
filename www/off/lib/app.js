@@ -109,7 +109,7 @@ export default class App extends React.Component
                 location : 'after',
                 options : 
                 {
-                    icon : 'clear',
+                    icon : 'fa-solid fa-arrow-right-to-bracket',
                     onClick : () => 
                     {                                                        
                         this.core.auth.logout()

@@ -232,7 +232,7 @@ export default class itemList extends React.Component
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
 
                                 <Column dataField="ITEM_CODE" caption={this.t("grdListe.clmCode")} visible={true}/> 
-                                <Column dataField="ITEM_NAME" caption={this.t("grdListe.clmName")} visible={true}/> 
+                                <Column dataField="ITEM_NAME" caption={this.t("grdListe.clmName")} visible={true} defaultSortOrder="asc"/> 
                                 <Column dataField="MAIN_GRP_NAME" caption={this.t("grdListe.clmMainGrp")} visible={true}/> 
                                 <Column dataField="PRICE" caption={this.t("grdListe.clmPrice")} visible={true}/> 
                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdListe.clmCustomer")} visible={true}/> 

@@ -65,7 +65,7 @@ export default class itemCount extends React.Component
             if(pData.rowData.stat == 'edit')
             {
                 this.btnBack.setState({disabled:false});
-                this.btnNew.setState({disabled:false});
+                this.btnNew.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
                 this.btnCopy.setState({disabled:false});
@@ -238,6 +238,56 @@ export default class itemCount extends React.Component
                 }
                 >  
                 </NdTextBox>
+            )
+        }
+        else  if(e.column.dataField == "QUANTITY")
+        {
+            return (
+                <NdNumberBox id={"numGrdQuantity"+e.rowIndex} parent={this} simple={true} 
+                value={e.value}
+                onKeyDown={async(k)=>
+                    {
+                        if(k.event.key == 'F10' || k.event.key == 'ArrowRight')
+                        {
+                            await this.pg_txtItemsCode.setVal(e.value)
+                            this.pg_txtItemsCode.onClick = async(data) =>
+                            {
+                                if(data.length > 0)
+                                {
+                                    this.addItem(data[0],e.rowIndex)
+                                }
+                            }
+                        }
+                    }}
+                    onValueChanged={async (v)=>
+                    {
+                        if(v.value > 1000)
+                        {
+                            let tmpConfObj = 
+                            {
+                                id:'msgBigQuantity',showTitle:true,title:this.t("msgBigQuantity.title"),showCloseButton:true,width:'500px',height:'200px',
+                                button:[{id:"btn01",caption:this.t("msgBigQuantity.btn01"),location:'before'},{id:"btn02",caption:this.t("msgBigQuantity.btn02"),location:'after'}],
+                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBigQuantity.msg")}</div>)
+                            }
+                            let pResult = await dialog(tmpConfObj);
+                            if(pResult == 'btn01')
+                            {
+                                e.setValue(v.value)
+                                return
+                            }
+                            else if(pResult == 'btn02')
+                            {
+                                return
+                            }
+                            
+                        }
+                        else
+                        {
+                            e.setValue(v.value)
+                        }
+                    }}
+                >  
+                </NdNumberBox>
             )
         }
     }
@@ -562,7 +612,7 @@ export default class itemCount extends React.Component
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdItemCount.clmCreateDate")} width={150} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdItemCount.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdItemCount.clmItemName")} width={350} />
-                                        <Column dataField="QUANTITY" caption={this.t("grdItemCount.clmQuantity")} dataType={'number'} width={150}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdItemCount.clmQuantity")} dataType={'number'} editCellRender={this._cellRoleRender} width={150}/>
                                     </NdGrid>
                                 </Item>
                                 <Item location="after">

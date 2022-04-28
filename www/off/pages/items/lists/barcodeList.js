@@ -211,7 +211,7 @@ export default class barcodeList extends React.Component
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
 
                                 <Column dataField="ITEM_CODE" caption={this.t("grdListe.clmCode")} visible={true}/> 
-                                <Column dataField="ITEM_NAME" caption={this.t("grdListe.clmName")} visible={true}/> 
+                                <Column dataField="ITEM_NAME" caption={this.t("grdListe.clmName")} visible={true} defaultSortOrder="asc"/> 
                                 <Column dataField="BARCODE" caption={this.t("grdListe.clmBarcode")} visible={true}/> 
                                 <Column dataField="UNIT_NAME" caption={this.t("grdListe.clmUnit")} visible={true}/> 
                                 <Column dataField="MAIN_GRP_NAME" caption={this.t("grdListe.clmMainGrp")} visible={true}/> 

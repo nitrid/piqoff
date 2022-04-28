@@ -204,8 +204,83 @@ export default class barcodeCard extends React.Component
                     <div className="row px-2 pt-2">                        
                         <div className="col-9">
                             <Form colCount={2} id="frmBarcode">
-                                {/* txtBarcode */}
+                                {/* txtItem */}
                                 <Item>                                    
+                                    <Label text={this.t("txtItem")} alignment="right" />
+                                    <NdTextBox id="txtItem" parent={this} simple={true} dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"ITEM_CODE"}}  validationGroup="frmBarcode"
+                                    readOnly={true}
+                                    button=
+                                    {
+                                        [
+                                            {
+                                                id:'01',
+                                                icon:'more',
+                                                onClick:()=>
+                                                {
+                                                    this.pg_txtItem.show()
+                                                    this.pg_txtItem.onClick = (data) =>
+                                                    {
+                                                        if(data.length > 0)
+                                                        {
+                                                            let tmpEmpty = {...this.itemBarcodeObj.empty};
+                                                            tmpEmpty.BARCODE = this.txtBarcode.value
+                                                            tmpEmpty.TYPE = this.cmbPopBarType.value
+                                                            tmpEmpty.UNIT_GUID = this.cmbBarUnit.value
+                                                            tmpEmpty.UNIT_NAME = this.cmbBarUnit.displayValue
+                                                            tmpEmpty.ITEM_GUID = data[0].GUID
+                                                            tmpEmpty.ITEM_NAME = data[0].NAME
+                                                            tmpEmpty.ITEM_CODE = data[0].CODE
+                                                            this.itemBarcodeObj.addEmpty(tmpEmpty);  
+                                                            this._getUnit(data[0].GUID)
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                        ]
+                                    }                       
+                                    >   
+                                    <Validator validationGroup={"frmBarcode"}>
+                                            <RequiredRule message={this.t("validCode")} />
+                                    </Validator>    
+                                    </NdTextBox>      
+                                    {/* STOK SEÇİM POPUP */}
+                                    <NdPopGrid id={"pg_txtItem"} parent={this} container={"#root"} 
+                                    visible={false}
+                                    position={{of:'#root'}} 
+                                    showTitle={true} 
+                                    showBorders={true}
+                                    width={'90%'}
+                                    height={'90%'}
+                                    title={this.t("pg_txtItem.title")} 
+                                    search={true}
+                                    data = 
+                                    {{
+                                        source:
+                                        {
+                                            select:
+                                            {
+                                                query : "SELECT GUID,CODE,NAME,VAT FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                                param : ['VAL:string|50']
+                                            },
+                                            sql:this.core.sql
+                                        }
+                                    }}
+                                    >
+                                        <Column dataField="CODE" caption={this.t("pg_txtItem.clmCode")} width={150} />
+                                        <Column dataField="NAME" caption={this.t("pg_txtItem.clmName")} width={650} defaultSortOrder="asc" />
+                                    </NdPopGrid>
+                                </Item>                           
+                                {/* txtItemName */}
+                                <Item>
+                                    <Label text={this.t("txtItemName")} alignment="right" />
+                                    <NdTextBox id="txtItemName" parent={this} simple={true} 
+                                    readOnly={true}
+                                    dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"ITEM_NAME"}} 
+                                   />
+                                </Item>
+                                
+                                 {/* txtBarcode */}
+                                 <Item>                                    
                                     <Label text={this.t("txtBarcode")} alignment="right" />
                                     <NdTextBox id="txtBarcode" parent={this} simple={true} dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"BARCODE"}}  validationGroup="frmBarcode"
                                     button=
@@ -309,80 +384,6 @@ export default class barcodeCard extends React.Component
                                     />
                                 </Item>
                                 <Item></Item>
-                                {/* txtItem */}
-                                <Item>                                    
-                                    <Label text={this.t("txtItem")} alignment="right" />
-                                    <NdTextBox id="txtItem" parent={this} simple={true} dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"ITEM_CODE"}}  validationGroup="frmBarcode"
-                                    readOnly={true}
-                                    button=
-                                    {
-                                        [
-                                            {
-                                                id:'01',
-                                                icon:'more',
-                                                onClick:()=>
-                                                {
-                                                    this.pg_txtItem.show()
-                                                    this.pg_txtItem.onClick = (data) =>
-                                                    {
-                                                        if(data.length > 0)
-                                                        {
-                                                            let tmpEmpty = {...this.itemBarcodeObj.empty};
-                                                            tmpEmpty.BARCODE = this.txtBarcode.value
-                                                            tmpEmpty.TYPE = this.cmbPopBarType.value
-                                                            tmpEmpty.UNIT_GUID = this.cmbBarUnit.value
-                                                            tmpEmpty.UNIT_NAME = this.cmbBarUnit.displayValue
-                                                            tmpEmpty.ITEM_GUID = data[0].GUID
-                                                            tmpEmpty.ITEM_NAME = data[0].NAME
-                                                            tmpEmpty.ITEM_CODE = data[0].CODE
-                                                            this.itemBarcodeObj.addEmpty(tmpEmpty);  
-                                                            this._getUnit(data[0].GUID)
-                                                        }
-                                                    }
-                                                }
-                                            },
-                                        ]
-                                    }                       
-                                    >   
-                                    <Validator validationGroup={"frmBarcode"}>
-                                            <RequiredRule message={this.t("validCode")} />
-                                    </Validator>    
-                                    </NdTextBox>      
-                                    {/* STOK SEÇİM POPUP */}
-                                    <NdPopGrid id={"pg_txtItem"} parent={this} container={"#root"} 
-                                    visible={false}
-                                    position={{of:'#root'}} 
-                                    showTitle={true} 
-                                    showBorders={true}
-                                    width={'90%'}
-                                    height={'90%'}
-                                    title={this.t("pg_txtItem.title")} 
-                                    search={true}
-                                    data = 
-                                    {{
-                                        source:
-                                        {
-                                            select:
-                                            {
-                                                query : "SELECT GUID,CODE,NAME,VAT FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
-                                                param : ['VAL:string|50']
-                                            },
-                                            sql:this.core.sql
-                                        }
-                                    }}
-                                    >
-                                        <Column dataField="CODE" caption={this.t("pg_txtItem.clmCode")} width={150} />
-                                        <Column dataField="NAME" caption={this.t("pg_txtItem.clmName")} width={650} defaultSortOrder="asc" />
-                                    </NdPopGrid>
-                                </Item>                           
-                                {/* txtItemName */}
-                                <Item>
-                                    <Label text={this.t("txtItemName")} alignment="right" />
-                                    <NdTextBox id="txtItemName" parent={this} simple={true} 
-                                    readOnly={true}
-                                    dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"ITEM_NAME"}} 
-                                   />
-                                </Item>
                                 {/* cmbBarUnit */}
                                 <Item>
                                     <Label text={this.t("cmbBarUnit")} alignment="right" />

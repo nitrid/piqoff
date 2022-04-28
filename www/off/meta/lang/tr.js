@@ -27,16 +27,16 @@ export const langTr =
         stk_01_003: "Fiyat Tanımları",
         stk_01_004: "Birim Tanımları",
         stk_01_005: "Multi Kod Tanımları",
-        stk_01_006: "Depo Tanımları",
+        stk_01_006: "Depo/Mağaza Tanımları",
         stk_02_001: "Sayım Evrakı",
-        stk_02_002: "Depolar Arası Sevk",
-        stk_02_003: "Fire Çıkış Fişi",
+        stk_02_002: "Depo/Mağaza Arası Sevk",
+        stk_02_003: "Kayıp Ürün Fişi",
         stk_02_004: "Etiket Basımı",
-        stk_02_005: "İade Deposuna Sevk",
+        stk_02_005: "İade Ürünü Toplama",
         stk_03_001: "Stok Listesi",
         stk_03_002: "Fiyat Listesi",
         stk_03_003: "Barkod Listesi",
-        stk_03_004: "Depo Listesi",
+        stk_03_004: "Depo/Mağaza Listesi",
         stk_03_005: "Multi Kod Listesi",
         stk_04_001: "Toplu Stok Düzenleme",
         stk_04_002: "İade Operasyonları",
@@ -494,6 +494,13 @@ export const langTr =
             btn01: "Tamam",
             btn02: "Vazgeç",
             msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgBigQuantity:
+        {
+            title: "Dikkat",
+            btn01: "Devam Et",
+            btn02: "Vazgeç",
+            msg: "Girdiğiniz Miktar 1000'den Büyük Devam Etmek İstediğinize Eminmisiniz ?"
         },
         msgLocked:
         {
