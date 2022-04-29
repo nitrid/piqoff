@@ -26,7 +26,7 @@ export default class NdPopGrid extends Base
         this.state.columns = typeof props.columns == 'undefined' ? undefined : props.columns
         this.state.filterRow = typeof props.filterRow == 'undefined' ? {visible:true} : props.filterRow
         this.state.headerFilter = typeof props.headerFilter == 'undefined' ? {visible:true} : props.headerFilter
-        this.state.selection = typeof props.selection == 'undefined' ? {mode:"single"} : props.selection
+        this.state.selection = typeof props.selection == 'undefined' ? {mode:"multiple"} : {mode:props.selection}
         this.state.paging = typeof props.paging == 'undefined' ? {} : props.paging
         this.state.pager = typeof props.pager == 'undefined' ? {} : props.pager
         this.state.editing = typeof props.editing == 'undefined' ? {} : props.editing

@@ -178,7 +178,33 @@ export default class itemCount extends React.Component
                             {
                                 if(data.length > 0)
                                 {
-                                    this.addItem(data[0],e.rowIndex)
+                                    if(data.length == 0)
+                                    {
+                                        this.addItem(data[0],e.rowIndex)
+                                    }
+                                    else
+                                    {
+                                        for (let i = 0; i < data.length; i++) 
+                                        {
+                                            if(i == 0)
+                                            {
+                                                this.addItem(data[i],e.rowIndex)
+                                            }
+                                            else
+                                            {
+                                                let tmpDocItems = {...this.countObj.empty}
+                                                tmpDocItems.LINE_NO = this.countObj.dt().length
+                                                tmpDocItems.REF = this.txtRef.value
+                                                tmpDocItems.REF_NO = this.txtRefno.value
+                                                tmpDocItems.DEPOT = this.cmbDepot.value
+                                                tmpDocItems.DOC_DATE = this.dtDocDate.value
+                                                this.txtRef.readOnly = true
+                                                this.txtRefno.readOnly = true
+                                                this.countObj.addEmpty(tmpDocItems)
+                                                this.addItem(data[i],this.countObj.dt().length-1)
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -229,7 +255,33 @@ export default class itemCount extends React.Component
                                 {
                                     if(data.length > 0)
                                     {
-                                        this.addItem(data[0],e.rowIndex)
+                                        if(data.length == 0)
+                                        {
+                                            this.addItem(data[0],e.rowIndex)
+                                        }
+                                        else
+                                        {
+                                            for (let i = 0; i < data.length; i++) 
+                                            {
+                                                if(i == 0)
+                                                {
+                                                    this.addItem(data[i],e.rowIndex)
+                                                }
+                                                else
+                                                {
+                                                    let tmpDocItems = {...this.countObj.empty}
+                                                    tmpDocItems.LINE_NO = this.countObj.dt().length
+                                                    tmpDocItems.REF = this.txtRef.value
+                                                    tmpDocItems.REF_NO = this.txtRefno.value
+                                                    tmpDocItems.DEPOT = this.cmbDepot.value
+                                                    tmpDocItems.DOC_DATE = this.dtDocDate.value
+                                                    this.txtRef.readOnly = true
+                                                    this.txtRefno.readOnly = true
+                                                    this.countObj.addEmpty(tmpDocItems)
+                                                    this.addItem(data[i],this.countObj.dt().length-1)
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -245,20 +297,6 @@ export default class itemCount extends React.Component
             return (
                 <NdNumberBox id={"numGrdQuantity"+e.rowIndex} parent={this} simple={true} 
                 value={e.value}
-                onKeyDown={async(k)=>
-                    {
-                        if(k.event.key == 'F10' || k.event.key == 'ArrowRight')
-                        {
-                            await this.pg_txtItemsCode.setVal(e.value)
-                            this.pg_txtItemsCode.onClick = async(data) =>
-                            {
-                                if(data.length > 0)
-                                {
-                                    this.addItem(data[0],e.rowIndex)
-                                }
-                            }
-                        }
-                    }}
                     onValueChanged={async (v)=>
                     {
                         if(v.value > 1000)
@@ -293,6 +331,8 @@ export default class itemCount extends React.Component
     }
     async addItem(pData,pIndex)
     {
+        console.log(pData)
+        console.log(pIndex)
         this.countObj.dt()[pIndex].ITEM_CODE = pData.CODE
         this.countObj.dt()[pIndex].ITEM = pData.GUID
         this.countObj.dt()[pIndex].ITEM_NAME = pData.NAME
@@ -541,7 +581,7 @@ export default class itemCount extends React.Component
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_Docs.title")} 
-                                    data={{source:{select:{query : "SELECT GUID,REF,REF_NO,DOC_DATE,DEPOT_NAME FROM ITEM_COUNT_VW_01"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT REF,REF_NO,DOC_DATE,DEPOT_NAME FROM ITEM_COUNT_VW_01 GROUP BY REF,REF_NO,DOC_DATE,DEPOT_NAME"},sql:this.core.sql}}}
                                     button=
                                     {
                                         [
@@ -604,6 +644,13 @@ export default class itemCount extends React.Component
                                         </Validator> 
                                     </NdDatePicker>
                                 </Item>
+                                {/* Boş */}
+                                <EmptyItem />
+                                {/* BARKOD EKLEME */}
+                                <Item>
+                                    <Label text={this.t("txtItemName")} alignment="right" />
+                                        <NdTextBox id="txtUrunAdi" parent={this} simple={true} onEnterKey={this._btnGetirClick}/>
+                                </Item>
                             </Form>
                         </div>
                     </div>
@@ -645,7 +692,6 @@ export default class itemCount extends React.Component
                                     validationGroup="frmCountFrom"
                                     onClick={async (e)=>
                                     {
-                                        console.log(this.cmbDepot)
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             if(typeof this.countObj.dt()[0] != 'undefined')
@@ -682,7 +728,7 @@ export default class itemCount extends React.Component
                             </Form>
                         </div>
                     </div>
-                    <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={"#root"}
+                    <NdPopGrid id={"pg_txtItemsCode"} selection={"multiple"} parent={this} container={"#root"}
                     visible={false}
                     position={{of:'#root'}} 
                     showTitle={true} 

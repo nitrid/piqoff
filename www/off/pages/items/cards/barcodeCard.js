@@ -55,6 +55,14 @@ export default class barcodeCard extends React.Component
 
                 if(tmpData.length > 0)
                 {
+                    let tmpConfObj =
+                    {
+                        id:'msgCheckBarcode',showTitle:true,title:this.t("msgCheckBarcode.title"),showCloseButton:true,width:'500px',height:'200px',
+                        button:[{id:"btn01",caption:this.t("msgCheckBarcode.btn01"),location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCheckBarcode.msg")}</div>)
+                    }
+                    
+                    await dialog(tmpConfObj);
                     this.getBarcode(tmpData[0].BARCODE)
                     resolve(2) //KAYIT VAR
                 }
@@ -313,25 +321,10 @@ export default class barcodeCard extends React.Component
                                         [
                                             {
                                                 id:'01',
-                                                icon:'more',
-                                                onClick:()=>
-                                                {
-                                                    this.pg_txtBarcode.show()
-                                                    this.pg_txtBarcode.onClick = (data) =>
-                                                    {
-                                                        if(data.length > 0)
-                                                        {
-                                                            this.getBarcode(data[0].BARCODE)
-                                                        }
-                                                    }
-                                                }
-                                            },
-                                            {
-                                                id:'02',
                                                 icon:'arrowdown',
                                                 onClick:()=>
                                                 {
-                                                    this.txtBarcode.value = Math.floor(Date.now() / 1000)
+                                                    this.txtBarcode.value = Math.floor(Date.now() / 10)
                                                 }
                                             }
                                         ]

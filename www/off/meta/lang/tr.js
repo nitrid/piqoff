@@ -341,7 +341,12 @@ export const langTr =
             clmItemCode: "STOK KODU"
         },
        
-      
+        msgCheckBarcode:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Girmiş olduğunuz barkod sistem de kayıtlı ! Stok Getirildi."
+        },
         msgBarcode:
         {
             title: "Dikkat",
@@ -443,7 +448,7 @@ export const langTr =
             clmRef : "SERİ",
             clmRefNo : "SIRA",
             clmDocDate : "TARIH",
-            clmDocDate : "DEPO/MAĞAZA",
+            clmDepotName : "DEPO/MAĞAZA",
         },
         pg_txtItemsCode : 
         {
@@ -1064,13 +1069,11 @@ export const langTr =
             clmCostPrice : "Maliyet Fiyatı",
             clmPriceSale : "Satış Fiyatı",
             clmVat : "Vergi",
-            clmMinPrice : "Minimum Satış Fiyatı",
-            clmMaxPrice : "Maximum Satış Fiyatı",
+            clmMinPrice : "Min Fiyatı",
+            clmMaxPrice : "Max  Fiyatı",
             clmStatus : "Durum",
             clmNetMargin : "Net Marj",
             clmMargin : "Brüt Marj"
-
-
         },
     },
     stk_03_002 : 

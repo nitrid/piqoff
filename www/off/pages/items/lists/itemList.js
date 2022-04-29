@@ -12,6 +12,7 @@ import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
+import NdTagBox from '../../../../core/react/devex/tagbox.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 
 
@@ -119,21 +120,11 @@ export default class itemList extends React.Component
     }
     async _btnGetirClick()
     {
-        console.log(this)
-        let TmpVal = ""
+       
         if(this.txtUrunAdi.value != '' && this.txtUrunAdi.value.slice(-1) != '*')
         {
             let tmpUrunAdi = this.txtUrunAdi.value + '*'
             this.txtUrunAdi.setState({value:tmpUrunAdi})
-        }
-        
-        for (let i = 0; i < this.txtBarkod.value.split(' ').length; i++) 
-        {
-            TmpVal += "'" + this.txtBarkod.value.split(' ')[i] + "'"
-            if(this.txtBarkod.value.split(' ').length > 1 && i !=  (this.txtBarkod.value.split(' ').length - 1))
-            {
-                TmpVal += ","
-            }
         }
         
         if(this.chkMasterBarcode.value == true)
@@ -166,17 +157,23 @@ export default class itemList extends React.Component
                 }
             }
             
-            if(this.txtBarkod.value == '')
+            if(this.txtBarkod.value.length == 0)
             {
                 tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "")
             }
-            else if(this.txtBarkod.value.split(' ').length > 1)
+            else if(this.txtBarkod.value.length == 1)
             {
-                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE IN (" + TmpVal + ")) OR (BARCODE IN (" + TmpVal + ")) OR (MULTICODE IN (" + TmpVal + "))) AND")
+                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE LIKE '" + this.txtBarkod.value[0] + "' + '%') OR (BARCODE LIKE '" + this.txtBarkod.value[0] + "' + '%') OR (MULTICODE LIKE '" + this.txtBarkod.value[0] + "' + '%')) AND")
             }
             else
             {
-                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE LIKE " + TmpVal + " + '%') OR (BARCODE LIKE " + TmpVal + " + '%') OR (MULTICODE LIKE " + TmpVal + " + '%')) AND")
+                let TmpVal = ''
+                for (let i = 0; i < this.txtBarkod.value.length; i++) 
+                {
+                    TmpVal = TmpVal + ",'" + this.txtBarkod.value[i] + "'"
+                    
+                }
+                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (BARCODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (MULTICODE IN (" + TmpVal.substring(1,TmpVal.length) + "))) AND")
             }
             await this.grdListe.dataRefresh(tmpSource)
         }
@@ -210,17 +207,24 @@ export default class itemList extends React.Component
                 }
             }
             
-            if(this.txtBarkod.value == '')
+            
+            if(this.txtBarkod.value.length == 0)
             {
                 tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "")
             }
-            else if(this.txtBarkod.value.split(' ').length > 1)
+            else if(this.txtBarkod.value.length == 1)
             {
-                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE IN (" + TmpVal + ")) OR (BARCODE IN (" + TmpVal + ")) OR (MULTICODE IN (" + TmpVal + "))) AND")
+                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE LIKE '" + this.txtBarkod.value[0] + "' + '%') OR (BARCODE LIKE '" + this.txtBarkod.value[0] + "' + '%') OR (MULTICODE LIKE '" + this.txtBarkod.value[0] + "' + '%')) AND")
             }
             else
             {
-                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE LIKE " + TmpVal + " + '%') OR (BARCODE LIKE " + TmpVal + " + '%') OR (MULTICODE LIKE " + TmpVal + " + '%')) AND")
+                let TmpVal = ''
+                for (let i = 0; i < this.txtBarkod.value.length; i++) 
+                {
+                    TmpVal = TmpVal + ",'" + this.txtBarkod.value[i] + "'"
+                    
+                }
+                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (BARCODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (MULTICODE IN (" + TmpVal.substring(1,TmpVal.length) + "))) AND")
             }
             await this.grdListe.dataRefresh(tmpSource)
         }
@@ -249,31 +253,6 @@ export default class itemList extends React.Component
                                                 text: 'Stok Tanımları',
                                                 path: '../pages/items/cards/itemCard.js'
                                             })
-                                        }
-                                    }    
-                                } />
-                                <Item location="after"
-                                locateInMenu="auto"
-                                widget="dxButton"
-                                options=
-                                {
-                                    {
-                                        type: 'default',
-                                        icon: 'clear',
-                                        onClick: async () => 
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
-                                            }
-                                            
-                                            let pResult = await dialog(tmpConfObj);
-                                            if(pResult == 'btn01')
-                                            {
-                                                App.instance.panel.closePage()
-                                            }
                                         }
                                     }    
                                 } />
@@ -310,7 +289,8 @@ export default class itemList extends React.Component
                             <Form colCount={2} id="frmKriter">
                                 <Item>
                                     <Label text={this.t("txtBarkod")} alignment="right" />
-                                        <NdTextBox id="txtBarkod" parent={this} simple={true}  onEnterKey={this._btnGetirClick}/>
+                                        <NdTagBox id="txtBarkod" parent={this} simple={true} value={[]}
+                                        />
                                 </Item>
                                 <Item>
                                     <Label text={this.t("cmbCustomer")} alignment="right" />
@@ -370,6 +350,23 @@ export default class itemList extends React.Component
                             columnAutoWidth={true}
                             allowColumnReordering={true}
                             allowColumnResizing={true}
+                            onCellPrepared={(e) =>
+                            {
+                                if(e.rowType === "data" && e.column.dataField === "MARGIN")
+                                {
+                                    if(typeof e.data.MARGIN.split("%")[1] != 'undefined' )
+                                    {
+                                        e.cellElement.style.color = e.data.MARGIN.split("%")[1] < 30 ? "red" : "blue";
+                                    }
+                                }
+                                if(e.rowType === "data" && e.column.dataField === "NETMARGIN")
+                                {
+                                    if(typeof e.data.NETMARGIN.split("%")[1] != 'undefined' )
+                                    {
+                                        e.cellElement.style.color = e.data.NETMARGIN.split("%")[1] < 30 ? "red" : "blue";
+                                    }
+                                }
+                            }}
                             onRowDblClick={async(e)=>
                             {
                                 App.instance.menuClick(
