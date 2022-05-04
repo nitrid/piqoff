@@ -1,6 +1,7 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import { itemCountCls } from '../../../../core/cls/count.js';
+import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
@@ -65,7 +66,7 @@ export default class itemCount extends React.Component
             if(pData.rowData.stat == 'edit')
             {
                 this.btnBack.setState({disabled:false});
-                this.btnNew.setState({disabled:false});
+                this.btnNew.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
                 this.btnCopy.setState({disabled:false});
@@ -178,7 +179,33 @@ export default class itemCount extends React.Component
                             {
                                 if(data.length > 0)
                                 {
-                                    this.addItem(data[0],e.rowIndex)
+                                    if(data.length == 0)
+                                    {
+                                        this.addItem(data[0],e.rowIndex)
+                                    }
+                                    else
+                                    {
+                                        for (let i = 0; i < data.length; i++) 
+                                        {
+                                            if(i == 0)
+                                            {
+                                                this.addItem(data[i],e.rowIndex)
+                                            }
+                                            else
+                                            {
+                                                let tmpDocItems = {...this.countObj.empty}
+                                                tmpDocItems.LINE_NO = this.countObj.dt().length
+                                                tmpDocItems.REF = this.txtRef.value
+                                                tmpDocItems.REF_NO = this.txtRefno.value
+                                                tmpDocItems.DEPOT = this.cmbDepot.value
+                                                tmpDocItems.DOC_DATE = this.dtDocDate.value
+                                                this.txtRef.readOnly = true
+                                                this.txtRefno.readOnly = true
+                                                this.countObj.addEmpty(tmpDocItems)
+                                                this.addItem(data[i],this.countObj.dt().length-1)
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -229,7 +256,33 @@ export default class itemCount extends React.Component
                                 {
                                     if(data.length > 0)
                                     {
-                                        this.addItem(data[0],e.rowIndex)
+                                        if(data.length == 0)
+                                        {
+                                            this.addItem(data[0],e.rowIndex)
+                                        }
+                                        else
+                                        {
+                                            for (let i = 0; i < data.length; i++) 
+                                            {
+                                                if(i == 0)
+                                                {
+                                                    this.addItem(data[i],e.rowIndex)
+                                                }
+                                                else
+                                                {
+                                                    let tmpDocItems = {...this.countObj.empty}
+                                                    tmpDocItems.LINE_NO = this.countObj.dt().length
+                                                    tmpDocItems.REF = this.txtRef.value
+                                                    tmpDocItems.REF_NO = this.txtRefno.value
+                                                    tmpDocItems.DEPOT = this.cmbDepot.value
+                                                    tmpDocItems.DOC_DATE = this.dtDocDate.value
+                                                    this.txtRef.readOnly = true
+                                                    this.txtRefno.readOnly = true
+                                                    this.countObj.addEmpty(tmpDocItems)
+                                                    this.addItem(data[i],this.countObj.dt().length-1)
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -240,9 +293,47 @@ export default class itemCount extends React.Component
                 </NdTextBox>
             )
         }
+        else  if(e.column.dataField == "QUANTITY")
+        {
+            return (
+                <NdNumberBox id={"numGrdQuantity"+e.rowIndex} parent={this} simple={true} 
+                value={e.value}
+                    onValueChanged={async (v)=>
+                    {
+                        if(v.value > 1000)
+                        {
+                            let tmpConfObj = 
+                            {
+                                id:'msgBigQuantity',showTitle:true,title:this.t("msgBigQuantity.title"),showCloseButton:true,width:'500px',height:'200px',
+                                button:[{id:"btn01",caption:this.t("msgBigQuantity.btn01"),location:'before'},{id:"btn02",caption:this.t("msgBigQuantity.btn02"),location:'after'}],
+                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBigQuantity.msg")}</div>)
+                            }
+                            let pResult = await dialog(tmpConfObj);
+                            if(pResult == 'btn01')
+                            {
+                                e.setValue(v.value)
+                                return
+                            }
+                            else if(pResult == 'btn02')
+                            {
+                                return
+                            }
+                            
+                        }
+                        else
+                        {
+                            e.setValue(v.value)
+                        }
+                    }}
+                >  
+                </NdNumberBox>
+            )
+        }
     }
     async addItem(pData,pIndex)
     {
+        console.log(pData)
+        console.log(pIndex)
         this.countObj.dt()[pIndex].ITEM_CODE = pData.CODE
         this.countObj.dt()[pIndex].ITEM = pData.GUID
         this.countObj.dt()[pIndex].ITEM_NAME = pData.NAME
@@ -371,6 +462,31 @@ export default class itemCount extends React.Component
                                         this.popDesign.show()
                                     }}/>
                                 </Item>
+                                <Item location="after"
+                                locateInMenu="auto"
+                                widget="dxButton"
+                                options=
+                                {
+                                    {
+                                        type: 'default',
+                                        icon: 'clear',
+                                        onClick: async () => 
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
+                                            }
+                                            
+                                            let pResult = await dialog(tmpConfObj);
+                                            if(pResult == 'btn01')
+                                            {
+                                                App.instance.panel.closePage()
+                                            }
+                                        }
+                                    }    
+                                } />
                             </Toolbar>
                         </div>
                     </div>
@@ -466,7 +582,7 @@ export default class itemCount extends React.Component
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_Docs.title")} 
-                                    data={{source:{select:{query : "SELECT GUID,REF,REF_NO,DOC_DATE,DEPOT_NAME FROM ITEM_COUNT_VW_01"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT REF,REF_NO,DOC_DATE,DEPOT_NAME FROM ITEM_COUNT_VW_01 GROUP BY REF,REF_NO,DOC_DATE,DEPOT_NAME"},sql:this.core.sql}}}
                                     button=
                                     {
                                         [
@@ -484,8 +600,8 @@ export default class itemCount extends React.Component
                                     >
                                         <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150} defaultSortOrder="asc"/>
                                         <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={300} defaultSortOrder="asc" />                                        
-                                        <Column dataField="DEPOT_NAME" caption={this.t("pg_Docs.clmdepotName")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="DOC_DATE" caption={this.t("pg_Docs.lcmDocDate")} width={300} defaultSortOrder="asc" />
+                                        <Column dataField="DEPOT_NAME" caption={this.t("pg_Docs.clmDepotName")} width={300} defaultSortOrder="asc" />
+                                        <Column dataField="DOC_DATE" caption={this.t("pg_Docs.clmDocDate")} width={300} defaultSortOrder="asc" />
                                         
                                     </NdPopGrid>
                                 </Item>
@@ -529,6 +645,13 @@ export default class itemCount extends React.Component
                                         </Validator> 
                                     </NdDatePicker>
                                 </Item>
+                                {/* Boş */}
+                                <EmptyItem />
+                                {/* BARKOD EKLEME */}
+                                <Item>
+                                    <Label text={this.t("txtItemName")} alignment="right" />
+                                        <NdTextBox id="txtUrunAdi" parent={this} simple={true} onEnterKey={this._btnGetirClick}/>
+                                </Item>
                             </Form>
                         </div>
                     </div>
@@ -562,7 +685,7 @@ export default class itemCount extends React.Component
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdItemCount.clmCreateDate")} width={150} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdItemCount.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdItemCount.clmItemName")} width={350} />
-                                        <Column dataField="QUANTITY" caption={this.t("grdItemCount.clmQuantity")} dataType={'number'} width={150}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdItemCount.clmQuantity")} dataType={'number'} editCellRender={this._cellRoleRender} width={150}/>
                                     </NdGrid>
                                 </Item>
                                 <Item location="after">
@@ -570,7 +693,6 @@ export default class itemCount extends React.Component
                                     validationGroup="frmCountFrom"
                                     onClick={async (e)=>
                                     {
-                                        console.log(this.cmbDepot)
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             if(typeof this.countObj.dt()[0] != 'undefined')
@@ -607,7 +729,7 @@ export default class itemCount extends React.Component
                             </Form>
                         </div>
                     </div>
-                    <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={"#root"}
+                    <NdPopGrid id={"pg_txtItemsCode"} selection={"multiple"} parent={this} container={"#root"}
                     visible={false}
                     position={{of:'#root'}} 
                     showTitle={true} 

@@ -90,6 +90,10 @@ module.exports =
             [
                 { from: "./src/pos/css/img/", to: "./pos/css/img/" },
                 { from: "./src/pos/sound/", to: "./pos/sound/" },
+                { from: "./src/off/css/img/", to: "./off/css/img/" },
+                { from: "./src/off/css/icons/", to: "./off/css/icons/" },
+                { from: "./src/off/css/icons/", to: "./off/css/icons/" },
+                { from: "./src/off/printview.html", to: "./off/printview.html" },
             ]
         }),
         new htmlWebPackPlugin(

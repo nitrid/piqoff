@@ -2,6 +2,7 @@ import React from 'react';
 import App from '../../../lib/app.js';
 import { customersCls,customerAdressCls, customerOfficalCls } from '../../../../core/cls/customers.js';
 
+
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item } from 'devextreme-react/form';
@@ -289,6 +290,31 @@ export default class customerAddressCard extends React.Component
                                         
                                     }}/>
                                 </Item>
+                                <Item location="after"
+                                locateInMenu="auto"
+                                widget="dxButton"
+                                options=
+                                {
+                                    {
+                                        type: 'default',
+                                        icon: 'clear',
+                                        onClick: async () => 
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
+                                            }
+                                            
+                                            let pResult = await dialog(tmpConfObj);
+                                            if(pResult == 'btn01')
+                                            {
+                                                App.instance.panel.closePage()
+                                            }
+                                        }
+                                    }    
+                                } />
                             </Toolbar>
                         </div>
                     </div>

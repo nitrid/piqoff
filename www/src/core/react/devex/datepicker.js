@@ -95,7 +95,8 @@ export default class NdDatePicker extends Base
             }
         }
         
-        this.setState({value:e})        
+        // REACT LOOBS HATASI VERDİĞİ İÇİN COMMENTE ALINDI
+        // this.setState({value:e})        
     } 
     render()
     {

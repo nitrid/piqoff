@@ -1,6 +1,7 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import {editItemCls} from '../../../../core/cls/items.js'
+import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
@@ -154,6 +155,31 @@ export default class collectiveItemEdit extends React.Component
                                             }                                       
                                     }}/>
                                 </Item>
+                                <Item location="after"
+                                locateInMenu="auto"
+                                widget="dxButton"
+                                options=
+                                {
+                                    {
+                                        type: 'default',
+                                        icon: 'clear',
+                                        onClick: async () => 
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
+                                            }
+                                            
+                                            let pResult = await dialog(tmpConfObj);
+                                            if(pResult == 'btn01')
+                                            {
+                                                App.instance.panel.closePage()
+                                            }
+                                        }
+                                    }    
+                                } />
                             </Toolbar>
                         </div>
                     </div>
@@ -319,11 +345,14 @@ export default class collectiveItemEdit extends React.Component
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
                                 <Editing mode="cell" allowUpdating={true} allowDeleting={false} confirmDelete={false}/>
                                 <Column dataField="CODE" caption={this.t("grdItemList.clmCode")} visible={true} width={150} allowEditing={false}/> 
-                                <Column dataField="NAME" caption={this.t("grdItemList.clmName")} visible={true}  /> 
-                                <Column dataField="BARCODE" caption={this.t("grdItemList.clmBarcode")} visible={true} width={150}/> 
+                                <Column dataField="NAME" caption={this.t("grdItemList.clmName")} visible={true} defaultSortOrder="asc"  /> 
+                                <Column dataField="BARCODE" caption={this.t("grdItemList.clmBarcode")} visible={true} width={150} allowEditing={false}/> 
                                 <Column dataField="MULTICODE" caption={this.t("grdItemList.clmMulticode")} visible={true} width={150}/> 
                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdItemList.clmCustomerName")} visible={true}  allowEditing={false}/> 
                                 <Column dataField="CUSTOMER_PRICE" caption={this.t("grdItemList.clmCustomerPrice")} visible={true} width={100}/> 
+                                <Column dataField="MAIN_UNIT_NAME" caption={this.t("grdItemList.clmMainUnit")} visible={true} width={100}/> 
+                                <Column dataField="UNDER_UNIT_NAME" caption={this.t("grdItemList.clmUnderUnit")} visible={true} width={100}/> 
+                                <Column dataField="UNDER_FACTOR" caption={this.t("grdItemList.clmUnderFactor")} visible={true} width={100}/> 
                                 <Column dataField="PRICE_SALE" caption={this.t("grdItemList.clmPriceSale")} visible={true} width={100} /> 
                                 <Column dataField="VAT" caption={this.t("grdItemList.clmVat")} visible={true} width={100} editCellRender={this._cellRoleRender}/>    
                                 <Column dataField="ORGINS" caption={this.t("grdItemList.clmOrgins")} visible={true} width={150} editCellRender={this._cellRoleRender}/>   

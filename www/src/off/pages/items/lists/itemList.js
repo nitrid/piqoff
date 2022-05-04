@@ -1,5 +1,6 @@
 import React from 'react';
 import App from '../../../lib/app.js';
+import moment from 'moment';
 
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
@@ -12,6 +13,9 @@ import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
+import NdTagBox from '../../../../core/react/devex/tagbox.js';
+import { dialog } from '../../../../core/react/devex/dialog.js';
+
 
 export default class itemList extends React.Component
 {
@@ -21,7 +25,7 @@ export default class itemList extends React.Component
 
         this.state = 
         {
-            columnListValue : ['NAME','CODE','BARCODE','MULTICODE','CUSTOMER_NAME']
+            columnListValue : ['NAME','CODE','BARCODE','MULTICODE','CUSTOMER_NAME','PRICE_SALE','VAT','MAIN_GRP_NAME']
         }
         
         this.core = App.instance.core;
@@ -35,7 +39,10 @@ export default class itemList extends React.Component
             {CODE : "BARCODE",NAME :  this.t("grdListe.clmBarcode")},
             {CODE : "MULTICODE",NAME : this.t("grdListe.clmMulticode")},
             {CODE : "CUSTOMER_NAME",NAME :  this.t("grdListe.clmCustomer")},
+            {CODE : "PRICE_SALE",NAME :  this.t("grdListe.clmPriceSale")},
             {CODE : "COST_PRICE",NAME :  this.t("grdListe.clmCostPrice")},
+            {CODE : "MARGIN",NAME :  this.t("grdListe.clmMargin")},
+            {CODE : "NETMARGIN",NAME :  this.t("grdListe.clmNetMargin")},
             {CODE : "VAT",NAME :  this.t("grdListe.clmVat")},  
             {CODE : "MIN_PRICE",NAME :  this.t("grdListe.clmMinPrice")},
             {CODE : "MAX_PRICE",NAME :  this.t("grdListe.clmMaxPrice")},
@@ -114,49 +121,114 @@ export default class itemList extends React.Component
     }
     async _btnGetirClick()
     {
-        let TmpVal = ""
-        
-        for (let i = 0; i < this.txtBarkod.value.split(' ').length; i++) 
+       
+        if(this.txtUrunAdi.value != '' && this.txtUrunAdi.value.slice(-1) != '*')
         {
-            TmpVal += "'" + this.txtBarkod.value.split(' ')[i] + "'"
-            if(this.txtBarkod.value.split(' ').length > 1 && i !=  (this.txtBarkod.value.split(' ').length - 1))
-            {
-                TmpVal += ","
-            }
+            let tmpUrunAdi = this.txtUrunAdi.value + '*'
+            this.txtUrunAdi.setState({value:tmpUrunAdi})
         }
         
-        let tmpSource =
+        if(this.chkMasterBarcode.value == true)
         {
-            source : 
+            let tmpSource =
             {
-                groupBy : this.groupList,
-                select : 
+                source : 
                 {
-                    query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 " +
-                            "WHERE {0} " +
-                            "((NAME = @NAME) OR (@NAME = '')) AND " +
-                            "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) AND " +
-                            "((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = ''))",
-                    param : ['NAME:string|250','MAIN_GRP:string|25','CUSTOMER_CODE:string|25'],
-                    value : [this.txtUrunAdi.value,this.cmbUrunGrup.value,this.cmbTedarikci.value]
-                },
-                sql : this.core.sql
+                    groupBy : this.groupList,
+                    select : 
+                    {
+                        query : "SELECT *,MAIN_UNIT_NAME AS UNIT_NAME," + 
+                                "CASE WHEN PRICE_SALE <> 0 THEN " +
+                                "CONVERT(nvarchar,ROUND((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE,2)) + '/ %' + CONVERT(nvarchar,ROUND((((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / (PRICE_SALE / ((VAT / 100) + 1))) * 100,2)) " +
+                                "ELSE '0'  " +
+                                "END AS MARGIN, " +
+                                "CASE WHEN PRICE_SALE <> 0 THEN " +
+                                "CONVERT(nvarchar,ROUND(((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / 1.12,2)) + '/ %' + CONVERT(nvarchar,ROUND(((((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / 1.12) / (PRICE_SALE / ((VAT / 100) + 1))) * 100,2)) " +
+                                "ELSE '0' " +
+                                "END AS NETMARGIN " +
+                                "FROM ITEMS_EDIT_VW_01 " +
+                                "WHERE {0} " +
+                                "((NAME LIKE @NAME +'%') OR (@NAME = '')) AND " +
+                                "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) AND " +
+                                "((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = ''))",
+                        param : ['NAME:string|250','MAIN_GRP:string|25','CUSTOMER_CODE:string|25'],
+                        value : [this.txtUrunAdi.value.replaceAll("*", "%"),this.cmbUrunGrup.value,this.cmbTedarikci.value]
+                    },
+                    sql : this.core.sql
+                }
             }
-        }
-        
-        if(this.txtBarkod.value == '')
-        {
-            tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "")
-        }
-        else if(this.txtBarkod.value.split(' ').length > 1)
-        {
-            tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE IN (" + TmpVal + ")) OR (BARCODE IN (" + TmpVal + ")) OR (MULTICODE IN (" + TmpVal + "))) AND")
+            
+            if(this.txtBarkod.value.length == 0)
+            {
+                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "")
+            }
+            else if(this.txtBarkod.value.length == 1)
+            {
+                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE LIKE '" + this.txtBarkod.value[0] + "' + '%') OR (BARCODE LIKE '" + this.txtBarkod.value[0] + "' + '%') OR (MULTICODE LIKE '" + this.txtBarkod.value[0] + "' + '%')) AND")
+            }
+            else
+            {
+                let TmpVal = ''
+                for (let i = 0; i < this.txtBarkod.value.length; i++) 
+                {
+                    TmpVal = TmpVal + ",'" + this.txtBarkod.value[i] + "'"
+                    
+                }
+                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (BARCODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (MULTICODE IN (" + TmpVal.substring(1,TmpVal.length) + "))) AND")
+            }
+            await this.grdListe.dataRefresh(tmpSource)
         }
         else
         {
-            tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE LIKE " + TmpVal + " + '%') OR (BARCODE LIKE " + TmpVal + " + '%') OR (MULTICODE LIKE " + TmpVal + " + '%')) AND")
+            let tmpSource =
+            {
+                source : 
+                {
+                    groupBy : this.groupList,
+                    select : 
+                    {
+                        query : "SELECT *," +
+                                "CASE WHEN PRICE_SALE <> 0 THEN " +
+                                "CONVERT(nvarchar,ROUND((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE,2)) + '/ %' + CONVERT(nvarchar,ROUND((((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / (PRICE_SALE / ((VAT / 100) + 1))) * 100,2)) " +
+                                "ELSE '0'  " +
+                                "END AS MARGIN, " +
+                                "CASE WHEN PRICE_SALE <> 0 THEN " +
+                                "CONVERT(nvarchar,ROUND(((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / 1.12,2)) + '/ %' + CONVERT(nvarchar,ROUND(((((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / 1.12) / (PRICE_SALE / ((VAT / 100) + 1))) * 100,2)) " +
+                                "ELSE '0' " +
+                                "END AS NETMARGIN " +
+                                "FROM ITEMS_BARCODE_MULTICODE_VW_01 " +
+                                "WHERE {0} " +
+                                "((NAME LIKE @NAME +'%') OR (@NAME = '')) AND " +
+                                "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) AND " +
+                                "((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = ''))",
+                        param : ['NAME:string|250','MAIN_GRP:string|25','CUSTOMER_CODE:string|25'],
+                        value : [this.txtUrunAdi.value.replaceAll("*", "%"),this.cmbUrunGrup.value,this.cmbTedarikci.value]
+                    },
+                    sql : this.core.sql
+                }
+            }
+            
+            
+            if(this.txtBarkod.value.length == 0)
+            {
+                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "")
+            }
+            else if(this.txtBarkod.value.length == 1)
+            {
+                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE LIKE '" + this.txtBarkod.value[0] + "' + '%') OR (BARCODE LIKE '" + this.txtBarkod.value[0] + "' + '%') OR (MULTICODE LIKE '" + this.txtBarkod.value[0] + "' + '%')) AND")
+            }
+            else
+            {
+                let TmpVal = ''
+                for (let i = 0; i < this.txtBarkod.value.length; i++) 
+                {
+                    TmpVal = TmpVal + ",'" + this.txtBarkod.value[i] + "'"
+                    
+                }
+                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (BARCODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (MULTICODE IN (" + TmpVal.substring(1,TmpVal.length) + "))) AND")
+            }
+            await this.grdListe.dataRefresh(tmpSource)
         }
-        await this.grdListe.dataRefresh(tmpSource)
     }
     render()
     {
@@ -185,6 +257,31 @@ export default class itemList extends React.Component
                                         }
                                     }    
                                 } />
+                                 <Item location="after"
+                                locateInMenu="auto"
+                                widget="dxButton"
+                                options=
+                                {
+                                    {
+                                        type: 'default',
+                                        icon: 'clear',
+                                        onClick: async () => 
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
+                                            }
+                                            
+                                            let pResult = await dialog(tmpConfObj);
+                                            if(pResult == 'btn01')
+                                            {
+                                                App.instance.panel.closePage()
+                                            }
+                                        }
+                                    }    
+                                } />
                             </Toolbar>
                         </div>
                     </div>
@@ -193,7 +290,8 @@ export default class itemList extends React.Component
                             <Form colCount={2} id="frmKriter">
                                 <Item>
                                     <Label text={this.t("txtBarkod")} alignment="right" />
-                                        <NdTextBox id="txtBarkod" parent={this} simple={true} />
+                                        <NdTagBox id="txtBarkod" parent={this} simple={true} value={[]}
+                                        />
                                 </Item>
                                 <Item>
                                     <Label text={this.t("cmbCustomer")} alignment="right" />
@@ -201,12 +299,11 @@ export default class itemList extends React.Component
                                         displayExpr="TITLE"                       
                                         valueExpr="CODE"
                                         data={{source: {select : {query:"SELECT CODE,TITLE FROM CUSTOMER_VW_01 WHERE TYPE IN(1,2) ORDER BY TITLE ASC"},sql : this.core.sql}}}
-                                        // onValueChanged={onValueChanged}
                                         />
                                 </Item>
                                 <Item>
                                     <Label text={this.t("txtItemName")} alignment="right" />
-                                        <NdTextBox id="txtUrunAdi" parent={this} simple={true} />
+                                        <NdTextBox id="txtUrunAdi" parent={this} simple={true} onEnterKey={this._btnGetirClick}/>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("cmbMainGrp")} alignment="right" />
@@ -214,13 +311,12 @@ export default class itemList extends React.Component
                                         displayExpr="NAME"                       
                                         valueExpr="CODE"
                                         data={{source: {select : {query:"SELECT CODE,NAME FROM ITEM_GROUP ORDER BY NAME ASC"},sql : this.core.sql}}}
-                                        // onValueChanged={onValueChanged}
                                         />
                                 </Item>
                                 <Item> </Item>
                                 <Item>
                                     <Label text={this.t("btnCheck")} alignment="right" />
-                                        <NdCheckBox id="chkAktif" parent={this} defaultValue={true}></NdCheckBox>
+                                        <NdCheckBox id="chkAktif" parent={this} value={true}></NdCheckBox>
                                 </Item>
                             </Form>
                         </div>
@@ -236,7 +332,7 @@ export default class itemList extends React.Component
                             />
                         </div>
                         <div className="col-3">
-                            
+                        <NdCheckBox id="chkMasterBarcode" parent={this} text={this.t("chkMasterBarcode")}  value={true} ></NdCheckBox>
                         </div>
                         <div className="col-3">
                             
@@ -255,17 +351,47 @@ export default class itemList extends React.Component
                             columnAutoWidth={true}
                             allowColumnReordering={true}
                             allowColumnResizing={true}
-                            >                            
+                            onCellPrepared={(e) =>
+                            {
+                                if(e.rowType === "data" && e.column.dataField === "MARGIN")
+                                {
+                                    if(typeof e.data.MARGIN.split("%")[1] != 'undefined' )
+                                    {
+                                        e.cellElement.style.color = e.data.MARGIN.split("%")[1] < 30 ? "red" : "blue";
+                                    }
+                                }
+                                if(e.rowType === "data" && e.column.dataField === "NETMARGIN")
+                                {
+                                    if(typeof e.data.NETMARGIN.split("%")[1] != 'undefined' )
+                                    {
+                                        e.cellElement.style.color = e.data.NETMARGIN.split("%")[1] < 30 ? "red" : "blue";
+                                    }
+                                }
+                            }}
+                            onRowDblClick={async(e)=>
+                            {
+                                App.instance.menuClick(
+                                    {
+                                        id: 'stk_01_001',
+                                        text: e.data.NAME.substring(0,10),
+                                        path: '../pages/items/cards/itemCard.js',
+                                        pagePrm:{CODE:e.data.CODE}
+                                    })
+                            }}
+                            >                                    
                                 <Paging defaultPageSize={15} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
 
                                 <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true}/> 
-                                <Column dataField="NAME" caption={this.t("grdListe.clmName")} visible={true}/> 
+                                <Column dataField="NAME" caption={this.t("grdListe.clmName")} visible={true} defaultSortOrder="asc" /> 
                                 <Column dataField="BARCODE" caption={this.t("grdListe.clmBarcode")} visible={true}/> 
                                 <Column dataField="SNAME" caption={this.t("grdListe.clmSname")} visible={false}/> 
-                                <Column dataField="MAIN_GRP_NAME" caption={this.t("grdListe.clmMainGrp")} visible={false}/> 
-                                <Column dataField="VAT" caption={this.t("grdListe.clmVat")} visible={false}/> 
+                                <Column dataField="MAIN_GRP_NAME" caption={this.t("grdListe.clmMainGrp")} visible={true}/> 
+                                <Column dataField="VAT" caption={this.t("grdListe.clmVat")} visible={true}/> 
+                                <Column dataField="PRICE_SALE" caption={this.t("grdListe.clmPriceSale")} visible={true}/> 
                                 <Column dataField="COST_PRICE" caption={this.t("grdListe.clmCostPrice")} visible={false}/> 
+                                <Column dataField="MARGIN" caption={this.t("grdListe.clmMargin")} visible={false}/> 
+                                <Column dataField="NETMARGIN" caption={this.t("grdListe.clmNetMargin")} visible={false}/> 
                                 <Column dataField="MIN_PRICE" caption={this.t("grdListe.clmMinPrice")} visible={false}/> 
                                 <Column dataField="MAX_PRICE" caption={this.t("grdListe.clmMaxPrice")} visible={false}/> 
                                 <Column dataField="UNIT_NAME" caption={this.t("grdListe.clmUnit")} visible={false}/> 

@@ -1,6 +1,9 @@
+import moment from 'moment';
+
 import React from 'react';
 import App from '../../../lib/app.js';
 import { docCls,docItemsCls, docCustomerCls } from '../../../../core/cls/doc.js';
+
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
@@ -8,6 +11,7 @@ import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
 import ContextMenu from 'devextreme-react/context-menu';
 import TabPanel from 'devextreme-react/tab-panel';
 import { Button } from 'devextreme-react/button';
+
 
 import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
@@ -80,7 +84,7 @@ export default class salesInvoice extends React.Component
             if(pData.rowData.stat == 'edit')
             {
                 this.btnBack.setState({disabled:false});
-                this.btnNew.setState({disabled:false});
+                this.btnNew.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
                 this.btnCopy.setState({disabled:false});
@@ -689,6 +693,31 @@ export default class salesInvoice extends React.Component
                                         this.popDesign.show()
                                     }}/>
                                 </Item>
+                                <Item location="after"
+                                locateInMenu="auto"
+                                widget="dxButton"
+                                options=
+                                {
+                                    {
+                                        type: 'default',
+                                        icon: 'clear',
+                                        onClick: async () => 
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
+                                            }
+                                            
+                                            let pResult = await dialog(tmpConfObj);
+                                            if(pResult == 'btn01')
+                                            {
+                                                App.instance.panel.closePage()
+                                            }
+                                        }
+                                    }    
+                                } />
                             </Toolbar>
                         </div>
                     </div>

@@ -4,6 +4,20 @@ export const langTr =
     btnSave: "Kaydet",
     btnCancel: "İptal",
     btnPrint :"Yazdır",
+    btnOk: "Tamam",
+    msgWarning: "Dikkat",
+    btnYes : "Evet",
+    btnNo : "Hayır",
+    msgClose : "Sayfayı Kapatmak İstediğinize Eminmisiniz ?",
+    txtLangSelect : "Dil Seçimi",
+    txtUser : "Kullanıcı",
+    txtPass : "Şifre",
+    btnUserSelect : "Kullanıcı Seçimi",
+    btnLogin : "Giriş",
+    btnLogout : "Çıkış",
+    msgNotAccess :"Kullanıcının Giriş Yetkisi Yok.",
+    msgInvalidUser : "Kullanıcı Adı veya Şifre Hatalı.",
+    txtCardRead :"Lütfen Kullanıcı Kartınızı Okutunuz.",
     menu:
     {
         stk: "Stok",                
@@ -17,16 +31,16 @@ export const langTr =
         stk_01_003: "Fiyat Tanımları",
         stk_01_004: "Birim Tanımları",
         stk_01_005: "Multi Kod Tanımları",
-        stk_01_006: "Depo Tanımları",
+        stk_01_006: "Depo/Mağaza Tanımları",
         stk_02_001: "Sayım Evrakı",
-        stk_02_002: "Depolar Arası Sevk",
-        stk_02_003: "Fire Çıkış Fişi",
+        stk_02_002: "Depo/Mağaza Arası Sevk",
+        stk_02_003: "Kayıp Ürün Fişi",
         stk_02_004: "Etiket Basımı",
-        stk_02_005: "İade Deposuna Sevk",
+        stk_02_005: "İade Ürünü Toplama",
         stk_03_001: "Stok Listesi",
         stk_03_002: "Fiyat Listesi",
         stk_03_003: "Barkod Listesi",
-        stk_03_004: "Depo Listesi",
+        stk_03_004: "Depo/Mağaza Listesi",
         stk_03_005: "Multi Kod Listesi",
         stk_04_001: "Toplu Stok Düzenleme",
         stk_04_002: "İade Operasyonları",
@@ -327,7 +341,12 @@ export const langTr =
             clmItemCode: "STOK KODU"
         },
        
-      
+        msgCheckBarcode:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Girmiş olduğunuz barkod sistem de kayıtlı ! Stok Getirildi."
+        },
         msgBarcode:
         {
             title: "Dikkat",
@@ -429,8 +448,7 @@ export const langTr =
             clmRef : "SERİ",
             clmRefNo : "SIRA",
             clmDocDate : "TARIH",
-            clmInputName : "GİRİŞ",
-            clmOutputName : "ÇIKIŞ",
+            clmDepotName : "DEPO/MAĞAZA",
         },
         pg_txtItemsCode : 
         {
@@ -484,6 +502,13 @@ export const langTr =
             btn01: "Tamam",
             btn02: "Vazgeç",
             msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgBigQuantity:
+        {
+            title: "Dikkat",
+            btn01: "Devam Et",
+            btn02: "Vazgeç",
+            msg: "Girdiğiniz Miktar 1000'den Büyük Devam Etmek İstediğinize Eminmisiniz ?"
         },
         msgLocked:
         {
@@ -1030,9 +1055,10 @@ export const langTr =
         cmbMainGrp : "Ürün Grubu",
         btnCheck : "Aktif",
         btnGet :"Getir",
+        chkMasterBarcode : "Barkodları Birleştir",
         grdListe : 
         {
-            clmCode: "ürün Kodu",
+            clmCode: "Ürün Kodu",
             clmName : "Ürün Adı",
             clmMainGrp : "Ürün Grubu",
             clmCustomer : "Cari",
@@ -1041,11 +1067,13 @@ export const langTr =
             clmUnit : "Birim",
             clmBarcode : "Barkod",
             clmCostPrice : "Maliyet Fiyatı",
+            clmPriceSale : "Satış Fiyatı",
             clmVat : "Vergi",
-            clmMinPrice : "Minimum Satış Fiyatı",
-            clmMaxPrice : "Maximum Satış Fiyatı",
+            clmMinPrice : "Min Fiyatı",
+            clmMaxPrice : "Max  Fiyatı",
             clmStatus : "Durum",
-
+            clmNetMargin : "Net Marj",
+            clmMargin : "Brüt Marj"
         },
     },
     stk_03_002 : 
@@ -1094,7 +1122,7 @@ export const langTr =
         btnGet :"Getir",
         grdListe : 
         {
-            clmCode: "ürün Kodu",
+            clmCode: "Ürün Kodu",
             clmName : "Ürün Adı",
             clmMainGrp : "Ürün Grubu",
             clmCustomer : "Cari",
@@ -1136,7 +1164,10 @@ export const langTr =
             clmPriceSale : "Satış Fiyatı",
             clmVat : "Vergi",
             clmOrgins : "Orgin",
-            clmStatus : "Aktif"
+            clmStatus : "Aktif",
+            clmUnderUnit : "Alt Birim",
+            clmMainUnit : 'Ana Birim',
+            clmUnderFactor : "Katsayı",
         },
         msgSave:
         {

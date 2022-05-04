@@ -1,8 +1,7 @@
-import moment from 'moment';
-
 import React from 'react';
 import App from '../../../lib/app.js';
 import {itemsCls,itemPriceCls,itemBarcodeCls,itemMultiCodeCls,unitCls} from '../../../../core/cls/items.js'
+import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
@@ -41,6 +40,10 @@ export default class itemCard extends React.Component
     {
         await this.core.util.waitUntil(0)
         this.init(); 
+        if(typeof this.pagePrm != 'undefined')
+        {
+            this.getItem(this.pagePrm.CODE)
+        }
     }    
     async init()
     {  
@@ -505,6 +508,31 @@ export default class itemCard extends React.Component
                                         this.popDesign.show()
                                     }}/>
                                 </Item>
+                                <Item location="after"
+                                locateInMenu="auto"
+                                widget="dxButton"
+                                options=
+                                {
+                                    {
+                                        type: 'default',
+                                        icon: 'clear',
+                                        onClick: async () => 
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
+                                            }
+                                            
+                                            let pResult = await dialog(tmpConfObj);
+                                            if(pResult == 'btn01')
+                                            {
+                                                App.instance.panel.closePage()
+                                            }
+                                        }
+                                    }    
+                                } />
                             </Toolbar>
                         </div>
                     </div>

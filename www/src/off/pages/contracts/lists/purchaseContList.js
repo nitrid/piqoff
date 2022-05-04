@@ -1,5 +1,6 @@
 import React from 'react';
 import App from '../../../lib/app.js';
+import moment from 'moment';
 
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
@@ -14,6 +15,7 @@ import NdButton from '../../../../core/react/devex/button.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
+import { dialog } from '../../../../core/react/devex/dialog.js';
 
 export default class purchaseContList extends React.Component
 {
@@ -171,6 +173,31 @@ export default class purchaseContList extends React.Component
                                                 text: this.t('menu'),
                                                 path: '../pages/contracts/cards/purchaseContract.js'
                                             })
+                                        }
+                                    }    
+                                } />
+                                 <Item location="after"
+                                locateInMenu="auto"
+                                widget="dxButton"
+                                options=
+                                {
+                                    {
+                                        type: 'default',
+                                        icon: 'clear',
+                                        onClick: async () => 
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
+                                            }
+                                            
+                                            let pResult = await dialog(tmpConfObj);
+                                            if(pResult == 'btn01')
+                                            {
+                                                App.instance.panel.closePage()
+                                            }
                                         }
                                     }    
                                 } />

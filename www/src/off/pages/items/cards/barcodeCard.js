@@ -2,6 +2,7 @@ import React from 'react';
 import App from '../../../lib/app.js';
 import {itemsCls,itemPriceCls,itemBarcodeCls,itemMultiCodeCls,unitCls} from '../../../../core/cls/items.js'
 
+
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item } from 'devextreme-react/form';
@@ -55,6 +56,14 @@ export default class barcodeCard extends React.Component
 
                 if(tmpData.length > 0)
                 {
+                    let tmpConfObj =
+                    {
+                        id:'msgCheckBarcode',showTitle:true,title:this.t("msgCheckBarcode.title"),showCloseButton:true,width:'500px',height:'200px',
+                        button:[{id:"btn01",caption:this.t("msgCheckBarcode.btn01"),location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCheckBarcode.msg")}</div>)
+                    }
+                    
+                    await dialog(tmpConfObj);
                     this.getBarcode(tmpData[0].BARCODE)
                     resolve(2) //KAYIT VAR
                 }
@@ -198,16 +207,42 @@ export default class barcodeCard extends React.Component
                                         this.popDesign.show()
                                     }}/>
                                 </Item>
+                                <Item location="after"
+                                locateInMenu="auto"
+                                widget="dxButton"
+                                options=
+                                {
+                                    {
+                                        type: 'default',
+                                        icon: 'clear',
+                                        onClick: async () => 
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
+                                            }
+                                            
+                                            let pResult = await dialog(tmpConfObj);
+                                            if(pResult == 'btn01')
+                                            {
+                                                App.instance.panel.closePage()
+                                            }
+                                        }
+                                    }    
+                                } />
                             </Toolbar>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">                        
                         <div className="col-9">
                             <Form colCount={2} id="frmBarcode">
-                                {/* txtBarcode */}
+                                {/* txtItem */}
                                 <Item>                                    
-                                    <Label text={this.t("txtBarcode")} alignment="right" />
-                                    <NdTextBox id="txtBarcode" parent={this} simple={true} dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"BARCODE"}}  validationGroup="frmBarcode"
+                                    <Label text={this.t("txtItem")} alignment="right" />
+                                    <NdTextBox id="txtItem" parent={this} simple={true} dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"ITEM_CODE"}}  validationGroup="frmBarcode"
+                                    readOnly={true}
                                     button=
                                     {
                                         [
@@ -216,22 +251,81 @@ export default class barcodeCard extends React.Component
                                                 icon:'more',
                                                 onClick:()=>
                                                 {
-                                                    this.pg_txtBarcode.show()
-                                                    this.pg_txtBarcode.onClick = (data) =>
+                                                    this.pg_txtItem.show()
+                                                    this.pg_txtItem.onClick = (data) =>
                                                     {
                                                         if(data.length > 0)
                                                         {
-                                                            this.getBarcode(data[0].BARCODE)
+                                                            let tmpEmpty = {...this.itemBarcodeObj.empty};
+                                                            tmpEmpty.BARCODE = this.txtBarcode.value
+                                                            tmpEmpty.TYPE = this.cmbPopBarType.value
+                                                            tmpEmpty.UNIT_GUID = this.cmbBarUnit.value
+                                                            tmpEmpty.UNIT_NAME = this.cmbBarUnit.displayValue
+                                                            tmpEmpty.ITEM_GUID = data[0].GUID
+                                                            tmpEmpty.ITEM_NAME = data[0].NAME
+                                                            tmpEmpty.ITEM_CODE = data[0].CODE
+                                                            this.itemBarcodeObj.addEmpty(tmpEmpty);  
+                                                            this._getUnit(data[0].GUID)
                                                         }
                                                     }
                                                 }
                                             },
+                                        ]
+                                    }                       
+                                    >   
+                                    <Validator validationGroup={"frmBarcode"}>
+                                            <RequiredRule message={this.t("validCode")} />
+                                    </Validator>    
+                                    </NdTextBox>      
+                                    {/* STOK SEÇİM POPUP */}
+                                    <NdPopGrid id={"pg_txtItem"} parent={this} container={"#root"} 
+                                    visible={false}
+                                    position={{of:'#root'}} 
+                                    showTitle={true} 
+                                    showBorders={true}
+                                    width={'90%'}
+                                    height={'90%'}
+                                    title={this.t("pg_txtItem.title")} 
+                                    search={true}
+                                    data = 
+                                    {{
+                                        source:
+                                        {
+                                            select:
                                             {
-                                                id:'02',
+                                                query : "SELECT GUID,CODE,NAME,VAT FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                                param : ['VAL:string|50']
+                                            },
+                                            sql:this.core.sql
+                                        }
+                                    }}
+                                    >
+                                        <Column dataField="CODE" caption={this.t("pg_txtItem.clmCode")} width={150} />
+                                        <Column dataField="NAME" caption={this.t("pg_txtItem.clmName")} width={650} defaultSortOrder="asc" />
+                                    </NdPopGrid>
+                                </Item>                           
+                                {/* txtItemName */}
+                                <Item>
+                                    <Label text={this.t("txtItemName")} alignment="right" />
+                                    <NdTextBox id="txtItemName" parent={this} simple={true} 
+                                    readOnly={true}
+                                    dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"ITEM_NAME"}} 
+                                   />
+                                </Item>
+                                
+                                 {/* txtBarcode */}
+                                 <Item>                                    
+                                    <Label text={this.t("txtBarcode")} alignment="right" />
+                                    <NdTextBox id="txtBarcode" parent={this} simple={true} dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"BARCODE"}}  validationGroup="frmBarcode"
+                                    button=
+                                    {
+                                        [
+                                            {
+                                                id:'01',
                                                 icon:'arrowdown',
                                                 onClick:()=>
                                                 {
-                                                    this.txtBarcode.value = Math.floor(Date.now() / 1000)
+                                                    this.txtBarcode.value = Math.floor(Date.now() / 10)
                                                 }
                                             }
                                         ]
@@ -309,80 +403,6 @@ export default class barcodeCard extends React.Component
                                     />
                                 </Item>
                                 <Item></Item>
-                                {/* txtItem */}
-                                <Item>                                    
-                                    <Label text={this.t("txtItem")} alignment="right" />
-                                    <NdTextBox id="txtItem" parent={this} simple={true} dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"ITEM_CODE"}}  validationGroup="frmBarcode"
-                                    readOnly={true}
-                                    button=
-                                    {
-                                        [
-                                            {
-                                                id:'01',
-                                                icon:'more',
-                                                onClick:()=>
-                                                {
-                                                    this.pg_txtItem.show()
-                                                    this.pg_txtItem.onClick = (data) =>
-                                                    {
-                                                        if(data.length > 0)
-                                                        {
-                                                            let tmpEmpty = {...this.itemBarcodeObj.empty};
-                                                            tmpEmpty.BARCODE = this.txtBarcode.value
-                                                            tmpEmpty.TYPE = this.cmbPopBarType.value
-                                                            tmpEmpty.UNIT_GUID = this.cmbBarUnit.value
-                                                            tmpEmpty.UNIT_NAME = this.cmbBarUnit.displayValue
-                                                            tmpEmpty.ITEM_GUID = data[0].GUID
-                                                            tmpEmpty.ITEM_NAME = data[0].NAME
-                                                            tmpEmpty.ITEM_CODE = data[0].CODE
-                                                            this.itemBarcodeObj.addEmpty(tmpEmpty);  
-                                                            this._getUnit(data[0].GUID)
-                                                        }
-                                                    }
-                                                }
-                                            },
-                                        ]
-                                    }                       
-                                    >   
-                                    <Validator validationGroup={"frmBarcode"}>
-                                            <RequiredRule message={this.t("validCode")} />
-                                    </Validator>    
-                                    </NdTextBox>      
-                                    {/* STOK SEÇİM POPUP */}
-                                    <NdPopGrid id={"pg_txtItem"} parent={this} container={"#root"} 
-                                    visible={false}
-                                    position={{of:'#root'}} 
-                                    showTitle={true} 
-                                    showBorders={true}
-                                    width={'90%'}
-                                    height={'90%'}
-                                    title={this.t("pg_txtItem.title")} 
-                                    search={true}
-                                    data = 
-                                    {{
-                                        source:
-                                        {
-                                            select:
-                                            {
-                                                query : "SELECT GUID,CODE,NAME,VAT FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
-                                                param : ['VAL:string|50']
-                                            },
-                                            sql:this.core.sql
-                                        }
-                                    }}
-                                    >
-                                        <Column dataField="CODE" caption={this.t("pg_txtItem.clmCode")} width={150} />
-                                        <Column dataField="NAME" caption={this.t("pg_txtItem.clmName")} width={650} defaultSortOrder="asc" />
-                                    </NdPopGrid>
-                                </Item>                           
-                                {/* txtItemName */}
-                                <Item>
-                                    <Label text={this.t("txtItemName")} alignment="right" />
-                                    <NdTextBox id="txtItemName" parent={this} simple={true} 
-                                    readOnly={true}
-                                    dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"ITEM_NAME"}} 
-                                   />
-                                </Item>
                                 {/* cmbBarUnit */}
                                 <Item>
                                     <Label text={this.t("cmbBarUnit")} alignment="right" />

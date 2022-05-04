@@ -1,6 +1,7 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import { docCls,docItemsCls, docCustomerCls } from '../../../../core/cls/doc.js';
+import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
@@ -74,7 +75,7 @@ export default class rebateDispatch extends React.Component
             if(pData.rowData.stat == 'edit')
             {
                 this.btnBack.setState({disabled:false});
-                this.btnNew.setState({disabled:false});
+                this.btnNew.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
                 this.btnCopy.setState({disabled:false});
@@ -227,20 +228,20 @@ export default class rebateDispatch extends React.Component
                 <NdTextBox id={"txtGrdItemsCode"+e.rowIndex} parent={this} simple={true} 
                 value={e.value}
                 onKeyDown={async(k)=>
+                {
+                    console.log(k)
+                    if(k.event.key == 'F10' || k.event.key == 'ArrowRight')
                     {
-                        console.log(k)
-                        if(k.event.key == 'F10' || k.event.key == 'ArrowRight')
+                        await this.pg_txtItemsCode.setVal(e.value)
+                        this.pg_txtItemsCode.onClick = async(data) =>
                         {
-                            await this.pg_txtItemsCode.setVal(e.value)
-                            this.pg_txtItemsCode.onClick = async(data) =>
+                            if(data.length > 0)
                             {
-                                if(data.length > 0)
-                                {
-                                    this.addItem(data[0],e.rowIndex)
-                                }
+                                this.addItem(data[0],e.rowIndex)
                             }
                         }
-                    }}
+                    }
+                }}
                     onValueChanged={(v)=>
                     {
                         e.value = v.value
@@ -544,6 +545,31 @@ export default class rebateDispatch extends React.Component
                                         this.popDesign.show()
                                     }}/>
                                 </Item>
+                                <Item location="after"
+                                locateInMenu="auto"
+                                widget="dxButton"
+                                options=
+                                {
+                                    {
+                                        type: 'default',
+                                        icon: 'clear',
+                                        onClick: async () => 
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
+                                            }
+                                            
+                                            let pResult = await dialog(tmpConfObj);
+                                            if(pResult == 'btn01')
+                                            {
+                                                App.instance.panel.closePage()
+                                            }
+                                        }
+                                    }    
+                                } />
                             </Toolbar>
                         </div>
                     </div>

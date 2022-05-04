@@ -1,5 +1,6 @@
 import React from 'react';
 import App from '../../../lib/app.js';
+import moment from 'moment';
 
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
@@ -12,6 +13,7 @@ import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
+import { dialog } from '../../../../core/react/devex/dialog.js';
 
 export default class multicodeList extends React.Component
 {
@@ -136,25 +138,31 @@ export default class multicodeList extends React.Component
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
-                                {/* <Item location="after"
+                            <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
                                 options=
                                 {
                                     {
                                         type: 'default',
-                                        icon: 'add',
+                                        icon: 'clear',
                                         onClick: async () => 
                                         {
-                                            App.instance.menuClick(
+                                            let tmpConfObj =
                                             {
-                                                id: 'stk_01_005',
-                                                text: 'Stok Tanımları',
-                                                path: '../pages/items/cards/itemCard.js'
-                                            })
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
+                                            }
+                                            
+                                            let pResult = await dialog(tmpConfObj);
+                                            if(pResult == 'btn01')
+                                            {
+                                                App.instance.panel.closePage()
+                                            }
                                         }
                                     }    
-                                } /> */}
+                                } />
                             </Toolbar>
                         </div>
                     </div>
@@ -226,7 +234,7 @@ export default class multicodeList extends React.Component
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
 
                                 <Column dataField="ITEM_CODE" caption={this.t("grdListe.clmCode")} visible={true}/> 
-                                <Column dataField="ITEM_NAME" caption={this.t("grdListe.clmName")} visible={true}/> 
+                                <Column dataField="ITEM_NAME" caption={this.t("grdListe.clmName")} visible={true} defaultSortOrder="asc"/> 
                                 <Column dataField="MULTICODE" caption={this.t("grdListe.clmMulticode")} visible={true}/> 
                                 <Column dataField="MAIN_GRP_NAME" caption={this.t("grdListe.clmMainGrp")} visible={true}/> 
                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdListe.clmCustomer")} visible={true}/> 
