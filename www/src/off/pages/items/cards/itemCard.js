@@ -1,4 +1,4 @@
-import moment from 'moment-with-locales-es6';
+import moment from 'moment';
 
 import React from 'react';
 import App from '../../../lib/app.js';

@@ -2,7 +2,7 @@ import 'devextreme/dist/css/dx.light.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/custom.css';
 
-import moment from 'moment-with-locales-es6';
+import moment from 'moment';
 import io from "socket.io-client";
 
 import "@fortawesome/fontawesome-free/js/all.js";

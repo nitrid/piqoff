@@ -1,6 +1,6 @@
 import React from "react";
 import App from "../lib/app.js";
-import moment from 'moment-with-locales-es6';
+import moment from 'moment';
 
 import Form, { Label,Item } from "devextreme-react/form";
 import { ButtonGroup } from "devextreme-react/button-group";

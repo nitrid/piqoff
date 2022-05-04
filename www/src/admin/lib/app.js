@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/custom.css';
 
 import $ from "jquery";
-import moment from 'moment-with-locales-es6';
+import moment from 'moment';
 import io from "socket.io-client";
 
 import React from 'react';

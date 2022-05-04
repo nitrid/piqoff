@@ -1,7 +1,7 @@
 import React from 'react';
 import DateBox from 'devextreme-react/date-box';
 import Base,{ Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from './base.js';
-import moment from 'moment-with-locales-es6';
+import moment from 'moment';
 
 export { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule }
 export default class NdDatePicker extends Base

@@ -1,5 +1,5 @@
 import { core,dataset,datatable } from "../core.js";
-import moment from 'moment-with-locales-es6';
+import moment from 'moment';
 
 export class itemsCls
 {
