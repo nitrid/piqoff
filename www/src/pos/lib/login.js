@@ -52,7 +52,6 @@ export default class Login extends React.Component
         }  
         this.core = App.instance.core;    
         this.lang = App.instance.lang;
-        this.image = ['../../cardicon3.png'];
 
         this.cardIdCheck = this.cardIdCheck.bind(this)
         this.onLoginClick = this.onLoginClick.bind(this)
@@ -288,11 +287,7 @@ export default class Login extends React.Component
                         >
                             <Form colCount={1} height={'fit-content'}>
                             <Item>
-                                <Gallery
-                                    dataSource={this.image}
-                                    height={300}
-                                    defaultSelectedIndex={2}
-                                />
+                                <img src="./css/img/cardicon3.png" height="300px"/>
                             </Item>
                             <Item>
                             <NdTextBox id="cardRead" parent={this} simple={true}  mode="password" showClearButton={true} height='fit-content' onValueChanged={this.textValueChanged}  
