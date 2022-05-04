@@ -808,7 +808,7 @@ export default class posDoc extends React.Component
                     <div className="col-12">                    
                         <div className="row m-2">
                             <div className="col-1">
-                                <img src="./css/img/logo2.png" width="50px" height="50px"/>
+                                <img src="./css/img/logo.png" width="50px" height="50px"/>
                             </div>
                             <div className="col-2">
                                 <div className="row" style={{height:"25px"}}>

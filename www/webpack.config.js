@@ -2,6 +2,7 @@ const path = require("path");
 const webpack = require("webpack");
 const htmlWebPackPlugin = require('html-webpack-plugin');
 const copyPlugin = require("copy-webpack-plugin");
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = 
 {
@@ -60,13 +61,15 @@ module.exports =
         static: 
         [
             {
-                directory: path.join(__dirname, "public/pos"),
-                publicPath: '/pos',
+                directory: path.join(__dirname, "public/admin")
+            },
+            {
+                directory: path.join(__dirname, "public/off")
+            },
+            {
+                directory: path.join(__dirname, "public/pos")
             }
         ],
-        // {
-        //     directory: path.join(__dirname, "public")
-        // },
         port: 3000,
         proxy: 
         {
@@ -80,6 +83,7 @@ module.exports =
     plugins: 
     [
         new webpack.HotModuleReplacementPlugin(),
+        new CleanWebpackPlugin(),
         new copyPlugin(
         {
             patterns: 
