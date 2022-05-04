@@ -4,3 +4,4 @@ plugins/lic
 tmp/
 node_modules/
 package-lock.json
+www/public

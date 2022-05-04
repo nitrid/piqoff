@@ -96,9 +96,9 @@ module.exports =
         }),
         new htmlWebPackPlugin(
         {
-            template: './src/off/index.html',
-            filename: 'off/index.html',
-            chunks: ['off']
+            template: './src/pos/index.html',
+            filename: 'pos/index.html',
+            chunks: ['pos']
         }),
     ]
 };
