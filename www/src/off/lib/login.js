@@ -292,7 +292,7 @@ export default class Login extends React.Component
                                 <img src="./css/img/cardicon3.png" height="300px"/>
                             </Item>
                             <Item>
-                            <NdTextBox id="cardRead" parent={this} simple={true}  mode="password" showClearButton={true} height='fit-content' onValueChanged={this.textValueChanged}  
+                            <NdTextBox id="cardRead" parent={this} simple={true}  mode="password" showClearButton={true} height='fit-content'
                                 placeholder={this.lang.t("txtCardRead")}
                                 onKeyUp={async(k)=>
                                 {
@@ -300,7 +300,7 @@ export default class Login extends React.Component
                                     {
                                       setTimeout(() => {
                                           this.cardRead.value = ''
-                                      }, 500);
+                                      }, 50);
                                     }
                                     else
                                     {

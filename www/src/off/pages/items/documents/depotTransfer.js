@@ -481,9 +481,8 @@ export default class depotTransfer extends React.Component
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
                                             readOnly={true}
                                             maxLength={32}
-                                            onValueChanged={(async()=>
+                                            onChange={(async(e)=>
                                             {
-                                                this.docObj.dt()[0].REF = this.txtRef.value 
                                                 let tmpQuery = 
                                                 {
                                                     query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 2 AND DOC_TYPE = 2 AND REF = @REF ",

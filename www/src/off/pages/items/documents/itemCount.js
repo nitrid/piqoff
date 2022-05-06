@@ -96,7 +96,7 @@ export default class itemCount extends React.Component
 
 
 
-        this.txtRef.props.onValueChanged()
+        this.txtRef.props.onChange()
         this.dtDocDate.value =  moment(new Date()).format("YYYY-MM-DD"),
         this.txtRef.readOnly = false
         this.txtRefno.readOnly = false
@@ -179,11 +179,11 @@ export default class itemCount extends React.Component
                             {
                                 if(data.length > 0)
                                 {
-                                    if(data.length == 0)
+                                    if(data.length == 1)
                                     {
                                         this.addItem(data[0],e.rowIndex)
                                     }
-                                    else
+                                    else İF(data.length > 1)
                                     {
                                         for (let i = 0; i < data.length; i++) 
                                         {
@@ -256,11 +256,11 @@ export default class itemCount extends React.Component
                                 {
                                     if(data.length > 0)
                                     {
-                                        if(data.length == 0)
+                                        if(data.length == 1)
                                         {
                                             this.addItem(data[0],e.rowIndex)
                                         }
-                                        else
+                                        else if(data.length > 1)
                                         {
                                             for (let i = 0; i < data.length; i++) 
                                             {
@@ -502,7 +502,7 @@ export default class itemCount extends React.Component
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.countObj.dt('ITEM_COUNT'),field:"REF"}}
                                             readOnly={true}
                                             maxLength={32}
-                                            onValueChanged={(async()=>
+                                            onChange={(async(e)=>
                                             {
                                                 let tmpQuery = 
                                                 {
@@ -649,8 +649,52 @@ export default class itemCount extends React.Component
                                 <EmptyItem />
                                 {/* BARKOD EKLEME */}
                                 <Item>
-                                    <Label text={this.t("txtItemName")} alignment="right" />
-                                        <NdTextBox id="txtUrunAdi" parent={this} simple={true} onEnterKey={this._btnGetirClick}/>
+                                    <Label text={this.t("txtBarcode")} alignment="right" />
+                                    <NdTextBox id="txtBarcode" parent={this} simple={true}  
+                                    onEnterKey={(async(e)=>
+                                    {
+                                        let tmpQuery = 
+                                        {
+                                            query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
+                                            param : ['CODE:string|50'],
+                                            value : [this.txtBarcode.value]
+                                        }
+                                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                                        this.txtBarcode.setState({value:""})
+                                        if(tmpData.result.recordset.length > 0)
+                                        {
+                                            if(typeof this.countObj.dt()[this.countObj.dt().length - 1] == 'undefined' || this.countObj.dt()[this.countObj.dt().length - 1].CODE != '')
+                                            {
+                                                let tmpDocItems = {...this.countObj.empty}
+                                                tmpDocItems.LINE_NO = this.countObj.dt().length
+                                                tmpDocItems.REF = this.txtRef.value
+                                                tmpDocItems.REF_NO = this.txtRefno.value
+                                                tmpDocItems.DEPOT = this.cmbDepot.value
+                                                tmpDocItems.DOC_DATE = this.dtDocDate.value
+                                                this.txtRef.readOnly = true
+                                                this.txtRefno.readOnly = true
+                                                this.countObj.addEmpty(tmpDocItems)
+                                            }
+                                            
+                                            this.addItem(tmpData.result.recordset[0],this.countObj.dt().length - 1)
+                                        }
+                                        else
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgItemNotFound',showTitle:true,title:this.t("msgItemNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
+                                            }
+                                
+                                            await dialog(tmpConfObj);
+                                        }
+                                        
+                                    }).bind(this)}
+                                    param={this.param.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
+                                    >
+                                    </NdTextBox>
                                 </Item>
                             </Form>
                         </div>
@@ -680,7 +724,7 @@ export default class itemCount extends React.Component
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
-                                        <Scrolling mode="infinite" />
+                                        <Scrolling mode="standard" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdItemCount.clmCreateDate")} width={150} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdItemCount.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
@@ -729,7 +773,7 @@ export default class itemCount extends React.Component
                             </Form>
                         </div>
                     </div>
-                    <NdPopGrid id={"pg_txtItemsCode"} selection={"multiple"} parent={this} container={"#root"}
+                    <NdPopGrid id={"pg_txtItemsCode"}  parent={this} container={"#root"}
                     visible={false}
                     position={{of:'#root'}} 
                     showTitle={true} 

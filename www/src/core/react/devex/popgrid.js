@@ -26,7 +26,7 @@ export default class NdPopGrid extends Base
         this.state.columns = typeof props.columns == 'undefined' ? undefined : props.columns
         this.state.filterRow = typeof props.filterRow == 'undefined' ? {visible:true} : props.filterRow
         this.state.headerFilter = typeof props.headerFilter == 'undefined' ? {visible:true} : props.headerFilter
-        this.state.selection = typeof props.selection == 'undefined' ? {mode:"single"} : props.selection
+        this.state.selection = typeof props.selection == 'undefined' ? {mode:"multiple"} : props.selection
         this.state.paging = typeof props.paging == 'undefined' ? {} : props.paging
         this.state.pager = typeof props.pager == 'undefined' ? {} : props.pager
         this.state.editing = typeof props.editing == 'undefined' ? {} : props.editing
@@ -248,9 +248,8 @@ export default class NdPopGrid extends Base
     {
         if(typeof pValue != 'undefined')
         {
-            
-            this["pop_" + this.props.id].show();
-            this["txt" + this.props.id].setState({value:pValue})
+            await this["pop_" + this.props.id].show();
+            await this["txt" + this.props.id].setState({value:pValue})
             await this.getData()
         }
     }
@@ -271,6 +270,7 @@ export default class NdPopGrid extends Base
         }
         tmpQuery.source.select.value = []
         tmpQuery.source.select.value.push(this["txt" + this.props.id].value.replaceAll('*','%')+'%')
+        console.log(this["txt" + this.props.id].value)
         await this.grid.dataRefresh(tmpQuery)
     }
     async setData(pData)

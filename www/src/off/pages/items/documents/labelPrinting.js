@@ -90,9 +90,9 @@ export default class labelPrinting extends React.Component
 
 
         let tmpLbl = {...this.lblObj.empty}
+        tmpLbl.REF = this.user.CODE
         this.lblObj.addEmpty(tmpLbl);
-        this.txtSer.value = this.user.CODE
-        this.txtSer.props.onValueChanged()
+        
         this.txtSer.readOnly = false
         this.txtRefno.readOnly = false
         this.dtSelectChange.value =  moment(new Date()).format("YYYY-MM-DD"),
@@ -101,6 +101,8 @@ export default class labelPrinting extends React.Component
         
         
         await this.grdLabelQueue.dataRefresh({source:this.lblObj.dt('LABEL_QUEUE')});
+
+        this.txtSer.props.onChange()
     }
     async getDoc(pGuid)
     {
@@ -380,9 +382,27 @@ export default class labelPrinting extends React.Component
                             await this.pg_txtItemsCode.setVal(e.value)
                             this.pg_txtItemsCode.onClick = async(data) =>
                             {
-                                if(data.length > 0)
+                                if(data.length == 1)
                                 {
                                     this.addItem(data[0],e.rowIndex)
+                                }
+                                else if(data.length > 1)
+                                {
+                                    for (let i = 0; i < data.length; i++) 
+                                    {
+                                        if(i == 0)
+                                        {
+                                            this.addItem(data[i],e.rowIndex)
+                                        }
+                                        else
+                                        {
+                                            let tmpDocItems = {...this.lblObj.empty}
+                                            tmpDocItems.REF = this.lblObj.dt()[0].REF
+                                            tmpDocItems.REF_NO = this.lblObj.dt()[0].REF_NO
+                                            this.lblObj.addEmpty(tmpDocItems)
+                                            this.addItem(data[i],this.lblObj.dt().length - 1)
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -391,7 +411,7 @@ export default class labelPrinting extends React.Component
                     {
                         e.value = v.value
                     }}
-                onChange={(async(r)=>
+                    onChange={(async(r)=>
                     {
                         if(typeof r.event.isTrusted == 'undefined')
                         {
@@ -445,9 +465,27 @@ export default class labelPrinting extends React.Component
                                 this.pg_txtItemsCode.show()
                                 this.pg_txtItemsCode.onClick = async(data) =>
                                 {
-                                    if(data.length > 0)
+                                    if(data.length == 1)
                                     {
                                         this.addItem(data[0],e.rowIndex)
+                                    }
+                                    else if(data.length > 1)
+                                    {
+                                        for (let i = 0; i < data.length; i++) 
+                                        {
+                                            if(i == 0)
+                                            {
+                                                this.addItem(data[i],e.rowIndex)
+                                            }
+                                            else
+                                            {
+                                                let tmpDocItems = {...this.lblObj.empty}
+                                                tmpDocItems.REF = this.lblObj.dt()[0].REF
+                                                tmpDocItems.REF_NO = this.lblObj.dt()[0].REF_NO
+                                                this.lblObj.addEmpty(tmpDocItems)
+                                                this.addItem(data[i],this.lblObj.dt().length -1)
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -494,9 +532,13 @@ export default class labelPrinting extends React.Component
     calculateCount()
     {
         this.txtPage.value = Math.ceil(this.lblObj.dt().length /this.pageCount)
-        if(this.lblObj.dt().length % this.pageCount == 0)
+        if(this.txtPage.value == '')
         {
-            this.txtFreeLabel.value = 0
+            this.txtPage.value = 'Lütfen Dizayn Seçiniz'
+        }
+        if(this.pageCount == 0)
+        {
+            this.txtFreeLabel.value = 'Lütfen Dizayn Seçiniz'
         }
         else
         {
@@ -587,8 +629,9 @@ export default class labelPrinting extends React.Component
                                     {
                                         if(e.validationGroup.validate().status == "valid")
                                         {
-                                            if(this.btnSave.disabled == false)
+                                            if(this.btnSave.state.disabled == false)
                                             {
+                                                console.log(12313)
                                                 await this.btnSave.props.onClick()
                                             }
                                             let tmpQuery = 
@@ -601,6 +644,7 @@ export default class labelPrinting extends React.Component
                                             }
 
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
+                                            console.log(tmpData)
                                             this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" +  JSON.stringify(tmpData.result.recordset)+ "}",(pResult) => 
                                             {
                                                 if(pResult.split('|')[0] != 'ERR')
@@ -676,9 +720,8 @@ export default class labelPrinting extends React.Component
                                             <NdTextBox id="txtSer" parent={this} simple={true} dt={{data:this.lblObj.dt('LABEL_QUEUE'),field:"REF"}}
                                             readOnly={true}
                                             maxLength={32}
-                                            onValueChanged={(async()=>
+                                            onChange={(async()=>
                                             {
-                                                this.lblObj.dt()[0].REF = this.txtSer.value 
                                                 let tmpQuery = 
                                                 {
                                                     query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM LABEL_QUEUE WHERE  REF = @REF ",
@@ -688,7 +731,7 @@ export default class labelPrinting extends React.Component
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
                                                 if(tmpData.result.recordset.length > 0)
                                                 {
-                                                    this.txtRefno.value = tmpData.result.recordset[0].REF_NO
+                                                    this.txtRefno.setState({value:tmpData.result.recordset[0].REF_NO})
                                                 }
                                             }).bind(this)}
                                             param={this.param.filter({ELEMENT:'txtSer',USERS:this.user.CODE})}
@@ -788,11 +831,11 @@ export default class labelPrinting extends React.Component
                                     valueExpr="TAG"
                                     value=""
                                     searchEnabled={true}
-                                    onValueChanged={(async()=>
+                                    onValueChanged={(async(e)=>
                                         {
                                            for (let i = 0; i < this.cmbDesignList.data.datatable.length; i++) 
                                            {
-                                               if(this.cmbDesignList.data.datatable[i].TAG == this.cmbDesignList.value)
+                                               if(this.cmbDesignList.data.datatable[i].TAG == e.value)
                                                {
                                                    this.pageCount = this.cmbDesignList.data.datatable[i].PAGE_COUNT
                                                }
@@ -820,8 +863,63 @@ export default class labelPrinting extends React.Component
                                 </Item> 
                                 {/* Boş */}
                                 <EmptyItem />
-                                {/* Boş */}
-                                <EmptyItem />
+                                 {/* txtBarcode */}
+                                 <Item>
+                                    <Label text={this.t("txtBarcode")} alignment="right" />
+                                    <NdTextBox id="txtBarcode" parent={this} simple={true}  
+                                    onEnterKey={(async(e)=>
+                                    {
+                                        let tmpQuery = 
+                                        {
+                                            query :"SELECT  *, " +
+                                           "CASE WHEN UNDER_UNIT_VALUE =0 " +
+                                           "THEN 0 " +
+                                           "ELSE " +
+                                           "ROUND((PRICE * UNDER_UNIT_VALUE),2) " +
+                                           "END AS UNDER_UNIT_PRICE " +
+                                           "FROM (  SELECT GUID,  " +
+                                           "CODE,  " +
+                                           "NAME,  " +
+                                           "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,  " +
+                                           "MAIN_GRP AS ITEM_GRP,  " +
+                                           "MAIN_GRP_NAME AS ITEM_GRP_NAME,  " +
+                                           "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE())) AS PRICE  ," +
+                                           "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE " +
+                                           "FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID),'') <> '') AS TMP WHERE ((CODE = @CODE) OR (BARCODE = @CODE))  ",
+                                            param : ['CODE:string|50'],
+                                            value : [this.txtBarcode.value]
+                                        }
+                                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                                        this.txtBarcode.setState({value:""})
+                                        if(tmpData.result.recordset.length > 0)
+                                        {
+                                            if(this.lblObj.dt()[this.lblObj.dt().length - 1].CODE != '')
+                                            {
+                                                let tmpDocItems = {...this.lblObj.empty}
+                                                tmpDocItems.REF = this.lblObj.dt()[0].REF
+                                                tmpDocItems.REF_NO = this.lblObj.dt()[0].REF_NO
+                                                this.lblObj.addEmpty(tmpDocItems)
+                                            }
+                                            this.addItem(tmpData.result.recordset[0],this.lblObj.dt().length - 1)
+                                        }
+                                        else
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgItemNotFound',showTitle:true,title:this.t("msgItemNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
+                                            }
+                                
+                                            await dialog(tmpConfObj);
+                                        }
+                                        
+                                    }).bind(this)}
+                                    param={this.param.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
+                                    >
+                                    </NdTextBox>
+                                </Item> 
                                  {/* txtLineCount */}
                                  <Item>
                                     <Label text={this.t("txtLineCount")} alignment="right" />
@@ -860,7 +958,7 @@ export default class labelPrinting extends React.Component
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
-                                        <Scrolling mode="infinite" />
+                                        <Scrolling mode="standard" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Column dataField="CODE" caption={this.t("grdLabelQueue.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="BARCODE" caption={this.t("grdLabelQueue.clmBarcode")} width={200} />

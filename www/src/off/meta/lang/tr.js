@@ -442,6 +442,7 @@ export const langTr =
         txtRefRefno : "Seri-Sıra",
         cmbDepot: "Sayım Deposu",
         dtDocDate : "Tarih",
+        txtBarcode : "Barkod Ekle",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -810,6 +811,7 @@ export const langTr =
         chkCustomer : "Tedarikçi Ürünleri",
         chkAllItems : "Tüm Ürünler",
         AddItems : "Ekle",
+        txtBarcode : "Barkod Ekle",
         pg_Docs : 
         {
             title : "Evrak Seçimi",

@@ -199,6 +199,8 @@ export class itemsCls
         this.ds.add(this.itemBarcode.dt('ITEM_BARCODE'))
         this.ds.add(this.itemMultiCode.dt('ITEM_MULTICODE'))
         this.ds.add(this.itemImage.dt('ITEM_IMAGE'))
+
+        this.ds.get('ITEMS').noColumnEdit = ['GROSS_MARGIN','SNAME','CUSER','MAIN_GRP_NAME','VAT_EXT','GROSS_MARGIN_RATE','NET_MARGIN','NET_MARGIN_RATE']
     }
     //#endregion
     dt()

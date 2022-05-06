@@ -92,14 +92,18 @@ export default class itemCard extends React.Component
 
                 pData.rowData.CUSER = this.user.CODE
             }    
-            //ALT BİRİM FİYAT HESAPLAMASI
-            this.underPrice();  
-            //MARGIN HESAPLAMASI
-            this.grossMargin()                 
-            this.netMargin()                 
+            if(pTblName == 'ITEM_PRICE' || pTblName == 'ITEM_UNIT')
+            {
+                // //ALT BİRİM FİYAT HESAPLAMASI
+                this.underPrice();  
+                // //MARGIN HESAPLAMASI
+                this.grossMargin()                 
+                this.netMargin() 
+            }
+                           
         })
         this.itemsObj.ds.on('onRefresh',(pTblName) =>
-        {            
+        {        
             this.prevCode = this.itemsObj.dt('ITEMS').length > 0 ? this.itemsObj.dt('ITEMS')[0].CODE : '';
             this.btnBack.setState({disabled:true});
             this.btnNew.setState({disabled:false});

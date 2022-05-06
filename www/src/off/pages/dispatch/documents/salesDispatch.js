@@ -69,9 +69,10 @@ export default class salesDispatch extends React.Component
             }
         })
         this.docObj.ds.on('onEdit',(pTblName,pData) =>
-        {            
+        {   
+            
             if(pData.rowData.stat == 'edit')
-            {
+            { 
                 this.btnBack.setState({disabled:false});
                 this.btnNew.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
@@ -83,7 +84,7 @@ export default class salesDispatch extends React.Component
             }                 
         })
         this.docObj.ds.on('onRefresh',(pTblName) =>
-        {            
+        {         
             this.btnBack.setState({disabled:true});
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:true});
@@ -92,7 +93,7 @@ export default class salesDispatch extends React.Component
             this.btnPrint.setState({disabled:false});          
         })
         this.docObj.ds.on('onDelete',(pTblName) =>
-        {            
+        {         
             this.btnBack.setState({disabled:false});
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:false});
@@ -188,11 +189,13 @@ export default class salesDispatch extends React.Component
         });
     }
     async _calculateTotal()
-    {
+    {        
+        console.log(this.docObj.docItems.dt())
         this.docObj.dt()[0].AMOUNT = this.docObj.docItems.dt().sum("AMOUNT",2)
         this.docObj.dt()[0].DISCOUNT = this.docObj.docItems.dt().sum("DISCOUNT",2)
         this.docObj.dt()[0].VAT = this.docObj.docItems.dt().sum("VAT",2)
         this.docObj.dt()[0].TOTAL = this.docObj.docItems.dt().sum("TOTAL",2)
+        console.log(this.docObj.dt())
         this._calculateTotalMargin()
     }
     async _calculateTotalMargin()
@@ -205,10 +208,12 @@ export default class salesDispatch extends React.Component
         }
         let tmpMargin = ((this.docObj.dt()[0].TOTAL - this.docObj.dt()[0].VAT) - tmpTotalCost)
         let tmpMarginRate = ((( this.docObj.dt()[0].TOTAL - this.docObj.dt()[0].VAT) - tmpTotalCost) - (this.docObj.dt()[0].TOTAL - this.docObj.dt()[0].VAT)) * 100
+        console.log(tmpMarginRate)
         this.docObj.dt()[0].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
     }
     async _calculateMargin()
     {
+        
         for(let  i= 0; i < this.docObj.docItems.dt().length; i++)
         {
             let tmpMargin = (this.docObj.docItems.dt()[i].TOTAL - this.docObj.docItems.dt()[i].VAT) - (this.docObj.docItems.dt()[i].COST_PRICE * this.docObj.docItems.dt()[i].QUANTITY)
@@ -298,6 +303,7 @@ export default class salesDispatch extends React.Component
     }
     async addItem(pData,pIndex)
     {
+        console.log(pData)
         for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
         {
             if(this.docObj.docItems.dt()[i].ITEM_CODE == pData.CODE)
@@ -556,9 +562,8 @@ export default class salesDispatch extends React.Component
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
                                             readOnly={true}
                                             maxLength={32}
-                                            onValueChanged={(async()=>
+                                            onChange={(async(e)=>
                                             {
-                                                this.docObj.dt()[0].REF = this.txtRef.value 
                                                 let tmpQuery = 
                                                 {
                                                     query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 40 AND REF = @REF ",
@@ -708,7 +713,7 @@ export default class salesDispatch extends React.Component
                                                 if(typeof tmpDatas != 'undefined' && tmpDatas.value ==  true)
                                                 {
                                                     this.txtRef.setState({value:tmpData.result.recordset[0].CODE});
-                                                    this.txtRef.props.onValueChanged()
+                                                    this.txtRef.props.onChange()
                                                 }
                                             }
                                             else
@@ -748,7 +753,7 @@ export default class salesDispatch extends React.Component
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
                                                                 this.txtRef.setState({value:data[0].CODE});
-                                                                this.txtRef.props.onValueChanged()
+                                                                this.txtRef.props.onChange()
                                                             }
                                                         }
                                                     }
@@ -1273,7 +1278,7 @@ export default class salesDispatch extends React.Component
                         {
                             select:
                             {
-                                query : "SELECT GUID,CODE,NAME,VAT FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
                                 param : ['VAL:string|50']
                             },
                             sql:this.core.sql

@@ -11,6 +11,7 @@ export class itemCountCls
         {
             GUID : '00000000-0000-0000-0000-000000000000',
             CUSER : this.core.auth.data == null ? '' : this.core.auth.data.CODE,
+            CDATE_FORMAT :  moment(new Date()).format("YYYY-MM-DD"),
             REF:  '',
             REF_NO : '',
             DOC_DATE : moment(new Date()).format("YYYY-MM-DD"),
@@ -20,7 +21,7 @@ export class itemCountCls
             ITEM : '00000000-0000-0000-0000-000000000000',
             ITEM_NAME : '',
             ITEM_CODE : '',
-            QUANTITY : 0
+            QUANTITY : 0,
         }
 
         this._initDs();

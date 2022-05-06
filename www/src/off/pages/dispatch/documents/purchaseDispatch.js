@@ -569,9 +569,8 @@ export default class purchaseDispatch extends React.Component
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
                                             readOnly={true}
                                             maxLength={32}
-                                            onValueChanged={(async()=>
+                                            onChange={(async(e)=>
                                             {
-                                                this.docObj.dt()[0].REF = this.txtRef.value 
                                                 let tmpQuery = 
                                                 {
                                                     query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 0 AND DOC_TYPE = 40 AND REF = @REF ",
@@ -721,7 +720,7 @@ export default class purchaseDispatch extends React.Component
                                                 if(typeof tmpDatas != 'undefined' && tmpDatas.value ==  true)
                                                 {
                                                     this.txtRef.setState({value:tmpData.result.recordset[0].CODE});
-                                                    this.txtRef.props.onValueChanged()
+                                                    this.txtRef.props.onChange()
                                                 }
                                                 this._getItems()
                                             }
@@ -761,7 +760,7 @@ export default class purchaseDispatch extends React.Component
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
                                                                 this.txtRef.setState({value:data[0].CODE});
-                                                                this.txtRef.props.onValueChanged()
+                                                                this.txtRef.props.onChange()
                                                             }
                                                             this._getItems()
                                                         }

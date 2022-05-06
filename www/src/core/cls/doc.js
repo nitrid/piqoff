@@ -29,7 +29,7 @@ export class docCls
             TOTAL : 0,
             DESCRIPTION : '',
             LOCKED : 0,
-            MARGIN : 0,
+            MARGIN : '',
             PAYMENT_DOC_GUID : '00000000-0000-0000-0000-000000000000',
         }
 
@@ -114,6 +114,9 @@ export class docCls
         this.ds.add(this.docCustomer.dt('DOC_CUSTOMER'))
         this.ds.add(this.checkCls.dt('CHECK'))
         this.ds.add(this.docOrders.dt('DOC_ORDERS'))
+
+        this.ds.get('DOC').noColumnEdit = ['MARGIN']
+        this.ds.get('DOC_ITEMS').noColumnEdit = ['MARGIN']
     }
     //#endregion
     dt()

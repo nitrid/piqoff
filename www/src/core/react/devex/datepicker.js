@@ -42,7 +42,8 @@ export default class NdDatePicker extends Base
             <DateBox id={this.props.id} showClearButton={this.state.showClearButton} 
             height='fit-content' 
             valueChangeEvent="keyup" 
-            value={moment(this.state.value).format("YYYY-MM-DD") == '1970-01-01' ? null : moment(this.state.value)} 
+            value={this.state.value}
+            //value={moment(this.state.value).format("YYYY-MM-DD") == '1970-01-01' ? null : moment(this.state.value)} 
             disabled={this.state.editable}
             type={this.state.type}
             dateSerializationFormat={"yyyy-MM-dd"}
@@ -95,8 +96,7 @@ export default class NdDatePicker extends Base
             }
         }
         
-        // REACT LOOBS HATASI VERDİĞİ İÇİN COMMENTE ALINDI
-        // this.setState({value:e})        
+        this.setState({value:e})        
     } 
     render()
     {
