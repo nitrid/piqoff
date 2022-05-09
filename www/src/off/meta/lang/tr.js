@@ -567,6 +567,7 @@ export const langTr =
         cmbOutDepot: "Çıkış Deposu",
         cmbInDepot: "Giriş Deposu",
         dtDocDate : "Tarih",
+        txtBarcode : "Barkod Ekle",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
