@@ -41,7 +41,8 @@ export default class posDoc extends React.Component
         this.prmObj = new param(prm)
         this.posObj = new posCls()
         this.posDevice = new posDeviceCls();
-        
+        this.parkDt = new datatable();
+
         this.state =
         {
             time:"00:00:00",
@@ -103,6 +104,11 @@ export default class posDoc extends React.Component
     }
     async init()
     {                
+        setInterval(()=>
+        {
+            this.setState({time:moment(new Date(),"HH:mm:ss").format("HH:mm:ss"),date:new Date().toLocaleDateString('tr-TR',{ year: 'numeric', month: 'numeric', day: 'numeric' })})                        
+        },1000)
+
         this.posObj.clearAll()
         await this.prmObj.load({PAGE:"pos",APP:'POS'})
 
@@ -116,10 +122,22 @@ export default class posDoc extends React.Component
         await this.grdList.dataRefresh({source:this.posObj.posSale.dt()});
         await this.grdPay.dataRefresh({source:this.posObj.posPay.dt()});
 
-        setInterval(()=>
+        this.parkDt.selectCmd =
         {
-            this.setState({time:moment(new Date(),"HH:mm:ss").format("HH:mm:ss"),date:new Date().toLocaleDateString('tr-TR',{ year: 'numeric', month: 'numeric', day: 'numeric' })})                        
-        },1000)
+            query : "SELECT GUID,LUSER_NAME,LDATE,TOTAL, " + 
+                    "ISNULL((SELECT TOP 1 DESCRIPTION FROM POS_EXTRA WHERE POS_GUID = POS_VW_01.GUID AND TAG = 'PARK DESC'),'') AS DESCRIPTION " +
+                    "FROM POS_VW_01 WHERE STATUS = 0 ORDER BY LDATE DESC",
+        }
+        await this.parkDt.refresh();     
+
+        for (let i = 0; i < this.parkDt.length; i++) 
+        {
+            if(this.parkDt[i].DESCRIPTION == '')
+            {
+                this.getDoc(this.parkDt[i].GUID)
+                return
+            }
+        }        
 
         setTimeout(() => 
         {
@@ -240,10 +258,10 @@ export default class posDoc extends React.Component
         tmpPrice = typeof tmpBarPattern.price == 'undefined' || tmpBarPattern.price == 0 ? tmpPrice : tmpBarPattern.price
         tmpQuantity = typeof tmpBarPattern.quantity == 'undefined' || tmpBarPattern.quantity == 0 ? tmpQuantity : tmpBarPattern.quantity
         pCode = tmpBarPattern.barcode        
-        //ÜRÜN GETİRME
+        //ÜRÜN GETİRME        
         let tmpItemsDt = await this.getItemDb(pCode)
         if(tmpItemsDt.length > 0)
-        {            
+        {                        
             //******************************************************** */
             //UNIQ BARKODU
             if(tmpItemsDt[0].UNIQ_CODE == tmpItemsDt[0].INPUT)
@@ -396,7 +414,7 @@ export default class posDoc extends React.Component
             })
 
             let tmpWeigh = await this.posDevice.mettlerScaleSend(pPrice)
-            console.log(tmpWeigh)
+            
             if(typeof tmpWeigh != 'undefined' && tmpWeigh != null)
             {
                 this.msgWeighing.hide()
@@ -497,7 +515,7 @@ export default class posDoc extends React.Component
     {
         if(pType == 'SALE')
         {
-            let tmpData = this.posObj.posSale.dt().where({ITEM_GUID:pData.GUID})
+            let tmpData = this.posObj.posSale.dt().where({ITEM_GUID:pData.GUID,SUBTOTAL:0})
             //BURAYA SUBTOTAL KONTROLÜ DE EKLENECEK
             if(tmpData.length > 0)
             {
@@ -521,7 +539,7 @@ export default class posDoc extends React.Component
     }
     async saleAdd(pItemData)
     {
-        let tmpRowData = this.isRowMerge('SALE',pItemData)
+        let tmpRowData = this.isRowMerge('SALE',pItemData)        
         //SATIR BİRLEŞTİR        
         if(typeof tmpRowData != 'undefined')
         {
@@ -529,7 +547,7 @@ export default class posDoc extends React.Component
             this.saleRowUpdate(tmpRowData,pItemData)
         }
         else
-        {
+        {            
             pItemData.QUANTITY = Number(parseFloat(pItemData.QUANTITY * pItemData.UNIT_FACTOR).toFixed(3))
             this.saleRowAdd(pItemData)
         }        
@@ -559,6 +577,7 @@ export default class posDoc extends React.Component
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ITEM_GUID = pItemData.GUID
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ITEM_CODE = pItemData.CODE
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ITEM_NAME = pItemData.NAME
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].INPUT = pItemData.INPUT
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].BARCODE_GUID = pItemData.BARCODE_GUID
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].BARCODE = pItemData.BARCODE
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_GUID = '00000000-0000-0000-0000-000000000000'
@@ -578,7 +597,7 @@ export default class posDoc extends React.Component
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_LOYALTY = 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_VAT = 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_TOTAL = 0
-
+        
         await this.calcGrandTotal();
     }
     async saleRowUpdate(pRowData,pItemData)
@@ -812,43 +831,37 @@ export default class posDoc extends React.Component
                             </div>
                             <div className="col-2">
                                 <div className="row" style={{height:"25px"}}>
-                                    <div className="col-12">
-                                        <i className="text-white fa-solid fa-user p-2"></i>
-                                        <span className="text-white">{this.user.CODE}</span>
+                                    <div className="col-12">                                        
+                                        <span className="text-white"><i className="text-white fa-solid fa-user pe-2"></i>{this.user.CODE}</span>
                                     </div>    
                                 </div>
                                 <div className="row" style={{height:"25px"}}>
                                     <div className="col-12">
-                                        <i className="text-light fa-solid fa-tv p-2"></i>
-                                        <span className="text-light">004</span>
+                                        <span className="text-light"><i className="text-light fa-solid fa-tv pe-2"></i>004</span>
                                     </div> 
                                 </div>
                             </div>
                             <div className="col-2">
                                 <div className="row" style={{height:"25px"}}>
-                                    <div className="col-12">                                
-                                        <i className="text-white fa-solid fa-circle-user p-2"></i>
-                                        <span className="text-white">{this.state.customerName}</span>
+                                    <div className="col-12">                                                                        
+                                        <span className="text-white"><i className="text-white fa-solid fa-circle-user pe-2"></i>{this.state.customerName}</span>
                                     </div>    
                                 </div>
                                 <div className="row" style={{height:"25px"}}>
-                                    <div className="col-12">
-                                        <i className="text-light fa-solid fa-user-plus p-2"></i>
-                                        <span className="text-light">{this.state.customerPoint}</span>
+                                    <div className="col-12">                                        
+                                        <span className="text-light"><i className="text-light fa-solid fa-user-plus pe-2"></i>{this.state.customerPoint}</span>
                                     </div> 
                                 </div>
                             </div>
                             <div className="col-2">
                                 <div className="row" style={{height:"25px"}}>
-                                    <div className="col-12">
-                                        <i className="text-white fa-solid fa-calendar p-2"></i>
-                                        <span className="text-white">{this.state.date}</span>
+                                    <div className="col-12">                                        
+                                        <span className="text-white"><i className="text-white fa-solid fa-calendar pe-2"></i>{this.state.date}</span>
                                     </div>    
                                 </div>
                                 <div className="row" style={{height:"25px"}}>
-                                    <div className="col-12">
-                                        <i className="text-light fa-solid fa-clock p-2"></i>
-                                        <span className="text-light">{this.state.time}</span>
+                                    <div className="col-12">                                        
+                                        <span className="text-light"><i className="text-light fa-solid fa-clock pe-2"></i>{this.state.time}</span>
                                     </div> 
                                 </div>
                             </div>
@@ -1426,6 +1439,16 @@ export default class posDoc extends React.Component
                                                             this.popRowDeleteDesc.show()
                                                         }
                                                     }
+                                                    else
+                                                    {
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'msgAlert',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Lütfen silmek istediğiniz satırı seçiniz !"}</div>)
+                                                        }
+                                                        await dialog(tmpConfObj);
+                                                    }
                                                 }}>
                                                     <i className="text-white fa-solid fa-outdent" style={{fontSize: "24px"}} />
                                                 </NbButton>
@@ -1451,7 +1474,11 @@ export default class posDoc extends React.Component
                                     </div>
                                     {/* Subtotal */}
                                     <div className="col px-1">
-                                        <NbButton id={"btnSubtotal"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        <NbButton id={"btnSubtotal"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        onClick={()=>
+                                        {
+                                            
+                                        }}>
                                             <i className="text-white fa-solid fa-plus-minus" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
@@ -1479,18 +1506,11 @@ export default class posDoc extends React.Component
                                         <NbButton id={"btnParkList"} parent={this} className="form-group btn btn-warning btn-block my-1" style={{height:"70px",width:"100%"}}
                                         onClick={async ()=>
                                         {            
-                                            let tmpParkDt = new datatable()
-                                            tmpParkDt.selectCmd =
-                                            {
-                                                query : "SELECT GUID,LUSER_NAME,LDATE,TOTAL, " + 
-                                                        "ISNULL((SELECT TOP 1 DESCRIPTION FROM POS_EXTRA WHERE POS_GUID = POS_VW_01.GUID AND TAG = 'PARK DESC'),'') AS DESCRIPTION " +
-                                                        "FROM POS_VW_01 WHERE STATUS = 0",
-                                            }
-                                            await tmpParkDt.refresh();
-                                            await this.grdPopParkList.dataRefresh({source:tmpParkDt});             
+                                            await this.parkDt.refresh();
+                                            await this.grdPopParkList.dataRefresh({source:this.parkDt});             
                                             this.popParkList.show();
                                         }}>
-                                            <i className="text-white fa-solid fa-arrow-up-right-from-square" style={{fontSize: "24px"}} />
+                                            <span className="text-white" style={{fontWeight: 'bold'}}><i className="text-white fa-solid fa-arrow-up-right-from-square pe-2" style={{fontSize: "24px"}} />{this.parkDt.length}</span>                                            
                                         </NbButton>
                                     </div>
                                     {/* Advance */}
@@ -2524,7 +2544,7 @@ export default class posDoc extends React.Component
                 </div>
                 {/* Last Sale List Popup */} 
                 <div>
-                    <NbPopUp id="popLastSaleList" parent={this} title={"Son Satış Listesi"}>
+                    <NbPopUp id="popLastSaleList" parent={this} title={"Son Satış Listesi"} fullscreen={true}>
                         {/* Tool Button Group */} 
                         <div className="row pb-1">
                             <div className="offset-10 col-2">
