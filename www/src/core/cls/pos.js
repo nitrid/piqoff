@@ -192,6 +192,7 @@ export class posSaleCls
             ITEM_GUID : '00000000-0000-0000-0000-000000000000',
             ITEM_CODE : '',
             ITEM_NAME : '',
+            INPUT : '',
             BARCODE_GUID : '00000000-0000-0000-0000-000000000000',
             BARCODE : '',
             UNIT_GUID : '00000000-0000-0000-0000-000000000000',
@@ -232,7 +233,8 @@ export class posSaleCls
                     "@CUSER = @PCUSER, " + 
                     "@POS = @PPOS, " +
                     "@LINE_NO = @PLINE_NO, " +
-                    "@ITEM = @PITEM, " +                      
+                    "@ITEM = @PITEM, " +  
+                    "@INPUT = @PINPUT, " +                      
                     "@BARCODE = @PBARCODE, " + 
                     "@UNIT = @PUNIT, " + 
                     "@QUANTITY = @PQUANTITY, " + 
@@ -243,9 +245,9 @@ export class posSaleCls
                     "@VAT = @PVAT, " + 
                     "@TOTAL = @PTOTAL, " + 
                     "@SUBTOTAL = @PSUBTOTAL ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PBARCODE:string|50','PUNIT:string|50',
+            param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PINPUT:string|25','PBARCODE:string|50','PUNIT:string|50',
                      'PQUANTITY:float','PPRICE:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int'],
-            dataprm : ['GUID','CUSER','POS_GUID','LINE_NO','ITEM_GUID','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','SUBTOTAL']
+            dataprm : ['GUID','CUSER','POS_GUID','LINE_NO','ITEM_GUID','INPUT','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','SUBTOTAL']
         } 
         tmpDt.updateCmd = 
         {
@@ -254,7 +256,8 @@ export class posSaleCls
                     "@CUSER = @PCUSER, " + 
                     "@POS = @PPOS, " +
                     "@LINE_NO = @PLINE_NO, " +
-                    "@ITEM = @PITEM, " +                      
+                    "@ITEM = @PITEM, " + 
+                    "@INPUT = @PINPUT, " +                   
                     "@BARCODE = @PBARCODE, " + 
                     "@UNIT = @PUNIT, " + 
                     "@QUANTITY = @PQUANTITY, " + 
@@ -265,9 +268,9 @@ export class posSaleCls
                     "@VAT = @PVAT, " + 
                     "@TOTAL = @PTOTAL, " + 
                     "@SUBTOTAL = @PSUBTOTAL ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PBARCODE:string|50','PUNIT:string|50',
+            param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PINPUT:string|25','PBARCODE:string|50','PUNIT:string|50',
                      'PQUANTITY:float','PPRICE:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int'],
-            dataprm : ['GUID','CUSER','POS_GUID','LINE_NO','ITEM_GUID','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','SUBTOTAL']
+            dataprm : ['GUID','CUSER','POS_GUID','LINE_NO','ITEM_GUID','INPUT','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','SUBTOTAL']
         } 
         tmpDt.deleteCmd = 
         {

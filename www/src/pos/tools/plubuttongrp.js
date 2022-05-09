@@ -582,7 +582,7 @@ export default class NbPluButtonGrp extends NbBase
                 </div>
                 {/* Plu Group Popup */}
                 <div>
-                    <NbPopUp id={"popPluGroup" + this.props.id} parent={this} title={""}>
+                    <NbPopUp id={"popPluGroup" + this.props.id} parent={this} title={""} fullscreen={true}>
                         {/* Alphabet Button Group */}
                         <div className="row py-1">
                             <NbButton id={"btnAph01"} parent={this} className="form-group btn btn-warning me-1" style={{height:"55px",width:"55px"}} onClick={this._btnAlphClick}>A</NbButton>
