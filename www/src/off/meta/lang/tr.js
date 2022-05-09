@@ -443,6 +443,7 @@ export const langTr =
         cmbDepot: "Sayım Deposu",
         dtDocDate : "Tarih",
         txtBarcode : "Barkod Ekle",
+        txtQuantity :"Miktar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -483,6 +484,13 @@ export const langTr =
             btn01: "Tamam",
             btn02: "Vazgeç",
             msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgQuantiy:
+        {
+            title: "Dikkat",
+            btn01: "Ekle",
+            btn02: "Vazgeç",
+            msg: "Lüten Miktar Giriniz !"
         },
         msgSaveResult:
         {
@@ -551,7 +559,8 @@ export const langTr =
         {
             title: "Dikkat",
             btn01: "Birleştir",
-            btn02: "Yeni Ekle",
+            btn02: "Değiştir",
+            btn03: "Vazgeç",
             msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Satırlar Birleştirilsin mi ?"
         },
         validRef :"Seri Boş Geçilemez",
@@ -916,9 +925,9 @@ export const langTr =
         msgCombineItem:
         {
             title: "Dikkat",
-            btn01: "Birleştir",
+            btn01: "Vazgeç",
             btn02: "Yeni Ekle",
-            msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Satırlar Birleştirilsin mi ?"
+            msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Yeni Satır Eklensin Mi ?"
         },
         popWizard : 
         {

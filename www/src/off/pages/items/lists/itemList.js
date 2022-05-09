@@ -252,7 +252,7 @@ export default class itemList extends React.Component
                                             {
                                                 id: 'stk_01_001',
                                                 text: 'Stok Tanımları',
-                                                path: '../pages/items/cards/itemCard.js'
+                                                path: 'items/cards/itemCard.js'
                                             })
                                         }
                                     }    
@@ -374,7 +374,7 @@ export default class itemList extends React.Component
                                     {
                                         id: 'stk_01_001',
                                         text: e.data.NAME.substring(0,10),
-                                        path: '../pages/items/cards/itemCard.js',
+                                        path: 'items/cards/itemCard.js',
                                         pagePrm:{CODE:e.data.CODE}
                                     })
                             }}

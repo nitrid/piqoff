@@ -19,7 +19,7 @@ import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation} from '../../.
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
-import { dialog } from '../../../../core/react/devex/dialog.js';
+import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
 
@@ -96,14 +96,16 @@ export default class itemCount extends React.Component
 
 
 
-        this.txtRef.props.onChange()
+        this.txtRef.setState({value:this.user.CODE})
+        
         this.dtDocDate.value =  moment(new Date()).format("YYYY-MM-DD"),
-        this.txtRef.readOnly = false
+        this.txtRef.readOnly = true
         this.txtRefno.readOnly = false
         this.docLocked = false
         
         this.frmCount.option('disabled',false)
         await this.grdItemCount.dataRefresh({source:this.countObj.dt('ITEM_COUNT')});
+        this.txtRef.props.onChange()
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -332,12 +334,77 @@ export default class itemCount extends React.Component
     }
     async addItem(pData,pIndex)
     {
-        console.log(pData)
-        console.log(pIndex)
+
+        let tmpQuantity = 1
+        let tmpBreak = false
+        await this.msgQuantiy.show().then(async (e) =>
+        {
+            if(e == 'btn01')
+            {
+                tmpQuantity = this.txtQuantity.value
+                this.msgQuantiy.hide()
+            }
+            else if(e == 'btn02')
+            {
+                tmpBreak = true
+                if(this.countObj.dt()[this.countObj.dt().length - 1].ITEM_CODE == '')
+                {
+                    await this.grdItemCount.devGrid.deleteRow(this.countObj.dt().length - 1)
+                }
+                this.msgQuantiy.hide()
+                this.txtBarcode.focus()
+            }
+        })
+        
+        if(tmpBreak == true)
+        {
+            return
+        }
+
+        for (let i = 0; i < this.countObj.dt().length; i++) 
+        {
+            if(this.countObj.dt()[i].ITEM_CODE == pData.CODE)
+            {
+                let tmpConfObj = 
+                {
+                    id:'msgCombineItem',showTitle:true,title:this.t("msgCombineItem.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'before'},{id:"btn03",caption:this.t("msgCombineItem.btn03"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>)
+                }
+                let pResult = await dialog(tmpConfObj);
+                if(pResult == 'btn01')
+                {
+                    this.countObj.dt()[i].QUANTITY = parseFloat(this.countObj.dt()[i].QUANTITY) + parseFloat(tmpQuantity)
+                    if(this.countObj.dt()[this.countObj.dt().length - 1].ITEM_CODE == '')
+                    {
+                        await this.grdItemCount.devGrid.deleteRow(this.countObj.dt().length - 1)
+                    }
+                    this.txtBarcode.focus()
+                    return
+                }
+                if(pResult == 'btn02')
+                {
+                    this.countObj.dt()[i].QUANTITY =  parseFloat(tmpQuantity)
+                    if(this.countObj.dt()[this.countObj.dt().length - 1].ITEM_CODE == '')
+                    {
+                        await this.grdItemCount.devGrid.deleteRow(this.countObj.dt().length - 1)
+                    }
+                    this.txtBarcode.focus()
+                    return
+                }
+                if(pResult == 'btn03')
+                {
+                    this.txtBarcode.focus()
+                    return
+                }
+                
+            }
+        }
         this.countObj.dt()[pIndex].ITEM_CODE = pData.CODE
         this.countObj.dt()[pIndex].ITEM = pData.GUID
         this.countObj.dt()[pIndex].ITEM_NAME = pData.NAME
-        this.countObj.dt()[pIndex].QUANTITY = 1
+        this.countObj.dt()[pIndex].QUANTITY = tmpQuantity
+        this.txtBarcode.focus()
     }
     render()
     {
@@ -506,7 +573,7 @@ export default class itemCount extends React.Component
                                             {
                                                 let tmpQuery = 
                                                 {
-                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM ITEM_COUNT ",
+                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM ITEM_COUNT WHERE REF = @REF ",
                                                     param : ['REF:string|25'],
                                                     value : [this.txtRef.value]
                                                 }
@@ -798,7 +865,48 @@ export default class itemCount extends React.Component
                         <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
                         <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />
                     </NdPopGrid>
-                </ScrollView>                
+                </ScrollView>  
+                {/* Miktar Dialog  */}
+                <NdDialog id={"msgQuantiy"} container={"#root"} parent={this}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    title={this.t("msgQuantiy.title")} 
+                    showCloseButton={false}
+                    width={"500px"}
+                    height={"250px"}
+                    button={[{id:"btn01",caption:this.t("msgQuantiy.btn01"),location:'before'},{id:"btn02",caption:this.t("msgQuantiy.btn02"),location:'after'}]}
+                    onShowed={()=>
+                    {
+                        this.txtQuantity.setState({value:1})
+                        setTimeout(() => {
+                            this.txtQuantity.focus()
+                        }, 500);
+                    }}
+                    >
+                        <div className="row">
+                            <div className="col-12 py-2">
+                                <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgQuantiy.msg")}</div>
+                            </div>
+                            <div className="col-12 py-2">
+                            <Form>
+                                {/* txtQuantity */}
+                                <Item>
+                                    <Label text={this.t("txtQuantity")} alignment="right" />
+                                    <NdTextBox id="txtQuantity" parent={this} simple={true}  
+                                    param={this.param.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
+                                    value ={1}
+                                    >
+                                    </NdTextBox>
+                                </Item>
+                            </Form>
+                        </div>
+                        </div>
+                        <div className='row'>
+                       
+                        </div>
+                       
+                </NdDialog>             
             </div>
         )
     }

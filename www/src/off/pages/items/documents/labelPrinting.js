@@ -499,6 +499,24 @@ export default class labelPrinting extends React.Component
     }
     async addItem(pData,pIndex)
     {
+        for (let i = 0; i < this.lblObj.dt().length; i++) 
+        {
+            if(this.lblObj.dt()[i].CODE == pData.CODE)
+            {
+                let tmpConfObj = 
+                {
+                    id:'msgCombineItem',showTitle:true,title:this.t("msgCombineItem.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>)
+                }
+                let pResult = await dialog(tmpConfObj);
+                if(pResult == 'btn01')
+                {
+                    return
+                }
+                
+            }
+        }
         this.lblObj.dt()[pIndex].CODE = pData.CODE
         this.lblObj.dt()[pIndex].BARCODE = pData.BARCODE
         this.lblObj.dt()[pIndex].NAME = pData.NAME
@@ -510,6 +528,7 @@ export default class labelPrinting extends React.Component
         this.lblObj.dt()[pIndex].PRICE = pData.PRICE
         this.lblObj.dt()[pIndex].LINE_NO = pIndex + 1
         this.calculateCount()
+        await this.lblObj.save()
     }
     async addAutoItem(pData)
     {
@@ -629,11 +648,6 @@ export default class labelPrinting extends React.Component
                                     {
                                         if(e.validationGroup.validate().status == "valid")
                                         {
-                                            if(this.btnSave.state.disabled == false)
-                                            {
-                                                console.log(12313)
-                                                await this.btnSave.props.onClick()
-                                            }
                                             let tmpQuery = 
                                             {
                                                 query:  "SELECT *, " +

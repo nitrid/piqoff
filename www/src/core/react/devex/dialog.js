@@ -20,6 +20,7 @@ export default class NdDialog extends Base
         this.state.position = typeof props.position == 'undefined' ? undefined : props.position
 
         this._onHiding = this._onHiding.bind(this);
+        this._onShowed = this._onShowed.bind(this);   
 
         this.result = null;
     }
@@ -30,10 +31,18 @@ export default class NdDialog extends Base
             this.props.onHiding();
         }
     }
+    _onShowed() 
+    {        
+        if(typeof this.props.onShowed != 'undefined')
+        {
+            this.props.onShowed();
+        }
+    }
     async show()
     {
         this.result = null;
         this["dia_" + this.props.id].setState({show:true})
+        this._onShowed()
         return new Promise(async resolve => 
         {
             this._onClick = function(e)
