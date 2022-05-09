@@ -462,7 +462,7 @@ export default class posDoc extends React.Component
         return new Promise(async resolve => 
         {
             if(this.posObj.dt().length > 0)
-            {
+            {                
                 this.posObj.dt()[this.posObj.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.posSale.dt().sum('AMOUNT',2)).toFixed(2))
                 this.posObj.dt()[this.posObj.dt().length - 1].DISCOUNT = Number(parseFloat(this.posObj.posSale.dt().sum('DISCOUNT',2)).toFixed(2))
                 this.posObj.dt()[this.posObj.dt().length - 1].LOYALTY = Number(parseFloat(this.posObj.posSale.dt().sum('LOYALTY',2)).toFixed(2))
@@ -515,8 +515,7 @@ export default class posDoc extends React.Component
     {
         if(pType == 'SALE')
         {
-            let tmpData = this.posObj.posSale.dt().where({ITEM_GUID:pData.GUID,SUBTOTAL:0})
-            //BURAYA SUBTOTAL KONTROLÜ DE EKLENECEK
+            let tmpData = this.posObj.posSale.dt().where({ITEM_GUID:pData.GUID}).where({SUBTOTAL:0})
             if(tmpData.length > 0)
             {
                 //UNIQ ÜRÜN İÇİN pData.INPUT == pData.UNIQ_CODE
@@ -543,7 +542,7 @@ export default class posDoc extends React.Component
         //SATIR BİRLEŞTİR        
         if(typeof tmpRowData != 'undefined')
         {
-            pItemData.QUANTITY = Number(parseFloat((pItemData.QUANTITY * pItemData.UNIT_FACTOR) + tmpRowData.QUANTITY).toFixed(3))
+            pItemData.QUANTITY = Number(parseFloat((pItemData.QUANTITY * pItemData.UNIT_FACTOR) + Number(tmpRowData.QUANTITY)).toFixed(3))
             this.saleRowUpdate(tmpRowData,pItemData)
         }
         else
@@ -563,6 +562,8 @@ export default class posDoc extends React.Component
         pItemData.VAT_AMOUNT = Number(parseFloat(pItemData.AMOUNT *  Number(parseFloat(pItemData.VAT / 100).toFixed(3))).toFixed(2))
         pItemData.TOTAL = Number(parseFloat(pItemData.AMOUNT + pItemData.VAT_AMOUNT).toFixed(2))
 
+        let tmpMaxLine = this.posObj.posSale.dt().where({SUBTOTAL:{'<>':-1}}).max('LINE_NO')
+        
         this.posObj.posSale.addEmpty()
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].SAFE = ''
@@ -573,7 +574,7 @@ export default class posDoc extends React.Component
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].CUSTOMER_GUID = this.posObj.dt()[0].CUSTOMER_GUID
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].CUSTOMER_CODE = this.posObj.dt()[0].CUSTOMER_CODE
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].CUSTOMER_NAME = this.posObj.dt()[0].CUSTOMER_NAME
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].LINE_NO = this.posObj.posSale.dt().length
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].LINE_NO = tmpMaxLine + 1
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ITEM_GUID = pItemData.GUID
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ITEM_CODE = pItemData.CODE
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ITEM_NAME = pItemData.NAME
@@ -1477,7 +1478,14 @@ export default class posDoc extends React.Component
                                         <NbButton id={"btnSubtotal"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
                                         onClick={()=>
                                         {
-                                            
+                                            let tmpData = this.posObj.posSale.dt().where({SUBTOTAL:0})
+                                            let tmpMaxSub = this.posObj.posSale.dt().where({SUBTOTAL:{'<>':-1}}).max('SUBTOTAL') + 1
+                                            for (let i = 0; i < tmpData.length; i++) 
+                                            {
+                                                tmpData[i].SUBTOTAL = tmpMaxSub
+                                            }
+                                            this.calcGrandTotal()
+                                            console.log(tmpData)
                                         }}>
                                             <i className="text-white fa-solid fa-plus-minus" style={{fontSize: "24px"}} />
                                         </NbButton>

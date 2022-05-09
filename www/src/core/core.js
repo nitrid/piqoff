@@ -688,7 +688,6 @@ export class datatable
             {            
                 if(target[prop] != receiver)
                 {
-                   
                     target[prop] = receiver
 
                     if(typeof this.noColumnEdit.find(x => x == prop) == 'undefined')
@@ -698,7 +697,6 @@ export class datatable
                         //EĞER EDİT EDİLDİĞİNDE STATE DURUMUNUN DEĞİŞMEMESİNİ İSTEDİĞİN KOLON VARSA BURDA KONTROL EDİLİYOR
                         if(target.stat != 'new')
                         {
-                            
                             //EDİT EDİLMİŞ KOLON VARSA BURDA editColumn DEĞİŞKENİNE SET EDİLİYOR.
                             let tmpColumn = []
                             if(typeof target.editColumn != 'undefined')
@@ -709,7 +707,6 @@ export class datatable
                             Object.setPrototypeOf(target,{stat:'edit',editColumn:tmpColumn})                    
                         }
                     }
-                   
                 }
                 //return target[prop];
                 return true;
@@ -719,7 +716,6 @@ export class datatable
         if(typeof pIsNew == 'undefined' || pIsNew)
         {
             Object.setPrototypeOf(pItem,{stat:'new'})
-
             this.emit('onNew',pItem)
         }
 
@@ -1066,9 +1062,23 @@ export class datatable
             
             if(Object.keys(arguments[0]).length > 0)
             {
+                let tmpOp = '='
                 let tmpKey = Object.keys(arguments[0])[0]
                 let tmpValue = Object.values(arguments[0])[0]
-                tmpData = tmpData.filter(x => x[tmpKey] === tmpValue)
+                if(typeof tmpValue === 'object')
+                {
+                    tmpOp = Object.keys(tmpValue)[0]
+                    tmpValue = Object.values(tmpValue)[0]
+                }
+
+                if(tmpOp == '=')
+                {
+                    tmpData = tmpData.filter(x => x[tmpKey] === tmpValue)
+                }
+                else if(tmpOp == '<>')
+                {
+                    tmpData = tmpData.filter(x => x[tmpKey] !== tmpValue)
+                }
             }
 
             let tmpDt = Object.assign(Object.create(Object.getPrototypeOf(this)), this)
@@ -1082,7 +1092,7 @@ export class datatable
     {
         let tmpVal = 0;
         if(arguments.length > 0)
-        {
+        {            
             tmpVal = this.reduce((a,b) =>
             {
                 return {[arguments[0]] : a[arguments[0]] + b[arguments[0]]}
@@ -1095,6 +1105,18 @@ export class datatable
         }
 
         return tmpVal;
+    }
+    max()
+    {
+        let tmpVal = 0;
+        if(arguments.length > 0)
+        {       
+            if(this.length > 0)
+            {
+                tmpVal = this.reduce((a,b) =>(b[arguments[0]] > a[arguments[0]] ? b : a))[arguments[0]]
+            }     
+            return tmpVal;
+        }
     }
 }
 export class param extends datatable

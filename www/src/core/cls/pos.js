@@ -164,6 +164,7 @@ export class posCls
         {
             this.ds.delete()
             resolve(await this.ds.update()); 
+            this.posSale.subTotalBuild();
         });
     }
 }
@@ -223,7 +224,7 @@ export class posSaleCls
         let tmpDt = new datatable('POS_SALE');            
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [dbo].[POS_SALE_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((POS_GUID = @POS_GUID) OR (@POS_GUID = '00000000-0000-0000-0000-000000000000'))",
+            query : "SELECT * FROM [dbo].[POS_SALE_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((POS_GUID = @POS_GUID) OR (@POS_GUID = '00000000-0000-0000-0000-000000000000')) ORDER BY LINE_NO DESC",
             param : ['GUID:string|50','POS_GUID:string|50']
         } 
         tmpDt.insertCmd = 
@@ -337,6 +338,7 @@ export class posSaleCls
             await this.ds.get('POS_SALE').refresh();
             
             resolve(this.ds.get('POS_SALE'));    
+            this.subTotalBuild();
         });
     }
     save()
@@ -345,7 +347,39 @@ export class posSaleCls
         {
             this.ds.delete()
             resolve(await this.ds.update()); 
-        });
+            this.subTotalBuild();
+        }); 
+    }
+    subTotalBuild()
+    {
+        let tmpData = this.ds.get('POS_SALE');
+        let tmpSubIndex = -1;
+
+        for (let i = 0; i < tmpData.length; i++) 
+        {
+            if(tmpData[i].GUID == '00000000-0000-0000-0000-000000000000')
+            {
+                tmpData.splice(i, 1); 
+            }
+        }
+        
+        for (let i = 0; i < tmpData.length; i++) 
+        {
+            if(tmpSubIndex != tmpData[i].SUBTOTAL)
+            {
+                tmpSubIndex = tmpData[i].SUBTOTAL;
+                if(tmpData[i].SUBTOTAL > 0)
+                { 
+                    let tmpItem = {...this.empty};
+                    tmpItem.ITEM_NAME = "SUB TOTAL";
+                    tmpItem.LINE_NO = tmpData[i].LINE_NO + 1;
+                    tmpItem.SUBTOTAL = -1;
+                    tmpItem.AMOUNT = tmpData.where({SUBTOTAL:tmpSubIndex}).sum('AMOUNT',2);
+
+                    tmpData.push(tmpItem,false)
+                }
+            }
+        }
     }
 }
 export class posPaymentCls
