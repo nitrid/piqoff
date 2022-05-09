@@ -1005,6 +1005,32 @@ export default class labelPrinting extends React.Component
                                             this.txtSer.readOnly = true
                                             this.txtRefno.readOnly = true
                                             this.lblObj.addEmpty(tmpDocItems)
+                                            this.pg_txtItemsCode.show()
+                                            this.pg_txtItemsCode.onClick = async(data) =>
+                                            {
+                                                if(data.length == 1)
+                                                {
+                                                    this.addItem(data[0],this.lblObj.dt().length - 1)
+                                                }
+                                                else if(data.length > 1)
+                                                {
+                                                    for (let i = 0; i < data.length; i++) 
+                                                    {
+                                                        if(i == 0)
+                                                        {
+                                                            this.addItem(data[i],e.rowIndex)
+                                                        }
+                                                        else
+                                                        {
+                                                            let tmpDocItems = {...this.lblObj.empty}
+                                                            tmpDocItems.REF = this.lblObj.dt()[0].REF
+                                                            tmpDocItems.REF_NO = this.lblObj.dt()[0].REF_NO
+                                                            this.lblObj.addEmpty(tmpDocItems)
+                                                            this.addItem(data[i],this.lblObj.dt().length -1)
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         }
                                         else
                                         {

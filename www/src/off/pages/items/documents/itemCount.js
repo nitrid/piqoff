@@ -823,6 +823,40 @@ export default class itemCount extends React.Component
                                             this.txtRef.readOnly = true
                                             this.txtRefno.readOnly = true
                                             this.countObj.addEmpty(tmpDocItems)
+                                            this.pg_txtItemsCode.show()
+                                            this.pg_txtItemsCode.onClick = async(data) =>
+                                            {
+                                                if(data.length > 0)
+                                                {
+                                                    if(data.length == 1)
+                                                    {
+                                                        this.addItem(data[0],this.countObj.dt().length -1)
+                                                    }
+                                                    else if(data.length > 1)
+                                                    {
+                                                        for (let i = 0; i < data.length; i++) 
+                                                        {
+                                                            if(i == 0)
+                                                            {
+                                                                this.addItem(data[i],e.rowIndex)
+                                                            }
+                                                            else
+                                                            {
+                                                                let tmpDocItems = {...this.countObj.empty}
+                                                                tmpDocItems.LINE_NO = this.countObj.dt().length
+                                                                tmpDocItems.REF = this.txtRef.value
+                                                                tmpDocItems.REF_NO = this.txtRefno.value
+                                                                tmpDocItems.DEPOT = this.cmbDepot.value
+                                                                tmpDocItems.DOC_DATE = this.dtDocDate.value
+                                                                this.txtRef.readOnly = true
+                                                                this.txtRefno.readOnly = true
+                                                                this.countObj.addEmpty(tmpDocItems)
+                                                                this.addItem(data[i],this.countObj.dt().length-1)
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         }
                                         else
                                         {
