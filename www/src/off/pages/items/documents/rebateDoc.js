@@ -197,9 +197,38 @@ export default class rebateDoc extends React.Component
                         await this.pg_txtItemsCode.setVal(e.value)
                         this.pg_txtItemsCode.onClick = async(data) =>
                         {
-                            if(data.length > 0)
+                            if(data.length == 1)
                             {
                                 this.addItem(data[0],e.rowIndex)
+                            }
+                            else if(data.length > 1)
+                            {
+                                for (let i = 0; i < data.length; i++) 
+                                {
+                                    if(i == 0)
+                                    {
+                                        this.addItem(data[i],e.rowIndex)
+                                    }
+                                    else
+                                    {
+                                        let tmpDocItems = {...this.docObj.docItems.empty}
+                                        tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                                        tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                                        tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                        tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                                        tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                                        tmpDocItems.REF = this.docObj.dt()[0].REF
+                                        tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                                        tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                        tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                                        tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                        tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                                        this.txtRef.readOnly = true
+                                        this.txtRefno.readOnly = true
+                                        this.docObj.docItems.addEmpty(tmpDocItems)
+                                        this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                    }
+                                }
                             }
                         }
                     }
@@ -249,10 +278,39 @@ export default class rebateDoc extends React.Component
                                 this.pg_txtItemsCode.show()
                                 this.pg_txtItemsCode.onClick = async(data) =>
                                 {
-                                    if(data.length > 0)
+                                    if(data.length == 1)
+                            {
+                                this.addItem(data[0],e.rowIndex)
+                            }
+                            else if(data.length > 1)
+                            {
+                                for (let i = 0; i < data.length; i++) 
+                                {
+                                    if(i == 0)
                                     {
-                                        this.addItem(data[0],e.rowIndex)
+                                        this.addItem(data[i],e.rowIndex)
                                     }
+                                    else
+                                    {
+                                        let tmpDocItems = {...this.docObj.docItems.empty}
+                                        tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                                        tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                                        tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                        tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                                        tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                                        tmpDocItems.REF = this.docObj.dt()[0].REF
+                                        tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                                        tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                        tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                                        tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                        tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                                        this.txtRef.readOnly = true
+                                        this.txtRefno.readOnly = true
+                                        this.docObj.docItems.addEmpty(tmpDocItems)
+                                        this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                    }
+                                }
+                            }
                                 }
                             }
                         },
@@ -665,7 +723,7 @@ export default class rebateDoc extends React.Component
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
-                                    height={'100%'} 
+                                    height={'400'} 
                                     width={'100%'}
                                     dbApply={false}
                                     onRowUpdated={async(e)=>{
@@ -676,7 +734,7 @@ export default class rebateDoc extends React.Component
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
-                                        <Scrolling mode="infinite" />
+                                        <Scrolling mode="standard" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdRebItems.clmCreateDate")} width={150} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdRebItems.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>

@@ -183,7 +183,7 @@ export default class itemCount extends React.Component
                                     {
                                         this.addItem(data[0],e.rowIndex)
                                     }
-                                    else İF(data.length > 1)
+                                    else if(data.length > 1)
                                     {
                                         for (let i = 0; i < data.length; i++) 
                                         {

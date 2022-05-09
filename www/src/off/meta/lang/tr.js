@@ -1243,7 +1243,7 @@ export const langTr =
         validDepot : "Lütfen Depo Seçiniz",
         popCount : 
         {
-            title : "Cari Seçimi",
+            title : "Stok Miktarları",
         },
         grdCountDocument : 
         {

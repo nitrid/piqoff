@@ -89,31 +89,31 @@ export const menu = (e) =>
                             text: e.t('menu.stk_03_001'),//'Stok Listesi',
                             path: 'items/lists/itemList'
                         },
-                        {
-                            id: 'stk_03_002',
-                            text: e.t('menu.stk_03_002'),//'Fiyat Listesi',
-                            path: 'items/lists/priceList'
-                        },
-                        {
-                            id: 'stk_03_003',
-                            text: e.t('menu.stk_03_003'),//'Barkod Listesi',
-                            path: 'items/lists/barcodeList'
-                        },
+                        // {
+                        //     id: 'stk_03_002',
+                        //     text: e.t('menu.stk_03_002'),//'Fiyat Listesi',
+                        //     path: 'items/lists/priceList'
+                        // },
+                        // {
+                        //     id: 'stk_03_003',
+                        //     text: e.t('menu.stk_03_003'),//'Barkod Listesi',
+                        //     path: 'items/lists/barcodeList'
+                        // },
                         // {
                         //     id: 'stk_03_004',
                         //     text: e.t('menu.stk_03_004'),//'Depo Listesi',
                         //     path: 'items/lists/depotList'
                         // },
-                        {
-                            id: 'stk_03_005',
-                            text: e.t('menu.stk_03_005'),//'Multi Kod Listesi',
-                            path: 'items/lists/multicodeList'
-                        },
+                        // {
+                        //     id: 'stk_03_005',
+                        //     text: e.t('menu.stk_03_005'),//'Multi Kod Listesi',
+                        //     path: 'items/lists/multicodeList'
+                        // },
                     ]
                 },
                 {
                     id: 'stk_04',
-                    text: e.t('menu.stk_04'),//'Promosyon',
+                    text: e.t('menu.stk_04'),//'Operasyonlar',
                     expanded: false,
                     items: 
                     [
