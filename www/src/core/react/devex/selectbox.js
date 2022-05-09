@@ -15,6 +15,7 @@ export default class NdSelectBox extends Base
 
         this._onInitialized = this._onInitialized.bind(this);
         this._onValueChanged = this._onValueChanged.bind(this);
+        this._onChange = this._onChange.bind(this);
     }
     //#region Private
     _onInitialized(e) 
@@ -36,6 +37,7 @@ export default class NdSelectBox extends Base
             searchTimeout={200}
             minSearchLength={0}
             onValueChanged={this._onValueChanged}
+            onChange={this._onChange}
             onInitialized={this._onInitialized}
             height={this.props.height}
             style={this.props.style}
@@ -52,6 +54,13 @@ export default class NdSelectBox extends Base
         if(typeof this.props.onValueChanged != 'undefined')
         {
             this.props.onValueChanged(e);
+        }
+    }
+    _onChange() 
+    {
+        if(typeof this.props.onChange != 'undefined')
+        {
+            this.props.onChange(e);
         }
     }
     //#endregion

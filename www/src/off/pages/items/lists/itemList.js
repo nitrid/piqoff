@@ -290,7 +290,7 @@ export default class itemList extends React.Component
                             <Form colCount={2} id="frmKriter">
                                 <Item>
                                     <Label text={this.t("txtBarkod")} alignment="right" />
-                                        <NdTagBox id="txtBarkod" parent={this} simple={true} value={[]}
+                                        <NdTagBox id="txtBarkod" parent={this} simple={true} value={[]} placeholder={this.t("barkodPlaceHolder")}
                                         />
                                 </Item>
                                 <Item>
@@ -303,7 +303,7 @@ export default class itemList extends React.Component
                                 </Item>
                                 <Item>
                                     <Label text={this.t("txtItemName")} alignment="right" />
-                                        <NdTextBox id="txtUrunAdi" parent={this} simple={true} onEnterKey={this._btnGetirClick}/>
+                                        <NdTextBox id="txtUrunAdi" parent={this} simple={true} onEnterKey={this._btnGetirClick} placeholder={this.t("ItemNamePlaceHolder")}/>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("cmbMainGrp")} alignment="right" />

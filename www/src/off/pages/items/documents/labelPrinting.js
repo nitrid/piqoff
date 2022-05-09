@@ -514,6 +514,10 @@ export default class labelPrinting extends React.Component
                 {
                     return
                 }
+                else
+                {
+                    break
+                }
                 
             }
         }
@@ -528,7 +532,6 @@ export default class labelPrinting extends React.Component
         this.lblObj.dt()[pIndex].PRICE = pData.PRICE
         this.lblObj.dt()[pIndex].LINE_NO = pIndex + 1
         this.calculateCount()
-        await this.lblObj.save()
     }
     async addAutoItem(pData)
     {
@@ -886,20 +889,23 @@ export default class labelPrinting extends React.Component
                                         let tmpQuery = 
                                         {
                                             query :"SELECT  *, " +
-                                           "CASE WHEN UNDER_UNIT_VALUE =0 " +
-                                           "THEN 0 " +
-                                           "ELSE " +
-                                           "ROUND((PRICE * UNDER_UNIT_VALUE),2) " +
-                                           "END AS UNDER_UNIT_PRICE " +
-                                           "FROM (  SELECT GUID,  " +
-                                           "CODE,  " +
-                                           "NAME,  " +
-                                           "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,  " +
-                                           "MAIN_GRP AS ITEM_GRP,  " +
-                                           "MAIN_GRP_NAME AS ITEM_GRP_NAME,  " +
-                                           "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE())) AS PRICE  ," +
-                                           "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE " +
-                                           "FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID),'') <> '') AS TMP WHERE ((CODE = @CODE) OR (BARCODE = @CODE))  ",
+                                            "CASE WHEN UNDER_UNIT_VALUE =0 " +
+                                            "THEN 0 " +
+                                            "ELSE " +
+                                            "ROUND((PRICE * UNDER_UNIT_VALUE),2) " +
+                                            "END AS UNDER_UNIT_PRICE " +
+                                            "FROM ( SELECT ITEMS.GUID,    " +
+                                            "ITEM_BARCODE.CDATE, " +
+                                            "ITEMS.CODE,    " +
+                                            "ITEMS.NAME,    " +
+                                            "ITEM_BARCODE.BARCODE,    " +
+                                            "MAIN_GRP AS ITEM_GRP,    " +
+                                            "MAIN_GRP_NAME AS ITEM_GRP_NAME,    " +
+                                            "(SELECT [dbo].[FN_PRICE_SALE](ITEMS.GUID,1,GETDATE())) AS PRICE  ,  " +
+                                            "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS.GUID),0) AS UNDER_UNIT_VALUE   " +
+                                            "FROM ITEMS_VW_01 AS ITEMS INNER JOIN ITEM_BARCODE ON ITEMS.GUID = ITEM_BARCODE.ITEM  " +
+                                            "WHERE ((ITEMS.CODE = @CODE) OR (ITEM_BARCODE.BARCODE = @CODE))  " +
+                                            " ) AS TMP ORDER BY CDATE DESC ",
                                             param : ['CODE:string|50'],
                                             value : [this.txtBarcode.value]
                                         }
@@ -1018,7 +1024,7 @@ export default class labelPrinting extends React.Component
                                                     {
                                                         if(i == 0)
                                                         {
-                                                            this.addItem(data[i],e.rowIndex)
+                                                            this.addItem(data[i],this.lblObj.dt().length - 1)
                                                         }
                                                         else
                                                         {

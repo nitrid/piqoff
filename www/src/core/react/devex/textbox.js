@@ -18,6 +18,7 @@ export default class NdTextBox extends Base
         this.state.value = typeof props.value == 'undefined' ? ''  : props.value
         this.state.title = typeof props.title == 'undefined' ? '' : props.title
         this.state.mode = typeof props.mode == 'undefined' ? 'text' : props.mode
+        this.state.placeholder = typeof props.placeholder == 'undefined' ? '' : props.placeholder
         this.state.displayValue = typeof props.displayValue == 'undefined' ? '' : props.displayValue
         this.state.titleAlign = typeof props.titleAlign == 'undefined' ? 'left' : props.titleAlign
         this.state.showClearButton = typeof props.showClearButton == 'undefined' ? false : props.showClearButton
@@ -137,6 +138,7 @@ export default class NdTextBox extends Base
         return (
             <TextBox id={this.props.id} mode={this.state.mode} showClearButton={this.state.showClearButton} height='fit-content' 
                 maxLength={this.props.maxLength}
+                placeholder={this.state.placeholder}
                 style={this.props.style}
                 elementAttr={this.props.elementAttr}
                 valueChangeEvent="keyup" onValueChanged={this._onValueChanged} 

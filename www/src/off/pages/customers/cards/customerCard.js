@@ -376,14 +376,14 @@ export default class CustomerCard extends React.Component
                                     data={{source:[{ID:0,VALUE:this.t("cmbTypeData.individual")},{ID:1,VALUE:this.t("cmbTypeData.company")}]}}
                                     onValueChanged={(async()=>
                                             {
-                                                if(this.cmbType.value == 0)
+                                                if(this.cmbType.value == 1)
                                                 {
                                                     this.txtTitle.readOnly = true
                                                     this.setState({officalVisible:false})
                                                     this.txtTitle.value = ""
                                                     this.txtCode.value = ""
                                                 }
-                                                else if(this.cmbType.value == 1)
+                                                else if(this.cmbType.value == 0)
                                                 {
                                                     this.txtTitle.readOnly = false
                                                     this.setState({officalVisible:true})
