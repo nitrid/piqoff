@@ -1469,7 +1469,24 @@ export default class posDoc extends React.Component
                                 <div className="row px-2">
                                     {/* Item Return */}
                                     <div className="col px-1">
-                                        <NbButton id={"btnItemReturn"} parent={this} className="form-group btn btn-danger btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        <NbButton id={"btnItemReturn"} parent={this} className="form-group btn btn-danger btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        onClick={async ()=>
+                                        {
+                                            if(this.posObj.posSale.dt().length > 0)
+                                            {
+                                                await this.msgItemReturnTicket.show().then(async (e) =>
+                                                {
+                                                    if(e == 'btn01')
+                                                    {
+                                                        if(this.txtItemReturnTicket.value != "")
+                                                        {
+                                                            this.msgItemReturnTicket.hide()
+                                                            this.popItemReturnDesc.show()
+                                                        }
+                                                    }
+                                                })                                                
+                                            }
+                                        }}>
                                             <i className="text-white fa-solid fa-retweet" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
@@ -2808,6 +2825,104 @@ export default class posDoc extends React.Component
                         await this.descSave("ROW DELETE",e,this.grdList.devGrid.getSelectedRowKeys()[0].LINE_NO)
                         this.rowDelete()
                     }}></NbPopDescboard>
+                </div>
+                {/* Item Return Description Popup */} 
+                <div>
+                    <NbPopDescboard id={"popItemReturnDesc"} parent={this} width={"900"} height={"540"} position={"#root"} head={"İade Açıklaması"} title={"Lütfen İade Nedenini Giriniz"}
+                    button={
+                    [
+                        {
+                            id:"btn01",
+                            text:"Ürün Barkodu Çift Okutulmuş"
+                        },
+                        {
+                            id:"btn02",
+                            text:"Ürün Arızalı Yada Defolu"
+                        },
+                        {
+                            id:"btn03",
+                            text:"Müşteri Ürünü Beğenmedi"
+                        },
+                        {
+                            id:"btn04",
+                            text:"Müşteri Yanlış Ürünü Aldı"
+                        }
+                    ]}
+                    onClick={async (e)=>
+                    {                        
+                        let tmpResult = await this.msgItemReturnType.show();
+
+                        let tmpType = 0;
+                        if(tmpResult == 'btn01') //Nakit
+                        {
+                            tmpType = 0;
+                        }
+                        else if(tmpResult == 'btn02') //İade Ticket
+                        {
+                            tmpType = 1;
+                        }
+
+                        if(this.txtItemReturnTicket.value != "")
+                        {
+                            this.posObj.dt()[0].TICKET = this.txtItemReturnTicket.value;
+                        }
+                        this.posObj.dt()[0].TYPE = 1;
+                        this.posObj.dt()[0].STATUS = 1;
+                        console.log(this.posObj)
+                        await this.descSave("REBATE",e,0);
+                        await this.calcGrandTotal();
+                        this.init()
+                    }}></NbPopDescboard>
+                </div>
+                {/* Item Return Ticket Dialog  */}
+                <NdDialog id={"msgItemReturnTicket"} container={"#root"} parent={this}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    title={"Dikkat"} 
+                    showCloseButton={false}
+                    width={"500px"}
+                    height={"250px"}
+                    button={[{id:"btn01",caption:"Tamam",location:'before'},{id:"btn02",caption:"İptal",location:'after'}]}
+                    onShowed={()=>
+                    {
+                        this.txtItemReturnTicket.value = ""
+                        setTimeout(() => 
+                        {
+                            this.txtItemReturnTicket.focus()
+                        }, 500);
+                    }}
+                    >
+                        <div className="row">
+                            <div className="col-12 py-2">
+                                <div style={{textAlign:"center",fontSize:"20px"}}>{"İade Alınan Ticketı Okutunuz !"}</div>
+                            </div>
+                            <div className="col-12 py-2">
+                            <Form>
+                                {/* txtItemReturnTicket */}
+                                <Item>
+                                    <NdTextBox id="txtItemReturnTicket" parent={this} simple={true} />
+                                </Item>
+                            </Form>
+                        </div>
+                        </div>
+                </NdDialog>
+                {/* Alert Item Return Type Popup */} 
+                <div>
+                    <NdDialog id={"msgItemReturnType"} container={"#root"} parent={this}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    title={"Uyarı"} 
+                    showCloseButton={true}
+                    width={"500px"}
+                    height={"200px"}
+                    button={[{id:"btn01",caption:"Espece",location:'before'},{id:"btn03",caption:"Bon D'avoir",location:'after'}]}
+                    >
+                        <div className="row">
+                            <div className="col-12 py-2">
+                                <div style={{textAlign:"center",fontSize:"20px"}}>{"İade Tipini Seçiniz !"}</div>
+                            </div>
+                        </div>
+                    </NdDialog>
                 </div>
                 {/* Alert Weighing Popup */} 
                 <div>

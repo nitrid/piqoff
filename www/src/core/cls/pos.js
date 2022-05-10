@@ -26,6 +26,7 @@ export class posCls
             LOYALTY : 0,
             VAT : 0,
             TOTAL : 0,
+            TICKET : '', //İADE ALINAN TICKET
             STATUS : 0
         }
 
@@ -59,10 +60,11 @@ export class posCls
                     "@LOYALTY = @PLOYALTY, " + 
                     "@VAT = @PVAT, " + 
                     "@TOTAL = @PTOTAL, " + 
+                    "@TICKET = @PTICKET, " + 
                     "@STATUS = @PSTATUS ", 
             param : ['PGUID:string|50','PCUSER:string|25','PDEVICE:string|25','PDEPOT:string|50','PTYPE:int','PDOC_DATE:date','PCUSTOMER:string|50',
-                     'PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSTATUS:int'],
-            dataprm : ['GUID','CUSER','DEVICE','DEPOT_GUID','TYPE','DOC_DATE','CUSTOMER_GUID','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','STATUS']
+                     'PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PTICKET:string|50','PSTATUS:int'],
+            dataprm : ['GUID','CUSER','DEVICE','DEPOT_GUID','TYPE','DOC_DATE','CUSTOMER_GUID','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','TICKET','STATUS']
         } 
         tmpDt.updateCmd = 
         {
@@ -79,10 +81,11 @@ export class posCls
                     "@LOYALTY = @PLOYALTY, " + 
                     "@VAT = @PVAT, " + 
                     "@TOTAL = @PTOTAL, " + 
+                    "@TICKET = @PTICKET, " + 
                     "@STATUS = @PSTATUS ", 
             param : ['PGUID:string|50','PCUSER:string|25','PDEVICE:string|25','PDEPOT:string|50','PTYPE:int','PDOC_DATE:date','PCUSTOMER:string|50',
-                     'PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSTATUS:int'],
-            dataprm : ['GUID','CUSER','DEVICE','DEPOT_GUID','TYPE','DOC_DATE','CUSTOMER_GUID','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','STATUS']
+                     'PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PTICKET:string|50','PSTATUS:int'],
+            dataprm : ['GUID','CUSER','DEVICE','DEPOT_GUID','TYPE','DOC_DATE','CUSTOMER_GUID','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','TICKET','STATUS']
         } 
         tmpDt.deleteCmd = 
         {
