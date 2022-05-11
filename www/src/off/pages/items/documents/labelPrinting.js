@@ -966,7 +966,7 @@ export default class labelPrinting extends React.Component
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
-                                    height={'400'} 
+                                    height={'600'} 
                                     width={'100%'}
                                     dbApply={false}
                                     onRowUpdated={async(e)=>{
@@ -980,12 +980,12 @@ export default class labelPrinting extends React.Component
                                         <Scrolling mode="standard" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Column dataField="CODE" caption={this.t("grdLabelQueue.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="BARCODE" caption={this.t("grdLabelQueue.clmBarcode")} width={200} />
-                                        <Column dataField="NAME" caption={this.t("grdLabelQueue.clmItemName")} width={350} />
-                                        <Column dataField="ITEM_GRP_NAME" caption={this.t("grdLabelQueue.clmItemGrpName")}  width={150}/>
-                                        <Column dataField="PRICE" caption={this.t("grdLabelQueue.clmPrice")} />
-                                        <Column dataField="UNDER_UNIT_VALUE" caption={this.t("grdLabelQueue.clmUnderUnit")} />
-                                        <Column dataField="UNDER_UNIT_PRICE" caption={this.t("grdLabelQueue.clmUnderUnitPrice")} />
+                                        <Column dataField="BARCODE" caption={this.t("grdLabelQueue.clmBarcode")} width={150} />
+                                        <Column dataField="NAME" caption={this.t("grdLabelQueue.clmItemName")} width={550} />
+                                        <Column dataField="ITEM_GRP_NAME" caption={this.t("grdLabelQueue.clmItemGrpName")}  width={200}/>
+                                        <Column dataField="PRICE" caption={this.t("grdLabelQueue.clmPrice")} width={70}/>
+                                        <Column dataField="UNDER_UNIT_VALUE" caption={this.t("grdLabelQueue.clmUnderUnit")} width={80}/>
+                                        <Column dataField="UNDER_UNIT_PRICE" caption={this.t("grdLabelQueue.clmUnderUnitPrice")}width={70} />
                                         <Column dataField="DESCRIPTION" caption={this.t("grdLabelQueue.clmDescription")} />
                                     </NdGrid>
                                 </Item>

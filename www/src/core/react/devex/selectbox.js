@@ -12,7 +12,6 @@ export default class NdSelectBox extends Base
         this.dev = null;
 
         this.state.value = typeof props.value != 'undefined' ? props.value : ''
-        this.state.value =  props.value == '00000000-0000-0000-0000-000000000000' ? props.displayExpr : ''
         this._onInitialized = this._onInitialized.bind(this);
         this._onValueChanged = this._onValueChanged.bind(this);
         this._onChange = this._onChange.bind(this);
