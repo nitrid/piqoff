@@ -1207,7 +1207,6 @@ export default class itemCard extends React.Component
                                     <NdNumberBox id={"txtPopPriQuantity"} parent={this} simple={true}>
                                         <Validator validationGroup={"frmPrice"}>
                                             <RequiredRule message="Miktar'ı boş geçemezsiniz !" />
-                                            <NumericRule message="Miktar'a sayısal değer giriniz !" />
                                         </Validator>
                                     </NdNumberBox>
                                 </Item>
@@ -1216,7 +1215,6 @@ export default class itemCard extends React.Component
                                     <NdNumberBox id={"txtPopPriPrice"} parent={this} simple={true}>
                                         <Validator validationGroup={"frmPrice"}>
                                             <RequiredRule message="Fiyat'ı boş geçemezsiniz !" />
-                                            <NumericRule message="Fiyat'a sayısal değer giriniz !" />
                                             <RangeRule min={0.001} message={"Fiyat sıfırdan küçük olamaz !"} />
                                         </Validator> 
                                     </NdNumberBox>
