@@ -128,13 +128,11 @@ export default class CustomerCard extends React.Component
         {
             this.txtTitle.readOnly = true
             this.setState({officalVisible:false})
-            this.txtCode.setState({value:""})
         }
         else if(pType == 1)
         {
             this.txtTitle.readOnly = false
             this.setState({officalVisible:true})
-            this.txtCode.setState({value:Math.floor(Date.now() / 1000)})
         }
     }
     async checkCustomer(pCode)
@@ -237,17 +235,12 @@ export default class CustomerCard extends React.Component
     }
     _cellRoleRender(e)
     {
-        let onValueChanged = function(data)
-        {
-            e.setValue(data.value)
-        }
         return (
             <NdSelectBox 
                 parent={this}                             
                 id = "cmbTaxType"                             
                 displayExpr="VALUE"                       
                 valueExpr="ID"
-                onValueChanged={onValueChanged}
                 data={{source:[{ID:0,VALUE:this.t("cmbTaxTypeData.individual")},{ID:1,VALUE:this.t("cmbTaxTypeData.company")}]}}
             >
             </NdSelectBox>
@@ -282,6 +275,30 @@ export default class CustomerCard extends React.Component
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmCustomers"
                                     onClick={async (e)=>
                                     {
+                                        if(this.customerObj.dt()[0].SIRET_ID == '' || this.customerObj.dt()[0].APE_CODE == '' || this.customerObj.dt()[0].TAX_OFFICE == '' || this.customerObj.dt()[0].TAX_NO == '')
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgLegalNotValid',showTitle:true,title:this.t("msgLegalNotValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgLegalNotValid.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgLegalNotValid.msg")}</div>)
+                                            }
+                                            
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
+                                        if(typeof this.customerObj.customerAdress.dt()[0] == 'undefined' || this.customerObj.customerAdress.dt()[0].COUNTRY == '' )
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgAdressNotValid',showTitle:true,title:this.t("msgAdressNotValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgAdressNotValid.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAdressNotValid.msg")}</div>)
+                                            }
+                                            
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             let tmpConfObj =
@@ -595,6 +612,7 @@ export default class CustomerCard extends React.Component
                                          access={this.access.filter({ELEMENT:'txtWeb',USERS:this.user.CODE})}
                                         />
                                 </Item>
+                                
                             </Form>
                         </div>
                         <div className='row px-2 pt-2'>
@@ -775,10 +793,6 @@ export default class CustomerCard extends React.Component
                                     valueExpr="ZIPCODE"
                                     value=""
                                     searchEnabled={true}
-                                    onValueChanged={(async()=>
-                                        {
-                                           
-                                    }).bind(this)}
                                     pageSize ={50}
                                     notRefresh = {true}
                                     data={{source:{select:{query : "SELECT [COUNTRY_CODE],[ZIPCODE],[PLACE],ZIPCODE + ' ' + PLACE AS ZIPNAME  FROM [dbo].[ZIPCODE]"},sql:this.core.sql}}}

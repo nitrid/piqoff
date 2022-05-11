@@ -149,6 +149,7 @@ export class labelMainCls
             REF_NO : '',
             DATA : '',
             PRINT_COUNT : 1,
+            DESING : '',
             STATUS : 0,
         }
 
@@ -172,10 +173,11 @@ export class labelMainCls
                     "@REF_NO = @PREF_NO, " + 
                     "@DATA = @PDATA, " + 
                     "@PRINT_COUNT = @PPRINT_COUNT, " + 
+                    "@DESING = @PDESING, " + 
                     "@STATUS = @PSTATUS ",
             param : ['PGUID:string|50','PCUSER:string|25','PREF:string|25','PREF_NO:int','PDATA:string|max',
-                     'PPRINT_COUNT:int','PSTATUS:int',],
-            dataprm : ['GUID','CUSER','REF','REF_NO','DATA','PRINT_COUNT','STATUS']
+                     'PPRINT_COUNT:int','PDESING:string|25','PSTATUS:int',],
+            dataprm : ['GUID','CUSER','REF','REF_NO','DATA','PRINT_COUNT','DESING','STATUS']
         } 
         tmpDt.updateCmd = 
         {
@@ -186,10 +188,11 @@ export class labelMainCls
                     "@REF_NO = @PREF_NO, " + 
                     "@DATA = @PDATA, " + 
                     "@PRINT_COUNT = @PPRINT_COUNT, " + 
+                    "@DESING = @PDESING, " + 
                     "@STATUS = @PSTATUS ",
             param : ['PGUID:string|50','PCUSER:string|25','PREF:string|25','PREF_NO:int','PDATA:string|max',
-                     'PPRINT_COUNT:int','PSTATUS:int',],
-            dataprm : ['GUID','CUSER','REF','REF_NO','DATA','PRINT_COUNT','STATUS']
+                     'PPRINT_COUNT:int','PDESING:string|25','PSTATUS:int',],
+            dataprm : ['GUID','CUSER','REF','REF_NO','DATA','PRINT_COUNT','DESING','STATUS']
         } 
 
         this.ds.add(tmpDt);

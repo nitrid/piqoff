@@ -68,7 +68,6 @@ export default class labelPrinting extends React.Component
                 this.btnBack.setState({disabled:false});
                 this.btnNew.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
-                this.btnDelete.setState({disabled:false});
                 this.btnCopy.setState({disabled:false});
                 this.btnPrint.setState({disabled:false});
 
@@ -160,7 +159,7 @@ export default class labelPrinting extends React.Component
                 "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE())) AS PRICE  , " +
                 "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE " +
                 "FROM ITEMS_VW_01  " +
-                "WHERE (SELECT TOP 1 LDATE FROM LABEL_QUEUE ORDER BY LDATE DESC) < (SELECT TOP 1 LDATE FROM ITEM_PRICE WHERE TYPE = 0  AND ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC)) AS TMP ", 
+                "WHERE (SELECT TOP 1 LDATE FROM LABEL_QUEUE ORDER BY LDATE DESC) < (SELECT TOP 1 LDATE FROM ITEM_PRICE WHERE TYPE = 0  AND ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC) OR  (SELECT TOP 1 LDATE FROM LABEL_QUEUE ORDER BY LDATE DESC) < ITEMS_VW_01.LDATE) AS TMP ", 
             }
             let tmpData = await this.core.sql.execute(tmpQuery) 
             if(tmpData.result.recordset.length > 0)
@@ -205,7 +204,7 @@ export default class labelPrinting extends React.Component
                 "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE())) AS PRICE  , " +
                 "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE " +
                 "FROM ITEMS_VW_01  " +
-                "WHERE @DATE < (SELECT TOP 1 LDATE FROM ITEM_PRICE WHERE TYPE = 0  AND ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC)) AS TMP ", 
+                "WHERE @DATE < (SELECT TOP 1 LDATE FROM ITEM_PRICE WHERE TYPE = 0  AND ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC) OR @DATE < ITEMS_VW_01.LDATE) AS TMP ", 
                 param : ['DATE:date'],
                 value : [this.dtSelectChange.value]
             }
@@ -516,6 +515,8 @@ export default class labelPrinting extends React.Component
                 let pResult = await dialog(tmpConfObj);
                 if(pResult == 'btn01')
                 {
+                   
+                    await this.grdLabelQueue.devGrid.deleteRow(pIndex)
                     return
                 }
                 else
@@ -634,6 +635,8 @@ export default class labelPrinting extends React.Component
                                             {                       
                                                 tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                 await dialog(tmpConfObj1);
+                                                this.btnSave.setState({disabled:true});
+                                                this.btnNew.setState({disabled:false});
                                             }
                                             else
                                             {
@@ -659,7 +662,6 @@ export default class labelPrinting extends React.Component
                                             }
 
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
-                                            console.log(tmpData)
                                             this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" +  JSON.stringify(tmpData.result.recordset)+ "}",(pResult) => 
                                             {
                                                 if(pResult.split('|')[0] != 'ERR')
@@ -766,8 +768,24 @@ export default class labelPrinting extends React.Component
                                                     {
                                                         id:'01',
                                                         icon:'more',
-                                                        onClick:()=>
+                                                        onClick:async()=>
                                                         {
+                                                            if(typeof this.btnSave.state.disabled != 'undefined')
+                                                            {
+                                                                if(this.btnSave.state.disabled == false)
+                                                                {
+                                                                    let tmpConfObj =
+                                                                    {
+                                                                        id:'msgNotSave',showTitle:true,title:this.t("msgNotSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                                        button:[{id:"btn01",caption:this.t("msgNotSave.btn01"),location:'after'}],
+                                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotSave.msg")}</div>)
+                                                                    }
+                                                        
+                                                                    await dialog(tmpConfObj);
+                                                                    return
+                                                                }
+                                                            }
+                                                           
                                                             this.getDocs(0)   
                                                         }
                                                     },
@@ -842,6 +860,7 @@ export default class labelPrinting extends React.Component
                                 <Item>
                                     <Label text={this.t("design")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
+                                    dt={{data:this.mainLblObj.dt('MAIN_LABEL_QUEUE'),field:"DESING"}}
                                     displayExpr="DESIGN_NAME"                       
                                     valueExpr="TAG"
                                     value=""
@@ -970,7 +989,10 @@ export default class labelPrinting extends React.Component
                                     width={'100%'}
                                     dbApply={false}
                                     onRowUpdated={async(e)=>{
-                                       
+                                        if(typeof e.data.PRICE != 'undefined' || typeof e.data.UNDER_UNIT_VALUE != 'undefined')
+                                        {
+                                            e.key.UNDER_UNIT_PRICE = parseFloat(((e.key.PRICE * (e.key.UNDER_UNIT_VALUE *100)) / 100).toFixed(3))
+                                        }
                                     }}
                                     onRowRemoved={(e)=>{
                                         this.calculateCount()
@@ -980,12 +1002,12 @@ export default class labelPrinting extends React.Component
                                         <Scrolling mode="standard" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Column dataField="CODE" caption={this.t("grdLabelQueue.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="BARCODE" caption={this.t("grdLabelQueue.clmBarcode")} width={200} />
+                                        <Column dataField="BARCODE" caption={this.t("grdLabelQueue.clmBarcode")} width={200} allowEditing={false} />
                                         <Column dataField="NAME" caption={this.t("grdLabelQueue.clmItemName")} width={350} />
-                                        <Column dataField="ITEM_GRP_NAME" caption={this.t("grdLabelQueue.clmItemGrpName")}  width={150}/>
+                                        <Column dataField="ITEM_GRP_NAME" caption={this.t("grdLabelQueue.clmItemGrpName")}  width={150} allowEditing={false}/>
                                         <Column dataField="PRICE" caption={this.t("grdLabelQueue.clmPrice")} />
                                         <Column dataField="UNDER_UNIT_VALUE" caption={this.t("grdLabelQueue.clmUnderUnit")} />
-                                        <Column dataField="UNDER_UNIT_PRICE" caption={this.t("grdLabelQueue.clmUnderUnitPrice")} />
+                                        <Column dataField="UNDER_UNIT_PRICE" caption={this.t("grdLabelQueue.clmUnderUnitPrice")} allowEditing={false}/>
                                         <Column dataField="DESCRIPTION" caption={this.t("grdLabelQueue.clmDescription")} />
                                     </NdGrid>
                                 </Item>
@@ -1000,6 +1022,32 @@ export default class labelPrinting extends React.Component
                                             {
                                                 if(this.lblObj.dt()[this.lblObj.dt().length - 1].CODE == '')
                                                 {
+                                                    this.pg_txtItemsCode.show()
+                                                    this.pg_txtItemsCode.onClick = async(data) =>
+                                                    {
+                                                        if(data.length == 1)
+                                                        {
+                                                            this.addItem(data[0],this.lblObj.dt().length - 1)
+                                                        }
+                                                        else if(data.length > 1)
+                                                        {
+                                                            for (let i = 0; i < data.length; i++) 
+                                                            {
+                                                                if(i == 0)
+                                                                {
+                                                                    this.addItem(data[i],this.lblObj.dt().length - 1)
+                                                                }
+                                                                else
+                                                                {
+                                                                    let tmpDocItems = {...this.lblObj.empty}
+                                                                    tmpDocItems.REF = this.mainLblObj.dt()[0].REF
+                                                                    tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
+                                                                    this.lblObj.addEmpty(tmpDocItems)
+                                                                    this.addItem(data[i],this.lblObj.dt().length -1)
+                                                                }
+                                                            }
+                                                        }
+                                                    }
                                                     return
                                                 }
                                             }
@@ -1135,7 +1183,7 @@ export default class labelPrinting extends React.Component
                                     <Label text={this.t("chkSelectChange")} alignment="right" />
                                 </Item>
                                 <Item>
-                                <NdDatePicker simple={true}  parent={this} id={"dtSelectChange"}/>
+                                <NdDatePicker simple={true}  parent={this} id={"dtSelectChange"} type={'datetime'}/>
                                 </Item>
                                 <Item>
                                     <NdCheckBox id="chkGroup" parent={this} defaultValue={false} 

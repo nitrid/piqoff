@@ -823,6 +823,43 @@ export default class rebateDoc extends React.Component
                                             {
                                                 if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                                 {
+                                                    this.pg_txtItemsCode.show()
+                                            this.pg_txtItemsCode.onClick = async(data) =>
+                                            {
+                                                if(data.length == 1)
+                                                {
+                                                    this.addItem(data[0],this.docObj.docItems.dt().length-1)
+                                                }
+                                                else if(data.length > 1)
+                                                {
+                                                    for (let i = 0; i < data.length; i++) 
+                                                    {
+                                                        if(i == 0)
+                                                        {
+                                                            this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                        }
+                                                        else
+                                                        {
+                                                            let tmpDocItems = {...this.docObj.docItems.empty}
+                                                            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                                                            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                                                            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                            tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                                                            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                                                            tmpDocItems.REF = this.docObj.dt()[0].REF
+                                                            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                                                            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                                                            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                            tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                                                            this.txtRef.readOnly = true
+                                                            this.txtRefno.readOnly = true
+                                                            this.docObj.docItems.addEmpty(tmpDocItems)
+                                                            this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                        }
+                                                    }
+                                                }
+                                            }
                                                     return
                                                 }
                                             }

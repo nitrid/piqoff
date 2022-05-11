@@ -853,6 +853,12 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
         },
+        msgNotSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrakta Değişiklik Yapılmış! Lütfen Kayıt Edin Yada Değişiklikleri Geri Alın"
+        },
         msgAddItems:
         {
             title: "Dikkat",
@@ -1304,6 +1310,7 @@ export const langTr =
         tabTitleLegal : "Yasal",
         tabTitleOffical : "Yetkili",
         tabCustomerBank : "Banka Bilgileri",
+        txtLegal :"Yasal Bilgiler",
         pg_txtCode : 
         {
             title : "Cari Seçim",
@@ -1390,6 +1397,18 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgLegalNotValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Yasal Bölümündeki alanları doldurunuz !"
+        },
+        msgAdressNotValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Adres Bölümünden Carinin Ülkesini Seçiniz!"
         },
         msgDelete:
         {
