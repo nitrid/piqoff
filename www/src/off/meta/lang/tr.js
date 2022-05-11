@@ -696,6 +696,7 @@ export const langTr =
         txtRefRefno : "Seri-Sıra",
         cmbOutDepot: "Çıkış Deposu",
         dtDocDate : "Tarih",
+        txtBarcode : "Barkod Ekle",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -947,6 +948,7 @@ export const langTr =
         cmbDepot2: "İade Deposu",
         dtDocDate : "Tarih",
         getRebate :"İade Deposudan Getir",
+        txtBarcode : "Barkod Ekle",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -1301,6 +1303,7 @@ export const langTr =
         tabTitleAdress : "Adres",
         tabTitleLegal : "Yasal",
         tabTitleOffical : "Yetkili",
+        tabCustomerBank : "Banka Bilgileri",
         pg_txtCode : 
         {
             title : "Cari Seçim",
@@ -1334,6 +1337,13 @@ export const langTr =
             clmGsmPhone : "GSM Tel.",
             clmEMail : "E-Mail"
         },
+        grdBank : 
+        {
+            clmName : "Banka Adı",
+            clmIban : "IBAN",
+            clmOffice : "Şube",
+            clmSwift : "Swift Kodu",
+        },
         popAdress : 
         {
             title : "Adres",
@@ -1341,6 +1351,14 @@ export const langTr =
             cmbPopZipcode :"Posta Kodu",
             cmbPopCity :"Şehir",
             cmbPopCountry :"Ülke",
+        },
+        popBank : 
+        {
+            title : "Banka Bilgileri",
+            txtName : "Banka Adı",
+            txtIban :"IBAN",
+            txtOffice :"Şube",
+            txtSwift :"Swift Kodu",
         },
         popOffical : 
         {
@@ -1482,6 +1500,14 @@ export const langTr =
             clmTitle : "Ünvan",
             clmType : "Tipi",
             clmGenus : "Cinsi",
+            clmAdress :"Adres",
+            clmZipcode : "Posta Kodu",
+            clmCountry :"Ülke",
+            clmCity : "Şehir",
+            clmPhone1 :"Telefon",
+            clmGsm : "GSM No.",
+            clmEmail :"E-Mail",
+            clmIban :"Iban"
         },
         cmbGenusData:
         {

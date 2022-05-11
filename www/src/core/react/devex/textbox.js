@@ -46,11 +46,11 @@ export default class NdTextBox extends Base
             this.props.onValueChanged(e);
         }
     }
-    _onEnterKey()
+    _onEnterKey(e)
     {
         if(typeof this.props.onEnterKey != 'undefined')
         {
-            this.props.onEnterKey();
+            this.props.onEnterKey(e);
         }
     }
     _onFocusIn()

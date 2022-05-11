@@ -35,12 +35,17 @@ export default class CustomerCard extends React.Component
 
         this._onItemRendered = this._onItemRendered.bind(this)
         this._cellRoleRender = this._cellRoleRender.bind(this)
+        this.typeChange = this.typeChange.bind(this)
         
     }
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
-        this.init()
+        await this.init()
+        if(typeof this.pagePrm != 'undefined')
+        {
+            this.getCustomer(this.pagePrm.CODE)
+        }
     }
     async init()
     {
@@ -109,12 +114,28 @@ export default class CustomerCard extends React.Component
         this.txtTitle.readOnly = true
         this.txtCode.value = ''
         this.setState({officalVisible:false})
+        this.cmbType.props.onValueChanged()
         
     }
     async getCustomer(pCode)
     {
         this.customerObj.clearAll()
         await this.customerObj.load({CODE:pCode});
+    }
+    typeChange(pType)
+    {
+        if(pType== 0)
+        {
+            this.txtTitle.readOnly = true
+            this.setState({officalVisible:false})
+            this.txtCode.setState({value:""})
+        }
+        else if(pType == 1)
+        {
+            this.txtTitle.readOnly = false
+            this.setState({officalVisible:true})
+            this.txtCode.setState({value:Math.floor(Date.now() / 1000)})
+        }
     }
     async checkCustomer(pCode)
     {
@@ -208,6 +229,10 @@ export default class CustomerCard extends React.Component
         if(e.itemData.title == this.t("tabTitleLegal"))
         {        
             await this.grdLegal.dataRefresh({source:this.customerObj.dt('CUSTOMERS')});
+        }
+        if(e.itemData.title == this.t("tabCustomerBank"))
+        {        
+            await this.grdBank.dataRefresh({source:this.customerObj.customerBank.dt('CUSTOMER_BANK')});
         }
     }
     _cellRoleRender(e)
@@ -374,20 +399,11 @@ export default class CustomerCard extends React.Component
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
                                     data={{source:[{ID:0,VALUE:this.t("cmbTypeData.individual")},{ID:1,VALUE:this.t("cmbTypeData.company")}]}}
-                                    onValueChanged={(async()=>
+                                    onValueChanged={(async(e)=>
                                             {
-                                                if(this.cmbType.value == 1)
+                                                if(typeof e != 'undefined')
                                                 {
-                                                    this.txtTitle.readOnly = true
-                                                    this.setState({officalVisible:false})
-                                                    this.txtTitle.value = ""
-                                                    this.txtCode.value = ""
-                                                }
-                                                else if(this.cmbType.value == 0)
-                                                {
-                                                    this.txtTitle.readOnly = false
-                                                    this.setState({officalVisible:true})
-                                                    this.txtCode.value = Math.floor(Date.now() / 1000)
+                                                    this.typeChange(e.value)
                                                 }
                                         }).bind(this)}
                                     //param={this.param.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
@@ -690,6 +706,45 @@ export default class CustomerCard extends React.Component
                                                 </NdGrid>
                                             </div>
                                         </div>
+                                    </Item>  
+                                    <Item title={this.t("tabCustomerBank")}>
+                                    <div className='row px-2 py-2'>
+                                            <div className='col-12'>
+                                                <Toolbar>
+                                                    <Item location="after">
+                                                        <Button icon="add"
+                                                        onClick={async ()=>
+                                                        {
+                                                            this.txtBankName.value = "";
+                                                            this.txtBankIban.value = "";
+                                                            this.txtBankOffice.value = "";
+                                                            this.txtBankSwift.value = ''
+                                                            this.popBank.show();
+                                                        }}/>
+                                                    </Item>
+                                                </Toolbar>
+                                            </div>
+                                        </div>
+                                        <div className='row px-2 py-2'>
+                                            <div className='col-12'>
+                                                <NdGrid parent={this} id={"grdBank"} 
+                                                showBorders={true} 
+                                                columnsAutoWidth={true} 
+                                                allowColumnReordering={true} 
+                                                allowColumnResizing={true} 
+                                                height={'100%'} 
+                                                width={'100%'}
+                                                dbApply={false}
+                                                >
+                                                    <Paging defaultPageSize={5} />
+                                                    <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
+                                                    <Column dataField="NAME" caption={this.t("grdBank.clmName")}/>
+                                                    <Column dataField="IBAN" caption={this.t("grdBank.clmIban")}/>
+                                                    <Column dataField="OFFICE" caption={this.t("grdBank.clmOffice")}/>
+                                                    <Column dataField="SWIFT" caption={this.t("grdBank.clmSwift")}/>
+                                                </NdGrid>
+                                            </div>
+                                        </div>
                                     </Item>                              
                                 </TabPanel>
                             </div>
@@ -867,6 +922,67 @@ export default class CustomerCard extends React.Component
                             </Form>
                         </NdPopUp>
                     </div>  
+                     {/* Banka POPUP */}
+                     <div>
+                        <NdPopUp parent={this} id={"popBank"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popBank.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'350'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("popBank.txtName")} alignment="right" />
+                                    <NdTextBox id={"txtBankName"} parent={this} simple={true} />
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("popBank.txtIban")} alignment="right" />
+                                    <NdTextBox id={"txtBankIban"} parent={this} simple={true} />
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("popBank.txtOffice")} alignment="right" />
+                                    <NdTextBox id={"txtBankOffice"} parent={this} simple={true} />
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("popBank.txtSwift")} alignment="right" />
+                                    <NdTextBox id={"txtBankSwift"} parent={this} simple={true} />
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
+                                            onClick={async ()=>
+                                            {
+                                                let tmpEmpty = {...this.customerObj.customerBank.empty};
+                                               
+                                                
+                                                tmpEmpty.NAME = this.txtBankName.value
+                                                tmpEmpty.IBAN = this.txtBankIban.value
+                                                tmpEmpty.OFFICE = this.txtBankOffice.value
+                                                tmpEmpty.SWIFT = this.txtBankSwift.value
+                                                tmpEmpty.CUSTOMER = this.customerObj.dt()[0].GUID 
+
+                                                this.customerObj.customerBank.addEmpty(tmpEmpty);    
+                                                this.popBank.hide(); 
+                                                
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popBank.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div> 
                 </ScrollView>
             </div>
         )

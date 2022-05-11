@@ -1,6 +1,6 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { labelCls } from '../../../../core/cls/label.js';
+import { labelCls,labelMainCls } from '../../../../core/cls/label.js';
 import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
@@ -32,6 +32,7 @@ export default class labelPrinting extends React.Component
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.lblObj = new labelCls();
+        this.mainLblObj = new labelMainCls()
         this.pageCount = 0;
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
@@ -46,6 +47,7 @@ export default class labelPrinting extends React.Component
     async init()
     {
         this.lblObj.clearAll()
+        this.mainLblObj.clearAll()
 
         this.lblObj.ds.on('onAddRow',(pTblName,pData) =>
         {
@@ -91,7 +93,7 @@ export default class labelPrinting extends React.Component
 
         let tmpLbl = {...this.lblObj.empty}
         tmpLbl.REF = this.user.CODE
-        this.lblObj.addEmpty(tmpLbl);
+        this.mainLblObj.addEmpty(tmpLbl);
         
         this.txtSer.readOnly = false
         this.txtRefno.readOnly = false
@@ -107,7 +109,9 @@ export default class labelPrinting extends React.Component
     async getDoc(pGuid)
     {
         this.lblObj.clearAll()
+        this.mainLblObj.clearAll()
         await this.lblObj.load({GUID:pGuid});
+        this.mainLblObj.load({GUID:pGuid});
 
         this.txtSer.readOnly = true
         this.txtRefno.readOnly = true
@@ -397,8 +401,8 @@ export default class labelPrinting extends React.Component
                                         else
                                         {
                                             let tmpDocItems = {...this.lblObj.empty}
-                                            tmpDocItems.REF = this.lblObj.dt()[0].REF
-                                            tmpDocItems.REF_NO = this.lblObj.dt()[0].REF_NO
+                                            tmpDocItems.REF = this.mainLblObj.dt()[0].REF
+                                            tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
                                             this.lblObj.addEmpty(tmpDocItems)
                                             this.addItem(data[i],this.lblObj.dt().length - 1)
                                         }
@@ -480,8 +484,8 @@ export default class labelPrinting extends React.Component
                                             else
                                             {
                                                 let tmpDocItems = {...this.lblObj.empty}
-                                                tmpDocItems.REF = this.lblObj.dt()[0].REF
-                                                tmpDocItems.REF_NO = this.lblObj.dt()[0].REF_NO
+                                                tmpDocItems.REF = this.mainLblObj.dt()[0].REF
+                                                tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
                                                 this.lblObj.addEmpty(tmpDocItems)
                                                 this.addItem(data[i],this.lblObj.dt().length -1)
                                             }
@@ -536,8 +540,8 @@ export default class labelPrinting extends React.Component
     async addAutoItem(pData)
     {
         let tmpDocItems = {...this.lblObj.empty}
-        tmpDocItems.REF = this.lblObj.dt()[0].REF
-        tmpDocItems.REF_NO = this.lblObj.dt()[0].REF_NO
+        tmpDocItems.REF = this.mainLblObj.dt()[0].REF
+        tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
         tmpDocItems.CODE = pData.CODE
         tmpDocItems.BARCODE = pData.BARCODE
         tmpDocItems.NAME = pData.NAME
@@ -618,12 +622,7 @@ export default class labelPrinting extends React.Component
                                         if(pResult == 'btn01')
                                         {
                                             let Data = {data:this.lblObj.dt().toArray()}
-                                            let tmpLbl = {...this.lblObj.empty}
-                                            tmpLbl.REF = this.txtSer.value
-                                            tmpLbl.REF_NO = this.txtRefno.value
-                                            tmpLbl.DATA  = JSON.stringify(Data)
-                                            this.lblObj.clearAll()
-                                            this.lblObj.addEmpty(tmpLbl);
+                                            this.mainLblObj.dt()[0].DATA = JSON.stringify(Data)
 
                                             let tmpConfObj1 =
                                             {
@@ -631,9 +630,8 @@ export default class labelPrinting extends React.Component
                                                 button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                             }
                                             
-                                            if((await this.lblObj.save()) == 0)
+                                            if((await this.mainLblObj.save()) == 0)
                                             {                       
-                                                await this.lblObj.load({GUID:this.lblObj.dt()[0].GUID});                             
                                                 tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                 await dialog(tmpConfObj1);
                                             }
@@ -679,7 +677,7 @@ export default class labelPrinting extends React.Component
                                             {
                                                 query:  "UPDATE LABEL_QUEUE SET STATUS = 1 WHERE GUID = @GUID",
                                                 param:  ['GUID:string|50'],
-                                                value:  [this.lblObj.dt()[0].GUID]
+                                                value:  [this.mainLblObj.dt()[0].GUID]
                                             }
                                             await this.core.sql.execute(updateQuery) 
                                             
@@ -734,7 +732,7 @@ export default class labelPrinting extends React.Component
                                     <Label text={this.t("txtRefRefno")} alignment="right" />
                                     <div className="row">
                                         <div className="col-4 pe-0">
-                                            <NdTextBox id="txtSer" parent={this} simple={true} dt={{data:this.lblObj.dt('LABEL_QUEUE'),field:"REF"}}
+                                            <NdTextBox id="txtSer" parent={this} simple={true} dt={{data:this.mainLblObj.dt('MAIN_LABEL_QUEUE'),field:"REF"}}
                                             readOnly={true}
                                             maxLength={32}
                                             onChange={(async()=>
@@ -760,7 +758,7 @@ export default class labelPrinting extends React.Component
                                             </NdTextBox>
                                         </div>
                                         <div className="col-5 ps-0">
-                                            <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.lblObj.dt('LABEL_QUEUE'),field:"REF_NO"}}
+                                            <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.mainLblObj.dt('MAIN_LABEL_QUEUE'),field:"REF_NO"}}
                                             readOnly={true}
                                             button=
                                             {
@@ -913,14 +911,15 @@ export default class labelPrinting extends React.Component
                                         this.txtBarcode.setState({value:""})
                                         if(tmpData.result.recordset.length > 0)
                                         {
-                                            if(this.lblObj.dt()[this.lblObj.dt().length - 1].CODE != '')
+                                            if(typeof this.lblObj.dt()[this.lblObj.dt().length - 1] == 'undefined' || this.lblObj.dt()[this.lblObj.dt().length - 1].CODE != '')
                                             {
                                                 let tmpDocItems = {...this.lblObj.empty}
-                                                tmpDocItems.REF = this.lblObj.dt()[0].REF
-                                                tmpDocItems.REF_NO = this.lblObj.dt()[0].REF_NO
+                                                tmpDocItems.REF = this.mainLblObj.dt()[0].REF
+                                                tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
                                                 this.lblObj.addEmpty(tmpDocItems)
                                             }
                                             this.addItem(tmpData.result.recordset[0],this.lblObj.dt().length - 1)
+                                            this.txtBarcode.focus()
                                         }
                                         else
                                         {
@@ -1006,8 +1005,8 @@ export default class labelPrinting extends React.Component
                                             }
                                            
                                             let tmpDocItems = {...this.lblObj.empty}
-                                            tmpDocItems.REF = this.lblObj.dt()[0].REF
-                                            tmpDocItems.REF_NO = this.lblObj.dt()[0].REF_NO
+                                            tmpDocItems.REF = this.mainLblObj.dt()[0].REF
+                                            tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
                                             this.txtSer.readOnly = true
                                             this.txtRefno.readOnly = true
                                             this.lblObj.addEmpty(tmpDocItems)
@@ -1029,8 +1028,8 @@ export default class labelPrinting extends React.Component
                                                         else
                                                         {
                                                             let tmpDocItems = {...this.lblObj.empty}
-                                                            tmpDocItems.REF = this.lblObj.dt()[0].REF
-                                                            tmpDocItems.REF_NO = this.lblObj.dt()[0].REF_NO
+                                                            tmpDocItems.REF = this.mainLblObj.dt()[0].REF
+                                                            tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
                                                             this.lblObj.addEmpty(tmpDocItems)
                                                             this.addItem(data[i],this.lblObj.dt().length -1)
                                                         }

@@ -52,7 +52,7 @@ export default class barcodeList extends React.Component
     {
         let onOptionChanged = (e) =>
         {
-            if (e.name == 'selectedBarcodeKeys') 
+            if (e.name == 'selectedItemKeys') 
             {
                 this.groupList = [];
                 if(typeof e.value.find(x => x == 'CODE') != 'undefined')

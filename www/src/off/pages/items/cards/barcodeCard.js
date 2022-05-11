@@ -40,11 +40,10 @@ export default class barcodeCard extends React.Component
     async init()
     {
         this.itemBarcodeObj.clearAll();
-      
-        
-        let tmpEmpty = {...this.itemBarcodeObj.empty};
-        this.itemBarcodeObj.addEmpty(tmpEmpty);  
-        console.log(this.itemBarcodeObj.dt()[0])
+        this.cmbBarUnit.value = ''
+        this.txtBarUnitFactor.setState({value:'0'})
+        this.txtItem.setState({value:''})
+        this.txtItemName.setState({value:''})
     }
     async checkBarcode(pCode)
     {
@@ -152,6 +151,7 @@ export default class barcodeCard extends React.Component
                                                 {                                                    
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
+                                                    this.init()
                                                 }
                                                 else
                                                 {
@@ -259,11 +259,10 @@ export default class barcodeCard extends React.Component
                                                             let tmpEmpty = {...this.itemBarcodeObj.empty};
                                                             tmpEmpty.BARCODE = this.txtBarcode.value
                                                             tmpEmpty.TYPE = this.cmbPopBarType.value
-                                                            tmpEmpty.UNIT_GUID = this.cmbBarUnit.value
-                                                            tmpEmpty.UNIT_NAME = this.cmbBarUnit.displayValue
                                                             tmpEmpty.ITEM_GUID = data[0].GUID
                                                             tmpEmpty.ITEM_NAME = data[0].NAME
                                                             tmpEmpty.ITEM_CODE = data[0].CODE
+                                                            tmpEmpty.UNIT_GUID = ''
                                                             this.itemBarcodeObj.addEmpty(tmpEmpty);  
                                                             this._getUnit(data[0].GUID)
                                                         }
@@ -406,17 +405,20 @@ export default class barcodeCard extends React.Component
                                 {/* cmbBarUnit */}
                                 <Item>
                                     <Label text={this.t("cmbBarUnit")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbBarUnit"
+                                    <NdSelectBox simple={true} parent={this} id="cmbBarUnit" 
                                     dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"UNIT_GUID"}} 
                                     displayExpr="NAME"                       
                                     valueExpr="GUID"
                                     onValueChanged={(async(e)=>
+                                    {
+                                        if(e.value != '00000000-0000-0000-0000-000000000000' && e.value != '')
                                         {
                                             this.txtBarUnitFactor.setState({value:this.cmbBarUnit.data.datatable.where({'GUID':e.value})[0].FACTOR});
+                                        }
                                     }).bind(this)}
                                     />
                                 </Item>
-                                {/* cmbBarUnit */}
+                                {/* txtBarUnitFactor */}
                                 <Item>
                                     <Label text={this.t("txtBarUnitFactor")} alignment="right" />
                                     <NdTextBox simple={true} parent={this} id="txtBarUnitFactor" readOnly={true}

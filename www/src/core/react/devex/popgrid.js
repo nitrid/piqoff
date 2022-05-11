@@ -223,7 +223,7 @@ export default class NdPopGrid extends Base
     }    
     async show()
     {
-        
+        console.log(this)
         if(typeof this.props.search == 'undefined' || this.props.search == false)
         {
             //this.setState({show:true})
