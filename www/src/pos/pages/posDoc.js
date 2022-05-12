@@ -42,6 +42,7 @@ export default class posDoc extends React.Component
         this.posObj = new posCls()
         this.posDevice = new posDeviceCls();
         this.parkDt = new datatable();
+        this.cheqDt = new datatable();
 
         this.state =
         {
@@ -56,7 +57,6 @@ export default class posDoc extends React.Component
             totalRowCount:0,
             totalItemCount:0,
             totalLoyalty:0,
-            totalTicRest:0,
             totalSub:0,
             totalVat:0,
             totalDiscount:0,
@@ -65,23 +65,21 @@ export default class posDoc extends React.Component
             payChange:0,
             payRest:0,
             discountBefore:0,
-            discountAfter:0
+            discountAfter:0,
+            cheqCount:0,
+            cheqTotalAmount:0,
+            cheqLastAmount:0
         }   
 
         document.onkeydown = (e) =>
         {
-            //EĞER TXTBARCODE ELEMENT HARİCİNDE BAŞKA BİR İNPUT A FOKUSLANILMIŞSA FONKSİYONDAN ÇIKILIYOR.
-            // if(document.activeElement.type == 'text' && document.activeElement.parentElement.parentElement.parentElement.id != 'txtBarcode')
-            // {
-            //     return
-            // }
             //EĞER FORMUN ÖNÜNDE POPUP YADA LOADING PANEL VARSA BARCODE TEXTBOX ÇALIŞMIYOR.
             if(document.getElementsByClassName("dx-overlay-wrapper").length > 0)
             {
-                if(e.key == "Enter")
-                {
-                    document.getElementById("Sound").play();
-                }
+                // if(e.key == "Enter")
+                // {
+                //     document.getElementById("Sound").play();
+                // }
                 return
             }
             
@@ -122,6 +120,14 @@ export default class posDoc extends React.Component
         await this.grdList.dataRefresh({source:this.posObj.posSale.dt()});
         await this.grdPay.dataRefresh({source:this.posObj.posPay.dt()});
 
+        this.cheqDt.selectCmd = 
+        {
+            query : "SELECT * FROM CHEQPAY_VW_01 WHERE DOC = @DOC",
+            param : ['DOC:string|50'], 
+            value : [this.posObj.dt()[0].GUID]           
+        }
+        await this.cheqDt.refresh();         
+
         this.parkDt.selectCmd =
         {
             query : "SELECT GUID,LUSER_NAME,LDATE,TOTAL, " + 
@@ -129,15 +135,6 @@ export default class posDoc extends React.Component
                     "FROM POS_VW_01 WHERE STATUS = 0 ORDER BY LDATE DESC",
         }
         await this.parkDt.refresh();     
-
-        for (let i = 0; i < this.parkDt.length; i++) 
-        {
-            if(this.parkDt[i].DESCRIPTION == '')
-            {
-                this.getDoc(this.parkDt[i].GUID)
-                return
-            }
-        }        
 
         setTimeout(() => 
         {
@@ -148,7 +145,19 @@ export default class posDoc extends React.Component
             })    
         }, 1000);
         
-        await this.calcGrandTotal(false)       
+        await this.calcGrandTotal(false) 
+
+        for (let i = 0; i < this.parkDt.length; i++) 
+        {
+            if(this.parkDt[i].DESCRIPTION == '')
+            {
+                this.cheqDt.selectCmd.value = [this.parkDt[i].GUID] 
+                await this.cheqDt.refresh();  
+
+                await this.getDoc(this.parkDt[i].GUID)                
+                return
+            }
+        }                              
     }
     async getDoc(pGuid)
     {
@@ -477,14 +486,16 @@ export default class posDoc extends React.Component
                         totalRowCount:this.posObj.posSale.dt().length,
                         totalItemCount:this.posObj.posSale.dt().sum('QUANTITY',2),
                         totalLoyalty:this.posObj.dt()[0].LOYALTY,
-                        totalTicRest:0,
                         totalSub:this.posObj.dt()[0].AMOUNT,
                         totalVat:this.posObj.dt()[0].VAT,
                         totalDiscount:this.posObj.dt()[0].DISCOUNT,
                         totalGrand:this.posObj.dt()[0].TOTAL,
                         payTotal:this.posObj.posPay.dt().sum('AMOUNT',2),
                         payChange:this.state.payChange,
-                        payRest:this.state.payRest
+                        payRest:this.state.payRest,
+                        cheqCount:this.cheqDt.length,
+                        cheqLastAmount:this.cheqDt.length > 0 ? this.cheqDt[0].AMOUNT : 0,
+                        cheqTotalAmount:this.cheqDt.sum('AMOUNT',2)
                     }
                 )
                 
@@ -519,7 +530,7 @@ export default class posDoc extends React.Component
             if(tmpData.length > 0)
             {
                 //UNIQ ÜRÜN İÇİN pData.INPUT == pData.UNIQ_CODE
-                if(pData.SALE_JOIN_LINE == 1 && pData.WEIGHING == 0 && pData.INPUT != pData.UNIQ_CODE)
+                if(pData.SALE_JOIN_LINE == 0 && pData.WEIGHING == 0 && pData.INPUT != pData.UNIQ_CODE)
                 {
                     return tmpData[0]
                 }
@@ -676,21 +687,30 @@ export default class posDoc extends React.Component
             this.posObj.dt()[0].STATUS = 1
             await this.calcGrandTotal()
             this.popTotal.hide()
-
+            this.popCheqpay.hide();
+            
             if(this.state.payChange > 0)
             {
-                let tmpConfObj =
+                if(pType == 4)
                 {
-                    id:'msgAlert',
-                    showTitle:true,
-                    title:"Bilgi",
-                    showCloseButton:true,
-                    width:'500px',
-                    height:'250px',
-                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                    content:(<div><h3 className="text-danger text-center">{this.state.payChange + " EUR"}</h3><h3 className="text-primary text-center">Para üstü veriniz.</h3></div>)
+                    this.posObj.dt()[0].REBATE_CHEQPAY = 'Q' + new Date().toISOString().substring(2, 10).replace('-','').replace('-','') + Math.round(Number(parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2)) * 100).toString().padStart(5,'0') + Date.now().toString().substring(7,12);
+                    await this.cheqpaySave(this.posObj.dt()[0].REBATE_CHEQPAY,this.state.payChange,0,1);
                 }
-                await dialog(tmpConfObj);
+                else if(this.posObj.posPay.dt().where({TYPE:0}).length > 0)
+                {
+                    let tmpConfObj =
+                    {
+                        id:'msgAlert',
+                        showTitle:true,
+                        title:"Bilgi",
+                        showCloseButton:true,
+                        width:'500px',
+                        height:'250px',
+                        button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                        content:(<div><h3 className="text-danger text-center">{this.state.payChange + " EUR"}</h3><h3 className="text-primary text-center">Para üstü veriniz.</h3></div>)
+                    }
+                    await dialog(tmpConfObj);
+                }
             }
             
             this.init()
@@ -810,6 +830,178 @@ export default class posDoc extends React.Component
         {
             this.delete()
         }
+    }
+    async cheqpayAdd(pCode)
+    {
+        let tmpDt = new datatable();
+        let tmpType = 0
+        let tmpStatus = 0
+        let tmpAmount = 0
+        let tmpPayType = 0;
+
+        if(pCode == "")
+        {
+            return;
+        }
+        
+        if(pCode.substring(0,1) == 'Q')         
+        {
+            tmpType = 1
+            tmpStatus = 1
+            tmpPayType = 4
+            tmpAmount = Number(parseFloat(pCode.substring(7,12) / 100).toFixed(2))
+
+            if(this.posObj.posPay.dt().where({TYPE:0}).length > 0)
+            {
+                this.txtPopCheqpay.value = "";
+                let tmpConfObj =
+                {
+                    id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Bon d'avoir girmeden önce girili tahsilatları temizleyiniz !"}</div>)
+                }
+                await dialog(tmpConfObj);
+                return;
+            }
+        }
+        else if(pCode.length >= 20 && pCode.length <= 24)
+        {   
+            tmpType = 0
+            tmpStatus = 0            
+            tmpPayType = 3
+
+            let tmpTicket = pCode.substring(11,16)
+            let tmpYear = pCode.substring(pCode.length - 1, pCode.length);
+            let tmpCtrlCode = pCode.substring(16,17)
+            
+            if(tmpCtrlCode != '1' && tmpCtrlCode != '2' && tmpCtrlCode != '3' && tmpCtrlCode != '4')
+            {
+                this.txtPopCheqpay.value = "";
+                document.getElementById("Sound").play(); 
+
+                let tmpConfObj =
+                {
+                    id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Geçersiz ticket."}</div>)
+                }
+                await dialog(tmpConfObj);
+                return
+            }
+
+            if(pCode.length == 22)
+            {
+                tmpTicket = pCode.substring(9,14)
+            }    
+
+            tmpAmount = Number(parseFloat(tmpTicket / 100).toFixed(2))
+            tmpYear = (parseInt(parseFloat(moment(new Date(),"YY").format("YY")) / 10) * 10) + parseInt(tmpYear)                                            
+            if(moment(new Date()).diff(moment('20' + tmpYear + '0101'),"day") > 395)
+            {
+                this.txtPopCheqpay.value = "";
+                document.getElementById("Sound").play(); 
+
+                let tmpConfObj =
+                {
+                    id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Geçersiz ticket."}</div>)
+                }
+                await dialog(tmpConfObj);
+                return;
+            }
+
+            if(tmpAmount > 21)
+            {
+                this.txtPopCheqpay.value = "";
+                document.getElementById("Sound").play(); 
+
+                let tmpConfObj =
+                {
+                    id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Geçersiz ticket."}</div>)
+                }
+                await dialog(tmpConfObj);
+                return;
+            }
+
+            tmpDt.selectCmd = 
+            {
+                query : "SELECT * FROM CHEQPAY_VW_01 WHERE REFERENCE = @REFERENCE AND TYPE = 0",
+                param : ['REFERENCE:string|50'],
+                value : [pCode.substring(0,9)]
+            }                                            
+        }
+        else
+        {
+            this.txtPopCheqpay.value = "";
+            document.getElementById("Sound").play(); 
+
+            let tmpConfObj =
+            {
+                id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Geçersiz ticket."}</div>)
+            }
+            await dialog(tmpConfObj);
+            return;
+        }
+        
+        await tmpDt.refresh()
+
+        if(tmpDt.length > 0)
+        {
+            if(tmpDt[0].STATUS == '2')
+            {
+                let tmpConfObj =
+                {
+                    id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Çalıntı Ticket !"}</div>)
+                }
+                await dialog(tmpConfObj);
+                return;
+            }
+            else if((tmpDt[0].STATUS == '0' && tmpDt[0].TYPE == '0') || (tmpDt.where({STATUS:'1'}).length > 0 && tmpDt[0].TYPE == '1'))
+            {
+                let tmpConfObj =
+                {
+                    id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Daha önce kullanılmıştır !"}</div>)
+                }
+                await dialog(tmpConfObj);
+                return;                                                
+            }
+        }
+
+        await this.cheqpaySave(pCode,tmpAmount,tmpStatus,tmpType)
+        await this.cheqDt.refresh()
+
+        this.payAdd(tmpPayType,tmpAmount)
+        
+        this.txtPopCheqpay.value = "";
+    }
+    async cheqpaySave(pCode,pAmount,pStatus,pType)
+    {
+        return new Promise(async resolve => 
+        {
+            let tmpQuery = 
+            {
+                query : "EXEC [dbo].[PRD_CHEQPAY_INSERT] " + 
+                        "@CUSER = @PCUSER, " + 
+                        "@TYPE = @PTYPE, " +                      
+                        "@DOC = @PDOC, " + 
+                        "@CODE = @PCODE, " + 
+                        "@AMOUNT = @PAMOUNT, " + 
+                        "@STATUS = @PSTATUS ", 
+                param : ['PCUSER:string|25','PTYPE:int','PDOC:string|50','PCODE:string|25','PAMOUNT:float','PSTATUS:int'],
+                value : [this.core.auth.data.CODE,pType,this.posObj.dt()[0].GUID,pCode,pAmount,pStatus]
+            }
+            await this.core.sql.execute(tmpQuery)
+            resolve()
+        });
     }
     render()
     {
@@ -1037,7 +1229,7 @@ export default class posDoc extends React.Component
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-start m-0">Ticket Rest.: <span className="text-dark">{parseFloat(this.state.totalTicRest).toFixed(2)} €</span></p>    
+                                        <p className="text-primary text-start m-0">Ticket Rest.: <span className="text-dark">{this.state.cheqCount + '/' + parseFloat(this.state.cheqTotalAmount).toFixed(2)} €</span></p>    
                                     </div>
                                 </div>
                             </div>
@@ -1230,12 +1422,44 @@ export default class posDoc extends React.Component
                                             <i className="text-white fa-solid fa-percent" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
-                                    {/* Ticket */}
+                                    {/* Cheqpay */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btnTicket"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
-                                        onClick={()=>
-                                        {                                                        
-                                            this.popTicket.show();
+                                        <NbButton id={"btnCheqpay"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        onClick={async ()=>
+                                        {
+                                            //TICKET REST. SADAKAT PUAN KULLANIMI PARAMETRESI
+                                            if(this.prmObj.filter({ID:'UseTicketRestLoyalty',TYPE:0}).getValue() == true)
+                                            {
+                                                if(this.state.customerName != '')
+                                                {
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Ticket Rest. ile yapılan ödemelerde sadakat puanı veremezsiniz. Lütfen seçili müşteriden çıkınız !"}</div>)
+                                                    }
+                                                    await dialog(tmpConfObj);
+                                                    return
+                                                }
+                                            }
+
+                                            if(this.posObj.posSale.dt().length == 0)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Satış olmadan ödeme alamazsınız !"}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                                return
+                                            }
+                                            
+                                            await this.cheqDt.refresh();
+                                            await this.grdPopCheqpayList.dataRefresh({source:this.cheqDt});
+                                            this.calcGrandTotal(false);
+
+                                            this.popCheqpay.show();
                                         }}>
                                             <i className="text-white fa-solid fa-ticket" style={{fontSize: "24px"}} />
                                         </NbButton>
@@ -2213,29 +2437,44 @@ export default class posDoc extends React.Component
                         </div>
                     </NdPopUp>
                 </div>
-                {/* Ticket Popup */}
+                {/* Cheqpay Popup */}
                 <div>
-                    <NdPopUp parent={this} id={"popTicket"} 
+                    <NdPopUp parent={this} id={"popCheqpay"} 
                     visible={false}                        
                     showCloseButton={true}
                     showTitle={true}
-                    title={"Ticket Giriş"}
+                    title={"Cheqpay Giriş"}
                     container={"#root"} 
                     width={"900"}
                     height={"585"}
                     position={{of:"#root"}}
+                    onShowed={()=>
+                    {
+                        this.txtPopCheqpay.value = ""
+                        setTimeout(() => 
+                        {
+                            this.txtPopCheqpay.focus()
+                        }, 500);
+                    }}
                     >
-                        {/* txtPopTicket */}
+                        {/* txtPopCheqpay */}
                         <div className="row py-1">
                             <div className="col-12">
-                                <NdTextBox id="txtPopTicket" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}>     
+                                <NdTextBox id="txtPopCheqpay" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}
+                                onKeyDown={(async(e)=>
+                                {    
+                                    if(e.event.key == 'Enter')
+                                    {   
+                                        this.cheqpayAdd(this.txtPopCheqpay.value)                                        
+                                    }
+                                }).bind(this)}>     
                                 </NdTextBox> 
                             </div>
                         </div>
-                        {/* grdPopTicketList */}
+                        {/* grdPopCheqpayList */}
                         <div className="row py-1">
                             <div className="col-12">
-                                <NdGrid parent={this} id={"grdPopTicketList"} 
+                                <NdGrid parent={this} id={"grdPopCheqpayList"} 
                                 showBorders={true} 
                                 columnsAutoWidth={true} 
                                 allowColumnReordering={true} 
@@ -2243,50 +2482,40 @@ export default class posDoc extends React.Component
                                 height={"280px"} 
                                 width={"100%"}
                                 dbApply={false}
-                                data={{source:[{TYPE_NAME:0},{TYPE_NAME:1},{TYPE_NAME:2},{TYPE_NAME:3},{TYPE_NAME:4},{TYPE_NAME:5},{TYPE_NAME:6},{TYPE_NAME:7},{TYPE_NAME:8},{TYPE_NAME:9}]}}
-                                onRowPrepared=
+                                onRowPrepared={(e)=>
                                 {
-                                    (e)=>
+                                    if(e.rowType == "header")
                                     {
-                                        if(e.rowType == "header")
-                                        {
-                                            e.rowElement.style.fontWeight = "bold";    
-                                        }
-                                        e.rowElement.style.fontSize = "13px";
+                                        e.rowElement.style.fontWeight = "bold";    
                                     }
-                                }
-                                onCellPrepared=
+                                    e.rowElement.style.fontSize = "13px";
+                                }}
+                                onCellPrepared={(e)=>
                                 {
-                                    (e)=>
-                                    {
-                                        e.cellElement.style.padding = "4px"
-                                    }
-                                }
+                                    e.cellElement.style.padding = "4px"
+                                }}
                                 >
-                                    <Column dataField="TYPE_NAME" caption={"NO"} width={40} alignment={"center"}/>
-                                    <Column dataField="DEPOT" caption={"ADI"} width={350} />
-                                    <Column dataField="CUSTOMER_NAME" caption={"MIKTAR"} width={100}/>
-                                    <Column dataField="QUANTITY" caption={"FIYAT"} width={100}/>
-                                    <Column dataField="VAT_EXT" caption={"TUTAR"} width={100}/>                                                
+                                    <Column dataField="CODE" caption={"CODE"} width={550} />
+                                    <Column dataField="AMOUNT" caption={"AMOUNT"} width={100}/>
                                 </NdGrid>
                             </div>
                         </div>
                         {/* Last Read */}
                         <div className="row py-1">
                             <div className="col-12">
-                                <h3 className="text-primary text-center">Son Okutulan : <span className="text-dark">0.00 €</span></h3>    
+                                <h3 className="text-primary text-center">Son Okutulan : <span className="text-dark">{parseFloat(this.state.cheqLastAmount).toFixed(2)} €</span></h3>    
                             </div>
                         </div>
                         {/* Total Read */}
                         <div className="row py-1">
                             <div className="col-12">
-                                <h3 className="text-primary text-center">Toplam Okutulan : <span className="text-dark">0.00 €</span></h3>    
+                                <h3 className="text-primary text-center">Toplam Okutulan : <span className="text-dark">{parseFloat(this.state.cheqTotalAmount).toFixed(2)} €</span></h3>    
                             </div>
                         </div>
                         {/* Rest */}
                         <div className="row py-1">
                             <div className="col-12">
-                                <h3 className="text-primary text-center">Kalan Ödeme : <span className="text-dark">0.00 €</span></h3>    
+                                <h3 className="text-primary text-center">Kalan Ödeme : <span className="text-dark">{parseFloat(this.state.payRest).toFixed(2)} €</span></h3>    
                             </div>
                         </div>
                     </NdPopUp>
@@ -2851,15 +3080,30 @@ export default class posDoc extends React.Component
                     onClick={async (e)=>
                     {                        
                         let tmpResult = await this.msgItemReturnType.show();
-
-                        let tmpType = 0;
+                        
                         if(tmpResult == 'btn01') //Nakit
                         {
-                            tmpType = 0;
+                            this.posObj.posPay.addEmpty()
+                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
+                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE = 0
+                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE_NAME = 'ESC'
+                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].LINE_NO = this.posObj.posPay.dt().length
+                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2))
+                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].CHANGE = 0
                         }
-                        else if(tmpResult == 'btn02') //İade Ticket
+                        else if(tmpResult == 'btn02') //İade Çeki
                         {
-                            tmpType = 1;
+                            this.posObj.posPay.addEmpty()
+                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
+                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE = 2
+                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE_NAME = 'CHQ'
+                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].LINE_NO = this.posObj.posPay.dt().length
+                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2))
+                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].CHANGE = 0
+
+                            this.posObj.dt()[0].REBATE_CHEQPAY = 'Q' + new Date().toISOString().substring(2, 10).replace('-','').replace('-','') + Math.round(Number(parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2)) * 100).toString().padStart(5,'0') + Date.now().toString().substring(7,12);
+
+                            await this.cheqpaySave(this.posObj.dt()[0].REBATE_CHEQPAY,this.posObj.dt()[0].TOTAL,0,1);
                         }
 
                         if(this.txtItemReturnTicket.value != "")
@@ -2868,44 +3112,47 @@ export default class posDoc extends React.Component
                         }
                         this.posObj.dt()[0].TYPE = 1;
                         this.posObj.dt()[0].STATUS = 1;
-                        console.log(this.posObj)
-                        await this.descSave("REBATE",e,0);
+                        
+                        await this.descSave("REBATE",e,0);                        
                         await this.calcGrandTotal();
+
                         this.init()
                     }}></NbPopDescboard>
                 </div>
                 {/* Item Return Ticket Dialog  */}
-                <NdDialog id={"msgItemReturnTicket"} container={"#root"} parent={this}
-                    position={{of:'#root'}} 
-                    showTitle={true} 
-                    title={"Dikkat"} 
-                    showCloseButton={false}
-                    width={"500px"}
-                    height={"250px"}
-                    button={[{id:"btn01",caption:"Tamam",location:'before'},{id:"btn02",caption:"İptal",location:'after'}]}
-                    onShowed={()=>
-                    {
-                        this.txtItemReturnTicket.value = ""
-                        setTimeout(() => 
+                <div>
+                    <NdDialog id={"msgItemReturnTicket"} container={"#root"} parent={this}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        title={"Dikkat"} 
+                        showCloseButton={false}
+                        width={"500px"}
+                        height={"250px"}
+                        button={[{id:"btn01",caption:"Tamam",location:'before'},{id:"btn02",caption:"İptal",location:'after'}]}
+                        onShowed={()=>
                         {
-                            this.txtItemReturnTicket.focus()
-                        }, 500);
-                    }}
-                    >
-                        <div className="row">
-                            <div className="col-12 py-2">
-                                <div style={{textAlign:"center",fontSize:"20px"}}>{"İade Alınan Ticketı Okutunuz !"}</div>
+                            this.txtItemReturnTicket.value = ""
+                            setTimeout(() => 
+                            {
+                                this.txtItemReturnTicket.focus()
+                            }, 500);
+                        }}
+                        >
+                            <div className="row">
+                                <div className="col-12 py-2">
+                                    <div style={{textAlign:"center",fontSize:"20px"}}>{"İade Alınan Ticketı Okutunuz !"}</div>
+                                </div>
+                                <div className="col-12 py-2">
+                                <Form>
+                                    {/* txtItemReturnTicket */}
+                                    <Item>
+                                        <NdTextBox id="txtItemReturnTicket" parent={this} simple={true} />
+                                    </Item>
+                                </Form>
                             </div>
-                            <div className="col-12 py-2">
-                            <Form>
-                                {/* txtItemReturnTicket */}
-                                <Item>
-                                    <NdTextBox id="txtItemReturnTicket" parent={this} simple={true} />
-                                </Item>
-                            </Form>
-                        </div>
-                        </div>
-                </NdDialog>
+                            </div>
+                    </NdDialog>
+                </div>
                 {/* Alert Item Return Type Popup */} 
                 <div>
                     <NdDialog id={"msgItemReturnType"} container={"#root"} parent={this}
@@ -2915,7 +3162,7 @@ export default class posDoc extends React.Component
                     showCloseButton={true}
                     width={"500px"}
                     height={"200px"}
-                    button={[{id:"btn01",caption:"Espece",location:'before'},{id:"btn03",caption:"Bon D'avoir",location:'after'}]}
+                    button={[{id:"btn01",caption:"Espece",location:'before'},{id:"btn02",caption:"Bon D'avoir",location:'after'}]}
                     >
                         <div className="row">
                             <div className="col-12 py-2">

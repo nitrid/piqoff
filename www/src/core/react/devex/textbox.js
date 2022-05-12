@@ -53,11 +53,11 @@ export default class NdTextBox extends Base
             this.props.onEnterKey(e);
         }
     }
-    _onFocusIn()
+    _onFocusIn(e)
     {
         if(typeof this.props.onFocusIn != 'undefined')
         {
-            this.props.onFocusIn();
+            this.props.onFocusIn(e);
         }
     }
     _onFocusOut()
@@ -129,14 +129,14 @@ export default class NdTextBox extends Base
         if(typeof this.props.displayValue != 'undefined')
         {
             return (
-                <div id={"dsp" + this.props.id}  className="dsp-textbox">{this.state.displayValue}</div>
+                <div id={"dsp" + this.props.id}  className="dsp-textbox ">{this.state.displayValue}</div>
             )            
         }
     }
     _txtView()
     {                        
         return (
-            <TextBox id={this.props.id} mode={this.state.mode} showClearButton={this.state.showClearButton} height='fit-content' 
+            <TextBox id={this.props.id} mode={this.state.mode} showClearButton={this.state.showClearButton} height='fit-content'  
                 maxLength={this.props.maxLength}
                 placeholder={this.state.placeholder}
                 style={this.props.style}

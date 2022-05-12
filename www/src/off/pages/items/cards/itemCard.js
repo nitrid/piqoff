@@ -1,6 +1,6 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import {itemsCls,itemPriceCls,itemBarcodeCls,itemMultiCodeCls,unitCls} from '../../../../core/cls/items.js'
+import {itemsCls,itemPriceCls,itemBarcodeCls,itemMultiCodeCls,unitCls,itemLogPriceCls} from '../../../../core/cls/items.js'
 import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
@@ -32,7 +32,7 @@ export default class itemCard extends React.Component
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.itemsObj = new itemsCls();
         this.itemsPriceSupply = new itemPriceCls();   
-        this.itemsPriceSalesCont = new itemPriceCls();        
+        this.itemsPriceLogObj = new itemLogPriceCls();        
         this.prevCode = "";
         
         this._onItemRendered = this._onItemRendered.bind(this)
@@ -52,7 +52,7 @@ export default class itemCard extends React.Component
         this.itemsObj.clearAll();
 
         this.itemsPriceSupply.clearAll();     
-        this.itemsPriceSalesCont.clearAll();        
+        this.itemsPriceLogObj.clearAll();        
 
         this.itemsObj.ds.on('onAddRow',(pTblName,pData) =>
         {            
@@ -173,7 +173,7 @@ export default class itemCard extends React.Component
         await this.itemsObj.load({CODE:pCode});
         //TEDARİKÇİ FİYAT GETİR İŞLEMİ.                
         await this.itemsPriceSupply.load({ITEM_CODE:pCode,TYPE:1})  
-        await this.itemsPriceSalesCont.load({ITEM_CODE:pCode,TYPE:2})  
+        await this.itemsPriceLogObj.load({ITEM_GUID:this.itemsObj.dt()[0].GUID})
         this.txtBarcode.readOnly = true;
     }
     async checkItem(pCode)
@@ -327,13 +327,13 @@ export default class itemCard extends React.Component
         {
             await this.grdCustomer.dataRefresh({source:this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')});
         }
-        else if(e.itemData.title == "Tedarikçi Fiyat")
+        else if(e.itemData.title == this.t("tabTitleCustomerPrice"))
         {
-            await this.grdCustomerPrice.dataRefresh({source:this.itemsPriceSupply.dt()});
+            await this.grdCustomerPrice.dataRefresh({source:this.itemsPriceLogObj.dt()});
         }
         else if(e.itemData.title == this.t("tabTitleSalesContract"))
         {
-            await this.grdCustomerPrice.dataRefresh({source:this.itemsPriceSalesCont.dt()});
+            // satış anlaşması
         }
     }
     underPrice()
@@ -1137,7 +1137,7 @@ export default class itemCard extends React.Component
                                                 <Column dataField="CUSTOMER_CODE" caption={this.t("grdCustomer.clmCode")} />
                                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdCustomer.clmName")} />
                                                 <Column dataField="CUSTOMER_PRICE_USER_NAME" caption={this.t("grdCustomer.clmPriceUserName")} />
-                                                <Column dataField="CUSTOMER_PRICE_DATE" caption={this.t("grdCustomer.clmPriceDate")} allowEditing={false} dataType="datetime" format={"dd/MM/yyyy - hh:mm:ss"}/>
+                                                <Column dataField="CUSTOMER_PRICE_DATE" caption={this.t("grdCustomer.clmPriceDate")} allowEditing={false}  />
                                                 <Column dataField="CUSTOMER_PRICE" caption={this.t("grdCustomer.clmPrice")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                                 <Column dataField="MULTICODE" caption={this.t("grdCustomer.clmMulticode")} />
                                             </NdGrid>

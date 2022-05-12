@@ -251,6 +251,7 @@ export const langTr =
             clmName: "Adı",
             clmDate: "Son Fiyat Tarih",
             clmPrice: "Fiyat",
+            clmMulticode: "Tedarikçi Stok Kodu"
         },
         msgRef:
         {

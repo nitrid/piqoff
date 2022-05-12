@@ -39,6 +39,7 @@ export class itemsCls
         this.itemBarcode = new itemBarcodeCls();
         this.itemMultiCode = new itemMultiCodeCls();
         this.itemImage = new itemImageCls();
+        this.itemPriceLog = new itemLogPriceCls();
 
         this._initDs();
     }    
@@ -264,6 +265,7 @@ export class itemsCls
                 await this.itemBarcode.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID})
                 await this.itemMultiCode.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID})
                 await this.itemImage.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID})
+                await this.itemPriceLog.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID})
             }
             resolve(this.ds.get('ITEMS'));    
         });
@@ -767,7 +769,7 @@ export class itemMultiCodeCls
             MULTICODE : '',
             CUSTOMER_PRICE_GUID : '00000000-0000-0000-0000-000000000000',
             CUSTOMER_PRICE : '0',
-            CUSTOMER_PRICE_DATE : moment(new Date(0)).format("DD/MM/YYYY HH:mm:ss"),
+            CUSTOMER_PRICE_DATE :'',
             CUSTOMER_PRICE_USER_NAME : this.core.auth.data == null ? '' : this.core.auth.data.NAME,
         }
         
@@ -1389,6 +1391,89 @@ export class depotCls
 
             await this.ds.get('DEPOT').refresh();
             resolve(this.ds.get('DEPOT'));    
+        });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            this.ds.delete()
+            resolve(await this.ds.update()); 
+        });
+    }
+}
+export class itemLogPriceCls
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds = new dataset();
+        this.empty = 
+        {
+            GUID : '00000000-0000-0000-0000-000000000000',
+            CUSER : this.core.auth.data == null ? '' : this.core.auth.data.CODE,
+            CUSER_NAME : this.core.auth.data == null ? '' : this.core.auth.data.NAME,
+            ITEM_GUID : '00000000-0000-0000-0000-000000000000',
+            ITEM_CODE : '',
+            ITEM_NAME : '',
+            PRICE : 0,
+            CUSTOMER_GUID : '00000000-0000-0000-0000-000000000000',
+            CUSTOMER_CODE : '',
+            CUSTOMER_NAME : '',
+            CHANGE_DATE : moment(new Date(0)).format("DD/MM/YYYY HH:mm:ss"),
+            CDATE_FORMAT : '',
+            MULTICODE : '',
+        }
+
+        this._initDs();
+    }
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('ITEM_PRICE_LOG');            
+        tmpDt.selectCmd = 
+        {
+            query : "SELECT * FROM [ITEM_PRICE_LOG_VW_01] WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 1",
+            param : ['ITEM_GUID:string|50',]
+        }
+
+        this.ds.add(tmpDt);
+    }
+    //#endregion
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0]);
+        }
+
+        return this.ds.get(0)
+    }
+    clearAll()
+    {
+        for (let i = 0; i < this.ds.length; i++) 
+        {
+            this.dt(i).clear()
+        }
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ.
+        return new Promise(async resolve => 
+        {
+            let tmpPrm = 
+            {
+                ITEM_GUID : '00000000-0000-0000-0000-000000000000',
+            }         
+
+            if(arguments.length > 0)
+            {
+                tmpPrm.ITEM_GUID = typeof arguments[0].ITEM_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].ITEM_GUID;
+            }
+            this.ds.get('ITEM_PRICE_LOG').selectCmd.value = Object.values(tmpPrm)
+
+            await this.ds.get('ITEM_PRICE_LOG').refresh();
+            resolve(this.ds.get('ITEM_PRICE_LOG'));    
         });
     }
     save()
