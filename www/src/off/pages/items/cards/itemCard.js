@@ -20,6 +20,7 @@ import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
+import NumberBox from 'devextreme-react/number-box';
 
 export default class itemCard extends React.Component
 {
@@ -457,6 +458,9 @@ export default class itemCard extends React.Component
                                                 {                                                    
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
+                                                    this.btnSave.setState({disabled:true});
+                                                    this.btnNew.setState({disabled:false});
+                                                    this.getItem(this.itemsObj.dt()[0].CODE)
                                                 }
                                                 else
                                                 {
@@ -635,7 +639,10 @@ export default class itemCard extends React.Component
                                     displayExpr="NAME"                       
                                     valueExpr="CODE"
                                     value=""
-                                    searchEnabled={true} showClearButton={true}
+                                    searchEnabled={true} 
+                                    // showClearButton={true}
+                                    pageSize ={50}
+                                    notRefresh={true}
                                     param={this.param.filter({ELEMENT:'cmbItemGrp',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbItemGrp',USERS:this.user.CODE})}
                                     data={{source:{select:{query : "SELECT CODE,NAME FROM ITEM_GROUP ORDER BY NAME ASC"},sql:this.core.sql}}}
@@ -760,13 +767,13 @@ export default class itemCard extends React.Component
                                     displayExpr="NAME"                       
                                     valueExpr="CODE"
                                     value=""
-                                    searchEnabled={true} showClearButton={true}
+                                    searchEnabled={true} showClearButton={false}
                                     param={this.param.filter({ELEMENT:'cmbOrigin',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbOrigin',USERS:this.user.CODE})}
                                     data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY CODE ASC"},sql:this.core.sql}}}
                                     >
                                     
-                                        <Validator validationGroup={this.state.isItemGrpForOrginsValid ? "frmItems" : ""}>
+                                        <Validator validationGroup={this.state.isItemGrpForOrginsValid ? "frmItems" : ''}>
                                             <RequiredRule message="Menşei boş geçemezsiniz !" />
                                         </Validator>
                                     </NdSelectBox>                                    
@@ -812,7 +819,11 @@ export default class itemCard extends React.Component
                                             if(e.value.length <= 32)
                                                 this.txtShortName.value = e.value
                                         }
-                                    }/>
+                                    }>
+                                        <Validator validationGroup={"frmItems"}>
+                                            <RequiredRule message="Adı boş geçemezsiniz !" />
+                                        </Validator> 
+                                    </NdTextBox>
                                 </Item>
                                 {/* txtShortName */}
                                 <Item>
@@ -924,20 +935,21 @@ export default class itemCard extends React.Component
                                             param={this.param.filter({ELEMENT:'txtLastBuyPrice',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtLastBuyPrice',USERS:this.user.CODE})}/>
                                         </div>
-                                        <div className='col-4'>
+                                        <div className='col-4 py-3'>
                                             <Toolbar>
-                                                <Item location="after">
+                                            <Item location="after">
                                                     <Button icon="add"
+                                                    text={'Satış Fiyat Ekle'}
                                                     onClick={()=>
                                                     {                                                        
                                                         this.dtPopPriStartDate.value = "1970-01-01"
                                                         this.dtPopPriEndDate.value = "1970-01-01"
-                                                        this.txtPopPriQuantity.value = 0
+                                                        this.txtPopPriQuantity.value = 1
                                                         this.txtPopPriPrice.value = 0
 
                                                         this.popPrice.show();
                                                     }}/>
-                                                </Item>
+                                            </Item>
                                             </Toolbar>
                                         </div>
                                     </div>
@@ -1125,7 +1137,7 @@ export default class itemCard extends React.Component
                                                 <Column dataField="CUSTOMER_CODE" caption={this.t("grdCustomer.clmCode")} />
                                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdCustomer.clmName")} />
                                                 <Column dataField="CUSTOMER_PRICE_USER_NAME" caption={this.t("grdCustomer.clmPriceUserName")} />
-                                                <Column dataField="CUSTOMER_PRICE_DATE" caption={this.t("grdCustomer.clmPriceDate")} allowEditing={false} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
+                                                <Column dataField="CUSTOMER_PRICE_DATE" caption={this.t("grdCustomer.clmPriceDate")} allowEditing={false} dataType="datetime" format={"dd/MM/yyyy - hh:mm:ss"}/>
                                                 <Column dataField="CUSTOMER_PRICE" caption={this.t("grdCustomer.clmPrice")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                                 <Column dataField="MULTICODE" caption={this.t("grdCustomer.clmMulticode")} />
                                             </NdGrid>
@@ -1207,7 +1219,6 @@ export default class itemCard extends React.Component
                                     <NdNumberBox id={"txtPopPriQuantity"} parent={this} simple={true}>
                                         <Validator validationGroup={"frmPrice"}>
                                             <RequiredRule message="Miktar'ı boş geçemezsiniz !" />
-                                            <NumericRule message="Miktar'a sayısal değer giriniz !" />
                                         </Validator>
                                     </NdNumberBox>
                                 </Item>
@@ -1216,7 +1227,6 @@ export default class itemCard extends React.Component
                                     <NdNumberBox id={"txtPopPriPrice"} parent={this} simple={true}>
                                         <Validator validationGroup={"frmPrice"}>
                                             <RequiredRule message="Fiyat'ı boş geçemezsiniz !" />
-                                            <NumericRule message="Fiyat'a sayısal değer giriniz !" />
                                             <RangeRule min={0.001} message={"Fiyat sıfırdan küçük olamaz !"} />
                                         </Validator> 
                                     </NdNumberBox>
@@ -1487,10 +1497,25 @@ export default class itemCard extends React.Component
                         height={'320'}
                         position={{of:'#root'}}
                         >
-                            <Form colCount={1} height={'fit-content'}>
+                            <Form colCount={1} height={'fit-content'} id="frmItemCustomer">
                                 <Item>
                                     <Label text={this.t("popCustomer.txtPopCustomerCode")} alignment="right" />
                                     <NdTextBox id={"txtPopCustomerCode"} parent={this} simple={true}
+                                      onEnterKey={(async(e)=>
+                                        {
+                                            await this.pg_txtPopCustomerCode.setVal(this.txtPopCustomerCode.value)
+                                            this.pg_txtPopCustomerCode.show()
+                                            this.pg_txtPopCustomerCode.onClick = (data) =>
+                                            {
+                                                if(data.length > 0)
+                                                {
+                                                    this.txtPopCustomerCode.GUID = data[0].GUID
+                                                    this.txtPopCustomerCode.value = data[0].CODE;
+                                                    this.txtPopCustomerName.value = data[0].TITLE;
+                                                    console.log(this.txtPopCustomerCode.GUID);
+                                                }
+                                            }
+                                        }).bind(this)}
                                     button=
                                     {
                                         [
@@ -1539,7 +1564,7 @@ export default class itemCard extends React.Component
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,TITLE FROM CUSTOMER_VW_01 WHERE TYPE = 1 AND UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                                                query : "SELECT GUID,CODE,TITLE FROM CUSTOMER_VW_01 WHERE GENUS IN(1,2) AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL))",
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
@@ -1557,40 +1582,70 @@ export default class itemCard extends React.Component
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popCustomer.txtPopCustomerItemCode")} alignment="right" />
-                                    <NdTextBox id={"txtPopCustomerItemCode"} parent={this} simple={true} />
+                                    <NdTextBox id={"txtPopCustomerItemCode"} parent={this} simple={true} >
+                                    <Validator validationGroup={"frmItemCustomer"}>
+                                            <RequiredRule message="Tedarikci Kodu Giriniz !" />
+                                    </Validator> 
+                                    </NdTextBox>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popCustomer.txtPopCustomerPrice")} alignment="right" />
-                                    <NdTextBox id={"txtPopCustomerPrice"} parent={this} simple={true} />
+                                    <NdNumberBox id={"txtPopCustomerPrice"} parent={this} simple={true} >
+                                    <Validator validationGroup={"frmItemCustomer"}>
+                                            <RequiredRule message="Fiyat'ı boş geçemezsiniz !" />
+                                            <RangeRule min={0.001} message={"Fiyat sıfırdan küçük olamaz !"} />
+                                        </Validator> 
+                                    </NdNumberBox>
                                 </Item>
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
-                                            onClick={async ()=>
+                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} validationGroup="frmItemCustomer"
+                                            onClick={async (e)=>
                                             {       
-                                                let tmpEmptyMulti = {...this.itemsObj.itemMultiCode.empty};
-                                                
-                                                tmpEmptyMulti.CUSER = this.core.auth.data.CODE,  
-                                                tmpEmptyMulti.ITEM_GUID = this.itemsObj.dt()[0].GUID 
-                                                tmpEmptyMulti.CUSTOMER_GUID = this.txtPopCustomerCode.GUID                              
-                                                tmpEmptyMulti.CUSTOMER_CODE = this.txtPopCustomerCode.value
-                                                tmpEmptyMulti.CUSTOMER_NAME = this.txtPopCustomerName.value
-                                                tmpEmptyMulti.MULTICODE = this.txtPopCustomerItemCode.value
-                                                tmpEmptyMulti.CUSTOMER_PRICE = this.txtPopCustomerPrice.value
-                                                tmpEmptyMulti.CUSTOMER_PRICE_DATE = moment(new Date()).format("DD/MM/YYYY HH:mm:ss")
+                                                if(e.validationGroup.validate().status == "valid")
+                                                {
+                                                    let tmpEmptyMulti = {...this.itemsObj.itemMultiCode.empty};
+                                                    
+                                                    tmpEmptyMulti.CUSER = this.core.auth.data.CODE,  
+                                                    tmpEmptyMulti.ITEM_GUID = this.itemsObj.dt()[0].GUID 
+                                                    tmpEmptyMulti.CUSTOMER_GUID = this.txtPopCustomerCode.GUID                              
+                                                    tmpEmptyMulti.CUSTOMER_CODE = this.txtPopCustomerCode.value
+                                                    tmpEmptyMulti.CUSTOMER_NAME = this.txtPopCustomerName.value
+                                                    tmpEmptyMulti.MULTICODE = this.txtPopCustomerItemCode.value
+                                                    tmpEmptyMulti.CUSTOMER_PRICE = this.txtPopCustomerPrice.value
+                                                    tmpEmptyMulti.CUSTOMER_PRICE_DATE = moment(new Date()).format("DD/MM/YYYY HH:mm:ss")
 
-                                                let tmpResult = await this.checkMultiCode(this.txtPopCustomerItemCode.value,this.txtPopCustomerCode.value)
-                                                if(tmpResult == 2) //KAYIT VAR
+                                                    let tmpResult = await this.checkMultiCode(this.txtPopCustomerItemCode.value,this.txtPopCustomerCode.value)
+                                                    if(tmpResult == 2) //KAYIT VAR
+                                                    {
+                                                        this.popCustomer.hide(); 
+                                                    }
+                                                    else if(tmpResult == 1) //KAYIT YOK
+                                                    {
+                                                        this.txtCostPrice.value = this.txtPopCustomerPrice.value
+                                                        this.itemsObj.itemMultiCode.addEmpty(tmpEmptyMulti);
+                                                        this.popCustomer.hide(); 
+                                                    }
+                                                    // Min ve Max Fiyat 
+                                                    let tmpMinData = this.prmObj.filter({ID:'ItemMinPricePercent'}).getValue()
+                                                    let tmpMinPrice = this.txtPopCustomerPrice.value + (this.txtPopCustomerPrice.value * tmpMinData) /100
+                                                    this.txtMinSalePrice.setState({value:(tmpMinPrice).toFixed(2)})
+                                                    let tmpMaxData = this.prmObj.filter({ID:'ItemMaxPricePercent'}).getValue()
+                                                    let tmpMAxPrice = this.txtPopCustomerPrice.value + (this.txtPopCustomerPrice.value * tmpMaxData) /100
+                                                    this.txtMaxSalePrice.setState({value:(tmpMAxPrice).toFixed(2)})
+                                                }                              
+                                                else
                                                 {
-                                                    this.popCustomer.hide(); 
-                                                }
-                                                else if(tmpResult == 1) //KAYIT YOK
-                                                {
-                                                    this.txtCostPrice.value = this.txtPopCustomerPrice.value
-                                                    this.itemsObj.itemMultiCode.addEmpty(tmpEmptyMulti);
-                                                    this.popCustomer.hide(); 
-                                                }
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgPriceAdd',showTitle:true,title:this.t("msgPriceAdd.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.t("msgPriceAdd.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPriceAdd.msg")}</div>)
+                                                    }
+                                                    
+                                                    await dialog(tmpConfObj);
+                                                }     
                                             }}/>
                                         </div>
                                         <div className='col-6'>

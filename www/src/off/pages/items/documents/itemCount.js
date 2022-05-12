@@ -720,9 +720,22 @@ export default class itemCount extends React.Component
                                     <NdTextBox id="txtBarcode" parent={this} simple={true}  
                                     onEnterKey={(async(e)=>
                                     {
+                                        if(this.cmbDepot.value == '')
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
+                                            }
+                                            
+                                            await dialog(tmpConfObj);
+                                            this.txtBarcode.setState({value:""})
+                                            return
+                                        }
                                         let tmpQuery = 
                                         {
-                                            query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
+                                            query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE ORDER BY ITEM_BARCODE_VW_01.CDATE DESC",
                                             param : ['CODE:string|50'],
                                             value : [this.txtBarcode.value]
                                         }
@@ -810,6 +823,40 @@ export default class itemCount extends React.Component
                                             {
                                                 if(this.countObj.dt()[this.countObj.dt().length - 1].ITEM_CODE == '')
                                                 {
+                                                    this.pg_txtItemsCode.show()
+                                                    this.pg_txtItemsCode.onClick = async(data) =>
+                                                    {
+                                                        if(data.length > 0)
+                                                        {
+                                                            if(data.length == 1)
+                                                            {
+                                                                this.addItem(data[0],this.countObj.dt().length -1)
+                                                            }
+                                                            else if(data.length > 1)
+                                                            {
+                                                                for (let i = 0; i < data.length; i++) 
+                                                                {
+                                                                    if(i == 0)
+                                                                    {
+                                                                        this.addItem(data[i],e.rowIndex)
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        let tmpDocItems = {...this.countObj.empty}
+                                                                        tmpDocItems.LINE_NO = this.countObj.dt().length
+                                                                        tmpDocItems.REF = this.txtRef.value
+                                                                        tmpDocItems.REF_NO = this.txtRefno.value
+                                                                        tmpDocItems.DEPOT = this.cmbDepot.value
+                                                                        tmpDocItems.DOC_DATE = this.dtDocDate.value
+                                                                        this.txtRef.readOnly = true
+                                                                        this.txtRefno.readOnly = true
+                                                                        this.countObj.addEmpty(tmpDocItems)
+                                                                        this.addItem(data[i],this.countObj.dt().length-1)
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
                                                     return
                                                 }
                                             }
@@ -883,6 +930,7 @@ export default class itemCount extends React.Component
                     height={'90%'}
                     title={this.t("pg_txtItemsCode.title")} //
                     search={true}
+                    selection ={{mode:"single"}}
                     data = 
                     {{
                         source:

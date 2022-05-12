@@ -621,6 +621,7 @@ export class itemBarcodeCls
             ITEM_NAME : '',
             UNIT_GUID : '00000000-0000-0000-0000-000000000000',
             UNIT_ID : '001',
+            UNIT_TYPE : 0,
             UNIT_NAME : 'UNIT',
             UNIT_FACTOR : '0',
             UNIT_SYMBOL : ''
@@ -767,7 +768,7 @@ export class itemMultiCodeCls
             CUSTOMER_PRICE_GUID : '00000000-0000-0000-0000-000000000000',
             CUSTOMER_PRICE : '0',
             CUSTOMER_PRICE_DATE : moment(new Date(0)).format("DD/MM/YYYY HH:mm:ss"),
-            CUSTOMER_PRICE_USER_NAME : this.core.auth.data == null ? '' : this.core.auth.data.NAME
+            CUSTOMER_PRICE_USER_NAME : this.core.auth.data == null ? '' : this.core.auth.data.NAME,
         }
         
         this._initDs();

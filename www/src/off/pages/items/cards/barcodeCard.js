@@ -5,7 +5,7 @@ import {itemsCls,itemPriceCls,itemBarcodeCls,itemMultiCodeCls,unitCls} from '../
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item } from 'devextreme-react/form';
+import Form, { Label,Item, EmptyItem } from 'devextreme-react/form';
 import TabPanel from 'devextreme-react/tab-panel';
 import { Button } from 'devextreme-react/button';
 
@@ -40,11 +40,10 @@ export default class barcodeCard extends React.Component
     async init()
     {
         this.itemBarcodeObj.clearAll();
-      
-        
-        let tmpEmpty = {...this.itemBarcodeObj.empty};
-        this.itemBarcodeObj.addEmpty(tmpEmpty);  
-        console.log(this.itemBarcodeObj.dt()[0])
+        this.cmbBarUnit.value = ''
+        this.txtBarUnitFactor.setState({value:'0'})
+        this.txtItem.setState({value:''})
+        this.txtItemName.setState({value:''})
     }
     async checkBarcode(pCode)
     {
@@ -52,9 +51,15 @@ export default class barcodeCard extends React.Component
         {
             if(pCode !== '')
             {
-                let tmpData = await this.itemBarcodeObj.load({BARCODE:pCode});
+                let tmpQuery = 
+                {
+                    query :"SELECT BARCODE FROM ITEM_BARCODE WHERE BARCODE = @CODE",
+                    param : ['CODE:string|50'],
+                    value : [pCode]
+                }
+                let tmpData = await this.core.sql.execute(tmpQuery) 
 
-                if(tmpData.length > 0)
+                if(tmpData.result.recordset.length > 0)
                 {
                     let tmpConfObj =
                     {
@@ -64,7 +69,7 @@ export default class barcodeCard extends React.Component
                     }
                     
                     await dialog(tmpConfObj);
-                    this.getBarcode(tmpData[0].BARCODE)
+                    this.getBarcode(tmpData.result.recordset[0].BARCODE)
                     resolve(2) //KAYIT VAR
                 }
                 else
@@ -92,7 +97,7 @@ export default class barcodeCard extends React.Component
             {
                 select : 
                 {
-                    query : "SELECT GUID,NAME,FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID =@ITEM_GUID",
+                    query : "SELECT GUID,NAME,FACTOR,TYPE FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID =@ITEM_GUID",
                     param : ['ITEM_GUID:string|50'],
                     value : [pGuid]
                 },
@@ -100,6 +105,21 @@ export default class barcodeCard extends React.Component
             }
         }
         await this.cmbBarUnit.dataRefresh(tmpSource)
+        if(this.cmbBarUnit.data.datatable.length > 0)
+        {
+            let tmpGuid = this.cmbBarUnit.data.datatable.where({'TYPE':0})[0].GUID
+            this.cmbBarUnit.setState({value:tmpGuid});
+            this.txtBarUnitFactor.setState({value:this.cmbBarUnit.data.datatable.where({'GUID':tmpGuid})[0].FACTOR});
+            let tmpUnitType = this.cmbBarUnit.data.datatable.where({'GUID':tmpGuid})[0].TYPE
+            if(tmpUnitType == 0)
+            {
+                this.txtUnitTypeName.setState({value:this.t("MainUnit")})
+            }
+            else
+            {
+                this.txtUnitTypeName.setState({value:this.t("SubUnit")})
+            }
+        }
     }
    render()
     {           
@@ -147,11 +167,12 @@ export default class barcodeCard extends React.Component
                                                     id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
                                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
-                                                
+                                                console.log(this.itemBarcodeObj.dt()[0])
                                                 if((await this.itemBarcodeObj.save()) == 0)
                                                 {                                                    
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
+                                                    this.init()
                                                 }
                                                 else
                                                 {
@@ -259,11 +280,10 @@ export default class barcodeCard extends React.Component
                                                             let tmpEmpty = {...this.itemBarcodeObj.empty};
                                                             tmpEmpty.BARCODE = this.txtBarcode.value
                                                             tmpEmpty.TYPE = this.cmbPopBarType.value
-                                                            tmpEmpty.UNIT_GUID = this.cmbBarUnit.value
-                                                            tmpEmpty.UNIT_NAME = this.cmbBarUnit.displayValue
                                                             tmpEmpty.ITEM_GUID = data[0].GUID
                                                             tmpEmpty.ITEM_NAME = data[0].NAME
                                                             tmpEmpty.ITEM_CODE = data[0].CODE
+                                                            tmpEmpty.UNIT_GUID = ''
                                                             this.itemBarcodeObj.addEmpty(tmpEmpty);  
                                                             this._getUnit(data[0].GUID)
                                                         }
@@ -406,21 +426,40 @@ export default class barcodeCard extends React.Component
                                 {/* cmbBarUnit */}
                                 <Item>
                                     <Label text={this.t("cmbBarUnit")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbBarUnit"
+                                    <NdSelectBox simple={true} parent={this} id="cmbBarUnit" 
                                     dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"UNIT_GUID"}} 
                                     displayExpr="NAME"                       
                                     valueExpr="GUID"
                                     onValueChanged={(async(e)=>
+                                    {
+                                        if(e.value != '00000000-0000-0000-0000-000000000000' && e.value != '')
                                         {
                                             this.txtBarUnitFactor.setState({value:this.cmbBarUnit.data.datatable.where({'GUID':e.value})[0].FACTOR});
+                                            let tmpUnitType = this.cmbBarUnit.data.datatable.where({'GUID':e.value})[0].TYPE
+                                            if(tmpUnitType == 0)
+                                            {
+                                                this.txtUnitTypeName.setState({value:this.t("MainUnit")})
+                                            }
+                                            else
+                                            {
+                                                this.txtUnitTypeName.setState({value:this.t("SubUnit")})
+                                            }
+                                           
+                                        }
                                     }).bind(this)}
                                     />
                                 </Item>
-                                {/* cmbBarUnit */}
+                                {/* txtBarUnitFactor */}
                                 <Item>
                                     <Label text={this.t("txtBarUnitFactor")} alignment="right" />
                                     <NdTextBox simple={true} parent={this} id="txtBarUnitFactor" readOnly={true}
                                     dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"UNIT_FACTOR"}} 
+                                    />
+                                </Item>
+                                 {/* txtBarUnitFactor */}
+                                 <Item>
+                                    <Label text={this.t("txtUnitTypeName")} alignment="right" />
+                                    <NdTextBox simple={true} parent={this} id="txtUnitTypeName" readOnly={true}
                                     />
                                 </Item>
                             </Form>

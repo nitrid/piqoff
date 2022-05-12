@@ -26,6 +26,7 @@ export class customersCls
 
         this.customerOffical = new customerOfficalCls();
         this.customerAdress = new customerAdressCls();
+        this.customerBank = new customerBankCls();
 
         this._initDs();
     }
@@ -79,7 +80,7 @@ export class customersCls
                     "@INT_VAT_NO = @PINT_VAT_NO, " +
                     "@TAX_TYPE = @PTAX_TYPE " ,
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PTITLE:string|50','PCODE:string|50','PGENUS:int','PCUSTOMER_GRP:string|25','PWEB:string|100','PNOTE:string|1500',
-                        'PSIRET_ID:string|25','PAPE_CODE:string|50','PTAX_OFFICE:string|25','PTAX_NO:string|25','PINT_VAT_NO:string|50','PTAX_TYPE:int'],
+                    'PSIRET_ID:string|25','PAPE_CODE:string|50','PTAX_OFFICE:string|25','PTAX_NO:string|25','PINT_VAT_NO:string|50','PTAX_TYPE:int'],
             dataprm : ['GUID','CUSER','TYPE','TITLE','CODE','GENUS','CUSTOMER_GRP','WEB','NOTE','SIRET_ID','APE_CODE','TAX_OFFICE','TAX_NO','INT_VAT_NO','TAX_TYPE']
         }
         tmpDt.deleteCmd = 
@@ -95,6 +96,7 @@ export class customersCls
         this.ds.add(tmpDt);
         this.ds.add(this.customerOffical.dt('CUSTOMER_OFFICAL'))
         this.ds.add(this.customerAdress.dt('CUSTOMER_ADRESS'))
+        this.ds.add(this.customerBank.dt('CUSTOMER_BANK'))
     }
     //#endregion
     dt()
@@ -150,6 +152,7 @@ export class customersCls
             {  
                 await this.customerAdress.load({CUSTOMER:this.ds.get('CUSTOMERS')[0].GUID})
                 await this.customerOffical.load({CUSTOMER:this.ds.get('CUSTOMERS')[0].GUID})
+                await this.customerBank.load({CUSTOMER:this.ds.get('CUSTOMERS')[0].GUID})
             }
             resolve(this.ds.get('CUSTOMERS'))
         });
@@ -437,6 +440,139 @@ export class customerAdressCls
             await this.ds.get('CUSTOMER_ADRESS').refresh();
             
             resolve(this.ds.get('CUSTOMER_ADRESS'));
+            
+        });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            this.ds.delete()
+            resolve(await this.ds.update()); 
+        });
+    }
+}
+export class customerBankCls
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds = new dataset()
+        this.empty = {
+            GUID : '00000000-0000-0000-0000-000000000000',
+            CUSER : this.core.auth.data.CODE,
+            CUSER_NAME : this.core.auth.data.NAME,
+            CUSTOMER : '00000000-0000-0000-0000-000000000000',
+            NAME : '',
+            IBAN : '',
+            OFFICE : '',
+            SWIFT : ''
+        }
+
+        this._initDs()
+    }
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('CUSTOMER_BANK')
+        tmpDt.selectCmd = 
+        {
+            query : "SELECT * FROM [dbo].[CUSTOMER_BANK_VW_01] WHERE ((CUSTOMER = @CUSTOMER) OR (@CUSTOMER = '00000000-0000-0000-0000-000000000000')) ",
+            param : ['CUSTOMER:string|50']
+        }
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_CUSTOMER_BANK_INSERT] " +
+                    "@GUID =@PGUID, " +
+                    "@CUSER = @PCUSER, " +
+                    "@CUSTOMER = @PCUSTOMER, " +
+                    "@NAME = @PNAME, " +
+                    "@IBAN = @PIBAN, " +
+                    "@OFFICE = @POFFICE, " +
+                    "@SWIFT = @PSWIFT ",
+            param : ['PGUID:string|50','PCUSER:string|50','PCUSTOMER:string|50','PNAME:string|50','PIBAN:string|50','POFFICE:string|50','PSWIFT:string|25'],
+            dataprm : ['GUID','CUSER','CUSTOMER','NAME','IBAN','OFFICE','SWIFT']
+        }
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_CUSTOMER_BANK_UPDATE] " +
+                    "@GUID =@PGUID, " +
+                    "@CUSER = @PCUSER, " +
+                    "@CUSTOMER = @PCUSTOMER, " +
+                    "@NAME = @PNAME, " +
+                    "@IBAN = @PIBAN, " +
+                    "@OFFICE = @POFFICE, " +
+                    "@SWIFT = @PSWIFT ",
+            param : ['PGUID:string|50','PCUSER:string|50','PCUSTOMER:string|50','PNAME:string|50','PIBAN:string|50','POFFICE:string|50','PSWIFT:string|25'],
+            dataprm : ['GUID','CUSER','CUSTOMER','NAME','IBAN','OFFICE','SWIFT']
+        }
+        tmpDt.deleteCmd = 
+        {
+            query : " [dbo].[PRD_CUSTOMER_BANK_DELETE] " + 
+                    " @CUSER = @PCUSER, " + 
+                    " @UPDATE = 1, " + 
+                    " @GUID = @PGUID ", 
+            param : ['PCUSER:string|25','PGUID:string|50'],
+            dataprm : ['CUSER','GUID']
+        }
+
+        this.ds.add(tmpDt);
+    }
+    //#regionend
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0])
+        }
+
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('CUSTOMER_BANK') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {};
+        if(arguments.length > 0)
+        {
+            tmp = {...arguments[0]}
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        tmp.GUID = datatable.uuidv4()
+        this.dt('CUSTOMER_BANK').push(tmp)
+    }
+    clearAll()
+    {
+        for (let i = 0; i < this.ds.length; i++) 
+        {
+            this.dt(i).clear()
+        }
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİR.
+        return new Promise(async resolve =>
+        {
+            let tmpPrm = 
+            {
+                CUSTOMER : '00000000-0000-0000-0000-000000000000',
+            }
+
+            if(arguments.length > 0)
+            {
+                tmpPrm.CUSTOMER = typeof arguments[0].CUSTOMER == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].CUSTOMER;
+            }
+
+            this.ds.get('CUSTOMER_BANK').selectCmd.value = Object.values(tmpPrm);
+
+            await this.ds.get('CUSTOMER_BANK').refresh();
+            
+            resolve(this.ds.get('CUSTOMER_BANK'));
             
         });
     }

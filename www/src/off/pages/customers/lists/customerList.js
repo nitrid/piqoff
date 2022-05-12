@@ -32,7 +32,15 @@ export default class barcodeList extends React.Component
             {CODE : "CODE",NAME : this.t("grdListe.clmCode")},
             {CODE : "TITLE",NAME : this.t("grdListe.clmTitle")},
             {CODE : "TYPE_NAME",NAME : this.t("grdListe.clmType")},
-            {CODE : "GENUS_NAME",NAME : this.t("grdListe.clmGenus")},                                   
+            {CODE : "GENUS_NAME",NAME : this.t("grdListe.clmGenus")},       
+            {CODE : "ADRESS",NAME : this.t("grdListe.clmAdress")},       
+            {CODE : "ZIPCDDE",NAME : this.t("grdListe.clmZipcode")},       
+            {CODE : "COUNTRY",NAME : this.t("grdListe.clmCountry")},       
+            {CODE : "CITY",NAME : this.t("grdListe.clmCity")},       
+            {CODE : "PHONE1",NAME : this.t("grdListe.clmPhone1")},       
+            {CODE : "GSM_PHONE",NAME : this.t("grdListe.clmGsm")},       
+            {CODE : "EMAIL",NAME : this.t("grdListe.clmEmail")}, 
+            {CODE : "IBAN",NAME : this.t("grdListe.clmIban")},       
         ]
         this.groupList = [];
         this._btnGetirClick = this._btnGetirClick.bind(this)
@@ -49,7 +57,7 @@ export default class barcodeList extends React.Component
     {
         let onOptionChanged = (e) =>
         {
-            if (e.name == 'selectedBarcodeKeys') 
+            if (e.name == 'selectedItemKeys') 
             {
                 this.groupList = [];
                 if(typeof e.value.find(x => x == 'CODE') != 'undefined')
@@ -104,9 +112,7 @@ export default class barcodeList extends React.Component
         )
     }
     async _btnGetirClick()
-    {
-        console.log(11)
-        
+    {        
         let tmpSource =
         {
             source : 
@@ -114,7 +120,7 @@ export default class barcodeList extends React.Component
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT * FROM CUSTOMER_VW_01 WHERE ((TITLE like '%' + @CUSTOMER_NAME + '%') OR (@CUSTOMER_NAME = '')) AND " +
+                    query : "SELECT * FROM CUSTOMER_VW_02 WHERE ((TITLE like '%' + @CUSTOMER_NAME + '%') OR (@CUSTOMER_NAME = '')) AND " +
                             " ((GENUS = @GENUS) OR (@GENUS = -1))  ",
                     param : ['CUSTOMER_NAME:string|250','GENUS:string|25'],
                     value : [this.txtCustomerName.value,this.cmbGenus.value]
@@ -147,7 +153,7 @@ export default class barcodeList extends React.Component
                                             {
                                                 id: 'cri_01_001',
                                                 text: this.t('menu'),
-                                                path: '../pages/customers/cards/customerCard.js'
+                                                path: 'customers/cards/customerCard.js'
                                             })
                                         }
                                     }    
@@ -192,7 +198,7 @@ export default class barcodeList extends React.Component
                                     <NdSelectBox simple={true} parent={this} id="cmbGenus" height='fit-content'
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
-                                    value={-1}
+                                    value={"-1"}
                                     data={{source:[{ID:-1,VALUE:this.t("cmbGenusData.allGenus")},{ID:0,VALUE:this.t("cmbGenusData.Customer")},{ID:1,VALUE:this.t("cmbGenusData.supplier")},{ID:2,VALUE:this.t("cmbGenusData.both")}]}}
                                     />
                                 </Item>       
@@ -230,6 +236,16 @@ export default class barcodeList extends React.Component
                             columnAutoWidth={true}
                             allowColumnReordering={true}
                             allowColumnResizing={true}
+                            onRowDblClick={async(e)=>
+                                {
+                                    App.instance.menuClick(
+                                        {
+                                            id: 'cri_01_001',
+                                            text: e.data.TITLE.substring(0,10),
+                                            path: 'customers/cards/customerCard.js',
+                                            pagePrm:{CODE:e.data.CODE}
+                                        })
+                                }}
                             >                            
                                 <Paging defaultPageSize={15} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
@@ -238,6 +254,14 @@ export default class barcodeList extends React.Component
                                 <Column dataField="TITLE" caption={this.t("grdListe.clmTitle")} visible={true}/> 
                                 <Column dataField="TYPE_NAME" caption={this.t("grdListe.clmType")} visible={true}/> 
                                 <Column dataField="GENUS_NAME" caption={this.t("grdListe.clmGenus")} visible={true}/> 
+                                <Column dataField="ADRESS" caption={this.t("grdListe.clmAdress")} visible={true}/> 
+                                <Column dataField="ZIPCDDE" caption={this.t("grdListe.clmZipcode")} visible={false}/> 
+                                <Column dataField="COUNTRY" caption={this.t("grdListe.clmCountry")} visible={false}/> 
+                                <Column dataField="CITY" caption={this.t("grdListe.clmCity")} visible={false}/> 
+                                <Column dataField="PHONE1" caption={this.t("grdListe.clmPhone1")} visible={false}/> 
+                                <Column dataField="GSM_PHONE" caption={this.t("grdListe.clmGsm")} visible={false}/> 
+                                <Column dataField="EMAIL" caption={this.t("grdListe.clmEmail")} visible={false}/> 
+                                <Column dataField="IBAN" caption={this.t("grdListe.clmIban")} visible={false}/> 
                             </NdGrid>
                         </div>
                     </div>

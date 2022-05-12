@@ -373,7 +373,7 @@ export default class salesOrder extends React.Component
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmSalesDis"
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmslsDoc"
                                     onClick={async (e)=>
                                     {
                                         if(this.docLocked == true)
@@ -549,7 +549,7 @@ export default class salesOrder extends React.Component
                     {/* Form */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id="frmSalesDis">
+                            <Form colCount={3} id="frmslsDoc">
                                 {/* txtRef-Refno */}
                                 <Item>
                                     <Label text={this.t("txtRefRefno")} alignment="right" />
@@ -575,7 +575,7 @@ export default class salesOrder extends React.Component
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmSalesDis"}>
+                                            <Validator validationGroup={"frmslsDoc"}>
                                                     <RequiredRule message={this.t("validRef")} />
                                                 </Validator>  
                                             </NdTextBox>
@@ -623,7 +623,7 @@ export default class salesOrder extends React.Component
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmSalesDis"}>
+                                            <Validator validationGroup={"frmslsDoc"}>
                                                     <RequiredRule message={this.t("validRefNo")} />
                                                 </Validator> 
                                             </NdTextBox>
@@ -677,7 +677,7 @@ export default class salesOrder extends React.Component
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmSalesDis"}>
+                                        <Validator validationGroup={"frmslsDoc"}>
                                             <RequiredRule message={this.t("validDepot")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -760,7 +760,7 @@ export default class salesOrder extends React.Component
                                     param={this.param.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmSalesDis"}>
+                                        <Validator validationGroup={"frmslsDoc"}>
                                             <RequiredRule message={this.t("validCustomerCode")} />
                                         </Validator>  
                                     </NdTextBox>
@@ -827,7 +827,7 @@ export default class salesOrder extends React.Component
                                         {
                                     }).bind(this)}
                                     >
-                                        <Validator validationGroup={"frmSalesDis"}>
+                                        <Validator validationGroup={"frmslsDoc"}>
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
@@ -955,11 +955,11 @@ export default class salesOrder extends React.Component
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={4} parent={this} id="frmSalesDis">
+                            <Form colCount={4} parent={this} id="frmslsDoc">
                                 {/* Ara Toplam */}
                                 <Item location="after" colSpan={3}>
                                     <Button icon="add"
-                                    validationGroup="frmSalesDis"
+                                    validationGroup="frmslsDoc"
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")

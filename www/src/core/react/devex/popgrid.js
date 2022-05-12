@@ -223,7 +223,7 @@ export default class NdPopGrid extends Base
     }    
     async show()
     {
-        
+        this.grid.devGrid.clearSelection()
         if(typeof this.props.search == 'undefined' || this.props.search == false)
         {
             //this.setState({show:true})
@@ -233,8 +233,12 @@ export default class NdPopGrid extends Base
         }
         else
         {
-            await this.grid.dataRefresh({source:[]})
-            this["txt" + this.props.id].setState({value:''})
+            if(this["txt" + this.props.id].value == '')
+            {
+                await this.grid.dataRefresh({source:[]})
+                this["txt" + this.props.id].setState({value:''})
+            }
+           
             this["pop_" + this.props.id].show();
         }
        
@@ -260,6 +264,8 @@ export default class NdPopGrid extends Base
     async getData()
     {
         let tmpQuery
+        console.log(this.data)
+        console.log(this.SourceData)
         if(typeof this.data == 'undefined' )
         {
             tmpQuery = this.SourceData
@@ -268,9 +274,9 @@ export default class NdPopGrid extends Base
         {
             tmpQuery =  {...this.data}
         }
+        console.log(tmpQuery)
         tmpQuery.source.select.value = []
         tmpQuery.source.select.value.push(this["txt" + this.props.id].value.replaceAll('*','%')+'%')
-        console.log(this["txt" + this.props.id].value)
         await this.grid.dataRefresh(tmpQuery)
     }
     async setData(pData)

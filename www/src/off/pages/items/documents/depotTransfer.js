@@ -94,19 +94,21 @@ export default class depotTransfer extends React.Component
             this.btnPrint.setState({disabled:false});
         })
 
-
+        this.txtRef.setState({value:this.user.CODE})
         let tmpDoc = {...this.docObj.empty}
+        tmpDoc.REF = this.user.CODE
         tmpDoc.TYPE = 2
         tmpDoc.DOC_TYPE = 2
         tmpDoc.REBATE = 0
         this.docObj.addEmpty(tmpDoc);
 
-        this.txtRef.readOnly = false
-        this.txtRefno.readOnly = false
+        this.txtRef.readOnly = true
+        this.txtRefno.readOnly = true
         this.docLocked = false
         
         this.frmTrnsfItems.option('disabled',false)
         await this.grdTrnsfItems.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
+        this.txtRef.props.onChange()
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -733,9 +735,22 @@ export default class depotTransfer extends React.Component
                                     <NdTextBox id="txtBarcode" parent={this} simple={true}  
                                     onEnterKey={(async(e)=>
                                     {
+                                        if(this.cmbOutDepot.value == '' || this.cmbInDepot.value == '')
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
+                                            }
+                                            
+                                            await dialog(tmpConfObj);
+                                            this.txtBarcode.setState({value:""})
+                                            return
+                                        }
                                         let tmpQuery = 
                                         {
-                                            query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
+                                            query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE ORDER BY ITEM_BARCODE_VW_01.CDATE DESC",
                                             param : ['CODE:string|50'],
                                             value : [this.txtBarcode.value]
                                         }
@@ -761,8 +776,7 @@ export default class depotTransfer extends React.Component
                                                 this.txtRefno.readOnly = true
                                                 this.docObj.docItems.addEmpty(tmpDocItems)
                                             }
-                                            
-                                            this.addItem(tmpData.result.recordset[0],this.countObj.dt().length - 1)
+                                            this.addItem(tmpData.result.recordset[0],this.docObj.docItems.dt().length - 1)
                                         }
                                         else
                                         {
@@ -830,7 +844,43 @@ export default class depotTransfer extends React.Component
                                             if(typeof this.docObj.docItems.dt()[0] != 'undefined')
                                             {
                                                 if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
-                                                {
+                                                {this.pg_txtItemsCode.show()
+                                                    this.pg_txtItemsCode.onClick = async(data) =>
+                                                    {
+                                                        if(data.length == 1)
+                                                        {
+                                                            this.addItem(data[0],this.docObj.docItems.dt().length-1)
+                                                        }
+                                                        else if(data.length > 1)
+                                                        {
+                                                            for (let i = 0; i < data.length; i++) 
+                                                            {
+                                                                if(i == 0)
+                                                                {
+                                                                    this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                                }
+                                                                else
+                                                                {
+                                                                    let tmpDocItems = {...this.docObj.docItems.empty}
+                                                                    tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                                                                    tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                                                                    tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                                    tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                                                                    tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                                                                    tmpDocItems.REF = this.docObj.dt()[0].REF
+                                                                    tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                                                                    tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                                    tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                                                                    tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                                    tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                                                                    this.txtRef.readOnly = true
+                                                                    this.txtRefno.readOnly = true
+                                                                    this.docObj.docItems.addEmpty(tmpDocItems)
+                                                                    this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                                }
+                                                            }
+                                                        }
+                                                    }
                                                     return
                                                 }
                                             }
@@ -850,6 +900,43 @@ export default class depotTransfer extends React.Component
                                             this.txtRef.readOnly = true
                                             this.txtRefno.readOnly = true
                                             this.docObj.docItems.addEmpty(tmpDocItems)
+                                            this.pg_txtItemsCode.show()
+                                            this.pg_txtItemsCode.onClick = async(data) =>
+                                            {
+                                                if(data.length == 1)
+                                                {
+                                                    this.addItem(data[0],this.docObj.docItems.dt().length-1)
+                                                }
+                                                else if(data.length > 1)
+                                                {
+                                                    for (let i = 0; i < data.length; i++) 
+                                                    {
+                                                        if(i == 0)
+                                                        {
+                                                            this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                        }
+                                                        else
+                                                        {
+                                                            let tmpDocItems = {...this.docObj.docItems.empty}
+                                                            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                                                            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                                                            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                            tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                                                            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                                                            tmpDocItems.REF = this.docObj.dt()[0].REF
+                                                            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                                                            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                                                            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                            tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                                                            this.txtRef.readOnly = true
+                                                            this.txtRefno.readOnly = true
+                                                            this.docObj.docItems.addEmpty(tmpDocItems)
+                                                            this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         }
                                         else
                                         {

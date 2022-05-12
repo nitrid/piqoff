@@ -26,7 +26,7 @@ export const langTr =
         stk_03: "Listeler",
         stk_04: "Operasyonlar",
         stk_05: "Raporlar",
-        stk_01_001: "Stok Tanımları",
+        stk_01_001: "Yeni Stok Tanımlama",
         stk_01_002: "Barkod Tanımları",
         stk_01_003: "Fiyat Tanımları",
         stk_01_004: "Birim Tanımları",
@@ -136,7 +136,7 @@ export const langTr =
         txtShortName: "Kısa Adı",
         chkActive: "Aktif",
         chkCaseWeighed: "Kasada Tartılsın",
-        chkLineMerged: "Satış da Satır Birleştir",
+        chkLineMerged: "Satış da Satırları Ayır",
         chkTicketRest: "Ticket Rest.",
         txtCostPrice: "Maliyet Fiyatı",
         txtMinSalePrice: "Min. Satış Fiyatı",
@@ -146,7 +146,7 @@ export const langTr =
         tabTitleUnit: "Birim",
         tabTitleBarcode: "Barkod",
         tabTitleCustomer: "Tedarikçi",
-        tabTitleCustomerPrice: "Tedarikçi Fiyat",
+        tabTitleCustomerPrice: "Tedarikçi Fiyat Geçmişi",
         tabTitleSalesContract: "Satış Anlaşmaları",
         tabTitleInfo: "Bilgi",
         pg_txtRef:
@@ -327,6 +327,9 @@ export const langTr =
         cmbBarUnit: "Birim",
         txtBarUnitFactor: "Katsayı",
         cmbPopBarType : "Tip",
+        MainUnit :"Bu Barkod Ana Birime Tanımlanacaktır",
+        SubUnit : "Bu Barkod Alt Birime Tanımlanacaktır",
+        txtUnitTypeName :"Açıklama",
         pg_txtItem:
         {
             title: "Ürün Seçim",
@@ -696,6 +699,7 @@ export const langTr =
         txtRefRefno : "Seri-Sıra",
         cmbOutDepot: "Çıkış Deposu",
         dtDocDate : "Tarih",
+        txtBarcode : "Barkod Ekle",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -852,6 +856,12 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
         },
+        msgNotSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrakta Değişiklik Yapılmış! Lütfen Kayıt Edin Yada Değişiklikleri Geri Alın"
+        },
         msgAddItems:
         {
             title: "Dikkat",
@@ -947,6 +957,7 @@ export const langTr =
         cmbDepot2: "İade Deposu",
         dtDocDate : "Tarih",
         getRebate :"İade Deposudan Getir",
+        txtBarcode : "Barkod Ekle",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -1301,6 +1312,8 @@ export const langTr =
         tabTitleAdress : "Adres",
         tabTitleLegal : "Yasal",
         tabTitleOffical : "Yetkili",
+        tabCustomerBank : "Banka Bilgileri",
+        txtLegal :"Yasal Bilgiler",
         pg_txtCode : 
         {
             title : "Cari Seçim",
@@ -1334,6 +1347,13 @@ export const langTr =
             clmGsmPhone : "GSM Tel.",
             clmEMail : "E-Mail"
         },
+        grdBank : 
+        {
+            clmName : "Banka Adı",
+            clmIban : "IBAN",
+            clmOffice : "Şube",
+            clmSwift : "Swift Kodu",
+        },
         popAdress : 
         {
             title : "Adres",
@@ -1341,6 +1361,14 @@ export const langTr =
             cmbPopZipcode :"Posta Kodu",
             cmbPopCity :"Şehir",
             cmbPopCountry :"Ülke",
+        },
+        popBank : 
+        {
+            title : "Banka Bilgileri",
+            txtName : "Banka Adı",
+            txtIban :"IBAN",
+            txtOffice :"Şube",
+            txtSwift :"Swift Kodu",
         },
         popOffical : 
         {
@@ -1372,6 +1400,18 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgLegalNotValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Yasal Bölümündeki alanları doldurunuz !"
+        },
+        msgAdressNotValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Adres Bölümünden Carinin Ülkesini Seçiniz!"
         },
         msgDelete:
         {
@@ -1482,6 +1522,14 @@ export const langTr =
             clmTitle : "Ünvan",
             clmType : "Tipi",
             clmGenus : "Cinsi",
+            clmAdress :"Adres",
+            clmZipcode : "Posta Kodu",
+            clmCountry :"Ülke",
+            clmCity : "Şehir",
+            clmPhone1 :"Telefon",
+            clmGsm : "GSM No.",
+            clmEmail :"E-Mail",
+            clmIban :"Iban"
         },
         cmbGenusData:
         {
