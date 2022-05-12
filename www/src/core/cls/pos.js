@@ -27,6 +27,7 @@ export class posCls
             VAT : 0,
             TOTAL : 0,
             TICKET : '', //İADE ALINAN TICKET
+            REBATE_CHEQPAY : '', //İADE CEKİ
             STATUS : 0
         }
 

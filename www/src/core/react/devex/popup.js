@@ -59,6 +59,7 @@ export default class NdPopUp extends Base
     }  
     show()
     {  
+        this.onShowed()
         this.setState(
         {
             show: true
@@ -78,6 +79,13 @@ export default class NdPopUp extends Base
             showTitle: true,
             title: pVal
         });
+    }
+    onShowed()
+    {
+        if(typeof this.props.onShowed != 'undefined')
+        {
+            this.props.onShowed();
+        }
     }
     onHiding() 
     {
