@@ -22,6 +22,9 @@ export class itemCountCls
             ITEM_NAME : '',
             ITEM_CODE : '',
             QUANTITY : 0,
+            CUSTOMER_NAME : '',
+            TOTAL_COST :0,
+            COST_PRICE : 0,
         }
 
         this._initDs();

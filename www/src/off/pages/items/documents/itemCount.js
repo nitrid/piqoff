@@ -20,6 +20,7 @@ import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
+import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
 
@@ -33,7 +34,27 @@ export default class itemCount extends React.Component
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.countObj = new itemCountCls();
 
+        this.state = 
+        {
+            columnListValue : ['CDATE_FORMAT','ITEM_CODE','ITEM_NAME','QUANTITY','COST_PRICE','TOTAL_COST','CUSTOMER_NAME']
+        }
+        
+        this.columnListData = 
+        [
+            {CODE : "CDATE_FORMAT",NAME : this.t("grdSlsIvcList.clmCreateDate")},
+            {CODE : "ITEM_CODE",NAME : this.t("grdSlsIvcList.clmItemCode")},
+            {CODE : "ITEM_NAME",NAME : this.t("grdSlsIvcList.clmItemName")},                                   
+            {CODE : "QUANTITY",NAME : this.t("grdSlsIvcList.clmQuantity")},
+            {CODE : "COST_PRICE",NAME : this.t("grdSlsIvcList.clmCostPrice")},
+            {CODE : "TOTAL_COST",NAME : this.t("grdSlsIvcList.clmTotalCost")},
+            {CODE : "CUSTOMER_NAME",NAME : this.t("grdSlsIvcList.clmCustomerName")},
+            
+        ]
+
+        this.groupList = [];
+
         this._cellRoleRender = this._cellRoleRender.bind(this)
+        this._columnListBox = this._columnListBox.bind(this)
 
         this.frmCount = undefined;
         this.docLocked = false;        
@@ -405,6 +426,72 @@ export default class itemCount extends React.Component
         this.countObj.dt()[pIndex].ITEM_NAME = pData.NAME
         this.countObj.dt()[pIndex].QUANTITY = tmpQuantity
         this.txtBarcode.focus()
+    }
+    _columnListBox(e)
+    {
+        let onOptionChanged = (e) =>
+        {
+            if (e.name == 'selectedItemKeys') 
+            {
+                this.groupList = [];
+                if(typeof e.value.find(x => x == 'CDATE_FORMAT') != 'undefined')
+                {
+                    this.groupList.push('CDATE_FORMAT')
+                }
+                if(typeof e.value.find(x => x == 'ITEM_CODE') != 'undefined')
+                {
+                    this.groupList.push('ITEM_CODE')
+                }                
+                if(typeof e.value.find(x => x == 'ITEM_NAME') != 'undefined')
+                {
+                    this.groupList.push('ITEM_NAME')
+                }
+                if(typeof e.value.find(x => x == 'QUANTITY') != 'undefined')
+                {
+                    this.groupList.push('QUANTITY')
+                }
+                if(typeof e.value.find(x => x == 'COST_PRICE') != 'undefined')
+                {
+                    this.groupList.push('COST_PRICE')
+                }
+                if(typeof e.value.find(x => x == 'TOTAL_COST') != 'undefined')
+                {
+                    this.groupList.push('TOTAL_COST')
+                }
+
+                for (let i = 0; i < this.grdItemCount.devGrid.columnCount(); i++) 
+                {
+                    if(typeof e.value.find(x => x == this.grdItemCount.devGrid.columnOption(i).name) == 'undefined')
+                    {
+                        this.grdItemCount.devGrid.columnOption(i,'visible',false)
+                    }
+                    else
+                    {
+                        this.grdItemCount.devGrid.columnOption(i,'visible',true)
+                    }
+                }
+
+                this.setState(
+                    {
+                        columnListValue : e.value
+                    }
+                )
+            }
+        }
+        
+        return(
+            <NdListBox id='columnListBox' parent={this}
+            data={{source: this.columnListData}}
+            width={'100%'}
+            showSelectionControls={true}
+            selectionMode={'multiple'}
+            displayExpr={'NAME'}
+            keyExpr={'CODE'}
+            value={this.state.columnListValue}
+            onOptionChanged={onOptionChanged}
+            >
+            </NdListBox>
+        )
     }
     render()
     {
@@ -779,6 +866,26 @@ export default class itemCount extends React.Component
                             </Form>
                         </div>
                     </div>
+                    <div className="row px-2 pt-2">
+                        <div className="col-3">
+                            <NdDropDownBox simple={true} parent={this} id="cmbColumn"
+                            value={this.state.columnListValue}
+                            displayExpr="NAME"                       
+                            valueExpr="CODE"
+                            data={{source: this.columnListData}}
+                            contentRender={this._columnListBox}
+                            />
+                        </div>
+                        <div className="col-3">
+                            
+                        </div>
+                        <div className="col-3">
+                            
+                        </div>
+                        <div className="col-3">
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
+                        </div>
+                    </div>
                     {/* Grid */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -806,10 +913,13 @@ export default class itemCount extends React.Component
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                                         <Scrolling mode="standard" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdItemCount.clmCreateDate")} width={150} allowEditing={false}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdItemCount.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdItemCount.clmItemName")} width={350} />
-                                        <Column dataField="QUANTITY" caption={this.t("grdItemCount.clmQuantity")} dataType={'number'} editCellRender={this._cellRoleRender} width={150}/>
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdItemCount.clmCreateDate")} width={150} visible={true} allowEditing={false}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdItemCount.clmItemCode")} width={150} visible={true} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdItemCount.clmItemName")} width={350} visible={true} />
+                                        <Column dataField="QUANTITY" caption={this.t("grdItemCount.clmQuantity")} dataType={'number'} editCellRender={this._cellRoleRender} width={150} visible={true}/>
+                                        <Column dataField="COST_PRICE" caption={this.t("grdItemCount.clmCostPrice")} dataType={'number'} width={150} visible={true}/>
+                                        <Column dataField="TOTAL_COST" caption={this.t("grdItemCount.clmTotalCost")} dataType={'number'}  width={150} visible={true}/>
+                                        <Column dataField="CUSTOMER_NAME" caption={this.t("grdItemCount.clmCustomerName")} dataType={'text'}  width={150} visible={true}/>
                                     </NdGrid>
                                 </Item>
                                 <Item location="after">
