@@ -978,6 +978,12 @@ export default class itemCount extends React.Component
                                     param={this.param.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
                                     value ={1}
+                                    onFocusIn={(async(e)=>
+                                        {
+                                            this.txtQuantity.select()
+                                            console.log(e)
+                                            console.log(this.txtQuantity.select())
+                                        }).bind(this)}
                                     >
                                     </NdTextBox>
                                 </Item>
