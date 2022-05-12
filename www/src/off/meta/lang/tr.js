@@ -468,7 +468,10 @@ export const langTr =
             clmItemName: "Adı",
             clmQuantity : "Miktar",
             clmCreateDate: "Kayıt Tarihi",
-            clmDescription :"Açıklama"
+            clmDescription :"Açıklama",
+            clmCostPrice :"Birim Maliyet",
+            clmTotalCost :"Toplam Maliyet",
+            clmCustomerName :"Tedarikci Cari",
         },
         popPassword : 
         {

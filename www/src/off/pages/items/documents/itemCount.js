@@ -21,6 +21,7 @@ import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
+import NdListBox from '../../../../core/react/devex/listbox.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
 
@@ -41,13 +42,13 @@ export default class itemCount extends React.Component
         
         this.columnListData = 
         [
-            {CODE : "CDATE_FORMAT",NAME : this.t("grdSlsIvcList.clmCreateDate")},
-            {CODE : "ITEM_CODE",NAME : this.t("grdSlsIvcList.clmItemCode")},
-            {CODE : "ITEM_NAME",NAME : this.t("grdSlsIvcList.clmItemName")},                                   
-            {CODE : "QUANTITY",NAME : this.t("grdSlsIvcList.clmQuantity")},
-            {CODE : "COST_PRICE",NAME : this.t("grdSlsIvcList.clmCostPrice")},
-            {CODE : "TOTAL_COST",NAME : this.t("grdSlsIvcList.clmTotalCost")},
-            {CODE : "CUSTOMER_NAME",NAME : this.t("grdSlsIvcList.clmCustomerName")},
+            {CODE : "CDATE_FORMAT",NAME : this.t("grdItemCount.clmCreateDate")},
+            {CODE : "ITEM_CODE",NAME : this.t("grdItemCount.clmItemCode")},
+            {CODE : "ITEM_NAME",NAME : this.t("grdItemCount.clmItemName")},                                   
+            {CODE : "QUANTITY",NAME : this.t("grdItemCount.clmQuantity")},
+            {CODE : "COST_PRICE",NAME : this.t("grdItemCount.clmCostPrice")},
+            {CODE : "TOTAL_COST",NAME : this.t("grdItemCount.clmTotalCost")},
+            {CODE : "CUSTOMER_NAME",NAME : this.t("grdItemCount.clmCustomerName")},
             
         ]
 
@@ -883,7 +884,6 @@ export default class itemCount extends React.Component
                             
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
                         </div>
                     </div>
                     {/* Grid */}
@@ -904,7 +904,10 @@ export default class itemCount extends React.Component
                                     width={'100%'}
                                     dbApply={false}
                                     onRowUpdated={async(e)=>{
-                                       
+                                        if(typeof e.data.QUANTITY != 'undefined' || typeof e.data.COST_PRICE != 'undefined')
+                                        {
+                                            e.key.TOTAL_COST = parseFloat(((e.key.QUANTITY * e.key.COST_PRICE) )).toFixed(3)
+                                        }
                                     }}
                                     onRowRemoved={(e)=>{
 
@@ -917,8 +920,8 @@ export default class itemCount extends React.Component
                                         <Column dataField="ITEM_CODE" caption={this.t("grdItemCount.clmItemCode")} width={150} visible={true} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdItemCount.clmItemName")} width={350} visible={true} />
                                         <Column dataField="QUANTITY" caption={this.t("grdItemCount.clmQuantity")} dataType={'number'} editCellRender={this._cellRoleRender} width={150} visible={true}/>
-                                        <Column dataField="COST_PRICE" caption={this.t("grdItemCount.clmCostPrice")} dataType={'number'} width={150} visible={true}/>
-                                        <Column dataField="TOTAL_COST" caption={this.t("grdItemCount.clmTotalCost")} dataType={'number'}  width={150} visible={true}/>
+                                        <Column dataField="COST_PRICE" caption={this.t("grdItemCount.clmCostPrice")} dataType={'number'} width={150} visible={true} allowEditing={false}/>
+                                        <Column dataField="TOTAL_COST" caption={this.t("grdItemCount.clmTotalCost")} dataType={'number'}  width={150} visible={true} allowEditing={false}/>
                                         <Column dataField="CUSTOMER_NAME" caption={this.t("grdItemCount.clmCustomerName")} dataType={'text'}  width={150} visible={true}/>
                                     </NdGrid>
                                 </Item>
