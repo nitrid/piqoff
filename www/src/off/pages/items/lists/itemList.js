@@ -54,8 +54,11 @@ export default class itemList extends React.Component
     }
     componentDidMount()
     {
+        
         setTimeout(async () => 
         {
+            console.log(this.txtBarkod)
+            this.txtBarkod.focus()
             // this.test.data.source.groupBy = ["NAME"]
             // await this.test.dataRefresh()
             //console.log(this.test.data.datatable)
@@ -121,7 +124,6 @@ export default class itemList extends React.Component
     }
     async _btnGetirClick()
     {
-       
         if(this.txtUrunAdi.value != '' && this.txtUrunAdi.value.slice(-1) != '*')
         {
             let tmpUrunAdi = this.txtUrunAdi.value + '*'

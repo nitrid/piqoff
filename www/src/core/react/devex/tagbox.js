@@ -29,6 +29,7 @@ export default class NdTagBox extends Base
             items={[]}
             acceptCustomValue={true} onValueChanged={this._onValueChanged} 
             placeholder={this.state.placeholder}
+            openOnFieldClick={false}
             showClearButton ={true}
             noDataText=""
             >

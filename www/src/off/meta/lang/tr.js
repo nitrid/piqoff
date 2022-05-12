@@ -26,7 +26,7 @@ export const langTr =
         stk_03: "Listeler",
         stk_04: "Operasyonlar",
         stk_05: "Raporlar",
-        stk_01_001: "Stok Tanımları",
+        stk_01_001: "Yeni Stok Tanımlama",
         stk_01_002: "Barkod Tanımları",
         stk_01_003: "Fiyat Tanımları",
         stk_01_004: "Birim Tanımları",
@@ -136,7 +136,7 @@ export const langTr =
         txtShortName: "Kısa Adı",
         chkActive: "Aktif",
         chkCaseWeighed: "Kasada Tartılsın",
-        chkLineMerged: "Satış da Satır Birleştir",
+        chkLineMerged: "Satış da Satırları Ayır",
         chkTicketRest: "Ticket Rest.",
         txtCostPrice: "Maliyet Fiyatı",
         txtMinSalePrice: "Min. Satış Fiyatı",
@@ -146,7 +146,7 @@ export const langTr =
         tabTitleUnit: "Birim",
         tabTitleBarcode: "Barkod",
         tabTitleCustomer: "Tedarikçi",
-        tabTitleCustomerPrice: "Tedarikçi Fiyat",
+        tabTitleCustomerPrice: "Tedarikçi Fiyat Geçmişi",
         tabTitleSalesContract: "Satış Anlaşmaları",
         tabTitleInfo: "Bilgi",
         pg_txtRef:
@@ -327,6 +327,9 @@ export const langTr =
         cmbBarUnit: "Birim",
         txtBarUnitFactor: "Katsayı",
         cmbPopBarType : "Tip",
+        MainUnit :"Bu Barkod Ana Birime Tanımlanacaktır",
+        SubUnit : "Bu Barkod Alt Birime Tanımlanacaktır",
+        txtUnitTypeName :"Açıklama",
         pg_txtItem:
         {
             title: "Ürün Seçim",

@@ -502,7 +502,7 @@ export const prm =
     {
         TYPE : 1,
         ID :"ItemGrpForOrginsValidation",
-        VALUE : ['019','021'],
+        VALUE : ['017'],
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "",
@@ -518,7 +518,7 @@ export const prm =
     {
         TYPE : 1,
         ID :"ItemGrpForMinMaxAccess",
-        VALUE : ['019','021'],
+        VALUE : ['017'],
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "",
@@ -530,6 +530,37 @@ export const prm =
             CAPTION : "Ürün Grubuna Göre Min Max Yetki"
         }
     },
+        //Otomatik Min ve Max Fiyat Atama
+        {
+            TYPE : 1,
+            ID :"ItemMinPricePercent",
+            VALUE : 10,
+            SPECIAL : "",
+            PAGE : "stk_01_001",
+            ELEMENT : "",
+            APP : "OFF",
+            VIEW : 
+            {
+                TYPE : "text",
+                PAGE_NAME : "Stok Tanımları",
+                CAPTION : "Ürün Minimum Satış Yüzdesi"
+            }
+        },
+        {
+            TYPE : 1,
+            ID :"ItemMaxPricePercent",
+            VALUE : 400,
+            SPECIAL : "",
+            PAGE : "stk_01_001",
+            ELEMENT : "",
+            APP : "OFF",
+            VIEW : 
+            {
+                TYPE : "text",
+                PAGE_NAME : "Stok Tanımları",
+                CAPTION : "Ürün MAximum Satış Yüzdesi"
+            }
+        },
     //#endregion
 
     //#region Cari Tanıtım
