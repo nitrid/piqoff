@@ -788,7 +788,7 @@ export class itemMultiCodeCls
                     "((CUSTOMER_GUID = @CUSTOMER_GUID) OR (@CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000')) AND " + 
                     "((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND " + 
                     "((CUSTOMER_NAME = @CUSTOMER_NAME) OR (@CUSTOMER_NAME = '')) AND " + 
-                    "((MULTICODE = @MULTICODE) OR (@MULTICODE = ''))",
+                    "((MULTICODE = @MULTICODE) OR (@MULTICODE = '')) ORDER BY CHANGE_PRICE_DATE DESC",
             param : ['ITEM_GUID:string|50','ITEM_CODE:string|25','ITEM_NAME:string|250','CUSTOMER_GUID:string|50',
                      'CUSTOMER_CODE:string|25','CUSTOMER_NAME:string|250','MULTICODE:string|25']
         }
@@ -1433,7 +1433,7 @@ export class itemLogPriceCls
         let tmpDt = new datatable('ITEM_PRICE_LOG');            
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [ITEM_PRICE_LOG_VW_01] WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 1",
+            query : "SELECT * FROM [ITEM_PRICE_LOG_VW_01] WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 1 ORDER BY LDATE DESC",
             param : ['ITEM_GUID:string|50',]
         }
 

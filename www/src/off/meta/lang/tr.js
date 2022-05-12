@@ -151,13 +151,13 @@ export const langTr =
         tabTitleInfo: "Bilgi",
         pg_txtRef:
         {
-            title: "Ürün Grubu Seçim",
+            title: "Stok Seçimi",
             clmCode: "KODU",
             clmName: "ADI", 
         },
         pg_txtPopCustomerCode:
         {
-            title: "Ürün Grubu Seçim",
+            title: "Cari Seçimi",
             clmCode: "KODU",
             clmName: "ADI", 
         },
@@ -448,6 +448,7 @@ export const langTr =
         dtDocDate : "Tarih",
         txtBarcode : "Barkod Ekle",
         txtQuantity :"Miktar",
+        txtAmount : "Toplam Değer",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -472,6 +473,8 @@ export const langTr =
             clmCostPrice :"Birim Maliyet",
             clmTotalCost :"Toplam Maliyet",
             clmCustomerName :"Tedarikci Cari",
+            clmMulticode : "Tedarikçi Kodu",
+            clmBarcode : "Barkod",
         },
         popPassword : 
         {

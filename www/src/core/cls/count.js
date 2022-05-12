@@ -25,6 +25,8 @@ export class itemCountCls
             CUSTOMER_NAME : '',
             TOTAL_COST :0,
             COST_PRICE : 0,
+            MULTICODE : '',
+            BARCODE : ''
         }
 
         this._initDs();

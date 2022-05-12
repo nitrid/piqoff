@@ -1095,7 +1095,7 @@ export class datatable
         {            
             tmpVal = this.reduce((a,b) =>
             {
-                return {[arguments[0]] : a[arguments[0]] + b[arguments[0]]}
+                return {[arguments[0]] : Number(a[arguments[0]]) + Number(b[arguments[0]])}
             },{[arguments[0]]:0})[arguments[0]]
 
             if(arguments.length == 2)

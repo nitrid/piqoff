@@ -15,7 +15,7 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Pager} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
@@ -37,7 +37,7 @@ export default class itemCount extends React.Component
 
         this.state = 
         {
-            columnListValue : ['CDATE_FORMAT','ITEM_CODE','ITEM_NAME','QUANTITY','COST_PRICE','TOTAL_COST','CUSTOMER_NAME']
+            columnListValue : ['CDATE_FORMAT','ITEM_CODE','ITEM_NAME','QUANTITY','COST_PRICE','TOTAL_COST','MULTICODE','CUSTOMER_NAME','BARCODE']
         }
         
         this.columnListData = 
@@ -49,6 +49,8 @@ export default class itemCount extends React.Component
             {CODE : "COST_PRICE",NAME : this.t("grdItemCount.clmCostPrice")},
             {CODE : "TOTAL_COST",NAME : this.t("grdItemCount.clmTotalCost")},
             {CODE : "CUSTOMER_NAME",NAME : this.t("grdItemCount.clmCustomerName")},
+            {CODE : "MULTICODE",NAME : this.t("grdItemCount.clmMulticode")},
+            {CODE : "BARCODE",NAME : this.t("grdItemCount.clmBarcode")},
             
         ]
 
@@ -136,6 +138,9 @@ export default class itemCount extends React.Component
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
+
+        let totalPrice= await this.countObj.dt().sum("TOTAL_COST",2)
+        this.txtAmount.setState({value :totalPrice})
         
     }
     async checkDoc(pGuid,pRef,pRefno)
@@ -244,7 +249,10 @@ export default class itemCount extends React.Component
                         {
                             let tmpQuery = 
                             {
-                                query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
+                                query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS MULTICODE, "+
+                                "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS BARCODE, " + 
+                                "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
+                                " FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
                                 param : ['CODE:string|50'],
                                 value : [r.component._changedValue]
                             }
@@ -397,6 +405,8 @@ export default class itemCount extends React.Component
                 if(pResult == 'btn01')
                 {
                     this.countObj.dt()[i].QUANTITY = parseFloat(this.countObj.dt()[i].QUANTITY) + parseFloat(tmpQuantity)
+                    let totalPrice= await this.countObj.dt().sum("TOTAL_COST",2)
+                    this.txtAmount.setState({value :totalPrice})
                     if(this.countObj.dt()[this.countObj.dt().length - 1].ITEM_CODE == '')
                     {
                         await this.grdItemCount.devGrid.deleteRow(this.countObj.dt().length - 1)
@@ -407,6 +417,8 @@ export default class itemCount extends React.Component
                 if(pResult == 'btn02')
                 {
                     this.countObj.dt()[i].QUANTITY =  parseFloat(tmpQuantity)
+                    let totalPrice= await this.countObj.dt().sum("TOTAL_COST",2)
+                    this.txtAmount.setState({value :totalPrice})
                     if(this.countObj.dt()[this.countObj.dt().length - 1].ITEM_CODE == '')
                     {
                         await this.grdItemCount.devGrid.deleteRow(this.countObj.dt().length - 1)
@@ -426,7 +438,17 @@ export default class itemCount extends React.Component
         this.countObj.dt()[pIndex].ITEM = pData.GUID
         this.countObj.dt()[pIndex].ITEM_NAME = pData.NAME
         this.countObj.dt()[pIndex].QUANTITY = tmpQuantity
+        this.countObj.dt()[pIndex].COST_PRICE = pData.COST_PRICE
+        this.countObj.dt()[pIndex].MULTICODE = pData.MULTICODE
+        this.countObj.dt()[pIndex].CUSTOMER_NAME = pData.CUSTOMER_NAME
+        this.countObj.dt()[pIndex].BARCODE = pData.BARCODE
+        this.countObj.dt()[pIndex].TOTAL_COST =parseFloat(pData.COST_PRICE *tmpQuantity).toFixed(2)
         this.txtBarcode.focus()
+        await this.countObj.save()
+
+        let totalPrice= await this.countObj.dt().sum("TOTAL_COST",2)
+        this.txtAmount.setState({value :totalPrice})
+
     }
     _columnListBox(e)
     {
@@ -442,7 +464,11 @@ export default class itemCount extends React.Component
                 if(typeof e.value.find(x => x == 'ITEM_CODE') != 'undefined')
                 {
                     this.groupList.push('ITEM_CODE')
-                }                
+                }             
+                if(typeof e.value.find(x => x == 'BARCODE') != 'undefined')
+                {
+                    this.groupList.push('BARCODE')
+                }   
                 if(typeof e.value.find(x => x == 'ITEM_NAME') != 'undefined')
                 {
                     this.groupList.push('ITEM_NAME')
@@ -822,8 +848,9 @@ export default class itemCount extends React.Component
                                             return
                                         }
                                         let tmpQuery = 
-                                        {
-                                            query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE ORDER BY ITEM_BARCODE_VW_01.CDATE DESC",
+                                        {   query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS MULTICODE,  " + 
+                                            "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
+                                            " FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
                                             param : ['CODE:string|50'],
                                             value : [this.txtBarcode.value]
                                         }
@@ -903,26 +930,33 @@ export default class itemCount extends React.Component
                                     height={'400'} 
                                     width={'100%'}
                                     dbApply={false}
+                                    filterRow={{visible:true}} 
                                     onRowUpdated={async(e)=>{
                                         if(typeof e.data.QUANTITY != 'undefined' || typeof e.data.COST_PRICE != 'undefined')
                                         {
                                             e.key.TOTAL_COST = parseFloat(((e.key.QUANTITY * e.key.COST_PRICE) )).toFixed(3)
+                                            let totalPrice= await this.countObj.dt().sum("TOTAL_COST",2)
+                                            this.txtAmount.setState({value :totalPrice})
                                         }
                                     }}
                                     onRowRemoved={(e)=>{
 
                                     }}
                                     >
+                                        <Paging defaultPageSize={15} />
+                                         <Pager visible={true} allowedPageSizes={[5,10,50,500,1000]} showPageSizeSelector={true} />
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                                         <Scrolling mode="standard" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdItemCount.clmCreateDate")} width={150} visible={true} allowEditing={false}/>
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdItemCount.clmCreateDate")} width={200} visible={true} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdItemCount.clmItemCode")} width={150} visible={true} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdItemCount.clmItemName")} width={350} visible={true} />
+                                        <Column dataField="BARCODE" caption={this.t("grdItemCount.clmBarcode")} width={150} visible={true} allowEditing={false}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdItemCount.clmItemName")} width={350} visible={true} allowEditing={false}/>
                                         <Column dataField="QUANTITY" caption={this.t("grdItemCount.clmQuantity")} dataType={'number'} editCellRender={this._cellRoleRender} width={150} visible={true}/>
-                                        <Column dataField="COST_PRICE" caption={this.t("grdItemCount.clmCostPrice")} dataType={'number'} width={150} visible={true} allowEditing={false}/>
-                                        <Column dataField="TOTAL_COST" caption={this.t("grdItemCount.clmTotalCost")} dataType={'number'}  width={150} visible={true} allowEditing={false}/>
-                                        <Column dataField="CUSTOMER_NAME" caption={this.t("grdItemCount.clmCustomerName")} dataType={'text'}  width={150} visible={true}/>
+                                        <Column dataField="COST_PRICE" caption={this.t("grdItemCount.clmCostPrice")} dataType={'number'} width={100} visible={true} allowEditing={false}/>
+                                        <Column dataField="TOTAL_COST" caption={this.t("grdItemCount.clmTotalCost")} dataType={'number'}  width={100} visible={true} allowEditing={false}/>
+                                        <Column dataField="MULTICODE" caption={this.t("grdItemCount.clmMulticode")} dataType={'text'}  width={100} visible={true} allowEditing={false}/>
+                                        <Column dataField="CUSTOMER_NAME" caption={this.t("grdItemCount.clmCustomerName")} dataType={'text'}  width={150} visible={true} allowEditing={false}/>
                                     </NdGrid>
                                 </Item>
                                 <Item location="after">
@@ -1033,6 +1067,24 @@ export default class itemCount extends React.Component
                                 </Item>
                             </Form>
                         </div>
+                        <div className="row px-2 pt-2">
+                        <div className="col-12">
+                            <Form colCount={4} parent={this} id="frmslsDoc">
+                                {/* Ara Toplam */}
+                                <Item  colSpan={3}>
+                                </Item>
+                                 {/*  Toplam Maliyet */}
+                                <Item  >
+                                <Label text={this.t("txtAmount")} alignment="right" />
+                                    <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} 
+                                    maxLength={32}
+                                    ></NdTextBox>
+                                </Item>
+                                
+                              
+                            </Form>
+                        </div>
+                    </div>
                     </div>
                     <NdPopGrid id={"pg_txtItemsCode"}  parent={this} container={"#root"}
                     visible={false}
@@ -1050,7 +1102,9 @@ export default class itemCount extends React.Component
                         {
                             select:
                             {
-                                query : "SELECT GUID,CODE,NAME,VAT FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS MULTICODE, " + 
+                                "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS BARCODE, " + 
+                                "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
                                 param : ['VAL:string|50']
                             },
                             sql:this.core.sql
@@ -1093,9 +1147,7 @@ export default class itemCount extends React.Component
                                     value ={1}
                                     onFocusIn={(async(e)=>
                                         {
-                                            this.txtQuantity.select()
-                                            console.log(e)
-                                            console.log(this.txtQuantity.select())
+                                           
                                         }).bind(this)}
                                     >
                                     </NdTextBox>
