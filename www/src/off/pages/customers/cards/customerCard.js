@@ -128,6 +128,7 @@ export default class CustomerCard extends React.Component
         {
             this.txtTitle.readOnly = true
             this.setState({officalVisible:false})
+            this.txtTitle.setState({value:''})
         }
         else if(pType == 1)
         {
@@ -670,7 +671,7 @@ export default class CustomerCard extends React.Component
                                                 dbApply={false}
                                                 >
                                                     <Paging defaultPageSize={5} />
-                                                    <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
+                                                    <Editing mode="cell" allowUpdating={true} allowDeleting={false} />
                                                     <Column dataField="SIRET_ID" caption={this.t("grdLegal.clmSiretID")}/>
                                                     <Column dataField="APE_CODE" caption={this.t("grdLegal.clmApeCode")}/>
                                                     <Column dataField="TAX_OFFICE" caption={this.t("grdLegal.clmTaxOffice")}/>
