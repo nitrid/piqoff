@@ -441,7 +441,7 @@ export default class CustomerCard extends React.Component
                                 {/* txtCode */}
                                 <Item>
                                     <Label text={this.t("txtCode")} alignment="right" />
-                                    <NdTextBox id="txtCode" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"CODE"}}  
+                                    <NdTextBox id="txtCode" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"CODE"}} 
                                     button=
                                     {
                                         [
@@ -528,7 +528,7 @@ export default class CustomerCard extends React.Component
                                  {/* txtTitle */}
                                  <Item>
                                     <Label text={this.t("txtTitle")} alignment="right" />
-                                    <NdTextBox id="txtTitle" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"TITLE"}}
+                                    <NdTextBox id="txtTitle" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"TITLE"}}
                                     onChange={(async()=>
                                     {
                                       
@@ -541,27 +541,22 @@ export default class CustomerCard extends React.Component
                                 {/* txtCustomerName */}
                                 <Item>
                                     <Label text={this.t("txtCustomerName")} alignment="right" />
-                                    <NdTextBox id="txtCustomerName" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"NAME",filter:{TYPE:0}}}
+                                    <NdTextBox id="txtCustomerName" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"NAME",filter:{TYPE:0}}}
                                     maxLength={32}
                                     param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
-                                    >
-                                     <Validator validationGroup={"frmCustomers"}>
-                                            <RequiredRule message="Adı boş geçemezsiniz !" />
-                                        </Validator>  
+                                    >                                      
                                     </NdTextBox>
                                 </Item>
                                 {/* txtCustomerLastname */}
                                 <Item>
                                     <Label text={this.t("txtCustomerLastname")} alignment="right" />
-                                        <NdTextBox id="txtCustomerLastname" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"LAST_NAME",filter:{TYPE:0}}}
+                                        <NdTextBox id="txtCustomerLastname" parent={this} simple={true} tabIndex={this.tabIndex} 
+                                        dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"LAST_NAME",filter:{TYPE:0}}}
                                         maxLength={32}
                                         param={this.param.filter({ELEMENT:'txtCustomerLastname',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'txtCustomerLastname',USERS:this.user.CODE})}
-                                        >
-                                     <Validator validationGroup={"frmCustomers"}>
-                                            <RequiredRule message="Soyadı boş geçemezsiniz !" />
-                                        </Validator>  
+                                        >                                      
                                     </NdTextBox>
                                 </Item>
                                  {/* txtPhone1 */}

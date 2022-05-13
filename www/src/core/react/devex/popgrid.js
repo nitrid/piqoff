@@ -264,8 +264,6 @@ export default class NdPopGrid extends Base
     async getData()
     {
         let tmpQuery
-        console.log(this.data)
-        console.log(this.SourceData)
         if(typeof this.data == 'undefined' )
         {
             tmpQuery = this.SourceData
@@ -274,7 +272,7 @@ export default class NdPopGrid extends Base
         {
             tmpQuery =  {...this.data}
         }
-        console.log(tmpQuery)
+        
         tmpQuery.source.select.value = []
         tmpQuery.source.select.value.push(this["txt" + this.props.id].value.replaceAll('*','%')+'%')
         await this.grid.dataRefresh(tmpQuery)

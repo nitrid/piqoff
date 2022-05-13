@@ -10,7 +10,7 @@ export default class NdBase extends React.Component
     constructor(props)
     {
         super(props)
-
+        
         this.state = 
         {
             data : typeof props.data == 'undefined' ? undefined : props.data
@@ -530,7 +530,7 @@ export default class NdBase extends React.Component
             }
 
             return (
-                <Validator validationGroup={tmpValid.grp}>
+                <Validator validationGroup={tmpValid.grp + (this.props.tabIndex == 'undefined' ? '' : this.props.tabIndex)}>
                     {tmp}        
                 </Validator>
             )
