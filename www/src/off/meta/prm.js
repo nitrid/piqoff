@@ -225,7 +225,7 @@ export const prm =
         ID :"cmbUnderUnit",
         VALUE : 
         {
-            value : "001"
+            value : "002"
         },
         SPECIAL : "",
         PAGE : "stk_01_001",

@@ -151,11 +151,9 @@ export default class itemCard extends React.Component
         let tmpUnderUnitObj = {...this.itemsObj.itemUnit.empty}
         tmpUnderUnitObj.TYPE = 1,
         tmpUnderUnitObj.TYPE_NAME = 'Alt Birim'
-        tmpUnderUnitObj.ITEM_GUID = this.itemsObj.dt()[0].GUID         
-        if(tmpUnit.dt(0).length > 0)
-        {
-            tmpUnderUnitObj.ID = tmpUnit.dt(0)[0].ID
-        }
+        tmpUnderUnitObj.ID  = this.cmbUnderUnit.value
+        tmpUnderUnitObj.ITEM_GUID = this.itemsObj.dt()[0].GUID    
+        tmpUnderUnitObj.FACTOR = 0
         
         let tmpBarcodeObj = {...this.itemsObj.itemBarcode.empty}
         tmpBarcodeObj.ITEM_GUID = this.itemsObj.dt()[0].GUID 
