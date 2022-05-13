@@ -34,7 +34,7 @@ export default class itemCard extends React.Component
         this.itemsPriceSupply = new itemPriceCls();   
         this.itemsPriceLogObj = new itemLogPriceCls();        
         this.prevCode = "";
-        console.log(this.tabIndex)
+        
         this._onItemRendered = this._onItemRendered.bind(this)
     }    
     async componentDidMount()
