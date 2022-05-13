@@ -1662,6 +1662,5 @@ export default class itemCard extends React.Component
                 </ScrollView>
             </div>
         )
-        
     }
 }
