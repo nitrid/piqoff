@@ -1629,10 +1629,10 @@ export default class itemCard extends React.Component
                                                     // Min ve Max Fiyat 
                                                     let tmpMinData = this.prmObj.filter({ID:'ItemMinPricePercent'}).getValue()
                                                     let tmpMinPrice = this.txtPopCustomerPrice.value + (this.txtPopCustomerPrice.value * tmpMinData) /100
-                                                    this.txtMinSalePrice.setState({value:(tmpMinPrice).toFixed(2)})
+                                                    this.txtMinSalePrice.value = (tmpMinPrice).toFixed(2)
                                                     let tmpMaxData = this.prmObj.filter({ID:'ItemMaxPricePercent'}).getValue()
                                                     let tmpMAxPrice = this.txtPopCustomerPrice.value + (this.txtPopCustomerPrice.value * tmpMaxData) /100
-                                                    this.txtMaxSalePrice.setState({value:(tmpMAxPrice).toFixed(2)})
+                                                    this.txtMaxSalePrice.value = (tmpMAxPrice).toFixed(2)
                                                 }                              
                                                 else
                                                 {
