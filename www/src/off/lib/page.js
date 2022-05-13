@@ -29,7 +29,6 @@ export default class Page extends React.Component
       obj.default.prototype.lang = App.instance.lang;
       obj.default.prototype.t = App.instance.lang.getFixedT(null,null,this.props.data.id)
       obj.default.prototype.pagePrm = this.props.data.pagePrm;
-      obj.default.prototype.tabIndex = this.props.index
 
       obj.default.prototype.init = (function()
       {
