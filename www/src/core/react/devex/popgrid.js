@@ -240,6 +240,11 @@ export default class NdPopGrid extends Base
             }
            
             this["pop_" + this.props.id].show();
+            setTimeout(() => 
+                {
+                    this["txt" + this.props.id].focus()
+                }, 1000);
+            
         }
        
     }
