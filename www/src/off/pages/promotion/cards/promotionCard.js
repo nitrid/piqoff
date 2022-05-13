@@ -216,7 +216,7 @@ export default class promotionCard extends React.Component
                                 {/* txtCode */}
                                 <Item>                                    
                                     <Label text={this.t("txtCode")} alignment="right" />
-                                    <NdTextBox id="txtCode" parent={this} simple={true} 
+                                    <NdTextBox id="txtCode" parent={this} simple={true} tabIndex={this.tabIndex} 
                                     dt={{data:this.promoObj.dt(),field:"CODE"}}
                                     button=
                                     {

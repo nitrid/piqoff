@@ -631,7 +631,7 @@ export const prm =
             CAPTION : "Cinsi"
         }
     },
-    //txtCode
+    //txtTitle
     {
         TYPE : 2,
         ID :"txtTitle",

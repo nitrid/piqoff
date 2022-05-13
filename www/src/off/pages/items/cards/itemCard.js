@@ -34,7 +34,7 @@ export default class itemCard extends React.Component
         this.itemsPriceSupply = new itemPriceCls();   
         this.itemsPriceLogObj = new itemLogPriceCls();        
         this.prevCode = "";
-        
+        console.log(this.tabIndex)
         this._onItemRendered = this._onItemRendered.bind(this)
     }    
     async componentDidMount()
@@ -418,7 +418,7 @@ export default class itemCard extends React.Component
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmItems"
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmItems" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -546,11 +546,11 @@ export default class itemCard extends React.Component
                     </div>
                     <div className="row px-2 pt-2">                        
                         <div className="col-9">
-                            <Form colCount={2} id="frmItems">
+                            <Form colCount={2} id={"frmItems" + this.tabIndex}>
                                 {/* txtRef */}
                                 <Item>                                    
                                     <Label text={this.t("txtRef")} alignment="right" />
-                                    <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.itemsObj.dt('ITEMS'),field:"CODE"}} 
+                                    <NdTextBox id="txtRef" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.itemsObj.dt('ITEMS'),field:"CODE"}} 
                                     button=
                                     {
                                         [
@@ -634,7 +634,7 @@ export default class itemCard extends React.Component
                                 {/* cmbItemGrp */}
                                 <Item>
                                     <Label text={this.t("cmbItemGrp")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbItemGrp"
+                                    <NdSelectBox simple={true} parent={this} id="cmbItemGrp" tabIndex={this.tabIndex}
                                     dt={{data:this.itemsObj.dt('ITEMS'),field:"MAIN_GRP",display:"MAIN_GRP_NAME"}}
                                     displayExpr="NAME"                       
                                     valueExpr="CODE"
@@ -660,23 +660,20 @@ export default class itemCard extends React.Component
                                     dt={{data:this.itemsObj.dt('ITEM_MULTICODE'),field:"CUSTOMER_CODE",display:"CUSTOMER_NAME"}}
                                     readOnly={true}
                                     displayValue={""}
-                                    button=
+                                    button={[
                                     {
-                                        [
-                                            {
-                                                id:'001',
-                                                icon:'add',
-                                                onClick:()=>
-                                                {
-                                                    this.txtPopCustomerCode.value = "";
-                                                    this.txtPopCustomerName.value = "";
-                                                    this.txtPopCustomerItemCode.value = "";
-                                                    this.txtPopCustomerPrice.value = "0";
-                                                    this.popCustomer.show();
-                                                }
-                                            }
-                                        ]
-                                    }
+                                        id:'001',
+                                        icon:'add',
+                                        onClick:()=>
+                                        {
+                                            this.txtPopCustomerCode.value = "";
+                                            this.txtPopCustomerName.value = "";
+                                            this.txtPopCustomerItemCode.value = "";
+                                            this.txtPopCustomerPrice.value = "0";
+                                            this.popCustomer.show();
+                                        }
+                                    }]}
+                                    tabIndex={this.tabIndex}
                                     param={this.param.filter({ELEMENT:'txtCustomer',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomer',USERS:this.user.CODE})}>
                                     </NdTextBox>
@@ -750,7 +747,7 @@ export default class itemCard extends React.Component
                                             />
                                         </div>
                                         <div className="col-5 ps-0">
-                                            <NdNumberBox id="txtMainUnit" parent={this} simple={true} style={{borderTopLeftRadius:'0px',borderBottomLeftRadius:'0px'}} 
+                                            <NdNumberBox id="txtMainUnit" parent={this} simple={true} tabIndex={this.tabIndex} style={{borderTopLeftRadius:'0px',borderBottomLeftRadius:'0px'}} 
                                             showSpinButtons={true} step={1.0} format={"###.000"}
                                             dt={{data:this.itemsObj.dt('ITEM_UNIT'),field:"FACTOR",filter:{TYPE:0}}}
                                             param={this.param.filter({ELEMENT:'txtMainUnit',USERS:this.user.CODE})}
@@ -772,8 +769,7 @@ export default class itemCard extends React.Component
                                     access={this.access.filter({ELEMENT:'cmbOrigin',USERS:this.user.CODE})}
                                     data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY CODE ASC"},sql:this.core.sql}}}
                                     >
-                                    
-                                        <Validator validationGroup={this.state.isItemGrpForOrginsValid ? "frmItems" : ''}>
+                                        <Validator validationGroup={this.state.isItemGrpForOrginsValid ? "frmItems" + this.tabIndex : ''}>
                                             <RequiredRule message="Menşei boş geçemezsiniz !" />
                                         </Validator>
                                     </NdSelectBox>                                    
@@ -794,7 +790,7 @@ export default class itemCard extends React.Component
                                             />
                                         </div>
                                         <div className="col-5 ps-0">
-                                            <NdNumberBox id="txtUnderUnit" parent={this} simple={true} style={{borderTopLeftRadius:'0px',borderBottomLeftRadius:'0px'}} 
+                                            <NdNumberBox id="txtUnderUnit" parent={this} simple={true} tabIndex={this.tabIndex} style={{borderTopLeftRadius:'0px',borderBottomLeftRadius:'0px'}} 
                                             showSpinButtons={true} step={0.1} format={"##0.000"}
                                             dt={{id:"txtUnderUnit",data:this.itemsObj.dt('ITEM_UNIT'),field:"FACTOR",filter:{TYPE:1}}}
                                             param={this.param.filter({ELEMENT:'txtUnderUnit',USERS:this.user.CODE})}
@@ -815,12 +811,11 @@ export default class itemCard extends React.Component
                                     param={this.param.filter({ELEMENT:'txtItemName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtItemName',USERS:this.user.CODE})}
                                     onValueChanged={(e)=>
-                                        {
-                                            if(e.value.length <= 32)
-                                                this.txtShortName.value = e.value
-                                        }
-                                    }>
-                                        <Validator validationGroup={"frmItems"}>
+                                    {
+                                        if(e.value.length <= 32)
+                                            this.txtShortName.value = e.value
+                                    }}>
+                                        <Validator validationGroup={"frmItems" + this.tabIndex}>
                                             <RequiredRule message="Adı boş geçemezsiniz !" />
                                         </Validator> 
                                     </NdTextBox>
@@ -869,7 +864,7 @@ export default class itemCard extends React.Component
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={6} id="frmChkBox">
+                            <Form colCount={6} id={"frmChkBox" + this.tabIndex}>
                                 {/* chkActive */}
                                 <Item>
                                     <Label text={this.t("chkActive")} alignment="right" />
@@ -907,14 +902,16 @@ export default class itemCard extends React.Component
                                 <Item title={this.t("tabTitlePrice")}>
                                     <div className='row px-2 py-2'>
                                         <div className='col-2'>
-                                            <NdNumberBox id="txtCostPrice" parent={this} title={this.t("txtCostPrice")} titleAlign={"top"} dt={{data:this.itemsObj.dt('ITEMS'),field:"COST_PRICE"}}
+                                            <NdNumberBox id="txtCostPrice" parent={this} title={this.t("txtCostPrice")}  titleAlign={"top"} tabIndex={this.tabIndex}
+                                            dt={{data:this.itemsObj.dt('ITEMS'),field:"COST_PRICE"}}
                                             format={"#,##0.000"} step={0.1}
                                             param={this.param.filter({ELEMENT:'txtCostPrice',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtCostPrice',USERS:this.user.CODE})}>
                                             </NdNumberBox>
                                         </div>
                                         <div className='col-2'>
-                                            <NdNumberBox id="txtMinSalePrice" parent={this} title={this.t("txtMinSalePrice")} titleAlign={"top"} dt={{data:this.itemsObj.dt('ITEMS'),field:"MIN_PRICE"}}
+                                            <NdNumberBox id="txtMinSalePrice" parent={this} title={this.t("txtMinSalePrice")} titleAlign={"top"} tabIndex={this.tabIndex}
+                                            dt={{data:this.itemsObj.dt('ITEMS'),field:"MIN_PRICE"}}
                                             format={"#,##0.000"} step={0.1}
                                             editable={this.state.isItemGrpForMinMaxAccess}
                                             param={this.param.filter({ELEMENT:'txtMinSalePrice',USERS:this.user.CODE})}
@@ -922,7 +919,8 @@ export default class itemCard extends React.Component
                                             </NdNumberBox>
                                         </div>
                                         <div className='col-2'>
-                                            <NdNumberBox id="txtMaxSalePrice" parent={this} title={this.t("txtMaxSalePrice")} titleAlign={"top"} dt={{data:this.itemsObj.dt('ITEMS'),field:"MAX_PRICE"}}
+                                            <NdNumberBox id="txtMaxSalePrice" parent={this} title={this.t("txtMaxSalePrice")} titleAlign={"top"} tabIndex={this.tabIndex}
+                                            dt={{data:this.itemsObj.dt('ITEMS'),field:"MAX_PRICE"}}
                                             format={"#,##0.000"} step={0.1}
                                             editable={this.state.isItemGrpForMinMaxAccess}
                                             param={this.param.filter({ELEMENT:'txtMaxSalePrice',USERS:this.user.CODE})}
@@ -1205,7 +1203,7 @@ export default class itemCard extends React.Component
                         height={'320'}
                         position={{of:'#root'}}
                         >
-                            <Form colCount={1} height={'fit-content'} id="frmPrice">
+                            <Form colCount={1} height={'fit-content'} id={"frmPrice" + this.tabIndex}>
                                 <Item>
                                     <Label text={this.t("popPrice.dtPopPriStartDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtPopPriStartDate"}/>
@@ -1217,7 +1215,7 @@ export default class itemCard extends React.Component
                                 <Item>
                                     <Label text={this.t("popPrice.txtPopPriQuantity")} alignment="right" />
                                     <NdNumberBox id={"txtPopPriQuantity"} parent={this} simple={true}>
-                                        <Validator validationGroup={"frmPrice"}>
+                                        <Validator validationGroup={"frmPrice" + this.tabIndex}>
                                             <RequiredRule message="Miktar'ı boş geçemezsiniz !" />
                                         </Validator>
                                     </NdNumberBox>
@@ -1225,7 +1223,7 @@ export default class itemCard extends React.Component
                                 <Item>
                                     <Label text={this.t("popPrice.txtPopPriPrice")} alignment="right" />
                                     <NdNumberBox id={"txtPopPriPrice"} parent={this} simple={true}>
-                                        <Validator validationGroup={"frmPrice"}>
+                                        <Validator validationGroup={"frmPrice" + this.tabIndex}>
                                             <RequiredRule message="Fiyat'ı boş geçemezsiniz !" />
                                             <RangeRule min={0.001} message={"Fiyat sıfırdan küçük olamaz !"} />
                                         </Validator> 
@@ -1234,9 +1232,10 @@ export default class itemCard extends React.Component
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} validationGroup="frmPrice"
+                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmPrice" + this.tabIndex}
                                             onClick={async (e)=>
                                             {
+                                                console.log(e)
                                                 if(e.validationGroup.validate().status == "valid")
                                                 {
                                                     //FİYAT GİRERKEN MALİYET FİYAT KONTROLÜ
@@ -1497,7 +1496,7 @@ export default class itemCard extends React.Component
                         height={'320'}
                         position={{of:'#root'}}
                         >
-                            <Form colCount={1} height={'fit-content'} id="frmItemCustomer">
+                            <Form colCount={1} height={'fit-content'} id={"frmItemCustomer" + + this.tabIndex}>
                                 <Item>
                                     <Label text={this.t("popCustomer.txtPopCustomerCode")} alignment="right" />
                                     <NdTextBox id={"txtPopCustomerCode"} parent={this} simple={true}
@@ -1583,7 +1582,7 @@ export default class itemCard extends React.Component
                                 <Item>
                                     <Label text={this.t("popCustomer.txtPopCustomerItemCode")} alignment="right" />
                                     <NdTextBox id={"txtPopCustomerItemCode"} parent={this} simple={true} >
-                                    <Validator validationGroup={"frmItemCustomer"}>
+                                    <Validator validationGroup={"frmItemCustomer" + this.tabIndex}>
                                             <RequiredRule message="Tedarikci Kodu Giriniz !" />
                                     </Validator> 
                                     </NdTextBox>
@@ -1591,7 +1590,7 @@ export default class itemCard extends React.Component
                                 <Item>
                                     <Label text={this.t("popCustomer.txtPopCustomerPrice")} alignment="right" />
                                     <NdNumberBox id={"txtPopCustomerPrice"} parent={this} simple={true} >
-                                    <Validator validationGroup={"frmItemCustomer"}>
+                                    <Validator validationGroup={"frmItemCustomer" + this.tabIndex}>
                                             <RequiredRule message="Fiyat'ı boş geçemezsiniz !" />
                                             <RangeRule min={0.001} message={"Fiyat sıfırdan küçük olamaz !"} />
                                         </Validator> 
@@ -1600,7 +1599,7 @@ export default class itemCard extends React.Component
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} validationGroup="frmItemCustomer"
+                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmItemCustomer" + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
