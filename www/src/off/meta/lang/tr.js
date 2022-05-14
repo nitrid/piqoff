@@ -625,6 +625,12 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
         },
+        msgNotQuantity:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır !"
+        },
         msgDblDepot:
         {
             title: "Dikkat",
@@ -642,7 +648,7 @@ export const langTr =
         {
             title: "Dikkat",
             btn01: "Tamam",
-            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgSuccess: "Transfer İşleminiz  Gerçekleştirilmiş ve Başarıyla Kayıt Edilmiştir. !",
             msgFailed: "Kayıt işleminiz başarısız !"
         },
         msgSaveValid:

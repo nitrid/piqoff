@@ -1016,5 +1016,28 @@ export const prm =
             CAPTION : "Varsayılan Depo"
         }
     },
+        //#endregion
+
+    //#region Depo Miktar Listesi
+     // negativeQuantity
+     {
+        TYPE : 1,
+        ID :"negativeQuantity",
+        VALUE : 
+        {
+            value : true
+        },
+        SPECIAL : "",
+        PAGE : "stk_03_004",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Depolar Arası Transfer",
+            CAPTION : "Eksiye Düşemeye İzin Verme"
+        }
+    },
     //#endregion
+
 ]
