@@ -996,4 +996,25 @@ export const prm =
     },
     //#endregion
 
+    //#region Depo Miktar Listesi
+    // maxDiscount
+    {
+        TYPE : 2,
+        ID :"cmbDepot",
+        VALUE : 
+        {
+            value : '1A428DFC-48A9-4AC6-AF20-4D0A4D33F316'
+        },
+        SPECIAL : "",
+        PAGE : "stk_03_006",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Depo Miktar Listesi",
+            CAPTION : "Varsayılan Depo"
+        }
+    },
+    //#endregion
 ]

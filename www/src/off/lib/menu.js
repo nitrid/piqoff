@@ -112,7 +112,7 @@ export const menu = (e) =>
                         {
                             id: 'stk_03_006',
                             text: e.t('menu.stk_03_006'),//'Stok Listesi',
-                            path: 'items/lists/DepotQuantityList'
+                            path: 'items/lists/itemQuantityList'
                         },
                     ]
                 },

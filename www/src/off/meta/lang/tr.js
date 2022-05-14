@@ -37,12 +37,12 @@ export const langTr =
         stk_02_003: "Kayıp Ürün Çıkışı",
         stk_02_004: "Etiket Basımı",
         stk_02_005: "İade Ürünü Toplama",
-        stk_03_006 : "Depo Ürün Miktarları Listesi",
         stk_03_001: "Stok Listesi",
         stk_03_002: "Fiyat Listesi",
         stk_03_003: "Barkod Listesi",
         stk_03_004: "Depo/Mağaza Listesi",
         stk_03_005: "Multi Kod Listesi",
+        stk_03_006 : "Depo Ürün Miktarları Listesi",
         stk_04_001: "Toplu Stok Düzenleme",
         stk_04_002: "İade Operasyonları",
         stk_04_003 : "Sayım Kesinleştirme",
@@ -1171,6 +1171,20 @@ export const langTr =
             clmMaxPrice : "Maximum Satış Fiyatı",
             clmStatus : "Durum",
 
+        },
+    },
+    stk_03_006 : 
+    {
+        txtItemName : "Ürün Adı",
+        cmbDepot : "Depo",
+        btnCheck : "Aktif",
+        btnGet :"Getir",
+        grdListe : 
+        {
+            clmCode: "Kodu",
+            clmName : "Adı",           
+            clmQuantity : "Miktar",
+            clmBarcode : "Barkodu"
         },
     },
     stk_04_001 : 
