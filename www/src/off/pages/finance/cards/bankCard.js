@@ -24,13 +24,14 @@ import { datatable } from '../../../../core/core.js';
 
 export default class bankCard extends React.Component
 {
-    constructor()
+    constructor(props)
     {
-        super()
+        super(props)
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.bankObj = new bankCls();
         this.prevCode = "";
+        this.tabIndex = props.data.tabkey
     }
     async componentDidMount()
     {
@@ -179,7 +180,7 @@ export default class bankCard extends React.Component
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmBank"
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmBank"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -291,7 +292,7 @@ export default class bankCard extends React.Component
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id="frmBank">
+                            <Form colCount={3} id={"frmBank"  + this.tabIndex}>
                                  {/* txtCode */}
                                  <Item>
                                     <Label text={this.t("txtCode")} alignment="right" />
@@ -335,7 +336,7 @@ export default class bankCard extends React.Component
                                     param={this.param.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmBank"}>
+                                        <Validator validationGroup={"frmBank"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validCode")} />
                                         </Validator>  
                                     </NdTextBox>
@@ -390,7 +391,7 @@ export default class bankCard extends React.Component
                                     param={this.param.filter({ELEMENT:'txtIban',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtIban',USERS:this.user.CODE})}
                                     >
-                                         <Validator validationGroup={"frmBank"}>
+                                         <Validator validationGroup={"frmBank"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validIban")} />
                                         </Validator>  
                                     </NdTextBox>

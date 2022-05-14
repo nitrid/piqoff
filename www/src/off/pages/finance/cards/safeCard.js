@@ -24,13 +24,14 @@ import { datatable } from '../../../../core/core.js';
 
 export default class safeCard extends React.Component
 {
-    constructor()
+    constructor(props)
     {
-        super()
+        super(props)
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.safeObj = new safeCls();
         this.prevCode = "";
+        this.tabIndex = props.data.tabkey
     }
     async componentDidMount()
     {
@@ -179,7 +180,7 @@ export default class safeCard extends React.Component
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmSafe"
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmSafe"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -335,7 +336,7 @@ export default class safeCard extends React.Component
                                     param={this.param.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmSafe"}>
+                                        <Validator validationGroup={"frmSafe"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validCode")} />
                                         </Validator>  
                                     </NdTextBox>
