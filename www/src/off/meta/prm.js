@@ -996,4 +996,48 @@ export const prm =
     },
     //#endregion
 
+    //#region Depo Miktar Listesi
+    // maxDiscount
+    {
+        TYPE : 2,
+        ID :"cmbDepot",
+        VALUE : 
+        {
+            value : '1A428DFC-48A9-4AC6-AF20-4D0A4D33F316'
+        },
+        SPECIAL : "",
+        PAGE : "stk_03_006",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Depo Miktar Listesi",
+            CAPTION : "Varsayılan Depo"
+        }
+    },
+        //#endregion
+
+    //#region Depo Miktar Listesi
+     // negativeQuantity
+     {
+        TYPE : 1,
+        ID :"negativeQuantity",
+        VALUE : 
+        {
+            value : true
+        },
+        SPECIAL : "",
+        PAGE : "stk_03_004",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Depolar Arası Transfer",
+            CAPTION : "Eksiye Düşemeye İzin Verme"
+        }
+    },
+    //#endregion
+
 ]

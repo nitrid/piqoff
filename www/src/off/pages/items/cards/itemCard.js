@@ -24,9 +24,9 @@ import NumberBox from 'devextreme-react/number-box';
 
 export default class itemCard extends React.Component
 {
-    constructor()
+    constructor(props)
     {
-        super()                
+        super(props)                
         this.state = {underPrice : 0,isItemGrpForOrginsValid : false,isItemGrpForMinMaxAccess : false}
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
@@ -34,7 +34,7 @@ export default class itemCard extends React.Component
         this.itemsPriceSupply = new itemPriceCls();   
         this.itemsPriceLogObj = new itemLogPriceCls();        
         this.prevCode = "";
-        
+        this.tabIndex = props.data.tabkey
         this._onItemRendered = this._onItemRendered.bind(this)
     }    
     async componentDidMount()

@@ -23,14 +23,15 @@ import { datatable } from '../../../../core/core.js';
 
 export default class CustomerCard extends React.Component
 {
-    constructor()
+    constructor(props)
     {
-        super()
+        super(props)
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.customerObj = new customersCls();
         this.prevCode = "";
         this.state={officalVisible:true}
+        this.tabIndex = props.data.tabkey
         
 
         this._onItemRendered = this._onItemRendered.bind(this)
@@ -273,7 +274,7 @@ export default class CustomerCard extends React.Component
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmCustomers"
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmCustomers"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(this.customerObj.dt()[0].SIRET_ID == '' || this.customerObj.dt()[0].APE_CODE == '' || this.customerObj.dt()[0].TAX_OFFICE == '' || this.customerObj.dt()[0].TAX_NO == '')
@@ -409,7 +410,7 @@ export default class CustomerCard extends React.Component
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={2} id="frmCustomers">
+                            <Form colCount={2} id={"frmCustomers"  + this.tabIndex}>
                                 {/* cmbType */}
                                 <Item>
                                     <Label text={this.t("cmbType")} alignment="right" />
@@ -482,7 +483,7 @@ export default class CustomerCard extends React.Component
                                     param={this.param.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmCustomers"}>
+                                        <Validator validationGroup={"frmCustomers"  + this.tabIndex}>
                                             <RequiredRule message="Kodu boş geçemezsiniz !" />
                                         </Validator>  
                                     </NdTextBox>

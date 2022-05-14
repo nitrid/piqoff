@@ -109,6 +109,11 @@ export const menu = (e) =>
                         //     text: e.t('menu.stk_03_005'),//'Multi Kod Listesi',
                         //     path: 'items/lists/multicodeList'
                         // },
+                        {
+                            id: 'stk_03_006',
+                            text: e.t('menu.stk_03_006'),//'Stok Listesi',
+                            path: 'items/lists/itemQuantityList'
+                        },
                     ]
                 },
                 {

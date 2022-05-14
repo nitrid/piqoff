@@ -34,7 +34,7 @@ export const langTr =
         stk_01_006: "Depo/Mağaza Tanımları",
         stk_02_001: "Sayım Evrakı",
         stk_02_002: "Depo/Mağaza Arası Sevk",
-        stk_02_003: "Kayıp Ürün Fişi",
+        stk_02_003: "Kayıp Ürün Çıkışı",
         stk_02_004: "Etiket Basımı",
         stk_02_005: "İade Ürünü Toplama",
         stk_03_001: "Stok Listesi",
@@ -42,6 +42,7 @@ export const langTr =
         stk_03_003: "Barkod Listesi",
         stk_03_004: "Depo/Mağaza Listesi",
         stk_03_005: "Multi Kod Listesi",
+        stk_03_006 : "Depo Ürün Miktarları Listesi",
         stk_04_001: "Toplu Stok Düzenleme",
         stk_04_002: "İade Operasyonları",
         stk_04_003 : "Sayım Kesinleştirme",
@@ -456,6 +457,8 @@ export const langTr =
             clmRefNo : "SIRA",
             clmDocDate : "TARIH",
             clmDepotName : "DEPO/MAĞAZA",
+            clmQuantity :"Toplam Ürün Miktarı",
+            clmTotalLine : "Satır Sayısı"
         },
         pg_txtItemsCode : 
         {
@@ -622,6 +625,12 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
         },
+        msgNotQuantity:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır !"
+        },
         msgDblDepot:
         {
             title: "Dikkat",
@@ -639,7 +648,7 @@ export const langTr =
         {
             title: "Dikkat",
             btn01: "Tamam",
-            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgSuccess: "Transfer İşleminiz  Gerçekleştirilmiş ve Başarıyla Kayıt Edilmiştir. !",
             msgFailed: "Kayıt işleminiz başarısız !"
         },
         msgSaveValid:
@@ -1168,6 +1177,20 @@ export const langTr =
             clmMaxPrice : "Maximum Satış Fiyatı",
             clmStatus : "Durum",
 
+        },
+    },
+    stk_03_006 : 
+    {
+        txtItemName : "Ürün Adı",
+        cmbDepot : "Depo",
+        btnCheck : "Aktif",
+        btnGet :"Getir",
+        grdListe : 
+        {
+            clmCode: "Kodu",
+            clmName : "Adı",           
+            clmQuantity : "Miktar",
+            clmBarcode : "Barkodu"
         },
     },
     stk_04_001 : 

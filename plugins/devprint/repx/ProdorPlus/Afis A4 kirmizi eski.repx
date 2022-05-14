@@ -6,7 +6,7 @@
       <Controls>
         <Item1 Ref="3" ControlType="XRLabel" Name="label5" Multiline="true" Text="BADOIT &#xD;&#xA;CITRON TOUCHE DE CITRON &#xD;&#xA;VERT&#xD;&#xA; 1LT" TextAlignment="MiddleCenter" SizeF="732.333252,229.8461" LocationFloat="39.5833321, 0" Font="Arial Black, 35pt, style=Bold" Padding="2,2,0,0,100">
           <ExpressionBindings>
-            <Item1 Ref="4" EventName="BeforePrint" PropertyName="Text" Expression="[NAME]" />
+            <Item1 Ref="4" EventName="BeforePrint" PropertyName="Text" Expression="[DESING_NAME]" />
           </ExpressionBindings>
           <StylePriority Ref="5" UseFont="false" UseTextAlignment="false" />
         </Item1>

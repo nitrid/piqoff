@@ -21,13 +21,14 @@ import { dialog } from '../../../../core/react/devex/dialog.js';
 
 export default class purchaseContract extends React.Component
 {
-    constructor()
+    constructor(props)
     {
-        super() 
+        super(props) 
                
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.itemPriceObj = new itemPriceCls();
+        this.tabIndex = props.data.tabkey
 
         this._getItems = this._getItems.bind(this)
         this._getContracts = this._getContracts.bind(this)
@@ -84,7 +85,7 @@ export default class purchaseContract extends React.Component
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmPurcContract"
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmPurcContract"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -237,7 +238,7 @@ export default class purchaseContract extends React.Component
                                     param={this.param.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmPurcContract"}>
+                                        <Validator validationGroup={"frmPurcContract"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validCustomerCode")} />
                                         </Validator>  
                                     </NdTextBox>
@@ -327,7 +328,7 @@ export default class purchaseContract extends React.Component
                             }}>
                                 <Item location="after">
                                     <Button icon="add"
-                                    validationGroup="frmPurcContract"
+                                    validationGroup={"frmPurcContract"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -446,7 +447,7 @@ export default class purchaseContract extends React.Component
                                             },
                                         ]
                                     }>       
-                                    <Validator validationGroup={"frmPurcContItems"}>
+                                    <Validator validationGroup={"frmPurcContItems"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validItemsCode")} />
                                     </Validator>                                 
                                     </NdTextBox>
@@ -459,7 +460,7 @@ export default class purchaseContract extends React.Component
                                 <Item>
                                     <Label text={this.t("popItems.txtPopItemsPrice")} alignment="right" />
                                     <NdTextBox id={"txtPopItemsPrice"} parent={this} simple={true} >
-                                        <Validator validationGroup={"frmPurcContItems"}>
+                                        <Validator validationGroup={"frmPurcContract"  + this.tabIndex}>
                                                 <RequiredRule message={this.t("validItemPrice")} />
                                         </Validator>
                                     </NdTextBox>
@@ -479,7 +480,7 @@ export default class purchaseContract extends React.Component
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} validationGroup="frmPurcContItems"
+                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmPurcContItems"  + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")

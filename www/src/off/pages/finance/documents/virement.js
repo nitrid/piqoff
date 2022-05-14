@@ -272,7 +272,7 @@ export default class virement extends React.Component
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmVirement"
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmVirement"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(this.docLocked == true)
@@ -455,7 +455,7 @@ export default class virement extends React.Component
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmVirement"}>
+                                            <Validator validationGroup={"frmVirement"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRef")} />
                                                 </Validator>  
                                             </NdTextBox>
@@ -503,7 +503,7 @@ export default class virement extends React.Component
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmVirement"}>
+                                            <Validator validationGroup={"frmVirement"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRefNo")} />
                                                 </Validator> 
                                             </NdTextBox>
@@ -550,7 +550,7 @@ export default class virement extends React.Component
                                             
                                     }).bind(this)}
                                     >
-                                        <Validator validationGroup={"frmVirement"}>
+                                        <Validator validationGroup={"frmVirement"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
@@ -567,7 +567,7 @@ export default class virement extends React.Component
                             }}>
                                 <Item location="after">
                                     <Button icon="add" text={this.t("btnSafeToSafe")}
-                                    validationGroup="frmVirement"
+                                    validationGroup={"frmVirement"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -593,7 +593,7 @@ export default class virement extends React.Component
                                 </Item>
                                 <Item location="after">
                                     <Button icon="add" text={this.t("btnSafeToBank")}
-                                    validationGroup="frmVirement"
+                                    validationGroup={"frmVirement"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -619,7 +619,7 @@ export default class virement extends React.Component
                                 </Item>
                                 <Item location="after">
                                     <Button icon="add" text={this.t("btnBankToSafe")}
-                                    validationGroup="frmVirement"
+                                    validationGroup={"frmVirement"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -645,7 +645,7 @@ export default class virement extends React.Component
                                 </Item>
                                 <Item location="after">
                                     <Button icon="add" text={this.t("btnBankToBank")}
-                                    validationGroup="frmVirement"
+                                    validationGroup={"frmVirement"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -767,7 +767,7 @@ export default class virement extends React.Component
                                     param={this.param.filter({ELEMENT:'cmbSafeToSafe',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbSafeToSafe',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmCaseToCase"}>
+                                        <Validator validationGroup={"frmCaseToCase"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validSafe")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -800,7 +800,7 @@ export default class virement extends React.Component
                                     param={this.param.filter({ELEMENT:'cmbSafeToSafe2',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbSafeToSafe2',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmCaseToCase"}>
+                                        <Validator validationGroup={"frmCaseToCase"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validSafe")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -813,7 +813,7 @@ export default class virement extends React.Component
                                         param={this.param.filter({ELEMENT:'safeToSafeAmount',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'safeToSafeAmount',USERS:this.user.CODE})}
                                         >
-                                        <Validator validationGroup={"frmCaseToCase"}>
+                                        <Validator validationGroup={"frmCaseToCase"  + this.tabIndex}>
                                             <RequiredRule message={this.t("ValidAmount")} />
                                         </Validator>  
                                         </NdNumberBox>
@@ -834,7 +834,7 @@ export default class virement extends React.Component
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.t("popSafeToSafe.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                            validationGroup="frmCaseToCase"
+                                            validationGroup={"frmCaseToCase"  + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
                                                

@@ -26,14 +26,15 @@ import tr from '../../../meta/lang/devexpress/tr.js';
 
 export default class collection extends React.Component
 {
-    constructor()
+    constructor(props)
     {
-        super()
+        super(props)
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.docObj = new docCls();
-
+        this.tabIndex = props.data.tabkey
+        
         this._calculateTotal = this._calculateTotal.bind(this)
         this._addPayment = this._addPayment.bind(this)
        
@@ -264,7 +265,7 @@ export default class collection extends React.Component
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmCollection"
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmCollection"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(this.docLocked == true)
@@ -422,7 +423,7 @@ export default class collection extends React.Component
                     {/* Form */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id="frmCollection">
+                            <Form colCount={3} id={"frmCollection"  + this.tabIndex}>
                                 {/* txtRef-Refno */}
                                 <Item>
                                     <Label text={this.t("txtRefRefno")} alignment="right" />
@@ -448,7 +449,7 @@ export default class collection extends React.Component
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmCollection"}>
+                                            <Validator validationGroup={"frmCollection"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRef")} />
                                                 </Validator>  
                                             </NdTextBox>
@@ -496,7 +497,7 @@ export default class collection extends React.Component
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmCollection"}>
+                                            <Validator validationGroup={"frmCollection"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRefNo")} />
                                                 </Validator> 
                                             </NdTextBox>
@@ -544,7 +545,7 @@ export default class collection extends React.Component
                                             
                                     }).bind(this)}
                                     >
-                                        <Validator validationGroup={"frmCollection"}>
+                                        <Validator validationGroup={"frmCollection"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
@@ -628,7 +629,7 @@ export default class collection extends React.Component
                                     param={this.param.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmCollection"}>
+                                        <Validator validationGroup={"frmCollection"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validCustomerCode")} />
                                         </Validator>  
                                     </NdTextBox>
@@ -701,7 +702,7 @@ export default class collection extends React.Component
                             }}>
                                 <Item location="after">
                                     <Button icon="add" text={this.t("btnCash")}
-                                    validationGroup="frmCollection"
+                                    validationGroup={"frmCollection"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -725,7 +726,7 @@ export default class collection extends React.Component
                                 </Item>
                                 <Item location="after">
                                     <Button icon="add" text={this.t("btnCheck")}
-                                    validationGroup="frmCollection"
+                                    validationGroup={"frmCollection"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -750,7 +751,7 @@ export default class collection extends React.Component
                                 </Item>
                                 <Item location="after">
                                     <Button icon="add" text={this.t("btnBank")} width={200}
-                                    validationGroup="frmCollection"
+                                    validationGroup={"frmCollection"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -815,7 +816,7 @@ export default class collection extends React.Component
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={4} parent={this} id="frmCollection">                            
+                            <Form colCount={4} parent={this} id={"frmCollection"  + this.tabIndex}>                            
                                 {/* TOPLAM */}
                                 <Item colSpan={3}></Item>
                                 <Item>
@@ -859,7 +860,7 @@ export default class collection extends React.Component
                                     param={this.param.filter({ELEMENT:'cmbCashSafe',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbCashSafe',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmCollCash"}>
+                                        <Validator validationGroup={"frmCollCash"  + this.tabIndex}>
                                             <RequiredRule message={this.t("ValidCash")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -872,7 +873,7 @@ export default class collection extends React.Component
                                         param={this.param.filter({ELEMENT:'numCash',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'numCash',USERS:this.user.CODE})}
                                         >
-                                        <Validator validationGroup={"frmCollCash"}>
+                                        <Validator validationGroup={"frmCollCash"  + this.tabIndex}>
                                             <RequiredRule message={this.t("ValidCash")} />
                                         </Validator>  
                                         </NdNumberBox>
@@ -893,7 +894,7 @@ export default class collection extends React.Component
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.t("popCash.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                            validationGroup="frmCollCash"
+                                            validationGroup={"frmCollCash"  + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")

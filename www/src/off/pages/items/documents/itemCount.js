@@ -763,7 +763,7 @@ export default class itemCount extends React.Component
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_Docs.title")} 
-                                    data={{source:{select:{query : "SELECT REF,REF_NO,DOC_DATE,DEPOT_NAME FROM ITEM_COUNT_VW_01 GROUP BY REF,REF_NO,DOC_DATE,DEPOT_NAME"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT REF,REF_NO,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE,DEPOT_NAME,SUM(QUANTITY) AS QUANTITY,COUNT(REF) AS TOTAL_LINE  FROM ITEM_COUNT_VW_01 GROUP BY REF,REF_NO,DOC_DATE,DEPOT_NAME"},sql:this.core.sql}}}
                                     button=
                                     {
                                         [
@@ -779,10 +779,12 @@ export default class itemCount extends React.Component
                                         
                                     }
                                     >
-                                        <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150} defaultSortOrder="asc"/>
-                                        <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={300} defaultSortOrder="asc" />                                        
+                                        <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={70} defaultSortOrder="asc"/>
+                                        <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={70} defaultSortOrder="asc" />                                        
                                         <Column dataField="DEPOT_NAME" caption={this.t("pg_Docs.clmDepotName")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="DOC_DATE" caption={this.t("pg_Docs.clmDocDate")} width={300} defaultSortOrder="asc" />
+                                        <Column dataField="DOC_DATE" caption={this.t("pg_Docs.clmDocDate")} width={100} defaultSortOrder="asc" />
+                                        <Column dataField="TOTAL_LINE" caption={this.t("pg_Docs.clmTotalLine")} width={200} defaultSortOrder="asc" />
+                                        <Column dataField="QUANTITY" caption={this.t("pg_Docs.clmQuantity")} width={200} defaultSortOrder="asc" />
                                         
                                     </NdPopGrid>
                                 </Item>

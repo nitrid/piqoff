@@ -789,6 +789,7 @@ export class datatable
         {
             if(typeof this[i].stat != 'undefined' && typeof tmpStat.find(x => x == this[i].stat))
             {
+
                 let tmpQuery = undefined;
                 if(this[i].stat == 'new')
                 {
@@ -807,29 +808,29 @@ export class datatable
                 else if(this[i].stat == 'edit')
                 {
                     tmpQuery = {...this.updateCmd}
-                    //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 28.02.2022
-                    if(typeof tmpQuery.local != 'undefined' && typeof tmpQuery.local.set != 'undefined')
-                    {
-                        //SET
-                        for (let x = 0; x < Object.keys(tmpQuery.local.set).length; x++) 
-                        {
-                            let tmpKey = Object.keys(tmpQuery.local.set)[x]
-                            let tmpMap = Object.values(tmpQuery.local.set)[x]
-                            tmpQuery.local.set[tmpKey] = this[i][tmpMap.map]
-                        }
+                    // //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 28.02.2022
+                    // if(typeof tmpQuery.local != 'undefined' && typeof tmpQuery.local.set != 'undefined')
+                    // {
+                    //     //SET
+                    //     for (let x = 0; x < Object.keys(tmpQuery.local.set).length; x++) 
+                    //     {
+                    //         let tmpKey = Object.keys(tmpQuery.local.set)[x]
+                    //         let tmpMap = Object.values(tmpQuery.local.set)[x]
+                    //         tmpQuery.local.set[tmpKey] = this[i][tmpMap.map]
+                    //     }
                         
-                    }
-                    //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 28.02.2022
-                    if(typeof tmpQuery.local != 'undefined' && typeof tmpQuery.local.where != 'undefined')
-                    {
-                        //WHERE
-                        for (let x = 0; x < Object.keys(tmpQuery.local.where).length; x++) 
-                        {
-                            let tmpKey = Object.keys(tmpQuery.local.where)[x]
-                            let tmpMap = Object.values(tmpQuery.local.where)[x]
-                            tmpQuery.local.where[tmpKey] = this[i][tmpMap.map]
-                        }
-                    }
+                    // }
+                    // //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 28.02.2022
+                    // if(typeof tmpQuery.local != 'undefined' && typeof tmpQuery.local.where != 'undefined')
+                    // {
+                    //     //WHERE
+                    //     for (let x = 0; x < Object.keys(tmpQuery.local.where).length; x++) 
+                    //     {
+                    //         let tmpKey = Object.keys(tmpQuery.local.where)[x]
+                    //         let tmpMap = Object.values(tmpQuery.local.where)[x]
+                    //         tmpQuery.local.where[tmpKey] = this[i][tmpMap.map]
+                    //     }
+                    // }
                 }
             
                 if(typeof tmpQuery != 'undefined')
