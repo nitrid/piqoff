@@ -662,10 +662,13 @@ export default class labelPrinting extends React.Component
                                             }
 
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
+                                            console.log(tmpData)
                                             this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" +  JSON.stringify(tmpData.result.recordset)+ "}",(pResult) => 
                                             {
+                                                console.log(pResult)
                                                 if(pResult.split('|')[0] != 'ERR')
                                                 {
+                                                    console.log(11)
                                                     var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
                                                     mywindow.onload = async function() 
                                                     {

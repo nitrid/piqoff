@@ -34,9 +34,10 @@ export const langTr =
         stk_01_006: "Depo/Mağaza Tanımları",
         stk_02_001: "Sayım Evrakı",
         stk_02_002: "Depo/Mağaza Arası Sevk",
-        stk_02_003: "Kayıp Ürün Fişi",
+        stk_02_003: "Kayıp Ürün Çıkışı",
         stk_02_004: "Etiket Basımı",
         stk_02_005: "İade Ürünü Toplama",
+        stk_03_006 : "Depo Ürün Miktarları Listesi",
         stk_03_001: "Stok Listesi",
         stk_03_002: "Fiyat Listesi",
         stk_03_003: "Barkod Listesi",
@@ -456,6 +457,8 @@ export const langTr =
             clmRefNo : "SIRA",
             clmDocDate : "TARIH",
             clmDepotName : "DEPO/MAĞAZA",
+            clmQuantity :"Toplam Ürün Miktarı",
+            clmTotalLine : "Satır Sayısı"
         },
         pg_txtItemsCode : 
         {

@@ -33,6 +33,7 @@ export const langTr =
         stk_03_003: "Barkod Listesi",
         stk_03_004: "Depo Listesi",
         stk_03_005: "Multi Kod Listesi",
+        stk_03_006 : "Depo Ürün Miktarları Listesi",
         cri: "Cari",
         cri_01: "Tanımlar",
         cri_02: "Listeler",
