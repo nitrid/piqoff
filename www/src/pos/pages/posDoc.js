@@ -1728,7 +1728,7 @@ export default class posDoc extends React.Component
                                             this.calcGrandTotal()
                                             console.log(tmpData)
                                         }}>
-                                            <i className="text-white fa-solid fa-plus-minus" style={{fontSize: "24px"}} />
+                                            <i className="text-white fa-solid fa-square-root-variable" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* Blank */}
@@ -1884,7 +1884,7 @@ export default class posDoc extends React.Component
                                                 await dialog(tmpConfObj);
                                             }
                                         }}>
-                                            <i className="text-white fa-solid fa-book" style={{fontSize: "24px"}} />
+                                            <i className="text-white fa-solid fa-plus-minus" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* Blank */}

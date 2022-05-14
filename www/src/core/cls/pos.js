@@ -895,14 +895,17 @@ export class posDeviceCls
 {
     constructor()
     {
-        if(!core.instance.util.isElectron())
+        if(core.instance.util.isElectron())
         {
+            console.log(1)
+
             this.escpos = require('escpos');
             this.escpos.Serial = require('escpos-serialport');
             this.escpos.Screen = require('escpos-screen');
             this.escpos.USB = require('escpos-usb');
             this.path = require('path')
             this.serialport = require('serialport');
+            console.log(this.escpos)
         }
 
         this.lcdPort = "";
