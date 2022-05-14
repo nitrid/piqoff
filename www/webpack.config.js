@@ -32,6 +32,15 @@ module.exports =
             }
         ]
     },
+    externals:
+    {
+        'escpos':'escpos',
+        'escpos-serialport':'escpos-serialport',
+        'escpos-screen':'escpos-screen',
+        'escpos-usb':'escpos-usb',
+        'serialport':'serialport',
+        'path':'path'
+    },
     resolve: 
     { 
         alias: 
@@ -40,14 +49,14 @@ module.exports =
             globalize: path.resolve(__dirname, "node_modules/globalize/dist/globalize"),
             cldr$: path.resolve(__dirname, "node_modules/cldrjs/dist/cldr.js"),
             cldr: path.resolve(__dirname, "node_modules/cldrjs/dist/cldr"),
-            'escpos': false,
-            'escpos-serialport' : false,
-            'escpos-screen' : false,
-            'escpos-usb' : false,
-            'serialport' : false,
-            'path' : false
+            // 'escpos': false,
+            // 'escpos-serialport' : false,
+            // 'escpos-screen' : false,
+            // 'escpos-usb' : false,
+            // 'serialport' : false,
+            // 'path' : false
         },
-        extensions: ["*", ".js", ".jsx"] 
+        extensions: ["*", ".js", ".jsx"]
     },
     output: 
     {
