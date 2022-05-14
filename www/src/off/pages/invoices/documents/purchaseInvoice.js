@@ -439,21 +439,18 @@ export default class purchaseInvoice extends React.Component
     }
     async _getDispatch()
     {
-        let tmpSource =
+        let tmpQuery = 
         {
-            source : 
-            {
-                groupBy : this.groupList,
-                select : 
-                {
-                    query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE OUTPUT = @OUTPUT AND INVOICE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 0 AND DOC_TYPE IN(40)",
-                    param : ['OUTPUT:string|50'],
-                    value : [this.docObj.dt()[0].OUTPUT]
-                },
-                sql : this.core.sql
-            }
+            query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE OUTPUT = @OUTPUT AND INVOICE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 0 AND DOC_TYPE IN(40)",
+            param : ['OUTPUT:string|50'],
+            value : [this.docObj.dt()[0].OUTPUT]
         }
-        await this.pg_dispatchGrid.setSource(tmpSource)
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        if(tmpData.result.recordset.length > 0)
+        {   
+            await this.pg_dispatchGrid.setData(tmpData.result.recordset)
+        }
+
         this.pg_dispatchGrid.show()
         this.pg_dispatchGrid.onClick = async(data) =>
         {
@@ -806,12 +803,12 @@ export default class purchaseInvoice extends React.Component
                                             maxLength={32}
                                             onValueChanged={(async(e)=>
                                             {
-                                                this.docObj.docCustomer.dt()[0].REF = e.value 
+                                                
                                                 let tmpQuery = 
                                                 {
                                                     query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 0 AND DOC_TYPE = 20 AND REF = @REF ",
                                                     param : ['REF:string|25'],
-                                                    value : [e.value]
+                                                    value : [this.txtRef.value]
                                                 }
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
                                                 if(tmpData.result.recordset.length > 0)
@@ -960,7 +957,7 @@ export default class purchaseInvoice extends React.Component
                                                     if(typeof tmpDatas != 'undefined' && tmpDatas.value ==  true)
                                                     {
                                                         this.txtRef.setState({value:tmpData.result.recordset[0].CODE});
-                                                        this.txtRef.props.onChange()
+                                                        this.txtRef.props.onValueChanged()
                                                     }
                                                     this._getItems()
                                                 }
@@ -1003,7 +1000,7 @@ export default class purchaseInvoice extends React.Component
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
                                                                 this.txtRef.setState({value:data[0].CODE});
-                                                                this.txtRef.props.onChange()
+                                                                this.txtRef.props.onValueChanged()
                                                             }
                                                             this._getItems()
                                                         }

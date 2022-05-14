@@ -369,21 +369,17 @@ export default class salesInvoice extends React.Component
     }
     async _getDispatch()
     {
-        let tmpSource =
+        let tmpQuery = 
         {
-            source : 
-            {
-                groupBy : this.groupList,
-                select : 
-                {
-                    query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND INVOICE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND DOC_TYPE IN(40)",
-                    param : ['INPUT:string|50'],
-                    value : [this.docObj.dt()[0].INPUT]
-                },
-                sql : this.core.sql
-            }
+            query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND INVOICE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND DOC_TYPE IN(40)",
+            param : ['INPUT:string|50'],
+            value : [this.docObj.dt()[0].INPUT]
         }
-        await this.pg_dispatchGrid.setSource(tmpSource)
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        if(tmpData.result.recordset.length > 0)
+        {   
+            await this.pg_dispatchGrid.setData(tmpData.result.recordset)
+        }
         this.pg_dispatchGrid.show()
         this.pg_dispatchGrid.onClick = async(data) =>
         {
