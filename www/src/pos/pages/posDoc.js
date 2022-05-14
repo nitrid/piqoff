@@ -116,7 +116,7 @@ export default class posDoc extends React.Component
         this.posDevice.lcdPort = this.prmObj.filter({ID:'LCDPort',TYPE:0,SPECIAL:"001"}).getValue()
         this.posDevice.scalePort = this.prmObj.filter({ID:'ScalePort',TYPE:0,SPECIAL:"001"}).getValue()
         this.posDevice.payCardPort = this.prmObj.filter({ID:'PayCardPort',TYPE:0,SPECIAL:"001"}).getValue()
-        
+        console.log(this.prmObj.filter({ID:'ParkDelDescription',TYPE:0}).getValue().btnList)
         await this.grdList.dataRefresh({source:this.posObj.posSale.dt()});
         await this.grdPay.dataRefresh({source:this.posObj.posPay.dt()});
 
@@ -1862,9 +1862,30 @@ export default class posDoc extends React.Component
                                             <i className="text-white fa-solid fa-print" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
-                                    {/* Blank */}
+                                    {/* Diffrent Price */}
                                     <div className="col px-1">
-                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
+                                        <NbButton id={"btnPriceDiff"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}
+                                        onClick={async()=>
+                                        {          
+                                            if(this.grdList.devGrid.getSelectedRowKeys().length > 0)
+                                            {
+                                                this.txtPopDiffPriceQ.value = this.grdList.devGrid.getSelectedRowKeys()[0].QUANTITY < 0 ? this.grdList.devGrid.getSelectedRowKeys()[0].QUANTITY * -1 : this.grdList.devGrid.getSelectedRowKeys()[0].QUANTITY;
+                                                this.txtPopDiffPriceP.value = this.grdList.devGrid.getSelectedRowKeys()[0].PRICE;
+                                                this.popDiffPrice.show();
+                                            }
+                                            else
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgAlert',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Lütfen satır seçiniz !"}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                            }
+                                        }}>
+                                            <i className="text-white fa-solid fa-book" style={{fontSize: "24px"}} />
+                                        </NbButton>
                                     </div>
                                     {/* Blank */}
                                     <div className="col px-1">
@@ -2973,26 +2994,8 @@ export default class posDoc extends React.Component
                 </div>
                 {/* Park Description Popup */} 
                 <div>
-                    <NbPopDescboard id={"popParkDesc"} parent={this} width={"900"} height={"540"} position={"#root"} head={"Park Açıklaması"} title={"Lütfen Açıklama Giriniz"}
-                    button={
-                    [
-                        {
-                            id:"btn01",
-                            text:"Yetersiz Ödeme"
-                        },
-                        {
-                            id:"btn02",
-                            text:"Ek Alış Veriş"
-                        },
-                        {
-                            id:"btn03",
-                            text:"Mağaza Personeli"
-                        },
-                        {
-                            id:"btn04",
-                            text:"K.Kartı Geçmedi"
-                        }
-                    ]}
+                    <NbPopDescboard id={"popParkDesc"} parent={this} width={"900"} height={"610"} position={"#root"} head={"Park Açıklaması"} title={"Lütfen Açıklama Giriniz"}
+                    button={this.prmObj.filter({ID:'ParkDelDescription',TYPE:0}).getValue().buttons}
                     onClick={async (e)=>
                     {
                         await this.descSave("PARK DESC",e,0)
@@ -3002,25 +3005,7 @@ export default class posDoc extends React.Component
                 {/* Delete Description Popup */} 
                 <div>
                     <NbPopDescboard id={"popDeleteDesc"} parent={this} width={"900"} height={"540"} position={"#root"} head={"Silme İşlemi Açıklaması"} title={"Lütfen Silme Nedeninizi Giriniz"}
-                    button={
-                    [
-                        {
-                            id:"btn01",
-                            text:"Alış Verişten Vazgeçti"
-                        },
-                        {
-                            id:"btn02",
-                            text:"Yetersiz Ödeme"
-                        },
-                        {
-                            id:"btn03",
-                            text:"K.Karti Yetersiz Bakiye"
-                        },
-                        {
-                            id:"btn04",
-                            text:"Test Amaçlı"
-                        }
-                    ]}
+                    button={this.prmObj.filter({ID:'DocDelDescription',TYPE:0}).getValue().buttons}
                     onClick={async (e)=>
                     {
                         await this.descSave("FULL DELETE",e,0)
@@ -3030,25 +3015,7 @@ export default class posDoc extends React.Component
                 {/* Row Delete Description Popup */} 
                 <div>
                     <NbPopDescboard id={"popRowDeleteDesc"} parent={this} width={"900"} height={"540"} position={"#root"} head={"Satır Silme İşlemi Açıklaması"} title={"Lütfen Silme Nedeninizi Giriniz"}
-                    button={
-                    [
-                        {
-                            id:"btn01",
-                            text:"Üründen Vazgeçti"
-                        },
-                        {
-                            id:"btn02",
-                            text:"Fiyat Hatalı"
-                        },
-                        {
-                            id:"btn03",
-                            text:"Hatalı Ürün"
-                        },
-                        {
-                            id:"btn04",
-                            text:"Test Amaçlı Okutma"
-                        }
-                    ]}
+                    button={this.prmObj.filter({ID:'DocRowDelDescription',TYPE:0}).getValue().buttons}
                     onClick={async (e)=>
                     {
                         await this.descSave("ROW DELETE",e,this.grdList.devGrid.getSelectedRowKeys()[0].LINE_NO)
@@ -3207,6 +3174,61 @@ export default class posDoc extends React.Component
                         </div>
                     </NdDialog>
                 </div>
+                {/* Diffrent Price Popup */}
+                <div>
+                <NdPopUp parent={this} id={"popDiffPrice"} 
+                visible={false}                        
+                showCloseButton={true}
+                showTitle={true}
+                title={"Fiyat Farkı"}
+                container={"#root"} 
+                width={"300"}
+                height={"515"}
+                // onHiding={()=> {this._onClick('close')}}
+                position={{of:"#root"}}
+                >
+                    {/* txtPopDiffPriceQ */}
+                    <div className="row pt-1">
+                        <div className="col-12">
+                            <NdTextBox id={"txtPopDiffPriceQ"} parent={this} simple={true} onFocusIn={()=>
+                            {
+                                this.numPopDiffPrice.textobj = "txtPopDiffPriceQ"
+                            }}>     
+                            </NdTextBox> 
+                        </div>
+                    </div> 
+                    {/* txtPopDiffPriceP */}
+                    <div className="row pt-1">
+                        <div className="col-12">
+                            <NdTextBox id={"txtPopDiffPriceP"} parent={this} simple={true} onFocusIn={()=>
+                            {
+                                this.numPopDiffPrice.textobj = "txtPopDiffPriceP"
+                            }}>     
+                            </NdTextBox> 
+                        </div>
+                    </div> 
+                    {/* numPopDiffPrice */}
+                    <div className="row pt-2">                        
+                        <div className="col-12">
+                            <NbNumberboard id={"numPopDiffPrice"} parent={this} textobj={"txtPopDiffPriceQ"} span={1} buttonHeight={"60px"}/>
+                        </div>
+                    </div>
+                    {/* btnPopDiffPrice */}
+                    <div className="row pt-2">
+                        <div className="col-12">
+                            <NbButton id={"btnPopDiffPrice"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
+                            onClick={()=>
+                            {
+                                let tmpData = {QUANTITY:this.txtPopDiffPriceQ.value * -1,PRICE:this.txtPopDiffPriceP.value};
+                                this.saleRowUpdate(this.grdList.devGrid.getSelectedRowKeys()[0],tmpData);
+                                this.popDiffPrice.hide();
+                            }}>
+                                <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
+                            </NbButton>
+                        </div>
+                    </div>
+                </NdPopUp>
+            </div>
             </div>
         )
     }

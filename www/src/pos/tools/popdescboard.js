@@ -21,24 +21,52 @@ export default class NbPopDescboard extends NbBase
         }
         this._onClick = this._onClick.bind(this)
     }
-    _buttonView()
+    _buttonView1()
     {
         if(typeof this.props.button != 'undefined')
         {
             let tmp = []
-            for (let i = 0; i < this.props.button.length; i++) 
+            for (let i = 0; i < 4; i++) 
             {
-                tmp.push (
-                    <div className="col-3" key={this.props.button[i].id}>
-                        <NbButton id={this.props.button[i].id} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
-                        onClick={()=>
-                        {
-                            this["txt" + this.props.id].value = this.props.button[i].text
-                        }}>
-                            {this.props.button[i].text}
-                        </NbButton>
-                    </div>
-                )
+                if(typeof this.props.button[i] != 'undefined')
+                {
+                    tmp.push (
+                        <div className="col-3" key={this.props.button[i].id}>
+                            <NbButton id={this.props.button[i].id} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
+                            onClick={()=>
+                            {
+                                this["txt" + this.props.id].value = this.props.button[i].text
+                            }}>
+                                {this.props.button[i].text}
+                            </NbButton>
+                        </div>
+                    )
+                }
+            }
+            return tmp
+        }
+    }
+    _buttonView2()
+    {
+        if(typeof this.props.button != 'undefined')
+        {
+            let tmp = []
+            for (let i = 4; i < 8; i++) 
+            {
+                if(typeof this.props.button[i] != 'undefined')
+                {
+                    tmp.push (
+                        <div className="col-3" key={this.props.button[i].id}>
+                            <NbButton id={this.props.button[i].id} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
+                            onClick={()=>
+                            {
+                                this["txt" + this.props.id].value = this.props.button[i].text
+                            }}>
+                                {this.props.button[i].text}
+                            </NbButton>
+                        </div>
+                    )
+                }
             }
             return tmp
         }
@@ -81,7 +109,10 @@ export default class NbPopDescboard extends NbBase
                         </div>
                     </div>
                     <div className="row py-1">
-                        {this._buttonView()}
+                        {this._buttonView1()}
+                    </div>
+                    <div className="row py-1">
+                        {this._buttonView2()}
                     </div>
                     <div className="row py-1">
                         <div className="col-12">

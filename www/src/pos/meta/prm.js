@@ -75,7 +75,29 @@ export const prm =
     {
         TYPE : 0,
         ID :"DocDelDescription",
-        VALUE : true,
+        VALUE : 
+        {
+            disable:true,
+            buttons:
+            [
+                {
+                    id:"btn01",
+                    text:"Alış Verişten Vazgeçti"
+                },
+                {
+                    id:"btn02",
+                    text:"Yetersiz Ödeme"
+                },
+                {
+                    id:"btn03",
+                    text:"K.Karti Yetersiz Bakiye"
+                },
+                {
+                    id:"btn04",
+                    text:"Test Amaçlı"
+                }
+            ]
+        },
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",
@@ -91,7 +113,29 @@ export const prm =
     {
         TYPE : 0,
         ID :"DocRowDelDescription",
-        VALUE : true,
+        VALUE : 
+        {
+            disable:true,
+            buttons:
+            [
+                {
+                    id:"btn01",
+                    text:"Üründen Vazgeçti"
+                },
+                {
+                    id:"btn02",
+                    text:"Fiyat Hatalı"
+                },
+                {
+                    id:"btn03",
+                    text:"Hatalı Ürün"
+                },
+                {
+                    id:"btn04",
+                    text:"Test Amaçlı Okutma"
+                }
+            ]
+        },
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",
@@ -107,7 +151,29 @@ export const prm =
     {
         TYPE : 0,
         ID :"ParkDelDescription",
-        VALUE : true,
+        VALUE : 
+        {
+            disable:true,
+            buttons:
+            [
+                {
+                    id:"btn01",
+                    text:"Yetersiz Ödeme"
+                },
+                {
+                    id:"btn02",
+                    text:"Ek Alış Veriş"
+                },
+                {
+                    id:"btn03",
+                    text:"Mağaza Personeli"
+                },
+                {
+                    id:"btn04",
+                    text:"K.Kartı Geçmedi"
+                }
+            ]
+        },
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",
@@ -214,6 +280,6 @@ export const prm =
             PAGE_NAME : "Pos",
             CAPTION : "K.Kart Port"
         }
-    }
+    }    
     //#endregion
 ]

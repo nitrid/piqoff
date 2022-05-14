@@ -3423,9 +3423,6 @@ export const langTr =
         validDepot : "Depo Seçmelisiniz",
         validCustomerCode : "Cari Kodu Boş Geçilemez",
         validDocDate : "Tarih Seçmelisiniz",
-
-
-
     },
     sip_01_001 :
     {
@@ -3456,8 +3453,6 @@ export const langTr =
             clmTotal : "Toplam",
             clmInputName : "Depo",
         },
-       
-
     },
     sip_01_002 :
     {
@@ -3541,7 +3536,6 @@ export const langTr =
             clmMargin :"Marj",
             clmMulticode :"T. Kodu",
             clmBarcode :"Barkodu"
-
         },
         popDiscount : 
         {
@@ -3686,9 +3680,6 @@ export const langTr =
         validDepot : "Depo Seçmelisiniz",
         validCustomerCode : "Cari Kodu Boş Geçilemez",
         validDocDate : "Tarih Seçmelisiniz",
-
-
-
     },
     sip_02_002 :
     {
