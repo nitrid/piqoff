@@ -146,7 +146,7 @@ export default class barcodeList extends React.Component
                                             {
                                                 id: 'stk_01_002',
                                                 text: 'Barcode Tanımları',
-                                                path: '../pages/items/cards/barcodeCard.js'
+                                                path: 'items/cards/barcodeCard.js'
                                             })
                                         }
                                     }    

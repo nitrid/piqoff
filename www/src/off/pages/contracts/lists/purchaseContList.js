@@ -171,7 +171,7 @@ export default class purchaseContList extends React.Component
                                             {
                                                 id: 'cnt_01_001',
                                                 text: this.t('menu'),
-                                                path: '../pages/contracts/cards/purchaseContract.js'
+                                                path: 'contracts/cards/purchaseContract.js'
                                             })
                                         }
                                     }    

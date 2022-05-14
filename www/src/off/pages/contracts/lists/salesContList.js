@@ -170,7 +170,7 @@ export default class salesContList extends React.Component
                                                 {
                                                     id: 'cnt_01_002',
                                                     text: this.t('menu'),
-                                                    path: '../pages/contracts/cards/salesContract.js'
+                                                    path: 'contracts/cards/salesContract.js'
                                                 })
                                         }
                                     }    

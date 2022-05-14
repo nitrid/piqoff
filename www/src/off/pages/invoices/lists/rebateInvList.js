@@ -165,7 +165,7 @@ export default class rebateInvList extends React.Component
                                             {
                                                 id: 'ftr_02_003',
                                                 text: this.t('menu'),
-                                                path: '../pages/invoices/documents/rebateInvoice.js'
+                                                path: 'invoices/documents/rebateInvoice.js'
                                             })
                                         }
                                     }    
@@ -321,7 +321,7 @@ export default class rebateInvList extends React.Component
                                         {
                                             id: 'ftr_02_003',
                                             text: this.t('menu'),
-                                            path: '../pages/invoices/documents/rebateInvoice.js',
+                                            path: 'invoices/documents/rebateInvoice.js',
                                             pagePrm:{GUID:e.data.GUID}
                                         })
                                 }}

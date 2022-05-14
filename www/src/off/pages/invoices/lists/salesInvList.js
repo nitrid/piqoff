@@ -165,7 +165,7 @@ export default class salesInvList extends React.Component
                                             {
                                                 id: 'ftr_02_002',
                                                 text: this.t('menu'),
-                                                path: '../pages/invoices/documents/salesInvoice.js'
+                                                path: 'invoices/documents/salesInvoice.js'
                                             })
                                         }
                                     }    
@@ -321,7 +321,7 @@ export default class salesInvList extends React.Component
                                         {
                                             id: 'ftr_02_002',
                                             text: this.t('menu'),
-                                            path: '../pages/invoices/documents/salesInvoice.js',
+                                            path: 'invoices/documents/salesInvoice.js',
                                             pagePrm:{GUID:e.data.GUID}
                                         })
                                 }}

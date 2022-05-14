@@ -166,7 +166,7 @@ export default class barcodeList extends React.Component
                                             {
                                                 id: 'cri_01_001',
                                                 text: this.t('menu'),
-                                                path: '../pages/customers/cards/customerCard.js'
+                                                path: 'customers/cards/customerCard.js'
                                             })
                                         }
                                     }    

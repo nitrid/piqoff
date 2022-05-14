@@ -165,7 +165,7 @@ export default class salesOrdList extends React.Component
                                             {
                                                 id: 'sip_02_002',
                                                 text: this.t('menu'),
-                                                path: '../pages/orders/documents/salesOrder.js',
+                                                path: 'orders/documents/salesOrder.js',
                                             })
                                         }
                                     }    
@@ -321,7 +321,7 @@ export default class salesOrdList extends React.Component
                                         {
                                             id: 'sip_02_002',
                                             text: this.t('menu'),
-                                            path: '../pages/orders/documents/salesOrder.js',
+                                            path: 'orders/documents/salesOrder.js',
                                             pagePrm:{GUID:e.data.GUID}
                                         })
                                 }}

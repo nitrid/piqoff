@@ -1182,6 +1182,7 @@ export const langTr =
     stk_03_006 : 
     {
         txtItemName : "Ürün Adı",
+        chkZeroQuantity : "0 Miktarlar Gösterilsin",
         cmbDepot : "Depo",
         btnCheck : "Aktif",
         btnGet :"Getir",
