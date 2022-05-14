@@ -897,8 +897,6 @@ export class posDeviceCls
     {
         if(core.instance.util.isElectron())
         {
-            console.log(1)
-
             this.escpos = require('escpos');
             this.escpos.Serial = require('escpos-serialport');
             this.escpos.Screen = require('escpos-screen');
