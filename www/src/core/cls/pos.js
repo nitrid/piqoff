@@ -899,7 +899,7 @@ export class posDeviceCls
         {
             console.log(1)
 
-            this.escpos = require('escpos');
+            this.escpos = global.require('escpos');
             this.escpos.Serial = require('escpos-serialport');
             this.escpos.Screen = require('escpos-screen');
             this.escpos.USB = require('escpos-usb');
