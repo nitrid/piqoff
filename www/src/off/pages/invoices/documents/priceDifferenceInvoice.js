@@ -398,22 +398,19 @@ export default class priceDifferenceInvoice extends React.Component
     }
     async _getContract()
     {
-        console.log(this.docObj.dt()[0].INPUT)
-        let tmpSource =
+
+        let tmpQuery = 
         {
-            source : 
-            {
-                groupBy : this.groupList,
-                select : 
-                {
-                    query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_VW_01 WHERE OUTPUT = @OUTPUT AND TYPE = 0 AND DOC_TYPE = 20 ORDER BY DOC_DATE DESC",
-                    param : ['OUTPUT:string|50'],
-                    value : [this.docObj.dt()[0].INPUT]
-                },
-                sql : this.core.sql
-            }
+            query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_VW_01 WHERE OUTPUT = @OUTPUT AND TYPE = 0 AND DOC_TYPE = 20 ORDER BY DOC_DATE DESC",
+            param : ['OUTPUT:string|50'],
+            value : [this.docObj.dt()[0].INPUT]
         }
-        await this.pg_contractGrid.setSource(tmpSource)
+
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        if(tmpData.result.recordset.length > 0)
+        {   
+            await this.pg_contractGrid.setData(tmpData.result.recordset)
+        }
         this.pg_contractGrid.show()
         this.pg_contractGrid.onClick = async(data) =>
         {
