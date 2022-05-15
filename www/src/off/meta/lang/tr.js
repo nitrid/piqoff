@@ -3289,6 +3289,14 @@ export const langTr =
             title : "Stok Seçimi",
             clmCode :  "STOK KODU",
             clmName : "STOK ADI",
+           
+        },
+        pg_RebateGrid : 
+        {
+            title : "İade Stok Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+            clmQuantity :"MİKTAR"
         },
         grdRebtDispatch: 
         {
