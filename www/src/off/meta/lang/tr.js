@@ -1282,7 +1282,12 @@ export const langTr =
             title: " Dikkat",
             btn01 : "Tamam",
             msg : "Ürünü Birden Fazla Cari İçin Seçilmiş Lütfen Kontol Ediniz"
-
+        },
+        msgCustomerFound : 
+        {
+            title: " Dikkat",
+            btn01 : "Tamam",
+            msg : "Carisi Tanımlanmamış Ürünler Seçilemez. Lütfen Cari Tanımlayın"
         }
     },
     stk_04_003 : 
@@ -2230,6 +2235,7 @@ export const langTr =
         txtTotal : "Genel Toplam",
         dtShipDate :"Sevk Tarihi",
         getPayment : "Tahsilatlar",
+        getDispatch : "İrsaliye Getir",
         cash : "Tutar",
         description :"Açıklama",
         checkReference : "Referans",

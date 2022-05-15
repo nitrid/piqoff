@@ -371,7 +371,7 @@ export default class salesInvoice extends React.Component
     {
         let tmpQuery = 
         {
-            query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND INVOICE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND DOC_TYPE IN(40)",
+            query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND INVOICE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND REBATE = 0 AND DOC_TYPE IN(40)",
             param : ['INPUT:string|50'],
             value : [this.docObj.dt()[0].INPUT]
         }
@@ -729,9 +729,9 @@ export default class salesInvoice extends React.Component
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
                                             readOnly={true}
                                             maxLength={32}
-                                            onChange={(async(e)=>
+                                            onValueChanged={(async(e)=>
                                             {
-                                                this.docObj.docCustomer.dt()[0].REF = e.value
+                                                this.docObj.docCustomer.dt()[0].REF = this.txtRef.value
                                                 let tmpQuery = 
                                                 {
                                                     query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 20 AND REF = @REF ",
@@ -884,8 +884,8 @@ export default class salesInvoice extends React.Component
                                                     let tmpDatas = this.prmObj.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                     if(typeof tmpDatas != 'undefined' && tmpDatas.value ==  true)
                                                     {
-                                                        this.txtRef.setState({value:tmpData.result.recordset[0].CODE});
-                                                        this.txtRef.props.onChange()
+                                                        this.txtRef.value = tmpData.result.recordset[0].CODE
+                                                        this.txtRef.props.onValueChanged()
                                                     }
                                                 }
                                                 else
@@ -926,8 +926,8 @@ export default class salesInvoice extends React.Component
                                                             let tmpData = this.prmObj.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
-                                                                this.txtRef.setState({value:data[0].CODE});
-                                                                this.txtRef.props.onChange()
+                                                                this.txtRef.value = data[0].CODE
+                                                                this.txtRef.props.onValueChanged()
                                                             }
                                                             
                                                         }

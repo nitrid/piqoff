@@ -61,9 +61,20 @@ export default class rebateOperation extends React.Component
             source : 
             {
                 select : 
-                {
-                    query :"SELECT *,[dbo].[FN_DEPOT_QUANTITY]([ITEM_GUID],@DEPOT,GETDATE()) AS QUANTITY FROM ITEM_MULTICODE_VW_01 WHERE [dbo].[FN_DEPOT_QUANTITY]([ITEM_GUID],@DEPOT,GETDATE()) > 0 "+
-                    " AND ((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = ''))",
+                { 
+                    query :"SELECT ITEMS_VW_01.GUID AS ITEM_GUID, " +
+                    "ITEMS_VW_01.NAME AS ITEM_NAME, " +
+                    "ITEMS_VW_01.CODE AS ITEM_CODE, " +
+                    "ISNULL(ITEM_MULTICODE_VW_01.CUSTOMER_PRICE,0) AS CUSTOMER_PRICE, " +
+                    "ISNULL(ITEM_MULTICODE_VW_01.VAT_RATE,0)  AS VAT_RATE, " +
+                    "ISNULL(ITEM_MULTICODE_VW_01.CUSTOMER_NAME,'')  AS CUSTOMER_NAME, " +
+                    "ISNULL(ITEM_MULTICODE_VW_01.CUSTOMER_CODE ,'')AS CUSTOMER_CODE, " +
+                    "ISNULL(ITEM_MULTICODE_VW_01.CUSTOMER_GUID ,'00000000-0000-0000-0000-000000000000')AS CUSTOMER_GUID, " +
+                    "[dbo].[FN_DEPOT_QUANTITY](ITEMS_VW_01.GUID,@DEPOT,GETDATE()) AS QUANTITY FROM ITEMS_VW_01 " +
+                    "LEFT OUTER JOIN  " +
+                    "ITEM_MULTICODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_MULTICODE_VW_01.ITEM_GUID " +
+                    "WHERE [dbo].[FN_DEPOT_QUANTITY](ITEMS_VW_01.GUID,@DEPOT,GETDATE()) > 0  " +
+                    " AND      ((ITEM_MULTICODE_VW_01.CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) ",
                     param : ['DEPOT:string|50','CUSTOMER_CODE:string|50'],
                     value : [this.cmbDepot.value,this.txtCustomerCode.CODE]
                 },
@@ -75,6 +86,22 @@ export default class rebateOperation extends React.Component
     }
     async _btnSave(pType)
     {
+        for(let i = 0; i < this.grdRebateList.getSelectedData().length; i++)
+        {
+           if(this.grdRebateList.getSelectedData()[i].CUSTOMER_NAME == '')
+           {
+                let tmpConfObj =
+                {
+                    id:'msgCustomerFound',showTitle:true,title:this.t("msgCustomerFound.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.t("msgCustomerFound.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{ this.t("msgCustomerFound.msg")}</div>)
+                }
+            
+                await dialog(tmpConfObj);
+                return
+           }
+        }
+
         let tmpItem = await this._toGroupByCustomer(this.grdRebateList.getSelectedData(),'ITEM_CODE')
         for(let i = 0; i < Object.values(tmpItem).length; i++)
         {
@@ -91,6 +118,7 @@ export default class rebateOperation extends React.Component
                 return
            }
         }
+        
 
         let tmpConfObj =
         {
@@ -109,77 +137,80 @@ export default class rebateOperation extends React.Component
 
         for (let i = 0; i < Object.keys(tmpCustomer).length; i++)
         {
-            if(pType == 0)
+            if(Object.keys(tmpCustomer)[i] != '00000000-0000-0000-0000-000000000000')
             {
-                let tmpDoc = {...this.docObj.empty}
-                tmpDoc.TYPE = 1
-                tmpDoc.DOC_TYPE = 40
-                tmpDoc.REBATE = 1
-                tmpDoc.REF = this.txtRef
-                tmpDoc.REF_NO = (this.docObj.dt().length + 1)
-                tmpDoc.OUTPUT = this.cmbDepot.value
-                tmpDoc.INPUT = Object.keys(tmpCustomer)[i]
-                this.docObj.addEmpty(tmpDoc);
-            }
-            else if(pType == 1)
-            {
-                let tmpDoc = {...this.docObj.empty}
-                tmpDoc.TYPE = 1
-                tmpDoc.DOC_TYPE = 20
-                tmpDoc.REBATE = 1
-                tmpDoc.REF = this.txtRef
-                tmpDoc.REF_NO = (this.docObj.dt().length + 1)
-                tmpDoc.OUTPUT = this.cmbDepot.value
-                tmpDoc.INPUT = Object.keys(tmpCustomer)[i]
-                this.docObj.addEmpty(tmpDoc);
-
-                let tmpDocCustomer = {...this.docObj.docCustomer.empty}
-                tmpDocCustomer.DOC_GUID = this.docObj.dt()[this.docObj.dt().length - 1].GUID
-                tmpDocCustomer.TYPE = this.docObj.dt()[this.docObj.dt().length - 1].TYPE
-                tmpDocCustomer.DOC_TYPE = this.docObj.dt()[this.docObj.dt().length - 1].DOC_TYPE
-                tmpDocCustomer.REBATE = this.docObj.dt()[this.docObj.dt().length - 1].REBATE
-                tmpDocCustomer.REF = this.docObj.dt()[this.docObj.dt().length - 1].REF
-                tmpDocCustomer.REF_NO = this.docObj.dt()[this.docObj.dt().length - 1].REF_NO
-                tmpDocCustomer.DOC_DATE = this.docObj.dt()[this.docObj.dt().length - 1].DOC_DATE
-                tmpDocCustomer.OUTPUT =this.docObj.dt()[this.docObj.dt().length - 1].OUTPUT
-                tmpDocCustomer.INPUT = this.docObj.dt()[this.docObj.dt().length - 1].INPUT
-                this.docObj.docCustomer.addEmpty(tmpDocCustomer)
+                if(pType == 0)
+                {
+                    let tmpDoc = {...this.docObj.empty}
+                    tmpDoc.TYPE = 1
+                    tmpDoc.DOC_TYPE = 40
+                    tmpDoc.REBATE = 1
+                    tmpDoc.REF = this.txtRef
+                    tmpDoc.REF_NO = (this.docObj.dt().length + 1)
+                    tmpDoc.OUTPUT = this.cmbDepot.value
+                    tmpDoc.INPUT = Object.keys(tmpCustomer)[i]
+                    this.docObj.addEmpty(tmpDoc);
+                }
+                else if(pType == 1)
+                {
+                    let tmpDoc = {...this.docObj.empty}
+                    tmpDoc.TYPE = 1
+                    tmpDoc.DOC_TYPE = 20
+                    tmpDoc.REBATE = 1
+                    tmpDoc.REF = this.txtRef
+                    tmpDoc.REF_NO = (this.docObj.dt().length + 1)
+                    tmpDoc.OUTPUT = this.cmbDepot.value
+                    tmpDoc.INPUT = Object.keys(tmpCustomer)[i]
+                    this.docObj.addEmpty(tmpDoc);
+    
+                    let tmpDocCustomer = {...this.docObj.docCustomer.empty}
+                    tmpDocCustomer.DOC_GUID = this.docObj.dt()[this.docObj.dt().length - 1].GUID
+                    tmpDocCustomer.TYPE = this.docObj.dt()[this.docObj.dt().length - 1].TYPE
+                    tmpDocCustomer.DOC_TYPE = this.docObj.dt()[this.docObj.dt().length - 1].DOC_TYPE
+                    tmpDocCustomer.REBATE = this.docObj.dt()[this.docObj.dt().length - 1].REBATE
+                    tmpDocCustomer.REF = this.docObj.dt()[this.docObj.dt().length - 1].REF
+                    tmpDocCustomer.REF_NO = this.docObj.dt()[this.docObj.dt().length - 1].REF_NO
+                    tmpDocCustomer.DOC_DATE = this.docObj.dt()[this.docObj.dt().length - 1].DOC_DATE
+                    tmpDocCustomer.OUTPUT =this.docObj.dt()[this.docObj.dt().length - 1].OUTPUT
+                    tmpDocCustomer.INPUT = this.docObj.dt()[this.docObj.dt().length - 1].INPUT
+                    this.docObj.docCustomer.addEmpty(tmpDocCustomer)
+                }
+                for(let x = 0; x < this.grdRebateList.getSelectedData().length; x++)
+                {
+                   if(Object.keys(tmpCustomer)[i] == this.grdRebateList.getSelectedData()[x].CUSTOMER_GUID)
+                   {
+                        let tmpDocItems = {...this.docObj.docItems.empty}
+                        tmpDocItems.DOC_GUID = this.docObj.dt()[this.docObj.dt().length - 1].GUID
+                        tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                        tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                        tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                        tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                        tmpDocItems.REF = this.docObj.dt()[this.docObj.dt().length - 1].REF
+                        tmpDocItems.REF_NO = this.docObj.dt()[this.docObj.dt().length - 1].REF_NO
+                        tmpDocItems.INPUT = Object.keys(tmpCustomer)[i]
+                        tmpDocItems.OUTPUT = this.cmbDepot.value
+                        tmpDocItems.DOC_DATE = this.docObj.dt()[this.docObj.dt().length - 1].DOC_DATE
+                        tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[this.docObj.dt().length - 1].SHIPMENT_DATE
+                        tmpDocItems.ITEM = this.grdRebateList.getSelectedData()[x].ITEM_GUID
+                        tmpDocItems.ITEM_NAME = this.grdRebateList.getSelectedData()[x].ITEM_NAME
+                        tmpDocItems.PRICE = this.grdRebateList.getSelectedData()[x].CUSTOMER_PRICE
+                        tmpDocItems.QUANTITY = this.grdRebateList.getSelectedData()[x].QUANTITY
+                        tmpDocItems.AMOUNT = (this.grdRebateList.getSelectedData()[x].CUSTOMER_PRICE * this.grdRebateList.getSelectedData()[x].QUANTITY)
+                        tmpDocItems.VAT = tmpDocItems.AMOUNT * (this.grdRebateList.getSelectedData()[x].VAT_RATE / 100)
+                        tmpDocItems.TOTAL = tmpDocItems.AMOUNT + tmpDocItems.VAT
+    
+                        this.docObj.dt()[this.docObj.dt().length - 1].AMOUNT = tmpDocItems.AMOUNT + this.docObj.dt()[this.docObj.dt().length - 1].AMOUNT
+                        this.docObj.dt()[this.docObj.dt().length - 1].VAT = tmpDocItems.VAT + this.docObj.dt()[this.docObj.dt().length - 1].VAT
+                        this.docObj.dt()[this.docObj.dt().length - 1].TOTAL =  tmpDocItems.TOTAL + this.docObj.dt()[this.docObj.dt().length - 1].TOTAL
+                        if(pType == 1)
+                        {
+                            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length - 1].AMOUNT = this.docObj.dt()[this.docObj.dt().length - 1].TOTAL
+                        }
+                        await this.docObj.docItems.addEmpty(tmpDocItems)
+                   }
+                }
             }
            
-            for(let x = 0; x < this.grdRebateList.getSelectedData().length; x++)
-            {
-               if(Object.keys(tmpCustomer)[i] == this.grdRebateList.getSelectedData()[x].CUSTOMER_GUID)
-               {
-                    let tmpDocItems = {...this.docObj.docItems.empty}
-                    tmpDocItems.DOC_GUID = this.docObj.dt()[this.docObj.dt().length - 1].GUID
-                    tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                    tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                    tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                    tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                    tmpDocItems.REF = this.docObj.dt()[this.docObj.dt().length - 1].REF
-                    tmpDocItems.REF_NO = this.docObj.dt()[this.docObj.dt().length - 1].REF_NO
-                    tmpDocItems.INPUT = Object.keys(tmpCustomer)[i]
-                    tmpDocItems.OUTPUT = this.cmbDepot.value
-                    tmpDocItems.DOC_DATE = this.docObj.dt()[this.docObj.dt().length - 1].DOC_DATE
-                    tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[this.docObj.dt().length - 1].SHIPMENT_DATE
-                    tmpDocItems.ITEM = this.grdRebateList.getSelectedData()[x].ITEM_GUID
-                    tmpDocItems.ITEM_NAME = this.grdRebateList.getSelectedData()[x].ITEM_NAME
-                    tmpDocItems.PRICE = this.grdRebateList.getSelectedData()[x].CUSTOMER_PRICE
-                    tmpDocItems.QUANTITY = this.grdRebateList.getSelectedData()[x].QUANTITY
-                    tmpDocItems.AMOUNT = (this.grdRebateList.getSelectedData()[x].CUSTOMER_PRICE * this.grdRebateList.getSelectedData()[x].QUANTITY)
-                    tmpDocItems.VAT = tmpDocItems.AMOUNT * (this.grdRebateList.getSelectedData()[x].VAT_RATE / 100)
-                    tmpDocItems.TOTAL = tmpDocItems.AMOUNT + tmpDocItems.VAT
-
-                    this.docObj.dt()[this.docObj.dt().length - 1].AMOUNT = tmpDocItems.AMOUNT + this.docObj.dt()[this.docObj.dt().length - 1].AMOUNT
-                    this.docObj.dt()[this.docObj.dt().length - 1].VAT = tmpDocItems.VAT + this.docObj.dt()[this.docObj.dt().length - 1].VAT
-                    this.docObj.dt()[this.docObj.dt().length - 1].TOTAL =  tmpDocItems.TOTAL + this.docObj.dt()[this.docObj.dt().length - 1].TOTAL
-                    if(pType == 1)
-                    {
-                        this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length - 1].AMOUNT = this.docObj.dt()[this.docObj.dt().length - 1].TOTAL
-                    }
-                    await this.docObj.docItems.addEmpty(tmpDocItems)
-               }
-            }
         }
 
         let tmpConfObj1 =
