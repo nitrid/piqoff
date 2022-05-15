@@ -716,6 +716,7 @@ export const langTr =
         cmbOutDepot: "Çıkış Deposu",
         dtDocDate : "Tarih",
         txtBarcode : "Barkod Ekle",
+        getDispatch : "İrsaliye Getir",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -738,6 +739,15 @@ export const langTr =
             clmQuantity : "Miktar",
             clmCreateDate: "Kayıt Tarihi",
             clmDescription :"Açıklama"
+        },
+        pg_dispatchGrid : 
+        {
+            title : "İrsaliye Seçimi",
+            clmReferans : "Seri - Sıra",
+            clmCode : "Kodu",
+            clmName : "Adı",
+            clmQuantity : "Miktar",
+            clmCuStomer : "Cari",
         },
         popPassword : 
         {
