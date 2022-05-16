@@ -11,10 +11,12 @@ import moment from "moment";
 export function print()
 {
     let data = arguments.length > 0 ? arguments[0] : undefined;
+
     if(typeof data == 'undefined')
         return []
 
     return [
+        {align:"ct",logo:"./resources/logop.png"},
         ()=>{return {font:"a",style:"b",align:"ct",data:""}},
         ()=>{return {font:"a",style:"b",align:"ct",data:"ZAC HECKENWALD"}},
         ()=>{return {font:"a",style:"b",align:"ct",data:"57740 LONGEVILLE-LES-ST-AVOLD"}},
@@ -87,26 +89,25 @@ export function print()
                 for (let i = 0; i < data.possale.length; i++) 
                 {
                     let tmpQt = ""            
-                    let tmpVatType = "C"
-                    if(data.possale[i].VAT_RATE)
+                    
                     if(Number.isInteger(parseFloat(data.possale[i].QUANTITY)))
                     {
-                        tmpQt = data.possale[i].QUANTITY + " " + data.possale[i].UNIT_NAME;
+                        tmpQt = data.possale[i].QUANTITY + " " + data.possale[i].UNIT_SHORT;
                     }
                     else
                     {
-                        tmpQt = parseFloat(parseFloat(data.possale[i].QUANTITY).toFixed(3)) + " " + data.possale[i].UNIT_NAME;
+                        tmpQt = parseFloat(parseFloat(data.possale[i].QUANTITY).toFixed(3)) + " " + data.possale[i].UNIT_SHORT;
                     }
                     
                     tmpArr.push( 
                     {
                         font: "b",
                         align: "lt",
-                        data: data.possale[i].VAT_RATE + " " +
+                        data: data.possale[i].VAT_TYPE + " " +
                             (data.possale[i].TICKET_REST ? "*" + data.possale[i].ITEM_NAME : data.possale[i].ITEM_NAME).toString().space(34) + " " +
                             tmpQt.space(8,'s') + " " + 
                             parseFloat(data.possale[i].PRICE).toFixed(2).space(7,"s") + " " + 
-                            (parseFloat(data.possale[i].AMOUNT).toFixed(2) + "€").space(10,"s")
+                            (parseFloat(data.possale[i].AMOUNT).toFixed(2) + "EUR").space(10,"s")
                     })
                 }
             } 

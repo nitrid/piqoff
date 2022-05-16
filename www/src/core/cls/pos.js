@@ -203,6 +203,7 @@ export class posSaleCls
             BARCODE : '',
             UNIT_GUID : '00000000-0000-0000-0000-000000000000',
             UNIT_NAME : '',
+            UNIT_SHORT : '',
             UNIT_FACTOR : 0,
             QUANTITY : 0,
             PRICE : 0,
@@ -211,6 +212,7 @@ export class posSaleCls
             LOYALTY : 0,
             VAT : 0,
             VAT_RATE : 0,
+            VAT_TYPE : '',
             TOTAL : 0,
             SUBTOTAL : 0,
             GRAND_AMOUNT : 0,
@@ -1215,75 +1217,85 @@ export class posDeviceCls
         let device  = new this.escpos.USB();
         let options = { encoding: "GB18030" /* default */ }
         let printer = new this.escpos.Printer(device, options);
-        console.log(__dirname)
-        const imgpath = this.path.join(__dirname, '../../Logo.png');
-        this.escpos.Image.load(imgpath, function(image)
+
+        let imgLoad = (imgPath) => 
         {
-            device.open(function(error)
-            {   
-                console.log(error)
-                printer.align('ct')
-                .image(image, 's8')
-                .then(() => 
-                { 
-                    //printer.cut().close(); 
+            return new Promise((resolve) =>
+            {
+                this.escpos.Image.load(imgPath, function(image)
+                {
+                    resolve(image)
                 });
-    
-                let tmpArr = [];
-                for (let i = 0; i < pData.length; i++) 
+            });
+        }
+        device.open(async function(error)
+        {   
+            console.log(error)
+
+            let tmpArr = [];
+            for (let i = 0; i < pData.length; i++) 
+            {
+                let tmpObj = pData[i]
+                if(typeof pData[i] == 'function')
                 {
-                    let tmpObj = pData[i]
-                    if(typeof pData[i] == 'function')
-                    {
-                        tmpObj = pData[i]()
-                    }
-                    if(Array.isArray(tmpObj))
-                    {
-                        tmpArr.push(...tmpObj)
-                    }
-                    else if(typeof tmpObj == 'object')
-                    {
-                        tmpArr.push(tmpObj)
-                    }
+                    tmpObj = pData[i]()
                 }
-                
-                for (let i = 0; i < tmpArr.length; i++) 
+                if(Array.isArray(tmpObj))
                 {
-                    if(typeof tmpArr[i].barcode != 'undefined')
+                    tmpArr.push(...tmpObj)
+                }
+                else if(typeof tmpObj == 'object')
+                {
+                    tmpArr.push(tmpObj)
+                }
+            }
+            
+            for (let i = 0; i < tmpArr.length; i++) 
+            {
+                if(typeof tmpArr[i].barcode != 'undefined')
+                {
+                    printer.align(tmpArr[i].align).barcode(tmpArr[i].barcode,'CODE39',tmpArr[i].options);                    
+                }
+                else if(typeof tmpArr[i].logo != 'undefined')
+                {
+                    let image = await imgLoad(tmpArr[i].logo);
+                    printer.align(tmpArr[i].align)
+                    .image(image, 's8')
+                    .then(() => 
+                    { 
+                        //printer.cut().close(); 
+                    });
+                }
+                else
+                {                   
+                    printer.size(0,0);
+                    printer.font(tmpArr[i].font);
+                    printer.align(tmpArr[i].align);
+
+                    if(typeof tmpArr[i].style != 'undefined')
                     {
-                        printer.align(tmpArr[i].align).barcode(tmpArr[i].barcode,'CODE39',tmpArr[i].options);                    
+                        printer.style(tmpArr[i].style);
                     }
                     else
-                    {                   
-                        printer.size(0,0);
-                        printer.font(tmpArr[i].font);
-                        printer.align(tmpArr[i].align);
-    
-                        if(typeof tmpArr[i].style != 'undefined')
-                        {
-                            printer.style(tmpArr[i].style);
-                        }
-                        else
-                        {
-                            printer.style("normal");
-                        }
-                        
-                        if(typeof tmpArr[i].size != 'undefined')
-                        {
-                            printer.size(tmpArr[i].size[0],tmpArr[i].size[1]);
-                        }
-                        printer.text(tmpArr[i].data,'857');
-                    }                
-                }                      
-                        
-                printer.cut().close
-                (
-                    function()
                     {
-                        
+                        printer.style("normal");
                     }
-                );
-            });  
-        });
+                    
+                    if(typeof tmpArr[i].size != 'undefined')
+                    {
+                        printer.size(tmpArr[i].size[0],tmpArr[i].size[1]);
+                    }
+                    printer.text(tmpArr[i].data,'857');
+                }                
+            }                      
+                    
+            printer.cut().close
+            (
+                function()
+                {
+                    
+                }
+            );
+        });  
     }
 }
