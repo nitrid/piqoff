@@ -98,7 +98,7 @@ export default class posDoc extends React.Component
             }
         }
 
-        this.init()
+        this.init();        
     }
     async init()
     {                
@@ -589,6 +589,7 @@ export default class posDoc extends React.Component
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ITEM_GUID = pItemData.GUID
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ITEM_CODE = pItemData.CODE
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ITEM_NAME = pItemData.NAME
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].TICKET_REST = pItemData.TICKET_REST
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].INPUT = pItemData.INPUT
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].BARCODE_GUID = pItemData.BARCODE_GUID
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].BARCODE = pItemData.BARCODE
@@ -715,6 +716,8 @@ export default class posDoc extends React.Component
             
             this.init()
         }
+
+        this.print()
     }
     payRowAdd(pPayData)
     {
@@ -1002,6 +1005,23 @@ export default class posDoc extends React.Component
             await this.core.sql.execute(tmpQuery)
             resolve()
         });
+    }
+    print()
+    {
+        let prmPrint = this.prmObj.filter({ID:'PrintDesign',TYPE:0}).getValue()
+        
+        import("../meta/print/" + prmPrint).then((e)=>
+        {
+            let tmpData = 
+            {
+                pos : this.posObj.dt(),
+                possale : this.posObj.posSale.dt(),
+                pospay : this.posObj.posPay.dt(),
+                special : {type:'Fis',safe:'001',ticketCount:5,reprint:false,repas:"0"}
+            }
+            let x = e.print(tmpData)
+            this.posDevice.escPrinter(x)
+        })
     }
     render()
     {
@@ -1704,8 +1724,46 @@ export default class posDoc extends React.Component
                                                     {
                                                         if(this.txtItemReturnTicket.value != "")
                                                         {
-                                                            this.msgItemReturnTicket.hide()
-                                                            this.popItemReturnDesc.show()
+                                                            let tmpDt = new datatable();
+                                                            tmpDt.selectCmd = 
+                                                            {
+                                                                query : "SELECT * FROM POS_SALE_VW_01 WHERE SUBSTRING(CONVERT(NVARCHAR(50),POS_GUID),25,12) = @GUID",
+                                                                param : ['GUID:string|12'], 
+                                                                value : [this.txtItemReturnTicket.value] 
+                                                            }
+                                                            await tmpDt.refresh();
+                                                            
+                                                            if(tmpDt.length > 0)
+                                                            {
+                                                                for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
+                                                                {
+                                                                    let tmpItem = tmpDt.where({ITEM_CODE:this.posObj.posSale.dt()[i].ITEM_CODE})
+                                                                    if(tmpItem.length > 0 && this.posObj.posSale.dt()[i].QUANTITY >= tmpItem[0].QUANTITY)
+                                                                    {
+                                                                        this.msgItemReturnTicket.hide()
+                                                                        this.popItemReturnDesc.show()
+                                                                        return
+                                                                    }
+                                                                }
+
+                                                                let tmpConfObj =
+                                                                {
+                                                                    id:'msgAlert',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
+                                                                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Okutmuş olduğunuz ticket daki ürünler yada miktar uyuşmuyor !"}</div>)
+                                                                }
+                                                                await dialog(tmpConfObj);
+                                                            }
+                                                            else
+                                                            {
+                                                                let tmpConfObj =
+                                                                {
+                                                                    id:'msgAlert',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
+                                                                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Geçersiz ticket !"}</div>)
+                                                                }
+                                                                await dialog(tmpConfObj);
+                                                            }
                                                         }
                                                     }
                                                 })                                                
@@ -3228,7 +3286,7 @@ export default class posDoc extends React.Component
                         </div>
                     </div>
                 </NdPopUp>
-            </div>
+                </div>
             </div>
         )
     }

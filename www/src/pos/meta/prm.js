@@ -280,6 +280,22 @@ export const prm =
             PAGE_NAME : "Pos",
             CAPTION : "K.Kart Port"
         }
-    }    
+    },
+    //Print Design
+    {
+        TYPE : 0,
+        ID :"PrintDesign",
+        VALUE : "print.js",
+        SPECIAL : "001",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Yazdırma Dizaynı"
+        }
+    } 
     //#endregion
 ]
