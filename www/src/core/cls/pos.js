@@ -197,11 +197,13 @@ export class posSaleCls
             ITEM_GUID : '00000000-0000-0000-0000-000000000000',
             ITEM_CODE : '',
             ITEM_NAME : '',
+            TICKET_REST : 0,
             INPUT : '',
             BARCODE_GUID : '00000000-0000-0000-0000-000000000000',
             BARCODE : '',
             UNIT_GUID : '00000000-0000-0000-0000-000000000000',
             UNIT_NAME : '',
+            UNIT_SHORT : '',
             UNIT_FACTOR : 0,
             QUANTITY : 0,
             PRICE : 0,
@@ -210,6 +212,7 @@ export class posSaleCls
             LOYALTY : 0,
             VAT : 0,
             VAT_RATE : 0,
+            VAT_TYPE : '',
             TOTAL : 0,
             SUBTOTAL : 0,
             GRAND_AMOUNT : 0,
@@ -357,6 +360,7 @@ export class posSaleCls
     subTotalBuild()
     {
         let tmpData = this.ds.get('POS_SALE');
+        let tmpArr = [];
         let tmpSubIndex = -1;
 
         for (let i = 0; i < tmpData.length; i++) 
@@ -377,13 +381,16 @@ export class posSaleCls
                     let tmpItem = {...this.empty};
                     tmpItem.ITEM_NAME = "SUB TOTAL";
                     tmpItem.LINE_NO = tmpData[i].LINE_NO + 1;
-                    tmpItem.SUBTOTAL = -1;
+                    tmpItem.SUBTOTAL = tmpSubIndex;
                     tmpItem.AMOUNT = tmpData.where({SUBTOTAL:tmpSubIndex}).sum('AMOUNT',2);
 
-                    tmpData.push(tmpItem,false)
+                    tmpArr.push(tmpItem)
                 }
             }
+            tmpArr.push(tmpData[i])
         }
+        tmpData.splice(0,tmpData.length)
+        tmpData.import(tmpArr)
     }
 }
 export class posPaymentCls
@@ -1203,5 +1210,96 @@ export class posDeviceCls
 
             return port.on("close", resolve)
         });
+    }
+    escPrinter(pData)
+    {    
+        if(!core.instance.util.isElectron())
+        {
+            return
+        }
+
+        let device  = new this.escpos.USB();
+        let options = { encoding: "GB18030" /* default */ }
+        let printer = new this.escpos.Printer(device, options);
+
+        let imgLoad = (imgPath) => 
+        {
+            return new Promise((resolve) =>
+            {
+                this.escpos.Image.load(imgPath, function(image)
+                {
+                    resolve(image)
+                });
+            });
+        }
+        device.open(async function(error)
+        {   
+            console.log(error)
+
+            let tmpArr = [];
+            for (let i = 0; i < pData.length; i++) 
+            {
+                let tmpObj = pData[i]
+                if(typeof pData[i] == 'function')
+                {
+                    tmpObj = pData[i]()
+                }
+                if(Array.isArray(tmpObj))
+                {
+                    tmpArr.push(...tmpObj)
+                }
+                else if(typeof tmpObj == 'object')
+                {
+                    tmpArr.push(tmpObj)
+                }
+            }
+            
+            for (let i = 0; i < tmpArr.length; i++) 
+            {
+                if(typeof tmpArr[i].barcode != 'undefined')
+                {
+                    printer.align(tmpArr[i].align).barcode(tmpArr[i].barcode,'CODE39',tmpArr[i].options);                    
+                }
+                else if(typeof tmpArr[i].logo != 'undefined')
+                {
+                    let image = await imgLoad(tmpArr[i].logo);
+                    printer.align(tmpArr[i].align)
+                    .image(image, 's8')
+                    .then(() => 
+                    { 
+                        //printer.cut().close(); 
+                    });
+                }
+                else
+                {                   
+                    printer.size(0,0);
+                    printer.font(tmpArr[i].font);
+                    printer.align(tmpArr[i].align);
+
+                    if(typeof tmpArr[i].style != 'undefined')
+                    {
+                        printer.style(tmpArr[i].style);
+                    }
+                    else
+                    {
+                        printer.style("normal");
+                    }
+                    
+                    if(typeof tmpArr[i].size != 'undefined')
+                    {
+                        printer.size(tmpArr[i].size[0],tmpArr[i].size[1]);
+                    }
+                    printer.text(tmpArr[i].data,'857');
+                }                
+            }                      
+                    
+            printer.cut().close
+            (
+                function()
+                {
+                    
+                }
+            );
+        });  
     }
 }

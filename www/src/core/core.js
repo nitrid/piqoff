@@ -1,3 +1,4 @@
+import moment from 'moment';
 export class core
 {        
     static instance = null;
@@ -127,9 +128,11 @@ export class sql
                         }
                     }
                 }
-
+                console.log("execute 1 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
+                console.log(TmpQuery)
                 core.instance.socket.emit('sql',TmpQuery,(data) =>
                 {
+                    console.log("execute 2 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
                     core.instance.emit('onExecuted');
                     if(typeof data.auth_err == 'undefined')
                     {
@@ -722,12 +725,27 @@ export class datatable
         this.emit('onAddRow',pItem);
         super.push(pItem)
     }
+    getIndexByKey(pKey)
+    {
+        let tmpArr = [];
+        for (let i = 0; i < this.length; i++) 
+        {
+            tmpArr.push(Object.assign({}, this[i]))
+        }
+        for (let i = 0; i < tmpArr.length; i++) 
+        {
+            if(JSON.stringify(tmpArr[i]) == JSON.stringify(Object.assign({}, pKey)))
+            {
+                return i
+            }
+        }
+    }
     removeAt()
     {
         let tmpIndex = -1;
         if(arguments.length > 0 && typeof arguments[0] == 'object')
         {
-            tmpIndex = this.indexOf(arguments[0]);
+            tmpIndex = this.getIndexByKey(arguments[0]);
         }
         else if(arguments.length > 0 && typeof arguments[0] == 'number')
         {
