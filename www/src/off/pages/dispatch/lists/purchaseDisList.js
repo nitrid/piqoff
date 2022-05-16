@@ -6,7 +6,7 @@ import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
@@ -307,7 +307,7 @@ export default class purchaseDisList extends React.Component
                                 {
                                     App.instance.menuClick(
                                         {
-                                            id: 'irs_02_001',
+                                            id: 'irs_01_001',
                                             text: this.t('menu'),
                                             path: 'dispatch/documents/purchaseDispatch.js',
                                             pagePrm:{GUID:e.data.GUID}
@@ -316,7 +316,7 @@ export default class purchaseDisList extends React.Component
                             >                            
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
-
+                                <Export fileName={this.lang.t("menu.stk_02_001")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="REF" caption={this.t("grdPurcDisList.clmRef")} visible={true} width={200}/> 
                                 <Column dataField="REF_NO" caption={this.t("grdPurcDisList.clmRefNo")} visible={true} width={100}/> 
                                 <Column dataField="OUTPUT_CODE" caption={this.t("grdPurcDisList.clmOutputCode")} visible={false}/> 

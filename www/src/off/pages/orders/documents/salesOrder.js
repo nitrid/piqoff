@@ -15,7 +15,7 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
@@ -235,7 +235,37 @@ export default class salesOrder extends React.Component
                             {
                                 if(data.length > 0)
                                 {
-                                    this.addItem(data[0],e.rowIndex)
+                                    if(data.length == 1)
+                                    {
+                                        this.addItem(data[0],e.rowIndex)
+                                    }
+                                    else if(data.length > 1)
+                                    {
+                                        for (let i = 0; i < data.length; i++) 
+                                        {
+                                            if(i == 0)
+                                            {
+                                                this.addItem(data[i],e.rowIndex)
+                                            }
+                                            else
+                                            {
+                                                let tmpdocOrders = {...this.docObj.docOrders.empty}
+                                                tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
+                                                tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
+                                                tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
+                                                tmpdocOrders.REF = this.docObj.dt()[0].REF
+                                                tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
+                                                tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
+                                                tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                this.txtRef.readOnly = true
+                                                this.txtRefno.readOnly = true
+                                                this.docObj.docOrders.addEmpty(tmpdocOrders)
+                                                this.addItem(data[i],this.docObj.docOrders.dt().length-1)
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -286,7 +316,37 @@ export default class salesOrder extends React.Component
                                 {
                                     if(data.length > 0)
                                     {
-                                        this.addItem(data[0],e.rowIndex)
+                                        if(data.length == 1)
+                                        {
+                                            this.addItem(data[0],e.rowIndex)
+                                        }
+                                        else if(data.length > 1)
+                                        {
+                                            for (let i = 0; i < data.length; i++) 
+                                            {
+                                                if(i == 0)
+                                                {
+                                                    this.addItem(data[i],e.rowIndex)
+                                                }
+                                                else
+                                                {
+                                                    let tmpdocOrders = {...this.docObj.docOrders.empty}
+                                                    tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
+                                                    tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
+                                                    tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                    tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
+                                                    tmpdocOrders.REF = this.docObj.dt()[0].REF
+                                                    tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
+                                                    tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                    tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
+                                                    tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                    this.txtRef.readOnly = true
+                                                    this.txtRefno.readOnly = true
+                                                    this.docObj.docOrders.addEmpty(tmpdocOrders)
+                                                    this.addItem(data[i],this.docObj.docOrders.dt().length-1)
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -937,6 +997,7 @@ export default class salesOrder extends React.Component
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                                         <Scrolling mode="infinite" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
+                                        <Export fileName={this.lang.t("menu.sip_02_002")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsOrder.clmCreateDate")} width={150} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdSlsOrder.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdSlsOrder.clmItemName")} width={350} />
@@ -968,6 +1029,44 @@ export default class salesOrder extends React.Component
                                             {
                                                 if(this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1].ITEM_CODE == '')
                                                 {
+                                                    this.pg_txtItemsCode.show()
+                                                    this.pg_txtItemsCode.onClick = async(data) =>
+                                                    {
+                                                        if(data.length > 0)
+                                                        {
+                                                            if(data.length == 1)
+                                                            {
+                                                                this.addItem(data[0],this.docObj.docOrders.dt().length -1)
+                                                            }
+                                                            else if(data.length > 1)
+                                                            {
+                                                                for (let i = 0; i < data.length; i++) 
+                                                                {
+                                                                    if(i == 0)
+                                                                    {
+                                                                        this.addItem(data[i],this.docObj.docOrders.dt().length -1)
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        let tmpdocOrders = {...this.docObj.docOrders.empty}
+                                                                        tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
+                                                                        tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
+                                                                        tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                                        tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
+                                                                        tmpdocOrders.REF = this.docObj.dt()[0].REF
+                                                                        tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
+                                                                        tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                                        tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
+                                                                        tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                                        this.txtRef.readOnly = true
+                                                                        this.txtRefno.readOnly = true
+                                                                        this.docObj.docOrders.addEmpty(tmpdocOrders)
+                                                                        this.addItem(data[i],this.docObj.docOrders.dt().length-1)
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
                                                     return
                                                 }
                                             }
@@ -985,6 +1084,44 @@ export default class salesOrder extends React.Component
                                             this.txtRef.readOnly = true
                                             this.txtRefno.readOnly = true
                                             this.docObj.docOrders.addEmpty(tmpdocOrders)
+                                            this.pg_txtItemsCode.show()
+                                            this.pg_txtItemsCode.onClick = async(data) =>
+                                            {
+                                                if(data.length > 0)
+                                                {
+                                                    if(data.length == 1)
+                                                    {
+                                                        this.addItem(data[0],this.docObj.docOrders.dt().length -1)
+                                                    }
+                                                    else if(data.length > 1)
+                                                    {
+                                                        for (let i = 0; i < data.length; i++) 
+                                                        {
+                                                            if(i == 0)
+                                                            {
+                                                                this.addItem(data[i],this.docObj.docOrders.dt().length -1)
+                                                            }
+                                                            else
+                                                            {
+                                                                let tmpdocOrders = {...this.docObj.docOrders.empty}
+                                                                tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
+                                                                tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
+                                                                tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                                tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
+                                                                tmpdocOrders.REF = this.docObj.dt()[0].REF
+                                                                tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
+                                                                tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                                tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
+                                                                tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                                this.txtRef.readOnly = true
+                                                                this.txtRefno.readOnly = true
+                                                                this.docObj.docOrders.addEmpty(tmpdocOrders)
+                                                                this.addItem(data[i],this.docObj.docOrders.dt().length-1)
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         }
                                         else
                                         {

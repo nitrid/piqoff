@@ -17,7 +17,7 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
@@ -27,14 +27,15 @@ import tr from '../../../meta/lang/devexpress/tr.js';
 
 export default class priceDifferenceInvoice extends React.Component
 {
-    constructor()
+    constructor(props)
     {
-        super()
+        super(props)
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.docObj = new docCls();
         this.paymentObj = new docCls();
+        this.tabIndex = props.data.tabkey
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
         this._calculateTotal = this._calculateTotal.bind(this)
@@ -608,7 +609,7 @@ export default class priceDifferenceInvoice extends React.Component
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmPriceDiffInv"
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmPriceDiffInv"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(this.docLocked == true)
@@ -773,7 +774,7 @@ export default class priceDifferenceInvoice extends React.Component
                     {/* Form */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id="frmPriceDiffInv">
+                            <Form colCount={3} id={"frmPriceDiffInv"  + this.tabIndex}>
                                 {/* txtRef-Refno */}
                                 <Item>
                                     <Label text={this.t("txtRefRefno")} alignment="right" />
@@ -801,7 +802,7 @@ export default class priceDifferenceInvoice extends React.Component
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmPriceDiffInv"}>
+                                            <Validator validationGroup={"frmPriceDiffInv"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRef")} />
                                                 </Validator>  
                                             </NdTextBox>
@@ -850,7 +851,7 @@ export default class priceDifferenceInvoice extends React.Component
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmPriceDiffInv"}>
+                                            <Validator validationGroup={"frmPriceDiffInv"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRefNo")} />
                                                 </Validator> 
                                             </NdTextBox>
@@ -905,7 +906,7 @@ export default class priceDifferenceInvoice extends React.Component
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmPriceDiffInv"}>
+                                        <Validator validationGroup={"frmPriceDiffInv"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDepot")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -992,7 +993,7 @@ export default class priceDifferenceInvoice extends React.Component
                                     param={this.param.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmPriceDiffInv"}>
+                                        <Validator validationGroup={"frmPriceDiffInv"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validCustomerCode")} />
                                         </Validator>  
                                     </NdTextBox>
@@ -1060,7 +1061,7 @@ export default class priceDifferenceInvoice extends React.Component
                                             this.docObj.docCustomer.dt()[0].DOC_DATE = moment(this.dtDocDate.value).format("DD/MM/YYYY") 
                                     }).bind(this)}
                                     >
-                                        <Validator validationGroup={"frmPriceDiffInv"}>
+                                        <Validator validationGroup={"frmPriceDiffInv"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
@@ -1165,6 +1166,7 @@ export default class priceDifferenceInvoice extends React.Component
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                                         <Scrolling mode="infinite" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
+                                        <Export fileName={this.lang.t("menu.ftr_02_004")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdDiffInv.clmCreateDate")} width={200} allowEditing={false} headerFilter={{visible:true}}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdDiffInv.clmItemCode")} width={150} editCellRender={this._cellRoleRender} headerFilter={{visible:true}}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdDiffInv.clmItemName")} width={400} headerFilter={{visible:true}}/>
@@ -1201,11 +1203,11 @@ export default class priceDifferenceInvoice extends React.Component
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={4} parent={this} id="frmPriceDiffInv">
+                            <Form colCount={4} parent={this} id={"frmPriceDiffInv"  + this.tabIndex}>
                                 {/* Ara Toplam */}
                                 <Item location="after" colSpan={3}>
                                     <Button icon="add"
-                                    validationGroup="frmPriceDiffInv"
+                                    validationGroup={"frmPriceDiffInv"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -1214,7 +1216,47 @@ export default class priceDifferenceInvoice extends React.Component
                                             if(typeof this.docObj.docItems.dt()[0] != 'undefined')
                                             {
                                                 if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
-                                                {
+                                                { 
+                                                    this.pg_txtItemsCode.show()
+                                                    this.pg_txtItemsCode.onClick = async(data) =>
+                                                    {
+                                                        if(data.length > 0)
+                                                        {
+                                                            if(data.length == 1)
+                                                            {
+                                                                this.addItem(data[0],this.docObj.docItems.dt().length -1)
+                                                            }
+                                                            else if(data.length > 1)
+                                                            {
+                                                                for (let i = 0; i < data.length; i++) 
+                                                                {
+                                                                    if(i == 0)
+                                                                    {
+                                                                        this.addItem(data[i],this.docObj.docItems.dt().length -1)
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        let tmpDocItems = {...this.docObj.docItems.empty}
+                                                                        tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                                                                        tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                                                                        tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                                        tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                                                                        tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                                                                        tmpDocItems.REF = this.docObj.dt()[0].REF
+                                                                        tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                                                                        tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                                        tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                                                                        tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                                        tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                                                                        this.txtRef.readOnly = true
+                                                                        this.txtRefno.readOnly = true
+                                                                        this.docObj.docItems.addEmpty(tmpDocItems)
+                                                                        this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
                                                     return
                                                 }
                                             }
@@ -1664,7 +1706,7 @@ export default class priceDifferenceInvoice extends React.Component
                                 </NdGrid>
                                 <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={2} parent={this} id="frmSalesInv">
+                            <Form colCount={2} parent={this} >
                                 {/* Toplam */}
                                 <Item colSpan={1}></Item>
                                 <Item>
@@ -1724,7 +1766,7 @@ export default class priceDifferenceInvoice extends React.Component
                                     param={this.param.filter({ELEMENT:'cmbCashSafe',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbCashSafe',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmDiffCash"}>
+                                        <Validator validationGroup={"frmDiffCash"  + this.tabIndex}>
                                             <RequiredRule message={this.t("ValidCash")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -1737,7 +1779,7 @@ export default class priceDifferenceInvoice extends React.Component
                                         param={this.param.filter({ELEMENT:'numCash',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'numCash',USERS:this.user.CODE})}
                                         >
-                                        <Validator validationGroup={"frmDiffCash"}>
+                                        <Validator validationGroup={"frmDiffCash"  + this.tabIndex}>
                                             <RequiredRule message={this.t("ValidCash")} />
                                         </Validator>  
                                         </NdNumberBox>
@@ -1758,7 +1800,7 @@ export default class priceDifferenceInvoice extends React.Component
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.t("popCash.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                            validationGroup="frmDiffCash"
+                                            validationGroup={"frmDiffCash"  + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
@@ -1810,7 +1852,7 @@ export default class priceDifferenceInvoice extends React.Component
                                     param={this.param.filter({ELEMENT:'cmbCheckSafe',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbCheckSafe',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmDiffCheck"}>
+                                        <Validator validationGroup={"frmDiffCheck"  + this.tabIndex}>
                                             <RequiredRule message={this.t("ValidCash")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -1834,7 +1876,7 @@ export default class priceDifferenceInvoice extends React.Component
                                         param={this.param.filter({ELEMENT:'numcheck',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'numcheck',USERS:this.user.CODE})}
                                         >
-                                        <Validator validationGroup={"frmDiffCheck"}>
+                                        <Validator validationGroup={"frmDiffCheck"  + this.tabIndex}>
                                             <RequiredRule message={this.t("ValidCash")} />
                                         </Validator>  
                                         </NdNumberBox>
@@ -1855,7 +1897,7 @@ export default class priceDifferenceInvoice extends React.Component
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.t("popCheck.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                            validationGroup="frmDiffCheck"
+                                            validationGroup={"frmDiffCheck"  + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
@@ -1906,7 +1948,7 @@ export default class priceDifferenceInvoice extends React.Component
                                     param={this.param.filter({ELEMENT:'cmbBank',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbBank',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmDiffBank"}>
+                                        <Validator validationGroup={"frmDiffBank"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validBank")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -1919,7 +1961,7 @@ export default class priceDifferenceInvoice extends React.Component
                                         param={this.param.filter({ELEMENT:'numBank',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'numBank',USERS:this.user.CODE})}
                                         >
-                                        <Validator validationGroup={"frmDiffBank"}>
+                                        <Validator validationGroup={"frmDiffBank"  + this.tabIndex}>
                                             <RequiredRule message={this.t("ValidCash")} />
                                         </Validator>  
                                         </NdNumberBox>
@@ -1940,7 +1982,7 @@ export default class priceDifferenceInvoice extends React.Component
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.t("popBank.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                            validationGroup="frmDiffCheck"
+                                            validationGroup={"frmDiffBank"  + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")

@@ -15,7 +15,7 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
@@ -212,7 +212,37 @@ export default class purchaseOrder extends React.Component
                             {
                                 if(data.length > 0)
                                 {
-                                    this.addItem(data[0],e.rowIndex)
+                                    if(data.length == 1)
+                                    {
+                                        this.addItem(data[0],e.rowIndex)
+                                    }
+                                    else if(data.length > 1)
+                                    {
+                                        for (let i = 0; i < data.length; i++) 
+                                        {
+                                            if(i == 0)
+                                            {
+                                                this.addItem(data[i],e.rowIndex)
+                                            }
+                                            else
+                                            {
+                                                let tmpdocOrders = {...this.docObj.docOrders.empty}
+                                                tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
+                                                tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
+                                                tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
+                                                tmpdocOrders.REF = this.docObj.dt()[0].REF
+                                                tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
+                                                tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
+                                                tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                this.txtRef.readOnly = true
+                                                this.txtRefno.readOnly = true
+                                                this.docObj.docOrders.addEmpty(tmpdocOrders)
+                                                this.addItem(data[i],this.docObj.docOrders.dt().length-1)
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -262,7 +292,37 @@ export default class purchaseOrder extends React.Component
                                 {
                                     if(data.length > 0)
                                     {
-                                        this.addItem(data[0],e.rowIndex)
+                                        if(data.length == 1)
+                                        {
+                                            this.addItem(data[0],e.rowIndex)
+                                        }
+                                        else if(data.length > 1)
+                                        {
+                                            for (let i = 0; i < data.length; i++) 
+                                            {
+                                                if(i == 0)
+                                                {
+                                                    this.addItem(data[i],e.rowIndex)
+                                                }
+                                                else
+                                                {
+                                                    let tmpdocOrders = {...this.docObj.docOrders.empty}
+                                                    tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
+                                                    tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
+                                                    tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                    tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
+                                                    tmpdocOrders.REF = this.docObj.dt()[0].REF
+                                                    tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
+                                                    tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                    tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
+                                                    tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                    this.txtRef.readOnly = true
+                                                    this.txtRefno.readOnly = true
+                                                    this.docObj.docOrders.addEmpty(tmpdocOrders)
+                                                    this.addItem(data[i],this.docObj.docOrders.dt().length-1)
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -342,7 +402,14 @@ export default class purchaseOrder extends React.Component
             this.docObj.docOrders.dt()[pIndex].TOTAL = parseFloat((tmpData.result.recordset[0].PRICE + this.docObj.docOrders.dt()[pIndex].VAT).toFixed(2))
             this._calculateTotal()
         }
-        console.log(this.docObj.docOrders.dt()[pIndex].PRICE)
+        else
+        {
+            this.docObj.docItems.dt()[pIndex].PRICE =0
+            this.docObj.docItems.dt()[pIndex].VAT = 0
+            this.docObj.docItems.dt()[pIndex].AMOUNT = 0
+            this.docObj.docItems.dt()[pIndex].TOTAL = 0
+            this._calculateTotal()
+        }
     }
     async _getItems()
     {
@@ -386,7 +453,7 @@ export default class purchaseOrder extends React.Component
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmPurcOrder"
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmPurcOrder"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(this.docLocked == true)
@@ -588,7 +655,7 @@ export default class purchaseOrder extends React.Component
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmPurcOrder"}>
+                                            <Validator validationGroup={"frmPurcOrder"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRef")} />
                                                 </Validator>  
                                             </NdTextBox>
@@ -636,7 +703,7 @@ export default class purchaseOrder extends React.Component
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmPurcOrder"}>
+                                            <Validator validationGroup={"frmPurcOrder"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRefNo")} />
                                                 </Validator> 
                                             </NdTextBox>
@@ -690,7 +757,7 @@ export default class purchaseOrder extends React.Component
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmPurcOrder"}>
+                                        <Validator validationGroup={"frmPurcOrder"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDepot")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -774,7 +841,7 @@ export default class purchaseOrder extends React.Component
                                     param={this.param.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmPurcOrder"}>
+                                        <Validator validationGroup={"frmPurcOrder"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validCustomerCode")} />
                                         </Validator>  
                                     </NdTextBox>
@@ -841,7 +908,7 @@ export default class purchaseOrder extends React.Component
                                         {
                                     }).bind(this)}
                                     >
-                                        <Validator validationGroup={"frmPurcOrder"}>
+                                        <Validator validationGroup={"frmPurcOrder"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
@@ -911,6 +978,7 @@ export default class purchaseOrder extends React.Component
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                                         <Scrolling mode="infinite" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
+                                        <Export fileName={this.lang.t("menu.sip_02_001")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcOrders.clmCreateDate")} width={180} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdPurcOrders.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="MULTICODE" caption={this.t("grdPurcOrders.clmMulticode")} width={150}/>
@@ -934,7 +1002,7 @@ export default class purchaseOrder extends React.Component
                                 {/* Ara Toplam-Stok Ekle */}
                                 <Item location="after" colSpan={3}>
                                     <Button icon="add"
-                                    validationGroup="frmPurcOrder"
+                                    validationGroup={"frmPurcOrder"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -944,6 +1012,44 @@ export default class purchaseOrder extends React.Component
                                             {
                                                 if(this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1].ITEM_CODE == '')
                                                 {
+                                                    this.pg_txtItemsCode.show()
+                                                    this.pg_txtItemsCode.onClick = async(data) =>
+                                                    {
+                                                        if(data.length > 0)
+                                                        {
+                                                            if(data.length == 1)
+                                                            {
+                                                                this.addItem(data[0],this.docObj.docOrders.dt().length -1)
+                                                            }
+                                                            else if(data.length > 1)
+                                                            {
+                                                                for (let i = 0; i < data.length; i++) 
+                                                                {
+                                                                    if(i == 0)
+                                                                    {
+                                                                        this.addItem(data[i],this.docObj.docOrders.dt().length -1)
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        let tmpdocOrders = {...this.docObj.docOrders.empty}
+                                                                        tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
+                                                                        tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
+                                                                        tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                                        tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
+                                                                        tmpdocOrders.REF = this.docObj.dt()[0].REF
+                                                                        tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
+                                                                        tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                                        tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
+                                                                        tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                                        this.txtRef.readOnly = true
+                                                                        this.txtRefno.readOnly = true
+                                                                        this.docObj.docOrders.addEmpty(tmpdocOrders)
+                                                                        this.addItem(data[i],this.docObj.docOrders.dt().length-1)
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
                                                     return
                                                 }
                                             }
@@ -961,6 +1067,44 @@ export default class purchaseOrder extends React.Component
                                             this.txtRef.readOnly = true
                                             this.txtRefno.readOnly = true
                                             this.docObj.docOrders.addEmpty(tmpdocOrders)
+                                            this.pg_txtItemsCode.show()
+                                            this.pg_txtItemsCode.onClick = async(data) =>
+                                            {
+                                                if(data.length > 0)
+                                                {
+                                                    if(data.length == 1)
+                                                    {
+                                                        this.addItem(data[0],this.docObj.docOrders.dt().length -1)
+                                                    }
+                                                    else if(data.length > 1)
+                                                    {
+                                                        for (let i = 0; i < data.length; i++) 
+                                                        {
+                                                            if(i == 0)
+                                                            {
+                                                                this.addItem(data[i],this.docObj.docOrders.dt().length -1)
+                                                            }
+                                                            else
+                                                            {
+                                                                let tmpdocOrders = {...this.docObj.docOrders.empty}
+                                                                tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
+                                                                tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
+                                                                tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                                tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
+                                                                tmpdocOrders.REF = this.docObj.dt()[0].REF
+                                                                tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
+                                                                tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                                tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
+                                                                tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                                this.txtRef.readOnly = true
+                                                                this.txtRefno.readOnly = true
+                                                                this.docObj.docOrders.addEmpty(tmpdocOrders)
+                                                                this.addItem(data[i],this.docObj.docOrders.dt().length-1)
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         }
                                         else
                                         {
@@ -1260,7 +1404,7 @@ export default class purchaseOrder extends React.Component
                                     param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmPurcOrderPrint"}>
+                                        <Validator validationGroup={"frmPurcOrderPrint"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDesign")} />
                                         </Validator> 
                                     </NdSelectBox>

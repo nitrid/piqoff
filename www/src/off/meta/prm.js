@@ -1018,7 +1018,7 @@ export const prm =
     },
         //#endregion
 
-    //#region Depo Miktar Listesi
+    //#region Depo Sevk
      // negativeQuantity
      {
         TYPE : 1,

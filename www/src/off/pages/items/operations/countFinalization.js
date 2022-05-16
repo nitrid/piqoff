@@ -286,7 +286,7 @@ export default class countFinalization extends React.Component
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmValidCount"}>
+                                        <Validator validationGroup={"frmValidCount"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDepot")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -324,7 +324,7 @@ export default class countFinalization extends React.Component
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick} validationGroup="frmValidCount"></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick} validationGroup={"frmValidCount"  + this.tabIndex}></NdButton>
                         </div>
                         <div className="col-3">
                             

@@ -6,7 +6,7 @@ import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
@@ -328,7 +328,7 @@ export default class purchaseOrdList extends React.Component
                             >                            
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
-
+                                <Export fileName={this.lang.t("menu.sip_01_001")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="REF" caption={this.t("grdPurcOrdList.clmRef")} visible={true} width={200}/> 
                                 <Column dataField="REF_NO" caption={this.t("grdPurcOrdList.clmRefNo")} visible={true} width={100}/> 
                                 <Column dataField="OUTPUT_CODE" caption={this.t("grdPurcOrdList.clmOutputCode")} visible={false}/> 

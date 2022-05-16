@@ -114,7 +114,7 @@ export default class promotionCard extends React.Component
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmPromo"
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmPromo"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -210,7 +210,7 @@ export default class promotionCard extends React.Component
                     </div>
                     <div className="row px-2 pt-2"> 
                         <div className="col-12">
-                            <Form colCount={3} id="frmPromo">
+                            <Form colCount={3} id={"frmPromo"  + this.tabIndex}>
                                 <GroupItem colSpan={3}>
                                 <GroupItem colCount={3}>
                                 {/* txtCode */}
@@ -256,7 +256,7 @@ export default class promotionCard extends React.Component
                                     }).bind(this)} 
                                     param={this.param.filter({ELEMENT:'txtCode',USERS:this.user.CODE})} 
                                     >     
-                                        <Validator validationGroup={"frmPromo"}>
+                                        <Validator validationGroup={"frmPromo"  + this.tabIndex}>
                                             <RequiredRule />
                                         </Validator>  
                                     </NdTextBox>  

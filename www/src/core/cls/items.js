@@ -1173,7 +1173,7 @@ export class editItemCls
         let tmpDt = new datatable('ITEM_EDIT');            
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE (CODE) LIKE (@CODE) AND " + 
+            query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE ((CODE) IN (@CODE) OR (@CODE = '')) AND " + 
                     "(NAME) LIKE (@NAME) AND ((CUSTOMER_GUID = @CUSTOMER) OR (@CUSTOMER = '00000000-0000-0000-0000-000000000000')) AND ((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) ",
             param : ['CODE:string|50','NAME:string|50','CUSTOMER:string|50','MAIN_GRP:string|25']
         }
@@ -1249,15 +1249,13 @@ export class editItemCls
            
             if(arguments.length > 0)
             {
-                tmpPrm.CODE = typeof arguments[0].CODE == 'undefined' ? '%' : arguments[0].CODE;
+                tmpPrm.CODE = typeof arguments[0].CODE == 'undefined' ? '' : arguments[0].CODE;
                 tmpPrm.NAME = typeof arguments[0].NAME == 'undefined' ? '%' : arguments[0].NAME;  
                 tmpPrm.CUSTOMER = typeof arguments[0].CUSTOMER == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].CUSTOMER;
                 tmpPrm.MAIN_GRP = typeof arguments[0].MAIN_GRP == 'undefined' ? '' : arguments[0].MAIN_GRP;
             }
             
-            this.ds.get('ITEM_EDIT').selectCmd.value = Object.values(tmpPrm)
             
-            await this.ds.get('ITEM_EDIT').refresh();
             resolve(this.ds.get('ITEM_EDIT'));    
         });
     }

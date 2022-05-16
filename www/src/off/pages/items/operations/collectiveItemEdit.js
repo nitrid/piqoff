@@ -20,6 +20,7 @@ import NdGrid,{Column,Editing,Paging,Scrolling,Pager,KeyboardNavigation} from '.
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
+import NdTagBox from '../../../../core/react/devex/tagbox.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
@@ -51,11 +52,71 @@ export default class collectiveItemEdit extends React.Component
 
         this.txtCustomerCode.GUID ='00000000-0000-0000-0000-000000000000'
         this.txtCustomerCode.CODE =''
+        console.log(this.editObj.dt())
         await this.grdItemList.dataRefresh({source:this.editObj.dt('ITEM_EDIT')});
     }
     async _btnGetClick()
     {
-        await this.editObj.load({CODE:(this.txtCode.value.replaceAll('*','%')+'%%'),NAME:(this.txtName.value.replaceAll('*','%')+'%%'),CUSTOMER:this.txtCustomerCode.GUID,MAIN_GRP:this.cmbItemGroup.value})
+        if(this.txtName.value != '' && this.txtName.value.slice(-1) != '*')
+        {
+            let txtName = this.txtName.value + '*'
+            this.txtName.setState({value:txtName})
+        }
+        
+            let tmpSource =
+            {
+                source : 
+                {
+                    select : 
+                    {
+                        query : "SELECT *,MAIN_UNIT_NAME AS UNIT_NAME," + 
+                                "CASE WHEN PRICE_SALE <> 0 THEN " +
+                                "CONVERT(nvarchar,ROUND((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE,2)) + '/ %' + CONVERT(nvarchar,ROUND((((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / (PRICE_SALE / ((VAT / 100) + 1))) * 100,2)) " +
+                                "ELSE '0'  " +
+                                "END AS MARGIN, " +
+                                "CASE WHEN PRICE_SALE <> 0 THEN " +
+                                "CONVERT(nvarchar,ROUND(((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / 1.12,2)) + '/ %' + CONVERT(nvarchar,ROUND(((((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / 1.12) / (PRICE_SALE / ((VAT / 100) + 1))) * 100,2)) " +
+                                "ELSE '0' " +
+                                "END AS NETMARGIN " +
+                                "FROM ITEMS_EDIT_VW_01 " +
+                                "WHERE {0} " +
+                                "((NAME LIKE @NAME +'%') OR (@NAME = '')) AND " +
+                                "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) AND " +
+                                "((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = ''))",
+                        param : ['NAME:string|250','MAIN_GRP:string|25','CUSTOMER_CODE:string|25'],
+                        value : [this.txtName.value.replaceAll("*", "%"),this.cmbItemGroup.value,this.txtCustomerCode.value]
+                    },
+                    sql : this.core.sql
+                }
+            }
+            
+            if(this.txtCode.value.length == 0)
+            {
+                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "")
+            }
+            else if(this.txtCode.value.length == 1)
+            {
+                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE LIKE '" + this.txtCode.value[0] + "' + '%') OR (BARCODE LIKE '" + this.txtCode.value[0] + "' + '%') OR (MULTICODE LIKE '" + this.txtCode.value[0] + "' + '%')) AND")
+            }
+            else
+            {
+                let TmpVal = ''
+                for (let i = 0; i < this.txtCode.value.length; i++) 
+                {
+                    TmpVal = TmpVal + ",'" + this.txtCode.value[i] + "'"
+                    
+                }
+                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (BARCODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (MULTICODE IN (" + TmpVal.substring(1,TmpVal.length) + "))) AND")
+            }
+            await this.grdItemList.dataRefresh(tmpSource)
+            for (let i = 0; i < this.grdItemList.data.datatable.length; i++) 
+            {
+                this.editObj.dt().push(this.grdItemList.data.datatable[i])
+            }
+            console.log(this.editObj.dt())
+            console.log(this.editObj.dt()[0].GUID)
+            await this.grdItemList.dataRefresh({source:this.editObj.dt('ITEM_EDIT')});
+       
     }
     _cellRoleRender(e)
     {
@@ -125,6 +186,7 @@ export default class collectiveItemEdit extends React.Component
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="default"
                                     onClick={async (e)=>
                                     {
+                                        console.log(this.editObj.dt())
                                         
                                             let tmpConfObj =
                                             {
@@ -189,15 +251,8 @@ export default class collectiveItemEdit extends React.Component
                             {/* txtCode */}
                             <Item>
                                     <Label text={this.t("txtCode")} alignment="right" />
-                                    <NdTextBox id="txtCode" parent={this} simple={true}
-                                    onChange={(async()=>
-                                    {
-                                      
-                                    }).bind(this)}
-                                    param={this.param.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
+                                        <NdTagBox id="txtCode" parent={this} simple={true} value={[]} placeholder={this.t("codePlaceHolder")}
+                                        />
                                 </Item>
                                 <Item>
                                 <Label text={this.t("txtCustomerCode")} alignment="right" />

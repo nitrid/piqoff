@@ -7,7 +7,7 @@ import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule
 import NdSelectBox from '../../core/react/devex/selectbox.js';
 import NdPopGrid from '../../core/react/devex/popgrid.js';
 import NdPopUp from '../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation} from '../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Export} from '../../core/react/devex/grid.js';
 import i18n from './i18n.js'
 import NbKeyboard from "../tools/keyboard.js";
 import { Gallery } from 'devextreme-react/gallery';

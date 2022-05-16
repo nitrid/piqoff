@@ -1,9 +1,10 @@
 import React from 'react';
-import DataGrid,{Column,ColumnChooser,ColumnFixing,Pager,Paging,Scrolling,Selection,Editing,FilterRow,SearchPanel,HeaderFilter,Popup,KeyboardNavigation,Form,Lookup } from 'devextreme-react/data-grid';
+import DataGrid,{Column,ColumnChooser,ColumnFixing,Pager,Paging,Scrolling,Selection,Editing,FilterRow,SearchPanel,HeaderFilter,Popup,KeyboardNavigation,Form,Lookup,Export} from 'devextreme-react/data-grid';
 import Toolbar,{Item} from 'devextreme-react/toolbar';
+import { exportDataGrid } from 'devextreme/excel_exporter';
 import Base from './base.js';
 
-export {Column,ColumnChooser,ColumnFixing,Pager,Paging,Scrolling,Selection,Editing,FilterRow,SearchPanel,HeaderFilter,Popup,Toolbar,Item,KeyboardNavigation,Form,Lookup }
+export {Column,ColumnChooser,ColumnFixing,Pager,Paging,Scrolling,Selection,Editing,FilterRow,SearchPanel,HeaderFilter,Popup,Toolbar,Item,KeyboardNavigation,Form,Lookup,Export}
 export default class NdGrid extends Base
 {
     constructor(props)
@@ -310,7 +311,10 @@ export default class NdGrid extends Base
                 >
                     {this.props.children}
                 </DataGrid>
+                
             )            
+
+            
         }
         else
         {
