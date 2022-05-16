@@ -1217,7 +1217,7 @@ export class posDeviceCls
         let printer = new this.escpos.Printer(device, options);
         console.log(__dirname)
         const imgpath = this.path.join(__dirname, '../../Logo.png');
-        escpos.Image.load(imgpath, function(image)
+        this.escpos.Image.load(imgpath, function(image)
         {
             device.open(function(error)
             {   
