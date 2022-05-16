@@ -1219,12 +1219,12 @@ export class posDeviceCls
         device.open(function(error)
         {   
             console.log(error)
-            printer.align('ct')
-            .image(image, 's8')
-            .then(() => 
-            { 
-                //printer.cut().close(); 
-            });
+            // printer.align('ct')
+            // .image(image, 's8')
+            // .then(() => 
+            // { 
+            //     //printer.cut().close(); 
+            // });
 
             let tmpArr = [];
             for (let i = 0; i < pData.length; i++) 
