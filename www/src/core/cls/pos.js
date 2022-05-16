@@ -1206,15 +1206,15 @@ export class posDeviceCls
         });
     }
     escPrinter(pData)
-    {        
+    {    
         if(!core.instance.util.isElectron())
         {
             return
         }
 
-        let device  = new escpos.USB();
+        let device  = new this.escpos.USB();
         let options = { encoding: "GB18030" /* default */ }
-        let printer = new escpos.Printer(device, options);
+        let printer = new this.escpos.Printer(device, options);
 
         device.open(function(error)
         {   
