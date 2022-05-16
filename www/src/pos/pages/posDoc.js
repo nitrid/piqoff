@@ -171,7 +171,7 @@ export default class posDoc extends React.Component
             let tmpDt = new datatable(); 
             tmpDt.selectCmd = 
             {
-                query : "SELECT *,@CODE AS INPUT FROM ITEMS_POS_VW_01 WHERE CODE = @CODE OR BARCODE = @CODE OR MULTICODE = @CODE OR UNIQ_CODE = @CODE",
+                query : "SELECT TOP 1 *,@CODE AS INPUT FROM ITEMS_POS_VW_01 WHERE CODE = @CODE",
                 param : ['CODE:string|25'],
                 value: [pCode]
             }
@@ -270,7 +270,7 @@ export default class posDoc extends React.Component
         //ÜRÜN GETİRME        
         let tmpItemsDt = await this.getItemDb(pCode)
         if(tmpItemsDt.length > 0)
-        {                        
+        {                             
             //******************************************************** */
             //UNIQ BARKODU
             if(tmpItemsDt[0].UNIQ_CODE == tmpItemsDt[0].INPUT)
@@ -288,6 +288,7 @@ export default class posDoc extends React.Component
             }
             tmpPriceDt.selectCmd.value = [tmpItemsDt[0].GUID,tmpQuantity]
             await tmpPriceDt.refresh();
+            console.log("1 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))       
             if(tmpPriceDt.length > 0 && tmpPrice == 0)
             {
                 tmpPrice = tmpPriceDt[0].PRICE
@@ -311,6 +312,7 @@ export default class posDoc extends React.Component
                 }
                 //**************************************************** */
             }
+            console.log("2 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))       
             //**************************************************** */
             //EĞER ÜRÜN TERAZİLİ İSE
             if(tmpItemsDt[0].WEIGHING)
@@ -353,6 +355,7 @@ export default class posDoc extends React.Component
                     }
                 }
             }
+            console.log("3 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))       
             //**************************************************** */
             //FİYAT TANIMSIZ YADA SIFIR İSE
             //**************************************************** */
@@ -376,6 +379,7 @@ export default class posDoc extends React.Component
                 }
             }
             //**************************************************** */
+            console.log("4 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))       
             tmpItemsDt[0].QUANTITY = tmpQuantity
             tmpItemsDt[0].PRICE = tmpPrice
             this.saleAdd(tmpItemsDt[0])
@@ -471,38 +475,23 @@ export default class posDoc extends React.Component
         return new Promise(async resolve => 
         {
             if(this.posObj.dt().length > 0)
-            {                
+            {      
+                console.log("13 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))              
                 this.posObj.dt()[this.posObj.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.posSale.dt().sum('AMOUNT',2)).toFixed(2))
                 this.posObj.dt()[this.posObj.dt().length - 1].DISCOUNT = Number(parseFloat(this.posObj.posSale.dt().sum('DISCOUNT',2)).toFixed(2))
                 this.posObj.dt()[this.posObj.dt().length - 1].LOYALTY = Number(parseFloat(this.posObj.posSale.dt().sum('LOYALTY',2)).toFixed(2))
                 this.posObj.dt()[this.posObj.dt().length - 1].VAT = Number(parseFloat(this.posObj.posSale.dt().sum('VAT',2)).toFixed(2))
                 this.posObj.dt()[this.posObj.dt().length - 1].TOTAL = Number(parseFloat(this.posObj.posSale.dt().sum('TOTAL',2)).toFixed(2))
-                
+                console.log("14 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
                 this.state.payChange = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) >= 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2)) * -1
                 this.state.payRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2)); 
+                console.log("15 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
                 
-                this.setState(
-                    {
-                        totalRowCount:this.posObj.posSale.dt().length,
-                        totalItemCount:this.posObj.posSale.dt().sum('QUANTITY',2),
-                        totalLoyalty:this.posObj.dt()[0].LOYALTY,
-                        totalSub:this.posObj.dt()[0].AMOUNT,
-                        totalVat:this.posObj.dt()[0].VAT,
-                        totalDiscount:this.posObj.dt()[0].DISCOUNT,
-                        totalGrand:this.posObj.dt()[0].TOTAL,
-                        payTotal:this.posObj.posPay.dt().sum('AMOUNT',2),
-                        payChange:this.state.payChange,
-                        payRest:this.state.payRest,
-                        cheqCount:this.cheqDt.length,
-                        cheqLastAmount:this.cheqDt.length > 0 ? this.cheqDt[0].AMOUNT : 0,
-                        cheqTotalAmount:this.cheqDt.sum('AMOUNT',2)
-                    }
-                )
-                
+                console.log("16 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
                 this.txtPopTotal.value = parseFloat(this.state.payRest).toFixed(2)
                 this.txtPopCardPay.value = parseFloat(this.state.payRest).toFixed(2)
                 this.txtPopCashPay.value = parseFloat(this.state.payRest).toFixed(2)   
-
+                console.log("17 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
                 if(this.posObj.posSale.dt().length > 0)
                 {
                     this.posDevice.lcdPrint
@@ -517,9 +506,30 @@ export default class posDoc extends React.Component
     
             if(typeof pSave == 'undefined' || pSave)
             {
+                console.log("18 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
                 await this.posObj.save()
+                console.log("19 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
             }
-            resolve()
+            console.log("20 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
+            this.setState(
+                {
+                    totalRowCount:this.posObj.posSale.dt().length,
+                    totalItemCount:this.posObj.posSale.dt().sum('QUANTITY',2),
+                    totalLoyalty:this.posObj.dt()[0].LOYALTY,
+                    totalSub:this.posObj.dt()[0].AMOUNT,
+                    totalVat:this.posObj.dt()[0].VAT,
+                    totalDiscount:this.posObj.dt()[0].DISCOUNT,
+                    totalGrand:this.posObj.dt()[0].TOTAL,
+                    payTotal:this.posObj.posPay.dt().sum('AMOUNT',2),
+                    payChange:this.state.payChange,
+                    payRest:this.state.payRest,
+                    cheqCount:this.cheqDt.length,
+                    cheqLastAmount:this.cheqDt.length > 0 ? this.cheqDt[0].AMOUNT : 0,
+                    cheqTotalAmount:this.cheqDt.sum('AMOUNT',2)
+                }
+            ,()=>{})
+            console.log("21 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
+            resolve()            
         });
     }    
     isRowMerge(pType,pData)
@@ -549,6 +559,7 @@ export default class posDoc extends React.Component
     }
     async saleAdd(pItemData)
     {
+        console.log("5 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))       
         let tmpRowData = this.isRowMerge('SALE',pItemData)        
         //SATIR BİRLEŞTİR        
         if(typeof tmpRowData != 'undefined')
@@ -559,16 +570,17 @@ export default class posDoc extends React.Component
         else
         {            
             pItemData.QUANTITY = Number(parseFloat(pItemData.QUANTITY * pItemData.UNIT_FACTOR).toFixed(3))
-            this.saleRowAdd(pItemData)
+            this.saleRowAdd(pItemData)                  
         }        
         //HER EKLEME İŞLEMİNDEN SONRA İLK SATIR SEÇİLİYOR.
-        setTimeout(() => 
-        {
-            this.grdList.devGrid.selectRowsByIndexes(0)
-        }, 100);
+        // setTimeout(() => 
+        // {
+        //     this.grdList.devGrid.selectRowsByIndexes(0)
+        // }, 100);
     }
     async saleRowAdd(pItemData)
     {           
+        console.log("6 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
         pItemData.AMOUNT = Number(parseFloat(pItemData.PRICE * pItemData.QUANTITY).toFixed(2))
         pItemData.VAT_AMOUNT = Number(parseFloat(pItemData.AMOUNT *  Number(parseFloat(pItemData.VAT / 100).toFixed(3))).toFixed(2))
         pItemData.TOTAL = Number(parseFloat(pItemData.AMOUNT + pItemData.VAT_AMOUNT).toFixed(2))
@@ -612,21 +624,24 @@ export default class posDoc extends React.Component
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_LOYALTY = 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_VAT = 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_TOTAL = 0
-        
+        console.log("7 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
         await this.calcGrandTotal();
+        console.log("8 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
     }
     async saleRowUpdate(pRowData,pItemData)
     {
+        console.log("11 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
         let tmpAmount = Number(parseFloat(pItemData.PRICE * pItemData.QUANTITY).toFixed(2))
         let tmpVat = Number(parseFloat(tmpAmount *  Number(parseFloat(pRowData.VAT_RATE / 100).toFixed(3))).toFixed(2))
         let tmpTotal = Number(parseFloat(tmpAmount + tmpVat).toFixed(2))
-        
+        console.log("12 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))  
+        console.log(pRowData)  
         pRowData.QUANTITY = pItemData.QUANTITY
         pRowData.PRICE = pItemData.PRICE
         pRowData.AMOUNT = tmpAmount
         pRowData.VAT = tmpVat
         pRowData.TOTAL = tmpTotal
-
+        console.log("13 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
         await this.calcGrandTotal();
     }
     async payAdd(pType,pAmount)
@@ -1027,6 +1042,7 @@ export default class posDoc extends React.Component
     }
     render()
     {
+        console.log(1)
         return(
             <div>
                 <LoadPanel
@@ -1784,9 +1800,9 @@ export default class posDoc extends React.Component
                                             for (let i = 0; i < tmpData.length; i++) 
                                             {
                                                 tmpData[i].SUBTOTAL = tmpMaxSub
+                                                console.log(tmpData[i].SUBTOTAL)
                                             }
                                             this.calcGrandTotal()
-                                            console.log(tmpData)
                                         }}>
                                             <i className="text-white fa-solid fa-square-root-variable" style={{fontSize: "24px"}} />
                                         </NbButton>

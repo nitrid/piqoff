@@ -360,6 +360,7 @@ export class posSaleCls
     subTotalBuild()
     {
         let tmpData = this.ds.get('POS_SALE');
+        let tmpArr = [];
         let tmpSubIndex = -1;
 
         for (let i = 0; i < tmpData.length; i++) 
@@ -380,13 +381,16 @@ export class posSaleCls
                     let tmpItem = {...this.empty};
                     tmpItem.ITEM_NAME = "SUB TOTAL";
                     tmpItem.LINE_NO = tmpData[i].LINE_NO + 1;
-                    tmpItem.SUBTOTAL = -1;
+                    tmpItem.SUBTOTAL = tmpSubIndex;
                     tmpItem.AMOUNT = tmpData.where({SUBTOTAL:tmpSubIndex}).sum('AMOUNT',2);
 
-                    tmpData.push(tmpItem,false)
+                    tmpArr.push(tmpItem)
                 }
             }
+            tmpArr.push(tmpData[i])
         }
+        tmpData.splice(0,tmpData.length)
+        tmpData.import(tmpArr)
     }
 }
 export class posPaymentCls
