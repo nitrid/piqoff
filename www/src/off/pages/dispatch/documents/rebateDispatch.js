@@ -331,21 +331,17 @@ export default class rebateDispatch extends React.Component
     }
     async _getRebate()
     {
-        let tmpSource =
+        let tmpQuery = 
         {
-            source : 
-            {
-                groupBy : this.groupList,
-                select : 
-                {
-                    query : "SELECT *,[dbo].[FN_DEPOT_QUANTITY]([ITEM_GUID],@DEPOT,GETDATE()) AS QUANTITY FROM ITEM_MULTICODE_VW_01 WHERE [dbo].[FN_DEPOT_QUANTITY]([ITEM_GUID],@DEPOT,GETDATE()) > 0 AND CUSTOMER_GUID = @CUSTOMER",
-                    param : ['DEPOT:string|50','CUSTOMER:string|50'],
-                    value : [this.docObj.dt()[0].OUTPUT,this.docObj.dt()[0].INPUT]
-                },
-                sql : this.core.sql
-            }
+            query : "SELECT *,[dbo].[FN_DEPOT_QUANTITY]([ITEM_GUID],@DEPOT,GETDATE()) AS QUANTITY FROM ITEM_MULTICODE_VW_01 WHERE [dbo].[FN_DEPOT_QUANTITY]([ITEM_GUID],@DEPOT,GETDATE()) > 0 AND CUSTOMER_GUID = @CUSTOMER",
+            param : ['DEPOT:string|50','CUSTOMER:string|50'],
+            value : [this.docObj.dt()[0].OUTPUT,this.docObj.dt()[0].INPUT]
         }
-        await this.pg_RebateGrid.setSource(tmpSource)
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        if(tmpData.result.recordset.length > 0)
+        {   
+            await this.pg_RebateGrid.setData(tmpData.result.recordset)
+        }
         this.pg_RebateGrid.show()
         this.pg_RebateGrid.onClick = async(data) =>
         {

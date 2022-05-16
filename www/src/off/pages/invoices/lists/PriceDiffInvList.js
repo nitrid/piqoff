@@ -164,7 +164,7 @@ export default class PriceDiffInvList extends React.Component
                                             {
                                                 id: 'ftr_02_004',
                                                 text: this.t('menu'),
-                                                path: '../pages/invoices/documents/priceDifferenceInvoice.js'
+                                                path: 'invoices/documents/priceDifferenceInvoice.js'
                                             })
                                         }
                                     }    
@@ -320,7 +320,7 @@ export default class PriceDiffInvList extends React.Component
                                         {
                                             id: 'ftr_02_004',
                                             text: this.t('menu'),
-                                            path: '../pages/invoices/documents/priceDifferenceInvoice.js',
+                                            path: 'invoices/documents/priceDifferenceInvoice.js',
                                             pagePrm:{GUID:e.data.GUID}
                                         })
                                 }}

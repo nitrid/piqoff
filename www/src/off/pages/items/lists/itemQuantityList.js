@@ -111,25 +111,52 @@ export default class QuantityList extends React.Component
     }
     async _btnGetirClick()
     {
-        let tmpSource =
+        if(this.chkZeroQuantity == true)
         {
-            source : 
+            let tmpSource =
             {
-                groupBy : this.groupList,
-                select : 
+                source : 
                 {
-                    query : "SELECT NAME,CODE,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM_BARCODE.ITEM = ITEMS.GUID ORDER BY LDATE DESC),'') AS BARCODE,[dbo].[FN_DEPOT_QUANTITY](GUID,@DEPOT,GETDATE()) AS QUANTITY FROM ITEMS " +
-                            "WHERE  " +
-                            "((NAME like @NAME + '%') OR (@NAME = ''))",
-                    param : ['NAME:string|250','DEPOT:string|50'],
-                    value : [this.txtUrunAdi.value,this.cmbDepot.value]
-                },
-                sql : this.core.sql
+                    groupBy : this.groupList,
+                    select : 
+                    {
+                        query : "SELECT NAME,CODE,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM_BARCODE.ITEM = ITEMS.GUID ORDER BY LDATE DESC),'') AS BARCODE,[dbo].[FN_DEPOT_QUANTITY](GUID,@DEPOT,GETDATE()) AS QUANTITY FROM ITEMS " +
+                                "WHERE  " +
+                                "((NAME like @NAME + '%') OR (@NAME = ''))",
+                        param : ['NAME:string|250','DEPOT:string|50'],
+                        value : [this.txtUrunAdi.value,this.cmbDepot.value]
+                    },
+                    sql : this.core.sql
+                }
             }
+
+            await this.grdListe.dataRefresh(tmpSource)
         }
+        else
+        {
+            let tmpSource =
+            {
+                source : 
+                {
+                    groupBy : this.groupList,
+                    select : 
+                    {
+                        query : "SELECT NAME,CODE,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM_BARCODE.ITEM = ITEMS.GUID ORDER BY LDATE DESC),'') AS BARCODE,[dbo].[FN_DEPOT_QUANTITY](GUID,@DEPOT,GETDATE()) AS QUANTITY FROM ITEMS " +
+                                "WHERE [dbo].[FN_DEPOT_QUANTITY](GUID,@DEPOT,GETDATE()) <> 0 AND " +
+                                "((NAME like @NAME + '%') OR (@NAME = ''))",
+                        param : ['NAME:string|250','DEPOT:string|50'],
+                        value : [this.txtUrunAdi.value,this.cmbDepot.value]
+                    },
+                    sql : this.core.sql
+                }
+            }
+
+            await this.grdListe.dataRefresh(tmpSource)
+        }
+       
         
     
-        await this.grdListe.dataRefresh(tmpSource)
+      
     }
     render()
     {
@@ -153,7 +180,7 @@ export default class QuantityList extends React.Component
                                             {
                                                 id: 'stk_01_001',
                                                 text: 'Stok Tanımları',
-                                                path: '../pages/items/cards/itemCard.js'
+                                                path: 'items/cards/itemCard.js'
                                             })
                                         }
                                     }    
@@ -219,7 +246,7 @@ export default class QuantityList extends React.Component
                             />
                         </div>
                         <div className="col-3">
-                            
+                        <NdCheckBox id="chkZeroQuantity" parent={this} text={this.t("chkZeroQuantity")}  value={false} ></NdCheckBox>
                         </div>
                         <div className="col-3">
                             

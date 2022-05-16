@@ -189,7 +189,7 @@ export default class safeList extends React.Component
                                             {
                                                 id: 'fns_02_001',
                                                 text: this.t('menu'),
-                                                path: '../pages/finance/documents/payment.js'
+                                                path: 'finance/documents/payment.js'
                                             })
                                         }
                                     }    

@@ -165,7 +165,7 @@ export default class rebateDisList extends React.Component
                                             {
                                                 id: 'irs_02_003',
                                                 text: this.t('menu'),
-                                                path: '../pages/dispatch/documents/rebateDispatch.js',
+                                                path: 'dispatch/documents/rebateDispatch.js',
                                             })
                                         }
                                     }    
@@ -309,7 +309,7 @@ export default class rebateDisList extends React.Component
                                         {
                                             id: 'irs_02_003',
                                             text: this.t('menu'),
-                                            path: '../pages/dispatch/documents/rebateDispatch.js',
+                                            path: 'dispatch/documents/rebateDispatch.js',
                                             pagePrm:{GUID:e.data.GUID}
                                         })
                                 }}

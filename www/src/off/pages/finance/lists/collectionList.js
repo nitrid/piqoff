@@ -164,7 +164,7 @@ export default class collectionList extends React.Component
                                             {
                                                 id: 'fns_02_002',
                                                 text: this.t('menu'),
-                                                path: '../pages/finance/documents/collection.js'
+                                                path: 'finance/documents/collection.js'
                                             })
                                         }
                                     }    

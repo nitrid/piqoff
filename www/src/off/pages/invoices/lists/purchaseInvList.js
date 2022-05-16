@@ -167,7 +167,7 @@ export default class purchaseInvList extends React.Component
                                             {
                                                 id: 'ftr_02_001',
                                                 text: this.t('menu'),
-                                                path: '../pages/invoices/documents/purchaseInvoice.js'
+                                                path: 'invoices/documents/purchaseInvoice.js'
                                             })
                                         }
                                     }    
@@ -348,7 +348,7 @@ export default class purchaseInvList extends React.Component
                                         {
                                             id: 'ftr_02_001',
                                             text: this.t('menu'),
-                                            path: '../pages/invoices/documents/purchaseInvoice.js',
+                                            path: 'invoices/documents/purchaseInvoice.js',
                                             pagePrm:{GUID:e.data.GUID}
                                         })
                                 }}

@@ -6,6 +6,7 @@ import moment from 'moment';
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
+import ContextMenu from 'devextreme-react/context-menu';
 import TabPanel from 'devextreme-react/tab-panel';
 import { Button } from 'devextreme-react/button';
 
@@ -33,10 +34,13 @@ export default class outageDoc extends React.Component
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.docObj = new docCls();
 
+        this._getDispatch = this._getDispatch.bind(this)
         this._cellRoleRender = this._cellRoleRender.bind(this)
 
         this.frmOutwas = undefined;
-        this.docLocked = false;        
+        this.docLocked = false;      
+        
+        this.rightItems = [{ text: this.t("getDispatch"), }]
     }
     async componentDidMount()
     {
@@ -79,7 +83,7 @@ export default class outageDoc extends React.Component
         {            
             this.btnBack.setState({disabled:true});
             this.btnNew.setState({disabled:false});
-            this.btnSave.setState({disabled:true});
+            this.btnSave.setState({disabled:false});
             this.btnDelete.setState({disabled:false});
             this.btnCopy.setState({disabled:false});
             this.btnPrint.setState({disabled:false});          
@@ -186,6 +190,60 @@ export default class outageDoc extends React.Component
     async _calculateTotal()
     {
        
+    }
+    async _getDispatch()
+    {
+        let tmpQuery = 
+        {
+            query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE INVOICE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND REBATE = 1 AND DOC_TYPE IN(40)",
+        }
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        if(tmpData.result.recordset.length > 0)
+        {   
+            await this.pg_dispatchGrid.setData(tmpData.result.recordset)
+        }
+        this.pg_dispatchGrid.show()
+        this.pg_dispatchGrid.onClick = async(data) =>
+        {
+            for (let i = 0; i < data.length; i++) 
+            {
+                let tmpDocItems = {...this.docObj.docItems.empty}
+                tmpDocItems.GUID = data[i].GUID
+                tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                tmpDocItems.TYPE =  this.docObj.dt()[0].TYPE
+                tmpDocItems.DOC_TYPE =this.docObj.dt()[0].DOC_TYPE
+                tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                tmpDocItems.LINE_NO = data[i].LINE_NO
+                tmpDocItems.REF = this.docObj.dt()[0].REF
+                tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].DOC_DATE
+                tmpDocItems.INPUT = '00000000-0000-0000-0000-000000000000'
+                tmpDocItems.INPUT_CODE =''
+                tmpDocItems.INPUT_NAME = ''
+                tmpDocItems.OUTPUT = data[i].OUTPUT
+                tmpDocItems.OUTPUT_CODE = data[i].OUTPUT_CODE
+                tmpDocItems.OUTPUT_NAME = data[i].OUTPUT_NAME
+                tmpDocItems.ITEM = data[i].ITEM
+                tmpDocItems.ITEM_CODE = data[i].ITEM_CODE
+                tmpDocItems.ITEM_NAME = data[i].ITEM_NAME
+                tmpDocItems.PRICE = data[i].PRICE
+                tmpDocItems.QUANTITY = data[i].QUANTITY
+                tmpDocItems.VAT = data[i].VAT
+                tmpDocItems.AMOUNT = data[i].AMOUNT
+                tmpDocItems.TOTAL = data[i].TOTAL
+                tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
+                tmpDocItems.INVOICE_GUID = '00000000-0000-0000-0000-000000000000'
+                tmpDocItems.VAT_RATE = data[i].VAT_RATE
+                tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
+                tmpDocItems.CONNECT_REF = data[i].CONNECT_REF
+
+                await this.docObj.docItems.addEmpty(tmpDocItems,false)
+                this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].stat = 'edit'
+            }
+            this.docObj.docItems.dt().emit('onRefresh')
+            this._calculateTotal()
+        }
     }
     _cellRoleRender(e)
     {
@@ -623,7 +681,7 @@ export default class outageDoc extends React.Component
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_Docs.title")} 
-                                    data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 1 AND REBATE = 0"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT GUID,REF,REF_NO,OUTPUT_NAMEFROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 1 AND REBATE = 0"},sql:this.core.sql}}}
                                     button=
                                     {
                                         [
@@ -641,9 +699,7 @@ export default class outageDoc extends React.Component
                                     >
                                         <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150} defaultSortOrder="asc"/>
                                         <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="INPUT_NAME" caption={this.t("pg_Docs.clmInputName")} width={300} defaultSortOrder="asc" />
                                         <Column dataField="OUTPUT_NAME" caption={this.t("pg_Docs.clmOutputName")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="DOC_DATE" caption={this.t("pg_Docs.clmInputCode")} width={300} defaultSortOrder="asc" />
                                         
                                     </NdPopGrid>
                                 </Item>
@@ -768,6 +824,7 @@ export default class outageDoc extends React.Component
                             }}>
                                
                                  <Item>
+                                 <React.Fragment>    
                                     <NdGrid parent={this} id={"grdOutwasItems"} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 
@@ -792,6 +849,24 @@ export default class outageDoc extends React.Component
                                         <Column dataField="QUANTITY" caption={this.t("grdOutwasItems.clmQuantity")} dataType={'number'} width={150}/>
                                         <Column dataField="DESCRIPTION" caption={this.t("grdOutwasItems.clmDescription")} />
                                     </NdGrid>
+                                    <ContextMenu
+                                    dataSource={this.rightItems}
+                                    width={200}
+                                    target="#grdOutwasItems"
+                                    onItemClick={(async(e)=>
+                                    {
+                                        if(e.itemData.text == this.t("getDispatch"))
+                                        {
+                                            this._getDispatch()
+                                        }
+                                        else if(e.itemData.text == this.t("getPayment"))
+                                        {
+                                            await this._getPayment()
+                                            this.popPayment.show()
+                                        }
+                                        
+                                    }).bind(this)} />
+                                    </React.Fragment>    
                                 </Item>
                                 <Item location="after">
                                     <Button icon="add"
@@ -939,6 +1014,23 @@ export default class outageDoc extends React.Component
                         <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
                         <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />
                     </NdPopGrid>
+                       {/* İrsaliye Grid */}
+                       <NdPopGrid id={"pg_dispatchGrid"} parent={this} container={"#root"}
+                        visible={false}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        showBorders={true}
+                        width={'90%'}
+                        height={'90%'}
+                        selection={{mode:"multiple"}}
+                        title={this.t("pg_dispatchGrid.title")} //
+                        >
+                            <Column dataField="REFERANS" caption={this.t("pg_dispatchGrid.clmReferans")} width={200} defaultSortOrder="asc"/>
+                            <Column dataField="INPUT_NAME" caption={this.t("pg_dispatchGrid.clmCustomer")} width={300} />
+                            <Column dataField="ITEM_CODE" caption={this.t("pg_dispatchGrid.clmCode")} width={200}/>
+                            <Column dataField="ITEM_NAME" caption={this.t("pg_dispatchGrid.clmName")} width={300} />
+                            <Column dataField="QUANTITY" caption={this.t("pg_dispatchGrid.clmQuantity")} width={300} />
+                        </NdPopGrid>
                 </ScrollView>                
             </div>
         )

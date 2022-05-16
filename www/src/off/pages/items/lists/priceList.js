@@ -158,7 +158,7 @@ export default class itemList extends React.Component
                                             {
                                                 id: 'stk_01_001',
                                                 text: 'Stok Tanımları',
-                                                path: '../pages/items/cards/itemCard.js'
+                                                path: 'items/cards/itemCard.js'
                                             })
                                         }
                                     }    

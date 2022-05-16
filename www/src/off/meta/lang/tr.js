@@ -716,6 +716,7 @@ export const langTr =
         cmbOutDepot: "Çıkış Deposu",
         dtDocDate : "Tarih",
         txtBarcode : "Barkod Ekle",
+        getDispatch : "İrsaliye Getir",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -738,6 +739,15 @@ export const langTr =
             clmQuantity : "Miktar",
             clmCreateDate: "Kayıt Tarihi",
             clmDescription :"Açıklama"
+        },
+        pg_dispatchGrid : 
+        {
+            title : "İrsaliye Seçimi",
+            clmReferans : "Seri - Sıra",
+            clmCode : "Kodu",
+            clmName : "Adı",
+            clmQuantity : "Miktar",
+            clmCuStomer : "Cari",
         },
         popPassword : 
         {
@@ -1182,6 +1192,7 @@ export const langTr =
     stk_03_006 : 
     {
         txtItemName : "Ürün Adı",
+        chkZeroQuantity : "0 Miktarlar Gösterilsin",
         cmbDepot : "Depo",
         btnCheck : "Aktif",
         btnGet :"Getir",
@@ -1281,7 +1292,12 @@ export const langTr =
             title: " Dikkat",
             btn01 : "Tamam",
             msg : "Ürünü Birden Fazla Cari İçin Seçilmiş Lütfen Kontol Ediniz"
-
+        },
+        msgCustomerFound : 
+        {
+            title: " Dikkat",
+            btn01 : "Tamam",
+            msg : "Carisi Tanımlanmamış Ürünler Seçilemez. Lütfen Cari Tanımlayın"
         }
     },
     stk_04_003 : 
@@ -2229,6 +2245,7 @@ export const langTr =
         txtTotal : "Genel Toplam",
         dtShipDate :"Sevk Tarihi",
         getPayment : "Tahsilatlar",
+        getDispatch : "İrsaliye Getir",
         cash : "Tutar",
         description :"Açıklama",
         checkReference : "Referans",
@@ -3282,6 +3299,14 @@ export const langTr =
             title : "Stok Seçimi",
             clmCode :  "STOK KODU",
             clmName : "STOK ADI",
+           
+        },
+        pg_RebateGrid : 
+        {
+            title : "İade Stok Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+            clmQuantity :"MİKTAR"
         },
         grdRebtDispatch: 
         {

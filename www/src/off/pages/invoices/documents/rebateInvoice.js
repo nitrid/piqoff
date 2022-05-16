@@ -36,6 +36,7 @@ export default class rebateInvoice extends React.Component
         this.paymentObj = new docCls();
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
+        this._getDispatch = this._getDispatch.bind(this)
         this._calculateTotal = this._calculateTotal.bind(this)
         this._getPayment = this._getPayment.bind(this)
         this._addPayment = this._addPayment.bind(this)
@@ -43,7 +44,7 @@ export default class rebateInvoice extends React.Component
         this.frmRebateInv = undefined;
         this.docLocked = false;        
 
-        this.rightItems = [{ text: this.t("getPayment"), }]
+        this.rightItems = [{ text: this.t("getDispatch"), },{ text: this.t("getPayment"), }]
     }
     async componentDidMount()
     {
@@ -445,6 +446,62 @@ export default class rebateInvoice extends React.Component
             await this._getPayment()
             this.popPayment.show()
     }
+    async _getDispatch()
+    {
+        let tmpQuery = 
+        {
+            query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND INVOICE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND REBATE = 1 AND DOC_TYPE IN(40)",
+            param : ['INPUT:string|50'],
+            value : [this.docObj.dt()[0].INPUT]
+        }
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        if(tmpData.result.recordset.length > 0)
+        {   
+            await this.pg_dispatchGrid.setData(tmpData.result.recordset)
+        }
+        this.pg_dispatchGrid.show()
+        this.pg_dispatchGrid.onClick = async(data) =>
+        {
+            for (let i = 0; i < data.length; i++) 
+            {
+                let tmpDocItems = {...this.docObj.docItems.empty}
+                tmpDocItems.GUID = data[i].GUID
+                tmpDocItems.DOC_GUID = data[i].DOC_GUID
+                tmpDocItems.TYPE = data[i].TYPE
+                tmpDocItems.DOC_TYPE = data[i].DOC_TYPE
+                tmpDocItems.REBATE = data[i].REBATE
+                tmpDocItems.LINE_NO = data[i].LINE_NO
+                tmpDocItems.REF = data[i].REF
+                tmpDocItems.REF_NO = data[i].REF_NO
+                tmpDocItems.DOC_DATE = data[i].DOC_DATE
+                tmpDocItems.SHIPMENT_DATE = data[i].SHIPMENT_DATE
+                tmpDocItems.INPUT = data[i].INPUT
+                tmpDocItems.INPUT_CODE = data[i].INPUT_CODE
+                tmpDocItems.INPUT_NAME = data[i].INPUT_NAME
+                tmpDocItems.OUTPUT = data[i].OUTPUT
+                tmpDocItems.OUTPUT_CODE = data[i].OUTPUT_CODE
+                tmpDocItems.OUTPUT_NAME = data[i].OUTPUT_NAME
+                tmpDocItems.ITEM = data[i].ITEM
+                tmpDocItems.ITEM_CODE = data[i].ITEM_CODE
+                tmpDocItems.ITEM_NAME = data[i].ITEM_NAME
+                tmpDocItems.PRICE = data[i].PRICE
+                tmpDocItems.QUANTITY = data[i].QUANTITY
+                tmpDocItems.VAT = data[i].VAT
+                tmpDocItems.AMOUNT = data[i].AMOUNT
+                tmpDocItems.TOTAL = data[i].TOTAL
+                tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
+                tmpDocItems.INVOICE_GUID = this.docObj.dt()[0].GUID
+                tmpDocItems.VAT_RATE = data[i].VAT_RATE
+                tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
+                tmpDocItems.CONNECT_REF = data[i].CONNECT_REF
+
+                await this.docObj.docItems.addEmpty(tmpDocItems,false)
+                this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].stat = 'edit'
+            }
+            this.docObj.docItems.dt().emit('onRefresh')
+            this._calculateTotal()
+        }
+    }
     async close()
     {
         App.instance.panel.onClose = async () =>
@@ -525,6 +582,7 @@ export default class rebateInvoice extends React.Component
                                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
                                                 
+                                                console.log(this.docObj.dt())
                                                 if((await this.docObj.save()) == 0)
                                                 {                                                    
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
@@ -661,9 +719,9 @@ export default class rebateInvoice extends React.Component
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
                                             readOnly={true}
                                             maxLength={32}
-                                            onChange={(async(e)=>
+                                            onValueChanged={(async(e)=>
                                             {
-                                                this.docObj.docCustomer.dt()[0].REF = e.value
+                                                this.docObj.docCustomer.dt()[0].REF = this.txtRef.value
                                                 let tmpQuery = 
                                                 {
                                                     query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 20 AND REF = @REF ",
@@ -816,8 +874,8 @@ export default class rebateInvoice extends React.Component
                                                     let tmpDatas = this.prmObj.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                     if(typeof tmpDatas != 'undefined' && tmpDatas.value ==  true)
                                                     {
-                                                        this.txtRef.setState({value:tmpData.result.recordset[0].CODE});
-                                                        this.txtRef.props.onChange()
+                                                        this.txtRef.value = tmpData.result.recordset[0].CODE
+                                                        this.txtRef.props.onValueChanged()
                                                     }
                                                 }
                                                 else
@@ -858,8 +916,8 @@ export default class rebateInvoice extends React.Component
                                                             let tmpData = this.prmObj.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
-                                                                this.txtRef.setState({value:data[0].CODE});
-                                                                this.txtRef.props.onChange()
+                                                                this.txtRef.value = data[0].CODE
+                                                                this.txtRef.props.onValueChanged()
                                                             }
                                                             
                                                         }
@@ -1055,7 +1113,6 @@ export default class rebateInvoice extends React.Component
                                     }}
                                     onRowRemoved={async(e)=>{
                                         this._calculateTotal()
-                                        await this.docObj.save()
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />

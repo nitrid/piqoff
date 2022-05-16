@@ -165,7 +165,7 @@ export default class purchaseDisList extends React.Component
                                             {
                                                 id: 'irs_02_001',
                                                 text: this.t('menu'),
-                                                path: '../pages/dispatch/documents/purchaseDispatch.js'
+                                                path: 'dispatch/documents/purchaseDispatch.js'
                                             })
                                         }
                                     }    
@@ -309,7 +309,7 @@ export default class purchaseDisList extends React.Component
                                         {
                                             id: 'irs_02_001',
                                             text: this.t('menu'),
-                                            path: '../pages/dispatch/documents/purchaseDispatch.js',
+                                            path: 'dispatch/documents/purchaseDispatch.js',
                                             pagePrm:{GUID:e.data.GUID}
                                         })
                                 }}
