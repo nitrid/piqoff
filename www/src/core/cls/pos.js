@@ -1215,71 +1215,75 @@ export class posDeviceCls
         let device  = new this.escpos.USB();
         let options = { encoding: "GB18030" /* default */ }
         let printer = new this.escpos.Printer(device, options);
-
-        device.open(function(error)
-        {   
-            console.log(error)
-            // printer.align('ct')
-            // .image(image, 's8')
-            // .then(() => 
-            // { 
-            //     //printer.cut().close(); 
-            // });
-
-            let tmpArr = [];
-            for (let i = 0; i < pData.length; i++) 
-            {
-                let tmpObj = pData[i]
-                if(typeof pData[i] == 'function')
+        
+        const imgpath = path.join(__dirname, '../../Logo.png');
+        escpos.Image.load(imgpath, function(image)
+        {
+            device.open(function(error)
+            {   
+                console.log(error)
+                printer.align('ct')
+                .image(image, 's8')
+                .then(() => 
+                { 
+                    //printer.cut().close(); 
+                });
+    
+                let tmpArr = [];
+                for (let i = 0; i < pData.length; i++) 
                 {
-                    tmpObj = pData[i]()
-                }
-                if(Array.isArray(tmpObj))
-                {
-                    tmpArr.push(...tmpObj)
-                }
-                else if(typeof tmpObj == 'object')
-                {
-                    tmpArr.push(tmpObj)
-                }
-            }
-            
-            for (let i = 0; i < tmpArr.length; i++) 
-            {
-                if(typeof tmpArr[i].barcode != 'undefined')
-                {
-                    printer.align(tmpArr[i].align).barcode(tmpArr[i].barcode,'CODE39',tmpArr[i].options);                    
-                }
-                else
-                {                   
-                    printer.size(0,0);
-                    printer.font(tmpArr[i].font);
-                    printer.align(tmpArr[i].align);
-
-                    if(typeof tmpArr[i].style != 'undefined')
+                    let tmpObj = pData[i]
+                    if(typeof pData[i] == 'function')
                     {
-                        printer.style(tmpArr[i].style);
+                        tmpObj = pData[i]()
+                    }
+                    if(Array.isArray(tmpObj))
+                    {
+                        tmpArr.push(...tmpObj)
+                    }
+                    else if(typeof tmpObj == 'object')
+                    {
+                        tmpArr.push(tmpObj)
+                    }
+                }
+                
+                for (let i = 0; i < tmpArr.length; i++) 
+                {
+                    if(typeof tmpArr[i].barcode != 'undefined')
+                    {
+                        printer.align(tmpArr[i].align).barcode(tmpArr[i].barcode,'CODE39',tmpArr[i].options);                    
                     }
                     else
+                    {                   
+                        printer.size(0,0);
+                        printer.font(tmpArr[i].font);
+                        printer.align(tmpArr[i].align);
+    
+                        if(typeof tmpArr[i].style != 'undefined')
+                        {
+                            printer.style(tmpArr[i].style);
+                        }
+                        else
+                        {
+                            printer.style("normal");
+                        }
+                        
+                        if(typeof tmpArr[i].size != 'undefined')
+                        {
+                            printer.size(tmpArr[i].size[0],tmpArr[i].size[1]);
+                        }
+                        printer.text(tmpArr[i].data,'857');
+                    }                
+                }                      
+                        
+                printer.cut().close
+                (
+                    function()
                     {
-                        printer.style("normal");
+                        
                     }
-                    
-                    if(typeof tmpArr[i].size != 'undefined')
-                    {
-                        printer.size(tmpArr[i].size[0],tmpArr[i].size[1]);
-                    }
-                    printer.text(tmpArr[i].data,'857');
-                }                
-            }                      
-                    
-            printer.cut().close
-            (
-                function()
-                {
-                    
-                }
-            );
-        });      
+                );
+            });  
+        });
     }
 }

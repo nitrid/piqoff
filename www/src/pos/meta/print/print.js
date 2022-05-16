@@ -87,7 +87,8 @@ export function print()
                 for (let i = 0; i < data.possale.length; i++) 
                 {
                     let tmpQt = ""            
-                
+                    let tmpVatType = "C"
+                    if(data.possale[i].VAT_RATE)
                     if(Number.isInteger(parseFloat(data.possale[i].QUANTITY)))
                     {
                         tmpQt = data.possale[i].QUANTITY + " " + data.possale[i].UNIT_NAME;
@@ -102,10 +103,10 @@ export function print()
                         font: "b",
                         align: "lt",
                         data: data.possale[i].VAT_RATE + " " +
-                                (data.possale[i].TICKET_REST ? "*" + data.possale[i].ITEM_NAME : data.possale[i].ITEM_NAME).toString().space(34) + " " +
-                                tmpQt.space(8,'s') + " " + 
-                                parseFloat(data.possale[i].PRICE).toFixed(2).space(7,"s") + " " + 
-                                (parseFloat(data.possale[i].AMOUNT).toFixed(2) + "EUR").space(10,"s")
+                            (data.possale[i].TICKET_REST ? "*" + data.possale[i].ITEM_NAME : data.possale[i].ITEM_NAME).toString().space(34) + " " +
+                            tmpQt.space(8,'s') + " " + 
+                            parseFloat(data.possale[i].PRICE).toFixed(2).space(7,"s") + " " + 
+                            (parseFloat(data.possale[i].AMOUNT).toFixed(2) + "€").space(10,"s")
                     })
                 }
             } 
