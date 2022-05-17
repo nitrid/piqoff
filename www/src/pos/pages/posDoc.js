@@ -102,10 +102,10 @@ export default class posDoc extends React.Component
     }
     async init()
     {                
-        setInterval(()=>
-        {
-            this.setState({time:moment(new Date(),"HH:mm:ss").format("HH:mm:ss"),date:new Date().toLocaleDateString('tr-TR',{ year: 'numeric', month: 'numeric', day: 'numeric' })})                        
-        },1000)
+        // setInterval(()=>
+        // {
+        //     this.setState({time:moment(new Date(),"HH:mm:ss").format("HH:mm:ss"),date:new Date().toLocaleDateString('tr-TR',{ year: 'numeric', month: 'numeric', day: 'numeric' })})                        
+        // },1000)
 
         this.posObj.clearAll()
         await this.prmObj.load({PAGE:"pos",APP:'POS'})
@@ -171,7 +171,7 @@ export default class posDoc extends React.Component
             let tmpDt = new datatable(); 
             tmpDt.selectCmd = 
             {
-                query : "SELECT TOP 1 *,@CODE AS INPUT FROM ITEMS_POS_VW_01 WHERE CODE = @CODE",
+                query : "SELECT TOP 1 *,@CODE AS INPUT FROM ITEMS_POS_VW_01 WHERE CODE = @CODE OR BARCODE = @CODE",
                 param : ['CODE:string|25'],
                 value: [pCode]
             }
@@ -1042,7 +1042,7 @@ export default class posDoc extends React.Component
     }
     render()
     {
-        console.log(1)
+        console.log("111 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
         return(
             <div>
                 <LoadPanel
