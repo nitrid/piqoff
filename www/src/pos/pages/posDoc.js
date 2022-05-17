@@ -176,6 +176,18 @@ export default class posDoc extends React.Component
                 value: [pCode]
             }
             await tmpDt.refresh();
+            //UNIQ BARKOD
+            if(tmpDt.length == 0)
+            {
+                tmpDt.selectCmd = 
+                {
+                    query : "SELECT TOP 1 *,@CODE AS INPUT FROM ITEMS_POS_VW_01 WHERE UNIQ_CODE = @CODE",
+                    param : ['CODE:string|25'],
+                    value: [pCode]
+                }
+
+                await tmpDt.refresh();
+            }
             resolve(tmpDt)
         });
     }
@@ -527,8 +539,8 @@ export default class posDoc extends React.Component
                     cheqLastAmount:this.cheqDt.length > 0 ? this.cheqDt[0].AMOUNT : 0,
                     cheqTotalAmount:this.cheqDt.sum('AMOUNT',2)
                 }
-            ,()=>{})
-            console.log("21 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
+            ,()=>{console.log("21 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) })
+            console.log("22 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
             resolve()            
         });
     }    
