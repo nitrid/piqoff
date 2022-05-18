@@ -128,11 +128,8 @@ export class sql
                         }
                     }
                 }
-                console.log("execute 1 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
-                console.log(TmpQuery)
                 core.instance.socket.emit('sql',TmpQuery,(data) =>
                 {
-                    console.log("execute 2 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
                     core.instance.emit('onExecuted');
                     if(typeof data.auth_err == 'undefined')
                     {
