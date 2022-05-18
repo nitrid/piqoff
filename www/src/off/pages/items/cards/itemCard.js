@@ -167,12 +167,14 @@ export default class itemCard extends React.Component
     }
     async getItem(pCode)
     {
+        App.instance.setState({isExecute:true})
         this.itemsObj.clearAll();
         await this.itemsObj.load({CODE:pCode});
         //TEDARİKÇİ FİYAT GETİR İŞLEMİ.                
         await this.itemsPriceSupply.load({ITEM_CODE:pCode,TYPE:1})  
         await this.itemsPriceLogObj.load({ITEM_GUID:this.itemsObj.dt()[0].GUID})
         this.txtBarcode.readOnly = true;
+        App.instance.setState({isExecute:false})
     }
     async checkItem(pCode)
     {
@@ -586,7 +588,8 @@ export default class itemCard extends React.Component
                                         }
                                     }).bind(this)} 
                                     param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})} 
-                                    access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}                                
+                                    access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}     
+                                    selectAll={true}                           
                                     >     
                                     </NdTextBox>      
                                     {/* STOK SEÇİM POPUP */}
@@ -808,10 +811,11 @@ export default class itemCard extends React.Component
                                     <NdTextBox id="txtItemName" parent={this} simple={true} dt={{data:this.itemsObj.dt('ITEMS'),field:"NAME"}}
                                     param={this.param.filter({ELEMENT:'txtItemName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtItemName',USERS:this.user.CODE})}
+                                    upper={true}
                                     onValueChanged={(e)=>
                                     {
                                         if(e.value.length <= 32)
-                                            this.txtShortName.value = e.value
+                                            this.txtShortName.value = e.value.toUpperCase()
                                     }}>
                                         <Validator validationGroup={"frmItems" + this.tabIndex}>
                                             <RequiredRule message="Adı boş geçemezsiniz !" />
@@ -824,7 +828,8 @@ export default class itemCard extends React.Component
                                         <NdTextBox id="txtShortName" parent={this} simple={true} dt={{data:this.itemsObj.dt('ITEMS'),field:"SNAME"}}
                                         maxLength={32}
                                         param={this.param.filter({ELEMENT:'txtShortName',USERS:this.user.CODE})}
-                                        access={this.access.filter({ELEMENT:'txtShortName',USERS:this.user.CODE})}/>
+                                        access={this.access.filter({ELEMENT:'txtShortName',USERS:this.user.CODE})}
+                                        />
                                 </Item>
                             </Form>
                         </div>

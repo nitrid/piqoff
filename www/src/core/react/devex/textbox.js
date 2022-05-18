@@ -39,8 +39,16 @@ export default class NdTextBox extends Base
         this.dev = e.component;    
     }
     _onValueChanged(e) 
-    {           
-        this.value = e.value;
+    {       
+        if(this.props.upper)
+        {
+            this.value = e.value.toString().toUpperCase();
+        }    
+        else
+        {
+            this.value = e.value;
+        }
+        
         if(typeof this.props.onValueChanged != 'undefined')
         {
             this.props.onValueChanged(e);
@@ -55,6 +63,10 @@ export default class NdTextBox extends Base
     }
     _onFocusIn(e)
     {
+        if(this.props.selectAll)
+        {
+            this.dev.element().getElementsByTagName('input')[0].select()
+        }
         if(typeof this.props.onFocusIn != 'undefined')
         {
             this.props.onFocusIn(e);
@@ -129,7 +141,18 @@ export default class NdTextBox extends Base
         if(typeof this.props.displayValue != 'undefined')
         {
             return (
-                <div id={"dsp" + this.props.id}  className="dsp-textbox ">{this.state.displayValue}</div>
+                <div id={"dsp" + this.props.id}  className="dsp-textbox " 
+                style={
+                {
+                    zIndex: 1,
+                    borderRadius:'4px',
+                    height:'100%',
+                    padding:'5px',
+                    margin:'2px',
+                    width:'100%',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden'
+                }}>{this.state.displayValue}</div>
             )            
         }
     }

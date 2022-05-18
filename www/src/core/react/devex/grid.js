@@ -19,7 +19,7 @@ export default class NdGrid extends Base
         this.state.selection = typeof props.selection == 'undefined' ? {} : props.selection
         this.state.paging = typeof props.paging == 'undefined' ? {} : props.paging
         this.state.pager = typeof props.pager == 'undefined' ? {} : props.pager
-
+        
         this._onInitialized = this._onInitialized.bind(this);
         this._onSelectionChanged = this._onSelectionChanged.bind(this);
         this._onInitNewRow = this._onInitNewRow.bind(this);

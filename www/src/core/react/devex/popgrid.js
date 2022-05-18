@@ -300,7 +300,7 @@ export default class NdPopGrid extends Base
                     container={this.state.container}
                     width={this.state.width}
                     height={this.state.height}
-                    position={this.state.position}
+                    position={this.state.position}                    
                 >
                     {this._buttonView()}
                     {this._formView()}      
@@ -326,7 +326,8 @@ export default class NdPopGrid extends Base
                             editing={this.state.editing}  
                             param={this.param.grid} 
                             access={this.access.grid}
-                            notRefresh = {this.props.notRefresh}
+                            notRefresh={this.props.notRefresh}
+                            loadPanel={{enabled:true}}
                             >                            
                             {this.props.children}
                             </NdGrid>

@@ -1173,9 +1173,21 @@ export class editItemCls
         let tmpDt = new datatable('ITEM_EDIT');            
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE ((CODE) IN (@CODE) OR (@CODE = '')) AND " + 
-                    "(NAME) LIKE (@NAME) AND ((CUSTOMER_GUID = @CUSTOMER) OR (@CUSTOMER = '00000000-0000-0000-0000-000000000000')) AND ((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) ",
-            param : ['CODE:string|50','NAME:string|50','CUSTOMER:string|50','MAIN_GRP:string|25']
+            query : "SELECT *,MAIN_UNIT_NAME AS UNIT_NAME," + 
+                    "CASE WHEN PRICE_SALE <> 0 THEN " +
+                    "CONVERT(nvarchar,ROUND((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE,2)) + '/ %' + CONVERT(nvarchar,ROUND((((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / (PRICE_SALE / ((VAT / 100) + 1))) * 100,2)) " +
+                    "ELSE '0'  " +
+                    "END AS MARGIN, " +
+                    "CASE WHEN PRICE_SALE <> 0 THEN " +
+                    "CONVERT(nvarchar,ROUND(((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / 1.12,2)) + '/ %' + CONVERT(nvarchar,ROUND(((((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / 1.12) / (PRICE_SALE / ((VAT / 100) + 1))) * 100,2)) " +
+                    "ELSE '0' " +
+                    "END AS NETMARGIN " +
+                    "FROM ITEMS_EDIT_VW_01 " +
+                    "WHERE {0} " +
+                    "((NAME LIKE @NAME +'%') OR (@NAME = '')) AND " +
+                    "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) AND " +
+                    "((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = ''))",
+            param : ['NAME:string|250','MAIN_GRP:string|25','CUSTOMER_CODE:string|25'],
         }
         tmpDt.updateCmd = 
         {
@@ -1245,17 +1257,26 @@ export class editItemCls
         //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ ÖRN: {ID:'',NAME:'',SYMBOL:''}
         return new Promise(async resolve => 
         {
-            let tmpPrm = {CODE:'%',NAME:'%',CUSTOMER:'00000000-0000-0000-0000-000000000000',MAIN_GRP:''}
+            let tmpPrm = {NAME:'%',MAIN_GRP:'',CUSTOMER_CODE:'',QUERY:''}
            
             if(arguments.length > 0)
             {
-                tmpPrm.CODE = typeof arguments[0].CODE == 'undefined' ? '' : arguments[0].CODE;
-                tmpPrm.NAME = typeof arguments[0].NAME == 'undefined' ? '%' : arguments[0].NAME;  
-                tmpPrm.CUSTOMER = typeof arguments[0].CUSTOMER == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].CUSTOMER;
+                tmpPrm.NAME = typeof arguments[0].NAME == 'undefined' ? '%' : arguments[0].NAME;
                 tmpPrm.MAIN_GRP = typeof arguments[0].MAIN_GRP == 'undefined' ? '' : arguments[0].MAIN_GRP;
+                tmpPrm.CUSTOMER_CODE = typeof arguments[0].CUSTOMER_CODE == 'undefined' ? '' : arguments[0].CUSTOMER_CODE;
+                
+                if(typeof arguments[0].QUERY == 'undefined' || (typeof arguments[0].QUERY != 'undefined' && arguments[0].QUERY == ''))
+                {
+                    this.ds.get('ITEM_EDIT').selectCmd.query = this.ds.get('ITEM_EDIT').selectCmd.query.replaceAll("{0}", "")
+                }
+                else
+                {
+                    this.ds.get('ITEM_EDIT').selectCmd.query = this.ds.get('ITEM_EDIT').selectCmd.query.replaceAll("{0}", arguments[0].QUERY)
+                }
             }
             
-            
+            this.ds.get('ITEM_EDIT').selectCmd.value = Object.values(tmpPrm)
+            await this.ds.get('ITEM_EDIT').refresh();
             resolve(this.ds.get('ITEM_EDIT'));    
         });
     }

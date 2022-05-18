@@ -63,59 +63,77 @@ export default class collectiveItemEdit extends React.Component
             this.txtName.setState({value:txtName})
         }
         
-            let tmpSource =
+        let tmpSrc = ""
+        if(this.txtCode.value.length == 1)
+        {
+            tmpSrc = "((CODE LIKE '" + this.txtCode.value[0] + "' + '%') OR (BARCODE LIKE '" + this.txtCode.value[0] + "' + '%') OR (MULTICODE LIKE '" + this.txtCode.value[0] + "' + '%')) AND"
+        }
+        else
+        {
+            let TmpVal = ''
+            for (let i = 0; i < this.txtCode.value.length; i++) 
             {
-                source : 
-                {
-                    select : 
-                    {
-                        query : "SELECT *,MAIN_UNIT_NAME AS UNIT_NAME," + 
-                                "CASE WHEN PRICE_SALE <> 0 THEN " +
-                                "CONVERT(nvarchar,ROUND((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE,2)) + '/ %' + CONVERT(nvarchar,ROUND((((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / (PRICE_SALE / ((VAT / 100) + 1))) * 100,2)) " +
-                                "ELSE '0'  " +
-                                "END AS MARGIN, " +
-                                "CASE WHEN PRICE_SALE <> 0 THEN " +
-                                "CONVERT(nvarchar,ROUND(((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / 1.12,2)) + '/ %' + CONVERT(nvarchar,ROUND(((((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / 1.12) / (PRICE_SALE / ((VAT / 100) + 1))) * 100,2)) " +
-                                "ELSE '0' " +
-                                "END AS NETMARGIN " +
-                                "FROM ITEMS_EDIT_VW_01 " +
-                                "WHERE {0} " +
-                                "((NAME LIKE @NAME +'%') OR (@NAME = '')) AND " +
-                                "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) AND " +
-                                "((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = ''))",
-                        param : ['NAME:string|250','MAIN_GRP:string|25','CUSTOMER_CODE:string|25'],
-                        value : [this.txtName.value.replaceAll("*", "%"),this.cmbItemGroup.value,this.txtCustomerCode.value]
-                    },
-                    sql : this.core.sql
-                }
+                TmpVal = TmpVal + ",'" + this.txtCode.value[i] + "'"
+                
             }
+            tmpSrc = "((CODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (BARCODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (MULTICODE IN (" + TmpVal.substring(1,TmpVal.length) + "))) AND"
+        }
+
+        await this.editObj.load({NAME:this.txtName.value.replaceAll("*", "%"),MAIN_GRP:this.cmbItemGroup.value,CUSTOMER_CODE:this.txtCustomerCode.value,QUERY:tmpSrc})
+            // let tmpSource =
+            // {
+            //     source : 
+            //     {
+            //         select : 
+            //         {
+            //             query : "SELECT *,MAIN_UNIT_NAME AS UNIT_NAME," + 
+            //                     "CASE WHEN PRICE_SALE <> 0 THEN " +
+            //                     "CONVERT(nvarchar,ROUND((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE,2)) + '/ %' + CONVERT(nvarchar,ROUND((((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / (PRICE_SALE / ((VAT / 100) + 1))) * 100,2)) " +
+            //                     "ELSE '0'  " +
+            //                     "END AS MARGIN, " +
+            //                     "CASE WHEN PRICE_SALE <> 0 THEN " +
+            //                     "CONVERT(nvarchar,ROUND(((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / 1.12,2)) + '/ %' + CONVERT(nvarchar,ROUND(((((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / 1.12) / (PRICE_SALE / ((VAT / 100) + 1))) * 100,2)) " +
+            //                     "ELSE '0' " +
+            //                     "END AS NETMARGIN " +
+            //                     "FROM ITEMS_EDIT_VW_01 " +
+            //                     "WHERE {0} " +
+            //                     "((NAME LIKE @NAME +'%') OR (@NAME = '')) AND " +
+            //                     "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) AND " +
+            //                     "((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = ''))",
+            //             param : ['NAME:string|250','MAIN_GRP:string|25','CUSTOMER_CODE:string|25'],
+            //             value : [this.txtName.value.replaceAll("*", "%"),this.cmbItemGroup.value,this.txtCustomerCode.value]
+            //         },
+            //         sql : this.core.sql
+            //     }
+            // }
             
-            if(this.txtCode.value.length == 0)
-            {
-                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "")
-            }
-            else if(this.txtCode.value.length == 1)
-            {
-                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE LIKE '" + this.txtCode.value[0] + "' + '%') OR (BARCODE LIKE '" + this.txtCode.value[0] + "' + '%') OR (MULTICODE LIKE '" + this.txtCode.value[0] + "' + '%')) AND")
-            }
-            else
-            {
-                let TmpVal = ''
-                for (let i = 0; i < this.txtCode.value.length; i++) 
-                {
-                    TmpVal = TmpVal + ",'" + this.txtCode.value[i] + "'"
+            // if(this.txtCode.value.length == 0)
+            // {
+            //     tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "")
+            // }
+            // else if(this.txtCode.value.length == 1)
+            // {
+            //     tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE LIKE '" + this.txtCode.value[0] + "' + '%') OR (BARCODE LIKE '" + this.txtCode.value[0] + "' + '%') OR (MULTICODE LIKE '" + this.txtCode.value[0] + "' + '%')) AND")
+            // }
+            // else
+            // {
+            //     let TmpVal = ''
+            //     for (let i = 0; i < this.txtCode.value.length; i++) 
+            //     {
+            //         TmpVal = TmpVal + ",'" + this.txtCode.value[i] + "'"
                     
-                }
-                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (BARCODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (MULTICODE IN (" + TmpVal.substring(1,TmpVal.length) + "))) AND")
-            }
-            await this.grdItemList.dataRefresh(tmpSource)
-            for (let i = 0; i < this.grdItemList.data.datatable.length; i++) 
-            {
-                this.editObj.dt().push(this.grdItemList.data.datatable[i])
-            }
-            console.log(this.editObj.dt())
-            console.log(this.editObj.dt()[0].GUID)
-            await this.grdItemList.dataRefresh({source:this.editObj.dt('ITEM_EDIT')});
+            //     }
+            //     tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (BARCODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (MULTICODE IN (" + TmpVal.substring(1,TmpVal.length) + "))) AND")
+            // }
+            // await this.grdItemList.dataRefresh(tmpSource)
+
+            // for (let i = 0; i < this.grdItemList.data.datatable.length; i++) 
+            // {
+            //     this.editObj.dt().push(this.grdItemList.data.datatable[i])
+            // }
+            // console.log(this.editObj.dt())
+            // console.log(this.editObj.dt()[0].GUID)
+            
        
     }
     _cellRoleRender(e)
@@ -395,6 +413,7 @@ export default class collectiveItemEdit extends React.Component
                             allowColumnResizing={true}
                             height={'100%'} 
                             width={'100%'}
+                            dbApply={false}
                             >                            
                                 <Paging defaultPageSize={14} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
