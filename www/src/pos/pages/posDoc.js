@@ -22,6 +22,7 @@ import NbRadioButton from "../../core/react/bootstrap/radiogroup.js";
 import NbPosPopGrid from "../tools/pospopgrid.js";
 import NbPopDescboard from "../tools/popdescboard.js";
 import NdDialog,{ dialog } from "../../core/react/devex/dialog.js";
+import NbLabel from "../../core/react/bootstrap/label.js";
 
 import { posCls,posSaleCls,posPaymentCls,posPluCls,posDeviceCls } from "../../core/cls/pos.js";
 import { itemsCls } from "../../core/cls/items.js";
@@ -29,7 +30,7 @@ import { dataset,datatable,param,access } from "../../core/core.js";
 import {prm} from '../meta/prm.js'
 import {acs} from '../meta/acs.js'
 
-export default class posDoc extends React.Component
+export default class posDoc extends React.PureComponent
 {
     constructor()
     {
@@ -46,7 +47,6 @@ export default class posDoc extends React.Component
 
         this.state =
         {
-            time:"00:00:00",
             date:"00.00.0000",
             isPluEdit:false,
             isBtnGetCustomer:false,
@@ -54,13 +54,6 @@ export default class posDoc extends React.Component
             isLoading:false,
             customerName:'',
             customerPoint:0,
-            totalRowCount:0,
-            totalItemCount:0,
-            totalLoyalty:0,
-            totalSub:0,
-            totalVat:0,
-            totalDiscount:0,
-            totalGrand:0,
             payTotal:0,
             payChange:0,
             payRest:0,
@@ -102,10 +95,11 @@ export default class posDoc extends React.Component
     }
     async init()
     {                
-        // setInterval(()=>
-        // {
-        //     this.setState({time:moment(new Date(),"HH:mm:ss").format("HH:mm:ss"),date:new Date().toLocaleDateString('tr-TR',{ year: 'numeric', month: 'numeric', day: 'numeric' })})                        
-        // },1000)
+        setInterval(()=>
+        {
+            this.lblTime.value = moment(new Date(),"HH:mm:ss").format("HH:mm:ss")
+            this.lblDate.value = new Date().toLocaleDateString('tr-TR',{ year: 'numeric', month: 'numeric', day: 'numeric' })
+        },1000)
 
         this.posObj.clearAll()
         await this.prmObj.load({PAGE:"pos",APP:'POS'})
@@ -278,7 +272,8 @@ export default class posDoc extends React.Component
         let tmpBarPattern = this.getBarPattern(pCode)
         tmpPrice = typeof tmpBarPattern.price == 'undefined' || tmpBarPattern.price == 0 ? tmpPrice : tmpBarPattern.price
         tmpQuantity = typeof tmpBarPattern.quantity == 'undefined' || tmpBarPattern.quantity == 0 ? tmpQuantity : tmpBarPattern.quantity
-        pCode = tmpBarPattern.barcode        
+        pCode = tmpBarPattern.barcode     
+        console.log("1 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
         //ÜRÜN GETİRME        
         let tmpItemsDt = await this.getItemDb(pCode)
         if(tmpItemsDt.length > 0)
@@ -299,8 +294,7 @@ export default class posDoc extends React.Component
                 param : ['GUID:string|50','QUANTITY:float']
             }
             tmpPriceDt.selectCmd.value = [tmpItemsDt[0].GUID,tmpQuantity]
-            await tmpPriceDt.refresh();
-            console.log("1 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))       
+            await tmpPriceDt.refresh();                  
             if(tmpPriceDt.length > 0 && tmpPrice == 0)
             {
                 tmpPrice = tmpPriceDt[0].PRICE
@@ -324,7 +318,6 @@ export default class posDoc extends React.Component
                 }
                 //**************************************************** */
             }
-            console.log("2 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))       
             //**************************************************** */
             //EĞER ÜRÜN TERAZİLİ İSE
             if(tmpItemsDt[0].WEIGHING)
@@ -367,7 +360,6 @@ export default class posDoc extends React.Component
                     }
                 }
             }
-            console.log("3 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))       
             //**************************************************** */
             //FİYAT TANIMSIZ YADA SIFIR İSE
             //**************************************************** */
@@ -391,7 +383,6 @@ export default class posDoc extends React.Component
                 }
             }
             //**************************************************** */
-            console.log("4 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))       
             tmpItemsDt[0].QUANTITY = tmpQuantity
             tmpItemsDt[0].PRICE = tmpPrice
             this.saleAdd(tmpItemsDt[0])
@@ -488,22 +479,39 @@ export default class posDoc extends React.Component
         {
             if(this.posObj.dt().length > 0)
             {      
-                console.log("13 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))              
                 this.posObj.dt()[this.posObj.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.posSale.dt().sum('AMOUNT',2)).toFixed(2))
                 this.posObj.dt()[this.posObj.dt().length - 1].DISCOUNT = Number(parseFloat(this.posObj.posSale.dt().sum('DISCOUNT',2)).toFixed(2))
                 this.posObj.dt()[this.posObj.dt().length - 1].LOYALTY = Number(parseFloat(this.posObj.posSale.dt().sum('LOYALTY',2)).toFixed(2))
                 this.posObj.dt()[this.posObj.dt().length - 1].VAT = Number(parseFloat(this.posObj.posSale.dt().sum('VAT',2)).toFixed(2))
                 this.posObj.dt()[this.posObj.dt().length - 1].TOTAL = Number(parseFloat(this.posObj.posSale.dt().sum('TOTAL',2)).toFixed(2))
-                console.log("14 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
+
+                this.totalRowCount.value = this.posObj.posSale.dt().length
+                this.totalItemCount.value = this.posObj.posSale.dt().sum('QUANTITY',2)
+                this.totalLoyalty.value = parseFloat(this.posObj.dt()[0].LOYALTY).toFixed(2) + "€"
+                this.totalSub.value = parseFloat(this.posObj.dt()[0].AMOUNT).toFixed(2) + "€"
+                this.totalVat.value = parseFloat(this.posObj.dt()[0].VAT).toFixed(2) + "€"
+                this.totalDiscount.value = parseFloat(this.posObj.dt()[0].DISCOUNT).toFixed(2) + "€"
+                this.totalGrand.value = parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2) + "€"
+                this.popTotalGrand.value = parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2) + "€"
+                this.popCardTotalGrand.value = parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2) + "€"
+                this.popCashTotalGrand.value = parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2) + "€"
+
                 this.state.payChange = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) >= 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2)) * -1
                 this.state.payRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2)); 
-                console.log("15 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
                 
-                console.log("16 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
                 this.txtPopTotal.value = parseFloat(this.state.payRest).toFixed(2)
                 this.txtPopCardPay.value = parseFloat(this.state.payRest).toFixed(2)
                 this.txtPopCashPay.value = parseFloat(this.state.payRest).toFixed(2)   
-                console.log("17 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
+                
+                this.setState(
+                {
+                    payTotal:this.posObj.posPay.dt().sum('AMOUNT',2),
+                    payChange:this.state.payChange,
+                    payRest:this.state.payRest,
+                    cheqCount:this.cheqDt.length,
+                    cheqLastAmount:this.cheqDt.length > 0 ? this.cheqDt[0].AMOUNT : 0,
+                    cheqTotalAmount:this.cheqDt.sum('AMOUNT',2)
+                })       
                 if(this.posObj.posSale.dt().length > 0)
                 {
                     this.posDevice.lcdPrint
@@ -515,32 +523,11 @@ export default class posDoc extends React.Component
                     })
                 }
             }
-    
+            console.log("100 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
             if(typeof pSave == 'undefined' || pSave)
             {
-                console.log("18 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
                 await this.posObj.save()
-                console.log("19 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
-            }
-            console.log("20 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
-            this.setState(
-                {
-                    totalRowCount:this.posObj.posSale.dt().length,
-                    totalItemCount:this.posObj.posSale.dt().sum('QUANTITY',2),
-                    totalLoyalty:this.posObj.dt()[0].LOYALTY,
-                    totalSub:this.posObj.dt()[0].AMOUNT,
-                    totalVat:this.posObj.dt()[0].VAT,
-                    totalDiscount:this.posObj.dt()[0].DISCOUNT,
-                    totalGrand:this.posObj.dt()[0].TOTAL,
-                    payTotal:this.posObj.posPay.dt().sum('AMOUNT',2),
-                    payChange:this.state.payChange,
-                    payRest:this.state.payRest,
-                    cheqCount:this.cheqDt.length,
-                    cheqLastAmount:this.cheqDt.length > 0 ? this.cheqDt[0].AMOUNT : 0,
-                    cheqTotalAmount:this.cheqDt.sum('AMOUNT',2)
-                }
-            ,()=>{console.log("21 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) })
-            console.log("22 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
+            }    
             resolve()            
         });
     }    
@@ -571,7 +558,6 @@ export default class posDoc extends React.Component
     }
     async saleAdd(pItemData)
     {
-        console.log("5 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))       
         let tmpRowData = this.isRowMerge('SALE',pItemData)        
         //SATIR BİRLEŞTİR        
         if(typeof tmpRowData != 'undefined')
@@ -585,14 +571,13 @@ export default class posDoc extends React.Component
             this.saleRowAdd(pItemData)                  
         }        
         //HER EKLEME İŞLEMİNDEN SONRA İLK SATIR SEÇİLİYOR.
-        // setTimeout(() => 
-        // {
-        //     this.grdList.devGrid.selectRowsByIndexes(0)
-        // }, 100);
+        setTimeout(() => 
+        {
+            this.grdList.devGrid.selectRowsByIndexes(0)
+        }, 100);
     }
     async saleRowAdd(pItemData)
     {           
-        console.log("6 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
         pItemData.AMOUNT = Number(parseFloat(pItemData.PRICE * pItemData.QUANTITY).toFixed(2))
         pItemData.VAT_AMOUNT = Number(parseFloat(pItemData.AMOUNT *  Number(parseFloat(pItemData.VAT / 100).toFixed(3))).toFixed(2))
         pItemData.TOTAL = Number(parseFloat(pItemData.AMOUNT + pItemData.VAT_AMOUNT).toFixed(2))
@@ -636,24 +621,21 @@ export default class posDoc extends React.Component
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_LOYALTY = 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_VAT = 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_TOTAL = 0
-        console.log("7 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
+
         await this.calcGrandTotal();
-        console.log("8 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
     }
     async saleRowUpdate(pRowData,pItemData)
     {
-        console.log("11 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
         let tmpAmount = Number(parseFloat(pItemData.PRICE * pItemData.QUANTITY).toFixed(2))
         let tmpVat = Number(parseFloat(tmpAmount *  Number(parseFloat(pRowData.VAT_RATE / 100).toFixed(3))).toFixed(2))
         let tmpTotal = Number(parseFloat(tmpAmount + tmpVat).toFixed(2))
-        console.log("12 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))  
-        console.log(pRowData)  
+ 
         pRowData.QUANTITY = pItemData.QUANTITY
         pRowData.PRICE = pItemData.PRICE
         pRowData.AMOUNT = tmpAmount
         pRowData.VAT = tmpVat
         pRowData.TOTAL = tmpTotal
-        console.log("13 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
+
         await this.calcGrandTotal();
     }
     async payAdd(pType,pAmount)
@@ -1054,7 +1036,6 @@ export default class posDoc extends React.Component
     }
     render()
     {
-        console.log("111 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
         return(
             <div>
                 <LoadPanel
@@ -1099,12 +1080,12 @@ export default class posDoc extends React.Component
                             <div className="col-2">
                                 <div className="row" style={{height:"25px"}}>
                                     <div className="col-12">                                        
-                                        <span className="text-white"><i className="text-white fa-solid fa-calendar pe-2"></i>{this.state.date}</span>
+                                        <span className="text-white"><i className="text-white fa-solid fa-calendar pe-2"></i><NbLabel id="lblDate" parent={this} value={"00.00.0000"}/></span>
                                     </div>    
                                 </div>
                                 <div className="row" style={{height:"25px"}}>
                                     <div className="col-12">                                        
-                                        <span className="text-light"><i className="text-light fa-solid fa-clock pe-2"></i>{this.state.time}</span>
+                                        <span className="text-light"><i className="text-light fa-solid fa-clock pe-2"></i><NbLabel id="lblTime" parent={this} value={"00:00:00"}/></span>
                                     </div> 
                                 </div>
                             </div>
@@ -1266,15 +1247,15 @@ export default class posDoc extends React.Component
                             <div className="col-6">
                                 <div className="row">
                                     <div className="col-6">
-                                        <p className="text-primary text-start m-0">T.Satır : <span className="text-dark">{this.state.totalRowCount}</span></p>    
+                                        <p className="text-primary text-start m-0">T.Satır : <span className="text-dark"><NbLabel id="totalRowCount" parent={this} value={"0"}/></span></p>    
                                     </div>
                                     <div className="col-6">
-                                        <p className="text-primary text-start m-0">T.Mik.: <span className="text-dark">{this.state.totalItemCount}</span></p>    
+                                        <p className="text-primary text-start m-0">T.Mik.: <span className="text-dark"><NbLabel id="totalItemCount" parent={this} value={"0"}/></span></p>    
                                     </div>
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-start m-0">Sadakat İndirim : <span className="text-dark">{parseFloat(this.state.totalLoyalty).toFixed(2)} €</span></p>    
+                                        <p className="text-primary text-start m-0">Sadakat İndirim : <span className="text-dark"><NbLabel id="totalLoyalty" parent={this} value={"0.00 €"}/></span></p>    
                                     </div>
                                 </div>
                                 <div className="row">
@@ -1286,24 +1267,24 @@ export default class posDoc extends React.Component
                             <div className="col-6">
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-end m-0">Ara Toplam : <span className="text-dark">{parseFloat(this.state.totalSub).toFixed(2)} €</span></p>    
+                                        <p className="text-primary text-end m-0">Ara Toplam : <span className="text-dark"><NbLabel id="totalSub" parent={this} value={"0.00 €"}/></span></p>    
                                     </div>
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-end m-0">Kdv : <span className="text-dark">{parseFloat(this.state.totalVat).toFixed(2)} €</span></p>    
+                                        <p className="text-primary text-end m-0">Kdv : <span className="text-dark"><NbLabel id="totalVat" parent={this} value={"0.00 €"}/></span></p>    
                                     </div>
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-end m-0">İndirim : <span className="text-dark">{parseFloat(this.state.totalDiscount).toFixed(2)} €</span></p>    
+                                        <p className="text-primary text-end m-0">İndirim : <span className="text-dark"><NbLabel id="totalDiscount" parent={this} value={"0.00 €"}/></span></p>    
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div className="row">
                             <div className="col-12">
-                                <p className="fs-2 fw-bold text-center m-0">{parseFloat(this.state.totalGrand).toFixed(2)} €</p>
+                                <p className="fs-2 fw-bold text-center m-0"><NbLabel id="totalGrand" parent={this} value={"0.00 €"}/></p>
                             </div>
                         </div>
                         {/* Button Console */}
@@ -2005,7 +1986,7 @@ export default class posDoc extends React.Component
                                 {/* Top Total Indicator */}
                                 <div className="row">
                                     <div className="col-4">
-                                        <p className="text-primary text-start m-0">Toplam : <span className="text-dark">{parseFloat(this.state.totalGrand).toFixed(2)} €</span></p>    
+                                        <p className="text-primary text-start m-0">Toplam : <span className="text-dark"><NbLabel id="popTotalGrand" parent={this} value={"0.00 €"}/></span></p>    
                                     </div>
                                     <div className="col-4">
                                         <p className="text-primary text-start m-0">Kalan : <span className="text-dark">{parseFloat(this.state.payRest).toFixed(2)} €</span></p>    
@@ -2201,7 +2182,7 @@ export default class posDoc extends React.Component
                             <div className="col-12">
                                <div className="row">
                                     <div className="col-6">
-                                        <p className="text-primary text-start m-0">Toplam : <span className="text-dark">{parseFloat(this.state.totalGrand).toFixed(2)} €</span></p>    
+                                        <p className="text-primary text-start m-0">Toplam : <span className="text-dark"><NbLabel id="popCardTotalGrand" parent={this} value={"0.00 €"}/></span></p>    
                                     </div>
                                     <div className="col-6">
                                         <p className="text-primary text-start m-0">Kalan : <span className="text-dark">{parseFloat(this.state.payRest).toFixed(2)} €</span></p>    
@@ -2250,7 +2231,7 @@ export default class posDoc extends React.Component
                                 {/* Top Total Indicator */}
                                 <div className="row pb-3">
                                     <div className="col-6">
-                                        <p className="text-primary text-start m-0">Toplam : <span className="text-dark">{parseFloat(this.state.totalGrand).toFixed(2)} €</span></p>    
+                                        <p className="text-primary text-start m-0">Toplam : <span className="text-dark"><NbLabel id="popCashTotalGrand" parent={this} value={"0.00 €"}/></span></p>    
                                     </div>
                                     <div className="col-6">
                                         <p className="text-primary text-start m-0">Kalan : <span className="text-dark">{parseFloat(this.state.payRest).toFixed(2)} €</span></p>    
