@@ -933,6 +933,7 @@ export default class itemCount extends React.Component
                                     width={'100%'}
                                     dbApply={false}
                                     filterRow={{visible:true}} 
+                                    loadPanel={{enabled:true}}
                                     onRowUpdated={async(e)=>{
                                         if(typeof e.data.QUANTITY != 'undefined' || typeof e.data.COST_PRICE != 'undefined')
                                         {

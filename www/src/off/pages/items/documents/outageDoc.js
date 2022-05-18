@@ -833,6 +833,7 @@ export default class outageDoc extends React.Component
                                     height={'400'} 
                                     width={'100%'}
                                     dbApply={false}
+                                    loadPanel={{enabled:true}}
                                     onRowUpdated={async(e)=>{
                                        
                                     }}

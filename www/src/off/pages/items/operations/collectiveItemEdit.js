@@ -68,7 +68,7 @@ export default class collectiveItemEdit extends React.Component
         {
             tmpSrc = "((CODE LIKE '" + this.txtCode.value[0] + "' + '%') OR (BARCODE LIKE '" + this.txtCode.value[0] + "' + '%') OR (MULTICODE LIKE '" + this.txtCode.value[0] + "' + '%')) AND"
         }
-        else
+        else if(this.txtCode.value.length > 1 )
         {
             let TmpVal = ''
             for (let i = 0; i < this.txtCode.value.length; i++) 
@@ -80,59 +80,6 @@ export default class collectiveItemEdit extends React.Component
         }
 
         await this.editObj.load({NAME:this.txtName.value.replaceAll("*", "%"),MAIN_GRP:this.cmbItemGroup.value,CUSTOMER_CODE:this.txtCustomerCode.value,QUERY:tmpSrc})
-            // let tmpSource =
-            // {
-            //     source : 
-            //     {
-            //         select : 
-            //         {
-            //             query : "SELECT *,MAIN_UNIT_NAME AS UNIT_NAME," + 
-            //                     "CASE WHEN PRICE_SALE <> 0 THEN " +
-            //                     "CONVERT(nvarchar,ROUND((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE,2)) + '/ %' + CONVERT(nvarchar,ROUND((((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / (PRICE_SALE / ((VAT / 100) + 1))) * 100,2)) " +
-            //                     "ELSE '0'  " +
-            //                     "END AS MARGIN, " +
-            //                     "CASE WHEN PRICE_SALE <> 0 THEN " +
-            //                     "CONVERT(nvarchar,ROUND(((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / 1.12,2)) + '/ %' + CONVERT(nvarchar,ROUND(((((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / 1.12) / (PRICE_SALE / ((VAT / 100) + 1))) * 100,2)) " +
-            //                     "ELSE '0' " +
-            //                     "END AS NETMARGIN " +
-            //                     "FROM ITEMS_EDIT_VW_01 " +
-            //                     "WHERE {0} " +
-            //                     "((NAME LIKE @NAME +'%') OR (@NAME = '')) AND " +
-            //                     "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) AND " +
-            //                     "((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = ''))",
-            //             param : ['NAME:string|250','MAIN_GRP:string|25','CUSTOMER_CODE:string|25'],
-            //             value : [this.txtName.value.replaceAll("*", "%"),this.cmbItemGroup.value,this.txtCustomerCode.value]
-            //         },
-            //         sql : this.core.sql
-            //     }
-            // }
-            
-            // if(this.txtCode.value.length == 0)
-            // {
-            //     tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "")
-            // }
-            // else if(this.txtCode.value.length == 1)
-            // {
-            //     tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE LIKE '" + this.txtCode.value[0] + "' + '%') OR (BARCODE LIKE '" + this.txtCode.value[0] + "' + '%') OR (MULTICODE LIKE '" + this.txtCode.value[0] + "' + '%')) AND")
-            // }
-            // else
-            // {
-            //     let TmpVal = ''
-            //     for (let i = 0; i < this.txtCode.value.length; i++) 
-            //     {
-            //         TmpVal = TmpVal + ",'" + this.txtCode.value[i] + "'"
-                    
-            //     }
-            //     tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (BARCODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (MULTICODE IN (" + TmpVal.substring(1,TmpVal.length) + "))) AND")
-            // }
-            // await this.grdItemList.dataRefresh(tmpSource)
-
-            // for (let i = 0; i < this.grdItemList.data.datatable.length; i++) 
-            // {
-            //     this.editObj.dt().push(this.grdItemList.data.datatable[i])
-            // }
-            // console.log(this.editObj.dt())
-            // console.log(this.editObj.dt()[0].GUID)
             
        
     }
@@ -204,35 +151,33 @@ export default class collectiveItemEdit extends React.Component
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="default"
                                     onClick={async (e)=>
                                     {
-                                        console.log(this.editObj.dt())
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
+                                        }
                                         
-                                            let tmpConfObj =
+                                        let pResult = await dialog(tmpConfObj);
+                                        if(pResult == 'btn01')
+                                        {
+                                            let tmpConfObj1 =
                                             {
-                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
+                                                id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                             }
                                             
-                                            let pResult = await dialog(tmpConfObj);
-                                            if(pResult == 'btn01')
+                                            if(await this.editObj.save() == 0)
+                                            {                                                    
+                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
+                                                await dialog(tmpConfObj1);
+                                            }
+                                            else
                                             {
-                                                let tmpConfObj1 =
-                                                {
-                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                                                }
-                                                
-                                                if(await this.editObj.save() == 0)
-                                                {                                                    
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                                    await dialog(tmpConfObj1);
-                                                }
-                                                else
-                                                {
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgFailed")}</div>)
-                                                    await dialog(tmpConfObj1);
-                                                }
-                                            }                                       
+                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                                await dialog(tmpConfObj1);
+                                            }
+                                        }                                       
                                     }}/>
                                 </Item>
                                 <Item location="after"
@@ -411,6 +356,7 @@ export default class collectiveItemEdit extends React.Component
                             columnAutoWidth={true}
                             allowColumnReordering={true}
                             allowColumnResizing={true}
+                            loadPanel={{enabled:true}}
                             height={'100%'} 
                             width={'100%'}
                             dbApply={false}

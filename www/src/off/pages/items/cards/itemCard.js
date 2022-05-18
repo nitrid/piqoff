@@ -30,6 +30,7 @@ export default class itemCard extends React.Component
         this.state = {underPrice : 0,isItemGrpForOrginsValid : false,isItemGrpForMinMaxAccess : false}
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
+
         this.itemsObj = new itemsCls();
         this.itemsPriceSupply = new itemPriceCls();   
         this.itemsPriceLogObj = new itemLogPriceCls();        

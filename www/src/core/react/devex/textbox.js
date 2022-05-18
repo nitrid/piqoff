@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 import {TextBox,Button,Item} from 'devextreme-react/text-box';
 import Base,{ Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from './base.js';
 import { core } from '../../core.js';
+import { prm } from '../../../off/meta/prm.js';
 
 export { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule }
 export default class NdTextBox extends Base
@@ -15,6 +16,7 @@ export default class NdTextBox extends Base
         
         this.dev = null;
 
+
         this.state.value = typeof props.value == 'undefined' ? ''  : props.value
         this.state.title = typeof props.title == 'undefined' ? '' : props.title
         this.state.mode = typeof props.mode == 'undefined' ? 'text' : props.mode
@@ -22,8 +24,9 @@ export default class NdTextBox extends Base
         this.state.displayValue = typeof props.displayValue == 'undefined' ? '' : props.displayValue
         this.state.titleAlign = typeof props.titleAlign == 'undefined' ? 'left' : props.titleAlign
         this.state.showClearButton = typeof props.showClearButton == 'undefined' ? false : props.showClearButton
-        this.state.readOnly = typeof props.readOnly == 'undefined' ? false : props.readOnly        
+        this.state.readOnly = typeof props.readOnly == 'undefined' ? false : props.readOnly   
 
+        
         this._onInitialized = this._onInitialized.bind(this);
         this._onValueChanged = this._onValueChanged.bind(this);
         this._onEnterKey = this._onEnterKey.bind(this);
@@ -63,7 +66,7 @@ export default class NdTextBox extends Base
     }
     _onFocusIn(e)
     {
-        if(this.props.selectAll)
+        if(typeof this.props.selectAll == 'undefined' || this.props.selectAll == true)
         {
             this.dev.element().getElementsByTagName('input')[0].select()
         }

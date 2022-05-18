@@ -991,6 +991,7 @@ export default class labelPrinting extends React.Component
                                     height={'600'} 
                                     width={'100%'}
                                     dbApply={false}
+                                    loadPanel={{enabled:true}}
                                     onRowUpdated={async(e)=>{
                                         if(typeof e.data.PRICE != 'undefined' || typeof e.data.UNDER_UNIT_VALUE != 'undefined')
                                         {

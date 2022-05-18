@@ -353,6 +353,7 @@ export default class itemList extends React.Component
                             columnAutoWidth={true}
                             allowColumnReordering={true}
                             allowColumnResizing={true}
+                            loadPanel={{enabled:true}}
                             onCellPrepared={(e) =>
                             {
                                 if(e.rowType === "data" && e.column.dataField === "MARGIN")

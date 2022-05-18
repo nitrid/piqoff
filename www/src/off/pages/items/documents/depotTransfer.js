@@ -851,6 +851,7 @@ export default class depotTransfer extends React.Component
                                     onRowRemoved={(e)=>{
 
                                     }}
+                                    loadPanel={{enabled:true}}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                                         <Scrolling mode="standard" />
