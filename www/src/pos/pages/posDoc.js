@@ -94,7 +94,7 @@ export default class posDoc extends React.PureComponent
         this.init();        
     }
     async init()
-    {                
+    {       
         setInterval(()=>
         {
             this.lblTime.value = moment(new Date(),"HH:mm:ss").format("HH:mm:ss")
@@ -151,7 +151,7 @@ export default class posDoc extends React.PureComponent
                 await this.getDoc(this.parkDt[i].GUID)                
                 return
             }
-        }                              
+        }           
     }
     async getDoc(pGuid)
     {

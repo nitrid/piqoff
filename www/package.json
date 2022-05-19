@@ -33,6 +33,7 @@
     "html-react-parser": "^1.4.12",
     "html-webpack-plugin": "^5.5.0",
     "i18next": "^21.6.16",
+    "is-proxy": "^1.0.6",
     "jquery": "^3.6.0",
     "moment": "^2.24.0",
     "moment-with-locales-es6": "^1.0.1",

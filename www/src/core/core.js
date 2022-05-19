@@ -1,4 +1,6 @@
 import moment from 'moment';
+import { isProxy } from 'is-proxy';
+
 export class core
 {        
     static instance = null;
@@ -677,48 +679,51 @@ export class datatable
     }
     //#endregion
     push(pItem,pIsNew)
-    {     
-        pItem = new Proxy(pItem, 
+    {            
+        if(!isProxy(pItem))
         {
-            get: function(target, prop, receiver) 
+            pItem = new Proxy(pItem, 
             {
-                return target[prop];
-            },
-            set: (function(target, prop, receiver) 
-            {            
-                if(target[prop] != receiver)
+                get: function(target, prop, receiver) 
                 {
-                    target[prop] = receiver
-
-                    if(typeof this.noColumnEdit.find(x => x == prop) == 'undefined')
+                    return target[prop];
+                },
+                set: (function(target, prop, receiver) 
+                {            
+                    if(target[prop] != receiver)
                     {
-                        this.emit('onEdit',{data:{[prop]:receiver},rowIndex:this.findIndex(x => x === pItem),rowData:pItem});
-
-                        //EĞER EDİT EDİLDİĞİNDE STATE DURUMUNUN DEĞİŞMEMESİNİ İSTEDİĞİN KOLON VARSA BURDA KONTROL EDİLİYOR
-                        if(target.stat != 'new')
+                        target[prop] = receiver
+    
+                        if(typeof this.noColumnEdit.find(x => x == prop) == 'undefined')
                         {
-                            //EDİT EDİLMİŞ KOLON VARSA BURDA editColumn DEĞİŞKENİNE SET EDİLİYOR.
-                            let tmpColumn = []
-                            if(typeof target.editColumn != 'undefined')
+                            this.emit('onEdit',{data:{[prop]:receiver},rowIndex:this.findIndex(x => x === pItem),rowData:pItem});
+    
+                            //EĞER EDİT EDİLDİĞİNDE STATE DURUMUNUN DEĞİŞMEMESİNİ İSTEDİĞİN KOLON VARSA BURDA KONTROL EDİLİYOR
+                            if(target.stat != 'new')
                             {
-                                tmpColumn = [...target.editColumn];
+                                //EDİT EDİLMİŞ KOLON VARSA BURDA editColumn DEĞİŞKENİNE SET EDİLİYOR.
+                                let tmpColumn = []
+                                if(typeof target.editColumn != 'undefined')
+                                {
+                                    tmpColumn = [...target.editColumn];
+                                }
+                                tmpColumn.push(prop)
+                                Object.setPrototypeOf(target,{stat:'edit',editColumn:tmpColumn})                    
                             }
-                            tmpColumn.push(prop)
-                            Object.setPrototypeOf(target,{stat:'edit',editColumn:tmpColumn})                    
                         }
                     }
-                }
-                //return target[prop];
-                return true;
-            }).bind(this)
-        });
+                    //return target[prop];
+                    return true;
+                }).bind(this)
+            });
+        }
         
         if(typeof pIsNew == 'undefined' || pIsNew)
         {
             Object.setPrototypeOf(pItem,{stat:'new'})
             this.emit('onNew',pItem)
         }
-
+        console.log(pItem)
         this.emit('onAddRow',pItem);
         super.push(pItem)
     }

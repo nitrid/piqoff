@@ -114,5 +114,7 @@ export function print()
             } 
             return tmpArr.length > 0 ? tmpArr : undefined
         },
+        {font:"b",style:"bu",align:"lt",data:" ".space(64)},
+        {font:"b",style:"bu",align:"lt",data:" ".space(64)}
     ]
 }
