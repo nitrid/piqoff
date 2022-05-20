@@ -1186,7 +1186,7 @@ export default class posDoc extends React.PureComponent
                                         }
                                     }
                                 ]}
-                                onKeyDown={(async(e)=>
+                                onKeyUp={(async(e)=>
                                 {    
                                     if(e.event.key == 'Enter')
                                     {                                        
