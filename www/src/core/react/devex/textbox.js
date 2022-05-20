@@ -255,6 +255,7 @@ export default class NdTextBox extends Base
     }
     set value(e)
     {   
+        console.log(e)
         if(typeof e == 'undefined')
         {
             return;
@@ -290,7 +291,8 @@ export default class NdTextBox extends Base
             }
         }
         this.setState({value:e.toString()})                
-        this.dev.option('value',e.toString()) 
+        this.dev.option('value',e.toString())
+        console.log(1453) 
     } 
     get readOnly()
     {

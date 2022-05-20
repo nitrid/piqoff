@@ -162,48 +162,36 @@ export default class posDoc extends React.PureComponent
     {
         return new Promise(async resolve => 
         {
-            console.log("11 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
+            console.log("11 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
             let tmpDt = new datatable(); 
             tmpDt.selectCmd = 
             {
-                query : "SELECT TOP 1 *,@CODE AS INPUT FROM ITEMS_POS_VW_01 WHERE BARCODE = @CODE",
+                query : "SELECT TOP 1 *,@CODE AS INPUT FROM ITEMS_POS_VW_01 WHERE CODE = @CODE OR BARCODE = @CODE",
                 param : ['CODE:string|25'],
                 value: [pCode]
             }
+            console.log("12 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
             await tmpDt.refresh();
-            console.log("12 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
-            console.log(tmpDt)
-            //BARKOD
-            // if(tmpDt.length == 0)
-            // {
-            //     console.log("13 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
-            //     tmpDt.selectCmd = 
-            //     {
-            //         query : "SELECT TOP 1 *,@CODE AS INPUT FROM ITEMS_POS_VW_01 WHERE BARCODE = @CODE",
-            //         param : ['CODE:string|25'],
-            //         value: [pCode]
-            //     }
+            console.log("13 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
+            //UNIQ BARKOD
+            if(tmpDt.length == 0)
+            {
+                tmpDt.selectCmd = 
+                {
+                    query : "SELECT TOP 1 *,@CODE AS INPUT FROM ITEMS_POS_VW_01 WHERE UNIQ_CODE = @CODE",
+                    param : ['CODE:string|25'],
+                    value: [pCode]
+                }
 
-            //     await tmpDt.refresh();
-            //     console.log("14 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
-            //     //UNIQ BARKOD
-            //     if(tmpDt.length == 0)
-            //     {
-            //         tmpDt.selectCmd = 
-            //         {
-            //             query : "SELECT TOP 1 *,@CODE AS INPUT FROM ITEMS_POS_VW_01 WHERE UNIQ_CODE = @CODE",
-            //             param : ['CODE:string|25'],
-            //             value: [pCode]
-            //         }
-
-            //         await tmpDt.refresh();
-            //     }
-            // }
+                await tmpDt.refresh();
+            }
+            console.log("14 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
             resolve(tmpDt)
         });
     }
     async getItem(pCode)
     {        
+        console.log("0 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
         this.txtBarcode.value = ""; 
         let tmpQuantity = 1
         let tmpPrice = 0        
@@ -293,6 +281,7 @@ export default class posDoc extends React.PureComponent
         console.log("1 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
         //ÜRÜN GETİRME        
         let tmpItemsDt = await this.getItemDb(pCode)
+        console.log("2 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
         if(tmpItemsDt.length > 0)
         {                             
             //******************************************************** */
@@ -1186,12 +1175,15 @@ export default class posDoc extends React.PureComponent
                                         }
                                     }
                                 ]}
-                                onKeyUp={(async(e)=>
-                                {    
-                                    if(e.event.key == 'Enter')
-                                    {                                        
-                                        this.getItem(this.txtBarcode.dev.option("text"))
-                                    }
+                                onEnterKey={(async(e)=>
+                                {      
+                                    console.log("21 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
+                                    this.getItem(this.txtBarcode.dev.option("text"))                                  
+                                    // if(e.event.key == 'Enter')
+                                    // {
+                                    //     console.log("11 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
+                                    //     this.getItem(this.txtBarcode.dev.option("text"))
+                                    // }
                                 }).bind(this)} 
                                 >     
                                 </NdTextBox>  
