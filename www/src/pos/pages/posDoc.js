@@ -23,6 +23,7 @@ import NbPosPopGrid from "../tools/pospopgrid.js";
 import NbPopDescboard from "../tools/popdescboard.js";
 import NdDialog,{ dialog } from "../../core/react/devex/dialog.js";
 import NbLabel from "../../core/react/bootstrap/label.js";
+import NdPosBarBox from "../tools/posbarbox.js";
 
 import { posCls,posSaleCls,posPaymentCls,posPluCls,posDeviceCls } from "../../core/cls/pos.js";
 import { itemsCls } from "../../core/cls/items.js";
@@ -76,22 +77,8 @@ export default class posDoc extends React.PureComponent
                 // }
                 return
             }
-
-            if(!e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey)
-            {
-                if(e.key == "Enter")
-                {
-                    this.txtBarcode.value = this.barcode
-                    this.barcode = ""
-                    this.txtBarcode.props.onEnterKey()
-                }
-                else
-                {
-                    this.barcode = this.barcode + e.key
-                }
-            }
             
-            //this.txtBarcode.focus()
+            this.txtBarcode.focus()
             if(e.which == 38) //UP
             {
                 
@@ -177,17 +164,15 @@ export default class posDoc extends React.PureComponent
     {
         return new Promise(async resolve => 
         {
-            console.log("11 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
             let tmpDt = new datatable(); 
             tmpDt.selectCmd = 
             {
                 query : "SELECT TOP 1 *,@CODE AS INPUT FROM ITEMS_POS_VW_01 WHERE CODE = @CODE OR BARCODE = @CODE",
                 param : ['CODE:string|25'],
-                value: [pCode]
+                value: [pCode],
+                // timeout : 3000
             }
-            console.log("12 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
             await tmpDt.refresh();
-            console.log("13 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
             //UNIQ BARKOD
             if(tmpDt.length == 0)
             {
@@ -200,13 +185,11 @@ export default class posDoc extends React.PureComponent
 
                 await tmpDt.refresh();
             }
-            console.log("14 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
             resolve(tmpDt)
         });
     }
     async getItem(pCode)
     {        
-        console.log("0 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
         this.txtBarcode.value = ""; 
         let tmpQuantity = 1
         let tmpPrice = 0        
@@ -294,9 +277,9 @@ export default class posDoc extends React.PureComponent
         tmpQuantity = typeof tmpBarPattern.quantity == 'undefined' || tmpBarPattern.quantity == 0 ? tmpQuantity : tmpBarPattern.quantity
         pCode = tmpBarPattern.barcode     
         console.log("1 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
+        this.setState({isLoading:true})
         //ÜRÜN GETİRME        
         let tmpItemsDt = await this.getItemDb(pCode)
-        console.log("2 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
         if(tmpItemsDt.length > 0)
         {                             
             //******************************************************** */
@@ -334,7 +317,7 @@ export default class posDoc extends React.PureComponent
                         content:(<div><h3 className="text-primary text-center">{tmpItemsDt[0].NAME}</h3><h3 className="text-danger text-center">{tmpPrice + " EUR"}</h3></div>)
                     }
                     await dialog(tmpConfObj);
-                    this.setState({isBtnInfo:false})
+                    this.setState({isBtnInfo:false,isLoading:false})
                     return;
                 }
                 //**************************************************** */
@@ -353,6 +336,7 @@ export default class posDoc extends React.PureComponent
                     }
                     else
                     {
+                        this.setState({isLoading:false})
                         return
                     }
                 }
@@ -371,12 +355,14 @@ export default class posDoc extends React.PureComponent
                         }
                         else
                         {
+                            this.setState({isLoading:false})
                             return
                         }
                     }
                     else
                     {
                         //POPUP KAPATILMIŞ İSE YADA FİYAT BOŞ GİRİLMİŞ İSE...
+                        this.setState({isLoading:false})
                         return
                     }
                 }
@@ -400,12 +386,14 @@ export default class posDoc extends React.PureComponent
                 let tmpMsgResult = await dialog(tmpConfObj);
                 if(tmpMsgResult == 'btn02')
                 {
+                    this.setState({isLoading:false})
                     return
                 }
             }
             //**************************************************** */
             tmpItemsDt[0].QUANTITY = tmpQuantity
             tmpItemsDt[0].PRICE = tmpPrice
+            this.setState({isLoading:false})
             this.saleAdd(tmpItemsDt[0])
         }
         else
@@ -423,6 +411,7 @@ export default class posDoc extends React.PureComponent
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Okuttuğunuz Barkod Sistemde Bulunamadı !"}</div>)
             }
             await dialog(tmpConfObj);
+            this.setState({isLoading:false})
         }
         //******************************************************** */    
     }
@@ -498,6 +487,7 @@ export default class posDoc extends React.PureComponent
     {
         return new Promise(async resolve => 
         {
+            this.setState({isLoading:true})
             if(this.posObj.dt().length > 0)
             {      
                 this.posObj.dt()[this.posObj.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.posSale.dt().sum('AMOUNT',2)).toFixed(2))
@@ -550,6 +540,7 @@ export default class posDoc extends React.PureComponent
                 await this.posObj.save()
             }    
             resolve()            
+            this.setState({isLoading:false})
         });
     }    
     isRowMerge(pType,pData)
@@ -1060,7 +1051,7 @@ export default class posDoc extends React.PureComponent
         return(
             <div>
                 <LoadPanel
-                shadingColor="rgba(0,0,0,0.4)"
+                shadingColor="rgba(0,0,0,0.0)"
                 position={{ of: '#root' }}
                 visible={this.state.isLoading}
                 showIndicator={false}
@@ -1156,7 +1147,7 @@ export default class posDoc extends React.PureComponent
                         {/* txtBarcode */}
                         <div className="row">
                             <div className="col-12">
-                                <NdTextBox id="txtBarcode" parent={this} simple={true} 
+                                <NdPosBarBox id="txtBarcode" parent={this} simple={true} 
                                 button={
                                 [
                                     {
@@ -1190,18 +1181,15 @@ export default class posDoc extends React.PureComponent
                                         }
                                     }
                                 ]}
-                                onEnterKey={(async(e)=>
+                                onKeyUp={(async(e)=>
                                 {      
-                                    console.log("21 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
-                                    this.getItem(this.txtBarcode.dev.option("text"))                                  
-                                    // if(e.event.key == 'Enter')
-                                    // {
-                                    //     console.log("11 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
-                                    //     this.getItem(this.txtBarcode.dev.option("text"))
-                                    // }
+                                    if(e.event.key == 'Enter')
+                                    {
+                                        this.getItem(this.txtBarcode.dev.option("value"))
+                                    }
                                 }).bind(this)} 
                                 >     
-                                </NdTextBox>  
+                                </NdPosBarBox>  
                             </div>                            
                         </div>
                         {/* grdList */}
