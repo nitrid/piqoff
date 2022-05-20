@@ -1,4 +1,3 @@
-import moment from 'moment';
 import { isProxy } from 'is-proxy';
 
 export class core

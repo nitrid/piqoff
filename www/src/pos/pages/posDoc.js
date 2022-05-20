@@ -44,6 +44,7 @@ export default class posDoc extends React.PureComponent
         this.posDevice = new posDeviceCls();
         this.parkDt = new datatable();
         this.cheqDt = new datatable();
+        this.barcode = "";
 
         this.state =
         {
@@ -74,6 +75,11 @@ export default class posDoc extends React.PureComponent
                 //     document.getElementById("Sound").play();
                 // }
                 return
+            }
+            console.log(e)
+            if(!e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey)
+            {
+                console.log(e)
             }
             
             this.txtBarcode.focus()

@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import {TextBox,Button,Item} from 'devextreme-react/text-box';
 import Base,{ Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from './base.js';
 import { core } from '../../core.js';
-
+import moment from 'moment';
 export { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule }
 export default class NdTextBox extends Base
 {
@@ -254,7 +254,6 @@ export default class NdTextBox extends Base
     }
     set value(e)
     {   
-        console.log(e)
         if(typeof e == 'undefined')
         {
             return;
@@ -291,7 +290,6 @@ export default class NdTextBox extends Base
         }
         this.setState({value:e.toString()})                
         this.dev.option('value',e.toString())
-        console.log(1453) 
     } 
     get readOnly()
     {
