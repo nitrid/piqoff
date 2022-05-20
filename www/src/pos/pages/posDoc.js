@@ -162,26 +162,43 @@ export default class posDoc extends React.PureComponent
     {
         return new Promise(async resolve => 
         {
+            console.log("11 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
             let tmpDt = new datatable(); 
             tmpDt.selectCmd = 
             {
-                query : "SELECT TOP 1 *,@CODE AS INPUT FROM ITEMS_POS_VW_01 WHERE CODE = @CODE OR BARCODE = @CODE",
+                query : "SELECT TOP 1 *,@CODE AS INPUT FROM ITEMS_POS_VW_01 WHERE BARCODE = @CODE",
                 param : ['CODE:string|25'],
                 value: [pCode]
             }
             await tmpDt.refresh();
-            //UNIQ BARKOD
-            if(tmpDt.length == 0)
-            {
-                tmpDt.selectCmd = 
-                {
-                    query : "SELECT TOP 1 *,@CODE AS INPUT FROM ITEMS_POS_VW_01 WHERE UNIQ_CODE = @CODE",
-                    param : ['CODE:string|25'],
-                    value: [pCode]
-                }
+            console.log("12 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
+            console.log(tmpDt)
+            //BARKOD
+            // if(tmpDt.length == 0)
+            // {
+            //     console.log("13 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
+            //     tmpDt.selectCmd = 
+            //     {
+            //         query : "SELECT TOP 1 *,@CODE AS INPUT FROM ITEMS_POS_VW_01 WHERE BARCODE = @CODE",
+            //         param : ['CODE:string|25'],
+            //         value: [pCode]
+            //     }
 
-                await tmpDt.refresh();
-            }
+            //     await tmpDt.refresh();
+            //     console.log("14 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
+            //     //UNIQ BARKOD
+            //     if(tmpDt.length == 0)
+            //     {
+            //         tmpDt.selectCmd = 
+            //         {
+            //             query : "SELECT TOP 1 *,@CODE AS INPUT FROM ITEMS_POS_VW_01 WHERE UNIQ_CODE = @CODE",
+            //             param : ['CODE:string|25'],
+            //             value: [pCode]
+            //         }
+
+            //         await tmpDt.refresh();
+            //     }
+            // }
             resolve(tmpDt)
         });
     }
@@ -1169,7 +1186,7 @@ export default class posDoc extends React.PureComponent
                                         }
                                     }
                                 ]}
-                                onKeyDown={(async(e)=>
+                                onKeyUp={(async(e)=>
                                 {    
                                     if(e.event.key == 'Enter')
                                     {                                        

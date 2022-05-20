@@ -65,7 +65,8 @@ export default class itemCount extends React.Component
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
-        this.init()
+        await this.init()
+       
     }
     async init()
     {
@@ -130,6 +131,10 @@ export default class itemCount extends React.Component
         this.frmCount.option('disabled',false)
         await this.grdItemCount.dataRefresh({source:this.countObj.dt('ITEM_COUNT')});
         this.txtRef.props.onChange()
+        if(typeof this.pagePrm != 'undefined')
+        {
+            this.getDoc('00000000-0000-0000-0000-000000000000',this.pagePrm.REF,this.pagePrm.REF_NO)
+        }
     }
     async getDoc(pGuid,pRef,pRefno)
     {
