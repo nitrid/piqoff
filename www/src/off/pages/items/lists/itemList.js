@@ -297,7 +297,7 @@ export default class itemList extends React.Component
                                 </Item>
                                 <Item>
                                     <Label text={this.t("cmbCustomer")} alignment="right" />
-                                        <NdSelectBox simple={true} parent={this} id="cmbTedarikci" showClearButton={true} notRefresh={true}  searchEnabled={true}
+                                        <NdSelectBox simple={true} parent={this} id="cmbTedarikci" showClearButton={true} notRefresh={true}  searchEnabled={true} 
                                         displayExpr="TITLE"                       
                                         valueExpr="CODE"
                                         data={{source: {select : {query:"SELECT CODE,TITLE FROM CUSTOMER_VW_01 WHERE TYPE IN(1,2) ORDER BY TITLE ASC"},sql : this.core.sql}}}

@@ -32,6 +32,8 @@ export default class CustomerCard extends React.Component
         this.prevCode = "";
         this.state={officalVisible:true}
         this.tabIndex = props.data.tabkey
+        this.sysPrmObj = this.param.filter({TYPE:0,USERS:this.user.CODE});
+        console.log(this.sysPrmObj)
         
 
         this._onItemRendered = this._onItemRendered.bind(this)
@@ -425,8 +427,8 @@ export default class CustomerCard extends React.Component
                                                     this.typeChange(e.value)
                                                 }
                                         }).bind(this)}
-                                    //param={this.param.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
-                                    //access={this.access.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
+                                    param={this.param.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
                                     />
                                 </Item>       
                                 {/* cmbGenus */}
@@ -436,8 +438,8 @@ export default class CustomerCard extends React.Component
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
                                     data={{source:[{ID:0,VALUE:this.t("cmbGenusData.Customer")},{ID:1,VALUE:this.t("cmbGenusData.supplier")},{ID:2,VALUE:this.t("cmbGenusData.both")}]}}
-                                    //param={this.param.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
-                                    //access={this.access.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
+                                    param={this.param.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
                                     />
                                 </Item>       
                                 {/* txtCode */}
@@ -645,7 +647,7 @@ export default class CustomerCard extends React.Component
                                                 dbApply={false}
                                                 >
                                                     <Paging defaultPageSize={5} />
-                                                    <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
+                                                    <Editing mode="cell" allowUpdating={false} allowDeleting={true} />
                                                     <Column dataField="ADRESS" caption={this.t("grdAdress.clmAdress")} />
                                                     <Column dataField="ZIPCODE" caption={this.t("grdAdress.clmZipcode")} />
                                                     <Column dataField="CITY" caption={this.t("grdAdress.clmCity")}/>
@@ -790,6 +792,7 @@ export default class CustomerCard extends React.Component
                                     valueExpr="ZIPCODE"
                                     value=""
                                     searchEnabled={true}
+                                    showClearButton={true}
                                     pageSize ={50}
                                     notRefresh = {true}
                                     data={{source:{select:{query : "SELECT [COUNTRY_CODE],[ZIPCODE],[PLACE],ZIPCODE + ' ' + PLACE AS ZIPNAME  FROM [dbo].[ZIPCODE]"},sql:this.core.sql}}}
@@ -802,6 +805,7 @@ export default class CustomerCard extends React.Component
                                     valueExpr="PLACE"
                                     value=""
                                     searchEnabled={true}
+                                    showClearButton={true}
                                     pageSize ={50}
                                     notRefresh = {true}
                                     data={{source:{select:{query : "SELECT COUNTRY_CODE,ZIPCODE,PLACE,PLACE + ' ' + ZIPCODE AS CITYNAME  FROM [dbo].[ZIPCODE]"},sql:this.core.sql}}}
@@ -814,6 +818,7 @@ export default class CustomerCard extends React.Component
                                     valueExpr="CODE"
                                     value="FR"
                                     searchEnabled={true}
+                                    showClearButton={true}
                                     data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY NAME ASC"},sql:this.core.sql}}}
                                     />
                                 </Item>

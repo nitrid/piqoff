@@ -507,59 +507,75 @@ export default class rebateInvoice extends React.Component
     }
     async _getDispatch()
     {
-        let tmpQuery = 
+        if(this.docObj.dt()[0].INPUT == '' || this.docObj.dt()[0].INPUT == '00000000-0000-0000-0000-000000000000')
         {
-            query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND INVOICE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND REBATE = 1 AND DOC_TYPE IN(40)",
-            param : ['INPUT:string|50'],
-            value : [this.docObj.dt()[0].INPUT]
-        }
-        let tmpData = await this.core.sql.execute(tmpQuery) 
-        if(tmpData.result.recordset.length > 0)
-        {   
-            await this.pg_dispatchGrid.setData(tmpData.result.recordset)
-        }
-        this.pg_dispatchGrid.show()
-        this.pg_dispatchGrid.onClick = async(data) =>
-        {
-            for (let i = 0; i < data.length; i++) 
+            let tmpConfObj =
             {
-                let tmpDocItems = {...this.docObj.docItems.empty}
-                tmpDocItems.GUID = data[i].GUID
-                tmpDocItems.DOC_GUID = data[i].DOC_GUID
-                tmpDocItems.TYPE = data[i].TYPE
-                tmpDocItems.DOC_TYPE = data[i].DOC_TYPE
-                tmpDocItems.REBATE = data[i].REBATE
-                tmpDocItems.LINE_NO = data[i].LINE_NO
-                tmpDocItems.REF = data[i].REF
-                tmpDocItems.REF_NO = data[i].REF_NO
-                tmpDocItems.DOC_DATE = data[i].DOC_DATE
-                tmpDocItems.SHIPMENT_DATE = data[i].SHIPMENT_DATE
-                tmpDocItems.INPUT = data[i].INPUT
-                tmpDocItems.INPUT_CODE = data[i].INPUT_CODE
-                tmpDocItems.INPUT_NAME = data[i].INPUT_NAME
-                tmpDocItems.OUTPUT = data[i].OUTPUT
-                tmpDocItems.OUTPUT_CODE = data[i].OUTPUT_CODE
-                tmpDocItems.OUTPUT_NAME = data[i].OUTPUT_NAME
-                tmpDocItems.ITEM = data[i].ITEM
-                tmpDocItems.ITEM_CODE = data[i].ITEM_CODE
-                tmpDocItems.ITEM_NAME = data[i].ITEM_NAME
-                tmpDocItems.PRICE = data[i].PRICE
-                tmpDocItems.QUANTITY = data[i].QUANTITY
-                tmpDocItems.VAT = data[i].VAT
-                tmpDocItems.AMOUNT = data[i].AMOUNT
-                tmpDocItems.TOTAL = data[i].TOTAL
-                tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
-                tmpDocItems.INVOICE_GUID = this.docObj.dt()[0].GUID
-                tmpDocItems.VAT_RATE = data[i].VAT_RATE
-                tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
-                tmpDocItems.CONNECT_REF = data[i].CONNECT_REF
-
-                await this.docObj.docItems.addEmpty(tmpDocItems,false)
-                this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].stat = 'edit'
+                id:'msgCustomerSelect',showTitle:true,title:this.t("msgCustomerSelect.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgCustomerSelect.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerSelect.msg")}</div>)
             }
-            this.docObj.docItems.dt().emit('onRefresh')
-            this._calculateTotal()
+
+            await dialog(tmpConfObj);
+            return
         }
+        else
+        {
+            let tmpQuery = 
+            {
+                query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND INVOICE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND REBATE = 1 AND DOC_TYPE IN(40)",
+                param : ['INPUT:string|50'],
+                value : [this.docObj.dt()[0].INPUT]
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            if(tmpData.result.recordset.length > 0)
+            {   
+                await this.pg_dispatchGrid.setData(tmpData.result.recordset)
+            }
+            this.pg_dispatchGrid.show()
+            this.pg_dispatchGrid.onClick = async(data) =>
+            {
+                for (let i = 0; i < data.length; i++) 
+                {
+                    let tmpDocItems = {...this.docObj.docItems.empty}
+                    tmpDocItems.GUID = data[i].GUID
+                    tmpDocItems.DOC_GUID = data[i].DOC_GUID
+                    tmpDocItems.TYPE = data[i].TYPE
+                    tmpDocItems.DOC_TYPE = data[i].DOC_TYPE
+                    tmpDocItems.REBATE = data[i].REBATE
+                    tmpDocItems.LINE_NO = data[i].LINE_NO
+                    tmpDocItems.REF = data[i].REF
+                    tmpDocItems.REF_NO = data[i].REF_NO
+                    tmpDocItems.DOC_DATE = data[i].DOC_DATE
+                    tmpDocItems.SHIPMENT_DATE = data[i].SHIPMENT_DATE
+                    tmpDocItems.INPUT = data[i].INPUT
+                    tmpDocItems.INPUT_CODE = data[i].INPUT_CODE
+                    tmpDocItems.INPUT_NAME = data[i].INPUT_NAME
+                    tmpDocItems.OUTPUT = data[i].OUTPUT
+                    tmpDocItems.OUTPUT_CODE = data[i].OUTPUT_CODE
+                    tmpDocItems.OUTPUT_NAME = data[i].OUTPUT_NAME
+                    tmpDocItems.ITEM = data[i].ITEM
+                    tmpDocItems.ITEM_CODE = data[i].ITEM_CODE
+                    tmpDocItems.ITEM_NAME = data[i].ITEM_NAME
+                    tmpDocItems.PRICE = data[i].PRICE
+                    tmpDocItems.QUANTITY = data[i].QUANTITY
+                    tmpDocItems.VAT = data[i].VAT
+                    tmpDocItems.AMOUNT = data[i].AMOUNT
+                    tmpDocItems.TOTAL = data[i].TOTAL
+                    tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
+                    tmpDocItems.INVOICE_GUID = this.docObj.dt()[0].GUID
+                    tmpDocItems.VAT_RATE = data[i].VAT_RATE
+                    tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
+                    tmpDocItems.CONNECT_REF = data[i].CONNECT_REF
+    
+                    await this.docObj.docItems.addEmpty(tmpDocItems,false)
+                    this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].stat = 'edit'
+                }
+                this.docObj.docItems.dt().emit('onRefresh')
+                this._calculateTotal()
+            }
+        }
+
     }
     async close()
     {

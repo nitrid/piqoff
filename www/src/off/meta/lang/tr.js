@@ -1967,6 +1967,12 @@ export const langTr =
             btn02: "Yeni Ekle",
             msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Satırlar Birleştirilsin mi ?"
         },
+        msgCustomerSelect:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Cari Seçiniz !"
+        },
         popCash : 
         {
             title: "Nakit Girişi",
@@ -2207,6 +2213,12 @@ export const langTr =
             btn01: "Birleştir",
             btn02: "Yeni Ekle",
             msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Satırlar Birleştirilsin mi ?"
+        },
+        msgCustomerSelect:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Cari Seçiniz !"
         },
         popCash : 
         {
@@ -2449,6 +2461,12 @@ export const langTr =
             btn01: "Birleştir",
             btn02: "Yeni Ekle",
             msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Satırlar Birleştirilsin mi ?"
+        },
+        msgCustomerSelect:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Cari Seçiniz !"
         },
         popCash : 
         {

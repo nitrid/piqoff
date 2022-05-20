@@ -1,5 +1,23 @@
 export const prm =
 [
+    //#region Sistem
+    //txtRef
+    {
+        TYPE : 0,
+        ID :"onlyBigChar",
+        VALUE : 
+        {
+            value : true
+        },
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Sadece Büyük Harf Kullanımı"
+        }
+    },
+    //#endregion
     //#region Stok Tanıtım
     //txtRef
     {

@@ -20,10 +20,14 @@ export default class Page extends React.Component
       let tmpPrm = new param(prm);
       await tmpPrm.load({PAGE:props.data.id,APP:'OFF'})
 
+      let tmpSysPrm = new param(prm);
+      await tmpSysPrm.load({TYPE:0,APP:'OFF'})
+
       let tmpAcs = new access(acs);
       await tmpAcs.load({PAGE:props.data.id,APP:'OFF'})
       
       obj.default.prototype.param = tmpPrm;
+      obj.default.prototype.sysParam = tmpSysPrm;
       obj.default.prototype.access = tmpAcs;
       obj.default.prototype.user = this.core.auth.data;
       obj.default.prototype.lang = App.instance.lang;
