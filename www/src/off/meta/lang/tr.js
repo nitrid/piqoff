@@ -1327,6 +1327,13 @@ export const langTr =
             clmCode : "Kodu",
             clmQuantity : "Sayılan Miktar",
         },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
         msgSaveResult:
         {
             title: "Dikkat",
