@@ -5,7 +5,6 @@ import ReactDOM from 'react-dom';
 import {TextBox,Button,Item} from 'devextreme-react/text-box';
 import Base,{ Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from './base.js';
 import { core } from '../../core.js';
-import { prm } from '../../../off/meta/prm.js';
 
 export { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule }
 export default class NdTextBox extends Base

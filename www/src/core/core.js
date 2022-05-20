@@ -1242,6 +1242,7 @@ export class param extends datatable
     }
     filter()
     {
+        //BURAYA KESİN BAKILACAK
         if(arguments.length == 1 && typeof arguments[0] == 'object')
         {
             let tmpData = this.toArray();
