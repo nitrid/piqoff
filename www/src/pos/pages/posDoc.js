@@ -45,7 +45,7 @@ export default class posDoc extends React.PureComponent
         this.posDevice = new posDeviceCls();
         this.parkDt = new datatable();
         this.cheqDt = new datatable();
-        this.barcode = "";
+        this.loading = React.createRef()
 
         this.state =
         {
@@ -53,7 +53,6 @@ export default class posDoc extends React.PureComponent
             isPluEdit:false,
             isBtnGetCustomer:false,
             isBtnInfo:false,
-            isLoading:false,
             customerName:'',
             customerPoint:0,
             payTotal:0,
@@ -96,7 +95,7 @@ export default class posDoc extends React.PureComponent
         this.init();        
     }
     async init()
-    {       
+    {               
         setInterval(()=>
         {
             this.lblTime.value = moment(new Date(),"HH:mm:ss").format("HH:mm:ss")
@@ -189,7 +188,7 @@ export default class posDoc extends React.PureComponent
         });
     }
     async getItem(pCode)
-    {        
+    {                
         this.txtBarcode.value = ""; 
         let tmpQuantity = 1
         let tmpPrice = 0        
@@ -277,7 +276,7 @@ export default class posDoc extends React.PureComponent
         tmpQuantity = typeof tmpBarPattern.quantity == 'undefined' || tmpBarPattern.quantity == 0 ? tmpQuantity : tmpBarPattern.quantity
         pCode = tmpBarPattern.barcode     
         console.log("1 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
-        this.setState({isLoading:true})
+        this.loading.current.instance.show()
         //ÜRÜN GETİRME        
         let tmpItemsDt = await this.getItemDb(pCode)
         if(tmpItemsDt.length > 0)
@@ -317,7 +316,8 @@ export default class posDoc extends React.PureComponent
                         content:(<div><h3 className="text-primary text-center">{tmpItemsDt[0].NAME}</h3><h3 className="text-danger text-center">{tmpPrice + " EUR"}</h3></div>)
                     }
                     await dialog(tmpConfObj);
-                    this.setState({isBtnInfo:false,isLoading:false})
+                    this.setState({isBtnInfo:false})
+                    this.loading.current.instance.hide()
                     return;
                 }
                 //**************************************************** */
@@ -336,7 +336,7 @@ export default class posDoc extends React.PureComponent
                     }
                     else
                     {
-                        this.setState({isLoading:false})
+                        this.loading.current.instance.hide()
                         return
                     }
                 }
@@ -355,14 +355,14 @@ export default class posDoc extends React.PureComponent
                         }
                         else
                         {
-                            this.setState({isLoading:false})
+                            this.loading.current.instance.hide()
                             return
                         }
                     }
                     else
                     {
                         //POPUP KAPATILMIŞ İSE YADA FİYAT BOŞ GİRİLMİŞ İSE...
-                        this.setState({isLoading:false})
+                        this.loading.current.instance.hide()
                         return
                     }
                 }
@@ -386,14 +386,14 @@ export default class posDoc extends React.PureComponent
                 let tmpMsgResult = await dialog(tmpConfObj);
                 if(tmpMsgResult == 'btn02')
                 {
-                    this.setState({isLoading:false})
+                    this.loading.current.instance.hide()
                     return
                 }
             }
             //**************************************************** */
             tmpItemsDt[0].QUANTITY = tmpQuantity
             tmpItemsDt[0].PRICE = tmpPrice
-            this.setState({isLoading:false})
+            this.loading.current.instance.hide()
             this.saleAdd(tmpItemsDt[0])
         }
         else
@@ -411,7 +411,7 @@ export default class posDoc extends React.PureComponent
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Okuttuğunuz Barkod Sistemde Bulunamadı !"}</div>)
             }
             await dialog(tmpConfObj);
-            this.setState({isLoading:false})
+            this.loading.current.instance.hide()
         }
         //******************************************************** */    
     }
@@ -487,7 +487,7 @@ export default class posDoc extends React.PureComponent
     {
         return new Promise(async resolve => 
         {
-            this.setState({isLoading:true})
+            this.loading.current.instance.show()
             if(this.posObj.dt().length > 0)
             {      
                 this.posObj.dt()[this.posObj.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.posSale.dt().sum('AMOUNT',2)).toFixed(2))
@@ -540,7 +540,7 @@ export default class posDoc extends React.PureComponent
                 await this.posObj.save()
             }    
             resolve()            
-            this.setState({isLoading:false})
+            this.loading.current.instance.hide()
         });
     }    
     isRowMerge(pType,pData)
@@ -1053,11 +1053,11 @@ export default class posDoc extends React.PureComponent
                 <LoadPanel
                 shadingColor="rgba(0,0,0,0.0)"
                 position={{ of: '#root' }}
-                visible={this.state.isLoading}
                 showIndicator={false}
                 shading={true}
                 showPane={false}
                 message={""}
+                ref={this.loading}
                 />               
                 <div className="top-bar row">
                     <div className="col-12">                    
