@@ -723,7 +723,6 @@ export class datatable
             Object.setPrototypeOf(pItem,{stat:'new'})
             this.emit('onNew',pItem)
         }
-        console.log(pItem)
         this.emit('onAddRow',pItem);
         super.push(pItem)
     }
