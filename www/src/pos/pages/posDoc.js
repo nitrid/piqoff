@@ -77,21 +77,21 @@ export default class posDoc extends React.PureComponent
                 return
             }
 
-            // if(!e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey)
-            // {
-            //     if(e.key == "Enter")
-            //     {
-            //         this.txtBarcode.value = this.barcode
-            //         this.barcode = ""
-            //         this.txtBarcode.props.onEnterKey()
-            //     }
-            //     else
-            //     {
-            //         this.barcode = this.barcode + e.key
-            //     }
-            // }
+            if(!e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey)
+            {
+                if(e.key == "Enter")
+                {
+                    this.txtBarcode.value = this.barcode
+                    this.barcode = ""
+                    this.txtBarcode.props.onEnterKey()
+                }
+                else
+                {
+                    this.barcode = this.barcode + e.key
+                }
+            }
             
-            this.txtBarcode.focus()
+            //this.txtBarcode.focus()
             if(e.which == 38) //UP
             {
                 
