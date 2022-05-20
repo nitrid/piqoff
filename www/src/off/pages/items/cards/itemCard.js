@@ -642,7 +642,7 @@ export default class itemCard extends React.Component
                                     valueExpr="CODE"
                                     value=""
                                     searchEnabled={true} 
-                                    //showClearButton={true}
+                                    showClearButton={true}
                                     pageSize ={50}
                                     notRefresh={true}
                                     param={this.param.filter({ELEMENT:'cmbItemGrp',USERS:this.user.CODE})}

@@ -348,6 +348,16 @@ export default class countFinalization extends React.Component
                             columnAutoWidth={true}
                             allowColumnReordering={true}
                             allowColumnResizing={true}
+                            onRowDblClick={async(e)=>
+                                {
+                                    App.instance.menuClick(
+                                        {
+                                            id: 'stk_02_001',
+                                            text: 'Sayım',
+                                            path: 'items/documents/itemCount.js',
+                                            pagePrm:{REF:e.data.REF,REF_NO:e.data.REF_NO}
+                                        })
+                                }}
                             >                            
                                 <Paging defaultPageSize={15} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
