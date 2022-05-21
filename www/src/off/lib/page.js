@@ -18,17 +18,14 @@ export default class Page extends React.Component
     {
       //SAYFA YÜKLENMEDEN ÖNCE PARAMETRE, DİL, YETKİLENDİRME DEĞERLERİ GETİRİLİP CLASS PROTOTYPE A SET EDİLİYOR.
       let tmpPrm = new param(prm);
-      await tmpPrm.load({PAGE:props.data.id,APP:'OFF'})
-
-      let tmpSysPrm = new param(prm);
-      await tmpSysPrm.load({TYPE:0,APP:'OFF'})
-
-      let tmpAcs = new access(acs);
-      await tmpAcs.load({PAGE:props.data.id,APP:'OFF'})
+      await tmpPrm.load({APP:'OFF'})
       
-      obj.default.prototype.param = tmpPrm;
-      obj.default.prototype.sysParam = tmpSysPrm;
-      obj.default.prototype.access = tmpAcs;
+      let tmpAcs = new access(acs);
+      await tmpAcs.load({APP:'OFF'})
+      
+      obj.default.prototype.param = tmpPrm.filter({PAGE:props.data.id});
+      obj.default.prototype.sysParam = tmpPrm.filter({TYPE:0});
+      obj.default.prototype.access = tmpAcs.filter({PAGE:props.data.id});
       obj.default.prototype.user = this.core.auth.data;
       obj.default.prototype.lang = App.instance.lang;
       obj.default.prototype.t = App.instance.lang.getFixedT(null,null,this.props.data.id)

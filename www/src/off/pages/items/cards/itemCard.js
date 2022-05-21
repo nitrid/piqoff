@@ -30,7 +30,12 @@ export default class itemCard extends React.Component
         this.state = {underPrice : 0,isItemGrpForOrginsValid : false,isItemGrpForMinMaxAccess : false}
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
-        
+
+        for (let i = 0; i < this.prmObj.length; i++) 
+        {
+            console.log(this.prmObj[i].PAGE + " - " + this.prmObj[i].USER)
+        }
+
         this.itemsObj = new itemsCls();
         this.itemsPriceSupply = new itemPriceCls();   
         this.itemsPriceLogObj = new itemLogPriceCls();        
@@ -812,7 +817,7 @@ export default class itemCard extends React.Component
                                     <NdTextBox id="txtItemName" parent={this} simple={true} dt={{data:this.itemsObj.dt('ITEMS'),field:"NAME"}}
                                     param={this.param.filter({ELEMENT:'txtItemName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtItemName',USERS:this.user.CODE})}
-                                    upper={this.sysPrmObj.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    upper={true}
                                     onValueChanged={(e)=>
                                     {
                                         if(e.value.length <= 32)

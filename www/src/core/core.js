@@ -1183,16 +1183,10 @@ export class param extends datatable
             {
                 this.selectCmd = 
                 {
-                    query : "SELECT * FROM PARAM WHERE PAGE = @PAGE AND APP = @APP AND ((USERS = @USERS) OR (@USERS = '')) AND " +
-                            "((TYPE = @TYPE) OR (@TYPE = -1)) AND ((SPECIAL = @SPECIAL) OR (@SPECIAL = '')) AND ((ELEMENT = @ELEMENT) OR (@ELEMENT = ''))" ,
-                    param : ['PAGE:string|25','APP:string|50','USERS:string|25','TYPE:int','SPECIAL:string|150','ELEMENT:string|250'],
+                    query : "SELECT * FROM PARAM WHERE ((APP = @APP) OR (@APP = ''))" ,
+                    param : ['APP:string|50'],
                     value : [
-                                typeof arguments[0].PAGE == 'undefined' ? '' : arguments[0].PAGE, 
                                 typeof arguments[0].APP == 'undefined' ? '' : arguments[0].APP,
-                                typeof arguments[0].USERS == 'undefined' ? '' : arguments[0].USERS,
-                                typeof arguments[0].TYPE == 'undefined' ? -1 : arguments[0].TYPE,
-                                typeof arguments[0].SPECIAL == 'undefined' ? '' : arguments[0].SPECIAL,
-                                typeof arguments[0].ELEMENT == 'undefined' ? '' : arguments[0].ELEMENT
                             ]
                 } 
                 await this.refresh();
@@ -1368,15 +1362,10 @@ export class access extends datatable
             {
                 this.selectCmd = 
                 {
-                    query : "SELECT * FROM ACCESS WHERE PAGE = @PAGE AND APP = @APP AND ((USERS = @USERS) OR (@USERS = '')) AND " +
-                            "((SPECIAL = @SPECIAL) OR (@SPECIAL = '')) AND ((ELEMENT = @ELEMENT) OR (@ELEMENT = ''))" ,
-                    param : ['PAGE:string|25','APP:string|50','USERS:string|25','SPECIAL:string|150','ELEMENT:string|250'],
+                    query : "SELECT * FROM ACCESS WHERE ((APP = @APP) OR (@APP = ''))" ,
+                    param : ['APP:string|50'],
                     value : [
-                                typeof arguments[0].PAGE == 'undefined' ? '' : arguments[0].PAGE, 
                                 typeof arguments[0].APP == 'undefined' ? '' : arguments[0].APP,
-                                typeof arguments[0].USERS == 'undefined' ? '' : arguments[0].USERS,
-                                typeof arguments[0].SPECIAL == 'undefined' ? '' : arguments[0].SPECIAL,
-                                typeof arguments[0].ELEMENT == 'undefined' ? '' : arguments[0].ELEMENT
                             ]
                 } 
                 await this.refresh();
