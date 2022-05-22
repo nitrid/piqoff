@@ -2,6 +2,7 @@ import moment from "moment";
 //data.pos
 //data.possale
 //data.pospay
+//data.vatlist = 'Vergi Listesi'
 //data.special.type = 'Fatura'
 //data.special.safe = 'Kasa Kodu'
 //data.special.ticketCount = 'Günlük Ticket Sayısı'
@@ -157,43 +158,119 @@ export function print()
         // ÖDEME TOPLAMLARI
         ()=>
         {
+            let tmpArr = [];
+            let tmpOperator = data.pos[0].TYPE == 1 ? "-" : "";
+
             for (let i = 0; i < data.pospay.length; i++) 
             {
-                let TmpType = "";
-                if(pTData[i].TYPE == 0)
-                    TmpType = "Espece" //BUNLAR PARAMETRİK OLACAK.
-                else if (pTData[i].TYPE == 1)
-                    TmpType = "CB"
-                else if(pTData[i].TYPE == 2)
-                    TmpType = "Cheque"
-                else if(pTData[i].TYPE == 3)
-                    TmpType = "CHEQue"
-                else if(pTData[i].TYPE == 4)
-                    TmpType = "BON D'AVOIR"
-                else if(pTData[i].TYPE == 5)
-                    TmpType = "AVOIR"
-                else if(pTData[i].TYPE == 6)
-                    TmpType = "VIRMENT"
-                else if(pTData[i].TYPE == 7)
-                    TmpType = "PRLV"
+                let tmpType = "";
+                if(data.pospay[i].TYPE == 0)
+                    tmpType = "Espece"
+                else if (data.pospay[i].TYPE == 1)
+                    tmpType = "CB"
+                else if(data.pospay[i].TYPE == 2)
+                    tmpType = "Cheque"
+                else if(data.pospay[i].TYPE == 3)
+                    tmpType = "CHEQue"
+                else if(data.pospay[i].TYPE == 4)
+                    tmpType = "BON D'AVOIR"
+                else if(data.pospay[i].TYPE == 5)
+                    tmpType = "AVOIR"
+                else if(data.pospay[i].TYPE == 6)
+                    tmpType = "VIRMENT"
+                else if(data.pospay[i].TYPE == 7)
+                    tmpType = "PRLV"
 
-                TmpLine = 
+                tmpArr.push(
                 {
                     font: "a",
                     align: "lt",
-                    data: _PrintText(TmpType,33) +
-                        _PrintText(TmpOperator + parseFloat(_SumColumn(pTData,"AMOUNT","TYPE = " + pTData[i].TYPE)).toFixed(2) + " EUR",15,"Start")
-                }
-                TmpData.push(TmpLine);
+                    data: tmpType.space(33) + 
+                    (tmpOperator + data.possale.where({TYPE:data.pospay[i].TYPE}).sum("AMOUNT",2) + " EUR").space(15,"s")
+                })
             }
-            return {
+            return tmpArr.length > 0 ? tmpArr : undefined
+        },
+        // PARA ÜSTÜ
+        ()=>
+        {
+            let tmpArr = [];
+            if(data.pospay.where({TYPE:0}).length > 0)
+            {
+                tmpArr.push(
+                {
+                    font: "a",
+                    align: "lt",
+                    data: "Recu".space(33) +
+                        (parseFloat(data.possale.where({TYPE:0}).sum("AMOUNT",2) + data.possale.sum("CHANGE",2)).toFixed(2) + " EUR").space(15,"s")
+                });
+
+                tmpArr.push(
+                {
+                    font: "a",
+                    align: "lt",
+                    data: "Rendu".space(33) + (data.possale.sum("CHANGE",2) + " EUR").space(15,"s")
+                });
+            }
+            else if(data.pospay.where({TYPE:3}).length > 0)
+            {
+                tmpArr.push(
+                {
+                    font: "a",
+                    align: "lt",
+                    data: "Surplus Tic. Rest.".space(33) + (data.possale.sum("TICKET_PLUS",2) + " EUR").space(15,"s")
+                });
+            }
+            if(data.pospay.where({TYPE:4}).length > 0)
+            {
+                tmpArr.push(
+                {
+                    font: "a",
+                    align: "lt",
+                    data: "Recu".space(33) +
+                        (parseFloat(data.possale.where({TYPE:4}).sum("AMOUNT",2) + data.possale.sum("CHANGE",2)).toFixed(2) + " EUR").space(15,"s")
+                });
+
+                tmpArr.push(
+                {
+                    font: "a",
+                    align: "lt",
+                    data: "Rendu".space(33) + (data.possale.sum("CHANGE",2) + " EUR").space(15,"s")
+                });
+            }
+            return tmpArr.length > 0 ? tmpArr : undefined
+        },
+        {font:"b",style:"bu",align:"lt",data:" ".space(64)},
+        ()=>
+        {
+            let tmpArr = [];
+            
+            tmpArr.push(
+            {
                 font: "b",
-                size : [1,1],
-                style: "b",
+                style: "bu",
                 align: "lt",
-                data: "Total TTC".space(17) + 
-                (tmpOperator + parseFloat(data.possale.sum("AMOUNT",2) - (data.possale.sum("DISCOUNT",2) + parseFloat(parseFloat(data.special.customerPoint) / 100))).toFixed(2) + " EUR").space(15,"s")
+                data: " ".space(5) + " " +
+                    "Taux".space(10) + " " +
+                    "HT".space(10) + " " +
+                    "TVA".space(10) + " " +
+                    "TTC".space(10)
+            })
+
+            for (let i = 0; i < data.vatlist.length; i++) 
+            {
+                tmpArr.push(
+                {
+                    font: "b",
+                    align: "lt",
+                    data: data.vatlist[i].VAT_TYPE.space(5) + " " +
+                        (data.vatlist[i].VAT + "%").space(10) + " " +
+                        parseFloat(data.vatlist[i].HT).toFixed(2).space(10) + " " + 
+                        parseFloat(data.vatlist[i].TVA).toFixed(2).space(10) + " " + 
+                        parseFloat(data.vatlist[i].TTC).toFixed(2).space(10)
+                })
             }
-        }
+            return tmpArr.length > 0 ? tmpArr : undefined
+        },
     ]
 }
