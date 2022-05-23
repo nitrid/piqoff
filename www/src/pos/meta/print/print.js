@@ -7,11 +7,9 @@ import moment from "moment";
 //data.special.ticketCount = 'Günlük Ticket Sayısı'
 //data.special.reprint = 'true' Tekrar yazdırma
 //data.special.repas = 'TxtRepasMiktar'
-//data.special.customerCode = 'Müşteri Kodu'
 //data.special.customerUsePoint = 'Müşteri Kullanılan Puanı'
 //data.special.customerPoint = 'Müşteri Puanı'
 //data.special.customerGrowPoint = 'Müşteri Kalan Puanı'
-//data.special.rebateCode = 'İade Kodu'
 
 export function print()
 {
@@ -295,7 +293,7 @@ export function print()
         ()=>
         {
             let tmpArr = [];
-            if(data.pos[0].CUSTOMER_CODE != data.special.customerCode)
+            if(data.pos[0].CUSTOMER_CODE != '')
             {            
                 tmpArr.push({align:"ct",barcode:data.pos[0].CUSTOMER_CODE,options:{width: 1,height:30}});
                 tmpArr.push({font:"b",style:"b",align:"lt",data:"****************************************************************".space(64)});
@@ -315,26 +313,26 @@ export function print()
         },
         ()=>
         {
-            // let tmpArr = [];
-            // if(data.special.rebateCode != '' && data.pospay. _Equal(pTData,"TYPE",4) && _Equal(pTData,"DOC_TYPE",1))
-            // {
-            //     TmpData.push({font:"b",style:"b",align:"ct",size : [1,0],data:"Reste Bon d'avoir : " + parseFloat(pParamData[5].substring(8,12) / 100).toFixed(2) + "EUR"});
-            //     TmpData.push({align:"ct",barcode:pParamData[5],options:{width: 1,height:90}});
-            //     TmpData.push({font:"b",style:"b",align:"lt",data:_PrintText(" ",64)});
-            //     TmpData.push({font:"b",style:"b",align:"ct",data:"Avoir valable 3 mois apres edition..."});
-            // }
-            // else if(pParamData[5] != '' && _Equal(pTData,"TYPE",4) && _Equal(pTData,"DOC_TYPE",0) && _NotEqual(pTData,"CHANGE",0))
-            // {
-            //     TmpData.push({font:"b",style:"b",align:"ct",size : [1,0],data:"Reste Bon d'avoir : " + parseFloat(pParamData[5].substring(8,12) / 100).toFixed(2) + "EUR"});
-            //     TmpData.push({align:"ct",barcode:pParamData[5],options:{width: 1,height:90}});
-            //     TmpData.push({font:"b",style:"b",align:"lt",data:_PrintText(" ",64)});
-            //     TmpData.push({font:"b",style:"b",align:"ct",data:"Avoir valable 3 mois apres edition..."});
-            // }
-            // else
-            // {
-            //     TmpData.push({font:"b",style:"b",align:"ct",data:"Merci de votre fidelite a tres bientot ..."});    
-            // }
-            // return tmpArr.length > 0 ? tmpArr : undefined
+            let tmpArr = [];
+            if(data.pos[0].REBATE_CHEQPAY != '' && data.pospay.where({TYPE:4}).length > 0 && data.pos[0].TYPE == 1)
+            {
+                tmpArr.push({font:"b",style:"b",align:"ct",size : [1,0],data:"Reste Bon d'avoir : " + parseFloat(data.pos[0].REBATE_CHEQPAY.substring(8,12) / 100).toFixed(2) + "EUR"});
+                tmpArr.push({align:"ct",barcode:data.pos[0].REBATE_CHEQPAY,options:{width: 1,height:90}});
+                tmpArr.push({font:"b",style:"b",align:"lt",data:" ".space(64)});
+                tmpArr.push({font:"b",style:"b",align:"ct",data:"Avoir valable 3 mois apres edition..."});
+            }
+            else if(data.pos[0].REBATE_CHEQPAY != '' && data.pospay.where({TYPE:4}).length > 0 && data.pos[0].TYPE == 0 && data.pospay.where({CHANGE:{'<>':0}}).length > 0)
+            {
+                tmpArr.push({font:"b",style:"b",align:"ct",size : [1,0],data:"Reste Bon d'avoir : " + parseFloat(data.pos[0].REBATE_CHEQPAY.substring(8,12) / 100).toFixed(2) + "EUR"});
+                tmpArr.push({align:"ct",barcode:data.pos[0].REBATE_CHEQPAY,options:{width: 1,height:90}});
+                tmpArr.push({font:"b",style:"b",align:"lt",data:" ".space(64)});
+                tmpArr.push({font:"b",style:"b",align:"ct",data:"Avoir valable 3 mois apres edition..."});
+            }
+            else
+            {
+                tmpArr.push({font:"b",style:"b",align:"ct",data:"Merci de votre fidelite a tres bientot ..."});    
+            }
+            return tmpArr.length > 0 ? tmpArr : undefined
         },
     ]
 }

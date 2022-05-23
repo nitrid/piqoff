@@ -45,7 +45,7 @@ export default class posDoc extends React.PureComponent
         this.posDevice = new posDeviceCls();
         this.parkDt = new datatable();
         this.cheqDt = new datatable();
-        this.loading = React.createRef()
+        this.loading = React.createRef();
 
         this.state =
         {
@@ -54,6 +54,7 @@ export default class posDoc extends React.PureComponent
             isBtnGetCustomer:false,
             isBtnInfo:false,
             customerName:'',
+            customerUsePoint:0,
             customerPoint:0,
             payTotal:0,
             payChange:0,
@@ -212,7 +213,7 @@ export default class posDoc extends React.PureComponent
             let tmpCustomerDt = new datatable(); 
             tmpCustomerDt.selectCmd = 
             {
-                query : "SELECT GUID,CODE,TITLE,ADRESS,0 AS CUSTOMER_POINT FROM [dbo].[CUSTOMER_VW_02] WHERE CODE = @CODE",
+                query : "SELECT GUID,CODE,TITLE,ADRESS,dbo.FN_CUSTOMER_TOTAL_POINT(GUID,GETDATE()) AS CUSTOMER_POINT FROM [dbo].[CUSTOMER_VW_02] WHERE CODE = @CODE",
                 param : ['CODE:string|50']
             }
             tmpCustomerDt.selectCmd.value = [pCode]
@@ -220,9 +221,9 @@ export default class posDoc extends React.PureComponent
 
             if(tmpCustomerDt.length > 0)
             {
-                this.posObj.dt().CUSTOMER_GUID = tmpCustomerDt[0].GUID
-                this.posObj.dt().CUSTOMER_CODE = tmpCustomerDt[0].CODE
-                this.posObj.dt().CUSTOMER_NAME = tmpCustomerDt[0].TITLE
+                this.posObj.dt()[0].CUSTOMER_GUID = tmpCustomerDt[0].GUID
+                this.posObj.dt()[0].CUSTOMER_CODE = tmpCustomerDt[0].CODE
+                this.posObj.dt()[0].CUSTOMER_NAME = tmpCustomerDt[0].TITLE
                 
                 this.setState({customerName:tmpCustomerDt[0].TITLE,customerPoint:tmpCustomerDt[0].CUSTOMER_POINT})
             }
@@ -495,7 +496,7 @@ export default class posDoc extends React.PureComponent
                 this.posObj.dt()[this.posObj.dt().length - 1].LOYALTY = Number(parseFloat(this.posObj.posSale.dt().sum('LOYALTY',2)).toFixed(2))
                 this.posObj.dt()[this.posObj.dt().length - 1].VAT = Number(parseFloat(this.posObj.posSale.dt().sum('VAT',2)).toFixed(2))
                 this.posObj.dt()[this.posObj.dt().length - 1].TOTAL = Number(parseFloat(this.posObj.posSale.dt().sum('TOTAL',2)).toFixed(2))
-
+                
                 this.totalRowCount.value = this.posObj.posSale.dt().length
                 this.totalItemCount.value = this.posObj.posSale.dt().sum('QUANTITY',2)
                 this.totalLoyalty.value = parseFloat(this.posObj.dt()[0].LOYALTY).toFixed(2) + "€"
@@ -710,6 +711,15 @@ export default class posDoc extends React.PureComponent
 
             this.posObj.dt()[0].STATUS = 1
             await this.calcGrandTotal()
+            //EĞER MÜŞTERİ KARTI İSE PUAN KAYIT EDİLİYOR.
+            if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
+            {
+                await this.customerPointSave(0,Math.floor(this.posObj.dt()[0].TOTAL))
+                if(this.state.customerUsePoint > 0)
+                {
+                    await this.customerPointSave(1,this.state.customerUsePoint)
+                }
+            }
             this.popTotal.hide()
             this.popCheqpay.hide();
             
@@ -736,11 +746,9 @@ export default class posDoc extends React.PureComponent
                     await dialog(tmpConfObj);
                 }
             }
-            
+            this.print('Fis','001',false,"0")
             this.init()
         }
-
-        this.print()
     }
     payRowAdd(pPayData)
     {
@@ -1029,7 +1037,27 @@ export default class posDoc extends React.PureComponent
             resolve()
         });
     }
-    print()
+    async customerPointSave(pType,pPoint)
+    {
+        return new Promise(async resolve => 
+        {
+            let tmpQuery = 
+            {
+                query : "EXEC [dbo].[PRD_CUSTOMER_POINT_INSERT] " + 
+                        "@CUSER = @PCUSER, " + 
+                        "@TYPE = @PTYPE, " +     
+                        "@CUSTOMER = @PCUSTOMER, " +                  
+                        "@DOC = @PDOC, " + 
+                        "@POINT = @PPOINT, " + 
+                        "@DESCRIPTION = @PDESCRIPTION ", 
+                param : ['PCUSER:string|25','PTYPE:int','PCUSTOMER:string|50','PDOC:string|50','PPOINT:float','PDESCRIPTION:string|250'],
+                value : [this.core.auth.data.CODE,pType,this.posObj.dt()[0].CUSTOMER_GUID,this.posObj.dt()[0].GUID,pPoint,'']
+            }
+            await this.core.sql.execute(tmpQuery)
+            resolve()
+        });
+    }
+    print(pType,pSafe,pRePrint,pRepas)
     {
         let prmPrint = this.prmObj.filter({ID:'PrintDesign',TYPE:0}).getValue()
         
@@ -1040,10 +1068,20 @@ export default class posDoc extends React.PureComponent
                 pos : this.posObj.dt(),
                 possale : this.posObj.posSale.dt(),
                 pospay : this.posObj.posPay.dt(),
-                special : {type:'Fis',safe:'001',ticketCount:5,reprint:false,repas:"0",customerCode:"",customerUsePoint:0,customerPoint:0,customerGrowPoint:0,rebateCode:""}
+                special : 
+                {
+                    type: pType,
+                    safe: pSafe,
+                    ticketCount:0,
+                    reprint: pRePrint,
+                    repas: pRepas,
+                    customerUsePoint:0,
+                    customerPoint:this.state.customerPoint,
+                    customerGrowPoint:0
+                }
             }
-            let x = e.print(tmpData)
-            this.posDevice.escPrinter(x)
+            let tmpPrint = e.print(tmpData)
+            this.posDevice.escPrinter(tmpPrint)
         })
     }
     render()
@@ -2381,7 +2419,7 @@ export default class posDoc extends React.PureComponent
                     {
                         select:
                         {
-                            query : "SELECT GUID,CODE,TITLE,ADRESS,0 AS CUSTOMER_POINT FROM [dbo].[CUSTOMER_VW_02] WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                            query : "SELECT GUID,CODE,TITLE,ADRESS,dbo.FN_CUSTOMER_TOTAL_POINT(GUID,GETDATE()) AS CUSTOMER_POINT FROM [dbo].[CUSTOMER_VW_02] WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
                             param : ['VAL:string|50']
                         },
                         sql:this.core.sql
@@ -2390,9 +2428,9 @@ export default class posDoc extends React.PureComponent
                     {
                         if(pData.length > 0)
                         {
-                            this.posObj.dt().CUSTOMER_GUID = pData[0].GUID
-                            this.posObj.dt().CUSTOMER_CODE = pData[0].CODE
-                            this.posObj.dt().CUSTOMER_NAME = pData[0].TITLE
+                            this.posObj.dt()[0].CUSTOMER_GUID = pData[0].GUID
+                            this.posObj.dt()[0].CUSTOMER_CODE = pData[0].CODE
+                            this.posObj.dt()[0].CUSTOMER_NAME = pData[0].TITLE
                             
                             this.setState({customerName:pData[0].TITLE,customerPoint:pData[0].CUSTOMER_POINT})
                         }
@@ -3163,7 +3201,11 @@ export default class posDoc extends React.PureComponent
                         
                         await this.descSave("REBATE",e,0);                        
                         await this.calcGrandTotal();
-
+                        //EĞER MÜŞTERİ KARTI İSE PUAN KAYIT EDİLİYOR.
+                        if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
+                        {
+                            await this.customerPointSave(1,Math.floor(this.posObj.dt()[0].TOTAL))
+                        }
                         this.init()
                     }}></NbPopDescboard>
                 </div>
