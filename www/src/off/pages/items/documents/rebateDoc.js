@@ -192,6 +192,7 @@ export default class rebateDoc extends React.Component
         {
             return (
                 <NdTextBox id={"txtGrdItemsCode"+e.rowIndex} parent={this} simple={true} 
+                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                 value={e.value}
                 onKeyDown={async(k)=>
                 {
@@ -541,6 +542,7 @@ export default class rebateDoc extends React.Component
                                     <div className="row">
                                         <div className="col-4 pe-0">
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
+                                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             readOnly={true}
                                             maxLength={32}
                                             onChange={(async(e)=>
@@ -711,6 +713,7 @@ export default class rebateDoc extends React.Component
                                  <Item>
                                     <Label text={this.t("txtBarcode")} alignment="right" />
                                     <NdTextBox id="txtBarcode" parent={this} simple={true}  validationGroup="frmRbtDoc"
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     onEnterKey={(async(e)=>
                                     {
                                         if(this.cmbDepot2.value == '' || this.cmbDepot1.value == '')

@@ -326,6 +326,7 @@ export default class customerAddressCard extends React.Component
                                 <Item>
                                     <Label text={this.t("txtCode")} alignment="right" />
                                     <NdTextBox id="txtCode" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"CODE"}}  
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     button=
                                     {
                                         [

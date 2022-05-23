@@ -579,6 +579,22 @@ export const prm =
                 CAPTION : "Ürün MAximum Satış Yüzdesi"
             }
         },
+         //Tax Sugar
+        {
+            TYPE : 1,
+            ID :"taxSugarGroupValidation",
+            VALUE : ['017'],
+            SPECIAL : "",
+            PAGE : "stk_01_001",
+            ELEMENT : "",
+            APP : "OFF",
+            VIEW : 
+            {
+                TYPE : "text",
+                PAGE_NAME : "Stok Tanımları",
+                CAPTION : "Tax Sugar Uygulanacak Gruplar"
+            }
+        },
     //#endregion
 
     //#region Cari Tanıtım

@@ -305,7 +305,8 @@ export default class itemList extends React.Component
                                 </Item>
                                 <Item>
                                     <Label text={this.t("txtItemName")} alignment="right" />
-                                        <NdTextBox id="txtUrunAdi" parent={this} simple={true} onEnterKey={this._btnGetirClick} placeholder={this.t("ItemNamePlaceHolder")}/>
+                                        <NdTextBox id="txtUrunAdi" parent={this} simple={true} onEnterKey={this._btnGetirClick} placeholder={this.t("ItemNamePlaceHolder")}
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("cmbMainGrp")} alignment="right" />

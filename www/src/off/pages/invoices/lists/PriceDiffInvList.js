@@ -217,6 +217,7 @@ export default class PriceDiffInvList extends React.Component
                                 <Item>
                                 <Label text={this.t("txtCustomerCode")} alignment="right" />
                                 <NdTextBox id="txtCustomerCode" parent={this} simple={true}
+                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                 button=
                                 {
                                     [

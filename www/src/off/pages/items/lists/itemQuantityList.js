@@ -218,7 +218,8 @@ export default class QuantityList extends React.Component
                             <Form colCount={2} id="frmKriter">
                                 <Item>
                                     <Label text={this.t("txtItemName")} alignment="right" />
-                                        <NdTextBox id="txtUrunAdi" parent={this} simple={true} />
+                                        <NdTextBox id="txtUrunAdi" parent={this} simple={true} 
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
                                 </Item>
                                 <Item></Item>
                                 <Item>

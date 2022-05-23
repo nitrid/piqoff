@@ -217,6 +217,7 @@ export default class promotionCard extends React.Component
                                 <Item>                                    
                                     <Label text={this.t("txtCode")} alignment="right" />
                                     <NdTextBox id="txtCode" parent={this} simple={true} tabIndex={this.tabIndex} 
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.promoObj.dt(),field:"CODE"}}
                                     button=
                                     {
@@ -279,6 +280,7 @@ export default class promotionCard extends React.Component
                                 <Item colSpan={2}>                                    
                                     <Label text={this.t("txtName")} alignment="right" />
                                     <NdTextBox id="txtName" parent={this} simple={true} 
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.promoObj.dt(),field:"NAME"}}
                                     />     
                                 </Item>
@@ -313,6 +315,7 @@ export default class promotionCard extends React.Component
                                 <Item>                                    
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
                                     <NdTextBox id="txtCustomerCode" parent={this} simple={true} 
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.promoObj.dt(),field:"CUSTOMER_CODE"}}
                                     button=
                                     {
@@ -374,6 +377,7 @@ export default class promotionCard extends React.Component
                                 <Item colSpan={2}>                                    
                                     <Label text={this.t("txtCustomerName")} alignment="right" />
                                     <NdTextBox id="txtCustomerName" parent={this} simple={true} readOnly={true}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.promoObj.dt(),field:"CUSTOMER_NAME"}}
                                     />     
                                 </Item>
@@ -403,6 +407,7 @@ export default class promotionCard extends React.Component
                                 <Item>
                                     <Label text={this.t("txtPrmItem")} alignment="right" />
                                     <NdTextBox id="txtPrmItem" parent={this} simple={true} readOnly={true}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.promoObj.dt(),field:"PRM_V",display:"PRM_NAME"}}
                                     displayValue={""}
                                     button=
@@ -469,6 +474,7 @@ export default class promotionCard extends React.Component
                                 <Item>
                                     <Label text={this.t("txtPrmItemGrp")} alignment="right" />
                                     <NdTextBox id="txtPrmItemGrp" parent={this} simple={true} readOnly={true}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.promoObj.dt(),field:"PRM_V",display:"PRM_NAME"}}
                                     displayValue={""}
                                     button=
@@ -560,6 +566,7 @@ export default class promotionCard extends React.Component
                                 <Item>
                                     <Label text={this.t("txtRstItem")} alignment="right" />
                                     <NdTextBox id="txtRstItem" parent={this} simple={true} readOnly={true}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.promoObj.dt(),field:"RST_ITEM",display:"RST_NAME"}}
                                     displayValue={""}
                                     button=

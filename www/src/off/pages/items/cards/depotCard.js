@@ -296,6 +296,7 @@ export default class DepotCard extends React.Component
                                  <Item>
                                     <Label text={this.t("txtCode")} alignment="right" />
                                     <NdTextBox id="txtCode" parent={this} simple={true} dt={{data:this.depotObj.dt('DEPOT'),field:"CODE"}}  
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     button=
                                     {
                                         [
@@ -369,6 +370,7 @@ export default class DepotCard extends React.Component
                                 <Item>
                                     <Label text={this.t("txtName")} alignment="right" />
                                     <NdTextBox id="txtTitle" parent={this} simple={true} dt={{data:this.depotObj.dt('DEPOT'),field:"NAME"}}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     onChange={(async()=>
                                     {
                                       

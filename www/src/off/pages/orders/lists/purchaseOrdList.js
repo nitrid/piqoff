@@ -218,6 +218,7 @@ export default class purchaseOrdList extends React.Component
                                 <Item>
                                 <Label text={this.t("txtCustomerCode")} alignment="right" />
                                 <NdTextBox id="txtCustomerCode" parent={this} simple={true}  notRefresh = {true}
+                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                 button=
                                 {
                                     [
