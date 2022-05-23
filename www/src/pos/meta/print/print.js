@@ -2,13 +2,14 @@ import moment from "moment";
 //data.pos
 //data.possale
 //data.pospay
-//data.vatlist = 'Vergi Listesi'
 //data.special.type = 'Fatura'
 //data.special.safe = 'Kasa Kodu'
 //data.special.ticketCount = 'Günlük Ticket Sayısı'
 //data.special.reprint = 'true' Tekrar yazdırma
 //data.special.repas = 'TxtRepasMiktar'
+//data.special.customerUsePoint = 'Müşteri Kullanılan Puanı'
 //data.special.customerPoint = 'Müşteri Puanı'
+//data.special.customerGrowPoint = 'Müşteri Kalan Puanı'
 
 export function print()
 {
@@ -126,15 +127,15 @@ export function print()
             let tmpArr = [];
             let tmpOperator = data.pos[0].TYPE == 1 ? "-" : "";
 
-            if(data.special.customerPoint > 0)
+            if(data.special.customerUsePoint > 0)
             {
                 tmpArr.push({font:"a",align:"lt",data:"Sous-Total ".space(33) + (tmpOperator + data.possale.sum("AMOUNT",2) + " EUR").space(15,"s")});
-                tmpArr.push({font:"a",align:"lt",data:"Remise Fidelite ".space(33) + (parseFloat(parseFloat(data.special.customerPoint) / 100).toFixed(2).toString() + ' EUR').space(15,"s")});
+                tmpArr.push({font:"a",align:"lt",data:"Remise Fidelite ".space(33) + (parseFloat(parseFloat(data.special.customerUsePoint) / 100).toFixed(2).toString() + ' EUR').space(15,"s")});
             }
 
             if(data.possale.sum("DISCOUNT",2) > 0)
             {
-                if(data.special.customerPoint == 0)
+                if(data.special.customerUsePoint == 0)
                 {
                     tmpArr.push({font:"a",align:"lt",data:"Sous-Total ".space(33) + (tmpOperator + data.possale.sum("AMOUNT",2) + " EUR").space(15,"s")});
                 }
@@ -152,7 +153,7 @@ export function print()
                 style: "b",
                 align: "lt",
                 data: "Total TTC".space(17) + 
-                (tmpOperator + parseFloat(data.possale.sum("AMOUNT",2) - (data.possale.sum("DISCOUNT",2) + parseFloat(parseFloat(data.special.customerPoint) / 100))).toFixed(2) + " EUR").space(15,"s")
+                (tmpOperator + parseFloat(data.possale.sum("AMOUNT",2) - (data.possale.sum("DISCOUNT",2) + parseFloat(parseFloat(data.special.customerUsePoint) / 100))).toFixed(2) + " EUR").space(15,"s")
             }
         },
         // ÖDEME TOPLAMLARI
@@ -256,19 +257,80 @@ export function print()
                     "TVA".space(10) + " " +
                     "TTC".space(10)
             })
-
-            for (let i = 0; i < data.vatlist.length; i++) 
+            let tmpVatLst = data.possale.groupBy('VAT_RATE');
+            for (let i = 0; i < tmpVatLst.length; i++) 
             {
                 tmpArr.push(
                 {
                     font: "b",
                     align: "lt",
-                    data: data.vatlist[i].VAT_TYPE.space(5) + " " +
-                        (data.vatlist[i].VAT + "%").space(10) + " " +
-                        parseFloat(data.vatlist[i].HT).toFixed(2).space(10) + " " + 
-                        parseFloat(data.vatlist[i].TVA).toFixed(2).space(10) + " " + 
-                        parseFloat(data.vatlist[i].TTC).toFixed(2).space(10)
+                    data: tmpVatLst[i].VAT_TYPE.space(5) + " " +
+                        (tmpVatLst[i].VAT + "%").space(10) + " " +
+                        data.possale.where({VAT_TYPE:tmpVatLst[i].VAT_RATE}).sum('AMOUNT',2).space(10) + " " + 
+                        data.possale.where({VAT_TYPE:tmpVatLst[i].VAT_RATE}).sum('VAT',2).space(10) + " " + 
+                        data.possale.where({VAT_TYPE:tmpVatLst[i].VAT_RATE}).sum('TOTAL',2).space(10)
                 })
+            }
+            return tmpArr.length > 0 ? tmpArr : undefined
+        },
+        {font:"b",style:"bu",align:"lt",data:" ".space(64)},
+        // TICKET_REST
+        ()=>
+        {
+            if(data.possale.where({TICKET_REST:1}).length > 0)
+            {
+                return {
+                    font:"b",
+                    style:"b",
+                    align:"lt",
+                    data:"TOTAL ART ELIGIBLE".space(56) + " " + 
+                    data.possale.where({TICKET_REST:1}).sum('TOTAL',2).space(7,"s") 
+                }
+            }
+        },
+        {font:"b",style:"bu",align:"lt",data:" ".space(64)},
+        ()=>{return {font:"b",align:"lt",data: (data.possale.length.toString() + " Aricle(s)").space(14)}},
+        ()=>
+        {
+            let tmpArr = [];
+            if(data.pos[0].CUSTOMER_CODE != '')
+            {            
+                tmpArr.push({align:"ct",barcode:data.pos[0].CUSTOMER_CODE,options:{width: 1,height:30}});
+                tmpArr.push({font:"b",style:"b",align:"lt",data:"****************************************************************".space(64)});
+                tmpArr.push({font:"b",align:"lt",data:("CARTE DE FIDELITE / " + data.pos[0].CUSTOMER_CODE).space(64)});
+                tmpArr.push({font:"b",align:"lt",data:"ANCIEN CUMUL ".space(56) + (data.special.customerPoint + ' Pts').space(8,"s")});
+                tmpArr.push({font:"b",align:"lt",data:"POINT ACQUIS SUR CE TICKET ".space(56) + (data.pos[0].TOTAL + ' Pts').space(8,"s")});
+                if(data.special.customerUsePoint > 0)
+                {
+                    tmpArr.push({font:"b",align:"lt",data:"UTILISE POINT ".space(56) + (data.special.customerUsePoint + ' Pts').space(8,"s")});
+                }
+                tmpArr.push({font:"b",align:"lt",data:"NOUVEAU CUMUL ".space(56) + ((parseInt(data.special.customerGrowPoint) - parseInt(data.special.customerUsePoint)) + ' Pts').space(8,"s")});
+                tmpArr.push({font:"b",align:"lt",data:"EQUIVALENT REMISE ".space(56) + (parseFloat(parseFloat(data.special.customerGrowPoint - data.special.customerUsePoint) / 100).toFixed(2).toString() + ' EUR').space(8,"Start")});
+
+                tmpArr.push({font:"b",style:"b",align:"lt",data:"****************************************************************".space(64)});
+            }
+            return tmpArr.length > 0 ? tmpArr : undefined
+        },
+        ()=>
+        {
+            let tmpArr = [];
+            if(data.pos[0].REBATE_CHEQPAY != '' && data.pospay.where({TYPE:4}).length > 0 && data.pos[0].TYPE == 1)
+            {
+                tmpArr.push({font:"b",style:"b",align:"ct",size : [1,0],data:"Reste Bon d'avoir : " + parseFloat(data.pos[0].REBATE_CHEQPAY.substring(8,12) / 100).toFixed(2) + "EUR"});
+                tmpArr.push({align:"ct",barcode:data.pos[0].REBATE_CHEQPAY,options:{width: 1,height:90}});
+                tmpArr.push({font:"b",style:"b",align:"lt",data:" ".space(64)});
+                tmpArr.push({font:"b",style:"b",align:"ct",data:"Avoir valable 3 mois apres edition..."});
+            }
+            else if(data.pos[0].REBATE_CHEQPAY != '' && data.pospay.where({TYPE:4}).length > 0 && data.pos[0].TYPE == 0 && data.pospay.where({CHANGE:{'<>':0}}).length > 0)
+            {
+                tmpArr.push({font:"b",style:"b",align:"ct",size : [1,0],data:"Reste Bon d'avoir : " + parseFloat(data.pos[0].REBATE_CHEQPAY.substring(8,12) / 100).toFixed(2) + "EUR"});
+                tmpArr.push({align:"ct",barcode:data.pos[0].REBATE_CHEQPAY,options:{width: 1,height:90}});
+                tmpArr.push({font:"b",style:"b",align:"lt",data:" ".space(64)});
+                tmpArr.push({font:"b",style:"b",align:"ct",data:"Avoir valable 3 mois apres edition..."});
+            }
+            else
+            {
+                tmpArr.push({font:"b",style:"b",align:"ct",data:"Merci de votre fidelite a tres bientot ..."});    
             }
             return tmpArr.length > 0 ? tmpArr : undefined
         },
