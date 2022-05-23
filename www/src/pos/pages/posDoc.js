@@ -1040,7 +1040,7 @@ export default class posDoc extends React.PureComponent
                 pos : this.posObj.dt(),
                 possale : this.posObj.posSale.dt(),
                 pospay : this.posObj.posPay.dt(),
-                special : {type:'Fis',safe:'001',ticketCount:5,reprint:false,repas:"0"}
+                special : {type:'Fis',safe:'001',ticketCount:5,reprint:false,repas:"0",customerCode:"",customerUsePoint:0,customerPoint:0,customerGrowPoint:0,rebateCode:""}
             }
             let x = e.print(tmpData)
             this.posDevice.escPrinter(x)
