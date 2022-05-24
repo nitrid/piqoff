@@ -155,6 +155,7 @@ export default class salesContract extends React.Component
                                  <Item>
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
                                     <NdTextBox id="txtCustomerCode" parent={this} simple={true}  
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     onChange={(async(r)=>
                                     {
                                         if(r.event.isTrusted == true)
@@ -255,6 +256,7 @@ export default class salesContract extends React.Component
                                 <Item>
                                     <Label text={this.t("txtCustomerName")} alignment="right" />
                                     <NdTextBox id="txtCustomerName" parent={this} simple={true}  
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     readOnly={true}
                                     param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
@@ -393,6 +395,7 @@ export default class salesContract extends React.Component
                                 <Item>
                                     <Label text={this.t("popItems.txtPopItemsCode")} alignment="right" />
                                     <NdTextBox id={"txtPopItemsCode"} parent={this} simple={true}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     button=
                                     {
                                         [
@@ -428,7 +431,8 @@ export default class salesContract extends React.Component
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popItems.txtPopItemsName")} alignment="right" />
-                                    <NdTextBox id={"txtPopItemsName"} parent={this} simple={true} editable={true}/>
+                                    <NdTextBox id={"txtPopItemsName"} parent={this} simple={true} editable={true}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popItems.txtPopItemsPrice")} alignment="right" />

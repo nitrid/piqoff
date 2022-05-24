@@ -446,6 +446,7 @@ export default class CustomerCard extends React.Component
                                 <Item>
                                     <Label text={this.t("txtCode")} alignment="right" />
                                     <NdTextBox id="txtCode" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"CODE"}} 
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     button=
                                     {
                                         [
@@ -533,6 +534,7 @@ export default class CustomerCard extends React.Component
                                  <Item>
                                     <Label text={this.t("txtTitle")} alignment="right" />
                                     <NdTextBox id="txtTitle" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"TITLE"}}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     onChange={(async()=>
                                     {
                                       
@@ -546,6 +548,7 @@ export default class CustomerCard extends React.Component
                                 <Item>
                                     <Label text={this.t("txtCustomerName")} alignment="right" />
                                     <NdTextBox id="txtCustomerName" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"NAME",filter:{TYPE:0}}}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     maxLength={32}
                                     param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
@@ -556,6 +559,7 @@ export default class CustomerCard extends React.Component
                                 <Item>
                                     <Label text={this.t("txtCustomerLastname")} alignment="right" />
                                         <NdTextBox id="txtCustomerLastname" parent={this} simple={true} tabIndex={this.tabIndex} 
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"LAST_NAME",filter:{TYPE:0}}}
                                         maxLength={32}
                                         param={this.param.filter({ELEMENT:'txtCustomerLastname',USERS:this.user.CODE})}
@@ -567,6 +571,7 @@ export default class CustomerCard extends React.Component
                                  <Item>
                                     <Label text={this.t("txtPhone1")} alignment="right" />
                                         <NdTextBox id="txtPhone1" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"PHONE1",filter:{TYPE:0}}}
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         maxLength={32}
                                         access={this.access.filter({ELEMENT:'txtPhone1',USERS:this.user.CODE})}
                                        />
@@ -575,6 +580,7 @@ export default class CustomerCard extends React.Component
                                  <Item>
                                     <Label text={this.t("txtPhone2")} alignment="right" />
                                         <NdTextBox id="txtPhone2" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"PHONE2",filter:{TYPE:0}}}
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         maxLength={32}
                                         access={this.access.filter({ELEMENT:'txtPhone2',USERS:this.user.CODE})}
                                         />
@@ -583,6 +589,7 @@ export default class CustomerCard extends React.Component
                                  <Item>
                                     <Label text={this.t("txtGsmPhone")} alignment="right" />
                                         <NdTextBox id="txtGsmPhone" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"GSM_PHONE",filter:{TYPE:0}}}
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         maxLength={32}
                                          access={this.access.filter({ELEMENT:'txtGsmPhone',USERS:this.user.CODE})}
                                         />
@@ -591,6 +598,7 @@ export default class CustomerCard extends React.Component
                                  <Item>
                                     <Label text={this.t("txtOtherPhone")} alignment="right" />
                                         <NdTextBox id="txtOtherPhone" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"OTHER_PHONE",filter:{TYPE:0}}}
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         maxLength={32}
                                          access={this.access.filter({ELEMENT:'txtOtherPhone',USERS:this.user.CODE})}
                                         />
@@ -599,6 +607,7 @@ export default class CustomerCard extends React.Component
                                  <Item>
                                     <Label text={this.t("txtEmail")} alignment="right" />
                                         <NdTextBox id="txtEmail" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"EMAIL",filter:{TYPE:0}}}
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         maxLength={32}
                                          access={this.access.filter({ELEMENT:'txtEmail',USERS:this.user.CODE})}
                                         />
@@ -607,6 +616,7 @@ export default class CustomerCard extends React.Component
                                  <Item>
                                     <Label text={this.t("txtWeb")} alignment="right" />
                                         <NdTextBox id="txtWeb" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"WEB"}} 
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         maxLength={32}
                                          access={this.access.filter({ELEMENT:'txtWeb',USERS:this.user.CODE})}
                                         />
@@ -783,7 +793,8 @@ export default class CustomerCard extends React.Component
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
                                     <Label text={this.t("popAdress.txtPopAdress")} alignment="right" />
-                                    <NdTextBox id={"txtPopAdress"} parent={this} simple={true} />
+                                    <NdTextBox id={"txtPopAdress"} parent={this} simple={true} 
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popAdress.cmbPopZipcode")} alignment="right" />
@@ -870,36 +881,43 @@ export default class CustomerCard extends React.Component
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
                                     <Label text={this.t("popOffical.txtPopName")}alignment="right" />
-                                    <NdTextBox id={"txtPopName"} parent={this} simple={true} />
+                                    <NdTextBox id={"txtPopName"} parent={this} simple={true} 
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popOffical.txtPopLastName")} alignment="right" />
                                     <NdTextBox simple={true} parent={this} id="txtPopLastName"
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     />
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popOffical.txtPopPhone1")} alignment="right" />
                                     <NdTextBox simple={true} parent={this} id="txtPopPhone1"
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     />
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popOffical.txtPopPhone2")} alignment="right" />
                                     <NdTextBox simple={true} parent={this} id="txtPopPhone2"
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     />
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popOffical.txtPopGsmPhone")} alignment="right" />
                                     <NdTextBox simple={true} parent={this} id="txtPopGsmPhone"
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     />
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popOffical.txtPopOtherPhone")} alignment="right" />
                                     <NdTextBox simple={true} parent={this} id="txtPopOtherPhone"
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     />
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popOffical.txtPopMail")} alignment="right" />
                                     <NdTextBox simple={true} parent={this} id="txtPopMail"
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     />
                                 </Item>
                                 <Item>
@@ -953,19 +971,23 @@ export default class CustomerCard extends React.Component
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
                                     <Label text={this.t("popBank.txtName")} alignment="right" />
-                                    <NdTextBox id={"txtBankName"} parent={this} simple={true} />
+                                    <NdTextBox id={"txtBankName"} parent={this} simple={true} 
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popBank.txtIban")} alignment="right" />
-                                    <NdTextBox id={"txtBankIban"} parent={this} simple={true} />
+                                    <NdTextBox id={"txtBankIban"} parent={this} simple={true} 
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popBank.txtOffice")} alignment="right" />
-                                    <NdTextBox id={"txtBankOffice"} parent={this} simple={true} />
+                                    <NdTextBox id={"txtBankOffice"} parent={this} simple={true} 
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popBank.txtSwift")} alignment="right" />
-                                    <NdTextBox id={"txtBankSwift"} parent={this} simple={true} />
+                                    <NdTextBox id={"txtBankSwift"} parent={this} simple={true} 
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
                                 </Item>
                                 <Item>
                                     <div className='row'>

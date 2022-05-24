@@ -264,6 +264,7 @@ export default class barcodeCard extends React.Component
                                     <Label text={this.t("txtItem")} alignment="right" />
                                     <NdTextBox id="txtItem" parent={this} simple={true} dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"ITEM_CODE"}}  validationGroup="frmBarcode"
                                     readOnly={true}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     button=
                                     {
                                         [
@@ -329,6 +330,7 @@ export default class barcodeCard extends React.Component
                                     <Label text={this.t("txtItemName")} alignment="right" />
                                     <NdTextBox id="txtItemName" parent={this} simple={true} 
                                     readOnly={true}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"ITEM_NAME"}} 
                                    />
                                 </Item>
@@ -337,6 +339,7 @@ export default class barcodeCard extends React.Component
                                  <Item>                                    
                                     <Label text={this.t("txtBarcode")} alignment="right" />
                                     <NdTextBox id="txtBarcode" parent={this} simple={true} dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"BARCODE"}}  validationGroup="frmBarcode"
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     button=
                                     {
                                         [
@@ -453,6 +456,7 @@ export default class barcodeCard extends React.Component
                                 <Item>
                                     <Label text={this.t("txtBarUnitFactor")} alignment="right" />
                                     <NdTextBox simple={true} parent={this} id="txtBarUnitFactor" readOnly={true}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"UNIT_FACTOR"}} 
                                     />
                                 </Item>
@@ -460,6 +464,7 @@ export default class barcodeCard extends React.Component
                                  <Item>
                                     <Label text={this.t("txtUnitTypeName")} alignment="right" />
                                     <NdTextBox simple={true} parent={this} id="txtUnitTypeName" readOnly={true}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     />
                                 </Item>
                             </Form>

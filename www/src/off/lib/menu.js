@@ -564,6 +564,27 @@ export const menu = (e) =>
                     expanded: false,
                 }
             ]
+        },
+        {
+            id: 'setting',
+            text: e.t('menu.set'),//'Ayarlar',
+            expanded: false,
+            items: 
+            [
+                {
+                    id: 'set_01',
+                    text : e.t('menu.set_01'),//'Maliyet ve Ek Vergi',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'set_01_001',
+                            text: e.t('menu.set_01_001'),//'Tax Sugar Oranları',
+                            path: 'setting/costandtax/taxSugar'
+                        }
+                    ]
+                },
+            ]
         }
     ]
 }

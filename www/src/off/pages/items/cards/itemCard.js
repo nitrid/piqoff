@@ -27,14 +27,9 @@ export default class itemCard extends React.Component
     constructor(props)
     {
         super(props)                
-        this.state = {underPrice : 0,isItemGrpForOrginsValid : false,isItemGrpForMinMaxAccess : false}
+        this.state = {underPrice : 0,isItemGrpForOrginsValid : false,isItemGrpForMinMaxAccess : false,isTaxSugar : false}
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
-
-        for (let i = 0; i < this.prmObj.length; i++) 
-        {
-            console.log(this.prmObj[i].PAGE + " - " + this.prmObj[i].USER)
-        }
 
         this.itemsObj = new itemsCls();
         this.itemsPriceSupply = new itemPriceCls();   
@@ -42,6 +37,7 @@ export default class itemCard extends React.Component
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
         this._onItemRendered = this._onItemRendered.bind(this)
+        this.taxSugarCalculate = this.taxSugarCalculate.bind(this)
     }    
     async componentDidMount()
     {
@@ -169,7 +165,8 @@ export default class itemCard extends React.Component
         this.itemsObj.itemUnit.addEmpty(tmpUnderUnitObj);
 
         this.itemGrpForOrginsValidCheck();   
-        this.itemGrpForMinMaxAccessCheck();                        
+        this.itemGrpForMinMaxAccessCheck();  
+        this.taxSugarValidCheck()                      
     }
     async getItem(pCode)
     {
@@ -398,6 +395,38 @@ export default class itemCard extends React.Component
             this.setState({isItemGrpForMinMaxAccess:false})
         }
     }
+    taxSugarValidCheck()
+    {
+        let tmpData = this.prmObj.filter({ID:'taxSugarGroupValidation'}).getValue()
+        if((typeof tmpData != 'undefined' && Array.isArray(tmpData) && typeof tmpData.find(x => x == this.cmbItemGrp.value) != 'undefined') && (this.cmbOrigin.value != 'FR'))
+        {
+            this.setState({isTaxSugar:true})
+            this.txtTaxSugar.readOnly = false
+        }
+        else
+        {
+            this.setState({isTaxSugar:false})
+            this.txtTaxSugar.readOnly = true
+            this.txtTaxSugar.setState({value:0})
+        }
+    }
+    async taxSugarCalculate()
+    {
+        let tmpQuery = 
+        {
+            query :"SELECT RATE,PRICE FROM TAX_SUGAR_TABLE_VW_01 WHERE MIN_VALUE >= @VALUE AND MAX_VALUE <= @VALUE AND TYPE =0 ",
+            param : ['VALUE:float'],
+            value : [this.txtTaxSugar.value]
+        }
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        if(tmpData.result.recordset.length > 0)
+        {
+            console.log(tmpData.result.recordset[0].PRICE)
+            let tmpprice = tmpData.result.recordset[0].PRICE/100
+            let tmpTaxSucre = tmpprice / this.txtUnderUnit.value
+            this.txtCostPrice.setState({value:this.txtCostPrice.value + tmpTaxSucre})
+        }
+    }
     render()
     {           
         return (
@@ -557,6 +586,7 @@ export default class itemCard extends React.Component
                                 <Item>                                    
                                     <Label text={this.t("txtRef")} alignment="right" />
                                     <NdTextBox id="txtRef" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.itemsObj.dt('ITEMS'),field:"CODE"}} 
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     button=
                                     {
                                         [
@@ -656,6 +686,7 @@ export default class itemCard extends React.Component
                                     onValueChanged={(e)=>
                                     {
                                         this.itemGrpForOrginsValidCheck()
+                                        this.taxSugarValidCheck()
                                         this.itemGrpForMinMaxAccessCheck()
                                     }}
                                     />
@@ -664,6 +695,7 @@ export default class itemCard extends React.Component
                                 <Item>
                                     <Label text={this.t("txtCustomer")} alignment="right" />
                                     <NdTextBox id="txtCustomer" parent={this} simple={true}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.itemsObj.dt('ITEM_MULTICODE'),field:"CUSTOMER_CODE",display:"CUSTOMER_NAME"}}
                                     readOnly={true}
                                     displayValue={""}
@@ -700,6 +732,7 @@ export default class itemCard extends React.Component
                                 <Item>
                                     <Label text={this.t("txtBarcode")} alignment="right" />
                                     <NdTextBox id="txtBarcode" parent={this} simple={true}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.itemsObj.dt('ITEM_BARCODE'),field:"BARCODE"}}
                                     button=
                                     {
@@ -775,6 +808,10 @@ export default class itemCard extends React.Component
                                     param={this.param.filter({ELEMENT:'cmbOrigin',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbOrigin',USERS:this.user.CODE})}
                                     data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY CODE ASC"},sql:this.core.sql}}}
+                                    onValueChanged={(e)=>
+                                        {
+                                            this.taxSugarValidCheck()
+                                        }}
                                     >
                                         <Validator validationGroup={this.state.isItemGrpForOrginsValid ? "frmItems" + this.tabIndex : ''}>
                                             <RequiredRule message="Menşei boş geçemezsiniz !" />
@@ -809,15 +846,29 @@ export default class itemCard extends React.Component
                                         </div>
                                     </div>                                     
                                 </Item>   
-                                {/* Boş */}
-                                <Item> </Item>                             
+                                {/* TaxSugar */}
+                                <Item>
+                                    <Label text={this.t("txtTaxSugar")} alignment="right" />
+                                    <NdNumberBox id="txtTaxSugar" parent={this} simple={true} readOnly={true}
+                                    dt={{data:this.itemsObj.dt('ITEMS'),field:"SUGAR_RATE"}} 
+                                    param={this.param.filter({ELEMENT:'txtTaxSugar',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'txtTaxSugar',USERS:this.user.CODE})}
+                                    onChange={()=>
+                                    {
+                                        this.taxSugarCalculate()
+                                    }}>
+                                       <Validator validationGroup={this.state.isTaxSugar ? "frmItems" + this.tabIndex : ''}>
+                                            <RequiredRule message="Şeker Oranını Girmelisiniz !" />
+                                        </Validator>
+                                    </NdNumberBox>
+                                </Item>                          
                                 {/* txtItemName */}
                                 <Item>
                                     <Label text={this.t("txtItemName")} alignment="right" />
                                     <NdTextBox id="txtItemName" parent={this} simple={true} dt={{data:this.itemsObj.dt('ITEMS'),field:"NAME"}}
                                     param={this.param.filter({ELEMENT:'txtItemName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtItemName',USERS:this.user.CODE})}
-                                    upper={true}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     onValueChanged={(e)=>
                                     {
                                         if(e.value.length <= 32)
@@ -832,6 +883,7 @@ export default class itemCard extends React.Component
                                 <Item>
                                     <Label text={this.t("txtShortName")} alignment="right" />
                                         <NdTextBox id="txtShortName" parent={this} simple={true} dt={{data:this.itemsObj.dt('ITEMS'),field:"SNAME"}}
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         maxLength={32}
                                         param={this.param.filter({ELEMENT:'txtShortName',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'txtShortName',USERS:this.user.CODE})}
@@ -1244,7 +1296,6 @@ export default class itemCard extends React.Component
                                             <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmPrice" + this.tabIndex}
                                             onClick={async (e)=>
                                             {
-                                                console.log(e)
                                                 if(e.validationGroup.validate().status == "valid")
                                                 {
                                                     //FİYAT GİRERKEN MALİYET FİYAT KONTROLÜ
@@ -1408,6 +1459,7 @@ export default class itemCard extends React.Component
                                 <Item>
                                     <Label text={this.t("popBarcode.txtPopBarcode")} alignment="right" />
                                     <NdTextBox id={"txtPopBarcode"} parent={this} simple={true} 
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     onValueChanged={(e)=>
                                     {
                                         if(parseInt(e.value) == NaN || parseInt(e.value).toString() != e.value)
@@ -1509,6 +1561,7 @@ export default class itemCard extends React.Component
                                 <Item>
                                     <Label text={this.t("popCustomer.txtPopCustomerCode")} alignment="right" />
                                     <NdTextBox id={"txtPopCustomerCode"} parent={this} simple={true}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                       onEnterKey={(async(e)=>
                                         {
                                             await this.pg_txtPopCustomerCode.setVal(this.txtPopCustomerCode.value)
@@ -1586,11 +1639,13 @@ export default class itemCard extends React.Component
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popCustomer.txtPopCustomerName")} alignment="right" />
-                                    <NdTextBox id={"txtPopCustomerName"} parent={this} simple={true} editable={true}/>
+                                    <NdTextBox id={"txtPopCustomerName"} parent={this} simple={true} editable={true} 
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popCustomer.txtPopCustomerItemCode")} alignment="right" />
-                                    <NdTextBox id={"txtPopCustomerItemCode"} parent={this} simple={true} >
+                                    <NdTextBox id={"txtPopCustomerItemCode"} parent={this} simple={true}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} >
                                     <Validator validationGroup={"frmItemCustomer" + this.tabIndex}>
                                             <RequiredRule message="Tedarikci Kodu Giriniz !" />
                                     </Validator> 

@@ -377,6 +377,7 @@ export default class labelPrinting extends React.Component
         {
             return (
                 <NdTextBox id={"txtGrdItemsCode"+e.rowIndex} parent={this} simple={true} 
+                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                 value={e.value}
                 onKeyDown={async(k)=>
                     {
@@ -738,6 +739,7 @@ export default class labelPrinting extends React.Component
                                     <div className="row">
                                         <div className="col-4 pe-0">
                                             <NdTextBox id="txtSer" parent={this} simple={true} dt={{data:this.mainLblObj.dt('MAIN_LABEL_QUEUE'),field:"REF"}}
+                                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             readOnly={true}
                                             maxLength={32}
                                             onChange={(async()=>
@@ -764,6 +766,7 @@ export default class labelPrinting extends React.Component
                                         </div>
                                         <div className="col-5 ps-0">
                                             <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.mainLblObj.dt('MAIN_LABEL_QUEUE'),field:"REF_NO"}}
+                                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             readOnly={true}
                                             button=
                                             {
@@ -852,6 +855,7 @@ export default class labelPrinting extends React.Component
                                 <Item>
                                     <Label text={this.t("txtPage")} alignment="right" />
                                     <NdTextBox id="txtPage" parent={this} simple={true}  
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     readOnly={true}
                                     param={this.param.filter({ELEMENT:'txtPage',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtPage',USERS:this.user.CODE})}
@@ -965,6 +969,7 @@ export default class labelPrinting extends React.Component
                                  <Item>
                                     <Label text={this.t("txtLineCount")} alignment="right" />
                                     <NdTextBox id="txtLineCount" parent={this} simple={true}  
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     readOnly={true}
                                     param={this.param.filter({ELEMENT:'txtLineCount',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtLineCount',USERS:this.user.CODE})}

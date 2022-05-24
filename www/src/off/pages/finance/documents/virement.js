@@ -436,6 +436,7 @@ export default class virement extends React.Component
                                     <div className="row">
                                         <div className="col-4 pe-0">
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
+                                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             readOnly={true}
                                             maxLength={32}
                                             onChange={(async(e)=>
@@ -824,6 +825,7 @@ export default class virement extends React.Component
                                     <Label text={this.t("description")} alignment="right" />
                                     <div className="col-12 pe-0">
                                         <NdTextBox id="safeToSafeDescription" parent={this} simple={true} width={500}
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         maxLength={32}                                        
                                         param={this.param.filter({ELEMENT:'safeToSafeDescription',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'safeToSafeDescription',USERS:this.user.CODE})}
@@ -953,6 +955,7 @@ export default class virement extends React.Component
                                     <Label text={this.t("description")} alignment="right" />
                                     <div className="col-12 pe-0">
                                         <NdTextBox id="safeToBankDescription" parent={this} simple={true} width={500}
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         maxLength={32}                                        
                                         param={this.param.filter({ELEMENT:'safeToBankDescription',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'safeToBankDescription',USERS:this.user.CODE})}
@@ -1080,6 +1083,7 @@ export default class virement extends React.Component
                                     <Label text={this.t("description")} alignment="right" />
                                     <div className="col-12 pe-0">
                                         <NdTextBox id="bankToSafeDescription" parent={this} simple={true} width={500}
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         maxLength={32}                                        
                                         param={this.param.filter({ELEMENT:'bankToSafeDescription',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'bankToSafeDescription',USERS:this.user.CODE})}
@@ -1207,6 +1211,7 @@ export default class virement extends React.Component
                                     <Label text={this.t("description")} alignment="right" />
                                     <div className="col-12 pe-0">
                                         <NdTextBox id="bankToBankDescription" parent={this} simple={true} width={500}
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         maxLength={32}                                        
                                         param={this.param.filter({ELEMENT:'bankToBankDescription',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'bankToBankDescription',USERS:this.user.CODE})}

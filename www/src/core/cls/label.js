@@ -1,5 +1,4 @@
 import { core,dataset,datatable } from "../core.js";
-import moment from 'moment';
 
 export class labelCls
 {

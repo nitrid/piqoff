@@ -297,6 +297,7 @@ export default class bankCard extends React.Component
                                  <Item>
                                     <Label text={this.t("txtCode")} alignment="right" />
                                     <NdTextBox id="txtCode" parent={this} simple={true} dt={{data:this.bankObj.dt('BANK'),field:"CODE"}}  
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     button=
                                     {
                                         [
@@ -370,6 +371,7 @@ export default class bankCard extends React.Component
                                 <Item>
                                     <Label text={this.t("txtName")} alignment="right" />
                                     <NdTextBox id="txtTitle" parent={this} simple={true} dt={{data:this.bankObj.dt('BANK'),field:"NAME"}}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     onChange={(async()=>
                                     {
                                       
@@ -384,6 +386,7 @@ export default class bankCard extends React.Component
                                <Item>
                                     <Label text={this.t("txtIban")} alignment="right" />
                                     <NdTextBox id="txtIban" parent={this} simple={true} dt={{data:this.bankObj.dt('BANK'),field:"IBAN"}}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     onChange={(async()=>
                                     {
                                       
@@ -400,6 +403,7 @@ export default class bankCard extends React.Component
                                <Item>
                                     <Label text={this.t("txtSwift")} alignment="right" />
                                     <NdTextBox id="txtSwift" parent={this} simple={true} dt={{data:this.bankObj.dt('BANK'),field:"SWIFT"}}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     onChange={(async()=>
                                     {
                                       
@@ -425,6 +429,7 @@ export default class bankCard extends React.Component
                                <Item>
                                     <Label text={this.t("txtOffical")} alignment="right" />
                                     <NdTextBox id="txtOffical" parent={this} simple={true} dt={{data:this.bankObj.dt('BANK'),field:"OFFICAL"}}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     onChange={(async()=>
                                     {
                                       
@@ -437,6 +442,7 @@ export default class bankCard extends React.Component
                                 <Item colSpan={2}>
                                     <Label text={this.t("txtAdress")} alignment="right" />
                                     <NdTextBox id="txtAdress" parent={this} simple={true} dt={{data:this.bankObj.dt('BANK'),field:"ADRESS"}}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     onChange={(async()=>
                                     {
                                       
@@ -449,6 +455,7 @@ export default class bankCard extends React.Component
                                <Item>
                                     <Label text={this.t("txtPhone")} alignment="right" />
                                     <NdTextBox id="txtPhone" parent={this} simple={true} dt={{data:this.bankObj.dt('BANK'),field:"PHONE"}}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     onChange={(async()=>
                                     {
                                       

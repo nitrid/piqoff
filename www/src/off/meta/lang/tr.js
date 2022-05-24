@@ -115,6 +115,9 @@ export const langTr =
         promo_02: "Listeler",
         promo_02_001: "Promosyon Listesi",
         promo_03: "Raporlar",
+        set : "Ayarlar",
+        set_01 : "Maliyet ve Ek Vergiler",
+        set_01_001 : "Tax Sugar",
     },
     login:
     {
@@ -150,6 +153,7 @@ export const langTr =
         tabTitleCustomerPrice: "Tedarikçi Fiyat Geçmişi",
         tabTitleSalesContract: "Satış Anlaşmaları",
         tabTitleInfo: "Bilgi",
+        txtTaxSugar: "Tax Sugar",
         pg_txtRef:
         {
             title: "Stok Seçimi",
@@ -4784,5 +4788,63 @@ export const langTr =
         validRefNo : "Sıra Boş Geçilemez",
         validAccount : "Hesap Seçmelisiniz",
         validDocDate : "Tarih Seçmelisiniz",
+    },
+    set_01_001 :
+    {
+        pg_Docs : 
+        {
+            title : "Evrak Seçimi",
+            clmRef : "SERİ",
+            clmRefNo : "SIRA",
+            clmDocDate : "TARIH",
+            clmInputName : "GİRİŞ",
+            clmOutputName : "ÇIKIŞ",
+        },
+        pg_txtItemsCode : 
+        {
+            title : "Stok Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+        },
+        grdTaxSugar: 
+        {
+            clmCreateDate: "Kayıt Tarihi",
+            clmMinValue : "Alt Değer",
+            clmMaxvalue : "Üst  Değer",
+            clmRate : "Vergi Oranı",
+            clmPrice : "Fiyat"
+        },
+        popTaxSugar : 
+        {
+            title: "Nakit Girişi",
+            btnApprove : "Ekle",
+            rate :"Oran",
+            minValue : "Alt Değer",
+            maxValue : "Üst değer",
+            price : "Fiyat",
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        validValue :"Boş Geçilemez",
+        zeroValid : "0'dan Büyük Olmalıdır"
+
     },
 }

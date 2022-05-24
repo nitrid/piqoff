@@ -430,6 +430,7 @@ export default class collection extends React.Component
                                     <div className="row">
                                         <div className="col-4 pe-0">
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
+                                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             readOnly={true}
                                             maxLength={32}
                                             onChange={(async(e)=>
@@ -556,6 +557,7 @@ export default class collection extends React.Component
                                 <Item>
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
                                     <NdTextBox id="txtCustomerCode" parent={this} simple={true} 
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.docObj.dt('DOC'),field:"OUTPUT_CODE"}} 
                                     onChange={(async(r)=>
                                         {
@@ -678,6 +680,7 @@ export default class collection extends React.Component
                                 <Item>
                                     <Label text={this.t("txtCustomerName")} alignment="right" />
                                     <NdTextBox id="txtCustomerName" parent={this} simple={true}  
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.docObj.dt('DOC'),field:"OUTPUT_NAME"}} 
                                     readOnly={true}
                                     param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
@@ -884,6 +887,7 @@ export default class collection extends React.Component
                                     <Label text={this.t("description")} alignment="right" />
                                     <div className="col-12 pe-0">
                                         <NdTextBox id="cashDescription" parent={this} simple={true} width={500}
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         maxLength={32}                                        
                                         param={this.param.filter({ELEMENT:'cashDescription',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'cashDescription',USERS:this.user.CODE})}
@@ -957,6 +961,7 @@ export default class collection extends React.Component
                                     <Label text={this.t("checkReference")} alignment="right" />
                                     <div className="col-12 pe-0">
                                         <NdTextBox id="checkReference" parent={this} simple={true} width={500}
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         maxLength={32}                                        
                                         param={this.param.filter({ELEMENT:'checkReference',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'checkReference',USERS:this.user.CODE})}
@@ -982,6 +987,7 @@ export default class collection extends React.Component
                                     <Label text={this.t("description")} alignment="right" />
                                     <div className="col-12 pe-0">
                                         <NdTextBox id="checkDescription" parent={this} simple={true} width={500}
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         maxLength={32}                                        
                                         param={this.param.filter({ELEMENT:'checkDescription',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'checkDescription',USERS:this.user.CODE})}
@@ -1068,6 +1074,7 @@ export default class collection extends React.Component
                                     <Label text={this.t("description")} alignment="right" />
                                     <div className="col-12 pe-0">
                                         <NdTextBox id="bankDescription" parent={this} simple={true} width={500}
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         maxLength={32}                                        
                                         param={this.param.filter({ELEMENT:'bankDescription',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'bankDescription',USERS:this.user.CODE})}
