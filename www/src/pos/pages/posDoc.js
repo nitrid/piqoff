@@ -222,9 +222,8 @@ export default class posDoc extends React.PureComponent
                 this.posObj.dt()[0].CUSTOMER_GUID = tmpCustomerDt[0].GUID
                 this.posObj.dt()[0].CUSTOMER_CODE = tmpCustomerDt[0].CODE
                 this.posObj.dt()[0].CUSTOMER_NAME = tmpCustomerDt[0].TITLE
-                
-                this.customerName.value = tmpCustomerDt[0].TITLE
-                this.customerPoint.value = tmpCustomerDt[0].CUSTOMER_POINT
+                this.posObj.dt()[0].CUSTOMER_POINT = tmpCustomerDt[0].CUSTOMER_POINT
+
                 this.calcGrandTotal();
             }
             else
@@ -490,17 +489,19 @@ export default class posDoc extends React.PureComponent
         {
             this.loading.current.instance.show()
             if(this.posObj.dt().length > 0)
-            {   
-                this.customerName.value = this.posObj.dt()[this.posObj.dt().length - 1].CUSTOMER_NAME.toString()
-                this.customerPoint.value = this.posObj.dt()[this.posObj.dt().length - 1].CUSTOMER_POINT.toString()
+            {                                   
+                this.posObj.dt()[0].FAMOUNT = Number(parseFloat(this.posObj.posSale.dt().sum('FAMOUNT',2)).toFixed(2))
+                this.posObj.dt()[0].AMOUNT = Number(parseFloat(this.posObj.posSale.dt().sum('AMOUNT',2)).toFixed(2))
+                this.posObj.dt()[0].DISCOUNT = Number(parseFloat(this.posObj.posSale.dt().sum('DISCOUNT',2)).toFixed(2))
+                this.posObj.dt()[0].LOYALTY = Number(parseFloat(this.posObj.posSale.dt().sum('LOYALTY',2)).toFixed(2))
+                this.posObj.dt()[0].VAT = Number(parseFloat(this.posObj.posSale.dt().sum('VAT',2)).toFixed(2))
+                this.posObj.dt()[0].TOTAL = Number(parseFloat(this.posObj.posSale.dt().sum('TOTAL',2)).toFixed(2))
 
-                this.posObj.dt()[this.posObj.dt().length - 1].FAMOUNT = Number(parseFloat(this.posObj.posSale.dt().sum('FAMOUNT',2)).toFixed(2))
-                this.posObj.dt()[this.posObj.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.posSale.dt().sum('AMOUNT',2)).toFixed(2))
-                this.posObj.dt()[this.posObj.dt().length - 1].DISCOUNT = Number(parseFloat(this.posObj.posSale.dt().sum('DISCOUNT',2)).toFixed(2))
-                this.posObj.dt()[this.posObj.dt().length - 1].LOYALTY = Number(parseFloat(this.posObj.posSale.dt().sum('LOYALTY',2)).toFixed(2))
-                this.posObj.dt()[this.posObj.dt().length - 1].VAT = Number(parseFloat(this.posObj.posSale.dt().sum('VAT',2)).toFixed(2))
-                this.posObj.dt()[this.posObj.dt().length - 1].TOTAL = Number(parseFloat(this.posObj.posSale.dt().sum('TOTAL',2)).toFixed(2))
-                
+                this.customerName.value = this.posObj.dt()[0].CUSTOMER_NAME.toString()
+                this.customerPoint.value = this.posObj.dt()[0].CUSTOMER_POINT.toString()
+                this.popCustomerPoint.value = this.posObj.dt()[0].CUSTOMER_POINT.toString()
+                this.popCustomerUsePoint.value = Number(parseFloat(this.posObj.dt()[0].LOYALTY * 100).toFixed(0))
+
                 this.totalRowCount.value = this.posObj.posSale.dt().length
                 this.totalItemCount.value = this.posObj.posSale.dt().sum('QUANTITY',2)
                 this.totalLoyalty.value = parseFloat(this.posObj.dt()[0].LOYALTY).toFixed(2) + "€"
@@ -548,6 +549,22 @@ export default class posDoc extends React.PureComponent
             this.loading.current.instance.hide()
         });
     }    
+    calcSaleTotal(pPrice,pQuantity,pDiscount,pLoyalty,pVatRate)
+    {
+        let tmpAmount = Number(parseFloat((pPrice * pQuantity)).toFixed(2))
+        let tmpFAmount = Number(parseFloat((pPrice * pQuantity) - (pDiscount + pLoyalty)).toFixed(2))
+        let tmpVat = Number(parseFloat(tmpFAmount - (tmpFAmount / ((pVatRate / 100) + 1))).toFixed(2))
+    
+        return {
+            QUANTITY:pQuantity,
+            PRICE:pPrice,
+            FAMOUNT:Number(parseFloat(tmpFAmount - tmpVat).toFixed(2)),
+            AMOUNT:Number(parseFloat(tmpAmount).toFixed(2)),
+            DISCOUNT:pDiscount,
+            VAT:tmpVat,
+            TOTAL:tmpFAmount
+        }
+    }
     isRowMerge(pType,pData)
     {
         if(pType == 'SALE')
@@ -594,16 +611,8 @@ export default class posDoc extends React.PureComponent
         }, 100);
     }
     async saleRowAdd(pItemData)
-    {           
-        let tmpFPrice = Number(parseFloat(Number(parseFloat(pItemData.PRICE).toFixed(2)) / Number(parseFloat((pItemData.VAT / 100) + 1).toFixed(3))).toFixed(2))
-        
-        pItemData.FAMOUNT = Number(parseFloat(tmpFPrice * pItemData.QUANTITY).toFixed(2))
-        pItemData.AMOUNT = Number(parseFloat(pItemData.PRICE * pItemData.QUANTITY).toFixed(2))
-        pItemData.DISCOUNT = Number(parseFloat(typeof pItemData.DISCOUNT == 'undefined' ? 0 : pItemData.DISCOUNT).toFixed(2))
-        let tmpDisAmount = pItemData.AMOUNT - pItemData.DISCOUNT
-        pItemData.VAT_AMOUNT = Number(parseFloat(tmpDisAmount - (tmpDisAmount /  Number(parseFloat((pItemData.VAT / 100) + 1)).toFixed(3))).toFixed(2))
-        pItemData.TOTAL = Number(parseFloat(tmpDisAmount).toFixed(2))
-
+    {        
+        let tmpCalc = this.calcSaleTotal(pItemData.PRICE,pItemData.QUANTITY,0,0,pItemData.VAT)
         let tmpMaxLine = this.posObj.posSale.dt().where({SUBTOTAL:{'<>':-1}}).max('LINE_NO')
         
         this.posObj.posSale.addEmpty()
@@ -630,14 +639,14 @@ export default class posDoc extends React.PureComponent
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_FACTOR = pItemData.UNIT_FACTOR
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].QUANTITY = pItemData.QUANTITY
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].PRICE = pItemData.PRICE
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].FAMOUNT = pItemData.FAMOUNT
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].AMOUNT = pItemData.AMOUNT
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].FAMOUNT = tmpCalc.FAMOUNT
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].AMOUNT = tmpCalc.AMOUNT
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DISCOUNT = 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].LOYALTY = 0
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].VAT = pItemData.VAT_AMOUNT
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].VAT = tmpCalc.VAT
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].VAT_RATE = pItemData.VAT
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].VAT_TYPE = pItemData.VAT_TYPE
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].TOTAL = pItemData.TOTAL
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].TOTAL = tmpCalc.TOTAL
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].SUBTOTAL = 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_AMOUNT = 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_DISCOUNT = 0
@@ -648,7 +657,7 @@ export default class posDoc extends React.PureComponent
         await this.calcGrandTotal();
     }
     async saleRowUpdate(pRowData,pItemData)
-    {
+    { 
         let tmpCalc = this.calcSaleTotal(pItemData.PRICE,pItemData.QUANTITY,pRowData.DISCOUNT,pRowData.LOYALTY,pRowData.VAT_RATE)
     
         pRowData.QUANTITY = tmpCalc.QUANTITY
@@ -660,23 +669,7 @@ export default class posDoc extends React.PureComponent
         pRowData.TOTAL = tmpCalc.TOTAL
 
         await this.calcGrandTotal();
-    }
-    calcSaleTotal(pPrice,pQuantity,pDiscount,pLoyalty,pVatRate)
-    {
-        let tmpAmount = Number(parseFloat((pPrice * pQuantity)).toFixed(2))
-        let tmpFAmount = Number(parseFloat((pPrice * pQuantity) - (pDiscount + pLoyalty)).toFixed(2))
-        let tmpVat = Number(parseFloat(tmpFAmount - (tmpFAmount / ((pVatRate / 100) + 1))).toFixed(2))
-    
-        return {
-            QUANTITY:pQuantity,
-            PRICE:pPrice,
-            FAMOUNT:Number(parseFloat(tmpFAmount - tmpVat).toFixed(2)),
-            AMOUNT:Number(parseFloat(tmpAmount).toFixed(2)),
-            DISCOUNT:pDiscount,
-            VAT:tmpVat,
-            TOTAL:tmpFAmount
-        }
-    }
+    }    
     async payAdd(pType,pAmount)
     {
         if(this.state.payRest > 0)
@@ -743,7 +736,7 @@ export default class posDoc extends React.PureComponent
                 await this.customerPointSave(0,Math.floor(this.posObj.dt()[0].TOTAL))
                 if(this.state.customerUsePoint > 0)
                 {
-                    await this.customerPointSave(1,this.state.customerUsePoint)
+                    await this.customerPointSave(1,Number(parseFloat(this.posObj.dt()[0].LOYALTY * 100).toFixed(0)))
                 }
             }
             this.popTotal.hide()
@@ -1951,7 +1944,12 @@ export default class posDoc extends React.PureComponent
                                     </div>
                                     {/* Customer Point */}
                                     <div className="col px-1">
-                                        <NbButton id={"btnCustomerPoint"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        <NbButton id={"btnCustomerPoint"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        onClick={()=>
+                                        {
+                                            this.txtPopLoyalty.value = 0
+                                            this.popLoyalty.show()
+                                        }}>
                                             <i className="text-white fa-solid fa-gift" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
@@ -2461,9 +2459,8 @@ export default class posDoc extends React.PureComponent
                             this.posObj.dt()[0].CUSTOMER_GUID = pData[0].GUID
                             this.posObj.dt()[0].CUSTOMER_CODE = pData[0].CODE
                             this.posObj.dt()[0].CUSTOMER_NAME = pData[0].TITLE
-                            
-                            this.customerName.value = pData[0].TITLE
-                            this.customerPoint.value = pData[0].CUSTOMER_POINT
+                            this.posObj.dt()[0].CUSTOMER_POINT = pData[0].CUSTOMER_POINT
+
                             this.calcGrandTotal();
                         }
                     }}>
@@ -2864,7 +2861,7 @@ export default class posDoc extends React.PureComponent
                                                 await dialog(tmpConfObj);
                                                 return;
                                             }
-                                            if(this.state.discountAfter < 0)
+                                            if(this.state.discountAfter < this.txtPopDiscountAmount.value)
                                             {
                                                 let tmpConfObj =
                                                 {
@@ -2962,6 +2959,68 @@ export default class posDoc extends React.PureComponent
                                         </NbButton>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </NdPopUp>
+                </div>
+                {/* Loyalty Popup */}
+                <div>
+                    <NdPopUp parent={this} id={"popLoyalty"} 
+                    visible={false}                        
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={"Sadakat İndirimi"}
+                    container={"#root"} 
+                    width={"300"}
+                    height={"525"}
+                    position={{of:"#root"}}
+                    >
+                        {/* Top Total Indicator */}
+                        <div className="row">
+                            <div className="col-12">
+                               <div className="row">
+                                    <div className="col-12">
+                                        <p className="text-primary text-start m-0">Mevcut Puan : <span className="text-dark"><NbLabel id="popCustomerPoint" parent={this} value={"0"}/></span></p>    
+                                    </div>                                    
+                                </div> 
+                                <div className="row">
+                                    <div className="col-12">
+                                        <p className="text-primary text-start m-0">Kullanılan Puan : <span className="text-dark"><NbLabel id="popCustomerUsePoint" parent={this} value={"0"}/></span></p>    
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {/* txtPopLoyalty */}
+                        <div className="row pt-1">
+                            <div className="col-12">
+                                <NdTextBox id="txtPopLoyalty" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}>     
+                                </NdTextBox> 
+                            </div>
+                        </div> 
+                        {/* numPopLoyalty */}
+                        <div className="row pt-2">                            
+                            <div className="col-12">
+                                <NbNumberboard id={"numPopLoyalty"} parent={this} textobj="txtPopLoyalty" span={1} buttonHeight={"60px"}/>
+                            </div>
+                        </div>
+                        <div className="row pt-2">
+                            {/* btnPopLoyaltyDel */}
+                            <div className="col-6">
+                                <NbButton id={"btnPopLoyaltyDel"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
+                                onClick={()=>{this.payAdd(1,this.txtPopCardPay.value)}}>
+                                    <i className="text-white fa-solid fa-eraser" style={{fontSize: "24px"}} />
+                                </NbButton>
+                            </div>
+                            {/* btnPopLoyaltyOk */}
+                            <div className="col-6">
+                                <NbButton id={"btnPopLoyaltyOk"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
+                                onClick={()=>
+                                {
+                                    this.posObj.dt()[0].LOYALTY = Number(parseFloat(this.txtPopLoyalty.value / 100).toFixed(2))
+                                    this.calcGrandTotal()
+                                }}>
+                                    <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
+                                </NbButton>
                             </div>
                         </div>
                     </NdPopUp>
