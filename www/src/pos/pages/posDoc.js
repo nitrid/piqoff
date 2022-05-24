@@ -53,9 +53,7 @@ export default class posDoc extends React.PureComponent
             isPluEdit:false,
             isBtnGetCustomer:false,
             isBtnInfo:false,
-            customerName:'',
             customerUsePoint:0,
-            customerPoint:0,
             payTotal:0,
             payChange:0,
             payRest:0,
@@ -225,7 +223,9 @@ export default class posDoc extends React.PureComponent
                 this.posObj.dt()[0].CUSTOMER_CODE = tmpCustomerDt[0].CODE
                 this.posObj.dt()[0].CUSTOMER_NAME = tmpCustomerDt[0].TITLE
                 
-                this.setState({customerName:tmpCustomerDt[0].TITLE,customerPoint:tmpCustomerDt[0].CUSTOMER_POINT})
+                this.customerName.value = tmpCustomerDt[0].TITLE
+                this.customerPoint.value = tmpCustomerDt[0].CUSTOMER_POINT
+                this.calcGrandTotal();
             }
             else
             {
@@ -490,7 +490,11 @@ export default class posDoc extends React.PureComponent
         {
             this.loading.current.instance.show()
             if(this.posObj.dt().length > 0)
-            {      
+            {   
+                this.customerName.value = this.posObj.dt()[this.posObj.dt().length - 1].CUSTOMER_NAME.toString()
+                this.customerPoint.value = this.posObj.dt()[this.posObj.dt().length - 1].CUSTOMER_POINT.toString()
+
+                this.posObj.dt()[this.posObj.dt().length - 1].FAMOUNT = Number(parseFloat(this.posObj.posSale.dt().sum('FAMOUNT',2)).toFixed(2))
                 this.posObj.dt()[this.posObj.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.posSale.dt().sum('AMOUNT',2)).toFixed(2))
                 this.posObj.dt()[this.posObj.dt().length - 1].DISCOUNT = Number(parseFloat(this.posObj.posSale.dt().sum('DISCOUNT',2)).toFixed(2))
                 this.posObj.dt()[this.posObj.dt().length - 1].LOYALTY = Number(parseFloat(this.posObj.posSale.dt().sum('LOYALTY',2)).toFixed(2))
@@ -500,9 +504,9 @@ export default class posDoc extends React.PureComponent
                 this.totalRowCount.value = this.posObj.posSale.dt().length
                 this.totalItemCount.value = this.posObj.posSale.dt().sum('QUANTITY',2)
                 this.totalLoyalty.value = parseFloat(this.posObj.dt()[0].LOYALTY).toFixed(2) + "€"
-                this.totalSub.value = parseFloat(this.posObj.dt()[0].AMOUNT).toFixed(2) + "€"
+                this.totalSub.value = parseFloat(this.posObj.dt()[0].FAMOUNT).toFixed(2) + "€"
                 this.totalVat.value = parseFloat(this.posObj.dt()[0].VAT).toFixed(2) + "€"
-                this.totalDiscount.value = parseFloat(this.posObj.dt()[0].DISCOUNT).toFixed(2) + "€"
+                this.totalDiscount.value = "-" + parseFloat(this.posObj.dt()[0].DISCOUNT).toFixed(2) + "€"
                 this.totalGrand.value = parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2) + "€"
                 this.popTotalGrand.value = parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2) + "€"
                 this.popCardTotalGrand.value = parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2) + "€"
@@ -591,9 +595,14 @@ export default class posDoc extends React.PureComponent
     }
     async saleRowAdd(pItemData)
     {           
+        let tmpFPrice = Number(parseFloat(Number(parseFloat(pItemData.PRICE).toFixed(2)) / Number(parseFloat((pItemData.VAT / 100) + 1).toFixed(3))).toFixed(2))
+        
+        pItemData.FAMOUNT = Number(parseFloat(tmpFPrice * pItemData.QUANTITY).toFixed(2))
         pItemData.AMOUNT = Number(parseFloat(pItemData.PRICE * pItemData.QUANTITY).toFixed(2))
-        pItemData.VAT_AMOUNT = Number(parseFloat(pItemData.AMOUNT *  Number(parseFloat(pItemData.VAT / 100).toFixed(3))).toFixed(2))
-        pItemData.TOTAL = Number(parseFloat(pItemData.AMOUNT + pItemData.VAT_AMOUNT).toFixed(2))
+        pItemData.DISCOUNT = Number(parseFloat(typeof pItemData.DISCOUNT == 'undefined' ? 0 : pItemData.DISCOUNT).toFixed(2))
+        let tmpDisAmount = pItemData.AMOUNT - pItemData.DISCOUNT
+        pItemData.VAT_AMOUNT = Number(parseFloat(tmpDisAmount - (tmpDisAmount /  Number(parseFloat((pItemData.VAT / 100) + 1)).toFixed(3))).toFixed(2))
+        pItemData.TOTAL = Number(parseFloat(tmpDisAmount).toFixed(2))
 
         let tmpMaxLine = this.posObj.posSale.dt().where({SUBTOTAL:{'<>':-1}}).max('LINE_NO')
         
@@ -621,6 +630,7 @@ export default class posDoc extends React.PureComponent
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_FACTOR = pItemData.UNIT_FACTOR
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].QUANTITY = pItemData.QUANTITY
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].PRICE = pItemData.PRICE
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].FAMOUNT = pItemData.FAMOUNT
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].AMOUNT = pItemData.AMOUNT
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DISCOUNT = 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].LOYALTY = 0
@@ -639,17 +649,33 @@ export default class posDoc extends React.PureComponent
     }
     async saleRowUpdate(pRowData,pItemData)
     {
-        let tmpAmount = Number(parseFloat(pItemData.PRICE * pItemData.QUANTITY).toFixed(2))
-        let tmpVat = Number(parseFloat(tmpAmount *  Number(parseFloat(pRowData.VAT_RATE / 100).toFixed(3))).toFixed(2))
-        let tmpTotal = Number(parseFloat(tmpAmount + tmpVat).toFixed(2))
- 
-        pRowData.QUANTITY = pItemData.QUANTITY
-        pRowData.PRICE = pItemData.PRICE
-        pRowData.AMOUNT = tmpAmount
-        pRowData.VAT = tmpVat
-        pRowData.TOTAL = tmpTotal
+        let tmpCalc = this.calcSaleTotal(pItemData.PRICE,pItemData.QUANTITY,pRowData.DISCOUNT,pRowData.LOYALTY,pRowData.VAT_RATE)
+    
+        pRowData.QUANTITY = tmpCalc.QUANTITY
+        pRowData.PRICE = tmpCalc.PRICE
+        pRowData.FAMOUNT = tmpCalc.FAMOUNT
+        pRowData.AMOUNT = tmpCalc.AMOUNT
+        pRowData.DISCOUNT = tmpCalc.DISCOUNT
+        pRowData.VAT = tmpCalc.VAT
+        pRowData.TOTAL = tmpCalc.TOTAL
 
         await this.calcGrandTotal();
+    }
+    calcSaleTotal(pPrice,pQuantity,pDiscount,pLoyalty,pVatRate)
+    {
+        let tmpAmount = Number(parseFloat((pPrice * pQuantity)).toFixed(2))
+        let tmpFAmount = Number(parseFloat((pPrice * pQuantity) - (pDiscount + pLoyalty)).toFixed(2))
+        let tmpVat = Number(parseFloat(tmpFAmount - (tmpFAmount / ((pVatRate / 100) + 1))).toFixed(2))
+    
+        return {
+            QUANTITY:pQuantity,
+            PRICE:pPrice,
+            FAMOUNT:Number(parseFloat(tmpFAmount - tmpVat).toFixed(2)),
+            AMOUNT:Number(parseFloat(tmpAmount).toFixed(2)),
+            DISCOUNT:pDiscount,
+            VAT:tmpVat,
+            TOTAL:tmpFAmount
+        }
     }
     async payAdd(pType,pAmount)
     {
@@ -746,7 +772,7 @@ export default class posDoc extends React.PureComponent
                     await dialog(tmpConfObj);
                 }
             }
-            this.print('Fis','001',false,"0")
+            await this.print('Fis','001',false,"0")
             this.init()
         }
     }
@@ -1059,30 +1085,34 @@ export default class posDoc extends React.PureComponent
     }
     print(pType,pSafe,pRePrint,pRepas)
     {
-        let prmPrint = this.prmObj.filter({ID:'PrintDesign',TYPE:0}).getValue()
-        
-        import("../meta/print/" + prmPrint).then((e)=>
+        return new Promise(async resolve => 
         {
-            let tmpData = 
+            let prmPrint = this.prmObj.filter({ID:'PrintDesign',TYPE:0}).getValue()
+        
+            import("../meta/print/" + prmPrint).then(async(e)=>
             {
-                pos : this.posObj.dt(),
-                possale : this.posObj.posSale.dt(),
-                pospay : this.posObj.posPay.dt(),
-                special : 
+                let tmpData = 
                 {
-                    type: pType,
-                    safe: pSafe,
-                    ticketCount:0,
-                    reprint: pRePrint,
-                    repas: pRepas,
-                    customerUsePoint:0,
-                    customerPoint:this.state.customerPoint,
-                    customerGrowPoint:0
+                    pos : this.posObj.dt(),
+                    possale : this.posObj.posSale.dt(),
+                    pospay : this.posObj.posPay.dt(),
+                    special : 
+                    {
+                        type: pType,
+                        safe: pSafe,
+                        ticketCount:0,
+                        reprint: pRePrint,
+                        repas: pRepas,
+                        customerUsePoint:0,
+                        customerPoint:this.customerPoint.value,
+                        customerGrowPoint:0
+                    }
                 }
-            }
-            let tmpPrint = e.print(tmpData)
-            this.posDevice.escPrinter(tmpPrint)
-        })
+                let tmpPrint = e.print(tmpData)
+                await this.posDevice.escPrinter(tmpPrint)
+                resolve()
+            })
+        });
     }
     render()
     {
@@ -1115,15 +1145,15 @@ export default class posDoc extends React.PureComponent
                                     </div> 
                                 </div>
                             </div>
-                            <div className="col-2">
+                            <div className="col-3">
                                 <div className="row" style={{height:"25px"}}>
                                     <div className="col-12">                                                                        
-                                        <span className="text-white"><i className="text-white fa-solid fa-circle-user pe-2"></i>{this.state.customerName}</span>
+                                        <span className="text-white"><i className="text-white fa-solid fa-circle-user pe-2"></i><NbLabel id="customerName" parent={this} value={""}/></span>
                                     </div>    
                                 </div>
                                 <div className="row" style={{height:"25px"}}>
                                     <div className="col-12">                                        
-                                        <span className="text-light"><i className="text-light fa-solid fa-user-plus pe-2"></i>{this.state.customerPoint}</span>
+                                        <span className="text-light"><i className="text-light fa-solid fa-user-plus pe-2"></i><NbLabel id="customerPoint" parent={this} value={""}/></span>
                                     </div> 
                                 </div>
                             </div>
@@ -1139,7 +1169,7 @@ export default class posDoc extends React.PureComponent
                                     </div> 
                                 </div>
                             </div>
-                            <div className="col-1 offset-2 px-1">
+                            <div className="col-1 offset-1 px-1">
                                 <NbButton id={"btnRefresh"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
                                 onClick={()=>
                                 {                                                        
@@ -1511,7 +1541,7 @@ export default class posDoc extends React.PureComponent
                                             //TICKET REST. SADAKAT PUAN KULLANIMI PARAMETRESI
                                             if(this.prmObj.filter({ID:'UseTicketRestLoyalty',TYPE:0}).getValue() == true)
                                             {
-                                                if(this.state.customerName != '')
+                                                if(this.customerName.value != '')
                                                 {
                                                     let tmpConfObj =
                                                     {
@@ -2432,7 +2462,9 @@ export default class posDoc extends React.PureComponent
                             this.posObj.dt()[0].CUSTOMER_CODE = pData[0].CODE
                             this.posObj.dt()[0].CUSTOMER_NAME = pData[0].TITLE
                             
-                            this.setState({customerName:pData[0].TITLE,customerPoint:pData[0].CUSTOMER_POINT})
+                            this.customerName.value = pData[0].TITLE
+                            this.customerPoint.value = pData[0].CUSTOMER_POINT
+                            this.calcGrandTotal();
                         }
                     }}>
                         <Column dataField="CODE" caption={"CODE"} width={100} />
@@ -2790,14 +2822,14 @@ export default class posDoc extends React.PureComponent
                                         {
                                             for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
                                             {
-                                                let tmpAmount = Number(parseFloat(this.posObj.posSale.dt()[i].AMOUNT - this.posObj.posSale.dt()[i].LOYALTY).toFixed(2))
-                                                
-                                                let tmpVat = Number(parseFloat(this.posObj.posSale.dt()[i].AMOUNT * (this.posObj.posSale.dt()[i].VAT_RATE / 100)))
-                                                let tmpTotal = Number(parseFloat(tmpAmount + tmpVat).toFixed(2))
-                                                
+                                                let tmpData = this.posObj.posSale.dt()[i];
+                                                let tmpCalc = this.calcSaleTotal(tmpData.PRICE,tmpData.QUANTITY,0,tmpData.LOYALTY,tmpData.VAT_RATE)
+                                            
+                                                this.posObj.posSale.dt()[i].FAMOUNT = tmpCalc.FAMOUNT
+                                                this.posObj.posSale.dt()[i].AMOUNT = tmpCalc.AMOUNT
                                                 this.posObj.posSale.dt()[i].DISCOUNT = 0
-                                                this.posObj.posSale.dt()[i].VAT = tmpVat
-                                                this.posObj.posSale.dt()[i].TOTAL = tmpTotal
+                                                this.posObj.posSale.dt()[i].VAT = tmpCalc.VAT
+                                                this.posObj.posSale.dt()[i].TOTAL = tmpCalc.TOTAL
                                             }
                                             await this.calcGrandTotal()
                                             this.popDiscount.hide()
@@ -2850,32 +2882,30 @@ export default class posDoc extends React.PureComponent
                                                 {
                                                     let tmpDiscountRate = Number(parseFloat(this.txtPopDiscountPercent.value / 100).toFixed(3))                                                    
                                                     let tmpDiscount = Number(parseFloat(this.posObj.posSale.dt()[i].AMOUNT * tmpDiscountRate).toFixed(2))
-                                                    let tmpAmount = Number(parseFloat(this.posObj.posSale.dt()[i].AMOUNT - (tmpDiscount + this.posObj.posSale.dt()[i].LOYALTY)).toFixed(2))
-                                                    
-                                                    let tmpVat = Number(parseFloat(tmpAmount * (this.posObj.posSale.dt()[i].VAT_RATE / 100)))
-                                                    let tmpTotal = Number(parseFloat(tmpAmount + tmpVat).toFixed(2))
-                                                    
+                                                    let tmpData = this.posObj.posSale.dt()[i]
+                                                    let tmpCalc = this.calcSaleTotal(tmpData.PRICE,tmpData.QUANTITY,tmpDiscount,tmpData.LOYALTY,tmpData.VAT_RATE)
+
+                                                    this.posObj.posSale.dt()[i].FAMOUNT = tmpCalc.FAMOUNT
+                                                    this.posObj.posSale.dt()[i].AMOUNT = tmpCalc.AMOUNT
                                                     this.posObj.posSale.dt()[i].DISCOUNT = tmpDiscount
-                                                    this.posObj.posSale.dt()[i].VAT = tmpVat
-                                                    this.posObj.posSale.dt()[i].TOTAL = tmpTotal
+                                                    this.posObj.posSale.dt()[i].VAT = tmpCalc.VAT
+                                                    this.posObj.posSale.dt()[i].TOTAL = tmpCalc.TOTAL
                                                 }                                                
                                             }
                                             else if(this.rbtnDisType.value == 1) //SATIR İSKONTO
                                             {
                                                 if(this.grdList.devGrid.getSelectedRowsData().length > 0)
                                                 {
-                                                    let tmpData = this.grdList.devGrid.getSelectedRowsData()[0]
-
+                                                    let tmpData = this.grdList.devGrid.getSelectedRowsData()[0]                                                    
                                                     let tmpDiscountRate = Number(parseFloat(this.txtPopDiscountPercent.value / 100).toFixed(3))                                                    
                                                     let tmpDiscount = Number(parseFloat(tmpData.AMOUNT * tmpDiscountRate).toFixed(2))
-                                                    let tmpAmount = Number(parseFloat(tmpData.AMOUNT - (tmpDiscount + tmpData.LOYALTY)).toFixed(2))
-                                                    
-                                                    let tmpVat = Number(parseFloat(tmpAmount * (tmpData.VAT_RATE / 100)))
-                                                    let tmpTotal = Number(parseFloat(tmpAmount + tmpVat).toFixed(2))
-                                                    
+                                                    let tmpCalc = this.calcSaleTotal(tmpData.PRICE,tmpData.QUANTITY,tmpDiscount,tmpData.LOYALTY,tmpData.VAT_RATE)
+                                              
+                                                    tmpData.FAMOUNT = tmpCalc.FAMOUNT
+                                                    tmpData.AMOUNT = tmpCalc.AMOUNT
                                                     tmpData.DISCOUNT = tmpDiscount
-                                                    tmpData.VAT = tmpVat
-                                                    tmpData.TOTAL = tmpTotal
+                                                    tmpData.VAT = tmpCalc.VAT
+                                                    tmpData.TOTAL = tmpCalc.TOTAL
                                                 }
                                             }
                                             await this.calcGrandTotal()

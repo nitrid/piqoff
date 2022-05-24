@@ -242,6 +242,7 @@ export function print()
             return tmpArr.length > 0 ? tmpArr : undefined
         },
         {font:"b",style:"bu",align:"lt",data:" ".space(64)},
+        // VERGİ LİSTESİ
         ()=>
         {
             let tmpArr = [];
@@ -265,10 +266,10 @@ export function print()
                     font: "b",
                     align: "lt",
                     data: tmpVatLst[i].VAT_TYPE.space(5) + " " +
-                        (tmpVatLst[i].VAT + "%").space(10) + " " +
-                        data.possale.where({VAT_TYPE:tmpVatLst[i].VAT_RATE}).sum('AMOUNT',2).space(10) + " " + 
-                        data.possale.where({VAT_TYPE:tmpVatLst[i].VAT_RATE}).sum('VAT',2).space(10) + " " + 
-                        data.possale.where({VAT_TYPE:tmpVatLst[i].VAT_RATE}).sum('TOTAL',2).space(10)
+                        (tmpVatLst[i].VAT_RATE + "%").space(10) + " " +
+                        data.possale.where({VAT_TYPE:tmpVatLst[i].VAT_TYPE}).sum('FAMOUNT',2).space(10) + " " + 
+                        data.possale.where({VAT_TYPE:tmpVatLst[i].VAT_TYPE}).sum('VAT',2).space(10) + " " + 
+                        data.possale.where({VAT_TYPE:tmpVatLst[i].VAT_TYPE}).sum('TOTAL',2).space(10)
                 })
             }
             return tmpArr.length > 0 ? tmpArr : undefined

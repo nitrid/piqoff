@@ -21,6 +21,8 @@ export class posCls
             CUSTOMER_GUID : '00000000-0000-0000-0000-000000000000',
             CUSTOMER_CODE : '',
             CUSTOMER_NAME : '',
+            CUSTOMER_POINT : 0,
+            FAMOUNT : 0,
             AMOUNT : 0,
             DISCOUNT : 0,
             LOYALTY : 0,
@@ -56,6 +58,7 @@ export class posCls
                     "@TYPE = @PTYPE, " +                      
                     "@DOC_DATE = @PDOC_DATE, " + 
                     "@CUSTOMER = @PCUSTOMER, " + 
+                    "@FAMOUNT = @PFAMOUNT, " + 
                     "@AMOUNT = @PAMOUNT, " + 
                     "@DISCOUNT = @PDISCOUNT, " + 
                     "@LOYALTY = @PLOYALTY, " + 
@@ -64,8 +67,8 @@ export class posCls
                     "@TICKET = @PTICKET, " + 
                     "@STATUS = @PSTATUS ", 
             param : ['PGUID:string|50','PCUSER:string|25','PDEVICE:string|25','PDEPOT:string|50','PTYPE:int','PDOC_DATE:date','PCUSTOMER:string|50',
-                     'PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PTICKET:string|50','PSTATUS:int'],
-            dataprm : ['GUID','CUSER','DEVICE','DEPOT_GUID','TYPE','DOC_DATE','CUSTOMER_GUID','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','TICKET','STATUS']
+                    'PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PTICKET:string|50','PSTATUS:int'],
+            dataprm : ['GUID','CUSER','DEVICE','DEPOT_GUID','TYPE','DOC_DATE','CUSTOMER_GUID','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','TICKET','STATUS']
         } 
         tmpDt.updateCmd = 
         {
@@ -77,6 +80,7 @@ export class posCls
                     "@TYPE = @PTYPE, " +                      
                     "@DOC_DATE = @PDOC_DATE, " + 
                     "@CUSTOMER = @PCUSTOMER, " + 
+                    "@FAMOUNT = @PFAMOUNT, " +
                     "@AMOUNT = @PAMOUNT, " + 
                     "@DISCOUNT = @PDISCOUNT, " + 
                     "@LOYALTY = @PLOYALTY, " + 
@@ -85,8 +89,8 @@ export class posCls
                     "@TICKET = @PTICKET, " + 
                     "@STATUS = @PSTATUS ", 
             param : ['PGUID:string|50','PCUSER:string|25','PDEVICE:string|25','PDEPOT:string|50','PTYPE:int','PDOC_DATE:date','PCUSTOMER:string|50',
-                     'PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PTICKET:string|50','PSTATUS:int'],
-            dataprm : ['GUID','CUSER','DEVICE','DEPOT_GUID','TYPE','DOC_DATE','CUSTOMER_GUID','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','TICKET','STATUS']
+                    'PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PTICKET:string|50','PSTATUS:int'],
+            dataprm : ['GUID','CUSER','DEVICE','DEPOT_GUID','TYPE','DOC_DATE','CUSTOMER_GUID','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','TICKET','STATUS']
         } 
         tmpDt.deleteCmd = 
         {
@@ -192,7 +196,7 @@ export class posSaleCls
             DOC_DATE : moment(new Date()).format("YYYY-MM-DD"),
             CUSTOMER_GUID : '00000000-0000-0000-0000-000000000000',
             CUSTOMER_CODE : '',
-            CUSTOMER_NAME : '',
+            CUSTOMER_NAME : '',            
             LINE_NO : 0,
             ITEM_GUID : '00000000-0000-0000-0000-000000000000',
             ITEM_CODE : '',
@@ -207,6 +211,7 @@ export class posSaleCls
             UNIT_FACTOR : 0,
             QUANTITY : 0,
             PRICE : 0,
+            FAMOUNT : 0,
             AMOUNT : 0,
             DISCOUNT : 0,
             LOYALTY : 0,
@@ -222,7 +227,6 @@ export class posSaleCls
             GRAND_TOTAL : 0,
             STATUS : 0
         }
-
         this._initDs();
     }
     //#region Private
@@ -247,6 +251,7 @@ export class posSaleCls
                     "@UNIT = @PUNIT, " + 
                     "@QUANTITY = @PQUANTITY, " + 
                     "@PRICE = @PPRICE, " + 
+                    "@FAMOUNT = @PFAMOUNT, " + 
                     "@AMOUNT = @PAMOUNT, " + 
                     "@DISCOUNT = @PDISCOUNT, " + 
                     "@LOYALTY = @PLOYALTY, " + 
@@ -254,8 +259,9 @@ export class posSaleCls
                     "@TOTAL = @PTOTAL, " + 
                     "@SUBTOTAL = @PSUBTOTAL ", 
             param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PINPUT:string|25','PBARCODE:string|50','PUNIT:string|50',
-                     'PQUANTITY:float','PPRICE:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int'],
-            dataprm : ['GUID','CUSER','POS_GUID','LINE_NO','ITEM_GUID','INPUT','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','SUBTOTAL']
+                    'PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int'],
+            dataprm : ['GUID','CUSER','POS_GUID','LINE_NO','ITEM_GUID','INPUT','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY','VAT',
+                    'TOTAL','SUBTOTAL']
         } 
         tmpDt.updateCmd = 
         {
@@ -270,6 +276,7 @@ export class posSaleCls
                     "@UNIT = @PUNIT, " + 
                     "@QUANTITY = @PQUANTITY, " + 
                     "@PRICE = @PPRICE, " + 
+                    "@FAMOUNT = @PFAMOUNT, " +
                     "@AMOUNT = @PAMOUNT, " + 
                     "@DISCOUNT = @PDISCOUNT, " + 
                     "@LOYALTY = @PLOYALTY, " + 
@@ -277,8 +284,9 @@ export class posSaleCls
                     "@TOTAL = @PTOTAL, " + 
                     "@SUBTOTAL = @PSUBTOTAL ", 
             param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PINPUT:string|25','PBARCODE:string|50','PUNIT:string|50',
-                     'PQUANTITY:float','PPRICE:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int'],
-            dataprm : ['GUID','CUSER','POS_GUID','LINE_NO','ITEM_GUID','INPUT','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','SUBTOTAL']
+                     'PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int'],
+            dataprm : ['GUID','CUSER','POS_GUID','LINE_NO','ITEM_GUID','INPUT','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY',
+                    'VAT','TOTAL','SUBTOTAL']
         } 
         tmpDt.deleteCmd = 
         {
@@ -1213,93 +1221,99 @@ export class posDeviceCls
     }
     escPrinter(pData)
     {    
-        if(!core.instance.util.isElectron())
+        return new Promise(async resolve => 
         {
-            return
-        }
-
-        let device  = new this.escpos.USB();
-        let options = { encoding: "GB18030" /* default */ }
-        let printer = new this.escpos.Printer(device, options);
-
-        let imgLoad = (imgPath) => 
-        {
-            return new Promise((resolve) =>
+            if(!core.instance.util.isElectron())
             {
-                this.escpos.Image.load(imgPath, function(image)
-                {
-                    resolve(image)
-                });
-            });
-        }
-        device.open(async function(error)
-        {   
-            console.log(error)
-
-            let tmpArr = [];
-            for (let i = 0; i < pData.length; i++) 
-            {
-                let tmpObj = pData[i]
-                if(typeof pData[i] == 'function')
-                {
-                    tmpObj = pData[i]()
-                }
-                if(Array.isArray(tmpObj))
-                {
-                    tmpArr.push(...tmpObj)
-                }
-                else if(typeof tmpObj == 'object')
-                {
-                    tmpArr.push(tmpObj)
-                }
+                resolve()
+                return
             }
-            
-            for (let i = 0; i < tmpArr.length; i++) 
+    
+            let device  = new this.escpos.USB();
+            let options = { encoding: "GB18030" /* default */ }
+            let printer = new this.escpos.Printer(device, options);
+    
+            let imgLoad = (imgPath) => 
             {
-                if(typeof tmpArr[i].barcode != 'undefined')
+                return new Promise((mresolve) =>
                 {
-                    printer.align(tmpArr[i].align).barcode(tmpArr[i].barcode,'CODE39',tmpArr[i].options);                    
-                }
-                else if(typeof tmpArr[i].logo != 'undefined')
-                {
-                    let image = await imgLoad(tmpArr[i].logo);
-                    printer.align(tmpArr[i].align)
-                    .image(image, 's8')
-                    .then(() => 
-                    { 
-                        //printer.cut().close(); 
-                    });
-                }
-                else
-                {                   
-                    printer.size(0,0);
-                    printer.font(tmpArr[i].font);
-                    printer.align(tmpArr[i].align);
-
-                    if(typeof tmpArr[i].style != 'undefined')
+                    this.escpos.Image.load(imgPath, function(image)
                     {
-                        printer.style(tmpArr[i].style);
+                        mresolve(image)
+                    });
+                });
+            }
+            device.open(async function(error)
+            {   
+                console.log(error)
+    
+                let tmpArr = [];
+                for (let i = 0; i < pData.length; i++) 
+                {
+                    let tmpObj = pData[i]
+                    if(typeof pData[i] == 'function')
+                    {
+                        tmpObj = pData[i]()
+                    }
+                    if(Array.isArray(tmpObj))
+                    {
+                        tmpArr.push(...tmpObj)
+                    }
+                    else if(typeof tmpObj == 'object')
+                    {
+                        tmpArr.push(tmpObj)
+                    }
+                }
+                
+                for (let i = 0; i < tmpArr.length; i++) 
+                {
+                    if(typeof tmpArr[i].barcode != 'undefined')
+                    {
+                        printer.align(tmpArr[i].align).barcode(tmpArr[i].barcode,'CODE39',tmpArr[i].options);                    
+                    }
+                    else if(typeof tmpArr[i].logo != 'undefined')
+                    {
+                        let image = await imgLoad(tmpArr[i].logo);
+                        printer.align(tmpArr[i].align)
+                        .image(image, 's8')
+                        .then(() => 
+                        { 
+                            //printer.cut().close(); 
+                        });
                     }
                     else
+                    {                   
+                        printer.size(0,0);
+                        printer.font(tmpArr[i].font);
+                        printer.align(tmpArr[i].align);
+    
+                        if(typeof tmpArr[i].style != 'undefined')
+                        {
+                            printer.style(tmpArr[i].style);
+                        }
+                        else
+                        {
+                            printer.style("normal");
+                        }
+                        
+                        if(typeof tmpArr[i].size != 'undefined')
+                        {
+                            printer.size(tmpArr[i].size[0],tmpArr[i].size[1]);
+                        }
+                        printer.text(tmpArr[i].data,'857');
+                    }                
+                }                      
+                        
+                printer.cut().close
+                (
+                    function()
                     {
-                        printer.style("normal");
+                        
                     }
-                    
-                    if(typeof tmpArr[i].size != 'undefined')
-                    {
-                        printer.size(tmpArr[i].size[0],tmpArr[i].size[1]);
-                    }
-                    printer.text(tmpArr[i].data,'857');
-                }                
-            }                      
-                    
-            printer.cut().close
-            (
-                function()
-                {
-                    
-                }
-            );
-        });  
+                );
+
+                resolve()
+            });  
+        });
     }
 }
