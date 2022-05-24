@@ -153,7 +153,7 @@ export const langTr =
         tabTitleCustomerPrice: "Tedarikçi Fiyat Geçmişi",
         tabTitleSalesContract: "Satış Anlaşmaları",
         tabTitleInfo: "Bilgi",
-        txtTaxSugar: "Tax Sugar",
+        txtTaxSugar: "Şeker Oranı(100ML/GR)",
         pg_txtRef:
         {
             title: "Stok Seçimi",
@@ -4809,19 +4809,17 @@ export const langTr =
         grdTaxSugar: 
         {
             clmCreateDate: "Kayıt Tarihi",
-            clmMinValue : "Alt Değer",
-            clmMaxvalue : "Üst  Değer",
-            clmRate : "Vergi Oranı",
-            clmPrice : "Fiyat"
+            clmMinValue : "Min. Şeker Oranı(100ML/GR)",
+            clmMaxvalue : "Max. Şeker Oranı(100ML/GR)",
+            clmPrice : "Çarpan Fiyat"
         },
         popTaxSugar : 
         {
-            title: "Nakit Girişi",
+            title: "Şeker Oranı Ekleme",
             btnApprove : "Ekle",
-            rate :"Oran",
-            minValue : "Alt Değer",
-            maxValue : "Üst değer",
-            price : "Fiyat",
+            minValue : "Min. Şeker Oranı(100ML/GR)",
+            maxValue : "Max.  Şeker Oranı(100ML/GR)",
+            price : "Çarpan Fiyat",
         },
         msgSave:
         {

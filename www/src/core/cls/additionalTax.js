@@ -132,7 +132,7 @@ export class taxSugarCls
             GUID : '00000000-0000-0000-0000-000000000000',
             CUSER : this.core.auth.data == null ? '' : this.core.auth.data.CODE,
             TYPE:  0,
-            CDATE_FORMAT : moment(new Date()).format("YYYY-MM-DD"),
+            CDATE_FORMAT : moment(new Date()).format("YYYY-MM-DD - HH:mm:ss"),
             NAME : '',
             JSON : '',
             STATUS : 0,

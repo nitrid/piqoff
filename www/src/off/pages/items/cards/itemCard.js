@@ -21,6 +21,7 @@ import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import NumberBox from 'devextreme-react/number-box';
+import { datatable } from '../../../../core/core.js';
 
 export default class itemCard extends React.Component
 {
@@ -38,6 +39,8 @@ export default class itemCard extends React.Component
         this.tabIndex = props.data.tabkey
         this._onItemRendered = this._onItemRendered.bind(this)
         this.taxSugarCalculate = this.taxSugarCalculate.bind(this)
+
+        this.extraCostData = new datatable
     }    
     async componentDidMount()
     {
@@ -412,20 +415,27 @@ export default class itemCard extends React.Component
     }
     async taxSugarCalculate()
     {
+        console.log(2)
         let tmpQuery = 
         {
-            query :"SELECT RATE,PRICE FROM TAX_SUGAR_TABLE_VW_01 WHERE MIN_VALUE >= @VALUE AND MAX_VALUE <= @VALUE AND TYPE =0 ",
+            query :"SELECT RATE,PRICE FROM TAX_SUGAR_TABLE_VW_01 WHERE MIN_VALUE <= @VALUE AND MAX_VALUE >= @VALUE AND TYPE =0 ",
             param : ['VALUE:float'],
             value : [this.txtTaxSugar.value]
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
+        console.log(tmpData)
         if(tmpData.result.recordset.length > 0)
         {
-            console.log(tmpData.result.recordset[0].PRICE)
             let tmpprice = tmpData.result.recordset[0].PRICE/100
             let tmpTaxSucre = tmpprice / this.txtUnderUnit.value
+            this.taxSugarPrice = tmpTaxSucre
             this.txtCostPrice.setState({value:this.txtCostPrice.value + tmpTaxSucre})
+            console.log(this.extraCostData)
         }
+    }
+    extraCostCalculate()
+    {
+
     }
     render()
     {           
@@ -855,6 +865,7 @@ export default class itemCard extends React.Component
                                     access={this.access.filter({ELEMENT:'txtTaxSugar',USERS:this.user.CODE})}
                                     onChange={()=>
                                     {
+                                        console.log(1)
                                         this.taxSugarCalculate()
                                     }}>
                                        <Validator validationGroup={this.state.isTaxSugar ? "frmItems" + this.tabIndex : ''}>
@@ -1248,6 +1259,27 @@ export default class itemCard extends React.Component
                                         </div>
                                     </div>
                                 </Item>
+                                <Item title={this.t("tabExtraCost")}>
+                                    <div className='row px-2 py-2'>
+                                        <div className='col-12'>
+                                            <NdGrid parent={this} id={"grdExtraCost"} 
+                                            showBorders={true} 
+                                            columnsAutoWidth={true} 
+                                            allowColumnReordering={true} 
+                                            allowColumnResizing={true} 
+                                            height={'100%'} 
+                                            width={'100%'}
+                                            dbApply={false}
+                                            >
+                                                <Paging defaultPageSize={5} />
+                                                <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
+                                                <Column dataField="DATE" caption={this.t("grdExtraCost.clmDate")}/>
+                                                <Column dataField="TYPE_NAME" caption={this.t("grdExtraCost.clmTypeName")} />
+                                                <Column dataField="PRICE" caption={this.t("grdExtraCost.clmPrice")} />
+                                            </NdGrid>
+                                        </div>
+                                    </div>
+                                </Item> 
                                 <Item title={this.t("tabTitleInfo")}></Item>
                             </TabPanel>
                         </div>

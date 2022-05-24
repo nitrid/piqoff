@@ -98,3 +98,7 @@
     white-space: 'nowrap';
     overflow: 'hidden'
 }
+.dx-layout-manager
+{
+    height: fit-content;
+}

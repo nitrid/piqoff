@@ -583,7 +583,7 @@ export const prm =
         {
             TYPE : 1,
             ID :"taxSugarGroupValidation",
-            VALUE : ['017'],
+            VALUE : ['007'],
             SPECIAL : "",
             PAGE : "stk_01_001",
             ELEMENT : "",

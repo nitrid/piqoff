@@ -4,7 +4,7 @@ import { additionalTax,taxSugarCls } from '../../../../core/cls/additionalTax.js
 import moment from 'moment';
 
 
-import Toolbar,{Item} from 'devextreme-react/toolbar';
+import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 import { Button } from 'devextreme-react/button';
@@ -15,7 +15,7 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Popup,Paging,Scrolling,KeyboardNavigation,Export,Item,Form as grdFrom} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
@@ -87,8 +87,18 @@ export default class taxSugar extends React.Component
         this.addTaxObj.clearAll()
         this.taxSugarObj.clearAll()
         await this.addTaxObj.load({TYPE:0});
+        if(this.addTaxObj.dt().length == 0)
+        {
+            let tmpAdd = {...this.addTaxObj.empty}
+            tmpAdd.TYPE = 0
+            this.addTaxObj.addEmpty(tmpAdd);
+        }
         await this.taxSugarObj.load({TYPE:0});
 
+    }
+    formatRender(pValue)
+    {
+        console.log(pValue)
     }
     render()
     {
@@ -189,7 +199,7 @@ export default class taxSugar extends React.Component
                                     width={'100%'}
                                     dbApply={false}
                                     onRowUpdated={async(e)=>{
-                                       
+                                       e.key.CDATE_FORMAT =  moment(new Date()).format("YYYY-MM-DD - HH:mm:ss")
                                     }}
                                     onRowRemoved={(e)=>{
 
@@ -198,21 +208,35 @@ export default class taxSugar extends React.Component
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                                         <Scrolling mode="standard" />
-                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
+                                        <Editing mode="popup" allowUpdating={true} allowDeleting={true} confirmDelete={false}>
+                                            <Popup title={this.t("popTaxSugar.title")} showTitle={true} width={700} height={400} >
+                                            <grdFrom>
+                                            <Item itemType="group" colCount={2}>
+                                                <Item dataField="MIN_VALUE" format={"##0.00"}/>
+                                                <Item dataField="MAX_VALUE" format={"##0.00"}/>
+                                                <Item dataField="PRICE" format={"##0.00"}/>
+                                            </Item>
+                                            </grdFrom>
+                                            </Popup>
+                                        </Editing>
                                         <Export fileName={this.lang.t("menu.stk_02_002")} enabled={true} allowExportSelectedData={true} />
+                                        <Column dataField="CUSER" caption={this.t("grdTaxSugar.clmCreateDate")} width={200} allowEditing={false}/>
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdTaxSugar.clmCreateDate")} width={200} allowEditing={false}/>
-                                        <Column dataField="MIN_VALUE" caption={this.t("grdTaxSugar.clmMinValue")} width={250} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="MAX_VALUE" caption={this.t("grdTaxSugar.clmMaxvalue")} width={250} />
-                                        <Column dataField="RATE" caption={this.t("grdTaxSugar.clmRate")} dataType={'number'} width={250}/>
-                                        <Column dataField="PRICE" caption={this.t("grdTaxSugar.clmPrice")} dataType={'number'} width={250}/>
+                                        <Column dataField="MIN_VALUE" caption={this.t("grdTaxSugar.clmMinValue")} width={300} dataType={'number'}  format={"#,##0.00 '(100ML/GR)'"}>
+                                        <RangeRule min={0.01} message={"Oran sıfırdan küçük olamaz !"} /><RequiredRule/></Column>
+                                        <Column dataField="MAX_VALUE" caption={this.t("grdTaxSugar.clmMaxvalue")} width={300} dataType={'number'} format={"#,##0.00 '(100ML/GR)'"}>
+                                        <RangeRule min={0.01} message={"Oran sıfırdan küçük olamaz !"} /><RequiredRule/></Column>
+                                        <Column dataField="PRICE" caption={this.t("grdTaxSugar.clmPrice")} dataType={'number'} width={300}  format={"#,##0.00 €'(100ML/GR)'"}>
+                                        <RangeRule min={0.01} message={"Fiyat sıfırdan küçük olamaz !"} /><RequiredRule/></Column>
                                     </NdGrid>
                                 </Item>
                                 <Item location="after">
                                     <Button icon="add" text="Yeni Değer Ekle"
                                     onClick={async (e)=>
                                     {
-                                        let tmpDocItems = {...this.taxSugarObj.empty}
-                                        this.taxSugarObj.addEmpty(tmpDocItems)
+                                        this.minValue.value = 0
+                                        this.maxValue.value = 0
+                                        this.price.value = 0
                                         this.popTaxSugar.show()
                                     }}/>
                                 </Item>
@@ -235,7 +259,7 @@ export default class taxSugar extends React.Component
                                 <Label text={this.t("popTaxSugar.minValue")} alignment="right" />
                                 <div className="col-4 pe-0">
                                     <NdNumberBox id="minValue" parent={this} simple={true}
-                                    maxLength={32}                                        
+                                    maxLength={32} format={"##0.00"}
                                     >
                                     <Validator validationGroup={"frmPopTaxSugar"  + this.tabIndex}>
                                         <RequiredRule message={this.t("validValue")} />
@@ -248,22 +272,9 @@ export default class taxSugar extends React.Component
                                 <Label text={this.t("popTaxSugar.maxValue")} alignment="right" />
                                 <div className="col-12 pe-0">
                                     <NdNumberBox id="maxValue" parent={this} simple={true} width={500}
-                                     maxLength={32}                                        
+                                     maxLength={32} format={"##0.00"}                                       
                                      param={this.param.filter({ELEMENT:'numCash',USERS:this.user.CODE})}
                                      access={this.access.filter({ELEMENT:'numCash',USERS:this.user.CODE})}
-                                     >
-                                     <Validator validationGroup={"frmPopTaxSugar"  + this.tabIndex}>
-                                         <RequiredRule message={this.t("validValue")}/>
-                                         <RangeRule min={0.001} message={this.t("zeroValid")} />
-                                     </Validator>  
-                                     </NdNumberBox>
-                                </div>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("popTaxSugar.rate")} alignment="right" />
-                                <div className="col-12 pe-0">
-                                    <NdNumberBox id="rate" parent={this} simple={true} width={500}
-                                     maxLength={32}                                        
                                      >
                                      <Validator validationGroup={"frmPopTaxSugar"  + this.tabIndex}>
                                          <RequiredRule message={this.t("validValue")}/>
@@ -276,7 +287,7 @@ export default class taxSugar extends React.Component
                                 <Label text={this.t("popTaxSugar.price")} alignment="right" />
                                 <div className="col-12 pe-0">
                                     <NdNumberBox id="price" parent={this} simple={true} width={500}
-                                     maxLength={32}                                        
+                                     maxLength={32}  format={"##0.00"}                                      
                                      >
                                      <Validator validationGroup={"frmPopTaxSugar"  + this.tabIndex}>
                                          <RequiredRule message={this.t("validValue")}/>
@@ -294,12 +305,11 @@ export default class taxSugar extends React.Component
                                         {       
                                             if(e.validationGroup.validate().status == "valid")
                                             {
-                                                console.log(this.taxSugarObj.dt().length)
-                                                console.log(this.taxSugarObj.dt())
-                                                this.taxSugarObj.dt()[this.taxSugarObj.dt().length-1].MIN_VALUE = this.minValue.value
-                                                this.taxSugarObj.dt()[this.taxSugarObj.dt().length-1].MAX_VALUE = this.minValue.value
-                                                this.taxSugarObj.dt()[this.taxSugarObj.dt().length-1].RATE = this.rate.value
-                                                this.taxSugarObj.dt()[this.taxSugarObj.dt().length-1].PRICE = this.price.value
+                                                let tmpDocItems = {...this.taxSugarObj.empty}
+                                                tmpDocItems.MIN_VALUE = this.minValue.value
+                                                tmpDocItems.MAX_VALUE = this.maxValue.value
+                                                tmpDocItems.PRICE =this.price.value
+                                                this.taxSugarObj.addEmpty(tmpDocItems)
                                                 this.popTaxSugar.hide();  
                                             }
                                             
