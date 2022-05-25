@@ -427,6 +427,7 @@ export class posPaymentCls
             LINE_NO : 0,
             AMOUNT : 0,
             CHANGE : 0,
+            TICKET_PLUS : 0,
             GRAND_AMOUNT : 0,
             GRAND_DISCOUNT : 0,
             GRAND_LOYALTY : 0,

@@ -173,6 +173,7 @@ export default class NdTextBox extends Base
                 onInitialized={this._onInitialized}
                 value={typeof this.state.value == 'undefined' ? '' : this.state.value.toString()} 
                 readOnly={this.state.readOnly}
+                format={this.props.format}
                 disabled={typeof this.props.editable == 'undefined' ? this.state.editable : this.props.editable}>                    
                     {this.props.children}
                     {this._buttonView()}                    

@@ -57,8 +57,6 @@ export default class posDoc extends React.PureComponent
             payTotal:0,
             payChange:0,
             payRest:0,
-            discountBefore:0,
-            discountAfter:0,
             cheqCount:0,
             cheqTotalAmount:0,
             cheqLastAmount:0
@@ -496,25 +494,26 @@ export default class posDoc extends React.PureComponent
                 this.posObj.dt()[0].LOYALTY = Number(parseFloat(this.posObj.posSale.dt().sum('LOYALTY',2)).toFixed(2))
                 this.posObj.dt()[0].VAT = Number(parseFloat(this.posObj.posSale.dt().sum('VAT',2)).toFixed(2))
                 this.posObj.dt()[0].TOTAL = Number(parseFloat(this.posObj.posSale.dt().sum('TOTAL',2)).toFixed(2))
+                
+                this.state.payChange = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) >= 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2)) * -1
+                this.state.payRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2)); 
 
                 this.customerName.value = this.posObj.dt()[0].CUSTOMER_NAME.toString()
-                this.customerPoint.value = this.posObj.dt()[0].CUSTOMER_POINT.toString()
-                this.popCustomerPoint.value = this.posObj.dt()[0].CUSTOMER_POINT.toString()
+                this.customerPoint.value = this.posObj.dt()[0].CUSTOMER_POINT
+                this.popCustomerPoint.value = this.posObj.dt()[0].CUSTOMER_POINT
                 this.popCustomerUsePoint.value = Number(parseFloat(this.posObj.dt()[0].LOYALTY * 100).toFixed(0))
-
+                this.popCustomerGrowPoint.value = Number(parseInt(this.customerPoint.value - Number(parseFloat(this.posObj.dt()[0].LOYALTY * 100).toFixed(0))))
+                
                 this.totalRowCount.value = this.posObj.posSale.dt().length
                 this.totalItemCount.value = this.posObj.posSale.dt().sum('QUANTITY',2)
                 this.totalLoyalty.value = parseFloat(this.posObj.dt()[0].LOYALTY).toFixed(2) + "€"
                 this.totalSub.value = parseFloat(this.posObj.dt()[0].FAMOUNT).toFixed(2) + "€"
                 this.totalVat.value = parseFloat(this.posObj.dt()[0].VAT).toFixed(2) + "€"
                 this.totalDiscount.value = "-" + parseFloat(this.posObj.dt()[0].DISCOUNT).toFixed(2) + "€"
-                this.totalGrand.value = parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2) + "€"
+                this.totalGrand.value = parseFloat(this.state.payRest).toFixed(2) + "€"
                 this.popTotalGrand.value = parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2) + "€"
                 this.popCardTotalGrand.value = parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2) + "€"
-                this.popCashTotalGrand.value = parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2) + "€"
-
-                this.state.payChange = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) >= 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2)) * -1
-                this.state.payRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2)); 
+                this.popCashTotalGrand.value = parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2) + "€"                
                 
                 this.txtPopTotal.value = parseFloat(this.state.payRest).toFixed(2)
                 this.txtPopCardPay.value = parseFloat(this.state.payRest).toFixed(2)
@@ -552,7 +551,8 @@ export default class posDoc extends React.PureComponent
     calcSaleTotal(pPrice,pQuantity,pDiscount,pLoyalty,pVatRate)
     {
         let tmpAmount = Number(parseFloat((pPrice * pQuantity)).toFixed(2))
-        let tmpFAmount = Number(parseFloat((pPrice * pQuantity) - (pDiscount + pLoyalty)).toFixed(2))
+        let tmpFAmount = Number(parseFloat((pPrice * pQuantity) - (pDiscount)).toFixed(2))
+        tmpFAmount = Number(tmpFAmount - pLoyalty)
         let tmpVat = Number(parseFloat(tmpFAmount - (tmpFAmount / ((pVatRate / 100) + 1))).toFixed(2))
     
         return {
@@ -561,6 +561,7 @@ export default class posDoc extends React.PureComponent
             FAMOUNT:Number(parseFloat(tmpFAmount - tmpVat).toFixed(2)),
             AMOUNT:Number(parseFloat(tmpAmount).toFixed(2)),
             DISCOUNT:pDiscount,
+            LOYALTY:pLoyalty,
             VAT:tmpVat,
             TOTAL:tmpFAmount
         }
@@ -678,40 +679,59 @@ export default class posDoc extends React.PureComponent
             if(pType == 1)
             {
                 this.popCardPay.hide()
-                this.msgCardPayment.show().then(async (e) =>
-                {
-                    if(e == 'btn01')
-                    {
-                        if((await this.payCard(pAmount)))
-                        {
-                            this.msgCardPayment.hide()
-                        }
-                        else
-                        {
-                            this.msgCardPayment.hide()
-                            return
-                        }
-                    }
-                    else if(e == 'btn02')
-                    {
-                        return
-                    }
-                })
-                
-                if((await this.payCard(pAmount)))
+                let tmpPayCard = await this.payCard(pAmount)
+                if(tmpPayCard == 1) //Başarılı
                 {
                     this.msgCardPayment.hide()
                 }
-                else
+                else if(tmpPayCard == 2) //Zorla
+                {
+                    let tmpConfObj =
+                    {
+                        id:'msgAlert',showTitle:true,title:"Bilgi",showCloseButton:true,width:'500px',height:'250px',
+                        button:[{id:"btn01",caption:"İptal",location:'before'},{id:"btn02",caption:"Tamam",location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Ödemeyi aldığınızdan eminmisiniz ?"}</div>)
+                    }
+                    let tmpResult = await dialog(tmpConfObj);
+                    if(tmpResult == "btn02")
+                    {
+                        this.msgCardPayment.hide()
+                        let tmpConfObj =
+                        {
+                            id:'msgAlert',showTitle:true,title:"Bilgi",showCloseButton:true,width:'500px',height:'250px',
+                            button:[{id:"btn01",caption:"ESC",location:'before'},{id:"btn02",caption:"CB",location:'center'},{id:"btn03",caption:"CHQe",location:'center'},{id:"btn04",caption:"T.R",location:'after'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Kalan ödemeyi nasıl almak istersiniz ?"}</div>)
+                        }
+                        let tmpResult2 = await dialog(tmpConfObj);
+                        if(tmpResult2 == "btn01")
+                        {
+                            this.msgCardPayment.hide()
+                            this.popCashPay.show();
+                        }
+                        else if(tmpResult2 == "btn02")
+                        {
+                            this.msgCardPayment.hide()
+                            this.popCardPay.show();
+                        }
+                        else if(tmpResult2 == "btn03")
+                        {
+                            this.msgCardPayment.hide()
+                            this.popTotal.show();
+                            this.rbtnPayType.value = 2
+                        }
+                    }
+                }
+                else //Başarısız veya İptal
                 {
                     this.msgCardPayment.hide()
                     return
                 }
             }
+            console.log(pType)
             let tmpRowData = this.isRowMerge('PAY',{TYPE:pType})
             //SATIR BİRLEŞTİR        
             if(typeof tmpRowData != 'undefined')
-            {
+            {    
                 await this.payRowUpdate(tmpRowData,{AMOUNT:Number(parseFloat(Number(pAmount) + tmpRowData.AMOUNT).toFixed(2)),CHANGE:0})
             }
             else
@@ -729,6 +749,7 @@ export default class posDoc extends React.PureComponent
             })
 
             this.posObj.dt()[0].STATUS = 1
+            this.posObj.posPay()[this.posObj.posPay().length - 1].CHANGE = this.state.payChange
             await this.calcGrandTotal()
             //EĞER MÜŞTERİ KARTI İSE PUAN KAYIT EDİLİYOR.
             if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
@@ -808,6 +829,22 @@ export default class posDoc extends React.PureComponent
     {
         return new Promise(async resolve => 
         {
+            this.msgCardPayment.show().then(async (e) =>
+            {
+                if(e == 'btn01')
+                {
+                    resolve(await this.payCard(pAmount)) // Tekrar
+                }
+                else if(e == 'btn02')
+                {
+                    resolve(3) // İptal
+                }
+                else if(e == 'btn03')
+                {
+                    resolve(2) // Zorla
+                }
+            })
+
             let tmpCardPay = await this.posDevice.cardPayment(pAmount)
 
             if(typeof tmpCardPay != 'undefined')
@@ -824,21 +861,21 @@ export default class posDoc extends React.PureComponent
                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Ödeme gerçekleşmedi !"}</div>)
                         }
                         await dialog(tmpConfObj);
-                        resolve(false)
+                        resolve(0) // Başarısız
                     }
                     else
                     {
-                        resolve(true)
+                        resolve(1) // Başarılı
                     }
                 }
                 else
                 {
-                    resolve(false)
+                    resolve(0) // Başarısız
                 }
             }
             else
             {
-                resolve(false)
+                resolve(0) // Başarısız
             }
         });
     }
@@ -1096,9 +1133,9 @@ export default class posDoc extends React.PureComponent
                         ticketCount:0,
                         reprint: pRePrint,
                         repas: pRepas,
-                        customerUsePoint:0,
+                        customerUsePoint:this.popCustomerUsePoint.value,
                         customerPoint:this.customerPoint.value,
-                        customerGrowPoint:0
+                        customerGrowPoint:this.popCustomerGrowPoint.value
                     }
                 }
                 let tmpPrint = e.print(tmpData)
@@ -1522,6 +1559,8 @@ export default class posDoc extends React.PureComponent
                                             this.rbtnDisType.value = 0
                                             this.rbtnDisType._onClick(0)
                                             this.popDiscount.show()
+                                            this.txtPopDiscountPercent.newStart = true;
+                                            this.txtPopDiscountAmount.newStart = true;
                                         }}>
                                             <i className="text-white fa-solid fa-percent" style={{fontSize: "24px"}} />
                                         </NbButton>
@@ -1947,8 +1986,9 @@ export default class posDoc extends React.PureComponent
                                         <NbButton id={"btnCustomerPoint"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
                                         onClick={()=>
                                         {
-                                            this.txtPopLoyalty.value = 0
+                                            this.txtPopLoyalty.value = this.popCustomerUsePoint.value
                                             this.popLoyalty.show()
+                                            this.txtPopLoyalty.newStart = true;
                                         }}>
                                             <i className="text-white fa-solid fa-gift" style={{fontSize: "24px"}} />
                                         </NbButton>
@@ -2081,7 +2121,6 @@ export default class posDoc extends React.PureComponent
                                             [
                                                 {
                                                     id:"btn01",
-
                                                     style:{height:'66px',width:'100%'},
                                                     icon:"fa-money-bill-1",
                                                     text:"ESC"
@@ -2328,7 +2367,7 @@ export default class posDoc extends React.PureComponent
                                         <NbNumberboard id={"numPopCashPay"} parent={this} textobj="txtPopCashPay" span={1} buttonHeight={"60px"}/>
                                     </div>
                                 </div>
-                                {/* numPopCashPay */}
+                                {/* btnPopCashPayOk */}
                                 <div className="row pt-2">
                                     <div className="col-12">
                                         <NbButton id={"btnPopCashPayOk"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
@@ -2723,7 +2762,7 @@ export default class posDoc extends React.PureComponent
                                         text:"Satır"
                                     }
                                 ]}
-                                onClick={(e)=>
+                                onClick={async (e)=>
                                 {
                                     let tmpData = {}
                                     if(e == 0) //EVRAK SEÇİLİ İSE
@@ -2736,14 +2775,26 @@ export default class posDoc extends React.PureComponent
                                         {
                                             tmpData = this.grdList.devGrid.getSelectedRowsData()[0]
                                         }
+                                        else
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Satır seçme den satır iskonto yapamazsınız !"}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                            this.popDiscount.hide()
+                                            return;
+                                        }
                                     }
 
                                     let tmpDiscount = Number(parseFloat(tmpData.DISCOUNT).toFixed(2))
                                     let tmpBefore = Number(parseFloat(tmpData.AMOUNT).toFixed(2));
                                     let tmpAfter = Number(parseFloat(tmpData.AMOUNT - tmpData.DISCOUNT).toFixed(2))
                                     
-                                    this.setState({discountBefore:tmpBefore,discountAfter:tmpAfter})       
-                                    
+                                    this.discountBefore.value = tmpBefore
+                                    this.discountAfter.value = tmpAfter
                                     this.txtPopDiscountPercent.value = parseFloat((tmpDiscount / tmpBefore) * 100).toFixed(2)
                                     this.txtPopDiscountAmount.value = parseFloat(tmpDiscount).toFixed(2)    
                                 }}/>
@@ -2756,7 +2807,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <h3 className="text-primary text-center">{parseFloat(this.state.discountBefore).toFixed(2)} €</h3>    
+                                        <h3 className="text-primary text-center"><NbLabel id="discountBefore" parent={this} value={"0"}/> €</h3>    
                                     </div>
                                 </div>
                             </div>
@@ -2768,7 +2819,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <h3 className="text-primary text-center">{parseFloat(this.state.discountAfter).toFixed(2)} €</h3>    
+                                        <h3 className="text-primary text-center"><NbLabel id="discountAfter" parent={this} value={"0"}/> €</h3>    
                                     </div>
                                 </div>
                             </div>
@@ -2779,11 +2830,12 @@ export default class posDoc extends React.PureComponent
                             <div className="col-6">
                                 <NdTextBox id="txtPopDiscountPercent" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}
                                 onFocusIn={()=>{this.numPopDiscount.textobj = "txtPopDiscountPercent"}}
-                                onValueChanged={(e)=>
+                                onValueChanged={async (e)=>
                                 {
+                                    await this.core.util.waitUntil()
                                     if(this.numPopDiscount.textobj == "txtPopDiscountPercent")
-                                    {
-                                        this.txtPopDiscountAmount.value = parseFloat(this.state.discountBefore * Number(e.value / 100)).toFixed(2)
+                                    {   
+                                        this.txtPopDiscountAmount.value = Number(this.discountBefore.value).rateInc(e.value,2)                                    
                                     }
                                 }}>     
                                 </NdTextBox> 
@@ -2792,11 +2844,12 @@ export default class posDoc extends React.PureComponent
                             <div className="col-6">
                                 <NdTextBox id="txtPopDiscountAmount" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}
                                 onFocusIn={()=>{this.numPopDiscount.textobj = "txtPopDiscountAmount"}}
-                                onValueChanged={(e)=>
+                                onValueChanged={async (e)=>
                                 {
+                                    await this.core.util.waitUntil()
                                     if(this.numPopDiscount.textobj == "txtPopDiscountAmount")
                                     {
-                                        this.txtPopDiscountPercent.value = parseFloat(Number(parseFloat(e.value / this.state.discountBefore).toFixed(3)) * 100).toFixed(2)
+                                        this.txtPopDiscountPercent.value = Number(this.discountBefore.value).rate2Num(e.value)
                                     }
                                 }}>     
                                 </NdTextBox> 
@@ -2861,13 +2914,19 @@ export default class posDoc extends React.PureComponent
                                                 await dialog(tmpConfObj);
                                                 return;
                                             }
-                                            if(this.state.discountAfter < this.txtPopDiscountAmount.value)
+                                            
+                                            if(Number(this.discountBefore.value) < Number(this.txtPopDiscountAmount.value))
                                             {
+                                                let tmpMsg = "Satış tutardan fazla iskonto yapılamaz !"
+                                                if(this.rbtnDisType.value == 1)
+                                                {
+                                                    tmpMsg = "Satır tutarından fazla iskonto yapılamaz !"
+                                                }
                                                 let tmpConfObj =
                                                 {
                                                     id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
                                                     button:[{id:"btn01",caption:"Tamam",location:'before'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Tutardan Fazla İskonto Yapılamaz.!"}</div>)
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{tmpMsg}</div>)
                                                 }
                                                 await dialog(tmpConfObj);
                                                 return;
@@ -2877,8 +2936,8 @@ export default class posDoc extends React.PureComponent
                                             {                                                                                                
                                                 for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
                                                 {
-                                                    let tmpDiscountRate = Number(parseFloat(this.txtPopDiscountPercent.value / 100).toFixed(3))                                                    
-                                                    let tmpDiscount = Number(parseFloat(this.posObj.posSale.dt()[i].AMOUNT * tmpDiscountRate).toFixed(2))
+                                                    let tmpDiscount = Number(this.posObj.posSale.dt()[i].AMOUNT).rateInc(this.txtPopDiscountPercent.value,2)
+                                                    
                                                     let tmpData = this.posObj.posSale.dt()[i]
                                                     let tmpCalc = this.calcSaleTotal(tmpData.PRICE,tmpData.QUANTITY,tmpDiscount,tmpData.LOYALTY,tmpData.VAT_RATE)
 
@@ -2894,8 +2953,9 @@ export default class posDoc extends React.PureComponent
                                                 if(this.grdList.devGrid.getSelectedRowsData().length > 0)
                                                 {
                                                     let tmpData = this.grdList.devGrid.getSelectedRowsData()[0]                                                    
-                                                    let tmpDiscountRate = Number(parseFloat(this.txtPopDiscountPercent.value / 100).toFixed(3))                                                    
-                                                    let tmpDiscount = Number(parseFloat(tmpData.AMOUNT * tmpDiscountRate).toFixed(2))
+                                                    //let tmpDiscountRate = Number(parseFloat(this.txtPopDiscountPercent.value / 100).toFixed(3))                                                    
+                                                    //let tmpDiscount = Number(parseFloat(tmpData.AMOUNT * tmpDiscountRate).toFixed(2))
+                                                    let tmpDiscount = Number(tmpData.AMOUNT).rateInc(this.txtPopDiscountPercent.value,2)
                                                     let tmpCalc = this.calcSaleTotal(tmpData.PRICE,tmpData.QUANTITY,tmpDiscount,tmpData.LOYALTY,tmpData.VAT_RATE)
                                               
                                                     tmpData.FAMOUNT = tmpCalc.FAMOUNT
@@ -2972,7 +3032,7 @@ export default class posDoc extends React.PureComponent
                     title={"Sadakat İndirimi"}
                     container={"#root"} 
                     width={"300"}
-                    height={"525"}
+                    height={"540"}
                     position={{of:"#root"}}
                     >
                         {/* Top Total Indicator */}
@@ -2986,6 +3046,11 @@ export default class posDoc extends React.PureComponent
                                 <div className="row">
                                     <div className="col-12">
                                         <p className="text-primary text-start m-0">Kullanılan Puan : <span className="text-dark"><NbLabel id="popCustomerUsePoint" parent={this} value={"0"}/></span></p>    
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-12">
+                                        <p className="text-primary text-start m-0">Kalan Puan : <span className="text-dark"><NbLabel id="popCustomerGrowPoint" parent={this} value={"0"}/></span></p>    
                                     </div>
                                 </div>
                             </div>
@@ -3007,17 +3072,73 @@ export default class posDoc extends React.PureComponent
                             {/* btnPopLoyaltyDel */}
                             <div className="col-6">
                                 <NbButton id={"btnPopLoyaltyDel"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
-                                onClick={()=>{this.payAdd(1,this.txtPopCardPay.value)}}>
+                                onClick={async()=>
+                                {
+                                    for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
+                                    {
+                                        let tmpData = this.posObj.posSale.dt()[i]
+                                        let tmpCalc = this.calcSaleTotal(tmpData.PRICE,tmpData.QUANTITY,tmpData.DISCOUNT,0,tmpData.VAT_RATE)
+
+                                        this.posObj.posSale.dt()[i].FAMOUNT = tmpCalc.FAMOUNT
+                                        this.posObj.posSale.dt()[i].AMOUNT = tmpCalc.AMOUNT
+                                        this.posObj.posSale.dt()[i].DISCOUNT = tmpCalc.DISCOUNT
+                                        this.posObj.posSale.dt()[i].LOYALTY = 0
+                                        this.posObj.posSale.dt()[i].VAT = tmpCalc.VAT
+                                        this.posObj.posSale.dt()[i].TOTAL = tmpCalc.TOTAL
+                                    }
+
+                                    await this.calcGrandTotal()
+                                    this.popLoyalty.hide()
+                                }}>
                                     <i className="text-white fa-solid fa-eraser" style={{fontSize: "24px"}} />
                                 </NbButton>
                             </div>
                             {/* btnPopLoyaltyOk */}
                             <div className="col-6">
                                 <NbButton id={"btnPopLoyaltyOk"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
-                                onClick={()=>
+                                onClick={async()=>
                                 {
-                                    this.posObj.dt()[0].LOYALTY = Number(parseFloat(this.txtPopLoyalty.value / 100).toFixed(2))
-                                    this.calcGrandTotal()
+                                    if(this.popCustomerGrowPoint.value < this.txtPopLoyalty.value)
+                                    {
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Girmiş olduğunuz puan, mevcut puanınızdan daha büyük olamaz !"}</div>)
+                                        }
+                                        await dialog(tmpConfObj);
+                                        return;
+                                    }
+                                    if(Number(parseFloat((Number(this.popCustomerGrowPoint.value) - Number(this.txtPopLoyalty.value)) / 100).toFixed(2)) > this.posObj.dt()[0].TOTAL)
+                                    {
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Girmiş olduğunuz puan satış tutarından daha büyük olamaz !"}</div>)
+                                        }
+                                        await dialog(tmpConfObj);
+                                        return;
+                                    }
+
+                                    let tmpLoyalty = Number(parseFloat(this.txtPopLoyalty.value / 100).toFixed(2))
+                                    let tmpLoyaltyRate = Number(this.posObj.dt()[0].TOTAL).rate2Num(tmpLoyalty)
+
+                                    for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
+                                    {
+                                        let tmpData = this.posObj.posSale.dt()[i]
+                                        let tmpRowLoyalty = Number(tmpData.AMOUNT - tmpData.DISCOUNT).rateInc(tmpLoyaltyRate,2)
+                                        let tmpCalc = this.calcSaleTotal(tmpData.PRICE,tmpData.QUANTITY,tmpData.DISCOUNT,tmpRowLoyalty,tmpData.VAT_RATE)
+
+                                        this.posObj.posSale.dt()[i].FAMOUNT = tmpCalc.FAMOUNT
+                                        this.posObj.posSale.dt()[i].AMOUNT = tmpCalc.AMOUNT
+                                        this.posObj.posSale.dt()[i].DISCOUNT = tmpCalc.DISCOUNT
+                                        this.posObj.posSale.dt()[i].LOYALTY = tmpRowLoyalty
+                                        this.posObj.posSale.dt()[i].VAT = tmpCalc.VAT
+                                        this.posObj.posSale.dt()[i].TOTAL = tmpCalc.TOTAL
+                                    }
+                                    await this.calcGrandTotal()
+                                    this.popLoyalty.hide()
                                 }}>
                                     <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
                                 </NbButton>
