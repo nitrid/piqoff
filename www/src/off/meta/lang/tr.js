@@ -150,10 +150,13 @@ export const langTr =
         tabTitleUnit: "Birim",
         tabTitleBarcode: "Barkod",
         tabTitleCustomer: "Tedarikçi",
+        tabExtraCost: "Ek Maliyetler",
         tabTitleCustomerPrice: "Tedarikçi Fiyat Geçmişi",
         tabTitleSalesContract: "Satış Anlaşmaları",
         tabTitleInfo: "Bilgi",
         txtTaxSugar: "Şeker Oranı(100ML/GR)",
+        txtTotalExtraCost : "Ek Maliyetler",
+        clmtaxSugar : "Şeker Vergisi",
         pg_txtRef:
         {
             title: "Stok Seçimi",
@@ -230,6 +233,12 @@ export const langTr =
             clmBarcode: "Barkod",
             clmUnit: "Birim",
             clmType: "Tip"
+        },
+        grdExtraCost: 
+        {
+            clmDate: "Tarih",
+            clmPrice: "Birim Maliyet",
+            clmTypeName: "Tip"
         },
         grdCustomer: 
         {
