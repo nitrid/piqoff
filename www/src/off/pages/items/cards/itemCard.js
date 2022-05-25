@@ -430,9 +430,9 @@ export default class itemCard extends React.Component
         let tmpData = await this.core.sql.execute(tmpQuery) 
         if(tmpData.result.recordset.length > 0)
         {
-            let tmpprice = tmpData.result.recordset[0].PRICE/100
-            let tmpTaxSucre = tmpprice / this.txtUnderUnit.value
-            this.taxSugarPrice = tmpTaxSucre.toFixed(3)
+            let tmpUnit = this.txtUnderUnit.value / 100
+            let tmpTaxSucre = tmpUnit * tmpData.result.recordset[0].PRICE
+            this.taxSugarPrice = Number(tmpTaxSucre.toFixed(3))
             if(this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE').length > 0)
             {
                 let tmpCost = this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_PRICE + tmpTaxSucre
@@ -451,7 +451,7 @@ export default class itemCard extends React.Component
             }
             else
             {
-                this.extraCostData.push({TYPE_NAME:this.t("clmtaxSugar"),PRICE:this.taxSugarPrice})
+                this.extraCostData.push({TYPE_NAME:this.t("clmtaxSugar"),PRICE:this.taxSugarPrice,CUSTOMER:this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_NAME,CUSTOMER_PRICE:this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_PRICE})
             }
         }
 
@@ -466,6 +466,8 @@ export default class itemCard extends React.Component
             this.txtTotalExtraCost.setState({value:0})
         }
 
+        this.netMargin()
+        this.grossMargin()
 
        
     }
@@ -1015,7 +1017,7 @@ export default class itemCard extends React.Component
                                         </div>
                                         <div className='col-2'>
                                             <NdNumberBox id="txtTotalExtraCost" parent={this} title={this.t("txtTotalExtraCost")}  titleAlign={"top"} tabIndex={this.tabIndex}
-                                            format={"#,##0.000"}
+                                            format={"#,##0.000"} readOnly={true}
                                             param={this.param.filter({ELEMENT:'txtTotalExtraCost',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtTotalExtraCost',USERS:this.user.CODE})}>
                                             </NdNumberBox>
@@ -1311,10 +1313,11 @@ export default class itemCard extends React.Component
                                             dbApply={false}
                                             >
                                                 <Paging defaultPageSize={5} />
-                                                <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                                <Column dataField="DATE" caption={this.t("grdExtraCost.clmDate")}/>
+                                                <Editing mode="cell" allowUpdating={false} allowDeleting={true} />
+                                                <Column dataField="CUSTOMER" caption={this.t("grdExtraCost.clmCustomer")} />
                                                 <Column dataField="TYPE_NAME" caption={this.t("grdExtraCost.clmTypeName")} />
-                                                <Column dataField="PRICE" caption={this.t("grdExtraCost.clmPrice")} />
+                                                <Column dataField="CUSTOMER_PRICE" caption={this.t("grdExtraCost.clmCustomerPrice")} format={"#,##0.000 €"}/>
+                                                <Column dataField="PRICE" caption={this.t("grdExtraCost.clmPrice")} format={"#,##0.000 €"}/>
                                             </NdGrid>
                                         </div>
                                     </div>

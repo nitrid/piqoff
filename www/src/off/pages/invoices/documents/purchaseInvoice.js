@@ -94,7 +94,7 @@ export default class purchaseInvoice extends React.Component
         {            
             this.btnBack.setState({disabled:true});
             this.btnNew.setState({disabled:false});
-            this.btnSave.setState({disabled:false});
+            this.btnSave.setState({disabled:true});
             this.btnDelete.setState({disabled:false});
             this.btnCopy.setState({disabled:false});
             this.btnPrint.setState({disabled:false});          
@@ -656,6 +656,7 @@ export default class purchaseInvoice extends React.Component
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmPurcInv"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
+                                        console.log(this.docObj.dt())
                                         if(this.docLocked == true)
                                         {
                                             let tmpConfObj =
@@ -694,6 +695,8 @@ export default class purchaseInvoice extends React.Component
                                                 {                                                    
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
+                                                    this.btnSave.setState({disabled:true});
+                                                    this.btnNew.setState({disabled:false});
                                                 }
                                                 else
                                                 {
@@ -947,7 +950,7 @@ export default class purchaseInvoice extends React.Component
                                         {
                                             this.docObj.docCustomer.dt()[0].INPUT = this.cmbDepot.value
                                         }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE IN(0,2)"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
@@ -984,7 +987,7 @@ export default class purchaseInvoice extends React.Component
                                                     let tmpDatas = this.prmObj.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                     if(typeof tmpDatas != 'undefined' && tmpDatas.value ==  true)
                                                     {
-                                                        this.txtRef.setState({value:tmpData.result.recordset[0].CODE});
+                                                        this.txtRef.value = tmpData.result.recordset[0].CODE
                                                         this.txtRef.props.onValueChanged()
                                                     }
                                                     this._getItems()
@@ -1027,7 +1030,7 @@ export default class purchaseInvoice extends React.Component
                                                             let tmpData = this.prmObj.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
-                                                                this.txtRef.setState({value:data[0].CODE});
+                                                                this.txtRef.value = data[0].CODE
                                                                 this.txtRef.props.onValueChanged()
                                                             }
                                                             this._getItems()
@@ -1426,8 +1429,6 @@ export default class purchaseInvoice extends React.Component
                                 <Label text={this.t("txtTotal")} alignment="right" />
                                     <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}}
                                     maxLength={32}
-                                    //param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
-                                    //access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                     ></NdTextBox>
                                 </Item>
                                 {/* Ödeme Toplam */}

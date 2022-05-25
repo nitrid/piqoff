@@ -237,8 +237,10 @@ export const langTr =
         grdExtraCost: 
         {
             clmDate: "Tarih",
-            clmPrice: "Birim Maliyet",
-            clmTypeName: "Tip"
+            clmPrice: "Ek Maliyet",
+            clmTypeName: "Tip",
+            clmCustomerPrice : "Tedarikçi Fiyat",
+            clmCustomer : "Tedarikçi"
         },
         grdCustomer: 
         {
@@ -409,8 +411,10 @@ export const langTr =
         validCode :"Kodu Boş Geçemezsiniz !",
         cmbTypeData : 
         {
-            normal : "Normal",
-            rebate : "İade"
+            normal : "Merkezi",
+            rebate : "İade",
+            shop : "Mağaza",
+            outage : "Fire",
         },
         pg_txtCode : 
         {

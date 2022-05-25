@@ -223,15 +223,20 @@ export default class salesInvoice extends React.Component
     }
     async _calculateTotalMargin()
     {
+        console.log(1)
         let tmpTotalCost = 0
 
         for (let  i= 0; i < this.docObj.docItems.dt().length; i++) 
         {
+            console.log(this.docObj.docItems.dt()[i])
             tmpTotalCost += this.docObj.docItems.dt()[i].COST_PRICE * this.docObj.docItems.dt()[i].QUANTITY
         }
+        console.log(tmpTotalCost)
         let tmpMargin = ((this.docObj.dt()[0].TOTAL - this.docObj.dt()[0].VAT) - tmpTotalCost)
         let tmpMarginRate = (tmpMargin / (this.docObj.dt()[0].TOTAL - this.docObj.dt()[0].VAT)) * 100
         this.docObj.dt()[0].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+        console.log(this.docObj.dt()[0].MARGIN)
+        this.txtMargin.setState({value:this.docObj.dt()[0].MARGIN})
     }
     async _calculateMargin()
     {
@@ -927,7 +932,7 @@ export default class salesInvoice extends React.Component
                                         {
                                             this.docObj.docCustomer.dt()[0].OUTPUT = this.cmbDepot.value
                                         }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE IN(0,2)"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
