@@ -1098,6 +1098,14 @@ export class datatable
                 {
                     tmpData = tmpData.filter(x => x[tmpKey] !== tmpValue)
                 }
+                else if(tmpOp == '>')
+                {
+                    tmpData = tmpData.filter(x => x[tmpKey] > tmpValue)
+                }
+                else if(tmpOp == '<')
+                {
+                    tmpData = tmpData.filter(x => x[tmpKey] < tmpValue)
+                }
             }
 
             let tmpDt = Object.assign(Object.create(Object.getPrototypeOf(this)), this)
@@ -1515,7 +1523,7 @@ Number.prototype.rateInc = function(pRate,pDigit)
     if(typeof pRate != 'undefined')
     {
         if(typeof pDigit != 'undefined')
-            return (this * (pRate / 100)).toFixed(pDigit)
+            return Number((this * (pRate / 100)).toFixed(pDigit))
         else
             return this * (pRate / 100)
     }
@@ -1527,7 +1535,7 @@ Number.prototype.rateExc = function(pRate,pDigit)
     if(typeof pRate != 'undefined')
     {
         if(typeof pDigit != 'undefined')
-            return (this * ((pRate / 100) + 1)).toFixed(pDigit)
+            return Number((this * ((pRate / 100) + 1)).toFixed(pDigit))
         else
             return this * ((pRate / 100) + 1)
     }
@@ -1539,9 +1547,25 @@ Number.prototype.rateInNum = function(pRate,pDigit)
     if(typeof pRate != 'undefined')
     {
         if(typeof pDigit != 'undefined')
-            return (this / ((pRate / 100) + 1)).toFixed(pDigit)
+            return Number((this / ((pRate / 100) + 1)).toFixed(pDigit))
         else
             return this / ((pRate / 100) + 1)
+    }
+    return 0
+}
+//* B SAYISININ A SAYISINA DAHİLİ ORANI ÖRN: 1.8 SAYISININ, 11.8 SAYISIN İÇERİSİNDEKİ ORANI %18 */
+Number.prototype.rate2In = function(pNum,pDigit)
+{
+    if(typeof pNum != 'undefined')
+    {
+        if(typeof pDigit != 'undefined')
+        {
+            return Number(((pNum / (this - pNum)) * 100).toFixed(pDigit))
+        }
+        else
+        {
+            return (pNum / (this - pNum)) * 100
+        }                 
     }
     return 0
 }
@@ -1552,11 +1576,11 @@ Number.prototype.rate2Num = function(pNum,pDigit)
     {
         if(typeof pDigit != 'undefined')
         {
-            return ((pNum / (this - pNum)) * 100).toFixed(pDigit)
+            return Number(((pNum / this) * 100).toFixed(pDigit))
         }
         else
         {
-            return (pNum / (this - pNum)) * 100
+            return (pNum / this) * 100
         }                 
     }
     return 0

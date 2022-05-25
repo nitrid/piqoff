@@ -26,6 +26,7 @@ export function print()
         ()=>{return {font:"a",style:"b",align:"ct",data:"57740 LONGEVILLE-LES-ST-AVOLD"}},
         ()=>{return {font:"a",style:"b",align:"ct",data:"Tel : 03 87 91 00 32"}},
         ()=>{return {font:"a",style:"b",align:"ct",data:"longeville@prodorplus.fr"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data:"www.prodorplus.fr"}},
         ()=>
         {       
             let tmpArr = []
@@ -44,7 +45,10 @@ export function print()
             return tmpArr.length > 0 ? tmpArr : undefined
         },
         ()=>{return {font:"b",align:"lt",data:(moment(new Date()).locale('fr').format('dddd') + " " + moment(new Date()).format("DD.MM.YYYY")).space(59) + (moment(new Date()).format("LTS")).space(5)}},
-        ()=>{return {font:"b",align:"lt",data:("Caissier: " + data.pos[0].CUSER).space(34) + ("Caisse: " + data.special.safe + " - Ticket: " + data.special.ticketCount).space(30)}},
+        ()=>{return {font:"b",align:"lt",data:("Caissier: " + data.pos[0].CUSER).space(34,'e') + ("Caisse: " + data.special.safe).space(30,'s')}},
+        //FIS NO BARKODU
+        ()=>{return {align:"ct",barcode:data.pos[0].GUID.substring(19,36),options:{width: 1,height:40,position:'OFF'}}},
+        ()=>{return {font:"a",style:"b",align:"ct",data:"****** Numero de Ticket De Caisse ******"}},
         ()=>{return {font:"b",align:"lt",data:" ".space(64)}},
         ()=>
         {
@@ -130,7 +134,7 @@ export function print()
             if(data.special.customerUsePoint > 0)
             {
                 tmpArr.push({font:"a",align:"lt",data:"Sous-Total ".space(33) + (tmpOperator + data.possale.sum("AMOUNT",2) + " EUR").space(15,"s")});
-                tmpArr.push({font:"a",align:"lt",data:"Remise Fidelite ".space(33) + (parseFloat(parseFloat(data.special.customerUsePoint) / 100).toFixed(2).toString() + ' EUR').space(15,"s")});
+                tmpArr.push({font:"a",align:"lt",data:"Remise Fidelite ".space(33) + ((parseFloat(parseFloat(data.special.customerUsePoint) / 100) * -1).toFixed(2).toString() + ' EUR').space(15,"s")});
             }
 
             if(data.possale.sum("DISCOUNT",2) > 0)
@@ -139,7 +143,7 @@ export function print()
                 {
                     tmpArr.push({font:"a",align:"lt",data:"Sous-Total ".space(33) + (tmpOperator + data.possale.sum("AMOUNT",2) + " EUR").space(15,"s")});
                 }
-                tmpArr.push({font:"a",align:"lt",data:"Remise ".space(33) + (data.possale.sum("AMOUNT",2) + " EUR").space(15,"s")});
+                tmpArr.push({font:"a",align:"lt",data:"Remise ".space(33) + ((data.possale.sum("DISCOUNT",2) * -1) + " EUR").space(15,"s")});
             }
             return tmpArr.length > 0 ? tmpArr : undefined
         },
@@ -153,7 +157,7 @@ export function print()
                 style: "b",
                 align: "lt",
                 data: "Total TTC".space(17) + 
-                (tmpOperator + parseFloat(data.possale.sum("AMOUNT",2) - (data.possale.sum("DISCOUNT",2) + parseFloat(parseFloat(data.special.customerUsePoint) / 100))).toFixed(2) + " EUR").space(15,"s")
+                (tmpOperator + data.possale.sum("TOTAL",2) + " EUR").space(15,"s")
             }
         },
         // ÖDEME TOPLAMLARI
@@ -165,21 +169,21 @@ export function print()
             for (let i = 0; i < data.pospay.length; i++) 
             {
                 let tmpType = "";
-                if(data.pospay[i].TYPE == 0)
+                if(data.pospay[i].PAY_TYPE == 0)
                     tmpType = "Espece"
-                else if (data.pospay[i].TYPE == 1)
+                else if (data.pospay[i].PAY_TYPE == 1)
                     tmpType = "CB"
-                else if(data.pospay[i].TYPE == 2)
+                else if(data.pospay[i].PAY_TYPE == 2)
                     tmpType = "Cheque"
-                else if(data.pospay[i].TYPE == 3)
+                else if(data.pospay[i].PAY_TYPE == 3)
                     tmpType = "CHEQue"
-                else if(data.pospay[i].TYPE == 4)
+                else if(data.pospay[i].PAY_TYPE == 4)
                     tmpType = "BON D'AVOIR"
-                else if(data.pospay[i].TYPE == 5)
+                else if(data.pospay[i].PAY_TYPE == 5)
                     tmpType = "AVOIR"
-                else if(data.pospay[i].TYPE == 6)
+                else if(data.pospay[i].PAY_TYPE == 6)
                     tmpType = "VIRMENT"
-                else if(data.pospay[i].TYPE == 7)
+                else if(data.pospay[i].PAY_TYPE == 7)
                     tmpType = "PRLV"
 
                 tmpArr.push(
@@ -187,7 +191,7 @@ export function print()
                     font: "a",
                     align: "lt",
                     data: tmpType.space(33) + 
-                    (tmpOperator + data.possale.where({TYPE:data.pospay[i].TYPE}).sum("AMOUNT",2) + " EUR").space(15,"s")
+                    (tmpOperator + data.pospay.where({PAY_TYPE:data.pospay[i].PAY_TYPE}).sum("AMOUNT",2) + " EUR").space(15,"s")
                 })
             }
             return tmpArr.length > 0 ? tmpArr : undefined
@@ -196,47 +200,47 @@ export function print()
         ()=>
         {
             let tmpArr = [];
-            if(data.pospay.where({TYPE:0}).length > 0)
+            if(data.pospay.where({PAY_TYPE:0}).length > 0)
             {
                 tmpArr.push(
                 {
                     font: "a",
                     align: "lt",
                     data: "Recu".space(33) +
-                        (parseFloat(data.possale.where({TYPE:0}).sum("AMOUNT",2) + data.possale.sum("CHANGE",2)).toFixed(2) + " EUR").space(15,"s")
+                        (parseFloat(data.pospay.sum("AMOUNT",2)).toFixed(2) + " EUR").space(15,"s")
                 });
 
                 tmpArr.push(
                 {
                     font: "a",
                     align: "lt",
-                    data: "Rendu".space(33) + (data.possale.sum("CHANGE",2) + " EUR").space(15,"s")
+                    data: "Rendu".space(33) + (data.pospay.sum("CHANGE",2) + " EUR").space(15,"s")
                 });
             }
-            else if(data.pospay.where({TYPE:3}).length > 0)
+            else if(data.pospay.where({PAY_TYPE:3}).length > 0)
             {
                 tmpArr.push(
                 {
                     font: "a",
                     align: "lt",
-                    data: "Surplus Tic. Rest.".space(33) + (data.possale.sum("TICKET_PLUS",2) + " EUR").space(15,"s")
+                    data: "Surplus Tic. Rest.".space(33) + (data.pospay.sum("TICKET_PLUS",2) + " EUR").space(15,"s")
                 });
             }
-            if(data.pospay.where({TYPE:4}).length > 0)
+            if(data.pospay.where({PAY_TYPE:4}).length > 0)
             {
                 tmpArr.push(
                 {
                     font: "a",
                     align: "lt",
                     data: "Recu".space(33) +
-                        (parseFloat(data.possale.where({TYPE:4}).sum("AMOUNT",2) + data.possale.sum("CHANGE",2)).toFixed(2) + " EUR").space(15,"s")
+                        (parseFloat(data.pospay.where({PAY_TYPE:4}).sum("AMOUNT",2) + data.pospay.sum("CHANGE",2)).toFixed(2) + " EUR").space(15,"s")
                 });
 
                 tmpArr.push(
                 {
                     font: "a",
                     align: "lt",
-                    data: "Rendu".space(33) + (data.possale.sum("CHANGE",2) + " EUR").space(15,"s")
+                    data: "Rendu".space(33) + (data.pospay.sum("CHANGE",2) + " EUR").space(15,"s")
                 });
             }
             return tmpArr.length > 0 ? tmpArr : undefined
@@ -300,13 +304,14 @@ export function print()
                 tmpArr.push({font:"b",style:"b",align:"lt",data:"****************************************************************".space(64)});
                 tmpArr.push({font:"b",align:"lt",data:("CARTE DE FIDELITE / " + data.pos[0].CUSTOMER_CODE).space(64)});
                 tmpArr.push({font:"b",align:"lt",data:"ANCIEN CUMUL ".space(56) + (data.special.customerPoint + ' Pts').space(8,"s")});
-                tmpArr.push({font:"b",align:"lt",data:"POINT ACQUIS SUR CE TICKET ".space(56) + (data.pos[0].TOTAL + ' Pts').space(8,"s")});
+                tmpArr.push({font:"b",align:"lt",data:"POINT ACQUIS SUR CE TICKET ".space(56) + (parseInt(data.pos[0].TOTAL) + ' Pts').space(8,"s")});
+
                 if(data.special.customerUsePoint > 0)
                 {
-                    tmpArr.push({font:"b",align:"lt",data:"UTILISE POINT ".space(56) + (data.special.customerUsePoint + ' Pts').space(8,"s")});
+                    tmpArr.push({font:"b",align:"lt",data:"UTILISE POINT ".space(56) + ((parseInt(data.special.customerUsePoint) * -1) + ' Pts').space(8,"s")});
                 }
-                tmpArr.push({font:"b",align:"lt",data:"NOUVEAU CUMUL ".space(56) + ((parseInt(data.special.customerGrowPoint) - parseInt(data.special.customerUsePoint)) + ' Pts').space(8,"s")});
-                tmpArr.push({font:"b",align:"lt",data:"EQUIVALENT REMISE ".space(56) + (parseFloat(parseFloat(data.special.customerGrowPoint - data.special.customerUsePoint) / 100).toFixed(2).toString() + ' EUR').space(8,"Start")});
+                tmpArr.push({font:"b",align:"lt",data:"NOUVEAU CUMUL ".space(56) + (parseInt(data.special.customerGrowPoint) + parseInt(data.pos[0].TOTAL) + ' Pts').space(8,"s")});
+                tmpArr.push({font:"b",align:"lt",data:"EQUIVALENT REMISE ".space(56) + (parseFloat((parseInt(data.special.customerGrowPoint) + parseInt(data.pos[0].TOTAL)) / 100).toFixed(2).toString() + ' EUR').space(8,"s")});
 
                 tmpArr.push({font:"b",style:"b",align:"lt",data:"****************************************************************".space(64)});
             }
@@ -315,14 +320,14 @@ export function print()
         ()=>
         {
             let tmpArr = [];
-            if(data.pos[0].REBATE_CHEQPAY != '' && data.pospay.where({TYPE:4}).length > 0 && data.pos[0].TYPE == 1)
+            if(data.pos[0].REBATE_CHEQPAY != '' && data.pospay.where({PAY_TYPE:4}).length > 0 && data.pos[0].TYPE == 1)
             {
                 tmpArr.push({font:"b",style:"b",align:"ct",size : [1,0],data:"Reste Bon d'avoir : " + parseFloat(data.pos[0].REBATE_CHEQPAY.substring(8,12) / 100).toFixed(2) + "EUR"});
                 tmpArr.push({align:"ct",barcode:data.pos[0].REBATE_CHEQPAY,options:{width: 1,height:90}});
                 tmpArr.push({font:"b",style:"b",align:"lt",data:" ".space(64)});
                 tmpArr.push({font:"b",style:"b",align:"ct",data:"Avoir valable 3 mois apres edition..."});
             }
-            else if(data.pos[0].REBATE_CHEQPAY != '' && data.pospay.where({TYPE:4}).length > 0 && data.pos[0].TYPE == 0 && data.pospay.where({CHANGE:{'<>':0}}).length > 0)
+            else if(data.pos[0].REBATE_CHEQPAY != '' && data.pospay.where({PAY_TYPE:4}).length > 0 && data.pos[0].TYPE == 0 && data.pospay.where({CHANGE:{'<>':0}}).length > 0)
             {
                 tmpArr.push({font:"b",style:"b",align:"ct",size : [1,0],data:"Reste Bon d'avoir : " + parseFloat(data.pos[0].REBATE_CHEQPAY.substring(8,12) / 100).toFixed(2) + "EUR"});
                 tmpArr.push({align:"ct",barcode:data.pos[0].REBATE_CHEQPAY,options:{width: 1,height:90}});

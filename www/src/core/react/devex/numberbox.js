@@ -63,6 +63,7 @@ export default class NdNumberBox extends Base
     {
         return (
             <NumberBox showClearButton={this.state.showClearButton} height='fit-content' 
+                elementAttr={this.props.elementAttr}
                 style={this.props.style}
                 valueChangeEvent="keyup" onValueChanged={this._onValueChanged} 
                 onEnterKey={this._onEnterKey} onFocusIn={this._onFocusIn} onFocusOut={this._onFocusOut}

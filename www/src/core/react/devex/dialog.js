@@ -18,7 +18,7 @@ export default class NdDialog extends Base
         this.state.width = typeof props.width == 'undefined' ? 'auto' : props.width
         this.state.height = typeof props.height == 'undefined' ? 'auto' : props.height
         this.state.position = typeof props.position == 'undefined' ? undefined : props.position
-
+        
         this._onHiding = this._onHiding.bind(this);
         this._onShowed = this._onShowed.bind(this);   
 
@@ -43,8 +43,18 @@ export default class NdDialog extends Base
         this.result = null;
         this["dia_" + this.props.id].setState({show:true})
         this._onShowed()
+        
         return new Promise(async resolve => 
         {
+            if(typeof this.props.timeout != 'undefined')
+            {
+                setTimeout(() => 
+                {
+                    this.hide();
+                    resolve();
+                }, this.props.timeout);    
+            }
+
             this._onClick = function(e)
             {
                 this.result = e;
@@ -133,6 +143,7 @@ export const dialog = function()
             width={arguments[0].width}
             height={arguments[0].height}
             button={arguments[0].button}
+            timeout={arguments[0].timeout}
             onHiding={()=>
             {
                 if(tmpObj.current.result == null)
