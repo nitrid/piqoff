@@ -1098,6 +1098,14 @@ export class datatable
                 {
                     tmpData = tmpData.filter(x => x[tmpKey] !== tmpValue)
                 }
+                else if(tmpOp == '>')
+                {
+                    tmpData = tmpData.filter(x => x[tmpKey] > tmpValue)
+                }
+                else if(tmpOp == '<')
+                {
+                    tmpData = tmpData.filter(x => x[tmpKey] < tmpValue)
+                }
             }
 
             let tmpDt = Object.assign(Object.create(Object.getPrototypeOf(this)), this)
