@@ -187,6 +187,7 @@ export class posSaleCls
             GUID : '00000000-0000-0000-0000-000000000000',
             CUSER : this.core.auth.data.CODE,
             LUSER : this.core.auth.data.CODE,
+            LDATE : moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
             POS_GUID : '00000000-0000-0000-0000-000000000000',
             SAFE : '',
             DEPOT_GUID : '00000000-0000-0000-0000-000000000000',
@@ -387,8 +388,8 @@ export class posSaleCls
                 if(tmpData[i].SUBTOTAL > 0)
                 { 
                     let tmpItem = {...this.empty};
+                    tmpItem.LDATE = tmpData[i].LDATE;
                     tmpItem.ITEM_NAME = "SUB TOTAL";
-                    tmpItem.LINE_NO = tmpData[i].LINE_NO + 1;
                     tmpItem.SUBTOTAL = tmpSubIndex;
                     tmpItem.AMOUNT = tmpData.where({SUBTOTAL:tmpSubIndex}).sum('AMOUNT',2);
 
