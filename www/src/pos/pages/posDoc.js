@@ -618,6 +618,7 @@ export default class posDoc extends React.PureComponent
         let tmpMaxLine = this.posObj.posSale.dt().where({SUBTOTAL:{'<>':-1}}).max('LINE_NO')
         
         this.posObj.posSale.addEmpty()
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].LDATE = moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].SAFE = ''
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DEPOT_GUID = '00000000-0000-0000-0000-000000000000'
@@ -662,6 +663,7 @@ export default class posDoc extends React.PureComponent
     { 
         let tmpCalc = this.calcSaleTotal(pItemData.PRICE,pItemData.QUANTITY,pRowData.DISCOUNT,pRowData.LOYALTY,pRowData.VAT_RATE)
     
+        pRowData.LDATE = moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
         pRowData.QUANTITY = tmpCalc.QUANTITY
         pRowData.PRICE = tmpCalc.PRICE
         pRowData.FAMOUNT = tmpCalc.FAMOUNT
@@ -1425,7 +1427,8 @@ export default class posDoc extends React.PureComponent
                                 }}
                                 >
                                     <Editing confirmDelete={false}/>
-                                    <Column dataField="LINE_NO" caption={"NO"} width={40} alignment={"center"} defaultSortOrder="desc"/>
+                                    <Column dataField="LDATE" caption={"LDATE"} width={40} alignment={"center"} dataType={"datetime"} format={"dd-MM-yyyy - HH:mm:ss"} defaultSortOrder="desc" visible={false}/>
+                                    {/* <Column dataField="LINE_NO" caption={"NO"} width={40} alignment={"center"} defaultSortOrder="desc"/> */}
                                     <Column dataField="ITEM_NAME" caption={"ADI"} width={250} />
                                     <Column dataField="QUANTITY" caption={"MIKTAR"} width={60}/>
                                     <Column dataField="PRICE" caption={"FIYAT"} width={60}/>
