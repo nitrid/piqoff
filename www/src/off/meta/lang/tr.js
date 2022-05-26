@@ -46,6 +46,7 @@ export const langTr =
         stk_04_001: "Toplu Stok Düzenleme",
         stk_04_002: "İade Operasyonları",
         stk_04_003 : "Sayım Kesinleştirme",
+        stk_04_004 :"Toplu İşlemler",
         cri: "Cari",
         cri_01: "Tanımlar",
         cri_02: "Listeler",
@@ -118,6 +119,9 @@ export const langTr =
         set : "Ayarlar",
         set_01 : "Maliyet ve Ek Vergiler",
         set_01_001 : "Tax Sugar",
+        proces : "Toplu işlemler",
+        proces_01 : "Stok İşlemleri",
+        proces_01_001 : "Ürün Grubu Güncelleme"
     },
     login:
     {

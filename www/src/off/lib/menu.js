@@ -566,6 +566,27 @@ export const menu = (e) =>
             ]
         },
         {
+            id: 'proces',
+            text: e.t('menu.proces'),//'Toplu İşlemler',
+            expanded: false,
+            items: 
+            [
+                {
+                    id: 'proces_01',
+                    text : e.t('menu.proces_01'),//'Toplu Stok işlemleri',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'proces_01_001',
+                            text: e.t('menu.proces_01_001'),//'Toplu Ürün Grubu Güncelle',
+                            path: 'setting/costandtax/taxSugar'
+                        }
+                    ]
+                },
+            ]
+        },
+        {
             id: 'setting',
             text: e.t('menu.set'),//'Ayarlar',
             expanded: false,
