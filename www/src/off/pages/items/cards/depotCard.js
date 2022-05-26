@@ -387,7 +387,7 @@ export default class DepotCard extends React.Component
                                     <NdSelectBox simple={true} parent={this} id="cmbType" height='fit-content' dt={{data:this.depotObj.dt('DEPOT'),field:"TYPE"}}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
-                                    data={{source:[{ID:0,VALUE:this.t("cmbTypeData.normal")},{ID:1,VALUE:this.t("cmbTypeData.rebate")}]}}
+                                    data={{source:[{ID:0,VALUE:this.t("cmbTypeData.normal")},{ID:1,VALUE:this.t("cmbTypeData.rebate")},{ID:2,VALUE:this.t("cmbTypeData.shop")},{ID:1,VALUE:this.t("cmbTypeData.outage")}]}}
                                     onValueChanged={(async()=>
                                             {
                                                
