@@ -17,8 +17,9 @@ export default class NbButton extends NbBase
         }
         if(typeof this.props.keyBtn != 'undefined' && typeof this.props.parent != 'undefined' && typeof this.props.id != 'undefined')
         {
+            console.log(this.props.keyBtn.textbox)
             if(this.props.keyBtn.key == 'Backspace')
-            {
+            {                
                 //EKRAN YENİ AÇILDIĞINDA BUTONA BASTIĞINDA TEXTBOX A İLK DEĞER ATAMASI
                 if(typeof this.props.parent[this.props.keyBtn.textbox].newStart != 'undefined' && this.props.parent[this.props.keyBtn.textbox].newStart)
                 {
