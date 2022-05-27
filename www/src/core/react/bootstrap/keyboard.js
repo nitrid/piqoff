@@ -11,13 +11,14 @@ export default class NbKeyboard extends NbBase
         {
             span: typeof this.props.span == 'undefined' ? '0' : this.props.span,
             buttonHeight : typeof this.props.buttonHeight == 'undefined' ? '60px' : this.props.buttonHeight,
-            textobj : this.props.textobj
+            textobj : this.props.textobj,
+            shift : typeof this.props.shift == 'undefined' ? false : this.props.shift
         }
         if(typeof this.state.textobj != 'undefined')
         {
             this[this.state.textobj] = this.props.parent[this.state.textobj]
         }
-        this.shift = false
+
         this.keyUpDown = this.keyUpDown.bind(this)
         this.shiftPress = this.shiftPress.bind(this)
     }
@@ -33,11 +34,11 @@ export default class NbKeyboard extends NbBase
     keyUpDown(pKey)
     {
      
-        if(this.shift == true)
+        if(this.state.shift == true)
         {
             return(pKey.toUpperCase())
         }
-        else if(this.shift == false)
+        else if(this.state.shift == false)
         {
             return(pKey.toLowerCase())
         }
@@ -45,15 +46,15 @@ export default class NbKeyboard extends NbBase
     }
     shiftPress()
     {
-        if(this.shift == true)
+        if(this.state.shift == true)
         {
-            this.shift = false
-            this.setState({span:0})
+            this.state.shift = false
+            this.forceUpdate();
         }
-        else if(this.shift == false)
+        else if(this.state.shift == false)
         {
-            this.shift = true
-            this.setState({span:0})
+            this.state.shift = true
+            this.forceUpdate();
         }
     }
     render()

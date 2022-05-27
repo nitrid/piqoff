@@ -48,7 +48,8 @@ export default class Login extends React.Component
         {
             kullanici: '',
             sifre: '',
-            alert: ''
+            alert: '',
+            btnCardIdCancel:false,
         }  
         this.core = App.instance.core;    
         this.lang = App.instance.lang;
@@ -128,6 +129,7 @@ export default class Login extends React.Component
     }
     async cardIdCheck(pValue)
     {
+        this.setState({btnCardIdCancel:true})
         let idCheck = false
         let tmpData = await this.core.auth.getUserList()
         for (let i = 0; i < tmpData.length; i++) 
@@ -154,15 +156,15 @@ export default class Login extends React.Component
                 button:[{id:"btn01",caption:this.lang.t("btnOk"),location:'after'}],
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgInvalidUser")}</div>)
             }
-
             await dialog(tmpConfObj);
         }
+        this.setState({btnCardIdCancel:false})
     }
     render()
     {
         return (
             <div style={this.style.body}>
-                <div className="p-5"></div>
+                <div className="p-3"></div>
                 <div className="card" style={this.style.login_box}>
                    <div className="card-header">Login</div>
                    <div className="card-body">
@@ -261,52 +263,62 @@ export default class Login extends React.Component
                             </div>
                             
                         </div>
-                        <NdPopGrid id={"pg_users"} parent={this} container={"#root"}
-                        visible={false}
-                        position={{of:'#root'}} 
-                        showTitle={true} 
-                        showBorders={true}
-                        width={'50%'}
-                        height={'90%'}
-                        title="Kullanıcı Listesi"
-                        >
-                            <Column dataField="CODE" caption="CODE" width={150} defaultSortOrder="asc"/>
-                            <Column dataField="NAME" caption="NAME" width={150} defaultSortOrder="asc" />                            
-                        </NdPopGrid>
-                         {/* CardId PopUp */}
-                        <NdPopUp parent={this} id={"popCardId"} 
-                        visible={false}
-                        showCloseButton={true}
-                        showTitle={true}
-                        container={"#root"} 
-                        width={'500'}
-                        height={'500'}
-                        position={{of:'#root'}}
-                        >
-                            <Form colCount={1} height={'fit-content'}>
-                            <Item>
-                                <img src="./css/img/cardicon3.png" height="300px"/>
-                            </Item>
-                            <Item>
-                            <NdTextBox id="cardRead" parent={this} simple={true}  mode="password" showClearButton={true} height='fit-content' onValueChanged={this.textValueChanged}  
+                        <div>
+                            <NdPopGrid id={"pg_users"} parent={this} container={"#root"}
+                            visible={false}
+                            position={{of:'#root'}} 
+                            showTitle={true} 
+                            showBorders={true}
+                            width={'50%'}
+                            height={'90%'}
+                            title="Kullanıcı Listesi"
+                            >
+                                <Column dataField="CODE" caption="CODE" width={150} defaultSortOrder="asc"/>
+                                <Column dataField="NAME" caption="NAME" width={150} defaultSortOrder="asc" />                            
+                            </NdPopGrid>
+                        </div>
+                        {/* CardId PopUp */}
+                        <div>
+                            <NdPopUp parent={this} id={"popCardId"} 
+                            visible={false}
+                            showCloseButton={false}
+                            showTitle={true}
+                            container={"#root"} 
+                            width={'500'}
+                            height={'500'}
+                            position={{of:'#root'}}
+                            >
+                                <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <img src="./css/img/cardicon3.png" height="300px"/>
+                                </Item>
+                                <Item>
+                                <NdTextBox id="cardRead" parent={this} simple={true}  mode="password" showClearButton={true} height='fit-content' onValueChanged={this.textValueChanged}  
                                 placeholder={this.lang.t("txtCardRead")}
                                 onKeyUp={async(k)=>
                                 {
                                     if(k.event.code != 'Enter')
                                     {
-                                      setTimeout(() => {
-                                          this.cardRead.value = ''
-                                      }, 500);
+                                        setTimeout(() => {
+                                            this.cardRead.value = ''
+                                        }, 500);
                                     }
                                     else
                                     {
-                                       this.cardIdCheck(this.cardRead.value)
+                                        this.cardIdCheck(this.cardRead.value)
                                     }
                                 }}
                                 />
-                            </Item>
-                            </Form>
-                        </NdPopUp>
+                                </Item>
+                                <Item>
+                                    <Button width={'100%'} height='fit-content' text={this.lang.t("btnCancel")} type="default" stylingMode="contained"
+                                    disabled={this.state.btnCardIdCancel}
+                                    onClick={()=>{this.popCardId.hide()}}
+                                    />
+                                </Item>
+                                </Form>
+                            </NdPopUp>
+                        </div>                        
                    </div>
                 </div>
                 <div className="p-2"></div>

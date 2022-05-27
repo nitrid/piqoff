@@ -1247,7 +1247,10 @@ export class posDeviceCls
             }
             device.open(async function(error)
             {   
-                console.log(error)
+                if(error != null)
+                {
+                    console.log(error)
+                }
     
                 let tmpArr = [];
                 for (let i = 0; i < pData.length; i++) 
@@ -1305,16 +1308,11 @@ export class posDeviceCls
                         printer.text(tmpArr[i].data,'857');
                     }                
                 }                      
-                        
-                printer.cut().close
-                (
-                    function()
-                    {
-                        
-                    }
-                );
-
-                resolve()
+                
+                printer.cut().close(function()
+                {
+                    resolve();
+                });
             });  
         });
     }

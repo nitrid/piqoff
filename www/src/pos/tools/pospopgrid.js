@@ -2,9 +2,10 @@ import React from "react";
 import NbBase from "../../core/react/bootstrap/base.js";
 import NbButton from "../../core/react/bootstrap/button.js";
 import NdGrid,{Paging,Pager,Column} from "../../core/react/devex/grid.js";
-import NbKeyboard from "../../core/react/bootstrap/keyboard.js";
 import NdTextBox from "../../core/react/devex/textbox.js";
 import NdPopUp from "../../core/react/devex/popup.js";
+import Keyboard from "react-simple-keyboard";
+import "react-simple-keyboard/build/css/index.css";
 
 export {Column}
 export default class NbPosPopGrid extends NbBase
@@ -17,7 +18,8 @@ export default class NbPosPopGrid extends NbBase
             title:this.props.title,
             width:this.props.width,
             height:this.props.height,
-            position:this.props.position
+            position:this.props.position,
+            layoutName: "default"
         }
         this.data = this.props.data
         this._onSelection = this._onSelection.bind(this)
@@ -37,7 +39,7 @@ export default class NbPosPopGrid extends NbBase
     {
         let tmpQuery = {...this.data}
         tmpQuery.source.select.value = []
-        tmpQuery.source.select.value.push(this["txt" + this.props.id].value.replaceAll('*','%')+'%')
+        tmpQuery.source.select.value.push(this["txt" + this.props.id].value.replaceAll('%','%')+'%')
         await this["grd" + this.props.id].dataRefresh(tmpQuery)
     }
     async show()
@@ -58,8 +60,7 @@ export default class NbPosPopGrid extends NbBase
                 container={this.state.position} 
                 width={this.state.width}
                 height={this.state.height}
-                position={{of:this.state.position}}
-                >
+                position={{of:this.state.position}}>
                     <div className="row pb-1">
                         <div className="col-12">
                             <NdTextBox id={"txt" + this.props.id} parent={this} simple={true} 
@@ -74,28 +75,32 @@ export default class NbPosPopGrid extends NbBase
                             columnsAutoWidth={true} 
                             allowColumnReordering={true} 
                             allowColumnResizing={true} 
-                            height={"220px"} 
+                            filterRow={{visible:true}} 
+                            headerFilter={{visible:true}}
+                            height={"290px"} 
                             width={"100%"}
                             dbApply={false}
-                            onRowPrepared=
-                            {
-                                (e)=>
+                            selection={{mode:'single'}}
+                            onRowPrepared={(e)=>
                                 {
                                     if(e.rowType == "header")
                                     {
-                                        e.rowElement.style.fontWeight = "bold";    
+                                        e.rowElement.style.fontWeight = "bold";                                          
                                     }
-                                    e.rowElement.style.fontSize = "13px";
+                                    e.rowElement.style.fontSize = "13px";  
                                 }
                             }
                             onCellPrepared=
                             {
                                 (e)=>
                                 {
-                                    e.cellElement.style.padding = "4px"
+                                    if(e.rowType == "data")
+                                    {
+                                        e.cellElement.style.padding = "12px"
+                                    }
                                 }
                             }
-                            selection={{mode:'single'}}
+                            
                             >
                                 <Paging defaultPageSize={5} />
                                 <Pager visible={true}/>
@@ -120,7 +125,69 @@ export default class NbPosPopGrid extends NbBase
                         </div>                        
                     </div>
                     <div className="row pt-1">
-                        <NbKeyboard id={"key" + this.props.id} parent={this} textobj={"txt" + this.props.id} span={1} buttonHeight={"40px"}/>
+                        <Keyboard keyboardRef={(r) => (this.keyboard = r)}
+                        onChange={(input) => 
+                        {
+                            this["txt" + this.props.id].value = input
+                        }}
+                        onKeyPress={(button) => 
+                        {
+                            if (button === "{shift}" || button === "{lock}") 
+                            {
+                                this.setState(
+                                {
+                                    layoutName: this.state.layoutName === "default" ? "shift" : "default"
+                                });
+                            }
+                            if (button === "{numbers}" || button === "{abc}") 
+                            {
+                                this.setState(
+                                {
+                                    layoutName: this.state.layoutName === "default" ? "numbers" : "default"
+                                });
+                            }
+                        }}
+                        layoutName={this.state.layoutName}
+                        layout={{
+                            shift: 
+                            [
+                            "q w e r t y u i o p ü .",
+                            "a s d f g h j k l ş - ,",
+                            "z x c v b n m ö ç * / %",
+                            "{numbers} {space} {backspace}"
+                            ],
+                            default: 
+                            [
+                            "Q W E R T Y U I O P Ü .",
+                            "A S D F G H J K L Ş - ,",
+                            "Z X C V B N M Ö Ç * / %",
+                            "{numbers} {space} {backspace}"
+                            ],
+                            numbers: ["1 2 3", "4 5 6", "7 8 9", "{abc} 0 {backspace}"]
+                        }}
+                        display={{
+                            "{numbers}": "123",
+                            "{ent}": "return",
+                            "{escape}": "esc ⎋",
+                            "{tab}": "tab ⇥",
+                            "{backspace}": "⌫",
+                            "{capslock}": "caps lock ⇪",
+                            "{shift}": "⇧",
+                            "{controlleft}": "ctrl ⌃",
+                            "{controlright}": "ctrl ⌃",
+                            "{altleft}": "alt ⌥",
+                            "{altright}": "alt ⌥",
+                            "{metaleft}": "cmd ⌘",
+                            "{metaright}": "cmd ⌘",
+                            "{abc}": "ABC"
+                        }}
+                        buttonTheme={[
+                        {
+                            class: "simple-keyboard-rate",
+                            buttons: "%"
+                        }]}
+                        mergeDisplay={true}
+                        />
                     </div>
                 </NdPopUp>
             </div> 

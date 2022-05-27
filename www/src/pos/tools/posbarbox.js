@@ -15,7 +15,6 @@ export default class NdPosBarBox extends Base
         this.state.placeholder = typeof props.placeholder == 'undefined' ? '' : props.placeholder
         this.state.showClearButton = typeof props.showClearButton == 'undefined' ? false : props.showClearButton
 
-        
         this._onInitialized = this._onInitialized.bind(this);
         this._onValueChanged = this._onValueChanged.bind(this);
         this._onEnterKey = this._onEnterKey.bind(this);
@@ -28,8 +27,11 @@ export default class NdPosBarBox extends Base
     //#region Private
     _onInitialized(e) 
     {
-        this.dev = e.component;    
-        this.dev.option('value',this.props.value)
+        this.dev = e.component;  
+        if(typeof this.props.value != 'undefined')
+        {
+            this.dev.option('value',this.props.value)
+        }
     }
     _onValueChanged(e) 
     {       
