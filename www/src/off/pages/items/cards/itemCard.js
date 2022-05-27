@@ -20,7 +20,6 @@ import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import NumberBox from 'devextreme-react/number-box';
 import { datatable } from '../../../../core/core.js';
 
 export default class itemCard extends React.Component
