@@ -10,8 +10,7 @@ import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule
 import NdGrid,{Column,Editing,Paging,Scrolling} from "../../core/react/devex/grid.js";
 import NbButton from "../../core/react/bootstrap/button.js";
 import NdPopUp from "../../core/react/devex/popup.js";
-import NbNumberboard from "../tools/numberboard.js";
-import NbKeyboard from "../tools/keyboard.js";
+import NbNumberboard from "../../core/react/bootstrap/numberboard.js";
 import NbCalculator from "../tools/calculator.js";
 import NbPopUp from "../../core/react/bootstrap/popup.js";
 import NdDatePicker from "../../core/react/devex/datepicker.js";

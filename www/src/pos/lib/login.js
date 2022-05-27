@@ -9,7 +9,7 @@ import NdPopGrid from '../../core/react/devex/popgrid.js';
 import NdPopUp from '../../core/react/devex/popup.js';
 import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Export} from '../../core/react/devex/grid.js';
 import i18n from './i18n.js'
-import NbKeyboard from "../tools/keyboard.js";
+import NbKeyboard from "../../core/react/bootstrap/keyboard.js";
 import { Gallery } from 'devextreme-react/gallery';
 import { locale, loadMessages, formatMessage } from 'devextreme/localization';
 import { dialog } from '../../core/react/devex/dialog.js';
@@ -261,7 +261,6 @@ export default class Login extends React.Component
                             </div>
                             
                         </div>
-                        
                         <NdPopGrid id={"pg_users"} parent={this} container={"#root"}
                         visible={false}
                         position={{of:'#root'}} 
@@ -275,7 +274,6 @@ export default class Login extends React.Component
                             <Column dataField="NAME" caption="NAME" width={150} defaultSortOrder="asc" />                            
                         </NdPopGrid>
                          {/* CardId PopUp */}
-              
                         <NdPopUp parent={this} id={"popCardId"} 
                         visible={false}
                         showCloseButton={true}
@@ -313,7 +311,7 @@ export default class Login extends React.Component
                 </div>
                 <div className="p-2"></div>
                 <div className="card" style={this.style.keyboardBox}>
-                <NbKeyboard id={"keyboard"} parent={this}  textobj="Kullanici"/>
+                    <NbKeyboard id={"keyboard"} parent={this}  textobj="Kullanici"/>
                 </div>
             </div>
         )

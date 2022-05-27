@@ -5,7 +5,7 @@ import NbButton from "../../core/react/bootstrap/button.js";
 import NbPosPopGrid,{Column} from "./pospopgrid.js";
 import NdPopUp from "../../core/react/devex/popup.js";
 import NdTextBox from "../../core/react/devex/textbox.js";
-import NbKeyboard from "./keyboard.js";
+import NbKeyboard from "../../core/react/bootstrap/keyboard.js";
 import NbPopUp from "../../core/react/bootstrap/popup.js";
 import { posPluCls } from "../../core/cls/pos.js";
 import { datatable } from "../../core/core.js";

@@ -3,7 +3,7 @@ import NbBase from "../../core/react/bootstrap/base.js";
 import NbButton from "../../core/react/bootstrap/button.js";
 import NdTextBox from "../../core/react/devex/textbox.js";
 import NdPopUp from "../../core/react/devex/popup.js";
-import NbNumberboard from "./numberboard.js";
+import NbNumberboard from "../../core/react/bootstrap/numberboard.js";
 
 export default class NbPopNumber extends NbBase
 {
