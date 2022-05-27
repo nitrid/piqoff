@@ -527,6 +527,45 @@ export const menu = (e) =>
             ]
         },
         {
+            id: 'pos',
+            text: e.t('menu.pos'),//'Toplu İşlemler',
+            expanded: false,
+            items: 
+            [
+                {
+                    id: 'pos_01',
+                    text : e.t('menu.pos_01'),//'Tanımlar',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'pos_01_001',
+                            text: e.t('menu.pos_01_001'),//'Promosyon Tanımları',
+                            path: 'pos/card/posDeviceCard'
+                        }
+                    ]
+                },
+                {
+                    id: 'pos_02',
+                    text : e.t('menu.pos_02'),//'Raporlar',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'pos_02_001',
+                            text: e.t('menu.pos_02_001'),//'Promosyon Tanımları',
+                            path: 'pos/report/salesTicketReport'
+                        },
+                        {
+                            id: 'pos_02_002',
+                            text: e.t('menu.pos_02_002'),//'Promosyon Tanımları',
+                            path: 'pos/report/customerPointReport'
+                        }
+                    ]
+                },
+            ]
+        },
+        {
             id: 'promo',
             text: e.t('menu.promo'),//'Promosyon',
             expanded: false,

@@ -110,6 +110,12 @@ export const langTr =
         fns_03_002 : "Banka Tanıtım",
         fns_03_003 : "Hesaplar Arası Virman",
         fns_04 : "Raporlar",
+        pos: "Pos İşlemleri",
+        pos_01 : "Tanımlar",
+        pos_01_001 : "Pos Cihaz Tanıtım",
+        pos_02 : "Raporlar",
+        pos_02_001 : "Satış Fiş Raporu",
+        pos_02_002 : "Müşteri Puanı Raporu",
         promo: "Promosyon",
         promo_01: "Tanımlar",
         promo_01_001: "Promosyon Tanımları",
@@ -4860,6 +4866,141 @@ export const langTr =
         },
         validValue :"Boş Geçilemez",
         zeroValid : "0'dan Büyük Olmalıdır"
+
+    },
+    pos_01_001 :
+    {
+        txtCode : "Kodu",
+        txtName :"Adı",
+        txtIban :"Iban",
+        validCode :"Kodu Boş Geçemezsiniz !",
+        txtScalePort : "Scale Port",
+        txtLcdPort : "LCD Port",
+        txtPayCardPort : "Pay Card Port",
+        txtPrintDesing : "Fiş Dizaynı",
+        pg_txtCode : 
+        {
+            title : "Kasa Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI",
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgCode : 
+        {
+            title: "Dikkat",
+            btn01: "Cihaza Git",
+            btn02: "Tamam",
+            msg : "Girmiş olduğunuz Cihaz Kodu sistem de kayıtlı !"
+        }
+      
+    },
+    pos_02_001 :
+    {
+        cmbCustomer :"Cari",
+        btnGet :"Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        txtCustomerCode : "Cari",
+        cmbDevice :"Cihaz",
+        txtTicketno : "Fiş I.D",
+        numTicketAmount : "Tutar",
+        cmbPayType :"Ödeme Tipi",
+        cmbUser :"Kulanıcı",
+        txtItem :"Ürün Kodu",
+        ckhDoublePay : "Birden Fazla Ödeme",
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        grdSaleTicketReport: 
+        {
+            clmDate: "Tarih",
+            clmTime: "Saat",
+            slmUser: "Kullanıcı",
+            clmCustomer : "Cari",
+            clmDiscount : "İndirim",
+            clmLoyalyt: "Loyalyt",
+            clmHT : "Ara Toplam",
+            clmVTA : "Vergi",
+            clmTTC : "Toplam",
+            clmTicketID :"Fiş I.D",
+        },
+        pg_txtItem:
+        {
+            title: "Ürün Seçim",
+            clmCode: "KODU",
+            clmName: "ADI", 
+        },
+        grdSaleTicketItems :
+        {
+            clmBarcode : "Barkod",
+            clmName : "Ürün Adı",
+            clmQuantity : "Miktar",
+            clmPrice : "Fiyat",
+            clmTotal : "Tutar"
+        },
+        grdSaleTicketPays : 
+        {
+            clmPayName : "Ödeme Tipi", 
+            clmTotal : "Tutar",
+        },
+        popDetail : 
+        {
+            title : "Fiş Detayı"
+        }
+
+    },
+    pos_02_002 :
+    {
+        cmbCustomer :"Cari",
+        btnGet :"Getir",
+        txtCustomerCode : "Cari Kodu",
+        txtCustomerName : "Cari Adı",
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        grdCustomerPointReport: 
+        {
+            clmCode: "Kodu",
+            clmTitle: "Adı",
+            clmPoint: "Puan",
+            clmLdate : "Son Güncelleme Tarihi",
+        },
 
     },
 }
