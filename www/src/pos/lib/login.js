@@ -85,15 +85,7 @@ export default class Login extends React.Component
         
         if((await this.core.auth.login(this.state.kullanici,this.state.sifre,'OFF')))
         {
-            //ADMIN PANELINE YANLIZCA ADMINISTRATOR ROLUNDEKİ KULLANICILAR GİREBİLİR...
-            if(this.core.auth.data.ROLE == 'Administrator')
-            {
-                App.instance.setState({logined:true});
-            }
-            else
-            {
-                this.setState({logined:false,alert:this.lang.t("msgNotAccess")})
-            }
+            App.instance.setState({logined:true});
         }
         else
         {
@@ -261,7 +253,6 @@ export default class Login extends React.Component
                                     />
                                 </div>
                             </div>
-                            
                         </div>
                         <div>
                             <NdPopGrid id={"pg_users"} parent={this} container={"#root"}
@@ -293,7 +284,7 @@ export default class Login extends React.Component
                                     <img src="./css/img/cardicon3.png" height="300px"/>
                                 </Item>
                                 <Item>
-                                <NdTextBox id="cardRead" parent={this} simple={true}  mode="password" showClearButton={true} height='fit-content' onValueChanged={this.textValueChanged}  
+                                <NdTextBox id="cardRead" parent={this} simple={true}  mode="password" showClearButton={true} height='fit-content'
                                 placeholder={this.lang.t("txtCardRead")}
                                 onKeyUp={async(k)=>
                                 {

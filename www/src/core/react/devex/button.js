@@ -20,11 +20,22 @@ export default class NdButton extends Base
         this._onClick = this._onClick.bind(this);
     }
     //#region Private
-    _onClick(e)
+    async _onClick(e)
     {
         if(typeof this.props.onClick != 'undefined')
         {
-            this.props.onClick(e);
+            if(typeof this.props.access != 'undefined' && typeof this.props.access.getValue().dialog != 'undefined' && this.props.access.getValue().dialog.type != -1)
+            {   
+                let tmpResult = await acsDialog({id:"AcsDialog",parent:this.props.parent,type:this.props.access.getValue().dialog.type})
+                if(tmpResult)
+                {
+                    this.props.onClick(e);
+                }
+            }
+            else
+            {
+                this.props.onClick(e);
+            }            
         }
     }
     //#endregion

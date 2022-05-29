@@ -23,6 +23,7 @@ import NbPopDescboard from "../tools/popdescboard.js";
 import NdDialog,{ dialog } from "../../core/react/devex/dialog.js";
 import NbLabel from "../../core/react/bootstrap/label.js";
 import NdPosBarBox from "../tools/posbarbox.js";
+import NdAcsDialog,{acsDialog} from "../../core/react/devex/acsdialog.js";
 
 import { posCls,posSaleCls,posPaymentCls,posPluCls,posDeviceCls } from "../../core/cls/pos.js";
 import { itemsCls } from "../../core/cls/items.js";
@@ -40,6 +41,8 @@ export default class posDoc extends React.PureComponent
         this.t = App.instance.lang.getFixedT(null,null,"pos")
         this.user = this.core.auth.data
         this.prmObj = new param(prm)
+        this.acsObj = new access(acs);
+        
         this.posObj = new posCls()
         this.posDevice = new posDeviceCls();
         this.parkDt = new datatable();
@@ -99,6 +102,7 @@ export default class posDoc extends React.PureComponent
 
         this.posObj.clearAll()
         await this.prmObj.load({PAGE:"pos",APP:'POS'})
+        await this.acsObj.load({PAGE:"pos",APP:'POS'})
 
         this.posObj.addEmpty()
         this.posObj.dt()[this.posObj.dt().length - 1].DEVICE = '001'
@@ -1395,6 +1399,7 @@ export default class posDoc extends React.PureComponent
                             </div>
                             <div className="col-1 px-1">
                                 <NbButton id={"btnPluEdit"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
+                                access={this.acsObj.filter({ELEMENT:'btnPluEdit',USERS:this.user.CODE})}
                                 onClick={()=>
                                 {       
                                     if(this.pluBtnGrp.edit)
@@ -1511,8 +1516,21 @@ export default class posDoc extends React.PureComponent
                                         if(this.prmObj.filter({ID:'QuantityEdit',TYPE:0}).getValue() == true)
                                         {                                            
                                             let tmpResult = await this.popNumber.show('Miktar',e.value)
+                                                                                        
                                             if(typeof tmpResult != 'undefined' && tmpResult != '')
                                             {
+                                                if(this.prmObj.filter({ID:'QuantityCheckZero',TYPE:0}).getValue() == true && tmpResult == 0)
+                                                {
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Miktar sıfır girilemez !"}</div>)
+                                                    }
+                                                    await dialog(tmpConfObj);
+                                                    return
+                                                }
+
                                                 let tmpData = {QUANTITY:tmpResult,PRICE:e.key.PRICE}
                                                 this.saleRowUpdate(e.key,tmpData)
                                             }
@@ -1522,9 +1540,30 @@ export default class posDoc extends React.PureComponent
                                     {
                                         if(this.prmObj.filter({ID:'PriceEdit',TYPE:0}).getValue() == true)
                                         {
-                                            let tmpResult = await this.popNumber.show('Fiyat',e.value)
+                                            if(typeof this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog != 'undefined' && this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog.type != -1)
+                                            {   
+                                                let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog.type})
+                                                if(!tmpResult)
+                                                {
+                                                    return
+                                                }
+                                            }
+                                            
+                                            let tmpResult = await this.popNumber.show('Fiyat',e.value)                                            
+                                            
                                             if(typeof tmpResult != 'undefined' && tmpResult != '')
                                             {
+                                                if(this.prmObj.filter({ID:'PriceCheckZero',TYPE:0}).getValue() == true && tmpResult == 0)
+                                                {
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Fiyat sıfır girilemez !"}</div>)
+                                                    }
+                                                    await dialog(tmpConfObj);
+                                                    return
+                                                }
                                                 let tmpData = {QUANTITY:e.key.QUANTITY,PRICE:tmpResult}
                                                 this.saleRowUpdate(e.key,tmpData)
                                             }
@@ -1680,6 +1719,7 @@ export default class posDoc extends React.PureComponent
                                     {/* Safe Open */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnSafeOpen"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        access={this.acsObj.filter({ELEMENT:'btnSafeOpen',USERS:this.user.CODE})}
                                         onClick={async ()=>
                                         {
                                             this.posDevice.caseOpen();
@@ -2609,39 +2649,6 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </div>
                         </div>                                                
-                    </NdPopUp>
-                </div>
-                {/* Access Pass Popup */}
-                <div>
-                    <NdPopUp parent={this} id={"popAccessPass"} 
-                    visible={false}                        
-                    showCloseButton={true}
-                    showTitle={true}
-                    title={"Yetkili Şifresi Giriniz"}
-                    container={"#root"} 
-                    width={"300"}
-                    height={"500"}
-                    position={{of:"#root"}}
-                    >
-                        <div className="row pt-1">
-                            <div className="col-12">
-                                <NdTextBox id="txtPopAccessPass" parent={this} simple={true}>     
-                                </NdTextBox> 
-                            </div>
-                        </div> 
-                        <div className="row pt-2">
-                            {/* Number Board */}
-                            <div className="col-12">
-                                <NbNumberboard id={"numPopAccessPass"} parent={this} textobj="txtPopAccessPass" span={1} buttonHeight={"60px"}/>
-                            </div>
-                        </div>
-                        <div className="row pt-2">
-                            <div className="col-12">
-                                <NbButton id={"btnPopAccessPass"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}>
-                                    <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
-                                </NbButton>
-                            </div>
-                        </div>
                     </NdPopUp>
                 </div>
                 {/* Number Popup */}

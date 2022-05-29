@@ -233,6 +233,38 @@ export const prm =
             CAPTION : "Fiyat Düzenle"
         }
     },
+    //Miktar Sıfır Kontrolü
+    {
+        TYPE : 0,
+        ID :"QuantityCheckZero",
+        VALUE : true,
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Sıfır Miktar Kontrolü"
+        }
+    },
+    //Fiyat Sıfır Kontrolü
+    {
+        TYPE : 0,
+        ID :"PriceCheckZero",
+        VALUE : true,
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Sıfır Miktar Kontrolü"
+        }
+    },
     //LCD Port
     {
         TYPE : 0,
