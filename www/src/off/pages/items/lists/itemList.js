@@ -23,6 +23,7 @@ export default class itemList extends React.Component
     {
         super(props)
 
+        this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.state = 
         {
             columnListValue : ['NAME','CODE','BARCODE','MULTICODE','CUSTOMER_NAME','PRICE_SALE','VAT','MAIN_GRP_NAME']
@@ -57,8 +58,6 @@ export default class itemList extends React.Component
         
         setTimeout(async () => 
         {
-            console.log(this.txtBarkod)
-            this.txtBarkod.focus()
             // this.test.data.source.groupBy = ["NAME"]
             // await this.test.dataRefresh()
             //console.log(this.test.data.datatable)
@@ -149,7 +148,7 @@ export default class itemList extends React.Component
                                 "ELSE '0' " +
                                 "END AS NETMARGIN " +
                                 "FROM ITEMS_EDIT_VW_01 " +
-                                "WHERE {0} " +
+                                "WHERE {0}" +
                                 "((NAME LIKE @NAME +'%') OR (@NAME = '')) AND " +
                                 "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) AND " +
                                 "((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = ''))",
@@ -162,11 +161,11 @@ export default class itemList extends React.Component
             
             if(this.txtBarkod.value.length == 0)
             {
-                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "")
+                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "{1}")
             }
             else if(this.txtBarkod.value.length == 1)
             {
-                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE LIKE '" + this.txtBarkod.value[0] + "' + '%') OR (BARCODE LIKE '" + this.txtBarkod.value[0] + "' + '%') OR (MULTICODE LIKE '" + this.txtBarkod.value[0] + "' + '%')) AND")
+                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE LIKE '" + this.txtBarkod.value[0] + "' + '%') OR (BARCODE LIKE '" + this.txtBarkod.value[0] + "' + '%') {1}) AND")
             }
             else
             {
@@ -176,9 +175,65 @@ export default class itemList extends React.Component
                     TmpVal = TmpVal + ",'" + this.txtBarkod.value[i] + "'"
                     
                 }
-                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (BARCODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (MULTICODE IN (" + TmpVal.substring(1,TmpVal.length) + "))) AND")
+                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (BARCODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) {1}) AND")
+            }
+            if(this.txtMulticode.value.length == 0)
+            {
+               
+                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{1}", "")
+            }
+            else if(this.txtMulticode.value.length == 1)
+            {
+                if(this.txtBarkod.value.length == 0)
+                {
+                    tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{1}", " (MULTICODE = '" + this.txtMulticode.value[0] + "') AND")
+                }
+                else
+                {
+                    tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{1}", "OR (MULTICODE = '" + this.txtMulticode.value[0] + "')")
+                }
+            }
+            else
+            {
+                let tmpMultiCode = ''
+                for (let i = 0; i < this.txtMulticode.value.length; i++) 
+                {
+                    tmpMultiCode = tmpMultiCode + ",'" + this.txtMulticode.value[i] + "'"
+                    
+                }
+                if(this.txtBarkod.value.length == 0)
+                {
+                    tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{1}", " (MULTICODE IN (" + tmpMultiCode.substring(1,tmpMultiCode.length) + ")) AND")
+                }
+                else
+                {
+                    tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{1}", "OR (MULTICODE IN (" + tmpMultiCode.substring(1,tmpMultiCode.length) + ")) ")
+                }
+               
             }
             await this.grdListe.dataRefresh(tmpSource)
+            let tmpDatas = this.prmObj.filter({ID:'emptyCode',USERS:this.user.CODE}).getValue()
+            if(typeof tmpDatas != 'undefined' && tmpDatas.value ==  true)
+            {
+                for (let i = 0; i < this.txtBarkod.value.length; i++) 
+                {
+                    let TmpData = this.grdListe.data.datatable.find((item) => item.CODE === this.txtBarkod.value[i] || item.BARCODE === this.txtBarkod.value[i]);
+                    if(typeof TmpData == 'undefined')
+                    {
+                        this.grdListe.data.datatable.push({CODE:this.txtBarkod.value[i]})
+                    }
+                }
+                for (let i = 0; i < this.txtMulticode.value.length; i++) 
+                {
+                    let TmpMultiData = this.grdListe.data.datatable.find((item) => item.MULTICODE === this.txtMulticode.value[i]);
+                    if(typeof TmpMultiData == 'undefined')
+                    {
+                        this.grdListe.data.datatable.push({MULTICODE:this.txtMulticode.value[i]})
+                    }
+                }
+                this.grdListe.dataRefresh(this.grdListe.data.datatable)
+            }
+           
         }
         else
         {
@@ -230,6 +285,7 @@ export default class itemList extends React.Component
                 tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (BARCODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (MULTICODE IN (" + TmpVal.substring(1,TmpVal.length) + "))) AND")
             }
             await this.grdListe.dataRefresh(tmpSource)
+            console.log(this.grdListe)
         }
     }
     render()
@@ -316,7 +372,11 @@ export default class itemList extends React.Component
                                         data={{source: {select : {query:"SELECT CODE,NAME FROM ITEM_GROUP ORDER BY NAME ASC"},sql : this.core.sql}}}
                                         />
                                 </Item>
-                                <Item> </Item>
+                                <Item>
+                                    <Label text={this.t("txtMulticode")} alignment="right" />
+                                        <NdTagBox id="txtMulticode" parent={this} simple={true} value={[]} placeholder={this.t("multicodePlaceHolder")}
+                                        />
+                                </Item>
                                 <Item>
                                     <Label text={this.t("btnCheck")} alignment="right" />
                                         <NdCheckBox id="chkAktif" parent={this} value={true}></NdCheckBox>

@@ -175,42 +175,23 @@ export default class purchaseContract extends React.Component
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
                                     <NdTextBox id="txtCustomerCode" parent={this} simple={true}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    onChange={(async(r)=>
-                                    {
-                                        if(r.event.isTrusted == true)
+                                    onEnterKey={(async()=>
                                         {
-                                            let tmpQuery = 
+                                            await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
+                                            this.pg_txtCustomerCode.show()
+                                            this.pg_txtCustomerCode.onClick = (data) =>
                                             {
-                                                query :"SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE CODE = @CODE",
-                                                param : ['CODE:string|50'],
-                                                value : [r.component._changedValue]
-                                            }
-                                            let tmpData = await this.core.sql.execute(tmpQuery) 
-                                            if(tmpData.result.recordset.length > 0)
-                                            {
-                                                this.txtCustomerCode.GUID = tmpData.result.recordset[0].GUID
-                                                this.txtCustomerCode.value = tmpData.result.recordset[0].CODE;
-                                                this.txtCustomerName.value = tmpData.result.recordset[0].TITLE;
-                                                
-                                                this._getContracts()
-                                                this._getItems()
-                                            }
-                                            else
-                                            {
-                                                let tmpConfObj =
+                                                if(data.length > 0)
                                                 {
-                                                    id:'msgNotCustomer',showTitle:true,title:this.t("msgNotCustomer.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgNotCustomer.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotCustomer.msg")}</div>)
+                                                    this.txtCustomerCode.GUID = data[0].GUID
+                                                    this.txtCustomerCode.value = data[0].CODE;
+                                                    this.txtCustomerName.value = data[0].TITLE;
+                                                    
+                                                    this._getContracts()
+                                                    this._getItems()
                                                 }
-                                    
-                                                await dialog(tmpConfObj);
-                                                this.txtCustomerCode.GUID = ''
-                                                this.txtCustomerCode.value = '';
-                                                this.txtCustomerName.value = '';
                                             }
-                                        }
-                                    }).bind(this)}
+                                        }).bind(this)}
                                     button=
                                     {
                                         [

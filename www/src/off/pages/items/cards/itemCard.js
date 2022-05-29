@@ -954,7 +954,11 @@ export default class itemCard extends React.Component
                                 </div>
                             </div>
                             <div className='row pt-2'>
-                                <div className='col-12'>
+                            <div className='col-6'>
+                                    <NdButton id="btnNewImg" parent={this} icon="add" type="default" width='100%'
+                                    />
+                                </div>
+                                <div className='col-6'>
                                     <NdButton id="btnImgDel" parent={this} icon="trash" type="default" width='100%'
                                     onClick={()=>
                                     {
@@ -965,6 +969,7 @@ export default class itemCard extends React.Component
                                     }}/>
                                 </div>
                             </div>
+                            
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -1646,7 +1651,6 @@ export default class itemCard extends React.Component
                                                     this.txtPopCustomerCode.GUID = data[0].GUID
                                                     this.txtPopCustomerCode.value = data[0].CODE;
                                                     this.txtPopCustomerName.value = data[0].TITLE;
-                                                    console.log(this.txtPopCustomerCode.GUID);
                                                 }
                                             }
                                         }).bind(this)}
@@ -1739,6 +1743,8 @@ export default class itemCard extends React.Component
                                             <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmItemCustomer" + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
+                                                console.log(this.tabIndex)
+                                                console.log(e.validationGroup.validate().status)
                                                 if(e.validationGroup.validate().status == "valid")
                                                 {
                                                     let tmpEmptyMulti = {...this.itemsObj.itemMultiCode.empty};

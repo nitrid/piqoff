@@ -1132,7 +1132,9 @@ export const langTr =
         btnCheck : "Aktif",
         btnGet :"Getir",
         chkMasterBarcode : "Barkodları Birleştir",
-        barkodPlaceHolder :"Aratmak İstediğiniz Bir yada Biden Fazla Ürün Kodu yada Barkod Giriniz",
+        txtMulticode : "Tedarikçi Kodu",
+        multicodePlaceHolder : "Aratmak İstediğiniz Tedarikçi Kodlarını Giriniz",
+        barkodPlaceHolder :"Aratmak İstediğiniz Bir yada Birden Fazla Ürün Kodu yada Barkod Giriniz",
         ItemNamePlaceHolder :"Ürün Adının Tamamını yada İçinde Geçen Bir Hece Giriniz",
         grdListe : 
         {

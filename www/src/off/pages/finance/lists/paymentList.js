@@ -218,6 +218,22 @@ export default class paymentList extends React.Component
                                 <Label text={this.t("txtCustomerCode")} alignment="right" />
                                 <NdTextBox id="txtCustomerCode" parent={this} simple={true}  notRefresh = {true}
                                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                onEnterKey={(async()=>
+                                    {
+                                        await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
+                                        this.pg_txtCustomerCode.show()
+                                        this.pg_txtCustomerCode.onClick = (data) =>
+                                        { 
+                                            if(data.length > 0)
+                                            {
+                                                if(data.length > 0)
+                                                {
+                                                    this.txtCustomerCode.setState({value:data[0].TITLE})
+                                                    this.txtCustomerCode.CODE = data[0].CODE
+                                                }
+                                            }
+                                        }
+                                    }).bind(this)}
                                 button=
                                 {
                                     [

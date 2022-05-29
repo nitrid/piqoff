@@ -39,6 +39,7 @@ export default class NdImageUpload extends Base
     }
     _onValueChanged(e)
     {
+        console.log(11)
         const file = e.value[0];
         const fileReader = new FileReader();
 
@@ -121,7 +122,7 @@ export default class NdImageUpload extends Base
                 </div>
                 <FileUploader
                 id="file-uploader"
-                dialogTrigger="#dropzone-external"
+                dialogTrigger="#btnNewImg"
                 dropZone="#dropzone-external"
                 multiple={false}
                 uploadMode="useButtons"

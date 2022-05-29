@@ -597,6 +597,26 @@ export const prm =
         },
     //#endregion
 
+    //#region Stok Liste
+    {
+        TYPE : 1,
+        ID :"emptyCode",
+        VALUE : 
+        {
+            value : true
+        },
+        SPECIAL : "",
+        PAGE : "stk_03_001",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Stok Listesi",
+            CAPTION : "Bulunamayan Ürünler İçin Boş Satır Atılsın"
+        }
+    },
+    //#endregion
     //#region Cari Tanıtım
     //cmbType
     {
