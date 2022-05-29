@@ -1230,7 +1230,7 @@ export default class posDoc extends React.PureComponent
             let tmpDt = new datatable();
             tmpDt.selectCmd = 
             {
-                query : "SELECT * FROM POS_SALE_VW_01 WHERE SUBSTRING(CONVERT(NVARCHAR(50),POS_GUID),20,17) = @GUID",
+                query : "SELECT *,ISNULL((SELECT TOP 1 TICKET FROM POS_VW_01 WHERE TICKET = @GUID),'') AS REBATE_TICKET FROM POS_SALE_VW_01 WHERE SUBSTRING(CONVERT(NVARCHAR(50),POS_GUID),20,17) = @GUID",
                 param : ['GUID:string|50'], 
                 value : [pTicket] 
             }
@@ -1238,6 +1238,19 @@ export default class posDoc extends React.PureComponent
             
             if(tmpDt.length > 0)
             {
+                if(tmpDt[0].REBATE_TICKET != '')
+                {
+                    let tmpConfObj =
+                    {
+                        id:'msgAlert',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
+                        button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Okutmuş olduğunuz fiş ile alakalı daha önce iade yapılmıştır !"}</div>)
+                    }
+                    await dialog(tmpConfObj);
+                    this.msgItemReturnTicket.hide()
+                    return
+                }
+
                 for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
                 {
                     let tmpItem = tmpDt.where({ITEM_CODE:this.posObj.posSale.dt()[i].ITEM_CODE})
@@ -3748,39 +3761,43 @@ export default class posDoc extends React.PureComponent
                     >
                         <div className="row">
                             <div className="col-3 py-2">
-                                <NbButton id={"btnMsgRePaymentESC"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"60px",width:"100%"}}
+                                <NbButton id={"btnMsgRePaymentESC"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"70px",width:"100%"}}
                                 onClick={()=>
                                 {
                                     this.msgRePaymentType._onClick("btn01")
                                 }}>
-                                    <i className="text-white fa-solid fa-money-bill-1" style={{fontSize: "24px"}} />
+                                    <div className="row"><div className="col-12">ESC</div></div>
+                                    <div className="row"><div className="col-12"><i className="text-white fa-solid fa-money-bill-1" style={{fontSize: "24px"}}/></div></div>
                                 </NbButton>
                             </div>
                             <div className="col-3 py-2">
-                                <NbButton id={"btnMsgRePaymentCB"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"60px",width:"100%"}}
+                                <NbButton id={"btnMsgRePaymentCB"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"70px",width:"100%"}}
                                 onClick={()=>
                                 {
                                     this.msgRePaymentType._onClick("btn02")
                                 }}>
-                                    <i className="text-white fa-solid fa-credit-card" style={{fontSize: "24px"}} />
+                                    <div className="row"><div className="col-12">CB</div></div>
+                                    <div className="row"><div className="col-12"><i className="text-white fa-solid fa-credit-card" style={{fontSize: "24px"}}/></div></div>                                    
                                 </NbButton>
                             </div>
                             <div className="col-3 py-2">
-                                <NbButton id={"btnMsgRePaymentCHQ"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"60px",width:"100%"}}
+                                <NbButton id={"btnMsgRePaymentCHQ"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"70px",width:"100%"}}
                                 onClick={()=>
                                 {
                                     this.msgRePaymentType._onClick("btn03")
                                 }}>
-                                    <i className="text-white fa-solid fa-rectangle-list" style={{fontSize: "24px"}} />
+                                    <div className="row"><div className="col-12">CHQ</div></div>
+                                    <div className="row"><div className="col-12"><i className="text-white fa-solid fa-rectangle-list" style={{fontSize: "24px"}} /></div></div>                                    
                                 </NbButton>
                             </div>
                             <div className="col-3 py-2">
-                                <NbButton id={"btnMsgRePaymentTR"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"60px",width:"100%"}}
+                                <NbButton id={"btnMsgRePaymentTR"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"70px",width:"100%"}}
                                 onClick={()=>
                                 {
                                     this.msgRePaymentType._onClick("btn04")
                                 }}>
-                                    <i className="text-white fa-solid fa-ticket" style={{fontSize: "24px"}} />
+                                    <div className="row"><div className="col-12">T.R</div></div>
+                                    <div className="row"><div className="col-12"><i className="text-white fa-solid fa-ticket" style={{fontSize: "24px"}} /></div></div>                                    
                                 </NbButton>
                             </div>
                         </div>
