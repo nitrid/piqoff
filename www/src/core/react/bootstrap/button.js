@@ -7,8 +7,17 @@ export default class NbButton extends NbBase
     constructor(props)
     {
         super(props)
-
+        this.state.disabled = this.props.disabled
+        
         this._onClick = this._onClick.bind(this);
+    }
+    get disabled()
+    {
+        return this.state.disabled
+    }
+    set disabled(e)
+    {
+        this.setState({disabled:e})
     }
     async _onClick()
     {
@@ -63,6 +72,7 @@ export default class NbButton extends NbBase
             <button 
             className={this.props.className} 
             id={this.props.id}
+            disabled={this.state.disabled}
             style={this.props.style}
             onClick={this._onClick}
             >

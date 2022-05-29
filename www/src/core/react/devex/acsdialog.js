@@ -135,6 +135,10 @@ export default class NdAcsDialog extends NdBase
                                 onClick={()=>
                                 {
                                     this["popCardId" + this.props.id].show()
+                                    setTimeout(() => 
+                                    {
+                                        this["txt" + this.props.id + "cardRead"].focus()    
+                                    }, 500);
                                 }}>
                                     <i className="text-white fa-solid fa-id-card" style={{fontSize: "24px"}} />
                                 </NbButton>
@@ -168,6 +172,7 @@ export default class NdAcsDialog extends NdBase
                         }
                         else
                         {
+                            this["btn" + this.props.id + "CardId"].disabled = true
                             let tmpQuery = 
                             {
                                 query : "SELECT TOP 1 * FROM USERS WHERE CARDID = @CARDID", 
