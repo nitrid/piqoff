@@ -170,7 +170,7 @@ export default class posDoc extends React.PureComponent
             let tmpDt = new datatable(); 
             tmpDt.selectCmd = 
             {
-                query : "SELECT TOP 1 *,@CODE AS INPUT FROM ITEMS_POS_VW_01 WHERE CODE = @CODE OR BARCODE = @CODE",
+                query : "SELECT TOP 1 *,@CODE AS INPUT FROM ITEMS_POS_VW_01 WHERE CODE = @CODE OR BARCODE = @CODE AND STATUS = 1",
                 param : ['CODE:string|25'],
                 value: [pCode],
                 // timeout : 3000
@@ -181,7 +181,7 @@ export default class posDoc extends React.PureComponent
             {
                 tmpDt.selectCmd = 
                 {
-                    query : "SELECT TOP 1 *,@CODE AS INPUT FROM ITEMS_POS_VW_01 WHERE UNIQ_CODE = @CODE",
+                    query : "SELECT TOP 1 *,@CODE AS INPUT FROM ITEMS_POS_VW_01 WHERE UNIQ_CODE = @CODE AND STATUS = 1",
                     param : ['CODE:string|25'],
                     value: [pCode]
                 }
@@ -350,6 +350,13 @@ export default class posDoc extends React.PureComponent
                     let tmpResult = await this.popNumber.show('Fiyat',0)
                     if(typeof tmpResult != 'undefined' && tmpResult != '')
                     {
+                        //FIYAT DURUM KONTROLÜ
+                        if(!(await this.priceCheck(tmpItemsDt[0],tmpResult)))
+                        {
+                            this.loading.current.instance.hide()
+                            return
+                        }
+
                         tmpPrice = tmpResult
                         //FİYAT GİRİLMİŞ İSE TERAZİYE İSTEK YAPILIYOR.
                         let tmpWResult = await this.getWeighing()
@@ -388,7 +395,21 @@ export default class posDoc extends React.PureComponent
                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Ürünün fiyat bilgisi tanımsız ! Devam etmek istermisiniz ?"}</div>)
                 }
                 let tmpMsgResult = await dialog(tmpConfObj);
-                if(tmpMsgResult == 'btn02')
+                if(tmpMsgResult == 'btn01')
+                {
+                    let tmpResult = await this.popNumber.show('Fiyat',0)
+                    if(typeof tmpResult != 'undefined' && tmpResult != '')
+                    {
+                        //FIYAT DURUM KONTROLÜ
+                        if(!(await this.priceCheck(tmpItemsDt[0],tmpResult)))
+                        {
+                            this.loading.current.instance.hide()
+                            return
+                        }
+                        tmpPrice = tmpResult
+                    }
+                }
+                else if(tmpMsgResult == 'btn02')
                 {
                     this.loading.current.instance.hide()
                     return
@@ -647,6 +668,9 @@ export default class posDoc extends React.PureComponent
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ITEM_GUID = pItemData.GUID
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ITEM_CODE = pItemData.CODE
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ITEM_NAME = pItemData.NAME
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].MIN_PRICE = pItemData.MIN_PRICE
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].MAX_PRICE = pItemData.MAX_PRICE
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].COST_PRICE = pItemData.COST_PRICE
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].TICKET_REST = pItemData.TICKET_REST
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].INPUT = pItemData.INPUT
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].BARCODE_GUID = pItemData.BARCODE_GUID
@@ -1302,6 +1326,49 @@ export default class posDoc extends React.PureComponent
             }
         }
     }
+    priceCheck(pData,pPrice)
+    {
+        return new Promise(async resolve => 
+        {
+            if(this.prmObj.filter({ID:'PriceCheckZero',TYPE:0}).getValue() == true && pPrice == 0)
+            {
+                let tmpConfObj =
+                {
+                    id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Fiyat sıfır girilemez !"}</div>)
+                }
+                await dialog(tmpConfObj);
+                resolve(false)
+                return
+            }
+            if(this.prmObj.filter({ID:'MinPriceCheck',TYPE:0}).getValue() == true && Number(pPrice) < Number(parseFloat(pData.MIN_PRICE).toFixed(2)))
+            {
+                let tmpConfObj =
+                {
+                    id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Min. fiyatın altında fiyat giremezsiniz !"}</div>)
+                }
+                await dialog(tmpConfObj);
+                resolve(false)
+                return
+            }
+            if(this.prmObj.filter({ID:'CostPriceCheck',TYPE:0}).getValue() == true && Number(pPrice) < Number(parseFloat(pData.COST_PRICE).toFixed(2)))
+            {
+                let tmpConfObj =
+                {
+                    id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Maliyet fiyatının altında fiyat giremezsiniz !"}</div>)
+                }
+                await dialog(tmpConfObj);
+                resolve(false)
+                return
+            }
+            resolve(true)
+        });        
+    }
     print(pType,pSafe,pRePrint,pRepas)
     {
         return new Promise(async resolve => 
@@ -1456,7 +1523,7 @@ export default class posDoc extends React.PureComponent
                                                 let tmpDt = new datatable(); 
                                                 tmpDt.selectCmd = 
                                                 {
-                                                    query : "SELECT BARCODE,NAME,PRICE_SALE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE LIKE '%' + @BARCODE",
+                                                    query : "SELECT BARCODE,NAME,PRICE_SALE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE LIKE '%' + @BARCODE AND STATUS = 1",
                                                     param : ['BARCODE:string|25']
                                                 }
                                                 tmpDt.selectCmd.value = [this.txtBarcode.value]
@@ -1550,22 +1617,15 @@ export default class posDoc extends React.PureComponent
                                             }
                                             
                                             let tmpResult = await this.popNumber.show('Fiyat',e.value)                                            
-                                            
                                             if(typeof tmpResult != 'undefined' && tmpResult != '')
                                             {
-                                                if(this.prmObj.filter({ID:'PriceCheckZero',TYPE:0}).getValue() == true && tmpResult == 0)
+                                                console.log(1)
+                                                console.log(e.data)
+                                                if((await this.priceCheck(e.data,tmpResult)))
                                                 {
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Fiyat sıfır girilemez !"}</div>)
-                                                    }
-                                                    await dialog(tmpConfObj);
-                                                    return
+                                                    let tmpData = {QUANTITY:e.key.QUANTITY,PRICE:tmpResult}
+                                                    this.saleRowUpdate(e.key,tmpData)
                                                 }
-                                                let tmpData = {QUANTITY:e.key.QUANTITY,PRICE:tmpResult}
-                                                this.saleRowUpdate(e.key,tmpData)
                                             }
                                         }
                                     }
@@ -1871,14 +1931,28 @@ export default class posDoc extends React.PureComponent
                                 </div> 
                                 {/* Line 4 */}
                                 <div className="row px-2">
-                                    {/* Calculator */}
-                                    <div className="col-2 px-1">
-                                        <NbButton id={"btnCalculator"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
-                                        onClick={()=>
-                                        {                                                        
-                                            this.Calculator.show();
+                                    {/* Customer Point */}
+                                    <div className="col px-1">
+                                        <NbButton id={"btnCustomerPoint"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        onClick={async ()=>
+                                        {
+                                            if(this.customerName.value == '')
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgAlert',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Lütfen müşteri seçiniz !"}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                                return
+                                            }
+
+                                            this.txtPopLoyalty.value = this.popCustomerUsePoint.value
+                                            this.popLoyalty.show()
+                                            this.txtPopLoyalty.newStart = true;
                                         }}>
-                                            <i className="text-white fa-solid fa-calculator" style={{fontSize: "24px"}} />
+                                            <i className="text-white fa-solid fa-gift" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* Info */}
@@ -2060,8 +2134,7 @@ export default class posDoc extends React.PureComponent
                                         <NbPluButtonGrp id="pluBtnGrp" parent={this} 
                                         onSelection={(pItem)=>
                                         {
-                                            this.txtBarcode.value = pItem;
-                                            this.getItem(pItem)
+                                            this.getItem(this.txtBarcode.value + pItem)
                                         }}/>
                                     </div>
                                 </div>  
@@ -2069,7 +2142,7 @@ export default class posDoc extends React.PureComponent
                                 <div className="row px-2">
                                     {/* Item Return */}
                                     <div className="col px-1">
-                                        <NbButton id={"btnItemReturn"} parent={this} className="form-group btn btn-danger btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        <NbButton id={"btnItemReturn"} parent={this} className="form-group btn btn-block my-1" style={{height:"70px",width:"100%",backgroundColor:"#e84393"}}
                                         onClick={async ()=>
                                         {
                                             if(this.posObj.posSale.dt().length > 0)
@@ -2084,6 +2157,89 @@ export default class posDoc extends React.PureComponent
                                             }
                                         }}>
                                             <i className="text-white fa-solid fa-retweet" style={{fontSize: "24px"}} />
+                                        </NbButton>
+                                    </div>
+                                    {/* Blank */}
+                                    <div className="col px-1">
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
+                                    </div>
+                                    {/* Blank */}
+                                    <div className="col px-1">
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
+                                    </div>
+                                    {/* Blank */}
+                                    <div className="col px-1">
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
+                                    </div>
+                                    {/* Blank */}
+                                    <div className="col px-1">
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
+                                    </div>
+                                    {/* Blank */}
+                                    <div className="col px-1">
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
+                                    </div>
+                                </div>
+                                {/* Line 6 */}
+                                <div className="row px-2">
+                                    {/* Diffrent Price */}
+                                    <div className="col px-1">
+                                        <NbButton id={"btnPriceDiff"} parent={this} className="form-group btn btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt",backgroundColor:"#e84393"}}
+                                        onClick={async()=>
+                                        {          
+                                            if(this.grdList.devGrid.getSelectedRowKeys().length > 0)
+                                            {
+                                                this.txtPopDiffPriceQ.value = this.grdList.devGrid.getSelectedRowKeys()[0].QUANTITY < 0 ? this.grdList.devGrid.getSelectedRowKeys()[0].QUANTITY * -1 : this.grdList.devGrid.getSelectedRowKeys()[0].QUANTITY;
+                                                this.txtPopDiffPriceP.value = this.grdList.devGrid.getSelectedRowKeys()[0].PRICE;
+                                                this.popDiffPrice.show();
+                                            }
+                                            else
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgAlert',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Lütfen satır seçiniz !"}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                            }
+                                        }}>
+                                            <i className="text-white fa-solid fa-plus-minus" style={{fontSize: "24px"}} />
+                                        </NbButton>
+                                    </div>
+                                    {/* Blank */}
+                                    <div className="col px-1">
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
+                                    </div>
+                                    {/* Blank */}
+                                    <div className="col px-1">
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
+                                    </div>
+                                    {/* Blank */}
+                                    <div className="col px-1">
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
+                                    </div>
+                                    {/* Blank */}
+                                    <div className="col px-1">
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
+                                    </div>
+                                    {/* Blank */}
+                                    <div className="col px-1">
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
+                                    </div>
+                                </div>
+                                {/* Line 7 */}
+                                <div className="row px-2">
+                                    {/* Park List */}
+                                    <div className="col px-1">
+                                        <NbButton id={"btnParkList"} parent={this} className="form-group btn btn-warning btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        onClick={async ()=>
+                                        {            
+                                            await this.parkDt.refresh();
+                                            await this.grdPopParkList.dataRefresh({source:this.parkDt});             
+                                            this.popParkList.show();
+                                        }}>
+                                            <span className="text-white" style={{fontWeight: 'bold'}}><i className="text-white fa-solid fa-arrow-up-right-from-square pe-2" style={{fontSize: "24px"}} />{this.parkDt.length}</span>                                            
                                         </NbButton>
                                     </div>
                                     {/* Subtotal */}
@@ -2119,44 +2275,7 @@ export default class posDoc extends React.PureComponent
                                         <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
                                     </div>
                                 </div>
-                                {/* Line 6 */}
-                                <div className="row px-2">
-                                    {/* Park List */}
-                                    <div className="col px-1">
-                                        <NbButton id={"btnParkList"} parent={this} className="form-group btn btn-warning btn-block my-1" style={{height:"70px",width:"100%"}}
-                                        onClick={async ()=>
-                                        {            
-                                            await this.parkDt.refresh();
-                                            await this.grdPopParkList.dataRefresh({source:this.parkDt});             
-                                            this.popParkList.show();
-                                        }}>
-                                            <span className="text-white" style={{fontWeight: 'bold'}}><i className="text-white fa-solid fa-arrow-up-right-from-square pe-2" style={{fontSize: "24px"}} />{this.parkDt.length}</span>                                            
-                                        </NbButton>
-                                    </div>
-                                    {/* Advance */}
-                                    <div className="col px-1">
-                                        <NbButton id={"btnAdvance"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}>
-                                            <i className="text-white fa-solid fa-circle-dollar-to-slot" style={{fontSize: "24px"}} />
-                                        </NbButton>
-                                    </div>
-                                    {/* Blank */}
-                                    <div className="col px-1">
-                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
-                                    </div>
-                                    {/* Blank */}
-                                    <div className="col px-1">
-                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
-                                    </div>
-                                    {/* Blank */}
-                                    <div className="col px-1">
-                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
-                                    </div>
-                                    {/* Blank */}
-                                    <div className="col px-1">
-                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
-                                    </div>
-                                </div>
-                                {/* Line 7 */}
+                                {/* Line 8 */}
                                 <div className="row px-2">
                                     {/* Park */}
                                     <div className="col px-1">
@@ -2171,49 +2290,6 @@ export default class posDoc extends React.PureComponent
                                             <i className="text-white fa-solid fa-arrow-right-to-bracket" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
-                                    {/* Customer Point */}
-                                    <div className="col px-1">
-                                        <NbButton id={"btnCustomerPoint"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
-                                        onClick={async ()=>
-                                        {
-                                            if(this.customerName.value == '')
-                                            {
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgAlert',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Lütfen müşteri seçiniz !"}</div>)
-                                                }
-                                                await dialog(tmpConfObj);
-                                                return
-                                            }
-
-                                            this.txtPopLoyalty.value = this.popCustomerUsePoint.value
-                                            this.popLoyalty.show()
-                                            this.txtPopLoyalty.newStart = true;
-                                        }}>
-                                            <i className="text-white fa-solid fa-gift" style={{fontSize: "24px"}} />
-                                        </NbButton>
-                                    </div>
-                                    {/* Blank */}
-                                    <div className="col px-1">
-                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
-                                    </div>
-                                    {/* Blank */}
-                                    <div className="col px-1">
-                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
-                                    </div>
-                                    {/* Blank */}
-                                    <div className="col px-1">
-                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
-                                    </div>
-                                    {/* Blank */}
-                                    <div className="col px-1">
-                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
-                                    </div>
-                                </div>
-                                {/* Line 8 */}
-                                <div className="row px-2">
                                     {/* Get Customer */}
                                     <div className="col px-1">
                                         <NbButton id={"btnGetCustomer"} parent={this} className={this.state.isBtnGetCustomer == true ? "form-group btn btn-danger btn-block my-1" : "form-group btn btn-info btn-block my-1"} style={{height:"70px",width:"100%"}}
@@ -2238,16 +2314,6 @@ export default class posDoc extends React.PureComponent
                                             <i className="text-white fa-solid fa-circle-user" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
-                                    {/* Customer List */}
-                                    <div className="col px-1">
-                                        <NbButton id={"btnCustomerList"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
-                                        onClick={()=>
-                                        {                             
-                                            this.popCustomerList.show();
-                                        }}>
-                                            <i className="text-white fa-solid fa-users" style={{fontSize: "24px"}} />
-                                        </NbButton>
-                                    </div>
                                     {/* Print */}
                                     <div className="col px-1">
                                         <NbButton id={"btnPrint"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
@@ -2258,38 +2324,31 @@ export default class posDoc extends React.PureComponent
                                             <i className="text-white fa-solid fa-print" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
-                                    {/* Diffrent Price */}
+                                    {/* Advance */}
                                     <div className="col px-1">
-                                        <NbButton id={"btnPriceDiff"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}
-                                        onClick={async()=>
-                                        {          
-                                            if(this.grdList.devGrid.getSelectedRowKeys().length > 0)
-                                            {
-                                                this.txtPopDiffPriceQ.value = this.grdList.devGrid.getSelectedRowKeys()[0].QUANTITY < 0 ? this.grdList.devGrid.getSelectedRowKeys()[0].QUANTITY * -1 : this.grdList.devGrid.getSelectedRowKeys()[0].QUANTITY;
-                                                this.txtPopDiffPriceP.value = this.grdList.devGrid.getSelectedRowKeys()[0].PRICE;
-                                                this.popDiffPrice.show();
-                                            }
-                                            else
-                                            {
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgAlert',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Lütfen satır seçiniz !"}</div>)
-                                                }
-                                                await dialog(tmpConfObj);
-                                            }
-                                        }}>
-                                            <i className="text-white fa-solid fa-plus-minus" style={{fontSize: "24px"}} />
+                                        <NbButton id={"btnAdvance"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                            <i className="text-white fa-solid fa-circle-dollar-to-slot" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
-                                    {/* Blank */}
+                                    {/* Customer List */}
                                     <div className="col px-1">
-                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
+                                        <NbButton id={"btnCustomerList"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        onClick={()=>
+                                        {                             
+                                            this.popCustomerList.show();
+                                        }}>
+                                            <i className="text-white fa-solid fa-users" style={{fontSize: "24px"}} />
+                                        </NbButton>
                                     </div>
-                                    {/* Blank */}
-                                    <div className="col px-1">
-                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
+                                    {/* Calculator */}
+                                    <div className="col-2 px-1">
+                                        <NbButton id={"btnCalculator"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        onClick={()=>
+                                        {                                                        
+                                            this.Calculator.show();
+                                        }}>
+                                            <i className="text-white fa-solid fa-calculator" style={{fontSize: "24px"}} />
+                                        </NbButton>
                                     </div>
                                 </div>       
                             </div>
@@ -2692,7 +2751,7 @@ export default class posDoc extends React.PureComponent
                     {
                         select:
                         {
-                            query : "SELECT CODE,NAME,dbo.FN_PRICE_SALE(GUID,1,GETDATE()) AS PRICE FROM [dbo].[ITEMS_VW_01] WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                            query : "SELECT CODE,NAME,dbo.FN_PRICE_SALE(GUID,1,GETDATE()) AS PRICE FROM [dbo].[ITEMS_VW_01] WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) AND STATUS = 1",
                             param : ['VAL:string|50']
                         },
                         sql:this.core.sql
@@ -2701,8 +2760,7 @@ export default class posDoc extends React.PureComponent
                     {
                         if(pData.length > 0)
                         {
-                            this.txtBarcode.value = pData[0].CODE;
-                            this.getItem(pData[0].CODE)
+                            this.getItem(this.txtBarcode.value + pData[0].CODE)
                         }
                     }}>
                         <Column dataField="CODE" caption={"CODE"} width={150} />
@@ -2753,8 +2811,7 @@ export default class posDoc extends React.PureComponent
                                 }}
                                 onSelectionChanged={(e)=>
                                 {
-                                    this.txtBarcode.value = e.currentSelectedRowKeys[0].BARCODE
-                                    this.getItem(e.currentSelectedRowKeys[0].BARCODE)
+                                    this.getItem(this.txtBarcode.value + e.currentSelectedRowKeys[0].BARCODE)
                                     this.popBarcodeList.hide()
                                 }}
                                 >

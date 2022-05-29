@@ -101,6 +101,7 @@ export default class Login extends React.Component
         {
             this.setState({kullanici: data[0].CODE});
             this.Kullanici.setState({value:data[0].CODE})
+            this.Sifre.focus()
         }
     }
     closePage()

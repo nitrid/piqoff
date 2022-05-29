@@ -262,7 +262,39 @@ export const prm =
         {
             TYPE : "text",
             PAGE_NAME : "Pos",
-            CAPTION : "Sıfır Miktar Kontrolü"
+            CAPTION : "Sıfır Fiyat Kontrolü"
+        }
+    },
+    //Min Fiyat Kontrolü
+    {
+        TYPE : 0,
+        ID :"MinPriceCheck",
+        VALUE : true,
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Min. Fiyat Kontrolü"
+        }
+    },
+    //Maliyet Fiyat Kontrolü
+    {
+        TYPE : 0,
+        ID :"CostPriceCheck",
+        VALUE : true,
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Maliyet Fiyat Kontrolü"
         }
     },
     //LCD Port
