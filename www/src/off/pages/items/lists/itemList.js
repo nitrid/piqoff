@@ -268,11 +268,11 @@ export default class itemList extends React.Component
             
             if(this.txtBarkod.value.length == 0)
             {
-                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "")
+                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "{1}")
             }
             else if(this.txtBarkod.value.length == 1)
             {
-                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE LIKE '" + this.txtBarkod.value[0] + "' + '%') OR (BARCODE LIKE '" + this.txtBarkod.value[0] + "' + '%') OR (MULTICODE LIKE '" + this.txtBarkod.value[0] + "' + '%')) AND")
+                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE LIKE '" + this.txtBarkod.value[0] + "' + '%') OR (BARCODE LIKE '" + this.txtBarkod.value[0] + "' + '%') {1}) AND")
             }
             else
             {
@@ -282,10 +282,64 @@ export default class itemList extends React.Component
                     TmpVal = TmpVal + ",'" + this.txtBarkod.value[i] + "'"
                     
                 }
-                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (BARCODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (MULTICODE IN (" + TmpVal.substring(1,TmpVal.length) + "))) AND")
+                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (BARCODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) {1}) AND")
+            }
+            if(this.txtMulticode.value.length == 0)
+            {
+               
+                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{1}", "")
+            }
+            else if(this.txtMulticode.value.length == 1)
+            {
+                if(this.txtBarkod.value.length == 0)
+                {
+                    tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{1}", " (MULTICODE = '" + this.txtMulticode.value[0] + "') AND")
+                }
+                else
+                {
+                    tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{1}", "OR (MULTICODE = '" + this.txtMulticode.value[0] + "')")
+                }
+            }
+            else
+            {
+                let tmpMultiCode = ''
+                for (let i = 0; i < this.txtMulticode.value.length; i++) 
+                {
+                    tmpMultiCode = tmpMultiCode + ",'" + this.txtMulticode.value[i] + "'"
+                    
+                }
+                if(this.txtBarkod.value.length == 0)
+                {
+                    tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{1}", " (MULTICODE IN (" + tmpMultiCode.substring(1,tmpMultiCode.length) + ")) AND")
+                }
+                else
+                {
+                    tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{1}", "OR (MULTICODE IN (" + tmpMultiCode.substring(1,tmpMultiCode.length) + ")) ")
+                }
+               
             }
             await this.grdListe.dataRefresh(tmpSource)
-            console.log(this.grdListe)
+            let tmpDatas = this.prmObj.filter({ID:'emptyCode',USERS:this.user.CODE}).getValue()
+            if(typeof tmpDatas != 'undefined' && tmpDatas.value ==  true)
+            {
+                for (let i = 0; i < this.txtBarkod.value.length; i++) 
+                {
+                    let TmpData = this.grdListe.data.datatable.find((item) => item.CODE === this.txtBarkod.value[i] || item.BARCODE === this.txtBarkod.value[i]);
+                    if(typeof TmpData == 'undefined')
+                    {
+                        this.grdListe.data.datatable.push({CODE:this.txtBarkod.value[i]})
+                    }
+                }
+                for (let i = 0; i < this.txtMulticode.value.length; i++) 
+                {
+                    let TmpMultiData = this.grdListe.data.datatable.find((item) => item.MULTICODE === this.txtMulticode.value[i]);
+                    if(typeof TmpMultiData == 'undefined')
+                    {
+                        this.grdListe.data.datatable.push({MULTICODE:this.txtMulticode.value[i]})
+                    }
+                }
+                this.grdListe.dataRefresh(this.grdListe.data.datatable)
+            }
         }
     }
     render()
