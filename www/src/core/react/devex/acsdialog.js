@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Form, { Item } from 'devextreme-react/form';
 import NdBase from './base.js';
 import NbButton from '../bootstrap/button.js';
 import NdPopUp from './popup.js';
@@ -24,15 +25,38 @@ export default class NdAcsDialog extends NdBase
         
         return new Promise(async resolve => 
         {
-            this._onClick = async () =>
+            this._onClick = async (pCode,pPwd) =>
             {
+                let tmpCode = this.user.CODE
+                let tmpPass = btoa(this["txt" + this.props.id].value);
+                
+                if(typeof pCode != 'undefined' && typeof pPwd != 'undefined')
+                {
+                    if(pCode == '')
+                    {
+                        let tmpConfObj =
+                        {
+                            id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                            button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Geçersiz şifre !"}</div>)
+                        }
+                        await dialog(tmpConfObj);
+                        this[this.props.id].hide()
+                        resolve(false)
+                        return
+                    }
+
+                    tmpCode = pCode
+                    tmpPass = pPwd
+                }
+
                 if(pType == 0)
                 {
                     tmpQuery = 
                     {
                         query : "SELECT TOP 1 * FROM USERS WHERE PWD = @PWD AND ROLE = 'Administrator'", 
                         param : ['PWD:string|50'],
-                        value : [btoa(this["txt" + this.props.id].value)]
+                        value : [tmpPass]
                     }
                 }
                 else
@@ -41,12 +65,11 @@ export default class NdAcsDialog extends NdBase
                     {
                         query : "SELECT TOP 1 * FROM USERS WHERE CODE = @CODE AND PWD = @PWD", 
                         param : ['CODE:string|25','PWD:string|50'],
-                        value : [this.user.CODE,btoa(this["txt" + this.props.id].value)]
+                        value : [tmpCode,tmpPass]
                     }
                 }
                 
                 let tmpData = await this.core.sql.execute(tmpQuery)
-                
                 if(tmpData.result.recordset.length > 0)
                 {
                     this[this.props.id].hide()
@@ -108,11 +131,71 @@ export default class NdAcsDialog extends NdBase
                     </div>
                     <div className="row pt-2">
                             <div className="col-12">
-                                <NbButton id={"btnCard" + this.props.id} parent={this} className="form-group btn btn-primary btn-block" style={{height:"60px",width:"100%"}}>
+                                <NbButton id={"btnCard" + this.props.id} parent={this} className="form-group btn btn-primary btn-block" style={{height:"60px",width:"100%"}}
+                                onClick={()=>
+                                {
+                                    this["popCardId" + this.props.id].show()
+                                }}>
                                     <i className="text-white fa-solid fa-id-card" style={{fontSize: "24px"}} />
                                 </NbButton>
                             </div>
                         </div>
+                </NdPopUp>
+                {/* popCardId */}
+                <NdPopUp parent={this} id={"popCardId" + this.props.id} 
+                visible={false}
+                showCloseButton={false}
+                showTitle={true}
+                container={"#root"} 
+                width={'500'}
+                height={'500'}
+                position={{of:'#root'}}
+                >
+                    <Form colCount={1} height={'fit-content'}>
+                    <Item>
+                        <img src="./css/img/cardicon3.png" height="300px"/>
+                    </Item>
+                    <Item>
+                    <NdTextBox id={"txt" + this.props.id + "cardRead"} parent={this} simple={true}  mode="password" showClearButton={true} height='fit-content'
+                    placeholder={this.lang.t("txtCardRead")}
+                    onKeyUp={async(k)=>
+                    {
+                        if(k.event.key != 'Enter')
+                        {
+                            setTimeout(() => {
+                                this["txt" + this.props.id + "cardRead"].value = ''
+                            }, 500);
+                        }
+                        else
+                        {
+                            let tmpQuery = 
+                            {
+                                query : "SELECT TOP 1 * FROM USERS WHERE CARDID = @CARDID", 
+                                param : ['CARDID:string|50'],
+                                value : [this["txt" + this.props.id + "cardRead"].value]
+                            }
+                            let tmpData = await this.core.sql.execute(tmpQuery)
+                            if(tmpData.result.recordset.length > 0)
+                            {
+                                this._onClick(tmpData.result.recordset[0].CODE,tmpData.result.recordset[0].PWD)
+                            }
+                            else
+                            {
+                                this._onClick('','')
+                            }
+                            this["popCardId" + this.props.id].hide()
+                        }
+                    }}
+                    />
+                    </Item>
+                    <Item>
+                        <NbButton id={"btn" + this.props.id + "CardId"} parent={this} className="form-group btn btn-primary btn-block" style={{width:"100%"}}
+                        onClick={()=>{this["popCardId" + this.props.id].hide()}}
+                        >
+                            {this.lang.t("btnCancel")}
+                        </NbButton>
+                    </Item>
+                    </Form>
                 </NdPopUp>
             </div>
         )
