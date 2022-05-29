@@ -219,6 +219,22 @@ export default class rebateDisList extends React.Component
                                 <Label text={this.t("txtCustomerCode")} alignment="right" />
                                 <NdTextBox id="txtCustomerCode" parent={this} simple={true}  notRefresh = {true}
                                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                onEnterKey={(async()=>
+                                    {
+                                        await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
+                                        this.pg_txtCustomerCode.show()
+                                        this.pg_txtCustomerCode.onClick = (data) =>
+                                        { 
+                                            if(data.length > 0)
+                                            {
+                                                if(data.length > 0)
+                                                {
+                                                    this.txtCustomerCode.setState({value:data[0].TITLE})
+                                                    this.txtCustomerCode.CODE = data[0].CODE
+                                                }
+                                            }
+                                        }
+                                    }).bind(this)}
                                 button=
                                 {
                                     [
@@ -251,7 +267,19 @@ export default class rebateDisList extends React.Component
                                 width={'90%'}
                                 height={'90%'}
                                 title={this.t("pg_txtCustomerCode.title")} //
-                                data={{source:{select:{query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE GENUS IN(1,2) "},sql:this.core.sql}}}
+                                search={true}
+                                data = 
+                                {{
+                                    source:
+                                    {
+                                        select:
+                                        {
+                                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                                            param : ['VAL:string|50']
+                                        },
+                                        sql:this.core.sql
+                                    }
+                                }}
                                 button=
                                 {
                                     {

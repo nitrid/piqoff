@@ -762,46 +762,26 @@ export default class salesDispatch extends React.Component
                                     <NdTextBox id="txtCustomerCode" parent={this} simple={true}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.docObj.dt('DOC'),field:"INPUT_CODE"}} 
-                                    onChange={(async(r)=>
-                                    {
-                                        if(r.event.isTrusted == true)
+                                    onEnterKey={(async()=>
                                         {
-                                            let tmpQuery = 
+                                            await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
+                                            this.pg_txtCustomerCode.show()
+                                            this.pg_txtCustomerCode.onClick = (data) =>
                                             {
-                                                query :"SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE CODE = @CODE",
-                                                param : ['CODE:string|50'],
-                                                value : [r.component._changedValue]
-                                            }
-                                            let tmpData = await this.core.sql.execute(tmpQuery) 
-                                            if(tmpData.result.recordset.length > 0)
-                                            {
-                                                this.docObj.dt()[0].INPUT = tmpData.result.recordset[0].GUID
-                                                this.docObj.dt()[0].INPUT_CODE = tmpData.result.recordset[0].CODE
-                                                this.docObj.dt()[0].INPUT_NAME = tmpData.result.recordset[0].TITLE
-                                                let tmpDatas = this.prmObj.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
-                                                if(typeof tmpDatas != 'undefined' && tmpDatas.value ==  true)
+                                                if(data.length > 0)
                                                 {
-                                                    this.txtRef.setState({value:tmpData.result.recordset[0].CODE});
-                                                    this.txtRef.props.onChange()
+                                                    this.docObj.dt()[0].INPUT = data[0].GUID
+                                                    this.docObj.dt()[0].INPUT_CODE = data[0].CODE
+                                                    this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
+                                                    let tmpData = this.prmObj.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                                    if(typeof tmpData != 'undefined' && tmpData.value ==  true)
+                                                    {
+                                                        this.txtRef.setState({value:data[0].CODE});
+                                                        this.txtRef.props.onChange()
+                                                    }
                                                 }
                                             }
-                                            else
-                                            {
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgNotCustomer',showTitle:true,title:this.t("msgNotCustomer.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgNotCustomer.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotCustomer.msg")}</div>)
-                                                }
-                                    
-                                                await dialog(tmpConfObj);
-
-                                                this.docObj.dt()[0].INPUT = ''
-                                                this.docObj.dt()[0].INPUT_CODE = ''
-                                                this.docObj.dt()[0].INPUT_NAME = ''
-                                            }
-                                        }
-                                    }).bind(this)}
+                                        }).bind(this)}
                                     button=
                                     {
                                         [
