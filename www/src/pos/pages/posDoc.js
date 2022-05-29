@@ -807,13 +807,7 @@ export default class posDoc extends React.PureComponent
                         //EĞER ALINAN ÖDEME TOPLAM TUTAR KADAR İSE KALAN ÖDEME SORULMUYOR.
                         if((this.state.payRest - pAmount) > 0)
                         {
-                            let tmpConfObj =
-                            {
-                                id:'msgAlert',showTitle:true,title:"Bilgi",showCloseButton:true,width:'500px',height:'250px',
-                                button:[{id:"btn01",caption:"ESC",location:'before'},{id:"btn02",caption:"CB",location:'center'},{id:"btn03",caption:"CHQe",location:'center'},{id:"btn04",caption:"T.R",location:'after'}],
-                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Kalan ödemeyi nasıl almak istersiniz ?"}</div>)
-                            }
-                            let tmpResult2 = await dialog(tmpConfObj);
+                            let tmpResult2 = await this.msgRePaymentType.show()
                             if(tmpResult2 == "btn01")
                             {
                                 this.msgCardPayment.hide()
@@ -915,9 +909,9 @@ export default class posDoc extends React.PureComponent
                     resolve(2) // Zorla
                 }
             })
-
+            
             let tmpCardPay = await this.posDevice.cardPayment(pAmount)
-
+            
             if(typeof tmpCardPay != 'undefined')
             {
                 if(tmpCardPay.tag == "response")
@@ -943,10 +937,6 @@ export default class posDoc extends React.PureComponent
                 {
                     resolve(0) // Başarısız
                 }
-            }
-            else
-            {
-                resolve(0) // Başarısız
             }
         });
     }
@@ -3653,7 +3643,7 @@ export default class posDoc extends React.PureComponent
                                 <div style={{textAlign:"center",fontSize:"20px"}}>{"İade Tipini Seçiniz !"}</div>
                             </div>
                         </div>
-                    </NdDialog>
+                    </NdDialog>                    
                 </div>
                 {/* Alert Weighing Popup */} 
                 <div>
@@ -3693,58 +3683,108 @@ export default class posDoc extends React.PureComponent
                 </div>
                 {/* Diffrent Price Popup */}
                 <div>
-                <NdPopUp parent={this} id={"popDiffPrice"} 
-                visible={false}                        
-                showCloseButton={true}
-                showTitle={true}
-                title={"Fiyat Farkı"}
-                container={"#root"} 
-                width={"300"}
-                height={"515"}
-                // onHiding={()=> {this._onClick('close')}}
-                position={{of:"#root"}}
-                >
-                    {/* txtPopDiffPriceQ */}
-                    <div className="row pt-1">
-                        <div className="col-12">
-                            <NdTextBox id={"txtPopDiffPriceQ"} parent={this} simple={true} onFocusIn={()=>
-                            {
-                                this.numPopDiffPrice.textobj = "txtPopDiffPriceQ"
-                            }}>     
-                            </NdTextBox> 
+                    <NdPopUp parent={this} id={"popDiffPrice"} 
+                    visible={false}                        
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={"Fiyat Farkı"}
+                    container={"#root"} 
+                    width={"300"}
+                    height={"515"}
+                    // onHiding={()=> {this._onClick('close')}}
+                    position={{of:"#root"}}
+                    >
+                        {/* txtPopDiffPriceQ */}
+                        <div className="row pt-1">
+                            <div className="col-12">
+                                <NdTextBox id={"txtPopDiffPriceQ"} parent={this} simple={true} onFocusIn={()=>
+                                {
+                                    this.numPopDiffPrice.textobj = "txtPopDiffPriceQ"
+                                }}>     
+                                </NdTextBox> 
+                            </div>
+                        </div> 
+                        {/* txtPopDiffPriceP */}
+                        <div className="row pt-1">
+                            <div className="col-12">
+                                <NdTextBox id={"txtPopDiffPriceP"} parent={this} simple={true} onFocusIn={()=>
+                                {
+                                    this.numPopDiffPrice.textobj = "txtPopDiffPriceP"
+                                }}>     
+                                </NdTextBox> 
+                            </div>
+                        </div> 
+                        {/* numPopDiffPrice */}
+                        <div className="row pt-2">                        
+                            <div className="col-12">
+                                <NbNumberboard id={"numPopDiffPrice"} parent={this} textobj={"txtPopDiffPriceQ"} span={1} buttonHeight={"60px"}/>
+                            </div>
                         </div>
-                    </div> 
-                    {/* txtPopDiffPriceP */}
-                    <div className="row pt-1">
-                        <div className="col-12">
-                            <NdTextBox id={"txtPopDiffPriceP"} parent={this} simple={true} onFocusIn={()=>
-                            {
-                                this.numPopDiffPrice.textobj = "txtPopDiffPriceP"
-                            }}>     
-                            </NdTextBox> 
+                        {/* btnPopDiffPrice */}
+                        <div className="row pt-2">
+                            <div className="col-12">
+                                <NbButton id={"btnPopDiffPrice"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
+                                onClick={()=>
+                                {
+                                    let tmpData = {QUANTITY:this.txtPopDiffPriceQ.value * -1,PRICE:this.txtPopDiffPriceP.value};
+                                    this.saleRowUpdate(this.grdList.devGrid.getSelectedRowKeys()[0],tmpData);
+                                    this.popDiffPrice.hide();
+                                }}>
+                                    <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
+                                </NbButton>
+                            </div>
                         </div>
-                    </div> 
-                    {/* numPopDiffPrice */}
-                    <div className="row pt-2">                        
-                        <div className="col-12">
-                            <NbNumberboard id={"numPopDiffPrice"} parent={this} textobj={"txtPopDiffPriceQ"} span={1} buttonHeight={"60px"}/>
+                    </NdPopUp>
+                </div>
+                {/* Alert RePayment Type Popup */}
+                <div>
+                    <NdDialog id={"msgRePaymentType"} container={"#root"} parent={this}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    title={"Kalan ödemeyi nasıl almak istersiniz ?"} 
+                    showCloseButton={false}
+                    width={"500px"}
+                    height={"200px"}
+                    >
+                        <div className="row">
+                            <div className="col-3 py-2">
+                                <NbButton id={"btnMsgRePaymentESC"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"60px",width:"100%"}}
+                                onClick={()=>
+                                {
+                                    this.msgRePaymentType._onClick("btn01")
+                                }}>
+                                    <i className="text-white fa-solid fa-money-bill-1" style={{fontSize: "24px"}} />
+                                </NbButton>
+                            </div>
+                            <div className="col-3 py-2">
+                                <NbButton id={"btnMsgRePaymentCB"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"60px",width:"100%"}}
+                                onClick={()=>
+                                {
+                                    this.msgRePaymentType._onClick("btn02")
+                                }}>
+                                    <i className="text-white fa-solid fa-credit-card" style={{fontSize: "24px"}} />
+                                </NbButton>
+                            </div>
+                            <div className="col-3 py-2">
+                                <NbButton id={"btnMsgRePaymentCHQ"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"60px",width:"100%"}}
+                                onClick={()=>
+                                {
+                                    this.msgRePaymentType._onClick("btn03")
+                                }}>
+                                    <i className="text-white fa-solid fa-rectangle-list" style={{fontSize: "24px"}} />
+                                </NbButton>
+                            </div>
+                            <div className="col-3 py-2">
+                                <NbButton id={"btnMsgRePaymentTR"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"60px",width:"100%"}}
+                                onClick={()=>
+                                {
+                                    this.msgRePaymentType._onClick("btn04")
+                                }}>
+                                    <i className="text-white fa-solid fa-ticket" style={{fontSize: "24px"}} />
+                                </NbButton>
+                            </div>
                         </div>
-                    </div>
-                    {/* btnPopDiffPrice */}
-                    <div className="row pt-2">
-                        <div className="col-12">
-                            <NbButton id={"btnPopDiffPrice"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
-                            onClick={()=>
-                            {
-                                let tmpData = {QUANTITY:this.txtPopDiffPriceQ.value * -1,PRICE:this.txtPopDiffPriceP.value};
-                                this.saleRowUpdate(this.grdList.devGrid.getSelectedRowKeys()[0],tmpData);
-                                this.popDiffPrice.hide();
-                            }}>
-                                <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
-                            </NbButton>
-                        </div>
-                    </div>
-                </NdPopUp>
+                    </NdDialog>
                 </div>
             </div>
         )
