@@ -954,7 +954,11 @@ export default class itemCard extends React.Component
                                 </div>
                             </div>
                             <div className='row pt-2'>
-                                <div className='col-12'>
+                            <div className='col-6'>
+                                    <NdButton id="btnNewImg" parent={this} icon="add" type="default" width='100%'
+                                    />
+                                </div>
+                                <div className='col-6'>
                                     <NdButton id="btnImgDel" parent={this} icon="trash" type="default" width='100%'
                                     onClick={()=>
                                     {
@@ -965,6 +969,7 @@ export default class itemCard extends React.Component
                                     }}/>
                                 </div>
                             </div>
+                            
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
