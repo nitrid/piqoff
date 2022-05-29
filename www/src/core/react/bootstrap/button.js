@@ -1,5 +1,6 @@
 import React from 'react';
 import NbBase from './base.js';
+import {acsDialog} from '../devex/acsdialog.js';
 
 export default class NbButton extends NbBase
 {
@@ -9,11 +10,22 @@ export default class NbButton extends NbBase
 
         this._onClick = this._onClick.bind(this);
     }
-    _onClick()
+    async _onClick()
     {
         if(typeof this.props.onClick != 'undefined')
         {
-            this.props.onClick();
+            if(typeof this.props.access != 'undefined' && typeof this.props.access.getValue().dialog != 'undefined')
+            {   
+                let tmpResult = await acsDialog({id:"AcsDialog",parent:this.props.parent,type:this.props.access.getValue().dialog.type})
+                if(tmpResult)
+                {
+                    this.props.onClick();
+                }
+            }
+            else
+            {
+                this.props.onClick();
+            }
         }
         if(typeof this.props.keyBtn != 'undefined' && typeof this.props.parent != 'undefined' && typeof this.props.id != 'undefined')
         {

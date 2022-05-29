@@ -261,7 +261,6 @@ export default class Login extends React.Component
                                     />
                                 </div>
                             </div>
-                            
                         </div>
                         <div>
                             <NdPopGrid id={"pg_users"} parent={this} container={"#root"}
