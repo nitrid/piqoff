@@ -18,6 +18,8 @@ import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
+import NdTagBox from '../../../../core/react/devex/tagbox.js';
+
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
@@ -39,7 +41,9 @@ export default class purchaseDispatch extends React.Component
         this._getItems = this._getItems.bind(this)
 
         this.frmDocItems = undefined;
-        this.docLocked = false;        
+        this.docLocked = false;   
+        
+        this.multiItemData = new datatable
     }
     async componentDidMount()
     {
@@ -115,6 +119,7 @@ export default class purchaseDispatch extends React.Component
         
         this.frmDocItems.option('disabled',false)
         await this.grdPurcDispatch.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
+        await this.grdMultiItem.dataRefresh({source:this.multiItemData});
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -339,8 +344,12 @@ export default class purchaseDispatch extends React.Component
             )
         }
     }
-    async addItem(pData,pIndex)
+    async addItem(pData,pIndex,pQuantity)
     {
+        if(typeof pQuantity == 'undefined')
+        {
+            pQuantity = 1
+        }
         let tmpCheckQuery = 
         {
             query :"SELECT MULTICODE,CUSTOMER_PRICE AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
@@ -375,8 +384,8 @@ export default class purchaseDispatch extends React.Component
                 let pResult = await dialog(tmpConfObj);
                 if(pResult == 'btn01')
                 {
-                    this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + 1
-                    this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100))).toFixed(3))
+                    this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + pQuantity
+                    this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100) * pQuantity)).toFixed(3))
                     this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
                     this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
                     this._calculateTotal()
@@ -391,6 +400,7 @@ export default class purchaseDispatch extends React.Component
         this.docObj.docItems.dt()[pIndex].ITEM_NAME = pData.NAME
         this.docObj.docItems.dt()[pIndex].DISCOUNT = 0
         this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
+        this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
         let tmpQuery = 
         {
             query :"SELECT CUSTOMER_PRICE AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
@@ -401,9 +411,9 @@ export default class purchaseDispatch extends React.Component
         if(tmpData.result.recordset.length > 0)
         {
             this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(2))
-            this.docObj.docItems.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100)).toFixed(2))
-            this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(2))
-            this.docObj.docItems.dt()[pIndex].TOTAL = parseFloat((tmpData.result.recordset[0].PRICE + this.docObj.docItems.dt()[pIndex].VAT).toFixed(2))
+            this.docObj.docItems.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100) * pQuantity).toFixed(2))
+            this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(2) * pQuantity)
+            this.docObj.docItems.dt()[pIndex].TOTAL = parseFloat(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT).toFixed(2))
             this._calculateTotal()
         }
         else
@@ -432,6 +442,90 @@ export default class purchaseDispatch extends React.Component
             }
         }
         this.pg_txtItemsCode.setSource(tmpSource)
+    }
+    async multiItemAdd()
+    {
+        let tmpMissCodes = []
+        let tmpCounter = 0
+        for (let i = 0; i < this.tagItemCode.value.length; i++) 
+        {
+            if(this.cmbMultiItemType.value == 0)
+            {
+                let tmpQuery = 
+                {
+                    query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY," + 
+                    "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
+                    " FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') = @VALUE " ,
+                    param : ['VALUE:string|50'],
+                    value : [this.tagItemCode.value[i]]
+                }
+                let tmpData = await this.core.sql.execute(tmpQuery) 
+                if(tmpData.result.recordset.length > 0)
+                {
+                    this.multiItemData.push(tmpData.result.recordset[0])
+                    tmpCounter = tmpCounter + 1
+                }
+                else
+                {
+                    tmpMissCodes.push(this.tagItemCode.value[i])
+                }
+            }
+            else if (this.cmbMultiItemType.value == 1)
+            {
+                let tmpQuery = 
+                {
+                    query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY," + 
+                    "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
+                    " FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VALUE) OR UPPER(NAME) LIKE UPPER(@VALUE) " ,
+                    param : ['VALUE:string|50'],
+                    value : [this.tagItemCode.value[i]]
+                }
+                let tmpData = await this.core.sql.execute(tmpQuery) 
+                if(tmpData.result.recordset.length > 0)
+                {
+                    this.multiItemData.push(tmpData.result.recordset[0])
+                    tmpCounter = tmpCounter + 1
+                }
+                else
+                {
+                    tmpMissCodes.push(this.tagItemCode.value[i])
+                }
+            }
+            
+        }
+
+        let tmpConfObj =
+        {
+            id:'msgMultiCodeCount',showTitle:true,title:this.t("msgMultiCodeCount.title"),showCloseButton:true,width:'500px',height:'200px',
+            button:[{id:"btn01",caption:this.t("msgMultiCodeCount.btn01"),location:'after'}],
+            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgMultiCodeCount.msg") + ' ' +tmpCounter}</div>)
+        }
+    
+         await dialog(tmpConfObj);
+
+    }
+    async multiItemSave()
+    {
+        for (let i = 0; i < this.multiItemData.length; i++) 
+        {
+            let tmpDocItems = {...this.docObj.docItems.empty}
+            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+            tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+            tmpDocItems.REF = this.docObj.dt()[0].REF
+            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+            tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+            this.txtRef.readOnly = true
+            this.txtRefno.readOnly = true
+            this.docObj.docItems.addEmpty(tmpDocItems)
+            this.addItem(this.multiItemData[i],this.docObj.docItems.dt().length-1,this.multiItemData[i].QUANTITY)
+            this.popMultiItem.hide()
+        }
     }
     render()
     {
@@ -1122,6 +1216,31 @@ export default class purchaseDispatch extends React.Component
                                             await dialog(tmpConfObj);
                                         }
                                     }}/>
+                                     <Button icon="increaseindent" text="Toplu Ürün Ekleme"
+                                     validationGroup={"frmPurcDispatch"  + this.tabIndex}
+                                    onClick={async (e)=>
+                                    {
+                                        if(e.validationGroup.validate().status == "valid")
+                                        {
+                                            this.multiItemData.clear
+                                            this.popMultiItem.show()
+                                            if( typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] != 'undefined' && this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
+                                            {
+                                                await this.grdPurcInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                            }
+                                        }
+                                        else
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
+                                            }
+                                            
+                                            await dialog(tmpConfObj);
+                                        }
+                                    }}/>
                                 </Item>
                                 <Item  >
                                 <Label text={this.t("txtAmount")} alignment="right" />
@@ -1381,8 +1500,8 @@ export default class purchaseDispatch extends React.Component
                         <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />
                         <Column dataField="MULTICODE" caption={this.t("pg_txtItemsCode.clmMulticode")} width={200}/>
                     </NdPopGrid>
-                                           {/* Dizayn Seçim PopUp */}
-                                           <div>
+                    {/* Dizayn Seçim PopUp */}
+                    <div>
                         <NdPopUp parent={this} id={"popDesign"} 
                         visible={false}
                         showCloseButton={true}
@@ -1472,6 +1591,94 @@ export default class purchaseDispatch extends React.Component
                                     </div>
                                 </Item>
                             </Form>
+                        </NdPopUp>
+                    </div> 
+                    {/* Toplu Stok PopUp */}
+                    <div>
+                    <NdPopUp parent={this} id={"popMultiItem"} 
+                    visible={false}
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={this.t("popMultiItem.title")}
+                    container={"#root"} 
+                    width={'900'}
+                    height={'700'}
+                    position={{of:'#root'}}
+                    >
+                        <Form colCount={2} height={'fit-content'}>
+                        <Item colSpan={2}>
+                            <Label  alignment="right" />
+                                <NdTagBox id="tagItemCode" parent={this} simple={true} value={[]} placeholder={this.t("tagItemCodePlaceholder")}
+                                />
+                        </Item>
+                        <Item></Item>       
+                        <Item>
+                            <Label text={this.t("cmbMultiItemType.title")} alignment="right" />
+                            <NdSelectBox simple={true} parent={this} id="cmbMultiItemType" height='fit-content' 
+                            displayExpr="VALUE"                       
+                            valueExpr="ID"
+                            value={0}
+                            data={{source:[{ID:0,VALUE:this.t("cmbMultiItemType.customerCode")},{ID:1,VALUE:this.t("cmbMultiItemType.ItemCode")}]}}
+                            />
+                        </Item>   
+                        <Item></Item>   
+                        <Item>
+                            <div className='row'>
+                                <div className='col-6'>
+                                    <NdButton text={this.t("popMultiItem.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
+                                    onClick={async (e)=>
+                                    {       
+                                        this.multiItemAdd()
+                                    }}/>
+                                </div>
+                                <div className='col-6'>
+                                    <NdButton text={this.t("popMultiItem.btnClear")} type="normal" stylingMode="contained" width={'100%'}
+                                    onClick={()=>
+                                    {
+                                        this.multiItemData.clear()
+                                    }}/>
+                                </div>
+                            </div>
+                        </Item>
+                        <Item colSpan={2} >
+                        <NdGrid parent={this} id={"grdMultiItem"} 
+                                showBorders={true} 
+                                columnsAutoWidth={true} 
+                                allowColumnReordering={true} 
+                                allowColumnResizing={true} 
+                                headerFilter={{visible:true}}
+                                height={400} 
+                                width={'100%'}
+                                dbApply={false}
+                                onRowRemoved={async (e)=>{
+                                    
+                                }}
+                                >
+                                    <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
+                                    <Scrolling mode="infinite" />
+                                    <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
+                                    <Column dataField="CODE" caption={this.t("grdMultiItem.clmCode")} width={150} allowEditing={false} />
+                                    <Column dataField="MULTICODE" caption={this.t("grdMultiItem.clmMulticode")} width={150} allowEditing={false} />
+                                    <Column dataField="NAME" caption={this.t("grdMultiItem.clmName")} width={300}  headerFilter={{visible:true}} allowEditing={false} />
+                                    <Column dataField="QUANTITY" caption={this.t("grdMultiItem.clmQuantity")} dataType={'number'} width={100} headerFilter={{visible:true}}/>
+                            </NdGrid>
+                        </Item>
+                        <Item></Item>   
+                        <Item>
+                            <div className='row'>
+                                <div className='col-6'>
+                                    
+                                </div>
+                                <div className='col-6'>
+                                    <NdButton text={this.t("popMultiItem.btnSave")} type="normal" stylingMode="contained" width={'100%'}
+                                    onClick={()=>
+                                    {
+                                        this.multiItemSave()
+                                    }}/>
+                                </div>
+                            </div>
+                        </Item>
+                        </Form>
                         </NdPopUp>
                     </div> 
                 </ScrollView>                
