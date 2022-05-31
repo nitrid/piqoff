@@ -161,6 +161,7 @@ export default class posDoc extends React.PureComponent
         {
             this.setState({isBtnGetCustomer:true})
         }
+        console.log(this.posObj)
         await this.calcGrandTotal(false)
     }
     getItemDb(pCode)
@@ -569,6 +570,11 @@ export default class posDoc extends React.PureComponent
                 }
             }            
             console.log("100 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
+            //HER EKLEME İŞLEMİNDEN SONRA İLK SATIR SEÇİLİYOR.
+            setTimeout(() => 
+            {
+                this.grdList.devGrid.selectRowsByIndexes(0)
+            }, 100);
             if(typeof pSave == 'undefined' || pSave)
             {
                 let tmpClose = await this.saleClosed(true,tmpPayRest,tmpPayChange)
@@ -609,7 +615,6 @@ export default class posDoc extends React.PureComponent
             let tmpData = this.posObj.posSale.dt().where({ITEM_GUID:pData.GUID}).where({SUBTOTAL:0}).where({QUANTITY:{'>':0}})
             if(tmpData.length > 0)
             {
-                console.log(tmpData)
                 //UNIQ ÜRÜN İÇİN pData.INPUT == pData.UNIQ_CODE
                 if(pData.SALE_JOIN_LINE == 0 && pData.WEIGHING == 0 && pData.INPUT != pData.UNIQ_CODE)
                 {
@@ -641,12 +646,7 @@ export default class posDoc extends React.PureComponent
         {            
             pItemData.QUANTITY = Number(parseFloat(pItemData.QUANTITY * pItemData.UNIT_FACTOR).toFixed(3))
             this.saleRowAdd(pItemData)                  
-        }        
-        //HER EKLEME İŞLEMİNDEN SONRA İLK SATIR SEÇİLİYOR.
-        setTimeout(() => 
-        {
-            this.grdList.devGrid.selectRowsByIndexes(0)
-        }, 100);
+        }                
     }
     async saleRowAdd(pItemData)
     {        
@@ -654,7 +654,7 @@ export default class posDoc extends React.PureComponent
         let tmpMaxLine = this.posObj.posSale.dt().where({SUBTOTAL:{'<>':-1}}).max('LINE_NO')
         
         this.posObj.posSale.addEmpty()
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].LDATE = moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].LDATE = moment(new Date()).utcOffset(0, true)
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].SAFE = ''
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DEPOT_GUID = '00000000-0000-0000-0000-000000000000'
@@ -702,7 +702,7 @@ export default class posDoc extends React.PureComponent
     { 
         let tmpCalc = this.calcSaleTotal(pItemData.PRICE,pItemData.QUANTITY,pRowData.DISCOUNT,pRowData.LOYALTY,pRowData.VAT_RATE)
     
-        pRowData.LDATE = moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
+        pRowData.LDATE = moment(new Date()).utcOffset(0, true)
         pRowData.QUANTITY = tmpCalc.QUANTITY
         pRowData.PRICE = tmpCalc.PRICE
         pRowData.FAMOUNT = tmpCalc.FAMOUNT
@@ -717,7 +717,6 @@ export default class posDoc extends React.PureComponent
     {        
         return new Promise(async resolve => 
         {
-            console.log(pPayRest)
             await this.core.util.waitUntil()
             if(pPayRest == 0 && this.posObj.dt().length > 0 && this.posObj.dt()[0].AMOUNT > 0) //FIYATSIZ VE MİKTAR SIFIR ÜRÜNLER İÇİN KONTROL EKLENDİ. BU ŞEKİLDE SATIŞIN KAPANMASI ENGELLENDİ.
             {
@@ -1502,7 +1501,7 @@ export default class posDoc extends React.PureComponent
                         {/* txtBarcode */}
                         <div className="row">
                             <div className="col-12">
-                                <NdPosBarBox id="txtBarcode" parent={this} simple={true} 
+                                <NdPosBarBox id="txtBarcode" parent={this} simple={true} selectAll={false}
                                 button={
                                 [
                                     {
@@ -1632,12 +1631,11 @@ export default class posDoc extends React.PureComponent
                                 }}
                                 >
                                     <Editing confirmDelete={false}/>
-                                    <Column dataField="LDATE" caption={"LDATE"} width={40} alignment={"center"} dataType={"datetime"} format={"dd-MM-yyyy - HH:mm:ss"} defaultSortOrder="desc" visible={false}/>
-                                    {/* <Column dataField="LINE_NO" caption={"NO"} width={40} alignment={"center"} defaultSortOrder="desc"/> */}
-                                    <Column dataField="ITEM_NAME" caption={"ADI"} width={300} />
+                                    <Column dataField="LDATE" caption={"LDATE"} width={40} alignment={"center"} dataType={"datetime"} format={"dd-MM-yyyy - HH:mm:ss SSSZ"} defaultSortOrder="desc" visible={false}/>
+                                    <Column dataField="ITEM_NAME" caption={"ADI"} width={300}/>
                                     <Column dataField="QUANTITY" caption={"MIKTAR"} width={60}/>
-                                    <Column dataField="PRICE" caption={"FIYAT"} width={50}/>
-                                    <Column dataField="AMOUNT" alignment={"right"} caption={"TUTAR"} width={60}/>                                                
+                                    <Column dataField="PRICE" caption={"FIYAT"} width={50} format={"#0.00"}/>
+                                    <Column dataField="AMOUNT" alignment={"right"} caption={"TUTAR"} width={60} format={"#0.00"}/>                                                
                                 </NdGrid>
                             </div>
                         </div>
@@ -1847,6 +1845,7 @@ export default class posDoc extends React.PureComponent
                                     {/* Discount */}
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnDiscount"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        access={this.acsObj.filter({ELEMENT:'btnDiscount',USERS:this.user.CODE})}
                                         onClick={()=>
                                         {   
                                             this.rbtnDisType.value = 0

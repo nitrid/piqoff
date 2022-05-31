@@ -34,6 +34,22 @@ export const acs =
             CAPTION : "Kasa Aç"
         }
     },
+    //btnDiscount
+    {
+        TYPE : 2,
+        ID :"btnDiscount",
+        VALUE : {dialog:{type:1}},
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "btnDiscount",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Pos",
+            CAPTION : "İskonto Giriş Butonu"
+        }
+    },
     //PriceEdit
     {
         TYPE : 1,

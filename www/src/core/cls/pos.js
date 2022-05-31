@@ -187,7 +187,7 @@ export class posSaleCls
             GUID : '00000000-0000-0000-0000-000000000000',
             CUSER : this.core.auth.data.CODE,
             LUSER : this.core.auth.data.CODE,
-            LDATE : moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
+            LDATE : moment(new Date()).utcOffset(0, true),
             POS_GUID : '00000000-0000-0000-0000-000000000000',
             SAFE : '',
             DEPOT_GUID : '00000000-0000-0000-0000-000000000000',
@@ -246,7 +246,9 @@ export class posSaleCls
         {
             query : "EXEC [dbo].[PRD_POS_SALE_INSERT] " + 
                     "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " + 
+                    "@CUSER = @PCUSER, " +
+                    "@CDATE = @PCDATE, " + 
+                    "@LDATE = @PLDATE, " + 
                     "@POS = @PPOS, " +
                     "@LINE_NO = @PLINE_NO, " +
                     "@ITEM = @PITEM, " +  
@@ -262,9 +264,9 @@ export class posSaleCls
                     "@VAT = @PVAT, " + 
                     "@TOTAL = @PTOTAL, " + 
                     "@SUBTOTAL = @PSUBTOTAL ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PINPUT:string|25','PBARCODE:string|50','PUNIT:string|50',
+            param : ['PGUID:string|50','PCUSER:string|25','PCDATE:datetime','PLDATE:datetime','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PINPUT:string|25','PBARCODE:string|50','PUNIT:string|50',
                     'PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int'],
-            dataprm : ['GUID','CUSER','POS_GUID','LINE_NO','ITEM_GUID','INPUT','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY','VAT',
+            dataprm : ['GUID','CUSER','LDATE','LDATE','POS_GUID','LINE_NO','ITEM_GUID','INPUT','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY','VAT',
                     'TOTAL','SUBTOTAL']
         } 
         tmpDt.updateCmd = 
@@ -272,6 +274,7 @@ export class posSaleCls
             query : "EXEC [dbo].[PRD_POS_SALE_UPDATE] " + 
                     "@GUID = @PGUID, " +
                     "@CUSER = @PCUSER, " + 
+                    "@LDATE = @PLDATE, " + 
                     "@POS = @PPOS, " +
                     "@LINE_NO = @PLINE_NO, " +
                     "@ITEM = @PITEM, " + 
@@ -287,9 +290,9 @@ export class posSaleCls
                     "@VAT = @PVAT, " + 
                     "@TOTAL = @PTOTAL, " + 
                     "@SUBTOTAL = @PSUBTOTAL ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PINPUT:string|25','PBARCODE:string|50','PUNIT:string|50',
+            param : ['PGUID:string|50','PCUSER:string|25','PLDATE:datetime','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PINPUT:string|25','PBARCODE:string|50','PUNIT:string|50',
                      'PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int'],
-            dataprm : ['GUID','CUSER','POS_GUID','LINE_NO','ITEM_GUID','INPUT','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY',
+            dataprm : ['GUID','CUSER','LDATE','POS_GUID','LINE_NO','ITEM_GUID','INPUT','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY',
                     'VAT','TOTAL','SUBTOTAL']
         } 
         tmpDt.deleteCmd = 
