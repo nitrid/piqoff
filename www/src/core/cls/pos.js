@@ -224,6 +224,7 @@ export class posSaleCls
             VAT_TYPE : '',
             TOTAL : 0,
             SUBTOTAL : 0,
+            PROMO_TYPE : 0,
             GRAND_AMOUNT : 0,
             GRAND_DISCOUNT : 0,
             GRAND_LOYALTY : 0,
@@ -263,11 +264,12 @@ export class posSaleCls
                     "@LOYALTY = @PLOYALTY, " + 
                     "@VAT = @PVAT, " + 
                     "@TOTAL = @PTOTAL, " + 
-                    "@SUBTOTAL = @PSUBTOTAL ", 
+                    "@SUBTOTAL = @PSUBTOTAL, " + 
+                    "@PROMO_TYPE = @PPROMO_TYPE ", 
             param : ['PGUID:string|50','PCUSER:string|25','PCDATE:datetime','PLDATE:datetime','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PINPUT:string|25','PBARCODE:string|50','PUNIT:string|50',
-                    'PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int'],
+                    'PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int','PPROMO_TYPE:int'],
             dataprm : ['GUID','CUSER','LDATE','LDATE','POS_GUID','LINE_NO','ITEM_GUID','INPUT','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY','VAT',
-                    'TOTAL','SUBTOTAL']
+                    'TOTAL','SUBTOTAL','PROMO_TYPE']
         } 
         tmpDt.updateCmd = 
         {
@@ -289,11 +291,12 @@ export class posSaleCls
                     "@LOYALTY = @PLOYALTY, " + 
                     "@VAT = @PVAT, " + 
                     "@TOTAL = @PTOTAL, " + 
-                    "@SUBTOTAL = @PSUBTOTAL ", 
+                    "@SUBTOTAL = @PSUBTOTAL, " + 
+                    "@PROMO_TYPE = @PPROMO_TYPE ", 
             param : ['PGUID:string|50','PCUSER:string|25','PLDATE:datetime','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PINPUT:string|25','PBARCODE:string|50','PUNIT:string|50',
-                     'PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int'],
+                     'PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int','PPROMO_TYPE:int'],
             dataprm : ['GUID','CUSER','LDATE','POS_GUID','LINE_NO','ITEM_GUID','INPUT','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY',
-                    'VAT','TOTAL','SUBTOTAL']
+                    'VAT','TOTAL','SUBTOTAL','PROMO_TYPE']
         } 
         tmpDt.deleteCmd = 
         {
