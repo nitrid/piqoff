@@ -311,10 +311,7 @@ export default class NdGrid extends Base
                 >
                     {this.props.children}
                 </DataGrid>
-                
             )            
-
-            
         }
         else
         {
