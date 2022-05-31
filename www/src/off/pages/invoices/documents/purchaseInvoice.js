@@ -641,6 +641,23 @@ export default class purchaseInvoice extends React.Component
     {
         let tmpMissCodes = []
         let tmpCounter = 0
+        console.log(this.multiItemData)
+        if(this.multiItemData.length > 0)
+        {
+            
+                let tmpConfObj =
+                {
+                    id:'msgMultiData',showTitle:true,title:this.t("msgMultiData.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgMultiData.msg")}</div>)
+                }
+            
+                await dialog(tmpConfObj);
+                if(pResult == 'btn01')
+                {
+                   this.multiItemData.clear
+                }
+        }
         for (let i = 0; i < this.tagItemCode.value.length; i++) 
         {
             if(this.cmbMultiItemType.value == 0)
@@ -687,7 +704,17 @@ export default class purchaseInvoice extends React.Component
             }
             
         }
-
+        if(tmpMissCodes.length > 0)
+        {
+            let tmpConfObj =
+            {
+                id:'msgMissItemCode',showTitle:true,title:this.t("msgMissItemCode.title"),showCloseButton:true,width:'500px',height:'auto',
+                button:[{id:"btn01",caption:this.t("msgMissItemCode.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",wordWrap:"break-word",fontSize:"20px"}}>{this.t("msgMissItemCode.msg") + ' ' +tmpMissCodes}</div>)
+            }
+        
+            await dialog(tmpConfObj);
+        }
         let tmpConfObj =
         {
             id:'msgMultiCodeCount',showTitle:true,title:this.t("msgMultiCodeCount.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -2218,8 +2245,8 @@ export default class purchaseInvoice extends React.Component
                         showTitle={true}
                         title={this.t("popMultiItem.title")}
                         container={"#root"} 
-                        width={'900'}
-                        height={'700'}
+                        width={'1100'}
+                        height={'900'}
                         position={{of:'#root'}}
                         >
                             <Form colCount={2} height={'fit-content'}>
@@ -2264,7 +2291,8 @@ export default class purchaseInvoice extends React.Component
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
                                     headerFilter={{visible:true}}
-                                    height={400} 
+                                    filterRow = {{visible:true}}
+                                    height={600} 
                                     width={'100%'}
                                     dbApply={false}
                                     onRowRemoved={async (e)=>{
