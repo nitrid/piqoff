@@ -156,12 +156,6 @@ export default class posDoc extends React.PureComponent
     async getDoc(pGuid)
     {
         await this.posObj.load({GUID:pGuid})
-        //FİŞ DE MÜŞTERİ SEÇİLİ İSE BUTON AKTİF EDİLİYOR.
-        if(this.posObj.dt()[0].CUSTOMER_GUID.toString() != '00000000-0000-0000-0000-000000000000')
-        {
-            this.setState({isBtnGetCustomer:true})
-        }
-        console.log(this.posObj)
         await this.calcGrandTotal(false)
     }
     getItemDb(pCode)
@@ -208,12 +202,7 @@ export default class posDoc extends React.PureComponent
         }
         //EĞER CARİ SEÇ BUTONUNA BASILDIYSA CARİ BARKODDAN SEÇİLECEK.
         if(this.state.isBtnGetCustomer)
-        {
-            //TICKET REST. SADAKAT PUAN KULLANIMI PARAMETRESI
-            if(this.prmObj.filter({ID:'UseTicketRestLoyalty',TYPE:0}).getValue() == true)
-            {
-                //#BAK
-            }
+        {            
             let tmpCustomerDt = new datatable(); 
             tmpCustomerDt.selectCmd = 
             {
@@ -231,6 +220,7 @@ export default class posDoc extends React.PureComponent
                 this.posObj.dt()[0].CUSTOMER_POINT = tmpCustomerDt[0].CUSTOMER_POINT
 
                 this.calcGrandTotal(false);
+                this.setState({isBtnGetCustomer:false})
             }
             else
             {
@@ -649,7 +639,7 @@ export default class posDoc extends React.PureComponent
         }                
     }
     async saleRowAdd(pItemData)
-    {        
+    {                
         let tmpCalc = this.calcSaleTotal(pItemData.PRICE,pItemData.QUANTITY,0,0,pItemData.VAT)
         let tmpMaxLine = this.posObj.posSale.dt().where({SUBTOTAL:{'<>':-1}}).max('LINE_NO')
         
@@ -690,6 +680,7 @@ export default class posDoc extends React.PureComponent
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].VAT_TYPE = pItemData.VAT_TYPE
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].TOTAL = tmpCalc.TOTAL
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].SUBTOTAL = 0
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].PROMO_TYPE = (pItemData.INPUT == pItemData.UNIQ_CODE) ? 1 : 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_AMOUNT = 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_DISCOUNT = 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_LOYALTY = 0
@@ -701,7 +692,17 @@ export default class posDoc extends React.PureComponent
     async saleRowUpdate(pRowData,pItemData)
     { 
         let tmpCalc = this.calcSaleTotal(pItemData.PRICE,pItemData.QUANTITY,pRowData.DISCOUNT,pRowData.LOYALTY,pRowData.VAT_RATE)
-    
+        if(pRowData.PROMO_TYPE == 1)
+        {
+            let tmpConfObj =
+            {
+                id:'msgAlert',showTitle:true,title:"Bilgi",showCloseButton:true,width:'500px',height:'250px',
+                button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Özel etiketli ürünlerde herhangi bir değişiklik yapamazsınız !"}</div>)
+            }
+            await dialog(tmpConfObj);
+            return
+        }
         pRowData.LDATE = moment(new Date()).utcOffset(0, true)
         pRowData.QUANTITY = tmpCalc.QUANTITY
         pRowData.PRICE = tmpCalc.PRICE
@@ -810,9 +811,24 @@ export default class posDoc extends React.PureComponent
     {
         if(this.state.payRest > 0)
         {
+            console.log(pAmount + " - " + this.state.payRest)
             //KREDİ KARTI İSE
             if(pType == 1)
             {
+                if(pAmount > this.state.payRest)
+                {
+                    let tmpConfObj =
+                    {
+                        id:'msgAlert',showTitle:true,title:"Bilgi",showCloseButton:true,width:'500px',height:'250px',
+                        button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Girmiş olduğunuz tutar, kalan tutardan daha büyük olamaz !"}</div>)
+                    }
+                    await dialog(tmpConfObj);
+                    this.txtPopCardPay.newStart = true;
+                    this.txtPopCardPay.focus()
+                    return
+                }
+
                 this.popCardPay.hide()
                 let tmpPayCard = await this.payCard(pAmount)
                 if(tmpPayCard == 1) //Başarılı
@@ -824,11 +840,11 @@ export default class posDoc extends React.PureComponent
                     let tmpConfObj =
                     {
                         id:'msgAlert',showTitle:true,title:"Bilgi",showCloseButton:true,width:'500px',height:'250px',
-                        button:[{id:"btn01",caption:"İptal",location:'before'},{id:"btn02",caption:"Tamam",location:'after'}],
+                        button:[{id:"btn01",caption:"Tamam",location:'before'},{id:"btn02",caption:"İptal",location:'after'}],
                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Ödemeyi aldığınızdan eminmisiniz ?"}</div>)
                     }
                     let tmpResult = await dialog(tmpConfObj);
-                    if(tmpResult == "btn02")
+                    if(tmpResult == "btn01")
                     {
                         this.msgCardPayment.hide()
                         //EĞER ALINAN ÖDEME TOPLAM TUTAR KADAR İSE KALAN ÖDEME SORULMUYOR.
@@ -839,11 +855,13 @@ export default class posDoc extends React.PureComponent
                             {
                                 this.msgCardPayment.hide()
                                 this.popCashPay.show();
+                                this.txtPopCashPay.newStart = true;
                             }
                             else if(tmpResult2 == "btn02")
                             {
                                 this.msgCardPayment.hide()
                                 this.popCardPay.show();
+                                this.txtPopCardPay.newStart = true;
                             }
                             else if(tmpResult2 == "btn03")
                             {
@@ -1863,7 +1881,7 @@ export default class posDoc extends React.PureComponent
                                         onClick={async ()=>
                                         {
                                             //TICKET REST. SADAKAT PUAN KULLANIMI PARAMETRESI
-                                            if(this.prmObj.filter({ID:'UseTicketRestLoyalty',TYPE:0}).getValue() == true)
+                                            if(this.prmObj.filter({ID:'UseTicketRestLoyalty',TYPE:0}).getValue() == 0)
                                             {
                                                 if(this.customerName.value != '')
                                                 {
@@ -2292,22 +2310,55 @@ export default class posDoc extends React.PureComponent
                                     {/* Get Customer */}
                                     <div className="col px-1">
                                         <NbButton id={"btnGetCustomer"} parent={this} className={this.state.isBtnGetCustomer == true ? "form-group btn btn-danger btn-block my-1" : "form-group btn btn-info btn-block my-1"} style={{height:"70px",width:"100%"}}
-                                        onClick={()=>
+                                        onClick={async ()=>
                                         {
                                             if(this.state.isBtnGetCustomer)
                                             {
-                                                this.setState({isBtnGetCustomer:false})
-
-                                                this.posObj.dt()[0].CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000'
-                                                this.posObj.dt()[0].CUSTOMER_CODE = ''
-                                                this.posObj.dt()[0].CUSTOMER_NAME = ''
-                                                this.posObj.dt()[0].CUSTOMER_POINT = 0
-
-                                                this.calcGrandTotal(false);
+                                                this.setState({isBtnGetCustomer:false})                                                
                                             }
                                             else
                                             {
-                                                this.setState({isBtnGetCustomer:true})
+                                                if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
+                                                {
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:"Tamam",location:'before'},{id:"btn02",caption:"İptal",location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Seçili müşteriden çıkmak istediğinize eminmisiniz ?"}</div>)
+                                                    }
+                                                    let tmpResult = await dialog(tmpConfObj);
+                                                    if(tmpResult == "btn01")
+                                                    {
+                                                        this.posObj.dt()[0].CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000'
+                                                        this.posObj.dt()[0].CUSTOMER_CODE = ''
+                                                        this.posObj.dt()[0].CUSTOMER_NAME = ''
+                                                        this.posObj.dt()[0].CUSTOMER_POINT = 0
+        
+                                                        this.calcGrandTotal(false);
+                                                    }
+                                                    return
+                                                }
+                                                else
+                                                {
+                                                    //TICKET REST. SADAKAT PUAN KULLANIMI PARAMETRESI
+                                                    if(this.prmObj.filter({ID:'UseTicketRestLoyalty',TYPE:0}).getValue() == 0)
+                                                    {
+                                                        if(this.posObj.posPay.dt().where({PAY_TYPE:3}).length > 0)
+                                                        {
+                                                            let tmpConfObj =
+                                                            {
+                                                                id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                                                button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Ticket Rest. ile yapılan ödemelerde sadakat puanı veremezsiniz. Lütfen seçili müşteriden çıkınız !"}</div>)
+                                                            }
+                                                            await dialog(tmpConfObj);
+                                                            this.setState({isBtnGetCustomer:false})
+                                                            return
+                                                        }
+                                                    }
+
+                                                    this.setState({isBtnGetCustomer:true})
+                                                }
                                             }
                                         }}>
                                             <i className="text-white fa-solid fa-circle-user" style={{fontSize: "24px"}} />
@@ -2481,7 +2532,24 @@ export default class posDoc extends React.PureComponent
                                         <div className="row pb-1">
                                             {/* T.R Detail */}
                                             <div className="col-6">
-                                                <NbButton id={"btnPopTotalTRDetail"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}>
+                                                <NbButton id={"btnPopTotalTRDetail"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
+                                                onClick={async ()=>
+                                                {
+                                                    if(this.posObj.posPay.dt().where({PAY_TYPE:3}).length > 0)
+                                                    {
+                                                        let tmpDt = new datatable(); 
+                                                        tmpDt.selectCmd = 
+                                                        {
+                                                            query : "SELECT AMOUNT AS AMOUNT,COUNT(AMOUNT) AS COUNT FROM CHEQPAY WHERE DOC = @DOC GROUP BY AMOUNT",
+                                                            param : ['DOC:string|50']
+                                                        }
+                                                        tmpDt.selectCmd.value = [this.posObj.dt()[0].GUID]
+                                                        await tmpDt.refresh();
+                                                        
+                                                        await this.grdTRDetail.dataRefresh({source:tmpDt});
+                                                        this.popTRDetail.show()
+                                                    }
+                                                }}>
                                                     T.R Detay
                                                 </NbButton>
                                             </div>
@@ -2941,8 +3009,8 @@ export default class posDoc extends React.PureComponent
                                     e.cellElement.style.padding = "4px"
                                 }}
                                 >
-                                    <Column dataField="CODE" caption={"CODE"} width={550} />
-                                    <Column dataField="AMOUNT" caption={"AMOUNT"} width={100}/>
+                                    <Column dataField="CODE" alignment={"center"} caption={"CODE"} width={550} />
+                                    <Column dataField="AMOUNT" alignment={"center"} caption={"AMOUNT"} width={100}/>
                                 </NdGrid>
                             </div>
                         </div>
@@ -3865,6 +3933,55 @@ export default class posDoc extends React.PureComponent
                             </div>
                         </div>
                     </NdDialog>
+                </div>
+                {/* T.R Detail Popup */}
+                <div>
+                    <NdPopUp parent={this} id={"popTRDetail"} 
+                    visible={false}                        
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={"Ticket Restorant"}
+                    container={"#root"} 
+                    width={"600"}
+                    height={"600"}
+                    position={{of:"#root"}}
+                    >
+                        {/* grdTRDetail */}
+                        <div className="row">
+                            <div className="col-12">
+                                <NdGrid parent={this} id={"grdTRDetail"} 
+                                showBorders={true} 
+                                columnsAutoWidth={true} 
+                                allowColumnReordering={true} 
+                                allowColumnResizing={true} 
+                                filterRow={{visible:true}} 
+                                headerFilter={{visible:true}}
+                                height={"500px"} 
+                                width={"100%"}
+                                dbApply={false}
+                                selection={{mode:"single"}}
+                                onRowPrepared={(e)=>
+                                {
+                                    if(e.rowType == "header")
+                                    {
+                                        e.rowElement.style.fontWeight = "bold";                                             
+                                    }
+                                    e.rowElement.style.fontSize = "13px";
+                                }}
+                                onCellPrepared={(e)=>
+                                {
+                                    if(e.rowType == "data")
+                                    {
+                                        e.cellElement.style.padding = "12px"
+                                    }
+                                }}
+                                >
+                                    <Column dataField="AMOUNT" alignment={"center"} caption={"AMOUNT"} format={"#.00 €"} width={200}/>
+                                    <Column dataField="COUNT" alignment={"center"} caption={"COUNT"} format={"### Qty"} width={200} />
+                                </NdGrid>
+                            </div>
+                        </div>
+                    </NdPopUp>    
                 </div>
             </div>
         )

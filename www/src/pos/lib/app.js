@@ -152,17 +152,9 @@ export default class App extends React.Component
                 App.instance.setState({splash:tmpSplash});
             }
             //SUNUCUYA BAĞLANDIKDAN SONRA AUTH ILE LOGIN DENETLENIYOR
-            if((await this.core.auth.login(window.sessionStorage.getItem('auth'),'ADMIN')))
+            if((await this.core.auth.login(window.sessionStorage.getItem('auth'),'POS')))
             {
-                //ADMIN PANELINE YANLIZCA ADMINISTRATOR ROLUNDEKİ KULLANICILAR GİREBİLİR...
-                if(this.core.auth.data.ROLE == 'Administrator')
-                {
-                    App.instance.setState({logined:true,connected:true});
-                }
-                else
-                {
-                    App.instance.setState({logined:false,connected:true});
-                }
+                App.instance.setState({logined:true,connected:true});
             }
             else
             {
