@@ -86,15 +86,8 @@ export default class Login extends React.Component
         
         if((await this.core.auth.login(this.state.kullanici,this.state.sifre,'OFF')))
         {
-            //ADMIN PANELINE YANLIZCA ADMINISTRATOR ROLUNDEKİ KULLANICILAR GİREBİLİR...
-            if(this.core.auth.data.ROLE == 'Administrator')
-            {
-                App.instance.setState({logined:true});
-            }
-            else
-            {
-                this.setState({logined:false,alert:this.lang.t("msgNotAccess")})
-            }
+           
+            App.instance.setState({logined:true});
         }
         else
         {

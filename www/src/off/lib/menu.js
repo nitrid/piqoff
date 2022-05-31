@@ -394,7 +394,57 @@ export const menu = (e) =>
                 }
             ]
         },
-        
+        {
+            id: 'tkf',
+            text: e.t('menu.tkf'),//'tkfariş',
+            expanded: false,
+            items: 
+            [
+                {
+                    id: 'tkf_01',
+                    text : e.t('menu.tkf_01'),//'Listeler',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'tkf_01_001',
+                            text: e.t('menu.tkf_01_001'),//'Alış tkfariş Listesi',
+                            path: 'offers/lists/purchaseOrdList'
+                        },
+                        {
+                            id: 'tkf_01_002',
+                            text: e.t('menu.tkf_01_002'),//'Satış tkfariş Listesi',
+                            path: 'offers/lists/salesOrdList'
+                        },
+                    ]
+                },
+                {
+                    id: 'tkf_02',
+                    text : e.t('menu.tkf_02'),//'Evraklar',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'tkf_02_001',
+                            text: e.t('menu.tkf_02_001'),//'Alış Sİpariş',
+                            path: 'offers/documents/purchaseOffer'
+                        },
+                        {
+                            id: 'tkf_02_002',
+                            text: e.t('menu.tkf_02_002'),//'Satış tkfariş',
+                            path: 'offers/documents/salesOffer'
+                        },
+    
+            
+                    ]
+                },
+                {
+                    id: 'tkf_03',
+                    text : e.t('menu.tkf_03'),//'Raporlar',
+                    expanded: false,
+                }
+            ]
+        },
         {
             id: 'cnt',
             text: e.t('menu.cnt'),//'Anlaşmalar',
