@@ -18,7 +18,7 @@ import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NdImageUpload from '../../../../core/react/devex/imageupload.js';
+import NdTagBox from '../../../../core/react/devex/tagbox.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
@@ -41,6 +41,8 @@ export default class salesDispatch extends React.Component
 
         this.frmDocItems = undefined;
         this.docLocked = false;        
+
+        this.multiItemData = new datatable
     }
     async componentDidMount()
     {
@@ -115,6 +117,7 @@ export default class salesDispatch extends React.Component
         
         this.frmDocItems.option('disabled',false)
         await this.grdSlsDispatch.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
+        await this.grdMultiItem.dataRefresh({source:this.multiItemData});
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -222,6 +225,90 @@ export default class salesDispatch extends React.Component
             this.docObj.docItems.dt()[i].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
         }
        
+    }
+    async multiItemAdd()
+    {
+        let tmpMissCodes = []
+        let tmpCounter = 0
+        for (let i = 0; i < this.tagItemCode.value.length; i++) 
+        {
+            if(this.cmbMultiItemType.value == 0)
+            {
+                let tmpQuery = 
+                {
+                    query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY," + 
+                    "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].INPUT+"'),'') AS MULTICODE"+
+                    " FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].INPUT+"'),'') = @VALUE " ,
+                    param : ['VALUE:string|50'],
+                    value : [this.tagItemCode.value[i]]
+                }
+                let tmpData = await this.core.sql.execute(tmpQuery) 
+                if(tmpData.result.recordset.length > 0)
+                {
+                    this.multiItemData.push(tmpData.result.recordset[0])
+                    tmpCounter = tmpCounter + 1
+                }
+                else
+                {
+                    tmpMissCodes.push(this.tagItemCode.value[i])
+                }
+            }
+            else if (this.cmbMultiItemType.value == 1)
+            {
+                let tmpQuery = 
+                {
+                    query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY," + 
+                    "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].INPUT+"'),'') AS MULTICODE"+
+                    " FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VALUE) OR UPPER(NAME) LIKE UPPER(@VALUE) " ,
+                    param : ['VALUE:string|50'],
+                    value : [this.tagItemCode.value[i]]
+                }
+                let tmpData = await this.core.sql.execute(tmpQuery) 
+                if(tmpData.result.recordset.length > 0)
+                {
+                    this.multiItemData.push(tmpData.result.recordset[0])
+                    tmpCounter = tmpCounter + 1
+                }
+                else
+                {
+                    tmpMissCodes.push(this.tagItemCode.value[i])
+                }
+            }
+            
+        }
+
+        let tmpConfObj =
+        {
+            id:'msgMultiCodeCount',showTitle:true,title:this.t("msgMultiCodeCount.title"),showCloseButton:true,width:'500px',height:'200px',
+            button:[{id:"btn01",caption:this.t("msgMultiCodeCount.btn01"),location:'after'}],
+            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgMultiCodeCount.msg") + ' ' +tmpCounter}</div>)
+        }
+    
+         await dialog(tmpConfObj);
+
+    }
+    async multiItemSave()
+    {
+        for (let i = 0; i < this.multiItemData.length; i++) 
+        {
+            let tmpDocItems = {...this.docObj.docItems.empty}
+            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+            tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+            tmpDocItems.REF = this.docObj.dt()[0].REF
+            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+            tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+            this.txtRef.readOnly = true
+            this.txtRefno.readOnly = true
+            this.docObj.docItems.addEmpty(tmpDocItems)
+            this.addItem(this.multiItemData[i],this.docObj.docItems.dt().length-1,this.multiItemData[i].QUANTITY)
+            this.popMultiItem.hide()
+        }
     }
     _cellRoleRender(e)
     {
@@ -368,9 +455,12 @@ export default class salesDispatch extends React.Component
             )
         }
     }
-    async addItem(pData,pIndex)
+    async addItem(pData,pIndex,pQuantity)
     {
-        console.log(pData)
+        if(typeof pQuantity == 'undefined')
+        {
+            pQuantity = 1
+        }
         for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
         {
             if(this.docObj.docItems.dt()[i].ITEM_CODE == pData.CODE)
@@ -384,11 +474,12 @@ export default class salesDispatch extends React.Component
                 let pResult = await dialog(tmpConfObj);
                 if(pResult == 'btn01')
                 {
-                    this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + 1
-                    this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100))).toFixed(3))
+                    this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + pQuantity
+                    this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100)) * pQuantity).toFixed(3))
                     this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
                     this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
                     this._calculateTotal()
+                    await this.grdPurcInv.devGrid.deleteRow(pIndex)
                     return
                 }
                 
@@ -401,6 +492,7 @@ export default class salesDispatch extends React.Component
         this.docObj.docItems.dt()[pIndex].COST_PRICE = pData.COST_PRICE
         this.docObj.docItems.dt()[pIndex].DISCOUNT = 0
         this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
+        this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
         let tmpQuery = 
         {
             query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,1,GETDATE()) AS PRICE",
@@ -414,9 +506,9 @@ export default class salesDispatch extends React.Component
             let tmpMarginRate = ((tmpData.result.recordset[0].PRICE - this.docObj.docItems.dt()[pIndex].COST_PRICE) - tmpData.result.recordset[0].PRICE) * 100
             this.docObj.docItems.dt()[pIndex].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
             this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
-            this.docObj.docItems.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100)).toFixed(3))
-            this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
-            this.docObj.docItems.dt()[pIndex].TOTAL = parseFloat((tmpData.result.recordset[0].PRICE + this.docObj.docItems.dt()[pIndex].VAT).toFixed(3))
+            this.docObj.docItems.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100) * pQuantity).toFixed(3))
+            this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE * pQuantity ).toFixed(3))
+            this.docObj.docItems.dt()[pIndex].TOTAL =  parseFloat(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT).toFixed(2))
             this._calculateTotal()
         }
     }
@@ -1147,6 +1239,31 @@ export default class salesDispatch extends React.Component
                                             await dialog(tmpConfObj);
                                         }
                                     }}/>
+                                     <Button icon="increaseindent" text="Toplu Ürün Ekleme"
+                                    validationGroup={"frmSalesDis"  + this.tabIndex}
+                                    onClick={async (e)=>
+                                    {
+                                        if(e.validationGroup.validate().status == "valid")
+                                        {
+                                            this.multiItemData.clear
+                                            this.popMultiItem.show()
+                                            if( typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] != 'undefined' && this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
+                                            {
+                                                await this.grdPurcInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                            }
+                                        }
+                                        else
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
+                                            }
+                                            
+                                            await dialog(tmpConfObj);
+                                        }
+                                    }}/>
                                 </Item>
                                 <Item  >
                                 <Label text={this.t("txtAmount")} alignment="right" />
@@ -1419,8 +1536,8 @@ export default class salesDispatch extends React.Component
                         <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
                         <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />
                     </NdPopGrid>
-                                           {/* Dizayn Seçim PopUp */}
-                                           <div>
+                    {/* Dizayn Seçim PopUp */}
+                    <div>
                         <NdPopUp parent={this} id={"popDesign"} 
                         visible={false}
                         showCloseButton={true}
@@ -1509,6 +1626,187 @@ export default class salesDispatch extends React.Component
                                         </div>
                                     </div>
                                 </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div> 
+                    {/* Dizayn Seçim PopUp */}
+                    <div>
+                        <NdPopUp parent={this} id={"popDesign"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popDesign.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'250'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("popDesign.design")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
+                                    displayExpr="DESIGN_NAME"                       
+                                    valueExpr="TAG"
+                                    value=""
+                                    searchEnabled={true}
+                                    onValueChanged={(async()=>
+                                        {
+                                        }).bind(this)}
+                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '20'"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                    >
+                                        <Validator validationGroup={"frmPurcOrderPrint"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validDesign")} />
+                                        </Validator> 
+                                    </NdSelectBox>
+                                </Item>
+                                <Item>
+                                <Label text={this.t("popDesign.lang")} alignment="right" />
+                                <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
+                                    displayExpr="VALUE"                       
+                                    valueExpr="ID"
+                                    value=""
+                                    searchEnabled={true}
+                                    onValueChanged={(async()=>
+                                        {
+                                        }).bind(this)}
+                                    data={{source:[{ID:"FR",VALUE:"FR"},{ID:"TR",VALUE:"TR"}]}}
+                                    >
+                                    </NdSelectBox>
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} 
+                                            onClick={async ()=>
+                                            {       
+                                                let TmpFirma = "DORACAN Distribution SARL";
+                                                let TmpBaslik = "ZAC HECKENWALD" + '\n' + "57740 LONGEVILLE-LES-ST-AVOLD" + '\n' + "Tel : 03 87 91 00 32" + '\n' + "longeville@prodorplus.fr" + '\n' 
+                                                let tmpQuery = 
+                                                {
+                                                    query:  "SELECT *, " +
+                                                            "CONVERT(NVARCHAR,AMOUNT) AS AMOUNTF, " +
+                                                            "@FIRMA AS FIRMA, " +
+                                                            "@BASLIK AS BASLIK," +
+                                                            "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH " +
+                                                            "FROM DOC_ITEMS_VW_01 " +
+                                                            "WHERE ((DOC_GUID = @DOC_GUID) OR (INVOICE_GUID = @DOC_GUID)) ORDER BY LINE_NO ASC",
+                                                    param:  ['DOC_GUID:string|50','DESIGN:string|25','FIRMA:string|250','BASLIK:string|250'],
+                                                    value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,TmpFirma,TmpBaslik]
+                                                }
+                                                let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                {
+                                                    if(pResult.split('|')[0] != 'ERR')
+                                                    {
+                                                        var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
+                                                        mywindow.onload = function() 
+                                                        {
+                                                            mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                                                        }   
+                                                    }
+                                                });
+                                                this.popDesign.hide();  
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popDesign.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div>  
+                     {/* Toplu Stok PopUp */}
+                     <div>
+                        <NdPopUp parent={this} id={"popMultiItem"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popMultiItem.title")}
+                        container={"#root"} 
+                        width={'900'}
+                        height={'700'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={2} height={'fit-content'}>
+                            <Item colSpan={2}>
+                                <Label  alignment="right" />
+                                    <NdTagBox id="tagItemCode" parent={this} simple={true} value={[]} placeholder={this.t("tagItemCodePlaceholder")}
+                                    />
+                            </Item>
+                            <Item></Item>       
+                            <Item>
+                                <Label text={this.t("cmbMultiItemType.title")} alignment="right" />
+                                <NdSelectBox simple={true} parent={this} id="cmbMultiItemType" height='fit-content' 
+                                displayExpr="VALUE"                       
+                                valueExpr="ID"
+                                value={0}
+                                data={{source:[{ID:0,VALUE:this.t("cmbMultiItemType.customerCode")},{ID:1,VALUE:this.t("cmbMultiItemType.ItemCode")}]}}
+                                />
+                            </Item>   
+                            <Item></Item>   
+                            <Item>
+                                <div className='row'>
+                                    <div className='col-6'>
+                                        <NdButton text={this.t("popMultiItem.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
+                                        onClick={async (e)=>
+                                        {       
+                                           this.multiItemAdd()
+                                        }}/>
+                                    </div>
+                                    <div className='col-6'>
+                                        <NdButton text={this.t("popMultiItem.btnClear")} type="normal" stylingMode="contained" width={'100%'}
+                                        onClick={()=>
+                                        {
+                                            this.multiItemData.clear()
+                                        }}/>
+                                    </div>
+                                </div>
+                            </Item>
+                            <Item colSpan={2} >
+                            <NdGrid parent={this} id={"grdMultiItem"} 
+                                    showBorders={true} 
+                                    columnsAutoWidth={true} 
+                                    allowColumnReordering={true} 
+                                    allowColumnResizing={true} 
+                                    headerFilter={{visible:true}}
+                                    height={400} 
+                                    width={'100%'}
+                                    dbApply={false}
+                                    onRowRemoved={async (e)=>{
+                                     
+                                    }}
+                                    >
+                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
+                                        <Scrolling mode="infinite" />
+                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
+                                        <Column dataField="CODE" caption={this.t("grdMultiItem.clmCode")} width={150} allowEditing={false} />
+                                        <Column dataField="MULTICODE" caption={this.t("grdMultiItem.clmMulticode")} width={150} allowEditing={false} />
+                                        <Column dataField="NAME" caption={this.t("grdMultiItem.clmName")} width={300}  headerFilter={{visible:true}} allowEditing={false} />
+                                        <Column dataField="QUANTITY" caption={this.t("grdMultiItem.clmQuantity")} dataType={'number'} width={100} headerFilter={{visible:true}}/>
+                                </NdGrid>
+                            </Item>
+                            <Item></Item>   
+                            <Item>
+                                <div className='row'>
+                                    <div className='col-6'>
+                                       
+                                    </div>
+                                    <div className='col-6'>
+                                        <NdButton text={this.t("popMultiItem.btnSave")} type="normal" stylingMode="contained" width={'100%'}
+                                        onClick={()=>
+                                        {
+                                            this.multiItemSave()
+                                        }}/>
+                                    </div>
+                                </div>
+                            </Item>
                             </Form>
                         </NdPopUp>
                     </div> 

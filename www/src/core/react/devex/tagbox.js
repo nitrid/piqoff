@@ -31,6 +31,7 @@ export default class NdTagBox extends Base
             placeholder={this.state.placeholder}
             openOnFieldClick={false}
             showClearButton ={true}
+            maxFilterQueryLength={10000}
             noDataText=""
             >
                 {this.props.children}
