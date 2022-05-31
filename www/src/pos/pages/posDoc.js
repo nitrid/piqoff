@@ -811,7 +811,6 @@ export default class posDoc extends React.PureComponent
     {
         if(this.state.payRest > 0)
         {
-            console.log(pAmount + " - " + this.state.payRest)
             //KREDİ KARTI İSE
             if(pType == 1)
             {

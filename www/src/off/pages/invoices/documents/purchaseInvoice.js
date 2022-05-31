@@ -679,7 +679,7 @@ export default class purchaseInvoice extends React.Component
                 }
                 else
                 {
-                    tmpMissCodes.push(this.tagItemCode.value[i])
+                    tmpMissCodes.push("'" +this.tagItemCode.value[i] + "'")
                 }
             }
             else if (this.cmbMultiItemType.value == 1)
@@ -695,12 +695,15 @@ export default class purchaseInvoice extends React.Component
                 let tmpData = await this.core.sql.execute(tmpQuery) 
                 if(tmpData.result.recordset.length > 0)
                 {
-                    this.multiItemData.push(tmpData.result.recordset[0])
-                    tmpCounter = tmpCounter + 1
+                    if(typeof this.multiItemData.where({'CODE':tmpData.result.recordset[0].CODE})[0] == 'undefined')
+                    {
+                        this.multiItemData.push(tmpData.result.recordset[0])
+                        tmpCounter = tmpCounter + 1
+                    }
                 }
                 else
                 {
-                    tmpMissCodes.push(this.tagItemCode.value[i])
+                    tmpMissCodes.push("'" +this.tagItemCode.value[i] + "'")
                 }
             }
             
