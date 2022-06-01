@@ -1481,9 +1481,9 @@ export default class posDoc extends React.PureComponent
                                 </NbButton>
                             </div>
                             <div className="col-1 px-1">
-                                <NbButton id={"btnPluEdit"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
-                                access={this.acsObj.filter({ELEMENT:'btnPluEdit',USERS:this.user.CODE})}
-                                onClick={()=>
+                                <NbButton id={"btnPluEdit"} parent={this} className={this.state.isPluEdit == true ? "form-group btn btn-success btn-block" :"form-group btn btn-primary btn-block"} style={{height:"55px",width:"100%"}}
+                                // access={this.acsObj.filter({ELEMENT:'btnPluEdit',USERS:this.user.CODE})}
+                                onClick={async()=>
                                 {       
                                     if(this.pluBtnGrp.edit)
                                     {
