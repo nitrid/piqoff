@@ -58,32 +58,20 @@ export default class Login extends React.Component
         this.onLoginClick = this.onLoginClick.bind(this)
         this.cardIdRead = this.cardIdRead.bind(this)
         this.getUserList = this.getUserList.bind(this)
-        this.textValueChanged = this.textValueChanged.bind(this)
     }
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
         this.Kullanici.focus()
     }
-    textValueChanged(e) 
-    {      
-        if(e.element.id == 'Kullanici')
-        {
-            this.setState({kullanici: e.value});
-        } 
-        else if(e.element.id == 'Sifre')
-        {
-            this.setState({sifre: e.value});
-        }
-    }
     async onLoginClick(e)
     {
-        if(this.state.kullanici == '' && this.state.sifre == '')
+        if(this.Kullanici.value == '' && this.Sifre.value == '')
         {
             return;
         }
         
-        if((await this.core.auth.login(this.state.kullanici,this.state.sifre,'OFF')))
+        if((await this.core.auth.login(this.Kullanici.value,this.Sifre.value,'POS')))
         {
             App.instance.setState({logined:true});
         }
@@ -187,17 +175,17 @@ export default class Login extends React.Component
                         <div className="dx-field">
                             <div className="dx-field-label">{this.lang.t("txtUser")}</div>
                             <div className="dx-field-value">
-                                <NdTextBox id="Kullanici" parent={this} simple={true} showClearButton={true} height='fit-content' valueChangeEvent="keyup" onValueChanged={this.textValueChanged}  
-                                onFocusIn={()=>{this.keyboard.textobj = "Kullanici"}} placeholder={this.lang.t("txtUser")}
+                                <NdTextBox id="Kullanici" parent={this} simple={true} showClearButton={true} height='fit-content' valueChangeEvent="keyup" onValueChanged={(e)=>{this.keyboard.setInput(e.value)}}  
+                                onFocusIn={()=>{this.keyboard.inputName = "Kullanici"}} placeholder={this.lang.t("txtUser")}
                                 />
                             </div>
                         </div>
                         <div className="dx-field">
                             <div className="dx-field-label">{this.lang.t("txtPass")}</div>
                             <div className="dx-field-value">
-                                <NdTextBox id="Sifre" parent={this} mode="password" showClearButton={true} height='fit-content' valueChangeEvent="keyup" onValueChanged={this.textValueChanged} 
+                                <NdTextBox id="Sifre" parent={this} mode="password" showClearButton={true} height='fit-content' valueChangeEvent="keyup" onValueChanged={(e)=>{this.keyboard.setInput(e.value)}} 
                                 onEnterKey={this.onLoginClick}
-                                onFocusIn={()=>{this.keyboard.textobj="Sifre"}} placeholder={this.lang.t("txtPass")}
+                                onFocusIn={()=>{this.keyboard.inputName = "Sifre"}} placeholder={this.lang.t("txtPass")}
                                 />
                             </div>
                         </div>
@@ -315,7 +303,7 @@ export default class Login extends React.Component
                 </div>
                 <div className="p-2"></div>
                 <div className="card" style={this.style.keyboardBox}>
-                    <NbKeyboard id={"keyboard"} parent={this}  textobj="Kullanici"/>
+                    <NbKeyboard id={"keyboard"} parent={this} inputName="Kullanici"/>
                 </div>
             </div>
         )

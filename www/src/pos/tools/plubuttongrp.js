@@ -496,7 +496,7 @@ export default class NbPluButtonGrp extends NbBase
                 </div>
                 {/* Selection List Popup */}
                 <div>
-                    <NbPosPopGrid id={"popSelect" + this.props.id} parent={this} width={"900"} height={"650"} position={"#root"}
+                    <NbPosPopGrid id={"popSelect" + this.props.id} parent={this} width={"100%"} height={"100%"} position={"#root"}
                     onSelection={(pData)=>
                     {
                         if(pData.length > 0)
@@ -538,12 +538,12 @@ export default class NbPluButtonGrp extends NbBase
                     title={"Plu Grubu"}
                     container={"#root"} 
                     width={"700"}
-                    height={"420"}
+                    height={"460"}
                     position={{of:"#root"}}
                     >
                         <div className="row pb-1">
                             <div className="col-12">
-                                <NdTextBox id={"txtGroupEntry" + this.props.id} parent={this} simple={true} />     
+                                <NdTextBox id={"txtGroupEntry" + this.props.id} parent={this} simple={true} onValueChanged={(e)=>{this.keyGroupEntry.setInput(e.value)}} />     
                             </div>                            
                         </div>
                         <div className="row py-1">
@@ -576,7 +576,7 @@ export default class NbPluButtonGrp extends NbBase
                             </div>
                         </div>
                         <div className="row pt-1">
-                            <NbKeyboard id={"keyGroupEntry"} parent={this} textobj={"txtGroupEntry" + this.props.id} span={1} buttonHeight={"40px"}/>
+                            <NbKeyboard id={"keyGroupEntry"} parent={this} inputName={"txtGroupEntry" + this.props.id}/>
                         </div>
                     </NdPopUp>
                 </div>

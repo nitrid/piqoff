@@ -105,7 +105,7 @@ export default class NbPopDescboard extends NbBase
                     </div>
                     <div className="row py-1">
                         <div className="col-12">
-                            <NdTextBox id={"txt" + this.props.id} parent={this} simple={true}/>       
+                            <NdTextBox id={"txt" + this.props.id} parent={this} simple={true} onValueChanged={(e)=>{this["key" + this.props.id].setInput(e.value)}}/>       
                         </div>
                     </div>
                     <div className="row py-1">
@@ -116,7 +116,7 @@ export default class NbPopDescboard extends NbBase
                     </div>
                     <div className="row py-1">
                         <div className="col-12">
-                            <NbKeyboard id={"key" + this.props.id} parent={this} textobj={"txt" + this.props.id} span={1} buttonHeight={"40px"}/>
+                            <NbKeyboard id={"key" + this.props.id} parent={this} inputName={"txt" + this.props.id}/>
                         </div>
                     </div>
                     <div className="row py-1">

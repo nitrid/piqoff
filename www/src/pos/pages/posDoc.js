@@ -379,7 +379,7 @@ export default class posDoc extends React.PureComponent
                     id:'msgAlert',
                     showTitle:true,
                     title:"Uyarı",
-                    showCloseButton:true,
+                    showCloseButton:false,
                     width:'500px',
                     height:'200px',
                     button:[{id:"btn01",caption:"Evet",location:'before'},{id:"btn02",caption:"Hayır",location:'after'}],
@@ -391,6 +391,11 @@ export default class posDoc extends React.PureComponent
                     let tmpResult = await this.popNumber.show('Fiyat',0)
                     if(typeof tmpResult != 'undefined' && tmpResult != '')
                     {
+                        if(tmpResult == 0)
+                        {
+                            this.loading.current.instance.hide()
+                            return
+                        }
                         //FIYAT DURUM KONTROLÜ
                         if(!(await this.priceCheck(tmpItemsDt[0],tmpResult)))
                         {
@@ -398,6 +403,11 @@ export default class posDoc extends React.PureComponent
                             return
                         }
                         tmpPrice = tmpResult
+                    }
+                    else
+                    {
+                        this.loading.current.instance.hide()
+                        return
                     }
                 }
                 else if(tmpMsgResult == 'btn02')
@@ -1482,7 +1492,6 @@ export default class posDoc extends React.PureComponent
                             </div>
                             <div className="col-1 px-1">
                                 <NbButton id={"btnPluEdit"} parent={this} className={this.state.isPluEdit == true ? "form-group btn btn-success btn-block" :"form-group btn btn-primary btn-block"} style={{height:"55px",width:"100%"}}
-                                // access={this.acsObj.filter({ELEMENT:'btnPluEdit',USERS:this.user.CODE})}
                                 onClick={async()=>
                                 {       
                                     if(this.pluBtnGrp.edit)
@@ -1492,6 +1501,16 @@ export default class posDoc extends React.PureComponent
                                     }                              
                                     else
                                     {
+                                        let tmpAcsVal = this.acsObj.filter({ID:'btnPluEdit',TYPE:2,USERS:this.user.CODE})
+                                        
+                                        if(typeof tmpAcsVal.getValue().dialog != 'undefined' && tmpAcsVal.getValue().dialog.type != -1)
+                                        {   
+                                            let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:tmpAcsVal.getValue().dialog.type})
+                                            if(!tmpResult)
+                                            {
+                                                return
+                                            }
+                                        }
                                         this.pluBtnGrp.edit = true
                                     }                   
                                     this.setState({isPluEdit:this.pluBtnGrp.edit})
@@ -3639,7 +3658,7 @@ export default class posDoc extends React.PureComponent
                 </div>
                 {/* Park Description Popup */} 
                 <div>
-                    <NbPopDescboard id={"popParkDesc"} parent={this} width={"900"} height={"610"} position={"#root"} head={"Park Açıklaması"} title={"Lütfen Açıklama Giriniz"}
+                    <NbPopDescboard id={"popParkDesc"} parent={this} width={"900"} height={"650"} position={"#root"} head={"Park Açıklaması"} title={"Lütfen Açıklama Giriniz"}
                     button={this.prmObj.filter({ID:'ParkDelDescription',TYPE:0}).getValue().buttons}
                     onClick={async (e)=>
                     {
