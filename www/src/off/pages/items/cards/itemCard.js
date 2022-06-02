@@ -1743,8 +1743,8 @@ export default class itemCard extends React.Component
                                             <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmItemCustomer" + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
-                                                console.log(this.tabIndex)
-                                                console.log(e.validationGroup.validate().status)
+                                                console.log(e)
+                                                console.log(e.validationGroup)
                                                 if(e.validationGroup.validate().status == "valid")
                                                 {
                                                     let tmpEmptyMulti = {...this.itemsObj.itemMultiCode.empty};
