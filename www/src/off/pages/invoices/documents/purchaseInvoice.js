@@ -73,7 +73,6 @@ export default class purchaseInvoice extends React.Component
                 this.btnBack.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
-                this.btnCopy.setState({disabled:false});
                 this.btnPrint.setState({disabled:false});
             }
         })
@@ -85,7 +84,6 @@ export default class purchaseInvoice extends React.Component
                 this.btnNew.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
-                this.btnCopy.setState({disabled:false});
                 this.btnPrint.setState({disabled:false});
 
                 pData.rowData.CUSER = this.user.CODE
@@ -97,7 +95,6 @@ export default class purchaseInvoice extends React.Component
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:true});
             this.btnDelete.setState({disabled:false});
-            this.btnCopy.setState({disabled:false});
             this.btnPrint.setState({disabled:false});          
         })
         this.docObj.ds.on('onDelete',(pTblName) =>
@@ -106,7 +103,6 @@ export default class purchaseInvoice extends React.Component
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:false});
             this.btnDelete.setState({disabled:false});
-            this.btnCopy.setState({disabled:false});
             this.btnPrint.setState({disabled:false});
         })
 
@@ -897,13 +893,6 @@ export default class purchaseInvoice extends React.Component
                                         {
                                             this.popPassword.show()
                                         }
-                                        
-                                    }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnCopy" parent={this} icon="copy" type="default"
-                                    onClick={()=>
-                                    {
                                         
                                     }}/>
                                 </Item>
