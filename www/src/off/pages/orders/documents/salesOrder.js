@@ -1687,6 +1687,7 @@ export default class salesOrder extends React.Component
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
                                     headerFilter={{visible:true}}
+                                    filterRow = {{visible:true}}
                                     height={400} 
                                     width={'100%'}
                                     dbApply={false}
