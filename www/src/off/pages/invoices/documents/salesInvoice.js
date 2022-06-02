@@ -628,6 +628,21 @@ export default class salesInvoice extends React.Component
     {
         let tmpMissCodes = []
         let tmpCounter = 0
+        if(this.multiItemData.length > 0)
+        {
+            let tmpConfObj =
+            {
+                id:'msgMultiData',showTitle:true,title:this.t("msgMultiData.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgMultiData.btn01"),location:'before'},{id:"btn02",caption:this.t("msgMultiData.btn02"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgMultiData.msg")}</div>)
+            }
+
+            let pResult = await dialog(tmpConfObj);
+            if(pResult == 'btn01')
+            {
+                this.multiItemData.clear()
+            }
+        }
         for (let i = 0; i < this.tagItemCode.value.length; i++) 
         {
             if(this.cmbMultiItemType.value == 0)
@@ -643,12 +658,15 @@ export default class salesInvoice extends React.Component
                 let tmpData = await this.core.sql.execute(tmpQuery) 
                 if(tmpData.result.recordset.length > 0)
                 {
-                    this.multiItemData.push(tmpData.result.recordset[0])
-                    tmpCounter = tmpCounter + 1
+                    if(typeof this.multiItemData.where({'CODE':tmpData.result.recordset[0].CODE})[0] == 'undefined')
+                    {
+                        this.multiItemData.push(tmpData.result.recordset[0])
+                        tmpCounter = tmpCounter + 1
+                    }
                 }
                 else
                 {
-                    tmpMissCodes.push(this.tagItemCode.value[i])
+                    tmpMissCodes.push("'" +this.tagItemCode.value[i] + "'")
                 }
             }
             else if (this.cmbMultiItemType.value == 1)
@@ -664,17 +682,30 @@ export default class salesInvoice extends React.Component
                 let tmpData = await this.core.sql.execute(tmpQuery) 
                 if(tmpData.result.recordset.length > 0)
                 {
-                    this.multiItemData.push(tmpData.result.recordset[0])
-                    tmpCounter = tmpCounter + 1
+                    if(typeof this.multiItemData.where({'CODE':tmpData.result.recordset[0].CODE})[0] == 'undefined')
+                    {
+                        this.multiItemData.push(tmpData.result.recordset[0])
+                        tmpCounter = tmpCounter + 1
+                    }
                 }
                 else
                 {
-                    tmpMissCodes.push(this.tagItemCode.value[i])
+                    tmpMissCodes.push("'" +this.tagItemCode.value[i] + "'")
                 }
             }
             
         }
-
+        if(tmpMissCodes.length > 0)
+        {
+            let tmpConfObj =
+            {
+                id:'msgMissItemCode',showTitle:true,title:this.t("msgMissItemCode.title"),showCloseButton:true,width:'500px',height:'auto',
+                button:[{id:"btn01",caption:this.t("msgMissItemCode.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",wordWrap:"break-word",fontSize:"20px"}}>{this.t("msgMissItemCode.msg") + ' ' +tmpMissCodes}</div>)
+            }
+        
+            await dialog(tmpConfObj);
+        }
         let tmpConfObj =
         {
             id:'msgMultiCodeCount',showTitle:true,title:this.t("msgMultiCodeCount.title"),showCloseButton:true,width:'500px',height:'200px',

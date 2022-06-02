@@ -908,6 +908,31 @@ export default class purchaseInvoice extends React.Component
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
+                                    <NdButton id="btnInfo" parent={this} icon="info" type="default"
+                                    onClick={async()=>
+                                    {
+                                        this.numDetailCount.value = this.docObj.docItems.dt().length
+                                        this.numDetailQuantity.value =  this.docObj.docItems.dt().sum("QUANTITY",2)
+                                        let tmpQuantity2 = 0
+                                        for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+                                        {
+                                            let tmpQuery = 
+                                            {
+                                                query :"SELECT [dbo].[FN_UNIT2_QUANTITY](@ITEM) AS QUANTITY",
+                                                param : ['ITEM:string|50'],
+                                                value : [this.docObj.docItems.dt()[i].ITEM]
+                                            }
+                                            let tmpData = await this.core.sql.execute(tmpQuery) 
+                                            if(tmpData.result.recordset.length > 0)
+                                            {
+                                                tmpQuantity2 = tmpQuantity2 + (tmpData.result.recordset[0].QUANTITY * this.docObj.docItems.dt()[i].QUANTITY)
+                                            }
+                                        }
+                                        this.numDetailQuantity2.value = tmpQuantity2
+                                        this.popDetail.show()
+                                    }}/>
+                                </Item>
+                                <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                     onClick={()=>
                                     {
@@ -2330,6 +2355,40 @@ export default class purchaseInvoice extends React.Component
                             </Form>
                         </NdPopUp>
                     </div> 
+                      {/* İndirim PopUp */}
+                      <div>
+                        <NdPopUp parent={this} id={"popDetail"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popDetail.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'250'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("popDetail.count")} alignment="right" />
+                                    <NdNumberBox id="numDetailCount" parent={this} simple={true} readOnly={true}
+                                            maxLength={32}
+                                    ></NdNumberBox>
+                                </Item>
+                                <Item>
+                                <Label text={this.t("popDetail.quantity")} alignment="right" />
+                                    <NdNumberBox id="numDetailQuantity" parent={this} simple={true}
+                                        maxLength={32}
+                                    ></NdNumberBox>
+                                </Item>
+                                <Item>
+                                <Label text={this.t("popDetail.quantity2")} alignment="right" />
+                                    <NdNumberBox id="numDetailQuantity2" parent={this} simple={true}
+                                        maxLength={32}
+                                    ></NdNumberBox>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div>  
                 </ScrollView>     
                
             </div>

@@ -422,6 +422,21 @@ export default class salesOrder extends React.Component
     {
         let tmpMissCodes = []
         let tmpCounter = 0
+        if(this.multiItemData.length > 0)
+        {
+            let tmpConfObj =
+            {
+                id:'msgMultiData',showTitle:true,title:this.t("msgMultiData.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgMultiData.btn01"),location:'before'},{id:"btn02",caption:this.t("msgMultiData.btn02"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgMultiData.msg")}</div>)
+            }
+
+            let pResult = await dialog(tmpConfObj);
+            if(pResult == 'btn01')
+            {
+                this.multiItemData.clear()
+            }
+        }
         for (let i = 0; i < this.tagItemCode.value.length; i++) 
         {
             if(this.cmbMultiItemType.value == 0)
@@ -437,12 +452,15 @@ export default class salesOrder extends React.Component
                 let tmpData = await this.core.sql.execute(tmpQuery) 
                 if(tmpData.result.recordset.length > 0)
                 {
-                    this.multiItemData.push(tmpData.result.recordset[0])
-                    tmpCounter = tmpCounter + 1
+                    if(typeof this.multiItemData.where({'CODE':tmpData.result.recordset[0].CODE})[0] == 'undefined')
+                    {
+                        this.multiItemData.push(tmpData.result.recordset[0])
+                        tmpCounter = tmpCounter + 1
+                    }
                 }
                 else
                 {
-                    tmpMissCodes.push(this.tagItemCode.value[i])
+                    tmpMissCodes.push("'" +this.tagItemCode.value[i] + "'")
                 }
             }
             else if (this.cmbMultiItemType.value == 1)
@@ -458,17 +476,30 @@ export default class salesOrder extends React.Component
                 let tmpData = await this.core.sql.execute(tmpQuery) 
                 if(tmpData.result.recordset.length > 0)
                 {
-                    this.multiItemData.push(tmpData.result.recordset[0])
-                    tmpCounter = tmpCounter + 1
+                    if(typeof this.multiItemData.where({'CODE':tmpData.result.recordset[0].CODE})[0] == 'undefined')
+                    {
+                        this.multiItemData.push(tmpData.result.recordset[0])
+                        tmpCounter = tmpCounter + 1
+                    }
                 }
                 else
                 {
-                    tmpMissCodes.push(this.tagItemCode.value[i])
+                    tmpMissCodes.push("'" +this.tagItemCode.value[i] + "'")
                 }
             }
             
         }
-
+        if(tmpMissCodes.length > 0)
+        {
+            let tmpConfObj =
+            {
+                id:'msgMissItemCode',showTitle:true,title:this.t("msgMissItemCode.title"),showCloseButton:true,width:'500px',height:'auto',
+                button:[{id:"btn01",caption:this.t("msgMissItemCode.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",wordWrap:"break-word",fontSize:"20px"}}>{this.t("msgMissItemCode.msg") + ' ' +tmpMissCodes}</div>)
+            }
+        
+            await dialog(tmpConfObj);
+        }
         let tmpConfObj =
         {
             id:'msgMultiCodeCount',showTitle:true,title:this.t("msgMultiCodeCount.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -476,7 +507,7 @@ export default class salesOrder extends React.Component
             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgMultiCodeCount.msg") + ' ' +tmpCounter}</div>)
         }
     
-         await dialog(tmpConfObj);
+        await dialog(tmpConfObj);
 
     }
     async multiItemSave()
@@ -843,46 +874,26 @@ export default class salesOrder extends React.Component
                                     <NdTextBox id="txtCustomerCode" parent={this} simple={true}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.docObj.dt('DOC'),field:"INPUT_CODE"}} 
-                                    onChange={(async(r)=>
-                                    {
-                                        if(r.event.isTrusted == true)
+                                    onEnterKey={(async()=>
                                         {
-                                            let tmpQuery = 
+                                            await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
+                                            this.pg_txtCustomerCode.show()
+                                            this.pg_txtCustomerCode.onClick = (data) =>
                                             {
-                                                query :"SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE CODE = @CODE",
-                                                param : ['CODE:string|50'],
-                                                value : [r.component._changedValue]
-                                            }
-                                            let tmpData = await this.core.sql.execute(tmpQuery) 
-                                            if(tmpData.result.recordset.length > 0)
-                                            {
-                                                this.docObj.dt()[0].INPUT = tmpData.result.recordset[0].GUID
-                                                this.docObj.dt()[0].INPUT_CODE = tmpData.result.recordset[0].CODE
-                                                this.docObj.dt()[0].INPUT_NAME = tmpData.result.recordset[0].TITLE
-                                                let tmpDatas = this.prmObj.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
-                                                if(typeof tmpDatas != 'undefined' && tmpDatas.value ==  true)
+                                                if(data.length > 0)
                                                 {
-                                                    this.txtRef.setState({value:tmpData.result.recordset[0].CODE});
-                                                    this.txtRef.props.onChange()
+                                                    this.docObj.dt()[0].INPUT = data[0].GUID
+                                                    this.docObj.dt()[0].INPUT_CODE = data[0].CODE
+                                                    this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
+                                                    let tmpData = this.prmObj.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                                    if(typeof tmpData != 'undefined' && tmpData.value ==  true)
+                                                    {
+                                                        this.txtRef.setState({value:data[0].CODE});
+                                                        this.txtRef.props.onChange()
+                                                    }
                                                 }
                                             }
-                                            else
-                                            {
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgNotCustomer',showTitle:true,title:this.t("msgNotCustomer.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgNotCustomer.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotCustomer.msg")}</div>)
-                                                }
-                                    
-                                                await dialog(tmpConfObj);
-
-                                                this.docObj.dt()[0].INPUT = ''
-                                                this.docObj.dt()[0].INPUT_CODE = ''
-                                                this.docObj.dt()[0].INPUT_NAME = ''
-                                            }
-                                        }
-                                    }).bind(this)}
+                                        }).bind(this)}
                                     button=
                                     {
                                         [
@@ -1230,7 +1241,33 @@ export default class salesOrder extends React.Component
                                             await dialog(tmpConfObj);
                                         }
                                     }}/>
+                                    <Button icon="increaseindent" text="Toplu Ürün Ekleme"
+                                     validationGroup={"frmPurcDispatch"  + this.tabIndex}
+                                    onClick={async (e)=>
+                                    {
+                                        if(e.validationGroup.validate().status == "valid")
+                                        {
+                                            this.multiItemData.clear
+                                            this.popMultiItem.show()
+                                            if( typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] != 'undefined' && this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
+                                            {
+                                                await this.grdPurcInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                            }
+                                        }
+                                        else
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
+                                            }
+                                            
+                                            await dialog(tmpConfObj);
+                                        }
+                                    }}/>
                                 </Item>
+                                
                                 <Item  >
                                 <Label text={this.t("txtAmount")} alignment="right" />
                                     <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}
