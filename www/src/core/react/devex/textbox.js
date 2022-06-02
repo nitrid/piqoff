@@ -56,6 +56,13 @@ export default class NdTextBox extends Base
             this.props.onValueChanged(e);
         }
     }
+    _onValueChanging(e)
+    {
+        if(typeof this.props.onValueChanging != 'undefined')
+        {
+            this.props.onValueChanging(e);
+        }
+    }
     _onEnterKey(e)
     {
         if(typeof this.props.onEnterKey != 'undefined')
@@ -291,6 +298,7 @@ export default class NdTextBox extends Base
         }
         this.setState({value:e.toString()})                
         this.dev.option('value',e.toString())
+        this._onValueChanging(e.toString())
     } 
     get readOnly()
     {

@@ -5,6 +5,7 @@ import moment from 'moment';
 import Form, { Label,Item } from "devextreme-react/form";
 import { ButtonGroup } from "devextreme-react/button-group";
 import { LoadPanel } from 'devextreme-react/load-panel';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from "../../core/react/devex/textbox.js";
 import NdGrid,{Column,Editing,Paging,Scrolling} from "../../core/react/devex/grid.js";
@@ -1491,7 +1492,7 @@ export default class posDoc extends React.PureComponent
                                 </NbButton>
                             </div>
                             <div className="col-1 px-1">
-                                <NbButton id={"btnPluEdit"} parent={this} className={this.state.isPluEdit == true ? "form-group btn btn-success btn-block" :"form-group btn btn-primary btn-block"} style={{height:"55px",width:"100%"}}
+                                <NbButton id={"btnPluEdit"} parent={this} className={"form-group btn btn-primary btn-block"} style={{height:"55px",width:"100%"}}
                                 onClick={async()=>
                                 {       
                                     if(this.pluBtnGrp.edit)
@@ -1515,7 +1516,7 @@ export default class posDoc extends React.PureComponent
                                     }                   
                                     this.setState({isPluEdit:this.pluBtnGrp.edit})
                                 }}>
-                                    <i className={this.state.isPluEdit == true ? "text-white fa-solid fa-lock-open" : "text-white fa-solid fa-lock"} style={{fontSize: "16px"}} />
+                                    <FontAwesomeIcon icon={this.state.isPluEdit == true ? "fa-solid fa-lock-open" : "fa-solid fa-lock"} />
                                 </NbButton>
                             </div>
                             <div className="col-1 ps-1 pe-3">

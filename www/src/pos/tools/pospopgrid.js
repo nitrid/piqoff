@@ -4,7 +4,7 @@ import NbButton from "../../core/react/bootstrap/button.js";
 import NdGrid,{Paging,Pager,Column} from "../../core/react/devex/grid.js";
 import NdTextBox from "../../core/react/devex/textbox.js";
 import NdPopUp from "../../core/react/devex/popup.js";
-import Keyboard from "react-simple-keyboard";
+import NbKeyboard from "../../core/react/bootstrap/keyboard.js";
 import "react-simple-keyboard/build/css/index.css";
 
 export {Column}
@@ -48,6 +48,11 @@ export default class NbPosPopGrid extends NbBase
         //await this["grd" + this.props.id].dataRefresh({source:[]})
         this[this.props.id].show()
     }
+    async clear()
+    {
+        this["txt" + this.props.id].value = ""
+        await this["grd" + this.props.id].dataRefresh({source:[]})
+    }
     render()
     {
         return(
@@ -65,6 +70,7 @@ export default class NbPosPopGrid extends NbBase
                         <div className="col-12">
                             <NdTextBox id={"txt" + this.props.id} parent={this} simple={true} 
                             onChange={(async()=>{this.getData()}).bind(this)}
+                            onValueChanging={(e)=>{this.keyboard.setInput(e)}}
                             />     
                         </div>                            
                     </div>
@@ -125,69 +131,7 @@ export default class NbPosPopGrid extends NbBase
                         </div>                        
                     </div>
                     <div className="row pt-1">
-                        <Keyboard keyboardRef={(r) => (this.keyboard = r)}
-                        onChange={(input) => 
-                        {
-                            this["txt" + this.props.id].value = input
-                        }}
-                        onKeyPress={(button) => 
-                        {
-                            if (button === "{shift}" || button === "{lock}") 
-                            {
-                                this.setState(
-                                {
-                                    layoutName: this.state.layoutName === "default" ? "shift" : "default"
-                                });
-                            }
-                            if (button === "{numbers}" || button === "{abc}") 
-                            {
-                                this.setState(
-                                {
-                                    layoutName: this.state.layoutName === "default" ? "numbers" : "default"
-                                });
-                            }
-                        }}
-                        layoutName={this.state.layoutName}
-                        layout={{
-                            shift: 
-                            [
-                            "q w e r t y u i o p ü .",
-                            "a s d f g h j k l ş - ,",
-                            "z x c v b n m ö ç * / %",
-                            "{numbers} {space} {backspace}"
-                            ],
-                            default: 
-                            [
-                            "Q W E R T Y U I O P Ü .",
-                            "A S D F G H J K L Ş - ,",
-                            "Z X C V B N M Ö Ç * / %",
-                            "{numbers} {space} {backspace}"
-                            ],
-                            numbers: ["1 2 3", "4 5 6", "7 8 9", "{abc} 0 {backspace}"]
-                        }}
-                        display={{
-                            "{numbers}": "123",
-                            "{ent}": "return",
-                            "{escape}": "esc ⎋",
-                            "{tab}": "tab ⇥",
-                            "{backspace}": "⌫",
-                            "{capslock}": "caps lock ⇪",
-                            "{shift}": "⇧",
-                            "{controlleft}": "ctrl ⌃",
-                            "{controlright}": "ctrl ⌃",
-                            "{altleft}": "alt ⌥",
-                            "{altright}": "alt ⌥",
-                            "{metaleft}": "cmd ⌘",
-                            "{metaright}": "cmd ⌘",
-                            "{abc}": "ABC"
-                        }}
-                        buttonTheme={[
-                        {
-                            class: "simple-keyboard-rate",
-                            buttons: "%"
-                        }]}
-                        mergeDisplay={true}
-                        />
+                        <NbKeyboard id={"keyboard"} parent={this} inputName={"txt" + this.props.id}/>
                     </div>
                 </NdPopUp>
             </div> 
