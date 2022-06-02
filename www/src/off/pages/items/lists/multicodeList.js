@@ -43,13 +43,7 @@ export default class multicodeList extends React.Component
     {
         setTimeout(async () => 
         {
-            // this.test.data.source.groupBy = ["NAME"]
-            // await this.test.dataRefresh()
-            //console.log(this.test.data.datatable)
-            // this.test.data.store.load().then(
-            //     (data) => { console.log(data)},
-            //     (error) => { /* Handle the "error" here */ }
-            // );
+            
         }, 1000);
     }
     _columnListBox(e)

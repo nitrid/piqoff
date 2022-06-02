@@ -48,6 +48,7 @@ export default class purchaseInvoice extends React.Component
 
         this.rightItems = [{ text: this.t("getDispatch"), },{ text: this.t("getPayment"), }]
         this.multiItemData = new datatable
+        this.unitDetailData = new datatable
     }
     async componentDidMount()
     {
@@ -73,7 +74,6 @@ export default class purchaseInvoice extends React.Component
                 this.btnBack.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
-                this.btnCopy.setState({disabled:false});
                 this.btnPrint.setState({disabled:false});
             }
         })
@@ -85,7 +85,6 @@ export default class purchaseInvoice extends React.Component
                 this.btnNew.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
-                this.btnCopy.setState({disabled:false});
                 this.btnPrint.setState({disabled:false});
 
                 pData.rowData.CUSER = this.user.CODE
@@ -97,7 +96,6 @@ export default class purchaseInvoice extends React.Component
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:true});
             this.btnDelete.setState({disabled:false});
-            this.btnCopy.setState({disabled:false});
             this.btnPrint.setState({disabled:false});          
         })
         this.docObj.ds.on('onDelete',(pTblName) =>
@@ -106,7 +104,6 @@ export default class purchaseInvoice extends React.Component
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:false});
             this.btnDelete.setState({disabled:false});
-            this.btnCopy.setState({disabled:false});
             this.btnPrint.setState({disabled:false});
         })
 
@@ -134,6 +131,7 @@ export default class purchaseInvoice extends React.Component
         await this.grdPurcInv.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
         await this.grdInvoicePayment.dataRefresh({source:this.paymentObj.docCustomer.dt()});
         await this.grdMultiItem.dataRefresh({source:this.multiItemData});
+        await this.grdUnit2.dataRefresh({source:this.unitDetailData})
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -901,10 +899,28 @@ export default class purchaseInvoice extends React.Component
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnCopy" parent={this} icon="copy" type="default"
-                                    onClick={()=>
+                                    <NdButton id="btnInfo" parent={this} icon="info" type="default"
+                                    onClick={async()=>
                                     {
-                                        
+                                        this.numDetailCount.value = this.docObj.docItems.dt().length
+                                        this.numDetailQuantity.value =  this.docObj.docItems.dt().sum("QUANTITY",2)
+                                        let tmpQuantity2 = 0
+                                        for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+                                        {
+                                            let tmpQuery = 
+                                            {
+                                                query :"SELECT [dbo].[FN_UNIT2_QUANTITY](@ITEM) AS QUANTITY",
+                                                param : ['ITEM:string|50'],
+                                                value : [this.docObj.docItems.dt()[i].ITEM]
+                                            }
+                                            let tmpData = await this.core.sql.execute(tmpQuery) 
+                                            if(tmpData.result.recordset.length > 0)
+                                            {
+                                                tmpQuantity2 = tmpQuantity2 + (tmpData.result.recordset[0].QUANTITY * this.docObj.docItems.dt()[i].QUANTITY)
+                                            }
+                                        }
+                                        this.numDetailQuantity2.value = tmpQuantity2.toFixed(2)
+                                        this.popDetail.show()
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -2330,6 +2346,112 @@ export default class purchaseInvoice extends React.Component
                             </Form>
                         </NdPopUp>
                     </div> 
+                      {/* Detay PopUp */}
+                      <div>
+                        <NdPopUp parent={this} id={"popDetail"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popDetail.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'250'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("popDetail.count")} alignment="right" />
+                                    <NdNumberBox id="numDetailCount" parent={this} simple={true} readOnly={true}
+                                            maxLength={32}
+                                    ></NdNumberBox>
+                                </Item>
+                                <Item>
+                                <Label text={this.t("popDetail.quantity")} alignment="right" />
+                                    <NdNumberBox id="numDetailQuantity" parent={this} simple={true} readOnly={true}
+                                        maxLength={32}
+                                    ></NdNumberBox>
+                                </Item>
+                                <Item>
+                                <Label text={this.t("popDetail.quantity2")} alignment="right" />
+                                    <NdTextBox id="numDetailQuantity2" parent={this} simple={true} readOnly={true}
+                                        maxLength={32}
+                                        button=
+                                        {
+                                            [
+                                                {
+                                                    id:'01',
+                                                    icon:'more',
+                                                    onClick:async ()  =>
+                                                    {
+                                                        let tmpQuery = 
+                                                        {
+                                                            query : "SELECT " +
+                                                                    "NAME,ROUND(SUM(UNIT_FACTOR * QUANTITY),2) AS UNIT_FACTOR " +
+                                                                    "FROM ( " +
+                                                                    "SELECT ITEM_CODE,QUANTITY, " +
+                                                                    "(SELECT TOP 1 NAME FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID= ITEM AND TYPE = 1 ) AS NAME, " +
+                                                                    "(SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID= ITEM AND TYPE = 1 ) AS UNIT_FACTOR " +
+                                                                    "FROM DOC_ITEMS_VW_01 WHERE DOC_GUID = @DOC_GUID OR INVOICE_GUID = @DOC_GUID ) AS TMP GROUP BY NAME ",
+                                                            param : ['DOC_GUID:string|50'],
+                                                            value : [this.docObj.dt()[0].GUID]
+                                                        }
+                                                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                        this.unitDetailData.clear()
+                                                        if(tmpData.result.recordset.length > 0)
+                                                        {   
+                                                            for (let i = 0; i < tmpData.result.recordset.length; i++) 
+                                                            {
+                                                                this.unitDetailData.push(tmpData.result.recordset[i])
+                                                            }
+                                                            
+                                                            this.popUnit2.show()
+                                                        }
+
+                                                    }
+                                                },
+                                            ]
+                                        }
+                                    ></NdTextBox>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div>  
+                       {/* Birim PopUp */}
+                       <div>
+                        <NdPopUp parent={this} id={"popUnit2"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popUnit2.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'250'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                <NdGrid parent={this} id={"grdUnit2"} 
+                                    showBorders={true} 
+                                    columnsAutoWidth={true} 
+                                    allowColumnReordering={true} 
+                                    allowColumnResizing={true} 
+                                    height={'100%'} 
+                                    width={'100%'}
+                                    dbApply={false}
+                                    onRowRemoved={async (e)=>{
+                                     
+                                    }}
+                                    >
+                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
+                                        <Scrolling mode="infinite" />
+                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
+                                        <Column dataField="NAME" caption={this.t("grdUnit2.clmName")} width={120}  headerFilter={{visible:true}} allowEditing={false} />
+                                        <Column dataField="UNIT_FACTOR" caption={this.t("grdUnit2.clmQuantity")} dataType={'number'} width={120} headerFilter={{visible:true}}/>
+                                </NdGrid>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div>  
                 </ScrollView>     
                
             </div>
