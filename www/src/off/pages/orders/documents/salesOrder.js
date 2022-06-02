@@ -857,7 +857,7 @@ export default class salesOrder extends React.Component
                                     onValueChanged={(async()=>
                                         {
                                         }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE IN(0,2)"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
@@ -966,7 +966,7 @@ export default class salesOrder extends React.Component
                                         <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
                                         <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
                                         <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
-                                        <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} filterType={"include"} filterValues={['Tedarikçi']}/>
+                                        <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} />
                                         
                                     </NdPopGrid>
                                 </Item> 
@@ -1242,7 +1242,7 @@ export default class salesOrder extends React.Component
                                         }
                                     }}/>
                                     <Button icon="increaseindent" text="Toplu Ürün Ekleme"
-                                     validationGroup={"frmPurcDispatch"  + this.tabIndex}
+                                     validationGroup={"frmslsDoc"}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -1515,7 +1515,6 @@ export default class salesOrder extends React.Component
                         </NdPopUp>
                     </div> 
                     <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={"#root"}
-                    notRefresh={true}
                     visible={false}
                     position={{of:'#root'}} 
                     showTitle={true} 
@@ -1530,7 +1529,7 @@ export default class salesOrder extends React.Component
                         {
                             select:
                             {
-                                query : "SELECT GUID,CODE,NAME,VAT FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
                                 param : ['VAL:string|50']
                             },
                             sql:this.core.sql

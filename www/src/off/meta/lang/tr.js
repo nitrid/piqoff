@@ -2077,6 +2077,15 @@ export const langTr =
             quantity: "Toplam Miktar",
             quantity2: "2. Birim Toplamı "
         },
+        grdUnit2 : 
+        {
+            clmName : "ADI",
+            clmQuantity : "Miktar"
+        },
+        popUnit2 : 
+        {
+            title : "Birim Detayları"
+        },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
         validDepot : "Depo Seçmelisiniz",
