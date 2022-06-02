@@ -49,7 +49,15 @@ export default class NdSelectBox extends Base
     }
     _onValueChanged(e) 
     {
-        this.value = e.value;
+        if(e.value == null)
+        {
+            this.value = ""
+
+        }
+        else
+        {
+            this.value = e.value;
+        }
         if(typeof this.props.onValueChanged != 'undefined')
         {
             this.props.onValueChanged(e);
