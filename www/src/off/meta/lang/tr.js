@@ -359,7 +359,14 @@ export const langTr =
             clmUser : "Kullanıcı",
             clmDate : "Değişim Tarihi",
             clmPrice : "Fiyat",
-        }
+        },
+        grdItemInfo: 
+        {
+            cDate: "Oluşturulma Tarihi",
+            cUser: "Oluşturan Kullanıcı",
+            lDate: "Son Değiştirilme Tarihi",
+            lUser : "Son Değiştiren Kullanıcı",
+        },
     },
     stk_01_002: 
     {

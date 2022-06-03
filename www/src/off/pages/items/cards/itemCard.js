@@ -368,6 +368,10 @@ export default class itemCard extends React.Component
         {
             await this.grdExtraCost.dataRefresh({source:this.extraCostData});
         }
+        else if(e.itemData.title == this.t("tabTitleInfo"))
+        {
+            await this.grdItemInfo.dataRefresh({source:this.itemsObj.dt()});
+        }
     }
     underPrice()
     {
@@ -1368,7 +1372,28 @@ export default class itemCard extends React.Component
                                         </div>
                                     </div>
                                 </Item> 
-                                <Item title={this.t("tabTitleInfo")}></Item>
+                                <Item title={this.t("tabTitleInfo")}>
+                                    <div className='row px-2 py-2'>
+                                        <div className='col-12'>
+                                            <NdGrid parent={this} id={"grdItemInfo"} 
+                                            showBorders={true} 
+                                            columnsAutoWidth={true} 
+                                            allowColumnReordering={true} 
+                                            allowColumnResizing={true} 
+                                            height={'100%'} 
+                                            width={'100%'}
+                                            dbApply={false}
+                                            >
+                                                <Paging defaultPageSize={5} />
+                                                <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
+                                                <Column dataField="CDATE" caption={this.t("grdItemInfo.cDate")}  dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
+                                                <Column dataField="CUSER" caption={this.t("grdItemInfo.cUser")} />
+                                                <Column dataField="LDATE" caption={this.t("grdItemInfo.lDate")} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
+                                                <Column dataField="LUSER" caption={this.t("grdItemInfo.lUser")} />
+                                            </NdGrid>
+                                        </div>
+                                    </div>
+                                </Item>
                             </TabPanel>
                         </div>
                     </div>                   
