@@ -113,6 +113,7 @@ export default class posDoc extends React.PureComponent
         this.posDevice.payCardPort = this.prmObj.filter({ID:'PayCardPort',TYPE:0,SPECIAL:"001"}).getValue()
         
         await this.grdList.dataRefresh({source:this.posObj.posSale.dt()});
+        await this.grdDiscList.dataRefresh({source:this.posObj.posSale.dt()});
         await this.grdPay.dataRefresh({source:this.posObj.posPay.dt()});
 
         this.cheqDt.selectCmd = 
@@ -3065,12 +3066,12 @@ export default class posDoc extends React.PureComponent
                     showTitle={true}
                     title={"İskonto"}
                     container={"#root"} 
-                    width={"600"}
-                    height={"580"}
+                    width={"100%"}
+                    height={"100%"}
                     position={{of:"#root"}}
                     >
                         {/* Discount Header */}
-                        <div className="row pb-1">
+                        <div className="row">
                             <div className="col-4">
                                 <NbRadioButton id={"rbtnDisType"} parent={this} 
                                 button={
@@ -3096,9 +3097,9 @@ export default class posDoc extends React.PureComponent
                                     }
                                     else if(e == 1) //SATIR SEÇİLİ İSE
                                     {
-                                        if(this.grdList.devGrid.getSelectedRowsData().length > 0)
+                                        if(this.grdDiscList.devGrid.getSelectedRowsData().length > 0)
                                         {
-                                            tmpData = this.grdList.devGrid.getSelectedRowsData()[0]
+                                            tmpData = this.grdDiscList.devGrid.getSelectedRowsData()[0]
                                         }
                                         else
                                         {
@@ -3147,6 +3148,103 @@ export default class posDoc extends React.PureComponent
                                         <h3 className="text-primary text-center"><NbLabel id="discountAfter" parent={this} value={"0"}/> €</h3>    
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        {/* grdDiscList */}
+                        <div className="row pb-1">
+                            <div className="col-12">
+                                <NdGrid parent={this} id={"grdDiscList"} 
+                                showBorders={true} 
+                                columnsAutoWidth={true} 
+                                allowColumnReordering={true} 
+                                allowColumnResizing={true} 
+                                height={"175px"} 
+                                width={"100%"}
+                                dbApply={false}
+                                selection={{mode:"single"}}
+                                loadPanel={{enabled:false}}
+                                onRowPrepared={(e)=>
+                                {
+                                    if(e.rowType == "header")
+                                    {
+                                        e.rowElement.style.fontWeight = "bold";    
+                                    }
+                                    e.rowElement.style.fontSize = "15px";                                        
+                                }}
+                                onCellPrepared={(e)=>
+                                {
+                                    e.cellElement.style.padding = "4px"                                    
+                                    if(e.rowType == 'data' && e.column.dataField == 'AMOUNT')
+                                    {
+                                        e.cellElement.style.fontWeight = "bold";
+                                    }
+                                }}
+                                onCellClick={async (e)=>
+                                {
+                                    if(e.column.dataField == "QUANTITY")
+                                    {
+                                        if(this.prmObj.filter({ID:'QuantityEdit',TYPE:0}).getValue() == true)
+                                        {                                            
+                                            let tmpResult = await this.popNumber.show('Miktar',e.value)
+                                                                                        
+                                            if(typeof tmpResult != 'undefined' && tmpResult != '')
+                                            {
+                                                if(this.prmObj.filter({ID:'QuantityCheckZero',TYPE:0}).getValue() == true && tmpResult == 0)
+                                                {
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Miktar sıfır girilemez !"}</div>)
+                                                    }
+                                                    await dialog(tmpConfObj);
+                                                    return
+                                                }
+
+                                                let tmpData = {QUANTITY:tmpResult,PRICE:e.key.PRICE}
+                                                this.saleRowUpdate(e.key,tmpData)
+                                            }
+                                        }
+                                    }
+                                    if(e.column.dataField == "PRICE")
+                                    {
+                                        if(this.prmObj.filter({ID:'PriceEdit',TYPE:0}).getValue() == true)
+                                        {
+                                            if(typeof this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog != 'undefined' && this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog.type != -1)
+                                            {   
+                                                let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog.type})
+                                                if(!tmpResult)
+                                                {
+                                                    return
+                                                }
+                                            }
+                                            
+                                            let tmpResult = await this.popNumber.show('Fiyat',e.value)                                            
+                                            if(typeof tmpResult != 'undefined' && tmpResult != '')
+                                            {
+                                                console.log(1)
+                                                console.log(e.data)
+                                                if((await this.priceCheck(e.data,tmpResult)))
+                                                {
+                                                    let tmpData = {QUANTITY:e.key.QUANTITY,PRICE:tmpResult}
+                                                    this.saleRowUpdate(e.key,tmpData)
+                                                }
+                                            }
+                                        }
+                                    }
+                                }}
+                                onSelectionChanged={(e)=>
+                                {
+                                    this.rbtnDisType._onClick(this.rbtnDisType.value)
+                                }}
+                                >
+                                    <Editing confirmDelete={false}/>
+                                    <Column dataField="LDATE" caption={"LDATE"} width={40} alignment={"center"} dataType={"datetime"} format={"dd-MM-yyyy - HH:mm:ss SSSZ"} defaultSortOrder="desc" visible={false}/>
+                                    <Column dataField="ITEM_NAME" caption={"ADI"} width={300}/>
+                                    <Column dataField="QUANTITY" caption={"MIKTAR"} width={60}/>
+                                    <Column dataField="PRICE" caption={"FIYAT"} width={50} format={"#0.00"}/>
+                                    <Column dataField="AMOUNT" alignment={"right"} caption={"TUTAR"} width={60} format={"#0.00"}/>                                                
+                                </NdGrid>
                             </div>
                         </div>
                         {/* Discount Input */}
