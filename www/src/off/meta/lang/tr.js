@@ -1247,6 +1247,7 @@ export const langTr =
             clmQuantity : "Miktar",
             clmBarcode : "Barkodu"
         },
+        txtTotalQuantity : "Toplam Miktar"
     },
     stk_04_001 : 
     {
@@ -2055,7 +2056,7 @@ export const langTr =
             title: "Toplu Ürün Ekleme",
             btnApprove: "Ürünleri Getir",
             btnClear : "Temizle",
-            btnSave : "Faturayı Oluştur",
+            btnSave : "Satırları Ekle",
         },
         cmbMultiItemType : 
         {
@@ -2358,7 +2359,7 @@ export const langTr =
             title: "Toplu Ürün Ekleme",
             btnApprove: "Ürünleri Getir",
             btnClear : "Temizle",
-            btnSave : "Faturayı Oluştur",
+            btnSave : "Satırları Ekle",
         },
         cmbMultiItemType : 
         {
@@ -3232,7 +3233,7 @@ export const langTr =
             title: "Toplu Ürün Ekleme",
             btnApprove: "Ürünleri Getir",
             btnClear : "Temizle",
-            btnSave : "İrsaliyeyi Oluştur",
+            btnSave : "Satırları Ekle",
         },
         cmbMultiItemType : 
         {
@@ -3474,7 +3475,7 @@ export const langTr =
             title: "Toplu Ürün Ekleme",
             btnApprove: "Ürünleri Getir",
             btnClear : "Temizle",
-            btnSave : "İrsaliye Oluştur",
+            btnSave : "Satırları Ekle",
         },
         cmbMultiItemType : 
         {
@@ -3979,7 +3980,7 @@ export const langTr =
             title: "Toplu Ürün Ekleme",
             btnApprove: "Ürünleri Getir",
             btnClear : "Temizle",
-            btnSave : "Siparişi Oluştur",
+            btnSave : "Satırları Ekle",
         },
         cmbMultiItemType : 
         {
@@ -4218,7 +4219,7 @@ export const langTr =
             title: "Toplu Ürün Ekleme",
             btnApprove: "Ürünleri Getir",
             btnClear : "Temizle",
-            btnSave : "Siparişi Oluştur",
+            btnSave : "Satırları Ekle",
         },
         cmbMultiItemType : 
         {
@@ -5538,7 +5539,7 @@ export const langTr =
             title: "Toplu Ürün Ekleme",
             btnApprove: "Ürünleri Getir",
             btnClear : "Temizle",
-            btnSave : "Teklifi Oluştur",
+            btnSave : "Satırları Ekle",
         },
         cmbMultiItemType : 
         {
@@ -5777,7 +5778,7 @@ export const langTr =
             title: "Toplu Ürün Ekleme",
             btnApprove: "Ürünleri Getir",
             btnClear : "Temizle",
-            btnSave : "Teklifi Oluştur",
+            btnSave : "Satırları Ekle",
         },
         cmbMultiItemType : 
         {

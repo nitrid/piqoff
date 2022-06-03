@@ -206,75 +206,152 @@ export const menu = (e) =>
             ]
         },
         {
-            id: 'ftr',
-            text: e.t('menu.ftr'),//'Fatura',
+            id: 'cnt',
+            text: e.t('menu.cnt'),//'Anlaşmalar',
             expanded: false,
             items: 
             [
                 {
-                    id: 'ftr_01',
-                    text : e.t('menu.ftr_01'),//'Listeler',
+                    id: 'cnt_01',
+                    text : e.t('menu.cnt_01'),//'Listeler',
                     expanded: false,
                     items: 
                     [
                         {
-                            id: 'ftr_01_001',
-                            text: e.t('menu.ftr_01_001'),//'Alış Fatura Listesi',
-                            path: 'invoices/lists/purchaseInvList'
+                            id: 'cnt_01_001',
+                            text: e.t('menu.cnt_01_001'),//'Alış Anlaşma Listesi',
+                            path: 'contracts/lists/purchaseContList'
                         },
                         {
-                            id: 'ftr_01_002',
-                            text: e.t('menu.ftr_01_002'),//'Satış Fatura Listesi',
-                            path: 'invoices/lists/salesInvList'
+                            id: 'cnt_01_002',
+                            text: e.t('menu.cnt_01_002'),//'Satış Anlaşma Listesi',
+                            path: 'contracts/lists/salesContList'
                         },
-                        {
-                            id: 'ftr_01_003',
-                            text: e.t('menu.ftr_01_003'),//'iade Fatura Listesi',
-                            path: 'invoices/lists/rebateInvList'
-                        },
-                        {
-                            id: 'ftr_01_004',
-                            text: e.t('menu.ftr_01_004'),//'Fiyat Farkı Fatura Listesi',
-                            path: 'invoices/lists/priceDiffInvList'
-                        }
                     ]
                 },
                 {
-                    id: 'ftr_02',
-                    text : e.t('menu.ftr_02'),//'Evraklar',
+                    id: 'cnt_02',
+                    text : e.t('menu.cnt_02'),//'Evraklar',
                     expanded: false,
                     items: 
                     [
                         {
-                            id: 'ftr_02_001',
-                            text: e.t('menu.ftr_02_001'),//'Alış Faturası',
-                            path: 'invoices/documents/purchaseInvoice'
+                            id: 'cnt_02_001',
+                            text: e.t('menu.cnt_02_001'),//'Alış Anlaşma',
+                            path: 'contracts/cards/purchaseContract'
                         },
                         {
-                            id: 'ftr_02_002',
-                            text: e.t('menu.ftr_02_002'),//'Satış Faturası',
-                            path: 'invoices/documents/salesInvoice'
+                            id: 'cnt_02_002',
+                            text: e.t('menu.cnt_02_002'),//'Şatış Anlaşma',
+                            path: 'contracts/cards/salesContract'
                         },
-                        {
-                            id: 'ftr_02_003',
-                            text: e.t('menu.ftr_02_003'),//'İade Faturası',
-                            path: 'invoices/documents/rebateInvoice'
-                        },
-                        {
-                            id: 'ftr_02_004',
-                            text: e.t('menu.ftr_02_004'),//'Fiyat Farkı Faturası',
-                            path: 'invoices/documents/priceDifferenceInvoice'
-                        },
-                        // {
-                        //     id: 'ftr_02_005',
-                        //     text: e.t('menu.ftr_02_005'),//'Şubeler Arası Satış',
-                        //     path: 'customers/cards/customerCard'
-                        // }
                     ]
                 },
                 {
-                    id: 'ftr_03',
-                    text : e.t('menu.ftr_03'),//'Raporlar',
+                    id: 'cnt_03',
+                    text : e.t('menu.cnt_03'),//'Raporlar',
+                    expanded: false,
+                }
+            ]
+        },
+        {
+            id: 'tkf',
+            text: e.t('menu.tkf'),//'tkfariş',
+            expanded: false,
+            items: 
+            [
+                {
+                    id: 'tkf_01',
+                    text : e.t('menu.tkf_01'),//'Listeler',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'tkf_01_001',
+                            text: e.t('menu.tkf_01_001'),//'Alış tkfariş Listesi',
+                            path: 'offers/lists/purchaseOrdList'
+                        },
+                        {
+                            id: 'tkf_01_002',
+                            text: e.t('menu.tkf_01_002'),//'Satış tkfariş Listesi',
+                            path: 'offers/lists/salesOrdList'
+                        },
+                    ]
+                },
+                {
+                    id: 'tkf_02',
+                    text : e.t('menu.tkf_02'),//'Evraklar',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'tkf_02_001',
+                            text: e.t('menu.tkf_02_001'),//'Alış Sİpariş',
+                            path: 'offers/documents/purchaseOffer'
+                        },
+                        {
+                            id: 'tkf_02_002',
+                            text: e.t('menu.tkf_02_002'),//'Satış tkfariş',
+                            path: 'offers/documents/salesOffer'
+                        },
+    
+            
+                    ]
+                },
+                {
+                    id: 'tkf_03',
+                    text : e.t('menu.tkf_03'),//'Raporlar',
+                    expanded: false,
+                }
+            ]
+        },
+        {
+            id: 'sip',
+            text: e.t('menu.sip'),//'Sipariş',
+            expanded: false,
+            items: 
+            [
+                {
+                    id: 'sip_01',
+                    text : e.t('menu.sip_01'),//'Listeler',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'sip_01_001',
+                            text: e.t('menu.sip_01_001'),//'Alış Sipariş Listesi',
+                            path: 'orders/lists/purchaseOrdList'
+                        },
+                        {
+                            id: 'sip_01_002',
+                            text: e.t('menu.sip_01_002'),//'Satış Sipariş Listesi',
+                            path: 'orders/lists/salesOrdList'
+                        },
+                    ]
+                },
+                {
+                    id: 'sip_02',
+                    text : e.t('menu.sip_02'),//'Evraklar',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'sip_02_001',
+                            text: e.t('menu.sip_02_001'),//'Alış Sİpariş',
+                            path: 'orders/documents/purchaseOrder'
+                        },
+                        {
+                            id: 'sip_02_002',
+                            text: e.t('menu.sip_02_002'),//'Satış Sipariş',
+                            path: 'orders/documents/salesOrder'
+                        },
+    
+            
+                    ]
+                },
+                {
+                    id: 'sip_03',
+                    text : e.t('menu.sip_03'),//'Raporlar',
                     expanded: false,
                 }
             ]
@@ -344,152 +421,75 @@ export const menu = (e) =>
             ]
         },
         {
-            id: 'sip',
-            text: e.t('menu.sip'),//'Sipariş',
+            id: 'ftr',
+            text: e.t('menu.ftr'),//'Fatura',
             expanded: false,
             items: 
             [
                 {
-                    id: 'sip_01',
-                    text : e.t('menu.sip_01'),//'Listeler',
+                    id: 'ftr_01',
+                    text : e.t('menu.ftr_01'),//'Listeler',
                     expanded: false,
                     items: 
                     [
                         {
-                            id: 'sip_01_001',
-                            text: e.t('menu.sip_01_001'),//'Alış Sipariş Listesi',
-                            path: 'orders/lists/purchaseOrdList'
+                            id: 'ftr_01_001',
+                            text: e.t('menu.ftr_01_001'),//'Alış Fatura Listesi',
+                            path: 'invoices/lists/purchaseInvList'
                         },
                         {
-                            id: 'sip_01_002',
-                            text: e.t('menu.sip_01_002'),//'Satış Sipariş Listesi',
-                            path: 'orders/lists/salesOrdList'
+                            id: 'ftr_01_002',
+                            text: e.t('menu.ftr_01_002'),//'Satış Fatura Listesi',
+                            path: 'invoices/lists/salesInvList'
                         },
+                        {
+                            id: 'ftr_01_003',
+                            text: e.t('menu.ftr_01_003'),//'iade Fatura Listesi',
+                            path: 'invoices/lists/rebateInvList'
+                        },
+                        {
+                            id: 'ftr_01_004',
+                            text: e.t('menu.ftr_01_004'),//'Fiyat Farkı Fatura Listesi',
+                            path: 'invoices/lists/priceDiffInvList'
+                        }
                     ]
                 },
                 {
-                    id: 'sip_02',
-                    text : e.t('menu.sip_02'),//'Evraklar',
+                    id: 'ftr_02',
+                    text : e.t('menu.ftr_02'),//'Evraklar',
                     expanded: false,
                     items: 
                     [
                         {
-                            id: 'sip_02_001',
-                            text: e.t('menu.sip_02_001'),//'Alış Sİpariş',
-                            path: 'orders/documents/purchaseOrder'
+                            id: 'ftr_02_001',
+                            text: e.t('menu.ftr_02_001'),//'Alış Faturası',
+                            path: 'invoices/documents/purchaseInvoice'
                         },
                         {
-                            id: 'sip_02_002',
-                            text: e.t('menu.sip_02_002'),//'Satış Sipariş',
-                            path: 'orders/documents/salesOrder'
+                            id: 'ftr_02_002',
+                            text: e.t('menu.ftr_02_002'),//'Satış Faturası',
+                            path: 'invoices/documents/salesInvoice'
                         },
-    
-            
+                        {
+                            id: 'ftr_02_003',
+                            text: e.t('menu.ftr_02_003'),//'İade Faturası',
+                            path: 'invoices/documents/rebateInvoice'
+                        },
+                        {
+                            id: 'ftr_02_004',
+                            text: e.t('menu.ftr_02_004'),//'Fiyat Farkı Faturası',
+                            path: 'invoices/documents/priceDifferenceInvoice'
+                        },
+                        // {
+                        //     id: 'ftr_02_005',
+                        //     text: e.t('menu.ftr_02_005'),//'Şubeler Arası Satış',
+                        //     path: 'customers/cards/customerCard'
+                        // }
                     ]
                 },
                 {
-                    id: 'sip_03',
-                    text : e.t('menu.sip_03'),//'Raporlar',
-                    expanded: false,
-                }
-            ]
-        },
-        {
-            id: 'tkf',
-            text: e.t('menu.tkf'),//'tkfariş',
-            expanded: false,
-            items: 
-            [
-                {
-                    id: 'tkf_01',
-                    text : e.t('menu.tkf_01'),//'Listeler',
-                    expanded: false,
-                    items: 
-                    [
-                        {
-                            id: 'tkf_01_001',
-                            text: e.t('menu.tkf_01_001'),//'Alış tkfariş Listesi',
-                            path: 'offers/lists/purchaseOrdList'
-                        },
-                        {
-                            id: 'tkf_01_002',
-                            text: e.t('menu.tkf_01_002'),//'Satış tkfariş Listesi',
-                            path: 'offers/lists/salesOrdList'
-                        },
-                    ]
-                },
-                {
-                    id: 'tkf_02',
-                    text : e.t('menu.tkf_02'),//'Evraklar',
-                    expanded: false,
-                    items: 
-                    [
-                        {
-                            id: 'tkf_02_001',
-                            text: e.t('menu.tkf_02_001'),//'Alış Sİpariş',
-                            path: 'offers/documents/purchaseOffer'
-                        },
-                        {
-                            id: 'tkf_02_002',
-                            text: e.t('menu.tkf_02_002'),//'Satış tkfariş',
-                            path: 'offers/documents/salesOffer'
-                        },
-    
-            
-                    ]
-                },
-                {
-                    id: 'tkf_03',
-                    text : e.t('menu.tkf_03'),//'Raporlar',
-                    expanded: false,
-                }
-            ]
-        },
-        {
-            id: 'cnt',
-            text: e.t('menu.cnt'),//'Anlaşmalar',
-            expanded: false,
-            items: 
-            [
-                {
-                    id: 'cnt_01',
-                    text : e.t('menu.cnt_01'),//'Listeler',
-                    expanded: false,
-                    items: 
-                    [
-                        {
-                            id: 'cnt_01_001',
-                            text: e.t('menu.cnt_01_001'),//'Alış Anlaşma Listesi',
-                            path: 'contracts/lists/purchaseContList'
-                        },
-                        {
-                            id: 'cnt_01_002',
-                            text: e.t('menu.cnt_01_002'),//'Satış Anlaşma Listesi',
-                            path: 'contracts/lists/salesContList'
-                        },
-                    ]
-                },
-                {
-                    id: 'cnt_02',
-                    text : e.t('menu.cnt_02'),//'Evraklar',
-                    expanded: false,
-                    items: 
-                    [
-                        {
-                            id: 'cnt_02_001',
-                            text: e.t('menu.cnt_02_001'),//'Alış Anlaşma',
-                            path: 'contracts/cards/purchaseContract'
-                        },
-                        {
-                            id: 'cnt_02_002',
-                            text: e.t('menu.cnt_02_002'),//'Şatış Anlaşma',
-                            path: 'contracts/cards/salesContract'
-                        },
-                    ]
-                },
-                {
-                    id: 'cnt_03',
-                    text : e.t('menu.cnt_03'),//'Raporlar',
+                    id: 'ftr_03',
+                    text : e.t('menu.ftr_03'),//'Raporlar',
                     expanded: false,
                 }
             ]

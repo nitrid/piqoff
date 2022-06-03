@@ -107,18 +107,12 @@ export default class barcodeCard extends React.Component
         await this.cmbBarUnit.dataRefresh(tmpSource)
         if(this.cmbBarUnit.data.datatable.length > 0)
         {
+            this.txtBarUnitFactor.setState({value:this.cmbBarUnit.data.datatable.where({'TYPE':0})[0].FACTOR});
             let tmpGuid = this.cmbBarUnit.data.datatable.where({'TYPE':0})[0].GUID
             this.cmbBarUnit.setState({value:tmpGuid});
-            this.txtBarUnitFactor.setState({value:this.cmbBarUnit.data.datatable.where({'GUID':tmpGuid})[0].FACTOR});
-            let tmpUnitType = this.cmbBarUnit.data.datatable.where({'GUID':tmpGuid})[0].TYPE
-            if(tmpUnitType == 0)
-            {
-                this.txtUnitTypeName.setState({value:this.t("MainUnit")})
-            }
-            else
-            {
-                this.txtUnitTypeName.setState({value:this.t("SubUnit")})
-            }
+            
+            this.txtUnitTypeName.setState({value:this.t("MainUnit")})
+           
         }
     }
    render()

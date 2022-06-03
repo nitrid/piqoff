@@ -722,7 +722,7 @@ export default class outageDoc extends React.Component
                                     onValueChanged={(async()=>
                                         {
                                         }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 "},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE = 1"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbOutDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbOutDepot',USERS:this.user.CODE})}
                                     >

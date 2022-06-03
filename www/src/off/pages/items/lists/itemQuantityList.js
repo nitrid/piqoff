@@ -3,7 +3,7 @@ import App from '../../../lib/app.js';
 import moment from 'moment';
 
 import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { Label } from 'devextreme-react/form';
+import Form, { Label,EmptyItem } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
 import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
@@ -153,9 +153,8 @@ export default class QuantityList extends React.Component
 
             await this.grdListe.dataRefresh(tmpSource)
         }
-       
-        
-    
+        let tmpQuantity = this.grdListe.data.datatable.sum("QUANTITY",2)
+        this.txtTotalQuantity.setState({value:tmpQuantity})
       
     }
     render()
@@ -268,7 +267,7 @@ export default class QuantityList extends React.Component
                             allowColumnResizing={true}
                             loadPanel={{enabled:true}}
                             >                            
-                                <Paging defaultPageSize={15} />
+                                <Paging defaultPageSize={12} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
                                 <Export fileName={this.lang.t("menu.stk_03_006")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="NAME" caption={this.t("grdListe.clmName")} visible={true}/> 
@@ -279,6 +278,14 @@ export default class QuantityList extends React.Component
                             </NdGrid>
                         </div>
                     </div>
+                    <Form colCount={4}>
+                        <EmptyItem colSpan={3}></EmptyItem>
+                        <Item>
+                            <Label text={this.t("txtTotalQuantity")} alignment="right" />
+                                <NdTextBox id="txtTotalQuantity" parent={this} simple={true} readOnly={true}
+                                />
+                        </Item>
+                    </Form>
                 </ScrollView>
             </div>
         )
