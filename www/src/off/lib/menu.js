@@ -669,7 +669,7 @@ export const menu = (e) =>
                         {
                             id: 'proces_01_001',
                             text: e.t('menu.proces_01_001'),//'Toplu Ürün Grubu Güncelle',
-                            path: 'setting/costandtax/taxSugar'
+                            path: 'proces/itemProces/itemGroupProces'
                         }
                     ]
                 },

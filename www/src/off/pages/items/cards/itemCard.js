@@ -33,7 +33,8 @@ export default class itemCard extends React.Component
 
         this.itemsObj = new itemsCls();
         this.itemsPriceSupply = new itemPriceCls();   
-        this.itemsPriceLogObj = new itemLogPriceCls();        
+        this.itemsPriceLogObj = new itemLogPriceCls();    
+        this.salesPriceLogObj = new datatable    
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
         this._onItemRendered = this._onItemRendered.bind(this)
@@ -56,7 +57,8 @@ export default class itemCard extends React.Component
         this.itemsObj.clearAll();
 
         this.itemsPriceSupply.clearAll();     
-        this.itemsPriceLogObj.clearAll();        
+        this.itemsPriceLogObj.clearAll();     
+        this.salesPriceLogObj.clear()   
 
         this.itemsObj.ds.on('onAddRow',(pTblName,pData) =>
         {            
@@ -168,6 +170,8 @@ export default class itemCard extends React.Component
         this.itemsObj.itemUnit.addEmpty(tmpMainUnitObj);
         this.itemsObj.itemUnit.addEmpty(tmpUnderUnitObj);
 
+       
+
         this.itemGrpForOrginsValidCheck();   
         this.itemGrpForMinMaxAccessCheck();  
         this.taxSugarValidCheck()                      
@@ -181,6 +185,20 @@ export default class itemCard extends React.Component
         await this.itemsPriceSupply.load({ITEM_CODE:pCode,TYPE:1})  
         await this.itemsPriceLogObj.load({ITEM_GUID:this.itemsObj.dt()[0].GUID})
         this.txtBarcode.readOnly = true;
+        let tmpQuery = 
+        {
+            query :"SELECT * FROM [ITEM_PRICE_LOG_VW_01] WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 0 ORDER BY LDATE DESC ",
+            param : ['ITEM_GUID:string|50'],
+            value : [this.itemsObj.dt()[0].GUID]
+        }
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        if(tmpData.result.recordset.length > 0)
+        {
+            for (let i = 0; i < tmpData.result.recordset.length; i++) 
+            {
+                this.salesPriceLogObj.push(tmpData.result.recordset[i])
+            }
+        }
         App.instance.setState({isExecute:false})
     }
     async checkItem(pCode)
@@ -337,6 +355,10 @@ export default class itemCard extends React.Component
         else if(e.itemData.title == this.t("tabTitleCustomerPrice"))
         {
             await this.grdCustomerPrice.dataRefresh({source:this.itemsPriceLogObj.dt()});
+        }
+        else if(e.itemData.title == this.t("tabTitleSalesPriceHistory"))
+        {
+            await this.grdSalesPrice.dataRefresh({source:this.salesPriceLogObj});
         }
         else if(e.itemData.title == this.t("tabTitleSalesContract"))
         {
@@ -755,7 +777,6 @@ export default class itemCard extends React.Component
                                             this.popCustomer.show();
                                         }
                                     }]}
-                                    tabIndex={this.tabIndex}
                                     param={this.param.filter({ELEMENT:'txtCustomer',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomer',USERS:this.user.CODE})}>
                                     </NdTextBox>
@@ -1271,13 +1292,33 @@ export default class itemCard extends React.Component
                                             width={'100%'}
                                             >
                                                 <Paging defaultPageSize={5} />
-                                                <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
+                                                <Editing mode="cell" allowUpdating={true}  />
                                                 <Column dataField="CUSER_NAME" caption={this.t("grdCustomerPrice.clmUser")} />
                                                 <Column dataField="CUSTOMER_CODE" caption={this.t("grdCustomerPrice.clmCode")} />
                                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdCustomerPrice.clmName")} />
                                                 <Column dataField="CHANGE_DATE" caption={this.t("grdCustomerPrice.clmDate")} allowEditing={false} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
                                                 <Column dataField="PRICE" caption={this.t("grdCustomerPrice.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                                 <Column dataField="MULTICODE" caption={this.t("grdCustomerPrice.clmMulticode")} />
+                                            </NdGrid>
+                                        </div>
+                                    </div>
+                                </Item>
+                                   <Item title={this.t("tabTitleSalesPriceHistory")}>
+                                    <div className='row px-2 py-2'>
+                                        <div className='col-12'>
+                                            <NdGrid parent={this} id={"grdSalesPrice"} 
+                                            showBorders={true} 
+                                            columnsAutoWidth={true} 
+                                            allowColumnReordering={true} 
+                                            allowColumnResizing={true} 
+                                            height={'100%'} 
+                                            width={'100%'}
+                                            >
+                                                <Paging defaultPageSize={5} />
+                                                <Editing mode="cell" allowUpdating={true} />
+                                                <Column dataField="CUSER_NAME" caption={this.t("grdSalesPrice.clmUser")} />
+                                                <Column dataField="CHANGE_DATE" caption={this.t("grdSalesPrice.clmDate")} allowEditing={false} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
+                                                <Column dataField="PRICE" caption={this.t("grdSalesPrice.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                             </NdGrid>
                                         </div>
                                     </div>
