@@ -385,6 +385,7 @@ export default class NbPluButtonGrp extends NbBase
                         sql:this.props.parent.core.sql
                     }
                 }
+                this["popSelect" + this.props.id].clear()
                 this["popSelect" + this.props.id].show()
             }
             else if(pType == 2)
@@ -435,6 +436,7 @@ export default class NbPluButtonGrp extends NbBase
                         sql:this.props.parent.core.sql
                     }
                 }
+                this["popSelect" + this.props.id].clear()
                 this["popSelect" + this.props.id].show()
             }
         }
@@ -469,6 +471,7 @@ export default class NbPluButtonGrp extends NbBase
             this.props.onSelection(pItem);
         }
     }
+    _pop
     render()
     {
         if(this.state.isLoading)
@@ -500,30 +503,10 @@ export default class NbPluButtonGrp extends NbBase
                     onSelection={(pData)=>
                     {
                         if(pData.length > 0)
-                        {
-                            if(this.clickData.status == 0) //new
-                            {
-                                this.pluObj.addEmpty()
-                                this.pluObj.dt()[this.pluObj.dt().length-1].TYPE = this.clickData.type
-                                this.pluObj.dt()[this.pluObj.dt().length-1].NAME = pData[0].NAME
-                                this.pluObj.dt()[this.pluObj.dt().length-1].LINK = pData[0].GUID
-                                this.pluObj.dt()[this.pluObj.dt().length-1].LOCATION = this.clickData.index
-                                this.pluObj.dt()[this.pluObj.dt().length-1].GROUP_INDEX = this.isCategory
-                                this.refresh();
-                            }
-                            else if(this.clickData.status == 1) //update
-                            {                            
-                                let tmpData = this.pluObj.dt().where({GUID:this.clickData.data.GUID});
-                                if(tmpData.length > 0)
-                                {
-                                    tmpData[0].NAME = pData[0].NAME
-                                    tmpData[0].LINK = pData[0].LINK
-                                }
-                                this["popGroupEntry" + this.props.id].hide();
-                                this.refresh();
-                            }
+                        {           
+                            this["popNameEntry" + this.props.id].show()
+                            this["txtNameEntry" + this.props.id].value = pData[0].NAME
                         }
-                        
                     }}>
                         <Column dataField="CODE" caption={"CODE"} width={150} />
                         <Column dataField="NAME" caption={"NAME"} width={250} />
@@ -543,7 +526,7 @@ export default class NbPluButtonGrp extends NbBase
                     >
                         <div className="row pb-1">
                             <div className="col-12">
-                                <NdTextBox id={"txtGroupEntry" + this.props.id} parent={this} simple={true} onValueChanged={(e)=>{this.keyGroupEntry.setInput(e.value)}} />     
+                                <NdTextBox id={"txtGroupEntry" + this.props.id} parent={this} simple={true} onValueChanging={(e)=>{this.keyGroupEntry.setInput(e)}} />     
                             </div>                            
                         </div>
                         <div className="row py-1">
@@ -577,6 +560,58 @@ export default class NbPluButtonGrp extends NbBase
                         </div>
                         <div className="row pt-1">
                             <NbKeyboard id={"keyGroupEntry"} parent={this} inputName={"txtGroupEntry" + this.props.id}/>
+                        </div>
+                    </NdPopUp>
+                </div>
+                {/* Plu Name Entry Popup */}
+                <div>
+                    <NdPopUp parent={this} id={"popNameEntry" + this.props.id} 
+                    visible={false}                        
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={"Plu Adı"}
+                    container={"#root"} 
+                    width={"700"}
+                    height={"460"}
+                    position={{of:"#root"}}
+                    >
+                        <div className="row pb-1">
+                            <div className="col-12">
+                                <NdTextBox id={"txtNameEntry" + this.props.id} parent={this} simple={true} onValueChanging={(e)=>{this.keyNameEntry.setInput(e)}} />     
+                            </div>                            
+                        </div>
+                        <div className="row py-1">
+                            <div className="col-12">
+                                <NbButton id={"btnSelectNameEntry" + this.props.id} parent={this} className="form-group btn btn-success btn-block" 
+                                style={{height:"45px",width:"100%",fontSize:"16px"}}
+                                onClick={async ()=>
+                                {
+                                    if(this.clickData.status == 0) //new
+                                    {
+                                        this.pluObj.addEmpty()
+                                        this.pluObj.dt()[this.pluObj.dt().length-1].TYPE = this.clickData.type
+                                        this.pluObj.dt()[this.pluObj.dt().length-1].NAME = this["txtNameEntry" + this.props.id].value
+                                        this.pluObj.dt()[this.pluObj.dt().length-1].LINK = this.clickData.data.GUID
+                                        this.pluObj.dt()[this.pluObj.dt().length-1].LOCATION = this.clickData.index
+                                        this.pluObj.dt()[this.pluObj.dt().length-1].GROUP_INDEX = this.isCategory
+                                        this.refresh();
+                                    }
+                                    else if(this.clickData.status == 1) //update
+                                    {               
+                                        let tmpData = this.pluObj.dt().where({GUID:this.clickData.data.GUID});
+                                        if(tmpData.length > 0)
+                                        {
+                                            tmpData[0].NAME = this["txtNameEntry" + this.props.id].value
+                                            tmpData[0].LINK = this.clickData.data.LINK
+                                        }
+                                        this["popNameEntry" + this.props.id].hide();
+                                        this.refresh();
+                                    }
+                                }}><i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} /></NbButton>
+                            </div>
+                        </div>
+                        <div className="row pt-1">
+                            <NbKeyboard id={"keyNameEntry"} parent={this} inputName={"txtNameEntry" + this.props.id}/>
                         </div>
                     </NdPopUp>
                 </div>

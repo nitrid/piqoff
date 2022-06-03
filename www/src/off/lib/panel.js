@@ -17,6 +17,7 @@ export default class Panel extends React.Component
     }
     this.onSelectionChanged = this.onSelectionChanged.bind(this);
     this.renderTitle = this.renderTitle.bind(this);
+    this.tabCount = 0;
 
     if(!Panel.instance)
     {
@@ -27,7 +28,8 @@ export default class Panel extends React.Component
   {
     //AYNI EKRANI BİRDEN ÇOK AÇMAK İÇİN YAPILDI. MENÜDEN GELEN DATA TAB ÜZERİNDE BENZERSİZ HALE GETİRİLİYOR.
     let Tmp = {...e}
-    Tmp.tabkey = this.state.dataSource.length;
+    this.tabCount += 1
+    Tmp.tabkey = this.tabCount;//this.state.dataSource.length;
     //*************************************************************************************************** */
     this.setState(
     {

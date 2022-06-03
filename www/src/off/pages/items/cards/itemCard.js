@@ -137,7 +137,7 @@ export default class itemCard extends React.Component
         })        
 
         this.itemsObj.addEmpty();
-
+        console.log(Math.floor(Date.now() / 100000))
         this.txtRef.value = Math.floor(Date.now() / 1000)
         this.txtCustomer.value = "";
         this.txtCustomer.displayValue = "";   
@@ -521,6 +521,7 @@ export default class itemCard extends React.Component
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmItems" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
+                                        console.log(e.validationGroup)
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             //FIYAT GİRMEDEN KAYIT EDİLEMEZ KONTROLÜ
@@ -1784,8 +1785,8 @@ export default class itemCard extends React.Component
                                             <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmItemCustomer" + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
-                                                console.log(this.tabIndex)
-                                                console.log(e.validationGroup.validate().status)
+                                                console.log(e)
+                                                console.log(e.validationGroup)
                                                 if(e.validationGroup.validate().status == "valid")
                                                 {
                                                     let tmpEmptyMulti = {...this.itemsObj.itemMultiCode.empty};
