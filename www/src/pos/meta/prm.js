@@ -159,50 +159,61 @@ export const prm =
                 {
                     id:"btn01",
                     title:"Yetersiz Ödeme",
-                    text:"Yetersiz Ödeme"
+                    text:"Müşteri ödemesi gereken tutarı karşılayamadı terkrar gelecek."
                 },
                 {
                     id:"btn02",
-                    text:"Ek Alış Veriş"
+                    title:"Ek Alış Veriş",
+                    text:"Müşteri ek ürün almak için reyona gitti."
                 },
                 {
                     id:"btn03",
-                    text:"Mağaza Personeli"
+                    title:"Mağaza Personeli",
+                    text:"Mağaza personeli ödemesini sonra yapacak."
                 },
                 {
                     id:"btn04",
-                    text:"K.Kartı Geçmedi"
+                    title:"K.Kartı Geçmedi",
+                    text:"K.Kartı geçmedi müştere ödemesini yapabilmesi için tekrar gelecek."
                 },
                 {
                     id:"btn05",
+                    title:"Yetersiz Ödeme",
                     text:"Yetersiz Ödeme"
                 },
                 {
                     id:"btn06",
+                    title:"Ek Alış Veriş",
                     text:"Ek Alış Veriş"
                 },
                 {
                     id:"btn07",
+                    title:"Mağaza Personeli",
                     text:"Mağaza Personeli"
                 },
                 {
                     id:"btn08",
+                    title:"K.Kartı Geçmedi",
                     text:"K.Kartı Geçmedi"
                 },
                 {
                     id:"btn09",
+                    title:"Yetersiz Ödeme",
                     text:"Yetersiz Ödeme"
                 },
                 {
                     id:"btn10",
+                    title:"Ek Alış Veriş",
                     text:"Ek Alış Veriş"
                 },
                 {
                     id:"btn11",
+                    title:"Mağaza Personeli",
                     text:"Mağaza Personeli"
                 },
                 {
                     id:"btn12",
+                    title:"K.Kartı Geçmedi",
                     text:"K.Kartı Geçmedi"
                 }
             ]
