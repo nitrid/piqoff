@@ -3585,7 +3585,7 @@ export default class posDoc extends React.PureComponent
                 </div>
                 {/* Park Description Popup */} 
                 <div>
-                    <NbPopDescboard id={"popParkDesc"} parent={this} width={"900"} height={"650"} position={"#root"} head={"Park Açıklaması"} title={"Lütfen Açıklama Giriniz"}
+                    <NbPopDescboard id={"popParkDesc"} parent={this} width={"900"} height={"750"} position={"#root"} head={"Park Açıklaması"} title={"Lütfen Açıklama Giriniz"}
                     button={this.prmObj.filter({ID:'ParkDelDescription',TYPE:0}).getValue().buttons}
                     onClick={async (e)=>
                     {
@@ -3595,7 +3595,7 @@ export default class posDoc extends React.PureComponent
                 </div>
                 {/* Delete Description Popup */} 
                 <div>
-                    <NbPopDescboard id={"popDeleteDesc"} parent={this} width={"900"} height={"540"} position={"#root"} head={"Silme İşlemi Açıklaması"} title={"Lütfen Silme Nedeninizi Giriniz"}
+                    <NbPopDescboard id={"popDeleteDesc"} parent={this} width={"900"} height={"750"} position={"#root"} head={"Silme İşlemi Açıklaması"} title={"Lütfen Silme Nedeninizi Giriniz"}
                     button={this.prmObj.filter({ID:'DocDelDescription',TYPE:0}).getValue().buttons}
                     onClick={async (e)=>
                     {
@@ -3605,7 +3605,7 @@ export default class posDoc extends React.PureComponent
                 </div>
                 {/* Row Delete Description Popup */} 
                 <div>
-                    <NbPopDescboard id={"popRowDeleteDesc"} parent={this} width={"900"} height={"540"} position={"#root"} head={"Satır Silme İşlemi Açıklaması"} title={"Lütfen Silme Nedeninizi Giriniz"}
+                    <NbPopDescboard id={"popRowDeleteDesc"} parent={this} width={"900"} height={"750"} position={"#root"} head={"Satır Silme İşlemi Açıklaması"} title={"Lütfen Silme Nedeninizi Giriniz"}
                     button={this.prmObj.filter({ID:'DocRowDelDescription',TYPE:0}).getValue().buttons}
                     onClick={async (e)=>
                     {

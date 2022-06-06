@@ -389,7 +389,6 @@ export class posSaleCls
                 tmpData.splice(i, 1); 
             }
         }
-        
         for (let i = 0; i < tmpData.length; i++) 
         {
             if(tmpSubIndex != tmpData[i].SUBTOTAL)
@@ -398,7 +397,7 @@ export class posSaleCls
                 if(tmpData[i].SUBTOTAL > 0)
                 { 
                     let tmpItem = {...this.empty};
-                    tmpItem.LDATE = tmpData[i].LDATE;
+                    tmpItem.LDATE = tmpData.where({SUBTOTAL:tmpSubIndex}).max('LDATE');
                     tmpItem.ITEM_NAME = "SUB TOTAL";
                     tmpItem.SUBTOTAL = tmpSubIndex;
                     tmpItem.AMOUNT = tmpData.where({SUBTOTAL:tmpSubIndex}).sum('AMOUNT',2);
