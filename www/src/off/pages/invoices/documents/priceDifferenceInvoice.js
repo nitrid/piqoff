@@ -648,7 +648,8 @@ export default class priceDifferenceInvoice extends React.Component
                                                 }
                                                 
                                                 if((await this.docObj.save()) == 0)
-                                                {                                                    
+                                                {                               
+                                                    this._getPayment()                     
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
                                                 }

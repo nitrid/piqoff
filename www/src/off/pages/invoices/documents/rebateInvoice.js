@@ -660,7 +660,8 @@ export default class rebateInvoice extends React.Component
                                                 
                                                 console.log(this.docObj.dt())
                                                 if((await this.docObj.save()) == 0)
-                                                {                                                    
+                                                {                                    
+                                                    this._getPayment()                
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
                                                 }

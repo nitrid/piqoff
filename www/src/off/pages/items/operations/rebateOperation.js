@@ -137,6 +137,18 @@ export default class rebateOperation extends React.Component
 
         for (let i = 0; i < Object.keys(tmpCustomer).length; i++)
         {
+            let tmpQuery = 
+            {
+                query:  "Select CODE,ISNULL((SELECT (MAX(REF_NO) + 1) FROM DOC_VW_01 WHERE DOC_TYPE = 40 AND REBATE = 1 AND DOC_VW_01.INPUT = CUSTOMERS.GUID),1) AS REF_NO FROM CUSTOMERS WHERE GUID = @GUID ",
+                param:  ['GUID:string|50'],
+                value:  [Object.keys(tmpCustomer)[i]]
+            }
+
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+           
+            let tmpRef = tmpData.result.recordset[0].CODE
+            let tmpRefNo = tmpData.result.recordset[0].REF_NO
+
             if(Object.keys(tmpCustomer)[i] != '00000000-0000-0000-0000-000000000000')
             {
                 if(pType == 0)
@@ -145,8 +157,8 @@ export default class rebateOperation extends React.Component
                     tmpDoc.TYPE = 1
                     tmpDoc.DOC_TYPE = 40
                     tmpDoc.REBATE = 1
-                    tmpDoc.REF = this.txtRef
-                    tmpDoc.REF_NO = (this.docObj.dt().length + 1)
+                    tmpDoc.REF = tmpRef
+                    tmpDoc.REF_NO = tmpRefNo
                     tmpDoc.OUTPUT = this.cmbDepot.value
                     tmpDoc.INPUT = Object.keys(tmpCustomer)[i]
                     this.docObj.addEmpty(tmpDoc);
@@ -157,8 +169,8 @@ export default class rebateOperation extends React.Component
                     tmpDoc.TYPE = 1
                     tmpDoc.DOC_TYPE = 20
                     tmpDoc.REBATE = 1
-                    tmpDoc.REF = this.txtRef
-                    tmpDoc.REF_NO = (this.docObj.dt().length + 1)
+                    tmpDoc.REF = tmpRef
+                    tmpDoc.REF_NO = tmpRefNo
                     tmpDoc.OUTPUT = this.cmbDepot.value
                     tmpDoc.INPUT = Object.keys(tmpCustomer)[i]
                     this.docObj.addEmpty(tmpDoc);
@@ -220,7 +232,7 @@ export default class rebateOperation extends React.Component
         }
         if((await this.docObj.save()) == 0)
         {                                                    
-            tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.txtRef + this.t("msgSaveResult.msgSuccess")}</div>)
+            tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
             await dialog(tmpConfObj1);
             this.docObj.clearAll()
             this.txtRef = Math.floor(Date.now() / 1000)
