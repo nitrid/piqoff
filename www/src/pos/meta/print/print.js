@@ -115,7 +115,7 @@ export function print()
                         style: data.possale[i].GUID == "00000000-0000-0000-0000-000000000000" ? "b" : undefined, //SUBTOTAL
                         align: data.possale[i].GUID == "00000000-0000-0000-0000-000000000000" ? "rt" : "lt", //SUBTOTAL
                         data: data.possale[i].VAT_TYPE + " " +
-                            (data.possale[i].GUID == "00000000-0000-0000-0000-000000000000" ? data.possale[i].ITEM_NAME.space(30,'s') : (data.possale[i].TICKET_REST ? "*" + data.possale[i].ITEM_NAME : data.possale[i].ITEM_NAME).toString().space(34)) + " " +
+                            (data.possale[i].GUID == "00000000-0000-0000-0000-000000000000" ? data.possale[i].ITEM_SNAME.space(30,'s') : (data.possale[i].TICKET_REST ? "*" + data.possale[i].ITEM_SNAME : data.possale[i].ITEM_SNAME).toString().space(34)) + " " +
                             (data.possale[i].GUID == "00000000-0000-0000-0000-000000000000" ? "" : tmpQt).space(8,'s') + " " + //SUBTOTAL
                             (data.possale[i].GUID == "00000000-0000-0000-0000-000000000000" ? "" : parseFloat(data.possale[i].PRICE).toFixed(2)).space(7,"s") + " " + //SUBTOTAL
                             (parseFloat(data.possale[i].AMOUNT).toFixed(2) + "EUR").space(10,"s")
