@@ -399,6 +399,7 @@ export class posSaleCls
                     let tmpItem = {...this.empty};
                     tmpItem.LDATE = tmpData.where({SUBTOTAL:tmpSubIndex}).max('LDATE');
                     tmpItem.ITEM_NAME = "SUB TOTAL";
+                    tmpItem.ITEM_SNAME = "SUB TOTAL";
                     tmpItem.SUBTOTAL = tmpSubIndex;
                     tmpItem.AMOUNT = tmpData.where({SUBTOTAL:tmpSubIndex}).sum('AMOUNT',2);
 

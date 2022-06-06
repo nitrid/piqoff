@@ -2619,7 +2619,11 @@ export default class posDoc extends React.PureComponent
                                             {/* Okey */}
                                             <div className="col-6">
                                                 <NbButton id={"btnPopTotalOkey"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
-                                                onClick={()=>{this.payAdd(this.rbtnPayType.value,this.txtPopTotal.value)}}>
+                                                onClick={()=>
+                                                {
+                                                    this.payAdd(this.rbtnPayType.value,this.txtPopTotal.value);
+                                                    this.txtPopTotal.newStart = true;
+                                                }}>
                                                     <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
                                                 </NbButton>
                                             </div>
@@ -3065,7 +3069,7 @@ export default class posDoc extends React.PureComponent
                 <div>
                     <NdPopUp parent={this} id={"popDiscount"} 
                     visible={false}                        
-                    showCloseButton={true}
+                    showCloseButton={false}
                     showTitle={true}
                     title={"İskonto"}
                     container={"#root"} 
@@ -3188,6 +3192,16 @@ export default class posDoc extends React.PureComponent
                                         }
                                         await this.calcGrandTotal();
                                     }
+                                    else
+                                    {
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Lütfen bir ya da  bir den fazla satır seçiniz !"}</div>)
+                                        }
+                                        await dialog(tmpConfObj);
+                                    }
                                 }}>
                                     <div>İndirim Uygula (%)</div>
                                 </NbButton>
@@ -3196,53 +3210,66 @@ export default class posDoc extends React.PureComponent
                                 <NbButton id={"btnPopDiscountAmount"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
                                 onClick={async ()=>
                                 {
-                                    let tmpDt = new datatable()
-                                    tmpDt.import(this.grdDiscList.getSelectedData())                                    
+                                    if(this.grdDiscList.getSelectedData().length > 0)
+                                    {
+                                        let tmpDt = new datatable()
+                                        tmpDt.import(this.grdDiscList.getSelectedData())                                    
 
-                                    let tmpResult = await this.popNumber.show('İndirim € - ' + tmpDt.sum('AMOUNT',2),tmpDt.sum('DISCOUNT',2))
-                                    let tmpRate = Number(tmpDt.sum('AMOUNT')).rate2Num(tmpResult,2);
-                                    
-                                    if(typeof tmpResult == 'undefined')
-                                    {
-                                        return
-                                    }
-                                    if(this.posObj.posPay.dt().length > 0)
-                                    {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:"Tamam",location:'before'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"İndirim Yapmadan Önce Lütfen Tüm Ödemeleri Siliniz !"}</div>)
-                                        }
-                                        await dialog(tmpConfObj);
-                                        return
-                                    }
-                                    if(Number(tmpDt.sum('AMOUNT')) < Number(tmpResult))
-                                    {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:"Tamam",location:'before'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Tutar dan fazla iskonto yapılamaz !"}</div>)
-                                        }
-                                        await dialog(tmpConfObj);
-                                        return;
-                                    }
-
-                                    for (let i = 0; i < this.grdDiscList.getSelectedData().length; i++) 
-                                    {
-                                        let tmpDiscount = Number(this.grdDiscList.getSelectedData()[i].AMOUNT).rateInc(tmpRate,2)
-                                                    
-                                        let tmpData = this.grdDiscList.getSelectedData()[i]
-                                        let tmpCalc = this.calcSaleTotal(tmpData.PRICE,tmpData.QUANTITY,tmpDiscount,tmpData.LOYALTY,tmpData.VAT_RATE)
+                                        let tmpResult = await this.popNumber.show('İndirim € - ' + tmpDt.sum('AMOUNT',2),tmpDt.sum('DISCOUNT',2))
+                                        let tmpRate = Number(tmpDt.sum('AMOUNT')).rate2Num(tmpResult,2);
                                         
-                                        this.grdDiscList.getSelectedData()[i].FAMOUNT = tmpCalc.FAMOUNT
-                                        this.grdDiscList.getSelectedData()[i].AMOUNT = tmpCalc.AMOUNT
-                                        this.grdDiscList.getSelectedData()[i].DISCOUNT = tmpDiscount
-                                        this.grdDiscList.getSelectedData()[i].VAT = tmpCalc.VAT
-                                        this.grdDiscList.getSelectedData()[i].TOTAL = tmpCalc.TOTAL
-                                    }
-                                    await this.calcGrandTotal();                                    
+                                        if(typeof tmpResult == 'undefined')
+                                        {
+                                            return
+                                        }
+                                        if(this.posObj.posPay.dt().length > 0)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"İndirim Yapmadan Önce Lütfen Tüm Ödemeleri Siliniz !"}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
+                                        if(Number(tmpDt.sum('AMOUNT')) < Number(tmpResult))
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Tutar dan fazla iskonto yapılamaz !"}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                            return;
+                                        }
+
+                                        for (let i = 0; i < this.grdDiscList.getSelectedData().length; i++) 
+                                        {
+                                            let tmpDiscount = Number(this.grdDiscList.getSelectedData()[i].AMOUNT).rateInc(tmpRate,2)
+                                                        
+                                            let tmpData = this.grdDiscList.getSelectedData()[i]
+                                            let tmpCalc = this.calcSaleTotal(tmpData.PRICE,tmpData.QUANTITY,tmpDiscount,tmpData.LOYALTY,tmpData.VAT_RATE)
+                                            
+                                            this.grdDiscList.getSelectedData()[i].FAMOUNT = tmpCalc.FAMOUNT
+                                            this.grdDiscList.getSelectedData()[i].AMOUNT = tmpCalc.AMOUNT
+                                            this.grdDiscList.getSelectedData()[i].DISCOUNT = tmpDiscount
+                                            this.grdDiscList.getSelectedData()[i].VAT = tmpCalc.VAT
+                                            this.grdDiscList.getSelectedData()[i].TOTAL = tmpCalc.TOTAL
+                                        }
+                                        await this.calcGrandTotal();
+                                    }  
+                                    else
+                                    {
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Lütfen bir ya da  bir den fazla satır seçiniz !"}</div>)
+                                        }
+                                        await dialog(tmpConfObj);
+                                    }                               
                                 }}>
                                     <div>İndirim Uygula (€)</div>
                                 </NbButton>
@@ -3267,9 +3294,20 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </div>
                         </div>
-                        <div className="row">
+                        <div className="row pb-1">
                             <div className="col-12">
                                 <p className="fs-2 fw-bold text-center m-0"><NbLabel id="disTotalGrand" parent={this} value={"0.00 €"}/></p>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-12">
+                                <NbButton id={"btnPopDiscountExit"} parent={this} className="form-group btn btn-danger btn-block my-1" style={{height:"50px",width:"100%"}}
+                                onClick={async ()=>
+                                {
+                                    this.popDiscount.hide()
+                                }}>
+                                    <i className="text-white fa-solid fa-arrow-right-from-bracket" style={{fontSize: "24px"}} />
+                                </NbButton>
                             </div>
                         </div>
                     </NdPopUp>
@@ -3585,92 +3623,86 @@ export default class posDoc extends React.PureComponent
                 </div>
                 {/* Park Description Popup */} 
                 <div>
-                    <NbPopDescboard id={"popParkDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={"Park Açıklaması"} title={"Lütfen Açıklama Giriniz"}
-                    button={this.prmObj.filter({ID:'ParkDelDescription',TYPE:0}).getValue().buttons}
+                    <NbPopDescboard id={"popParkDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={"Park Açıklaması"} title={"Lütfen Açıklama Giriniz"}                    
+                    param={this.prmObj.filter({ID:'ParkDelDescription',TYPE:0})}
                     onClick={async (e)=>
                     {
-                        await this.descSave("PARK DESC",e,0)
+                        if(typeof e != 'undefined')
+                        {
+                            await this.descSave("PARK DESC",e,0)
+                        }
                         this.init()
                     }}></NbPopDescboard>
                 </div>
                 {/* Delete Description Popup */} 
                 <div>
-                    <NbPopDescboard id={"popDeleteDesc"} parent={this} width={"900"} height={"750"} position={"#root"} head={"Silme İşlemi Açıklaması"} title={"Lütfen Silme Nedeninizi Giriniz"}
-                    button={this.prmObj.filter({ID:'DocDelDescription',TYPE:0}).getValue().buttons}
+                    <NbPopDescboard id={"popDeleteDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={"Silme İşlemi Açıklaması"} title={"Lütfen Silme Nedeninizi Giriniz"}
+                    param={this.prmObj.filter({ID:'DocDelDescription',TYPE:0})}
                     onClick={async (e)=>
                     {
-                        await this.descSave("FULL DELETE",e,0)
+                        if(typeof e != 'undefined')
+                        {
+                            await this.descSave("FULL DELETE",e,0)
+                        }
                         this.delete()
                     }}></NbPopDescboard>
                 </div>
                 {/* Row Delete Description Popup */} 
                 <div>
-                    <NbPopDescboard id={"popRowDeleteDesc"} parent={this} width={"900"} height={"750"} position={"#root"} head={"Satır Silme İşlemi Açıklaması"} title={"Lütfen Silme Nedeninizi Giriniz"}
-                    button={this.prmObj.filter({ID:'DocRowDelDescription',TYPE:0}).getValue().buttons}
+                    <NbPopDescboard id={"popRowDeleteDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={"Satır Silme İşlemi Açıklaması"} title={"Lütfen Silme Nedeninizi Giriniz"}                    
+                    param={this.prmObj.filter({ID:'DocRowDelDescription',TYPE:0})}
                     onClick={async (e)=>
                     {
-                        await this.descSave("ROW DELETE",e,this.grdList.devGrid.getSelectedRowKeys()[0].LINE_NO)
+                        if(typeof e != 'undefined')
+                        {
+                            await this.descSave("ROW DELETE",e,this.grdList.devGrid.getSelectedRowKeys()[0].LINE_NO)
+                        }
                         this.rowDelete()
                     }}></NbPopDescboard>
                 </div>
                 {/* Item Return Description Popup */} 
                 <div>
-                    <NbPopDescboard id={"popItemReturnDesc"} parent={this} width={"900"} height={"540"} position={"#root"} head={"İade Açıklaması"} title={"Lütfen İade Nedenini Giriniz"}
-                    button={
-                    [
-                        {
-                            id:"btn01",
-                            text:"Ürün Barkodu Çift Okutulmuş"
-                        },
-                        {
-                            id:"btn02",
-                            text:"Ürün Arızalı Yada Defolu"
-                        },
-                        {
-                            id:"btn03",
-                            text:"Müşteri Ürünü Beğenmedi"
-                        },
-                        {
-                            id:"btn04",
-                            text:"Müşteri Yanlış Ürünü Aldı"
-                        }
-                    ]}
+                    <NbPopDescboard id={"popItemReturnDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={"İade Açıklaması"} title={"Lütfen İade Nedenini Giriniz"}
+                    param={this.prmObj.filter({ID:'RebateDescription',TYPE:0})}
                     onClick={async (e)=>
-                    {                        
-                        let tmpResult = await this.msgItemReturnType.show();
+                    {        
+                        if(typeof e != 'undefined')
+                        {
+                            let tmpResult = await this.msgItemReturnType.show();
                         
-                        if(tmpResult == 'btn01') //Nakit
-                        {
-                            this.posObj.posPay.addEmpty()
-                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
-                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE = 0
-                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE_NAME = 'ESC'
-                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].LINE_NO = this.posObj.posPay.dt().length
-                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2))
-                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].CHANGE = 0
-                        }
-                        else if(tmpResult == 'btn02') //İade Çeki
-                        {
-                            this.posObj.posPay.addEmpty()
-                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
-                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE = 4
-                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE_NAME = "BON D'AVOIR"
-                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].LINE_NO = this.posObj.posPay.dt().length
-                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2))
-                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].CHANGE = 0
+                            if(tmpResult == 'btn01') //Nakit
+                            {
+                                this.posObj.posPay.addEmpty()
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE = 0
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE_NAME = 'ESC'
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].LINE_NO = this.posObj.posPay.dt().length
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2))
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].CHANGE = 0
+                            }
+                            else if(tmpResult == 'btn02') //İade Çeki
+                            {
+                                this.posObj.posPay.addEmpty()
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE = 4
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE_NAME = "BON D'AVOIR"
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].LINE_NO = this.posObj.posPay.dt().length
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2))
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].CHANGE = 0
 
-                            this.posObj.dt()[0].REBATE_CHEQPAY = 'Q' + new Date().toISOString().substring(2, 10).replace('-','').replace('-','') + Math.round(Number(parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2)) * 100).toString().padStart(5,'0') + Date.now().toString().substring(7,12);
+                                this.posObj.dt()[0].REBATE_CHEQPAY = 'Q' + new Date().toISOString().substring(2, 10).replace('-','').replace('-','') + Math.round(Number(parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2)) * 100).toString().padStart(5,'0') + Date.now().toString().substring(7,12);
 
-                            await this.cheqpaySave(this.posObj.dt()[0].REBATE_CHEQPAY,this.posObj.dt()[0].TOTAL,0,1);
-                        }
+                                await this.cheqpaySave(this.posObj.dt()[0].REBATE_CHEQPAY,this.posObj.dt()[0].TOTAL,0,1);
+                            }
 
-                        if(this.txtItemReturnTicket.value != "")
-                        {
-                            this.posObj.dt()[0].TICKET = this.txtItemReturnTicket.value;
-                        }
+                            if(this.txtItemReturnTicket.value != "")
+                            {
+                                this.posObj.dt()[0].TICKET = this.txtItemReturnTicket.value;
+                            }
 
-                        this.posObj.dt()[0].TYPE = 1;
-                        await this.descSave("REBATE",e,0);                        
+                            this.posObj.dt()[0].TYPE = 1;
+                            await this.descSave("REBATE",e,0); 
+                        }                
 
                         await this.calcGrandTotal();
                     }}></NbPopDescboard>

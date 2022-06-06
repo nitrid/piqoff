@@ -5,6 +5,7 @@ import NdGrid,{Paging,Pager,Column} from "../../core/react/devex/grid.js";
 import NbKeyboard from "../../core/react/bootstrap/keyboard.js";
 import NdTextBox from "../../core/react/devex/textbox.js";
 import NdPopUp from "../../core/react/devex/popup.js";
+import NdDialog,{dialog} from "../../core/react/devex/dialog.js";
 
 export default class NbPopDescboard extends NbBase
 {
@@ -19,25 +20,29 @@ export default class NbPopDescboard extends NbBase
             height:this.props.height,
             position:this.props.position
         }
+        if(typeof this.props.param != 'undefined')
+        {
+            this.button = this.props.param.getValue().buttons
+        }
         this._onClick = this._onClick.bind(this)
     }
     _buttonView1()
     {
-        if(typeof this.props.button != 'undefined')
+        if(typeof this.button != 'undefined')
         {
             let tmp = []
             for (let i = 0; i < 4; i++) 
             {
-                if(typeof this.props.button[i] != 'undefined')
+                if(typeof this.button[i] != 'undefined')
                 {
                     tmp.push (
-                        <div className="col-3" key={this.props.button[i].id}>
-                            <NbButton id={this.props.button[i].id} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
+                        <div className="col-3" key={this.button[i].id}>
+                            <NbButton id={this.button[i].id} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
                             onClick={()=>
                             {
-                                this["txt" + this.props.id].value = this.props.button[i].text
+                                this["txt" + this.props.id].value = this.button[i].text
                             }}>
-                                {this.props.button[i].title}
+                                {this.button[i].title}
                             </NbButton>
                         </div>
                     )
@@ -48,21 +53,21 @@ export default class NbPopDescboard extends NbBase
     }
     _buttonView2()
     {
-        if(typeof this.props.button != 'undefined')
+        if(typeof this.button != 'undefined')
         {
             let tmp = []
             for (let i = 4; i < 8; i++) 
             {
-                if(typeof this.props.button[i] != 'undefined')
+                if(typeof this.button[i] != 'undefined')
                 {
                     tmp.push (
-                        <div className="col-3" key={this.props.button[i].id}>
-                            <NbButton id={this.props.button[i].id} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
+                        <div className="col-3" key={this.button[i].id}>
+                            <NbButton id={this.button[i].id} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
                             onClick={()=>
                             {
-                                this["txt" + this.props.id].value = this.props.button[i].text
+                                this["txt" + this.props.id].value = this.button[i].text
                             }}>
-                                {this.props.button[i].title}
+                                {this.button[i].title}
                             </NbButton>
                         </div>
                     )
@@ -73,21 +78,21 @@ export default class NbPopDescboard extends NbBase
     }
     _buttonView3()
     {
-        if(typeof this.props.button != 'undefined')
+        if(typeof this.button != 'undefined')
         {
             let tmp = []
             for (let i = 8; i < 12; i++) 
             {
-                if(typeof this.props.button[i] != 'undefined')
+                if(typeof this.button[i] != 'undefined')
                 {
                     tmp.push (
-                        <div className="col-3" key={this.props.button[i].id}>
-                            <NbButton id={this.props.button[i].id} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
+                        <div className="col-3" key={this.button[i].id}>
+                            <NbButton id={this.button[i].id} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
                             onClick={()=>
                             {
-                                this["txt" + this.props.id].value = this.props.button[i].text
+                                this["txt" + this.props.id].value = this.button[i].text
                             }}>
-                                {this.props.button[i].title}
+                                {this.button[i].title}
                             </NbButton>
                         </div>
                     )
@@ -96,8 +101,31 @@ export default class NbPopDescboard extends NbBase
             return tmp
         }
     }
-    _onClick()
-    {
+    async _onClick()
+    {       
+        if(this["txt" + this.props.id].value == '')
+        {
+            let tmpConfObj =
+            {
+                id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Açıklama alanını boş geçemezsiniz !"}</div>)
+            }
+            await dialog(tmpConfObj);
+            return;
+        }
+        if(typeof this.props.param != 'undefined' && typeof this.props.param.getValue().minCharSize != 'undefined' && this["txt" + this.props.id].value.length < this.props.param.getValue().minCharSize)
+        {
+            let tmpConfObj =
+            {
+                id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Girmiş olduğunuz açıklama " + this.props.param.getValue().minCharSize + " karakter den küçük olamaz."}</div>)
+            }
+            await dialog(tmpConfObj);
+            return;
+        }
+
         if(typeof this.props.onClick != 'undefined')
         {
             this.props.onClick(this["txt" + this.props.id].value)
@@ -106,6 +134,17 @@ export default class NbPopDescboard extends NbBase
     }
     async show()
     {
+        //EĞER PARAMETEREDEN DISABLE AKTİF İSE AÇIKLAMA EKRANI ÇIKMIYOR
+        if(typeof this.props.param != 'undefined' && typeof this.props.param.getValue().disable != 'undefined' && this.props.param.getValue().disable)
+        {
+            if(typeof this.props.onClick != 'undefined')
+            {
+                this.props.onClick()
+            }
+            this[this.props.id].hide()
+            return
+        }
+
         this["txt" + this.props.id].value = ""
         this[this.props.id].show()
     }

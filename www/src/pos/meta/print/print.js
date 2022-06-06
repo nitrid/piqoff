@@ -266,7 +266,7 @@ export function print()
                     "TVA".space(10) + " " +
                     "TTC".space(10)
             })
-            let tmpVatLst = data.possale.groupBy('VAT_RATE');
+            let tmpVatLst = data.possale.where({GUID:{'<>':'00000000-0000-0000-0000-000000000000'}}).groupBy('VAT_RATE');
             for (let i = 0; i < tmpVatLst.length; i++) 
             {
                 tmpArr.push(
@@ -286,19 +286,19 @@ export function print()
         // TICKET_REST
         ()=>
         {
-            if(data.possale.where({TICKET_REST:1}).length > 0)
+            if(data.possale.where({TICKET_REST:true}).length > 0)
             {
                 return {
                     font:"b",
                     style:"b",
                     align:"lt",
                     data:"TOTAL ART ELIGIBLE".space(56) + " " + 
-                    data.possale.where({TICKET_REST:1}).sum('TOTAL',2).space(7,"s") 
+                    data.possale.where({TICKET_REST:true}).sum('TOTAL',2).space(7,"s") 
                 }
             }
         },
         {font:"b",style:"bu",align:"lt",data:" ".space(64)},
-        ()=>{return {font:"b",align:"lt",data: (data.possale.length.toString() + " Aricle(s)").space(14)}},
+        ()=>{return {font:"b",align:"lt",data: (data.possale.where({GUID:{'<>':'00000000-0000-0000-0000-000000000000'}}).length.toString() + " Aricle(s)").space(14)}},
         ()=>
         {
             let tmpArr = [];
