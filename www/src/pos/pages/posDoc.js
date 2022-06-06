@@ -3099,28 +3099,7 @@ export default class posDoc extends React.PureComponent
                                 {
                                     if(e.column.dataField == "QUANTITY")
                                     {
-                                        if(this.prmObj.filter({ID:'QuantityEdit',TYPE:0}).getValue() == true)
-                                        {                                            
-                                            let tmpResult = await this.popNumber.show('Miktar',e.value)
-                                                                                        
-                                            if(typeof tmpResult != 'undefined' && tmpResult != '')
-                                            {
-                                                if(this.prmObj.filter({ID:'QuantityCheckZero',TYPE:0}).getValue() == true && tmpResult == 0)
-                                                {
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Miktar sıfır girilemez !"}</div>)
-                                                    }
-                                                    await dialog(tmpConfObj);
-                                                    return
-                                                }
-
-                                                let tmpData = {QUANTITY:tmpResult,PRICE:e.key.PRICE}
-                                                this.saleRowUpdate(e.key,tmpData)
-                                            }
-                                        }
+                                        
                                     }
                                 }}
                                 onSelectionChanged={(e)=>
