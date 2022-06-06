@@ -354,7 +354,19 @@ export default class rebateOperation extends React.Component
                                 width={'90%'}
                                 height={'90%'}
                                 title={this.t("pg_txtCustomerCode.title")} //
-                                data={{source:{select:{query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE GENUS IN(1,2)"},sql:this.core.sql}}}
+                                search={true}
+                                data = 
+                                {{
+                                    source:
+                                    {
+                                        select:
+                                        {
+                                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                                            param : ['VAL:string|50']
+                                        },
+                                        sql:this.core.sql
+                                    }
+                                }}
                                 button=
                                 {
                                     {
@@ -370,7 +382,7 @@ export default class rebateOperation extends React.Component
                                     <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
                                     <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
                                     <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
-                                    <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>
+                                    <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} filterType={"include"} filterValues={['Tedarikçi']}/>
                                     
                                 </NdPopGrid>
                                 </Item> 
@@ -400,6 +412,7 @@ export default class rebateOperation extends React.Component
                             headerFilter={{visible:true}}
                             columnAutoWidth={true}
                             allowColumnReordering={true}
+                            loadPanel={{enabled:true}}
                             allowColumnResizing={true}
                             >                            
                                 <Paging defaultPageSize={20} />

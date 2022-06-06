@@ -1306,6 +1306,7 @@ export const langTr =
     stk_04_002 : 
     {
         txtCustomerCode : "Cari",
+        validDepot : "Lütfen Depo Seçiniz",
         pg_txtCustomerCode : 
         {
             title : "Cari Seçimi",

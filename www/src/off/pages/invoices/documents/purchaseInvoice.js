@@ -1119,7 +1119,7 @@ export default class purchaseInvoice extends React.Component
                                                     this.docObj.docCustomer.dt()[0].OUTPUT = data[0].GUID
                                                     this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
                                                     this.docObj.dt()[0].OUTPUT_NAME = data[0].TITLE
-                                                    let tmpData = this.prmObj.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                                    let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                     if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                     {
                                                         this.txtRef.value = data[0].CODE
@@ -1146,7 +1146,7 @@ export default class purchaseInvoice extends React.Component
                                                             this.docObj.docCustomer.dt()[0].OUTPUT = data[0].GUID
                                                             this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
                                                             this.docObj.dt()[0].OUTPUT_NAME = data[0].TITLE
-                                                            let tmpData = this.prmObj.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                                            let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
                                                                 this.txtRef.value = data[0].CODE

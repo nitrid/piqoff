@@ -1,7 +1,7 @@
 export const prm =
 [
     //#region Sistem
-    //txtRef
+    //Bütük Harf
     {
         TYPE : 0,
         ID :"onlyBigChar",
@@ -15,6 +15,24 @@ export const prm =
             TYPE : "checkbox",
             PAGE_NAME : "Sistem",
             CAPTION : "Sadece Büyük Harf Kullanımı"
+        }
+    },
+    {
+        TYPE : 0,
+        ID :"refForCustomerCode",
+        VALUE : 
+        {
+            value : true
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_002",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Seri Numarası İçin Cari Kodu Kullan"
         }
     },
     //#endregion
@@ -860,24 +878,7 @@ export const prm =
             CAPTION : "Cari Adı"
         }
     },
-    {
-        TYPE : 1,
-        ID :"refForCustomerCode",
-        VALUE : 
-        {
-            value : true
-        },
-        SPECIAL : "",
-        PAGE : "ftr_02_002",
-        ELEMENT : "",
-        APP : "OFF",
-        VIEW : 
-        {
-            TYPE : "checkbox",
-            PAGE_NAME : "Satış Faturası",
-            CAPTION : "Seri Numarası İçin Cari Kodu Kullan"
-        }
-    },
+
     //#endregion
 
     //#region Alış Faturası
@@ -976,26 +977,7 @@ export const prm =
             CAPTION : "Cari Adı"
         }
     },
-    // refForCustomerCode
-    {
-        TYPE : 1,
-        ID :"refForCustomerCode",
-        VALUE : 
-        {
-            value : true
-        },
-        SPECIAL : "",
-        PAGE : "ftr_02_001",
-        ELEMENT : "",
-        APP : "OFF",
-        VIEW : 
-        {
-            TYPE : "checkbox",
-            PAGE_NAME : "Alış Faturası",
-            CAPTION : "Seri Numarası İçin Cari Kodu Kullan"
-        }
-    },
-    //#endregion
+       //#endregion
     
     //#region Promosyon
     //txtRef

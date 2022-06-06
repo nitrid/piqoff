@@ -791,7 +791,7 @@ export default class rebateDispatch extends React.Component
                                                     this.docObj.dt()[0].INPUT = data[0].GUID
                                                     this.docObj.dt()[0].INPUT_CODE = data[0].CODE
                                                     this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
-                                                    let tmpData = this.prmObj.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                                    let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                     if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                     {
                                                         this.txtRef.setState({value:data[0].CODE});
@@ -816,7 +816,7 @@ export default class rebateDispatch extends React.Component
                                                             this.docObj.dt()[0].INPUT = data[0].GUID
                                                             this.docObj.dt()[0].INPUT_CODE = data[0].CODE
                                                             this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
-                                                            let tmpData = this.prmObj.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                                            let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
                                                                 this.txtRef.setState({value:data[0].CODE});
