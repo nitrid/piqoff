@@ -1322,6 +1322,7 @@ export const langTr =
     {
         txtCustomerCode : "Cari",
         validDepot : "Lütfen Depo Seçiniz",
+        ItemNamePlaceHolder :"Ürün Adının Tamamını yada İçinde Geçen Bir Hece Giriniz",
         pg_txtCustomerCode : 
         {
             title : "Cari Seçimi",
@@ -1353,7 +1354,7 @@ export const langTr =
         {
             title: "Dikkat",
             btn01: "Tamam",
-            msgSuccess: " Serisi İle Evraklarınız Oluşturuldu..!",
+            msgSuccess: " İade Evraklarınız Oluşturuldu..!",
             msgFailed: "Kayıt işleminiz başarısız !"
         },
         msgDublicateItem : 
