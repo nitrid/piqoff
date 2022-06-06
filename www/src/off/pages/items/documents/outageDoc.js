@@ -467,6 +467,8 @@ export default class outageDoc extends React.Component
                                                 {                                                    
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
+                                                    this.btnSave.setState({disabled:true});
+                                                    this.btnNew.setState({disabled:false});
                                                 }
                                                 else
                                                 {
