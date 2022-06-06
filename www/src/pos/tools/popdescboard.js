@@ -71,6 +71,31 @@ export default class NbPopDescboard extends NbBase
             return tmp
         }
     }
+    _buttonView3()
+    {
+        if(typeof this.props.button != 'undefined')
+        {
+            let tmp = []
+            for (let i = 8; i < 12; i++) 
+            {
+                if(typeof this.props.button[i] != 'undefined')
+                {
+                    tmp.push (
+                        <div className="col-3" key={this.props.button[i].id}>
+                            <NbButton id={this.props.button[i].id} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
+                            onClick={()=>
+                            {
+                                this["txt" + this.props.id].value = this.props.button[i].text
+                            }}>
+                                {this.props.button[i].text}
+                            </NbButton>
+                        </div>
+                    )
+                }
+            }
+            return tmp
+        }
+    }
     _onClick()
     {
         if(typeof this.props.onClick != 'undefined')
@@ -113,6 +138,9 @@ export default class NbPopDescboard extends NbBase
                     </div>
                     <div className="row py-1">
                         {this._buttonView2()}
+                    </div>
+                    <div className="row py-1">
+                        {this._buttonView3()}
                     </div>
                     <div className="row py-1">
                         <div className="col-12">
