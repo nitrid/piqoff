@@ -768,7 +768,7 @@ export const langTr =
         txtBarcode : "Barkod Ekle",
         getDispatch : "İrsaliye Getir",
         txtTotalCost : "Toplam Maliyet",
-        tmpQuantity: "Toplam Miktar",
+        txtTotalQuantity: "Toplam Miktar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
