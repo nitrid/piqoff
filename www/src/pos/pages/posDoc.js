@@ -1646,26 +1646,7 @@ export default class posDoc extends React.PureComponent
                                     {
                                         if(this.prmObj.filter({ID:'PriceEdit',TYPE:0}).getValue() == true)
                                         {
-                                            if(typeof this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog != 'undefined' && this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog.type != -1)
-                                            {   
-                                                let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog.type})
-                                                if(!tmpResult)
-                                                {
-                                                    return
-                                                }
-                                            }
-                                            
-                                            let tmpResult = await this.popNumber.show('Fiyat',e.value)                                            
-                                            if(typeof tmpResult != 'undefined' && tmpResult != '')
-                                            {
-                                                console.log(1)
-                                                console.log(e.data)
-                                                if((await this.priceCheck(e.data,tmpResult)))
-                                                {
-                                                    let tmpData = {QUANTITY:e.key.QUANTITY,PRICE:tmpResult}
-                                                    this.saleRowUpdate(e.key,tmpData)
-                                                }
-                                            }
+                                            this.popPriceDesc.show()
                                         }
                                     }
                                 }}
@@ -2138,6 +2119,18 @@ export default class posDoc extends React.PureComponent
                                                 {
                                                     if(this.grdList.devGrid.getSelectedRowKeys().length > 0)
                                                     {
+                                                        if(this.posObj.posPay.dt().length > 0)
+                                                        {
+                                                            let tmpConfObj =
+                                                            {
+                                                                id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                                                button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Satır silmeden önce lütfen tüm ödemeleri siliniz !"}</div>)
+                                                            }
+                                                            await dialog(tmpConfObj);
+                                                            return
+                                                        }
+
                                                         let tmpConfObj =
                                                         {
                                                             id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
@@ -3620,6 +3613,38 @@ export default class posDoc extends React.PureComponent
                             </div>
                         </div>
                     </NbPopUp>
+                </div>
+                {/* Price Description Popup */} 
+                <div>
+                    <NbPopDescboard id={"popPriceDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={"Fiyat Açıklaması"} title={"Lütfen Açıklama Giriniz"}                    
+                    param={this.prmObj.filter({ID:'PriceDescription',TYPE:0})}
+                    onClick={async (e)=>
+                    {
+                        if(typeof e != 'undefined')
+                        {
+                            if(typeof this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog != 'undefined' && this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog.type != -1)
+                            {   
+                                let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog.type})
+                                if(!tmpResult)
+                                {
+                                    return
+                                }
+                            }
+                            
+                            let tmpResult = await this.popNumber.show('Fiyat',e.value)                                            
+                            if(typeof tmpResult != 'undefined' && tmpResult != '')
+                            {
+                                await this.descSave("PRICE DESC",e,this.grdList.devGrid.getSelectedRowKeys()[0].LINE_NO)
+
+                                if((await this.priceCheck(e.data,tmpResult)))
+                                {
+                                    let tmpData = {QUANTITY:e.key.QUANTITY,PRICE:tmpResult}
+                                    this.saleRowUpdate(e.key,tmpData)
+                                }
+                            }                            
+                        }
+                        this.init()
+                    }}></NbPopDescboard>
                 </div>
                 {/* Park Description Popup */} 
                 <div>
