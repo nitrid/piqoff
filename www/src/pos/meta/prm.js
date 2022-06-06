@@ -158,6 +158,7 @@ export const prm =
             [
                 {
                     id:"btn01",
+                    title:"Yetersiz Ödeme",
                     text:"Yetersiz Ödeme"
                 },
                 {
@@ -170,6 +171,38 @@ export const prm =
                 },
                 {
                     id:"btn04",
+                    text:"K.Kartı Geçmedi"
+                },
+                {
+                    id:"btn05",
+                    text:"Yetersiz Ödeme"
+                },
+                {
+                    id:"btn06",
+                    text:"Ek Alış Veriş"
+                },
+                {
+                    id:"btn07",
+                    text:"Mağaza Personeli"
+                },
+                {
+                    id:"btn08",
+                    text:"K.Kartı Geçmedi"
+                },
+                {
+                    id:"btn09",
+                    text:"Yetersiz Ödeme"
+                },
+                {
+                    id:"btn10",
+                    text:"Ek Alış Veriş"
+                },
+                {
+                    id:"btn11",
+                    text:"Mağaza Personeli"
+                },
+                {
+                    id:"btn12",
                     text:"K.Kartı Geçmedi"
                 }
             ]

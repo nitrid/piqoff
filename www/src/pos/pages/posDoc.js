@@ -3585,7 +3585,7 @@ export default class posDoc extends React.PureComponent
                 </div>
                 {/* Park Description Popup */} 
                 <div>
-                    <NbPopDescboard id={"popParkDesc"} parent={this} width={"900"} height={"750"} position={"#root"} head={"Park Açıklaması"} title={"Lütfen Açıklama Giriniz"}
+                    <NbPopDescboard id={"popParkDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={"Park Açıklaması"} title={"Lütfen Açıklama Giriniz"}
                     button={this.prmObj.filter({ID:'ParkDelDescription',TYPE:0}).getValue().buttons}
                     onClick={async (e)=>
                     {
