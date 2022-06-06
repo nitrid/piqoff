@@ -400,6 +400,8 @@ export default class rebateDoc extends React.Component
                                                 {                                                    
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
+                                                    this.btnSave.setState({disabled:true});
+                                                    this.btnNew.setState({disabled:false});
                                                 }
                                                 else
                                                 {
@@ -806,7 +808,7 @@ export default class rebateDoc extends React.Component
 
                                     }}
                                     >
-                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
+                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Scrolling mode="standard" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.stk_02_005")} enabled={true} allowExportSelectedData={true} />
