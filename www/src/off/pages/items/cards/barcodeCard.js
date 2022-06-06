@@ -141,7 +141,7 @@ export default class barcodeCard extends React.Component
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmBarcode"
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmBarcode"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -252,11 +252,11 @@ export default class barcodeCard extends React.Component
                     </div>
                     <div className="row px-2 pt-2">                        
                         <div className="col-9">
-                            <Form colCount={2} id="frmBarcode">
+                            <Form colCount={2} id={"frmBarcode"  + this.tabIndex}>
                                 {/* txtItem */}
                                 <Item>                                    
                                     <Label text={this.t("txtItem")} alignment="right" />
-                                    <NdTextBox id="txtItem" parent={this} simple={true} dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"ITEM_CODE"}}  validationGroup="frmBarcode"
+                                    <NdTextBox id="txtItem" parent={this} simple={true} dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"ITEM_CODE"}}  validationGroup={"frmBarcode"  + this.tabIndex}
                                     readOnly={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     button=
@@ -332,7 +332,7 @@ export default class barcodeCard extends React.Component
                                  {/* txtBarcode */}
                                  <Item>                                    
                                     <Label text={this.t("txtBarcode")} alignment="right" />
-                                    <NdTextBox id="txtBarcode" parent={this} simple={true} dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"BARCODE"}}  validationGroup="frmBarcode"
+                                    <NdTextBox id="txtBarcode" parent={this} simple={true} dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"BARCODE"}}  validationGroup={"frmBarcode"  + this.tabIndex}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     button=
                                     {
