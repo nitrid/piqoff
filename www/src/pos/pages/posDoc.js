@@ -587,9 +587,7 @@ export default class posDoc extends React.PureComponent
                 await this.posObj.save()      
                 if(tmpClose)
                 {
-                    console.log(1)
                     this.init()
-                    console.log(2)
                 }      
             }    
             resolve()            
@@ -1890,7 +1888,7 @@ export default class posDoc extends React.PureComponent
                                         access={this.acsObj.filter({ELEMENT:'btnDiscount',USERS:this.user.CODE})}
                                         onClick={async()=>
                                         {   
-                                            await this.grdDiscList.dataRefresh({source:this.posObj.posSale.dt().where({PROMO_TYPE:0})});
+                                            await this.grdDiscList.dataRefresh({source:this.posObj.posSale.dt().where({PROMO_TYPE:0}).where({ITEM_NAME:{'<>':'SUB TOTAL'}})});
                                             this.popDiscount.show()
                                         }}>
                                             <i className="text-white fa-solid fa-percent" style={{fontSize: "24px"}} />
