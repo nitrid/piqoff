@@ -53,8 +53,13 @@ export const menu = (e) =>
                     [
                         {
                             id: 'stk_02_004',
-                            text: e.t('menu.stk_02_004'),//'Sarf Giriş Çıkış Fişi',
+                            text: e.t('menu.stk_02_004'),//'Etiket Basım',
                             path: 'items/documents/labelPrinting'
+                        },
+                        {
+                            id: 'stk_02_006',
+                            text: e.t('menu.stk_02_006'),//'Etiket Basım',
+                            path: 'items/documents/privatePrinting'
                         },
                         {
                             id: 'stk_02_001',
