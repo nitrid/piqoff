@@ -37,6 +37,7 @@ export const langTr =
         stk_02_003: "Kayıp Ürün Çıkışı",
         stk_02_004: "Etiket Basımı",
         stk_02_005: "İade Ürünü Toplama",
+        stk_02_006: "Özel Etiket Basım",
         stk_03_001: "Stok Listesi",
         stk_03_002: "Fiyat Listesi",
         stk_03_003: "Barkod Listesi",
@@ -5877,4 +5878,41 @@ export const langTr =
             msgFailed: "Kayıt işleminiz başarısız !"
         },
     },
+    stk_02_006 : 
+    {
+        txtRef: "Referans",
+        txtPrice : "Fiyat",
+        txtDescription : "Açıklama",
+        txtItemName : "Ürün Adı",
+        txtQuantity : "Adet",
+        valPrice : "Fiyat 0 dan Küçük Olamaz",
+        valCode : "Lütfen Stok Girin",
+        valName : "Ürün Adı Boş Olamaz",
+        pg_txtRef:
+        {
+            title: "Stok Seçimi",
+            clmCode: "KODU",
+            clmName: "ADI", 
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+    }
 }

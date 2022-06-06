@@ -663,7 +663,6 @@ export default class labelPrinting extends React.Component
                                             }
 
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
-                                            console.log(tmpData)
                                             this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" +  JSON.stringify(tmpData.result.recordset)+ "}",(pResult) => 
                                             {
                                                 console.log(pResult)
