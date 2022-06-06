@@ -196,6 +196,8 @@ export default class outageDoc extends React.Component
             tmpTotal += (this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].COST_PRICE)
         }
         this.txtTotalCost.setState({value:tmpTotal.toFixed(2)})
+        let tmpQuantity = this.docObj.docItems.dt().sum("QUANTITY",0)
+        this.txtTotalQuantity.setState({value:tmpQuantity})
     }
     async _getDispatch()
     {
@@ -1012,6 +1014,14 @@ export default class outageDoc extends React.Component
                                         <NdTextBox id="txtTotalCost" parent={this} simple={true} readOnly={true} 
                                         maxLength={32}
                                         
+                                        ></NdTextBox>
+                                </Item>
+                                 {/* Toplam Miktar */}
+                                 <Item colSpan={3}></Item>
+                                <Item  >
+                                    <Label text={this.t("txtTotalQuantity")} alignment="right" />
+                                        <NdTextBox id="txtTotalQuantity" parent={this} simple={true} readOnly={true} 
+                                        maxLength={32}
                                         ></NdTextBox>
                                 </Item>
                        
