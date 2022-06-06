@@ -1101,7 +1101,7 @@ export default class outageDoc extends React.Component
                                                 if(this.txtPassword.value == '1234')
                                                 {
                                                     this.docObj.dt()[0].LOCKED = 0
-                                                    this.frmdocOffers.option('disabled',false)
+                                                    this.frmOutwas.option('disabled',false)
                                                     this.docLocked = false
                                                     let tmpConfObj =
                                                     {
