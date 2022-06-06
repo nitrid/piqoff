@@ -767,6 +767,7 @@ export const langTr =
         dtDocDate : "Tarih",
         txtBarcode : "Barkod Ekle",
         getDispatch : "İrsaliye Getir",
+        txtTotalCost : "Toplam Maliyet",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -788,7 +789,8 @@ export const langTr =
             clmItemName: "Adı",
             clmQuantity : "Miktar",
             clmCreateDate: "Kayıt Tarihi",
-            clmDescription :"Açıklama"
+            clmDescription :"Açıklama",
+            clmCostPrice : "Maliyet",
         },
         pg_dispatchGrid : 
         {

@@ -142,6 +142,7 @@ export default class outageDoc extends React.Component
             this.docLocked = false
             this.frmOutwas.option('disabled',false)
         }
+        this._calculateTotal()
     }
     async checkDoc(pGuid,pRef,pRefno)
     {
@@ -189,7 +190,12 @@ export default class outageDoc extends React.Component
     }
     async _calculateTotal()
     {
-       
+        let tmpTotal = 0
+        for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+        {
+            tmpTotal += (this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].COST_PRICE)
+        }
+        this.txtTotalCost.setState({value:tmpTotal.toFixed(2)})
     }
     async _getDispatch()
     {
@@ -300,7 +306,7 @@ export default class outageDoc extends React.Component
                     {
                         e.value = v.value
                     }}
-                onChange={(async(r)=>
+                    onChange={(async(r)=>
                     {
                         if(typeof r.event.isTrusted == 'undefined')
                         {
@@ -389,9 +395,10 @@ export default class outageDoc extends React.Component
         this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID
         this.docObj.docItems.dt()[pIndex].VAT_RATE = 0
         this.docObj.docItems.dt()[pIndex].ITEM_NAME = pData.NAME
-        this.docObj.docItems.dt()[pIndex].COST_PRICE = 0
         this.docObj.docItems.dt()[pIndex].DISCOUNT = 0
         this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
+        this.docObj.docItems.dt()[pIndex].COST_PRICE = pData.COST_PRICE
+        this._calculateTotal()
     }
     render()
     {
@@ -683,7 +690,7 @@ export default class outageDoc extends React.Component
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_Docs.title")} 
-                                    data={{source:{select:{query : "SELECT GUID,REF,REF_NO,OUTPUT_NAMEFROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 1 AND REBATE = 0"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT GUID,REF,REF_NO,OUTPUT_NAME FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 1 AND REBATE = 0"},sql:this.core.sql}}}
                                     button=
                                     {
                                         [
@@ -838,10 +845,10 @@ export default class outageDoc extends React.Component
                                     dbApply={false}
                                     loadPanel={{enabled:true}}
                                     onRowUpdated={async(e)=>{
-                                       
+                                        this._calculateTotal()
                                     }}
                                     onRowRemoved={(e)=>{
-
+                                        this._calculateTotal()
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
@@ -852,6 +859,7 @@ export default class outageDoc extends React.Component
                                         <Column dataField="ITEM_CODE" caption={this.t("grdOutwasItems.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdOutwasItems.clmItemName")} width={350} />
                                         <Column dataField="QUANTITY" caption={this.t("grdOutwasItems.clmQuantity")} dataType={'number'} width={150}/>
+                                        <Column dataField="COST_PRICE" caption={this.t("grdOutwasItems.clmCostPrice")} dataType={'number'} width={150}/>
                                         <Column dataField="DESCRIPTION" caption={this.t("grdOutwasItems.clmDescription")} />
                                     </NdGrid>
                                     <ContextMenu
@@ -994,6 +1002,24 @@ export default class outageDoc extends React.Component
                             </Form>
                         </div>
                     </div>
+                    <div className="row px-2 pt-2">
+                        <div className="col-12">
+                            <Form colCount={4} parent={this} id="frmPurcoffer">
+                                {/* TOPLAM MALIYET */}
+                                <Item colSpan={3}></Item>
+                                <Item  >
+                                    <Label text={this.t("txtTotalCost")} alignment="right" />
+                                        <NdTextBox id="txtTotalCost" parent={this} simple={true} readOnly={true} 
+                                        maxLength={32}
+                                        
+                                        ></NdTextBox>
+                                </Item>
+                       
+                               
+                               
+                            </Form>
+                        </div>
+                    </div>
                     <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={"#root"}
                     visible={false}
                     position={{of:'#root'}} 
@@ -1009,7 +1035,7 @@ export default class outageDoc extends React.Component
                         {
                             select:
                             {
-                                query : "SELECT GUID,CODE,NAME,VAT FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
                                 param : ['VAL:string|50']
                             },
                             sql:this.core.sql
