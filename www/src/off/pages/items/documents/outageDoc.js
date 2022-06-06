@@ -543,6 +543,7 @@ export default class outageDoc extends React.Component
                                         }
                                         else if(this.docObj.dt()[0].LOCKED == 1)
                                         {
+                                            this.txtPassword.setState({value:''})
                                             this.popPassword.show()
                                         }
                                         else if(this.docObj.dt()[0].LOCKED == 2)
