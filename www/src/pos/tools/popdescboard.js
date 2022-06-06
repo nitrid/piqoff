@@ -37,7 +37,7 @@ export default class NbPopDescboard extends NbBase
                             {
                                 this["txt" + this.props.id].value = this.props.button[i].text
                             }}>
-                                {this.props.button[i].text}
+                                {this.props.button[i].title}
                             </NbButton>
                         </div>
                     )
@@ -62,7 +62,7 @@ export default class NbPopDescboard extends NbBase
                             {
                                 this["txt" + this.props.id].value = this.props.button[i].text
                             }}>
-                                {this.props.button[i].text}
+                                {this.props.button[i].title}
                             </NbButton>
                         </div>
                     )
@@ -87,7 +87,7 @@ export default class NbPopDescboard extends NbBase
                             {
                                 this["txt" + this.props.id].value = this.props.button[i].text
                             }}>
-                                {this.props.button[i].text}
+                                {this.props.button[i].title}
                             </NbButton>
                         </div>
                     )
