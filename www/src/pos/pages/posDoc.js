@@ -1886,11 +1886,7 @@ export default class posDoc extends React.PureComponent
                                         access={this.acsObj.filter({ELEMENT:'btnDiscount',USERS:this.user.CODE})}
                                         onClick={()=>
                                         {   
-                                            this.rbtnDisType.value = 0
-                                            this.rbtnDisType._onClick(0)
                                             this.popDiscount.show()
-                                            this.txtPopDiscountPercent.newStart = true;
-                                            this.txtPopDiscountAmount.newStart = true;
                                         }}>
                                             <i className="text-white fa-solid fa-percent" style={{fontSize: "24px"}} />
                                         </NbButton>
@@ -3066,90 +3062,10 @@ export default class posDoc extends React.PureComponent
                     showTitle={true}
                     title={"İskonto"}
                     container={"#root"} 
-                    width={"100%"}
-                    height={"100%"}
+                    width={"700px"}
+                    height={"550px"}
                     position={{of:"#root"}}
                     >
-                        {/* Discount Header */}
-                        <div className="row">
-                            <div className="col-4">
-                                <NbRadioButton id={"rbtnDisType"} parent={this} 
-                                button={
-                                [
-                                    {
-                                        id:"btn01",
-
-                                        style:{height:'40px',width:'100%'},
-                                        text:"Evrak"
-                                    },
-                                    {
-                                        id:"btn02",
-                                        style:{height:'40px',width:'100%'},
-                                        text:"Satır"
-                                    }
-                                ]}
-                                onClick={async (e)=>
-                                {
-                                    let tmpData = {}
-                                    if(e == 0) //EVRAK SEÇİLİ İSE
-                                    {
-                                        tmpData = this.posObj.dt()[0]
-                                    }
-                                    else if(e == 1) //SATIR SEÇİLİ İSE
-                                    {
-                                        if(this.grdDiscList.devGrid.getSelectedRowsData().length > 0)
-                                        {
-                                            tmpData = this.grdDiscList.devGrid.getSelectedRowsData()[0]
-                                        }
-                                        else
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:"Tamam",location:'before'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Satır seçme den satır iskonto yapamazsınız !"}</div>)
-                                            }
-                                            await dialog(tmpConfObj);
-                                            this.popDiscount.hide()
-                                            return;
-                                        }
-                                    }
-
-                                    let tmpDiscount = Number(parseFloat(tmpData.DISCOUNT).toFixed(2))
-                                    let tmpBefore = Number(parseFloat(tmpData.AMOUNT).toFixed(2));
-                                    let tmpAfter = Number(parseFloat(tmpData.AMOUNT - tmpData.DISCOUNT).toFixed(2))
-                                    
-                                    this.discountBefore.value = tmpBefore
-                                    this.discountAfter.value = tmpAfter
-                                    this.txtPopDiscountPercent.value = parseFloat((tmpDiscount / tmpBefore) * 100).toFixed(2)
-                                    this.txtPopDiscountAmount.value = parseFloat(tmpDiscount).toFixed(2)    
-                                }}/>
-                            </div>
-                            <div className="col-4">
-                                <div className="row">
-                                    <div className="col-12">
-                                        <h3 className="text-danger text-center">Öncesi</h3>    
-                                    </div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-12">
-                                        <h3 className="text-primary text-center"><NbLabel id="discountBefore" parent={this} value={"0"}/> €</h3>    
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-4">
-                                <div className="row">
-                                    <div className="col-12">
-                                        <h3 className="text-danger text-center">Sonrası</h3>    
-                                    </div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-12">
-                                        <h3 className="text-primary text-center"><NbLabel id="discountAfter" parent={this} value={"0"}/> €</h3>    
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         {/* grdDiscList */}
                         <div className="row pb-1">
                             <div className="col-12">
@@ -3158,7 +3074,7 @@ export default class posDoc extends React.PureComponent
                                 columnsAutoWidth={true} 
                                 allowColumnReordering={true} 
                                 allowColumnResizing={true} 
-                                height={"175px"} 
+                                height={"430px"} 
                                 width={"100%"}
                                 dbApply={false}
                                 selection={{mode:"single"}}
@@ -3169,7 +3085,7 @@ export default class posDoc extends React.PureComponent
                                     {
                                         e.rowElement.style.fontWeight = "bold";    
                                     }
-                                    e.rowElement.style.fontSize = "15px";                                        
+                                    e.rowElement.style.fontSize = "20px";                                        
                                 }}
                                 onCellPrepared={(e)=>
                                 {
@@ -3206,242 +3122,19 @@ export default class posDoc extends React.PureComponent
                                             }
                                         }
                                     }
-                                    if(e.column.dataField == "PRICE")
-                                    {
-                                        if(this.prmObj.filter({ID:'PriceEdit',TYPE:0}).getValue() == true)
-                                        {
-                                            if(typeof this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog != 'undefined' && this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog.type != -1)
-                                            {   
-                                                let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog.type})
-                                                if(!tmpResult)
-                                                {
-                                                    return
-                                                }
-                                            }
-                                            
-                                            let tmpResult = await this.popNumber.show('Fiyat',e.value)                                            
-                                            if(typeof tmpResult != 'undefined' && tmpResult != '')
-                                            {
-                                                console.log(1)
-                                                console.log(e.data)
-                                                if((await this.priceCheck(e.data,tmpResult)))
-                                                {
-                                                    let tmpData = {QUANTITY:e.key.QUANTITY,PRICE:tmpResult}
-                                                    this.saleRowUpdate(e.key,tmpData)
-                                                }
-                                            }
-                                        }
-                                    }
                                 }}
                                 onSelectionChanged={(e)=>
                                 {
-                                    this.rbtnDisType._onClick(this.rbtnDisType.value)
+                                    
                                 }}
                                 >
                                     <Editing confirmDelete={false}/>
                                     <Column dataField="LDATE" caption={"LDATE"} width={40} alignment={"center"} dataType={"datetime"} format={"dd-MM-yyyy - HH:mm:ss SSSZ"} defaultSortOrder="desc" visible={false}/>
                                     <Column dataField="ITEM_NAME" caption={"ADI"} width={300}/>
-                                    <Column dataField="QUANTITY" caption={"MIKTAR"} width={60}/>
-                                    <Column dataField="PRICE" caption={"FIYAT"} width={50} format={"#0.00"}/>
-                                    <Column dataField="AMOUNT" alignment={"right"} caption={"TUTAR"} width={60} format={"#0.00"}/>                                                
+                                    <Column dataField="DISCOUNT" caption={"INDIRIM"} width={100}/>
+                                    <Column dataField="PRICE" caption={"FIYAT"} width={100} format={"#0.00"}/>
+                                    <Column dataField="AMOUNT" alignment={"right"} caption={"TUTAR"} width={100} format={"#0.00"}/>                                                
                                 </NdGrid>
-                            </div>
-                        </div>
-                        {/* Discount Input */}
-                        <div className="row py-1">
-                            {/* txtPopDiscountPercent */}
-                            <div className="col-6">
-                                <NdTextBox id="txtPopDiscountPercent" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}
-                                onFocusIn={()=>{this.numPopDiscount.textobj = "txtPopDiscountPercent"}}
-                                onValueChanged={async (e)=>
-                                {
-                                    await this.core.util.waitUntil()
-                                    if(this.numPopDiscount.textobj == "txtPopDiscountPercent")
-                                    {   
-                                        this.txtPopDiscountAmount.value = Number(this.discountBefore.value).rateInc(e.value,2)                                    
-                                    }
-                                }}>     
-                                </NdTextBox> 
-                            </div>
-                            {/* txtPopDiscountAmount */}
-                            <div className="col-6">
-                                <NdTextBox id="txtPopDiscountAmount" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}
-                                onFocusIn={()=>{this.numPopDiscount.textobj = "txtPopDiscountAmount"}}
-                                onValueChanged={async (e)=>
-                                {
-                                    await this.core.util.waitUntil()
-                                    if(this.numPopDiscount.textobj == "txtPopDiscountAmount")
-                                    {
-                                        this.txtPopDiscountPercent.value = Number(this.discountBefore.value).rate2Num(e.value)
-                                    }
-                                }}>     
-                                </NdTextBox> 
-                            </div>                            
-                        </div>
-                        {/* Discount Number Board */}
-                        <div className="row py-1">
-                            <div className="col-9">
-                                {/* numPopDiscount */}
-                                <div className="row pb-1">
-                                    <div className="col-12">
-                                        <NbNumberboard id={"numPopDiscount"} parent={this} textobj="txtPopDiscountPercent" span={1} buttonHeight={"60px"}/>
-                                    </div>
-                                </div>
-                                <div className="row pt-1">
-                                    {/* btnPopDiscountDel */}
-                                    <div className="col-4 pe-1">
-                                        <NbButton id={"btnPopDiscountDel"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
-                                        onClick={async ()=>
-                                        {
-                                            for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
-                                            {
-                                                let tmpData = this.posObj.posSale.dt()[i];
-                                                let tmpCalc = this.calcSaleTotal(tmpData.PRICE,tmpData.QUANTITY,0,tmpData.LOYALTY,tmpData.VAT_RATE)
-                                            
-                                                this.posObj.posSale.dt()[i].FAMOUNT = tmpCalc.FAMOUNT
-                                                this.posObj.posSale.dt()[i].AMOUNT = tmpCalc.AMOUNT
-                                                this.posObj.posSale.dt()[i].DISCOUNT = 0
-                                                this.posObj.posSale.dt()[i].VAT = tmpCalc.VAT
-                                                this.posObj.posSale.dt()[i].TOTAL = tmpCalc.TOTAL
-                                            }
-                                            await this.calcGrandTotal()
-                                            this.popDiscount.hide()
-                                        }}>
-                                            <i className="text-white fa-solid fa-eraser" style={{fontSize: "24px"}} />
-                                        </NbButton>
-                                    </div>
-                                    {/* btnPopDiscountOk */}
-                                    <div className="col-8 ps-1">
-                                        <NbButton id={"btnPopDiscountOk"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
-                                        onClick={async ()=>
-                                        {
-                                            if(this.posObj.posPay.dt().length > 0)
-                                            {
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:"Tamam",location:'before'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"İndirim Yapmadan Önce Lütfen Tüm Ödemeleri Siliniz !"}</div>)
-                                                }
-                                                await dialog(tmpConfObj);
-                                                return
-                                            }
-                                            if(this.txtPopDiscountAmount.value <= 0 || this.txtPopDiscountPercent <= 0)
-                                            {
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:"Tamam",location:'before'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Sıfır İskonto Yapılamaz !"}</div>)
-                                                }
-                                                await dialog(tmpConfObj);
-                                                return;
-                                            }
-                                            
-                                            if(Number(this.discountBefore.value) < Number(this.txtPopDiscountAmount.value))
-                                            {
-                                                let tmpMsg = "Satış tutardan fazla iskonto yapılamaz !"
-                                                if(this.rbtnDisType.value == 1)
-                                                {
-                                                    tmpMsg = "Satır tutarından fazla iskonto yapılamaz !"
-                                                }
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:"Tamam",location:'before'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{tmpMsg}</div>)
-                                                }
-                                                await dialog(tmpConfObj);
-                                                return;
-                                            }
-
-                                            if(this.rbtnDisType.value == 0) //EVRAK İSKONTO
-                                            {                                                                                                
-                                                for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
-                                                {
-                                                    let tmpDiscount = Number(this.posObj.posSale.dt()[i].AMOUNT).rateInc(this.txtPopDiscountPercent.value,2)
-                                                    
-                                                    let tmpData = this.posObj.posSale.dt()[i]
-                                                    let tmpCalc = this.calcSaleTotal(tmpData.PRICE,tmpData.QUANTITY,tmpDiscount,tmpData.LOYALTY,tmpData.VAT_RATE)
-
-                                                    this.posObj.posSale.dt()[i].FAMOUNT = tmpCalc.FAMOUNT
-                                                    this.posObj.posSale.dt()[i].AMOUNT = tmpCalc.AMOUNT
-                                                    this.posObj.posSale.dt()[i].DISCOUNT = tmpDiscount
-                                                    this.posObj.posSale.dt()[i].VAT = tmpCalc.VAT
-                                                    this.posObj.posSale.dt()[i].TOTAL = tmpCalc.TOTAL
-                                                }                                                
-                                            }
-                                            else if(this.rbtnDisType.value == 1) //SATIR İSKONTO
-                                            {
-                                                if(this.grdList.devGrid.getSelectedRowsData().length > 0)
-                                                {
-                                                    let tmpData = this.grdList.devGrid.getSelectedRowsData()[0]                                                    
-                                                    //let tmpDiscountRate = Number(parseFloat(this.txtPopDiscountPercent.value / 100).toFixed(3))                                                    
-                                                    //let tmpDiscount = Number(parseFloat(tmpData.AMOUNT * tmpDiscountRate).toFixed(2))
-                                                    let tmpDiscount = Number(tmpData.AMOUNT).rateInc(this.txtPopDiscountPercent.value,2)
-                                                    let tmpCalc = this.calcSaleTotal(tmpData.PRICE,tmpData.QUANTITY,tmpDiscount,tmpData.LOYALTY,tmpData.VAT_RATE)
-                                              
-                                                    tmpData.FAMOUNT = tmpCalc.FAMOUNT
-                                                    tmpData.AMOUNT = tmpCalc.AMOUNT
-                                                    tmpData.DISCOUNT = tmpDiscount
-                                                    tmpData.VAT = tmpCalc.VAT
-                                                    tmpData.TOTAL = tmpCalc.TOTAL
-                                                }
-                                            }
-                                            await this.calcGrandTotal()
-                                            this.popDiscount.hide()
-                                        }}>
-                                            <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
-                                        </NbButton>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-3">
-                                {/* btnPopDiscount10 */}
-                                <div className="row pb-1">
-                                    <div className="col-12 ps-1">
-                                        <NbButton id={"btnPopDiscount10"} parent={this} className="form-group btn btn-primary btn-block" 
-                                        onClick={()=>{this.txtPopDiscountPercent.value = 10}} style={{height:"60px",width:"100%",fontSize: "20px"}}>
-                                        % 10
-                                        </NbButton>
-                                    </div>
-                                </div>
-                                {/* btnPopDiscount20 */}
-                                <div className="row py-1">
-                                    <div className="col-12 ps-1">
-                                        <NbButton id={"btnPopDiscount20"} parent={this} className="form-group btn btn-primary btn-block" 
-                                        onClick={()=>{this.txtPopDiscountPercent.value = 20}} style={{height:"60px",width:"100%",fontSize: "20px"}}>
-                                        % 20
-                                        </NbButton>
-                                    </div>
-                                </div>
-                                {/* btnPopDiscount30 */}
-                                <div className="row py-1">
-                                    <div className="col-12 ps-1">
-                                        <NbButton id={"btnPopDiscount30"} parent={this} className="form-group btn btn-primary btn-block" 
-                                        onClick={()=>{this.txtPopDiscountPercent.value = 30}} style={{height:"60px",width:"100%",fontSize: "20px"}}>
-                                        % 30
-                                        </NbButton>
-                                    </div>
-                                </div>
-                                {/* btnPopDiscount40 */}
-                                <div className="row py-1">
-                                    <div className="col-12 ps-1">
-                                        <NbButton id={"btnPopDiscount40"} parent={this} className="form-group btn btn-primary btn-block" 
-                                        onClick={()=>{this.txtPopDiscountPercent.value = 40}} style={{height:"60px",width:"100%",fontSize: "20px"}}>
-                                        % 40
-                                        </NbButton>
-                                    </div>
-                                </div>
-                                {/* btnPopDiscount50 */}
-                                <div className="row py-1">
-                                    <div className="col-12 ps-1">
-                                        <NbButton id={"btnPopDiscount50"} parent={this} className="form-group btn btn-primary btn-block" 
-                                        onClick={()=>{this.txtPopDiscountPercent.value = 50}} style={{height:"60px",width:"100%",fontSize: "20px"}}>
-                                        % 50
-                                        </NbButton>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </NdPopUp>
