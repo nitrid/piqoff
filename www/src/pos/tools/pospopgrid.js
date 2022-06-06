@@ -88,14 +88,13 @@ export default class NbPosPopGrid extends NbBase
                             dbApply={false}
                             selection={{mode:'single'}}
                             onRowPrepared={(e)=>
+                            {
+                                if(e.rowType == "header")
                                 {
-                                    if(e.rowType == "header")
-                                    {
-                                        e.rowElement.style.fontWeight = "bold";                                          
-                                    }
-                                    e.rowElement.style.fontSize = "13px";  
+                                    e.rowElement.style.fontWeight = "bold";                                          
                                 }
-                            }
+                                e.rowElement.style.fontSize = "13px";  
+                            }}
                             onCellPrepared=
                             {
                                 (e)=>
@@ -105,8 +104,7 @@ export default class NbPosPopGrid extends NbBase
                                         e.cellElement.style.padding = "12px"
                                     }
                                 }
-                            }
-                            
+                            }                            
                             >
                                 <Paging defaultPageSize={5} />
                                 <Pager visible={true}/>

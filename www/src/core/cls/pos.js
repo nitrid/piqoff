@@ -202,6 +202,7 @@ export class posSaleCls
             ITEM_GUID : '00000000-0000-0000-0000-000000000000',
             ITEM_CODE : '',
             ITEM_NAME : '',
+            ITEM_SNAME : '',
             TICKET_REST : 0,
             COST_PRICE : 0,
             MIN_PRICE : 0,

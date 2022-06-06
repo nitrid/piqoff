@@ -18,6 +18,7 @@ import NdDatePicker from "../../core/react/devex/datepicker.js";
 import NdSelectBox from "../../core/react/devex/selectbox.js";
 import NbPluButtonGrp from "../tools/plubuttongrp.js";
 import NbPopNumber from "../tools/popnumber.js";
+import NbPopNumberRate from "../tools/popnumberrate.js";
 import NbRadioButton from "../../core/react/bootstrap/radiogroup.js";
 import NbPosPopGrid from "../tools/pospopgrid.js";
 import NbPopDescboard from "../tools/popdescboard.js";
@@ -113,7 +114,6 @@ export default class posDoc extends React.PureComponent
         this.posDevice.payCardPort = this.prmObj.filter({ID:'PayCardPort',TYPE:0,SPECIAL:"001"}).getValue()
         
         await this.grdList.dataRefresh({source:this.posObj.posSale.dt()});
-        await this.grdDiscList.dataRefresh({source:this.posObj.posSale.dt()});
         await this.grdPay.dataRefresh({source:this.posObj.posPay.dt()});
 
         this.cheqDt.selectCmd = 
@@ -543,6 +543,10 @@ export default class posDoc extends React.PureComponent
                 this.totalVat.value = parseFloat(this.posObj.dt()[0].VAT).toFixed(2) + "€"
                 this.totalDiscount.value = "-" + parseFloat(this.posObj.dt()[0].DISCOUNT).toFixed(2) + "€"
                 this.totalGrand.value = parseFloat(tmpPayRest).toFixed(2) + "€"
+                this.disTotalSub.value = parseFloat(this.posObj.dt()[0].FAMOUNT).toFixed(2) + "€"
+                this.disTotalVat.value = parseFloat(this.posObj.dt()[0].VAT).toFixed(2) + "€"
+                this.disTotalDiscount.value = "-" + parseFloat(this.posObj.dt()[0].DISCOUNT).toFixed(2) + "€"
+                this.disTotalGrand.value = parseFloat(tmpPayRest).toFixed(2) + "€"
                 this.popTotalGrand.value = parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2) + "€"
                 this.popCardTotalGrand.value = parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2) + "€"
                 this.popCashTotalGrand.value = parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2) + "€"                
@@ -1884,8 +1888,9 @@ export default class posDoc extends React.PureComponent
                                     <div className="col-2 px-1">
                                         <NbButton id={"btnDiscount"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
                                         access={this.acsObj.filter({ELEMENT:'btnDiscount',USERS:this.user.CODE})}
-                                        onClick={()=>
+                                        onClick={async()=>
                                         {   
+                                            await this.grdDiscList.dataRefresh({source:this.posObj.posSale.dt().where({PROMO_TYPE:0})});
                                             this.popDiscount.show()
                                         }}>
                                             <i className="text-white fa-solid fa-percent" style={{fontSize: "24px"}} />
@@ -2797,6 +2802,10 @@ export default class posDoc extends React.PureComponent
                 <div>
                     <NbPopNumber id={"popNumber"} parent={this}/>
                 </div>
+                {/* Number Rate Popup */}
+                <div>
+                    <NbPopNumberRate id={"popNumberRate"} parent={this}/>
+                </div>
                 {/* Customer List Popup */}
                 <div>
                     <NbPosPopGrid id={"popCustomerList"} parent={this} width={"900"} height={"650"} position={"#root"} title={"Müşteri Listesi"}
@@ -3062,8 +3071,8 @@ export default class posDoc extends React.PureComponent
                     showTitle={true}
                     title={"İskonto"}
                     container={"#root"} 
-                    width={"700px"}
-                    height={"550px"}
+                    width={"100%"}
+                    height={"100%"}
                     position={{of:"#root"}}
                     >
                         {/* grdDiscList */}
@@ -3077,43 +3086,192 @@ export default class posDoc extends React.PureComponent
                                 height={"430px"} 
                                 width={"100%"}
                                 dbApply={false}
-                                selection={{mode:"single"}}
+                                selection={{mode:"multiple"}}
                                 loadPanel={{enabled:false}}
                                 onRowPrepared={(e)=>
                                 {
                                     if(e.rowType == "header")
                                     {
-                                        e.rowElement.style.fontWeight = "bold";    
+                                        e.rowElement.style.fontWeight = "bold";   
+                                        e.rowElement.style.fontSize = "15px"; 
                                     }
-                                    e.rowElement.style.fontSize = "20px";                                        
+                                    else
+                                    {
+                                        e.rowElement.style.fontSize = "20px";
+                                    }
                                 }}
                                 onCellPrepared={(e)=>
                                 {
-                                    e.cellElement.style.padding = "4px"                                    
+                                    e.cellElement.style.padding = "8px"     
+                                                                 
                                     if(e.rowType == 'data' && e.column.dataField == 'AMOUNT')
                                     {
                                         e.cellElement.style.fontWeight = "bold";
                                     }
-                                }}
-                                onCellClick={async (e)=>
-                                {
-                                    if(e.column.dataField == "QUANTITY")
+                                    else if(e.rowType == 'data' && e.column.index == 2)
                                     {
-                                        
+                                        let tmpVal = Number(e.data.AMOUNT).rate2Num(e.data.DISCOUNT,2)
+                                        e.value = tmpVal
+                                        e.text = tmpVal
+                                        e.displayValue = tmpVal
+                                        e.cellElement.innerHTML  = tmpVal.toFixed(2) + " %"
                                     }
-                                }}
-                                onSelectionChanged={(e)=>
-                                {
-                                    
+                                    else if(e.rowType == 'data' && e.column.index == 5)
+                                    {
+                                        let tmpVal = Number(parseFloat((e.data.AMOUNT - e.data.DISCOUNT) / e.data.QUANTITY).toFixed(2))
+                                        e.value = tmpVal
+                                        e.text = tmpVal
+                                        e.displayValue = tmpVal
+                                        e.cellElement.innerHTML  = tmpVal.toFixed(2) + "€"
+                                    }
                                 }}
                                 >
                                     <Editing confirmDelete={false}/>
                                     <Column dataField="LDATE" caption={"LDATE"} width={40} alignment={"center"} dataType={"datetime"} format={"dd-MM-yyyy - HH:mm:ss SSSZ"} defaultSortOrder="desc" visible={false}/>
-                                    <Column dataField="ITEM_NAME" caption={"ADI"} width={300}/>
-                                    <Column dataField="DISCOUNT" caption={"INDIRIM"} width={100}/>
-                                    <Column dataField="PRICE" caption={"FIYAT"} width={100} format={"#0.00"}/>
-                                    <Column dataField="AMOUNT" alignment={"right"} caption={"TUTAR"} width={100} format={"#0.00"}/>                                                
+                                    <Column dataField="ITEM_NAME" caption={"ADI"} width={430}/>
+                                    <Column caption={"INDIRIM"} width={100} alignment={"right"}/>
+                                    <Column dataField="DISCOUNT" caption={"INDIRIM"} width={100} format={"#0.00€"}/>
+                                    <Column dataField="PRICE" caption={"FIYAT"} width={80} format={"#0.00€"}/>
+                                    <Column caption={"IND. FIYAT"} width={100} format={"#0.00"} alignment={"right"}/>
+                                    <Column dataField="AMOUNT" alignment={"right"} caption={"TUTAR"} width={100} format={"#0.00€"}/>                                                
                                 </NdGrid>
+                            </div>
+                        </div>
+                        <div className="row pb-1">
+                            <div className="col-6">
+                                <NbButton id={"btnPopDiscountRate"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
+                                onClick={async ()=>
+                                {
+                                    if(this.grdDiscList.getSelectedData().length > 0)
+                                    {
+                                        let tmpDt = new datatable()
+                                        tmpDt.import(this.grdDiscList.getSelectedData())
+    
+                                        let tmpResult = await this.popNumberRate.show('İndirim % - ' + tmpDt.sum('AMOUNT',2),Number(tmpDt.sum('AMOUNT')).rate2Num(tmpDt.sum('DISCOUNT')))
+                                        if(typeof tmpResult == 'undefined')
+                                        {
+                                            return
+                                        }
+                                        if(this.posObj.posPay.dt().length > 0)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"İndirim Yapmadan Önce Lütfen Tüm Ödemeleri Siliniz !"}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
+                                        if(Number(tmpResult) > 100)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Tutar dan fazla iskonto yapılamaz !"}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                            return;
+                                        }
+    
+                                        for (let i = 0; i < this.grdDiscList.getSelectedData().length; i++) 
+                                        {
+                                            let tmpDiscount = Number(this.grdDiscList.getSelectedData()[i].AMOUNT).rateInc(tmpResult,2)
+                                                    
+                                            let tmpData = this.grdDiscList.getSelectedData()[i]
+                                            let tmpCalc = this.calcSaleTotal(tmpData.PRICE,tmpData.QUANTITY,tmpDiscount,tmpData.LOYALTY,tmpData.VAT_RATE)
+                                            
+                                            this.grdDiscList.getSelectedData()[i].FAMOUNT = tmpCalc.FAMOUNT
+                                            this.grdDiscList.getSelectedData()[i].AMOUNT = tmpCalc.AMOUNT
+                                            this.grdDiscList.getSelectedData()[i].DISCOUNT = tmpDiscount
+                                            this.grdDiscList.getSelectedData()[i].VAT = tmpCalc.VAT
+                                            this.grdDiscList.getSelectedData()[i].TOTAL = tmpCalc.TOTAL
+                                        }
+                                        await this.calcGrandTotal();
+                                    }
+                                }}>
+                                    <div>İndirim Uygula (%)</div>
+                                </NbButton>
+                            </div>
+                            <div className="col-6">
+                                <NbButton id={"btnPopDiscountAmount"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
+                                onClick={async ()=>
+                                {
+                                    let tmpDt = new datatable()
+                                    tmpDt.import(this.grdDiscList.getSelectedData())                                    
+
+                                    let tmpResult = await this.popNumber.show('İndirim € - ' + tmpDt.sum('AMOUNT',2),tmpDt.sum('DISCOUNT',2))
+                                    let tmpRate = Number(tmpDt.sum('AMOUNT')).rate2Num(tmpResult,2);
+                                    
+                                    if(typeof tmpResult == 'undefined')
+                                    {
+                                        return
+                                    }
+                                    if(this.posObj.posPay.dt().length > 0)
+                                    {
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"İndirim Yapmadan Önce Lütfen Tüm Ödemeleri Siliniz !"}</div>)
+                                        }
+                                        await dialog(tmpConfObj);
+                                        return
+                                    }
+                                    if(Number(tmpDt.sum('AMOUNT')) < Number(tmpResult))
+                                    {
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Tutar dan fazla iskonto yapılamaz !"}</div>)
+                                        }
+                                        await dialog(tmpConfObj);
+                                        return;
+                                    }
+
+                                    for (let i = 0; i < this.grdDiscList.getSelectedData().length; i++) 
+                                    {
+                                        let tmpDiscount = Number(this.grdDiscList.getSelectedData()[i].AMOUNT).rateInc(tmpRate,2)
+                                                    
+                                        let tmpData = this.grdDiscList.getSelectedData()[i]
+                                        let tmpCalc = this.calcSaleTotal(tmpData.PRICE,tmpData.QUANTITY,tmpDiscount,tmpData.LOYALTY,tmpData.VAT_RATE)
+                                        
+                                        this.grdDiscList.getSelectedData()[i].FAMOUNT = tmpCalc.FAMOUNT
+                                        this.grdDiscList.getSelectedData()[i].AMOUNT = tmpCalc.AMOUNT
+                                        this.grdDiscList.getSelectedData()[i].DISCOUNT = tmpDiscount
+                                        this.grdDiscList.getSelectedData()[i].VAT = tmpCalc.VAT
+                                        this.grdDiscList.getSelectedData()[i].TOTAL = tmpCalc.TOTAL
+                                    }
+                                    await this.calcGrandTotal();                                    
+                                }}>
+                                    <div>İndirim Uygula (€)</div>
+                                </NbButton>
+                            </div>
+                        </div>
+                        <div className="row pb-1">
+                            <div className="col-6 offset-6">
+                                <div className="row">
+                                    <div className="col-12">
+                                        <p className="text-primary text-end m-0">Ara Toplam : <span className="text-dark"><NbLabel id="disTotalSub" parent={this} value={"0.00 €"}/></span></p>    
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-12">
+                                        <p className="text-primary text-end m-0">Kdv : <span className="text-dark"><NbLabel id="disTotalVat" parent={this} value={"0.00 €"}/></span></p>    
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-12">
+                                        <p className="text-primary text-end m-0">İndirim : <span className="text-dark"><NbLabel id="disTotalDiscount" parent={this} value={"0.00 €"}/></span></p>    
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-12">
+                                <p className="fs-2 fw-bold text-center m-0"><NbLabel id="disTotalGrand" parent={this} value={"0.00 €"}/></p>
                             </div>
                         </div>
                     </NdPopUp>
