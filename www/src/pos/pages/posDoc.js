@@ -49,6 +49,10 @@ export default class posDoc extends React.PureComponent
         this.posDevice = new posDeviceCls();
         this.parkDt = new datatable();
         this.cheqDt = new datatable();
+        this.lastPosDt = new datatable();
+        this.lastPosSaleDt = new datatable();
+        this.lastPosPayDt = new datatable();
+
         this.loading = React.createRef();
 
         this.state =
@@ -100,7 +104,7 @@ export default class posDoc extends React.PureComponent
         {
             this.lblTime.value = moment(new Date(),"HH:mm:ss").format("HH:mm:ss")
             this.lblDate.value = new Date().toLocaleDateString('tr-TR',{ year: 'numeric', month: 'numeric', day: 'numeric' })
-        },1000)
+        },1000)        
 
         this.posObj.clearAll()
         await this.prmObj.load({PAGE:"pos",APP:'POS'})
@@ -115,6 +119,8 @@ export default class posDoc extends React.PureComponent
         
         await this.grdList.dataRefresh({source:this.posObj.posSale.dt()});
         await this.grdPay.dataRefresh({source:this.posObj.posPay.dt()});
+
+        await this.grdLastPos.dataRefresh({source:this.lastPosDt});
 
         this.cheqDt.selectCmd = 
         {
@@ -2380,7 +2386,9 @@ export default class posDoc extends React.PureComponent
                                     <div className="col px-1">
                                         <NbButton id={"btnPrint"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
                                         onClick={()=>
-                                        {                                                        
+                                        {     
+                                            this.dtPopLastSaleStartDate.value = moment(new Date())
+                                            this.dtPopLastSaleFinishDate.value = moment(new Date())
                                             this.popLastSaleList.show();
                                         }}>
                                             <i className="text-white fa-solid fa-print" style={{fontSize: "24px"}} />
@@ -3441,7 +3449,10 @@ export default class posDoc extends React.PureComponent
                 </div>
                 {/* Last Sale List Popup */} 
                 <div>
-                    <NbPopUp id="popLastSaleList" parent={this} title={"Son Satış Listesi"} fullscreen={true}>
+                    <NdPopUp id="popLastSaleList" parent={this} title={"Son Satış Listesi"} width={"100%"} height={"100%"}
+                    showCloseButton={true}
+                    showTitle={true}
+                    >
                         {/* Tool Button Group */} 
                         <div className="row pb-1">
                             <div className="offset-10 col-2">
@@ -3471,26 +3482,142 @@ export default class posDoc extends React.PureComponent
                         <div className="row py-1">
                             {/* dtPopLastSaleStartDate */} 
                             <div className="col-2">
-                                <NdDatePicker simple={true}  parent={this} id={"dtPopLastSaleStartDate"}/>
+                                <NdDatePicker simple={true} parent={this} id={"dtPopLastSaleStartDate"}/>
                             </div>
                             {/* dtPopLastSaleFinishDate */} 
                             <div className="col-2">
-                                <NdDatePicker simple={true}  parent={this} id={"dtPopLastSaleFinishDate"}/>
+                                <NdDatePicker simple={true} parent={this} id={"dtPopLastSaleFinishDate"}/>
                             </div>
                             {/* cmbPopLastSalePayType */} 
                             <div className="col-2">
-                                <NdSelectBox simple={true} parent={this} id="cmbPopLastSalePayType"/>
+                                <NdSelectBox simple={true} parent={this} id="cmbPopLastSalePayType" displayExpr={'NAME'} valueExpr={'ID'} value={-1}
+                                data={{source:[{ID:-1,NAME:"Tümü"},{ID:0,NAME:"Espece"},{ID:1,NAME:"Carte Bancaire TPE"},{ID:2,NAME:"Cheque"},{ID:3,NAME:"CHEQue"},{ID:4,NAME:"Bon D'Avoir"}]}}/>
                             </div>
                             {/* btnPopLastSaleSearch */} 
                             <div className="col-1">
-                                <NbButton id={"btnPopLastSaleSearch"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"36px",width:"100%"}}>
+                                <NbButton id={"btnPopLastSaleSearch"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"36px",width:"100%"}}
+                                onClick={async()=>
+                                {
+                                    this.lastPosDt.selectCmd = 
+                                    {
+                                        query:  "SELECT *, " +
+                                                "SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,36) AS REF " + 
+                                                "FROM POS_VW_01 WHERE DOC_DATE >= @START_DATE AND DOC_DATE <= @FINISH_DATE AND " +
+                                                "((ISNULL((SELECT TOP 1 PAY.TYPE FROM POS_PAYMENT AS PAY WHERE PAY.POS = POS_VW_01.GUID),0) = @TYPE) OR (@TYPE = -1)) ",
+                                        param:  ["START_DATE:date","FINISH_DATE:date","TYPE:int"],
+                                        value:  [this.dtPopLastSaleStartDate.value,this.dtPopLastSaleFinishDate.value,this.cmbPopLastSalePayType.value]
+                                    }
+                                    
+                                    await this.lastPosDt.refresh()
+                                    await this.grdLastPos.dataRefresh({source:this.lastPosDt});                                    
+                                }}>
                                     <i className="text-white fa-solid fa-magnifying-glass" style={{fontSize: "16px"}} />
                                 </NbButton>
                             </div>
                         </div>
-                        {/* grdLastSale */}
+                        {/* grdLastPos */}
                         <div className="row py-1">
                             <div className="col-12">
+                                <NdGrid parent={this} id={"grdLastPos"} 
+                                showBorders={true} 
+                                columnsAutoWidth={true} 
+                                allowColumnReordering={true} 
+                                allowColumnResizing={true} 
+                                showRowLines={true}
+                                showColumnLines={true}
+                                height={"250px"} 
+                                width={"100%"}
+                                dbApply={false}
+                                selection={{mode:"single"}}
+                                onRowPrepared={(e)=>
+                                {
+                                    if(e.rowType == "header")
+                                    {
+                                        e.rowElement.style.fontWeight = "bold";    
+                                    }
+                                    e.rowElement.style.fontSize = "13px";
+                                }}
+                                onCellPrepared={(e)=>
+                                {
+                                    e.cellElement.style.padding = "4px"
+                                }}
+                                onSelectionChanged={async(e)=>
+                                {
+                                    if(e.selectedRowKeys.length > 0)
+                                    {
+                                        this.lastPosSaleDt.selectCmd = 
+                                        {
+                                            query:  "SELECT * FROM POS_SALE_VW_01 WHERE POS_GUID = @GUID ",
+                                            param:  ["GUID:string|50"],
+                                            value:  [e.selectedRowKeys[0].GUID]
+                                        }
+                                        
+                                        await this.lastPosSaleDt.refresh()
+                                        await this.grdLastSale.dataRefresh({source:this.lastPosSaleDt});
+
+                                        this.lastPosPayDt.selectCmd = 
+                                        {
+                                            query:  "SELECT * FROM POS_PAYMENT_VW_01 WHERE POS_GUID = @GUID ",
+                                            param:  ["GUID:string|50"],
+                                            value:  [e.selectedRowKeys[0].GUID]
+                                        }
+                                        this.lastPosPayDt.insertCmd = 
+                                        {
+                                            query : "EXEC [dbo].[PRD_POS_PAYMENT_INSERT] " + 
+                                                    "@GUID = @PGUID, " +
+                                                    "@CUSER = @PCUSER, " + 
+                                                    "@POS = @PPOS, " +
+                                                    "@TYPE = @PTYPE, " +
+                                                    "@LINE_NO = @PLINE_NO, " +
+                                                    "@AMOUNT = @PAMOUNT, " + 
+                                                    "@CHANGE = @PCHANGE ", 
+                                            param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
+                                            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE']
+                                        } 
+                                        this.lastPosPayDt.updateCmd = 
+                                        {
+                                            query : "EXEC [dbo].[PRD_POS_PAYMENT_UPDATE] " + 
+                                                    "@GUID = @PGUID, " +
+                                                    "@CUSER = @PCUSER, " + 
+                                                    "@POS = @PPOS, " +
+                                                    "@TYPE = @PTYPE, " +
+                                                    "@LINE_NO = @PLINE_NO, " +
+                                                    "@AMOUNT = @PAMOUNT, " + 
+                                                    "@CHANGE = @PCHANGE ", 
+                                            param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
+                                            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE']
+                                        } 
+                                        this.lastPosPayDt.deleteCmd = 
+                                        {
+                                            query : "EXEC [dbo].[PRD_POS_PAYMENT_DELETE] " + 
+                                                    "@CUSER = @PCUSER, " + 
+                                                    "@UPDATE = 1, " +
+                                                    "@GUID = @PGUID, " + 
+                                                    "@POS_GUID = @PPOS_GUID ", 
+                                            param : ['PCUSER:string|25','PGUID:string|50','PPOS_GUID:string|50'],
+                                            dataprm : ['CUSER','GUID','POS_GUID']
+                                        }
+                                        await this.lastPosPayDt.refresh()
+                                        await this.grdLastPay.dataRefresh({source:this.lastPosPayDt});
+                                        await this.grdLastTotalPay.dataRefresh({source:this.lastPosPayDt});
+
+                                        this.txtPopLastTotal.newStart = true;
+                                    }
+                                }}
+                                >
+                                    <Column dataField="LDATE" caption={"TARIH"} width={200} alignment={"center"} dataType={"datetime"} format={"dd-MM-yyyy - HH:mm:ss SSSZ"}/>
+                                    <Column dataField="REF" caption={"REF"} width={150}/>
+                                    <Column dataField="CUSTOMER_NAME" caption={"MÜŞTERİ"} width={200}/> 
+                                    <Column dataField="CUSER_NAME" caption={"KULLANICI"} width={100}/>
+                                    <Column dataField="DISCOUNT" caption={"INDIRIM"} width={100}/> 
+                                    <Column dataField="LOYALTY" caption={"SADAKAT"} width={100}/>
+                                    <Column dataField="AMOUNT" caption={"TUTAR"} width={100}/>                                             
+                                </NdGrid>
+                            </div>
+                        </div>
+                        <div className="row py-1">
+                            {/* grdLastSale */}
+                            <div className="col-6">
                                 <NdGrid parent={this} id={"grdLastSale"} 
                                 showBorders={true} 
                                 columnsAutoWidth={true} 
@@ -3502,81 +3629,29 @@ export default class posDoc extends React.PureComponent
                                 width={"100%"}
                                 dbApply={false}
                                 data={{source:[{TYPE_NAME:"ESC",AMOUNT:100.99}]}}
-                                onRowPrepared=
+                                onRowPrepared={(e)=>
                                 {
-                                    (e)=>
+                                    if(e.rowType == "header")
                                     {
-                                        if(e.rowType == "header")
-                                        {
-                                            e.rowElement.style.fontWeight = "bold";    
-                                        }
-                                        e.rowElement.style.fontSize = "13px";
+                                        e.rowElement.style.fontWeight = "bold";    
                                     }
-                                }
-                                onCellPrepared=
+                                    e.rowElement.style.fontSize = "13px";
+                                }}
+                                onCellPrepared={(e)=>
                                 {
-                                    (e)=>
-                                    {
-                                        e.cellElement.style.padding = "4px"
-                                    }
-                                }
+                                    e.cellElement.style.padding = "4px"
+                                }}
                                 >
-                                    <Column dataField="XX1" caption={"TARIH"} width={100}/>
-                                    <Column dataField="X11" caption={"SAAT"} width={100}/>    
-                                    <Column dataField="XX2" caption={"SERI"} width={40}/>
-                                    <Column dataField="XX3" caption={"SIRA"} width={40}/> 
-                                    <Column dataField="XX4" caption={"SATIR"} width={40}/>
-                                    <Column dataField="XX5" caption={"MÜŞTERİ"} width={200}/> 
-                                    <Column dataField="XX6" caption={"KULLANICI"} width={100}/>
-                                    <Column dataField="XX7" caption={"INDIRIM"} width={100}/> 
-                                    <Column dataField="XX8" caption={"SADAKAT"} width={100}/>
-                                    <Column dataField="AMOUNT" caption={"TUTAR"} width={100}/>                                             
-                                </NdGrid>
-                            </div>
-                        </div>
-                        <div className="row py-1">
-                            {/* grdLastSaleItem */}
-                            <div className="col-6">
-                                <NdGrid parent={this} id={"grdLastSaleItem"} 
-                                showBorders={true} 
-                                columnsAutoWidth={true} 
-                                allowColumnReordering={true} 
-                                allowColumnResizing={true} 
-                                showRowLines={true}
-                                showColumnLines={true}
-                                height={"250px"} 
-                                width={"100%"}
-                                dbApply={false}
-                                data={{source:[{TYPE_NAME:"ESC",AMOUNT:100.99}]}}
-                                onRowPrepared=
-                                {
-                                    (e)=>
-                                    {
-                                        if(e.rowType == "header")
-                                        {
-                                            e.rowElement.style.fontWeight = "bold";    
-                                        }
-                                        e.rowElement.style.fontSize = "13px";
-                                    }
-                                }
-                                onCellPrepared=
-                                {
-                                    (e)=>
-                                    {
-                                        e.cellElement.style.padding = "4px"
-                                    }
-                                }
-                                >
-                                    <Column dataField="XX1" caption={"BARKOD"} width={120}/>
-                                    <Column dataField="XX2" caption={"NAME"} width={200}/>    
-                                    <Column dataField="XX3" caption={"MIKTAR"} width={50}/>
-                                    <Column dataField="XX4" caption={"FIYAT"} width={50}/> 
+                                    <Column dataField="BARCODE" caption={"BARKOD"} width={120}/>
+                                    <Column dataField="ITEM_NAME" caption={"NAME"} width={200}/>    
+                                    <Column dataField="QUANTITY" caption={"MIKTAR"} width={50}/>
+                                    <Column dataField="PRICE" caption={"FIYAT"} width={50}/> 
                                     <Column dataField="AMOUNT" caption={"TUTAR"} width={100}/>
                                 </NdGrid>
                             </div>
-                            {/* grdLastSalePay */}
+                            {/* grdLastPay */}
                             <div className="col-6">
-                                <NdGrid parent={this} id={"grdLastSalePay"} 
+                                <NdGrid parent={this} id={"grdLastPay"} 
                                 showBorders={true} 
                                 columnsAutoWidth={true} 
                                 allowColumnReordering={true} 
@@ -3586,33 +3661,231 @@ export default class posDoc extends React.PureComponent
                                 height={"250px"} 
                                 width={"100%"}
                                 dbApply={false}
-                                data={{source:[{TYPE_NAME:"ESC",AMOUNT:100.99}]}}
-                                onRowPrepared=
+                                selection={{mode:"single"}}                          
+                                onRowPrepared={(e)=>
                                 {
-                                    (e)=>
+                                    if(e.rowType == "header")
                                     {
-                                        if(e.rowType == "header")
-                                        {
-                                            e.rowElement.style.fontWeight = "bold";    
-                                        }
-                                        e.rowElement.style.fontSize = "13px";
+                                        e.rowElement.style.fontWeight = "bold";    
                                     }
-                                }
-                                onCellPrepared=
+                                    e.rowElement.style.fontSize = "13px";
+                                }}
+                                onCellPrepared={
+                                (e)=>
                                 {
-                                    (e)=>
+                                    e.cellElement.style.padding = "4px"
+                                }}
+                                onRowClick={()=>
+                                {
+                                    if(this.lastPosPayDt.length > 0)
                                     {
-                                        e.cellElement.style.padding = "4px"
+                                        this.rbtnTotalPayType.value = 0
+                                        this.txtPopLastTotal.value = 0
+                                        this.popLastTotal.show()
                                     }
-                                }
+                                }}
                                 >
-                                    <Column dataField="XX1" caption={"TIP"} width={200}/>
-                                    <Column dataField="XX2" caption={"AMOUNT"} width={100}/>    
-                                    <Column dataField="XX3" caption={"CHANGE"} width={100}/>
+                                    <Column dataField="PAY_TYPE_NAME" caption={"TIP"} width={200}/>
+                                    <Column dataField="AMOUNT" caption={"AMOUNT"} width={100}/>    
+                                    <Column dataField="CHANGE" caption={"CHANGE"} width={100}/>
                                 </NdGrid>
                             </div>
                         </div>
-                    </NbPopUp>
+                    </NdPopUp>
+                </div>
+                {/* Last Total Popup */}
+                <div>
+                    <NdPopUp parent={this} id={"popLastTotal"} 
+                    visible={false}                        
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={"Son Satış Tahsilat"}
+                    container={"#root"} 
+                    width={"600"}
+                    height={"650"}
+                    position={{of:"#root"}}
+                    >
+                        <div className="row">
+                            <div className="col-12">
+                                <div className="row pt-2">
+                                    {/* Payment Type Selection */}
+                                    <div className="col-2 pe-1">
+                                        <NbRadioButton id={"rbtnTotalPayType"} parent={this} 
+                                        button={[
+                                            {
+                                                id:"btn01",
+                                                style:{height:'49px',width:'100%'},
+                                                icon:"fa-money-bill-1",
+                                                text:"ESC"
+                                            },
+                                            {
+                                                id:"btn02",
+                                                style:{height:'49px',width:'100%'},
+                                                icon:"fa-credit-card",
+                                                text:"CB"
+                                            },
+                                            {
+                                                id:"btn03",
+                                                style:{height:'49px',width:'100%'},
+                                                icon:"fa-rectangle-list",
+                                                text:"CHQ"
+                                            },
+                                            {
+                                                id:"btn04",
+                                                style:{height:'49px',width:'100%'},
+                                                icon:"fa-rectangle-list",
+                                                text:"CHQe"
+                                            }
+                                        ]}/>
+                                    </div>
+                                    {/* Payment Grid */}
+                                    <div className="col-10">
+                                        {/* grdLastTotalPay */}
+                                        <div className="row">
+                                            <div className="col-12">
+                                                <NdGrid parent={this} id={"grdLastTotalPay"} 
+                                                showBorders={true} 
+                                                columnsAutoWidth={true} 
+                                                allowColumnReordering={true} 
+                                                allowColumnResizing={true} 
+                                                showRowLines={true}
+                                                showColumnLines={true}
+                                                showColumnHeaders={false}
+                                                height={"138px"} 
+                                                width={"100%"}
+                                                dbApply={false}
+                                                selection={{mode:"single"}}
+                                                onRowPrepared={(e)=>
+                                                {
+                                                    e.rowElement.style.fontSize = "13px";
+                                                }}
+                                                onRowRemoved={async (e) =>
+                                                {
+                                                    await this.calcGrandTotal();
+                                                }}
+                                                >
+                                                    <Column dataField="PAY_TYPE_NAME" width={100} alignment={"center"}/>
+                                                    <Column dataField="AMOUNT" width={40}/>                                                
+                                                </NdGrid>
+                                            </div>
+                                        </div>
+                                        {/* txtPopLastTotal */}
+                                        <div className="row pt-1">
+                                            <div className="col-12">
+                                                <NdTextBox id="txtPopLastTotal" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}>     
+                                                </NdTextBox> 
+                                            </div>
+                                        </div>                                        
+                                    </div>
+                                </div>
+                                <div className="row pt-2">
+                                    {/* numPopLastTotal */}
+                                    <div className="col-9">
+                                        <NbNumberboard id={"numPopLastTotal"} parent={this} textobj="txtPopLastTotal" span={1} buttonHeight={"60px"}/>
+                                    </div>
+                                    <div className="col-3">
+                                        {/* T.R Detail */}
+                                        <div className="row pb-1">                                            
+                                            <div className="col-12">
+                                                <NbButton id={"btnPopTotalTRDetail"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
+                                                onClick={async ()=>
+                                                {
+                                                    if(this.posObj.posPay.dt().where({PAY_TYPE:3}).length > 0)
+                                                    {
+                                                        let tmpDt = new datatable(); 
+                                                        tmpDt.selectCmd = 
+                                                        {
+                                                            query : "SELECT AMOUNT AS AMOUNT,COUNT(AMOUNT) AS COUNT FROM CHEQPAY WHERE DOC = @DOC GROUP BY AMOUNT",
+                                                            param : ['DOC:string|50']
+                                                        }
+                                                        tmpDt.selectCmd.value = [this.posObj.dt()[0].GUID]
+                                                        await tmpDt.refresh();
+                                                        
+                                                        await this.grdTRDetail.dataRefresh({source:tmpDt});
+                                                        this.popTRDetail.show()
+                                                    }
+                                                }}>
+                                                    T.R Detay
+                                                </NbButton>
+                                            </div>
+                                        </div>
+                                        {/* Line Delete */}
+                                        <div className="row py-1">                                            
+                                            <div className="col-12">
+                                                <NbButton id={"btnPopLastTotalLineDel"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
+                                                onClick={()=>
+                                                {
+                                                    if(this.grdLastTotalPay.devGrid.getSelectedRowKeys().length > 0)
+                                                    {
+                                                        this.grdLastTotalPay.devGrid.deleteRow(this.grdLastTotalPay.devGrid.getRowIndexByKey(this.grdLastTotalPay.devGrid.getSelectedRowKeys()[0]))
+                                                    }
+                                                }}>
+                                                    Satır İptal
+                                                </NbButton>
+                                            </div>
+                                        </div>
+                                        {/* Cancel */}
+                                        <div className="row py-1">                                            
+                                            <div className="col-12">
+                                                <NbButton id={"btnPopLastTotalCancel"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
+                                                onClick={()=>{this.popLastTotal.hide()}}>
+                                                    Vazgeç
+                                                </NbButton>
+                                            </div>
+                                        </div>
+                                        {/* Okey */}
+                                        <div className="row py-1">                                            
+                                            <div className="col-12">
+                                                <NbButton id={"btnPopLastTotalOkey"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
+                                                onClick={()=>
+                                                {
+                                                    let tmpTypeName = ""
+                                                    if(this.rbtnTotalPayType.value == 0)
+                                                        tmpTypeName = "ESC"
+                                                    else if(this.rbtnTotalPayType.value == 1)
+                                                        tmpTypeName = "CB"
+                                                    else if(this.rbtnTotalPayType.value == 2)
+                                                        tmpTypeName = "CHQ"
+                                                    else if(this.rbtnTotalPayType.value == 3)
+                                                        tmpTypeName = "T.R"
+                                                    else if(this.rbtnTotalPayType.value == 4)
+                                                        tmpTypeName = "BON D'AVOIR"
+
+                                                    let tmpData = 
+                                                    {
+                                                        GUID : datatable.uuidv4(),
+                                                        CUSER : this.core.auth.data.CODE,
+                                                        POS_GUID : this.lastPosDt[0].GUID,
+                                                        PAY_TYPE : this.rbtnTotalPayType.value,
+                                                        PAY_TYPE_NAME : tmpTypeName,
+                                                        LINE_NO : this.lastPosPayDt.length,
+                                                        AMOUNT : this.txtPopLastTotal.value,
+                                                        CHANGE : 0
+                                                    }
+                                                    this.lastPosPayDt.push(tmpData)
+                                                    this.txtPopLastTotal.newStart = true;
+                                                }}>
+                                                    <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
+                                                </NbButton>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>  
+                                <div className="row pt-2">
+                                    <div className="col-12">
+                                        <NbButton id={"btnPopLastTotalSave"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
+                                        onClick={async ()=>
+                                        {
+                                            this.lastPosPayDt.delete()
+                                            await this.lastPosPayDt.update() 
+                                        }}>
+                                            <i className="text-white fa-solid fa-floppy-disk" style={{fontSize: "24px"}} />
+                                        </NbButton>
+                                    </div>
+                                </div>                              
+                            </div>
+                        </div>
+                    </NdPopUp>
                 </div>
                 {/* Price Description Popup */} 
                 <div>
