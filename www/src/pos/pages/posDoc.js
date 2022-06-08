@@ -3680,7 +3680,8 @@ export default class posDoc extends React.PureComponent
                                     if(this.lastPosPayDt.length > 0)
                                     {
                                         this.rbtnTotalPayType.value = 0
-                                        this.txtPopLastTotal.value = 0
+                                        this.lastPayRest.value = this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT') < 0 ? 0 : parseFloat(this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT')).toFixed(2)
+                                        this.txtPopLastTotal.value = this.lastPosSaleDt[0].GRAND_TOTAL;
                                         this.popLastTotal.show()
                                     }
                                 }}
@@ -3702,7 +3703,7 @@ export default class posDoc extends React.PureComponent
                     title={"Son Satış Tahsilat"}
                     container={"#root"} 
                     width={"600"}
-                    height={"650"}
+                    height={"700"}
                     position={{of:"#root"}}
                     >
                         <div className="row">
@@ -3764,9 +3765,15 @@ export default class posDoc extends React.PureComponent
                                                     await this.calcGrandTotal();
                                                 }}
                                                 >
+                                                    <Editing confirmDelete={false}/>
                                                     <Column dataField="PAY_TYPE_NAME" width={100} alignment={"center"}/>
                                                     <Column dataField="AMOUNT" width={40}/>                                                
                                                 </NdGrid>
+                                            </div>
+                                        </div>
+                                        <div className="row pt-1">
+                                            <div className="col-12">
+                                                <p className="fs-2 fw-bold text-center m-0"><NbLabel id="lastPayRest" parent={this} value={"0.00 €"}/></p>
                                             </div>
                                         </div>
                                         {/* txtPopLastTotal */}
@@ -3813,11 +3820,13 @@ export default class posDoc extends React.PureComponent
                                         <div className="row py-1">                                            
                                             <div className="col-12">
                                                 <NbButton id={"btnPopLastTotalLineDel"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
-                                                onClick={()=>
+                                                onClick={async()=>
                                                 {
                                                     if(this.grdLastTotalPay.devGrid.getSelectedRowKeys().length > 0)
-                                                    {
+                                                    {                                                        
                                                         this.grdLastTotalPay.devGrid.deleteRow(this.grdLastTotalPay.devGrid.getRowIndexByKey(this.grdLastTotalPay.devGrid.getSelectedRowKeys()[0]))
+                                                        this.lastPayRest.value = this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT') < 0 ? 0 : parseFloat(this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT')).toFixed(2)                                                            
+                                                        this.txtPopLastTotal.newStart = true;
                                                     }
                                                 }}>
                                                     Satır İptal
@@ -3837,33 +3846,75 @@ export default class posDoc extends React.PureComponent
                                         <div className="row py-1">                                            
                                             <div className="col-12">
                                                 <NbButton id={"btnPopLastTotalOkey"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
-                                                onClick={()=>
+                                                onClick={async()=>
                                                 {
                                                     let tmpTypeName = ""
-                                                    if(this.rbtnTotalPayType.value == 0)
-                                                        tmpTypeName = "ESC"
-                                                    else if(this.rbtnTotalPayType.value == 1)
-                                                        tmpTypeName = "CB"
-                                                    else if(this.rbtnTotalPayType.value == 2)
-                                                        tmpTypeName = "CHQ"
-                                                    else if(this.rbtnTotalPayType.value == 3)
-                                                        tmpTypeName = "T.R"
-                                                    else if(this.rbtnTotalPayType.value == 4)
-                                                        tmpTypeName = "BON D'AVOIR"
+                                                    let tmpAmount = Number(parseFloat(this.txtPopLastTotal.value).toFixed(2))
+                                                    let tmpChange = Number(parseFloat(this.lastPosSaleDt[0].GRAND_TOTAL - (this.lastPosPayDt.sum('AMOUNT') + tmpAmount)).toFixed(2))
 
-                                                    let tmpData = 
-                                                    {
-                                                        GUID : datatable.uuidv4(),
-                                                        CUSER : this.core.auth.data.CODE,
-                                                        POS_GUID : this.lastPosDt[0].GUID,
-                                                        PAY_TYPE : this.rbtnTotalPayType.value,
-                                                        PAY_TYPE_NAME : tmpTypeName,
-                                                        LINE_NO : this.lastPosPayDt.length,
-                                                        AMOUNT : this.txtPopLastTotal.value,
-                                                        CHANGE : 0
+                                                    if(this.rbtnTotalPayType.value == 0)
+                                                    {                                                        
+                                                        tmpTypeName = "ESC"
                                                     }
-                                                    this.lastPosPayDt.push(tmpData)
-                                                    this.txtPopLastTotal.newStart = true;
+                                                    else if(this.rbtnTotalPayType.value == 1)
+                                                    {
+                                                        tmpTypeName = "CB"
+                                                    }
+                                                    else if(this.rbtnTotalPayType.value == 2)
+                                                    {
+                                                        tmpTypeName = "CHQ"
+                                                    }
+                                                    else if(this.rbtnTotalPayType.value == 3)
+                                                    {
+                                                        tmpTypeName = "T.R"
+                                                    }
+                                                    else if(this.rbtnTotalPayType.value == 4)
+                                                    {
+                                                        tmpTypeName = "BON D'AVOIR"
+                                                    }
+                                                        
+                                                    if(tmpChange < 0)
+                                                    {
+                                                        if(this.rbtnTotalPayType.value == 0)
+                                                        {
+                                                            tmpChange = tmpChange * -1
+                                                            tmpAmount = this.txtPopLastTotal.value  - tmpChange
+                                                        }
+                                                        else
+                                                        {       
+                                                            let tmpConfObj =
+                                                            {
+                                                                id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                                                button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Girmiş olduğunuz ödeme tutarı,satış tutarından büyük olamaz !"}</div>)
+                                                            }
+                                                            await dialog(tmpConfObj);
+                                                            tmpAmount = (this.txtPopLastTotal.value  - tmpChange) * -1
+                                                            tmpChange = 0
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        tmpChange = 0
+                                                    }
+
+                                                    if(tmpAmount > 0)
+                                                    {
+                                                        let tmpData = 
+                                                        {
+                                                            GUID : datatable.uuidv4(),
+                                                            CUSER : this.core.auth.data.CODE,
+                                                            POS_GUID : this.lastPosDt[0].GUID,
+                                                            PAY_TYPE : this.rbtnTotalPayType.value,
+                                                            PAY_TYPE_NAME : tmpTypeName,
+                                                            LINE_NO : this.lastPosPayDt.length,
+                                                            AMOUNT : tmpAmount,
+                                                            CHANGE : tmpChange
+                                                        }
+                                                        this.lastPosPayDt.push(tmpData)
+                                                        this.lastPayRest.value = this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT') < 0 ? 0 : parseFloat(this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT')).toFixed(2)
+                                                        this.txtPopLastTotal.newStart = true;
+                                                    }
                                                 }}>
                                                     <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
                                                 </NbButton>
@@ -3876,7 +3927,7 @@ export default class posDoc extends React.PureComponent
                                         <NbButton id={"btnPopLastTotalSave"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
                                         onClick={async ()=>
                                         {
-                                            this.lastPosPayDt.delete()
+                                            //await this.lastPosPayDt.delete()
                                             await this.lastPosPayDt.update() 
                                         }}>
                                             <i className="text-white fa-solid fa-floppy-disk" style={{fontSize: "24px"}} />
