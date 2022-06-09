@@ -44,6 +44,8 @@ export default class posDoc extends React.PureComponent
         this.user = this.core.auth.data
         this.prmObj = new param(prm)
         this.acsObj = new access(acs);
+        // NUMBER İÇİN PARAMETREDEN PARA SEMBOLÜ ATANIYOR.
+        Number.money = this.prmObj.filter({ID:'MoneySymbol',TYPE:0}).getValue()
         
         this.posObj = new posCls()
         this.posDevice = new posDeviceCls();
@@ -99,7 +101,7 @@ export default class posDoc extends React.PureComponent
         this.init();        
     }
     async init()
-    {               
+    {     
         setInterval(()=>
         {
             this.lblTime.value = moment(new Date(),"HH:mm:ss").format("HH:mm:ss")
@@ -163,8 +165,13 @@ export default class posDoc extends React.PureComponent
     }
     async getDoc(pGuid)
     {
-        await this.posObj.load({GUID:pGuid})
-        await this.calcGrandTotal(false)
+        return new Promise(async resolve => 
+        {
+            this.posObj.clearAll()
+            await this.posObj.load({GUID:pGuid})
+            await this.calcGrandTotal(false)
+            resolve();
+        });        
     }
     getItemDb(pCode)
     {
@@ -544,22 +551,22 @@ export default class posDoc extends React.PureComponent
 
                 this.totalRowCount.value = this.posObj.posSale.dt().length
                 this.totalItemCount.value = this.posObj.posSale.dt().sum('QUANTITY',2)
-                this.totalLoyalty.value = parseFloat(this.posObj.dt()[0].LOYALTY).toFixed(2) + "€"
-                this.totalSub.value = parseFloat(this.posObj.dt()[0].FAMOUNT).toFixed(2) + "€"
-                this.totalVat.value = parseFloat(this.posObj.dt()[0].VAT).toFixed(2) + "€"
-                this.totalDiscount.value = "-" + parseFloat(this.posObj.dt()[0].DISCOUNT).toFixed(2) + "€"
-                this.totalGrand.value = parseFloat(tmpPayRest).toFixed(2) + "€"
-                this.disTotalSub.value = parseFloat(this.posObj.dt()[0].FAMOUNT).toFixed(2) + "€"
-                this.disTotalVat.value = parseFloat(this.posObj.dt()[0].VAT).toFixed(2) + "€"
-                this.disTotalDiscount.value = "-" + parseFloat(this.posObj.dt()[0].DISCOUNT).toFixed(2) + "€"
-                this.disTotalGrand.value = parseFloat(tmpPayRest).toFixed(2) + "€"
-                this.popTotalGrand.value = parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2) + "€"
-                this.popCardTotalGrand.value = parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2) + "€"
-                this.popCashTotalGrand.value = parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2) + "€"                
+                this.totalLoyalty.value = this.posObj.dt()[0].LOYALTY
+                this.totalSub.value = this.posObj.dt()[0].FAMOUNT
+                this.totalVat.value = this.posObj.dt()[0].VAT
+                this.totalDiscount.value = Number(this.posObj.dt()[0].DISCOUNT) * -1
+                this.totalGrand.value = tmpPayRest
+                this.disTotalSub.value = this.posObj.dt()[0].FAMOUNT
+                this.disTotalVat.value = this.posObj.dt()[0].VAT
+                this.disTotalDiscount.value = Number(this.posObj.dt()[0].DISCOUNT) * -1
+                this.disTotalGrand.value = tmpPayRest
+                this.popTotalGrand.value = this.posObj.dt()[0].TOTAL
+                this.popCardTotalGrand.value = this.posObj.dt()[0].TOTAL
+                this.popCashTotalGrand.value = this.posObj.dt()[0].TOTAL
                 
-                this.txtPopTotal.value = parseFloat(tmpPayRest).toFixed(2)
-                this.txtPopCardPay.value = parseFloat(tmpPayRest).toFixed(2)
-                this.txtPopCashPay.value = parseFloat(tmpPayRest).toFixed(2)   
+                this.txtPopTotal.value = tmpPayRest
+                this.txtPopCardPay.value = tmpPayRest
+                this.txtPopCashPay.value = tmpPayRest
                 
                 this.setState(
                 {
@@ -590,7 +597,7 @@ export default class posDoc extends React.PureComponent
             if(typeof pSave == 'undefined' || pSave)
             {
                 let tmpClose = await this.saleClosed(true,tmpPayRest,tmpPayChange)
-                await this.posObj.save()      
+                await this.posObj.save()                      
                 if(tmpClose)
                 {
                     this.init()
@@ -731,7 +738,7 @@ export default class posDoc extends React.PureComponent
         pRowData.DISCOUNT = tmpCalc.DISCOUNT
         pRowData.VAT = tmpCalc.VAT
         pRowData.TOTAL = tmpCalc.TOTAL
-
+        console.log(pRowData)
         await this.calcGrandTotal();
     } 
     async saleClosed(pPrint,pPayRest,pPayChange)
@@ -1026,7 +1033,7 @@ export default class posDoc extends React.PureComponent
         });
     }
     async delete()
-    {
+    {        
         this.posObj.dt().removeAt(0)
         await this.posObj.save()
         this.init()
@@ -1661,8 +1668,8 @@ export default class posDoc extends React.PureComponent
                                     <Column dataField="LDATE" caption={"LDATE"} width={40} alignment={"center"} dataType={"datetime"} format={"dd-MM-yyyy - HH:mm:ss SSSZ"} defaultSortOrder="desc" visible={false}/>
                                     <Column dataField="ITEM_NAME" caption={"ADI"} width={300}/>
                                     <Column dataField="QUANTITY" caption={"MIKTAR"} width={60}/>
-                                    <Column dataField="PRICE" caption={"FIYAT"} width={50} format={"#0.00"}/>
-                                    <Column dataField="AMOUNT" alignment={"right"} caption={"TUTAR"} width={60} format={"#0.00"}/>                                                
+                                    <Column dataField="PRICE" caption={"FIYAT"} width={50} format={"#0.00" + Number.money.sign}/>
+                                    <Column dataField="AMOUNT" alignment={"right"} caption={"TUTAR"} width={60} format={"#0.00" + Number.money.sign}/>                                                
                                 </NdGrid>
                             </div>
                         </div>
@@ -1679,36 +1686,36 @@ export default class posDoc extends React.PureComponent
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-start m-0">Sadakat İndirim : <span className="text-dark"><NbLabel id="totalLoyalty" parent={this} value={"0.00 €"}/></span></p>    
+                                        <p className="text-primary text-start m-0">Sadakat İndirim : <span className="text-dark"><NbLabel id="totalLoyalty" parent={this} value={"0.00"} format={"currency"}/></span></p>    
                                     </div>
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-start m-0">Ticket Rest.: <span className="text-dark">{this.state.cheqCount + '/' + parseFloat(this.state.cheqTotalAmount).toFixed(2)} €</span></p>    
+                                        <p className="text-primary text-start m-0">Ticket Rest.: <span className="text-dark">{this.state.cheqCount + '/' + parseFloat(this.state.cheqTotalAmount).toFixed(2)} + {Number.money.sign}</span></p>    
                                     </div>
                                 </div>
                             </div>
                             <div className="col-6">
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-end m-0">Ara Toplam : <span className="text-dark"><NbLabel id="totalSub" parent={this} value={"0.00 €"}/></span></p>    
+                                        <p className="text-primary text-end m-0">Ara Toplam : <span className="text-dark"><NbLabel id="totalSub" parent={this} value={"0.00"} format={"currency"}/></span></p>    
                                     </div>
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-end m-0">Kdv : <span className="text-dark"><NbLabel id="totalVat" parent={this} value={"0.00 €"}/></span></p>    
+                                        <p className="text-primary text-end m-0">Kdv : <span className="text-dark"><NbLabel id="totalVat" parent={this} value={"0.00 " + Number.money.sign}/></span></p>    
                                     </div>
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-end m-0">İndirim : <span className="text-dark"><NbLabel id="totalDiscount" parent={this} value={"0.00 €"}/></span></p>    
+                                        <p className="text-primary text-end m-0">İndirim : <span className="text-dark"><NbLabel id="totalDiscount" parent={this} value={"0.00"} format={"currency"}/></span></p>    
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div className="row">
                             <div className="col-12">
-                                <p className="fs-2 fw-bold text-center m-0"><NbLabel id="totalGrand" parent={this} value={"0.00 €"}/></p>
+                                <p className="fs-2 fw-bold text-center m-0"><NbLabel id="totalGrand" parent={this} value={"0.00"} format={"currency"}/></p>
                             </div>
                         </div>
                         {/* Button Console */}
@@ -2442,13 +2449,13 @@ export default class posDoc extends React.PureComponent
                                 {/* Top Total Indicator */}
                                 <div className="row">
                                     <div className="col-4">
-                                        <p className="text-primary text-start m-0">Toplam : <span className="text-dark"><NbLabel id="popTotalGrand" parent={this} value={"0.00 €"}/></span></p>    
+                                        <p className="text-primary text-start m-0">Toplam : <span className="text-dark"><NbLabel id="popTotalGrand" parent={this} value={"0.00"} format={"currency"}/></span></p>    
                                     </div>
                                     <div className="col-4">
-                                        <p className="text-primary text-start m-0">Kalan : <span className="text-dark">{parseFloat(this.state.payRest).toFixed(2)} €</span></p>    
+                                        <p className="text-primary text-start m-0">Kalan : <span className="text-dark">{Number(parseFloat(this.state.payRest).toFixed(2)).currency()} </span></p>    
                                     </div>
                                     <div className="col-4">
-                                        <p className="text-primary text-start m-0">Para Üstü : <span className="text-dark">{parseFloat(this.state.payChange).toFixed(2)}€</span></p>    
+                                        <p className="text-primary text-start m-0">Para Üstü : <span className="text-dark">{Number(parseFloat(this.state.payChange).toFixed(2)).currency()}</span></p>    
                                     </div>
                                 </div>
                                 <div className="row pt-2">
@@ -2504,7 +2511,7 @@ export default class posDoc extends React.PureComponent
                                                 }}
                                                 >
                                                     <Column dataField="PAY_TYPE_NAME" width={100} alignment={"center"}/>
-                                                    <Column dataField="AMOUNT" width={40}/>                                                
+                                                    <Column dataField="AMOUNT" width={40} format={"#0.00" + Number.money.sign}/>                                                
                                                 </NdGrid>
                                             </div>
                                         </div>
@@ -2658,10 +2665,10 @@ export default class posDoc extends React.PureComponent
                             <div className="col-12">
                                <div className="row">
                                     <div className="col-6">
-                                        <p className="text-primary text-start m-0">Toplam : <span className="text-dark"><NbLabel id="popCardTotalGrand" parent={this} value={"0.00 €"}/></span></p>    
+                                        <p className="text-primary text-start m-0">Toplam : <span className="text-dark"><NbLabel id="popCardTotalGrand" parent={this} value={"0.00"} format={"currency"}/></span></p>    
                                     </div>
                                     <div className="col-6">
-                                        <p className="text-primary text-start m-0">Kalan : <span className="text-dark">{parseFloat(this.state.payRest).toFixed(2)} €</span></p>    
+                                        <p className="text-primary text-start m-0">Kalan : <span className="text-dark">{Number(parseFloat(this.state.payRest).toFixed(2)).currency()}</span></p>    
                                     </div>
                                 </div> 
                             </div>
@@ -2707,10 +2714,10 @@ export default class posDoc extends React.PureComponent
                                 {/* Top Total Indicator */}
                                 <div className="row pb-3">
                                     <div className="col-6">
-                                        <p className="text-primary text-start m-0">Toplam : <span className="text-dark"><NbLabel id="popCashTotalGrand" parent={this} value={"0.00 €"}/></span></p>    
+                                        <p className="text-primary text-start m-0">Toplam : <span className="text-dark"><NbLabel id="popCashTotalGrand" parent={this} value={"0.00"} format={"currency"}/></span></p>    
                                     </div>
                                     <div className="col-6">
-                                        <p className="text-primary text-start m-0">Kalan : <span className="text-dark">{parseFloat(this.state.payRest).toFixed(2)} €</span></p>    
+                                        <p className="text-primary text-start m-0">Kalan : <span className="text-dark">{Number(parseFloat(this.state.payRest).toFixed(2)).currency()}</span></p>
                                     </div>
                                 </div>
                                 {/* txtPopCashPay */}
@@ -2912,7 +2919,7 @@ export default class posDoc extends React.PureComponent
                                 >
                                     <Column dataField="BARCODE" caption={"BARCODE"} width={150}/>
                                     <Column dataField="NAME" caption={"NAME"} width={500} />
-                                    <Column dataField="PRICE_SALE" caption={"PRICE"} width={100}/>
+                                    <Column dataField="PRICE_SALE" caption={"PRICE"} width={100} format={"#0.00" + Number.money.sign}/>
                                 </NdGrid>
                             </div>
                         </div>
@@ -2957,7 +2964,7 @@ export default class posDoc extends React.PureComponent
                                 >
                                     <Column dataField="LUSER_NAME" caption={"USER"} width={120} alignment={"center"}/>
                                     <Column dataField="LDATE" caption={"DATE"} width={150} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"} />
-                                    <Column dataField="TOTAL" caption={"AMOUNT"} width={100}/>
+                                    <Column dataField="TOTAL" caption={"AMOUNT"} width={100} format={"#0.00" + Number.money.sign}/>
                                     <Column dataField="DESCRIPTION" caption={"DESCRIPTION"} width={400}/>
                                 </NdGrid>
                             </div>
@@ -3038,26 +3045,26 @@ export default class posDoc extends React.PureComponent
                                 }}
                                 >
                                     <Column dataField="CODE" alignment={"center"} caption={"CODE"} width={550} />
-                                    <Column dataField="AMOUNT" alignment={"center"} caption={"AMOUNT"} width={100}/>
+                                    <Column dataField="AMOUNT" alignment={"center"} caption={"AMOUNT"} width={100} format={"#0.00" + Number.money.sign}/>
                                 </NdGrid>
                             </div>
                         </div>
                         {/* Last Read */}
                         <div className="row py-1">
                             <div className="col-12">
-                                <h3 className="text-primary text-center">Son Okutulan : <span className="text-dark">{parseFloat(this.state.cheqLastAmount).toFixed(2)} €</span></h3>    
+                                <h3 className="text-primary text-center">Son Okutulan : <span className="text-dark">{Number(parseFloat(this.state.cheqLastAmount).toFixed(2)).currency()}</span></h3>    
                             </div>
                         </div>
                         {/* Total Read */}
                         <div className="row py-1">
                             <div className="col-12">
-                                <h3 className="text-primary text-center">Toplam Okutulan : <span className="text-dark">{parseFloat(this.state.cheqTotalAmount).toFixed(2)} €</span></h3>    
+                                <h3 className="text-primary text-center">Toplam Okutulan : <span className="text-dark">{Number(parseFloat(this.state.cheqTotalAmount).toFixed(2)).currency()}</span></h3>    
                             </div>
                         </div>
                         {/* Rest */}
                         <div className="row py-1">
                             <div className="col-12">
-                                <h3 className="text-primary text-center">Kalan Ödeme : <span className="text-dark">{parseFloat(this.state.payRest).toFixed(2)} €</span></h3>    
+                                <h3 className="text-primary text-center">Kalan Ödeme : <span className="text-dark">{Number(parseFloat(this.state.payRest).toFixed(2)).currency()}</span></h3>    
                             </div>
                         </div>
                     </NdPopUp>
@@ -3125,7 +3132,7 @@ export default class posDoc extends React.PureComponent
                                         e.value = tmpVal
                                         e.text = tmpVal
                                         e.displayValue = tmpVal
-                                        e.cellElement.innerHTML  = tmpVal.toFixed(2) + "€"
+                                        e.cellElement.innerHTML  = Number(tmpVal.toFixed(2)).currency()
                                     }
                                 }}
                                 >
@@ -3133,10 +3140,10 @@ export default class posDoc extends React.PureComponent
                                     <Column dataField="LDATE" caption={"LDATE"} width={40} alignment={"center"} dataType={"datetime"} format={"dd-MM-yyyy - HH:mm:ss SSSZ"} defaultSortOrder="desc" visible={false}/>
                                     <Column dataField="ITEM_NAME" caption={"ADI"} width={430}/>
                                     <Column caption={"INDIRIM"} width={100} alignment={"right"}/>
-                                    <Column dataField="DISCOUNT" caption={"INDIRIM"} width={100} format={"#0.00€"}/>
-                                    <Column dataField="PRICE" caption={"FIYAT"} width={80} format={"#0.00€"}/>
-                                    <Column caption={"IND. FIYAT"} width={100} format={"#0.00"} alignment={"right"}/>
-                                    <Column dataField="AMOUNT" alignment={"right"} caption={"TUTAR"} width={100} format={"#0.00€"}/>                                                
+                                    <Column dataField="DISCOUNT" caption={"INDIRIM"} width={100} format={"#0.00" + Number.money.sign}/>
+                                    <Column dataField="PRICE" caption={"FIYAT"} width={80} format={"#0.00" + Number.money.sign}/>
+                                    <Column caption={"IND. FIYAT"} width={100} format={"#0.00" + Number.money.sign} alignment={"right"}/>
+                                    <Column dataField="AMOUNT" alignment={"right"} caption={"TUTAR"} width={100} format={"#0.00" + Number.money.sign}/>                                                
                                 </NdGrid>
                             </div>
                         </div>
@@ -3216,7 +3223,7 @@ export default class posDoc extends React.PureComponent
                                         let tmpDt = new datatable()
                                         tmpDt.import(this.grdDiscList.getSelectedData())                                    
 
-                                        let tmpResult = await this.popNumber.show('İndirim € - ' + tmpDt.sum('AMOUNT',2),tmpDt.sum('DISCOUNT',2))
+                                        let tmpResult = await this.popNumber.show('İndirim ' + Number.money.sign + ' - ' + tmpDt.sum('AMOUNT',2),tmpDt.sum('DISCOUNT',2))
                                         let tmpRate = Number(tmpDt.sum('AMOUNT')).rate2Num(tmpResult,2);
                                         
                                         if(typeof tmpResult == 'undefined')
@@ -3272,7 +3279,7 @@ export default class posDoc extends React.PureComponent
                                         await dialog(tmpConfObj);
                                     }                               
                                 }}>
-                                    <div>İndirim Uygula (€)</div>
+                                    <div>İndirim Uygula ({Number.money.sign})</div>
                                 </NbButton>
                             </div>
                         </div>
@@ -3280,24 +3287,24 @@ export default class posDoc extends React.PureComponent
                             <div className="col-6 offset-6">
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-end m-0">Ara Toplam : <span className="text-dark"><NbLabel id="disTotalSub" parent={this} value={"0.00 €"}/></span></p>    
+                                        <p className="text-primary text-end m-0">Ara Toplam : <span className="text-dark"><NbLabel id="disTotalSub" parent={this} value={"0.00"} format={"currency"}/></span></p>    
                                     </div>
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-end m-0">Kdv : <span className="text-dark"><NbLabel id="disTotalVat" parent={this} value={"0.00 €"}/></span></p>    
+                                        <p className="text-primary text-end m-0">Kdv : <span className="text-dark"><NbLabel id="disTotalVat" parent={this} value={"0.00"} format={"currency"}/></span></p>    
                                     </div>
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-end m-0">İndirim : <span className="text-dark"><NbLabel id="disTotalDiscount" parent={this} value={"0.00 €"}/></span></p>    
+                                        <p className="text-primary text-end m-0">İndirim : <span className="text-dark"><NbLabel id="disTotalDiscount" parent={this} value={"0.00"} format={"currency"}/></span></p>    
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div className="row pb-1">
                             <div className="col-12">
-                                <p className="fs-2 fw-bold text-center m-0"><NbLabel id="disTotalGrand" parent={this} value={"0.00 €"}/></p>
+                                <p className="fs-2 fw-bold text-center m-0"><NbLabel id="disTotalGrand" parent={this} value={"0.00"} format={"currency"}/></p>
                             </div>
                         </div>
                         <div className="row">
@@ -3345,7 +3352,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-start m-0">Puan Karşılığı € : <span className="text-dark"><NbLabel id="popCustomerPointToEuro" parent={this} value={"0 €"}/></span></p>    
+                                        <p className="text-primary text-start m-0">Puan Karşılığı € : <span className="text-dark"><NbLabel id="popCustomerPointToEuro" parent={this} value={"0"} format={"currency"}/></span></p>    
                                     </div>
                                 </div>
                             </div>
@@ -3356,7 +3363,7 @@ export default class posDoc extends React.PureComponent
                                 <NdTextBox id="txtPopLoyalty" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}
                                 onValueChanged={(e)=>
                                 {
-                                    this.popCustomerPointToEuro.value = Number(parseFloat(e.value / 100).toFixed(2)) + "€"
+                                    this.popCustomerPointToEuro.value = Number(parseFloat(e.value / 100).toFixed(2)) + Number.money.sign
                                 }}>     
                                 </NdTextBox> 
                             </div>
@@ -3609,9 +3616,9 @@ export default class posDoc extends React.PureComponent
                                     <Column dataField="REF" caption={"REF"} width={150}/>
                                     <Column dataField="CUSTOMER_NAME" caption={"MÜŞTERİ"} width={200}/> 
                                     <Column dataField="CUSER_NAME" caption={"KULLANICI"} width={100}/>
-                                    <Column dataField="DISCOUNT" caption={"INDIRIM"} width={100}/> 
-                                    <Column dataField="LOYALTY" caption={"SADAKAT"} width={100}/>
-                                    <Column dataField="AMOUNT" caption={"TUTAR"} width={100}/>                                             
+                                    <Column dataField="DISCOUNT" caption={"INDIRIM"} width={100} format={"#0.00" + Number.money.sign}/> 
+                                    <Column dataField="LOYALTY" caption={"SADAKAT"} width={100} format={"#0.00" + Number.money.sign}/>
+                                    <Column dataField="AMOUNT" caption={"TUTAR"} width={100} format={"#0.00" + Number.money.sign}/>                                             
                                 </NdGrid>
                             </div>
                         </div>
@@ -3645,8 +3652,8 @@ export default class posDoc extends React.PureComponent
                                     <Column dataField="BARCODE" caption={"BARKOD"} width={120}/>
                                     <Column dataField="ITEM_NAME" caption={"NAME"} width={200}/>    
                                     <Column dataField="QUANTITY" caption={"MIKTAR"} width={50}/>
-                                    <Column dataField="PRICE" caption={"FIYAT"} width={50}/> 
-                                    <Column dataField="AMOUNT" caption={"TUTAR"} width={100}/>
+                                    <Column dataField="PRICE" caption={"FIYAT"} width={50} format={"#0.00" + Number.money.sign}/> 
+                                    <Column dataField="AMOUNT" caption={"TUTAR"} width={100} format={"#0.00" + Number.money.sign}/>
                                 </NdGrid>
                             </div>
                             {/* grdLastPay */}
@@ -3680,15 +3687,15 @@ export default class posDoc extends React.PureComponent
                                     if(this.lastPosPayDt.length > 0)
                                     {
                                         this.rbtnTotalPayType.value = 0
-                                        this.lastPayRest.value = this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT') < 0 ? 0 : parseFloat(this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT')).toFixed(2)
+                                        this.lastPayRest.value = this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT') < 0 ? "0.00" + Number.money.sign : parseFloat(this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT')).toFixed(2) + Number.money.sign
                                         this.txtPopLastTotal.value = this.lastPosSaleDt[0].GRAND_TOTAL;
                                         this.popLastTotal.show()
                                     }
                                 }}
                                 >
                                     <Column dataField="PAY_TYPE_NAME" caption={"TIP"} width={200}/>
-                                    <Column dataField="AMOUNT" caption={"AMOUNT"} width={100}/>    
-                                    <Column dataField="CHANGE" caption={"CHANGE"} width={100}/>
+                                    <Column dataField="AMOUNT" caption={"AMOUNT"} width={100} format={"#0.00" + Number.money.sign}/>    
+                                    <Column dataField="CHANGE" caption={"CHANGE"} width={100} format={"#0.00" + Number.money.sign}/>
                                 </NdGrid>
                             </div>
                         </div>
@@ -3758,22 +3765,25 @@ export default class posDoc extends React.PureComponent
                                                 selection={{mode:"single"}}
                                                 onRowPrepared={(e)=>
                                                 {
-                                                    e.rowElement.style.fontSize = "13px";
+                                                    e.rowElement.style.fontSize = "16px";
+                                                    e.rowElement.style.fontWeight = "bold";
                                                 }}
                                                 onRowRemoved={async (e) =>
                                                 {
-                                                    await this.calcGrandTotal();
+                                                    
                                                 }}
                                                 >
                                                     <Editing confirmDelete={false}/>
-                                                    <Column dataField="PAY_TYPE_NAME" width={100} alignment={"center"}/>
-                                                    <Column dataField="AMOUNT" width={40}/>                                                
+                                                    <Column dataField="PAY_TYPE_NAME" width={200} alignment={"center"}/>
+                                                    <Column dataField="AMOUNT" width={60} format={"#.00" + Number.money.sign}/>  
+                                                    <Column dataField="CHANGE" width={60} format={"#.00" + Number.money.sign}/>                                                
                                                 </NdGrid>
                                             </div>
                                         </div>
+                                        {/* lastPayRest */}
                                         <div className="row pt-1">
                                             <div className="col-12">
-                                                <p className="fs-2 fw-bold text-center m-0"><NbLabel id="lastPayRest" parent={this} value={"0.00 €"}/></p>
+                                                <p className="fs-2 fw-bold text-center m-0"><NbLabel id="lastPayRest" parent={this} value={"0.00"} format={"currency"}/></p>
                                             </div>
                                         </div>
                                         {/* txtPopLastTotal */}
@@ -3824,8 +3834,8 @@ export default class posDoc extends React.PureComponent
                                                 {
                                                     if(this.grdLastTotalPay.devGrid.getSelectedRowKeys().length > 0)
                                                     {                                                        
-                                                        //this.grdLastTotalPay.devGrid.deleteRow(this.grdLastTotalPay.devGrid.getRowIndexByKey(this.grdLastTotalPay.devGrid.getSelectedRowKeys()[0]))
-                                                        this.lastPayRest.value = this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT') < 0 ? 0 : parseFloat(this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT')).toFixed(2)                                                            
+                                                        this.grdLastTotalPay.devGrid.deleteRow(this.grdLastTotalPay.devGrid.getRowIndexByKey(this.grdLastTotalPay.devGrid.getSelectedRowKeys()[0]))
+                                                        this.lastPayRest.value = this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT') < 0 ? "0.00" + Number.money.sign : parseFloat(this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT')).toFixed(2) + Number.money.sign
                                                         this.txtPopLastTotal.newStart = true;
                                                     }
                                                 }}>
@@ -3912,7 +3922,7 @@ export default class posDoc extends React.PureComponent
                                                             CHANGE : tmpChange
                                                         }
                                                         this.lastPosPayDt.push(tmpData)
-                                                        this.lastPayRest.value = this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT') < 0 ? 0 : parseFloat(this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT')).toFixed(2)
+                                                        this.lastPayRest.value = this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT') < 0 ? "0.00" + Number.money.sign : parseFloat(this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT')).toFixed(2) + Number.money.sign
                                                         this.txtPopLastTotal.newStart = true;
                                                     }
                                                 }}>
@@ -3927,8 +3937,9 @@ export default class posDoc extends React.PureComponent
                                         <NbButton id={"btnPopLastTotalSave"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
                                         onClick={async ()=>
                                         {
-                                            //await this.lastPosPayDt.delete()
-                                            //await this.lastPosPayDt.update() 
+                                            await this.lastPosPayDt.delete()
+                                            await this.lastPosPayDt.update() 
+                                            this.popLastTotal.hide()
                                         }}>
                                             <i className="text-white fa-solid fa-floppy-disk" style={{fontSize: "24px"}} />
                                         </NbButton>
@@ -3955,19 +3966,17 @@ export default class posDoc extends React.PureComponent
                                 }
                             }
                             
-                            let tmpResult = await this.popNumber.show('Fiyat',e.value)                                            
+                            let tmpResult = await this.popNumber.show('Fiyat',this.grdList.devGrid.getSelectedRowKeys()[0].PRICE)                                            
                             if(typeof tmpResult != 'undefined' && tmpResult != '')
                             {
-                                await this.descSave("PRICE DESC",e,this.grdList.devGrid.getSelectedRowKeys()[0].LINE_NO)
-
-                                if((await this.priceCheck(e.data,tmpResult)))
+                                await this.descSave("PRICE DESC",e,this.grdList.devGrid.getSelectedRowKeys()[0].LINE_NO)                                
+                                if((await this.priceCheck(this.grdList.devGrid.getSelectedRowKeys()[0],tmpResult)))
                                 {
-                                    let tmpData = {QUANTITY:e.key.QUANTITY,PRICE:tmpResult}
-                                    this.saleRowUpdate(e.key,tmpData)
+                                    let tmpData = {QUANTITY:this.grdList.devGrid.getSelectedRowKeys()[0].QUANTITY,PRICE:tmpResult}
+                                    this.saleRowUpdate(this.grdList.devGrid.getSelectedRowKeys()[0],tmpData)
                                 }
                             }                            
                         }
-                        this.init()
                     }}></NbPopDescboard>
                 </div>
                 {/* Park Description Popup */} 
@@ -4302,7 +4311,7 @@ export default class posDoc extends React.PureComponent
                                     }
                                 }}
                                 >
-                                    <Column dataField="AMOUNT" alignment={"center"} caption={"AMOUNT"} format={"#.00 €"} width={200}/>
+                                    <Column dataField="AMOUNT" alignment={"center"} caption={"AMOUNT"} format={"#.00 " + Number.money.sign} width={200}/>
                                     <Column dataField="COUNT" alignment={"center"} caption={"COUNT"} format={"### Qty"} width={200} />
                                 </NdGrid>
                             </div>

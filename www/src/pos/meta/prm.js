@@ -1,6 +1,22 @@
 export const prm =
 [
     //#region Pos
+    //Para Sembolu
+    {
+        TYPE : 0,
+        ID :"MoneySymbol",
+        VALUE : {code:"EUR",sign:"€"},
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Para Sembolü"
+        }
+    },
     //BarcodePattern
     {
         TYPE : 0,
@@ -62,7 +78,7 @@ export const prm =
         VALUE : 
         {
             disable:false,
-            minCharSize:25,
+            minCharSize:5,
             buttons:
             [
                 {

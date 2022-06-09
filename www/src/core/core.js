@@ -109,7 +109,7 @@ export class sql
             {
                 TmpQuery = arguments[0];
             }
-            console.log(TmpQuery)
+            
             //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 28.02.2022
             if(core.instance.offline)
             {
@@ -1606,4 +1606,9 @@ String.prototype.space = function(pLen,pType)
     {
         return tmpData.toString().padStart(pLen,' ');
     }
+}
+//* FORMAT */
+Number.prototype.currency = function()
+{
+    return new Intl.NumberFormat(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'), { style: 'currency', currency: typeof Number.money.code == 'undefined' ? 'EUR' : Number.money.code }).format(this)
 }
