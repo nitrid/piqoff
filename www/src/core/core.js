@@ -1607,8 +1607,13 @@ String.prototype.space = function(pLen,pType)
         return tmpData.toString().padStart(pLen,' ');
     }
 }
-//* FORMAT */
+//* FORMAT CURRENCY */
 Number.prototype.currency = function()
 {
     return new Intl.NumberFormat(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'), { style: 'currency', currency: typeof Number.money.code == 'undefined' ? 'EUR' : Number.money.code }).format(this)
+}
+//* FORMAT DECIMAL */
+Number.prototype.decimal = function()
+{    
+    return new Intl.NumberFormat(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'), { style: 'decimal',minimumIntegerDigits: 2,minimumFractionDigits: 2,maximumFractionDigits: 3}).format(this)
 }
