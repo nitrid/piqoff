@@ -1056,7 +1056,7 @@ export const prm =
 
     //#region Depo Sevk
      // negativeQuantity
-     {
+    {
         TYPE : 1,
         ID :"negativeQuantity",
         VALUE : 
@@ -1072,6 +1072,28 @@ export const prm =
             TYPE : "checkbox",
             PAGE_NAME : "Depolar Arası Transfer",
             CAPTION : "Eksiye Düşemeye İzin Verme"
+        }
+    },
+    //#endregion
+
+    //#region Kayıp Ürün
+     // Zorunlu Açıklama
+     {
+        TYPE : 1,
+        ID :"descriptionControl",
+        VALUE : 
+        {
+            value : true
+        },
+        SPECIAL : "",
+        PAGE : "stk_02_003",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Kayıp Ürün Fiçi",
+            CAPTION : "Satır Açıklamalarını Zorunlu Kıl"
         }
     },
     //#endregion

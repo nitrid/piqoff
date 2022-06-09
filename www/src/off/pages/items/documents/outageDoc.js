@@ -441,6 +441,25 @@ export default class outageDoc extends React.Component
                                             await dialog(tmpConfObj);
                                             return
                                         }
+                                        let tmpDatas = this.prmObj.filter({ID:'descriptionControl',USERS:this.user.CODE}).getValue()
+                                        if(typeof tmpDatas != 'undefined' && tmpDatas.value ==  true)
+                                        {
+                                            for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+                                            {
+                                                if(this.docObj.docItems.dt()[i].DESCRIPTION == '')
+                                                {
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgEmpDescription',showTitle:true,title:this.t("msgEmpDescription.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.t("msgEmpDescription.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgEmpDescription.msg")}</div>)
+                                                    }
+                                        
+                                                    await dialog(tmpConfObj);
+                                                    return
+                                                }
+                                            }
+                                        }
                                         if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                         {
                                             await this.grdOutwasItems.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
@@ -865,7 +884,9 @@ export default class outageDoc extends React.Component
                                         <Column dataField="ITEM_NAME" caption={this.t("grdOutwasItems.clmItemName")} width={350} />
                                         <Column dataField="QUANTITY" caption={this.t("grdOutwasItems.clmQuantity")} dataType={'number'} width={150}/>
                                         <Column dataField="COST_PRICE" caption={this.t("grdOutwasItems.clmCostPrice")} dataType={'number'} width={150}/>
-                                        <Column dataField="DESCRIPTION" caption={this.t("grdOutwasItems.clmDescription")} />
+                                        <Column dataField="DESCRIPTION" caption={this.t("grdOutwasItems.clmDescription")} >
+                                            <RequiredRule />
+                                        </Column>
                                     </NdGrid>
                                     <ContextMenu
                                     dataSource={this.rightItems}

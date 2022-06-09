@@ -18,6 +18,7 @@ export const langTr =
     msgNotAccess :"Kullanıcının Giriş Yetkisi Yok.",
     msgInvalidUser : "Kullanıcı Adı veya Şifre Hatalı.",
     txtCardRead :"Lütfen Kullanıcı Kartınızı Okutunuz.",
+    checkAll :"Tümünü Uygula",
     menu:
     {
         stk: "Stok",                
@@ -825,6 +826,12 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
+        },
+        msgEmpDescription:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Satır Açıklamaları Boş Geçilemez !"
         },
         msgSave:
         {
@@ -2009,7 +2016,7 @@ export const langTr =
             title: "Dikkat",
             btn01: "Devam Et",
             btn02: "Vazgeç",
-            msg: "Seçilen Ürün Cariye Tanımlı Değil !"
+            msg: "Seçilen Ürün Cariye Tanımlı Değil ! Devam Etmek İstiyormusunuz"
         },
         msgNotCustomer:
         {
@@ -3220,7 +3227,7 @@ export const langTr =
             title: "Dikkat",
             btn01: "Devam Et",
             btn02: "Vazgeç",
-            msg: "Seçilen Ürün Cariye Tanımlı Değil !"
+            msg: "Seçilen Ürün Cariye Tanımlı Değil ! Devam Etmek İstiyormusunuz"
         },
         msgNotCustomer:
         {
@@ -3973,7 +3980,7 @@ export const langTr =
             title: "Dikkat",
             btn01: "Devam Et",
             btn02: "Vazgeç",
-            msg: "Seçilen Ürün Cariye Tanımlı Değil !"
+            msg: "Seçilen Ürün Cariye Tanımlı Değil ! Devam Etmek İstiyormusunuz"
         },
         msgNotCustomer:
         {
@@ -5532,7 +5539,7 @@ export const langTr =
             title: "Dikkat",
             btn01: "Devam Et",
             btn02: "Vazgeç",
-            msg: "Seçilen Ürün Cariye Tanımlı Değil !"
+            msg: "Seçilen Ürün Cariye Tanımlı Değil ! Devam Etmek İstiyormusunuz"
         },
         msgNotCustomer:
         {
