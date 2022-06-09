@@ -55,11 +55,161 @@ export const prm =
             CAPTION : "Ticket Rest. Süresi"
         }
     },
+    //Fiyat Açıklama
+    {
+        TYPE : 0,
+        ID :"PriceDescription",
+        VALUE : 
+        {
+            disable:false,
+            minCharSize:25,
+            buttons:
+            [
+                {
+                    id:"btn01",
+                    title:"Ürün Barkodu Çift Okutulmuş",
+                    text:"Ürün Barkodu Çift Okutulmuş"
+                },
+                {
+                    id:"btn02",
+                    title:"Ürün Arızalı Yada Defolu",
+                    text:"Ürün Arızalı Yada Defolu"
+                },
+                {
+                    id:"btn03",
+                    title:"Müşteri Ürünü Beğenmedi",
+                    text:"Müşteri Ürünü Beğenmedi"
+                },
+                {
+                    id:"btn04",
+                    title:"Müşteri Yanlış Ürünü Aldı",
+                    text:"Müşteri Yanlış Ürünü Aldı"
+                },
+                {
+                    id:"btn05",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn06",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn07",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn08",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn09",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn10",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn11",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn12",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                }
+            ]
+        },
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "İade Açıklama"
+        }
+    },
     //İade Açıklama
     {
         TYPE : 0,
         ID :"RebateDescription",
-        VALUE : true,
+        VALUE : 
+        {
+            disable:false,
+            minCharSize:25,
+            buttons:
+            [
+                {
+                    id:"btn01",
+                    title:"Ürün Barkodu Çift Okutulmuş",
+                    text:"Ürün Barkodu Çift Okutulmuş"
+                },
+                {
+                    id:"btn02",
+                    title:"Ürün Arızalı Yada Defolu",
+                    text:"Ürün Arızalı Yada Defolu"
+                },
+                {
+                    id:"btn03",
+                    title:"Müşteri Ürünü Beğenmedi",
+                    text:"Müşteri Ürünü Beğenmedi"
+                },
+                {
+                    id:"btn04",
+                    title:"Müşteri Yanlış Ürünü Aldı",
+                    text:"Müşteri Yanlış Ürünü Aldı"
+                },
+                {
+                    id:"btn05",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn06",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn07",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn08",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn09",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn10",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn11",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn12",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                }
+            ]
+        },
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",
@@ -77,24 +227,69 @@ export const prm =
         ID :"DocDelDescription",
         VALUE : 
         {
-            disable:true,
+            disable:false,
+            minCharSize:25,
             buttons:
             [
                 {
                     id:"btn01",
+                    title:"Alış Verişten Vazgeçti",
                     text:"Alış Verişten Vazgeçti"
                 },
                 {
                     id:"btn02",
+                    title:"Yetersiz Ödeme",
                     text:"Yetersiz Ödeme"
                 },
                 {
                     id:"btn03",
+                    title:"K.Karti Yetersiz Bakiye",
                     text:"K.Karti Yetersiz Bakiye"
                 },
                 {
                     id:"btn04",
+                    title:"Test Amaçlı",
                     text:"Test Amaçlı"
+                },
+                {
+                    id:"btn05",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn06",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn07",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn08",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn09",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn10",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn11",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn12",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
                 }
             ]
         },
@@ -115,24 +310,69 @@ export const prm =
         ID :"DocRowDelDescription",
         VALUE : 
         {
-            disable:true,
+            disable:false,
+            minCharSize:25,
             buttons:
             [
                 {
                     id:"btn01",
+                    title:"Üründen Vazgeçti",
                     text:"Üründen Vazgeçti"
                 },
                 {
                     id:"btn02",
+                    title:"Fiyat Hatalı",
                     text:"Fiyat Hatalı"
                 },
                 {
                     id:"btn03",
+                    title:"Hatalı Ürün",
                     text:"Hatalı Ürün"
                 },
                 {
                     id:"btn04",
+                    title:"Test Amaçlı Okutm",
                     text:"Test Amaçlı Okutma"
+                },
+                {
+                    id:"btn05",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn06",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn07",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn08",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn09",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn10",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn11",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn12",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
                 }
             ]
         },
@@ -153,7 +393,8 @@ export const prm =
         ID :"ParkDelDescription",
         VALUE : 
         {
-            disable:true,
+            disable:false,
+            minCharSize:25,
             buttons:
             [
                 {
@@ -178,43 +419,43 @@ export const prm =
                 },
                 {
                     id:"btn05",
-                    title:"Yetersiz Ödeme",
-                    text:"Yetersiz Ödeme"
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
                 },
                 {
                     id:"btn06",
-                    title:"Ek Alış Veriş",
-                    text:"Ek Alış Veriş"
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
                 },
                 {
                     id:"btn07",
-                    title:"Mağaza Personeli",
-                    text:"Mağaza Personeli"
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
                 },
                 {
                     id:"btn08",
-                    title:"K.Kartı Geçmedi",
-                    text:"K.Kartı Geçmedi"
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
                 },
                 {
                     id:"btn09",
-                    title:"Yetersiz Ödeme",
-                    text:"Yetersiz Ödeme"
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
                 },
                 {
                     id:"btn10",
-                    title:"Ek Alış Veriş",
-                    text:"Ek Alış Veriş"
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
                 },
                 {
                     id:"btn11",
-                    title:"Mağaza Personeli",
-                    text:"Mağaza Personeli"
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
                 },
                 {
                     id:"btn12",
-                    title:"K.Kartı Geçmedi",
-                    text:"K.Kartı Geçmedi"
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
                 }
             ]
         },

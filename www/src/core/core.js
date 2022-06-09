@@ -109,6 +109,7 @@ export class sql
             {
                 TmpQuery = arguments[0];
             }
+            console.log(TmpQuery)
             //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 28.02.2022
             if(core.instance.offline)
             {

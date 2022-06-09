@@ -49,6 +49,10 @@ export default class posDoc extends React.PureComponent
         this.posDevice = new posDeviceCls();
         this.parkDt = new datatable();
         this.cheqDt = new datatable();
+        this.lastPosDt = new datatable();
+        this.lastPosSaleDt = new datatable();
+        this.lastPosPayDt = new datatable();
+
         this.loading = React.createRef();
 
         this.state =
@@ -100,7 +104,7 @@ export default class posDoc extends React.PureComponent
         {
             this.lblTime.value = moment(new Date(),"HH:mm:ss").format("HH:mm:ss")
             this.lblDate.value = new Date().toLocaleDateString('tr-TR',{ year: 'numeric', month: 'numeric', day: 'numeric' })
-        },1000)
+        },1000)        
 
         this.posObj.clearAll()
         await this.prmObj.load({PAGE:"pos",APP:'POS'})
@@ -115,6 +119,8 @@ export default class posDoc extends React.PureComponent
         
         await this.grdList.dataRefresh({source:this.posObj.posSale.dt()});
         await this.grdPay.dataRefresh({source:this.posObj.posPay.dt()});
+
+        await this.grdLastPos.dataRefresh({source:this.lastPosDt});
 
         this.cheqDt.selectCmd = 
         {
@@ -1646,26 +1652,7 @@ export default class posDoc extends React.PureComponent
                                     {
                                         if(this.prmObj.filter({ID:'PriceEdit',TYPE:0}).getValue() == true)
                                         {
-                                            if(typeof this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog != 'undefined' && this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog.type != -1)
-                                            {   
-                                                let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog.type})
-                                                if(!tmpResult)
-                                                {
-                                                    return
-                                                }
-                                            }
-                                            
-                                            let tmpResult = await this.popNumber.show('Fiyat',e.value)                                            
-                                            if(typeof tmpResult != 'undefined' && tmpResult != '')
-                                            {
-                                                console.log(1)
-                                                console.log(e.data)
-                                                if((await this.priceCheck(e.data,tmpResult)))
-                                                {
-                                                    let tmpData = {QUANTITY:e.key.QUANTITY,PRICE:tmpResult}
-                                                    this.saleRowUpdate(e.key,tmpData)
-                                                }
-                                            }
+                                            this.popPriceDesc.show()
                                         }
                                     }
                                 }}
@@ -2138,6 +2125,18 @@ export default class posDoc extends React.PureComponent
                                                 {
                                                     if(this.grdList.devGrid.getSelectedRowKeys().length > 0)
                                                     {
+                                                        if(this.posObj.posPay.dt().length > 0)
+                                                        {
+                                                            let tmpConfObj =
+                                                            {
+                                                                id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                                                button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Satır silmeden önce lütfen tüm ödemeleri siliniz !"}</div>)
+                                                            }
+                                                            await dialog(tmpConfObj);
+                                                            return
+                                                        }
+
                                                         let tmpConfObj =
                                                         {
                                                             id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
@@ -2387,7 +2386,9 @@ export default class posDoc extends React.PureComponent
                                     <div className="col px-1">
                                         <NbButton id={"btnPrint"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
                                         onClick={()=>
-                                        {                                                        
+                                        {     
+                                            this.dtPopLastSaleStartDate.value = moment(new Date())
+                                            this.dtPopLastSaleFinishDate.value = moment(new Date())
                                             this.popLastSaleList.show();
                                         }}>
                                             <i className="text-white fa-solid fa-print" style={{fontSize: "24px"}} />
@@ -2619,7 +2620,11 @@ export default class posDoc extends React.PureComponent
                                             {/* Okey */}
                                             <div className="col-6">
                                                 <NbButton id={"btnPopTotalOkey"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
-                                                onClick={()=>{this.payAdd(this.rbtnPayType.value,this.txtPopTotal.value)}}>
+                                                onClick={()=>
+                                                {
+                                                    this.payAdd(this.rbtnPayType.value,this.txtPopTotal.value);
+                                                    this.txtPopTotal.newStart = true;
+                                                }}>
                                                     <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
                                                 </NbButton>
                                             </div>
@@ -3065,7 +3070,7 @@ export default class posDoc extends React.PureComponent
                 <div>
                     <NdPopUp parent={this} id={"popDiscount"} 
                     visible={false}                        
-                    showCloseButton={true}
+                    showCloseButton={false}
                     showTitle={true}
                     title={"İskonto"}
                     container={"#root"} 
@@ -3188,6 +3193,16 @@ export default class posDoc extends React.PureComponent
                                         }
                                         await this.calcGrandTotal();
                                     }
+                                    else
+                                    {
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Lütfen bir ya da  bir den fazla satır seçiniz !"}</div>)
+                                        }
+                                        await dialog(tmpConfObj);
+                                    }
                                 }}>
                                     <div>İndirim Uygula (%)</div>
                                 </NbButton>
@@ -3196,53 +3211,66 @@ export default class posDoc extends React.PureComponent
                                 <NbButton id={"btnPopDiscountAmount"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"50px",width:"100%"}}
                                 onClick={async ()=>
                                 {
-                                    let tmpDt = new datatable()
-                                    tmpDt.import(this.grdDiscList.getSelectedData())                                    
+                                    if(this.grdDiscList.getSelectedData().length > 0)
+                                    {
+                                        let tmpDt = new datatable()
+                                        tmpDt.import(this.grdDiscList.getSelectedData())                                    
 
-                                    let tmpResult = await this.popNumber.show('İndirim € - ' + tmpDt.sum('AMOUNT',2),tmpDt.sum('DISCOUNT',2))
-                                    let tmpRate = Number(tmpDt.sum('AMOUNT')).rate2Num(tmpResult,2);
-                                    
-                                    if(typeof tmpResult == 'undefined')
-                                    {
-                                        return
-                                    }
-                                    if(this.posObj.posPay.dt().length > 0)
-                                    {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:"Tamam",location:'before'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"İndirim Yapmadan Önce Lütfen Tüm Ödemeleri Siliniz !"}</div>)
-                                        }
-                                        await dialog(tmpConfObj);
-                                        return
-                                    }
-                                    if(Number(tmpDt.sum('AMOUNT')) < Number(tmpResult))
-                                    {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:"Tamam",location:'before'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Tutar dan fazla iskonto yapılamaz !"}</div>)
-                                        }
-                                        await dialog(tmpConfObj);
-                                        return;
-                                    }
-
-                                    for (let i = 0; i < this.grdDiscList.getSelectedData().length; i++) 
-                                    {
-                                        let tmpDiscount = Number(this.grdDiscList.getSelectedData()[i].AMOUNT).rateInc(tmpRate,2)
-                                                    
-                                        let tmpData = this.grdDiscList.getSelectedData()[i]
-                                        let tmpCalc = this.calcSaleTotal(tmpData.PRICE,tmpData.QUANTITY,tmpDiscount,tmpData.LOYALTY,tmpData.VAT_RATE)
+                                        let tmpResult = await this.popNumber.show('İndirim € - ' + tmpDt.sum('AMOUNT',2),tmpDt.sum('DISCOUNT',2))
+                                        let tmpRate = Number(tmpDt.sum('AMOUNT')).rate2Num(tmpResult,2);
                                         
-                                        this.grdDiscList.getSelectedData()[i].FAMOUNT = tmpCalc.FAMOUNT
-                                        this.grdDiscList.getSelectedData()[i].AMOUNT = tmpCalc.AMOUNT
-                                        this.grdDiscList.getSelectedData()[i].DISCOUNT = tmpDiscount
-                                        this.grdDiscList.getSelectedData()[i].VAT = tmpCalc.VAT
-                                        this.grdDiscList.getSelectedData()[i].TOTAL = tmpCalc.TOTAL
-                                    }
-                                    await this.calcGrandTotal();                                    
+                                        if(typeof tmpResult == 'undefined')
+                                        {
+                                            return
+                                        }
+                                        if(this.posObj.posPay.dt().length > 0)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"İndirim Yapmadan Önce Lütfen Tüm Ödemeleri Siliniz !"}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
+                                        if(Number(tmpDt.sum('AMOUNT')) < Number(tmpResult))
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Tutar dan fazla iskonto yapılamaz !"}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                            return;
+                                        }
+
+                                        for (let i = 0; i < this.grdDiscList.getSelectedData().length; i++) 
+                                        {
+                                            let tmpDiscount = Number(this.grdDiscList.getSelectedData()[i].AMOUNT).rateInc(tmpRate,2)
+                                                        
+                                            let tmpData = this.grdDiscList.getSelectedData()[i]
+                                            let tmpCalc = this.calcSaleTotal(tmpData.PRICE,tmpData.QUANTITY,tmpDiscount,tmpData.LOYALTY,tmpData.VAT_RATE)
+                                            
+                                            this.grdDiscList.getSelectedData()[i].FAMOUNT = tmpCalc.FAMOUNT
+                                            this.grdDiscList.getSelectedData()[i].AMOUNT = tmpCalc.AMOUNT
+                                            this.grdDiscList.getSelectedData()[i].DISCOUNT = tmpDiscount
+                                            this.grdDiscList.getSelectedData()[i].VAT = tmpCalc.VAT
+                                            this.grdDiscList.getSelectedData()[i].TOTAL = tmpCalc.TOTAL
+                                        }
+                                        await this.calcGrandTotal();
+                                    }  
+                                    else
+                                    {
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Lütfen bir ya da  bir den fazla satır seçiniz !"}</div>)
+                                        }
+                                        await dialog(tmpConfObj);
+                                    }                               
                                 }}>
                                     <div>İndirim Uygula (€)</div>
                                 </NbButton>
@@ -3267,9 +3295,20 @@ export default class posDoc extends React.PureComponent
                                 </div>
                             </div>
                         </div>
-                        <div className="row">
+                        <div className="row pb-1">
                             <div className="col-12">
                                 <p className="fs-2 fw-bold text-center m-0"><NbLabel id="disTotalGrand" parent={this} value={"0.00 €"}/></p>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-12">
+                                <NbButton id={"btnPopDiscountExit"} parent={this} className="form-group btn btn-danger btn-block my-1" style={{height:"50px",width:"100%"}}
+                                onClick={async ()=>
+                                {
+                                    this.popDiscount.hide()
+                                }}>
+                                    <i className="text-white fa-solid fa-arrow-right-from-bracket" style={{fontSize: "24px"}} />
+                                </NbButton>
                             </div>
                         </div>
                     </NdPopUp>
@@ -3410,7 +3449,10 @@ export default class posDoc extends React.PureComponent
                 </div>
                 {/* Last Sale List Popup */} 
                 <div>
-                    <NbPopUp id="popLastSaleList" parent={this} title={"Son Satış Listesi"} fullscreen={true}>
+                    <NdPopUp id="popLastSaleList" parent={this} title={"Son Satış Listesi"} width={"100%"} height={"100%"}
+                    showCloseButton={true}
+                    showTitle={true}
+                    >
                         {/* Tool Button Group */} 
                         <div className="row pb-1">
                             <div className="offset-10 col-2">
@@ -3440,26 +3482,142 @@ export default class posDoc extends React.PureComponent
                         <div className="row py-1">
                             {/* dtPopLastSaleStartDate */} 
                             <div className="col-2">
-                                <NdDatePicker simple={true}  parent={this} id={"dtPopLastSaleStartDate"}/>
+                                <NdDatePicker simple={true} parent={this} id={"dtPopLastSaleStartDate"}/>
                             </div>
                             {/* dtPopLastSaleFinishDate */} 
                             <div className="col-2">
-                                <NdDatePicker simple={true}  parent={this} id={"dtPopLastSaleFinishDate"}/>
+                                <NdDatePicker simple={true} parent={this} id={"dtPopLastSaleFinishDate"}/>
                             </div>
                             {/* cmbPopLastSalePayType */} 
                             <div className="col-2">
-                                <NdSelectBox simple={true} parent={this} id="cmbPopLastSalePayType"/>
+                                <NdSelectBox simple={true} parent={this} id="cmbPopLastSalePayType" displayExpr={'NAME'} valueExpr={'ID'} value={-1}
+                                data={{source:[{ID:-1,NAME:"Tümü"},{ID:0,NAME:"Espece"},{ID:1,NAME:"Carte Bancaire TPE"},{ID:2,NAME:"Cheque"},{ID:3,NAME:"CHEQue"},{ID:4,NAME:"Bon D'Avoir"}]}}/>
                             </div>
                             {/* btnPopLastSaleSearch */} 
                             <div className="col-1">
-                                <NbButton id={"btnPopLastSaleSearch"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"36px",width:"100%"}}>
+                                <NbButton id={"btnPopLastSaleSearch"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"36px",width:"100%"}}
+                                onClick={async()=>
+                                {
+                                    this.lastPosDt.selectCmd = 
+                                    {
+                                        query:  "SELECT *, " +
+                                                "SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,36) AS REF " + 
+                                                "FROM POS_VW_01 WHERE DOC_DATE >= @START_DATE AND DOC_DATE <= @FINISH_DATE AND " +
+                                                "((ISNULL((SELECT TOP 1 PAY.TYPE FROM POS_PAYMENT AS PAY WHERE PAY.POS = POS_VW_01.GUID),0) = @TYPE) OR (@TYPE = -1)) ",
+                                        param:  ["START_DATE:date","FINISH_DATE:date","TYPE:int"],
+                                        value:  [this.dtPopLastSaleStartDate.value,this.dtPopLastSaleFinishDate.value,this.cmbPopLastSalePayType.value]
+                                    }
+                                    
+                                    await this.lastPosDt.refresh()
+                                    await this.grdLastPos.dataRefresh({source:this.lastPosDt});                                    
+                                }}>
                                     <i className="text-white fa-solid fa-magnifying-glass" style={{fontSize: "16px"}} />
                                 </NbButton>
                             </div>
                         </div>
-                        {/* grdLastSale */}
+                        {/* grdLastPos */}
                         <div className="row py-1">
                             <div className="col-12">
+                                <NdGrid parent={this} id={"grdLastPos"} 
+                                showBorders={true} 
+                                columnsAutoWidth={true} 
+                                allowColumnReordering={true} 
+                                allowColumnResizing={true} 
+                                showRowLines={true}
+                                showColumnLines={true}
+                                height={"250px"} 
+                                width={"100%"}
+                                dbApply={false}
+                                selection={{mode:"single"}}
+                                onRowPrepared={(e)=>
+                                {
+                                    if(e.rowType == "header")
+                                    {
+                                        e.rowElement.style.fontWeight = "bold";    
+                                    }
+                                    e.rowElement.style.fontSize = "13px";
+                                }}
+                                onCellPrepared={(e)=>
+                                {
+                                    e.cellElement.style.padding = "4px"
+                                }}
+                                onSelectionChanged={async(e)=>
+                                {
+                                    if(e.selectedRowKeys.length > 0)
+                                    {
+                                        this.lastPosSaleDt.selectCmd = 
+                                        {
+                                            query:  "SELECT * FROM POS_SALE_VW_01 WHERE POS_GUID = @GUID ",
+                                            param:  ["GUID:string|50"],
+                                            value:  [e.selectedRowKeys[0].GUID]
+                                        }
+                                        
+                                        await this.lastPosSaleDt.refresh()
+                                        await this.grdLastSale.dataRefresh({source:this.lastPosSaleDt});
+
+                                        this.lastPosPayDt.selectCmd = 
+                                        {
+                                            query:  "SELECT * FROM POS_PAYMENT_VW_01 WHERE POS_GUID = @GUID ",
+                                            param:  ["GUID:string|50"],
+                                            value:  [e.selectedRowKeys[0].GUID]
+                                        }
+                                        this.lastPosPayDt.insertCmd = 
+                                        {
+                                            query : "EXEC [dbo].[PRD_POS_PAYMENT_INSERT] " + 
+                                                    "@GUID = @PGUID, " +
+                                                    "@CUSER = @PCUSER, " + 
+                                                    "@POS = @PPOS, " +
+                                                    "@TYPE = @PTYPE, " +
+                                                    "@LINE_NO = @PLINE_NO, " +
+                                                    "@AMOUNT = @PAMOUNT, " + 
+                                                    "@CHANGE = @PCHANGE ", 
+                                            param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
+                                            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE']
+                                        } 
+                                        this.lastPosPayDt.updateCmd = 
+                                        {
+                                            query : "EXEC [dbo].[PRD_POS_PAYMENT_UPDATE] " + 
+                                                    "@GUID = @PGUID, " +
+                                                    "@CUSER = @PCUSER, " + 
+                                                    "@POS = @PPOS, " +
+                                                    "@TYPE = @PTYPE, " +
+                                                    "@LINE_NO = @PLINE_NO, " +
+                                                    "@AMOUNT = @PAMOUNT, " + 
+                                                    "@CHANGE = @PCHANGE ", 
+                                            param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
+                                            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE']
+                                        } 
+                                        this.lastPosPayDt.deleteCmd = 
+                                        {
+                                            query : "EXEC [dbo].[PRD_POS_PAYMENT_DELETE] " + 
+                                                    "@CUSER = @PCUSER, " + 
+                                                    "@UPDATE = 1, " +
+                                                    "@GUID = @PGUID, " + 
+                                                    "@POS_GUID = @PPOS_GUID ", 
+                                            param : ['PCUSER:string|25','PGUID:string|50','PPOS_GUID:string|50'],
+                                            dataprm : ['CUSER','GUID','POS_GUID']
+                                        }
+                                        await this.lastPosPayDt.refresh()
+                                        await this.grdLastPay.dataRefresh({source:this.lastPosPayDt});
+                                        await this.grdLastTotalPay.dataRefresh({source:this.lastPosPayDt});
+
+                                        this.txtPopLastTotal.newStart = true;
+                                    }
+                                }}
+                                >
+                                    <Column dataField="LDATE" caption={"TARIH"} width={200} alignment={"center"} dataType={"datetime"} format={"dd-MM-yyyy - HH:mm:ss SSSZ"}/>
+                                    <Column dataField="REF" caption={"REF"} width={150}/>
+                                    <Column dataField="CUSTOMER_NAME" caption={"MÜŞTERİ"} width={200}/> 
+                                    <Column dataField="CUSER_NAME" caption={"KULLANICI"} width={100}/>
+                                    <Column dataField="DISCOUNT" caption={"INDIRIM"} width={100}/> 
+                                    <Column dataField="LOYALTY" caption={"SADAKAT"} width={100}/>
+                                    <Column dataField="AMOUNT" caption={"TUTAR"} width={100}/>                                             
+                                </NdGrid>
+                            </div>
+                        </div>
+                        <div className="row py-1">
+                            {/* grdLastSale */}
+                            <div className="col-6">
                                 <NdGrid parent={this} id={"grdLastSale"} 
                                 showBorders={true} 
                                 columnsAutoWidth={true} 
@@ -3471,81 +3629,29 @@ export default class posDoc extends React.PureComponent
                                 width={"100%"}
                                 dbApply={false}
                                 data={{source:[{TYPE_NAME:"ESC",AMOUNT:100.99}]}}
-                                onRowPrepared=
+                                onRowPrepared={(e)=>
                                 {
-                                    (e)=>
+                                    if(e.rowType == "header")
                                     {
-                                        if(e.rowType == "header")
-                                        {
-                                            e.rowElement.style.fontWeight = "bold";    
-                                        }
-                                        e.rowElement.style.fontSize = "13px";
+                                        e.rowElement.style.fontWeight = "bold";    
                                     }
-                                }
-                                onCellPrepared=
+                                    e.rowElement.style.fontSize = "13px";
+                                }}
+                                onCellPrepared={(e)=>
                                 {
-                                    (e)=>
-                                    {
-                                        e.cellElement.style.padding = "4px"
-                                    }
-                                }
+                                    e.cellElement.style.padding = "4px"
+                                }}
                                 >
-                                    <Column dataField="XX1" caption={"TARIH"} width={100}/>
-                                    <Column dataField="X11" caption={"SAAT"} width={100}/>    
-                                    <Column dataField="XX2" caption={"SERI"} width={40}/>
-                                    <Column dataField="XX3" caption={"SIRA"} width={40}/> 
-                                    <Column dataField="XX4" caption={"SATIR"} width={40}/>
-                                    <Column dataField="XX5" caption={"MÜŞTERİ"} width={200}/> 
-                                    <Column dataField="XX6" caption={"KULLANICI"} width={100}/>
-                                    <Column dataField="XX7" caption={"INDIRIM"} width={100}/> 
-                                    <Column dataField="XX8" caption={"SADAKAT"} width={100}/>
-                                    <Column dataField="AMOUNT" caption={"TUTAR"} width={100}/>                                             
-                                </NdGrid>
-                            </div>
-                        </div>
-                        <div className="row py-1">
-                            {/* grdLastSaleItem */}
-                            <div className="col-6">
-                                <NdGrid parent={this} id={"grdLastSaleItem"} 
-                                showBorders={true} 
-                                columnsAutoWidth={true} 
-                                allowColumnReordering={true} 
-                                allowColumnResizing={true} 
-                                showRowLines={true}
-                                showColumnLines={true}
-                                height={"250px"} 
-                                width={"100%"}
-                                dbApply={false}
-                                data={{source:[{TYPE_NAME:"ESC",AMOUNT:100.99}]}}
-                                onRowPrepared=
-                                {
-                                    (e)=>
-                                    {
-                                        if(e.rowType == "header")
-                                        {
-                                            e.rowElement.style.fontWeight = "bold";    
-                                        }
-                                        e.rowElement.style.fontSize = "13px";
-                                    }
-                                }
-                                onCellPrepared=
-                                {
-                                    (e)=>
-                                    {
-                                        e.cellElement.style.padding = "4px"
-                                    }
-                                }
-                                >
-                                    <Column dataField="XX1" caption={"BARKOD"} width={120}/>
-                                    <Column dataField="XX2" caption={"NAME"} width={200}/>    
-                                    <Column dataField="XX3" caption={"MIKTAR"} width={50}/>
-                                    <Column dataField="XX4" caption={"FIYAT"} width={50}/> 
+                                    <Column dataField="BARCODE" caption={"BARKOD"} width={120}/>
+                                    <Column dataField="ITEM_NAME" caption={"NAME"} width={200}/>    
+                                    <Column dataField="QUANTITY" caption={"MIKTAR"} width={50}/>
+                                    <Column dataField="PRICE" caption={"FIYAT"} width={50}/> 
                                     <Column dataField="AMOUNT" caption={"TUTAR"} width={100}/>
                                 </NdGrid>
                             </div>
-                            {/* grdLastSalePay */}
+                            {/* grdLastPay */}
                             <div className="col-6">
-                                <NdGrid parent={this} id={"grdLastSalePay"} 
+                                <NdGrid parent={this} id={"grdLastPay"} 
                                 showBorders={true} 
                                 columnsAutoWidth={true} 
                                 allowColumnReordering={true} 
@@ -3555,122 +3661,397 @@ export default class posDoc extends React.PureComponent
                                 height={"250px"} 
                                 width={"100%"}
                                 dbApply={false}
-                                data={{source:[{TYPE_NAME:"ESC",AMOUNT:100.99}]}}
-                                onRowPrepared=
+                                selection={{mode:"single"}}                          
+                                onRowPrepared={(e)=>
                                 {
-                                    (e)=>
+                                    if(e.rowType == "header")
                                     {
-                                        if(e.rowType == "header")
-                                        {
-                                            e.rowElement.style.fontWeight = "bold";    
-                                        }
-                                        e.rowElement.style.fontSize = "13px";
+                                        e.rowElement.style.fontWeight = "bold";    
                                     }
-                                }
-                                onCellPrepared=
+                                    e.rowElement.style.fontSize = "13px";
+                                }}
+                                onCellPrepared={
+                                (e)=>
                                 {
-                                    (e)=>
+                                    e.cellElement.style.padding = "4px"
+                                }}
+                                onRowClick={()=>
+                                {
+                                    if(this.lastPosPayDt.length > 0)
                                     {
-                                        e.cellElement.style.padding = "4px"
+                                        this.rbtnTotalPayType.value = 0
+                                        this.lastPayRest.value = this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT') < 0 ? 0 : parseFloat(this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT')).toFixed(2)
+                                        this.txtPopLastTotal.value = this.lastPosSaleDt[0].GRAND_TOTAL;
+                                        this.popLastTotal.show()
                                     }
-                                }
+                                }}
                                 >
-                                    <Column dataField="XX1" caption={"TIP"} width={200}/>
-                                    <Column dataField="XX2" caption={"AMOUNT"} width={100}/>    
-                                    <Column dataField="XX3" caption={"CHANGE"} width={100}/>
+                                    <Column dataField="PAY_TYPE_NAME" caption={"TIP"} width={200}/>
+                                    <Column dataField="AMOUNT" caption={"AMOUNT"} width={100}/>    
+                                    <Column dataField="CHANGE" caption={"CHANGE"} width={100}/>
                                 </NdGrid>
                             </div>
                         </div>
-                    </NbPopUp>
+                    </NdPopUp>
+                </div>
+                {/* Last Total Popup */}
+                <div>
+                    <NdPopUp parent={this} id={"popLastTotal"} 
+                    visible={false}                        
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={"Son Satış Tahsilat"}
+                    container={"#root"} 
+                    width={"600"}
+                    height={"700"}
+                    position={{of:"#root"}}
+                    >
+                        <div className="row">
+                            <div className="col-12">
+                                <div className="row pt-2">
+                                    {/* Payment Type Selection */}
+                                    <div className="col-2 pe-1">
+                                        <NbRadioButton id={"rbtnTotalPayType"} parent={this} 
+                                        button={[
+                                            {
+                                                id:"btn01",
+                                                style:{height:'49px',width:'100%'},
+                                                icon:"fa-money-bill-1",
+                                                text:"ESC"
+                                            },
+                                            {
+                                                id:"btn02",
+                                                style:{height:'49px',width:'100%'},
+                                                icon:"fa-credit-card",
+                                                text:"CB"
+                                            },
+                                            {
+                                                id:"btn03",
+                                                style:{height:'49px',width:'100%'},
+                                                icon:"fa-rectangle-list",
+                                                text:"CHQ"
+                                            },
+                                            {
+                                                id:"btn04",
+                                                style:{height:'49px',width:'100%'},
+                                                icon:"fa-rectangle-list",
+                                                text:"CHQe"
+                                            }
+                                        ]}/>
+                                    </div>
+                                    {/* Payment Grid */}
+                                    <div className="col-10">
+                                        {/* grdLastTotalPay */}
+                                        <div className="row">
+                                            <div className="col-12">
+                                                <NdGrid parent={this} id={"grdLastTotalPay"} 
+                                                showBorders={true} 
+                                                columnsAutoWidth={true} 
+                                                allowColumnReordering={true} 
+                                                allowColumnResizing={true} 
+                                                showRowLines={true}
+                                                showColumnLines={true}
+                                                showColumnHeaders={false}
+                                                height={"138px"} 
+                                                width={"100%"}
+                                                dbApply={false}
+                                                selection={{mode:"single"}}
+                                                onRowPrepared={(e)=>
+                                                {
+                                                    e.rowElement.style.fontSize = "13px";
+                                                }}
+                                                onRowRemoved={async (e) =>
+                                                {
+                                                    await this.calcGrandTotal();
+                                                }}
+                                                >
+                                                    <Editing confirmDelete={false}/>
+                                                    <Column dataField="PAY_TYPE_NAME" width={100} alignment={"center"}/>
+                                                    <Column dataField="AMOUNT" width={40}/>                                                
+                                                </NdGrid>
+                                            </div>
+                                        </div>
+                                        <div className="row pt-1">
+                                            <div className="col-12">
+                                                <p className="fs-2 fw-bold text-center m-0"><NbLabel id="lastPayRest" parent={this} value={"0.00 €"}/></p>
+                                            </div>
+                                        </div>
+                                        {/* txtPopLastTotal */}
+                                        <div className="row pt-1">
+                                            <div className="col-12">
+                                                <NdTextBox id="txtPopLastTotal" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}>     
+                                                </NdTextBox> 
+                                            </div>
+                                        </div>                                        
+                                    </div>
+                                </div>
+                                <div className="row pt-2">
+                                    {/* numPopLastTotal */}
+                                    <div className="col-9">
+                                        <NbNumberboard id={"numPopLastTotal"} parent={this} textobj="txtPopLastTotal" span={1} buttonHeight={"60px"}/>
+                                    </div>
+                                    <div className="col-3">
+                                        {/* T.R Detail */}
+                                        <div className="row pb-1">                                            
+                                            <div className="col-12">
+                                                <NbButton id={"btnPopTotalTRDetail"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
+                                                onClick={async ()=>
+                                                {
+                                                    if(this.posObj.posPay.dt().where({PAY_TYPE:3}).length > 0)
+                                                    {
+                                                        let tmpDt = new datatable(); 
+                                                        tmpDt.selectCmd = 
+                                                        {
+                                                            query : "SELECT AMOUNT AS AMOUNT,COUNT(AMOUNT) AS COUNT FROM CHEQPAY WHERE DOC = @DOC GROUP BY AMOUNT",
+                                                            param : ['DOC:string|50']
+                                                        }
+                                                        tmpDt.selectCmd.value = [this.posObj.dt()[0].GUID]
+                                                        await tmpDt.refresh();
+                                                        
+                                                        await this.grdTRDetail.dataRefresh({source:tmpDt});
+                                                        this.popTRDetail.show()
+                                                    }
+                                                }}>
+                                                    T.R Detay
+                                                </NbButton>
+                                            </div>
+                                        </div>
+                                        {/* Line Delete */}
+                                        <div className="row py-1">                                            
+                                            <div className="col-12">
+                                                <NbButton id={"btnPopLastTotalLineDel"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
+                                                onClick={async()=>
+                                                {
+                                                    if(this.grdLastTotalPay.devGrid.getSelectedRowKeys().length > 0)
+                                                    {                                                        
+                                                        //this.grdLastTotalPay.devGrid.deleteRow(this.grdLastTotalPay.devGrid.getRowIndexByKey(this.grdLastTotalPay.devGrid.getSelectedRowKeys()[0]))
+                                                        this.lastPayRest.value = this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT') < 0 ? 0 : parseFloat(this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT')).toFixed(2)                                                            
+                                                        this.txtPopLastTotal.newStart = true;
+                                                    }
+                                                }}>
+                                                    Satır İptal
+                                                </NbButton>
+                                            </div>
+                                        </div>
+                                        {/* Cancel */}
+                                        <div className="row py-1">                                            
+                                            <div className="col-12">
+                                                <NbButton id={"btnPopLastTotalCancel"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
+                                                onClick={()=>{this.popLastTotal.hide()}}>
+                                                    Vazgeç
+                                                </NbButton>
+                                            </div>
+                                        </div>
+                                        {/* Okey */}
+                                        <div className="row py-1">                                            
+                                            <div className="col-12">
+                                                <NbButton id={"btnPopLastTotalOkey"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
+                                                onClick={async()=>
+                                                {
+                                                    let tmpTypeName = ""
+                                                    let tmpAmount = Number(parseFloat(this.txtPopLastTotal.value).toFixed(2))
+                                                    let tmpChange = Number(parseFloat(this.lastPosSaleDt[0].GRAND_TOTAL - (this.lastPosPayDt.sum('AMOUNT') + tmpAmount)).toFixed(2))
+
+                                                    if(this.rbtnTotalPayType.value == 0)
+                                                    {                                                        
+                                                        tmpTypeName = "ESC"
+                                                    }
+                                                    else if(this.rbtnTotalPayType.value == 1)
+                                                    {
+                                                        tmpTypeName = "CB"
+                                                    }
+                                                    else if(this.rbtnTotalPayType.value == 2)
+                                                    {
+                                                        tmpTypeName = "CHQ"
+                                                    }
+                                                    else if(this.rbtnTotalPayType.value == 3)
+                                                    {
+                                                        tmpTypeName = "T.R"
+                                                    }
+                                                    else if(this.rbtnTotalPayType.value == 4)
+                                                    {
+                                                        tmpTypeName = "BON D'AVOIR"
+                                                    }
+                                                        
+                                                    if(tmpChange < 0)
+                                                    {
+                                                        if(this.rbtnTotalPayType.value == 0)
+                                                        {
+                                                            tmpChange = tmpChange * -1
+                                                            tmpAmount = this.txtPopLastTotal.value  - tmpChange
+                                                        }
+                                                        else
+                                                        {       
+                                                            let tmpConfObj =
+                                                            {
+                                                                id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
+                                                                button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Girmiş olduğunuz ödeme tutarı,satış tutarından büyük olamaz !"}</div>)
+                                                            }
+                                                            await dialog(tmpConfObj);
+                                                            tmpAmount = (this.txtPopLastTotal.value  - tmpChange) * -1
+                                                            tmpChange = 0
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        tmpChange = 0
+                                                    }
+
+                                                    if(tmpAmount > 0)
+                                                    {
+                                                        let tmpData = 
+                                                        {
+                                                            GUID : datatable.uuidv4(),
+                                                            CUSER : this.core.auth.data.CODE,
+                                                            POS_GUID : this.lastPosDt[0].GUID,
+                                                            PAY_TYPE : this.rbtnTotalPayType.value,
+                                                            PAY_TYPE_NAME : tmpTypeName,
+                                                            LINE_NO : this.lastPosPayDt.length,
+                                                            AMOUNT : tmpAmount,
+                                                            CHANGE : tmpChange
+                                                        }
+                                                        this.lastPosPayDt.push(tmpData)
+                                                        this.lastPayRest.value = this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT') < 0 ? 0 : parseFloat(this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT')).toFixed(2)
+                                                        this.txtPopLastTotal.newStart = true;
+                                                    }
+                                                }}>
+                                                    <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
+                                                </NbButton>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>  
+                                <div className="row pt-2">
+                                    <div className="col-12">
+                                        <NbButton id={"btnPopLastTotalSave"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
+                                        onClick={async ()=>
+                                        {
+                                            //await this.lastPosPayDt.delete()
+                                            //await this.lastPosPayDt.update() 
+                                        }}>
+                                            <i className="text-white fa-solid fa-floppy-disk" style={{fontSize: "24px"}} />
+                                        </NbButton>
+                                    </div>
+                                </div>                              
+                            </div>
+                        </div>
+                    </NdPopUp>
+                </div>
+                {/* Price Description Popup */} 
+                <div>
+                    <NbPopDescboard id={"popPriceDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={"Fiyat Açıklaması"} title={"Lütfen Açıklama Giriniz"}                    
+                    param={this.prmObj.filter({ID:'PriceDescription',TYPE:0})}
+                    onClick={async (e)=>
+                    {
+                        if(typeof e != 'undefined')
+                        {
+                            if(typeof this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog != 'undefined' && this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog.type != -1)
+                            {   
+                                let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:this.acsObj.filter({ID:'PriceEdit',TYPE:1}).getValue().dialog.type})
+                                if(!tmpResult)
+                                {
+                                    return
+                                }
+                            }
+                            
+                            let tmpResult = await this.popNumber.show('Fiyat',e.value)                                            
+                            if(typeof tmpResult != 'undefined' && tmpResult != '')
+                            {
+                                await this.descSave("PRICE DESC",e,this.grdList.devGrid.getSelectedRowKeys()[0].LINE_NO)
+
+                                if((await this.priceCheck(e.data,tmpResult)))
+                                {
+                                    let tmpData = {QUANTITY:e.key.QUANTITY,PRICE:tmpResult}
+                                    this.saleRowUpdate(e.key,tmpData)
+                                }
+                            }                            
+                        }
+                        this.init()
+                    }}></NbPopDescboard>
                 </div>
                 {/* Park Description Popup */} 
                 <div>
-                    <NbPopDescboard id={"popParkDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={"Park Açıklaması"} title={"Lütfen Açıklama Giriniz"}
-                    button={this.prmObj.filter({ID:'ParkDelDescription',TYPE:0}).getValue().buttons}
+                    <NbPopDescboard id={"popParkDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={"Park Açıklaması"} title={"Lütfen Açıklama Giriniz"}                    
+                    param={this.prmObj.filter({ID:'ParkDelDescription',TYPE:0})}
                     onClick={async (e)=>
                     {
-                        await this.descSave("PARK DESC",e,0)
+                        if(typeof e != 'undefined')
+                        {
+                            await this.descSave("PARK DESC",e,0)
+                        }
                         this.init()
                     }}></NbPopDescboard>
                 </div>
                 {/* Delete Description Popup */} 
                 <div>
-                    <NbPopDescboard id={"popDeleteDesc"} parent={this} width={"900"} height={"750"} position={"#root"} head={"Silme İşlemi Açıklaması"} title={"Lütfen Silme Nedeninizi Giriniz"}
-                    button={this.prmObj.filter({ID:'DocDelDescription',TYPE:0}).getValue().buttons}
+                    <NbPopDescboard id={"popDeleteDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={"Silme İşlemi Açıklaması"} title={"Lütfen Silme Nedeninizi Giriniz"}
+                    param={this.prmObj.filter({ID:'DocDelDescription',TYPE:0})}
                     onClick={async (e)=>
                     {
-                        await this.descSave("FULL DELETE",e,0)
+                        if(typeof e != 'undefined')
+                        {
+                            await this.descSave("FULL DELETE",e,0)
+                        }
                         this.delete()
                     }}></NbPopDescboard>
                 </div>
                 {/* Row Delete Description Popup */} 
                 <div>
-                    <NbPopDescboard id={"popRowDeleteDesc"} parent={this} width={"900"} height={"750"} position={"#root"} head={"Satır Silme İşlemi Açıklaması"} title={"Lütfen Silme Nedeninizi Giriniz"}
-                    button={this.prmObj.filter({ID:'DocRowDelDescription',TYPE:0}).getValue().buttons}
+                    <NbPopDescboard id={"popRowDeleteDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={"Satır Silme İşlemi Açıklaması"} title={"Lütfen Silme Nedeninizi Giriniz"}                    
+                    param={this.prmObj.filter({ID:'DocRowDelDescription',TYPE:0})}
                     onClick={async (e)=>
                     {
-                        await this.descSave("ROW DELETE",e,this.grdList.devGrid.getSelectedRowKeys()[0].LINE_NO)
+                        if(typeof e != 'undefined')
+                        {
+                            await this.descSave("ROW DELETE",e,this.grdList.devGrid.getSelectedRowKeys()[0].LINE_NO)
+                        }
                         this.rowDelete()
                     }}></NbPopDescboard>
                 </div>
                 {/* Item Return Description Popup */} 
                 <div>
-                    <NbPopDescboard id={"popItemReturnDesc"} parent={this} width={"900"} height={"540"} position={"#root"} head={"İade Açıklaması"} title={"Lütfen İade Nedenini Giriniz"}
-                    button={
-                    [
-                        {
-                            id:"btn01",
-                            text:"Ürün Barkodu Çift Okutulmuş"
-                        },
-                        {
-                            id:"btn02",
-                            text:"Ürün Arızalı Yada Defolu"
-                        },
-                        {
-                            id:"btn03",
-                            text:"Müşteri Ürünü Beğenmedi"
-                        },
-                        {
-                            id:"btn04",
-                            text:"Müşteri Yanlış Ürünü Aldı"
-                        }
-                    ]}
+                    <NbPopDescboard id={"popItemReturnDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={"İade Açıklaması"} title={"Lütfen İade Nedenini Giriniz"}
+                    param={this.prmObj.filter({ID:'RebateDescription',TYPE:0})}
                     onClick={async (e)=>
-                    {                        
-                        let tmpResult = await this.msgItemReturnType.show();
+                    {        
+                        if(typeof e != 'undefined')
+                        {
+                            let tmpResult = await this.msgItemReturnType.show();
                         
-                        if(tmpResult == 'btn01') //Nakit
-                        {
-                            this.posObj.posPay.addEmpty()
-                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
-                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE = 0
-                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE_NAME = 'ESC'
-                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].LINE_NO = this.posObj.posPay.dt().length
-                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2))
-                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].CHANGE = 0
-                        }
-                        else if(tmpResult == 'btn02') //İade Çeki
-                        {
-                            this.posObj.posPay.addEmpty()
-                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
-                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE = 4
-                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE_NAME = "BON D'AVOIR"
-                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].LINE_NO = this.posObj.posPay.dt().length
-                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2))
-                            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].CHANGE = 0
+                            if(tmpResult == 'btn01') //Nakit
+                            {
+                                this.posObj.posPay.addEmpty()
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE = 0
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE_NAME = 'ESC'
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].LINE_NO = this.posObj.posPay.dt().length
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2))
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].CHANGE = 0
+                            }
+                            else if(tmpResult == 'btn02') //İade Çeki
+                            {
+                                this.posObj.posPay.addEmpty()
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE = 4
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE_NAME = "BON D'AVOIR"
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].LINE_NO = this.posObj.posPay.dt().length
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2))
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].CHANGE = 0
 
-                            this.posObj.dt()[0].REBATE_CHEQPAY = 'Q' + new Date().toISOString().substring(2, 10).replace('-','').replace('-','') + Math.round(Number(parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2)) * 100).toString().padStart(5,'0') + Date.now().toString().substring(7,12);
+                                this.posObj.dt()[0].REBATE_CHEQPAY = 'Q' + new Date().toISOString().substring(2, 10).replace('-','').replace('-','') + Math.round(Number(parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2)) * 100).toString().padStart(5,'0') + Date.now().toString().substring(7,12);
 
-                            await this.cheqpaySave(this.posObj.dt()[0].REBATE_CHEQPAY,this.posObj.dt()[0].TOTAL,0,1);
-                        }
+                                await this.cheqpaySave(this.posObj.dt()[0].REBATE_CHEQPAY,this.posObj.dt()[0].TOTAL,0,1);
+                            }
 
-                        if(this.txtItemReturnTicket.value != "")
-                        {
-                            this.posObj.dt()[0].TICKET = this.txtItemReturnTicket.value;
-                        }
+                            if(this.txtItemReturnTicket.value != "")
+                            {
+                                this.posObj.dt()[0].TICKET = this.txtItemReturnTicket.value;
+                            }
 
-                        this.posObj.dt()[0].TYPE = 1;
-                        await this.descSave("REBATE",e,0);                        
+                            this.posObj.dt()[0].TYPE = 1;
+                            await this.descSave("REBATE",e,0); 
+                        }                
 
                         await this.calcGrandTotal();
                     }}></NbPopDescboard>

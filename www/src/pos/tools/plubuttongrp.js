@@ -296,7 +296,7 @@ export default class NbPluButtonGrp extends NbBase
     async _onClick(pIndex,pType,pData)
     {
         this.clickData = {index:pIndex,type:pType,data:pData,status:typeof pData == 'undefined' ? 0 : 1} //status : 0 = new, 1 = update
-
+        
         if(this.edit)
         {    
             if(pType == 0)
@@ -471,7 +471,6 @@ export default class NbPluButtonGrp extends NbBase
             this.props.onSelection(pItem);
         }
     }
-    _pop
     render()
     {
         if(this.state.isLoading)
@@ -504,6 +503,7 @@ export default class NbPluButtonGrp extends NbBase
                     {
                         if(pData.length > 0)
                         {           
+                            this.clickData.data = pData[0]
                             this["popNameEntry" + this.props.id].show()
                             this["txtNameEntry" + this.props.id].value = pData[0].NAME
                         }
@@ -603,10 +603,10 @@ export default class NbPluButtonGrp extends NbBase
                                         {
                                             tmpData[0].NAME = this["txtNameEntry" + this.props.id].value
                                             tmpData[0].LINK = this.clickData.data.LINK
-                                        }
-                                        this["popNameEntry" + this.props.id].hide();
+                                        }                                        
                                         this.refresh();
                                     }
+                                    this["popNameEntry" + this.props.id].hide();
                                 }}><i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} /></NbButton>
                             </div>
                         </div>

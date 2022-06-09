@@ -6,14 +6,19 @@ export default class NbRadioButton extends NbBase
     constructor(props)
     {
         super(props)
+
+        let tmpBtnClass = []
+        if(typeof this.props.button != 'undefined')
+        {
+            for (let i = 0; i < this.props.button.length; i++) 
+            {
+                tmpBtnClass.push('-outline')
+            }
+        }
+        
         this.state = 
         {
-            btnClass : 
-            [
-                '-outline',
-                '-outline',
-                '-outline'
-            ],
+            btnClass : tmpBtnClass,
             value : 0
         }
         this._onClick = this._onClick.bind(this)
@@ -52,7 +57,9 @@ export default class NbRadioButton extends NbBase
                     pIcon = "fa-solid " + pIcon
                     return (
                         <div className='row'>
-                            <i className={pIcon} style={{fontSize: "20px"}} />
+                            <div className='col-12'>
+                                <i className={pIcon} style={{fontSize: "20px"}} />
+                            </div>
                         </div>
                     )
                 }
@@ -64,7 +71,9 @@ export default class NbRadioButton extends NbBase
                 {
                     return (
                         <div className='row'>
-                            <span>{pText}</span>
+                            <div className='col-12'>
+                                <span>{pText}</span>
+                            </div>
                         </div>
                     )
                 }
