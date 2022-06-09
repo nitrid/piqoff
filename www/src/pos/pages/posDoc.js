@@ -3824,7 +3824,7 @@ export default class posDoc extends React.PureComponent
                                                 {
                                                     if(this.grdLastTotalPay.devGrid.getSelectedRowKeys().length > 0)
                                                     {                                                        
-                                                        this.grdLastTotalPay.devGrid.deleteRow(this.grdLastTotalPay.devGrid.getRowIndexByKey(this.grdLastTotalPay.devGrid.getSelectedRowKeys()[0]))
+                                                        //this.grdLastTotalPay.devGrid.deleteRow(this.grdLastTotalPay.devGrid.getRowIndexByKey(this.grdLastTotalPay.devGrid.getSelectedRowKeys()[0]))
                                                         this.lastPayRest.value = this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT') < 0 ? 0 : parseFloat(this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT')).toFixed(2)                                                            
                                                         this.txtPopLastTotal.newStart = true;
                                                     }
@@ -3928,7 +3928,7 @@ export default class posDoc extends React.PureComponent
                                         onClick={async ()=>
                                         {
                                             //await this.lastPosPayDt.delete()
-                                            await this.lastPosPayDt.update() 
+                                            //await this.lastPosPayDt.update() 
                                         }}>
                                             <i className="text-white fa-solid fa-floppy-disk" style={{fontSize: "24px"}} />
                                         </NbButton>
