@@ -19,7 +19,7 @@ import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Export} from '
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdTagBox from '../../../../core/react/devex/tagbox.js';
-import { dialog } from '../../../../core/react/devex/dialog.js';
+import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
 
@@ -39,6 +39,10 @@ export default class purchaseOrder extends React.Component
 
         this.frmdocOrders = undefined;
         this.docLocked = false;   
+        this.customerControl = true
+        this.customerClear = false
+        this.combineControl = true
+        this.combineNew = false
 
         this.multiItemData = new datatable
        
@@ -215,11 +219,15 @@ export default class purchaseOrder extends React.Component
                             await this.pg_txtItemsCode.setVal(e.value)
                             this.pg_txtItemsCode.onClick = async(data) =>
                             {
+                                this.customerControl = true
+                                this.customerClear = false
+                                this.combineControl = true
+                                this.combineNew = false
                                 if(data.length > 0)
                                 {
                                     if(data.length == 1)
                                     {
-                                        this.addItem(data[0],e.rowIndex)
+                                        await this.addItem(data[0],e.rowIndex)
                                     }
                                     else if(data.length > 1)
                                     {
@@ -227,7 +235,7 @@ export default class purchaseOrder extends React.Component
                                         {
                                             if(i == 0)
                                             {
-                                                this.addItem(data[i],e.rowIndex)
+                                                await this.addItem(data[i],e.rowIndex)
                                             }
                                             else
                                             {
@@ -244,7 +252,8 @@ export default class purchaseOrder extends React.Component
                                                 this.txtRef.readOnly = true
                                                 this.txtRefno.readOnly = true
                                                 this.docObj.docOrders.addEmpty(tmpdocOrders)
-                                                this.addItem(data[i],this.docObj.docOrders.dt().length-1)
+                                                await this.core.util.waitUntil(100)
+                                                await this.addItem(data[i],this.docObj.docOrders.dt().length-1)
                                             }
                                         }
                                     }
@@ -269,7 +278,11 @@ export default class purchaseOrder extends React.Component
                             let tmpData = await this.core.sql.execute(tmpQuery) 
                             if(tmpData.result.recordset.length > 0)
                             {
-                                this.addItem(tmpData.result.recordset[0],e.rowIndex)
+                                this.customerControl = true
+                                this.customerClear = false
+                                this.combineControl = true
+                                this.combineNew = false
+                                await this.addItem(tmpData.result.recordset[0],e.rowIndex)
                             }
                             else
                             {
@@ -295,11 +308,15 @@ export default class purchaseOrder extends React.Component
                                 this.pg_txtItemsCode.show()
                                 this.pg_txtItemsCode.onClick = async(data) =>
                                 {
+                                    this.customerControl = true
+                                    this.customerClear = false
+                                    this.combineControl = true
+                                    this.combineNew = false
                                     if(data.length > 0)
                                     {
                                         if(data.length == 1)
                                         {
-                                            this.addItem(data[0],e.rowIndex)
+                                            await this.addItem(data[0],e.rowIndex)
                                         }
                                         else if(data.length > 1)
                                         {
@@ -307,7 +324,7 @@ export default class purchaseOrder extends React.Component
                                             {
                                                 if(i == 0)
                                                 {
-                                                    this.addItem(data[i],e.rowIndex)
+                                                    await this.addItem(data[i],e.rowIndex)
                                                 }
                                                 else
                                                 {
@@ -324,7 +341,8 @@ export default class purchaseOrder extends React.Component
                                                     this.txtRef.readOnly = true
                                                     this.txtRefno.readOnly = true
                                                     this.docObj.docOrders.addEmpty(tmpdocOrders)
-                                                    this.addItem(data[i],this.docObj.docOrders.dt().length-1)
+                                                    await this.core.util.waitUntil(100)
+                                                    await this.addItem(data[i],this.docObj.docOrders.dt().length-1)
                                                 }
                                             }
                                         }
@@ -352,40 +370,99 @@ export default class purchaseOrder extends React.Component
             value : [pData.CODE,this.docObj.dt()[0].OUTPUT]
         }
         let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
-        if(tmpCheckData.result.recordset.length == 0)
+        if(tmpCheckData.result.recordset.length > 0)
+        {  
+            this.docObj.docOrders.dt()[pIndex].MULTICODE = tmpCheckData.result.recordset[0].MULTICODE
+        }
+        if(this.customerControl == true)
         {
-            let tmpConfObj =
-            {
-                id:'msgCustomerNotFound',showTitle:true,title:this.t("msgCustomerNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
-                button:[{id:"btn01",caption:this.t("msgCustomerNotFound.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCustomerNotFound.btn02"),location:'after'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerNotFound.msg")}</div>)
-            }
-            let pResult = await dialog(tmpConfObj);
-            if(pResult == 'btn02')
-            {
-                return
+           
+            if(tmpCheckData.result.recordset.length == 0)
+            {   
+                let tmpCustomerBtn = ''
+                if(this.customerClear == true)
+                {
+                    await this.grdPurcOrders.devGrid.deleteRow(pIndex)
+                    return 
+                }
+               
+                await this.msgCustomerNotFound.show().then(async (e) =>
+                {
+
+                   if(e == 'btn01' && this.checkCustomer.value == true)
+                    {
+                        this.customerControl = false
+                        return
+                    }
+                    if(e == 'btn02')
+                    {
+                        tmpCustomerBtn = e
+                        await this.grdPurcOrders.devGrid.deleteRow(pIndex)
+                        if(this.checkCustomer.value == true)
+                        {
+                            this.customerClear = true
+                        }
+                        return 
+                    }
+                })
+                if(tmpCustomerBtn == 'btn02')
+                {
+                    return
+                }
             }
         }
+       
         for (let i = 0; i < this.docObj.docOrders.dt().length; i++) 
         {
             if(this.docObj.docOrders.dt()[i].ITEM_CODE == pData.CODE)
             {
-                let tmpConfObj = 
+                if(this.combineControl == true)
                 {
-                    id:'msgCombineItem',showTitle:true,title:this.t("msgCombineItem.title"),showCloseButton:true,width:'500px',height:'200px',
-                    button:[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>)
+                    let tmpCombineBtn = ''
+                    await this.msgCombineItem.show().then(async (e) =>
+                    {
+    
+                        if(e == 'btn01')
+                        {
+                            this.docObj.docOrders.dt()[i].QUANTITY = this.docObj.docOrders.dt()[i].QUANTITY + pQuantity
+                            this.docObj.docOrders.dt()[i].VAT = parseFloat((this.docObj.docOrders.dt()[i].VAT + (this.docObj.docOrders.dt()[i].PRICE * (this.docObj.docOrders.dt()[i].VAT_RATE / 100)) * pQuantity).toFixed(3))
+                            this.docObj.docOrders.dt()[i].AMOUNT = parseFloat((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE).toFixed(3))
+                            this.docObj.docOrders.dt()[i].TOTAL = parseFloat((((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE) - this.docObj.docOrders.dt()[i].DISCOUNT) + this.docObj.docOrders.dt()[i].VAT).toFixed(3))
+                            this._calculateTotal()
+                            await this.grdPurcOrders.devGrid.deleteRow(pIndex)
+                            if(this.checkCombine.value == true)
+                            {
+                                this.combineControl = false
+                            }
+                            tmpCombineBtn = e
+                            return
+                        }
+                        if(e == 'btn02')
+                        {
+                            if(this.checkCombine.value == true)
+                            {
+                                this.combineControl = false
+                                this.combineNew = true
+                            }
+                            return
+                        }
+                    })
+                    if(tmpCombineBtn == 'btn01')
+                    {
+                        return
+                    }
                 }
-                let pResult = await dialog(tmpConfObj);
-                if(pResult == 'btn01')
+                else if(this.combineNew == false)
                 {
                     this.docObj.docOrders.dt()[i].QUANTITY = this.docObj.docOrders.dt()[i].QUANTITY + pQuantity
                     this.docObj.docOrders.dt()[i].VAT = parseFloat((this.docObj.docOrders.dt()[i].VAT + (this.docObj.docOrders.dt()[i].PRICE * (this.docObj.docOrders.dt()[i].VAT_RATE / 100)) * pQuantity).toFixed(3))
                     this.docObj.docOrders.dt()[i].AMOUNT = parseFloat((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE).toFixed(3))
                     this.docObj.docOrders.dt()[i].TOTAL = parseFloat((((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE) - this.docObj.docOrders.dt()[i].DISCOUNT) + this.docObj.docOrders.dt()[i].VAT).toFixed(3))
                     this._calculateTotal()
+                    await this.grdPurcOrders.devGrid.deleteRow(pIndex)
                     return
                 }
+               
                 
             }
         }
@@ -395,7 +472,6 @@ export default class purchaseOrder extends React.Component
         this.docObj.docOrders.dt()[pIndex].ITEM_NAME = pData.NAME
         this.docObj.docOrders.dt()[pIndex].DISCOUNT = 0
         this.docObj.docOrders.dt()[pIndex].DISCOUNT_RATE = 0
-        this.docObj.docOrders.dt()[pIndex].MULTICODE = tmpCheckData.result.recordset[0].MULTICODE
         this.docObj.docOrders.dt()[pIndex].QUANTITY = pQuantity
         let tmpQuery = 
         {
@@ -533,6 +609,10 @@ export default class purchaseOrder extends React.Component
     }
     async multiItemSave()
     {
+        this.customerControl = true
+        this.customerClear = false
+        this.combineControl = true
+        this.combineNew = false
         for (let i = 0; i < this.multiItemData.length; i++) 
         {
             let tmpdocOrders = {...this.docObj.docOrders.empty}
@@ -548,7 +628,8 @@ export default class purchaseOrder extends React.Component
             this.txtRef.readOnly = true
             this.txtRefno.readOnly = true
             this.docObj.docOrders.addEmpty(tmpdocOrders)
-            this.addItem(this.multiItemData[i],this.docObj.docOrders.dt().length-1,this.multiItemData[i].QUANTITY)
+            await this.core.util.waitUntil(100)
+            await this.addItem(this.multiItemData[i],this.docObj.docOrders.dt().length-1,this.multiItemData[i].QUANTITY)
             this.popMultiItem.hide()
         }
     }
@@ -617,6 +698,8 @@ export default class purchaseOrder extends React.Component
                                                 {                                                    
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
+                                                    this.btnSave.setState({disabled:true});
+                                                    this.btnNew.setState({disabled:false});
                                                 }
                                                 else
                                                 {
@@ -1122,11 +1205,15 @@ export default class purchaseOrder extends React.Component
                                                     this.pg_txtItemsCode.show()
                                                     this.pg_txtItemsCode.onClick = async(data) =>
                                                     {
+                                                        this.customerControl = true
+                                                        this.customerClear = false
+                                                        this.combineControl = true
+                                                        this.combineNew = false
                                                         if(data.length > 0)
                                                         {
                                                             if(data.length == 1)
                                                             {
-                                                                this.addItem(data[0],this.docObj.docOrders.dt().length -1)
+                                                                await this.addItem(data[0],this.docObj.docOrders.dt().length -1)
                                                             }
                                                             else if(data.length > 1)
                                                             {
@@ -1134,7 +1221,7 @@ export default class purchaseOrder extends React.Component
                                                                 {
                                                                     if(i == 0)
                                                                     {
-                                                                        this.addItem(data[i],this.docObj.docOrders.dt().length -1)
+                                                                        await this.addItem(data[i],this.docObj.docOrders.dt().length -1)
                                                                     }
                                                                     else
                                                                     {
@@ -1151,7 +1238,8 @@ export default class purchaseOrder extends React.Component
                                                                         this.txtRef.readOnly = true
                                                                         this.txtRefno.readOnly = true
                                                                         this.docObj.docOrders.addEmpty(tmpdocOrders)
-                                                                        this.addItem(data[i],this.docObj.docOrders.dt().length-1)
+                                                                        await this.core.util.waitUntil(100)
+                                                                        await this.addItem(data[i],this.docObj.docOrders.dt().length-1)
                                                                     }
                                                                 }
                                                             }
@@ -1174,14 +1262,19 @@ export default class purchaseOrder extends React.Component
                                             this.txtRef.readOnly = true
                                             this.txtRefno.readOnly = true
                                             this.docObj.docOrders.addEmpty(tmpdocOrders)
+                                            await this.core.util.waitUntil(100)
                                             this.pg_txtItemsCode.show()
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
                                                 if(data.length > 0)
                                                 {
+                                                    this.customerControl = true
+                                                    this.customerClear = false
+                                                    this.combineControl = true
+                                                    this.combineNew = false
                                                     if(data.length == 1)
                                                     {
-                                                        this.addItem(data[0],this.docObj.docOrders.dt().length -1)
+                                                        await this.addItem(data[0],this.docObj.docOrders.dt().length -1)
                                                     }
                                                     else if(data.length > 1)
                                                     {
@@ -1189,7 +1282,7 @@ export default class purchaseOrder extends React.Component
                                                         {
                                                             if(i == 0)
                                                             {
-                                                                this.addItem(data[i],this.docObj.docOrders.dt().length -1)
+                                                                await this.addItem(data[i],this.docObj.docOrders.dt().length -1)
                                                             }
                                                             else
                                                             {
@@ -1206,7 +1299,8 @@ export default class purchaseOrder extends React.Component
                                                                 this.txtRef.readOnly = true
                                                                 this.txtRefno.readOnly = true
                                                                 this.docObj.docOrders.addEmpty(tmpdocOrders)
-                                                                this.addItem(data[i],this.docObj.docOrders.dt().length-1)
+                                                                await this.core.util.waitUntil(100)
+                                                                await this.addItem(data[i],this.docObj.docOrders.dt().length-1)
                                                             }
                                                         }
                                                     }
@@ -1692,6 +1786,70 @@ export default class purchaseOrder extends React.Component
                             </Form>
                         </NdPopUp>
                     </div> 
+                      {/* notCustomer Dialog  */}
+                      <NdDialog id={"msgCustomerNotFound"} container={"#root"} parent={this}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        title={this.t("msgCustomerNotFound.title")} 
+                        showCloseButton={false}
+                        width={"500px"}
+                        height={"250px"}
+                        button={[{id:"btn01",caption:this.t("msgCustomerNotFound.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCustomerNotFound.btn02"),location:'after'}]}
+                        >
+                            <div className="row">
+                                <div className="col-12 py-2">
+                                    <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerNotFound.msg")}</div>
+                                </div>
+                                <div className="col-12 py-2">
+                                <Form>
+                                    {/* checkCustomer */}
+                                    <Item>
+                                        <Label text={this.lang.t("checkAll")} alignment="right" />
+                                        <NdCheckBox id="checkCustomer" parent={this} simple={true}  
+                                        value ={false}
+                                        >
+                                        </NdCheckBox>
+                                    </Item>
+                                </Form>
+                            </div>
+                            </div>
+                            <div className='row'>
+                        
+                            </div>
+                        
+                    </NdDialog>  
+                    {/* combineItem Dialog  */}
+                    <NdDialog id={"msgCombineItem"} container={"#root"} parent={this}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        title={this.t("msgCombineItem.title")} 
+                        showCloseButton={false}
+                        width={"500px"}
+                        height={"250px"}
+                        button={[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}]}
+                        >
+                            <div className="row">
+                                <div className="col-12 py-2">
+                                    <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>
+                                </div>
+                                <div className="col-12 py-2">
+                                <Form>
+                                    {/* checkCustomer */}
+                                    <Item>
+                                        <Label text={this.lang.t("checkAll")} alignment="right" />
+                                        <NdCheckBox id="checkCombine" parent={this} simple={true}  
+                                        value ={false}
+                                        >
+                                        </NdCheckBox>
+                                    </Item>
+                                </Form>
+                            </div>
+                            </div>
+                            <div className='row'>
+                        
+                            </div>
+                        
+                    </NdDialog>  
                 </ScrollView>                
             </div>
         )

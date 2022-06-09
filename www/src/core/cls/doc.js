@@ -334,7 +334,7 @@ export class docItemsCls
 
         return this.ds.get(0)
     }
-    addEmpty()
+    async addEmpty()
     {
         if(typeof this.dt('DOC_ITEMS') == 'undefined')
         {
@@ -354,6 +354,7 @@ export class docItemsCls
             tmp.GUID = datatable.uuidv4()
         }
         this.dt('DOC_ITEMS').push(tmp,arguments[1])
+        
     }
     clearAll()
     {

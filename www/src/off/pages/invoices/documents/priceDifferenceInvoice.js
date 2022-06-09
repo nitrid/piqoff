@@ -21,7 +21,7 @@ import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Export} from '
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
-import { dialog } from '../../../../core/react/devex/dialog.js';
+import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
 
@@ -46,6 +46,8 @@ export default class priceDifferenceInvoice extends React.Component
 
         this.frmDocItems = undefined;
         this.docLocked = false;        
+        this.combineControl = true
+        this.combineNew = false
 
     }
     async componentDidMount()
@@ -252,9 +254,11 @@ export default class priceDifferenceInvoice extends React.Component
                             await this.pg_txtItemsCode.setVal(e.value)
                             this.pg_txtItemsCode.onClick = async(data) =>
                             {
+                                this.combineControl = true
+                                this.combineNew = false
                                 if(data.length == 1)
                                 {
-                                    this.addItem(data[0],e.rowIndex)
+                                    await this.addItem(data[0],e.rowIndex)
                                 }
                                 else if(data.length > 1)
                                 {
@@ -262,7 +266,7 @@ export default class priceDifferenceInvoice extends React.Component
                                     {
                                         if(i == 0)
                                         {
-                                            this.addItem(data[i],e.rowIndex)
+                                            await this.addItem(data[i],e.rowIndex)
                                         }
                                         else
                                         {
@@ -281,7 +285,8 @@ export default class priceDifferenceInvoice extends React.Component
                                             this.txtRef.readOnly = true
                                             this.txtRefno.readOnly = true
                                             this.docObj.docItems.addEmpty(tmpDocItems)
-                                            this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                            await this.core.util.waitUntil(100)
+                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
                                         }
                                     }
                                 }
@@ -305,7 +310,9 @@ export default class priceDifferenceInvoice extends React.Component
                             let tmpData = await this.core.sql.execute(tmpQuery) 
                             if(tmpData.result.recordset.length > 0)
                             {
-                                this.addItem(tmpData.result.recordset[0],e.rowIndex)
+                                this.combineControl = true
+                                this.combineNew = false
+                                await this.addItem(tmpData.result.recordset[0],e.rowIndex)
                             }
                             else
                             {
@@ -331,9 +338,11 @@ export default class priceDifferenceInvoice extends React.Component
                                 this.pg_txtItemsCode.show()
                                 this.pg_txtItemsCode.onClick = async(data) =>
                                 {
+                                    this.combineControl = true
+                                    this.combineNew = false
                                     if(data.length == 1)
                                     {
-                                        this.addItem(data[0],e.rowIndex)
+                                        await this.addItem(data[0],e.rowIndex)
                                     }
                                     else if(data.length > 1)
                                     {
@@ -341,7 +350,7 @@ export default class priceDifferenceInvoice extends React.Component
                                         {
                                             if(i == 0)
                                             {
-                                                this.addItem(data[i],e.rowIndex)
+                                                await this.addItem(data[i],e.rowIndex)
                                             }
                                             else
                                             {
@@ -360,7 +369,8 @@ export default class priceDifferenceInvoice extends React.Component
                                                 this.txtRef.readOnly = true
                                                 this.txtRefno.readOnly = true
                                                 this.docObj.docItems.addEmpty(tmpDocItems)
-                                                this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                await this.core.util.waitUntil(100)
+                                                await this.addItem(data[i],this.docObj.docItems.dt().length-1)
                                             }
                                         }
                                     }
@@ -374,8 +384,63 @@ export default class priceDifferenceInvoice extends React.Component
             )
         }
     }
-    async addItem(pData,pIndex)
+    async addItem(pData,pIndex,pQuantity)
     {
+        if(typeof pQuantity == 'undefined')
+        {
+            pQuantity = 1
+        }
+        for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+        {
+            if(this.docObj.docItems.dt()[i].ITEM_CODE == pData.CODE)
+            {
+                if(this.combineControl == true)
+                {
+                    let tmpCombineBtn = ''
+                    await this.msgCombineItem.show().then(async (e) =>
+                    {
+                        if(e == 'btn01')
+                        {
+                            this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + pQuantity
+                            this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100)* pQuantity )).toFixed(3))
+                            this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
+                            this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
+                            this._calculateTotal()
+                            await this.grdDiffInv.devGrid.deleteRow(pIndex)
+                            if(this.checkCombine.value == true)
+                            {
+                                this.combineControl = false
+                            }
+                            tmpCombineBtn = e
+                            return
+                        }
+                        if(e == 'btn02')
+                        {
+                            if(this.checkCombine.value == true)
+                            {
+                                this.combineControl = false
+                                this.combineNew = true
+                            }
+                            return
+                        }
+                    })
+                    if(tmpCombineBtn == 'btn01')
+                    {
+                        return
+                    }
+                }
+                else if(this.combineNew == false)
+                {
+                    this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY +  pQuantity
+                    this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100)* pQuantity)).toFixed(3))
+                    this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
+                    this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
+                    this._calculateTotal()
+                    await this.grdDiffInv.devGrid.deleteRow(pIndex)
+                    return
+                }
+            }
+        }
         this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
         this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID
         this.docObj.docItems.dt()[pIndex].VAT_RATE = pData.VAT
@@ -470,6 +535,7 @@ export default class priceDifferenceInvoice extends React.Component
                         tmpDocItems.INVOICE_GUID = tmpItems[i][x].DOC_GUID
                         console.log(tmpDocItems)
                         this.docObj.docItems.addEmpty(tmpDocItems)
+                        await this.core.util.waitUntil(100)
                         this.txtRef.readOnly = true
                         this.txtRefno.readOnly = true
                     }
@@ -652,6 +718,8 @@ export default class priceDifferenceInvoice extends React.Component
                                                     this._getPayment()                     
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
+                                                    this.btnSave.setState({disabled:true});
+                                                    this.btnNew.setState({disabled:false});
                                                 }
                                                 else
                                                 {
@@ -786,9 +854,8 @@ export default class priceDifferenceInvoice extends React.Component
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             readOnly={true}
                                             maxLength={32}
-                                            onChange={(async(e)=>
+                                            onValueChanged={(async()=>
                                             {
-                                                this.docObj.docCustomer.dt()[0].REF = e.value
                                                 let tmpQuery = 
                                                 {
                                                     query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 21 AND REF = @REF ",
@@ -937,8 +1004,8 @@ export default class priceDifferenceInvoice extends React.Component
                                                     let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                     if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                     {
-                                                        this.txtRef.setState({value:data[0].CODE});
-                                                        this.txtRef.props.onChange()
+                                                        this.txtRef.value=data[0].CODE;
+                                                        this.txtRef.props.onValueChanged()
                                                     }
                                                 }
                                             }
@@ -963,8 +1030,8 @@ export default class priceDifferenceInvoice extends React.Component
                                                             let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
-                                                                this.txtRef.setState({value:data[0].CODE});
-                                                                this.txtRef.props.onChange()
+                                                                this.txtRef.value=data[0].CODE
+                                                                this.txtRef.props.onValueChanged()
                                                             }
                                                         }
                                                     }
@@ -1131,7 +1198,6 @@ export default class priceDifferenceInvoice extends React.Component
                                     }}
                                     onRowRemoved={async (e)=>{
                                         this._calculateTotal()
-                                        await this.docObj.save()
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
@@ -1193,9 +1259,11 @@ export default class priceDifferenceInvoice extends React.Component
                                                     {
                                                         if(data.length > 0)
                                                         {
+                                                            this.combineControl = true
+                                                            this.combineNew = false
                                                             if(data.length == 1)
                                                             {
-                                                                this.addItem(data[0],this.docObj.docItems.dt().length -1)
+                                                                await this.addItem(data[0],this.docObj.docItems.dt().length -1)
                                                             }
                                                             else if(data.length > 1)
                                                             {
@@ -1203,7 +1271,7 @@ export default class priceDifferenceInvoice extends React.Component
                                                                 {
                                                                     if(i == 0)
                                                                     {
-                                                                        this.addItem(data[i],this.docObj.docItems.dt().length -1)
+                                                                        await this.addItem(data[i],this.docObj.docItems.dt().length -1)
                                                                     }
                                                                     else
                                                                     {
@@ -1222,7 +1290,8 @@ export default class priceDifferenceInvoice extends React.Component
                                                                         this.txtRef.readOnly = true
                                                                         this.txtRefno.readOnly = true
                                                                         this.docObj.docItems.addEmpty(tmpDocItems)
-                                                                        this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                                        await this.core.util.waitUntil(100)
+                                                                        await this.addItem(data[i],this.docObj.docItems.dt().length-1)
                                                                     }
                                                                 }
                                                             }
@@ -1247,12 +1316,15 @@ export default class priceDifferenceInvoice extends React.Component
                                             this.txtRef.readOnly = true
                                             this.txtRefno.readOnly = true
                                             this.docObj.docItems.addEmpty(tmpDocItems)
+                                            await this.core.util.waitUntil(100)
                                             this.pg_txtItemsCode.show()
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
+                                                this.combineControl = true
+                                                this.combineNew = false
                                                 if(data.length == 1)
                                                 {
-                                                    this.addItem(data[0],this.docObj.docItems.dt().length-1)
+                                                    await this.addItem(data[0],this.docObj.docItems.dt().length-1)
                                                 }
                                                 else if(data.length > 1)
                                                 {
@@ -1260,7 +1332,7 @@ export default class priceDifferenceInvoice extends React.Component
                                                     {
                                                         if(i == 0)
                                                         {
-                                                            this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
                                                         }
                                                         else
                                                         {
@@ -1279,7 +1351,8 @@ export default class priceDifferenceInvoice extends React.Component
                                                             this.txtRef.readOnly = true
                                                             this.txtRefno.readOnly = true
                                                             this.docObj.docItems.addEmpty(tmpDocItems)
-                                                            this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                            await this.core.util.waitUntil(100)
+                                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
                                                         }
                                                     }
                                                 }
@@ -2076,6 +2149,38 @@ export default class priceDifferenceInvoice extends React.Component
                             </Form>
                         </NdPopUp>
                     </div>  
+                      {/* combineItem Dialog  */}
+                    <NdDialog id={"msgCombineItem"} container={"#root"} parent={this}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        title={this.t("msgCombineItem.title")} 
+                        showCloseButton={false}
+                        width={"500px"}
+                        height={"250px"}
+                        button={[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}]}
+                        >
+                            <div className="row">
+                                <div className="col-12 py-2">
+                                    <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>
+                                </div>
+                                <div className="col-12 py-2">
+                                <Form>
+                                    {/* checkCustomer */}
+                                    <Item>
+                                        <Label text={this.lang.t("checkAll")} alignment="right" />
+                                        <NdCheckBox id="checkCombine" parent={this} simple={true}  
+                                        value ={false}
+                                        >
+                                        </NdCheckBox>
+                                    </Item>
+                                </Form>
+                            </div>
+                            </div>
+                            <div className='row'>
+                        
+                            </div>
+                        
+                    </NdDialog>  
                 </ScrollView>                
             </div>
         )
