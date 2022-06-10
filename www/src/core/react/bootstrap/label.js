@@ -8,6 +8,7 @@ export default class NbLabel extends NbBase
     {
         super(props)
         this.state.value = typeof props.value == 'undefined' ? ''  : props.value;
+        this.state.text = typeof props.value == 'undefined' ? ''  : props.value;
     }
     get value()
     {
@@ -15,10 +16,16 @@ export default class NbLabel extends NbBase
     }
     set value(e)
     {
-        this.setState({value:e.toString()})
+        if(typeof this.props.format != 'undefined' && this.props.format == 'currency')
+        {
+            this.setState({value:e.toString(),text:Number(e).currency()})
+            return
+        }
+        
+        this.setState({value:e.toString(),text:e.toString()})
     }
     render()
     {
-        return this.state.value
+        return this.state.text
     }
 }

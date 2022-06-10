@@ -38,7 +38,7 @@ export default class App extends React.Component
         i18n.changeLanguage(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'))
         this.lang = i18n;  
         moment.locale(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'));
-
+        
         this.style =
         {
             splash_body : 
