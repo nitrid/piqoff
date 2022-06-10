@@ -921,7 +921,6 @@ export default class outageDoc extends React.Component
                                         <Column dataField="QUANTITY" caption={this.t("grdOutwasItems.clmQuantity")} dataType={'number'} width={150}/>
                                         <Column dataField="COST_PRICE" caption={this.t("grdOutwasItems.clmCostPrice")} dataType={'number'} width={150}/>
                                         <Column dataField="DESCRIPTION" caption={this.t("grdOutwasItems.clmDescription")} editCellRender={this._cellRoleRender}>
-                                            <RequiredRule />
                                         </Column>
                                     </NdGrid>
                                     <ContextMenu
