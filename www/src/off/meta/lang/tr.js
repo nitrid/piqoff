@@ -908,6 +908,17 @@ export const langTr =
         validDepot : "Depo Seçmelisiniz",
         validCustomerCode : "Cari Kodu Boş Geçilemez",
         validDocDate : "Tarih Seçmelisiniz",
+        pg_quickDesc : 
+        {
+            title : "Hızlı Açıklama Seçimi",
+            clmDesc:  "AÇIKLAMA"
+        },
+        popQDescAdd : 
+        {
+            title : "Hızlı Açıklama Ekle",
+            description : "Yeni Açılama",
+            btnApprove : "Kaydet"
+        }
 
     },
     stk_02_004 :

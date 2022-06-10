@@ -38,7 +38,6 @@ export class docCls
         this.checkCls = new checkCls();
         this.docOrders = new docOrdersCls();
         this.docOffers = new docOffersCls();
-
         this._initDs();
     }
     // #region Private
@@ -1080,6 +1079,92 @@ export class docOffersCls
             resolve(this.ds.get('DOC_OFFERS'));
             
         });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            this.ds.delete()
+            resolve(await this.ds.update()); 
+        });
+    }
+}
+export class quickDescCls 
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds =  new dataset()
+        this.empty = {
+            GUID : '00000000-0000-0000-0000-000000000000',
+            CUSER : this.core.auth.data.CODE,
+            DESCRIPTION : '00000000-0000-0000-0000-000000000000',
+            PAGE : ''
+        }
+
+        this._initDs();
+    }
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('QUICK_DESCRIPTION');
+      
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_QUICK_DESCRIPTION_INSERT] " +
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " +
+                    "@DESCRIPTION = @PDESCRIPTION, " + 
+                    "@PAGE = @PPAGE " ,
+            param : ['PGUID:string|50','PCUSER:string|25','PDESCRIPTION:string|500','PPAGE:string|25'],
+            dataprm : ['GUID','CUSER','DESCRIPTION','PAGE']
+        }
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_QUICK_DESCRIPTION_UPDATE] " +
+            "@GUID = @PGUID, " +
+            "@CUSER = @PCUSER, " +
+            "@DESCRIPTION = @PDESCRIPTION, " + 
+            "@PAGE = @PPAGE " ,
+            param : ['PGUID:string|50','PCUSER:string|25','PDESCRIPTION:string|500','PPAGE:string|25'],
+            dataprm : ['GUID','CUSER','DESCRIPTION','PAGE']
+        }
+        this.ds.add(tmpDt);
+    }
+    //#region
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0])
+        }
+
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('QUICK_DESCRIPTION') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {};
+        if(arguments.length > 0)
+        {
+            tmp = {...arguments[0]}
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        tmp.GUID = datatable.uuidv4()
+        this.dt('QUICK_DESCRIPTION').push(tmp)
+    }
+    clearAll()
+    {
+        for(let i = 0; i < this.ds.length; i++)
+        {
+            this.dt(i).clear()
+        }
     }
     save()
     {

@@ -1,6 +1,6 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { docCls,docItemsCls, docCustomerCls } from '../../../../core/cls/doc.js';
+import { docCls,docItemsCls, docCustomerCls,quickDescCls } from '../../../../core/cls/doc.js';
 import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
@@ -33,6 +33,8 @@ export default class outageDoc extends React.Component
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.docObj = new docCls();
+        this.qDescObj = new quickDescCls();
+     
 
         this._getDispatch = this._getDispatch.bind(this)
         this._cellRoleRender = this._cellRoleRender.bind(this)
@@ -50,7 +52,6 @@ export default class outageDoc extends React.Component
     async init()
     {
         this.docObj.clearAll()
-
         this.docObj.ds.on('onAddRow',(pTblName,pData) =>
         {
             if(pData.stat == 'new')
@@ -380,6 +381,41 @@ export default class outageDoc extends React.Component
                                                 this.addItem(data[i],this.docObj.docItems.dt().length-1)
                                             }
                                         }
+                                    }
+                                }
+                            }
+                        },
+                    ]
+                }
+                >  
+                </NdTextBox>
+            )
+        }
+        else if(e.column.dataField == "DESCRIPTION")
+        {
+            return (
+                <NdTextBox id={"txtGrdDesc"+e.rowIndex} parent={this} simple={true} 
+                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                value={e.value}
+                onChange={(r)=>
+                {
+                    this.docObj.docItems.dt()[e.rowIndex].DESCRIPTION = r.component._changedValue
+                }}
+                button=
+                {
+                    [
+                        {
+                            id:'01',
+                            icon:'more',
+                            onClick:()  =>
+                            {
+                                this.pg_quickDesc.show()
+                                this.pg_quickDesc.onClick = async(data) =>
+                                {
+                                    if(data.length == 1)
+                                    {
+                                        e.value = data[0].DESCRIPTION
+                                        this.docObj.docItems.dt()[e.rowIndex].DESCRIPTION = data[0].DESCRIPTION
                                     }
                                 }
                             }
@@ -884,7 +920,7 @@ export default class outageDoc extends React.Component
                                         <Column dataField="ITEM_NAME" caption={this.t("grdOutwasItems.clmItemName")} width={350} />
                                         <Column dataField="QUANTITY" caption={this.t("grdOutwasItems.clmQuantity")} dataType={'number'} width={150}/>
                                         <Column dataField="COST_PRICE" caption={this.t("grdOutwasItems.clmCostPrice")} dataType={'number'} width={150}/>
-                                        <Column dataField="DESCRIPTION" caption={this.t("grdOutwasItems.clmDescription")} >
+                                        <Column dataField="DESCRIPTION" caption={this.t("grdOutwasItems.clmDescription")} editCellRender={this._cellRoleRender}>
                                             <RequiredRule />
                                         </Column>
                                     </NdGrid>
@@ -1155,6 +1191,92 @@ export default class outageDoc extends React.Component
                                             onClick={()=>
                                             {
                                                 this.popPassword.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div> 
+                    <NdPopGrid id={"pg_quickDesc"} parent={this} container={"#root"}
+                    visible={false}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    selection={{mode:"single"}}
+                    title={this.t("pg_quickDesc.title")} //
+                    data = 
+                    {{
+                        source:
+                        {
+                            select:
+                            {
+                                query : "SELECT GUID,DESCRIPTION FROM [dbo].[QUICK_DESCRIPTION] WHERE PAGE = 'stk_02_003' ",
+                            },
+                            sql:this.core.sql
+                        }
+                    }}
+                    button=
+                    {
+                        [
+                            {
+                                id:'01',
+                                icon:'add',
+                                onClick:()=>
+                                {
+                                    this.txtQdescAdd.value = ''
+                                    this.popQDescAdd.show()
+                                    this.pg_quickDesc.hide()
+
+                                }
+                            }
+                        ]
+                        
+                    }
+                    >
+                        <Column dataField="DESCRIPTION" caption={this.t("pg_quickDesc.clmDesc")} width={150} />
+                    </NdPopGrid>
+                       {/* Açıklama Ekle PopUp */}
+                       <div>
+                        <NdPopUp parent={this} id={"popQDescAdd"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popQDescAdd.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'200'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("popQDescAdd.description")} alignment="right" />
+                                    <NdTextBox id="txtQdescAdd" parent={this} simple={true}
+                                            maxLength={32}
+                                    ></NdTextBox>
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("popQDescAdd.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
+                                            onClick={async ()=>
+                                            {       
+                                                let tmpDesc = {...this.qDescObj.empty}
+                                                tmpDesc.DESCRIPTION = this.txtQdescAdd.value
+                                                tmpDesc.PAGE = this.props.data.id
+                                                this.qDescObj.addEmpty(tmpDesc);
+                                                await this.qDescObj.save()
+                                                this.popQDescAdd.hide();
+                                                this.pg_quickDesc.show()
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popQDescAdd.hide();  
                                             }}/>
                                         </div>
                                     </div>
