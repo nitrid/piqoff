@@ -1444,6 +1444,7 @@ export const langTr =
         tabTitleOffical : "Yetkili",
         tabCustomerBank : "Banka Bilgileri",
         txtLegal :"Yasal Bilgiler",
+        chkRebate :"İade Alır",
         pg_txtCode : 
         {
             title : "Cari Seçim",

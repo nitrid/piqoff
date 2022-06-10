@@ -623,6 +623,11 @@ export default class CustomerCard extends React.Component
                                          access={this.access.filter({ELEMENT:'txtWeb',USERS:this.user.CODE})}
                                         />
                                 </Item>
+                                 {/* chkRebate */}
+                                <Item>
+                                    <Label text={this.t("chkRebate")} alignment="right" />
+                                        <NdCheckBox id="chkRebate" parent={this} value={true}  dt={{data:this.customerObj.dt('CUSTOMERS'),field:"REBATE"}} ></NdCheckBox>
+                                </Item>
                                 
                             </Form>
                         </div>
