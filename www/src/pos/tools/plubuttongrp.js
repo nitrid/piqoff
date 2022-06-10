@@ -42,15 +42,17 @@ export default class NbPluButtonGrp extends NbBase
         this._onSelection = this._onSelection.bind(this);
     }
     async init()
-    {
+    {        
         await this.pluObj.load({CUSER:this.core.auth.data.CODE})
         this.setCategory(this.isCategory)        
         await this.pluImageDt.refresh()
         this.setState({isLoading:false})
     }
-    save()
+    async save()
     {
-        this.pluObj.save();
+        await this.pluObj.save();
+        this.setState({isLoading:true})
+        this.init()
     }
     setCategory(pIndex)
     {
@@ -112,7 +114,6 @@ export default class NbPluButtonGrp extends NbBase
                     </div>
                 )
             }
-            
         }
         return tmpView;
     }
@@ -329,6 +330,7 @@ export default class NbPluButtonGrp extends NbBase
                                 tmpData.removeAt(i)
                             }
                         }
+                        await this.pluObj.dt().delete()
                         this.refresh();
                         return;                        
                     }
@@ -367,6 +369,7 @@ export default class NbPluButtonGrp extends NbBase
                                 tmpData.removeAt(i)
                             }
                         }
+                        await this.pluObj.dt().delete()
                         this.refresh();
                         return;                        
                     }
@@ -419,6 +422,7 @@ export default class NbPluButtonGrp extends NbBase
                                 tmpData.removeAt(i)
                             }
                         }
+                        await this.pluObj.dt().delete()
                         this.refresh();
                         return;                        
                     }
@@ -585,7 +589,7 @@ export default class NbPluButtonGrp extends NbBase
                                 <NbButton id={"btnSelectNameEntry" + this.props.id} parent={this} className="form-group btn btn-success btn-block" 
                                 style={{height:"45px",width:"100%",fontSize:"16px"}}
                                 onClick={async ()=>
-                                {
+                                {       
                                     if(this.clickData.status == 0) //new
                                     {
                                         this.pluObj.addEmpty()
@@ -597,12 +601,12 @@ export default class NbPluButtonGrp extends NbBase
                                         this.refresh();
                                     }
                                     else if(this.clickData.status == 1) //update
-                                    {               
-                                        let tmpData = this.pluObj.dt().where({GUID:this.clickData.data.GUID});
+                                    {                                                       
+                                        let tmpData = this.pluObj.dt().where({TYPE:this.clickData.type}).where({LOCATION:this.clickData.index}).where({GROUP_INDEX:this.isCategory})
                                         if(tmpData.length > 0)
                                         {
                                             tmpData[0].NAME = this["txtNameEntry" + this.props.id].value
-                                            tmpData[0].LINK = this.clickData.data.LINK
+                                            tmpData[0].LINK = this.clickData.data.GUID                                            
                                         }                                        
                                         this.refresh();
                                     }

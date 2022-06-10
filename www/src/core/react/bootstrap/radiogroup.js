@@ -19,7 +19,8 @@ export default class NbRadioButton extends NbBase
         this.state = 
         {
             btnClass : tmpBtnClass,
-            value : 0
+            value : 0,
+            vertical : typeof this.props.vertical == 'undefined' ? true : this.props.vertical
         }
         this._onClick = this._onClick.bind(this)
     }
@@ -109,7 +110,7 @@ export default class NbRadioButton extends NbBase
         return (
             <div className="row">
                 <div className='col-12 pe-1'>
-                    <div className="btn-group-vertical" style={{width:'100%'}}>
+                    <div className={"btn-group" + (this.state.vertical == true ? "-vertical" : "")} style={{width:'100%'}}>
                         {this._buttonView()}
                     </div>
                 </div>            

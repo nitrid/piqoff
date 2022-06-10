@@ -2410,7 +2410,14 @@ export default class posDoc extends React.PureComponent
                                     </div>
                                     {/* Advance */}
                                     <div className="col px-1">
-                                        <NbButton id={"btnAdvance"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}>
+                                        <NbButton id={"btnAdvance"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        onClick={()=>
+                                        {
+                                            this.rbtnAdvanceType.value = 0
+                                            this.txtPopAdvance.value = 0
+                                            this.txtPopAdvance.newStart = true
+                                            this.popAdvance.show()
+                                        }}>
                                             <i className="text-white fa-solid fa-circle-dollar-to-slot" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
@@ -4508,6 +4515,65 @@ export default class posDoc extends React.PureComponent
                             </div>
                         </div>
                     </NdPopUp>    
+                </div>
+                {/* Advance Popup */}
+                <div>
+                    <NdPopUp parent={this} id={"popAdvance"} 
+                    visible={false}                        
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={"Avans"}
+                    container={"#root"} 
+                    width={"300"}
+                    height={"550"}
+                    position={{of:"#root"}}
+                    >
+                        <div className="row pt-1 pe-2">
+                            <div className="col-12">
+                                <NbRadioButton id={"rbtnAdvanceType"} parent={this} vertical={false}
+                                button={
+                                    [
+                                        {
+                                            id:"btn01",
+                                            style:{height:'66px',width:'100%'},
+                                            icon:"fa-arrow-right-to-bracket",
+                                            text:"Giriş"
+                                        },
+                                        {
+                                            id:"btn02",
+                                            style:{height:'66px',width:'100%'},
+                                            icon:"fa-arrow-right-from-bracket",
+                                            text:"Çıkış"
+                                        }
+                                    ]
+                                }/>
+                            </div>
+                        </div>
+                        {/* txtPopAdvance */}
+                        <div className="row pt-1">
+                            <div className="col-12">
+                                <NdTextBox id={"txtPopAdvance"} parent={this} simple={true} />
+                            </div>
+                        </div> 
+                        <div className="row pt-2">
+                            {/* numPopAdvance */}
+                            <div className="col-12">
+                                <NbNumberboard id={"numPopAdvance"} parent={this} textobj={"txtPopAdvance"} span={1} buttonHeight={"60px"}/>
+                            </div>
+                        </div>
+                        {/* btnPopAdvance */}
+                        <div className="row pt-2">
+                            <div className="col-12">
+                                <NbButton id={"btnPopAdvance"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
+                                onClick={()=>
+                                {
+                                    
+                                }}>
+                                    <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
+                                </NbButton>
+                            </div>
+                        </div>
+                    </NdPopUp>
                 </div>
             </div>
         )
