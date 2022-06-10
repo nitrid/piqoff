@@ -293,7 +293,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"txtMinSalePrice",
-        VALUE : {visible:true,editable:true},
+        VALUE : {visible:true,editable:false},
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "txtMinSalePrice",

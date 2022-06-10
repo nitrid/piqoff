@@ -61,6 +61,7 @@ export default class NdNumberBox extends Base
     }
     _txtView()
     {
+        console.log(this.state.editable +'-' +this.props.id)
         return (
             <NumberBox showClearButton={this.state.showClearButton} height='fit-content' 
                 elementAttr={this.props.elementAttr}
