@@ -924,7 +924,6 @@ export default class itemCard extends React.Component
                                     access={this.access.filter({ELEMENT:'txtTaxSugar',USERS:this.user.CODE})}
                                     onChange={()=>
                                     {
-                                        console.log(1)
                                         this.taxSugarCalculate()
                                     }}>
                                        <Validator validationGroup={this.state.isTaxSugar ? "frmItems" + this.tabIndex : ''}>
@@ -1036,6 +1035,7 @@ export default class itemCard extends React.Component
                         <div className='col-12'>
                             <TabPanel height="100%" onItemRendered={this._onItemRendered}>
                                 <Item title={this.t("tabTitlePrice")}>
+                                    {/* FİYAT PANELI */}
                                     <div className='row px-2 py-2'>
                                         <div className='col-2'>
                                             <NdNumberBox id="txtCostPrice" parent={this} title={this.t("txtCostPrice")}  titleAlign={"top"} tabIndex={this.tabIndex}
