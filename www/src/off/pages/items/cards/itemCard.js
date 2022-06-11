@@ -137,7 +137,7 @@ export default class itemCard extends React.Component
         })        
 
         this.itemsObj.addEmpty();
-        console.log(Math.floor(Date.now() / 100000))
+        
         this.txtRef.value = Math.floor(Date.now() / 1000)
         this.txtCustomer.value = "";
         this.txtCustomer.displayValue = "";   
