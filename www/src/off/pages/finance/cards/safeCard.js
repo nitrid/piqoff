@@ -389,7 +389,7 @@ export default class safeCard extends React.Component
                                     <NdSelectBox simple={true} parent={this} id="cmbType" height='fit-content' dt={{data:this.safeObj.dt('SAFE'),field:"TYPE"}}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
-                                    data={{source:[{ID:0,VALUE:this.t("cmbTypeData.cash")},{ID:1,VALUE:this.t("cmbTypeData.check")}]}}
+                                    data={{source:[{ID:0,VALUE:this.t("cmbTypeData.cash")},{ID:1,VALUE:this.t("cmbTypeData.check")},{ID:2,VALUE:this.t("cmbTypeData.pos")}]}}
                                     onValueChanged={(async()=>
                                             {
                                                
