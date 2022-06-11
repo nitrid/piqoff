@@ -28,6 +28,8 @@ import NdPosBarBox from "../tools/posbarbox.js";
 import NdAcsDialog,{acsDialog} from "../../core/react/devex/acsdialog.js";
 
 import { posCls,posSaleCls,posPaymentCls,posPluCls,posDeviceCls } from "../../core/cls/pos.js";
+import { docCls} from "../../core/cls/doc.js"
+
 import { itemsCls } from "../../core/cls/items.js";
 import { dataset,datatable,param,access } from "../../core/core.js";
 import {prm} from '../meta/prm.js'
@@ -115,9 +117,7 @@ export default class posDoc extends React.PureComponent
         this.posObj.addEmpty()
         this.posObj.dt()[this.posObj.dt().length - 1].DEVICE = '001'
 
-        this.posDevice.lcdPort = this.prmObj.filter({ID:'LCDPort',TYPE:0,SPECIAL:"001"}).getValue()
-        this.posDevice.scalePort = this.prmObj.filter({ID:'ScalePort',TYPE:0,SPECIAL:"001"}).getValue()
-        this.posDevice.payCardPort = this.prmObj.filter({ID:'PayCardPort',TYPE:0,SPECIAL:"001"}).getValue()
+        await this.posDevice.load({CODE:'001'})        
         
         await this.grdList.dataRefresh({source:this.posObj.posSale.dt()});
         await this.grdPay.dataRefresh({source:this.posObj.posPay.dt()});
@@ -1441,7 +1441,7 @@ export default class posDoc extends React.PureComponent
     {
         return new Promise(async resolve => 
         {
-            let prmPrint = this.prmObj.filter({ID:'PrintDesign',TYPE:0}).getValue()
+            let prmPrint = this.posDevice.dt().length > 0 ? this.posDevice.dt()[0].PRINT_DESING : ""
             import("../meta/print/" + prmPrint).then(async(e)=>
             {
                 let tmpPrint = e.print(pData)
@@ -4567,7 +4567,12 @@ export default class posDoc extends React.PureComponent
                                 <NbButton id={"btnPopAdvance"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
                                 onClick={()=>
                                 {
-                                    
+                                    let tmpDoc = new docCls()
+                                    tmpDoc.addEmpty()
+                                    tmpDoc.dt()[0].TYPE = 2
+                                    tmpDoc.dt()[0].DOC_TYPE = 201
+                                    tmpDoc.dt()[0].INPUT = this.prmObj.filter({ID:'SafeCenter',TYPE:0}).getValue()
+                                    tmpDoc.dt()[0].OUTPUT = this.prmObj.filter({ID:'SafeCenter',TYPE:0}).getValue()
                                 }}>
                                     <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
                                 </NbButton>

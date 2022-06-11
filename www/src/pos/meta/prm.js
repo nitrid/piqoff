@@ -598,12 +598,12 @@ export const prm =
             CAPTION : "Maliyet Fiyat Kontrolü"
         }
     },
-    //LCD Port
+    //Merkez Kasa
     {
         TYPE : 0,
-        ID :"LCDPort",
-        VALUE : "COM7",
-        SPECIAL : "001",
+        ID :"SafeCenter",
+        VALUE : "df8b4f69-9e2d-449a-996a-0001abcf0308",
+        SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",
         APP : "POS",
@@ -611,41 +611,9 @@ export const prm =
         {
             TYPE : "text",
             PAGE_NAME : "Pos",
-            CAPTION : "LCD Port"
+            CAPTION : "Merkez Kasa"
         }
-    },
-    //Scale Port
-    {
-        TYPE : 0,
-        ID :"ScalePort",
-        VALUE : "COM2",
-        SPECIAL : "001",
-        PAGE : "pos",
-        ELEMENT : "",
-        APP : "POS",
-        VIEW : 
-        {
-            TYPE : "text",
-            PAGE_NAME : "Pos",
-            CAPTION : "Terazi Port"
-        }
-    },
-    //PayCard Port
-    {
-        TYPE : 0,
-        ID :"PayCardPort",
-        VALUE : "COM8",
-        SPECIAL : "001",
-        PAGE : "pos",
-        ELEMENT : "",
-        APP : "POS",
-        VIEW : 
-        {
-            TYPE : "text",
-            PAGE_NAME : "Pos",
-            CAPTION : "K.Kart Port"
-        }
-    },
+    },   
     //Print Design
     {
         TYPE : 0,
