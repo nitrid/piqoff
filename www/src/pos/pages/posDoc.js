@@ -4565,14 +4565,58 @@ export default class posDoc extends React.PureComponent
                         <div className="row pt-2">
                             <div className="col-12">
                                 <NbButton id={"btnPopAdvance"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
-                                onClick={()=>
+                                onClick={async()=>
                                 {
-                                    let tmpDoc = new docCls()
-                                    tmpDoc.addEmpty()
-                                    tmpDoc.dt()[0].TYPE = 2
-                                    tmpDoc.dt()[0].DOC_TYPE = 201
-                                    tmpDoc.dt()[0].INPUT = this.prmObj.filter({ID:'SafeCenter',TYPE:0}).getValue()
-                                    tmpDoc.dt()[0].OUTPUT = this.prmObj.filter({ID:'SafeCenter',TYPE:0}).getValue()
+                                    if(this.txtPopAdvance.value > 0)
+                                    {
+                                        let tmpInput
+                                        let tmpOutput
+                                        if(this.rbtnAdvanceType.value == 0)
+                                        {
+                                            tmpInput = this.posDevice.dt().length > 0 ? this.posDevice.dt()[0].SAFE_GUID : '00000000-0000-0000-0000-000000000000'
+                                            tmpOutput = this.prmObj.filter({ID:'SafeCenter',TYPE:0}).getValue()
+                                        }
+                                        else
+                                        {
+                                            tmpInput = this.prmObj.filter({ID:'SafeCenter',TYPE:0}).getValue()
+                                            tmpOutput = this.posDevice.dt().length > 0 ? this.posDevice.dt()[0].SAFE_GUID : '00000000-0000-0000-0000-000000000000'
+                                        }
+
+                                        let tmpDoc = new docCls()
+                                        tmpDoc.addEmpty()
+                                        tmpDoc.dt()[0].TYPE = 2
+                                        tmpDoc.dt()[0].DOC_TYPE = 201
+                                        tmpDoc.dt()[0].REF = 'POS'
+                                        tmpDoc.dt()[0].REF_NO = Math.floor(Date.now() / 1000)
+                                        tmpDoc.dt()[0].INPUT = tmpInput
+                                        tmpDoc.dt()[0].OUTPUT = tmpOutput
+                                        tmpDoc.dt()[0].AMOUNT = this.txtPopAdvance.value
+                                        tmpDoc.dt()[0].TOTAL = this.txtPopAdvance.value
+
+                                        tmpDoc.docCustomer.addEmpty()
+                                        tmpDoc.docCustomer.dt()[0].TYPE = 2
+                                        tmpDoc.docCustomer.dt()[0].DOC_GUID = tmpDoc.dt()[0].GUID
+                                        tmpDoc.docCustomer.dt()[0].DOC_TYPE = 201
+                                        tmpDoc.docCustomer.dt()[0].REF = 'POS'
+                                        tmpDoc.docCustomer.dt()[0].REF_NO = tmpDoc.dt()[0].REF_NO
+                                        tmpDoc.docCustomer.dt()[0].INPUT = tmpDoc.dt()[0].INPUT
+                                        tmpDoc.docCustomer.dt()[0].OUTPUT = tmpDoc.dt()[0].OUTPUT
+                                        tmpDoc.docCustomer.dt()[0].PAY_TYPE = 20
+                                        tmpDoc.docCustomer.dt()[0].AMOUNT = this.txtPopAdvance.value
+                                        tmpDoc.docCustomer.dt()[0].DESCRIPTION = 'KASA AVANS'
+
+                                        await tmpDoc.save()
+                                        this.popAdvance.hide()
+
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgAlert',showTitle:true,title:"Bilgi",showCloseButton:true,width:'500px',height:'250px',
+                                            button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Kayıt işlemi başarılı."}</div>)
+                                        }
+                                        await dialog(tmpConfObj);
+                                    }
+
                                 }}>
                                     <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
                                 </NbButton>
