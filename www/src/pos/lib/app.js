@@ -108,7 +108,7 @@ export default class App extends React.Component
                 }
             }
         ];
-        
+
         this.core = new core(io(window.location.origin,{timeout:100000}));
         this.textValueChanged = this.textValueChanged.bind(this)
         this.onDbClick = this.onDbClick.bind(this)

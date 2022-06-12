@@ -838,7 +838,7 @@ export class posExtraCls
             query : "EXEC [dbo].[PRD_POS_EXTRA_DELETE] " + 
                     "@CUSER = @PCUSER, " + 
                     "@UPDATE = 1, " +
-                    "@GUID = @PGUID, " , 
+                    "@GUID = @PGUID " , 
             param : ['PCUSER:string|25','PGUID:string|50'],
             dataprm : ['CUSER','GUID'],
             local : 

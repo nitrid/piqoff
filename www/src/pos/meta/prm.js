@@ -486,6 +486,89 @@ export const prm =
             CAPTION : "Park Açıklama"
         }
     },
+    //Avans Açıklama
+    {
+        TYPE : 0,
+        ID :"AdvanceDescription",
+        VALUE : 
+        {
+            disable:false,
+            minCharSize:25,
+            buttons:
+            [
+                {
+                    id:"btn01",
+                    title:"Yetersiz Ödeme",
+                    text:"Müşteri ödemesi gereken tutarı karşılayamadı terkrar gelecek."
+                },
+                {
+                    id:"btn02",
+                    title:"Ek Alış Veriş",
+                    text:"Müşteri ek ürün almak için reyona gitti."
+                },
+                {
+                    id:"btn03",
+                    title:"Mağaza Personeli",
+                    text:"Mağaza personeli ödemesini sonra yapacak."
+                },
+                {
+                    id:"btn04",
+                    title:"K.Kartı Geçmedi",
+                    text:"K.Kartı geçmedi müştere ödemesini yapabilmesi için tekrar gelecek."
+                },
+                {
+                    id:"btn05",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn06",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn07",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn08",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn09",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn10",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn11",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                },
+                {
+                    id:"btn12",
+                    title:"Boş",
+                    text:"Detaylı açıklama alanı"
+                }
+            ]
+        },
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Avans Açıklama"
+        }
+    },
     //Açılış da Park Getir
     {
         TYPE : 0,
