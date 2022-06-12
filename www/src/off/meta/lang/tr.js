@@ -4898,7 +4898,8 @@ export const langTr =
         cmbTypeData : 
         {
             cash : "Nakit",
-            check : "Çek"
+            check : "Çek",
+            pos : "Pos"
         },
         pg_txtCode : 
         {

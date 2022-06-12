@@ -1,6 +1,6 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { deviceCls} from '../../../../core/cls/posSettings';
+import { posDeviceCls} from '../../../../core/cls/pos';
 import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
@@ -29,7 +29,7 @@ export default class posDeviceCard extends React.Component
         super(props)
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
-        this.deviceObj = new deviceCls();
+        this.deviceObj = new posDeviceCls();
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
     }
