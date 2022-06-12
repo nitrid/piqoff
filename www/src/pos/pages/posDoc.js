@@ -26,6 +26,7 @@ import NdDialog,{ dialog } from "../../core/react/devex/dialog.js";
 import NbLabel from "../../core/react/bootstrap/label.js";
 import NdPosBarBox from "../tools/posbarbox.js";
 import NdAcsDialog,{acsDialog} from "../../core/react/devex/acsdialog.js";
+import NbKeyboard from "../../core/react/bootstrap/keyboard.js";
 
 import { posCls,posSaleCls,posPaymentCls,posPluCls,posDeviceCls } from "../../core/cls/pos.js";
 import { docCls} from "../../core/cls/doc.js"
@@ -117,7 +118,7 @@ export default class posDoc extends React.PureComponent
         this.posObj.addEmpty()
         this.posObj.dt()[this.posObj.dt().length - 1].DEVICE = '001'
 
-        await this.posDevice.load({CODE:'001'})        
+        await this.posDevice.load({CODE:this.posObj.dt()[this.posObj.dt().length - 1].DEVICE})        
         
         await this.grdList.dataRefresh({source:this.posObj.posSale.dt()});
         await this.grdPay.dataRefresh({source:this.posObj.posPay.dt()});
@@ -1505,13 +1506,29 @@ export default class posDoc extends React.PureComponent
                                     </div> 
                                 </div>
                             </div>
-                            <div className="col-1 offset-1 px-1">
+                            <div className="col-1 px-1">
                                 <NbButton id={"btnRefresh"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
                                 onClick={()=>
                                 {                                                        
                                     document.location.reload()
                                 }}>
                                     <i className="text-white fa-solid fa-arrows-rotate" style={{fontSize: "16px"}} />
+                                </NbButton>
+                            </div>
+                            <div className="col-1 px-1">
+                                <NbButton id={"btnSettings"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
+                                onClick={()=>
+                                {   
+                                    if(this.posDevice.dt().length > 0)
+                                    {
+                                        this.txtPopSettingsLcd.value = this.posDevice.dt()[0].LCD_PORT
+                                        this.txtPopSettingsScale.value = this.posDevice.dt()[0].SCALE_PORT
+                                        this.txtPopSettingsPayCard.value = this.posDevice.dt()[0].PAY_CARD_PORT
+                                        this.txtPopSettingsPrint.value = this.posDevice.dt()[0].PRINT_DESING
+                                    }
+                                    this.popSettings.show();
+                                }}>
+                                    <i className="text-white fa-solid fa-gear" style={{fontSize: "16px"}} />
                                 </NbButton>
                             </div>
                             <div className="col-1 px-1">
@@ -4617,6 +4634,71 @@ export default class posDoc extends React.PureComponent
                                         await dialog(tmpConfObj);
                                     }
 
+                                }}>
+                                    <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
+                                </NbButton>
+                            </div>
+                        </div>
+                    </NdPopUp>
+                </div>
+                {/* Settings Popup */}
+                <div>
+                    <NdPopUp parent={this} id={"popSettings"} 
+                    visible={false}                        
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={"Ayarlar"}
+                    container={"#root"} 
+                    width={"600"}
+                    height={"520"}
+                    position={{of:"#root"}}
+                    >
+                        <Form colCount={2} height={'fit-content'} id={"frmSettings"}>
+                            <Item>
+                                <Label text={"LCD Port"} alignment="right" />
+                                <NdTextBox id={"txtPopSettingsLcd"} parent={this} simple={true} valueChangeEvent="keyup" onValueChanging={(e)=>{this.keyPopSettings.setInput(e)}} onFocusIn={(e)=>{this.keyPopSettings.setInput(this.txtPopSettingsLcd.value);this.keyPopSettings.inputName = "txtPopSettingsLcd"}}/>
+                            </Item>
+                            <Item>
+                                <Label text={"Scale Port"} alignment="right" />
+                                <NdTextBox id={"txtPopSettingsScale"} parent={this} simple={true} valueChangeEvent="keyup" onValueChanging={(e)=>{this.keyPopSettings.setInput(e)}} onFocusIn={()=>{this.keyPopSettings.setInput(this.txtPopSettingsScale.value);this.keyPopSettings.inputName = "txtPopSettingsScale"}}/>
+                            </Item>
+                            <Item>
+                                <Label text={"Pay Card Port"} alignment="right" />
+                                <NdTextBox id={"txtPopSettingsPayCard"} parent={this} simple={true} valueChangeEvent="keyup" onValueChanging={(e)=>{this.keyPopSettings.setInput(e)}} onFocusIn={()=>{this.keyPopSettings.setInput(this.txtPopSettingsPayCard.value);this.keyPopSettings.inputName = "txtPopSettingsPayCard"}}/>
+                            </Item>
+                            <Item>
+                                <Label text={"Yazdırma Dizayn"} alignment="right" />
+                                <NdTextBox id={"txtPopSettingsPrint"} parent={this} simple={true} valueChangeEvent="keyup" onValueChanging={(e)=>{this.keyPopSettings.setInput(e)}} onFocusIn={()=>{this.keyPopSettings.setInput(this.txtPopSettingsPrint.value);this.keyPopSettings.inputName = "txtPopSettingsPrint"}}/>
+                            </Item>
+                        </Form>
+                        <div className="row py-1">
+                            <div className="col-12">
+                                <NbKeyboard id={"keyPopSettings"} parent={this} inputName={"txtPopSettingsLcd"}/>
+                            </div>
+                        </div>
+                        <div className="row py-1">
+                            <div className="col-12">
+                            <NbButton id={"btnPopSettingsOk"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
+                                onClick={async()=>
+                                {
+                                    if(this.posDevice.dt().length > 0)
+                                    {
+                                        this.posDevice.dt()[0].LCD_PORT = this.txtPopSettingsLcd.value
+                                        this.posDevice.dt()[0].SCALE_PORT = this.txtPopSettingsScale.value
+                                        this.posDevice.dt()[0].PAY_CARD_PORT = this.txtPopSettingsPayCard.value
+                                        this.posDevice.dt()[0].PRINT_DESING = this.txtPopSettingsPrint.value
+                                    }
+                                    else
+                                    {
+                                        this.posDevice.addEmpty()
+                                        this.posDevice.dt()[0].CODE = this.posObj.dt()[this.posObj.dt().length - 1].DEVICE
+                                        this.posDevice.dt()[0].NAME = this.posObj.dt()[this.posObj.dt().length - 1].DEVICE
+                                        this.posDevice.dt()[0].LCD_PORT = this.txtPopSettingsLcd.value
+                                        this.posDevice.dt()[0].SCALE_PORT = this.txtPopSettingsScale.value
+                                        this.posDevice.dt()[0].PAY_CARD_PORT = this.txtPopSettingsPayCard.value
+                                        this.posDevice.dt()[0].PRINT_DESING = this.txtPopSettingsPrint.value
+                                    }
+                                    await this.posDevice.save()
                                 }}>
                                     <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
                                 </NbButton>
