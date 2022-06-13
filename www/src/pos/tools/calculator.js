@@ -177,6 +177,24 @@ export default class NbCalculator extends NbBase
                             </NbButton>
                         </div>
                     </div>
+                    {/* Ce */}
+                    <div className='row py-1'>
+                        <div className="col-6">
+                            <NbButton id={"btnCe" + this.props.id} parent={this} className="form-group btn btn-danger btn-block" style={{height:'60px',width:'100%',fontSize:'20pt'}}
+                            onClick={()=>
+                            {
+                                this.setState({calcResult:""})
+                            }}>
+                            CE
+                            </NbButton>
+                        </div>
+                        <div className="col-6">
+                            <NbButton id={"btn" + this.props.id + "Backspace"} parent={this} keyBtn={{textbox:"txtCalc" + this.props.id,key:"Backspace"}} 
+                            className="form-group btn btn-primary btn-block" style={{height:'60px',width:'100%'}}>
+                                <i className="text-white fa-solid fa-delete-left" style={{fontSize: '24px'}} />
+                            </NbButton>   
+                            </div>
+                        </div>
                     {/* Equal */}
                     <div className='row py-1'>
                         <div className="col-12">
@@ -189,19 +207,7 @@ export default class NbCalculator extends NbBase
                                 <i className="text-white fa-solid fa-equals" style={{fontSize: '24px'}} />
                             </NbButton>
                         </div>
-                    </div>
-                    {/* Ce */}
-                    <div className='row py-1'>
-                        <div className="col-12">
-                            <NbButton id={"btnCe" + this.props.id} parent={this} className="form-group btn btn-danger btn-block" style={{height:'60px',width:'100%',fontSize:'20pt'}}
-                            onClick={()=>
-                            {
-                                this.setState({calcResult:""})
-                            }}>
-                            CE
-                            </NbButton>
-                        </div>
-                    </div>
+                    </div>                    
                 </NdPopUp>
             </div>
         )

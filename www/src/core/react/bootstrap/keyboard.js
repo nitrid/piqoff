@@ -26,6 +26,10 @@ export default class NbKeyboard extends NbBase
     {
         this.keyboard.setInput(e)
     }
+    clearInput()
+    {
+        this.keyboard.clearInput();
+    }
     render()
     {
         return(
@@ -54,7 +58,8 @@ export default class NbKeyboard extends NbBase
                     }
                 }}
                 layoutName={this.state.layoutName}
-                layout={{
+                layout={
+                {
                     shift: 
                     [
                     "q w e r t y u i o p ü .",

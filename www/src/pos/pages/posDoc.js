@@ -26,6 +26,7 @@ import NdDialog,{ dialog } from "../../core/react/devex/dialog.js";
 import NbLabel from "../../core/react/bootstrap/label.js";
 import NdPosBarBox from "../tools/posbarbox.js";
 import NdAcsDialog,{acsDialog} from "../../core/react/devex/acsdialog.js";
+import NbKeyboard from "../../core/react/bootstrap/keyboard.js";
 
 import { posCls,posSaleCls,posPaymentCls,posPluCls,posDeviceCls } from "../../core/cls/pos.js";
 import { docCls} from "../../core/cls/doc.js"
@@ -118,7 +119,7 @@ export default class posDoc extends React.PureComponent
         this.posObj.addEmpty()
         this.posObj.dt()[this.posObj.dt().length - 1].DEVICE = '001'
 
-        await this.posDevice.load({CODE:'001'})        
+        await this.posDevice.load({CODE:this.posObj.dt()[this.posObj.dt().length - 1].DEVICE})        
         
         await this.grdList.dataRefresh({source:this.posObj.posSale.dt()});
         await this.grdPay.dataRefresh({source:this.posObj.posPay.dt()});
@@ -137,7 +138,9 @@ export default class posDoc extends React.PureComponent
         {
             query : "SELECT GUID,LUSER_NAME,LDATE,TOTAL, " + 
                     "ISNULL((SELECT TOP 1 DESCRIPTION FROM POS_EXTRA WHERE POS_GUID = POS_VW_01.GUID AND TAG = 'PARK DESC'),'') AS DESCRIPTION " +
-                    "FROM POS_VW_01 WHERE STATUS = 0 ORDER BY LDATE DESC",
+                    "FROM POS_VW_01 WHERE STATUS = 0 AND LUSER = @LUSER ORDER BY LDATE DESC",
+            param : ["LUSER:string|25"],
+            value : [this.core.auth.data.CODE]
         }
         await this.parkDt.refresh();     
 
@@ -1506,13 +1509,32 @@ export default class posDoc extends React.PureComponent
                                     </div> 
                                 </div>
                             </div>
-                            <div className="col-1 offset-1 px-1">
+                            <div className="col-1 px-1">
                                 <NbButton id={"btnRefresh"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
                                 onClick={()=>
                                 {                                                        
                                     document.location.reload()
                                 }}>
                                     <i className="text-white fa-solid fa-arrows-rotate" style={{fontSize: "16px"}} />
+                                </NbButton>
+                            </div>
+                            <div className="col-1 px-1">
+                                <NbButton id={"btnSettings"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
+                                onClick={()=>
+                                {   
+                                    if(this.posDevice.dt().length > 0)
+                                    {
+                                        this.txtPopSettingsLcd.value = this.posDevice.dt()[0].LCD_PORT
+                                        this.txtPopSettingsScale.value = this.posDevice.dt()[0].SCALE_PORT
+                                        // this.txtPopSettingsPayCard.value = this.posDevice.dt()[0].PAY_CARD_PORT
+                                        // this.txtPopSettingsPrint.value = this.posDevice.dt()[0].PRINT_DESING
+                                    }
+
+                                    // this.keyPopSettings.clearInput();
+                                    //this.keyPopSettings.setInput("")
+                                    this.popSettings.show();
+                                }}>
+                                    <i className="text-white fa-solid fa-gear" style={{fontSize: "16px"}} />
                                 </NbButton>
                             </div>
                             <div className="col-1 px-1">
@@ -2241,6 +2263,7 @@ export default class posDoc extends React.PureComponent
                                             {
                                                 this.txtPopDiffPriceQ.value = this.grdList.devGrid.getSelectedRowKeys()[0].QUANTITY < 0 ? this.grdList.devGrid.getSelectedRowKeys()[0].QUANTITY * -1 : this.grdList.devGrid.getSelectedRowKeys()[0].QUANTITY;
                                                 this.txtPopDiffPriceP.value = this.grdList.devGrid.getSelectedRowKeys()[0].PRICE;
+                                                this.txtPopDiffPriceQ.newStart = true
                                                 this.popDiffPrice.show();
                                             }
                                             else
@@ -2284,7 +2307,7 @@ export default class posDoc extends React.PureComponent
                                     <div className="col px-1">
                                         <NbButton id={"btnParkList"} parent={this} className="form-group btn btn-warning btn-block my-1" style={{height:"70px",width:"100%"}}
                                         onClick={async ()=>
-                                        {            
+                                        {      
                                             await this.parkDt.refresh();
                                             await this.grdPopParkList.dataRefresh({source:this.parkDt});             
                                             this.popParkList.show();
@@ -2335,6 +2358,14 @@ export default class posDoc extends React.PureComponent
                                             if(this.posObj.posSale.dt().length > 0)
                                             {
                                                 this.popParkDesc.show()
+                                                setTimeout(() => 
+                                                {
+                                                    if(this.posObj.posExtra.dt().where({TAG:"PARK DESC"}).length > 0)
+                                                    {
+                                                        this.popParkDesc.setText(this.posObj.posExtra.dt().where({TAG:"PARK DESC"})[0].DESCRIPTION)
+                                                    }                                                    
+                                                }, 100);
+                                                
                                             }
                                         }}>
                                             <i className="text-white fa-solid fa-arrow-right-to-bracket" style={{fontSize: "24px"}} />
@@ -2833,7 +2864,7 @@ export default class posDoc extends React.PureComponent
                 </div>
                 {/* Customer List Popup */}
                 <div>
-                    <NbPosPopGrid id={"popCustomerList"} parent={this} width={"900"} height={"650"} position={"#root"} title={"Müşteri Listesi"}
+                    <NbPosPopGrid id={"popCustomerList"} parent={this} width={"100%"} height={"100%"} position={"#root"} title={"Müşteri Listesi"}
                     data={{source:
                     {
                         select:
@@ -4369,7 +4400,6 @@ export default class posDoc extends React.PureComponent
                     container={"#root"} 
                     width={"300"}
                     height={"515"}
-                    // onHiding={()=> {this._onClick('close')}}
                     position={{of:"#root"}}
                     >
                         {/* txtPopDiffPriceQ */}
@@ -4570,54 +4600,133 @@ export default class posDoc extends React.PureComponent
                                 {
                                     if(this.txtPopAdvance.value > 0)
                                     {
-                                        let tmpInput
-                                        let tmpOutput
-                                        if(this.rbtnAdvanceType.value == 0)
-                                        {
-                                            tmpInput = this.posDevice.dt().length > 0 ? this.posDevice.dt()[0].SAFE_GUID : '00000000-0000-0000-0000-000000000000'
-                                            tmpOutput = this.prmObj.filter({ID:'SafeCenter',TYPE:0}).getValue()
-                                        }
-                                        else
-                                        {
-                                            tmpInput = this.prmObj.filter({ID:'SafeCenter',TYPE:0}).getValue()
-                                            tmpOutput = this.posDevice.dt().length > 0 ? this.posDevice.dt()[0].SAFE_GUID : '00000000-0000-0000-0000-000000000000'
-                                        }
-
-                                        let tmpDoc = new docCls()
-                                        tmpDoc.addEmpty()
-                                        tmpDoc.dt()[0].TYPE = 2
-                                        tmpDoc.dt()[0].DOC_TYPE = 201
-                                        tmpDoc.dt()[0].REF = 'POS'
-                                        tmpDoc.dt()[0].REF_NO = Math.floor(Date.now() / 1000)
-                                        tmpDoc.dt()[0].INPUT = tmpInput
-                                        tmpDoc.dt()[0].OUTPUT = tmpOutput
-                                        tmpDoc.dt()[0].AMOUNT = this.txtPopAdvance.value
-                                        tmpDoc.dt()[0].TOTAL = this.txtPopAdvance.value
-
-                                        tmpDoc.docCustomer.addEmpty()
-                                        tmpDoc.docCustomer.dt()[0].TYPE = 2
-                                        tmpDoc.docCustomer.dt()[0].DOC_GUID = tmpDoc.dt()[0].GUID
-                                        tmpDoc.docCustomer.dt()[0].DOC_TYPE = 201
-                                        tmpDoc.docCustomer.dt()[0].REF = 'POS'
-                                        tmpDoc.docCustomer.dt()[0].REF_NO = tmpDoc.dt()[0].REF_NO
-                                        tmpDoc.docCustomer.dt()[0].INPUT = tmpDoc.dt()[0].INPUT
-                                        tmpDoc.docCustomer.dt()[0].OUTPUT = tmpDoc.dt()[0].OUTPUT
-                                        tmpDoc.docCustomer.dt()[0].PAY_TYPE = 20
-                                        tmpDoc.docCustomer.dt()[0].AMOUNT = this.txtPopAdvance.value
-                                        tmpDoc.docCustomer.dt()[0].DESCRIPTION = 'KASA AVANS'
-
-                                        await tmpDoc.save()
-                                        this.popAdvance.hide()
-
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgAlert',showTitle:true,title:"Bilgi",showCloseButton:true,width:'500px',height:'250px',
-                                            button:[{id:"btn01",caption:"Tamam",location:'before'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Kayıt işlemi başarılı."}</div>)
-                                        }
-                                        await dialog(tmpConfObj);
+                                        this.popAdvanceDesc.show()
                                     }
+                                }}>
+                                    <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
+                                </NbButton>
+                            </div>
+                        </div>
+                    </NdPopUp>
+                </div>
+                {/* Advance Description Popup */} 
+                <div>
+                    <NbPopDescboard id={"popAdvanceDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={"Avans Açıklaması"} title={"Lütfen Avans Nedeninizi Giriniz"}                    
+                    param={this.prmObj.filter({ID:'AdvanceDescription',TYPE:0})}
+                    onClick={async (e)=>
+                    {
+                        if(typeof e != 'undefined')
+                        {
+                            if(this.txtPopAdvance.value > 0)
+                            {
+                                let tmpInput
+                                let tmpOutput
+                                if(this.rbtnAdvanceType.value == 0)
+                                {
+                                    tmpInput = this.posDevice.dt().length > 0 ? this.posDevice.dt()[0].SAFE_GUID : '00000000-0000-0000-0000-000000000000'
+                                    tmpOutput = this.prmObj.filter({ID:'SafeCenter',TYPE:0}).getValue()
+                                }
+                                else
+                                {
+                                    tmpInput = this.prmObj.filter({ID:'SafeCenter',TYPE:0}).getValue()
+                                    tmpOutput = this.posDevice.dt().length > 0 ? this.posDevice.dt()[0].SAFE_GUID : '00000000-0000-0000-0000-000000000000'
+                                }
 
+                                let tmpDoc = new docCls()
+                                tmpDoc.addEmpty()
+                                tmpDoc.dt()[0].TYPE = 2
+                                tmpDoc.dt()[0].DOC_TYPE = 201
+                                tmpDoc.dt()[0].REF = 'POS'
+                                tmpDoc.dt()[0].REF_NO = Math.floor(Date.now() / 1000)
+                                tmpDoc.dt()[0].INPUT = tmpInput
+                                tmpDoc.dt()[0].OUTPUT = tmpOutput
+                                tmpDoc.dt()[0].AMOUNT = this.txtPopAdvance.value
+                                tmpDoc.dt()[0].TOTAL = this.txtPopAdvance.value
+
+                                tmpDoc.docCustomer.addEmpty()
+                                tmpDoc.docCustomer.dt()[0].TYPE = 2
+                                tmpDoc.docCustomer.dt()[0].DOC_GUID = tmpDoc.dt()[0].GUID
+                                tmpDoc.docCustomer.dt()[0].DOC_TYPE = 201
+                                tmpDoc.docCustomer.dt()[0].REF = 'POS'
+                                tmpDoc.docCustomer.dt()[0].REF_NO = tmpDoc.dt()[0].REF_NO
+                                tmpDoc.docCustomer.dt()[0].INPUT = tmpDoc.dt()[0].INPUT
+                                tmpDoc.docCustomer.dt()[0].OUTPUT = tmpDoc.dt()[0].OUTPUT
+                                tmpDoc.docCustomer.dt()[0].PAY_TYPE = 20
+                                tmpDoc.docCustomer.dt()[0].AMOUNT = this.txtPopAdvance.value
+                                tmpDoc.docCustomer.dt()[0].DESCRIPTION = e
+
+                                await tmpDoc.save()
+                                this.popAdvance.hide()
+
+                                let tmpConfObj =
+                                {
+                                    id:'msgAlert',showTitle:true,title:"Bilgi",showCloseButton:true,width:'500px',height:'250px',
+                                    button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Kayıt işlemi başarılı."}</div>)
+                                }
+                                await dialog(tmpConfObj);
+                            }
+                        }
+                    }}></NbPopDescboard>
+                </div>
+                {/* Settings Popup */}
+                <div>
+                    <NdPopUp parent={this} id={"popSettings"} 
+                    visible={false}                        
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={"Ayarlar"}
+                    container={"#root"} 
+                    width={"600"}
+                    height={"520"}
+                    position={{of:"#root"}}
+                    >
+                        <Form colCount={2} height={'fit-content'} id={"frmSettings"}>
+                            <Item>
+                                <Label text={"LCD Port"} alignment="right" />
+                                <NdTextBox id={"txtPopSettingsLcd"} parent={this} simple={true} valueChangeEvent="keyup" onValueChanging={(e)=>{console.log(e);this.keyPopSettings.setInput(e)}} onFocusIn={()=>{this.keyPopSettings.inputName = "txtPopSettingsLcd"}}/>
+                            </Item>
+                            <Item>
+                                <Label text={"Scale Port"} alignment="right" />
+                                <NdTextBox id={"txtPopSettingsScale"} parent={this} simple={true} valueChangeEvent="keyup" onValueChanging={(e)=>{this.keyPopSettings.setInput(e)}} onFocusIn={()=>{this.keyPopSettings.inputName = "txtPopSettingsScale"}}/>
+                            </Item>
+                            <Item>
+                                <Label text={"Pay Card Port"} alignment="right" />
+                                <NdTextBox id={"txtPopSettingsPayCard"} parent={this} simple={true} valueChangeEvent="keyup" onValueChanging={(e)=>{this.keyPopSettings.setInput(e)}} onFocusIn={()=>{this.keyPopSettings.inputName = "txtPopSettingsPayCard"}}/>
+                            </Item>
+                            <Item>
+                                <Label text={"Yazdırma Dizayn"} alignment="right" />
+                                <NdTextBox id={"txtPopSettingsPrint"} parent={this} simple={true} valueChangeEvent="keyup" onValueChanging={(e)=>{this.keyPopSettings.setInput(e)}} onFocusIn={()=>{this.keyPopSettings.inputName = "txtPopSettingsPrint"}}/>
+                            </Item>
+                        </Form>
+                        <div className="row py-1">
+                            <div className="col-12">
+                                <NbKeyboard id={"keyPopSettings"} parent={this} inputName={"txtPopSettingsLcd"}/>
+                            </div>
+                        </div>
+                        <div className="row py-1">
+                            <div className="col-12">
+                            <NbButton id={"btnPopSettingsOk"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
+                                onClick={async()=>
+                                {
+                                    if(this.posDevice.dt().length > 0)
+                                    {
+                                        this.posDevice.dt()[0].LCD_PORT = this.txtPopSettingsLcd.value
+                                        this.posDevice.dt()[0].SCALE_PORT = this.txtPopSettingsScale.value
+                                        this.posDevice.dt()[0].PAY_CARD_PORT = this.txtPopSettingsPayCard.value
+                                        this.posDevice.dt()[0].PRINT_DESING = this.txtPopSettingsPrint.value
+                                    }
+                                    else
+                                    {
+                                        this.posDevice.addEmpty()
+                                        this.posDevice.dt()[0].CODE = this.posObj.dt()[this.posObj.dt().length - 1].DEVICE
+                                        this.posDevice.dt()[0].NAME = this.posObj.dt()[this.posObj.dt().length - 1].DEVICE
+                                        this.posDevice.dt()[0].LCD_PORT = this.txtPopSettingsLcd.value
+                                        this.posDevice.dt()[0].SCALE_PORT = this.txtPopSettingsScale.value
+                                        this.posDevice.dt()[0].PAY_CARD_PORT = this.txtPopSettingsPayCard.value
+                                        this.posDevice.dt()[0].PRINT_DESING = this.txtPopSettingsPrint.value
+                                    }
+                                    await this.posDevice.save()
                                 }}>
                                     <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
                                 </NbButton>

@@ -148,6 +148,10 @@ export default class NbPopDescboard extends NbBase
         this["txt" + this.props.id].value = ""
         this[this.props.id].show()
     }
+    setText(e)
+    {
+        this["txt" + this.props.id].value = e
+    }
     render()
     {
         return(
