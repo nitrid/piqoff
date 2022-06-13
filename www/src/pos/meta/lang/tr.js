@@ -6,6 +6,7 @@ export const langTr =
     btnPrint :"Yazdır",
     btnOk: "Tamam",
     msgWarning: "Dikkat",
+    info : "Bilgi",
     btnYes : "Evet",
     btnNo : "Hayır",
     msgClose : "Sayfayı Kapatmak İstediğinize Eminmisiniz ?",
@@ -18,4 +19,24 @@ export const langTr =
     msgNotAccess :"Kullanıcının Giriş Yetkisi Yok.",
     msgInvalidUser : "Kullanıcı Adı veya Şifre Hatalı.",
     txtCardRead :"Lütfen Kullanıcı Kartınızı Okutunuz.",
+    price : "Fiyat",
+    msgCustomerNotFound : 
+    {
+        title : "Dikkat",
+        msg : "Müşteri Bulunamadı !"
+    },
+    msgZeroValidation :
+    {
+        title : "Uyarı",
+        msg : "Miktar sıfır giremezsiniz !"
+    },
+    msgPriceNotFound : 
+    {
+        title : "Uyarı",
+        msg : "Ürünün fiyat bilgisi tanımsız ! Devam etmek istermisiniz ?",
+        btn01 : "Evet",
+        btn02 : "Hayır"
+    },
+
+
 }

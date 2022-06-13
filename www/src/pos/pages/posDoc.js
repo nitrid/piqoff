@@ -104,6 +104,7 @@ export default class posDoc extends React.PureComponent
     }
     async init()
     {     
+        console.log(this.props)
         setInterval(()=>
         {
             this.lblTime.value = moment(new Date(),"HH:mm:ss").format("HH:mm:ss")
@@ -248,14 +249,14 @@ export default class posDoc extends React.PureComponent
             {
                 let tmpConfObj =
                 {
-                    id:'msgAlert',
+                    id:'msgCustomerNotFound',
                     showTitle:true,
-                    title:"Dikkat",
+                    title:this.lang.t("msgCustomerNotFound.title"),
                     showCloseButton:true,
                     width:'500px',
                     height:'200px',
                     button:[{id:"btn01",caption:"Tamam",location:'before'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Müşteri bulunamadı !"}</div>)
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCustomerNotFound.msg")}</div>)
                 }
                 
                 await dialog(tmpConfObj);
@@ -271,14 +272,14 @@ export default class posDoc extends React.PureComponent
                 document.getElementById("Sound").play();
                 let tmpConfObj =
                 {
-                    id:'msgAlert',
+                    id:'msgZeroValidation',
                     showTitle:true,
-                    title:"Uyarı",
+                    title:this.lang.t("msgZeroValidation.title"),
                     showCloseButton:true,
                     width:'500px',
                     height:'200px',
                     button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Miktar sıfır giremezsiniz !"}</div>)
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgZeroValidation.msg")}</div>)
                 }
                 await dialog(tmpConfObj);
                 return
@@ -325,7 +326,7 @@ export default class posDoc extends React.PureComponent
                     {
                         id:'msgAlert',
                         showTitle:true,
-                        title:"Bilgi",
+                        title:this.lang.t("info"),
                         showCloseButton:true,
                         width:'500px',
                         height:'250px',
@@ -398,19 +399,19 @@ export default class posDoc extends React.PureComponent
             {
                 let tmpConfObj =
                 {
-                    id:'msgAlert',
+                    id:'msgPriceNotFound',
                     showTitle:true,
-                    title:"Uyarı",
+                    title:this.lang.t("msgPriceNotFound.title"),
                     showCloseButton:false,
                     width:'500px',
                     height:'200px',
-                    button:[{id:"btn01",caption:"Evet",location:'before'},{id:"btn02",caption:"Hayır",location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Ürünün fiyat bilgisi tanımsız ! Devam etmek istermisiniz ?"}</div>)
+                    button:[{id:"btn01",caption:this.lang.t("msgPriceNotFound.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgPriceNotFound.btn02"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPriceNotFound.msg")}</div>)
                 }
                 let tmpMsgResult = await dialog(tmpConfObj);
                 if(tmpMsgResult == 'btn01')
                 {
-                    let tmpResult = await this.popNumber.show('Fiyat',0)
+                    let tmpResult = await this.popNumber.show(this.lang.t("price"),0)
                     if(typeof tmpResult != 'undefined' && tmpResult != '')
                     {
                         if(tmpResult == 0)
