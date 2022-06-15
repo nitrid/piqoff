@@ -33,8 +33,7 @@ export default class NbPluButtonGrp extends NbBase
         this.isCategory = 0
         this.clickData = {};
         
-        this.pluImageDt = new datatable();
-        this.pluImageDt.selectCmd = {query : "SELECT * FROM PLU_IMAGE_VW_01 ORDER BY ITEM_NAME ASC"}
+        this.pluImageDt = new datatable();        
 
         this.init()
 
@@ -45,6 +44,19 @@ export default class NbPluButtonGrp extends NbBase
     {        
         await this.pluObj.load({CUSER:this.core.auth.data.CODE})
         this.setCategory(this.isCategory)        
+
+        let tmpArr = []
+        for (let i = 0; i < this.pluObj.dt().where({TYPE:2}).length; i++) 
+        {
+            tmpArr.push(this.pluObj.dt().where({TYPE:2})[i].LINK_CODE)
+        }
+        
+        this.pluImageDt.selectCmd = 
+        {
+            query : "SELECT * FROM PLU_IMAGE_VW_01 WHERE MAIN_CODE IN (SELECT value FROM STRING_SPLIT(@MAIN_CODE,',')) ORDER BY ITEM_NAME ASC",
+            param : ['MAIN_CODE:string|250'],
+            value : [tmpArr.toString()]
+        }        
         await this.pluImageDt.refresh()
         this.setState({isLoading:false})
     }
