@@ -158,18 +158,18 @@ export default class Login extends React.Component
                             <div className="dx-field-label">{this.lang.t("txtLangSelect")}</div>
                             <div className="dx-field-value">
                             <NdSelectBox simple={true} parent={this} id="cmbType" height='fit-content'
-                                    displayExpr="text"                       
-                                    valueExpr="id"
-                                    value= {localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang')}
-                                    data={{source:[{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"tr",text:"TR"}]}}
-                                    onValueChanged={(async(args)=>
-                                            {
-                                                localStorage.setItem('lang',args.value)
-                                                i18n.changeLanguage(args.value)
-                                                locale(args.value)
-                                                window.location.reload()
-                                        }).bind(this)}
-                                    />
+                            displayExpr="text"                       
+                            valueExpr="id"
+                            value= {localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang')}
+                            data={{source:[{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"tr",text:"TR"}]}}
+                            onValueChanged={(async(args)=>
+                                    {
+                                        localStorage.setItem('lang',args.value)
+                                        i18n.changeLanguage(args.value)
+                                        locale(args.value)
+                                        window.location.reload()
+                                }).bind(this)}
+                            />
                             </div>
                         </div>
                         <div className="dx-field">
@@ -193,12 +193,12 @@ export default class Login extends React.Component
                             <div className="col-12">
                                 <div className="dx-field">
                                     <Button
-                                        width={'100%'}
-                                        height='fit-content'
-                                        text={this.lang.t("btnUserSelect")}
-                                        type="success"
-                                        stylingMode="contained"
-                                        onClick={this.getUserList}
+                                    width={'100%'}
+                                    height='fit-content'
+                                    text={this.lang.t("btnUserSelect")}
+                                    type="success"
+                                    stylingMode="contained"
+                                    onClick={this.getUserList}
                                     />
                                 </div>
                             </div>
@@ -207,24 +207,24 @@ export default class Login extends React.Component
                             <div className="col-6">
                                 <div className="dx-field">
                                     <Button
-                                        width={'100%'}
-                                        height='fit-content'
-                                        text={this.lang.t("btnLogin")}
-                                        type="default"
-                                        stylingMode="contained"
-                                        onClick={this.onLoginClick}
+                                    width={'100%'}
+                                    height='fit-content'
+                                    text={this.lang.t("btnLogin")}
+                                    type="default"
+                                    stylingMode="contained"
+                                    onClick={this.onLoginClick}
                                     />
                                 </div>
                             </div>
                             <div className="col-6">
                                 <div className="dx-field">
                                     <Button
-                                        width={'100%'}
-                                        height='fit-content'
-                                        text={this.lang.t("btnLogout")}
-                                        type="danger"
-                                        stylingMode="contained"
-                                        onClick={this.closePage}
+                                    width={'100%'}
+                                    height='fit-content'
+                                    text={this.lang.t("btnLogout")}
+                                    type="danger"
+                                    stylingMode="contained"
+                                    onClick={this.closePage}
                                     />
                                 </div>
                             </div>
@@ -233,12 +233,12 @@ export default class Login extends React.Component
                             <div className="col-12">
                                 <div className="dx-field">
                                     <Button
-                                        icon={"fa-regular fa-id-card"}
-                                        width={'100%'}
-                                        height='50px'
-                                        type="default"
-                                        stylingMode="contained"
-                                        onClick={this.cardIdRead}
+                                    icon={"fa-regular fa-id-card"}
+                                    width={'100%'}
+                                    height='50px'
+                                    type="default"
+                                    stylingMode="contained"
+                                    onClick={this.cardIdRead}
                                     />
                                 </div>
                             </div>

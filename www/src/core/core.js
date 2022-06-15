@@ -1,5 +1,4 @@
 import { isProxy } from 'is-proxy';
-
 export class core
 {        
     static instance = null;
@@ -45,6 +44,10 @@ export class core
         this.socket.on('error', (error) => 
         {
             this.emit('connect_error',()=>{})
+        });
+        this.socket.on('disconnect', () => 
+        {
+            this.emit('disconnect',()=>{})
         });
     }
     //#region  "EVENT"
