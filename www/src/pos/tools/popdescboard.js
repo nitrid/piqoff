@@ -107,9 +107,9 @@ export default class NbPopDescboard extends NbBase
         {
             let tmpConfObj =
             {
-                id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                button:[{id:"btn01",caption:"Tamam",location:'before'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Açıklama alanını boş geçemezsiniz !"}</div>)
+                id:'popDescbordValidation',showTitle:true,title:this.lang.t("popDescbordValidation.title"),showCloseButton:true,width:'500px',height:'250px',
+                button:[{id:"btn01",caption:this.lang.t("popDescbordValidation.btn01"),location:'before'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("popDescbordValidation.msg")}</div>)
             }
             await dialog(tmpConfObj);
             return;
@@ -118,9 +118,9 @@ export default class NbPopDescboard extends NbBase
         {
             let tmpConfObj =
             {
-                id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                button:[{id:"btn01",caption:"Tamam",location:'before'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Girmiş olduğunuz açıklama " + this.props.param.getValue().minCharSize + " karakter den küçük olamaz."}</div>)
+                id:'popDescbordValidation2',showTitle:true,title:this.lang.t("popDescbordValidation2.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.lang.t("popDescbordValidation2.title"),location:'before'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("popDescbordValidation2.msg1") + this.props.param.getValue().minCharSize + this.lang.t("popDescbordValidation2.msg2")}</div>)
             }
             await dialog(tmpConfObj);
             return;

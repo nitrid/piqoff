@@ -474,5 +474,19 @@ export const langTr =
     {
         AMOUNT : "TUTAR",
         COUNT : "COUNT"
-    }
+    },
+    popDescbordValidation :
+    {
+        title : "Dikkat",
+        msg : "Açıklama alanını boş geçemezsiniz !",
+        btn01 : "Tamam",
+    },
+    popDescbordValidation2 :
+    {
+        title : "Dikkat",
+        msg1 : "Girmiş olduğunuz açıklama ",
+        msg2 : " karakterden az olamaz..",
+        btn01 : "Tamam",
+    },
+    listed : "Listele",
 }

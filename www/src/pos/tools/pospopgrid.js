@@ -116,7 +116,7 @@ export default class NbPosPopGrid extends NbBase
                         <div className="col-6">
                             <NbButton id={"btnList" + this.props.id} parent={this} className="form-group btn btn-success btn-block" 
                             style={{height:"45px",width:"100%",fontSize:"16px"}}
-                            onClick={async ()=>{this.getData()}}>Listele</NbButton>
+                            onClick={async ()=>{this.getData()}}>{this.lang.t("listed")}</NbButton>
                         </div>
                         <div className="col-6">
                             <NbButton id={"btnSelect" + this.props.id} parent={this} className="form-group btn btn-success btn-block" 
@@ -125,7 +125,7 @@ export default class NbPosPopGrid extends NbBase
                             {
                                 this._onSelection(this["grd" + this.props.id].devGrid.getSelectedRowsData())
                                 this[this.props.id].hide()
-                            }}>Seç</NbButton> 
+                            }}>{this.lang.t("select")}</NbButton> 
                         </div>                        
                     </div>
                     <div className="row pt-1">
