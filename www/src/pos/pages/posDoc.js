@@ -453,14 +453,14 @@ export default class posDoc extends React.PureComponent
             document.getElementById("Sound").play(); 
             let tmpConfObj =
             {
-                id:'msgAlert',
+                id:'msgBarcodeNotFound',
                 showTitle:true,
-                title:"Uyarı",
+                title:this.lang.t("msgBarcodeNotFound.title"),
                 showCloseButton:true,
                 width:'500px',
                 height:'200px',
-                button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Okuttuğunuz Barkod Sistemde Bulunamadı !"}</div>)
+                button:[{id:"btn01",caption:this.lang.t("msgBarcodeNotFound.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgBarcodeNotFound.msg")}</div>)
             }
             await dialog(tmpConfObj);
             this.loading.current.instance.hide()
@@ -735,9 +735,9 @@ export default class posDoc extends React.PureComponent
         {
             let tmpConfObj =
             {
-                id:'msgAlert',showTitle:true,title:"Bilgi",showCloseButton:true,width:'500px',height:'250px',
-                button:[{id:"btn01",caption:"Tamam",location:'before'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Özel etiketli ürünlerde herhangi bir değişiklik yapamazsınız !"}</div>)
+                id:'msgSpecialTicketAlert',showTitle:true,title:this.lang.t("msgSpecialTicketAlert.title"),showCloseButton:true,width:'500px',height:'250px',
+                button:[{id:"btn01",caption:this.lang.t("msgSpecialTicketAlert.btn01"),location:'before'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSpecialTicketAlert.msg")}</div>)
             }
             await dialog(tmpConfObj);
             return
@@ -813,15 +813,15 @@ export default class posDoc extends React.PureComponent
                         {
                             let tmpConfObj =
                             {
-                                id:'msgAlert',
+                                id:'msgMoneyChange',
                                 timeout:10000,
                                 showTitle:true,
-                                title:"Bilgi",
+                                title:this.lang.t("msgMoneyChange.title"),
                                 showCloseButton:true,
                                 width:'500px',
                                 height:'250px',
-                                button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                                content:(<div><h3 className="text-danger text-center">{pPayChange + " EUR"}</h3><h3 className="text-primary text-center">Para üstü veriniz.</h3></div>)
+                                button:[{id:"btn01",caption:this.lang.t("msgMoneyChange.btn01"),location:'after'}],
+                                content:(<div><h3 className="text-danger text-center">{pPayChange + " EUR"}</h3><h3 className="text-primary text-center">{this.lang.t("msgMoneyChange.msg")}</h3></div>)
                             }
                             dialog(tmpConfObj);
                         }
@@ -874,9 +874,9 @@ export default class posDoc extends React.PureComponent
                 {
                     let tmpConfObj =
                     {
-                        id:'msgAlert',showTitle:true,title:"Bilgi",showCloseButton:true,width:'500px',height:'250px',
-                        button:[{id:"btn01",caption:"Tamam",location:'before'}],
-                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Girmiş olduğunuz tutar, kalan tutardan daha büyük olamaz !"}</div>)
+                        id:'msgBigAmount',showTitle:true,title:this.lang.t("msgBigAmount.title"),showCloseButton:true,width:'500px',height:'250px',
+                        button:[{id:"btn01",caption:this.lang.t("msgBigAmount.btn01"),location:'before'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgBigAmount.msg")}</div>)
                     }
                     await dialog(tmpConfObj);
                     this.txtPopCardPay.newStart = true;
@@ -894,9 +894,9 @@ export default class posDoc extends React.PureComponent
                 {
                     let tmpConfObj =
                     {
-                        id:'msgAlert',showTitle:true,title:"Bilgi",showCloseButton:true,width:'500px',height:'250px',
-                        button:[{id:"btn01",caption:"Tamam",location:'before'},{id:"btn02",caption:"İptal",location:'after'}],
-                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Ödemeyi aldığınızdan eminmisiniz ?"}</div>)
+                        id:'msgPayCheck',showTitle:true,title:this.lang.t("msgPayCheck.title"),showCloseButton:true,width:'500px',height:'250px',
+                        button:[{id:"btn01",caption:this.lang.t("msgPayCheck.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgPayCheck.btn02"),location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPayCheck.msg")}</div>)
                     }
                     let tmpResult = await dialog(tmpConfObj);
                     if(tmpResult == "btn01")
@@ -1021,9 +1021,9 @@ export default class posDoc extends React.PureComponent
                         this.msgCardPayment.hide()
                         let tmpConfObj =
                         {
-                            id:'msgAlert',showTitle:true,title:"Bilgi",showCloseButton:true,width:'500px',height:'250px',
-                            button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Ödeme gerçekleşmedi !"}</div>)
+                            id:'msgPayFailed',showTitle:true,title:this.lang.t("msgPayFailed.title"),showCloseButton:true,width:'500px',height:'250px',
+                            button:[{id:"btn01",caption:this.lang.t("msgPayFailed.title"),location:'after'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPayFailed.title")}</div>)
                         }
                         await dialog(tmpConfObj);
                         resolve(0) // Başarısız
@@ -1117,9 +1117,9 @@ export default class posDoc extends React.PureComponent
 
                 let tmpConfObj =
                 {
-                    id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Bon d'avoir girmeden önce girili tahsilatları temizleyiniz !"}</div>)
+                    id:'msgBonDavoir',showTitle:true,title:this.lang.t("msgBonDavoir.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.lang.t("msgBonDavoir.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgBonDavoir.msg")}</div>)
                 }
                 await dialog(tmpConfObj);                
                 return;
@@ -1143,9 +1143,9 @@ export default class posDoc extends React.PureComponent
 
                 let tmpConfObj =
                 {
-                    id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Geçersiz ticket."}</div>)
+                    id:'msgInvalidTicket',showTitle:true,title:this.lang.t("msgInvalidTicket.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.lang.t("msgInvalidTicket.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgInvalidTicket.msg")}</div>)
                 }
                 await dialog(tmpConfObj);
                 return
@@ -1166,9 +1166,9 @@ export default class posDoc extends React.PureComponent
 
                 let tmpConfObj =
                 {
-                    id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Geçersiz ticket."}</div>)
+                    id:'msgInvalidTicket',showTitle:true,title:this.lang.t("msgInvalidTicket.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.lang.t("msgInvalidTicket.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgInvalidTicket.msg")}</div>)
                 }
                 await dialog(tmpConfObj);
                 return;
@@ -1182,9 +1182,9 @@ export default class posDoc extends React.PureComponent
 
                 let tmpConfObj =
                 {
-                    id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Geçersiz ticket."}</div>)
+                    id:'msgInvalidTicket',showTitle:true,title:this.lang.t("msgInvalidTicket.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.lang.t("msgInvalidTicket.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgInvalidTicket.msg")}</div>)
                 }
                 await dialog(tmpConfObj);
                 return;
@@ -1205,9 +1205,9 @@ export default class posDoc extends React.PureComponent
 
             let tmpConfObj =
             {
-                id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Geçersiz ticket."}</div>)
+                id:'msgInvalidTicket',showTitle:true,title:this.lang.t("msgInvalidTicket.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.lang.t("msgInvalidTicket.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgInvalidTicket.msg")}</div>)
             }
             await dialog(tmpConfObj);
             return;
@@ -1224,9 +1224,9 @@ export default class posDoc extends React.PureComponent
 
                 let tmpConfObj =
                 {
-                    id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Çalıntı Ticket !"}</div>)
+                    id:'msgStolenTicket',showTitle:true,title:this.lang.t("msgStolenTicket.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.lang.t("msgStolenTicket.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgStolenTicket.msg")}</div>)
                 }
                 await dialog(tmpConfObj);
                 return;
@@ -1239,9 +1239,9 @@ export default class posDoc extends React.PureComponent
 
                 let tmpConfObj =
                 {
-                    id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Daha önce kullanılmıştır !"}</div>)
+                    id:'msgUsedTicket',showTitle:true,title:this.lang.t("msgUsedTicket.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.lang.t("msgUsedTicket.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgUsedTicket.msg")}</div>)
                 }
                 await dialog(tmpConfObj);                
                 return;                                                
@@ -1254,9 +1254,9 @@ export default class posDoc extends React.PureComponent
 
                 let tmpConfObj =
                 {
-                    id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Süresi geçmiş ticket !"}</div>)
+                    id:'msgOldTicket',showTitle:true,title:this.lang.t("msgOldTicket.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.lang.t("msgOldTicket.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOldTicket.msg")}</div>)
                 }
                 await dialog(tmpConfObj);                
                 return;     
@@ -1270,9 +1270,9 @@ export default class posDoc extends React.PureComponent
 
             let tmpConfObj =
             {
-                id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Geçersiz ticket."}</div>)
+                id:'msgInvalidTicket',showTitle:true,title:this.lang.t("msgInvalidTicket.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.lang.t("msgInvalidTicket.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgInvalidTicket.msg")}</div>)
             }
             await dialog(tmpConfObj);
             return;
@@ -1342,9 +1342,9 @@ export default class posDoc extends React.PureComponent
                 {
                     let tmpConfObj =
                     {
-                        id:'msgAlert',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
-                        button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Okutmuş olduğunuz fiş ile alakalı daha önce iade yapılmıştır !"}</div>)
+                        id:'msgDoubleRebate',showTitle:true,title:this.lang.t("msgDoubleRebate.title"),showCloseButton:true,width:'500px',height:'200px',
+                        button:[{id:"btn01",caption:this.lang.t("msgDoubleRebate.btn01"),location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDoubleRebate.msg")}</div>)
                     }
                     await dialog(tmpConfObj);
                     this.msgItemReturnTicket.hide()
@@ -1358,9 +1358,9 @@ export default class posDoc extends React.PureComponent
                     {
                         let tmpConfObj =
                         {
-                            id:'msgAlert',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
-                            button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Okutmuş olduğunuz fiş deki ürünler den bir yada bir den fazlası uyuşmuyor !"}</div>)
+                            id:'msgRebateNotMatch',showTitle:true,title:this.lang.t("msgRebateNotMatch.title"),showCloseButton:true,width:'500px',height:'200px',
+                            button:[{id:"btn01",caption:this.lang.t("msgRebateNotMatch.btn01"),location:'after'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgRebateNotMatch.msg")}</div>)
                         }
                         await dialog(tmpConfObj);
                         return
@@ -1380,9 +1380,9 @@ export default class posDoc extends React.PureComponent
 
                 let tmpConfObj =
                 {
-                    id:'msgAlert',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
-                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Okutmuş olduğunuz fiş deki ürünler yada miktar uyuşmuyor !"}</div>)
+                    id:'msgItemOrQuantityNotMatch',showTitle:true,title:this.lang.t("msgItemOrQuantityNotMatch.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.lang.t("msgItemOrQuantityNotMatch.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgItemOrQuantityNotMatch.msg")}</div>)
                 }
                 await dialog(tmpConfObj);
             }
@@ -1390,9 +1390,9 @@ export default class posDoc extends React.PureComponent
             {
                 let tmpConfObj =
                 {
-                    id:'msgAlert',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
-                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Geçersiz kasa fişi !"}</div>)
+                    id:'msgInvalidSafeTicket',showTitle:true,title:this.lang.t("msgInvalidSafeTicket.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.lang.t("msgInvalidSafeTicket.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgInvalidSafeTicket.msg")}</div>)
                 }
                 await dialog(tmpConfObj);
             }
@@ -1406,9 +1406,9 @@ export default class posDoc extends React.PureComponent
             {
                 let tmpConfObj =
                 {
-                    id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Fiyat sıfır girilemez !"}</div>)
+                    id:'msgPriceNotDoesZero',showTitle:true,title:this.lang.t("msgPriceNotDoesZero.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.lang.t("msgPriceNotDoesZero.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPriceNotDoesZero.msg")}</div>)
                 }
                 await dialog(tmpConfObj);
                 resolve(false)
@@ -1418,9 +1418,9 @@ export default class posDoc extends React.PureComponent
             {
                 let tmpConfObj =
                 {
-                    id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Min. fiyatın altında fiyat giremezsiniz !"}</div>)
+                    id:'msgMinPrice',showTitle:true,title:this.lang.t("msgMinPrice.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.lang.t("msgMinPrice.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgMinPrice.msg")}</div>)
                 }
                 await dialog(tmpConfObj);
                 resolve(false)
@@ -1430,9 +1430,9 @@ export default class posDoc extends React.PureComponent
             {
                 let tmpConfObj =
                 {
-                    id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Maliyet fiyatının altında fiyat giremezsiniz !"}</div>)
+                    id:'msgCostPrice',showTitle:true,title:this.lang.t("msgCostPrice.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.lang.t("msgCostPrice.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCostPrice.msg")}</div>)
                 }
                 await dialog(tmpConfObj);
                 resolve(false)
@@ -1672,9 +1672,9 @@ export default class posDoc extends React.PureComponent
                                                 {
                                                     let tmpConfObj =
                                                     {
-                                                        id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Miktar sıfır girilemez !"}</div>)
+                                                        id:'msgZeroValidation',showTitle:true,title:this.lang.t("msgZeroValidation.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.lang.t("msgZeroValidation.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgZeroValidation.msg")}</div>)
                                                     }
                                                     await dialog(tmpConfObj);
                                                     return
@@ -1695,11 +1695,11 @@ export default class posDoc extends React.PureComponent
                                 }}
                                 >
                                     <Editing confirmDelete={false}/>
-                                    <Column dataField="LDATE" caption={"LDATE"} width={40} alignment={"center"} dataType={"datetime"} format={"dd-MM-yyyy - HH:mm:ss SSSZ"} defaultSortOrder="desc" visible={false}/>
-                                    <Column dataField="ITEM_NAME" caption={"ADI"} width={300}/>
-                                    <Column dataField="QUANTITY" caption={"MIKTAR"} width={60}/>
-                                    <Column dataField="PRICE" caption={"FIYAT"} width={50} format={"#,##0.00" + Number.money.sign}/>
-                                    <Column dataField="AMOUNT" alignment={"right"} caption={"TUTAR"} width={60} format={"#,##0.00" + Number.money.sign}/>                                                
+                                    <Column dataField="LDATE" caption={this.lang.t("grdList.LDATE")} width={40} alignment={"center"} dataType={"datetime"} format={"dd-MM-yyyy - HH:mm:ss SSSZ"} defaultSortOrder="desc" visible={false}/>
+                                    <Column dataField="ITEM_NAME" caption={this.lang.t("grdList.ITEM_NAME")} width={300}/>
+                                    <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} width={60}/>
+                                    <Column dataField="PRICE" caption={this.lang.t("grdList.PRICE")} width={50} format={"#,##0.00" + Number.money.sign}/>
+                                    <Column dataField="AMOUNT" alignment={"right"} caption={this.lang.t("grdList.AMOUNT")} width={60} format={"#,##0.00" + Number.money.sign}/>                                                
                                 </NdGrid>
                             </div>
                         </div>
@@ -1708,37 +1708,37 @@ export default class posDoc extends React.PureComponent
                             <div className="col-6">
                                 <div className="row">
                                     <div className="col-6">
-                                        <p className="text-primary text-start m-0">T.Satır : <span className="text-dark"><NbLabel id="totalRowCount" parent={this} value={"0"}/></span></p>    
+                                        <p className="text-primary text-start m-0">{this.lang.t("totalLine")}<span className="text-dark"><NbLabel id="totalRowCount" parent={this} value={"0"}/></span></p>    
                                     </div>
                                     <div className="col-6">
-                                        <p className="text-primary text-start m-0">T.Mik.: <span className="text-dark"><NbLabel id="totalItemCount" parent={this} value={"0"}/></span></p>    
+                                        <p className="text-primary text-start m-0">{this.lang.t("totalQuantity")}<span className="text-dark"><NbLabel id="totalItemCount" parent={this} value={"0"}/></span></p>    
                                     </div>
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-start m-0">Sadakat İndirim : <span className="text-dark"><NbLabel id="totalLoyalty" parent={this} value={"0.00"} format={"currency"}/></span></p>    
+                                        <p className="text-primary text-start m-0">{this.lang.t("loyaltyDiscount")}<span className="text-dark"><NbLabel id="totalLoyalty" parent={this} value={"0.00"} format={"currency"}/></span></p>    
                                     </div>
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-start m-0">Ticket Rest.: <span className="text-dark">{this.state.cheqCount + '/' + parseFloat(this.state.cheqTotalAmount).toFixed(2)} + {Number.money.sign}</span></p>    
+                                        <p className="text-primary text-start m-0">{this.lang.t("ticketRect")}<span className="text-dark">{this.state.cheqCount + '/' + parseFloat(this.state.cheqTotalAmount).toFixed(2)} + {Number.money.sign}</span></p>    
                                     </div>
                                 </div>
                             </div>
                             <div className="col-6">
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-end m-0">Ara Toplam : <span className="text-dark"><NbLabel id="totalSub" parent={this} value={"0.00"} format={"currency"}/></span></p>    
+                                        <p className="text-primary text-end m-0">{this.lang.t("amount")}<span className="text-dark"><NbLabel id="totalSub" parent={this} value={"0.00"} format={"currency"}/></span></p>    
                                     </div>
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-end m-0">Kdv : <span className="text-dark"><NbLabel id="totalVat" parent={this} value={"0.00 " + Number.money.sign}/></span></p>    
+                                        <p className="text-primary text-end m-0">{this.lang.t("vat")}<span className="text-dark"><NbLabel id="totalVat" parent={this} value={"0.00 " + Number.money.sign}/></span></p>    
                                     </div>
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-end m-0">İndirim : <span className="text-dark"><NbLabel id="totalDiscount" parent={this} value={"0.00"} format={"currency"}/></span></p>    
+                                        <p className="text-primary text-end m-0">{this.lang.t("discount")}<span className="text-dark"><NbLabel id="totalDiscount" parent={this} value={"0.00"} format={"currency"}/></span></p>    
                                     </div>
                                 </div>
                             </div>
@@ -1762,9 +1762,9 @@ export default class posDoc extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgAlert',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Satış işlemi yapmadan tahsilat giremezsiniz !"}</div>)
+                                                    id:'msgCollectForSale',showTitle:true,title:this.lang.t("msgCollectForSale.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("msgCollectForSale.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCollectForSale.msg")}</div>)
                                                 }
                                                 let tmpMsgResult = await dialog(tmpConfObj);
                                                 if(tmpMsgResult == 'btn01')
@@ -1788,9 +1788,9 @@ export default class posDoc extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgAlert',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Satış işlemi yapmadan tahsilat giremezsiniz !"}</div>)
+                                                    id:'msgCollectForSale',showTitle:true,title:this.lang.t("msgCollectForSale.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("msgCollectForSale.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCollectForSale.msg")}</div>)
                                                 }
                                                 let tmpMsgResult = await dialog(tmpConfObj);
                                                 if(tmpMsgResult == 'btn01')
@@ -1859,9 +1859,9 @@ export default class posDoc extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgAlert',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Satış işlemi yapmadan tahsilat giremezsiniz !"}</div>)
+                                                    id:'msgCollectForSale',showTitle:true,title:this.lang.t("msgCollectForSale.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("msgCollectForSale.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCollectForSale.msg")}</div>)
                                                 }
                                                 let tmpMsgResult = await dialog(tmpConfObj);
                                                 if(tmpMsgResult == 'btn01')
@@ -1930,9 +1930,9 @@ export default class posDoc extends React.PureComponent
                                                 {
                                                     let tmpConfObj =
                                                     {
-                                                        id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Ticket Rest. ile yapılan ödemelerde sadakat puanı veremezsiniz. Lütfen seçili müşteriden çıkınız !"}</div>)
+                                                        id:'msgTicketForNotCustomer',showTitle:true,title:this.lang.t("msgTicketForNotCustomer.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.lang.t("msgTicketForNotCustomer.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgTicketForNotCustomer.msg")}</div>)
                                                     }
                                                     await dialog(tmpConfObj);
                                                     return
@@ -1943,9 +1943,9 @@ export default class posDoc extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Satış olmadan ödeme alamazsınız !"}</div>)
+                                                    id:'msgPayForSelling',showTitle:true,title:this.lang.t("msgPayForSelling.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("msgPayForSelling.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPayForSelling.msg")}</div>)
                                                 }
                                                 await dialog(tmpConfObj);
                                                 return
@@ -2000,9 +2000,9 @@ export default class posDoc extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgAlert',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Lütfen müşteri seçiniz !"}</div>)
+                                                    id:'msgCustomerSelect',showTitle:true,title:this.lang.t("msgCustomerSelect.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("msgCustomerSelect.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCustomerSelect.msg")}</div>)
                                                 }
                                                 await dialog(tmpConfObj);
                                                 return
@@ -2139,9 +2139,9 @@ export default class posDoc extends React.PureComponent
                                                     {
                                                         let tmpConfObj =
                                                         {
-                                                            id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                                            button:[{id:"btn01",caption:"Tamam",location:'before'},{id:"btn02",caption:"İptal",location:'after'}],
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Evrakı iptal etmek istediğinize eminmisiniz ?"}</div>)
+                                                            id:'msgDocDeleteConfirm',showTitle:true,title:this.lang.t("msgDocDeleteConfirm.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.lang.t("msgLineDeleteConfirm.btn01"),location:'after'},{id:"btn02",caption:this.lang.t("msgLineDeleteConfirm.btn02"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDocDeleteConfirm.msg")}</div>)
                                                         }
                                                         let tmpResult = await dialog(tmpConfObj);
                                                         if(tmpResult == "btn01")
@@ -2166,9 +2166,9 @@ export default class posDoc extends React.PureComponent
                                                         {
                                                             let tmpConfObj =
                                                             {
-                                                                id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                                                button:[{id:"btn01",caption:"Tamam",location:'before'}],
-                                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Satır silmeden önce lütfen tüm ödemeleri siliniz !"}</div>)
+                                                                id:'msgLineDeleteValidation',showTitle:true,title:this.lang.t("msgLineDeleteValidation.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                                button:[{id:"btn01",caption:this.lang.t("msgLineDeleteValidation.btn01"),location:'after'}],
+                                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgLineDeleteValidation.msg")}</div>)
                                                             }
                                                             await dialog(tmpConfObj);
                                                             return
@@ -2176,9 +2176,9 @@ export default class posDoc extends React.PureComponent
 
                                                         let tmpConfObj =
                                                         {
-                                                            id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                                            button:[{id:"btn01",caption:"Tamam",location:'before'},{id:"btn02",caption:"İptal",location:'after'}],
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Satırı iptal etmek istediğinize eminmisiniz ?"}</div>)
+                                                            id:'msgLineDeleteConfirm',showTitle:true,title:this.lang.t("msgLineDeleteConfirm.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.lang.t("msgLineDeleteConfirm.btn01"),location:'after'},{id:"btn02",caption:this.lang.t("msgLineDeleteConfirm.btn02"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgLineDeleteConfirm.msg")}</div>)
                                                         }
                                                         let tmpResult = await dialog(tmpConfObj);
                                                         if(tmpResult == "btn01")
@@ -2190,9 +2190,9 @@ export default class posDoc extends React.PureComponent
                                                     {
                                                         let tmpConfObj =
                                                         {
-                                                            id:'msgAlert',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
-                                                            button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Lütfen silmek istediğiniz satırı seçiniz !"}</div>)
+                                                            id:'msgDeleteLineSelect',showTitle:true,title:this.lang.t("msgDeleteLineSelect.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.lang.t("msgDeleteLineSelect.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDeleteLineSelect.msg")}</div>)
                                                         }
                                                         await dialog(tmpConfObj);
                                                     }
@@ -2270,9 +2270,9 @@ export default class posDoc extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgAlert',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Lütfen satır seçiniz !"}</div>)
+                                                    id:'msgLineSelect',showTitle:true,title:this.lang.t("msgLineSelect.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("msgLineSelect.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgLineSelect.msg")}</div>)
                                                 }
                                                 await dialog(tmpConfObj);
                                             }
@@ -2386,9 +2386,9 @@ export default class posDoc extends React.PureComponent
                                                 {
                                                     let tmpConfObj =
                                                     {
-                                                        id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:"Tamam",location:'before'},{id:"btn02",caption:"İptal",location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Seçili müşteriden çıkmak istediğinize eminmisiniz ?"}</div>)
+                                                        id:'msgCancelCustomerConfirm',showTitle:true,title:this.lang.t("msgCancelCustomerConfirm.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.lang.t("msgCancelCustomerConfirm.btn01"),location:'after'},{id:"btn02",caption:this.lang.t("msgLineDeleteConfirm.btn02"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCancelCustomerConfirm.msg")}</div>)
                                                     }
                                                     let tmpResult = await dialog(tmpConfObj);
                                                     if(tmpResult == "btn01")
@@ -2411,9 +2411,9 @@ export default class posDoc extends React.PureComponent
                                                         {
                                                             let tmpConfObj =
                                                             {
-                                                                id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                                                button:[{id:"btn01",caption:"Tamam",location:'after'}],
-                                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Ticket Rest. ile yapılan ödemelerde sadakat puanı veremezsiniz. Lütfen seçili müşteriden çıkınız !"}</div>)
+                                                                id:'msgTicketForNotCustomer',showTitle:true,title:this.lang.t("msgTicketForNotCustomer.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                                button:[{id:"btn01",caption:this.lang.t("msgTicketForNotCustomer.btn01"),location:'after'}],
+                                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgTicketForNotCustomer.msg")}</div>)
                                                             }
                                                             await dialog(tmpConfObj);
                                                             this.setState({isBtnGetCustomer:false})
@@ -2484,7 +2484,7 @@ export default class posDoc extends React.PureComponent
                     visible={false}                        
                     showCloseButton={true}
                     showTitle={true}
-                    title={"Ara Toplam"}
+                    title={this.lang.t("popTotal.title")}
                     container={"#root"} 
                     width={"600"}
                     height={"590"}
@@ -2495,13 +2495,13 @@ export default class posDoc extends React.PureComponent
                                 {/* Top Total Indicator */}
                                 <div className="row">
                                     <div className="col-4">
-                                        <p className="text-primary text-start m-0">Toplam : <span className="text-dark"><NbLabel id="popTotalGrand" parent={this} value={"0.00"} format={"currency"}/></span></p>    
+                                        <p className="text-primary text-start m-0">{this.lang.t("total")} <span className="text-dark"><NbLabel id="popTotalGrand" parent={this} value={"0.00"} format={"currency"}/></span></p>    
                                     </div>
                                     <div className="col-4">
-                                        <p className="text-primary text-start m-0">Kalan : <span className="text-dark">{Number(parseFloat(this.state.payRest).toFixed(2)).currency()} </span></p>    
+                                        <p className="text-primary text-start m-0">{this.lang.t("remainder")} <span className="text-dark">{Number(parseFloat(this.state.payRest).toFixed(2)).currency()} </span></p>    
                                     </div>
                                     <div className="col-4">
-                                        <p className="text-primary text-start m-0">Para Üstü : <span className="text-dark">{Number(parseFloat(this.state.payChange).toFixed(2)).currency()}</span></p>    
+                                        <p className="text-primary text-start m-0">{this.lang.t("moneyChange")} <span className="text-dark">{Number(parseFloat(this.state.payChange).toFixed(2)).currency()}</span></p>    
                                     </div>
                                 </div>
                                 <div className="row pt-2">
@@ -2623,7 +2623,7 @@ export default class posDoc extends React.PureComponent
                                                         this.popTRDetail.show()
                                                     }
                                                 }}>
-                                                    T.R Detay
+                                                    {this.lang.t("trDeatil")}
                                                 </NbButton>
                                             </div>
                                             {/* 10 € */}
@@ -2644,7 +2644,7 @@ export default class posDoc extends React.PureComponent
                                                         this.grdPay.devGrid.deleteRow(this.grdPay.devGrid.getRowIndexByKey(this.grdPay.devGrid.getSelectedRowKeys()[0]))
                                                     }
                                                 }}>
-                                                    Satır İptal
+                                                   {this.lang.t("lineDelete")}
                                                 </NbButton>
                                             </div>
                                             {/* 20 € */}
@@ -2659,7 +2659,7 @@ export default class posDoc extends React.PureComponent
                                             <div className="col-6">
                                                 <NbButton id={"btnPopTotalCancel"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
                                                 onClick={()=>{this.popTotal.hide()}}>
-                                                    Vazgeç
+                                                    {this.lang.t("cancel")}
                                                 </NbButton>
                                             </div>
                                             {/* 50 € */}
@@ -2700,7 +2700,7 @@ export default class posDoc extends React.PureComponent
                     visible={false}                        
                     showCloseButton={true}
                     showTitle={true}
-                    title={"Kart Ödeme"}
+                    title={this.lang.t("popCardPay.title")}
                     container={"#root"} 
                     width={"300"}
                     height={"510"}
@@ -2711,10 +2711,10 @@ export default class posDoc extends React.PureComponent
                             <div className="col-12">
                                <div className="row">
                                     <div className="col-6">
-                                        <p className="text-primary text-start m-0">Toplam : <span className="text-dark"><NbLabel id="popCardTotalGrand" parent={this} value={"0.00"} format={"currency"}/></span></p>    
+                                        <p className="text-primary text-start m-0">{this.lang.t("total")} <span className="text-dark"><NbLabel id="popCardTotalGrand" parent={this} value={"0.00"} format={"currency"}/></span></p>    
                                     </div>
                                     <div className="col-6">
-                                        <p className="text-primary text-start m-0">Kalan : <span className="text-dark">{Number(parseFloat(this.state.payRest).toFixed(2)).currency()}</span></p>    
+                                        <p className="text-primary text-start m-0">{this.lang.t("remainder")} <span className="text-dark">{Number(parseFloat(this.state.payRest).toFixed(2)).currency()}</span></p>    
                                     </div>
                                 </div> 
                             </div>
@@ -2737,7 +2737,7 @@ export default class posDoc extends React.PureComponent
                             <div className="col-12">
                                 <NbButton id={"btnPopCardPaySend"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
                                 onClick={()=>{this.payAdd(1,this.txtPopCardPay.value)}}>
-                                    Gönder
+                                    {this.lang.t("send")}
                                 </NbButton>
                             </div>
                         </div>
@@ -2749,7 +2749,7 @@ export default class posDoc extends React.PureComponent
                     visible={false}                        
                     showCloseButton={true}
                     showTitle={true}
-                    title={"Nakit Ödeme"}
+                    title={this.lang.t("popCashPay.title")}
                     container={"#root"} 
                     width={"600"}
                     height={"570"}
@@ -2760,10 +2760,10 @@ export default class posDoc extends React.PureComponent
                                 {/* Top Total Indicator */}
                                 <div className="row pb-3">
                                     <div className="col-6">
-                                        <p className="text-primary text-start m-0">Toplam : <span className="text-dark"><NbLabel id="popCashTotalGrand" parent={this} value={"0.00"} format={"currency"}/></span></p>    
+                                        <p className="text-primary text-start m-0">{this.lang.t("total")} <span className="text-dark"><NbLabel id="popCashTotalGrand" parent={this} value={"0.00"} format={"currency"}/></span></p>    
                                     </div>
                                     <div className="col-6">
-                                        <p className="text-primary text-start m-0">Kalan : <span className="text-dark">{Number(parseFloat(this.state.payRest).toFixed(2)).currency()}</span></p>
+                                        <p className="text-primary text-start m-0">{this.lang.t("remainder")} <span className="text-dark">{Number(parseFloat(this.state.payRest).toFixed(2)).currency()}</span></p>
                                     </div>
                                 </div>
                                 {/* txtPopCashPay */}
@@ -2864,7 +2864,7 @@ export default class posDoc extends React.PureComponent
                 </div>
                 {/* Customer List Popup */}
                 <div>
-                    <NbPosPopGrid id={"popCustomerList"} parent={this} width={"100%"} height={"100%"} position={"#root"} title={"Müşteri Listesi"}
+                    <NbPosPopGrid id={"popCustomerList"} parent={this} width={"100%"} height={"100%"} position={"#root"} title={this.lang.t("popCustomerList.title")}
                     data={{source:
                     {
                         select:
@@ -2894,7 +2894,7 @@ export default class posDoc extends React.PureComponent
                 </div>
                 {/* Item List Popup */}
                 <div>
-                    <NbPosPopGrid id={"popItemList"} parent={this} width={"100%"} height={"100%"} position={"#root"} title={"Ürün Listesi"}
+                    <NbPosPopGrid id={"popItemList"} parent={this} width={"100%"} height={"100%"} position={"#root"} title={this.lang.t("popItemList.title")}
                     data={{source:
                     {
                         select:
@@ -2922,7 +2922,7 @@ export default class posDoc extends React.PureComponent
                     visible={false}                        
                     showCloseButton={true}
                     showTitle={true}
-                    title={"Barkod Listesi"}
+                    title={this.lang.t("popBarcodeList.title")}
                     container={"#root"} 
                     width={"800"}
                     height={"600"}
@@ -2963,9 +2963,9 @@ export default class posDoc extends React.PureComponent
                                     this.popBarcodeList.hide()
                                 }}
                                 >
-                                    <Column dataField="BARCODE" caption={"BARCODE"} width={150}/>
-                                    <Column dataField="NAME" caption={"NAME"} width={500} />
-                                    <Column dataField="PRICE_SALE" caption={"PRICE"} width={100} format={"#,##0.00" + Number.money.sign}/>
+                                    <Column dataField="BARCODE" caption={this.lang.t("grdBarcodeList.BARCODE")} width={150}/>
+                                    <Column dataField="NAME" caption={this.lang.t("grdBarcodeList.NAME")} width={500} />
+                                    <Column dataField="PRICE_SALE" caption={this.lang.t("grdgrdBarcodeListList.PRICE_SALE")} width={100} format={"#,##0.00" + Number.money.sign}/>
                                 </NdGrid>
                             </div>
                         </div>
@@ -2977,7 +2977,7 @@ export default class posDoc extends React.PureComponent
                     visible={false}                        
                     showCloseButton={true}
                     showTitle={true}
-                    title={"Park daki İşlemler"}
+                    title={this.lang.t("popParkList.title")}
                     container={"#root"} 
                     width={"900"}
                     height={"580"}
@@ -3008,10 +3008,10 @@ export default class posDoc extends React.PureComponent
                                     e.cellElement.style.padding = "4px"
                                 }}
                                 >
-                                    <Column dataField="LUSER_NAME" caption={"USER"} width={120} alignment={"center"}/>
-                                    <Column dataField="LDATE" caption={"DATE"} width={150} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"} />
-                                    <Column dataField="TOTAL" caption={"AMOUNT"} width={100} format={"#,##0.00" + Number.money.sign}/>
-                                    <Column dataField="DESCRIPTION" caption={"DESCRIPTION"} width={400}/>
+                                    <Column dataField="LUSER_NAME" caption={this.lang.t("grdPopParkList.LUSER_NAME")} width={120} alignment={"center"}/>
+                                    <Column dataField="LDATE" caption={this.lang.t("grdBarcodeList.LDATE")} width={150} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"} />
+                                    <Column dataField="TOTAL" caption={this.lang.t("grdBarcodeList.TOTAL")} width={100} format={"#,##0.00" + Number.money.sign}/>
+                                    <Column dataField="DESCRIPTION" caption={this.lang.t("grdBarcodeList.DESCRIPTION")} width={400}/>
                                 </NdGrid>
                             </div>
                         </div>
@@ -3027,7 +3027,7 @@ export default class posDoc extends React.PureComponent
                                         this.getDoc(this.grdPopParkList.devGrid.getSelectedRowsData()[0].GUID)
                                         this.popParkList.hide()
                                     }
-                                }}>Seç</NbButton> 
+                                }}>{this.lang.t("select")} </NbButton> 
                             </div>
                         </div>
                     </NdPopUp>
@@ -3038,7 +3038,7 @@ export default class posDoc extends React.PureComponent
                     visible={false}                        
                     showCloseButton={true}
                     showTitle={true}
-                    title={"Cheqpay Giriş"}
+                    title={this.lang.t("popCheqpay.title")}
                     container={"#root"} 
                     width={"900"}
                     height={"585"}
@@ -3090,27 +3090,27 @@ export default class posDoc extends React.PureComponent
                                     e.cellElement.style.padding = "4px"
                                 }}
                                 >
-                                    <Column dataField="CODE" alignment={"center"} caption={"CODE"} width={550} />
-                                    <Column dataField="AMOUNT" alignment={"center"} caption={"AMOUNT"} width={100} format={"#,##0.00" + Number.money.sign}/>
+                                    <Column dataField="CODE" alignment={"center"} caption={this.lang.t("grdPopCheqpayList.CODE")} width={550} />
+                                    <Column dataField="AMOUNT" alignment={"center"} caption={this.lang.t("grdPopCheqpayList.AMOUNT")} width={100} format={"#,##0.00" + Number.money.sign}/>
                                 </NdGrid>
                             </div>
                         </div>
                         {/* Last Read */}
                         <div className="row py-1">
                             <div className="col-12">
-                                <h3 className="text-primary text-center">Son Okutulan : <span className="text-dark">{Number(parseFloat(this.state.cheqLastAmount).toFixed(2)).currency()}</span></h3>    
+                                <h3 className="text-primary text-center">{this.lang.t("lastRead")} <span className="text-dark">{Number(parseFloat(this.state.cheqLastAmount).toFixed(2)).currency()}</span></h3>    
                             </div>
                         </div>
                         {/* Total Read */}
                         <div className="row py-1">
                             <div className="col-12">
-                                <h3 className="text-primary text-center">Toplam Okutulan : <span className="text-dark">{Number(parseFloat(this.state.cheqTotalAmount).toFixed(2)).currency()}</span></h3>    
+                                <h3 className="text-primary text-center">{this.lang.t("totalRead")} <span className="text-dark">{Number(parseFloat(this.state.cheqTotalAmount).toFixed(2)).currency()}</span></h3>    
                             </div>
                         </div>
                         {/* Rest */}
                         <div className="row py-1">
                             <div className="col-12">
-                                <h3 className="text-primary text-center">Kalan Ödeme : <span className="text-dark">{Number(parseFloat(this.state.payRest).toFixed(2)).currency()}</span></h3>    
+                                <h3 className="text-primary text-center">{this.lang.t("remainderPay")} <span className="text-dark">{Number(parseFloat(this.state.payRest).toFixed(2)).currency()}</span></h3>    
                             </div>
                         </div>
                     </NdPopUp>
@@ -3125,7 +3125,7 @@ export default class posDoc extends React.PureComponent
                     visible={false}                        
                     showCloseButton={false}
                     showTitle={true}
-                    title={"İskonto"}
+                    title={this.lang.t("popDiscount.title")}
                     container={"#root"} 
                     width={"100%"}
                     height={"100%"}
@@ -3183,13 +3183,13 @@ export default class posDoc extends React.PureComponent
                                 }}
                                 >
                                     <Editing confirmDelete={false}/>
-                                    <Column dataField="LDATE" caption={"LDATE"} width={40} alignment={"center"} dataType={"datetime"} format={"dd-MM-yyyy - HH:mm:ss SSSZ"} defaultSortOrder="desc" visible={false}/>
-                                    <Column dataField="ITEM_NAME" caption={"ADI"} width={430}/>
-                                    <Column caption={"INDIRIM"} width={100} alignment={"right"}/>
-                                    <Column dataField="DISCOUNT" caption={"INDIRIM"} width={100} format={"#,##0.00" + Number.money.sign}/>
-                                    <Column dataField="PRICE" caption={"FIYAT"} width={80} format={"#,##0.00" + Number.money.sign}/>
-                                    <Column caption={"IND. FIYAT"} width={100} format={"#,##0.00" + Number.money.sign} alignment={"right"}/>
-                                    <Column dataField="AMOUNT" alignment={"right"} caption={"TUTAR"} width={100} format={"#,##0.00" + Number.money.sign}/>                                                
+                                    <Column dataField="LDATE" caption={this.lang.t("grdDiscList.LDATE")} width={40} alignment={"center"} dataType={"datetime"} format={"dd-MM-yyyy - HH:mm:ss SSSZ"} defaultSortOrder="desc" visible={false}/>
+                                    <Column dataField="ITEM_NAME" caption={this.lang.t("grdDiscList.ITEM_NAME")} width={430}/>
+                                    <Column caption={this.lang.t("grdDiscList.INDIRIM")} width={100} alignment={"right"}/>
+                                    <Column dataField="DISCOUNT" caption={this.lang.t("grdDiscList.DISCOUNT")} width={100} format={"#,##0.00" + Number.money.sign}/>
+                                    <Column dataField="PRICE" caption={this.lang.t("grdDiscList.PRICE")} width={80} format={"#,##0.00" + Number.money.sign}/>
+                                    <Column caption={this.lang.t("grdDiscList.INDFIYAT")} width={100} format={"#,##0.00" + Number.money.sign} alignment={"right"}/>
+                                    <Column dataField="AMOUNT" alignment={"right"} caption={this.lang.t("grdDiscList.AMOUNT")} width={100} format={"#,##0.00" + Number.money.sign}/>                                                
                                 </NdGrid>
                             </div>
                         </div>
@@ -3203,7 +3203,7 @@ export default class posDoc extends React.PureComponent
                                         let tmpDt = new datatable()
                                         tmpDt.import(this.grdDiscList.getSelectedData())
     
-                                        let tmpResult = await this.popNumberRate.show('İndirim % - ' + tmpDt.sum('AMOUNT',2),Number(tmpDt.sum('AMOUNT')).rate2Num(tmpDt.sum('DISCOUNT')))
+                                        let tmpResult = await this.popNumberRate.show(this.lang.t("discountpercent") + tmpDt.sum('AMOUNT',2),Number(tmpDt.sum('AMOUNT')).rate2Num(tmpDt.sum('DISCOUNT')))
                                         if(typeof tmpResult == 'undefined')
                                         {
                                             return
@@ -3212,9 +3212,9 @@ export default class posDoc extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:"Tamam",location:'before'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"İndirim Yapmadan Önce Lütfen Tüm Ödemeleri Siliniz !"}</div>)
+                                                id:'msgDeletePayForDiscount',showTitle:true,title:this.lang.t("msgDeletePayForDiscount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("msgDeletePayForDiscount.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDeletePayForDiscount.msg")}</div>)
                                             }
                                             await dialog(tmpConfObj);
                                             return
@@ -3223,9 +3223,9 @@ export default class posDoc extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:"Tamam",location:'before'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Tutar dan fazla iskonto yapılamaz !"}</div>)
+                                                id:'msgDiscountNotBigAmount',showTitle:true,title:this.lang.t("msgDiscountNotBigAmount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("msgDiscountNotBigAmount.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDiscountNotBigAmount.msg")}</div>)
                                             }
                                             await dialog(tmpConfObj);
                                             return;
@@ -3250,14 +3250,14 @@ export default class posDoc extends React.PureComponent
                                     {
                                         let tmpConfObj =
                                         {
-                                            id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:"Tamam",location:'before'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Lütfen bir ya da  bir den fazla satır seçiniz !"}</div>)
+                                            id:'msgLineSelect',showTitle:true,title:this.lang.t("msgLineSelect.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.lang.t("msgLineSelect.btn01"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgLineSelect.msg")}</div>)
                                         }
                                         await dialog(tmpConfObj);
                                     }
                                 }}>
-                                    <div>İndirim Uygula (%)</div>
+                                    <div>{this.lang.t("applyDiscountPercent")}</div>
                                 </NbButton>
                             </div>
                             <div className="col-6">
@@ -3269,7 +3269,7 @@ export default class posDoc extends React.PureComponent
                                         let tmpDt = new datatable()
                                         tmpDt.import(this.grdDiscList.getSelectedData())                                    
 
-                                        let tmpResult = await this.popNumber.show('İndirim ' + Number.money.sign + ' - ' + tmpDt.sum('AMOUNT',2),tmpDt.sum('DISCOUNT',2))
+                                        let tmpResult = await this.popNumber.show(this.lang.t("discountPrice") + Number.money.sign + ' - ' + tmpDt.sum('AMOUNT',2),tmpDt.sum('DISCOUNT',2))
                                         let tmpRate = Number(tmpDt.sum('AMOUNT')).rate2Num(tmpResult,2);
                                         
                                         if(typeof tmpResult == 'undefined')
@@ -3280,9 +3280,9 @@ export default class posDoc extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:"Tamam",location:'before'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"İndirim Yapmadan Önce Lütfen Tüm Ödemeleri Siliniz !"}</div>)
+                                                id:'msgDeletePayForDiscount',showTitle:true,title:this.lang.t("msgDeletePayForDiscount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("msgDeletePayForDiscount.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDeletePayForDiscount.msg")}</div>)
                                             }
                                             await dialog(tmpConfObj);
                                             return
@@ -3291,9 +3291,9 @@ export default class posDoc extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:"Tamam",location:'before'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Tutar dan fazla iskonto yapılamaz !"}</div>)
+                                                id:'msgDiscountNotBigAmount',showTitle:true,title:this.lang.t("msgDiscountNotBigAmount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("msgDiscountNotBigAmount.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDiscountNotBigAmount.msg")}</div>)
                                             }
                                             await dialog(tmpConfObj);
                                             return;
@@ -3318,9 +3318,9 @@ export default class posDoc extends React.PureComponent
                                     {
                                         let tmpConfObj =
                                         {
-                                            id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:"Tamam",location:'before'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Lütfen bir ya da  bir den fazla satır seçiniz !"}</div>)
+                                            id:'msgLineSelect',showTitle:true,title:this.lang.t("msgLineSelect.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.lang.t("msgLineSelect.btn01"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgLineSelect.msg")}</div>)
                                         }
                                         await dialog(tmpConfObj);
                                     }                               
@@ -3333,17 +3333,17 @@ export default class posDoc extends React.PureComponent
                             <div className="col-6 offset-6">
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-end m-0">Ara Toplam : <span className="text-dark"><NbLabel id="disTotalSub" parent={this} value={"0.00"} format={"currency"}/></span></p>    
+                                        <p className="text-primary text-end m-0">{this.lang.t("amount")}<span className="text-dark"><NbLabel id="disTotalSub" parent={this} value={"0.00"} format={"currency"}/></span></p>    
                                     </div>
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-end m-0">Kdv : <span className="text-dark"><NbLabel id="disTotalVat" parent={this} value={"0.00"} format={"currency"}/></span></p>    
+                                        <p className="text-primary text-end m-0">{this.lang.t("vat")}<span className="text-dark"><NbLabel id="disTotalVat" parent={this} value={"0.00"} format={"currency"}/></span></p>    
                                     </div>
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-end m-0">İndirim : <span className="text-dark"><NbLabel id="disTotalDiscount" parent={this} value={"0.00"} format={"currency"}/></span></p>    
+                                        <p className="text-primary text-end m-0">{this.lang.t("discount")} <span className="text-dark"><NbLabel id="disTotalDiscount" parent={this} value={"0.00"} format={"currency"}/></span></p>    
                                     </div>
                                 </div>
                             </div>
@@ -3372,7 +3372,7 @@ export default class posDoc extends React.PureComponent
                     visible={false}                        
                     showCloseButton={true}
                     showTitle={true}
-                    title={"Sadakat İndirimi"}
+                    title={this.lang.t("popLoyalty.title")}
                     container={"#root"} 
                     width={"300"}
                     height={"560"}
@@ -3383,22 +3383,22 @@ export default class posDoc extends React.PureComponent
                             <div className="col-12">
                                <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-start m-0">Mevcut Puan : <span className="text-dark"><NbLabel id="popCustomerPoint" parent={this} value={"0"}/></span></p>    
+                                        <p className="text-primary text-start m-0">{this.lang.t("popLoyalty.availablePoint")} <span className="text-dark"><NbLabel id="popCustomerPoint" parent={this} value={"0"}/></span></p>    
                                     </div>                                    
                                 </div> 
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-start m-0">Kullanılan Puan : <span className="text-dark"><NbLabel id="popCustomerUsePoint" parent={this} value={"0"}/></span></p>    
+                                        <p className="text-primary text-start m-0">{this.lang.t("popLoyalty.usePoint")} <span className="text-dark"><NbLabel id="popCustomerUsePoint" parent={this} value={"0"}/></span></p>    
                                     </div>
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-start m-0">Kalan Puan : <span className="text-dark"><NbLabel id="popCustomerGrowPoint" parent={this} value={"0"}/></span></p>    
+                                        <p className="text-primary text-start m-0">{this.lang.t("popLoyalty.remainderPoint")}<span className="text-dark"><NbLabel id="popCustomerGrowPoint" parent={this} value={"0"}/></span></p>    
                                     </div>
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-start m-0">Puan Karşılığı € : <span className="text-dark"><NbLabel id="popCustomerPointToEuro" parent={this} value={"0"} format={"currency"}/></span></p>    
+                                        <p className="text-primary text-start m-0">{this.lang.t("popLoyalty.pointtoCash")} <span className="text-dark"><NbLabel id="popCustomerPointToEuro" parent={this} value={"0"} format={"currency"}/></span></p>    
                                     </div>
                                 </div>
                             </div>
@@ -3454,9 +3454,9 @@ export default class posDoc extends React.PureComponent
                                     {
                                         let tmpConfObj =
                                         {
-                                            id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:"Tamam",location:'before'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Girmiş olduğunuz puan, mevcut puanınızdan daha büyük olamaz !"}</div>)
+                                            id:'msgPointNotBigToPoint',showTitle:true,title:this.lang.t("msgPointNotBigToPoint.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.lang.t("msgPointNotBigToPoint.btn01"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPointNotBigToPoint.msg")}</div>)
                                         }
                                         await dialog(tmpConfObj);
                                         return;
@@ -3466,9 +3466,9 @@ export default class posDoc extends React.PureComponent
                                     {
                                         let tmpConfObj =
                                         {
-                                            id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:"Tamam",location:'before'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Girmiş olduğunuz puan satış tutarından daha büyük olamaz !"}</div>)
+                                            id:'msgPointNotBigToPay',showTitle:true,title:this.lang.t("msgPointNotBigToPay.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.lang.t("msgPointNotBigToPay.btn01"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPointNotBigToPay.msg")}</div>)
                                         }
                                         await dialog(tmpConfObj);
                                         return;
@@ -3502,7 +3502,7 @@ export default class posDoc extends React.PureComponent
                 </div>
                 {/* Last Sale List Popup */} 
                 <div>
-                    <NdPopUp id="popLastSaleList" parent={this} title={"Son Satış Listesi"} width={"100%"} height={"100%"}
+                    <NdPopUp id="popLastSaleList" parent={this} title={this.lang.t("popLastSaleList.title")} width={"100%"} height={"100%"}
                     showCloseButton={true}
                     showTitle={true}
                     >
@@ -3624,7 +3624,7 @@ export default class posDoc extends React.PureComponent
                             </div>
                             {/* txtPopLastRef */} 
                             <div className="col-4">
-                                <NdTextBox id="txtPopLastRef" parent={this} simple={true} placeholder={"Lütfen ticket üzerindeki barkodu okutunuz..."}
+                                <NdTextBox id="txtPopLastRef" parent={this} simple={true} placeholder={this.lang.t("txtPopLastRefPholder")}
                                 onKeyUp={(e)=>
                                 {
                                     if(e.event.key == 'Enter')
@@ -3761,13 +3761,13 @@ export default class posDoc extends React.PureComponent
                                     }
                                 }}
                                 >
-                                    <Column dataField="LDATE" caption={"TARIH"} width={200} alignment={"center"} dataType={"datetime"} format={"dd-MM-yyyy - HH:mm:ss SSSZ"}/>
-                                    <Column dataField="REF" caption={"REF"} width={150}/>
-                                    <Column dataField="CUSTOMER_NAME" caption={"MÜŞTERİ"} width={200}/> 
-                                    <Column dataField="CUSER_NAME" caption={"KULLANICI"} width={100}/>
-                                    <Column dataField="DISCOUNT" caption={"INDIRIM"} width={100} format={"#,##0.00" + Number.money.sign}/> 
-                                    <Column dataField="LOYALTY" caption={"SADAKAT"} width={100} format={"#,##0.00" + Number.money.sign}/>
-                                    <Column dataField="AMOUNT" caption={"TUTAR"} width={100} format={"#,##0.00" + Number.money.sign}/>                                             
+                                    <Column dataField="LDATE" caption={this.lang.t("grdLastPos.LDATE")} width={200} alignment={"center"} dataType={"datetime"} format={"dd-MM-yyyy - HH:mm:ss SSSZ"}/>
+                                    <Column dataField="REF" caption={this.lang.t("grdLastPos.REF")} width={150}/>
+                                    <Column dataField="CUSTOMER_NAME" caption={this.lang.t("grdLastPos.CUSTOMER_NAME")} width={200}/> 
+                                    <Column dataField="CUSER_NAME" caption={this.lang.t("grdLastPos.CUSER_NAME")} width={100}/>
+                                    <Column dataField="DISCOUNT" caption={this.lang.t("grdLastPos.DISCOUNT")} width={100} format={"#,##0.00" + Number.money.sign}/> 
+                                    <Column dataField="LOYALTY" caption={this.lang.t("grdLastPos.LOYALTY")} width={100} format={"#,##0.00" + Number.money.sign}/>
+                                    <Column dataField="AMOUNT" caption={this.lang.t("grdLastPos.AMOUNT")} width={100} format={"#,##0.00" + Number.money.sign}/>                                             
                                 </NdGrid>
                             </div>
                         </div>
@@ -3797,11 +3797,11 @@ export default class posDoc extends React.PureComponent
                                     e.cellElement.style.padding = "4px"
                                 }}
                                 >
-                                    <Column dataField="BARCODE" caption={"BARKOD"} width={120}/>
-                                    <Column dataField="ITEM_NAME" caption={"NAME"} width={200}/>    
-                                    <Column dataField="QUANTITY" caption={"MIKTAR"} width={50}/>
-                                    <Column dataField="PRICE" caption={"FIYAT"} width={50} format={"#,##0.00" + Number.money.sign}/> 
-                                    <Column dataField="AMOUNT" caption={"TUTAR"} width={100} format={"#,##0.00" + Number.money.sign}/>
+                                    <Column dataField="BARCODE" caption={this.lang.t("grdLastSale.BARCODE")} width={120}/>
+                                    <Column dataField="ITEM_NAME" caption={this.lang.t("grdLastSale.ITEM_NAME")} width={200}/>    
+                                    <Column dataField="QUANTITY" caption={this.lang.t("grdLastSale.QUANTITY")} width={50}/>
+                                    <Column dataField="PRICE" caption={this.lang.t("grdLastSale.PRICE")} width={50} format={"#,##0.00" + Number.money.sign}/> 
+                                    <Column dataField="AMOUNT" caption={this.lang.t("grdLastSale.AMOUNT")} width={100} format={"#,##0.00" + Number.money.sign}/>
                                 </NdGrid>
                             </div>
                             {/* grdLastPay */}
@@ -3846,9 +3846,9 @@ export default class posDoc extends React.PureComponent
                                     }
                                 }}
                                 >
-                                    <Column dataField="PAY_TYPE_NAME" caption={"TIP"} width={150}/>
-                                    <Column dataField="AMOUNT" caption={"AMOUNT"} width={100} format={"#,##0.00" + Number.money.sign}/>    
-                                    <Column dataField="CHANGE" caption={"CHANGE"} width={100} format={"#,##0.00" + Number.money.sign}/>
+                                    <Column dataField="PAY_TYPE_NAME" caption={this.lang.t("grdLastPay.PAY_TYPE_NAME")} width={150}/>
+                                    <Column dataField="AMOUNT" caption={this.lang.t("grdLastPay.AMOUNT")} width={100} format={"#,##0.00" + Number.money.sign}/>    
+                                    <Column dataField="CHANGE" caption={this.lang.t("grdLastPay.CHANGE")} width={100} format={"#,##0.00" + Number.money.sign}/>
                                 </NdGrid>
                             </div>
                         </div>
@@ -3860,7 +3860,7 @@ export default class posDoc extends React.PureComponent
                     visible={false}                        
                     showCloseButton={true}
                     showTitle={true}
-                    title={"Son Satış Tahsilat"}
+                    title={this.lang.t("popLastTotal.title")}
                     container={"#root"} 
                     width={"600"}
                     height={"700"}
@@ -3979,7 +3979,7 @@ export default class posDoc extends React.PureComponent
                                                         this.popLastTRDetail.show()
                                                     }
                                                 }}>
-                                                    T.R Detay
+                                                    {this.lang.t("trDeatil")}
                                                 </NbButton>
                                             </div>
                                         </div>
@@ -4002,7 +4002,7 @@ export default class posDoc extends React.PureComponent
                                                         }, 100);
                                                     }
                                                 }}>
-                                                    Satır İptal
+                                                    {this.lang.t("lineDelete")}
                                                 </NbButton>
                                             </div>
                                         </div>
@@ -4011,7 +4011,7 @@ export default class posDoc extends React.PureComponent
                                             <div className="col-12">
                                                 <NbButton id={"btnPopLastTotalCancel"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
                                                 onClick={()=>{this.popLastTotal.hide()}}>
-                                                    Vazgeç
+                                                     {this.lang.t("cancel")}
                                                 </NbButton>
                                             </div>
                                         </div>
@@ -4057,9 +4057,9 @@ export default class posDoc extends React.PureComponent
                                                         {       
                                                             let tmpConfObj =
                                                             {
-                                                                id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                                                button:[{id:"btn01",caption:"Tamam",location:'before'}],
-                                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Girmiş olduğunuz ödeme tutarı,satış tutarından büyük olamaz !"}</div>)
+                                                                id:'msgPayNotBigToPay',showTitle:true,title:this.lang.t("msgPayNotBigToPay.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                                button:[{id:"btn01",caption:this.lang.t("msgPayNotBigToPay.btn01"),location:'after'}],
+                                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPayNotBigToPay.msg")}</div>)
                                                             }
                                                             await dialog(tmpConfObj);
                                                             tmpAmount = (this.txtPopLastTotal.value  - tmpChange) * -1
@@ -4110,9 +4110,9 @@ export default class posDoc extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:"Tamam",location:'before'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Eksik ya da hatalı ödeme girdiniz lütfen girmiş olduğunuz ödemeleri kontrol ediniz !"}</div>)
+                                                    id:'msgMissingPay',showTitle:true,title:this.lang.t("msgMissingPay.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("msgMissingPay.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgMissingPay.msg")}</div>)
                                                 }
                                                 await dialog(tmpConfObj);
                                                 return
@@ -4172,8 +4172,8 @@ export default class posDoc extends React.PureComponent
                                     }
                                 }}
                                 >
-                                    <Column dataField="AMOUNT" alignment={"center"} caption={"AMOUNT"} format={"#,##0.00" + Number.money.sign} width={200}/>
-                                    <Column dataField="COUNT" alignment={"center"} caption={"COUNT"} format={"### Qty"} width={200} />
+                                    <Column dataField="AMOUNT" alignment={"center"} caption={this.lang.t("grdLastTRDetail.AMOUNT")} format={"#,##0.00" + Number.money.sign} width={200}/>
+                                    <Column dataField="COUNT" alignment={"center"} caption={this.lang.t("grdLastTRDetail.COUNT")} format={"### Qty"} width={200} />
                                 </NdGrid>
                             </div>
                         </div>
@@ -4181,7 +4181,7 @@ export default class posDoc extends React.PureComponent
                 </div>
                 {/* Price Description Popup */} 
                 <div>
-                    <NbPopDescboard id={"popPriceDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={"Fiyat Açıklaması"} title={"Lütfen Açıklama Giriniz"}                    
+                    <NbPopDescboard id={"popPriceDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={this.lang.t("popPriceDesc.head")} title={this.lang.t("popPriceDesc.title")}                    
                     param={this.prmObj.filter({ID:'PriceDescription',TYPE:0})}
                     onClick={async (e)=>
                     {
@@ -4211,7 +4211,7 @@ export default class posDoc extends React.PureComponent
                 </div>
                 {/* Park Description Popup */} 
                 <div>
-                    <NbPopDescboard id={"popParkDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={"Park Açıklaması"} title={"Lütfen Açıklama Giriniz"}                    
+                    <NbPopDescboard id={"popParkDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={this.lang.t("popParkDesc.head")} title={this.lang.t("popParkDesc.title")}                    
                     param={this.prmObj.filter({ID:'ParkDelDescription',TYPE:0})}
                     onClick={async (e)=>
                     {
@@ -4224,7 +4224,7 @@ export default class posDoc extends React.PureComponent
                 </div>
                 {/* Delete Description Popup */} 
                 <div>
-                    <NbPopDescboard id={"popDeleteDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={"Silme İşlemi Açıklaması"} title={"Lütfen Silme Nedeninizi Giriniz"}
+                    <NbPopDescboard id={"popDeleteDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={this.lang.t("popDeleteDesc.head")} title={this.lang.t("popDeleteDesc.title")} 
                     param={this.prmObj.filter({ID:'DocDelDescription',TYPE:0})}
                     onClick={async (e)=>
                     {
@@ -4237,7 +4237,7 @@ export default class posDoc extends React.PureComponent
                 </div>
                 {/* Row Delete Description Popup */} 
                 <div>
-                    <NbPopDescboard id={"popRowDeleteDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={"Satır Silme İşlemi Açıklaması"} title={"Lütfen Silme Nedeninizi Giriniz"}                    
+                    <NbPopDescboard id={"popRowDeleteDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={this.lang.t("popRowDeleteDesc.head")} title={this.lang.t("popRowDeleteDesc.title")}         
                     param={this.prmObj.filter({ID:'DocRowDelDescription',TYPE:0})}
                     onClick={async (e)=>
                     {
@@ -4250,7 +4250,7 @@ export default class posDoc extends React.PureComponent
                 </div>
                 {/* Item Return Description Popup */} 
                 <div>
-                    <NbPopDescboard id={"popItemReturnDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={"İade Açıklaması"} title={"Lütfen İade Nedenini Giriniz"}
+                    <NbPopDescboard id={"popItemReturnDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={this.lang.t("popItemReturnDesc.head")} title={this.lang.t("popItemReturnDesc.title")}     
                     param={this.prmObj.filter({ID:'RebateDescription',TYPE:0})}
                     onClick={async (e)=>
                     {        
@@ -4300,11 +4300,11 @@ export default class posDoc extends React.PureComponent
                     <NdDialog id={"msgItemReturnTicket"} container={"#root"} parent={this}
                         position={{of:'#root'}} 
                         showTitle={true} 
-                        title={"Dikkat"} 
+                        title={this.lang.t("msgItemReturnTicket.title")} 
                         showCloseButton={false}
                         width={"500px"}
                         height={"250px"}
-                        button={[{id:"btn01",caption:"Tamam",location:'before'},{id:"btn02",caption:"İptal",location:'after'}]}
+                        button={[{id:"btn01",caption:this.lang.t("msgItemReturnTicket.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgItemReturnTicket.btn02"),location:'after'}]}
                         onShowed={()=>
                         {
                             this.txtItemReturnTicket.value = ""
@@ -4316,7 +4316,7 @@ export default class posDoc extends React.PureComponent
                         >
                             <div className="row">
                                 <div className="col-12 py-2">
-                                    <div style={{textAlign:"center",fontSize:"20px"}}>{"İade Alınan Ticketı Okutunuz !"}</div>
+                                    <div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgItemReturnTicket.msg")}</div>
                                 </div>
                                 <div className="col-12 py-2">
                                     <Form>
@@ -4341,15 +4341,15 @@ export default class posDoc extends React.PureComponent
                     <NdDialog id={"msgItemReturnType"} container={"#root"} parent={this}
                     position={{of:'#root'}} 
                     showTitle={true} 
-                    title={"Uyarı"} 
+                    title={this.lang.t("msgItemReturnType.title")} 
                     showCloseButton={true}
                     width={"500px"}
                     height={"200px"}
-                    button={[{id:"btn01",caption:"Espece",location:'before'},{id:"btn02",caption:"Bon D'avoir",location:'after'}]}
+                    button={[{id:"btn01",caption:this.lang.t("msgItemReturnType.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgItemReturnType.btn02"),location:'after'}]}
                     >
                         <div className="row">
                             <div className="col-12 py-2">
-                                <div style={{textAlign:"center",fontSize:"20px"}}>{"İade Tipini Seçiniz !"}</div>
+                                <div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgItemReturnType.msg")}</div>
                             </div>
                         </div>
                     </NdDialog>                    
@@ -4363,11 +4363,11 @@ export default class posDoc extends React.PureComponent
                     showCloseButton={false}
                     width={"500px"}
                     height={"200px"}
-                    button={[{id:"btn01",caption:"Miktar Giriş",location:'before'},{id:"btn02",caption:"Vazgeç",location:'after'}]}
+                    button={[{id:"btn01",caption:this.lang.t("msgWeighing.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgWeighing.btn02"),location:'after'}]}
                     >
                         <div className="row">
                             <div className="col-12 py-2">
-                                <div style={{textAlign:"center",fontSize:"20px"}}>{"Teraziden cevap bekleniyor."}</div>
+                                <div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgWeighing.msg")}</div>
                             </div>
                         </div>
                     </NdDialog>
@@ -4377,15 +4377,15 @@ export default class posDoc extends React.PureComponent
                     <NdDialog id={"msgCardPayment"} container={"#root"} parent={this}
                     position={{of:'#root'}} 
                     showTitle={true} 
-                    title={"Uyarı"} 
+                    title={this.lang.t("msgCardPayment.title")} 
                     showCloseButton={false}
                     width={"500px"}
                     height={"200px"}
-                    button={[{id:"btn01",caption:"Tekrar",location:'before'},{id:"btn02",caption:"Vazgeç",location:'center'},{id:"btn03",caption:"Zorla",location:'after'}]}
+                    button={[{id:"btn01",caption:this.lang.t("msgCardPayment.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgCardPayment.btn02"),location:'center'},{id:"btn03",caption:this.lang.t("msgCardPayment.btn03"),location:'after'}]}
                     >
                         <div className="row">
                             <div className="col-12 py-2">
-                                <div style={{textAlign:"center",fontSize:"20px"}}>{"Kart cihazından cevap bekleniyor."}</div>
+                                <div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCardPayment.btn01")}</div>
                             </div>
                         </div>
                     </NdDialog>
@@ -4396,7 +4396,7 @@ export default class posDoc extends React.PureComponent
                     visible={false}                        
                     showCloseButton={true}
                     showTitle={true}
-                    title={"Fiyat Farkı"}
+                    title={this.lang.t("popDiffPrice.title")}
                     container={"#root"} 
                     width={"300"}
                     height={"515"}
@@ -4449,7 +4449,7 @@ export default class posDoc extends React.PureComponent
                     <NdDialog id={"msgRePaymentType"} container={"#root"} parent={this}
                     position={{of:'#root'}} 
                     showTitle={true} 
-                    title={"Kalan ödemeyi nasıl almak istersiniz ?"} 
+                    title={this.lang.t("msgRePaymentType.title")} 
                     showCloseButton={false}
                     width={"500px"}
                     height={"200px"}
@@ -4504,7 +4504,7 @@ export default class posDoc extends React.PureComponent
                     visible={false}                        
                     showCloseButton={true}
                     showTitle={true}
-                    title={"Ticket Restorant"}
+                    title={this.lang.t("popTRDetail.title")}
                     container={"#root"} 
                     width={"600"}
                     height={"600"}
@@ -4540,8 +4540,8 @@ export default class posDoc extends React.PureComponent
                                     }
                                 }}
                                 >
-                                    <Column dataField="AMOUNT" alignment={"center"} caption={"AMOUNT"} format={"#,##0.00" + Number.money.sign} width={200}/>
-                                    <Column dataField="COUNT" alignment={"center"} caption={"COUNT"} format={"### Qty"} width={200} />
+                                    <Column dataField="AMOUNT" alignment={"center"} caption={this.lang.t("grdTRDetail.AMOUNT")} format={"#,##0.00" + Number.money.sign} width={200}/>
+                                    <Column dataField="COUNT" alignment={"center"} caption={this.lang.t("grdTRDetail.COUNT")} format={"### Qty"} width={200} />
                                 </NdGrid>
                             </div>
                         </div>
@@ -4553,7 +4553,7 @@ export default class posDoc extends React.PureComponent
                     visible={false}                        
                     showCloseButton={true}
                     showTitle={true}
-                    title={"Avans"}
+                    title={this.lang.t("popAdvance.title")}
                     container={"#root"} 
                     width={"300"}
                     height={"550"}
@@ -4568,13 +4568,13 @@ export default class posDoc extends React.PureComponent
                                             id:"btn01",
                                             style:{height:'66px',width:'100%'},
                                             icon:"fa-arrow-right-to-bracket",
-                                            text:"Giriş"
+                                            text:this.lang.t("popAdvance.in")
                                         },
                                         {
                                             id:"btn02",
                                             style:{height:'66px',width:'100%'},
                                             icon:"fa-arrow-right-from-bracket",
-                                            text:"Çıkış"
+                                            text:this.lang.t("popAdvance.out")
                                         }
                                     ]
                                 }/>
@@ -4611,7 +4611,7 @@ export default class posDoc extends React.PureComponent
                 </div>
                 {/* Advance Description Popup */} 
                 <div>
-                    <NbPopDescboard id={"popAdvanceDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={"Avans Açıklaması"} title={"Lütfen Avans Nedeninizi Giriniz"}                    
+                    <NbPopDescboard id={"popAdvanceDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={this.lang.t("popAdvanceDesc.head")} title={this.lang.t("popAdvanceDesc.title")}                    
                     param={this.prmObj.filter({ID:'AdvanceDescription',TYPE:0})}
                     onClick={async (e)=>
                     {
@@ -4660,9 +4660,9 @@ export default class posDoc extends React.PureComponent
 
                                 let tmpConfObj =
                                 {
-                                    id:'msgAlert',showTitle:true,title:"Bilgi",showCloseButton:true,width:'500px',height:'250px',
-                                    button:[{id:"btn01",caption:"Tamam",location:'before'}],
-                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Kayıt işlemi başarılı."}</div>)
+                                    id:'msgSave',showTitle:true,title:this.lang.t("msgSave.title"),showCloseButton:true,width:'500px',height:'250px',
+                                    button:[{id:"btn01",caption:this.lang.t("msgSave.btn01"),location:'before'}],
+                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSave.msg")}</div>)
                                 }
                                 await dialog(tmpConfObj);
                             }
@@ -4675,7 +4675,7 @@ export default class posDoc extends React.PureComponent
                     visible={false}                        
                     showCloseButton={true}
                     showTitle={true}
-                    title={"Ayarlar"}
+                    title={this.lang.t("popSettings.title")}
                     container={"#root"} 
                     width={"600"}
                     height={"520"}
