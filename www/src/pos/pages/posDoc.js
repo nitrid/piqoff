@@ -105,7 +105,6 @@ export default class posDoc extends React.PureComponent
     }
     async init()
     {     
-        console.log(this.props)
         setInterval(()=>
         {
             this.lblTime.value = moment(new Date(),"HH:mm:ss").format("HH:mm:ss")
@@ -1526,12 +1525,10 @@ export default class posDoc extends React.PureComponent
                                     {
                                         this.txtPopSettingsLcd.value = this.posDevice.dt()[0].LCD_PORT
                                         this.txtPopSettingsScale.value = this.posDevice.dt()[0].SCALE_PORT
-                                        // this.txtPopSettingsPayCard.value = this.posDevice.dt()[0].PAY_CARD_PORT
-                                        // this.txtPopSettingsPrint.value = this.posDevice.dt()[0].PRINT_DESING
+                                        this.txtPopSettingsPayCard.value = this.posDevice.dt()[0].PAY_CARD_PORT
+                                        this.txtPopSettingsPrint.value = this.posDevice.dt()[0].PRINT_DESING
                                     }
-
-                                    // this.keyPopSettings.clearInput();
-                                    //this.keyPopSettings.setInput("")
+                                    this.keyPopSettings.clearInput();
                                     this.popSettings.show();
                                 }}>
                                     <i className="text-white fa-solid fa-gear" style={{fontSize: "16px"}} />
@@ -4684,19 +4681,59 @@ export default class posDoc extends React.PureComponent
                         <Form colCount={2} height={'fit-content'} id={"frmSettings"}>
                             <Item>
                                 <Label text={"LCD Port"} alignment="right" />
-                                <NdTextBox id={"txtPopSettingsLcd"} parent={this} simple={true} valueChangeEvent="keyup" onValueChanging={(e)=>{console.log(e);this.keyPopSettings.setInput(e)}} onFocusIn={()=>{this.keyPopSettings.inputName = "txtPopSettingsLcd"}}/>
+                                <NdTextBox id={"txtPopSettingsLcd"} parent={this} simple={true} valueChangeEvent="keyup" 
+                                onValueChanging={(e)=>
+                                {       
+                                    this.keyPopSettings.setCaretPosition(e.length)
+                                    this.keyPopSettings.setInput(e)
+                                }} 
+                                onFocusIn={()=>
+                                {                                    
+                                    this.keyPopSettings.inputName = "txtPopSettingsLcd"
+                                    this.keyPopSettings.setInput(this.txtPopSettingsLcd.value)
+                                }}/>
                             </Item>
                             <Item>
                                 <Label text={"Scale Port"} alignment="right" />
-                                <NdTextBox id={"txtPopSettingsScale"} parent={this} simple={true} valueChangeEvent="keyup" onValueChanging={(e)=>{this.keyPopSettings.setInput(e)}} onFocusIn={()=>{this.keyPopSettings.inputName = "txtPopSettingsScale"}}/>
+                                <NdTextBox id={"txtPopSettingsScale"} parent={this} simple={true} valueChangeEvent="keyup" 
+                                onValueChanging={(e)=>
+                                {
+                                    this.keyPopSettings.setCaretPosition(e.length)
+                                    this.keyPopSettings.setInput(e)
+                                }} 
+                                onFocusIn={()=>
+                                {
+                                    this.keyPopSettings.inputName = "txtPopSettingsScale"
+                                    this.keyPopSettings.setInput(this.txtPopSettingsScale.value)
+                                }}/>
                             </Item>
                             <Item>
                                 <Label text={"Pay Card Port"} alignment="right" />
-                                <NdTextBox id={"txtPopSettingsPayCard"} parent={this} simple={true} valueChangeEvent="keyup" onValueChanging={(e)=>{this.keyPopSettings.setInput(e)}} onFocusIn={()=>{this.keyPopSettings.inputName = "txtPopSettingsPayCard"}}/>
+                                <NdTextBox id={"txtPopSettingsPayCard"} parent={this} simple={true} valueChangeEvent="keyup" 
+                                onValueChanging={(e)=>
+                                {
+                                    this.keyPopSettings.setCaretPosition(e.length)
+                                    this.keyPopSettings.setInput(e)
+                                }} 
+                                onFocusIn={()=>
+                                {
+                                    this.keyPopSettings.inputName = "txtPopSettingsPayCard"
+                                    this.keyPopSettings.setInput(this.txtPopSettingsPayCard.value)
+                                }}/>
                             </Item>
                             <Item>
                                 <Label text={"Yazdırma Dizayn"} alignment="right" />
-                                <NdTextBox id={"txtPopSettingsPrint"} parent={this} simple={true} valueChangeEvent="keyup" onValueChanging={(e)=>{this.keyPopSettings.setInput(e)}} onFocusIn={()=>{this.keyPopSettings.inputName = "txtPopSettingsPrint"}}/>
+                                <NdTextBox id={"txtPopSettingsPrint"} parent={this} simple={true} valueChangeEvent="keyup" 
+                                onValueChanging={(e)=>
+                                {
+                                    this.keyPopSettings.setCaretPosition(e.length)
+                                    this.keyPopSettings.setInput(e)
+                                }}
+                                onFocusIn={()=>
+                                {
+                                    this.keyPopSettings.inputName = "txtPopSettingsPrint"
+                                    this.keyPopSettings.setInput(this.txtPopSettingsPrint.value)
+                                }}/>
                             </Item>
                         </Form>
                         <div className="row py-1">
@@ -4706,7 +4743,7 @@ export default class posDoc extends React.PureComponent
                         </div>
                         <div className="row py-1">
                             <div className="col-12">
-                            <NbButton id={"btnPopSettingsOk"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
+                                <NbButton id={"btnPopSettingsOk"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
                                 onClick={async()=>
                                 {
                                     if(this.posDevice.dt().length > 0)
@@ -4725,8 +4762,9 @@ export default class posDoc extends React.PureComponent
                                         this.posDevice.dt()[0].SCALE_PORT = this.txtPopSettingsScale.value
                                         this.posDevice.dt()[0].PAY_CARD_PORT = this.txtPopSettingsPayCard.value
                                         this.posDevice.dt()[0].PRINT_DESING = this.txtPopSettingsPrint.value
-                                    }
+                                    }                                
                                     await this.posDevice.save()
+                                    this.popSettings.hide()
                                 }}>
                                     <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
                                 </NbButton>

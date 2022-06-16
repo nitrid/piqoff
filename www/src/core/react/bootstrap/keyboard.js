@@ -30,6 +30,14 @@ export default class NbKeyboard extends NbBase
     {
         this.keyboard.clearInput();
     }
+    getCaretPositionEnd()
+    {
+        return this.keyboard.getCaretPositionEnd()
+    }
+    setCaretPosition(e)
+    {
+        this.keyboard.setCaretPosition(e)
+    }
     render()
     {
         return(
@@ -37,7 +45,7 @@ export default class NbKeyboard extends NbBase
                 <Keyboard keyboardRef={(r) => (this.keyboard = r)}
                 inputName={this.state.inputName}
                 onChange={(input) => 
-                {                    
+                {      
                     this.props.parent[this.state.inputName].value = input
                 }}
                 onKeyPress={(button) => 
