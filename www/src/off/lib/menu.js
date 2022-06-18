@@ -1,9 +1,10 @@
 export const menu = (e) => 
 {
     return [
+        //Stok
         {
             id: 'stk',
-            text: e.t('menu.stk'),//Stok,
+            text: e.t('menu.stk'),
             expanded: false,
             items: 
             [
@@ -151,9 +152,10 @@ export const menu = (e) =>
                 }
             ]
         },
+        //Cari
         {
             id: 'cri',
-            text: e.t('menu.cri'),//'Cari',
+            text: e.t('menu.cri'),
             expanded: false,
             items: 
             [
@@ -210,9 +212,10 @@ export const menu = (e) =>
                 }
             ]
         },
+        //Anlaşmalar
         {
             id: 'cnt',
-            text: e.t('menu.cnt'),//'Anlaşmalar',
+            text: e.t('menu.cnt'),
             expanded: false,
             items: 
             [
@@ -259,9 +262,10 @@ export const menu = (e) =>
                 }
             ]
         },
+        //Teklif
         {
             id: 'tkf',
-            text: e.t('menu.tkf'),//'tkfariş',
+            text: e.t('menu.tkf'),
             expanded: false,
             items: 
             [
@@ -310,9 +314,10 @@ export const menu = (e) =>
                 }
             ]
         },
+        //Sipariş
         {
             id: 'sip',
-            text: e.t('menu.sip'),//'Sipariş',
+            text: e.t('menu.sip'),
             expanded: false,
             items: 
             [
@@ -361,9 +366,10 @@ export const menu = (e) =>
                 }
             ]
         },
+        //İrsaliye
         {
             id: 'irs',
-            text: e.t('menu.irs'),//'İrsaliye',
+            text: e.t('menu.irs'),
             expanded: false,
             items: 
             [
@@ -425,9 +431,10 @@ export const menu = (e) =>
                 }
             ]
         },
+        //Fatura
         {
             id: 'ftr',
-            text: e.t('menu.ftr'),//'Fatura',
+            text: e.t('menu.ftr'),
             expanded: false,
             items: 
             [
@@ -499,9 +506,10 @@ export const menu = (e) =>
                 }
             ]
         },
+        //Finans
         {
             id: 'fns',
-            text: e.t('menu.fns'),//'Finans',
+            text: e.t('menu.fns'),
             expanded: false,
             items: 
             [
@@ -581,15 +589,17 @@ export const menu = (e) =>
                 }
             ]
         },
+        //Pos İşlemleri
         {
             id: 'pos',
-            text: e.t('menu.pos'),//'Toplu İşlemler',
+            text: e.t('menu.pos'),
             expanded: false,
             items: 
             [
+                //Tanımlar
                 {
                     id: 'pos_01',
-                    text : e.t('menu.pos_01'),//'Tanımlar',
+                    text : e.t('menu.pos_01'),
                     expanded: false,
                     items: 
                     [
@@ -600,29 +610,39 @@ export const menu = (e) =>
                         }
                     ]
                 },
+                //Raporlar
                 {
                     id: 'pos_02',
-                    text : e.t('menu.pos_02'),//'Raporlar',
+                    text : e.t('menu.pos_02'),
                     expanded: false,
                     items: 
                     [
+                        //Satış Fiş Raporu
                         {
                             id: 'pos_02_001',
-                            text: e.t('menu.pos_02_001'),//'Promosyon Tanımları',
+                            text: e.t('menu.pos_02_001'),
                             path: 'pos/report/salesTicketReport'
                         },
+                        //Müşteri Puan Raporu
                         {
                             id: 'pos_02_002',
-                            text: e.t('menu.pos_02_002'),//'Promosyon Tanımları',
+                            text: e.t('menu.pos_02_002'),
                             path: 'pos/report/customerPointReport'
+                        },
+                        //Pos Satış Raporu
+                        {
+                            id: 'pos_02_003',
+                            text: e.t('menu.pos_02_003'),
+                            path: 'pos/report/posSalesReport'
                         }
                     ]
                 },
             ]
         },
+        //Promosyon
         {
             id: 'promo',
-            text: e.t('menu.promo'),//'Promosyon',
+            text: e.t('menu.promo'),
             expanded: false,
             items: 
             [
@@ -659,9 +679,10 @@ export const menu = (e) =>
                 }
             ]
         },
+        //Toplu İşlemler
         {
             id: 'proces',
-            text: e.t('menu.proces'),//'Toplu İşlemler',
+            text: e.t('menu.proces'),
             expanded: false,
             items: 
             [
@@ -680,9 +701,10 @@ export const menu = (e) =>
                 },
             ]
         },
+        //Ayarlar
         {
             id: 'setting',
-            text: e.t('menu.set'),//'Ayarlar',
+            text: e.t('menu.set'),
             expanded: false,
             items: 
             [

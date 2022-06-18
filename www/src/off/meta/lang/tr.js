@@ -118,6 +118,7 @@ export const langTr =
         pos_02 : "Raporlar",
         pos_02_001 : "Satış Fiş Raporu",
         pos_02_002 : "Müşteri Puanı Raporu",
+        pos_02_003 : "Pos Satış Raporu",
         promo: "Promosyon",
         promo_01: "Tanımlar",
         promo_01_001: "Promosyon Tanımları",
