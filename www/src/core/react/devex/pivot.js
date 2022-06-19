@@ -50,6 +50,7 @@ export default class NdPivot extends Base
             showColumnGrandTotals={this.state.showColumnGrandTotals}
             showRowTotals={this.state.showRowTotals}
             showRowGrandTotals={this.state.showRowGrandTotals}
+            onCellPrepared={this.props.onCellPrepared}
             >
                 {this.props.children}
             </PivotGrid>

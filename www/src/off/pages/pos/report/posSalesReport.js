@@ -47,34 +47,42 @@ export default class posSalesReport extends React.Component
                                 let tmpQuery = 
                                 {
                                     query : "SELECT " +
-                                            "POS.DOC_DATE AS DOC_DATE, " +
-                                            "CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE, " +
-                                            "'SALES' AS TITLE, " +
-                                            "POS.VAT_RATE AS VAT_RATE, " +
-                                            "SUM(POS.FAMOUNT) AS HT, " +
-                                            "SUM(POS.VAT) AS TVA, " +
-                                            "SUM(POS.TOTAL) AS TTC, " +
-                                            "'' AS PAY_TYPE, " +
-                                            "0 AS PAY_AMOUNT " +
-                                            "FROM POS_SALE_VW_01 AS POS " +
-                                            "WHERE POS.STATUS = 1 " +
-                                            "GROUP BY POS.DOC_DATE,POS.TYPE,POS.VAT_RATE " +
-                                            "UNION ALL " +
+                                            "POS.DOC_DATE AS DOC_DATE,  " +
+                                            "POS.DEVICE AS DEVICE, " +
+                                            "CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE,  " +
+                                            "'SALES' AS TITLE,  " +
+                                            "'HT' AS TYPE, " +
+                                            "POS.VAT_RATE AS VAT_RATE,  " +
+                                            "SUM(POS.FAMOUNT) AS AMOUNT " +
+                                            "FROM POS_SALE_VW_01 AS POS  " +
+                                            "WHERE POS.STATUS = 1  " +
+                                            "GROUP BY POS.DOC_DATE,POS.TYPE,POS.VAT_RATE,POS.DEVICE  " +
+                                            "UNION ALL  " +
                                             "SELECT  " +
-                                            "POS.DOC_DATE AS DOC_DATE, " +                                            
-                                            "CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE, " +
-                                            "'PAYMENT' AS TITLE, " +
-                                            "0 AS VAT_RATE, " +
-                                            "0 AS HT, " +
-                                            "0 AS TVA, " +
-                                            "0 AS TTC, " +
-                                            "CASE WHEN PAY_TYPE = 0 THEN 'ESC'  " +
-                                            "WHEN PAY_TYPE = 1 THEN 'CB' " +
-                                            "END AS PAY_TYPE, " +
-                                            "SUM(AMOUNT) AS PAY_AMOUNT " +
-                                            "FROM POS_PAYMENT_VW_01 AS POS " +
-                                            "WHERE POS.STATUS = 1 " +
-                                            "GROUP BY POS.DOC_DATE,POS.TYPE,POS.PAY_TYPE", 
+                                            "POS.DOC_DATE AS DOC_DATE,  " +
+                                            "POS.DEVICE AS DEVICE, " +
+                                            "CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE,  " +
+                                            "'SALES' AS TITLE,  " +
+                                            "'TVA' AS TYPE, " +
+                                            "POS.VAT_RATE AS VAT_RATE,  " +
+                                            "SUM(POS.VAT) AS AMOUNT " +
+                                            "FROM POS_SALE_VW_01 AS POS  " +
+                                            "WHERE POS.STATUS = 1  " +
+                                            "GROUP BY POS.DOC_DATE,POS.TYPE,POS.VAT_RATE,POS.DEVICE  " +
+                                            "UNION ALL  " +
+                                            "SELECT   " +
+                                            "POS.DOC_DATE AS DOC_DATE,  " +
+                                            "POS.DEVICE AS DEVICE, " +
+                                            "CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE,  " +
+                                            "'PAYMENT' AS TITLE,  " +
+                                            "CASE WHEN PAY_TYPE = 0 THEN 'ESC'   " +
+                                            "WHEN PAY_TYPE = 1 THEN 'CB'  " +
+                                            "END AS TYPE,  " +
+                                            "0 AS VAT_RATE,  " +
+                                            "SUM(AMOUNT - CHANGE) AS AMOUNT  " +
+                                            "FROM POS_PAYMENT_VW_01 AS POS  " +
+                                            "WHERE POS.STATUS = 1  " +
+                                            "GROUP BY POS.DOC_DATE,POS.TYPE,POS.PAY_TYPE,POS.DEVICE  ", 
                                     param : ['START:date','END:date'],
                                     value : [this.dtDate.startDate,this.dtDate.endDate]
                                 }
@@ -100,63 +108,46 @@ export default class posSalesReport extends React.Component
                                     format: "dd/MM/yyyy",
                                     area: "row",
                                     expanded: true
-                                },                                 
+                                },
+                                {
+                                    caption: "DEVICE",
+                                    width: 80,
+                                    dataField: "DEVICE",
+                                    area: "row",
+                                },
                                 {
                                     caption: "TIP",
                                     width: 80,
                                     dataField: "DOC_TYPE",
                                     area: "row",
-                                },
+                                },                                
                                 {
                                     dataField: "TITLE",
                                     caption: "TITLE",
                                     width: 80,
-                                    area: "column"
+                                    area: "column",
                                 },
                                 {
                                     caption: "VAT",
                                     dataField: "VAT_RATE",
                                     width: 50,
                                     area: "column",
-                                },
-                                {
-                                    groupName: 'A',
-                                    caption: "HT",
-                                    dataField: "HT",
-                                    dataType: "number",
-                                    summaryType: "sum",
-                                    format: 
+                                    selector: (e) =>
                                     {
-                                        style: "currency", currency: "EUR",
-                                    },
-                                    area: "data"
+                                        if(e.VAT_RATE != 0)
+                                        {
+                                            return e.VAT_RATE
+                                        }
+                                    }
                                 },
                                 {
-                                    groupName: 'A',
-                                    caption: "TVA",
-                                    dataField: "TVA",
-                                    dataType: "number",
-                                    summaryType: "sum",
-                                    format: 
-                                    {
-                                        style: "currency", currency: "EUR",
-                                    },
-                                    area: "data"
+                                    caption: "TYPE",
+                                    dataField: "TYPE",
+                                    width: 50,
+                                    area: "column",
+                                    sortBy: "none"
                                 },
                                 {
-                                    groupName: 'A',
-                                    caption: "TTC",
-                                    dataField: "TTC",
-                                    dataType: "number",
-                                    summaryType: "sum",
-                                    format: 
-                                    {
-                                        style: "currency", currency: "EUR",
-                                    },
-                                    area: "data"
-                                },
-                                {
-                                    groupName: 'B',
                                     caption: "AMOUNT",
                                     dataField: "AMOUNT",
                                     dataType: "number",
@@ -165,16 +156,78 @@ export default class posSalesReport extends React.Component
                                     {
                                         style: "currency", currency: "EUR",
                                     },
-                                    area: "data"
-                                }
+                                    area: "data",
+                                },
+                                // {
+                                //     groupName: 'TITLE',
+                                //     visible: false
+                                // },
+                                // {
+                                //     groupName: 'Address',
+                                //     caption: "VAT",
+                                //     dataField: "VAT_RATE",
+                                //     width: 50,
+                                //     area: "column",
+                                //     groupIndex: 0
+                                // },
+                                // {
+                                //     caption: "HT",
+                                //     dataField: "HT",
+                                //     dataType: "number",
+                                //     summaryType: "sum",
+                                //     format: 
+                                //     {
+                                //         style: "currency", currency: "EUR",
+                                //     },
+                                //     area: "data",
+                                // },
+                                // {
+                                //     caption: "TVA",
+                                //     dataField: "TVA",
+                                //     dataType: "number",
+                                //     summaryType: "sum",
+                                //     format: 
+                                //     {
+                                //         style: "currency", currency: "EUR",
+                                //     },
+                                //     area: "data",
+                                // },
+                                // {
+                                //     groupName: 'SALES',
+                                //     caption: "TTC",
+                                //     dataField: "TTC",
+                                //     dataType: "number",
+                                //     summaryType: "sum",
+                                //     format: 
+                                //     {
+                                //         style: "currency", currency: "EUR",
+                                //     },
+                                //     area: "data",
+                                // },
+                                // {
+                                //     caption: "AMOUNT",
+                                //     dataField: "PAY_AMOUNT",
+                                //     dataType: "number",
+                                //     summaryType: "sum",
+                                //     format: 
+                                //     {
+                                //         style: "currency", currency: "EUR",
+                                //     },
+                                //     area: "data"
+                                // }
                             ]}
                             allowSortingBySummary={true}
                             allowFiltering={true}
                             showBorders={true}
-                            showColumnTotals={false}
+                            showColumnTotals={true}
                             showColumnGrandTotals={false}
                             showRowTotals={true}
-                            showRowGrandTotals={true}>
+                            showRowGrandTotals={true}
+                            onCellPrepared={(e)=>
+                            {
+                                console.log(e)
+                            }}
+                            >
                                 <FieldChooser enabled={true} height={400} />
                             </NdPivot>
                         </div>
