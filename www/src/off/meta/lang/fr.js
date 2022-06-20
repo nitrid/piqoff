@@ -18,6 +18,7 @@ export const langFr =
     msgNotAccess :"Kullanıcının Giriş Yetkisi Yok.",
     msgInvalidUser : "Identifiant ou mot de passe incorrect!",
     txtCardRead :"Lütfen Kullanıcı Kartınızı Okutunuz.",
+    //checkAll :"Tümünü Uygula",
     menu:
     {
         stk: "Produit",                
@@ -26,6 +27,7 @@ export const langFr =
         stk_03: "Liste Documents",
         stk_04: "Traitements",
         stk_05: "Rapports",
+        //stk_01_001: "Yeni Stok Tanımlama",
         stk_01_002: "Saisie Code barre ",
         stk_01_003: "Saisie Prix",
         stk_01_004: "Saisie Contenu",
@@ -36,6 +38,7 @@ export const langFr =
         stk_02_003: "Saisie Perte",
         stk_02_004: "Imprimer Etiquette",
         stk_02_005: "Saisie Perte Fournisseur",
+        //stk_02_006: "Özel Etiket Basım",
         stk_03_001: "Liste de Produit",
         stk_03_002: "Liste de Prix",
         stk_03_003: "Liste Code Barre",
@@ -109,6 +112,12 @@ export const langFr =
         fns_03_002 : "Saisie Nouveau Banque",
         fns_03_003 : "Virement Internes",
         fns_04 : "Rapports",
+        // pos: "Pos İşlemleri",
+        // pos_01 : "Tanımlar",
+        // pos_01_001 : "Pos Cihaz Tanıtım",
+        // pos_02 : "Raporlar",
+        // pos_02_001 : "Satış Fiş Raporu",
+        // pos_02_002 : "Müşteri Puanı Raporu",
         promo: "Promotions",
         promo_01: "Saisie Promotions",
         promo_01_001: "Saisie Nouveau Promotions",
@@ -120,7 +129,15 @@ export const langFr =
         set_01_001 : "Taxe Sucre",
         proces : "Traitement Generale",
         proces_01 : "Inventaire",
-        proces_01_001 : "Changement Famille Produit"
+        proces_01_001 : "Changement Famille Produit",
+        // tkf: "Teklif",
+        // tkf_01: "Listeler",
+        // tkf_02: "Evraklar",
+        // tkf_03: "Raporlar",
+        // tkf_01_001: "Alış Teklifi Listesi",
+        // tkf_01_002: "Satış Teklifi Listesi",
+        // tkf_02_001: "Alış Teklifi",
+        // tkf_02_002: "Satış Teklifi",
     },
     login:
     {
@@ -337,7 +354,21 @@ export const langFr =
             title: "Attention!",
             btn01: "Ok",
             msg: "Remplir les champs obligatoires SVP!!!"
-        }
+        },
+        // tabTitleSalesPriceHistory : "Satış Fiyat Geçmişi",
+        // grdSalesPrice : 
+        // {
+        //     clmUser : "Kullanıcı",
+        //     clmDate : "Değişim Tarihi",
+        //     clmPrice : "Fiyat",
+        // },
+        // grdItemInfo: 
+        // {
+        //     cDate: "Oluşturulma Tarihi",
+        //     cUser: "Oluşturan Kullanıcı",
+        //     lDate: "Son Değiştirilme Tarihi",
+        //     lUser : "Son Değiştiren Kullanıcı",
+        // },
     },
     stk_01_002: 
     {
@@ -737,6 +768,8 @@ export const langFr =
         dtDocDate : "Date",
         txtBarcode : "Ajouter code barres",
         getDispatch : "İrsaliye Getir",
+        // txtTotalCost : "Toplam Maliyet",
+        // txtTotalQuantity: "Toplam Miktar",
         pg_Docs : 
         {
             title : "Selectionner Document",

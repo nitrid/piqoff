@@ -809,7 +809,7 @@ export const langTr =
             Password : "Şifre",
             btnApprove : "Onayla"
         },
-         msgGetLocked:
+        msgGetLocked:
         {
             title: "Dikkat",
             btn01: "Tamam",
