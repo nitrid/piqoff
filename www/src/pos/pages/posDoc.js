@@ -542,13 +542,15 @@ export default class posDoc extends React.PureComponent
         {
             //this.loading.current.instance.show()
             if(this.posObj.dt().length > 0)
-            {                                   
-                this.posObj.dt()[0].FAMOUNT = Number(parseFloat(this.posObj.posSale.dt().sum('FAMOUNT',2)).toFixed(2))
-                this.posObj.dt()[0].AMOUNT = Number(parseFloat(this.posObj.posSale.dt().sum('AMOUNT',2)).toFixed(2))
-                this.posObj.dt()[0].DISCOUNT = Number(parseFloat(this.posObj.posSale.dt().sum('DISCOUNT',2)).toFixed(2))
-                this.posObj.dt()[0].LOYALTY = Number(parseFloat(this.posObj.posSale.dt().sum('LOYALTY',2)).toFixed(2))
-                this.posObj.dt()[0].VAT = Number(parseFloat(this.posObj.posSale.dt().sum('VAT',2)).toFixed(2))
-                this.posObj.dt()[0].TOTAL = Number(parseFloat(this.posObj.posSale.dt().sum('TOTAL',2)).toFixed(2))
+            {                  
+                let tmpPosSale = this.posObj.posSale.dt().where({GUID:{'<>' : '00000000-0000-0000-0000-000000000000'}})  
+
+                this.posObj.dt()[0].FAMOUNT = Number(parseFloat(tmpPosSale.sum('FAMOUNT',2)).toFixed(2))
+                this.posObj.dt()[0].AMOUNT = Number(parseFloat(tmpPosSale.sum('AMOUNT',2)).toFixed(2))
+                this.posObj.dt()[0].DISCOUNT = Number(parseFloat(tmpPosSale.sum('DISCOUNT',2)).toFixed(2))
+                this.posObj.dt()[0].LOYALTY = Number(parseFloat(tmpPosSale.sum('LOYALTY',2)).toFixed(2))
+                this.posObj.dt()[0].VAT = Number(parseFloat(tmpPosSale.sum('VAT',2)).toFixed(2))
+                this.posObj.dt()[0].TOTAL = Number(parseFloat(tmpPosSale.sum('TOTAL',2)).toFixed(2))
                 
                 tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2)); 
                 tmpPayChange = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) >= 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2)) * -1
@@ -559,8 +561,8 @@ export default class posDoc extends React.PureComponent
                 this.popCustomerUsePoint.value = Number(parseFloat(this.posObj.dt()[0].LOYALTY * 100).toFixed(0))
                 this.popCustomerGrowPoint.value = Number(parseInt(this.customerPoint.value - Number(parseFloat(this.posObj.dt()[0].LOYALTY * 100).toFixed(0))))                
 
-                this.totalRowCount.value = this.posObj.posSale.dt().length
-                this.totalItemCount.value = this.posObj.posSale.dt().sum('QUANTITY',2)
+                this.totalRowCount.value = tmpPosSale.length
+                this.totalItemCount.value = tmpPosSale.sum('QUANTITY',2)
                 this.totalLoyalty.value = this.posObj.dt()[0].LOYALTY
                 this.totalSub.value = this.posObj.dt()[0].FAMOUNT
                 this.totalVat.value = this.posObj.dt()[0].VAT
@@ -587,13 +589,13 @@ export default class posDoc extends React.PureComponent
                     cheqLastAmount:this.cheqDt.length > 0 ? this.cheqDt[0].AMOUNT : 0,
                     cheqTotalAmount:this.cheqDt.sum('AMOUNT',2)
                 })       
-                if(this.posObj.posSale.dt().length > 0)
+                if(tmpPosSale.length > 0)
                 {
                     this.posDevice.lcdPrint
                     ({
                         blink : 0,
-                        text :  this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ITEM_NAME.toString().space(11) + " " + 
-                                (parseFloat(this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].PRICE).toFixed(2) + "EUR").space(8,"s") +
+                        text :  tmpPosSale[tmpPosSale.length - 1].ITEM_NAME.toString().space(11) + " " + 
+                                (parseFloat(tmpPosSale[tmpPosSale.length - 1].PRICE).toFixed(2) + "EUR").space(8,"s") +
                                 "TOTAL : " + (parseFloat(tmpPayRest).toFixed(2) + "EUR").space(12,"s")
                     })
                 }
