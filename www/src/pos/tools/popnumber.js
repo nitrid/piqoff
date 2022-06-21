@@ -10,12 +10,14 @@ export default class NbPopNumber extends NbBase
     constructor(props)
     {
         super(props)
+        this.state.showCloseButton = typeof this.props.showCloseButton == 'undefined' ? true : false
     }
-    async show(pTitle,pValue)
+    async show(pTitle,pValue,pShowCloseButton)
     {
         this[this.props.id].setTitle(typeof pTitle == 'undefined' ? '' : pTitle);
         this["txt" + this.props.id].value = typeof pValue == 'undefined' ? 0 : pValue
         this["txt" + this.props.id].newStart = true;
+        this[this.props.id].setState({showCloseButton: typeof pShowCloseButton == 'undefined' ? true : pShowCloseButton})
         this[this.props.id].show();
         return new Promise(async resolve => 
         {
@@ -39,7 +41,7 @@ export default class NbPopNumber extends NbBase
             <div>
                 <NdPopUp parent={this} id={this.props.id} 
                 visible={false}                        
-                showCloseButton={true}
+                showCloseButton={this.state.showCloseButton}
                 showTitle={true}
                 title={""}
                 container={"#root"} 

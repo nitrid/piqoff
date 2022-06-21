@@ -2,6 +2,22 @@ export const acs =
 [
     //TYPE = 0 => SISTEM TYPE = 1 => EVRAK TYPE = 2 => ELEMENT
     //#region Pos
+    //btnDeviceEntry
+    {
+        TYPE : 2,
+        ID :"btnDeviceEntry",
+        VALUE : {dialog:{type:0}},
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "btnDeviceEntry",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Pos",
+            CAPTION : "Cihaz Giriş"
+        }
+    },
     //btnPluEdit
     {
         TYPE : 2,

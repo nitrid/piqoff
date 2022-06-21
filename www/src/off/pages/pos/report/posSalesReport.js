@@ -47,47 +47,49 @@ export default class posSalesReport extends React.Component
                                 let tmpQuery = 
                                 {
                                     query : "SELECT " +
-                                            "POS.DOC_DATE AS DOC_DATE,  " +
+                                            "POS.DOC_DATE AS DOC_DATE, " +
                                             "POS.DEVICE AS DEVICE, " +
-                                            "CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE,  " +
-                                            "'SALES' AS TITLE,  " +
+                                            "CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE, " +
+                                            "'SALES' AS TITLE, " +
                                             "'HT' AS TYPE, " +
-                                            "POS.VAT_RATE AS VAT_RATE,  " +
+                                            "POS.VAT_RATE AS VAT_RATE, " +
                                             "SUM(POS.FAMOUNT) AS AMOUNT " +
-                                            "FROM POS_SALE_VW_01 AS POS  " +
+                                            "FROM POS_SALE_VW_01 AS POS " +
                                             "WHERE POS.STATUS = 1  " +
-                                            "GROUP BY POS.DOC_DATE,POS.TYPE,POS.VAT_RATE,POS.DEVICE  " +
-                                            "UNION ALL  " +
-                                            "SELECT  " +
-                                            "POS.DOC_DATE AS DOC_DATE,  " +
+                                            "GROUP BY POS.DOC_DATE,POS.TYPE,POS.VAT_RATE,POS.DEVICE " +
+                                            "UNION ALL " +
+                                            "SELECT " +
+                                            "POS.DOC_DATE AS DOC_DATE, " +
                                             "POS.DEVICE AS DEVICE, " +
-                                            "CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE,  " +
-                                            "'SALES' AS TITLE,  " +
+                                            "CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE, " +
+                                            "'SALES' AS TITLE, " +
                                             "'TVA' AS TYPE, " +
-                                            "POS.VAT_RATE AS VAT_RATE,  " +
+                                            "POS.VAT_RATE AS VAT_RATE, " +
                                             "SUM(POS.VAT) AS AMOUNT " +
-                                            "FROM POS_SALE_VW_01 AS POS  " +
-                                            "WHERE POS.STATUS = 1  " +
-                                            "GROUP BY POS.DOC_DATE,POS.TYPE,POS.VAT_RATE,POS.DEVICE  " +
-                                            "UNION ALL  " +
-                                            "SELECT   " +
-                                            "POS.DOC_DATE AS DOC_DATE,  " +
+                                            "FROM POS_SALE_VW_01 AS POS " +
+                                            "WHERE POS.STATUS = 1 " +
+                                            "GROUP BY POS.DOC_DATE,POS.TYPE,POS.VAT_RATE,POS.DEVICE " +
+                                            "UNION ALL " +
+                                            "SELECT " +
+                                            "POS.DOC_DATE AS DOC_DATE, " +
                                             "POS.DEVICE AS DEVICE, " +
-                                            "CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE,  " +
-                                            "'PAYMENT' AS TITLE,  " +
-                                            "CASE WHEN PAY_TYPE = 0 THEN 'ESC'   " +
-                                            "WHEN PAY_TYPE = 1 THEN 'CB'  " +
-                                            "END AS TYPE,  " +
-                                            "0 AS VAT_RATE,  " +
-                                            "SUM(AMOUNT - CHANGE) AS AMOUNT  " +
-                                            "FROM POS_PAYMENT_VW_01 AS POS  " +
-                                            "WHERE POS.STATUS = 1  " +
-                                            "GROUP BY POS.DOC_DATE,POS.TYPE,POS.PAY_TYPE,POS.DEVICE  ", 
+                                            "CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE, " +
+                                            "'PAYMENT' AS TITLE, " +
+                                            "CASE WHEN PAY_TYPE = 0 THEN 'ESC' " +
+                                            "WHEN PAY_TYPE = 1 THEN 'CB' " +
+                                            "WHEN PAY_TYPE = 2 THEN 'CHQ' " +
+                                            "WHEN PAY_TYPE = 3 THEN 'CHQe' " +
+                                            "WHEN PAY_TYPE = 4 THEN 'BON D''AVOIR' " +
+                                            "END AS TYPE, " +
+                                            "0 AS VAT_RATE, " +
+                                            "SUM(AMOUNT - CHANGE) AS AMOUNT " +
+                                            "FROM POS_PAYMENT_VW_01 AS POS " +
+                                            "WHERE POS.STATUS = 1 " +
+                                            "GROUP BY POS.DOC_DATE,POS.TYPE,POS.PAY_TYPE,POS.DEVICE ", 
                                     param : ['START:date','END:date'],
                                     value : [this.dtDate.startDate,this.dtDate.endDate]
                                 }
                                 let tmpData = await this.core.sql.execute(tmpQuery)
-                                console.log(tmpQuery)
                                 if(tmpData.result.recordset.length > 0)
                                 {
                                     this.pivotgrid.setDataSource(tmpData.result.recordset)
@@ -225,7 +227,22 @@ export default class posSalesReport extends React.Component
                             showRowGrandTotals={true}
                             onCellPrepared={(e)=>
                             {
-                                console.log(e)
+                                if(e.area == 'column' && e.cell.type == 'T' && e.cell.path.length == 1 && e.cell.path[0] == "PAYMENT")
+                                {
+                                    e.cellElement.innerText = "Total"
+                                }
+                                if(e.area == 'column' && e.cell.type == 'T' && e.cell.path.length == 2 && e.cell.path[0] == "PAYMENT")
+                                {
+                                    e.cellElement.innerText = "Total"
+                                }
+                                if(e.area == 'column' && e.cell.type == 'T' && e.cell.path.length == 1 && e.cell.path[0] == "SALES")
+                                {
+                                    e.cellElement.innerText = "Total"
+                                }
+                                if(e.area == 'column' && e.cell.type == 'T' && e.cell.path.length == 2 && e.cell.path[0] == "SALES")
+                                {
+                                    e.cellElement.innerText = "TTC"
+                                }
                             }}
                             >
                                 <FieldChooser enabled={true} height={400} />
