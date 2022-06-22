@@ -4431,6 +4431,56 @@ export const langTr =
             dtPopEndDate : "Bitiş"
         },
         validCustomerCode : "Cari Kodu Boş Geçilemez",
+        txtRefRefno : 'Seri-Sıra',
+        startDate :'Başlangıç Tarihi',
+        finishDate : 'Bitiş Tarihi',
+        msgMissItemCode:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Bulunamayan Kodlar :"
+        },
+        msgMultiCodeCount:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Eklenen Ürün Sayısı"
+        },
+        popMultiItem:
+        {
+            title: "Toplu Ürün Ekleme",
+            btnApprove: "Ürünleri Getir",
+            btnClear : "Temizle",
+            btnSave : "Satırları Ekle",
+        },
+        cmbMultiItemType : 
+        {
+            title : "Arama Şekli",
+            customerCode : "Tedarikçi Koduna Göre",
+            ItemCode : "Ürün Koduna Göre"
+        },
+        grdMultiItem : 
+        {
+            clmCode : "Ürün Kodu",
+            clmMulticode : "Tedarikçi Kodun",
+            clmName : "Ürün Adı",
+            clmQuantity : "Miktar",
+            clmPrice : "Fiyat"
+        },
+        msgMultiData:
+        {
+            title: "Dikkat",
+            btn01: "Listeyi Temizle ve Hepsini Ekle",
+            btn02: "Yeni Yazılanları Listeye Ekle",
+            msg: "Listede Ürünler Var! "
+        },
+        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz",
+        msgDocValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
+        },
     },
     cnt_02_002 :
     {
@@ -4521,6 +4571,56 @@ export const langTr =
             msg: "İzin Verilen Tutardan Yüksek İndirim Yapılamaz.!! İzin Verilen Tutar : "
         },
         validCustomerCode : "Cari Kodu Boş Geçilemez",
+        txtRefRefno : 'Seri-Sıra',
+        startDate :'Başlangıç Tarihi',
+        finishDate : 'Bitiş Tarihi',
+        msgMissItemCode:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Bulunamayan Kodlar :"
+        },
+        msgMultiCodeCount:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Eklenen Ürün Sayısı"
+        },
+        popMultiItem:
+        {
+            title: "Toplu Ürün Ekleme",
+            btnApprove: "Ürünleri Getir",
+            btnClear : "Temizle",
+            btnSave : "Satırları Ekle",
+        },
+        cmbMultiItemType : 
+        {
+            title : "Arama Şekli",
+            customerCode : "Tedarikçi Koduna Göre",
+            ItemCode : "Ürün Koduna Göre"
+        },
+        grdMultiItem : 
+        {
+            clmCode : "Ürün Kodu",
+            clmMulticode : "Tedarikçi Kodun",
+            clmName : "Ürün Adı",
+            clmQuantity : "Miktar",
+            clmPrice : "Fiyat"
+        },
+        msgMultiData:
+        {
+            title: "Dikkat",
+            btn01: "Listeyi Temizle ve Hepsini Ekle",
+            btn02: "Yeni Yazılanları Listeye Ekle",
+            msg: "Listede Ürünler Var! "
+        },
+        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz",
+        msgDocValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
+        },
     },
     fns_01_001 :
     {

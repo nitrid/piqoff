@@ -16,6 +16,8 @@ export class contractCls
             LDATE : moment(new Date()).format("YYYY-MM-DD"),
             LUSER : this.core.auth.data.CODE,
             LUSER_NAME : '',
+            REF : '',
+            REF_NO : 0,
             TYPE : 0,
             TYPE_NAME : '',
             START_DATE : moment(new Date(0)).format("YYYY-MM-DD"),
@@ -41,14 +43,16 @@ export class contractCls
         let tmpDt = new datatable('SALES_CONTRACT');            
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [dbo].[SALES_CONTRACT_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((CUSTOMER = @CUSTOMER) OR (@CUSTOMER = '00000000-0000-0000-0000-000000000000')) AND TYPE = @TYPE",
-            param : ['GUID:string|50','CUSTOMER:string|50','TYPE:int']
+            query : "SELECT * FROM [dbo].[SALES_CONTRACT_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0)) AND TYPE = @TYPE",
+            param : ['GUID:string|50','REF:string|25','REF_NO:int','TYPE:int']
         } 
         tmpDt.insertCmd = 
         {
             query : "EXEC [dbo].[PRD_SALES_CONTRACT_INSERT] " + 
                     "@GUID = @PGUID, " +
                     "@CUSER = @PCUSER, " + 
+                    "@REF = @PREF, " + 
+                    "@REF_NO = @PREF_NO, " + 
                     "@TYPE = @PTYPE, " + 
                     "@START_DATE = @PSTART_DATE, " + 
                     "@FINISH_DATE = @PFINISH_DATE, " + 
@@ -57,9 +61,9 @@ export class contractCls
                     "@ITEM = @PITEM, " +
                     "@QUANTITY = @PQUANTITY, " +
                     "@PRICE = @PPRICE ",
-            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PSTART_DATE:date','PFINISH_DATE:date',
+            param : ['PGUID:string|50','PCUSER:string|25','PREF:string|25','PREF_NO:int','PTYPE:int','PSTART_DATE:date','PFINISH_DATE:date',
                      'PCUSTOMER:string|50','PDEPOT:string|50','PITEM:string|50','PQUANTITY:float','PPRICE:float'],
-            dataprm : ['GUID','CUSER','TYPE','START_DATE','FINISH_DATE','CUSTOMER','DEPOT','ITEM','QUANTITY','PRICE']
+            dataprm : ['GUID','CUSER','REF','REF_NO','TYPE','START_DATE','FINISH_DATE','CUSTOMER','DEPOT','ITEM','QUANTITY','PRICE']
         } 
         tmpDt.updateCmd = 
         {
@@ -74,9 +78,9 @@ export class contractCls
                     "@ITEM = @PITEM, " +
                     "@QUANTITY = @PQUANTITY, " +
                     "@PRICE = @PPRICE ",
-            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PSTART_DATE:date','PFINISH_DATE:date',
+            param : ['PGUID:string|50','PCUSER:string|25','PREF:string|25','PREF_NO:int','PTYPE:int','PSTART_DATE:date','PFINISH_DATE:date',
                     'PCUSTOMER:string|50','PDEPOT:string|50','PITEM:string|50','PQUANTITY:float','PPRICE:float'],
-            dataprm : ['GUID','CUSER','TYPE','START_DATE','FINISH_DATE','CUSTOMER','DEPOT','ITEM','QUANTITY','PRICE']
+            dataprm : ['GUID','CUSER','REF','REF_NO','TYPE','START_DATE','FINISH_DATE','CUSTOMER','DEPOT','ITEM','QUANTITY','PRICE']
         } 
         tmpDt.deleteCmd = 
         {
@@ -133,14 +137,16 @@ export class contractCls
             let tmpPrm = 
             {
                 GUID : '00000000-0000-0000-0000-000000000000',
-                CUSTOMER : '00000000-0000-0000-0000-000000000000',
+                REF : '',
+                REF_NO : 0,
                 TYPE : 0
             }          
 
             if(arguments.length > 0)
             {
                 tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
-                tmpPrm.CUSTOMER = typeof arguments[0].CUSTOMER == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].CUSTOMER;
+                tmpPrm.REF = typeof arguments[0].REF == 'undefined' ? '' : arguments[0].REF;
+                tmpPrm.REF_NO = typeof arguments[0].REF_NO == 'undefined' ? 0 : arguments[0].REF_NO;
                 tmpPrm.TYPE = typeof arguments[0].TYPE == 'undefined' ? 0 : arguments[0].TYPE;
             }
             this.ds.get('SALES_CONTRACT').selectCmd.value = Object.values(tmpPrm)
