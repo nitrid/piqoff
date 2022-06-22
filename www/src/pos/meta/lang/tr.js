@@ -489,4 +489,11 @@ export const langTr =
         btn01 : "Tamam",
     },
     listed : "Listele",
+    msgDeviceEntryAlert : 
+    {
+        title : "Uyarı",
+        msg : "Lütfen cihaz kodunu boş geçmeyiniz !",
+        btn01 : "Tamam",
+    },
+    popTitleDevice : "Kasa Kodu Giriş"
 }

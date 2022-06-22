@@ -110,13 +110,14 @@ export default class posDoc extends React.PureComponent
             this.lblTime.value = moment(new Date(),"HH:mm:ss").format("HH:mm:ss")
             this.lblDate.value = new Date().toLocaleDateString('tr-TR',{ year: 'numeric', month: 'numeric', day: 'numeric' })
         },1000)        
-
+        
         this.posObj.clearAll()
         await this.prmObj.load({PAGE:"pos",APP:'POS'})
         await this.acsObj.load({PAGE:"pos",APP:'POS'})
 
         this.posObj.addEmpty()
-        this.posObj.dt()[this.posObj.dt().length - 1].DEVICE = '001'
+        this.posObj.dt()[this.posObj.dt().length - 1].DEVICE = window.localStorage.getItem('device') == null ? '' : window.localStorage.getItem('device')
+        this.device.value = this.posObj.dt()[this.posObj.dt().length - 1].DEVICE
 
         await this.posDevice.load({CODE:this.posObj.dt()[this.posObj.dt().length - 1].DEVICE})        
         
@@ -153,6 +154,11 @@ export default class posDoc extends React.PureComponent
         }, 1000);
         
         await this.calcGrandTotal(false) 
+        
+        if(this.posObj.dt()[this.posObj.dt().length - 1].DEVICE == '')
+        {
+            this.deviceEntry()
+        }
 
         for (let i = 0; i < this.parkDt.length; i++) 
         {
@@ -164,7 +170,25 @@ export default class posDoc extends React.PureComponent
                 await this.getDoc(this.parkDt[i].GUID)                
                 return
             }
-        }           
+        }        
+    }
+    async deviceEntry()
+    {
+        let tmpResult = await this.popNumber.show(this.lang.t("popTitleDevice"),window.localStorage.getItem('device') == null ? '' : window.localStorage.getItem('device'),false)
+        if(typeof tmpResult == 'undefined' || tmpResult == '')
+        {
+            let tmpConfObj =
+            {
+                id:'msgDeviceEntryAlert',showTitle:true,title:this.lang.t("msgDeviceEntryAlert.title"),showCloseButton:true,width:'400px',height:'200px',
+                button:[{id:"btn01",caption:this.lang.t("msgDeviceEntryAlert.btn01"),location:'before'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDeviceEntryAlert.msg")}</div>)
+            }
+            await dialog(tmpConfObj);
+            this.deviceEntry()
+            return
+        }
+        window.localStorage.setItem('device',tmpResult)
+        window.location.reload()
     }
     async getDoc(pGuid)
     {
@@ -1480,9 +1504,23 @@ export default class posDoc extends React.PureComponent
                                         <span className="text-white"><i className="text-white fa-solid fa-user pe-2"></i>{this.user.CODE}</span>
                                     </div>    
                                 </div>
-                                <div className="row" style={{height:"25px"}}>
+                                <div className="row" style={{height:"25px"}} onClick={async()=>
+                                {
+                                    let tmpAcsVal = this.acsObj.filter({ID:'btnDeviceEntry',TYPE:2,USERS:this.user.CODE})
+                                        
+                                    if(typeof tmpAcsVal.getValue().dialog != 'undefined' && tmpAcsVal.getValue().dialog.type != -1)
+                                    {   
+                                        let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:tmpAcsVal.getValue().dialog.type})
+                                        if(!tmpResult)
+                                        {
+                                            return
+                                        }
+                                    }
+
+                                    this.deviceEntry()
+                                }}>
                                     <div className="col-12">
-                                        <span className="text-light"><i className="text-light fa-solid fa-tv pe-2"></i>004</span>
+                                        <span className="text-light"><i className="text-light fa-solid fa-tv pe-2"></i><NbLabel id="device" parent={this} value={""}/></span>
                                     </div> 
                                 </div>
                             </div>
@@ -1732,7 +1770,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-end m-0">{this.lang.t("vat")}<span className="text-dark"><NbLabel id="totalVat" parent={this} value={"0.00 " + Number.money.sign}/></span></p>    
+                                        <p className="text-primary text-end m-0">{this.lang.t("vat")}<span className="text-dark"><NbLabel id="totalVat" parent={this} value={"0.00 " + Number.money.sign} format={"currency"}/></span></p>    
                                     </div>
                                 </div>
                                 <div className="row">
