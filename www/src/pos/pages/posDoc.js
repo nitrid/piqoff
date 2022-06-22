@@ -1770,7 +1770,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-end m-0">{this.lang.t("vat")}<span className="text-dark"><NbLabel id="totalVat" parent={this} value={"0.00 " + Number.money.sign}/></span></p>    
+                                        <p className="text-primary text-end m-0">{this.lang.t("vat")}<span className="text-dark"><NbLabel id="totalVat" parent={this} value={"0.00 " + Number.money.sign} format={"currency"}/></span></p>    
                                     </div>
                                 </div>
                                 <div className="row">

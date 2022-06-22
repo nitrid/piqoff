@@ -149,13 +149,13 @@ export const langFr =
         msg : "Le prix ne peut être inferieur au prix de revient !",
         btn01 : "OK",
     },
-    totalLine : "Ligne total",
-    totalQuantity : "Montant total",
-    loyaltyDiscount : "Remise fidélité",
+    totalLine : "Ligne total :",
+    totalQuantity : "Quantite Total :",
+    loyaltyDiscount : "Remise fidélité :",
     ticketRect : "Ticket Rest. : ",
-    amount : "Sous-total",
-    vat : "TVA",
-    discount : "Remise",
+    amount : "Sous-total :",
+    vat : "TVA :",
+    discount : "Remise :",
     msgCollectForSale: 
     {
         title : "Attention",
@@ -410,10 +410,10 @@ export const langFr =
     grdList: 
     {
         LDATE : "Date MAJ",
-        ITEM_NAME :"NOM",
-        QUANTITY : "MONTANT",
-        PRICE : "PRIX",
-        AMOUNT : "TOTAL"
+        ITEM_NAME :"Désignation Produit",
+        QUANTITY : "Quantite",
+        PRICE : "Prix",
+        AMOUNT : "Total"
     },
     grdBarcodeList : 
     {
@@ -456,10 +456,10 @@ export const langFr =
     grdLastSale :
     {
         BARCODE : "CODE BARRE",
-        ITEM_NAME : "NOM",
-        QUANTITY : "QUANTITE",
-        PRICE :"PRIX",
-        AMOUNT : "TOTAL",
+        ITEM_NAME : "Désignation Produit",
+        QUANTITY : "Quantite",
+        PRICE :"Prix",
+        AMOUNT : "Total",
     },
     grdLastPay : 
     {
@@ -490,5 +490,5 @@ export const langFr =
         msg2 : " Ne peut être inférieur à ... caractères ", 
         btn01 : "Ok",
     },
-    listed : "Classe",
+    listed : "Rechercher",
 }
