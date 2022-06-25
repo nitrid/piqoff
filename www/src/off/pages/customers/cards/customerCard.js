@@ -236,19 +236,49 @@ export default class CustomerCard extends React.Component
         {        
             await this.grdBank.dataRefresh({source:this.customerObj.customerBank.dt('CUSTOMER_BANK')});
         }
+        if(e.itemData.title == this.t("tabTitleDetail"))
+        {        
+           
+        }
     }
     _cellRoleRender(e)
     {
-        return (
-            <NdSelectBox 
-                parent={this}                             
-                id = "cmbTaxType"                             
-                displayExpr="VALUE"                       
-                valueExpr="ID"
-                data={{source:[{ID:0,VALUE:this.t("cmbTaxTypeData.individual")},{ID:1,VALUE:this.t("cmbTaxTypeData.company")}]}}
-            >
-            </NdSelectBox>
-        )
+        console.log(e)
+        if(e.column.name == "TAX_TYPE")
+        {
+            return (
+                <NdSelectBox 
+                    parent={this}                             
+                    id = "cmbTaxType"                             
+                    displayExpr="VALUE"                       
+                    valueExpr="ID"
+                    data={{source:[{ID:0,VALUE:this.t("cmbTaxTypeData.individual")},{ID:1,VALUE:this.t("cmbTaxTypeData.company")}]}}
+                    onValueChanged={(v)=>
+                    {
+                        e.data.TAX_TYPE = v.value
+                    }}
+                >
+                </NdSelectBox>
+            )
+        }
+        if(e.column.name == "REBATE")
+        {
+            return (
+                <NdSelectBox 
+                    parent={this}                             
+                    id = "cmbRebate"                             
+                    displayExpr="VALUE"                       
+                    valueExpr="ID"
+                    data={{source:[{ID:0,VALUE:this.t("cmbRebate.passive")},{ID:1,VALUE:this.t("cmbRebate.active")}]}}
+                    onValueChanged={(v)=>
+                    {
+                        e.data.REBATE = v.value
+                    }}
+                >
+                </NdSelectBox>
+            )
+        }
+      
     }
     render()
     {
@@ -291,18 +321,19 @@ export default class CustomerCard extends React.Component
                                             await dialog(tmpConfObj);
                                             return
                                         }
-                                        if(typeof this.customerObj.customerAdress.dt()[0] == 'undefined' || this.customerObj.customerAdress.dt()[0].COUNTRY == '' )
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgAdressNotValid',showTitle:true,title:this.t("msgAdressNotValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgAdressNotValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAdressNotValid.msg")}</div>)
-                                            }
+                                        // ADRES BÖLÜMÜNDEKİ ÜLKE KONTROLÜ İÇİN YAPILMIŞTI AMA TAX_SUCRE SEBEBİYLE GEREK KALMAMIS OLABİLİR 
+                                        // if(typeof this.customerObj.customerAdress.dt()[0] == 'undefined' || this.customerObj.customerAdress.dt()[0].COUNTRY == '' )
+                                        // {
+                                        //     let tmpConfObj =
+                                        //     {
+                                        //         id:'msgAdressNotValid',showTitle:true,title:this.t("msgAdressNotValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                        //         button:[{id:"btn01",caption:this.t("msgAdressNotValid.btn01"),location:'after'}],
+                                        //         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAdressNotValid.msg")}</div>)
+                                        //     }
                                             
-                                            await dialog(tmpConfObj);
-                                            return
-                                        }
+                                        //     await dialog(tmpConfObj);
+                                        //     return
+                                        // }
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             let tmpConfObj =
@@ -623,12 +654,6 @@ export default class CustomerCard extends React.Component
                                          access={this.access.filter({ELEMENT:'txtWeb',USERS:this.user.CODE})}
                                         />
                                 </Item>
-                                 {/* chkRebate */}
-                                <Item>
-                                    <Label text={this.t("chkRebate")} alignment="right" />
-                                        <NdCheckBox id="chkRebate" parent={this} value={true}  dt={{data:this.customerObj.dt('CUSTOMERS'),field:"REBATE"}} ></NdCheckBox>
-                                </Item>
-                                
                             </Form>
                         </div>
                         <div className='row px-2 pt-2'>
@@ -779,7 +804,26 @@ export default class CustomerCard extends React.Component
                                                 </NdGrid>
                                             </div>
                                         </div>
-                                    </Item>                              
+                                    </Item>
+                                    <Item title={this.t("tabTitleDetail")}>
+                                        <div className='row px-2 py-2'>
+                                            <div className='col-12'>
+                                               <Form colCount={6}>
+                                                 {/* chkRebate */}
+                                                <Item>
+                                                    <Label text={this.t("chkRebate")} alignment="right" />
+                                                        <NdCheckBox id="chkRebate" parent={this} value={false}  dt={{data:this.customerObj.dt('CUSTOMERS'),field:"REBATE"}} ></NdCheckBox>
+                                                </Item>
+                                                {/* chkTaxSucre */}
+                                                <Item>
+                                                <Label text={this.t("chkTaxSucre")} alignment="right" />
+                                                    <NdCheckBox id="chkTaxSucre" parent={this} value={false}  dt={{data:this.customerObj.dt('CUSTOMERS'),field:"TAX_SUCRE"}} ></NdCheckBox>
+                                                </Item>
+                                               </Form>
+                                            </div>
+                                        </div>
+                                    </Item>  
+                                                                 
                                 </TabPanel>
                             </div>
                         </div> 

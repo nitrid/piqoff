@@ -192,14 +192,6 @@ export default class App extends React.Component
             this.core.auth.logout()
         })    
         
-        this.core.on('onExecuting',()=>
-        {
-            //this.setState({isExecute:true})
-        })
-        this.core.on('onExecuted',()=>
-        {
-            this.setState({isExecute:false})
-        })
     }
     menuClick(data)
     {

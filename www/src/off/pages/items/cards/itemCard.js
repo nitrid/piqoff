@@ -170,7 +170,7 @@ export default class itemCard extends React.Component
         this.itemsObj.itemUnit.addEmpty(tmpMainUnitObj);
         this.itemsObj.itemUnit.addEmpty(tmpUnderUnitObj);
 
-       
+        
 
         this.itemGrpForOrginsValidCheck();   
         this.itemGrpForMinMaxAccessCheck();  
@@ -179,8 +179,10 @@ export default class itemCard extends React.Component
     async getItem(pCode)
     {
         App.instance.setState({isExecute:true})
+        console.log(1)
         this.itemsObj.clearAll();
         await this.itemsObj.load({CODE:pCode});
+        console.log(2)
         //TEDARİKÇİ FİYAT GETİR İŞLEMİ.                
         await this.itemsPriceSupply.load({ITEM_CODE:pCode,TYPE:1})  
         await this.itemsPriceLogObj.load({ITEM_GUID:this.itemsObj.dt()[0].GUID})
@@ -199,6 +201,7 @@ export default class itemCard extends React.Component
                 this.salesPriceLogObj.push(tmpData.result.recordset[i])
             }
         }
+        console.log(3)
         App.instance.setState({isExecute:false})
     }
     async checkItem(pCode)
@@ -429,13 +432,33 @@ export default class itemCard extends React.Component
             this.setState({isItemGrpForMinMaxAccess:false})
         }
     }
-    taxSugarValidCheck()
+    async taxSugarValidCheck()
     {
         let tmpData = this.prmObj.filter({ID:'taxSugarGroupValidation'}).getValue()
         if((typeof tmpData != 'undefined' && Array.isArray(tmpData) && typeof tmpData.find(x => x == this.cmbItemGrp.value) != 'undefined'))
         {
-            this.setState({isTaxSugar:true})
-            this.txtTaxSugar.readOnly = false
+            
+            for (let i = 0; i < this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE').length; i++) 
+            {
+                let tmpQuery = 
+                {
+                    query :"SELECT TAX_SUCRE FROM CUSTOMERS WHERE CODE = @CODE ",
+                    param : ['CODE:string|50'],
+                    value : [this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[i].CUSTOMER_CODE]
+                }
+                let tmpData = await this.core.sql.execute(tmpQuery) 
+                if(tmpData.result.recordset.length > 0)
+                {
+                    if(tmpData.result.recordset[0].TAX_SUCRE == 1)
+                    {
+                        this.setState({isTaxSugar:true})
+                        this.txtTaxSugar.readOnly = false
+                        return
+                    }
+                }
+            }
+            this.setState({isTaxSugar:false})
+            this.txtTaxSugar.readOnly = true
         }
         else
         {
@@ -1737,7 +1760,6 @@ export default class itemCard extends React.Component
                                                             this.txtPopCustomerCode.GUID = data[0].GUID
                                                             this.txtPopCustomerCode.value = data[0].CODE;
                                                             this.txtPopCustomerName.value = data[0].TITLE;
-                                                            console.log(this.txtPopCustomerCode.GUID);
                                                         }
                                                     }
                                                 }
@@ -1810,8 +1832,6 @@ export default class itemCard extends React.Component
                                             <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmItemCustomer" + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
-                                                console.log(e)
-                                                console.log(e.validationGroup)
                                                 if(e.validationGroup.validate().status == "valid")
                                                 {
                                                     let tmpEmptyMulti = {...this.itemsObj.itemMultiCode.empty};
@@ -1843,6 +1863,7 @@ export default class itemCard extends React.Component
                                                     let tmpMaxData = this.prmObj.filter({ID:'ItemMaxPricePercent'}).getValue()
                                                     let tmpMAxPrice = this.txtPopCustomerPrice.value + (this.txtPopCustomerPrice.value * tmpMaxData) /100
                                                     this.txtMaxSalePrice.value = (tmpMAxPrice).toFixed(2)
+                                                    this.taxSugarValidCheck()
                                                 }                              
                                                 else
                                                 {

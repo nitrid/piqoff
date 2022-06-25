@@ -1585,8 +1585,9 @@ export const langTr =
             btn01: "Cariye Git",
             btn02: "Tamam",
             msg : "Girmiş olduğunuz Cari sistem de kayıtlı !"
-        }
-
+        },
+        chkTaxSucre : "Tax Sugar",
+        tabTitleDetail : "Detay Bilgileri"
     },
     cri_01_002:
     {
