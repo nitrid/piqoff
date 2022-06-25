@@ -179,10 +179,8 @@ export default class itemCard extends React.Component
     async getItem(pCode)
     {
         App.instance.setState({isExecute:true})
-        console.log(1)
         this.itemsObj.clearAll();
         await this.itemsObj.load({CODE:pCode});
-        console.log(2)
         //TEDARİKÇİ FİYAT GETİR İŞLEMİ.                
         await this.itemsPriceSupply.load({ITEM_CODE:pCode,TYPE:1})  
         await this.itemsPriceLogObj.load({ITEM_GUID:this.itemsObj.dt()[0].GUID})
@@ -201,7 +199,6 @@ export default class itemCard extends React.Component
                 this.salesPriceLogObj.push(tmpData.result.recordset[i])
             }
         }
-        console.log(3)
         App.instance.setState({isExecute:false})
     }
     async checkItem(pCode)
