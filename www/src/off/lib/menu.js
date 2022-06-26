@@ -634,6 +634,12 @@ export const menu = (e) =>
                             id: 'pos_02_003',
                             text: e.t('menu.pos_02_003'),
                             path: 'pos/report/posSalesReport'
+                        },
+                        //Pos Satış Detay Raporu
+                        {
+                            id: 'pos_02_004',
+                            text: e.t('menu.pos_02_004'),
+                            path: 'pos/report/posSalesDetailReport'
                         }
                     ]
                 },

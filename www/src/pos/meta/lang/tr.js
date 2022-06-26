@@ -4,7 +4,7 @@ export const langTr =
     btnSave: "Kaydet",
     btnCancel: "İptal",
     btnPrint :"Yazdır",
-    btnOk: "Tamam",
+    btnOk: "Tamam",    
     msgWarning: "Dikkat",
     info : "Bilgi",
     btnYes : "Evet",

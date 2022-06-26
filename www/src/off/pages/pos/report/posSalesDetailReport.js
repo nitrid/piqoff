@@ -6,12 +6,22 @@ import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
+import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
+import NdTextBox from '../../../../core/react/devex/textbox.js'
+import NdSelectBox from '../../../../core/react/devex/selectbox.js';
+import NdNumberBox from '../../../../core/react/devex/numberbox.js';
+import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
+import NdListBox from '../../../../core/react/devex/listbox.js';
+import NdPopUp from '../../../../core/react/devex/popup.js';
+import NdButton from '../../../../core/react/devex/button.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
+import NdPopGrid from '../../../../core/react/devex/popgrid.js';
+import { dialog } from '../../../../core/react/devex/dialog.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdPivot,{FieldChooser} from '../../../../core/react/devex/pivot.js';
 
-export default class posSalesReport extends React.Component
+export default class posSalesDetailReport extends React.Component
 {
     constructor(props)
     {
@@ -22,7 +32,6 @@ export default class posSalesReport extends React.Component
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
-        this.chkRowTotal.value = true
     }
     render()
     {
@@ -87,7 +96,7 @@ export default class posSalesReport extends React.Component
                                 let tmpData = await this.core.sql.execute(tmpQuery)
                                 if(tmpData.result.recordset.length > 0)
                                 {
-                                    this.pvtData.setDataSource(tmpData.result.recordset)
+                                    
                                 }
                             }}/>
                         </div>
@@ -108,100 +117,8 @@ export default class posSalesReport extends React.Component
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <NdPivot id="pvtData" parent={this}
-                            fields={
-                            [
-                                {
-                                    caption: "TARIH",
-                                    width: 80,
-                                    dataField: "DOC_DATE",
-                                    dataType: "date",
-                                    format: "dd/MM/yyyy",
-                                    area: "row",
-                                    expanded: true
-                                },
-                                {
-                                    caption: "DEVICE",
-                                    width: 80,
-                                    dataField: "DEVICE",
-                                    area: "row",
-                                },
-                                {
-                                    caption: "TIP",
-                                    width: 80,
-                                    dataField: "DOC_TYPE",
-                                    area: "row",
-                                },                                
-                                {
-                                    dataField: "TITLE",
-                                    caption: "TITLE",
-                                    width: 80,
-                                    area: "column",
-                                    expanded: true
-                                },
-                                {
-                                    caption: "VAT",
-                                    dataField: "VAT_RATE",
-                                    width: 50,
-                                    area: "column",
-                                    selector: (e) =>
-                                    {
-                                        if(e.VAT_RATE != 0)
-                                        {
-                                            return e.VAT_RATE
-                                        }
-                                    },
-                                    expanded: true
-                                },
-                                {
-                                    caption: "TYPE",
-                                    dataField: "TYPE",
-                                    width: 50,
-                                    area: "column",
-                                    sortBy: "none",
-                                    expanded: true
-                                },
-                                {
-                                    caption: "AMOUNT",
-                                    dataField: "AMOUNT",
-                                    dataType: "number",
-                                    summaryType: "sum",
-                                    format: 
-                                    {
-                                        style: "currency", currency: "EUR",
-                                    },
-                                    area: "data",
-                                }
-                            ]}
-                            allowSortingBySummary={true}
-                            allowFiltering={true}
-                            showBorders={true}
-                            showColumnTotals={true}
-                            showColumnGrandTotals={false}
-                            showRowTotals={false}
-                            showRowGrandTotals={true}
-                            onCellPrepared={(e)=>
-                            {
-                                if(e.area == 'column' && e.cell.type == 'T' && e.cell.path.length == 1 && e.cell.path[0] == "PAYMENT")
-                                {
-                                    e.cellElement.innerText = "Total"
-                                }
-                                if(e.area == 'column' && e.cell.type == 'T' && e.cell.path.length == 2 && e.cell.path[0] == "PAYMENT")
-                                {
-                                    e.cellElement.innerText = "Total"
-                                }
-                                if(e.area == 'column' && e.cell.type == 'T' && e.cell.path.length == 1 && e.cell.path[0] == "SALES")
-                                {
-                                    e.cellElement.innerText = "Total"
-                                }
-                                if(e.area == 'column' && e.cell.type == 'T' && e.cell.path.length == 2 && e.cell.path[0] == "SALES")
-                                {
-                                    e.cellElement.innerText = "TTC"
-                                }
-                            }}
-                            >
-                                <FieldChooser enabled={true} height={400} />
-                            </NdPivot>
+                            <iframe src="http://localhost:3000/pos" title="W3Schools Free Online Web Tutorials">
+                            </iframe>
                         </div>
                     </div>
                 </ScrollView>
