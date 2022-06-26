@@ -4,7 +4,7 @@ export const langFr =
     btnSave: "Enregistrer",
     btnCancel: "Annuler",
     btnPrint :"Imprimer",
-    btnOk: "OK",
+    btnOk: "OK",    
     msgWarning: "Attention",
     info : "Information",
     btnYes : "OK",
