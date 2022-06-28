@@ -32,6 +32,7 @@ export default class posSalesDetailReport extends React.Component
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
+        console.log(this.chkRowTotal)
     }
     render()
     {
@@ -43,11 +44,13 @@ export default class posSalesDetailReport extends React.Component
                             <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
                         </div>
                     </div>
+                    <div id="efe">EFE</div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <NdButton text={this.lang.t("btnGet")} type="default" stylingMode="contained" width={'100%'}
                             onClick={async (e)=>
                             {
+                                document.getElementById('efe').innerText = "KEMAL"
                                 let tmpQuery = 
                                 {
                                     query : "SELECT " +
