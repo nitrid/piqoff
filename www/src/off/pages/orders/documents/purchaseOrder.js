@@ -45,12 +45,12 @@ export default class purchaseOrder extends React.Component
         this.combineNew = false
 
         this.multiItemData = new datatable
-       
     }
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
         this.init()
+
         if(typeof this.pagePrm != 'undefined')
         {
             this.getDoc(this.pagePrm.GUID,'',0)
@@ -59,7 +59,6 @@ export default class purchaseOrder extends React.Component
     async init()
     {
         this.docObj.clearAll()
-
         this.docObj.ds.on('onAddRow',(pTblName,pData) =>
         {
             if(pData.stat == 'new')
@@ -106,7 +105,6 @@ export default class purchaseOrder extends React.Component
             this.btnCopy.setState({disabled:false});
             this.btnPrint.setState({disabled:false});
         })
-
         this.dtDocDate.value = moment(new Date())
 
         let tmpDoc = {...this.docObj.empty}
@@ -117,11 +115,10 @@ export default class purchaseOrder extends React.Component
         this.txtRef.readOnly = false
         this.txtRefno.readOnly = false
         this.docLocked = false
-        
         this.frmdocOrders.option('disabled',false)
+
         await this.grdPurcOrders.dataRefresh({source:this.docObj.docOrders.dt('DOC_ORDERS')});
         await this.grdMultiItem.dataRefresh({source:this.multiItemData});
-
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -141,7 +138,6 @@ export default class purchaseOrder extends React.Component
                 button:[{id:"btn01",caption:this.t("msgGetLocked.btn01"),location:'after'}],
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgGetLocked.msg")}</div>)
             }
-
             await dialog(tmpConfObj);
             this.frmdocOrders.option('disabled',true)
         }
@@ -173,8 +169,8 @@ export default class purchaseOrder extends React.Component
                         button:[{id:"btn01",caption:"Evrağa Git",location:'before'}],
                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Evrak Bulundu"}</div>)
                     }
-    
                     let pResult = await dialog(tmpConfObj);
+
                     if(pResult == 'btn01')
                     {
                         this.getDoc(pGuid,pRef,pRefno)
@@ -202,13 +198,13 @@ export default class purchaseOrder extends React.Component
         this.docObj.dt()[0].DISCOUNT = this.docObj.docOrders.dt().sum("DISCOUNT",2)
         this.docObj.dt()[0].VAT = this.docObj.docOrders.dt().sum("VAT",2)
         this.docObj.dt()[0].TOTAL = this.docObj.docOrders.dt().sum("TOTAL",2)
-
     }
     _cellRoleRender(e)
     {
         if(e.column.dataField == "ITEM_CODE")
         {
-            return (
+            return 
+            (
                 <NdTextBox id={"txtGrdItemsCode"+e.rowIndex} parent={this} simple={true} 
                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                 value={e.value}
@@ -223,6 +219,7 @@ export default class purchaseOrder extends React.Component
                                 this.customerClear = false
                                 this.combineControl = true
                                 this.combineNew = false
+
                                 if(data.length > 0)
                                 {
                                     if(data.length == 1)
@@ -249,9 +246,11 @@ export default class purchaseOrder extends React.Component
                                                 tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
                                                 tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
                                                 tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+
                                                 this.txtRef.readOnly = true
                                                 this.txtRefno.readOnly = true
                                                 this.docObj.docOrders.addEmpty(tmpdocOrders)
+
                                                 await this.core.util.waitUntil(100)
                                                 await this.addItem(data[i],this.docObj.docOrders.dt().length-1)
                                             }
@@ -265,7 +264,7 @@ export default class purchaseOrder extends React.Component
                     {
                         e.value = v.value
                     }}
-                onChange={(async(r)=>
+                    onChange={(async(r)=>
                     {
                         if(typeof r.event.isTrusted == 'undefined')
                         {
@@ -276,6 +275,7 @@ export default class purchaseOrder extends React.Component
                                 value : [r.component._changedValue]
                             }
                             let tmpData = await this.core.sql.execute(tmpQuery) 
+                            
                             if(tmpData.result.recordset.length > 0)
                             {
                                 this.customerControl = true
@@ -292,7 +292,6 @@ export default class purchaseOrder extends React.Component
                                     button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
                                 }
-                    
                                 await dialog(tmpConfObj);
                             }
                         }
@@ -312,6 +311,7 @@ export default class purchaseOrder extends React.Component
                                     this.customerClear = false
                                     this.combineControl = true
                                     this.combineNew = false
+
                                     if(data.length > 0)
                                     {
                                         if(data.length == 1)
@@ -338,9 +338,11 @@ export default class purchaseOrder extends React.Component
                                                     tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
                                                     tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
                                                     tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+
                                                     this.txtRef.readOnly = true
                                                     this.txtRefno.readOnly = true
                                                     this.docObj.docOrders.addEmpty(tmpdocOrders)
+
                                                     await this.core.util.waitUntil(100)
                                                     await this.addItem(data[i],this.docObj.docOrders.dt().length-1)
                                                 }
@@ -363,6 +365,7 @@ export default class purchaseOrder extends React.Component
         {
             pQuantity = 1
         }
+
         let tmpCheckQuery = 
         {
             query :"SELECT MULTICODE,CUSTOMER_PRICE AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
@@ -370,30 +373,31 @@ export default class purchaseOrder extends React.Component
             value : [pData.CODE,this.docObj.dt()[0].OUTPUT]
         }
         let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
+
         if(tmpCheckData.result.recordset.length > 0)
         {  
             this.docObj.docOrders.dt()[pIndex].MULTICODE = tmpCheckData.result.recordset[0].MULTICODE
         }
+
         if(this.customerControl == true)
         {
-           
             if(tmpCheckData.result.recordset.length == 0)
             {   
                 let tmpCustomerBtn = ''
+
                 if(this.customerClear == true)
                 {
                     await this.grdPurcOrders.devGrid.deleteRow(pIndex)
                     return 
                 }
-               
                 await this.msgCustomerNotFound.show().then(async (e) =>
                 {
-
                    if(e == 'btn01' && this.checkCustomer.value == true)
                     {
                         this.customerControl = false
                         return
                     }
+
                     if(e == 'btn02')
                     {
                         tmpCustomerBtn = e
@@ -405,13 +409,13 @@ export default class purchaseOrder extends React.Component
                         return 
                     }
                 })
+
                 if(tmpCustomerBtn == 'btn02')
                 {
                     return
                 }
             }
         }
-       
         for (let i = 0; i < this.docObj.docOrders.dt().length; i++) 
         {
             if(this.docObj.docOrders.dt()[i].ITEM_CODE == pData.CODE)
@@ -419,9 +423,9 @@ export default class purchaseOrder extends React.Component
                 if(this.combineControl == true)
                 {
                     let tmpCombineBtn = ''
+
                     await this.msgCombineItem.show().then(async (e) =>
                     {
-    
                         if(e == 'btn01')
                         {
                             this.docObj.docOrders.dt()[i].QUANTITY = this.docObj.docOrders.dt()[i].QUANTITY + pQuantity
@@ -437,6 +441,7 @@ export default class purchaseOrder extends React.Component
                             tmpCombineBtn = e
                             return
                         }
+
                         if(e == 'btn02')
                         {
                             if(this.checkCombine.value == true)
@@ -447,6 +452,7 @@ export default class purchaseOrder extends React.Component
                             return
                         }
                     })
+
                     if(tmpCombineBtn == 'btn01')
                     {
                         return
@@ -459,11 +465,10 @@ export default class purchaseOrder extends React.Component
                     this.docObj.docOrders.dt()[i].AMOUNT = parseFloat((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE).toFixed(3))
                     this.docObj.docOrders.dt()[i].TOTAL = parseFloat((((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE) - this.docObj.docOrders.dt()[i].DISCOUNT) + this.docObj.docOrders.dt()[i].VAT).toFixed(3))
                     this._calculateTotal()
+                    
                     await this.grdPurcOrders.devGrid.deleteRow(pIndex)
                     return
                 }
-               
-                
             }
         }
         this.docObj.docOrders.dt()[pIndex].ITEM_CODE = pData.CODE
@@ -473,13 +478,15 @@ export default class purchaseOrder extends React.Component
         this.docObj.docOrders.dt()[pIndex].DISCOUNT = 0
         this.docObj.docOrders.dt()[pIndex].DISCOUNT_RATE = 0
         this.docObj.docOrders.dt()[pIndex].QUANTITY = pQuantity
-        let tmpQuery = 
+
+        let tmpQuery =
         {
             query :"SELECT CUSTOMER_PRICE AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
             param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50'],
             value : [pData.CODE,this.docObj.dt()[0].OUTPUT]
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
+
         if(tmpData.result.recordset.length > 0)
         {
             this.docObj.docOrders.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(2))
@@ -519,6 +526,7 @@ export default class purchaseOrder extends React.Component
     {
         let tmpMissCodes = []
         let tmpCounter = 0
+
         if(this.multiItemData.length > 0)
         {
             let tmpConfObj =
@@ -527,8 +535,8 @@ export default class purchaseOrder extends React.Component
                 button:[{id:"btn01",caption:this.t("msgMultiData.btn01"),location:'before'},{id:"btn02",caption:this.t("msgMultiData.btn02"),location:'after'}],
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgMultiData.msg")}</div>)
             }
-
             let pResult = await dialog(tmpConfObj);
+
             if(pResult == 'btn01')
             {
                 this.multiItemData.clear()
@@ -547,6 +555,7 @@ export default class purchaseOrder extends React.Component
                     value : [this.tagItemCode.value[i]]
                 }
                 let tmpData = await this.core.sql.execute(tmpQuery) 
+
                 if(tmpData.result.recordset.length > 0)
                 {
                     if(typeof this.multiItemData.where({'CODE':tmpData.result.recordset[0].CODE})[0] == 'undefined')
@@ -571,6 +580,7 @@ export default class purchaseOrder extends React.Component
                     value : [this.tagItemCode.value[i]]
                 }
                 let tmpData = await this.core.sql.execute(tmpQuery) 
+
                 if(tmpData.result.recordset.length > 0)
                 {
                     if(typeof this.multiItemData.where({'CODE':tmpData.result.recordset[0].CODE})[0] == 'undefined')
@@ -584,7 +594,6 @@ export default class purchaseOrder extends React.Component
                     tmpMissCodes.push("'" +this.tagItemCode.value[i] + "'")
                 }
             }
-            
         }
         if(tmpMissCodes.length > 0)
         {
@@ -594,7 +603,6 @@ export default class purchaseOrder extends React.Component
                 button:[{id:"btn01",caption:this.t("msgMissItemCode.btn01"),location:'after'}],
                 content:(<div style={{textAlign:"center",wordWrap:"break-word",fontSize:"20px"}}>{this.t("msgMissItemCode.msg") + ' ' +tmpMissCodes}</div>)
             }
-        
             await dialog(tmpConfObj);
         }
         let tmpConfObj =
@@ -603,9 +611,7 @@ export default class purchaseOrder extends React.Component
             button:[{id:"btn01",caption:this.t("msgMultiCodeCount.btn01"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgMultiCodeCount.msg") + ' ' +tmpCounter}</div>)
         }
-    
-         await dialog(tmpConfObj);
-
+        await dialog(tmpConfObj);
     }
     async multiItemSave()
     {
@@ -613,6 +619,7 @@ export default class purchaseOrder extends React.Component
         this.customerClear = false
         this.combineControl = true
         this.combineNew = false
+
         for (let i = 0; i < this.multiItemData.length; i++) 
         {
             let tmpdocOrders = {...this.docObj.docOrders.empty}
@@ -625,9 +632,11 @@ export default class purchaseOrder extends React.Component
             tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
             tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
             tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+
             this.txtRef.readOnly = true
             this.txtRefno.readOnly = true
             this.docObj.docOrders.addEmpty(tmpdocOrders)
+
             await this.core.util.waitUntil(100)
             await this.addItem(this.multiItemData[i],this.docObj.docOrders.dt().length-1,this.multiItemData[i].QUANTITY)
             this.popMultiItem.hide()
@@ -668,7 +677,6 @@ export default class purchaseOrder extends React.Component
                                                 button:[{id:"btn01",caption:this.t("msgDocLocked.btn01"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocLocked.msg")}</div>)
                                             }
-                                
                                             await dialog(tmpConfObj);
                                             return
                                         }
@@ -684,8 +692,8 @@ export default class purchaseOrder extends React.Component
                                                 button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
                                             }
-                                            
                                             let pResult = await dialog(tmpConfObj);
+
                                             if(pResult == 'btn01')
                                             {
                                                 let tmpConfObj1 =
@@ -716,7 +724,6 @@ export default class purchaseOrder extends React.Component
                                                 button:[{id:"btn01",caption:this.t("msgSaveValid.btn01"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveValid.msg")}</div>)
                                             }
-                                            
                                             await dialog(tmpConfObj);
                                         }                                                 
                                     }}/>
@@ -725,22 +732,20 @@ export default class purchaseOrder extends React.Component
                                     <NdButton id="btnDelete" parent={this} icon="trash" type="default"
                                     onClick={async()=>
                                     {
-                                        
                                         let tmpConfObj =
                                         {
                                             id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
                                             button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
                                         }
-                                        
                                         let pResult = await dialog(tmpConfObj);
+
                                         if(pResult == 'btn01')
                                         {
                                             this.docObj.dt('DOC').removeAt(0)
                                             await this.docObj.dt('DOC').delete();
                                             this.init(); 
                                         }
-                                        
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -750,10 +755,12 @@ export default class purchaseOrder extends React.Component
                                         if(this.docObj.dt()[0].LOCKED == 0)
                                         {
                                             this.docObj.dt()[0].LOCKED = 1
+
                                             if(this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1].ITEM_CODE == '')
                                             {
                                                 await this.grdPurcOrders.devGrid.deleteRow(this.docObj.docOrders.dt().length - 1)
                                             }
+
                                             if((await this.docObj.save()) == 0)
                                             {                                                    
                                                 let tmpConfObj =
@@ -784,7 +791,6 @@ export default class purchaseOrder extends React.Component
                                                 button:[{id:"btn01",caption:this.t("msgLockedType2.btn01"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgLockedType2.msg")}</div>)
                                             }
-
                                             await dialog(tmpConfObj);
                                         }
                                         
@@ -794,7 +800,7 @@ export default class purchaseOrder extends React.Component
                                     <NdButton id="btnCopy" parent={this} icon="copy" type="default"
                                     onClick={()=>
                                     {
-                                        
+
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -839,83 +845,85 @@ export default class purchaseOrder extends React.Component
                                 {/* txtRef-Refno */}
                                 <Item>
                                     <Label text={this.t("txtRefRefno")} alignment="right" />
-                                    <div className="row">
-                                        <div className="col-4 pe-0">
-                                            <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
-                                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                            readOnly={true}
-                                            maxLength={32}
-                                            onChange={(async(e)=>
-                                            {
-                                                let tmpQuery = 
+                                        <div className="row">
+                                            <div className="col-4 pe-0">
+                                                <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
+                                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                                readOnly={true}
+                                                maxLength={32}
+                                                onChange={(async(e)=>
                                                 {
-                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 0 AND DOC_TYPE = 60 AND REF = @REF ",
-                                                    param : ['REF:string|25'],
-                                                    value : [this.txtRef.value]
-                                                }
-                                                let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                if(tmpData.result.recordset.length > 0)
-                                                {
-                                                    this.txtRefno.value = tmpData.result.recordset[0].REF_NO
-                                                }
-                                            }).bind(this)}
-                                            param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
-                                            access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
-                                            >
-                                            <Validator validationGroup={"frmPurcOrder"  + this.tabIndex}>
-                                                    <RequiredRule message={this.t("validRef")} />
-                                                </Validator>  
-                                            </NdTextBox>
-                                        </div>
-                                        <div className="col-5 ps-0">
-                                            <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
-                                            readOnly={true}
-                                            button=
-                                            {
-                                                [
+                                                    let tmpQuery = 
                                                     {
-                                                        id:'01',
-                                                        icon:'more',
-                                                        onClick:()=>
-                                                        {
-                                                            this.pg_Docs.show()
-                                                            this.pg_Docs.onClick = (data) =>
-                                                            {
-                                                                if(data.length > 0)
-                                                                {
-                                                                    this.getDoc(data[0].GUID,data[0].REF,data[0].REF_NO)
-                                                                }
-                                                            }
-                                                                   
-                                                        }
-                                                    },
-                                                    {
-                                                        id:'02',
-                                                        icon:'arrowdown',
-                                                        onClick:()=>
-                                                        {
-                                                            this.txtRefno.value = Math.floor(Date.now() / 1000)
-                                                        }
+                                                        query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 0 AND DOC_TYPE = 60 AND REF = @REF ",
+                                                        param : ['REF:string|25'],
+                                                        value : [this.txtRef.value]
                                                     }
-                                                ]
-                                            }
-                                            onChange={(async()=>
-                                            {
-                                                let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
-                                                if(tmpResult == 3)
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+
+                                                    if(tmpData.result.recordset.length > 0)
+                                                    {
+                                                        this.txtRefno.value = tmpData.result.recordset[0].REF_NO
+                                                    }
+                                                }).bind(this)}
+                                                param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
+                                                access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
+                                                >
+                                                    <Validator validationGroup={"frmPurcOrder"  + this.tabIndex}>
+                                                        <RequiredRule message={this.t("validRef")} />
+                                                    </Validator>  
+                                                </NdTextBox>
+                                            </div>
+                                            <div className="col-5 ps-0">
+                                                <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
+                                                readOnly={true}
+                                                button=
                                                 {
-                                                    this.txtRefno.value = "";
+                                                    [
+                                                        {
+                                                            id:'01',
+                                                            icon:'more',
+                                                            onClick:()=>
+                                                            {
+                                                                this.pg_Docs.show()
+                                                                this.pg_Docs.onClick = (data) =>
+                                                                {
+                                                                    if(data.length > 0)
+                                                                    {
+                                                                        this.getDoc(data[0].GUID,data[0].REF,data[0].REF_NO)
+                                                                    }
+                                                                }
+                                                                    
+                                                            }
+                                                        },
+                                                        {
+                                                            id:'02',
+                                                            icon:'arrowdown',
+                                                            onClick:()=>
+                                                            {
+                                                                this.txtRefno.value = Math.floor(Date.now() / 1000)
+                                                            }
+                                                        }
+                                                    ]
                                                 }
-                                            }).bind(this)}
-                                            param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
-                                            access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
-                                            >
-                                            <Validator validationGroup={"frmPurcOrder"  + this.tabIndex}>
-                                                    <RequiredRule message={this.t("validRefNo")} />
-                                                </Validator> 
-                                            </NdTextBox>
+                                                onChange={(async()=>
+                                                {
+                                                    let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
+                                                    
+                                                    if(tmpResult == 3)
+                                                    {
+                                                        this.txtRefno.value = "";
+                                                    }
+                                                }).bind(this)}
+                                                param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
+                                                access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
+                                                >
+                                                    <Validator validationGroup={"frmPurcOrder"  + this.tabIndex}>
+                                                        <RequiredRule message={this.t("validRefNo")} />
+                                                    </Validator> 
+                                                </NdTextBox>
+                                            </div>
                                         </div>
-                                    </div>
                                     {/*EVRAK SEÇİM */}
                                     <NdPopGrid id={"pg_Docs"} parent={this} container={"#root"}
                                     visible={false}
@@ -938,14 +946,12 @@ export default class purchaseOrder extends React.Component
                                                 }
                                             }
                                         ]
-                                        
                                     }
                                     >
                                         <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150} defaultSortOrder="asc"/>
                                         <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={300} defaultSortOrder="asc" />
                                         <Column dataField="OUTPUT_NAME" caption={this.t("pg_Docs.clmOutputName")} width={300} defaultSortOrder="asc" />
                                         <Column dataField="OUTPUT_CODE" caption={this.t("pg_Docs.clmOutputCode")} width={300} defaultSortOrder="asc" />
-                                        
                                     </NdPopGrid>
                                 </Item>
                                 {/* cmbDepot */}
@@ -988,7 +994,9 @@ export default class purchaseOrder extends React.Component
                                                     this.docObj.dt()[0].OUTPUT = data[0].GUID
                                                     this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
                                                     this.docObj.dt()[0].OUTPUT_NAME = data[0].TITLE
+                                                 
                                                     let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                                   
                                                     if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                     {
                                                         this.txtRef.setState({value:data[0].CODE});
@@ -1014,7 +1022,9 @@ export default class purchaseOrder extends React.Component
                                                             this.docObj.dt()[0].OUTPUT = data[0].GUID
                                                             this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
                                                             this.docObj.dt()[0].OUTPUT_NAME = data[0].TITLE
+                                                            
                                                             let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                                            
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
                                                                 this.txtRef.setState({value:data[0].CODE});
@@ -1072,7 +1082,6 @@ export default class purchaseOrder extends React.Component
                                         <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
                                         <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
                                         <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} filterType={"include"} filterValues={['Tedarikçi']}/>
-                                        
                                     </NdPopGrid>
                                 </Item> 
                                 {/* txtCustomerName */}
@@ -1117,8 +1126,7 @@ export default class purchaseOrder extends React.Component
                             {
                                 this.frmdocOrders = e.component
                             }}>
-                                
-                                 <Item>
+                                <Item>
                                     <NdGrid parent={this} id={"grdPurcOrders"} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 
@@ -1135,6 +1143,7 @@ export default class purchaseOrder extends React.Component
                                         {
                                             e.key.DISCOUNT = parseFloat((((this.docObj.docOrders.dt()[rowIndex].AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(3))
                                         }
+
                                         if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
                                         {
                                             let tmpConfObj =
@@ -1143,7 +1152,6 @@ export default class purchaseOrder extends React.Component
                                                 button:[{id:"btn01",caption:this.t("msgDiscount.btn01"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"msgDiscount.msg"}</div>)
                                             }
-                                        
                                             dialog(tmpConfObj);
                                             this.docObj.docOrders.dt()[rowIndex].DISCOUNT = 0 
                                             return
@@ -1154,6 +1162,7 @@ export default class purchaseOrder extends React.Component
                                         }
                                         this.docObj.docOrders.dt()[rowIndex].AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(2))
                                         this.docObj.docOrders.dt()[rowIndex].TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +this.docObj.docOrders.dt()[rowIndex].VAT).toFixed(2))
+                                        
                                         if(this.docObj.docOrders.dt()[rowIndex].DISCOUNT > 0)
                                         {
                                             this.docObj.docOrders.dt()[rowIndex].DISCOUNT_RATE = parseFloat(100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100).toFixed(2))
@@ -1197,7 +1206,6 @@ export default class purchaseOrder extends React.Component
                                     {
                                         if(e.validationGroup.validate().status == "valid")
                                         {
-                                            
                                             if(typeof this.docObj.docOrders.dt()[0] != 'undefined')
                                             {
                                                 if(this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1].ITEM_CODE == '')
@@ -1209,6 +1217,7 @@ export default class purchaseOrder extends React.Component
                                                         this.customerClear = false
                                                         this.combineControl = true
                                                         this.combineNew = false
+
                                                         if(data.length > 0)
                                                         {
                                                             if(data.length == 1)
@@ -1235,9 +1244,11 @@ export default class purchaseOrder extends React.Component
                                                                         tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
                                                                         tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
                                                                         tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+
                                                                         this.txtRef.readOnly = true
                                                                         this.txtRefno.readOnly = true
                                                                         this.docObj.docOrders.addEmpty(tmpdocOrders)
+
                                                                         await this.core.util.waitUntil(100)
                                                                         await this.addItem(data[i],this.docObj.docOrders.dt().length-1)
                                                                     }
@@ -1248,7 +1259,6 @@ export default class purchaseOrder extends React.Component
                                                     return
                                                 }
                                             }
-                                           
                                             let tmpdocOrders = {...this.docObj.docOrders.empty}
                                             tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
                                             tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
@@ -1259,9 +1269,11 @@ export default class purchaseOrder extends React.Component
                                             tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
                                             tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
                                             tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+
                                             this.txtRef.readOnly = true
                                             this.txtRefno.readOnly = true
                                             this.docObj.docOrders.addEmpty(tmpdocOrders)
+
                                             await this.core.util.waitUntil(100)
                                             this.pg_txtItemsCode.show()
                                             this.pg_txtItemsCode.onClick = async(data) =>
@@ -1272,6 +1284,7 @@ export default class purchaseOrder extends React.Component
                                                     this.customerClear = false
                                                     this.combineControl = true
                                                     this.combineNew = false
+
                                                     if(data.length == 1)
                                                     {
                                                         await this.addItem(data[0],this.docObj.docOrders.dt().length -1)
@@ -1296,9 +1309,11 @@ export default class purchaseOrder extends React.Component
                                                                 tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
                                                                 tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
                                                                 tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                                
                                                                 this.txtRef.readOnly = true
                                                                 this.txtRefno.readOnly = true
                                                                 this.docObj.docOrders.addEmpty(tmpdocOrders)
+
                                                                 await this.core.util.waitUntil(100)
                                                                 await this.addItem(data[i],this.docObj.docOrders.dt().length-1)
                                                             }
@@ -1315,11 +1330,10 @@ export default class purchaseOrder extends React.Component
                                                 button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
                                             }
-                                            
                                             await dialog(tmpConfObj);
                                         }
                                     }}/>
-                                     <Button icon="increaseindent" text="Toplu Ürün Ekleme"
+                                    <Button icon="increaseindent" text="Toplu Ürün Ekleme"
                                     validationGroup={"frmPurcOrder"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
@@ -1327,6 +1341,7 @@ export default class purchaseOrder extends React.Component
                                         {
                                             this.multiItemData.clear
                                             this.popMultiItem.show()
+
                                             if( typeof this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1] != 'undefined' && this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1].ITEM_CODE == '')
                                             {
                                                 await this.grdPurcInv.devGrid.deleteRow(this.docObj.docOrders.dt().length - 1)
@@ -1340,43 +1355,41 @@ export default class purchaseOrder extends React.Component
                                                 button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
                                             }
-                                            
                                             await dialog(tmpConfObj);
                                         }
                                     }}/>
                                 </Item>
                                 <Item  >
-                                <Label text={this.t("txtAmount")} alignment="right" />
-                                    <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}
-                                    maxLength={32}
-                                   
+                                    <Label text={this.t("txtAmount")} alignment="right" />
+                                        <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}
+                                        maxLength={32}
                                     ></NdTextBox>
                                 </Item>
                                 {/* İndirim */}
                                 <Item colSpan={3}></Item>
                                 <Item>
-                                <Label text={this.t("txtDiscount")} alignment="right" />
-                                    <NdTextBox id="txtDiscount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"DISCOUNT"}}
-                                    maxLength={32}
-                                    button=
-                                    {
-                                        [
-                                            {
-                                                id:'01',
-                                                icon:'more',
-                                                onClick:()  =>
+                                    <Label text={this.t("txtDiscount")} alignment="right" />
+                                        <NdTextBox id="txtDiscount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"DISCOUNT"}}
+                                        maxLength={32}
+                                        button=
+                                        {
+                                            [
                                                 {
-                                                    if(this.docObj.dt()[0].DISCOUNT > 0 )
+                                                    id:'01',
+                                                    icon:'more',
+                                                    onClick:()  =>
                                                     {
-                                                        this.txtDiscountPercent.value  = parseFloat((100 - (((this.docObj.dt()[0].AMOUNT - this.docObj.dt()[0].DISCOUNT) / this.docObj.dt()[0].AMOUNT) * 100)).toFixed(2))
-                                                        this.txtDiscountPrice.value = this.docObj.dt()[0].DISCOUNT
+                                                        if(this.docObj.dt()[0].DISCOUNT > 0 )
+                                                        {
+                                                            this.txtDiscountPercent.value  = parseFloat((100 - (((this.docObj.dt()[0].AMOUNT - this.docObj.dt()[0].DISCOUNT) / this.docObj.dt()[0].AMOUNT) * 100)).toFixed(2))
+                                                            this.txtDiscountPrice.value = this.docObj.dt()[0].DISCOUNT
+                                                        }
+                                                        this.popDiscount.show()
                                                     }
-                                                    this.popDiscount.show()
-                                                }
-                                            },
-                                        ]
-                                    }
-                                    ></NdTextBox>
+                                                },
+                                            ]
+                                        }
+                                        ></NdTextBox>
                                 </Item>
                                 {/* KDV */}
                                 <Item colSpan={3}></Item>
@@ -1392,15 +1405,14 @@ export default class purchaseOrder extends React.Component
                                                 icon:'clear',
                                                 onClick:async ()  =>
                                                 {
-                                                    
                                                     let tmpConfObj =
                                                     {
                                                         id:'msgVatDelete',showTitle:true,title:this.t("msgVatDelete.title"),showCloseButton:true,width:'500px',height:'200px',
                                                         button:[{id:"btn01",caption:this.t("msgVatDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
                                                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgVatDelete.msg")}</div>)
                                                     }
-                                                    
                                                     let pResult = await dialog(tmpConfObj);
+
                                                     if(pResult == 'btn01')
                                                     {
                                                         for (let i = 0; i < this.docObj.docOrders.dt().length; i++) 
@@ -1445,7 +1457,7 @@ export default class purchaseOrder extends React.Component
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
                                     <Label text={this.t("popDiscount.Percent")} alignment="right" />
-                                    <NdNumberBox id="txtDiscountPercent" parent={this} simple={true}
+                                        <NdNumberBox id="txtDiscountPercent" parent={this} simple={true}
                                             maxLength={32}
                                             onValueChanged={(async()=>
                                                 {
@@ -1457,7 +1469,6 @@ export default class purchaseOrder extends React.Component
                                                             button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
                                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
                                                         }
-                                            
                                                         await dialog(tmpConfObj);
                                                         this.txtDiscountPercent.value = 0;
                                                         this.txtDiscountPrice.value = 0;
@@ -1465,52 +1476,52 @@ export default class purchaseOrder extends React.Component
                                                     }
                                                     this.txtDiscountPrice.value =  parseFloat((this.docObj.dt()[0].AMOUNT * this.txtDiscountPercent.value / 100).toFixed(2))
                                             }).bind(this)}
-                                    ></NdNumberBox>
+                                        ></NdNumberBox>
                                 </Item>
                                 <Item>
-                                <Label text={this.t("popDiscount.Price")} alignment="right" />
-                                <NdNumberBox id="txtDiscountPrice" parent={this} simple={true}
-                                    maxLength={32}
-                                    onValueChanged={(async()=>
-                                        {
-                                            if( this.txtDiscountPrice.value > this.docObj.dt()[0].AMOUNT)
-                                            {
-                                                let tmpConfObj =
+                                    <Label text={this.t("popDiscount.Price")} alignment="right" />
+                                        <NdNumberBox id="txtDiscountPrice" parent={this} simple={true}
+                                            maxLength={32}
+                                            onValueChanged={(async()=>
                                                 {
-                                                    id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
-                                                }
-                                    
-                                                await dialog(tmpConfObj);
-                                                this.txtDiscountPercent.value = 0;
-                                                this.txtDiscountPrice.value = 0;
-                                                return
-                                            }
-                                            this.txtDiscountPercent.value = parseFloat((100 - (((this.docObj.dt()[0].AMOUNT - this.txtDiscountPrice.value) / this.docObj.dt()[0].AMOUNT) * 100)).toFixed(2))
-                                    }).bind(this)}
-                                ></NdNumberBox>
-                                </Item>
-                                <Item>
-                                    <div className='row'>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
-                                            onClick={async ()=>
-                                            {       
-                                                for (let i = 0; i < this.docObj.docOrders.dt().length; i++) 
-                                                {
-                                                    this.docObj.docOrders.dt()[i].DISCOUNT_RATE = this.txtDiscountPercent.value
-                                                    this.docObj.docOrders.dt()[i].DISCOUNT =  parseFloat((((this.docObj.docOrders.dt()[i].PRICE * this.docObj.docOrders.dt()[i].QUANTITY) * this.txtDiscountPercent.value) / 100).toFixed(2))
-                                                    if(this.docObj.docOrders.dt()[i].VAT > 0)
+                                                    if( this.txtDiscountPrice.value > this.docObj.dt()[0].AMOUNT)
                                                     {
-                                                        this.docObj.docOrders.dt()[i].VAT = parseFloat(((this.docObj.docOrders.dt()[i].PRICE * this.docObj.docOrders.dt()[i].QUANTITY) * (this.docObj.docOrders.dt()[i].VAT_RATE / 100)).toFixed(2))
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
+                                                        }
+                                                        await dialog(tmpConfObj);
+                                                        this.txtDiscountPercent.value = 0;
+                                                        this.txtDiscountPrice.value = 0;
+                                                        return
                                                     }
-                                                    this.docObj.docOrders.dt()[i].TOTAL = parseFloat(((this.docObj.docOrders.dt()[i].PRICE * this.docObj.docOrders.dt()[i].QUANTITY) + this.docObj.docOrders.dt()[i].VAT - this.docObj.docOrders.dt()[i].DISCOUNT).toFixed(2))
-                                                }
-                                                this._calculateTotal()
-                                                this.popDiscount.hide(); 
-                                            }}/>
-                                        </div>
+                                                    this.txtDiscountPercent.value = parseFloat((100 - (((this.docObj.dt()[0].AMOUNT - this.txtDiscountPrice.value) / this.docObj.dt()[0].AMOUNT) * 100)).toFixed(2))
+                                            }).bind(this)}
+                                        ></NdNumberBox>
+                                    </Item>
+                                    <Item>
+                                        <div className='row'>
+                                            <div className='col-6'>
+                                                <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
+                                                onClick={async ()=>
+                                                {       
+                                                    for (let i = 0; i < this.docObj.docOrders.dt().length; i++) 
+                                                    {
+                                                        this.docObj.docOrders.dt()[i].DISCOUNT_RATE = this.txtDiscountPercent.value
+                                                        this.docObj.docOrders.dt()[i].DISCOUNT =  parseFloat((((this.docObj.docOrders.dt()[i].PRICE * this.docObj.docOrders.dt()[i].QUANTITY) * this.txtDiscountPercent.value) / 100).toFixed(2))
+                                                        
+                                                        if(this.docObj.docOrders.dt()[i].VAT > 0)
+                                                        {
+                                                            this.docObj.docOrders.dt()[i].VAT = parseFloat(((this.docObj.docOrders.dt()[i].PRICE * this.docObj.docOrders.dt()[i].QUANTITY) * (this.docObj.docOrders.dt()[i].VAT_RATE / 100)).toFixed(2))
+                                                        }
+                                                        this.docObj.docOrders.dt()[i].TOTAL = parseFloat(((this.docObj.docOrders.dt()[i].PRICE * this.docObj.docOrders.dt()[i].QUANTITY) + this.docObj.docOrders.dt()[i].VAT - this.docObj.docOrders.dt()[i].DISCOUNT).toFixed(2))
+                                                    }
+                                                    this._calculateTotal()
+                                                    this.popDiscount.hide(); 
+                                                }}/>
+                                            </div>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
                                             onClick={()=>
@@ -1524,7 +1535,7 @@ export default class purchaseOrder extends React.Component
                         </NdPopUp>
                     </div>  
                      {/* Yönetici PopUp */}
-                     <div>
+                    <div>
                         <NdPopUp parent={this} id={"popPassword"} 
                         visible={false}
                         showCloseButton={true}
@@ -1540,7 +1551,6 @@ export default class purchaseOrder extends React.Component
                                     <Label text={this.t("popPassword.Password")} alignment="right" />
                                     <NdTextBox id="txtPassword" parent={this} simple={true}
                                             maxLength={32}
-
                                     ></NdTextBox>
                                 </Item>
                                 <Item>
@@ -1560,7 +1570,6 @@ export default class purchaseOrder extends React.Component
                                                         button:[{id:"btn01",caption:this.t("msgPasswordSucces.btn01"),location:'after'}],
                                                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPasswordSucces.msg")}</div>)
                                                     }
-                                        
                                                     await dialog(tmpConfObj);
                                                     this.popPassword.hide();  
                                                 }
@@ -1572,7 +1581,6 @@ export default class purchaseOrder extends React.Component
                                                         button:[{id:"btn01",caption:this.t("msgPasswordWrong.btn01"),location:'after'}],
                                                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPasswordWrong.msg")}</div>)
                                                     }
-                                        
                                                     await dialog(tmpConfObj);
                                                 }
                                             }}/>
@@ -1589,116 +1597,116 @@ export default class purchaseOrder extends React.Component
                             </Form>
                         </NdPopUp>
                     </div> 
-                    <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={"#root"}
-                    visible={false}
-                    position={{of:'#root'}} 
-                    showTitle={true} 
-                    showBorders={true}
-                    width={'90%'}
-                    height={'90%'}
-                    title={this.t("pg_txtItemsCode.title")} //
-                    search={true}
-                    >
-                        <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
-                        <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />
-                        <Column dataField="MULTICODE" caption={this.t("pg_txtItemsCode.clmMulticode")} width={200}/>
-                    </NdPopGrid>
+                        <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={"#root"}
+                        visible={false}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        showBorders={true}
+                        width={'90%'}
+                        height={'90%'}
+                        title={this.t("pg_txtItemsCode.title")} //
+                        search={true}
+                        >
+                            <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
+                            <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />
+                            <Column dataField="MULTICODE" caption={this.t("pg_txtItemsCode.clmMulticode")} width={200}/>
+                        </NdPopGrid>
                     {/* Dizayn Seçim PopUp */}
                     <div>
-                    <NdPopUp parent={this} id={"popDesign"} 
-                    visible={false}
-                    showCloseButton={true}
-                    showTitle={true}
-                    title={this.t("popDesign.title")}
-                    container={"#root"} 
-                    width={'500'}
-                    height={'250'}
-                    position={{of:'#root'}}
-                    >
-                        <Form colCount={1} height={'fit-content'}>
-                            <Item>
-                                <Label text={this.t("popDesign.design")} alignment="right" />
-                                <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
-                                displayExpr="DESIGN_NAME"                       
-                                valueExpr="TAG"
-                                value=""
-                                searchEnabled={true}
-                                onValueChanged={(async()=>
-                                    {
-                                    }).bind(this)}
-                                data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '60'"},sql:this.core.sql}}}
-                                param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
-                                access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
-                                >
-                                    <Validator validationGroup={"frmPurcOrderPrint"  + this.tabIndex}>
-                                        <RequiredRule message={this.t("validDesign")} />
-                                    </Validator> 
-                                </NdSelectBox>
-                            </Item>
-                            <Item>
-                            <Label text={this.t("popDesign.lang")} alignment="right" />
-                            <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
-                                displayExpr="VALUE"                       
-                                valueExpr="ID"
-                                value=""
-                                searchEnabled={true}
-                                onValueChanged={(async()=>
-                                    {
-                                    }).bind(this)}
-                                data={{source:[{ID:"FR",VALUE:"FR"},{ID:"TR",VALUE:"TR"}]}}
-                                >
-                                </NdSelectBox>
-                            </Item>
-                            <Item>
-                                <div className='row'>
-                                    <div className='col-6'>
-                                        <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} 
-                                        onClick={async ()=>
-                                        {       
-                                            let TmpFirma = "DORACAN Distribution SARL";
-                                            let TmpBaslik = "ZAC HECKENWALD" + '\n' + "57740 LONGEVILLE-LES-ST-AVOLD" + '\n' + "Tel : 03 87 91 00 32" + '\n' + "longeville@prodorplus.fr" + '\n' 
-                                            let tmpQuery = 
+                        <NdPopUp parent={this} id={"popDesign"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popDesign.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'250'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("popDesign.design")} alignment="right" />
+                                        <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
+                                        displayExpr="DESIGN_NAME"                       
+                                        valueExpr="TAG"
+                                        value=""
+                                        searchEnabled={true}
+                                        onValueChanged={(async()=>
                                             {
-                                                query:  "SELECT *, " +
-                                                        "CONVERT(NVARCHAR,AMOUNT) AS AMOUNTF, " +
-                                                        "@FIRMA AS FIRMA, " +
-                                                        "@BASLIK AS BASLIK," +
-                                                        "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH " +
-                                                        "FROM DOC_ORDERS_VW_01 " +
-                                                        "WHERE DOC_GUID=@DOC_GUID ORDER BY LINE_NO ASC",
-                                                param:  ['DOC_GUID:string|50','DESIGN:string|25','FIRMA:string|250','BASLIK:string|250'],
-                                                value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,TmpFirma,TmpBaslik]
-                                            }
-                                            let tmpData = await this.core.sql.execute(tmpQuery) 
-                                            this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
-                                            {
-                                                if(pResult.split('|')[0] != 'ERR')
+                                            }).bind(this)}
+                                        data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '60'"},sql:this.core.sql}}}
+                                        param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                        >
+                                            <Validator validationGroup={"frmPurcOrderPrint"  + this.tabIndex}>
+                                                <RequiredRule message={this.t("validDesign")} />
+                                            </Validator> 
+                                        </NdSelectBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("popDesign.lang")} alignment="right" />
+                                        <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
+                                            displayExpr="VALUE"                       
+                                            valueExpr="ID"
+                                            value=""
+                                            searchEnabled={true}
+                                            onValueChanged={(async()=>
                                                 {
-                                                    var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
-                                                    mywindow.onload = function() 
-                                                    {
-                                                        console.log(11)
-                                                        mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
-                                                    }   
+                                                }).bind(this)}
+                                            data={{source:[{ID:"FR",VALUE:"FR"},{ID:"TR",VALUE:"TR"}]}}
+                                            
+                                        ></NdSelectBox>
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} 
+                                            onClick={async ()=>
+                                            {       
+                                                let TmpFirma = "DORACAN Distribution SARL";
+                                                let TmpBaslik = "ZAC HECKENWALD" + '\n' + "57740 LONGEVILLE-LES-ST-AVOLD" + '\n' + "Tel : 03 87 91 00 32" + '\n' + "longeville@prodorplus.fr" + '\n' 
+                                                let tmpQuery = 
+                                                {
+                                                    query:  "SELECT *, " +
+                                                            "CONVERT(NVARCHAR,AMOUNT) AS AMOUNTF, " +
+                                                            "@FIRMA AS FIRMA, " +
+                                                            "@BASLIK AS BASLIK," +
+                                                            "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH " +
+                                                            "FROM DOC_ORDERS_VW_01 " +
+                                                            "WHERE DOC_GUID=@DOC_GUID ORDER BY LINE_NO ASC",
+                                                    param:  ['DOC_GUID:string|50','DESIGN:string|25','FIRMA:string|250','BASLIK:string|250'],
+                                                    value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,TmpFirma,TmpBaslik]
                                                 }
-                                            });
-                                            this.popDesign.hide();  
-                                        }}/>
+                                                let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                {
+                                                    if(pResult.split('|')[0] != 'ERR')
+                                                    {
+                                                        var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
+                                                        mywindow.onload = function() 
+                                                        {
+                                                            console.log(11)
+                                                            mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                                                        }   
+                                                    }
+                                                });
+                                                this.popDesign.hide();  
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popDesign.hide();  
+                                            }}/>
+                                        </div>
                                     </div>
-                                    <div className='col-6'>
-                                        <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                        onClick={()=>
-                                        {
-                                            this.popDesign.hide();  
-                                        }}/>
-                                    </div>
-                                </div>
-                            </Item>
-                        </Form>
-                    </NdPopUp>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
                     </div>  
                      {/* Toplu Stok PopUp */}
-                     <div>
+                    <div>
                         <NdPopUp parent={this} id={"popMultiItem"} 
                         visible={false}
                         showCloseButton={true}
@@ -1710,79 +1718,75 @@ export default class purchaseOrder extends React.Component
                         position={{of:'#root'}}
                         >
                             <Form colCount={2} height={'fit-content'}>
-                            <Item colSpan={2}>
-                                <Label  alignment="right" />
-                                    <NdTagBox id="tagItemCode" parent={this} simple={true} value={[]} placeholder={this.t("tagItemCodePlaceholder")}
-                                    />
-                            </Item>
-                            <Item></Item>       
-                            <Item>
-                                <Label text={this.t("cmbMultiItemType.title")} alignment="right" />
-                                <NdSelectBox simple={true} parent={this} id="cmbMultiItemType" height='fit-content' 
-                                displayExpr="VALUE"                       
-                                valueExpr="ID"
-                                value={0}
-                                data={{source:[{ID:0,VALUE:this.t("cmbMultiItemType.customerCode")},{ID:1,VALUE:this.t("cmbMultiItemType.ItemCode")}]}}
-                                />
-                            </Item>   
-                            <Item></Item>   
-                            <Item>
-                                <div className='row'>
-                                    <div className='col-6'>
-                                        <NdButton text={this.t("popMultiItem.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                        onClick={async (e)=>
-                                        {       
-                                           this.multiItemAdd()
-                                        }}/>
+                                <Item colSpan={2}>
+                                    <Label  alignment="right" />
+                                        <NdTagBox id="tagItemCode" parent={this} simple={true} value={[]} placeholder={this.t("tagItemCodePlaceholder")}
+                                        />
+                                </Item>
+                                <Item></Item>       
+                                <Item>
+                                    <Label text={this.t("cmbMultiItemType.title")} alignment="right" />
+                                        <NdSelectBox simple={true} parent={this} id="cmbMultiItemType" height='fit-content' 
+                                        displayExpr="VALUE"                       
+                                        valueExpr="ID"
+                                        value={0}
+                                        data={{source:[{ID:0,VALUE:this.t("cmbMultiItemType.customerCode")},{ID:1,VALUE:this.t("cmbMultiItemType.ItemCode")}]}}
+                                        />
+                                </Item>   
+                                <Item></Item>   
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("popMultiItem.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
+                                            onClick={async (e)=>
+                                            {       
+                                            this.multiItemAdd()
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("popMultiItem.btnClear")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.multiItemData.clear()
+                                            }}/>
+                                        </div>
                                     </div>
-                                    <div className='col-6'>
-                                        <NdButton text={this.t("popMultiItem.btnClear")} type="normal" stylingMode="contained" width={'100%'}
-                                        onClick={()=>
-                                        {
-                                            this.multiItemData.clear()
-                                        }}/>
+                                </Item>
+                                <Item colSpan={2} >
+                                    <NdGrid
+                                        parent={this} id={"grdMultiItem"} 
+                                        showBorders={true} 
+                                        columnsAutoWidth={true} 
+                                        allowColumnReordering={true} 
+                                        allowColumnResizing={true} 
+                                        headerFilter={{visible:true}}
+                                        filterRow = {{visible:true}}
+                                        height={400} 
+                                        width={'100%'}
+                                        dbApply={false}
+                                        >
+                                            <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
+                                            <Scrolling mode="infinite" />
+                                            <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
+                                            <Column dataField="CODE" caption={this.t("grdMultiItem.clmCode")} width={150} allowEditing={false} />
+                                            <Column dataField="MULTICODE" caption={this.t("grdMultiItem.clmMulticode")} width={150} allowEditing={false} />
+                                            <Column dataField="NAME" caption={this.t("grdMultiItem.clmName")} width={300}  headerFilter={{visible:true}} allowEditing={false} />
+                                            <Column dataField="QUANTITY" caption={this.t("grdMultiItem.clmQuantity")} dataType={'number'} width={100} headerFilter={{visible:true}}/>
+                                    </NdGrid>
+                                </Item>
+                                <Item></Item>   
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'></div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("popMultiItem.btnSave")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.multiItemSave()
+                                            }}/>
+                                        </div>
                                     </div>
-                                </div>
-                            </Item>
-                            <Item colSpan={2} >
-                            <NdGrid parent={this} id={"grdMultiItem"} 
-                                    showBorders={true} 
-                                    columnsAutoWidth={true} 
-                                    allowColumnReordering={true} 
-                                    allowColumnResizing={true} 
-                                    headerFilter={{visible:true}}
-                                    filterRow = {{visible:true}}
-                                    height={400} 
-                                    width={'100%'}
-                                    dbApply={false}
-                                    onRowRemoved={async (e)=>{
-                                     
-                                    }}
-                                    >
-                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
-                                        <Scrolling mode="infinite" />
-                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                        <Column dataField="CODE" caption={this.t("grdMultiItem.clmCode")} width={150} allowEditing={false} />
-                                        <Column dataField="MULTICODE" caption={this.t("grdMultiItem.clmMulticode")} width={150} allowEditing={false} />
-                                        <Column dataField="NAME" caption={this.t("grdMultiItem.clmName")} width={300}  headerFilter={{visible:true}} allowEditing={false} />
-                                        <Column dataField="QUANTITY" caption={this.t("grdMultiItem.clmQuantity")} dataType={'number'} width={100} headerFilter={{visible:true}}/>
-                                </NdGrid>
-                            </Item>
-                            <Item></Item>   
-                            <Item>
-                                <div className='row'>
-                                    <div className='col-6'>
-                                       
-                                    </div>
-                                    <div className='col-6'>
-                                        <NdButton text={this.t("popMultiItem.btnSave")} type="normal" stylingMode="contained" width={'100%'}
-                                        onClick={()=>
-                                        {
-                                            this.multiItemSave()
-                                        }}/>
-                                    </div>
-                                </div>
-                            </Item>
+                                </Item>
                             </Form>
                         </NdPopUp>
                     </div> 
@@ -1801,22 +1805,19 @@ export default class purchaseOrder extends React.Component
                                     <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerNotFound.msg")}</div>
                                 </div>
                                 <div className="col-12 py-2">
-                                <Form>
-                                    {/* checkCustomer */}
-                                    <Item>
-                                        <Label text={this.lang.t("checkAll")} alignment="right" />
-                                        <NdCheckBox id="checkCustomer" parent={this} simple={true}  
-                                        value ={false}
-                                        >
-                                        </NdCheckBox>
-                                    </Item>
-                                </Form>
+                                    <Form>
+                                        {/* checkCustomer */}
+                                        <Item>
+                                            <Label text={this.lang.t("checkAll")} alignment="right" />
+                                            <NdCheckBox id="checkCustomer" parent={this} simple={true}  
+                                            value ={false}
+                                            >
+                                            </NdCheckBox>
+                                        </Item>
+                                    </Form>
+                                </div>
                             </div>
-                            </div>
-                            <div className='row'>
-                        
-                            </div>
-                        
+                            <div className='row'></div>
                     </NdDialog>  
                     {/* combineItem Dialog  */}
                     <NdDialog id={"msgCombineItem"} container={"#root"} parent={this}
@@ -1833,22 +1834,19 @@ export default class purchaseOrder extends React.Component
                                     <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>
                                 </div>
                                 <div className="col-12 py-2">
-                                <Form>
-                                    {/* checkCustomer */}
-                                    <Item>
-                                        <Label text={this.lang.t("checkAll")} alignment="right" />
-                                        <NdCheckBox id="checkCombine" parent={this} simple={true}  
-                                        value ={false}
-                                        >
-                                        </NdCheckBox>
-                                    </Item>
-                                </Form>
+                                    <Form>
+                                        {/* checkCustomer */}
+                                        <Item>
+                                            <Label text={this.lang.t("checkAll")} alignment="right" />
+                                            <NdCheckBox id="checkCombine" parent={this} simple={true}  
+                                            value ={false}
+                                            >
+                                            </NdCheckBox>
+                                        </Item>
+                                    </Form>
+                                </div>
                             </div>
-                            </div>
-                            <div className='row'>
-                        
-                            </div>
-                        
+                        <div className='row'></div>
                     </NdDialog>  
                 </ScrollView>                
             </div>

@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XtraReportsLayoutSerializer SerializerVersion="19.2.3.0" Ref="1" ControlType="DevExpress.XtraReports.UI.XtraReport, DevExpress.XtraReports.v19.2, Version=19.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Name="Report1" DataSourceSchema="[{AMOUNT: 33.83,&#xD;&#xA;DEVICE: &quot;001&quot;,&#xD;&#xA;DOC_DATE: &quot;2022-06-17T00:00:00.000Z&quot;,&#xD;&#xA;DOC_TYPE: &quot;VENTE&quot;,&#xD;&#xA;TITLE: &quot;SALES&quot;,&#xD;&#xA;TYPE: &quot;HT&quot;,&#xD;&#xA;VAT_RATE: 5.5}]" Margins="100, 100, 294, 61" PageWidth="850" PageHeight="1100" Version="19.2" DataMember="DATA" DataSource="#Ref-0" Font="Arial, 9.75pt">
+  <Bands>
+    <Item1 Ref="2" ControlType="TopMarginBand" Name="TopMargin" HeightF="293.75">
+      <Controls>
+        <Item1 Ref="3" ControlType="XRChart" Name="chart1" DataSource="#Ref-0" SizeF="650,283.75" LocationFloat="0, 10.0000067" BorderColor="Black" Borders="None">
+          <Chart Ref="4">
+            <DataContainer Ref="5" SeriesDataMember="DOC_TYPE">
+              <SeriesSerializable>
+                <Item1 Ref="6" Name="Series 1" />
+              </SeriesSerializable>
+              <SeriesTemplate Ref="7" SeriesDataMember="DOC_TYPE" ArgumentDataMember="DOC_DATE" ValueDataMembersSerializable="AMOUNT">
+                <Label Ref="8" TypeNameSerializable="SideBySideBarSeriesLabel" TextPattern="{V}" />
+              </SeriesTemplate>
+            </DataContainer>
+            <OptionsPrint Ref="9" ImageFormat="Metafile" />
+            <Diagram Ref="10" TypeNameSerializable="XYDiagram">
+              <AxisX Ref="11" VisibleInPanesSerializable="-1" />
+              <AxisY Ref="12" VisibleInPanesSerializable="-1" />
+              <DefaultPane Ref="13" EnableAxisXScrolling="False" EnableAxisYScrolling="False" EnableAxisXZooming="False" EnableAxisYZooming="False">
+                <StackedBarTotalLabel Ref="14">
+                  <ConnectorLineStyle Ref="15" />
+                </StackedBarTotalLabel>
+              </DefaultPane>
+            </Diagram>
+            <AutoSeriesCheckedInLegendStates>
+              <Item1 Ref="16" AutoSeriesName="Series 3" CheckState="true" />
+              <Item2 Ref="17" AutoSeriesName="Series 2" CheckState="true" />
+              <Item3 Ref="18" AutoSeriesName="Series 1" CheckState="true" />
+              <Item4 Ref="19" AutoSeriesName="17.06.2022 00:00:00" CheckState="true" />
+              <Item5 Ref="20" AutoSeriesName="VENTE" CheckState="true" />
+            </AutoSeriesCheckedInLegendStates>
+          </Chart>
+        </Item1>
+      </Controls>
+    </Item1>
+    <Item2 Ref="21" ControlType="DetailBand" Name="Detail" HeightF="23">
+      <Controls>
+        <Item1 Ref="22" ControlType="XRLabel" Name="label3" Multiline="true" Text="label3" TextAlignment="TopRight" SizeF="100,23" LocationFloat="233.333328, 0" Padding="2,2,0,0,96">
+          <ExpressionBindings>
+            <Item1 Ref="23" EventName="BeforePrint" PropertyName="Text" Expression="[AMOUNT]" />
+          </ExpressionBindings>
+        </Item1>
+        <Item2 Ref="24" ControlType="XRLabel" Name="label2" Multiline="true" Text="label2" SizeF="100,23" LocationFloat="133.333328, 0" Padding="2,2,0,0,96">
+          <ExpressionBindings>
+            <Item1 Ref="25" EventName="BeforePrint" PropertyName="Text" Expression="[TYPE]" />
+          </ExpressionBindings>
+        </Item2>
+        <Item3 Ref="26" ControlType="XRLabel" Name="label1" Multiline="true" Text="label1" SizeF="133.333328,23" LocationFloat="0, 0" Padding="2,2,0,0,96">
+          <ExpressionBindings>
+            <Item1 Ref="27" EventName="BeforePrint" PropertyName="Text" Expression="[TITLE]" />
+          </ExpressionBindings>
+        </Item3>
+      </Controls>
+    </Item2>
+    <Item3 Ref="28" ControlType="BottomMarginBand" Name="BottomMargin" HeightF="61.20844" />
+  </Bands>
+  <ObjectStorage>
+    <Item1 ObjectType="DevExpress.XtraReports.Serialization.ObjectStorageInfo, DevExpress.XtraReports.v19.2" Ref="0" Content="~Xtra#NULL" Type="System.Data.DataTable" />
+  </ObjectStorage>
+</XtraReportsLayoutSerializer>
