@@ -672,6 +672,7 @@ export default class labelPrinting extends React.Component
                                                     var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
                                                     mywindow.onload = async function() 
                                                     {
+                                                        console.log(pResult.split('|')[1])
                                                         mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"  
                                                         
                                                     }   
@@ -1199,26 +1200,25 @@ export default class labelPrinting extends React.Component
                                     param={this.param.filter({ELEMENT:'chkGroup',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'chkGroup',USERS:this.user.CODE})}
                                     onValueChanged={(async()=>
-                                        {
-                                            this.chkLastChange.setState({value:false});
-                                            this.chkSelectChange.setState({value:false});
-                                            this.chkCustomer.setState({value:false});
-                                            this.chkAllItems.setState({value:false});
-                                        }).bind(this)}
+                                    {
+                                        this.chkLastChange.setState({value:false});
+                                        this.chkSelectChange.setState({value:false});
+                                        this.chkCustomer.setState({value:false});
+                                        this.chkAllItems.setState({value:false});
+                                    }).bind(this)}
                                     />
                                     <Label text={this.t("chkGroup")} alignment="right" />
-                                    
                                 </Item>
                                 <Item>
-                                <NdSelectBox simple={true} parent={this} id="cmbGroup" notRefresh = {true}
+                                    <NdSelectBox simple={true} parent={this} id="cmbGroup" notRefresh = {true}
                                     displayExpr="NAME"                       
                                     valueExpr="CODE"
                                     value=""
                                     searchEnabled={true}
                                     onValueChanged={(async()=>
-                                        {
-                                           
-                                        }).bind(this)}
+                                    {
+                                    
+                                    }).bind(this)}
                                     data={{source:{select:{query : "SELECT CODE,NAME FROM ITEM_GROUP"},sql:this.core.sql}}}
                                     >
                                     </NdSelectBox>
@@ -1228,25 +1228,25 @@ export default class labelPrinting extends React.Component
                                     param={this.param.filter({ELEMENT:'chkCustomer',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'chkCustomer',USERS:this.user.CODE})}
                                     onValueChanged={(async()=>
-                                        {
-                                            this.chkLastChange.setState({value:false});
-                                            this.chkSelectChange.setState({value:false});
-                                            this.chkGroup.setState({value:false});
-                                            this.chkAllItems.setState({value:false});
-                                        }).bind(this)}
+                                    {
+                                        this.chkLastChange.setState({value:false});
+                                        this.chkSelectChange.setState({value:false});
+                                        this.chkGroup.setState({value:false});
+                                        this.chkAllItems.setState({value:false});
+                                    }).bind(this)}
                                     />
                                     <Label text={this.t("chkCustomer")} alignment="right" />
                                 </Item>
                                 <Item>
-                                <NdSelectBox simple={true} parent={this} id="cmbCustomer" notRefresh = {true}
+                                    <NdSelectBox simple={true} parent={this} id="cmbCustomer" notRefresh = {true}
                                     displayExpr="TITLE"                       
                                     valueExpr="GUID"
                                     value=""
                                     searchEnabled={true}
                                     onValueChanged={(async()=>
-                                        {
-                                           
-                                        }).bind(this)}
+                                    {
+                                        
+                                    }).bind(this)}
                                     data={{source:{select:{query : "SELECT GUID,TITLE FROM CUSTOMER_VW_01 WHERE GENUS IN(1,2)"},sql:this.core.sql}}}
                                     >
                                     </NdSelectBox>
@@ -1256,12 +1256,12 @@ export default class labelPrinting extends React.Component
                                     param={this.param.filter({ELEMENT:'chkAllItems',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'chkAllItems',USERS:this.user.CODE})}
                                     onValueChanged={(async()=>
-                                        {
-                                            this.chkLastChange.setState({value:false});
-                                            this.chkSelectChange.setState({value:false});
-                                            this.chkGroup.setState({value:false});
-                                            this.chkCustomer.setState({value:false});
-                                        }).bind(this)}
+                                    {
+                                        this.chkLastChange.setState({value:false});
+                                        this.chkSelectChange.setState({value:false});
+                                        this.chkGroup.setState({value:false});
+                                        this.chkCustomer.setState({value:false});
+                                    }).bind(this)}
                                     />
                                     <Label text={this.t("chkAllItems")} alignment="right" />
                                 </Item>

@@ -94,14 +94,23 @@ export default class posSalesDetailReport extends React.Component
                                     value : [this.dtDate.startDate,this.dtDate.endDate]
                                 }
                                 let tmpData = await this.core.sql.execute(tmpQuery)
+                                
                                 if(tmpData.result.recordset.length > 0)
                                 {
-                                    
+                                    console.log(tmpData.result.recordset)
+                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'./plugins/devprint/repx/rpt/posSalesDetail.repx',DATA:" +  JSON.stringify(tmpData.result.recordset)+ "}",(pResult) => 
+                                    {
+                                        if(pResult.split('|')[0] != 'ERR')
+                                        {
+                                            let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
+                                            mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>");
+                                        }
+                                    });
                                 }
                             }}/>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-2"> 
                         <div className="col-12">
                             <Form>
                                 <Item>
@@ -113,12 +122,6 @@ export default class posSalesDetailReport extends React.Component
                                     }}/>
                                 </Item>
                             </Form>
-                        </div>
-                    </div>
-                    <div className="row px-2 pt-2">
-                        <div className="col-12">
-                            <iframe src="http://localhost:3000/pos" title="W3Schools Free Online Web Tutorials">
-                            </iframe>
                         </div>
                     </div>
                 </ScrollView>
