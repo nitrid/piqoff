@@ -203,16 +203,108 @@ export default class purchaseOrder extends React.Component
     {
         if(e.column.dataField == "ITEM_CODE")
         {
-            return 
-            (
+            return (
                 <NdTextBox id={"txtGrdItemsCode"+e.rowIndex} parent={this} simple={true} 
                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                 value={e.value}
                 onKeyDown={async(k)=>
+                {
+                    if(k.event.key == 'F10' || k.event.key == 'ArrowRight')
                     {
-                        if(k.event.key == 'F10' || k.event.key == 'ArrowRight')
+                        await this.pg_txtItemsCode.setVal(e.value)
+
+                        this.pg_txtItemsCode.onClick = async(data) =>
                         {
-                            await this.pg_txtItemsCode.setVal(e.value)
+                            console.log(3)
+                            this.customerControl = true
+                            this.customerClear = false
+                            this.combineControl = true
+                            this.combineNew = false
+
+                            if(data.length > 0)
+                            {
+                                if(data.length == 1)
+                                {
+                                    await this.addItem(data[0],e.rowIndex)
+                                }
+                                else if(data.length > 1)
+                                {
+                                    for (let i = 0; i < data.length; i++) 
+                                    {
+                                        if(i == 0)
+                                        {
+                                            await this.addItem(data[i],e.rowIndex)
+                                        }
+                                        else
+                                        {
+                                            let tmpdocOrders = {...this.docObj.docOrders.empty}
+                                            tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
+                                            tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
+                                            tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                            tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
+                                            tmpdocOrders.REF = this.docObj.dt()[0].REF
+                                            tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
+                                            tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                            tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
+                                            tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+
+                                            this.txtRef.readOnly = true
+                                            this.txtRefno.readOnly = true
+                                            this.docObj.docOrders.addEmpty(tmpdocOrders)
+
+                                            await this.core.util.waitUntil(100)
+                                            await this.addItem(data[i],this.docObj.docOrders.dt().length-1)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }}
+                onValueChanged={(v)=>
+                {
+                    e.value = v.value
+                }}
+                onChange={(async(r)=>
+                {
+                    if(typeof r.event.isTrusted == 'undefined')
+                    {
+                        let tmpQuery = 
+                        {
+                            query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
+                            param : ['CODE:string|50'],
+                            value : [r.component._changedValue]
+                        }
+                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                        
+                        if(tmpData.result.recordset.length > 0)
+                        {
+                            this.customerControl = true
+                            this.customerClear = false
+                            this.combineControl = true
+                            this.combineNew = false
+                            await this.addItem(tmpData.result.recordset[0],e.rowIndex)
+                        }
+                        else
+                        {
+                            let tmpConfObj =
+                            {
+                                id:'msgItemNotFound',showTitle:true,title:this.t("msgItemNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
+                                button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
+                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
+                            }
+                            await dialog(tmpConfObj);
+                        }
+                    }
+                }).bind(this)}
+                button={
+                [
+                    {
+                        id:'01',
+                        icon:'more',
+                        onClick:()  =>
+                        {
+                            this.pg_txtItemsCode.show()
                             this.pg_txtItemsCode.onClick = async(data) =>
                             {
                                 this.customerControl = true
@@ -259,101 +351,8 @@ export default class purchaseOrder extends React.Component
                                 }
                             }
                         }
-                    }}
-                    onValueChanged={(v)=>
-                    {
-                        e.value = v.value
-                    }}
-                    onChange={(async(r)=>
-                    {
-                        if(typeof r.event.isTrusted == 'undefined')
-                        {
-                            let tmpQuery = 
-                            {
-                                query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
-                                param : ['CODE:string|50'],
-                                value : [r.component._changedValue]
-                            }
-                            let tmpData = await this.core.sql.execute(tmpQuery) 
-                            
-                            if(tmpData.result.recordset.length > 0)
-                            {
-                                this.customerControl = true
-                                this.customerClear = false
-                                this.combineControl = true
-                                this.combineNew = false
-                                await this.addItem(tmpData.result.recordset[0],e.rowIndex)
-                            }
-                            else
-                            {
-                                let tmpConfObj =
-                                {
-                                    id:'msgItemNotFound',showTitle:true,title:this.t("msgItemNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
-                                    button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
-                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
-                                }
-                                await dialog(tmpConfObj);
-                            }
-                        }
-                    }).bind(this)}
-                button=
-                {
-                    [
-                        {
-                            id:'01',
-                            icon:'more',
-                            onClick:()  =>
-                            {
-                                this.pg_txtItemsCode.show()
-                                this.pg_txtItemsCode.onClick = async(data) =>
-                                {
-                                    this.customerControl = true
-                                    this.customerClear = false
-                                    this.combineControl = true
-                                    this.combineNew = false
-
-                                    if(data.length > 0)
-                                    {
-                                        if(data.length == 1)
-                                        {
-                                            await this.addItem(data[0],e.rowIndex)
-                                        }
-                                        else if(data.length > 1)
-                                        {
-                                            for (let i = 0; i < data.length; i++) 
-                                            {
-                                                if(i == 0)
-                                                {
-                                                    await this.addItem(data[i],e.rowIndex)
-                                                }
-                                                else
-                                                {
-                                                    let tmpdocOrders = {...this.docObj.docOrders.empty}
-                                                    tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
-                                                    tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
-                                                    tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                    tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
-                                                    tmpdocOrders.REF = this.docObj.dt()[0].REF
-                                                    tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
-                                                    tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                    tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
-                                                    tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-
-                                                    this.txtRef.readOnly = true
-                                                    this.txtRefno.readOnly = true
-                                                    this.docObj.docOrders.addEmpty(tmpdocOrders)
-
-                                                    await this.core.util.waitUntil(100)
-                                                    await this.addItem(data[i],this.docObj.docOrders.dt().length-1)
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                    ]
-                }
+                    },
+                ]}
                 >  
                 </NdTextBox>
             )
@@ -471,7 +470,9 @@ export default class purchaseOrder extends React.Component
                 }
             }
         }
+
         this.docObj.docOrders.dt()[pIndex].ITEM_CODE = pData.CODE
+        this.docObj.docOrders.dt()[pIndex].MULTICODE = pData.MULTICODE
         this.docObj.docOrders.dt()[pIndex].ITEM = pData.GUID
         this.docObj.docOrders.dt()[pIndex].VAT_RATE = pData.VAT
         this.docObj.docOrders.dt()[pIndex].ITEM_NAME = pData.NAME
