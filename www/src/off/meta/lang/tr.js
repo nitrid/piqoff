@@ -5,6 +5,7 @@ export const langTr =
     btnCancel: "İptal",
     btnPrint :"Yazdır",
     btnOk: "Tamam",
+    btnGet: "Getir",
     msgWarning: "Dikkat",
     btnYes : "Evet",
     btnNo : "Hayır",
