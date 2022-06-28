@@ -1721,18 +1721,16 @@ export default class purchaseOrder extends React.Component
                             <Form colCount={2} height={'fit-content'}>
                                 <Item colSpan={2}>
                                     <Label  alignment="right" />
-                                        <NdTagBox id="tagItemCode" parent={this} simple={true} value={[]} placeholder={this.t("tagItemCodePlaceholder")}
-                                        />
+                                    <NdTagBox id="tagItemCode" parent={this} simple={true} value={[]} placeholder={this.t("tagItemCodePlaceholder")}/>
                                 </Item>
                                 <Item></Item>       
                                 <Item>
                                     <Label text={this.t("cmbMultiItemType.title")} alignment="right" />
-                                        <NdSelectBox simple={true} parent={this} id="cmbMultiItemType" height='fit-content' 
-                                        displayExpr="VALUE"                       
-                                        valueExpr="ID"
-                                        value={0}
-                                        data={{source:[{ID:0,VALUE:this.t("cmbMultiItemType.customerCode")},{ID:1,VALUE:this.t("cmbMultiItemType.ItemCode")}]}}
-                                        />
+                                    <NdSelectBox simple={true} parent={this} id="cmbMultiItemType" height='fit-content' 
+                                    displayExpr="VALUE"                       
+                                    valueExpr="ID"
+                                    value={0}
+                                    data={{source:[{ID:0,VALUE:this.t("cmbMultiItemType.customerCode")},{ID:1,VALUE:this.t("cmbMultiItemType.ItemCode")}]}}/>
                                 </Item>   
                                 <Item></Item>   
                                 <Item>
@@ -1741,7 +1739,7 @@ export default class purchaseOrder extends React.Component
                                             <NdButton text={this.t("popMultiItem.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
                                             onClick={async (e)=>
                                             {       
-                                            this.multiItemAdd()
+                                                this.multiItemAdd()
                                             }}/>
                                         </div>
                                         <div className='col-6'>
@@ -1755,24 +1753,24 @@ export default class purchaseOrder extends React.Component
                                 </Item>
                                 <Item colSpan={2} >
                                     <NdGrid
-                                        parent={this} id={"grdMultiItem"} 
-                                        showBorders={true} 
-                                        columnsAutoWidth={true} 
-                                        allowColumnReordering={true} 
-                                        allowColumnResizing={true} 
-                                        headerFilter={{visible:true}}
-                                        filterRow = {{visible:true}}
-                                        height={400} 
-                                        width={'100%'}
-                                        dbApply={false}
-                                        >
-                                            <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
-                                            <Scrolling mode="infinite" />
-                                            <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                            <Column dataField="CODE" caption={this.t("grdMultiItem.clmCode")} width={150} allowEditing={false} />
-                                            <Column dataField="MULTICODE" caption={this.t("grdMultiItem.clmMulticode")} width={150} allowEditing={false} />
-                                            <Column dataField="NAME" caption={this.t("grdMultiItem.clmName")} width={300}  headerFilter={{visible:true}} allowEditing={false} />
-                                            <Column dataField="QUANTITY" caption={this.t("grdMultiItem.clmQuantity")} dataType={'number'} width={100} headerFilter={{visible:true}}/>
+                                    parent={this} id={"grdMultiItem"} 
+                                    showBorders={true} 
+                                    columnsAutoWidth={true} 
+                                    allowColumnReordering={true} 
+                                    allowColumnResizing={true} 
+                                    headerFilter={{visible:true}}
+                                    filterRow = {{visible:true}}
+                                    height={400} 
+                                    width={'100%'}
+                                    dbApply={false}
+                                    >
+                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
+                                        <Scrolling mode="infinite" />
+                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
+                                        <Column dataField="CODE" caption={this.t("grdMultiItem.clmCode")} width={150} allowEditing={false} />
+                                        <Column dataField="MULTICODE" caption={this.t("grdMultiItem.clmMulticode")} width={150} allowEditing={false} />
+                                        <Column dataField="NAME" caption={this.t("grdMultiItem.clmName")} width={300}  headerFilter={{visible:true}} allowEditing={false} />
+                                        <Column dataField="QUANTITY" caption={this.t("grdMultiItem.clmQuantity")} dataType={'number'} width={100} headerFilter={{visible:true}}/>
                                     </NdGrid>
                                 </Item>
                                 <Item></Item>   
