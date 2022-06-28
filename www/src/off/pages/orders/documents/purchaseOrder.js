@@ -1817,7 +1817,7 @@ export default class purchaseOrder extends React.Component
                                     </Form>
                                 </div>
                             </div>
-                            <div className='row'></div>
+                        <div className='row'></div>
                     </NdDialog>  
                     {/* combineItem Dialog  */}
                     <NdDialog id={"msgCombineItem"} container={"#root"} parent={this}
