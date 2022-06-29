@@ -293,7 +293,7 @@ export default class posDoc extends React.PureComponent
         //BARKOD X MİKTAR İŞLEMİ.
         if(pCode.indexOf("*") != -1)
         {
-            if(pCode.split("*")[0] == "")
+            if(pCode.split("*")[0] == "" || pCode.split("*")[0] == 0)
             {
                 document.getElementById("Sound").play();
                 let tmpConfObj =

@@ -739,7 +739,6 @@ export class itemBarcodeCls
             }
             
             this.ds.get('ITEM_BARCODE').selectCmd.value = Object.values(tmpPrm)
-              
             await this.ds.get('ITEM_BARCODE').refresh();
             resolve(this.ds.get('ITEM_BARCODE'));    
         });
