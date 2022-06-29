@@ -409,7 +409,7 @@ export const langTr =
     {
         LDATE : "LDATE",
         ITEM_NAME :"ADI",
-        QUANTITY : "MIKTAR",
+        QUANTITY : "ADET",
         PRICE : "FIYAT",
         AMOUNT : "TUTAR"
     },
@@ -455,7 +455,7 @@ export const langTr =
     {
         BARCODE : "BARKOD",
         ITEM_NAME : "ADI",
-        QUANTITY : "MIKTAR",
+        QUANTITY : "ADET",
         PRICE :"FIYAT",
         AMOUNT : "TUTAR",
     },

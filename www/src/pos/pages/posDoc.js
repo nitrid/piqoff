@@ -1733,9 +1733,9 @@ export default class posDoc extends React.PureComponent
                                 >
                                     <Editing confirmDelete={false}/>
                                     <Column dataField="LDATE" caption={this.lang.t("grdList.LDATE")} width={40} alignment={"center"} dataType={"datetime"} format={"dd-MM-yyyy - HH:mm:ss SSSZ"} defaultSortOrder="desc" visible={false}/>
-                                    <Column dataField="ITEM_NAME" caption={this.lang.t("grdList.ITEM_NAME")} width={300}/>
-                                    <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} width={60}/>
-                                    <Column dataField="PRICE" caption={this.lang.t("grdList.PRICE")} width={50} format={"#,##0.00" + Number.money.sign}/>
+                                    <Column dataField="ITEM_NAME" caption={this.lang.t("grdList.ITEM_NAME")} width={290}/>
+                                    <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} width={50}/>
+                                    <Column dataField="PRICE" caption={this.lang.t("grdList.PRICE")} width={70} format={"#,##0.00" + Number.money.sign}/>
                                     <Column dataField="AMOUNT" alignment={"right"} caption={this.lang.t("grdList.AMOUNT")} width={60} format={"#,##0.00" + Number.money.sign}/>                                                
                                 </NdGrid>
                             </div>
@@ -1758,7 +1758,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-start m-0">{this.lang.t("ticketRect")}<span className="text-dark">{this.state.cheqCount + '/' + parseFloat(this.state.cheqTotalAmount).toFixed(2)} + {Number.money.sign}</span></p>    
+                                        <p className="text-primary text-start m-0">{this.lang.t("ticketRect")}<span className="text-dark">{this.state.cheqCount + '/' + parseFloat(this.state.cheqTotalAmount).toFixed(2)} {Number.money.sign}</span></p>    
                                     </div>
                                 </div>
                             </div>
