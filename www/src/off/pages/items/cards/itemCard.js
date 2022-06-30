@@ -22,10 +22,11 @@ import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 
-export default class itemCard extends React.Component
+export default class itemCard extends React.PureComponent
 {
     constructor(props)
     {
+        console.log("1 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
         super(props)                
         this.state = {underPrice : 0,isItemGrpForOrginsValid : false,isItemGrpForMinMaxAccess : false,isTaxSugar : false}
         this.core = App.instance.core;
@@ -50,6 +51,7 @@ export default class itemCard extends React.Component
         {
             this.getItem(this.pagePrm.CODE)
         }
+        console.log("2 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
     }    
     async init()
     {  
@@ -146,11 +148,12 @@ export default class itemCard extends React.Component
         
         let tmpUnit = new unitCls();
         await tmpUnit.load()
-
+        
         let tmpMainUnitObj = {...this.itemsObj.itemUnit.empty}
         tmpMainUnitObj.TYPE = 0
         tmpMainUnitObj.TYPE_NAME = 'Ana Birim'
         tmpMainUnitObj.ITEM_GUID = this.itemsObj.dt()[0].GUID 
+        
         if(tmpUnit.dt(0).length > 0)
         {
             tmpMainUnitObj.ID = tmpUnit.dt(0)[0].ID
@@ -169,8 +172,6 @@ export default class itemCard extends React.Component
 
         this.itemsObj.itemUnit.addEmpty(tmpMainUnitObj);
         this.itemsObj.itemUnit.addEmpty(tmpUnderUnitObj);
-
-        
 
         this.itemGrpForOrginsValidCheck();   
         this.itemGrpForMinMaxAccessCheck();  
