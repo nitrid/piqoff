@@ -48,21 +48,19 @@ export default class NdButton extends Base
         }
 
         return (
-            <React.Fragment>
-                <Button id={this.props.id} 
-                location={this.props.location}
-                text={this.state.text} 
-                width={this.state.width} 
-                height={this.state.height} 
-                type={this.state.type} 
-                stylingMode={this.state.stylingMode}
-                icon={this.state.icon}
-                onClick={this._onClick}
-                validationGroup={this.props.validationGroup}
-                disabled={this.state.disabled}
-                elementAttr={this.state.elementAttr}
-                />
-            </React.Fragment>
+            <Button id={this.props.id} 
+            location={this.props.location}
+            text={this.state.text} 
+            width={this.state.width} 
+            height={this.state.height} 
+            type={this.state.type} 
+            stylingMode={this.state.stylingMode}
+            icon={this.state.icon}
+            onClick={this._onClick}
+            validationGroup={this.props.validationGroup}
+            disabled={this.state.disabled}
+            elementAttr={this.state.elementAttr}
+            />
         )
     }
 }

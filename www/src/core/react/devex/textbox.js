@@ -168,27 +168,25 @@ export default class NdTextBox extends Base
     _txtView()
     {                        
         return (
-            <React.Fragment>
-                <TextBox id={this.props.id} mode={this.state.mode} showClearButton={this.state.showClearButton} height='fit-content'  
-                    maxLength={this.props.maxLength}
-                    placeholder={this.state.placeholder}
-                    style={this.props.style}
-                    elementAttr={this.props.elementAttr}
-                    valueChangeEvent="keyup" onValueChanged={this._onValueChanged} 
-                    onEnterKey={this._onEnterKey} onFocusIn={this._onFocusIn} onFocusOut={this._onFocusOut}
-                    onChange={this._onChange}
-                    onKeyDown={this._onKeyDown} onKeyUp={this._onKeyUp}
-                    onInitialized={this._onInitialized}
-                    value={typeof this.state.value == 'undefined' ? '' : this.state.value.toString()} 
-                    readOnly={this.state.readOnly}
-                    format={this.props.format}
-                    disabled={typeof this.props.editable == 'undefined' ? this.state.editable : this.props.editable}>                    
-                        {this.props.children}
-                        {this._buttonView()}                    
-                        {this._displayView()}
-                        {this.validationView()}                    
-                </TextBox>
-            </React.Fragment>
+            <TextBox id={this.props.id} mode={this.state.mode} showClearButton={this.state.showClearButton} height='fit-content'  
+                maxLength={this.props.maxLength}
+                placeholder={this.state.placeholder}
+                style={this.props.style}
+                elementAttr={this.props.elementAttr}
+                valueChangeEvent="keyup" onValueChanged={this._onValueChanged} 
+                onEnterKey={this._onEnterKey} onFocusIn={this._onFocusIn} onFocusOut={this._onFocusOut}
+                onChange={this._onChange}
+                onKeyDown={this._onKeyDown} onKeyUp={this._onKeyUp}
+                onInitialized={this._onInitialized}
+                value={typeof this.state.value == 'undefined' ? '' : this.state.value.toString()} 
+                readOnly={this.state.readOnly}
+                format={this.props.format}
+                disabled={typeof this.props.editable == 'undefined' ? this.state.editable : this.props.editable}>                    
+                    {this.props.children}
+                    {this._buttonView()}                    
+                    {this._displayView()}
+                    {this.validationView()}                    
+            </TextBox>
         )
     }
     componentDidMount()
