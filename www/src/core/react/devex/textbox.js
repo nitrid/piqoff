@@ -168,6 +168,7 @@ export default class NdTextBox extends Base
     _txtView()
     {                        
         return (
+            <React.Fragment>
             <TextBox id={this.props.id} mode={this.state.mode} showClearButton={this.state.showClearButton} height='fit-content'  
                 maxLength={this.props.maxLength}
                 placeholder={this.state.placeholder}
@@ -187,6 +188,7 @@ export default class NdTextBox extends Base
                     {this._displayView()}
                     {this.validationView()}                    
             </TextBox>
+            </React.Fragment>
         )
     }
     componentDidMount()
