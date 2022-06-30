@@ -25,17 +25,19 @@ export default class NdDropDownBox extends Base
     _dropDownView()
     {
         return(
-            <DropDownBox
-            value={this.state.value}
-            valueExpr={this.props.valueExpr}
-            displayExpr={this.props.displayExpr} 
-            placeholder={this.props.placeholder}
-            showClearButton={this.props.showClearButton}
-            dataSource={typeof this.state.data == 'undefined' ? undefined : this.state.data.store} 
-            onValueChanged={this._onValueChanged}
-            contentRender={this.props.contentRender}
-            >
-            </DropDownBox>
+            <React.Fragment>
+                <DropDownBox
+                value={this.state.value}
+                valueExpr={this.props.valueExpr}
+                displayExpr={this.props.displayExpr} 
+                placeholder={this.props.placeholder}
+                showClearButton={this.props.showClearButton}
+                dataSource={typeof this.state.data == 'undefined' ? undefined : this.state.data.store} 
+                onValueChanged={this._onValueChanged}
+                contentRender={this.props.contentRender}
+                >
+                </DropDownBox>
+            </React.Fragment>
         )
     }
     //#endregion
@@ -71,12 +73,14 @@ export default class NdDropDownBox extends Base
         else
         {
             return (
-                <div className="dx-field">
-                    <div className="dx-field-label">{typeof this.props.title == 'undefined' ? '' : this.props.title}</div>
-                    <div className="dx-field-value">
-                        {this._dropDownView()}
+                <React.Fragment>
+                    <div className="dx-field">
+                        <div className="dx-field-label">{typeof this.props.title == 'undefined' ? '' : this.props.title}</div>
+                        <div className="dx-field-value">
+                            {this._dropDownView()}
+                        </div>
                     </div>
-                </div>
+                </React.Fragment>
             )            
         }
     }

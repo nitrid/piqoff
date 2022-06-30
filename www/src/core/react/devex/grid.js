@@ -284,64 +284,68 @@ export default class NdGrid extends Base
         if(typeof this.state.columns == 'undefined')
         {
             return (
-                <DataGrid id={this.props.id} dataSource={typeof this.state.data == 'undefined' ? undefined : this.state.data.store} 
-                showBorders={this.props.showBorders} 
-                columnWidth={this.props.columnWidth} 
-                columnAutoWidth={this.props.columnAutoWidth} 
-                allowColumnReordering={this.props.allowColumnReordering} 
-                allowColumnResizing={this.props.allowColumnResizing} 
-                showRowLines={typeof this.props.showRowLines == 'undefined' ? true : this.props.showRowLines}
-                showColumnLines={typeof this.props.showColumnLines == 'undefined' ? true : this.props.showColumnLines}
-                showColumnHeaders={typeof this.props.showColumnHeaders == 'undefined' ? true : this.props.showColumnHeaders}
-                loadPanel={this.props.loadPanel}
-                height={this.props.height} 
-                width={this.props.width}
-                onInitialized={this._onInitialized} onSelectionChanged={this._onSelectionChanged} 
-                onInitNewRow={this._onInitNewRow} onEditingStart={this._onEditingStart} onRowInserting={this._onRowInserting} onRowInserted={this._onRowInserted}
-                onRowUpdating={this._onRowUpdating} onRowUpdated={this._onRowUpdated} onRowRemoving={this._onRowRemoving} onRowRemoved={this._onRowRemoved}
-                onSaving={this._onSaving} onSaved={this._onSaved} onEditCanceling={this._onEditCanceling} onEditCanceled={this._onEditCanceled}
-                onCellPrepared={this._onCellPrepared} onRowDblClick={this._onRowDblClick} onKeyDown = {this._onKeyDown}
-                onCellClick={this._onCellClick} onCellDblClick={this._onCellDblClick} onRowClick={this._onRowClick}
-                filterRow={this.state.filterRow}
-                headerFilter={this.state.headerFilter}
-                selection={this.state.selection}
-                onEditorPrepared={this._onEditorPrepared}
-                onEditorPreparing={this._onEditorPreparing}
-                onRowPrepared = {this._onRowPrepared}                
-                >
-                    {this.props.children}
-                </DataGrid>
-            )            
-        }
-        else
-        {
-            return (
-                <DataGrid id={this.props.id} dataSource={typeof this.state.data == 'undefined' ? undefined : this.state.data.store}
+                <React.Fragment>
+                    <DataGrid id={this.props.id} dataSource={typeof this.state.data == 'undefined' ? undefined : this.state.data.store} 
                     showBorders={this.props.showBorders} 
-                    columnWidth={this.props.columnWidth}
+                    columnWidth={this.props.columnWidth} 
                     columnAutoWidth={this.props.columnAutoWidth} 
                     allowColumnReordering={this.props.allowColumnReordering} 
                     allowColumnResizing={this.props.allowColumnResizing} 
+                    showRowLines={typeof this.props.showRowLines == 'undefined' ? true : this.props.showRowLines}
+                    showColumnLines={typeof this.props.showColumnLines == 'undefined' ? true : this.props.showColumnLines}
+                    showColumnHeaders={typeof this.props.showColumnHeaders == 'undefined' ? true : this.props.showColumnHeaders}
+                    loadPanel={this.props.loadPanel}
                     height={this.props.height} 
                     width={this.props.width}
-                    loadPanel={this.props.loadPanel}
                     onInitialized={this._onInitialized} onSelectionChanged={this._onSelectionChanged} 
                     onInitNewRow={this._onInitNewRow} onEditingStart={this._onEditingStart} onRowInserting={this._onRowInserting} onRowInserted={this._onRowInserted}
                     onRowUpdating={this._onRowUpdating} onRowUpdated={this._onRowUpdated} onRowRemoving={this._onRowRemoving} onRowRemoved={this._onRowRemoved}
                     onSaving={this._onSaving} onSaved={this._onSaved} onEditCanceling={this._onEditCanceling} onEditCanceled={this._onEditCanceled}
                     onCellPrepared={this._onCellPrepared} onRowDblClick={this._onRowDblClick} onKeyDown = {this._onKeyDown}
                     onCellClick={this._onCellClick} onCellDblClick={this._onCellDblClick} onRowClick={this._onRowClick}
-                    columns={this.state.columns}
                     filterRow={this.state.filterRow}
                     headerFilter={this.state.headerFilter}
                     selection={this.state.selection}
-                    pager={this.state.pager}
                     onEditorPrepared={this._onEditorPrepared}
                     onEditorPreparing={this._onEditorPreparing}
-                    onRowPrepared = {this._onRowPrepared}
+                    onRowPrepared = {this._onRowPrepared}                
                     >
                         {this.props.children}
-                </DataGrid>
+                    </DataGrid>
+                </React.Fragment>
+            )            
+        }
+        else
+        {
+            return (
+                <React.Fragment>
+                    <DataGrid id={this.props.id} dataSource={typeof this.state.data == 'undefined' ? undefined : this.state.data.store}
+                        showBorders={this.props.showBorders} 
+                        columnWidth={this.props.columnWidth}
+                        columnAutoWidth={this.props.columnAutoWidth} 
+                        allowColumnReordering={this.props.allowColumnReordering} 
+                        allowColumnResizing={this.props.allowColumnResizing} 
+                        height={this.props.height} 
+                        width={this.props.width}
+                        loadPanel={this.props.loadPanel}
+                        onInitialized={this._onInitialized} onSelectionChanged={this._onSelectionChanged} 
+                        onInitNewRow={this._onInitNewRow} onEditingStart={this._onEditingStart} onRowInserting={this._onRowInserting} onRowInserted={this._onRowInserted}
+                        onRowUpdating={this._onRowUpdating} onRowUpdated={this._onRowUpdated} onRowRemoving={this._onRowRemoving} onRowRemoved={this._onRowRemoved}
+                        onSaving={this._onSaving} onSaved={this._onSaved} onEditCanceling={this._onEditCanceling} onEditCanceled={this._onEditCanceled}
+                        onCellPrepared={this._onCellPrepared} onRowDblClick={this._onRowDblClick} onKeyDown = {this._onKeyDown}
+                        onCellClick={this._onCellClick} onCellDblClick={this._onCellDblClick} onRowClick={this._onRowClick}
+                        columns={this.state.columns}
+                        filterRow={this.state.filterRow}
+                        headerFilter={this.state.headerFilter}
+                        selection={this.state.selection}
+                        pager={this.state.pager}
+                        onEditorPrepared={this._onEditorPrepared}
+                        onEditorPreparing={this._onEditorPreparing}
+                        onRowPrepared = {this._onRowPrepared}
+                        >
+                            {this.props.children}
+                    </DataGrid>
+                </React.Fragment>
             )
         }
     }
