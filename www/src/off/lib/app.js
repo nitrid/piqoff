@@ -29,7 +29,7 @@ import Navigation from './navigation.js'
 import Panel from './panel.js'
 import Login from './login.js'
 
-export default class App extends React.Component
+export default class App extends React.PureComponent
 {
     static instance = null;
 

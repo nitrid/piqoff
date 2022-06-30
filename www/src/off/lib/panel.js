@@ -3,7 +3,7 @@ import TabPanel from 'devextreme-react/tab-panel';
 import Page from './page.js'
 
 const page_list = [];
-export default class Panel extends React.Component
+export default class Panel extends React.PureComponent
 {
   static instance = null;
   constructor()

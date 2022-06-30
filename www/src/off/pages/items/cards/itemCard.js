@@ -520,7 +520,7 @@ export default class itemCard extends React.PureComponent
     render()
     {           
         return (
-            <div>                
+            <React.Fragment>                
                 <ScrollView>                    
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -1889,7 +1889,7 @@ export default class itemCard extends React.PureComponent
                         </NdPopUp>
                     </div>                                      
                 </ScrollView>
-            </div>
+            </React.Fragment>
         )
     }
 }
