@@ -148,11 +148,12 @@ export default class itemCard extends React.PureComponent
         
         let tmpUnit = new unitCls();
         await tmpUnit.load()
-
+        
         let tmpMainUnitObj = {...this.itemsObj.itemUnit.empty}
         tmpMainUnitObj.TYPE = 0
         tmpMainUnitObj.TYPE_NAME = 'Ana Birim'
         tmpMainUnitObj.ITEM_GUID = this.itemsObj.dt()[0].GUID 
+        
         if(tmpUnit.dt(0).length > 0)
         {
             tmpMainUnitObj.ID = tmpUnit.dt(0)[0].ID
@@ -171,8 +172,6 @@ export default class itemCard extends React.PureComponent
 
         this.itemsObj.itemUnit.addEmpty(tmpMainUnitObj);
         this.itemsObj.itemUnit.addEmpty(tmpUnderUnitObj);
-
-        
 
         this.itemGrpForOrginsValidCheck();   
         this.itemGrpForMinMaxAccessCheck();  
