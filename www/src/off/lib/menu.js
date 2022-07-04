@@ -643,6 +643,20 @@ export const menu = (e) =>
                         }
                     ]
                 },
+                //Operasyonlar
+                 {
+                    id: 'pos_03',
+                    text : e.t('menu.pos_03'),
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'pos_03_001',
+                            text: e.t('menu.pos_03_001'),//'Promosyon Tanımları',
+                            path: 'pos/operation/endOfDay'
+                        }
+                    ]
+                },
             ]
         },
         //Promosyon

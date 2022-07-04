@@ -120,6 +120,8 @@ export const langTr =
         pos_02_001 : "Satış Fiş Raporu",
         pos_02_002 : "Müşteri Puanı Raporu",
         pos_02_003 : "Pos Satış Raporu",
+        pos_03 :"Operasyonlar",
+        pos_03_001 : "Gün Sonu",
         promo: "Promosyon",
         promo_01: "Tanımlar",
         promo_01_001: "Promosyon Tanımları",
@@ -5418,6 +5420,30 @@ export const langTr =
             clmLdate : "Son Güncelleme Tarihi",
         },
 
+    },
+    pos_03_001 : 
+    {
+        title : "GÜN SONU İŞLEMİ",
+        start :"Başlangıç",
+        advance : "Avans",
+        cash : "Nakit",
+        debitCard : "Kredi Kartı",
+        check : "Çek",
+        ticketRest : "Tike Restorant",
+        previous: "Önceki",
+        finish : "Bitir",
+        next : "Sonraki",
+        dtDocDate :"Tarih",
+        cmbSafe : "Cihaz ID",
+        txtAdvance : "Avans",
+        txtCash : "Nakit",
+        txtCreditCard : "Kredi Kartı",
+        txtCheck : "Çek",
+        txtRestorant : "Tike Restorant",
+        popFinish : 
+        {
+            title :"Sonuç"
+        }
     },
     tkf_01_001 :
     {

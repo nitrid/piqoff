@@ -123,6 +123,15 @@ export default class itemList extends React.Component
     }
     async _btnGetirClick()
     {
+        let tmpStatus
+        if(this.chkAktif.value == true)
+        {
+            tmpStatus = 1
+        }
+        else
+        {
+            tmpStatus = -1
+        }
         if(this.txtUrunAdi.value != '' && this.txtUrunAdi.value.slice(-1) != '*')
         {
             let tmpUrunAdi = this.txtUrunAdi.value + '*'
@@ -151,9 +160,9 @@ export default class itemList extends React.Component
                                 "WHERE {0}" +
                                 "((NAME LIKE @NAME +'%') OR (@NAME = '')) AND " +
                                 "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) AND " +
-                                "((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = ''))",
-                        param : ['NAME:string|250','MAIN_GRP:string|25','CUSTOMER_CODE:string|25'],
-                        value : [this.txtUrunAdi.value.replaceAll("*", "%"),this.cmbUrunGrup.value,this.cmbTedarikci.value]
+                                "((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND ((STATUS = @STATUS) OR (@STATUS = -1))",
+                        param : ['NAME:string|250','MAIN_GRP:string|25','CUSTOMER_CODE:string|25','STATUS:int'],
+                        value : [this.txtUrunAdi.value.replaceAll("*", "%"),this.cmbUrunGrup.value,this.cmbTedarikci.value,tmpStatus]
                     },
                     sql : this.core.sql
                 }
@@ -257,9 +266,9 @@ export default class itemList extends React.Component
                                 "WHERE {0} " +
                                 "((NAME LIKE @NAME +'%') OR (@NAME = '')) AND " +
                                 "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) AND " +
-                                "((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = ''))",
-                        param : ['NAME:string|250','MAIN_GRP:string|25','CUSTOMER_CODE:string|25'],
-                        value : [this.txtUrunAdi.value.replaceAll("*", "%"),this.cmbUrunGrup.value,this.cmbTedarikci.value]
+                                "((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND ((STATUS = @STATUS) OR (@STATUS = -1))",
+                        param : ['NAME:string|250','MAIN_GRP:string|25','CUSTOMER_CODE:string|25','STATUS:int'],
+                        value : [this.txtUrunAdi.value.replaceAll("*", "%"),this.cmbUrunGrup.value,this.cmbTedarikci.value,tmpStatus]
                     },
                     sql : this.core.sql
                 }
