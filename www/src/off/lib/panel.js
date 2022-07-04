@@ -3,7 +3,7 @@ import TabPanel from 'devextreme-react/tab-panel';
 import Page from './page.js'
 
 const page_list = [];
-export default class Panel extends React.Component
+export default class Panel extends React.PureComponent
 {
   static instance = null;
   constructor()
@@ -83,7 +83,7 @@ export default class Panel extends React.Component
           dataSource={dataSource}
           height = {'100%'}
           itemTitleRender={this.renderTitle}
-          deferRendering={false}
+          deferRendering={true}
           showNavButtons={true}
           selectedIndex={selectedIndex}
           repaintChangesOnly={true}
