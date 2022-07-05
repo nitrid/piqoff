@@ -645,7 +645,7 @@ export const menu = (e) =>
                         {
                             id: 'pos_02_005',
                             text: e.t('menu.pos_02_005'),
-                            path: 'test'
+                            path: 'test1'
                         }
                     ]
                 },

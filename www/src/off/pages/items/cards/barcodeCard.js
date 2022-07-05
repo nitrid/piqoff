@@ -466,7 +466,6 @@ export default class barcodeCard extends React.Component
                     </div>                                   
                 </ScrollView>
             </div>
-        )
-        
+        )        
     }
 }

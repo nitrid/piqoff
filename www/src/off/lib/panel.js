@@ -1,6 +1,7 @@
 import React from 'react';
 import TabPanel from 'devextreme-react/tab-panel';
 import Page from './page.js'
+import moment from 'moment';
 
 const page_list = [];
 export default class Panel extends React.PureComponent
@@ -28,6 +29,7 @@ export default class Panel extends React.PureComponent
   {
     //AYNI EKRANI BİRDEN ÇOK AÇMAK İÇİN YAPILDI. MENÜDEN GELEN DATA TAB ÜZERİNDE BENZERSİZ HALE GETİRİLİYOR.
     let Tmp = {...e}
+    
     this.tabCount += 1
     Tmp.tabkey = this.tabCount;//this.state.dataSource.length;
     //*************************************************************************************************** */
@@ -76,14 +78,13 @@ export default class Panel extends React.PureComponent
   render()
   {
     const { dataSource, selectedIndex } = this.state;
-    
     return (
       <React.Fragment>
         <TabPanel id="page"
           dataSource={dataSource}
           height = {'100%'}
           itemTitleRender={this.renderTitle}
-          deferRendering={true}
+          deferRendering={false}
           showNavButtons={true}
           selectedIndex={selectedIndex}
           repaintChangesOnly={true}

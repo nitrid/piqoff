@@ -514,11 +514,10 @@ export default class itemCard extends React.PureComponent
 
         this.netMargin()
         this.grossMargin()
-
-       
     }
     render()
     {           
+        console.log("3 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
         return (
             <React.Fragment>                
                 <ScrollView>                    
