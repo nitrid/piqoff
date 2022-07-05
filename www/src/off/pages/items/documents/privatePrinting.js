@@ -270,6 +270,7 @@ export default class outageDoc extends React.Component
                                                             this.txtRef.value = data[0].CODE
                                                             this.txtItemName.value = data[0].NAME
                                                             this.txtRef.GUID = data[0].GUID
+                                                            this.txtPrice.value = data[0].PRICE
                                                         }
                                                     }
                                                 }
@@ -304,7 +305,7 @@ export default class outageDoc extends React.Component
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,NAME FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                                query : "SELECT GUID,CODE,NAME,[dbo].[FN_PRICE_SALE](GUID,1,GETDATE()) AS PRICE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
@@ -324,7 +325,8 @@ export default class outageDoc extends React.Component
                                     }
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_txtRef.clmCode")} width={150} />
-                                        <Column dataField="NAME" caption={this.t("pg_txtRef.clmName")} width={650} defaultSortOrder="asc" />
+                                        <Column dataField="NAME" caption={this.t("pg_txtRef.clmName")} width={500} defaultSortOrder="asc" />
+                                        <Column dataField="PRICE" caption={this.t("pg_txtRef.clmPrice")} width={150} type={"text"}/>
                                     </NdPopGrid>
                                 </Item>
                                 {/* txtItemName */}
