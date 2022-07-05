@@ -20,7 +20,7 @@ import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Export} from '
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
-import { dialog } from '../../../../core/react/devex/dialog.js';
+import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
 
@@ -41,6 +41,8 @@ export default class outageDoc extends React.Component
 
         this.frmOutwas = undefined;
         this.docLocked = false;      
+        this.combineControl = true
+        this.combineNew = false  
         
         this.rightItems = [{ text: this.t("getDispatch"), }]
     }
@@ -266,12 +268,14 @@ export default class outageDoc extends React.Component
                     {
                         if(k.event.key == 'F10' || k.event.key == 'ArrowRight')
                         {
+                            this.combineControl = true
+                            this.combineNew = false  
                             await this.pg_txtItemsCode.setVal(e.value)
                             this.pg_txtItemsCode.onClick = async(data) =>
                             {
                                 if(data.length == 1)
                                 {
-                                    this.addItem(data[0],e.rowIndex)
+                                    await this.addItem(data[0],e.rowIndex)
                                 }
                                 else if(data.length > 1)
                                 {
@@ -279,7 +283,7 @@ export default class outageDoc extends React.Component
                                     {
                                         if(i == 0)
                                         {
-                                            this.addItem(data[i],e.rowIndex)
+                                            await this.addItem(data[i],e.rowIndex)
                                         }
                                         else
                                         {
@@ -298,7 +302,7 @@ export default class outageDoc extends React.Component
                                             this.txtRef.readOnly = true
                                             this.txtRefno.readOnly = true
                                             this.docObj.docItems.addEmpty(tmpDocItems)
-                                            this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
                                         }
                                     }
                                 }
@@ -313,6 +317,8 @@ export default class outageDoc extends React.Component
                     {
                         if(typeof r.event.isTrusted == 'undefined')
                         {
+                            this.combineControl = true
+                            this.combineNew = false  
                             let tmpQuery = 
                             {
                                 query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
@@ -323,7 +329,7 @@ export default class outageDoc extends React.Component
                             if(tmpData.result.recordset.length > 0)
                             {
                                 
-                                this.addItem(tmpData.result.recordset[0],e.rowIndex)
+                                await this.addItem(tmpData.result.recordset[0],e.rowIndex)
                             }
                             else
                             {
@@ -349,9 +355,11 @@ export default class outageDoc extends React.Component
                                 this.pg_txtItemsCode.show()
                                 this.pg_txtItemsCode.onClick = async(data) =>
                                 {
+                                    this.combineControl = true
+                                    this.combineNew = false  
                                     if(data.length == 1)
                                     {
-                                        this.addItem(data[0],e.rowIndex)
+                                        await this.addItem(data[0],e.rowIndex)
                                     }
                                     else if(data.length > 1)
                                     {
@@ -359,7 +367,7 @@ export default class outageDoc extends React.Component
                                         {
                                             if(i == 0)
                                             {
-                                                this.addItem(data[i],e.rowIndex)
+                                                await this.addItem(data[i],e.rowIndex)
                                             }
                                             else
                                             {
@@ -378,7 +386,7 @@ export default class outageDoc extends React.Component
                                                 this.txtRef.readOnly = true
                                                 this.txtRefno.readOnly = true
                                                 this.docObj.docItems.addEmpty(tmpDocItems)
-                                                this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                await this.addItem(data[i],this.docObj.docItems.dt().length-1)
                                             }
                                         }
                                     }
@@ -429,6 +437,54 @@ export default class outageDoc extends React.Component
     }
     async addItem(pData,pIndex)
     {
+        for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+        {
+            if(this.docObj.docItems.dt()[i].ITEM_CODE == pData.CODE)
+            {
+                if(this.combineControl == true)
+                {
+                    let tmpCombineBtn = ''
+                    await this.msgCombineItem.show().then(async (e) =>
+                    {
+    
+                        if(e == 'btn01')
+                        {
+                            this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + 1
+                            this._calculateTotal()
+                            await this.grdOutwasItems.devGrid.deleteRow(pIndex)
+                            if(this.checkCombine.value == true)
+                            {
+                                this.combineControl = false
+                            }
+                            tmpCombineBtn = e
+                            return
+                        }
+                        if(e == 'btn02')
+                        {
+                            if(this.checkCombine.value == true)
+                            {
+                                this.combineControl = false
+                                this.combineNew = true
+                            }
+                            return
+                        }
+                    })
+                    if(tmpCombineBtn == 'btn01')
+                    {
+                        return
+                    }
+                }
+                else if(this.combineNew == false)
+                {
+                    this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + 1
+                    this._calculateTotal()
+                    await this.grdOutwasItems.devGrid.deleteRow(pIndex)
+                    return
+                }
+               
+                
+            }
+        }
         this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
         this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID
         this.docObj.docItems.dt()[pIndex].VAT_RATE = 0
@@ -844,6 +900,8 @@ export default class outageDoc extends React.Component
                                         this.txtBarcode.setState({value:""})
                                         if(tmpData.result.recordset.length > 0)
                                         {
+                                            this.combineControl = true
+                                            this.combineNew = false  
                                             if(typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] == 'undefined' || this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].CODE != '')
                                             {
                                                 let tmpDocItems = {...this.docObj.docItems.empty}
@@ -862,7 +920,7 @@ export default class outageDoc extends React.Component
                                                 this.txtRefno.readOnly = true
                                                 this.docObj.docItems.addEmpty(tmpDocItems)
                                             }
-                                            this.addItem(tmpData.result.recordset[0],this.docObj.docItems.dt().length - 1)
+                                            await this.addItem(tmpData.result.recordset[0],this.docObj.docItems.dt().length - 1)
                                         }
                                         else
                                         {
@@ -956,9 +1014,11 @@ export default class outageDoc extends React.Component
                                                     this.pg_txtItemsCode.show()
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
+                                                this.combineControl = true
+                                                this.combineNew = false  
                                                 if(data.length == 1)
                                                 {
-                                                    this.addItem(data[0],this.docObj.docItems.dt().length-1)
+                                                    await this.addItem(data[0],this.docObj.docItems.dt().length-1)
                                                 }
                                                 else if(data.length > 1)
                                                 {
@@ -966,7 +1026,7 @@ export default class outageDoc extends React.Component
                                                     {
                                                         if(i == 0)
                                                         {
-                                                            this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
                                                         }
                                                         else
                                                         {
@@ -985,7 +1045,7 @@ export default class outageDoc extends React.Component
                                                             this.txtRef.readOnly = true
                                                             this.txtRefno.readOnly = true
                                                             this.docObj.docItems.addEmpty(tmpDocItems)
-                                                            this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
                                                         }
                                                     }
                                                 }
@@ -1012,9 +1072,11 @@ export default class outageDoc extends React.Component
                                             this.pg_txtItemsCode.show()
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
+                                                this.combineControl = true
+                                                this.combineNew = false  
                                                 if(data.length == 1)
                                                 {
-                                                    this.addItem(data[0],this.docObj.docItems.dt().length-1)
+                                                    await this.addItem(data[0],this.docObj.docItems.dt().length-1)
                                                 }
                                                 else if(data.length > 1)
                                                 {
@@ -1022,7 +1084,7 @@ export default class outageDoc extends React.Component
                                                     {
                                                         if(i == 0)
                                                         {
-                                                            this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
                                                         }
                                                         else
                                                         {
@@ -1041,7 +1103,7 @@ export default class outageDoc extends React.Component
                                                             this.txtRef.readOnly = true
                                                             this.txtRefno.readOnly = true
                                                             this.docObj.docItems.addEmpty(tmpDocItems)
-                                                            this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
                                                         }
                                                     }
                                                 }
@@ -1283,6 +1345,37 @@ export default class outageDoc extends React.Component
                             </Form>
                         </NdPopUp>
                     </div> 
+                        {/* combineItem Dialog  */}
+                    <NdDialog id={"msgCombineItem"} container={"#root"} parent={this}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    title={this.t("msgCombineItem.title")} 
+                    showCloseButton={false}
+                    width={"500px"}
+                    height={"250px"}
+                    button={[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}]}
+                    >
+                        <div className="row">
+                            <div className="col-12 py-2">
+                                <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>
+                            </div>
+                            <div className="col-12 py-2">
+                            <Form>
+                                {/* checkCustomer */}
+                                <Item>
+                                    <Label text={this.lang.t("checkAll")} alignment="right" />
+                                    <NdCheckBox id="checkCombine" parent={this} simple={true}  
+                                    value ={false}
+                                    >
+                                    </NdCheckBox>
+                                </Item>
+                            </Form>
+                        </div>
+                        </div>
+                        <div className='row'>
+                    
+                        </div>
+                    </NdDialog>  
                 </ScrollView>                
             </div>
         )

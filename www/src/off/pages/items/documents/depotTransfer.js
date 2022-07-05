@@ -19,7 +19,7 @@ import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Export} from '
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
-import { dialog } from '../../../../core/react/devex/dialog.js';
+import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
 
@@ -36,7 +36,9 @@ export default class depotTransfer extends React.Component
         this._cellRoleRender = this._cellRoleRender.bind(this)
 
         this.frmTrnsfItems = undefined;
-        this.docLocked = false;        
+        this.docLocked = false;      
+        this.combineControl = true
+        this.combineNew = false  
     }
     async componentDidMount()
     {
@@ -200,9 +202,11 @@ export default class depotTransfer extends React.Component
                             await this.pg_txtItemsCode.setVal(e.value)
                             this.pg_txtItemsCode.onClick = async(data) =>
                             {
+                                this.combineControl = true
+                                this.combineNew = false
                                 if(data.length == 1)
                                 {
-                                    this.addItem(data[0],e.rowIndex)
+                                    await this.addItem(data[0],e.rowIndex)
                                 }
                                 else if(data.length > 1)
                                 {
@@ -210,7 +214,7 @@ export default class depotTransfer extends React.Component
                                     {
                                         if(i == 0)
                                         {
-                                            this.addItem(data[i],e.rowIndex)
+                                            await this.addItem(data[i],e.rowIndex)
                                         }
                                         else
                                         {
@@ -229,7 +233,7 @@ export default class depotTransfer extends React.Component
                                             this.txtRef.readOnly = true
                                             this.txtRefno.readOnly = true
                                             this.docObj.docItems.addEmpty(tmpDocItems)
-                                            this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
                                         }
                                     }
                                 }
@@ -253,8 +257,9 @@ export default class depotTransfer extends React.Component
                             let tmpData = await this.core.sql.execute(tmpQuery) 
                             if(tmpData.result.recordset.length > 0)
                             {
-                                
-                                this.addItem(tmpData.result.recordset[0],e.rowIndex)
+                                this.combineControl = true
+                                this.combineNew = false
+                                await this.addItem(tmpData.result.recordset[0],e.rowIndex)
                             }
                             else
                             {
@@ -280,9 +285,11 @@ export default class depotTransfer extends React.Component
                                 this.pg_txtItemsCode.show()
                                 this.pg_txtItemsCode.onClick = async(data) =>
                                 {
+                                    this.combineControl = true
+                                    this.combineNew = false
                                     if(data.length == 1)
                                     {
-                                        this.addItem(data[0],e.rowIndex)
+                                        await this.addItem(data[0],e.rowIndex)
                                     }
                                     else if(data.length > 1)
                                     {
@@ -290,7 +297,7 @@ export default class depotTransfer extends React.Component
                                         {
                                             if(i == 0)
                                             {
-                                                this.addItem(data[i],e.rowIndex)
+                                                await this.addItem(data[i],e.rowIndex)
                                             }
                                             else
                                             {
@@ -309,7 +316,7 @@ export default class depotTransfer extends React.Component
                                                 this.txtRef.readOnly = true
                                                 this.txtRefno.readOnly = true
                                                 this.docObj.docItems.addEmpty(tmpDocItems)
-                                                this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                await this.addItem(data[i],this.docObj.docItems.dt().length-1)
                                             }
                                         }
                                     }
@@ -350,6 +357,54 @@ export default class depotTransfer extends React.Component
                     await dialog(tmpConfObj);
                     return
                }
+            }
+        }
+        for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+        {
+            if(this.docObj.docItems.dt()[i].ITEM_CODE == pData.CODE)
+            {
+                if(this.combineControl == true)
+                {
+                    let tmpCombineBtn = ''
+                    await this.msgCombineItem.show().then(async (e) =>
+                    {
+    
+                        if(e == 'btn01')
+                        {
+                            this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + 1
+                            this._calculateTotal()
+                            await this.grdTrnsfItems.devGrid.deleteRow(pIndex)
+                            if(this.checkCombine.value == true)
+                            {
+                                this.combineControl = false
+                            }
+                            tmpCombineBtn = e
+                            return
+                        }
+                        if(e == 'btn02')
+                        {
+                            if(this.checkCombine.value == true)
+                            {
+                                this.combineControl = false
+                                this.combineNew = true
+                            }
+                            return
+                        }
+                    })
+                    if(tmpCombineBtn == 'btn01')
+                    {
+                        return
+                    }
+                }
+                else if(this.combineNew == false)
+                {
+                    this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + 1
+                    this._calculateTotal()
+                    await this.grdTrnsfItems.devGrid.deleteRow(pIndex)
+                    return
+                }
+               
+                
             }
         }
         this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
@@ -792,6 +847,8 @@ export default class depotTransfer extends React.Component
                                         this.txtBarcode.setState({value:""})
                                         if(tmpData.result.recordset.length > 0)
                                         {
+                                            this.combineControl = true
+                                            this.combineNew = false
                                             if(typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] == 'undefined' || this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].CODE != '')
                                             {
                                                 let tmpDocItems = {...this.docObj.docItems.empty}
@@ -810,7 +867,7 @@ export default class depotTransfer extends React.Component
                                                 this.txtRefno.readOnly = true
                                                 this.docObj.docItems.addEmpty(tmpDocItems)
                                             }
-                                            this.addItem(tmpData.result.recordset[0],this.docObj.docItems.dt().length - 1)
+                                            await this.addItem(tmpData.result.recordset[0],this.docObj.docItems.dt().length - 1)
                                         }
                                         else
                                         {
@@ -884,9 +941,11 @@ export default class depotTransfer extends React.Component
                                                 {this.pg_txtItemsCode.show()
                                                     this.pg_txtItemsCode.onClick = async(data) =>
                                                     {
+                                                        this.combineControl = true
+                                                        this.combineNew = false
                                                         if(data.length == 1)
                                                         {
-                                                            this.addItem(data[0],this.docObj.docItems.dt().length-1)
+                                                            await this.addItem(data[0],this.docObj.docItems.dt().length-1)
                                                         }
                                                         else if(data.length > 1)
                                                         {
@@ -894,7 +953,7 @@ export default class depotTransfer extends React.Component
                                                             {
                                                                 if(i == 0)
                                                                 {
-                                                                    this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                                    await this.addItem(data[i],this.docObj.docItems.dt().length-1)
                                                                 }
                                                                 else
                                                                 {
@@ -913,7 +972,7 @@ export default class depotTransfer extends React.Component
                                                                     this.txtRef.readOnly = true
                                                                     this.txtRefno.readOnly = true
                                                                     this.docObj.docItems.addEmpty(tmpDocItems)
-                                                                    this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                                    await this.addItem(data[i],this.docObj.docItems.dt().length-1)
                                                                 }
                                                             }
                                                         }
@@ -940,9 +999,11 @@ export default class depotTransfer extends React.Component
                                             this.pg_txtItemsCode.show()
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
+                                                this.combineControl = true
+                                                this.combineNew = false
                                                 if(data.length == 1)
                                                 {
-                                                    this.addItem(data[0],this.docObj.docItems.dt().length-1)
+                                                    await this.addItem(data[0],this.docObj.docItems.dt().length-1)
                                                 }
                                                 else if(data.length > 1)
                                                 {
@@ -950,7 +1011,7 @@ export default class depotTransfer extends React.Component
                                                     {
                                                         if(i == 0)
                                                         {
-                                                            this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
                                                         }
                                                         else
                                                         {
@@ -969,7 +1030,7 @@ export default class depotTransfer extends React.Component
                                                             this.txtRef.readOnly = true
                                                             this.txtRefno.readOnly = true
                                                             this.docObj.docItems.addEmpty(tmpDocItems)
-                                                            this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
                                                         }
                                                     }
                                                 }
@@ -1017,6 +1078,37 @@ export default class depotTransfer extends React.Component
                         <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
                         <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />
                     </NdPopGrid>
+                        {/* combineItem Dialog  */}
+                    <NdDialog id={"msgCombineItem"} container={"#root"} parent={this}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    title={this.t("msgCombineItem.title")} 
+                    showCloseButton={false}
+                    width={"500px"}
+                    height={"250px"}
+                    button={[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}]}
+                    >
+                        <div className="row">
+                            <div className="col-12 py-2">
+                                <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>
+                            </div>
+                            <div className="col-12 py-2">
+                            <Form>
+                                {/* checkCustomer */}
+                                <Item>
+                                    <Label text={this.lang.t("checkAll")} alignment="right" />
+                                    <NdCheckBox id="checkCombine" parent={this} simple={true}  
+                                    value ={false}
+                                    >
+                                    </NdCheckBox>
+                                </Item>
+                            </Form>
+                        </div>
+                        </div>
+                        <div className='row'>
+                    
+                        </div>
+                    </NdDialog>  
                 </ScrollView>                
             </div>
         )
