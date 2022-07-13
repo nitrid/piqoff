@@ -110,6 +110,7 @@ export default class Test extends React.PureComponent
     }
     render()
     {
+        console.log("3 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
         return (
             <ScrollView>
                 <div className="row px-2 pt-2">

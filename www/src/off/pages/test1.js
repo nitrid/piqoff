@@ -20,6 +20,7 @@ export default class Test extends React.PureComponent
 
         this.renderTitle = this.renderTitle.bind(this);
         this.myRef = React.createRef();
+        console.log(1)
     }
     addPage(e)
     {
@@ -50,7 +51,6 @@ export default class Test extends React.PureComponent
     }
     renderTitle(e) 
     {
-        console.log(e)
         return (
         <React.Fragment>
             <div>
@@ -64,10 +64,11 @@ export default class Test extends React.PureComponent
     }
     componentDidMount()
     {
-
+        console.log(2)
     }
     render()
     {
+        console.log(3)
         const { dataSource, selectedIndex } = this.state;
         return(
             <React.Fragment>
@@ -88,9 +89,9 @@ export default class Test extends React.PureComponent
                 dataSource={dataSource}
                 height = {'100%'}
                 itemTitleRender={this.renderTitle}
-                deferRendering={false}
+                deferRendering={true}
                 showNavButtons={true}
-                repaintChangesOnly={true}
+                repaintChangesOnly={false}
                 itemComponent={Page}
                 selectedIndex={selectedIndex}
                 // items={
