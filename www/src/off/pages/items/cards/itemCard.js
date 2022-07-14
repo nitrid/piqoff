@@ -179,11 +179,12 @@ export default class itemCard extends React.PureComponent
     }
     async getItem(pCode)
     {
+        console.log("11 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
         App.instance.setState({isExecute:true})
         this.itemsObj.clearAll();
         await this.itemsObj.load({CODE:pCode});
-        //TEDARİKÇİ FİYAT GETİR İŞLEMİ.                
-        await this.itemsPriceSupply.load({ITEM_CODE:pCode,TYPE:1})  
+        //TEDARİKÇİ FİYAT GETİR İŞLEMİ.  
+        await this.itemsPriceSupply.load({ITEM_GUID:this.itemsObj.dt()[0].GUID,TYPE:1})  
         await this.itemsPriceLogObj.load({ITEM_GUID:this.itemsObj.dt()[0].GUID})
         this.txtBarcode.readOnly = true;
         let tmpQuery = 
@@ -201,6 +202,7 @@ export default class itemCard extends React.PureComponent
             }
         }
         App.instance.setState({isExecute:false})
+        console.log("12 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
     }
     async checkItem(pCode)
     {

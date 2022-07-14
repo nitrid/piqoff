@@ -84,10 +84,10 @@ export default class Panel extends React.PureComponent
           dataSource={dataSource}
           height = {'100%'}
           itemTitleRender={this.renderTitle}
-          deferRendering={false}
+          deferRendering={true}
           showNavButtons={true}
           selectedIndex={selectedIndex}
-          repaintChangesOnly={true}
+          repaintChangesOnly={false}
           onOptionChanged={this.onSelectionChanged}
           itemComponent={Page}
         />

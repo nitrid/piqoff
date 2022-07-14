@@ -477,8 +477,8 @@ export class itemPriceCls
                     "((QUANTITY = @QUANTITY) OR (@QUANTITY = -1)) AND " +
                     "((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND " + 
                     "((CUSTOMER_GUID = @CUSTOMER_GUID) OR (@CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000'))",
-            param : ['ITEM_GUID:string|50','ITEM_CODE:string|25','TYPE:int','DEPOT:string|50','START_DATE:date','FINISH_DATE:date',
-                     'QUANTITY:float','CUSTOMER_CODE:string|25','CUSTOMER_GUID:string|50']
+            param : ['ITEM_GUID:string|36','ITEM_CODE:string|25','TYPE:int','DEPOT:string|36','START_DATE:date','FINISH_DATE:date',
+                     'QUANTITY:float','CUSTOMER_CODE:string|25','CUSTOMER_GUID:string|36']
         }
         tmpDt.insertCmd = 
         {
