@@ -4359,6 +4359,14 @@ export const langTr =
         cmbDepot: "Depo",
         txtCustomerCode : "Cari Kodu",
         txtCustomerName : "Cari Adı",
+        pg_Docs : 
+        {
+            title : "Evrak Seçimi",
+            clmRef : "SERİ",
+            clmRefNo : "SIRA",
+            clmOutputName : "CARİ ADI",
+            clmOutputCode  : "CARİ KODU",
+        },
         pg_txtCustomerCode : 
         {
             title : "Cari Seçimi",
@@ -4492,6 +4500,14 @@ export const langTr =
         txtCustomerCode : "Cari Kodu",
         txtCustomerName : "Cari Adı",
         validItemsCode : "Stok Seçimi",
+        pg_Docs : 
+        {
+            title : "Evrak Seçimi",
+            clmRef : "SERİ",
+            clmRefNo : "SIRA",
+            clmOutputName : "CARİ ADI",
+            clmOutputCode  : "CARİ KODU",
+        },
         pg_txtCustomerCode : 
         {
             title : "Cari Seçimi",
@@ -6080,5 +6096,9 @@ export const langTr =
             btn01: "Tamam",
             msg: "Lütfen gerekli alanları doldurunuz !"
         },
+    },
+    pos_02_003 : 
+    {
+        chkRowTotal : "Satır Toplamları"
     }
 }

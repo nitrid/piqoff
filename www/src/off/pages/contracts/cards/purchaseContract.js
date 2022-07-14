@@ -46,6 +46,39 @@ export default class purchaseContract extends React.Component
     {
         this.contractObj.clearAll();
              
+        this.contractObj.ds.on('onAddRow',(pTblName,pData) =>
+        {
+            if(pData.stat == 'new')
+            {
+                
+                this.btnNew.setState({disabled:false});
+                this.btnSave.setState({disabled:false});
+                this.btnDelete.setState({disabled:false});
+            }
+        })
+        this.contractObj.ds.on('onEdit',(pTblName,pData) =>
+        {            
+            if(pData.rowData.stat == 'edit')
+            {
+                this.btnNew.setState({disabled:false});
+                this.btnSave.setState({disabled:false});
+                this.btnDelete.setState({disabled:false});
+
+                pData.rowData.CUSER = this.user.CODE
+            }                 
+        })
+        this.contractObj.ds.on('onRefresh',(pTblName) =>
+        {            
+            this.btnNew.setState({disabled:false});
+            this.btnSave.setState({disabled:true});
+            this.btnDelete.setState({disabled:false});
+        })
+        this.contractObj.ds.on('onDelete',(pTblName) =>
+        {            
+            this.btnNew.setState({disabled:false});
+            this.btnSave.setState({disabled:false});
+            this.btnDelete.setState({disabled:false});
+        })
         this.cmbDepot.value = ''
         this.txtRef.value =this.user.CODE
         this.txtCustomerCode.value = ''
@@ -195,6 +228,7 @@ export default class purchaseContract extends React.Component
     }
     async multiItemSave()
     {
+        console.log(this.multiItemData)
         for (let i = 0; i < this.multiItemData.length; i++) 
         {                        
             let tmpEmpty = {...this.contractObj.empty};
@@ -264,6 +298,8 @@ export default class purchaseContract extends React.Component
                                                 {                                                    
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
+                                                    this.btnSave.setState({disabled:true});
+                                                    this.btnNew.setState({disabled:false});
                                                 }
                                                 else
                                                 {
@@ -412,7 +448,7 @@ export default class purchaseContract extends React.Component
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_Docs.title")} 
-                                    data={{source:{select:{query : "SELECT REF,REF_NO,ISNULL((SELECT TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = SALES_CONTRACT.CUSTOMER),'') FROM SALES_CONTRACT WHERE TYPE = 0 GROUP BY REF,REF_NO,CUSTOMER"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT REF,REF_NO,CUSTOMER,CUSTOMER_CODE,CUSTOMER_NAME FROM SALES_CONTRACT_VW_01 WHERE TYPE = 0 GROUP BY REF,REF_NO,CUSTOMER,CUSTOMER_CODE,CUSTOMER_NAME"},sql:this.core.sql}}}
                                     button=
                                     {
                                         [
@@ -430,8 +466,8 @@ export default class purchaseContract extends React.Component
                                     >
                                         <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150} defaultSortOrder="asc"/>
                                         <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="OUTPUT_NAME" caption={this.t("pg_Docs.clmOutputName")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="OUTPUT_CODE" caption={this.t("pg_Docs.clmOutputCode")} width={300} defaultSortOrder="asc" />
+                                        <Column dataField="CUSTOMER_NAME" caption={this.t("pg_Docs.clmOutputName")} width={300} defaultSortOrder="asc" />
+                                        <Column dataField="CUSTOMER_CODE" caption={this.t("pg_Docs.clmOutputCode")} width={300} defaultSortOrder="asc" />
                                         
                                     </NdPopGrid>
                                 </Item>
@@ -658,7 +694,6 @@ export default class purchaseContract extends React.Component
                                        
                                     }}
                                     onRowRemoved={async (e)=>{
-                                        await this.contractObj.save()
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />

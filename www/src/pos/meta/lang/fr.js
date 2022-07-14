@@ -421,7 +421,7 @@ export const langFr =
         NAME : "NOM",
         PRICE_SALE : "PRIX",
     },
-    grdBarcodeList : 
+    grdPopParkList : 
     {
         LUSER_NAME : "SAISIE UTILISATEUR",
         LDATE : "SAISIE DATE",
