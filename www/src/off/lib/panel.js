@@ -87,7 +87,7 @@ export default class Panel extends React.PureComponent
           deferRendering={true}
           showNavButtons={true}
           selectedIndex={selectedIndex}
-          repaintChangesOnly={false}
+          repaintChangesOnly={true}
           onOptionChanged={this.onSelectionChanged}
           itemComponent={Page}
         />
