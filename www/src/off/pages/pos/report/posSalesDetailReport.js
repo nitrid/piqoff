@@ -51,50 +51,23 @@ export default class posSalesDetailReport extends React.Component
                                 let tmpQuery = 
                                 {
                                     query : "SELECT " +
-                                            "POS.DOC_DATE AS DOC_DATE, " +
-                                            "POS.DEVICE AS DEVICE, " +
-                                            "CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE, " +
-                                            "'SALES' AS TITLE, " +
-                                            "'HT' AS TYPE, " +
-                                            "POS.VAT_RATE AS VAT_RATE, " +
-                                            "SUM(POS.FAMOUNT) AS AMOUNT " +
-                                            "FROM POS_SALE_VW_01 AS POS " +
-                                            "WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END " +
-                                            "GROUP BY POS.DOC_DATE,POS.TYPE,POS.VAT_RATE,POS.DEVICE " +
-                                            "UNION ALL " +
-                                            "SELECT " +
-                                            "POS.DOC_DATE AS DOC_DATE, " +
-                                            "POS.DEVICE AS DEVICE, " +
-                                            "CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE, " +
-                                            "'SALES' AS TITLE, " +
-                                            "'TVA' AS TYPE, " +
-                                            "POS.VAT_RATE AS VAT_RATE, " +
-                                            "SUM(POS.VAT) AS AMOUNT " +
-                                            "FROM POS_SALE_VW_01 AS POS " +
-                                            "WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END " +
-                                            "GROUP BY POS.DOC_DATE,POS.TYPE,POS.VAT_RATE,POS.DEVICE " +
-                                            "UNION ALL " +
-                                            "SELECT " +
-                                            "POS.DOC_DATE AS DOC_DATE, " +
-                                            "POS.DEVICE AS DEVICE, " +
-                                            "CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE, " +
-                                            "'PAYMENT' AS TITLE, " +
-                                            "CASE WHEN PAY_TYPE = 0 THEN 'ESC' " +
-                                            "WHEN PAY_TYPE = 1 THEN 'CB' " +
-                                            "WHEN PAY_TYPE = 2 THEN 'CHQ' " +
-                                            "WHEN PAY_TYPE = 3 THEN 'CHQe' " +
-                                            "WHEN PAY_TYPE = 4 THEN 'BON D''AVOIR' " +
-                                            "END AS TYPE, " +
-                                            "0 AS VAT_RATE, " +
-                                            "SUM(AMOUNT - CHANGE) AS AMOUNT " +
-                                            "FROM POS_PAYMENT_VW_01 AS POS " +
-                                            "WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END " +
-                                            "GROUP BY POS.GUID,POS.DOC_DATE,POS.TYPE,POS.PAY_TYPE,POS.DEVICE " , 
+                                    "ITEM_GRP_CODE AS CODE, " +
+                                    "ITEM_GRP_NAME, " +
+                                    "SUM(TOTAL) AS ITEM_GROUP_TOTAL, " +
+                                    "ROUND((SUM(TOTAL) / (SELECT SUM(TOTAL) FROM POS_VW_01)) * 100,2) AS TICKET_ORT, " +
+                                    "(SELECT COUNT(GUID) FROM POS_VW_01) AS TICKET_COUNT, " +
+                                    "(SELECT SUM(TOTAL) FROM POS_VW_01) AS TICKET_TOTAL, " +
+                                    "(SELECT COUNT(CUSTOMER_GUID) FROM POS_VW_01 WHERE CUSTOMER_GUID <> '00000000-0000-0000-0000-000000000000') AS CUSTOMER_CARD, " +
+                                    "(SELECT COUNT(GUID) FROM POS_VW_01 WHERE TYPE = 1) AS RETURN_COUNT, " +
+                                    "(SELECT SUM(TOTAL) FROM POS_VW_01 WHERE TYPE = 1) AS RETURN_TOTAL, " +
+                                    "(SELECT COUNT(DISCOUNT) FROM POS_VW_01 WHERE TYPE = 0 AND DISCOUNT > 0) AS DISCOUNT_COUNT, " +
+                                    "(SELECT SUM(DISCOUNT) FROM POS_VW_01 WHERE TYPE = 0) AS DISCOUNT_TOTAL " +
+                                    "FROM POS_SALE_VW_01 WHERE DOC_DATE >= @START AND DOC_DATE <= @END GROUP BY ITEM_GRP_CODE,ITEM_GRP_NAME ORDER BY ITEM_GRP_CODE ASC ",
                                     param : ['START:date','END:date'],
                                     value : [this.dtDate.startDate,this.dtDate.endDate]
                                 }
                                 let tmpData = await this.core.sql.execute(tmpQuery)
-                                
+                                console.log(tmpData)
                                 if(tmpData.result.recordset.length > 0)
                                 {
                                     this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'./plugins/devprint/repx/rpt/posSalesDetail.repx',DATA:" +  JSON.stringify(tmpData.result.recordset)+ "}",(pResult) => 
