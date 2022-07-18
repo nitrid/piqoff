@@ -129,7 +129,7 @@ export default class App extends React.PureComponent
             }
         ];
         
-        this.core = new core(io(window.location.origin,{timeout:100000}));
+        this.core = new core(io(window.location.origin,{timeout:100000,transports : ['websocket']}));
         this.textValueChanged = this.textValueChanged.bind(this)
         this.onDbClick = this.onDbClick.bind(this)
 
