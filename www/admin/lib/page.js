@@ -7,7 +7,7 @@ import {acs} from '../meta/acs.js'
 import { dialog } from '../../../../core/react/devex/dialog.js';
 
 
-export default class Page extends React.Component
+export default class Page extends React.PureComponent
 {
   constructor(props)
   {

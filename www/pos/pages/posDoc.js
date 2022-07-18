@@ -28,7 +28,7 @@ import { dataset,datatable,param,access } from "../../core/core.js";
 import {prm} from '../meta/prm.js'
 import {acs} from '../meta/acs.js'
 
-export default class posDoc extends React.Component
+export default class posDoc extends React.PureComponent
 {
     constructor()
     {

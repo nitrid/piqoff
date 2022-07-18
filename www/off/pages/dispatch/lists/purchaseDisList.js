@@ -16,7 +16,7 @@ import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 
-export default class purchaseDisList extends React.Component
+export default class purchaseDisList extends React.PureComponent
 {
     constructor(props)
     {

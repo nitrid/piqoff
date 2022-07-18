@@ -5,7 +5,7 @@ import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
 import NdSelectBox from '../../core/react/devex/selectbox.js';
 import { userCls } from '../../core/cls/users.js';
 
-export default class userPage extends React.Component
+export default class userPage extends React.PureComponent
 {
     constructor(props)
     {

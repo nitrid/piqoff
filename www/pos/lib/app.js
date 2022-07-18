@@ -13,7 +13,7 @@ import HTMLReactParser from 'html-react-parser';
 
 import Login from './login.js'
 import Pos from '../pages/posDoc.js'
-export default class App extends React.Component
+export default class App extends React.PureComponent
 {
     static instance = null;
 

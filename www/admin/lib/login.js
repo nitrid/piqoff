@@ -3,7 +3,7 @@ import App from './app.js'
 import TextBox from 'devextreme-react/text-box';
 import Button from 'devextreme-react/button';
 
-export default class Login extends React.Component
+export default class Login extends React.PureComponent
 {
     constructor()
     {

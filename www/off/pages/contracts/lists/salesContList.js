@@ -15,7 +15,7 @@ import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 
-export default class salesContList extends React.Component
+export default class salesContList extends React.PureComponent
 {
     constructor(props)
     {

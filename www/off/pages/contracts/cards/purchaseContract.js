@@ -18,7 +18,7 @@ import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 
-export default class purchaseContract extends React.Component
+export default class purchaseContract extends React.PureComponent
 {
     constructor()
     {

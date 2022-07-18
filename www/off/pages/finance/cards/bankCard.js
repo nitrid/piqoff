@@ -22,7 +22,7 @@ import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 
-export default class bankCard extends React.Component
+export default class bankCard extends React.PureComponent
 {
     constructor()
     {

@@ -5,7 +5,7 @@ import App from './app.js';
 
 // DOUBLE CLİCK ICIN YAPILDI
 let timeout = null;
-export default class Navigation extends React.Component 
+export default class Navigation extends React.PureComponent 
 {
     constructor()
     {        

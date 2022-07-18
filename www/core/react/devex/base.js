@@ -5,7 +5,7 @@ import { core } from '../../core.js';
 import { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from 'devextreme-react/validator';
 
 export { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule }
-export default class NdBase extends React.Component
+export default class NdBase extends React.PureComponent
 {
     constructor(props)
     {

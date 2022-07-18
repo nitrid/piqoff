@@ -1,7 +1,7 @@
 import React from 'react';
 import { datatable } from '../../core.js';
 
-export default class NbBase extends React.Component
+export default class NbBase extends React.PureComponent
 {
     constructor(props)
     {

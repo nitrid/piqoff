@@ -9,7 +9,7 @@ import App from '../lib/app.js';
 import { datatable } from '../../core/core.js';
 import TextBox from 'devextreme-react/text-box';
 
-export default class Test extends React.Component
+export default class Test extends React.PureComponent
 {
     constructor(props)
     {

@@ -16,7 +16,7 @@ import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 
-export default class PriceDiffInvList extends React.Component
+export default class PriceDiffInvList extends React.PureComponent
 {
     constructor(props)
     {

@@ -22,7 +22,7 @@ import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
 
-export default class purchaseDispatch extends React.Component
+export default class purchaseDispatch extends React.PureComponent
 {
     constructor()
     {

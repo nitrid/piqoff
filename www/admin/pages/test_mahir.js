@@ -6,7 +6,7 @@ import Button from '../../core/react/bootstrap/button.js';
 import PopUp from '../../core/react/bootstrap/popup.js';
 import NdDatePicker from '../../core/react/devex/datepicker.js';
 
-export default class Test_Mahir extends React.Component
+export default class Test_Mahir extends React.PureComponent
 {
     constructor(props)
     {

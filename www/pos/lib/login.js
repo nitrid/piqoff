@@ -14,7 +14,7 @@ import { Gallery } from 'devextreme-react/gallery';
 import { locale, loadMessages, formatMessage } from 'devextreme/localization';
 import { dialog } from '../../core/react/devex/dialog.js';
 
-export default class Login extends React.Component
+export default class Login extends React.PureComponent
 {
     constructor()
     {
