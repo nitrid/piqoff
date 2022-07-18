@@ -245,10 +245,14 @@ export const langTr =
         msg : "Tutar dan fazla iskonto yapılamaz !",
         btn01 : "Tamam"
     },
-    availablePoint : "Mevcut Puan : ",
-    usePoint : "Kullanılan Puan : ",
-    remainderPoint : "Kalan Puan : ",
-    pointtoCash : "Puan Karşılığı € : ",
+    popLoyalty:
+    {
+        title : "Sadakat İndirimi",
+        availablePoint : "Mevcut Puan : ",
+        usePoint : "Kullanılan Puan : ",
+        remainderPoint : "Kalan Puan : ",
+        pointtoCash : "Puan Karşılığı € : ",
+    },
     msgPointNotBigToPoint: 
     {
         title : "Dikkat",
@@ -419,7 +423,7 @@ export const langTr =
         NAME : "ADI",
         PRICE_SALE : "FIYAT",
     },
-    grdBarcodeList : 
+    grdPopParkList : 
     {
         LUSER_NAME : "D. KULLANICI",
         LDATE : "D. TARIH",
@@ -495,5 +499,12 @@ export const langTr =
         msg : "Lütfen cihaz kodunu boş geçmeyiniz !",
         btn01 : "Tamam",
     },
-    popTitleDevice : "Kasa Kodu Giriş"
+    popTitleDevice : "Kasa Kodu Giriş",
+    msgDeviceNotChange : 
+    {
+        title : "Uyarı",
+        msg : "Satış Yapılıken Kasa Değiştirilemez! Lütfen Satışı İptal Edin..",
+        btn01 : "Tamam",
+    },
+    
 }

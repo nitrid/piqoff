@@ -665,7 +665,7 @@ export default class posDoc extends React.PureComponent
     {
         if(pType == 'SALE')
         {
-            let tmpData = this.posObj.posSale.dt().where({ITEM_GUID:pData.GUID}).where({SUBTOTAL:0}).where({QUANTITY:{'>':0}})
+            let tmpData = this.posObj.posSale.dt().where({ITEM_GUID:pData.GUID}).where({SUBTOTAL:0}).where({QUANTITY:{'>':0}}).where({PRICE:pData.PRICE})
             if(tmpData.length > 0)
             {
                 //UNIQ ÜRÜN İÇİN pData.INPUT == pData.UNIQ_CODE
@@ -1506,6 +1506,20 @@ export default class posDoc extends React.PureComponent
                                 </div>
                                 <div className="row" style={{height:"25px"}} onClick={async()=>
                                 {
+                                    if(this.posObj.posSale.dt().length > 0)
+                                    {
+                                    let tmpConfObj =
+                                    {
+                                        id:'msgDeviceNotChange',showTitle:true,title:this.lang.t("msgDeviceNotChange.title"),showCloseButton:true,width:'500px',height:'200px',
+                                        button:[{id:"btn01",caption:this.lang.t("msgDeviceNotChange.btn01"),location:'after'}],
+                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDeviceNotChange.msg")}</div>)
+                                    }
+                                    let tmpMsgResult = await dialog(tmpConfObj);
+                                    if(tmpMsgResult == 'btn01')
+                                    {
+                                        return
+                                    }
+                                    }
                                     let tmpAcsVal = this.acsObj.filter({ID:'btnDeviceEntry',TYPE:2,USERS:this.user.CODE})
                                         
                                     if(typeof tmpAcsVal.getValue().dialog != 'undefined' && tmpAcsVal.getValue().dialog.type != -1)
@@ -2109,7 +2123,7 @@ export default class posDoc extends React.PureComponent
                                             {
                                                 let tmpData = 
                                                 {
-                                                    QUANTITY:this.grdList.devGrid.getSelectedRowsData()[0].QUANTITY + 1,
+                                                    QUANTITY:Number(this.grdList.devGrid.getSelectedRowsData()[0].QUANTITY) + 1,
                                                     PRICE:this.grdList.devGrid.getSelectedRowsData()[0].PRICE
                                                 }
                                                 this.saleRowUpdate(this.grdList.devGrid.getSelectedRowsData()[0],tmpData)
@@ -2434,6 +2448,7 @@ export default class posDoc extends React.PureComponent
                                                         this.posObj.dt()[0].CUSTOMER_CODE = ''
                                                         this.posObj.dt()[0].CUSTOMER_NAME = ''
                                                         this.posObj.dt()[0].CUSTOMER_POINT = 0
+                                                        this.btnPopLoyaltyDel.props.onClick()
         
                                                         this.calcGrandTotal(false);
                                                     }
@@ -3046,9 +3061,9 @@ export default class posDoc extends React.PureComponent
                                 }}
                                 >
                                     <Column dataField="LUSER_NAME" caption={this.lang.t("grdPopParkList.LUSER_NAME")} width={120} alignment={"center"}/>
-                                    <Column dataField="LDATE" caption={this.lang.t("grdBarcodeList.LDATE")} width={150} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"} />
-                                    <Column dataField="TOTAL" caption={this.lang.t("grdBarcodeList.TOTAL")} width={100} format={"#,##0.00" + Number.money.sign}/>
-                                    <Column dataField="DESCRIPTION" caption={this.lang.t("grdBarcodeList.DESCRIPTION")} width={400}/>
+                                    <Column dataField="LDATE" caption={this.lang.t("grdPopParkList.LDATE")} width={150} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"} />
+                                    <Column dataField="TOTAL" caption={this.lang.t("grdPopParkList.TOTAL")} width={100} format={"#,##0.00" + Number.money.sign}/>
+                                    <Column dataField="DESCRIPTION" caption={this.lang.t("grdPopParkList.DESCRIPTION")} width={400}/>
                                 </NdGrid>
                             </div>
                         </div>
@@ -3445,8 +3460,13 @@ export default class posDoc extends React.PureComponent
                             <div className="col-12">
                                 <NdTextBox id="txtPopLoyalty" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}
                                 onValueChanged={(e)=>
-                                {
-                                    this.popCustomerPointToEuro.value = Number(parseFloat(e.value / 100).toFixed(2)) + Number.money.sign
+                                { 
+                                    if(e.value == 0)
+                                    {
+                                        this.popCustomerPointToEuro.value = 0 
+                                        return
+                                    }
+                                    this.popCustomerPointToEuro.value = Number(parseFloat(e.value / 100).toFixed(2)).toString()
                                 }}>     
                                 </NdTextBox> 
                             </div>
