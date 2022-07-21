@@ -66,6 +66,10 @@
             {
                 initialize: function() {
                     this.bindEvents();
+                    document.getElementById('host').value = localStorage.host
+                    document.getElementById('port').value = localStorage.port
+                    document.getElementById('socketport').value = localStorage.socketport
+                    
                 },
                 bindEvents: function() {
                     document.addEventListener('deviceready', this.onDeviceReady, false);
@@ -159,7 +163,6 @@
             app.initialize();
             function BtnKaydet()
             {
-                console.log(111)
                 var host = document.getElementById('host').value;
                 var sockethost = document.getElementById('host').value;
 
