@@ -10,6 +10,7 @@ module.exports =
         admin: './src/admin/index.js',
         off: './src/off/index.js',
         pos: './src/pos/index.js',
+        mob: './src/mob/index.js',
     },    
     mode: "development",
     module: 
@@ -67,6 +68,9 @@ module.exports =
             },
             {
                 directory: path.join(__dirname, "public/pos")
+            },
+            {
+                directory: path.join(__dirname, "public/mob")
             }
         ],
         port: 3000,
@@ -92,6 +96,12 @@ module.exports =
                 { from: "./src/off/css/icons/", to: "./off/css/icons/" },
                 { from: "./src/off/css/icons/", to: "./off/css/icons/" },
                 { from: "./src/off/printview.html", to: "./off/printview.html" },
+                { from: "./src/mob/css/img/", to: "./mob/css/img/" },
+                { from: "./src/mob/css/icons/", to: "./mob/css/icons/" },
+                { from: "./src/mob/appUpdate.html", to: "./mob/appUpdate.html" },
+                { from: "./src/mob/css/bootstrap.min.css", to: "./mob/css/bootstrap.min.css" },
+                { from: "./src/mob/lib/bootstrap.bundle.min.js", to: "./mob/lib/bootstrap.bundle.min.js" },
+                { from: "./src/mob/lib/socket.io.js", to: "./mob/lib/socket.io.js" },
             ]
         }),
         new htmlWebPackPlugin(
@@ -111,6 +121,12 @@ module.exports =
             template: './src/pos/index.html',
             filename: 'pos/index.html',
             chunks: ['pos']
+        }),
+        new htmlWebPackPlugin(
+        {
+            template: './src/mob/index.html',
+            filename: 'mob/index.html',
+            chunks: ['mob']
         }),
     ]
 };
