@@ -92,7 +92,7 @@ export default class Login extends React.Component
             this.Sifre.focus()
         }
     }
-    closePage()
+    async closePage()
     {
         window.close()
     }

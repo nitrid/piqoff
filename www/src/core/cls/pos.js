@@ -925,6 +925,7 @@ export class posDeviceCls
         if(core.instance.util.isElectron())
         {
             this.escpos = global.require('escpos');
+            console.log(this.escpos)
             this.escpos.Serial = global.require('escpos-serialport');
             this.escpos.Screen = global.require('escpos-screen');
             this.escpos.USB = global.require('escpos-usb');
