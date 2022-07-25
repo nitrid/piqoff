@@ -1,4 +1,7 @@
 import { isProxy } from 'is-proxy';
+import * as JsStore from 'jsstore';
+import { jsworker } from './jsworker.js';
+
 export class core
 {        
     static instance = null;
@@ -157,7 +160,7 @@ export class local
     {
         if(typeof JsStore != 'undefined')
         {
-            this.conn = new JsStore.Connection(new Worker("../js/jsstore.worker.js"))
+            this.conn = new JsStore.Connection(new Worker(URL.createObjectURL(new Blob(["("+jsworker.toString()+")()"], {type: 'text/javascript'}))));
         }
     }
     async init(pDb)
@@ -313,6 +316,21 @@ export class local
                 resolve({result:{}});
             }
         });        
+    }
+    dropDb()
+    {
+        return new Promise(async resolve => 
+        {
+            this.conn.dropDb().then(async function() 
+            {
+                console.log('Db deleted successfully');
+                resolve(true)                
+            }).catch(function(error) 
+            {                
+                console.log(error);
+                resolve(false)
+            });    
+        });
     }
 }
 export class auth 

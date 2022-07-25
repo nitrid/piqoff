@@ -23,6 +23,8 @@ import HTMLReactParser from 'html-react-parser';
 
 import Login from './login.js'
 import Pos from '../pages/posDoc.js'
+import transferCls from './transfer.js'
+
 export default class App extends React.Component
 {
     static instance = null;
@@ -108,10 +110,11 @@ export default class App extends React.Component
                 }
             }
         ];
-
-        this.core = new core(io(window.location.origin,{timeout:100000}));
+        console.log(window.location.origin)
+        this.core = new core(io('http://localhost',{timeout:100000,transports : ['websocket']}));
         this.textValueChanged = this.textValueChanged.bind(this)
         this.onDbClick = this.onDbClick.bind(this)
+        this.transfer = new transferCls()
 
         if(!App.instance)
         {
