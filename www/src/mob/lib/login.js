@@ -88,6 +88,7 @@ export default class Login extends React.Component
     {
         let tmpData = await this.core.auth.getUserList()
         await this.pg_users.setData(tmpData)
+        console.log(this.pg_users)
         this.pg_users.show()
         this.pg_users.onClick = (data) =>
         {

@@ -940,6 +940,7 @@ export const langTr =
         chkAllItems : "Tüm Ürünler",
         AddItems : "Ekle",
         txtBarcode : "Barkod Ekle",
+        validDesign : "Lütfen Dizayn Seçin",
         pg_Docs : 
         {
             title : "Evrak Seçimi",

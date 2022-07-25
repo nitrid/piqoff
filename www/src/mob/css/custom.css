@@ -14,7 +14,6 @@
 .dx-device-mobile .dx-toolbar
 {
     padding: 10px;
-  height: 100%;
 }
 .dx-drawer-panel-content
 {
@@ -106,4 +105,7 @@
 .dx-layout-manager
 {
     height: fit-content;
+}
+.row {
+    --bs-gutter-x: 0.5rem;
 }

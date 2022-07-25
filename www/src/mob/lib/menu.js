@@ -19,6 +19,11 @@ export const menu = (e) =>
                             text: e.t('menu.stk_01_001'),//'Stok Tanımları',
                             path: 'items/cards/itemCard'
                         },
+                         {
+                            id: 'stk_01_002',
+                            text: e.t('menu.stk_01_002'),//'Stok Tanımları',
+                            path: 'items/documents/labelPrinting'
+                        },
                     ]
                 },
             ]
