@@ -1,9 +1,0 @@
-{
-    "explorer.fileNesting.enabled": false,
-    "typescript.validate.enable": true,
-    "explorer.excludeGitIgnore": false,
-    "scm.alwaysShowRepositories": false,
-    "scm.alwaysShowActions": false,
-    "scm.autoReveal": true,
-    "extensions.ignoreRecommendations": false
-}
