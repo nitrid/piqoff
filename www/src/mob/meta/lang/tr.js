@@ -54,6 +54,14 @@ export const langTr =
         btnBarcodeEntry : "Barkod Girişi",
         btnDocument : "İşlem Satırları",
         validDesign : "Lütfen Dizayn Seçin",
+        numPrice :"Fiyat",
+        btnItemAdd: "Ekle",
+        msgDesignSelect:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Dizayn Seçiniz.."
+        },
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -66,23 +74,12 @@ export const langTr =
             clmCode :  "STOK KODU",
             clmName : "STOK ADI",
         },
-        grdLabelQueue: 
-        {
-            clmItemCode: "Kodu",
-            clmBarcode : "Barkod",
-            clmItemName: "Adı",
-            clmItemGrpName : "Ürün Grubu",
-            clmPrice: "Fiyat",
-            clmUnderUnit : "Alt Birim",
-            clmUnderUnit : "Alt Birim",
-            clmUnderUnitPrice : "Alt Birim Fiyatı",
-            clmDescription :"Açıklama"
-        },
         grdLblPrinting :
         {
             clmItemCode: "Kodu",
             clmBarcode : "Barkod",
             clmItemName: "Adı",
+            clmPrice :"Fiyat",
         },
         msgDocValid:
         {
@@ -136,23 +133,23 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Kayıt Edildi Ve Kilitlendi !"
         },
-        msgPasswordSucces:
-        {
-            title: "Başarılı",
-            btn01: "Tamam",
-            msg: "Evrakın Kilidi Açıldı !",
-        },
-        msgPasswordWrong:
-        {
-            title: "Başarısız",
-            btn01: "Tamam",
-            msg: "Şifreniz Hatalı !"
-        },
-        msgGetLocked:
+        msgBarcodeCheck:
         {
             title: "Dikkat",
             btn01: "Tamam",
-            msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
+            msg: "Lütfen Barkod Okutunuz !",
+        },
+        msgBarcodeNotFound:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Barkod Bulunamadı !"
+        },
+        msgItemsAdd:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Seçtiğiniz Ürünler Eklendi !"
         },
         msgDoclocked:
         {

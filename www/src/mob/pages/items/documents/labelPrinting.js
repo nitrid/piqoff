@@ -37,7 +37,10 @@ export default class labelPrinting extends React.Component
         }     
         this.barcode = 
         {
-            name:"AYTAC KAVURMA/BOEUF PRECUIT SOUS VIDE 300G"
+            name:"",
+            price:0,
+            barcode: "",
+            code:""
         }
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
@@ -45,10 +48,11 @@ export default class labelPrinting extends React.Component
         this.lblObj = new labelCls();
         this.mainLblObj = new labelMainCls()
         this.pageCount = 0;
-        this.dropmenuMainItems = [this.t("btnNew"),this.t("btnSave"),this.t("btnDelete")]
+        this.dropmenuMainItems = [this.t("btnNew"),this.t("btnSave")]
         this.dropmenuDocItems = [this.t("btnDeleteRow")]
         this.pageChange = this.pageChange.bind(this)
         this.vsChange = this.vsChange.bind(this)
+        this.dropmenuClick = this.dropmenuClick.bind(this)
        
 
 
@@ -73,30 +77,112 @@ export default class labelPrinting extends React.Component
         this.txtSer.readOnly = true
         this.calculateCount()
         
-        //await this.grdLabelQueue.dataRefresh({source:this.lblObj.dt('LABEL_QUEUE')});
+        await this.grdLblPrinting.dataRefresh({source:this.lblObj.dt('LABEL_QUEUE')});
 
         this.txtSer.props.onChange()
     }
-    dropmenuClick(e)
+    async dropmenuClick(e)
     {
-        console.log(e)
+        if(e.itemData == this.t("btnNew"))
+        {
+            this.init()
+        }
+        else if(e.itemData == this.t("btnSave"))
+        {
+            let tmpConfObj =
+            {
+                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'350px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
+            }
+            
+            let pResult = await dialog(tmpConfObj);
+            if(pResult == 'btn01')
+            {
+                let Data = {data:this.lblObj.dt().toArray()}
+                this.mainLblObj.dt()[0].DATA = JSON.stringify(Data)
+
+                let tmpConfObj1 =
+                {
+                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'350px',height:'200px',
+                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                }
+                
+                if((await this.mainLblObj.save()) == 0)
+                {                       
+                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
+                    await dialog(tmpConfObj1);
+                }
+                else
+                {
+                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                    await dialog(tmpConfObj1);
+                }
+            }
+        }
     }
     calculateCount()
     {
         this.txtPage.value = Math.ceil(this.lblObj.dt().length /this.pageCount)
+        this.txtBarPage.value = Math.ceil(this.lblObj.dt().length /this.pageCount)
         if(this.txtPage.value == '')
         {
-            this.txtPage.value = 'Lütfen Dizayn Seçiniz'
+            this.txtPage.value = this.t("validDesign")
+            this.txtBarPage.value = this.t("validDesign")
         }
         if(this.pageCount == 0)
         {
-            this.txtFreeLabel.value = 'Lütfen Dizayn Seçiniz'
+            this.txtFreeLabel.value = this.t("validDesign")
+            this.txtBarFreeLabel.value = this.t("validDesign")
         }
         else
         {
             this.txtFreeLabel.value = this.pageCount - (this.lblObj.dt().length % this.pageCount)
+            this.txtBarFreeLabel.value  = this.pageCount - (this.lblObj.dt().length % this.pageCount)
         }
         this.txtLineCount.value = this.lblObj.dt().length
+        this.txtBarLineCount.value = this.lblObj.dt().length
+    }
+    async getDoc(pGuid)
+    {
+        this.lblObj.clearAll()
+        this.mainLblObj.clearAll()
+        await this.lblObj.load({GUID:pGuid});
+        await this.mainLblObj.load({GUID:pGuid});
+        let tmpQuery = 
+        {
+            query : "SELECT PAGE_COUNT FROM LABEL_DESIGN  WHERE TAG = @TAG ",
+            param : ['TAG:string|50'],
+            value : [this.mainLblObj.dt()[0].DESING]
+        }
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        this.pageCount = tmpData.result.recordset[0].PAGE_COUNT
+        this.calculateCount()
+
+        this.txtSer.readOnly = true
+        this.txtRefno.readOnly = true
+    }
+    async getDocs(pType)
+    {
+        let tmpQuery = 
+        {
+            query : "SELECT GUID,REF,REF_NO FROM LABEL_QUEUE WHERE STATUS IN("+pType+") AND REF = '" +this.txtSer.value+"' " 
+        }
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        let tmpRows = []
+        if(tmpData.result.recordset.length > 0)
+        {
+            tmpRows = tmpData.result.recordset
+        }
+        await this.pg_Docs.setData(tmpRows)
+        this.pg_Docs.show()
+        this.pg_Docs.onClick = (data) =>
+        {
+            if(data.length > 0)
+            {
+                this.getDoc(data[0].GUID)
+            }
+        }
     }
     async pageChange(pPage)
     {
@@ -108,9 +194,21 @@ export default class labelPrinting extends React.Component
         }
         if(pPage == "Barcode")
         {
+            if(this.cmbDesignList.value == "")
+            {
+                let tmpConfObj = 
+                {
+                    id:'msgDesignSelect',showTitle:true,title:this.t("msgDesignSelect.title"),showCloseButton:true,width:'350px',height:'200px',
+                    button:[{id:"btn01",caption:this.t("msgDesignSelect.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDesignSelect.msg")}</div>)
+                }
+                let pResult = await dialog(tmpConfObj);
+                return
+            }
             this.setState({tbMain:"hidden"})
             this.setState({tbBarcode:"visible"})
             this.setState({tbDocument:"hidden"})
+            this.txtBarcode.focus()
         }
         if(pPage == "Document")
         {
@@ -119,23 +217,33 @@ export default class labelPrinting extends React.Component
             this.setState({tbDocument:"visible"})
         }
     }    
-    async addItem(pData,pIndex)
+    async addItem()
     {
+        if(this.txtBarcode.value == "")
+        {
+            let tmpConfObj = 
+            {
+                id:'msgBarcodeCheck',showTitle:true,title:this.t("msgBarcodeCheck.title"),showCloseButton:true,width:'350px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgBarcodeCheck.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcodeCheck.msg")}</div>)
+            }
+            let pResult = await dialog(tmpConfObj);
+            return
+        }
         for (let i = 0; i < this.lblObj.dt().length; i++) 
         {
-            if(this.lblObj.dt()[i].CODE == pData.CODE)
+            if(this.lblObj.dt()[i].CODE == this.barcode.code)
             {
                 let tmpConfObj = 
                 {
-                    id:'msgCombineItem',showTitle:true,title:this.t("msgCombineItem.title"),showCloseButton:true,width:'500px',height:'200px',
+                    id:'msgCombineItem',showTitle:true,title:this.t("msgCombineItem.title"),showCloseButton:true,width:'350px',height:'200px',
                     button:[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}],
                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>)
                 }
                 let pResult = await dialog(tmpConfObj);
                 if(pResult == 'btn01')
-                {
-                   
-                    await this.grdLabelQueue.devGrid.deleteRow(pIndex)
+                {                   
+                    this.barcodeReset()
                     return
                 }
                 else
@@ -145,16 +253,33 @@ export default class labelPrinting extends React.Component
                 
             }
         }
-        this.lblObj.dt()[pIndex].CODE = pData.CODE
-        this.lblObj.dt()[pIndex].BARCODE = pData.BARCODE
-        this.lblObj.dt()[pIndex].NAME = pData.NAME
-        this.lblObj.dt()[pIndex].ITEM_GRP = pData.ITEM_GRP
-        this.lblObj.dt()[pIndex].ITEM_GRP_NAME = pData.ITEM_GRP_NAME
-        this.lblObj.dt()[pIndex].PRICE = pData.PRICE
-        this.lblObj.dt()[pIndex].UNDER_UNIT_VALUE = pData.UNDER_UNIT_VALUE
-        this.lblObj.dt()[pIndex].UNDER_UNIT_PRICE = pData.UNDER_UNIT_PRICE
-        this.lblObj.dt()[pIndex].PRICE = pData.PRICE
-        this.lblObj.dt()[pIndex].LINE_NO = pIndex + 1
+        let tmpDocItems = {...this.lblObj.empty}
+        tmpDocItems.REF = this.mainLblObj.dt()[0].REF
+        tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
+        tmpDocItems.NAME = this.barcode.name
+        tmpDocItems.CODE = this.barcode.code
+        tmpDocItems.BARCODE = this.barcode.barcode
+        tmpDocItems.PRICE = this.barcode.price
+        this.lblObj.addEmpty(tmpDocItems)
+        this.barcodeReset()
+       
+    }
+    barcodeReset()
+    {
+        if(this.chkAutoAdd.value == false)
+        {
+            this.barcode = 
+            {
+                name:"",
+                price:0,
+                barcode: "",
+                code:""
+            }
+            this.numPrice.value=0
+        }
+        this.txtBarcode.value = ""
+        this.setState({tbBarcode:"visible"})
+        this.txtBarcode.focus()
         this.calculateCount()
     }
     vsChange()
@@ -202,7 +327,7 @@ export default class labelPrinting extends React.Component
                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                     if(tmpData.result.recordset.length > 0)
                                     {
-                                        this.txtRefno.setState({value:tmpData.result.recordset[0].REF_NO})
+                                        this.txtRefno.value=tmpData.result.recordset[0].REF_NO
                                     }
                                 }).bind(this)}
                                 param={this.param.filter({ELEMENT:'txtSer',USERS:this.user.CODE})}
@@ -280,8 +405,8 @@ export default class labelPrinting extends React.Component
                             
                         }
                         >
-                            <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150} defaultSortOrder="asc"/>
-                            <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={300} defaultSortOrder="asc" />
+                            <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={100} defaultSortOrder="asc"/>
+                            <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={50} defaultSortOrder="asc" />
                         </NdPopGrid>
                     </Item>
                     {/* design */}
@@ -384,35 +509,92 @@ export default class labelPrinting extends React.Component
                                 {
                                     id:'01',
                                     icon:'more',
-                                    onClick:()=>
+                                    onClick:async()=>
                                     {
                                         this.popItemCode.show()
                                         this.popItemCode.onClick = async(data) =>
                                         {
                                             if(data.length == 1)
                                             {
-                                                    let tmpDocItems = {...this.lblObj.empty}
-                                                    tmpDocItems.REF = this.mainLblObj.dt()[0].REF
-                                                    tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
-                                                    this.lblObj.addEmpty(tmpDocItems)
-                                                    this.addItem(data[i],this.lblObj.dt().length -1)
+                                                this.txtBarcode.value = data[0].CODE
+                                                this.barcode = {
+                                                    name:data[0].NAME,
+                                                    code:data[0].CODE,
+                                                    barcode:data[0].BARCODE,
+                                                    price:data[0].PRICE
+                                                }
+                                                this.numPrice.value = data[0].PRICE
+                                                this.setState({tbBarcode:"visible"})
                                             }
                                             else if(data.length > 1)
                                             {
                                                 for (let i = 0; i < data.length; i++) 
                                                 {
-                                                    let tmpDocItems = {...this.lblObj.empty}
-                                                    tmpDocItems.REF = this.mainLblObj.dt()[0].REF
-                                                    tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
-                                                    this.lblObj.addEmpty(tmpDocItems)
-                                                    this.addItem(data[i],this.lblObj.dt().length -1)
+                                                    this.txtBarcode.value = data[i].CODE
+                                                    this.barcode = {
+                                                        name:data[i].NAME,
+                                                        code:data[i].CODE,
+                                                        barcode:data[i].BARCODE,
+                                                        price:data[i].PRICE
+                                                    }
+                                                    await this.addItem()
                                                 }
+                                                let tmpConfObj = 
+                                                {
+                                                    id:'msgItemsAdd',showTitle:true,title:this.t("msgItemsAdd.title"),showCloseButton:true,width:'350px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgItemsAdd.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemsAdd.msg")}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
                                             }
                                         }
                                     }
                                 }
                             ]
-                            }></NdTextBox>
+                            }
+                            onEnterKey={(async(e)=>
+                                {
+                                    if(e.component._changedValue == "")
+                                    {
+                                        return
+                                    }
+                                    let tmpQuery = 
+                                    {
+                                        query : "SELECT ITEM_CODE AS CODE,ITEM_NAME AS NAME,ITEM_GUID AS GUID,BARCODE,[dbo].[FN_PRICE_SALE](ITEM_GUID,1,GETDATE()) AS PRICE FROM ITEM_BARCODE_VW_01  WHERE BARCODE = @BARCODE OR ITEM_CODE = @BARCODE ",
+                                        param : ['BARCODE:string|50'],
+                                        value : [e.component._changedValue]
+                                    }
+                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                    if(tmpData.result.recordset.length >0)
+                                    {
+                                        this.barcode.name = tmpData.result.recordset[0].NAME
+                                        this.barcode.barcode = tmpData.result.recordset[0].BARCODE 
+                                        this.barcode.code = tmpData.result.recordset[0].CODE 
+                                        this.barcode.price = tmpData.result.recordset[0].PRICE 
+                                        this.numPrice.value = parseFloat(tmpData.result.recordset[0].PRICE)
+                                        if(this.chkAutoAdd.value == true)
+                                        {
+                                            this.addItem()
+                                        }
+                                        else
+                                        {
+                                            this.numPrice.focus()
+                                        }
+                                        this.setState({tbBarcode:"visible"})
+                                    }
+                                    else
+                                    {
+                                        let tmpConfObj = 
+                                        {
+                                            id:'msgBarcodeNotFound',showTitle:true,title:this.t("msgBarcodeNotFound.title"),showCloseButton:true,width:'350px',height:'200px',
+                                            button:[{id:"btn01",caption:this.t("msgBarcodeNotFound.btn01"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcodeNotFound.msg")}</div>)
+                                        }
+                                        await dialog(tmpConfObj);
+                                        this.txtBarcode.value = ""
+                                    }
+                                    
+                                }).bind(this)}></NdTextBox>
                         </div>
                     </Item>
                     <Item> 
@@ -425,7 +607,7 @@ export default class labelPrinting extends React.Component
                      {/* txtPage */}
                      <Item>
                         <Label text={this.t("txtPage")} alignment="right" />
-                        <NdTextBox id="txtPage" parent={this} simple={true}  
+                        <NdTextBox id="txtBarPage" parent={this} simple={true}  
                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                         readOnly={true}
                         param={this.param.filter({ELEMENT:'txtPage',USERS:this.user.CODE})}
@@ -436,7 +618,7 @@ export default class labelPrinting extends React.Component
                     {/* txtFreeLabel */}
                     <Item>
                         <Label text={this.t("txtFreeLabel")} alignment="right" />
-                        <NdTextBox id="txtFreeLabel" parent={this} simple={true}  
+                        <NdTextBox id="txtBarFreeLabel" parent={this} simple={true}  
                         readOnly={true}
                         param={this.param.filter({ELEMENT:'txtFreeLabel',USERS:this.user.CODE})}
                         access={this.access.filter({ELEMENT:'txtFreeLabel',USERS:this.user.CODE})}
@@ -446,7 +628,7 @@ export default class labelPrinting extends React.Component
                     {/* txtLineCount */}
                     <Item>
                         <Label text={this.t("txtLineCount")} alignment="right" />
-                        <NdTextBox id="txtLineCount" parent={this} simple={true}  
+                        <NdTextBox id="txtBarLineCount" parent={this} simple={true}  
                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                         readOnly={true}
                         param={this.param.filter({ELEMENT:'txtLineCount',USERS:this.user.CODE})}
@@ -460,13 +642,17 @@ export default class labelPrinting extends React.Component
                         <NdNumberBox id="numPrice" parent={this} simple={true}  
                         param={this.param.filter({ELEMENT:'numPrice',USERS:this.user.CODE})}
                         access={this.access.filter({ELEMENT:'numPrice',USERS:this.user.CODE})}
+                        onEnterKey={(async(e)=>
+                            {
+                                this.addItem()
+                            }).bind(this)}
                         >
                         </NdNumberBox>
                     </Item> 
                     <Item>
                         <div className="row">
                             <div className="col-12 px-4 pt-4">
-                                <NdButton text={this.t("btnItemAdd")} type="default" width="100%" onClick={()=>this.pageChange("Document")}></NdButton>
+                                <NdButton text={this.t("btnItemAdd")} type="default" width="100%" onClick={()=>this.addItem()}></NdButton>
                             </div>
                         </div>
                     </Item>
@@ -497,21 +683,19 @@ export default class labelPrinting extends React.Component
                     width={'100%'}
                     dbApply={false}
                     onRowUpdated={async(e)=>{
-                        console.log(this.docObj.docItems.dt()[rowIndex].MARGIN)
-                        this._calculateTotal()
                         
                     }}
                     onRowRemoved={async (e)=>{
-                        this._calculateTotal()
-                        await this.docObj.save()
+                       
                     }}
                     >
                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                         <Scrolling mode="infinite" />
                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                        <Column dataField="ITEM_CODE" caption={this.t("grdLblPrinting.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
-                        <Column dataField="ITEM_BARCODE" caption={this.t("grdLblPrinting.clmBarcode")} width={250} />
-                        <Column dataField="ITEM_NAME" caption={this.t("grdLblPrinting.clmItemName")} width={350} />
+                        <Column dataField="CODE" caption={this.t("grdLblPrinting.clmItemCode")} width={150}/>
+                        <Column dataField="NAME" caption={this.t("grdLblPrinting.clmItemName")} width={350} />
+                        <Column dataField="BARCODE" caption={this.t("grdLblPrinting.clmBarcode")} width={250} />
+                        <Column dataField="PRICE" caption={this.t("grdLblPrinting.clmPrice")} width={250} />
                     </NdGrid>
                 </Item>
                 </Form>
