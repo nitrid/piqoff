@@ -50,6 +50,7 @@ export const langTr =
         btnSave : "Kaydet",
         btnNew : "Yeni",
         btnDelete : "Sil",
+        btnDeleteRow : "Satır Sil",
         btnBarcodeEntry : "Barkod Girişi",
         btnDocument : "İşlem Satırları",
         validDesign : "Lütfen Dizayn Seçin",
@@ -76,6 +77,12 @@ export const langTr =
             clmUnderUnit : "Alt Birim",
             clmUnderUnitPrice : "Alt Birim Fiyatı",
             clmDescription :"Açıklama"
+        },
+        grdLblPrinting :
+        {
+            clmItemCode: "Kodu",
+            clmBarcode : "Barkod",
+            clmItemName: "Adı",
         },
         msgDocValid:
         {

@@ -45,7 +45,8 @@ export default class labelPrinting extends React.Component
         this.lblObj = new labelCls();
         this.mainLblObj = new labelMainCls()
         this.pageCount = 0;
-        this.dropmenuItems = [this.t("btnNew"),this.t("btnSave"),this.t("btnDelete"), ]
+        this.dropmenuMainItems = [this.t("btnNew"),this.t("btnSave"),this.t("btnDelete")]
+        this.dropmenuDocItems = [this.t("btnDeleteRow")]
         this.pageChange = this.pageChange.bind(this)
         this.vsChange = this.vsChange.bind(this)
        
@@ -177,7 +178,7 @@ export default class labelPrinting extends React.Component
                         <div className="row">
                             <div className="col-8"></div>
                             <div className="col-4">
-                                <DropDownButton text={this.t("btnDropmenu")} icon="menu" items={this.dropmenuItems}  onItemClick={this.dropmenuClick}/>
+                                <DropDownButton text={this.t("btnDropmenu")} icon="menu" items={this.dropmenuMainItems}  onItemClick={this.dropmenuClick}/>
                             </div>
                         </div>
                     </Item>
@@ -364,7 +365,7 @@ export default class labelPrinting extends React.Component
                             <NdButton icon="arrowleft" type="default" width="100%" onClick={()=>this.pageChange("Main")}></NdButton>
                         </div>
                         <div className="col-4 px-2 pt-2">
-                            <NdButton icon="detailslayout" type="default" width="100%" onClick={this._btnGetClick}></NdButton>
+                            <NdButton icon="detailslayout" type="default" width="100%" onClick={()=>this.pageChange("Document")}></NdButton>
                         </div>
                         <div className="col-4 px-2 pt-2">
                             
@@ -473,7 +474,46 @@ export default class labelPrinting extends React.Component
             </div>
             <div className="row px-2 pt-2" style={{visibility:this.state.tbDocument,position:"fixed"}}>
                 <Form colCount={1} >
-                 
+                <Item>
+                    <div className="row">
+                        <div className="col-4 px-2 pt-2">
+                            <NdButton icon="arrowleft" type="default" width="100%" onClick={()=>this.pageChange("Main")}></NdButton>
+                        </div>
+                        <div className="col-4 px-2 pt-2">
+                            <NdButton icon="plus" type="default" width="100%" onClick={()=>this.pageChange("Barcode")}></NdButton>
+                        </div>
+                        <div className="col-4">
+                                <DropDownButton text={this.t("btnDropmenu")} icon="menu" items={this.dropmenuDocItems}  onItemClick={this.dropmenuClick}/>
+                        </div>
+                    </div>
+                </Item>
+                <Item>
+                    <NdGrid parent={this} id={"grdLblPrinting"} 
+                    showBorders={true} 
+                    columnsAutoWidth={true} 
+                    allowColumnReordering={true} 
+                    allowColumnResizing={true} 
+                    height={'400'} 
+                    width={'100%'}
+                    dbApply={false}
+                    onRowUpdated={async(e)=>{
+                        console.log(this.docObj.docItems.dt()[rowIndex].MARGIN)
+                        this._calculateTotal()
+                        
+                    }}
+                    onRowRemoved={async (e)=>{
+                        this._calculateTotal()
+                        await this.docObj.save()
+                    }}
+                    >
+                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
+                        <Scrolling mode="infinite" />
+                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
+                        <Column dataField="ITEM_CODE" caption={this.t("grdLblPrinting.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
+                        <Column dataField="ITEM_BARCODE" caption={this.t("grdLblPrinting.clmBarcode")} width={250} />
+                        <Column dataField="ITEM_NAME" caption={this.t("grdLblPrinting.clmItemName")} width={350} />
+                    </NdGrid>
+                </Item>
                 </Form>
             </div>
             {/* Stok Seçim */}
