@@ -45,8 +45,10 @@ export const langTr =
         chkGroup : "Grup",
         chkCustomer : "Tedarikçi Ürünleri",
         chkAllItems : "Tüm Ürünler",
+        chkAutoAdd : "Oto Ekle",
         AddItems : "Ekle",
         txtBarcode : "Barkod Ekle",
+        txtBarcodePlace : "Lütfen Barkod Okutunuz",
         btnSave : "Kaydet",
         btnNew : "Yeni",
         btnDelete : "Sil",
@@ -80,6 +82,12 @@ export const langTr =
             clmBarcode : "Barkod",
             clmItemName: "Adı",
             clmPrice :"Fiyat",
+        },
+        popItemCode : 
+        {
+            title : "Stok Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
         },
         msgDocValid:
         {

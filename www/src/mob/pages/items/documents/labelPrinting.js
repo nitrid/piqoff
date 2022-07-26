@@ -494,7 +494,7 @@ export default class labelPrinting extends React.Component
                         </div>
                         <div className="col-4 px-2 pt-2">
                             
-                            <NdCheckBox id="chkAutoAdd" text={"Oto Ekle"} parent={this} defaultValue={false} 
+                            <NdCheckBox id="chkAutoAdd" text={this.t("chkAutoAdd")} parent={this} defaultValue={false} 
                             param={this.param.filter({ELEMENT:'chkAutoAdd',USERS:this.user.CODE})}
                             access={this.access.filter({ELEMENT:'chkAutoAdd',USERS:this.user.CODE})}/>
                         </div>
@@ -502,7 +502,7 @@ export default class labelPrinting extends React.Component
                     </Item>
                     <Item>
                     <div className="col-12 px-2 pt-2">
-                            <NdTextBox id="txtBarcode" parent={this} placeholder="Lütfen Barkod Okutunuz"
+                            <NdTextBox id="txtBarcode" parent={this} placeholder={this.t("txtBarcodePlace")}
                             button=
                             {
                             [
