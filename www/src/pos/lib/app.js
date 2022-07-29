@@ -110,8 +110,14 @@ export default class App extends React.Component
                 }
             }
         ];
-        console.log(window.location.origin)
-        this.core = new core(io('http://localhost',{timeout:100000,transports : ['websocket']}));
+        
+        let tmpHost = window.location.origin
+        if(localStorage.getItem('local') != null && localStorage.getItem('local'))
+        {
+            tmpHost = localStorage.getItem('host')
+        }
+        console.log(tmpHost)
+        this.core = new core(io(tmpHost,{timeout:100000,transports : ['websocket']}));
         this.textValueChanged = this.textValueChanged.bind(this)
         this.onDbClick = this.onDbClick.bind(this)
         this.transfer = new transferCls()

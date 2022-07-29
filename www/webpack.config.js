@@ -2,6 +2,8 @@ const path = require("path");
 const webpack = require("webpack");
 const htmlWebPackPlugin = require('html-webpack-plugin');
 const copyPlugin = require("copy-webpack-plugin");
+const zipPlugin = require('zip-webpack-plugin');
+const removePlugin = require('remove-files-webpack-plugin');
 
 module.exports = 
 {
@@ -128,5 +130,22 @@ module.exports =
             filename: 'mob/index.html',
             chunks: ['mob']
         }),
+        new zipPlugin(
+        {
+            path: './',
+            filename: 'public.zip',
+            pathPrefix: 'public',
+            extension: 'zip'
+        }),
+        new removePlugin(
+        {
+            before: 
+            {
+                include: 
+                [
+                    './public'
+                ]
+            }
+        })
     ]
 };
