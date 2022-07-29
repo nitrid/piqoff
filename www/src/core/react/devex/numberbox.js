@@ -9,6 +9,8 @@ export default class NdNumberBox extends Base
     constructor(props)
     {
         super(props)
+
+        this.dev = null;
         
         this.state.value = typeof props.value != 'undefined' ? props.value : 0 
         this.state.title = typeof props.title == 'undefined' ? '' : props.title
@@ -16,6 +18,7 @@ export default class NdNumberBox extends Base
         this.state.showClearButton = typeof props.showClearButton == 'undefined' ? false : props.showClearButton
         this.state.readOnly = typeof props.readOnly == 'undefined' ? false : props.readOnly        
 
+        this._onInitialized = this._onInitialized.bind(this);
         this._onValueChanged = this._onValueChanged.bind(this)
         this._onEnterKey = this._onEnterKey.bind(this)
         this._onFocusIn = this._onFocusIn.bind(this)
@@ -23,6 +26,10 @@ export default class NdNumberBox extends Base
         this._onChange = this._onChange.bind(this)        
     }
     //#region Private
+    _onInitialized(e) 
+    {
+        this.dev = e.component;    
+    }
     _onValueChanged(e) 
     {         
         this.value = e.value;
@@ -70,6 +77,7 @@ export default class NdNumberBox extends Base
                 onChange={this._onChange}
                 value={this.state.value} 
                 readOnly={this.state.readOnly}
+                onInitialized={this._onInitialized}
                 disabled={typeof this.props.editable == 'undefined' ? this.state.editable : this.props.editable}
                 showSpinButtons={this.props.showSpinButtons}
                 step={this.props.step}
@@ -130,6 +138,10 @@ export default class NdNumberBox extends Base
     set readOnly(e)
     {
         this.setState({readOnly:e})
+    }
+    focus()
+    {
+       this.dev.focus();
     }
     render()
     {               

@@ -28,5 +28,26 @@ export const menu = (e) =>
                 },
             ]
         },
+        {
+            id: 'ord',
+            text: e.t('menu.ord'),
+            expanded: false,
+            items: 
+            [
+                {
+                    id: 'ord_01',
+                    text : e.t('menu.ord_01'),//'Evraklar'
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'ord_01_001',
+                            text: e.t('menu.ord_01_001'),//'Satış Sipariş',
+                            path: 'orders/documents/salesOrder'
+                        },
+                    ]
+                },
+            ]
+        },
     ]
 }

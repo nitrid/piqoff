@@ -25,6 +25,9 @@ export const langTr =
         stk: "Stok",                
         stk_01: "Evraklar",
         stk_01_002: "Etiket Basımı",
+        ord: "Sipariş",                
+        ord_01: "Evraklar",
+        ord_01_001: "Satış Sipariş"
     },
     login:
     {
@@ -45,14 +48,25 @@ export const langTr =
         chkGroup : "Grup",
         chkCustomer : "Tedarikçi Ürünleri",
         chkAllItems : "Tüm Ürünler",
+        chkAutoAdd : "Oto Ekle",
         AddItems : "Ekle",
         txtBarcode : "Barkod Ekle",
+        txtBarcodePlace : "Lütfen Barkod Okutunuz",
         btnSave : "Kaydet",
         btnNew : "Yeni",
         btnDelete : "Sil",
+        btnDeleteRow : "Satır Sil",
         btnBarcodeEntry : "Barkod Girişi",
         btnDocument : "İşlem Satırları",
         validDesign : "Lütfen Dizayn Seçin",
+        numPrice :"Fiyat",
+        btnItemAdd: "Ekle",
+        msgDesignSelect:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Dizayn Seçiniz.."
+        },
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -65,17 +79,18 @@ export const langTr =
             clmCode :  "STOK KODU",
             clmName : "STOK ADI",
         },
-        grdLabelQueue: 
+        grdLblPrinting :
         {
             clmItemCode: "Kodu",
             clmBarcode : "Barkod",
             clmItemName: "Adı",
-            clmItemGrpName : "Ürün Grubu",
-            clmPrice: "Fiyat",
-            clmUnderUnit : "Alt Birim",
-            clmUnderUnit : "Alt Birim",
-            clmUnderUnitPrice : "Alt Birim Fiyatı",
-            clmDescription :"Açıklama"
+            clmPrice :"Fiyat",
+        },
+        popItemCode : 
+        {
+            title : "Stok Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
         },
         msgDocValid:
         {
@@ -129,23 +144,23 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Kayıt Edildi Ve Kilitlendi !"
         },
-        msgPasswordSucces:
-        {
-            title: "Başarılı",
-            btn01: "Tamam",
-            msg: "Evrakın Kilidi Açıldı !",
-        },
-        msgPasswordWrong:
-        {
-            title: "Başarısız",
-            btn01: "Tamam",
-            msg: "Şifreniz Hatalı !"
-        },
-        msgGetLocked:
+        msgBarcodeCheck:
         {
             title: "Dikkat",
             btn01: "Tamam",
-            msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
+            msg: "Lütfen Barkod Okutunuz !",
+        },
+        msgBarcodeNotFound:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Barkod Bulunamadı !"
+        },
+        msgItemsAdd:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Seçtiğiniz Ürünler Eklendi !"
         },
         msgDoclocked:
         {
@@ -181,5 +196,177 @@ export const langTr =
         validDocDate : "Tarih Seçmelisiniz",
 
     },
-  
+    ord_01_001 :
+    {
+        btnDropmenu : "İşlemler",
+        txtRefRefno : "Seri-Sıra",
+        txtCustomerCode : "Cari Kodu",
+        txtCustomerName : "Cari Adı",
+        txtPage : "Sayfa",
+        txtDepot : "Depo",
+        txtDate : "Tarih",
+        txtAmount : "Tutar",
+        txtDiscount : "İndirim",
+        txtQuantity : "Miktar",
+        txtVat : "Kdv",
+        txtPrice :"Fiyat",
+        chkGroup : "Grup",
+        chkCustomer : "Tedarikçi Ürünleri",
+        chkAllItems : "Tüm Ürünler",
+        chkAutoAdd : "Oto Ekle",
+        AddItems : "Ekle",
+        txtBarcode : "Barkod Ekle",
+        txtBarcodePlace : "Lütfen Barkod Okutunuz",
+        btnSave : "Kaydet",
+        btnNew : "Yeni",
+        btnDelete : "Sil",
+        btnDeleteRow : "Satır Sil",
+        btnBarcodeEntry : "Barkod Girişi",
+        btnDocument : "İşlem Satırları",
+        btnItemAdd: "Ekle",
+        msgDesignSelect:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Dizayn Seçiniz.."
+        },
+        pg_Docs : 
+        {
+            title : "Evrak Seçimi",
+            clmRef : "SERİ",
+            clmRefNo : "SIRA",
+            clmInputName : "CARİ ADI",
+            clmInputCode  : "CARİ KODU",
+        },
+        pg_CustomerSelect :
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        pg_txtItemsCode : 
+        {
+            title : "Stok Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+        },
+        grdSlsOrder: 
+        {
+            clmItemCode: "Kodu",
+            clmBarcode : "Barkod",
+            clmItemName: "Adı",
+            clmPrice :"Fiyat",
+        },
+        popItemCode : 
+        {
+            title : "Stok Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+        },
+        msgDocValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
+        },
+        msgNotSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrakta Değişiklik Yapılmış! Lütfen Kayıt Edin Yada Değişiklikleri Geri Alın"
+        },
+        msgAddItems:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Seçmiş olduğunuz kritere uygun ürünler eklenecektir.Onaylıyormusunuz ?"
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgLocked:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kayıt Edildi Ve Kilitlendi !"
+        },
+        msgBarcodeCheck:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Barkod Okutunuz !",
+        },
+        msgBarcodeNotFound:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Barkod Bulunamadı !"
+        },
+        msgItemsAdd:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Seçtiğiniz Ürünler Eklendi !"
+        },
+        msgDoclocked:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kilidi Açılmadan Kayıt Edilemez !"
+        },
+        msgItemNotFound:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Stok Bulunmadı !!"
+        },
+        msgCombineItem:
+        {
+            title: "Dikkat",
+            btn01: "Vazgeç",
+            btn02: "Yeni Ekle",
+            msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Yeni Satır Eklensin Mi ?"
+        },
+        popWizard : 
+        {
+            title : "Ürün Seçme Sihirbazı",
+        },
+        popBarcodeEntry : 
+        {
+            title : "Barkod Giriş"
+        },
+        validRef :"Seri Boş Geçilemez",
+        validRefNo : "Sıra Boş Geçilemez",
+        validDepot : "Depo Seçmelisiniz",
+        validCustomerCode : "Cari Kodu Boş Geçilemez",
+        validDocDate : "Tarih Seçmelisiniz",
+
+    },
 }

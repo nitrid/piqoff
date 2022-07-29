@@ -304,7 +304,7 @@ export default class NdPopGrid extends Base
                 >
                     {this._buttonView()}
                     {this._formView()}      
-                    <div className="row" style={{height:"89%"}}>
+                    <div className="row" style={{height:"80%"}}>
                         <div className="col-12">
                             <NdGrid parent={this} id={"grid_" + this.props.id} 
                             dataSource={typeof this.state.data == 'undefined' ? undefined : this.state.data.store} 
