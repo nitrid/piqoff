@@ -1,6 +1,7 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import { labelCls,labelMainCls } from '../../../../core/cls/label.js';
+import { docCls,docOrdersCls, docCustomerCls } from '../../../../core/cls/doc.js';
 import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
@@ -24,7 +25,7 @@ import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
 import { triggerHandler } from 'devextreme/events';
 
-export default class labelPrinting extends React.Component
+export default class salesOrder extends React.Component
 {
     constructor()
     {
@@ -45,13 +46,12 @@ export default class labelPrinting extends React.Component
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
-        this.lblObj = new labelCls();
-        this.mainLblObj = new labelMainCls()
-        this.pageCount = 0;
+
+        this.docObj = new docCls();
+
         this.dropmenuMainItems = [this.t("btnNew"),this.t("btnSave")]
         this.dropmenuDocItems = [this.t("btnDeleteRow")]
         this.pageChange = this.pageChange.bind(this)
-        this.dropmenuClick = this.dropmenuClick.bind(this)
     }
     async componentDidMount()
     {
@@ -60,124 +60,25 @@ export default class labelPrinting extends React.Component
     }
     async init()
     {
-        this.lblObj.clearAll()
-        this.mainLblObj.clearAll()
+        this.docObj.clearAll()
 
-        let tmpLbl = {...this.lblObj.empty}
-        tmpLbl.REF = this.user.CODE
-        this.mainLblObj.addEmpty(tmpLbl);
+        let tmpDoc = {...this.docObj.empty}
+
         
-        this.txtSer.readOnly = false
+        this.docObj.addEmpty(tmpDoc);
+
+        this.txtCustomerCode.readOnly = false;
+        this.txtRef.readOnly = false
         this.txtRefno.readOnly = false
-        this.txtSer.readOnly = true
-        this.calculateCount()
-        
-        await this.grdLblPrinting.dataRefresh({source:this.lblObj.dt('LABEL_QUEUE')});
-
-        this.txtSer.props.onChange()
+        this.txtRef.readOnly = true
     }
-    async dropmenuClick(e)
+    async getDoc(pGuid,pRef,pRefno)
     {
-        if(e.itemData == this.t("btnNew"))
-        {
-            this.init()
-        }
-        else if(e.itemData == this.t("btnSave"))
-        {
-            let tmpConfObj =
-            {
-                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'350px',height:'200px',
-                button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
-            }
-            
-            let pResult = await dialog(tmpConfObj);
-            if(pResult == 'btn01')
-            {
-                let Data = {data:this.lblObj.dt().toArray()}
-                this.mainLblObj.dt()[0].DATA = JSON.stringify(Data)
+        this.docObj.clearAll()
+        await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:60});
 
-                let tmpConfObj1 =
-                {
-                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'350px',height:'200px',
-                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                }
-                
-                if((await this.mainLblObj.save()) == 0)
-                {                       
-                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                    await dialog(tmpConfObj1);
-                }
-                else
-                {
-                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgFailed")}</div>)
-                    await dialog(tmpConfObj1);
-                }
-            }
-        }
-    }
-    calculateCount()
-    {
-        this.txtPage.value = Math.ceil(this.lblObj.dt().length /this.pageCount)
-        this.txtBarPage.value = Math.ceil(this.lblObj.dt().length /this.pageCount)
-        if(this.txtPage.value == '')
-        {
-            this.txtPage.value = this.t("validDesign")
-            this.txtBarPage.value = this.t("validDesign")
-        }
-        if(this.pageCount == 0)
-        {
-            this.txtFreeLabel.value = this.t("validDesign")
-            this.txtBarFreeLabel.value = this.t("validDesign")
-        }
-        else
-        {
-            this.txtFreeLabel.value = this.pageCount - (this.lblObj.dt().length % this.pageCount)
-            this.txtBarFreeLabel.value  = this.pageCount - (this.lblObj.dt().length % this.pageCount)
-        }
-        this.txtLineCount.value = this.lblObj.dt().length
-        this.txtBarLineCount.value = this.lblObj.dt().length
-    }
-    async getDoc(pGuid)
-    {
-        this.lblObj.clearAll()
-        this.mainLblObj.clearAll()
-        await this.lblObj.load({GUID:pGuid});
-        await this.mainLblObj.load({GUID:pGuid});
-        let tmpQuery = 
-        {
-            query : "SELECT PAGE_COUNT FROM LABEL_DESIGN  WHERE TAG = @TAG ",
-            param : ['TAG:string|50'],
-            value : [this.mainLblObj.dt()[0].DESING]
-        }
-        let tmpData = await this.core.sql.execute(tmpQuery) 
-        this.pageCount = tmpData.result.recordset[0].PAGE_COUNT
-        this.calculateCount()
-
-        this.txtSer.readOnly = true
+        this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
-    }
-    async getDocs(pType)
-    {
-        let tmpQuery = 
-        {
-            query : "SELECT GUID,REF,REF_NO FROM LABEL_QUEUE WHERE STATUS IN("+pType+") AND REF = '" +this.txtSer.value+"' " 
-        }
-        let tmpData = await this.core.sql.execute(tmpQuery) 
-        let tmpRows = []
-        if(tmpData.result.recordset.length > 0)
-        {
-            tmpRows = tmpData.result.recordset
-        }
-        await this.pg_Docs.setData(tmpRows)
-        this.pg_Docs.show()
-        this.pg_Docs.onClick = (data) =>
-        {
-            if(data.length > 0)
-            {
-                this.getDoc(data[0].GUID)
-            }
-        }
     }
     async pageChange(pPage)
     {
@@ -189,17 +90,6 @@ export default class labelPrinting extends React.Component
         }
         if(pPage == "Barcode")
         {
-            if(this.cmbDesignList.value == "")
-            {
-                let tmpConfObj = 
-                {
-                    id:'msgDesignSelect',showTitle:true,title:this.t("msgDesignSelect.title"),showCloseButton:true,width:'350px',height:'200px',
-                    button:[{id:"btn01",caption:this.t("msgDesignSelect.btn01"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDesignSelect.msg")}</div>)
-                }
-                let pResult = await dialog(tmpConfObj);
-                return
-            }
             this.setState({tbMain:"hidden"})
             this.setState({tbBarcode:"visible"})
             this.setState({tbDocument:"hidden"})
@@ -212,71 +102,6 @@ export default class labelPrinting extends React.Component
             this.setState({tbDocument:"visible"})
         }
     }    
-    async addItem()
-    {
-        if(this.txtBarcode.value == "")
-        {
-            let tmpConfObj = 
-            {
-                id:'msgBarcodeCheck',showTitle:true,title:this.t("msgBarcodeCheck.title"),showCloseButton:true,width:'350px',height:'200px',
-                button:[{id:"btn01",caption:this.t("msgBarcodeCheck.btn01"),location:'after'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcodeCheck.msg")}</div>)
-            }
-            let pResult = await dialog(tmpConfObj);
-            return
-        }
-        for (let i = 0; i < this.lblObj.dt().length; i++) 
-        {
-            if(this.lblObj.dt()[i].CODE == this.barcode.code)
-            {
-                let tmpConfObj = 
-                {
-                    id:'msgCombineItem',showTitle:true,title:this.t("msgCombineItem.title"),showCloseButton:true,width:'350px',height:'200px',
-                    button:[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>)
-                }
-                let pResult = await dialog(tmpConfObj);
-                if(pResult == 'btn01')
-                {                   
-                    this.barcodeReset()
-                    return
-                }
-                else
-                {
-                    break
-                }
-                
-            }
-        }
-        let tmpDocItems = {...this.lblObj.empty}
-        tmpDocItems.REF = this.mainLblObj.dt()[0].REF
-        tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
-        tmpDocItems.NAME = this.barcode.name
-        tmpDocItems.CODE = this.barcode.code
-        tmpDocItems.BARCODE = this.barcode.barcode
-        tmpDocItems.PRICE = this.barcode.price
-        this.lblObj.addEmpty(tmpDocItems)
-        this.barcodeReset()
-       
-    }
-    barcodeReset()
-    {
-        if(this.chkAutoAdd.value == false)
-        {
-            this.barcode = 
-            {
-                name:"",
-                price:0,
-                barcode: "",
-                code:""
-            }
-            this.numPrice.value=0
-        }
-        this.txtBarcode.value = ""
-        this.setState({tbBarcode:"visible"})
-        this.txtBarcode.focus()
-        this.calculateCount()
-    }
     render()
     {
         return(
@@ -291,12 +116,12 @@ export default class labelPrinting extends React.Component
                             </div>
                         </div>
                     </Item>
-                    {/* txtSer-Refno */}
+                    {/* txtRef-Refno */}
                     <Item>
                         <Label text={this.t("txtRefRefno")} alignment="right" />
                         <div className="row">
                             <div className="col-5 pe-0">
-                                <NdTextBox id="txtSer" parent={this} simple={true} dt={{data:this.mainLblObj.dt('MAIN_LABEL_QUEUE'),field:"REF"}}
+                                <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
                                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                 readOnly={true}
                                 maxLength={32}
@@ -304,9 +129,9 @@ export default class labelPrinting extends React.Component
                                 {
                                     let tmpQuery = 
                                     {
-                                        query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM LABEL_QUEUE WHERE  REF = @REF ",
+                                        query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 60 AND REF = @REF ",
                                         param : ['REF:string|25'],
-                                        value : [this.txtSer.value]
+                                        value : [this.txtRef.value]
                                     }
                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                     if(tmpData.result.recordset.length > 0)
@@ -314,8 +139,8 @@ export default class labelPrinting extends React.Component
                                         this.txtRefno.value=tmpData.result.recordset[0].REF_NO
                                     }
                                 }).bind(this)}
-                                param={this.param.filter({ELEMENT:'txtSer',USERS:this.user.CODE})}
-                                access={this.access.filter({ELEMENT:'txtSer',USERS:this.user.CODE})}
+                                param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
+                                access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                 >
                                 <Validator validationGroup={"frmLabelQeueu"}>
                                         <RequiredRule message={this.t("validRef")} />
@@ -323,7 +148,7 @@ export default class labelPrinting extends React.Component
                                 </NdTextBox>
                             </div>
                             <div className="col-7 ps-0">
-                                <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.mainLblObj.dt('MAIN_LABEL_QUEUE'),field:"REF_NO"}}
+                                <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
                                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                 readOnly={true}
                                 button=
@@ -334,7 +159,14 @@ export default class labelPrinting extends React.Component
                                             icon:'more',
                                             onClick:async()=>
                                             {
-                                                this.getDocs(0)   
+                                                this.pg_Docs.show()
+                                                this.pg_Docs.onClick = (data) =>
+                                                {
+                                                    if(data.length > 0)
+                                                    {
+                                                        this.getDoc(data[0].GUID,data[0].REF,data[0].REF_NO)
+                                                    }
+                                                }
                                             }
                                         },
                                         {
@@ -349,7 +181,7 @@ export default class labelPrinting extends React.Component
                                 }
                                 onChange={(async()=>
                                 {
-                                    let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtSer.value,this.txtRefno.value)
+                                    let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
                                     if(tmpResult == 3)
                                     {
                                         this.txtRefno.value = "";
@@ -367,12 +199,13 @@ export default class labelPrinting extends React.Component
                         {/*EVRAK SEÇİM */}
                         <NdPopGrid id={"pg_Docs"} parent={this} container={"#root"}
                         visible={false}
-                        position={{of:'#root'}} 
+                        position={{of:'#root'}}
                         showTitle={true} 
                         showBorders={true}
                         width={'90%'}
                         height={'90%'}
                         title={this.t("pg_Docs.title")} 
+                        data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 60 AND REBATE = 0"},sql:this.core.sql}}}
                         button=
                         {
                             [
@@ -381,79 +214,179 @@ export default class labelPrinting extends React.Component
                                     icon:'more',
                                     onClick:()=>
                                     {
-                                        this.pg_Docs.hide()
-                                        this.getDocs('0,1')
+
+                                    }
+                                }
+                            ]
+                        }
+                        >
+                        <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150} defaultSortOrder="asc"/>
+                        <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={150} defaultSortOrder="asc" />
+                        <Column dataField="INPUT_NAME" caption={this.t("pg_Docs.clmInputName")} width={200} defaultSortOrder="asc" />
+                        <Column dataField="INPUT_CODE" caption={this.t("pg_Docs.clmInputCode")} width={200} defaultSortOrder="asc" />
+                        </NdPopGrid>
+                    </Item>
+                    {/* Depot */}
+                    <Item>
+                        <Label text={this.t("txtDepot")} alignment="right" />
+                        <NdSelectBox simple={true} parent={this} id="cmbDepot" notRefresh = {true}
+                        dt=""
+                        displayExpr="NAME"                       
+                        valueExpr="GUID"
+                        value=""
+                        searchEnabled={true}
+                        onValueChanged={(async(e)=>
+                            {
+                                
+                            }).bind(this)}
+                        data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}}}
+                        param={this.param.filter({ELEMENT:'cmbDepotList',USERS:this.user.CODE})}
+                        access={this.access.filter({ELEMENT:'cmbDepotList',USERS:this.user.CODE})}
+                        >
+                        </NdSelectBox>
+                    </Item>
+                    {/* txtCustomerCode */}
+                    <Item>
+                        <Label text={this.t("txtCustomerCode")} alignment="right" />
+                        <div className="row">
+                            <div className="col-12">
+                                <NdTextBox id="txtCustomerCode" parent={this} simple={true}
+                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                dt={{data:this.docObj.dt('DOC'),field:"INPUT_CODE"}}
+                                onEnterKey={(async()=>
+                                    {
+                                        await this.pg_CustomerSelect.setVal(this.txtCustomerCode.value)
+                                        this.pg_CustomerSelect.show()
+                                        this.pg_CustomerSelect.onClick = (data) =>
+                                        {
+                                            if(data.length > 0)
+                                            {
+                                                this.docObj.dt()[0].INPUT = data[0].GUID
+                                                this.docObj.dt()[0].INPUT_CODE = data[0].CODE
+                                                this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
+                                                let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                                if(typeof tmpData != 'undefined' && tmpData.value ==  true)
+                                                {
+                                                    this.txtRef.value=data[0].CODE;
+                                                    this.txtRef.props.onChange()
+                                                }
+                                            }
+                                        }
+                                    }).bind(this)}
+                                button=
+                                {
+                                    [
+                                        {
+                                            id:'01',
+                                            icon:'more',
+                                            onClick:async()=>
+                                            {
+                                                this.pg_CustomerSelect.show()
+                                                this.pg_CustomerSelect.onClick = (data) =>
+                                                {
+                                                    if(data.length > 0)
+                                                    {
+                                                        this.docObj.dt()[0].INPUT = data[0].GUID
+                                                        this.docObj.dt()[0].INPUT_CODE = data[0].CODE
+                                                        this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
+                                                        let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                                        if(typeof tmpData != 'undefined' && tmpData.value ==  true)
+                                                        {
+                                                            this.txtRef.value=data[0].CODE;
+                                                            this.txtRef.props.onChange()
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        {
+                                            id:'02',
+                                            icon:'arrowdown',
+                                            onClick:()=>
+                                            {
+                                                
+                                            }
+                                        }
+                                    ]
+                                }
+                                onChange={(async()=>
+                                {
+
+                                }).bind(this)}
+                                param={this.param.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
+                                access={this.access.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
+                                >
+                                </NdTextBox>
+                            </div>
+                        </div>
+                        {/*CARİ SEÇİM */}
+                        <NdPopGrid id={"pg_CustomerSelect"} parent={this} container={"#root"}
+                        visible={false}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        showBorders={true}
+                        width={'90%'}
+                        height={'90%'}
+                        title={this.t("pg_CustomerSelect.title")} 
+                        search={true}
+                        data = 
+                        {{
+                            source:
+                            {
+                                select:
+                                {
+                                    query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                                    param : ['VAL:string|50']
+                                },
+                                sql:this.core.sql
+                            }
+                        }}
+                        button=
+                        {
+                            [
+                                {
+                                    id:'01',
+                                    icon:'more',
+                                    onClick:()=>
+                                    {
                                     }
                                 }
                             ]
                             
                         }
                         >
-                            <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={100} defaultSortOrder="asc"/>
-                            <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={50} defaultSortOrder="asc" />
+                            <Column dataField="CODE" caption={this.t("pg_CustomerSelect.clmCode")} width={150} />
+                            <Column dataField="TITLE" caption={this.t("pg_CustomerSelect.clmTitle")} width={200} defaultSortOrder="asc" />
+                            <Column dataField="TYPE_NAME" caption={this.t("pg_CustomerSelect.clmTypeName")} width={100} />
+                            <Column dataField="GENUS_NAME" caption={this.t("pg_CustomerSelect.clmGenusName")} width={100} />
                         </NdPopGrid>
-                    </Item>
-                    {/* design */}
+                    </Item> 
+                    {/* txtCustomerName */}
                     <Item>
-                        <Label text={this.t("design")} alignment="right" />
-                        <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
-                        dt={{data:this.mainLblObj.dt('MAIN_LABEL_QUEUE'),field:"DESING"}}
-                        displayExpr="DESIGN_NAME"
-                        valueExpr="TAG"
-                        value=""
-                        searchEnabled={true}
-                        onValueChanged={(async(e)=>
+                        <Label text={this.t("txtCustomerName")} alignment="right" />
+                        <NdTextBox id="txtCustomerName" parent={this} simple={true}  
+                        readOnly={true}
+                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                        // dt={{data:this.docObj.dt('DOC'),field:"INPUT_NAME"}} 
+                        param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
+                        access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
+                        >
+                        </NdTextBox>
+                    </Item> 
+                    {/* txtDate */}
+                    <Item>
+                        <Label text={this.t("txtDate")} alignment="right" />
+                        <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
+                        dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
+                        onValueChanged={(async()=>
                             {
-                                for (let i = 0; i < this.cmbDesignList.data.datatable.length; i++) 
-                                {
-                                    if(this.cmbDesignList.data.datatable[i].TAG == e.value)
-                                    {
-                                        this.pageCount = this.cmbDesignList.data.datatable[i].PAGE_COUNT
-                                    }
-                                }
-                                this.calculateCount()
-                            }).bind(this)}
-                        data={{source:{select:{query : "SELECT TAG,DESIGN_NAME,PAGE_COUNT FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '01'"},sql:this.core.sql}}}
-                        param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
-                        access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                        }).bind(this)}
                         >
-                            <Validator validationGroup={"frmLabelQeueu"}>
-                                <RequiredRule message={this.t("validDesign")} />
+                            <Validator validationGroup={"frmslsDoc"}>
+                                <RequiredRule message={this.t("validDocDate")} />
                             </Validator> 
-                        </NdSelectBox>
+                        </NdDatePicker>
                     </Item>
-                    {/* txtPage */}
-                    <Item>
-                        <Label text={this.t("txtPage")} alignment="right" />
-                        <NdTextBox id="txtPage" parent={this} simple={true}  
-                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                        readOnly={true}
-                        param={this.param.filter({ELEMENT:'txtPage',USERS:this.user.CODE})}
-                        access={this.access.filter({ELEMENT:'txtPage',USERS:this.user.CODE})}
-                        >
-                        </NdTextBox>
-                    </Item> 
-                    {/* txtFreeLabel */}
-                    <Item>
-                        <Label text={this.t("txtFreeLabel")} alignment="right" />
-                        <NdTextBox id="txtFreeLabel" parent={this} simple={true}  
-                        readOnly={true}
-                        param={this.param.filter({ELEMENT:'txtFreeLabel',USERS:this.user.CODE})}
-                        access={this.access.filter({ELEMENT:'txtFreeLabel',USERS:this.user.CODE})}
-                        >
-                        </NdTextBox>
-                    </Item> 
-                    {/* txtLineCount */}
-                    <Item>
-                        <Label text={this.t("txtLineCount")} alignment="right" />
-                        <NdTextBox id="txtLineCount" parent={this} simple={true}  
-                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                        readOnly={true}
-                        param={this.param.filter({ELEMENT:'txtLineCount',USERS:this.user.CODE})}
-                        access={this.access.filter({ELEMENT:'txtLineCount',USERS:this.user.CODE})}
-                        >
-                        </NdTextBox>
-                    </Item> 
                     <Item>
                         <div className="row">
                             <div className="col-6 px-4 pt-4">
@@ -467,7 +400,7 @@ export default class labelPrinting extends React.Component
                 </Form>
             </div>
             <div className="row px-2 pt-2" style={{visibility:this.state.tbBarcode,position:"fixed"}}>
-                <Form>
+                <Form colCount={1}>
                     <Item>
                     <div className="row">
                         <div className="col-4 px-2 pt-2">
@@ -588,71 +521,77 @@ export default class labelPrinting extends React.Component
                             </h4>
                         </div>
                     </Item>
-                    {/* txtPage */}
-                    <GroupItem colCountByScreen={{xs:3}}>
-                        <SimpleItem/> 
-                        <SimpleItem> 
-                        <Label text={this.t("txtPage")} alignment="right"/>
-                        </SimpleItem>
+                    {/* txtQuantity */}
+                    <GroupItem colCountByScreen={{xs:2}}>
+                        <SimpleItem/>
                         <SimpleItem>
-                            <NdTextBox id="txtBarPage" parent={this} simple={true}  
+                            <Label text={this.t("txtQuantity")}/>
+                            <NdNumberBox id="txtBarQuantity" parent={this} simple={true}  
                                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                 readOnly={true}
-                                param={this.param.filter({ELEMENT:'txtPage',USERS:this.user.CODE})}
-                                access={this.access.filter({ELEMENT:'txtPage',USERS:this.user.CODE})}
+                                param={this.param.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
+                                access={this.access.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
                                 >
-                            </NdTextBox>
-                        </SimpleItem>
-                    </GroupItem> 
-                    {/* txtFreeLabel */}
-                    <GroupItem colCountByScreen={{xs:3}}>
-                        <SimpleItem/> 
-                        <SimpleItem> 
-                        <Label text={this.t("txtFreeLabel")} alignment="right"/>
-                        </SimpleItem>
-                        <SimpleItem>
-                            <NdTextBox id="txtBarFreeLabel" parent={this} simple={true}  
-                            readOnly={true}
-                            param={this.param.filter({ELEMENT:'txtFreeLabel',USERS:this.user.CODE})}
-                            access={this.access.filter({ELEMENT:'txtFreeLabel',USERS:this.user.CODE})}
-                            >
-                            </NdTextBox>
-                        </SimpleItem>
-                    </GroupItem> 
-                    {/* txtLineCount */}
-                    <GroupItem colCountByScreen={{xs:3}}>
-                        <SimpleItem/> 
-                        <SimpleItem> 
-                        <Label text={this.t("txtLineCount")} alignment="right"/>
-                        </SimpleItem>
-                        <SimpleItem>
-                            <NdTextBox id="txtBarLineCount" parent={this} simple={true}  
-                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                            readOnly={true}
-                            param={this.param.filter({ELEMENT:'txtLineCount',USERS:this.user.CODE})}
-                            access={this.access.filter({ELEMENT:'txtLineCount',USERS:this.user.CODE})}
-                            >
-                            </NdTextBox>
-                        </SimpleItem>
-                    </GroupItem> 
-                    {/* txtPrice */}
-                    <GroupItem colCountByScreen={{xs:3}}>
-                        <SimpleItem/> 
-                        <SimpleItem> 
-                        <Label text={this.t("numPrice")} alignment="right"/>
-                        </SimpleItem>
-                        <SimpleItem>
-                            <NdNumberBox id="numPrice" parent={this} simple={true}  
-                            param={this.param.filter({ELEMENT:'numPrice',USERS:this.user.CODE})}
-                            access={this.access.filter({ELEMENT:'numPrice',USERS:this.user.CODE})}
-                            onEnterKey={(async(e)=>
-                                {
-                                    this.addItem()
-                                }).bind(this)}
-                            >
                             </NdNumberBox>
                         </SimpleItem>
+                    </GroupItem>
+                    {/* txtPrice */}
+                    <GroupItem colCountByScreen={{xs:2}}>
+                    <SimpleItem/>
+                    <SimpleItem>
+                       <Label text={this.t("txtPrice")} alignment="right" />
+                       <NdNumberBox id="txtPrice" parent={this} simple={true}
+                       param={this.param.filter({ELEMENT:'txtPrice',USERS:this.user.CODE})}
+                       access={this.access.filter({ELEMENT:'txtPrice',USERS:this.user.CODE})}
+                       onEnterKey={(async(e)=>
+                           {
+
+                           }).bind(this)}
+                       >
+                       </NdNumberBox>
+                    </SimpleItem>
+                    </GroupItem>
+                    {/* txtVat */}
+                    <GroupItem colCountByScreen={{xs:2}}>
+                        <SimpleItem/>
+                        <SimpleItem>
+                            <Label text={this.t("txtVat")} alignment="right" />
+                            <NdTextBox id="txtBarVat" parent={this} simple={true}  
+                            readOnly={true}
+                            param={this.param.filter({ELEMENT:'txtVat',USERS:this.user.CODE})}
+                            access={this.access.filter({ELEMENT:'txtVat',USERS:this.user.CODE})}
+                            >
+                            </NdTextBox>
+                        </SimpleItem>
                     </GroupItem> 
+                    {/* txtDiscount */}
+                    <GroupItem colCountByScreen={{xs:2}}>
+                        <SimpleItem/>
+                        <SimpleItem>
+                            <Label text={this.t("txtDiscount")} alignment="right" />
+                            <NdTextBox id="txtBarDisCount" parent={this} simple={true}  
+                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                            readOnly={true}
+                            param={this.param.filter({ELEMENT:'txtDiscount',USERS:this.user.CODE})}
+                            access={this.access.filter({ELEMENT:'txtDiscount',USERS:this.user.CODE})}
+                            >
+                            </NdTextBox>
+                        </SimpleItem>
+                    </GroupItem> 
+                    {/* txtAmount */}
+                    <GroupItem colCountByScreen={{xs:2}}>
+                        <SimpleItem/>
+                        <SimpleItem>
+                            <Label text={this.t("txtAmount")} alignment="right" />
+                            <NdTextBox id="txtBarAmount" parent={this} simple={true}  
+                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                            readOnly={true}
+                            param={this.param.filter({ELEMENT:'txtAmount',USERS:this.user.CODE})}
+                            access={this.access.filter({ELEMENT:'txtAmount',USERS:this.user.CODE})}
+                            >
+                            </NdTextBox>
+                        </SimpleItem>
+                    </GroupItem>
                     <Item>
                         <div className="row">
                             <div className="col-12 px-4 pt-4">
@@ -678,7 +617,7 @@ export default class labelPrinting extends React.Component
                     </div>
                 </Item>
                 <Item>
-                    <NdGrid parent={this} id={"grdLblPrinting"} 
+                    <NdGrid parent={this} id={"grdSlsOrder"} 
                     showBorders={true} 
                     columnsAutoWidth={true} 
                     allowColumnReordering={true} 
@@ -696,10 +635,10 @@ export default class labelPrinting extends React.Component
                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                         <Scrolling mode="infinite" />
                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                        <Column dataField="CODE" caption={this.t("grdLblPrinting.clmItemCode")} width={150}/>
-                        <Column dataField="NAME" caption={this.t("grdLblPrinting.clmItemName")} width={350} />
-                        <Column dataField="BARCODE" caption={this.t("grdLblPrinting.clmBarcode")} width={250} />
-                        <Column dataField="PRICE" caption={this.t("grdLblPrinting.clmPrice")} width={250} />
+                        <Column dataField="CODE" caption={this.t("grdSlsOrder.clmItemCode")} width={150}/>
+                        <Column dataField="NAME" caption={this.t("grdSlsOrder.clmItemName")} width={350} />
+                        <Column dataField="BARCODE" caption={this.t("grdSlsOrder.clmBarcode")} width={250} />
+                        <Column dataField="PRICE" caption={this.t("grdSlsOrder.clmPrice")} width={250} />
                     </NdGrid>
                 </Item>
                 </Form>
