@@ -224,11 +224,17 @@ export const langTr =
         btnBarcodeEntry : "Barkod Girişi",
         btnDocument : "İşlem Satırları",
         btnItemAdd: "Ekle",
-        msgDesignSelect:
+        msgCustomerSelect:
         {
             title: "Dikkat",
             btn01: "Tamam",
-            msg: "Lütfen Dizayn Seçiniz.."
+            msg: "Lütfen Cari Seçiniz.."
+        },
+        msgDepotSelect:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Depo Seçiniz.."
         },
         pg_Docs : 
         {

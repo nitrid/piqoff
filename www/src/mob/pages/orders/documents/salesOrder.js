@@ -90,6 +90,28 @@ export default class salesOrder extends React.Component
         }
         if(pPage == "Barcode")
         {
+            if(this.cmbDepotList.value == "")
+            {
+                let tmpConfObj = 
+                {
+                    id:'msgDepotSelect',showTitle:true,title:this.t("msgDepotSelect.title"),showCloseButton:true,width:'350px',height:'200px',
+                    button:[{id:"btn01",caption:this.t("msgDepotSelect.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDepotSelect.msg")}</div>)
+                }
+                let pResult = await dialog(tmpConfObj);
+                return
+            }
+            else if(this.docObj.dt()[0].INPUT_CODE == "")
+            {
+                let tmpConfObj = 
+                {
+                    id:'msgCustomerSelect',showTitle:true,title:this.t("msgCustomerSelect.title"),showCloseButton:true,width:'350px',height:'200px',
+                    button:[{id:"btn01",caption:this.t("msgCustomerSelect.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerSelect.msg")}</div>)
+                }
+                let pResult = await dialog(tmpConfObj);
+                return
+            }
             this.setState({tbMain:"hidden"})
             this.setState({tbBarcode:"visible"})
             this.setState({tbDocument:"hidden"})
@@ -229,9 +251,9 @@ export default class salesOrder extends React.Component
                     {/* Depot */}
                     <Item>
                         <Label text={this.t("txtDepot")} alignment="right" />
-                        <NdSelectBox simple={true} parent={this} id="cmbDepot" notRefresh = {true}
+                        <NdSelectBox simple={true} parent={this} id="cmbDepotList" notRefresh = {true}
                         dt=""
-                        displayExpr="NAME"                       
+                        displayExpr="NAME"
                         valueExpr="GUID"
                         value=""
                         searchEnabled={true}
@@ -264,6 +286,7 @@ export default class salesOrder extends React.Component
                                                 this.docObj.dt()[0].INPUT = data[0].GUID
                                                 this.docObj.dt()[0].INPUT_CODE = data[0].CODE
                                                 this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
+                                                console.log(this.docObj.dt()[0].INPUT_NAME)
                                                 let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                 if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                 {
@@ -281,15 +304,18 @@ export default class salesOrder extends React.Component
                                             icon:'more',
                                             onClick:async()=>
                                             {
+                                                console.log(111111)
                                                 this.pg_CustomerSelect.show()
                                                 this.pg_CustomerSelect.onClick = (data) =>
                                                 {
                                                     if(data.length > 0)
                                                     {
+                                                        console.log(this.docObj.dt())
                                                         this.docObj.dt()[0].INPUT = data[0].GUID
                                                         this.docObj.dt()[0].INPUT_CODE = data[0].CODE
                                                         this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
                                                         let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                                        console.log(this.txtCustomerCode)
                                                         if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                         {
                                                             this.txtRef.value=data[0].CODE;
@@ -311,7 +337,7 @@ export default class salesOrder extends React.Component
                                 }
                                 onChange={(async()=>
                                 {
-
+                                    
                                 }).bind(this)}
                                 param={this.param.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                 access={this.access.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
@@ -367,7 +393,7 @@ export default class salesOrder extends React.Component
                         <NdTextBox id="txtCustomerName" parent={this} simple={true}  
                         readOnly={true}
                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                        // dt={{data:this.docObj.dt('DOC'),field:"INPUT_NAME"}} 
+                        dt={{data:this.docObj.dt('DOC'),field:"INPUT_NAME"}} 
                         param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                         access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                         >

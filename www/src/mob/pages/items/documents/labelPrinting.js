@@ -398,7 +398,7 @@ export default class labelPrinting extends React.Component
                         <Label text={this.t("design")} alignment="right" />
                         <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
                         dt={{data:this.mainLblObj.dt('MAIN_LABEL_QUEUE'),field:"DESING"}}
-                        displayExpr="DESIGN_NAME"
+                        displayExpr="DESIGN_NAME"                       
                         valueExpr="TAG"
                         value=""
                         searchEnabled={true}
@@ -467,7 +467,7 @@ export default class labelPrinting extends React.Component
                 </Form>
             </div>
             <div className="row px-2 pt-2" style={{visibility:this.state.tbBarcode,position:"fixed"}}>
-                <Form>
+                <Form colCount={1} >
                     <Item>
                     <div className="row">
                         <div className="col-4 px-2 pt-2">
@@ -588,71 +588,51 @@ export default class labelPrinting extends React.Component
                             </h4>
                         </div>
                     </Item>
-                    {/* txtPage */}
-                    <GroupItem colCountByScreen={{xs:3}}>
-                        <SimpleItem/> 
-                        <SimpleItem> 
-                        <Label text={this.t("txtPage")} alignment="right"/>
-                        </SimpleItem>
-                        <SimpleItem>
-                            <NdTextBox id="txtBarPage" parent={this} simple={true}  
-                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                readOnly={true}
-                                param={this.param.filter({ELEMENT:'txtPage',USERS:this.user.CODE})}
-                                access={this.access.filter({ELEMENT:'txtPage',USERS:this.user.CODE})}
-                                >
-                            </NdTextBox>
-                        </SimpleItem>
-                    </GroupItem> 
+                     {/* txtPage */}
+                     <Item>
+                        <Label text={this.t("txtPage")} alignment="right" />
+                        <NdTextBox id="txtBarPage" parent={this} simple={true}  
+                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                        readOnly={true}
+                        param={this.param.filter({ELEMENT:'txtPage',USERS:this.user.CODE})}
+                        access={this.access.filter({ELEMENT:'txtPage',USERS:this.user.CODE})}
+                        >
+                        </NdTextBox>
+                    </Item> 
                     {/* txtFreeLabel */}
-                    <GroupItem colCountByScreen={{xs:3}}>
-                        <SimpleItem/> 
-                        <SimpleItem> 
-                        <Label text={this.t("txtFreeLabel")} alignment="right"/>
-                        </SimpleItem>
-                        <SimpleItem>
-                            <NdTextBox id="txtBarFreeLabel" parent={this} simple={true}  
-                            readOnly={true}
-                            param={this.param.filter({ELEMENT:'txtFreeLabel',USERS:this.user.CODE})}
-                            access={this.access.filter({ELEMENT:'txtFreeLabel',USERS:this.user.CODE})}
-                            >
-                            </NdTextBox>
-                        </SimpleItem>
-                    </GroupItem> 
+                    <Item>
+                        <Label text={this.t("txtFreeLabel")} alignment="right" />
+                        <NdTextBox id="txtBarFreeLabel" parent={this} simple={true}  
+                        readOnly={true}
+                        param={this.param.filter({ELEMENT:'txtFreeLabel',USERS:this.user.CODE})}
+                        access={this.access.filter({ELEMENT:'txtFreeLabel',USERS:this.user.CODE})}
+                        >
+                        </NdTextBox>
+                    </Item> 
                     {/* txtLineCount */}
-                    <GroupItem colCountByScreen={{xs:3}}>
-                        <SimpleItem/> 
-                        <SimpleItem> 
-                        <Label text={this.t("txtLineCount")} alignment="right"/>
-                        </SimpleItem>
-                        <SimpleItem>
-                            <NdTextBox id="txtBarLineCount" parent={this} simple={true}  
-                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                            readOnly={true}
-                            param={this.param.filter({ELEMENT:'txtLineCount',USERS:this.user.CODE})}
-                            access={this.access.filter({ELEMENT:'txtLineCount',USERS:this.user.CODE})}
-                            >
-                            </NdTextBox>
-                        </SimpleItem>
-                    </GroupItem> 
-                    {/* txtPrice */}
-                    <GroupItem colCountByScreen={{xs:3}}>
-                        <SimpleItem/> 
-                        <SimpleItem> 
-                        <Label text={this.t("numPrice")} alignment="right"/>
-                        </SimpleItem>
-                        <SimpleItem>
-                            <NdNumberBox id="numPrice" parent={this} simple={true}  
-                            param={this.param.filter({ELEMENT:'numPrice',USERS:this.user.CODE})}
-                            access={this.access.filter({ELEMENT:'numPrice',USERS:this.user.CODE})}
-                            onEnterKey={(async(e)=>
-                                {
-                                    this.addItem()
-                                }).bind(this)}
-                            >
-                            </NdNumberBox>
-                        </SimpleItem>
-                    </GroupItem> 
+                    <Item>
+                        <Label text={this.t("txtLineCount")} alignment="right" />
+                        <NdTextBox id="txtBarLineCount" parent={this} simple={true}  
+                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                        readOnly={true}
+                        param={this.param.filter({ELEMENT:'txtLineCount',USERS:this.user.CODE})}
+                        access={this.access.filter({ELEMENT:'txtLineCount',USERS:this.user.CODE})}
+                        >
+                        </NdTextBox>
+                    </Item> 
+                     {/* txtPrice */}
+                     <Item>
+                        <Label text={this.t("numPrice")} alignment="right" />
+                        <NdNumberBox id="numPrice" parent={this} simple={true}  
+                        param={this.param.filter({ELEMENT:'numPrice',USERS:this.user.CODE})}
+                        access={this.access.filter({ELEMENT:'numPrice',USERS:this.user.CODE})}
+                        onEnterKey={(async(e)=>
+                            {
+                                this.addItem()
+                            }).bind(this)}
+                        >
+                        </NdNumberBox>
+                    </Item> 
                     <Item>
                         <div className="row">
                             <div className="col-12 px-4 pt-4">
