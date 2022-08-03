@@ -1,15 +1,11 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { labelCls,labelMainCls } from '../../../../core/cls/label.js';
-import { docCls,docOrdersCls, docCustomerCls } from '../../../../core/cls/doc.js';
+
 import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item,EmptyItem,GroupItem, SimpleItem } from 'devextreme-react/form';
-import DropDownButton from 'devextreme-react/drop-down-button';
-import TabPanel from 'devextreme-react/tab-panel';
-import { Button } from 'devextreme-react/button';
 
 import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';

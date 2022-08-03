@@ -258,6 +258,7 @@ export default class labelPrinting extends React.Component
         tmpDocItems.PRICE = this.barcode.price
         this.lblObj.addEmpty(tmpDocItems)
         this.barcodeReset()
+        await this.mainLblObj.save()
        
     }
     barcodeReset()
@@ -307,7 +308,6 @@ export default class labelPrinting extends React.Component
                         }
                         else
                         {
-                            this.numPrice.focus()
                         }
                         this.setState({tbBarcode:"visible"})
                     }
@@ -627,7 +627,6 @@ export default class labelPrinting extends React.Component
                                         }
                                         else
                                         {
-                                            this.numPrice.focus()
                                         }
                                         this.setState({tbBarcode:"visible"})
                                     }
@@ -712,10 +711,10 @@ export default class labelPrinting extends React.Component
                 <Item>
                     <div className="row">
                         <div className="col-4 px-2 pt-2">
-                            <NdButton icon="arrowleft" type="default" width="100%" onClick={()=>this.pageChange("Main")}></NdButton>
+                            <NdButton icon="arrowleft" type="default" width="100%" onClick={()=>this.pageChange("Barcode")}></NdButton>
                         </div>
                         <div className="col-4 px-2 pt-2">
-                            <NdButton icon="plus" type="default" width="100%" onClick={()=>this.pageChange("Barcode")}></NdButton>
+                            {/* <NdButton icon="plus" type="default" width="100%" onClick={()=>this.pageChange("Barcode")}></NdButton> */}
                         </div>
                         <div className="col-4">
                                 <DropDownButton text={this.t("btnDropmenu")} icon="menu" items={this.dropmenuDocItems}  onItemClick={this.dropmenuClick}/>
@@ -741,9 +740,9 @@ export default class labelPrinting extends React.Component
                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                         <Scrolling mode="infinite" />
                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                        <Column dataField="CODE" caption={this.t("grdLblPrinting.clmItemCode")} width={150}/>
-                        <Column dataField="NAME" caption={this.t("grdLblPrinting.clmItemName")} width={350} />
                         <Column dataField="BARCODE" caption={this.t("grdLblPrinting.clmBarcode")} width={250} />
+                        <Column dataField="NAME" caption={this.t("grdLblPrinting.clmItemName")} width={350} />
+                        <Column dataField="CODE" caption={this.t("grdLblPrinting.clmItemCode")} width={150}/>
                         <Column dataField="PRICE" caption={this.t("grdLblPrinting.clmPrice")} width={250} />
                     </NdGrid>
                 </Item>
