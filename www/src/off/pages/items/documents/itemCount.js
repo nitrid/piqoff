@@ -797,12 +797,12 @@ export default class itemCount extends React.Component
                                         
                                     </NdPopGrid>
                                 </Item>
-                                 {/* Boş */}
-                                 <EmptyItem />
                                 {/* Boş */}
                                 <EmptyItem />
-                               {/* cmbDepot */}
-                               <Item>
+                                {/* Boş */}
+                                <EmptyItem />
+                                {/* cmbDepot */}
+                                <Item>
                                     <Label text={this.t("cmbDepot")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbDepot"
                                     dt={{data:this.countObj.dt('ITEM_COUNT'),field:"DEPOT"}}  
@@ -932,8 +932,7 @@ export default class itemCount extends React.Component
                             {
                                 this.frmCount = e.component
                             }}>
-                               
-                                 <Item>
+                                <Item>
                                     <NdGrid parent={this} id={"grdItemCount"} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 
@@ -1085,17 +1084,14 @@ export default class itemCount extends React.Component
                         <div className="col-12">
                             <Form colCount={4} parent={this} id="frmslsDoc">
                                 {/* Ara Toplam */}
-                                <Item  colSpan={3}>
-                                </Item>
-                                 {/*  Toplam Maliyet */}
-                                <Item  >
+                                <EmptyItem />
+                                {/*  Toplam Maliyet */}
+                                <Item>
                                 <Label text={this.t("txtAmount")} alignment="right" />
                                     <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} 
                                     maxLength={32}
                                     ></NdTextBox>
                                 </Item>
-                                
-                              
                             </Form>
                         </div>
                     </div>
@@ -1167,12 +1163,8 @@ export default class itemCount extends React.Component
                                     </NdTextBox>
                                 </Item>
                             </Form>
+                            </div>
                         </div>
-                        </div>
-                        <div className='row'>
-                       
-                        </div>
-                       
                 </NdDialog>             
             </div>
         )

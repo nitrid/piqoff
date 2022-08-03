@@ -1367,7 +1367,7 @@ export default class purchaseOrder extends React.Component
                                     ></NdTextBox>
                                 </Item>
                                 {/* İndirim */}
-                                <Item colSpan={3}></Item>
+                                <EmptyItem />
                                 <Item>
                                     <Label text={this.t("txtDiscount")} alignment="right" />
                                         <NdTextBox id="txtDiscount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"DISCOUNT"}}
@@ -1393,7 +1393,7 @@ export default class purchaseOrder extends React.Component
                                         ></NdTextBox>
                                 </Item>
                                 {/* KDV */}
-                                <Item colSpan={3}></Item>
+                                <EmptyItem />
                                 <Item>
                                 <Label text={this.t("txtVat")} alignment="right" />
                                     <NdTextBox id="txtVat" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"VAT"}}
@@ -1431,7 +1431,7 @@ export default class purchaseOrder extends React.Component
                                     ></NdTextBox>
                                 </Item>
                                 {/* KDV */}
-                                <Item colSpan={3}></Item>
+                                <EmptyItem />
                                 <Item>
                                 <Label text={this.t("txtTotal")} alignment="right" />
                                     <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}}
@@ -1723,7 +1723,7 @@ export default class purchaseOrder extends React.Component
                                     <Label  alignment="right" />
                                     <NdTagBox id="tagItemCode" parent={this} simple={true} value={[]} placeholder={this.t("tagItemCodePlaceholder")}/>
                                 </Item>
-                                <Item></Item>       
+                                <EmptyItem />       
                                 <Item>
                                     <Label text={this.t("cmbMultiItemType.title")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbMultiItemType" height='fit-content' 
@@ -1732,7 +1732,7 @@ export default class purchaseOrder extends React.Component
                                     value={0}
                                     data={{source:[{ID:0,VALUE:this.t("cmbMultiItemType.customerCode")},{ID:1,VALUE:this.t("cmbMultiItemType.ItemCode")}]}}/>
                                 </Item>   
-                                <Item></Item>   
+                                <EmptyItem />   
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>
@@ -1773,7 +1773,7 @@ export default class purchaseOrder extends React.Component
                                         <Column dataField="QUANTITY" caption={this.t("grdMultiItem.clmQuantity")} dataType={'number'} width={100} headerFilter={{visible:true}}/>
                                     </NdGrid>
                                 </Item>
-                                <Item></Item>   
+                                <EmptyItem />   
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'></div>

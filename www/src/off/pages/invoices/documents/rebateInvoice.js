@@ -1419,7 +1419,7 @@ export default class rebateInvoice extends React.Component
                                     ></NdTextBox>
                                 </Item>
                                 {/* İndirim */}
-                                <Item colSpan={3}></Item>
+                                <EmptyItem />
                                 <Item>
                                 <Label text={this.t("txtDiscount")} alignment="right" />
                                     <NdTextBox id="txtDiscount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"DISCOUNT"}}
@@ -1445,7 +1445,7 @@ export default class rebateInvoice extends React.Component
                                     ></NdTextBox>
                                 </Item>
                                 {/* KDV */}
-                                <Item colSpan={3}></Item>
+                                <EmptyItem />
                                 <Item>
                                 <Label text={this.t("txtVat")} alignment="right" />
                                     <NdTextBox id="txtVat" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"VAT"}}
@@ -1484,7 +1484,7 @@ export default class rebateInvoice extends React.Component
                                     ></NdTextBox>
                                 </Item>
                                 {/* Toplam */}
-                                <Item colSpan={3}></Item>
+                                <EmptyItem />
                                 <Item>
                                 <Label text={this.t("txtTotal")} alignment="right" />
                                     <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}}
@@ -1492,7 +1492,7 @@ export default class rebateInvoice extends React.Component
                                     ></NdTextBox>
                                 </Item>
                                 {/* Ödeme Toplam */}
-                                <Item colSpan={3}></Item>
+                                <EmptyItem />
                                 <Item>
                                 <Label text={this.t("txtPayTotal")} alignment="right" />
                                     <NdTextBox id="txtPayTotal" parent={this} simple={true} readOnly={true} dt={{data:this.paymentObj.dt('DOC'),field:"TOTAL"}}
@@ -1500,7 +1500,7 @@ export default class rebateInvoice extends React.Component
                                     ></NdTextBox>
                                 </Item>
                                 {/* Kalan */}
-                                <Item colSpan={3}></Item>
+                                <EmptyItem />
                                 <Item>
                                 <Label text={this.t("txtRemainder")} alignment="right" />
                                     <NdTextBox id="txtMainRemainder" parent={this} simple={true} readOnly={true}
@@ -1792,7 +1792,7 @@ export default class rebateInvoice extends React.Component
                         <div className="col-12">
                             <Form colCount={2} parent={this} >
                                 {/* Toplam */}
-                                <Item colSpan={1}></Item>
+                                <EmptyItem />
                                 <Item>
                                 <Label text={this.t("txtPayInvoıceTotal")} alignment="right" />
                                     <NdTextBox id="txtPayInvoıceTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}}
@@ -1800,7 +1800,7 @@ export default class rebateInvoice extends React.Component
                                     ></NdTextBox>
                                 </Item>
                                 {/* Ödeme Toplam */}
-                                <Item colSpan={1}></Item>
+                                <EmptyItem />
                                 <Item>
                                 <Label text={this.t("txtPayTotal")} alignment="right" />
                                     <NdTextBox id="txtPayTotal" parent={this} simple={true} readOnly={true} dt={{data:this.paymentObj.dt('DOC'),field:"TOTAL"}}
@@ -1808,7 +1808,7 @@ export default class rebateInvoice extends React.Component
                                     ></NdTextBox>
                                 </Item>
                                 {/* Kalan */}
-                                <Item colSpan={1}></Item>
+                                <EmptyItem />
                                 <Item>
                                 <Label text={this.t("txtRemainder")} alignment="right" />
                                     <NdTextBox id="txtRemainder" parent={this} simple={true} readOnly={true}

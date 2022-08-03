@@ -348,7 +348,7 @@ export default class collectionList extends React.Component
                         <div className="col-12">
                             <Form colCount={4} parent={this} >                            
                                 {/* TOPLAM */}
-                                <Item colSpan={3}></Item>
+                                <EmptyItem />
                                 <Item>
                                 <Label text={this.t("txtTotal")} alignment="right" />
                                     <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true}

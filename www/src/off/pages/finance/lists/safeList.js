@@ -317,7 +317,7 @@ export default class safeList extends React.Component
                         <div className="col-12">
                             <Form colCount={4} parent={this}>                            
                                 {/* TOPLAM */}
-                                <Item colSpan={3}></Item>
+                                <EmptyItem />
                                 <Item>
                                 <Label text={this.t("txtAmount")} alignment="right" />
                                     <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true}

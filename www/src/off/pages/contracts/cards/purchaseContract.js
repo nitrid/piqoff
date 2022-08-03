@@ -893,7 +893,7 @@ export default class purchaseContract extends React.Component
                                     <NdTagBox id="tagItemCode" parent={this} simple={true} value={[]} placeholder={this.t("tagItemCodePlaceholder")}
                                     />
                             </Item>
-                            <Item></Item>       
+                            <EmptyItem />       
                             <Item>
                                 <Label text={this.t("cmbMultiItemType.title")} alignment="right" />
                                 <NdSelectBox simple={true} parent={this} id="cmbMultiItemType" height='fit-content' 
@@ -903,7 +903,7 @@ export default class purchaseContract extends React.Component
                                 data={{source:[{ID:0,VALUE:this.t("cmbMultiItemType.customerCode")},{ID:1,VALUE:this.t("cmbMultiItemType.ItemCode")}]}}
                                 />
                             </Item>   
-                            <Item></Item>   
+                            <EmptyItem />   
                             <Item>
                                 <div className='row'>
                                     <div className='col-6'>
@@ -947,7 +947,7 @@ export default class purchaseContract extends React.Component
                                         <Column dataField="PRICE" caption={this.t("grdMultiItem.clmPrice")} dataType={'number'} width={100} headerFilter={{visible:true}}/>
                                 </NdGrid>
                             </Item>
-                            <Item></Item>   
+                            <EmptyItem />   
                             <Item>
                                 <div className='row'>
                                     <div className='col-6'>

@@ -718,7 +718,7 @@ export default class virement extends React.Component
                         <div className="col-12">
                             <Form colCount={4} parent={this} id="frmPayment">                            
                                 {/* TOPLAM */}
-                                <Item colSpan={3}></Item>
+                                <EmptyItem />
                                 <Item>
                                 <Label text={this.t("txtTotal")} alignment="right" />
                                     <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}}

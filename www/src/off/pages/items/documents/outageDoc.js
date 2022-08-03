@@ -1129,7 +1129,7 @@ export default class outageDoc extends React.Component
                         <div className="col-12">
                             <Form colCount={4} parent={this} id="frmPurcoffer">
                                 {/* TOPLAM MALIYET */}
-                                <Item colSpan={3}></Item>
+                                <EmptyItem />
                                 <Item  >
                                     <Label text={this.t("txtTotalCost")} alignment="right" />
                                         <NdTextBox id="txtTotalCost" parent={this} simple={true} readOnly={true} 
@@ -1137,8 +1137,8 @@ export default class outageDoc extends React.Component
                                         
                                         ></NdTextBox>
                                 </Item>
-                                 {/* Toplam Miktar */}
-                                 <Item colSpan={3}></Item>
+                                {/* Toplam Miktar */}
+                                <EmptyItem />
                                 <Item  >
                                     <Label text={this.t("txtTotalQuantity")} alignment="right" />
                                         <NdTextBox id="txtTotalQuantity" parent={this} simple={true} readOnly={true} 

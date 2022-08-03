@@ -220,7 +220,7 @@ export default class QuantityList extends React.Component
                                         <NdTextBox id="txtUrunAdi" parent={this} simple={true} placeholder={this.t("ItemNamePlaceHolder")}
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
                                 </Item>
-                                <Item></Item>
+                                <EmptyItem />
                                 <Item>
                                     <Label text={this.t("cmbDepot")} alignment="right" />
                                         <NdSelectBox simple={true} parent={this} id="cmbDepot" showClearButton={true} notRefresh={true}  searchEnabled={true}

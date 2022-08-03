@@ -758,43 +758,43 @@ export default class collection extends React.Component
                                     }}/>
                                 </Item>
                                 <EmptyItem colSpan={7}/>
-                                 <Item colSpan={10}>
-                                 <React.Fragment>
-                                    <NdGrid parent={this} id={"grdDocPayments"} 
-                                    showBorders={true} 
-                                    columnsAutoWidth={true} 
-                                    allowColumnReordering={true} 
-                                    allowColumnResizing={true} 
-                                    height={'500'} 
-                                    width={'100%'}
-                                    dbApply={false}
-                                    onRowUpdated={async(e)=>{
-                                        let rowIndex = e.component.getRowIndexByKey(e.key)
+                                <Item colSpan={10}>
+                                    <React.Fragment>
+                                        <NdGrid parent={this} id={"grdDocPayments"} 
+                                        showBorders={true} 
+                                        columnsAutoWidth={true} 
+                                        allowColumnReordering={true} 
+                                        allowColumnResizing={true} 
+                                        height={'500'} 
+                                        width={'100%'}
+                                        dbApply={false}
+                                        onRowUpdated={async(e)=>{
+                                            let rowIndex = e.component.getRowIndexByKey(e.key)
 
-                                        this._calculateTotal()
-                                    }}
-                                    onRowRemoved={async (e)=>{
-                                        this._calculateTotal()
-                                        await this.docObj.save()
-                                    }}
-                                    >
-                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
-                                        <Scrolling mode="infinite" />
-                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                        <Export fileName={this.lang.t("menu.fns_02_002")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdDocPayments.clmCreateDate")} width={200} allowEditing={false}/>
-                                        <Column dataField="INPUT_NAME" caption={this.t("grdDocPayments.clmInputName")} allowEditing={false}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdDocPayments.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} />
-                                        <Column dataField="DESCRIPTION" caption={this.t("grdDocPayments.clmDescription")} />
-                                    </NdGrid>
-                                    <ContextMenu
-                                    dataSource={this.rightItems}
-                                    width={200}
-                                    target="#grdDocPayments"
-                                    onItemClick={(async(e)=>
-                                    {
-                                    }).bind(this)} />
-                                </React.Fragment>     
+                                            this._calculateTotal()
+                                        }}
+                                        onRowRemoved={async (e)=>{
+                                            this._calculateTotal()
+                                            await this.docObj.save()
+                                        }}
+                                        >
+                                            <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
+                                            <Scrolling mode="infinite" />
+                                            <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
+                                            <Export fileName={this.lang.t("menu.fns_02_002")} enabled={true} allowExportSelectedData={true} />
+                                            <Column dataField="CDATE_FORMAT" caption={this.t("grdDocPayments.clmCreateDate")} width={200} allowEditing={false}/>
+                                            <Column dataField="INPUT_NAME" caption={this.t("grdDocPayments.clmInputName")} allowEditing={false}/>
+                                            <Column dataField="AMOUNT" caption={this.t("grdDocPayments.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} />
+                                            <Column dataField="DESCRIPTION" caption={this.t("grdDocPayments.clmDescription")} />
+                                        </NdGrid>
+                                        <ContextMenu
+                                        dataSource={this.rightItems}
+                                        width={200}
+                                        target="#grdDocPayments"
+                                        onItemClick={(async(e)=>
+                                        {
+                                        }).bind(this)} />
+                                    </React.Fragment>     
                                 </Item>
                             </Form>
                         </div>
@@ -803,7 +803,7 @@ export default class collection extends React.Component
                         <div className="col-12">
                             <Form colCount={4} parent={this} id={"frmCollection"  + this.tabIndex}>                            
                                 {/* TOPLAM */}
-                                <Item colSpan={3}></Item>
+                                <EmptyItem />
                                 <Item>
                                 <Label text={this.t("txtTotal")} alignment="right" />
                                     <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}}

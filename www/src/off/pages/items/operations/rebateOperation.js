@@ -320,9 +320,6 @@ export default class rebateOperation extends React.Component
                                     </NdSelectBox>
                                 </Item>
                                 <Item>
-                                
-                                </Item>
-                                <Item>
                                 <Label text={this.t("txtCustomerCode")} alignment="right" />
                                 <NdTextBox id="txtCustomerCode" parent={this} simple={true}  notRefresh = {true}
                                 onEnterKey={(async()=>

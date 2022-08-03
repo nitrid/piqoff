@@ -292,9 +292,6 @@ export default class countFinalization extends React.Component
                                     </NdSelectBox>
                                 </Item>
                                 <Item>
-                                
-                                </Item>
-                                <Item>
                                 <Label text={this.t("dtFirstDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtFirstDate"}
                                     onValueChanged={(async()=>
@@ -407,10 +404,6 @@ export default class countFinalization extends React.Component
                                     {
                                         this._btnSave()                                        
                                     }}/>
-                                </Item>
-                                <Item location="after">
-                                </Item>
-                                <Item location="after">
                                 </Item>
                             </Form>
                             </div>
