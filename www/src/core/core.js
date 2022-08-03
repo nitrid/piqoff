@@ -158,33 +158,48 @@ export class local
 {
     constructor()
     {
+        const getWorkerPath = () => 
+        {
+            if (process.env.NODE_ENV === 'development') 
+            {
+                return require("file-loader?name=scripts/[name].[hash].js!jsstore/dist/jsstore.worker.js");
+            }
+            else 
+            {
+                return require("file-loader?name=scripts/[name].[hash].js!jsstore/dist/jsstore.worker.min.js");
+            }
+        };
         if(typeof JsStore != 'undefined')
         {
-            this.conn = new JsStore.Connection(new Worker(URL.createObjectURL(new Blob(["("+jsworker.toString()+")()"], {type: 'text/javascript'}))));
+            this.conn = new JsStore.Connection(new Worker(getWorkerPath().default));
+            //this.conn = new JsStore.Connection(new Worker(URL.createObjectURL(new Blob(["("+jsworker.toString()+")()"], {type: 'text/javascript'}))));
         }
     }
     async init(pDb)
     {
-        if(typeof this.conn != 'undefined')
+        return new Promise(async resolve => 
         {
-            let tmpResult = await this.conn.initDb(pDb)
-            
-            if(tmpResult)
+            if(typeof this.conn != 'undefined')
             {
-                console.log('Database created and connection is opened')
-                return true
+                let tmpResult = await this.conn.initDb(pDb)
+                
+                if(tmpResult)
+                {
+                    console.log('Database created and connection is opened')
+                    resolve(true)
+                }
+                else
+                {
+                    console.log('Connection is opened')
+                    resolve(true)
+                }
             }
             else
             {
-                console.log('Connection is opened')
-                return true
+                console.log('jsstore is undefined')
             }
-        }
-        else
-        {
-            console.log('jsstore is undefined')
-        }
-        return false
+            resolve(false)
+        });
     }
     async insert(pQuery)
     {

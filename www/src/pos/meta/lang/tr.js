@@ -17,7 +17,7 @@ export const langTr =
     btnLogin : "Giriş",
     btnLogout : "Çıkış",
     msgNotAccess :"Kullanıcının Giriş Yetkisi Yok.",
-    msgInvalidUser : "Kullanıcı Adı veya Şifre Hatalı.",
+    msgInvalidUser : "Kullanıcı Adı veya Şifre Hatalı.",    
     txtCardRead :"Lütfen Kullanıcı Kartınızı Okutunuz.",
     price : "Fiyat",
     quantity : "Miktar",
@@ -506,5 +506,11 @@ export const langTr =
         msg : "Satış Yapılıken Kasa Değiştirilemez! Lütfen Satışı İptal Edin..",
         btn01 : "Tamam",
     },
-    
+    msgDbTransferAlert : 
+    {
+        title : "Uyarı",
+        msg : "Local Database'i Güncellemek İstermisiniz ?",
+        btn01 : "Tamam",
+        btn02 : "İptal",
+    }
 }

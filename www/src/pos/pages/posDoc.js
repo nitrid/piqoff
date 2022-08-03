@@ -112,8 +112,8 @@ export default class posDoc extends React.PureComponent
         },1000)        
         
         this.posObj.clearAll()
-        await this.prmObj.load({PAGE:"pos",APP:'POS'})
-        await this.acsObj.load({PAGE:"pos",APP:'POS'})
+        await this.prmObj.load({APP:'POS'})
+        await this.acsObj.load({APP:'POS'})
 
         this.posObj.addEmpty()
         this.posObj.dt()[this.posObj.dt().length - 1].DEVICE = window.localStorage.getItem('device') == null ? '' : window.localStorage.getItem('device')

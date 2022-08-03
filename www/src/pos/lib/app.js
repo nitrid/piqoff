@@ -116,12 +116,13 @@ export default class App extends React.Component
         {
             tmpHost = localStorage.getItem('host')
         }
-        console.log(tmpHost)
+        
         this.core = new core(io(tmpHost,{timeout:100000,transports : ['websocket']}));
-        this.textValueChanged = this.textValueChanged.bind(this)
-        this.onDbClick = this.onDbClick.bind(this)
         this.transfer = new transferCls()
 
+        this.textValueChanged = this.textValueChanged.bind(this)
+        this.onDbClick = this.onDbClick.bind(this)        
+        
         if(!App.instance)
         {
             App.instance = this;
@@ -222,6 +223,11 @@ export default class App extends React.Component
             }
             App.instance.setState({logined:false,connected:false,splash:tmpSplash});
         }
+    }
+    async componentDidMount()
+    {
+        await this.core.util.waitUntil(0)
+        await this.transfer.init('POS')
     }
     render() 
     {
