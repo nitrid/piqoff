@@ -408,7 +408,7 @@ export default class barcodeCard extends React.Component
                                         
                                     </NdPopGrid>
                                 </Item> 
-                                <Item></Item>
+                                <EmptyItem/>
                                 <Item>
                                     <Label text={this.t("cmbPopBarType")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbPopBarType"
@@ -419,7 +419,7 @@ export default class barcodeCard extends React.Component
                                     data={{source:[{ID:"0",VALUE:"EAN8"},{ID:"1",VALUE:"EAN13"},{ID:"2",VALUE:"CODE39"}]}}
                                     />
                                 </Item>
-                                <Item></Item>
+                                <EmptyItem/>
                                 {/* cmbBarUnit */}
                                 <Item>
                                     <Label text={this.t("cmbBarUnit")} alignment="right" />
