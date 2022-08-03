@@ -277,10 +277,10 @@ export default class labelPrinting extends React.Component
         this.txtBarcode.focus()
         this.calculateCount()
     }
-    barcodeScan()
+    async barcodeScan()
     {
         cordova.plugins.barcodeScanner.scan(
-            function (result) 
+            async function (result) 
             {
                 if(result.cancelled == false)
                 {
