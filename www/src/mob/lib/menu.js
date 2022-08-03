@@ -19,11 +19,26 @@ export const menu = (e) =>
                             text: e.t('menu.stk_01_001'),//'Stok Tanımları',
                             path: 'items/cards/itemCard'
                         },
-                         {
+                        {
                             id: 'stk_01_002',
                             text: e.t('menu.stk_01_002'),//'Stok Tanımları',
                             path: 'items/documents/labelPrinting'
                         },
+                        {
+                            id: 'stk_01_003',
+                            text: e.t('menu.stk_01_003'),//'Fiyat Gör',
+                            path: 'items/cards/checkPrice'
+                        },
+                        {
+                            id: 'stk_01_004',
+                            text: e.t('menu.stk_01_004'),//'Tedarikçi Gör',
+                            path: 'items/cards/checkCustomer'
+                        },
+                        {
+                            id: 'stk_01_005',
+                            text: e.t('menu.stk_01_005'),//'Barkod Tanımları',
+                            path: 'items/cards/barcodeCard'
+                        }
                     ]
                 },
             ]

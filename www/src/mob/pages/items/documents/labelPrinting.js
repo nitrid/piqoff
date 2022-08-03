@@ -52,6 +52,7 @@ export default class labelPrinting extends React.Component
         this.dropmenuDocItems = [this.t("btnDeleteRow")]
         this.pageChange = this.pageChange.bind(this)
         this.dropmenuClick = this.dropmenuClick.bind(this)
+        this.barcodeScan = this.barcodeScan.bind(this)
     }
     async componentDidMount()
     {
@@ -279,11 +280,13 @@ export default class labelPrinting extends React.Component
     }
     async barcodeScan()
     {
+        
         cordova.plugins.barcodeScanner.scan(
             async function (result) 
             {
                 if(result.cancelled == false)
                 {
+                    this.txtBarcode.value = result.text;
                     let tmpQuery = 
                     {
                         query : "SELECT ITEM_CODE AS CODE,ITEM_NAME AS NAME,ITEM_GUID AS GUID,BARCODE,[dbo].[FN_PRICE_SALE](ITEM_GUID,1,GETDATE()) AS PRICE FROM ITEM_BARCODE_VW_01  WHERE BARCODE = @BARCODE OR ITEM_CODE = @BARCODE ",
@@ -320,7 +323,7 @@ export default class labelPrinting extends React.Component
                         this.txtBarcode.value = ""
                     }
                 }
-            },
+            }.bind(this),
             function (error) 
             {
                 //alert("Scanning failed: " + error);
