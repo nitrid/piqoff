@@ -291,6 +291,7 @@ export default class countFinalization extends React.Component
                                         </Validator> 
                                     </NdSelectBox>
                                 </Item>
+                                <EmptyItem/>
                                 <Item>
                                 <Label text={this.t("dtFirstDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtFirstDate"}

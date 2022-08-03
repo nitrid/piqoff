@@ -277,6 +277,60 @@ export default class labelPrinting extends React.Component
         this.txtBarcode.focus()
         this.calculateCount()
     }
+    barcodeScan()
+    {
+        cordova.plugins.barcodeScanner.scan(
+            function (result) 
+            {
+                if(result.cancelled == false)
+                {
+                    let tmpQuery = 
+                    {
+                        query : "SELECT ITEM_CODE AS CODE,ITEM_NAME AS NAME,ITEM_GUID AS GUID,BARCODE,[dbo].[FN_PRICE_SALE](ITEM_GUID,1,GETDATE()) AS PRICE FROM ITEM_BARCODE_VW_01  WHERE BARCODE = @BARCODE OR ITEM_CODE = @BARCODE ",
+                        param : ['BARCODE:string|50'],
+                        value : [result.text]
+                    }
+                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                    if(tmpData.result.recordset.length >0)
+                    {
+                        this.barcode.name = tmpData.result.recordset[0].NAME
+                        this.barcode.barcode = tmpData.result.recordset[0].BARCODE 
+                        this.barcode.code = tmpData.result.recordset[0].CODE 
+                        this.barcode.price = tmpData.result.recordset[0].PRICE 
+                        this.numPrice.value = parseFloat(tmpData.result.recordset[0].PRICE)
+                        if(this.chkAutoAdd.value == true)
+                        {
+                            this.addItem()
+                        }
+                        else
+                        {
+                            this.numPrice.focus()
+                        }
+                        this.setState({tbBarcode:"visible"})
+                    }
+                    else
+                    {
+                        let tmpConfObj = 
+                        {
+                            id:'msgBarcodeNotFound',showTitle:true,title:this.t("msgBarcodeNotFound.title"),showCloseButton:true,width:'350px',height:'200px',
+                            button:[{id:"btn01",caption:this.t("msgBarcodeNotFound.btn01"),location:'after'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcodeNotFound.msg")}</div>)
+                        }
+                        await dialog(tmpConfObj);
+                        this.txtBarcode.value = ""
+                    }
+                }
+            },
+            function (error) 
+            {
+                //alert("Scanning failed: " + error);
+            },
+            {
+              prompt : "Scan",
+              orientation : "portrait"
+            }
+        );
+    }
     render()
     {
         return(
@@ -486,55 +540,63 @@ export default class labelPrinting extends React.Component
                     </Item>
                     <Item>
                     <div className="col-12 px-2 pt-2">
-                            <NdTextBox id="txtBarcode" parent={this} placeholder={this.t("txtBarcodePlace")}
+                        <NdTextBox id="txtBarcode" parent={this} placeholder={this.t("txtBarcodePlace")}
                             button=
                             {
-                            [
-                                {
-                                    id:'01',
-                                    icon:'more',
-                                    onClick:async()=>
+                                [
                                     {
-                                        this.popItemCode.show()
-                                        this.popItemCode.onClick = async(data) =>
+                                        id:'01',
+                                        icon:'more',
+                                        onClick:async()=>
                                         {
-                                            if(data.length == 1)
+                                            this.popItemCode.show()
+                                            this.popItemCode.onClick = async(data) =>
                                             {
-                                                this.txtBarcode.value = data[0].CODE
-                                                this.barcode = {
-                                                    name:data[0].NAME,
-                                                    code:data[0].CODE,
-                                                    barcode:data[0].BARCODE,
-                                                    price:data[0].PRICE
-                                                }
-                                                this.numPrice.value = data[0].PRICE
-                                                this.setState({tbBarcode:"visible"})
-                                            }
-                                            else if(data.length > 1)
-                                            {
-                                                for (let i = 0; i < data.length; i++) 
+                                                if(data.length == 1)
                                                 {
-                                                    this.txtBarcode.value = data[i].CODE
+                                                    this.txtBarcode.value = data[0].CODE
                                                     this.barcode = {
-                                                        name:data[i].NAME,
-                                                        code:data[i].CODE,
-                                                        barcode:data[i].BARCODE,
-                                                        price:data[i].PRICE
+                                                        name:data[0].NAME,
+                                                        code:data[0].CODE,
+                                                        barcode:data[0].BARCODE,
+                                                        price:data[0].PRICE
                                                     }
-                                                    await this.addItem()
+                                                    this.numPrice.value = data[0].PRICE
+                                                    this.setState({tbBarcode:"visible"})
                                                 }
-                                                let tmpConfObj = 
+                                                else if(data.length > 1)
                                                 {
-                                                    id:'msgItemsAdd',showTitle:true,title:this.t("msgItemsAdd.title"),showCloseButton:true,width:'350px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgItemsAdd.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemsAdd.msg")}</div>)
+                                                    for (let i = 0; i < data.length; i++) 
+                                                    {
+                                                        this.txtBarcode.value = data[i].CODE
+                                                        this.barcode = {
+                                                            name:data[i].NAME,
+                                                            code:data[i].CODE,
+                                                            barcode:data[i].BARCODE,
+                                                            price:data[i].PRICE
+                                                        }
+                                                        await this.addItem()
+                                                    }
+                                                    let tmpConfObj = 
+                                                    {
+                                                        id:'msgItemsAdd',showTitle:true,title:this.t("msgItemsAdd.title"),showCloseButton:true,width:'350px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.t("msgItemsAdd.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemsAdd.msg")}</div>)
+                                                    }
+                                                    await dialog(tmpConfObj);
                                                 }
-                                                await dialog(tmpConfObj);
                                             }
                                         }
+                                    },
+                                    {
+                                        id:'02',
+                                        icon:'photo',
+                                        onClick:async()=>
+                                        {
+                                            this.barcodeScan()
+                                        }
                                     }
-                                }
-                            ]
+                                ]
                             }
                             onEnterKey={(async(e)=>
                                 {
@@ -579,7 +641,7 @@ export default class labelPrinting extends React.Component
                                     }
                                     
                                 }).bind(this)}></NdTextBox>
-                        </div>
+                    </div>
                     </Item>
                     <Item> 
                         <div>

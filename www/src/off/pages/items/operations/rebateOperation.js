@@ -319,6 +319,7 @@ export default class rebateOperation extends React.Component
                                         </Validator> 
                                     </NdSelectBox>
                                 </Item>
+                                <EmptyItem/>
                                 <Item>
                                 <Label text={this.t("txtCustomerCode")} alignment="right" />
                                 <NdTextBox id="txtCustomerCode" parent={this} simple={true}  notRefresh = {true}
