@@ -34,7 +34,7 @@ export default class labelPrinting extends React.Component
             tbMain:"visible",
             tbBarcode:"hidden",
             tbDocument: "hidden"
-        }     
+        }
         this.barcode = 
         {
             name:"",
