@@ -10,7 +10,7 @@ export const menu = (e) =>
             [
                 {
                     id: 'stk_01',
-                    text : e.t('menu.stk_01'),//'Tanımlar'
+                    text : e.t('menu.stk_01'), //'Tanımlar'
                     expanded: false,
                     items: 
                     [
@@ -21,7 +21,7 @@ export const menu = (e) =>
                         },
                         {
                             id: 'stk_01_002',
-                            text: e.t('menu.stk_01_002'),//'Stok Tanımları',
+                            text: e.t('menu.stk_01_002'),//'Etiket Basım',
                             path: 'items/documents/labelPrinting'
                         },
                         {
@@ -38,7 +38,17 @@ export const menu = (e) =>
                             id: 'stk_01_005',
                             text: e.t('menu.stk_01_005'),//'Barkod Tanımları',
                             path: 'items/cards/barcodeCard'
-                        }
+                        },
+                        {
+                            id: 'stk_01_006',
+                            text: e.t('menu.stk_01_006'),//'Ürün Grubu Değiştir',
+                            path: 'items/cards/itemGrpChange'
+                        },
+                        {
+                            id: 'stk_01_007',
+                            text: e.t('menu.stk_01_007'),//'İade Ürün Toplama',
+                            path: 'items/documents/rebateDoc'
+                        },
                     ]
                 },
             ]
