@@ -198,7 +198,7 @@ export default class labelPrinting extends React.Component
                     button:[{id:"btn01",caption:this.t("msgDesignSelect.btn01"),location:'after'}],
                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDesignSelect.msg")}</div>)
                 }
-                let pResult = await dialog(tmpConfObj);
+                await dialog(tmpConfObj);
                 return
             }
             this.setState({tbMain:"hidden"})

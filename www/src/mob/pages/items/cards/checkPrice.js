@@ -1,7 +1,6 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { labelCls,labelMainCls } from '../../../../core/cls/label.js';
-import { docCls,docOrdersCls, docCustomerCls } from '../../../../core/cls/doc.js';
+import {itemPriceCls,itemLogPriceCls} from '../../../../core/cls/items.js'
 import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
@@ -35,11 +34,13 @@ export default class salesOrder extends React.Component
             name:"",
             price:0,
             barcode: "",
-            code:""
+            code:"",
+            guid:"00000000-0000-0000-0000-000000000000"
         }
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
+        this.itemsPriceObj = new itemPriceCls();   
     }
     async componentDidMount()
     {
@@ -48,6 +49,7 @@ export default class salesOrder extends React.Component
     }
     async init()
     {
+        
     }
     render()
     {
@@ -68,38 +70,17 @@ export default class salesOrder extends React.Component
                                     this.popItemCode.show()
                                     this.popItemCode.onClick = async(data) =>
                                     {
-                                        if(data.length == 1)
+                                        if(data.length > 0)
                                         {
                                             this.txtBarcode.value = data[0].CODE
                                             this.barcode = {
                                                 name:data[0].NAME,
                                                 code:data[0].CODE,
                                                 barcode:data[0].BARCODE,
-                                                price:data[0].PRICE
+                                                price:data[0].PRICE,
+                                                guid:data[0].GUID
                                             }
-                                            this.numPrice.value = data[0].PRICE
                                             this.setState({tbBarcode:"visible"})
-                                        }
-                                        else if(data.length > 1)
-                                        {
-                                            for (let i = 0; i < data.length; i++) 
-                                            {
-                                                this.txtBarcode.value = data[i].CODE
-                                                this.barcode = {
-                                                    name:data[i].NAME,
-                                                    code:data[i].CODE,
-                                                    barcode:data[i].BARCODE,
-                                                    price:data[i].PRICE
-                                                }
-                                                await this.addItem()
-                                            }
-                                            let tmpConfObj = 
-                                            {
-                                                id:'msgItemsAdd',showTitle:true,title:this.t("msgItemsAdd.title"),showCloseButton:true,width:'350px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgItemsAdd.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemsAdd.msg")}</div>)
-                                            }
-                                            await dialog(tmpConfObj);
                                         }
                                     }
                                 }
@@ -125,7 +106,7 @@ export default class salesOrder extends React.Component
                                     this.barcode.barcode = tmpData.result.recordset[0].BARCODE 
                                     this.barcode.code = tmpData.result.recordset[0].CODE 
                                     this.barcode.price = tmpData.result.recordset[0].PRICE 
-                                    this.numPrice.value = parseFloat(tmpData.result.recordset[0].PRICE)
+                                    this.barcode.guid = tmpData.result.recordset[0].GUID 
                                     this.setState({tbBarcode:"visible"})
                                 }
                                 else
@@ -138,6 +119,14 @@ export default class salesOrder extends React.Component
                                     }
                                     await dialog(tmpConfObj);
                                     this.txtBarcode.value = ""
+                                    this.barcode = 
+                                    {
+                                        name:"",
+                                        price:0,
+                                        barcode: "",
+                                        code:"",
+                                        guid:"00000000-0000-0000-0000-000000000000"
+                                    }
                                 }
                                 
                             }).bind(this)}></NdTextBox>
@@ -160,7 +149,23 @@ export default class salesOrder extends React.Component
                 <Item>
                     <div className="row">
                         <div className="col-6 px-4 pt-4">
-                        <NdButton text={this.t("btnAddPrice")} type="default" width="100%" onClick={()=>{this.popPrice.show()}}></NdButton>
+                        <NdButton text={this.t("btnAddPrice")} type="default" width="100%" onClick={async()=>
+                        {
+                            if(this.barcode.guid == "")
+                            {
+                                let tmpConfObj = 
+                                {
+                                    id:'msgItemNotSelect',showTitle:true,title:this.t("msgItemNotSelect.title"),showCloseButton:true,width:'350px',height:'200px',
+                                    button:[{id:"btn01",caption:this.t("msgItemNotSelect.btn01"),location:'after'}],
+                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotSelect.msg")}</div>)
+                                }
+                                await dialog(tmpConfObj);
+                                return
+                            }
+                            this.txtPopPriQuantity.value = 1
+                            this.txtPopPriPrice.value = 0
+                            this.popPrice.show()
+                        }}></NdButton>
                         </div>
                         <div className="col-6 px-4 pt-4">
                         <NdButton text={this.t("btnChangePrice")} type="default" width="100%" onClick={()=>{this.popChangePrice.show()}}></NdButton>
@@ -177,6 +182,7 @@ export default class salesOrder extends React.Component
                 width={'90%'}
                 height={'90%'}
                 title={this.t("popItemCode.title")} //
+                selection={{mode:"single"}}
                 search={true}
                 data = 
                 {{
@@ -217,25 +223,35 @@ export default class salesOrder extends React.Component
             title={this.t("popPrice.title")}
             container={"#root"} 
             width={'90%'}
-            height={'350'}
+            height={'400'}
             position={{of:'#root'}}
             >
-                <Form colCount={2} height={'fit-content'} id={"frmPrice" + this.tabIndex}>
-                    <Item>
-                        <Label text={this.t("popPrice.dtPopPriStartDate")} alignment="right" />
-                        <NdDatePicker simple={true}  parent={this} id={"dtPopPriStartDate"}
-                        dt=""/>
-                    </Item>
-                    <Item>
-                        <Label text={this.t("popPrice.dtPopPriEndDate")} alignment="right" />
-                        <NdDatePicker simple={true}  parent={this} id={"dtPopPriEndDate"}
-                        dt=""/>
+                <Form colCount={1} height={'fit-content'} id={"frmPrice" + this.tabIndex}>
+                     {/* Depot */}
+                     <Item>
+                        <Label text={this.t("txtDepot")} alignment="right" />
+                        <NdSelectBox simple={true} parent={this} id="popcmbDepot" notRefresh = {true}
+                        dt=""
+                        displayExpr="NAME"
+                        valueExpr="GUID"
+                        value=""
+                        searchEnabled={true}
+                        onValueChanged={(async(e)=>
+                            {
+                                console.log(e)
+                            }).bind(this)}
+                        data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}}}
+                        param={this.param.filter({ELEMENT:'popcmbDepot',USERS:this.user.CODE})}
+                        access={this.access.filter({ELEMENT:'popcmbDepot',USERS:this.user.CODE})}
+                        >
+                        </NdSelectBox>
                     </Item>
                     <Item>
                         <Label text={this.t("popPrice.txtPopPriQuantity")} alignment="right" />
-                        <NdNumberBox id={"txtPopPriQuantity"} parent={this} simple={true}>
+                        <NdNumberBox id={"txtPopPriQuantity"} parent={this} simple={true} value="1">
                             <Validator validationGroup={"frmPrice" + this.tabIndex}>
                                 <RequiredRule message="Miktar'ı boş geçemezsiniz !" />
+                                <RangeRule min={0.001} message={"Fiyat sıfırdan küçük olamaz !"} />
                             </Validator>
                         </NdNumberBox>
                     </Item>
@@ -251,10 +267,37 @@ export default class salesOrder extends React.Component
                     <Item>
                         <div className='row'>
                             <div className='col-6'>
-                                <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'}
+                                <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmPrice" + this.tabIndex}
                                 onClick={async (e)=>
                                 {
-
+                                    if(e.validationGroup.validate().status == "valid")
+                                    {
+                                        let tmpPriceObj = {...this.itemsPriceObj.empty}
+                                        tmpPriceObj.ITEM_GUID = this.barcode.guid
+                                        tmpPriceObj.PRICE = this.txtPopPriPrice.value
+                                        tmpPriceObj.DEPOT = this.popcmbDepot.value
+                                        tmpPriceObj.QUANTITY = this.txtPopPriQuantity.value
+                                        this.itemsPriceObj.addEmpty(tmpPriceObj); 
+                                    
+                                        let tmpConfObj1 =
+                                        {
+                                            id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'350px',height:'200px',
+                                            button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                        }
+                                        
+                                        if((await this.itemsPriceObj.save()) == 0)
+                                        {                       
+                                            tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
+                                            await dialog(tmpConfObj1);
+                                            this.popPrice.hide()
+                                        }
+                                        else
+                                        {
+                                            tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                            await dialog(tmpConfObj1);
+                                            this.popPrice.hide()
+                                        }
+                                    }
                                 }}/>
                             </div>
                             <div className='col-6'>

@@ -1434,7 +1434,11 @@ export default class itemCard extends React.PureComponent
                             <Form colCount={1} height={'fit-content'} id={"frmPrice" + this.tabIndex}>
                                 <Item>
                                     <Label text={this.t("popPrice.dtPopPriStartDate")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtPopPriStartDate"}/>
+                                    <NdDatePicker simple={true}  parent={this} id={"dtPopPriStartDate"}
+                                     onValueChanged={(async(e)=>
+                                        {
+                                            console.log(this.dtPopPriStartDate.value)
+                                        }).bind(this)}/>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popPrice.dtPopPriEndDate")} alignment="right" />
@@ -1481,7 +1485,7 @@ export default class itemCard extends React.PureComponent
                                                     }
                                                     //********************************** */
                                                     let tmpEmpty = {...this.itemsObj.itemPrice.empty};
-                                                
+                                                    
                                                     tmpEmpty.TYPE = 0
                                                     tmpEmpty.TYPE_NAME = 'Standart'
                                                     tmpEmpty.ITEM_GUID = this.itemsObj.dt()[0].GUID 

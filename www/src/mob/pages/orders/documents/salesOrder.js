@@ -90,7 +90,7 @@ export default class salesOrder extends React.Component
         }
         if(pPage == "Barcode")
         {
-            if(this.cmbDepotList.value == "")
+            if(this.cmbDepot.value == "")
             {
                 let tmpConfObj = 
                 {
@@ -251,7 +251,7 @@ export default class salesOrder extends React.Component
                     {/* Depot */}
                     <Item>
                         <Label text={this.t("txtDepot")} alignment="right" />
-                        <NdSelectBox simple={true} parent={this} id="cmbDepotList" notRefresh = {true}
+                        <NdSelectBox simple={true} parent={this} id="cmbDepot" notRefresh = {true}
                         dt=""
                         displayExpr="NAME"
                         valueExpr="GUID"
@@ -262,8 +262,8 @@ export default class salesOrder extends React.Component
                                 
                             }).bind(this)}
                         data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}}}
-                        param={this.param.filter({ELEMENT:'cmbDepotList',USERS:this.user.CODE})}
-                        access={this.access.filter({ELEMENT:'cmbDepotList',USERS:this.user.CODE})}
+                        param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
+                        access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                         >
                         </NdSelectBox>
                     </Item>
