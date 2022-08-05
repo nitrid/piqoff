@@ -1569,7 +1569,7 @@ export default class salesInvoice extends React.PureComponent
                                     ></NdTextBox>
                                 </Item>
                                 {/* İndirim */}
-                                <EmptyItem />
+                                <EmptyItem colSpan={3}/>
                                 <Item>
                                 <Label text={this.t("txtDiscount")} alignment="right" />
                                     <NdTextBox id="txtDiscount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"DISCOUNT"}}
@@ -1595,7 +1595,7 @@ export default class salesInvoice extends React.PureComponent
                                     ></NdTextBox>
                                 </Item>
                                 {/* Ara Toplam */}
-                                <EmptyItem />
+                                <EmptyItem colSpan={3}/>
                                 <Item  >
                                 <Label text={this.t("txtMargin")} alignment="right" />
                                     <NdTextBox id="txtMargin" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"MARGIN"}}
@@ -1604,7 +1604,7 @@ export default class salesInvoice extends React.PureComponent
                                     ></NdTextBox>
                                 </Item>
                                 {/* KDV */}
-                                <EmptyItem />
+                                <EmptyItem colSpan={3}/>
                                 <Item>
                                 <Label text={this.t("txtVat")} alignment="right" />
                                     <NdTextBox id="txtVat" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"VAT"}}
@@ -1643,7 +1643,7 @@ export default class salesInvoice extends React.PureComponent
                                     ></NdTextBox>
                                 </Item>
                                 {/* Toplam */}
-                                <EmptyItem />
+                                <EmptyItem colSpan={3}/>
                                 <Item>
                                 <Label text={this.t("txtTotal")} alignment="right" />
                                     <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}}
@@ -1653,7 +1653,7 @@ export default class salesInvoice extends React.PureComponent
                                     ></NdTextBox>
                                 </Item>
                                 {/* Ödeme Toplam */}
-                                <EmptyItem />
+                                <EmptyItem colSpan={3}/>
                                 <Item>
                                 <Label text={this.t("txtPayTotal")} alignment="right" />
                                     <NdTextBox id="txtPayTotal" parent={this} simple={true} readOnly={true} dt={{data:this.paymentObj.dt('DOC'),field:"TOTAL"}}
@@ -1661,7 +1661,7 @@ export default class salesInvoice extends React.PureComponent
                                     ></NdTextBox>
                                 </Item>
                                 {/* Kalan */}
-                                <EmptyItem />
+                                <EmptyItem colSpan={3}/>
                                 <Item>
                                 <Label text={this.t("txtRemainder")} alignment="right" />
                                     <NdTextBox id="txtMainRemainder" parent={this} simple={true} readOnly={true}
