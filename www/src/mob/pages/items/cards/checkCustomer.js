@@ -33,13 +33,16 @@ export default class salesOrder extends React.Component
         this.barcode = 
         {
             name:"",
-            price:0,
             barcode: "",
             code:""
         }
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
+        this.itemCustomerObj = new datatable   
+        this.barcodeScan = this.barcodeScan.bind(this)
+
+
     }
     async componentDidMount()
     {
@@ -48,6 +51,65 @@ export default class salesOrder extends React.Component
     }
     async init()
     {
+        await this.grdChkCustomer.dataRefresh({source:this.itemCustomerObj});
+    }
+    async barcodeScan()
+    {
+        this.itemCustomerObj.clear()
+        cordova.plugins.barcodeScanner.scan(
+            async function (result) 
+            {
+                if(result.cancelled == false)
+                {
+                    let tmpQuery = 
+                    {
+                        query : "SELECT ITEM_CODE AS CODE,ITEM_NAME AS NAME,ITEM_GUID AS GUID,BARCODE FROM ITEM_BARCODE_VW_01  WHERE BARCODE = @BARCODE OR ITEM_CODE = @BARCODE ",
+                        param : ['BARCODE:string|50'],
+                        value : [result.text]
+                    }
+                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                    if(tmpData.result.recordset.length >0)
+                    {
+                        this.barcode.name = tmpData.result.recordset[0].NAME
+                        this.barcode.barcode = tmpData.result.recordset[0].BARCODE 
+                        this.barcode.code = tmpData.result.recordset[0].CODE 
+                        let tmpCustomerQuery = 
+                        {
+                            query : "SELECT CUSTOMER_NAME,CUSTOMER_CODE,CONVERT(NVARCHAR,CDATE,104) AS CDATE,MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = @ITEM_GUID",
+                            param : ['ITEM_GUID:string|50'],
+                            value : [tmpData.result.recordset[0].GUID]
+                        }
+                        let tmpCustomerData = await this.core.sql.execute(tmpCustomerQuery) 
+                        if(tmpCustomerData.result.recordset.length >0)
+                        for (let i = 0; i < tmpCustomerData.result.recordset.length; i++) 
+                        {
+                            this.itemCustomerObj.push(tmpCustomerData.result.recordset[i])
+                        }
+
+                        this.setState({tbBarcode:"visible"})
+                    }
+                    else
+                    {
+                        let tmpConfObj = 
+                        {
+                            id:'msgBarcodeNotFound',showTitle:true,title:this.t("msgBarcodeNotFound.title"),showCloseButton:true,width:'350px',height:'200px',
+                            button:[{id:"btn01",caption:this.t("msgBarcodeNotFound.btn01"),location:'after'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcodeNotFound.msg")}</div>)
+                        }
+                        await dialog(tmpConfObj);
+                        this.txtBarcode.value = ""
+                    }
+                }
+            }.bind(this),
+            function (error) 
+            {
+                //alert("Scanning failed: " + error);
+            },
+            {
+              prompt : "Scan",
+              orientation : "portrait"
+            }
+        );
     }
     render()
     {
@@ -68,53 +130,51 @@ export default class salesOrder extends React.Component
                                     this.popItemCode.show()
                                     this.popItemCode.onClick = async(data) =>
                                     {
+                                        this.itemCustomerObj.clear()
                                         if(data.length == 1)
                                         {
                                             this.txtBarcode.value = data[0].CODE
-                                            this.barcode = {
-                                                name:data[0].NAME,
-                                                code:data[0].CODE,
-                                                barcode:data[0].BARCODE,
-                                                price:data[0].PRICE
+                                            this.barcode.name = data[0].NAME
+                                            this.barcode.barcode = data[0].BARCODE 
+                                            this.barcode.code = data[0].CODE 
+                                            let tmpCustomerQuery = 
+                                            {
+                                                query : "SELECT CUSTOMER_NAME,CUSTOMER_CODE,CONVERT(NVARCHAR,CDATE,104) AS CDATE,MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = @ITEM_GUID ORDER BY CDATE DESC",
+                                                param : ['ITEM_GUID:string|50'],
+                                                value : [data[0].GUID]
                                             }
-                                            this.numPrice.value = data[0].PRICE
+                                            let tmpCustomerData = await this.core.sql.execute(tmpCustomerQuery) 
+                                            if(tmpCustomerData.result.recordset.length >0)
+                                            for (let i = 0; i < tmpCustomerData.result.recordset.length; i++) 
+                                            {
+                                                this.itemCustomerObj.push(tmpCustomerData.result.recordset[i])
+                                            }
+                                            this.txtBarcode.value= ''
                                             this.setState({tbBarcode:"visible"})
                                         }
-                                        else if(data.length > 1)
-                                        {
-                                            for (let i = 0; i < data.length; i++) 
-                                            {
-                                                this.txtBarcode.value = data[i].CODE
-                                                this.barcode = {
-                                                    name:data[i].NAME,
-                                                    code:data[i].CODE,
-                                                    barcode:data[i].BARCODE,
-                                                    price:data[i].PRICE
-                                                }
-                                                await this.addItem()
-                                            }
-                                            let tmpConfObj = 
-                                            {
-                                                id:'msgItemsAdd',showTitle:true,title:this.t("msgItemsAdd.title"),showCloseButton:true,width:'350px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgItemsAdd.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemsAdd.msg")}</div>)
-                                            }
-                                            await dialog(tmpConfObj);
-                                        }
                                     }
+                                }
+                            },
+                            {
+                                id:'02',
+                                icon:'photo',
+                                onClick:async()=>
+                                {
+                                    this.barcodeScan()
                                 }
                             }
                         ]
                         }
                         onEnterKey={(async(e)=>
                             {
+                                this.itemCustomerObj.clear()
                                 if(e.component._changedValue == "")
                                 {
                                     return
                                 }
                                 let tmpQuery = 
                                 {
-                                    query : "SELECT ITEM_CODE AS CODE,ITEM_NAME AS NAME,ITEM_GUID AS GUID,BARCODE,[dbo].[FN_PRICE_SALE](ITEM_GUID,1,GETDATE()) AS PRICE FROM ITEM_BARCODE_VW_01  WHERE BARCODE = @BARCODE OR ITEM_CODE = @BARCODE ",
+                                    query : "SELECT ITEM_CODE AS CODE,ITEM_NAME AS NAME,ITEM_GUID AS GUID,BARCODE FROM ITEM_BARCODE_VW_01  WHERE BARCODE = @BARCODE OR ITEM_CODE = @BARCODE ",
                                     param : ['BARCODE:string|50'],
                                     value : [e.component._changedValue]
                                 }
@@ -124,8 +184,19 @@ export default class salesOrder extends React.Component
                                     this.barcode.name = tmpData.result.recordset[0].NAME
                                     this.barcode.barcode = tmpData.result.recordset[0].BARCODE 
                                     this.barcode.code = tmpData.result.recordset[0].CODE 
-                                    this.barcode.price = tmpData.result.recordset[0].PRICE 
-                                    this.numPrice.value = parseFloat(tmpData.result.recordset[0].PRICE)
+                                    let tmpCustomerQuery = 
+                                    {
+                                        query : "SELECT CUSTOMER_NAME,CUSTOMER_CODE,CONVERT(NVARCHAR,CDATE,104) AS CDATE,MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = @ITEM_GUID",
+                                        param : ['ITEM_GUID:string|50'],
+                                        value : [tmpData.result.recordset[0].GUID]
+                                    }
+                                    let tmpCustomerData = await this.core.sql.execute(tmpCustomerQuery) 
+                                    if(tmpCustomerData.result.recordset.length >0)
+                                    for (let i = 0; i < tmpCustomerData.result.recordset.length; i++) 
+                                    {
+                                        this.itemCustomerObj.push(tmpCustomerData.result.recordset[i])
+                                    }
+                                    this.txtBarcode.value= ''
                                     this.setState({tbBarcode:"visible"})
                                 }
                                 else
@@ -171,9 +242,10 @@ export default class salesOrder extends React.Component
                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                         <Scrolling mode="infinite" />
                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                        <Column dataField="DATE" caption={this.t("grdChkCustomer.clmDate")} width={100} />
-                        <Column dataField="CODE" caption={this.t("grdChkCustomer.clmCustomerCode")} width={150}/>
-                        <Column dataField="NAME" caption={this.t("grdChkCustomer.clmCustomerName")} width={350} />
+                        <Column dataField="CDATE" caption={this.t("grdChkCustomer.clmDate")} width={100} />
+                        <Column dataField="MULTICODE" caption={this.t("grdChkCustomer.clmMulticode")} width={120} />
+                        <Column dataField="CUSTOMER_NAME" caption={this.t("grdChkCustomer.clmCustomerName")} width={350} />
+                        <Column dataField="CUSTOMER_CODE" caption={this.t("grdChkCustomer.clmCustomerCode")} width={150}/>
                     </NdGrid>
                 </Item>
             </Form>
@@ -185,6 +257,7 @@ export default class salesOrder extends React.Component
                 showBorders={true}
                 width={'90%'}
                 height={'90%'}
+                selection={{mode:"single"}}
                 title={this.t("popItemCode.title")} //
                 search={true}
                 data = 

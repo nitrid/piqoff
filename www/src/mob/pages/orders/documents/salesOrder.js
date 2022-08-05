@@ -39,9 +39,10 @@ export default class salesOrder extends React.Component
         this.barcode = 
         {
             name:"",
-            price:0,
+            vat:0,
             barcode: "",
-            code:""
+            code:"",
+            guid : "00000000-0000-0000-0000-000000000000",
         }
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
@@ -52,6 +53,7 @@ export default class salesOrder extends React.Component
         this.dropmenuMainItems = [this.t("btnNew"),this.t("btnSave")]
         this.dropmenuDocItems = [this.t("btnDeleteRow")]
         this.pageChange = this.pageChange.bind(this)
+        this.setBarcode = this.setBarcode.bind(this)
     }
     async componentDidMount()
     {
@@ -71,6 +73,8 @@ export default class salesOrder extends React.Component
         this.txtRef.readOnly = false
         this.txtRefno.readOnly = false
         this.txtRef.readOnly = true
+        await this.grdSlsOrder.dataRefresh({source:this.docObj.docOrders.dt('DOC_ORDERS')});
+
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -124,6 +128,112 @@ export default class salesOrder extends React.Component
             this.setState({tbDocument:"visible"})
         }
     }    
+    async setBarcode()
+    {
+        this.txtQuantity.value = 1
+        let tmpQuery = 
+        {
+            query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,1,GETDATE()) AS PRICE",
+            param : ['GUID:string|50'],
+            value : [this.barcode.guid]
+        }
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        if(tmpData.result.recordset.length > 0)
+        {
+            this.txtPrice.value = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
+            this.txtVat.value = parseFloat((tmpData.result.recordset[0].PRICE * (this.barcode.vat / 100)).toFixed(3))
+            this.txtDiscount.value = 0
+            this.txtAmount.value = parseFloat((Number(this.txtPrice.value) + Number(this.txtVat.value)).toFixed(3))
+        }
+        if(this.chkAutoAdd.value == true)
+        {
+            this.addItem(1)
+        }
+        else
+        {
+
+        }
+        this.setState({tbBarcode:"visible"})
+    }
+    barcodeReset()
+    {
+        if(this.chkAutoAdd.value == false)
+        {
+            this.barcode = 
+            {
+                name:"",
+                vat:0,
+                barcode: "",
+                code:"",
+                guid : "00000000-0000-0000-0000-000000000000",
+            }
+        }
+        this.txtBarcode.value = ""
+        this.setState({tbBarcode:"visible"})
+        this.txtBarcode.focus()
+        //this.calculateCount()
+    }
+    async addItem(pQuantity)
+    {
+        if(this.txtBarcode.value == "")
+        {
+            let tmpConfObj = 
+            {
+                id:'msgBarcodeCheck',showTitle:true,title:this.t("msgBarcodeCheck.title"),showCloseButton:true,width:'350px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgBarcodeCheck.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcodeCheck.msg")}</div>)
+            }
+            let pResult = await dialog(tmpConfObj);
+            return
+        }
+        for (let i = 0; i < this.docObj.docOrders.dt().length; i++) 
+        {
+            if(this.docObj.docOrders.dt()[i].CODE == this.barcode.code)
+            {
+                let tmpConfObj = 
+                {
+                    id:'msgCombineItem',showTitle:true,title:this.t("msgCombineItem.title"),showCloseButton:true,width:'350px',height:'200px',
+                    button:[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>)
+                }
+                let pResult = await dialog(tmpConfObj);
+                if(pResult == 'btn01')
+                {                   
+                    this.barcodeReset()
+                    return
+                }
+                else
+                {
+                    break
+                }
+                
+            }
+        }
+        let tmpDocItems = {...this.docObj.docOrders.empty}
+        tmpDocItems.REF = this.docObj.dt()[0].REF
+        tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+        tmpDocItems.ITEM_NAME = this.barcode.name
+        tmpDocItems.ITEM_CODE = this.barcode.code
+        tmpDocItems.ITEM = this.barcode.guid
+        tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+        tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+        tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+        tmpDocItems.LINE_NO = this.docObj.docOrders.dt().length
+        tmpDocItems.REF = this.docObj.dt()[0].REF
+        tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+        tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+        tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+        tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+        tmpDocItems.QUANTITY = pQuantity
+        tmpDocItems.VAT_RATE = this.barcode.vat
+        tmpDocItems.PRICE = this.txtPrice.value
+        tmpDocItems.VAT = (this.txtVat.value * pQuantity).toFixed(3)
+        tmpDocItems.AMOUNT = (this.txtPrice.value * pQuantity).toFixed(3)
+        tmpDocItems.TOTAL = parseFloat(((this.txtPrice.value * pQuantity) + (this.txtVat.value * pQuantity).toFixed(3))).toFixed(3)
+        this.docObj.docOrders.addEmpty(tmpDocItems)
+        this.barcodeReset()
+        await this.docObj.save()
+    }
     render()
     {
         return(
@@ -252,7 +362,7 @@ export default class salesOrder extends React.Component
                     <Item>
                         <Label text={this.t("txtDepot")} alignment="right" />
                         <NdSelectBox simple={true} parent={this} id="cmbDepot" notRefresh = {true}
-                        dt=""
+                        dt={{data:this.docObj.dt('DOC'),field:"OUTPUT"}}  
                         displayExpr="NAME"
                         valueExpr="GUID"
                         value=""
@@ -367,19 +477,6 @@ export default class salesOrder extends React.Component
                                 sql:this.core.sql
                             }
                         }}
-                        button=
-                        {
-                            [
-                                {
-                                    id:'01',
-                                    icon:'more',
-                                    onClick:()=>
-                                    {
-                                    }
-                                }
-                            ]
-                            
-                        }
                         >
                             <Column dataField="CODE" caption={this.t("pg_CustomerSelect.clmCode")} width={150} />
                             <Column dataField="TITLE" caption={this.t("pg_CustomerSelect.clmTitle")} width={200} defaultSortOrder="asc" />
@@ -464,9 +561,9 @@ export default class salesOrder extends React.Component
                                                     name:data[0].NAME,
                                                     code:data[0].CODE,
                                                     barcode:data[0].BARCODE,
-                                                    price:data[0].PRICE
+                                                    price:data[0].PRICE,
+                                                    guid : date[0].GUID
                                                 }
-                                                this.numPrice.value = data[0].PRICE
                                                 this.setState({tbBarcode:"visible"})
                                             }
                                             else if(data.length > 1)
@@ -478,7 +575,8 @@ export default class salesOrder extends React.Component
                                                         name:data[i].NAME,
                                                         code:data[i].CODE,
                                                         barcode:data[i].BARCODE,
-                                                        price:data[i].PRICE
+                                                        price:data[i].PRICE,
+                                                        guid : date[0].GUID
                                                     }
                                                     await this.addItem()
                                                 }
@@ -503,7 +601,7 @@ export default class salesOrder extends React.Component
                                     }
                                     let tmpQuery = 
                                     {
-                                        query : "SELECT ITEM_CODE AS CODE,ITEM_NAME AS NAME,ITEM_GUID AS GUID,BARCODE,[dbo].[FN_PRICE_SALE](ITEM_GUID,1,GETDATE()) AS PRICE FROM ITEM_BARCODE_VW_01  WHERE BARCODE = @BARCODE OR ITEM_CODE = @BARCODE ",
+                                        query : "SELECT ITEM_CODE AS CODE,ITEM_NAME AS NAME,ITEM_GUID AS GUID,BARCODE, ISNULL((SELECT VAT FROM ITEMS WHERE ITEMS.GUID = ITEM_BARCODE_VW_01.ITEM_GUID),0) AS VAT FROM ITEM_BARCODE_VW_01  WHERE BARCODE = @BARCODE OR ITEM_CODE = @BARCODE ",
                                         param : ['BARCODE:string|50'],
                                         value : [e.component._changedValue]
                                     }
@@ -513,17 +611,10 @@ export default class salesOrder extends React.Component
                                         this.barcode.name = tmpData.result.recordset[0].NAME
                                         this.barcode.barcode = tmpData.result.recordset[0].BARCODE 
                                         this.barcode.code = tmpData.result.recordset[0].CODE 
-                                        this.barcode.price = tmpData.result.recordset[0].PRICE 
-                                        this.numPrice.value = parseFloat(tmpData.result.recordset[0].PRICE)
-                                        if(this.chkAutoAdd.value == true)
-                                        {
-                                            this.addItem()
-                                        }
-                                        else
-                                        {
-                                            this.numPrice.focus()
-                                        }
-                                        this.setState({tbBarcode:"visible"})
+                                        this.barcode.guid = tmpData.result.recordset[0].GUID 
+                                        this.barcode.vat = tmpData.result.recordset[0].VAT 
+                                        this.setBarcode()
+                                        
                                     }
                                     else
                                     {
@@ -548,23 +639,18 @@ export default class salesOrder extends React.Component
                         </div>
                     </Item>
                     {/* txtQuantity */}
-                    <GroupItem colCountByScreen={{xs:2}}>
-                        <SimpleItem/>
-                        <SimpleItem>
-                            <Label text={this.t("txtQuantity")}/>
-                            <NdNumberBox id="txtBarQuantity" parent={this} simple={true}  
-                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                readOnly={true}
-                                param={this.param.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
-                                access={this.access.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
-                                >
-                            </NdNumberBox>
-                        </SimpleItem>
-                    </GroupItem>
+                   <Item>
+                        <Label text={this.t("txtQuantity")}/>
+                        <NdNumberBox id="txtQuantity" parent={this} simple={true}  
+                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                            readOnly={true}
+                            param={this.param.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
+                            access={this.access.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
+                            >
+                        </NdNumberBox>
+                    </Item>
                     {/* txtPrice */}
-                    <GroupItem colCountByScreen={{xs:2}}>
-                    <SimpleItem/>
-                    <SimpleItem>
+                    <Item>
                        <Label text={this.t("txtPrice")} alignment="right" />
                        <NdNumberBox id="txtPrice" parent={this} simple={true}
                        param={this.param.filter({ELEMENT:'txtPrice',USERS:this.user.CODE})}
@@ -575,53 +661,43 @@ export default class salesOrder extends React.Component
                            }).bind(this)}
                        >
                        </NdNumberBox>
-                    </SimpleItem>
-                    </GroupItem>
+                    </Item>
                     {/* txtVat */}
-                    <GroupItem colCountByScreen={{xs:2}}>
-                        <SimpleItem/>
-                        <SimpleItem>
-                            <Label text={this.t("txtVat")} alignment="right" />
-                            <NdTextBox id="txtBarVat" parent={this} simple={true}  
-                            readOnly={true}
-                            param={this.param.filter({ELEMENT:'txtVat',USERS:this.user.CODE})}
-                            access={this.access.filter({ELEMENT:'txtVat',USERS:this.user.CODE})}
-                            >
-                            </NdTextBox>
-                        </SimpleItem>
-                    </GroupItem> 
+                    <Item>
+                        <Label text={this.t("txtVat")} alignment="right" />
+                        <NdTextBox id="txtVat" parent={this} simple={true}  
+                        readOnly={true}
+                        param={this.param.filter({ELEMENT:'txtVat',USERS:this.user.CODE})}
+                        access={this.access.filter({ELEMENT:'txtVat',USERS:this.user.CODE})}
+                        >
+                        </NdTextBox>
+                    </Item>
                     {/* txtDiscount */}
-                    <GroupItem colCountByScreen={{xs:2}}>
-                        <SimpleItem/>
-                        <SimpleItem>
-                            <Label text={this.t("txtDiscount")} alignment="right" />
-                            <NdTextBox id="txtBarDisCount" parent={this} simple={true}  
-                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                            readOnly={true}
-                            param={this.param.filter({ELEMENT:'txtDiscount',USERS:this.user.CODE})}
-                            access={this.access.filter({ELEMENT:'txtDiscount',USERS:this.user.CODE})}
-                            >
-                            </NdTextBox>
-                        </SimpleItem>
-                    </GroupItem> 
+                    <Item>
+                        <Label text={this.t("txtDiscount")} alignment="right" />
+                        <NdTextBox id="txtDiscount" parent={this} simple={true}  
+                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                        readOnly={true}
+                        param={this.param.filter({ELEMENT:'txtDiscount',USERS:this.user.CODE})}
+                        access={this.access.filter({ELEMENT:'txtDiscount',USERS:this.user.CODE})}
+                        >
+                        </NdTextBox>
+                    </Item>
                     {/* txtAmount */}
-                    <GroupItem colCountByScreen={{xs:2}}>
-                        <SimpleItem/>
-                        <SimpleItem>
-                            <Label text={this.t("txtAmount")} alignment="right" />
-                            <NdTextBox id="txtBarAmount" parent={this} simple={true}  
-                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                            readOnly={true}
-                            param={this.param.filter({ELEMENT:'txtAmount',USERS:this.user.CODE})}
-                            access={this.access.filter({ELEMENT:'txtAmount',USERS:this.user.CODE})}
-                            >
-                            </NdTextBox>
-                        </SimpleItem>
-                    </GroupItem>
+                    <Item>
+                        <Label text={this.t("txtAmount")} alignment="right" />
+                        <NdTextBox id="txtAmount" parent={this} simple={true}  
+                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                        readOnly={true}
+                        param={this.param.filter({ELEMENT:'txtAmount',USERS:this.user.CODE})}
+                        access={this.access.filter({ELEMENT:'txtAmount',USERS:this.user.CODE})}
+                        >
+                        </NdTextBox>
+                    </Item>
                     <Item>
                         <div className="row">
                             <div className="col-12 px-4 pt-4">
-                                <NdButton text={this.t("btnItemAdd")} type="default" width="100%" onClick={()=>this.addItem()}></NdButton>
+                                <NdButton text={this.t("btnItemAdd")} type="default" width="100%" onClick={()=>this.addItem(this.txtQuantity.value)}></NdButton>
                             </div>
                         </div>
                     </Item>
@@ -652,19 +728,97 @@ export default class salesOrder extends React.Component
                     width={'100%'}
                     dbApply={false}
                     onRowUpdated={async(e)=>{
+                        let rowIndex = e.component.getRowIndexByKey(e.key)
+
+                        if(typeof e.data.DISCOUNT_RATE != 'undefined')
+                        {
+                            e.key.DISCOUNT = parseFloat((((this.docObj.docOrders.dt()[rowIndex].AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(3))
+                        }
+
+                        if(e.key.COST_PRICE > e.key.PRICE )
+                        {
+                            let tmpData = this.acsobj.filter({ID:'underMinCostPrice',USERS:this.user.CODE}).getValue()
+                            if(typeof tmpData != 'undefined' && tmpData ==  true)
+                            {
+                                let tmpConfObj =
+                                {
+                                    id:'msgUnderPrice1',showTitle:true,title:this.t("msgUnderPrice1.title"),showCloseButton:true,width:'500px',height:'200px',
+                                    button:[{id:"btn01",caption:this.t("msgUnderPrice1.btn01"),location:'before'},{id:"btn02",caption:this.t("msgUnderPrice1.btn02"),location:'after'}],
+                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgUnderPrice1.msg")}</div>)
+                                }
+                                
+                                let pResult = await dialog(tmpConfObj);
+                                if(pResult == 'btn01')
+                                {
+                                    
+                                }
+                                else if(pResult == 'btn02')
+                                {
+                                    return
+                                }
+                            }
+                            else
+                            {
+                                let tmpConfObj =
+                                {
+                                    id:'msgUnderPrice2',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
+                                    button:[{id:"btn01",caption:this.t("msgUnderPrice2.btn01"),location:'after'}],
+                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"msgUnderPrice2.msg"}</div>)
+                                }
+                                dialog(tmpConfObj);
+                                return
+                            }
+                        }
+                        if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
+                        {
+                            let tmpConfObj =
+                            {
+                                id:'msgDiscount',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
+                                button:[{id:"btn01",caption:this.t("msgDiscount.btn01"),location:'after'}],
+                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscount.msg")}</div>)
+                            }
+                        
+                            dialog(tmpConfObj);
+                            this.docObj.docOrders.dt()[rowIndex].DISCOUNT = 0 
+                            return
+                        }
+                        if(this.docObj.docOrders.dt()[rowIndex].VAT > 0)
+                        {
+                            this.docObj.docOrders.dt()[rowIndex].VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(3));
+                        }
+                        this.docObj.docOrders.dt()[rowIndex].AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3))
+                        this.docObj.docOrders.dt()[rowIndex].TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +this.docObj.docOrders.dt()[rowIndex].VAT).toFixed(3))
+
+                        let tmpMargin = (this.docObj.docOrders.dt()[rowIndex].TOTAL - this.docObj.docOrders.dt()[rowIndex].VAT) - (this.docObj.docOrders.dt()[rowIndex].COST_PRICE * this.docObj.docOrders.dt()[rowIndex].QUANTITY)
+                        let tmpMarginRate = (tmpMargin /(this.docObj.docOrders.dt()[rowIndex].TOTAL - this.docObj.docOrders.dt()[rowIndex].VAT)) * 100
+                        this.docObj.docOrders.dt()[rowIndex].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+                        if(this.docObj.docOrders.dt()[rowIndex].DISCOUNT > 0)
+                        {
+                            this.docObj.docOrders.dt()[rowIndex].DISCOUNT_RATE = parseFloat((100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100)).toFixed(3))
+                        }
+                        console.log(this.docObj.docOrders.dt()[rowIndex].MARGIN)
+                        this._calculateTotal()
                         
                     }}
                     onRowRemoved={async (e)=>{
-                       
+                        this._calculateTotal()
+                        await this.docObj.save()
                     }}
                     >
                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                         <Scrolling mode="infinite" />
                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                        <Column dataField="CODE" caption={this.t("grdSlsOrder.clmItemCode")} width={150}/>
-                        <Column dataField="NAME" caption={this.t("grdSlsOrder.clmItemName")} width={350} />
-                        <Column dataField="BARCODE" caption={this.t("grdSlsOrder.clmBarcode")} width={250} />
-                        <Column dataField="PRICE" caption={this.t("grdSlsOrder.clmPrice")} width={250} />
+                        <Export fileName={this.lang.t("menu.sip_02_002")} enabled={true} allowExportSelectedData={true} />
+                        <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsOrder.clmCreateDate")} width={150} allowEditing={false}/>
+                        <Column dataField="ITEM_CODE" caption={this.t("grdSlsOrder.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
+                        <Column dataField="ITEM_NAME" caption={this.t("grdSlsOrder.clmItemName")} width={350} />
+                        <Column dataField="PRICE" caption={this.t("grdSlsOrder.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={150}/>
+                        <Column dataField="QUANTITY" caption={this.t("grdSlsOrder.clmQuantity")} dataType={'number'} width={150}/>
+                        <Column dataField="AMOUNT" caption={this.t("grdSlsOrder.clmAmount")} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}} width={150}/>
+                        <Column dataField="DISCOUNT" caption={this.t("grdSlsOrder.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={150}/>
+                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsOrder.clmDiscountRate")} dataType={'number'} width={150}/>
+                        <Column dataField="VAT" caption={this.t("grdSlsOrder.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} width={150}/>
+                        <Column dataField="TOTAL" caption={this.t("grdSlsOrder.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} width={150}/>
                     </NdGrid>
                 </Item>
                 </Form>

@@ -757,6 +757,7 @@ export default class labelPrinting extends React.Component
                 width={'90%'}
                 height={'90%'}
                 title={this.t("popItemCode.title")} //
+                selection={{mode:"single"}}
                 search={true}
                 data = 
                 {{

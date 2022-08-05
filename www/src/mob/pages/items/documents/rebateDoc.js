@@ -38,8 +38,8 @@ export default class salesOrder extends React.Component
         }     
         this.barcode = 
         {
+            guid:"00000000-0000-0000-0000-000000000000",
             name:"",
-            price:0,
             barcode: "",
             code:""
         }
@@ -50,8 +50,10 @@ export default class salesOrder extends React.Component
         this.docObj = new docCls();
 
         this.dropmenuMainItems = [this.t("btnNew"),this.t("btnSave")]
-        this.dropmenuDocItems = [this.t("btnDeleteRow")]
+        this.dropmenuDocItems = [this.t("btnSave")]
         this.pageChange = this.pageChange.bind(this)
+        this.dropmenuClick = this.dropmenuClick.bind(this)
+
     }
     async componentDidMount()
     {
@@ -62,23 +64,129 @@ export default class salesOrder extends React.Component
     {
         this.docObj.clearAll()
 
+        this.txtRef.setState({value:this.user.CODE})
         let tmpDoc = {...this.docObj.empty}
-
-        
+        tmpDoc.REF = this.user.CODE
+        tmpDoc.TYPE = 2
+        tmpDoc.DOC_TYPE = 2
+        tmpDoc.REBATE = 1
         this.docObj.addEmpty(tmpDoc);
 
-        this.txtCustomerCode.readOnly = false;
-        this.txtRef.readOnly = false
-        this.txtRefno.readOnly = false
         this.txtRef.readOnly = true
+        this.txtRefno.readOnly = true
+        this.docLocked = false
+        
+        this.frmDocItems.option('disabled',false)
+        await this.grdRebItems.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
+        this.txtRef.props.onChange()
     }
     async getDoc(pGuid,pRef,pRefno)
     {
         this.docObj.clearAll()
-        await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:60});
+        await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:2,DOC_TYPE:2});
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
+        
+        if(this.docObj.dt()[0].LOCKED != 0)
+        {
+            this.docLocked = true
+            let tmpConfObj =
+            {
+                id:'msgGetLocked',showTitle:true,title:this.t("msgGetLocked.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgGetLocked.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgGetLocked.msg")}</div>)
+            }
+
+            await dialog(tmpConfObj);
+            this.frmDocItems.option('disabled',true)
+        }
+        else
+        {
+            this.docLocked = false
+            this.frmDocItems.option('disabled',false)
+        }
+    }
+    async dropmenuClick(e)
+    {
+        if(e.itemData == this.t("btnNew"))
+        {
+            this.init()
+        }
+        else if(e.itemData == this.t("btnSave"))
+        {
+            let tmpConfObj =
+            {
+                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'350px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
+            }
+            
+            let pResult = await dialog(tmpConfObj);
+            if(pResult == 'btn01')
+            {
+                let tmpConfObj1 =
+                {
+                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'350px',height:'200px',
+                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                }
+                
+                if((await this.docObj.save()) == 0)
+                {                       
+                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
+                    await dialog(tmpConfObj1);
+                }
+                else
+                {
+                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                    await dialog(tmpConfObj1);
+                }
+            }
+        }
+    }
+    async checkDoc(pGuid,pRef,pRefno)
+    {
+        return new Promise(async resolve =>
+        {
+            if(pRef !== '')
+            {
+                let tmpData = await new docCls().load({GUID:pGuid,REF:pRef,REF_NO:pRefno});
+
+                if(tmpData.length > 0)
+                {
+                    let tmpConfObj = 
+                    {
+                        id: 'msgCode',
+                        showTitle:true,
+                        title:"Dikkat",
+                        showCloseButton:true,
+                        width:'500px',
+                        height:'200px',
+                        button:[{id:"btn01",caption:"Evrağa Git",location:'before'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Evrak Bulundu"}</div>)
+                    }
+    
+                    let pResult = await dialog(tmpConfObj);
+                    if(pResult == 'btn01')
+                    {
+                        this.getDoc(pGuid,pRef,pRefno)
+                        resolve(2) //KAYIT VAR
+                    }
+                    else
+                    {
+                        resolve(3) // TAMAM BUTONU
+                    }
+                }
+                else
+                {
+                    resolve(1) // KAYIT BULUNAMADI
+                }
+            }
+            else
+            {
+                resolve(0) //PARAMETRE BOŞ
+            }
+        });
     }
     async pageChange(pPage)
     {
@@ -90,7 +198,7 @@ export default class salesOrder extends React.Component
         }
         if(pPage == "Barcode")
         {
-            if(this.cmbOutDepotList.value == "")
+            if(this.cmbDepot1.value == "")
             {
                 let tmpConfObj = 
                 {
@@ -98,10 +206,10 @@ export default class salesOrder extends React.Component
                     button:[{id:"btn01",caption:this.t("msgDepotSelect.btn01"),location:'after'}],
                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDepotSelect.msg")}</div>)
                 }
-                let pResult = await dialog(tmpConfObj);
+                await dialog(tmpConfObj);
                 return
             }
-            else if(this.cmbRebateDepotList.value == "")
+            else if(this.cmbDepot2.value == "")
             {
                 let tmpConfObj = 
                 {
@@ -109,7 +217,7 @@ export default class salesOrder extends React.Component
                     button:[{id:"btn01",caption:this.t("msgDepotSelect.btn01"),location:'after'}],
                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDepotSelect.msg")}</div>)
                 }
-                let pResult = await dialog(tmpConfObj);
+                await dialog(tmpConfObj);
                 return
             }
             this.setState({tbMain:"hidden"})
@@ -124,6 +232,80 @@ export default class salesOrder extends React.Component
             this.setState({tbDocument:"visible"})
         }
     }    
+    barcodeReset()
+    {
+        if(this.chkAutoAdd.value == false)
+        {
+            this.barcode = 
+            {
+                name:"",
+                barcode: "",
+                code:""
+            }
+        }
+        this.txtBarcode.value = ""
+        this.txtQuantity.value=1
+        this.setState({tbBarcode:"visible"})
+        this.txtBarcode.focus()
+    }
+    async addItem(pQuantity)
+    {
+        if(this.txtBarcode.value == "")
+        {
+            let tmpConfObj = 
+            {
+                id:'msgBarcodeCheck',showTitle:true,title:this.t("msgBarcodeCheck.title"),showCloseButton:true,width:'350px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgBarcodeCheck.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcodeCheck.msg")}</div>)
+            }
+            let pResult = await dialog(tmpConfObj);
+            return
+        }
+        for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+        {
+            if(this.docObj.docItems.dt()[i].CODE == this.barcode.code)
+            {
+                let tmpConfObj = 
+                {
+                    id:'msgCombineItem',showTitle:true,title:this.t("msgCombineItem.title"),showCloseButton:true,width:'350px',height:'200px',
+                    button:[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>)
+                }
+                let pResult = await dialog(tmpConfObj);
+                if(pResult == 'btn01')
+                {                   
+                    this.barcodeReset()
+                    return
+                }
+                else
+                {
+                    break
+                }
+                
+            }
+        }
+        let tmpDocItems = {...this.docObj.docItems.empty}
+        tmpDocItems.REF = this.docObj.dt()[0].REF
+        tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+        tmpDocItems.ITEM_NAME = this.barcode.name
+        tmpDocItems.ITEM_CODE = this.barcode.code
+        tmpDocItems.ITEM = this.barcode.guid
+        tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+        tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+        tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+        tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+        tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+        tmpDocItems.REF = this.docObj.dt()[0].REF
+        tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+        tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+        tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+        tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+        tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+        tmpDocItems.QUANTITY = pQuantity
+        this.docObj.docItems.addEmpty(tmpDocItems)
+        this.barcodeReset()
+        await this.docObj.save()
+    }
     render()
     {
         return(
@@ -138,40 +320,39 @@ export default class salesOrder extends React.Component
                             </div>
                         </div>
                     </Item>
-                    {/* txtRef-Refno */}
-                    <Item>
+                   {/* txtRef-Refno */}
+                   <Item>
                         <Label text={this.t("txtRefRefno")} alignment="right" />
                         <div className="row">
-                            <div className="col-5 pe-0">
+                            <div className="col-4 pe-0">
                                 <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
                                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                 readOnly={true}
                                 maxLength={32}
-                                onChange={(async()=>
+                                onChange={(async(e)=>
                                 {
                                     let tmpQuery = 
                                     {
-                                        query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 60 AND REF = @REF ",
+                                        query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 2 AND DOC_TYPE = 2 AND REF = @REF ",
                                         param : ['REF:string|25'],
                                         value : [this.txtRef.value]
                                     }
                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                     if(tmpData.result.recordset.length > 0)
                                     {
-                                        this.txtRefno.value=tmpData.result.recordset[0].REF_NO
+                                        this.txtRefno.value = tmpData.result.recordset[0].REF_NO
                                     }
                                 }).bind(this)}
                                 param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                 access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                 >
-                                <Validator validationGroup={"frmLabelQeueu"}>
+                                <Validator validationGroup={"frmRbtDoc"}>
                                         <RequiredRule message={this.t("validRef")} />
                                     </Validator>  
                                 </NdTextBox>
                             </div>
-                            <div className="col-7 ps-0">
+                            <div className="col-5 ps-0">
                                 <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
-                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                 readOnly={true}
                                 button=
                                 {
@@ -179,7 +360,7 @@ export default class salesOrder extends React.Component
                                         {
                                             id:'01',
                                             icon:'more',
-                                            onClick:async()=>
+                                            onClick:()=>
                                             {
                                                 this.pg_Docs.show()
                                                 this.pg_Docs.onClick = (data) =>
@@ -189,6 +370,7 @@ export default class salesOrder extends React.Component
                                                         this.getDoc(data[0].GUID,data[0].REF,data[0].REF_NO)
                                                     }
                                                 }
+                                                        
                                             }
                                         },
                                         {
@@ -212,7 +394,7 @@ export default class salesOrder extends React.Component
                                 param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                 access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                 >
-                                <Validator validationGroup={"frmLabelQeueu"}>
+                                <Validator validationGroup={"frmRbtDoc"}>
                                         <RequiredRule message={this.t("validRefNo")} />
                                     </Validator> 
                                 </NdTextBox>
@@ -221,13 +403,14 @@ export default class salesOrder extends React.Component
                         {/*EVRAK SEÇİM */}
                         <NdPopGrid id={"pg_Docs"} parent={this} container={"#root"}
                         visible={false}
-                        position={{of:'#root'}}
+                        position={{of:'#root'}} 
                         showTitle={true} 
                         showBorders={true}
                         width={'90%'}
                         height={'90%'}
                         title={this.t("pg_Docs.title")} 
-                        data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 60 AND REBATE = 0"},sql:this.core.sql}}}
+                        selection={{mode:"single"}}
+                        data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 2 AND DOC_TYPE = 2 AND REBATE = 1"},sql:this.core.sql}}}
                         button=
                         {
                             [
@@ -236,69 +419,76 @@ export default class salesOrder extends React.Component
                                     icon:'more',
                                     onClick:()=>
                                     {
-
+                                        
                                     }
                                 }
                             ]
+                            
                         }
                         >
-                        <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150} defaultSortOrder="asc"/>
-                        <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={150} defaultSortOrder="asc" />
-                        <Column dataField="INPUT_NAME" caption={this.t("pg_Docs.clmInputName")} width={200} defaultSortOrder="asc" />
-                        <Column dataField="INPUT_CODE" caption={this.t("pg_Docs.clmInputCode")} width={200} defaultSortOrder="asc" />
+                            <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150} defaultSortOrder="asc"/>
+                            <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={300} defaultSortOrder="asc" />
+                            <Column dataField="INPUT_NAME" caption={this.t("pg_Docs.clmInputName")} width={300} defaultSortOrder="asc" />
+                            <Column dataField="OUTPUT_NAME" caption={this.t("pg_Docs.clmOutputName")} width={300} defaultSortOrder="asc" />
+                            <Column dataField="DOC_DATE" caption={this.t("pg_Docs.clmInputCode")} width={300} defaultSortOrder="asc" />
+                            
                         </NdPopGrid>
                     </Item>
-                    {/* OutDepot */}
+                    {/* dtDocDate */}
                     <Item>
-                        <Label text={this.t("txtOutDepot")} alignment="right" />
-                        <NdSelectBox simple={true} parent={this} id="cmbOutDepotList" notRefresh = {true}
-                        dt=""
-                        displayExpr="NAME"
-                        valueExpr="GUID"
-                        value=""
-                        searchEnabled={true}
-                        onValueChanged={(async(e)=>
-                            {
-                                
-                            }).bind(this)}
-                        data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}}}
-                        param={this.param.filter({ELEMENT:'cmbOutDepotList',USERS:this.user.CODE})}
-                        access={this.access.filter({ELEMENT:'cmbOutDepotList',USERS:this.user.CODE})}
-                        >
-                        </NdSelectBox>
-                    </Item>
-                    {/* RebateDepot */}
-                    <Item>
-                        <Label text={this.t("txtRebateDepot")} alignment="right" />
-                        <NdSelectBox simple={true} parent={this} id="cmbRebateDepotList" notRefresh = {true}
-                        dt=""
-                        displayExpr="NAME"
-                        valueExpr="GUID"
-                        value=""
-                        searchEnabled={true}
-                        onValueChanged={(async(e)=>
-                            {
-                                
-                            }).bind(this)}
-                        data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}}}
-                        param={this.param.filter({ELEMENT:'cmbRebateDepotList',USERS:this.user.CODE})}
-                        access={this.access.filter({ELEMENT:'cmbRebateDepotList',USERS:this.user.CODE})}
-                        >
-                        </NdSelectBox>
-                    </Item>
-                    {/* txtDate */}
-                    <Item>
-                        <Label text={this.t("txtDate")} alignment="right" />
+                        <Label text={this.t("dtDocDate")} alignment="right" />
                         <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
                         dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
                         onValueChanged={(async()=>
                             {
                         }).bind(this)}
                         >
-                            <Validator validationGroup={"frmslsDoc"}>
+                            <Validator validationGroup={"frmRbtDoc"}>
                                 <RequiredRule message={this.t("validDocDate")} />
                             </Validator> 
                         </NdDatePicker>
+                    </Item>
+                    {/* cmbDepot */}
+                    <Item>
+                        <Label text={this.t("cmbDepot1")} alignment="right" />
+                        <NdSelectBox simple={true} parent={this} id="cmbDepot1"
+                        dt={{data:this.docObj.dt('DOC'),field:"OUTPUT"}}  
+                        displayExpr="NAME"                       
+                        valueExpr="GUID"
+                        value=""
+                        searchEnabled={true}
+                        onValueChanged={(async()=>
+                            {
+                            }).bind(this)}
+                        data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE = 0"},sql:this.core.sql}}}
+                        param={this.param.filter({ELEMENT:'cmbDepot1',USERS:this.user.CODE})}
+                        access={this.access.filter({ELEMENT:'cmbDepot1',USERS:this.user.CODE})}
+                        >
+                            <Validator validationGroup={"frmRbtDoc"}>
+                                <RequiredRule message={this.t("validDepot")} />
+                            </Validator> 
+                        </NdSelectBox>
+                    </Item>
+                    {/* cmbDepot */}
+                    <Item>
+                        <Label text={this.t("cmbDepot2")} alignment="right" />
+                        <NdSelectBox simple={true} parent={this} id="cmbDepot2"
+                        dt={{data:this.docObj.dt('DOC'),field:"INPUT"}}  
+                        displayExpr="NAME"                       
+                        valueExpr="GUID"
+                        value=""
+                        searchEnabled={true}
+                        onValueChanged={(async()=>
+                            {
+                            }).bind(this)}
+                        data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE = 1"},sql:this.core.sql}}}
+                        param={this.param.filter({ELEMENT:'cmbDepot2',USERS:this.user.CODE})}
+                        access={this.access.filter({ELEMENT:'cmbDepot2',USERS:this.user.CODE})}
+                        >
+                            <Validator validationGroup={"frmRbtDoc"}>
+                                <RequiredRule message={this.t("validDepot")} />
+                            </Validator> 
+                        </NdSelectBox>
                     </Item>
                     <Item>
                         <div className="row">
@@ -341,6 +531,7 @@ export default class salesOrder extends React.Component
                                     icon:'more',
                                     onClick:async()=>
                                     {
+                                        this.barcodeReset()
                                         this.popItemCode.show()
                                         this.popItemCode.onClick = async(data) =>
                                         {
@@ -351,9 +542,8 @@ export default class salesOrder extends React.Component
                                                     name:data[0].NAME,
                                                     code:data[0].CODE,
                                                     barcode:data[0].BARCODE,
-                                                    price:data[0].PRICE
+                                                    guid:data[0].GUID
                                                 }
-                                                this.numPrice.value = data[0].PRICE
                                                 this.setState({tbBarcode:"visible"})
                                             }
                                             else if(data.length > 1)
@@ -365,7 +555,7 @@ export default class salesOrder extends React.Component
                                                         name:data[i].NAME,
                                                         code:data[i].CODE,
                                                         barcode:data[i].BARCODE,
-                                                        price:data[i].PRICE
+                                                        guid:data[0].GUID
                                                     }
                                                     await this.addItem()
                                                 }
@@ -400,15 +590,14 @@ export default class salesOrder extends React.Component
                                         this.barcode.name = tmpData.result.recordset[0].NAME
                                         this.barcode.barcode = tmpData.result.recordset[0].BARCODE 
                                         this.barcode.code = tmpData.result.recordset[0].CODE 
-                                        this.barcode.price = tmpData.result.recordset[0].PRICE 
-                                        this.numPrice.value = parseFloat(tmpData.result.recordset[0].PRICE)
+                                        this.barcode.guid = tmpData.result.recordset[0].GUID 
                                         if(this.chkAutoAdd.value == true)
                                         {
-                                            this.addItem()
+                                            this.addItem(1)
                                         }
                                         else
                                         {
-                                            this.numPrice.focus()
+                                            this.txtQuantity.focus()
                                         }
                                         this.setState({tbBarcode:"visible"})
                                     }
@@ -421,7 +610,7 @@ export default class salesOrder extends React.Component
                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcodeNotFound.msg")}</div>)
                                         }
                                         await dialog(tmpConfObj);
-                                        this.txtBarcode.value = ""
+                                        this.barcodeReset()
                                     }
                                     
                                 }).bind(this)}></NdTextBox>
@@ -435,87 +624,25 @@ export default class salesOrder extends React.Component
                         </div>
                     </Item>
                     {/* txtQuantity */}
-                    <GroupItem colCountByScreen={{xs:2}}>
-                        <SimpleItem/>
-                        <SimpleItem>
-                            <Label text={this.t("txtQuantity")}/>
-                            <NdNumberBox id="txtBarQuantity" parent={this} simple={true}  
-                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                readOnly={true}
-                                param={this.param.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
-                                access={this.access.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
-                                >
-                            </NdNumberBox>
-                        </SimpleItem>
-                    </GroupItem>
-                    {/* txtPrice */}
-                    <GroupItem colCountByScreen={{xs:2}}>
-                    <SimpleItem/>
-                    <SimpleItem>
-                       <Label text={this.t("txtPrice")} alignment="right" />
-                       <NdNumberBox id="txtPrice" parent={this} simple={true}
-                       param={this.param.filter({ELEMENT:'txtPrice',USERS:this.user.CODE})}
-                       access={this.access.filter({ELEMENT:'txtPrice',USERS:this.user.CODE})}
-                       onEnterKey={(async(e)=>
-                           {
-
-                           }).bind(this)}
-                       >
-                       </NdNumberBox>
-                    </SimpleItem>
-                    </GroupItem>
-                    {/* txtVat */}
-                    <GroupItem colCountByScreen={{xs:2}}>
-                        <SimpleItem/>
-                        <SimpleItem>
-                            <Label text={this.t("txtVat")} alignment="right" />
-                            <NdTextBox id="txtBarVat" parent={this} simple={true}  
-                            readOnly={true}
-                            param={this.param.filter({ELEMENT:'txtVat',USERS:this.user.CODE})}
-                            access={this.access.filter({ELEMENT:'txtVat',USERS:this.user.CODE})}
+                    <Item>
+                        <Label text={this.t("txtQuantity")}/>
+                        <NdNumberBox id="txtQuantity" parent={this} simple={true}  value={1}
+                            param={this.param.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
+                            access={this.access.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
                             >
-                            </NdTextBox>
-                        </SimpleItem>
-                    </GroupItem> 
-                    {/* txtDiscount */}
-                    <GroupItem colCountByScreen={{xs:2}}>
-                        <SimpleItem/>
-                        <SimpleItem>
-                            <Label text={this.t("txtDiscount")} alignment="right" />
-                            <NdTextBox id="txtBarDisCount" parent={this} simple={true}  
-                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                            readOnly={true}
-                            param={this.param.filter({ELEMENT:'txtDiscount',USERS:this.user.CODE})}
-                            access={this.access.filter({ELEMENT:'txtDiscount',USERS:this.user.CODE})}
-                            >
-                            </NdTextBox>
-                        </SimpleItem>
-                    </GroupItem> 
-                    {/* txtAmount */}
-                    <GroupItem colCountByScreen={{xs:2}}>
-                        <SimpleItem/>
-                        <SimpleItem>
-                            <Label text={this.t("txtAmount")} alignment="right" />
-                            <NdTextBox id="txtBarAmount" parent={this} simple={true}  
-                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                            readOnly={true}
-                            param={this.param.filter({ELEMENT:'txtAmount',USERS:this.user.CODE})}
-                            access={this.access.filter({ELEMENT:'txtAmount',USERS:this.user.CODE})}
-                            >
-                            </NdTextBox>
-                        </SimpleItem>
-                    </GroupItem>
+                        </NdNumberBox>
+                    </Item>
                     <Item>
                         <div className="row">
                             <div className="col-12 px-4 pt-4">
-                                <NdButton text={this.t("btnItemAdd")} type="default" width="100%" onClick={()=>this.addItem()}></NdButton>
+                                <NdButton text={this.t("btnItemAdd")} type="default" width="100%" onClick={()=>this.addItem(this.txtQuantity.value)}></NdButton>
                             </div>
                         </div>
                     </Item>
                 </Form>
             </div>
             <div className="row px-2 pt-2" style={{visibility:this.state.tbDocument,position:"fixed"}}>
-                <Form colCount={1} >
+                <Form>
                 <Item>
                     <div className="row">
                         <div className="col-4 px-2 pt-2">
@@ -529,8 +656,13 @@ export default class salesOrder extends React.Component
                         </div>
                     </div>
                 </Item>
+                </Form>
+                <Form colCount={1} onInitialized={(e)=>
+                {
+                    this.frmDocItems = e.component
+                }}>
                 <Item>
-                    <NdGrid parent={this} id={"grdSlsOrder"} 
+                    <NdGrid parent={this} id={"grdRebItems"} 
                     showBorders={true} 
                     columnsAutoWidth={true} 
                     allowColumnReordering={true} 
@@ -538,20 +670,23 @@ export default class salesOrder extends React.Component
                     height={'400'} 
                     width={'100%'}
                     dbApply={false}
+                    loadPanel={{enabled:true}}
                     onRowUpdated={async(e)=>{
                         
                     }}
-                    onRowRemoved={async (e)=>{
-                       
+                    onRowRemoved={(e)=>{
+
                     }}
                     >
-                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
-                        <Scrolling mode="infinite" />
+                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
+                        <Scrolling mode="standard" />
                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                        <Column dataField="CODE" caption={this.t("grdSlsOrder.clmItemCode")} width={150}/>
-                        <Column dataField="NAME" caption={this.t("grdSlsOrder.clmItemName")} width={350} />
-                        <Column dataField="BARCODE" caption={this.t("grdSlsOrder.clmBarcode")} width={250} />
-                        <Column dataField="PRICE" caption={this.t("grdSlsOrder.clmPrice")} width={250} />
+                        <Export fileName={this.lang.t("menu.stk_02_005")} enabled={true} allowExportSelectedData={true} />
+                        <Column dataField="CDATE_FORMAT" caption={this.t("grdRebItems.clmCreateDate")} width={150} allowEditing={false}/>
+                        <Column dataField="ITEM_CODE" caption={this.t("grdRebItems.clmItemCode")} width={150} allowEditing={false}/>
+                        <Column dataField="ITEM_NAME" caption={this.t("grdRebItems.clmItemName")} width={350} allowEditing={false}/>
+                        <Column dataField="QUANTITY" caption={this.t("grdRebItems.clmQuantity")} dataType={'number'} width={150}/>
+                        <Column dataField="DESCRIPTION" caption={this.t("grdRebItems.clmDescription")} />
                     </NdGrid>
                 </Item>
                 </Form>
@@ -565,6 +700,7 @@ export default class salesOrder extends React.Component
                 width={'90%'}
                 height={'90%'}
                 title={this.t("popItemCode.title")} //
+                selection={{mode:"single"}}
                 search={true}
                 data = 
                 {{

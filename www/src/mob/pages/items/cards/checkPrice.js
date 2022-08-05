@@ -1,6 +1,6 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import {itemPriceCls,itemLogPriceCls} from '../../../../core/cls/items.js'
+import {itemPriceCls} from '../../../../core/cls/items.js'
 import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
@@ -41,6 +41,8 @@ export default class salesOrder extends React.Component
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.itemsPriceObj = new itemPriceCls();   
+        this.barcodeScan = this.barcodeScan.bind(this)
+
     }
     async componentDidMount()
     {
@@ -49,7 +51,57 @@ export default class salesOrder extends React.Component
     }
     async init()
     {
+        await this.grdPrice.dataRefresh({source:this.itemsPriceObj.dt('ITEM_PRICE')});
+    }
+    async barcodeScan()
+    {
         
+        cordova.plugins.barcodeScanner.scan(
+            async function (result) 
+            {
+                if(result.cancelled == false)
+                {
+                    let tmpQuery = 
+                    {
+                        query : "SELECT ITEM_CODE AS CODE,ITEM_NAME AS NAME,ITEM_GUID AS GUID,BARCODE,[dbo].[FN_PRICE_SALE](ITEM_GUID,1,GETDATE()) AS PRICE FROM ITEM_BARCODE_VW_01  WHERE BARCODE = @BARCODE OR ITEM_CODE = @BARCODE ",
+                        param : ['BARCODE:string|50'],
+                        value : [result.text]
+                    }
+                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                    if(tmpData.result.recordset.length >0)
+                    {
+                        this.barcode = {
+                            name:tmpData.result.recordset[0].NAME,
+                            code:tmpData.result.recordset[0].CODE,
+                            barcode:tmpData.result.recordset[0].BARCODE,
+                            price:tmpData.result.recordset[0].PRICE,
+                            guid:tmpData.result.recordset[0].GUID
+                        }
+                        await this.itemsPriceObj.load({ITEM_GUID:tmpData.result.recordset[0].GUID});
+                        this.setState({tbBarcode:"visible"})
+                    }
+                    else
+                    {
+                        let tmpConfObj = 
+                        {
+                            id:'msgBarcodeNotFound',showTitle:true,title:this.t("msgBarcodeNotFound.title"),showCloseButton:true,width:'350px',height:'200px',
+                            button:[{id:"btn01",caption:this.t("msgBarcodeNotFound.btn01"),location:'after'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcodeNotFound.msg")}</div>)
+                        }
+                        await dialog(tmpConfObj);
+                        this.txtBarcode.value = ""
+                    }
+                }
+            }.bind(this),
+            function (error) 
+            {
+                //alert("Scanning failed: " + error);
+            },
+            {
+              prompt : "Scan",
+              orientation : "portrait"
+            }
+        );
     }
     render()
     {
@@ -80,9 +132,19 @@ export default class salesOrder extends React.Component
                                                 price:data[0].PRICE,
                                                 guid:data[0].GUID
                                             }
+                                            await this.itemsPriceObj.load({ITEM_GUID:data[0].GUID});
+                                            this.txtBarcode.value = ""
                                             this.setState({tbBarcode:"visible"})
                                         }
                                     }
+                                }
+                            },
+                            {
+                                id:'02',
+                                icon:'photo',
+                                onClick:async()=>
+                                {
+                                    this.barcodeScan()
                                 }
                             }
                         ]
@@ -107,6 +169,8 @@ export default class salesOrder extends React.Component
                                     this.barcode.code = tmpData.result.recordset[0].CODE 
                                     this.barcode.price = tmpData.result.recordset[0].PRICE 
                                     this.barcode.guid = tmpData.result.recordset[0].GUID 
+                                    await this.itemsPriceObj.load({ITEM_GUID:tmpData.result.recordset[0].GUID});
+                                    this.txtBarcode.value = ""
                                     this.setState({tbBarcode:"visible"})
                                 }
                                 else
@@ -151,7 +215,7 @@ export default class salesOrder extends React.Component
                         <div className="col-6 px-4 pt-4">
                         <NdButton text={this.t("btnAddPrice")} type="default" width="100%" onClick={async()=>
                         {
-                            if(this.barcode.guid == "")
+                            if(this.barcode.code == "")
                             {
                                 let tmpConfObj = 
                                 {
@@ -168,7 +232,21 @@ export default class salesOrder extends React.Component
                         }}></NdButton>
                         </div>
                         <div className="col-6 px-4 pt-4">
-                        <NdButton text={this.t("btnChangePrice")} type="default" width="100%" onClick={()=>{this.popChangePrice.show()}}></NdButton>
+                        <NdButton text={this.t("btnChangePrice")} type="default" width="100%" onClick={async()=>
+                            {
+                                if(this.barcode.code == "")
+                                {
+                                    let tmpConfObj = 
+                                    {
+                                        id:'msgItemNotSelect',showTitle:true,title:this.t("msgItemNotSelect.title"),showCloseButton:true,width:'350px',height:'200px',
+                                        button:[{id:"btn01",caption:this.t("msgItemNotSelect.btn01"),location:'after'}],
+                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotSelect.msg")}</div>)
+                                    }
+                                    await dialog(tmpConfObj);
+                                    return
+                                }
+                                this.popChangePrice.show()
+                            }}></NdButton>
                         </div>
                     </div>
                 </Item>
@@ -236,9 +314,9 @@ export default class salesOrder extends React.Component
                         valueExpr="GUID"
                         value=""
                         searchEnabled={true}
+                        showClearButton={true}
                         onValueChanged={(async(e)=>
                             {
-                                console.log(e)
                             }).bind(this)}
                         data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}}}
                         param={this.param.filter({ELEMENT:'popcmbDepot',USERS:this.user.CODE})}
@@ -275,7 +353,7 @@ export default class salesOrder extends React.Component
                                         let tmpPriceObj = {...this.itemsPriceObj.empty}
                                         tmpPriceObj.ITEM_GUID = this.barcode.guid
                                         tmpPriceObj.PRICE = this.txtPopPriPrice.value
-                                        tmpPriceObj.DEPOT = this.popcmbDepot.value
+                                        tmpPriceObj.DEPOT = this.popcmbDepot.value == '' ? '00000000-0000-0000-0000-000000000000' : this.popcmbDepot.value
                                         tmpPriceObj.QUANTITY = this.txtPopPriQuantity.value
                                         this.itemsPriceObj.addEmpty(tmpPriceObj); 
                                     
@@ -312,45 +390,70 @@ export default class salesOrder extends React.Component
                 </Form>
             </NdPopUp>
             {/* FİYAT DEĞİŞTİR POPUP */}
-            <NdPopGrid id={"popChangePrice"} parent={this} container={"#root"} 
-            visible={false}
-            position={{of:'#root'}} 
-            showTitle={true} 
-            showBorders={true}
+            <NdPopUp parent={this} id={"popChangePrice"} 
+            visible={false}                        
+            showCloseButton={true}
+            showTitle={true}
+            title={this.t("grdPrice.title")}
+            container={"#root"} 
             width={'90%'}
-            height={'90%'}
-            title={this.t("popChangePrice.title")} 
-            data = 
-            {{
-                source:
-                {
-                    select:
-                    {
-                        query : "",
-                        param : ['']
-                    },
-                    sql:this.core.sql
-                }
-            }}
-            button=
-            {
-                [
-                    {
-                        id:'tst',
-                        icon:'more',
-                        onClick:()=>
-                        {
-                            console.log(1111)
-                        }
-                    }
-                ]
-            }
+            height={'400'}
+            position={{of:'#root'}}
             >
-                <Column dataField="CODE" caption={this.t("popChangePrice.clmCode")} width={150} />
-                <Column dataField="NAME" caption={this.t("popChangePrice.clmName")} width={250} defaultSortOrder="asc" />
-                <Column dataField="PRICE" caption={this.t("popChangePrice.clmPrice")} width={100} defaultSortOrder="asc" />
-
-            </NdPopGrid>
+                <Form colCount={1} height={'fit-content'} id={"frmPrice" + this.tabIndex}>
+                    <Item>
+                        <NdGrid parent={this} id={"grdPrice"} 
+                        showBorders={true} 
+                        columnsAutoWidth={true} 
+                        allowColumnReordering={true} 
+                        allowColumnResizing={true} 
+                        height={'100%'} 
+                        width={'100%'}
+                        dbApply={false}
+                        >
+                            <Paging defaultPageSize={5} />
+                            <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
+                            <Column dataField="QUANTITY" caption={this.t("grdPrice.clmQuantity")}/>
+                            <Column dataField="PRICE" caption={this.t("grdPrice.clmPrice")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                        </NdGrid>
+                    </Item>
+                    <Item>
+                        <div className='row'>
+                            <div className='col-6'>
+                                <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmPrice" + this.tabIndex}
+                                onClick={async (e)=>
+                                {
+                                    let tmpConfObj1 =
+                                    {
+                                        id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'350px',height:'200px',
+                                        button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                    }
+                                    
+                                    if((await this.itemsPriceObj.save()) == 0)
+                                    {                       
+                                        tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
+                                        await dialog(tmpConfObj1);
+                                        this.popPrice.hide()
+                                    }
+                                    else
+                                    {
+                                        tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                        await dialog(tmpConfObj1);
+                                        this.popPrice.hide()
+                                    }
+                                }}/>
+                            </div>
+                            <div className='col-6'>
+                                <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                onClick={()=>
+                                {
+                                    this.popPrice.hide();  
+                                }}/>
+                            </div>
+                        </div>
+                    </Item>
+                </Form>
+            </NdPopUp>
         </div>
         )
     }
