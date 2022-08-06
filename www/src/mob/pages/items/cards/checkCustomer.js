@@ -241,11 +241,9 @@ export default class salesOrder extends React.Component
                     >
                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                         <Scrolling mode="infinite" />
-                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                        <Column dataField="CDATE" caption={this.t("grdChkCustomer.clmDate")} />
-                        <Column dataField="MULTICODE" caption={this.t("grdChkCustomer.clmMulticode")} />
-                        <Column dataField="CUSTOMER_NAME" caption={this.t("grdChkCustomer.clmCustomerName")}  />
-                        <Column dataField="CUSTOMER_CODE" caption={this.t("grdChkCustomer.clmCustomerCode")} />
+                        <Editing mode="cell" allowUpdating={false} allowDeleting={false} confirmDelete={false}/>
+                        <Column dataField="MULTICODE" caption={this.t("grdChkCustomer.clmMulticode")} width={100} />
+                        <Column dataField="CUSTOMER_NAME" caption={this.t("grdChkCustomer.clmCustomerName")} />
                     </NdGrid>
                 </Item>
             </Form>
