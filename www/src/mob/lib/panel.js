@@ -37,7 +37,6 @@ export default class Panel extends React.PureComponent
           button:[{id:"btn02",caption:("Tamam"),location:'after'}],
           content:(<div style={{textAlign:"center",fontSize:"20px"}}>{("En fazla " + (this.state.dataSource.length) + "Adet Sayfa Açabilirsiniz.! Lütfen Birini Kapatın"  )}</div>)
       }
-      
       await dialog(tmpConfObj);
       return
     }
