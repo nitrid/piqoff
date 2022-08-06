@@ -54,6 +54,7 @@ export default class salesOrder extends React.Component
         this.dropmenuDocItems = [this.t("btnDeleteRow")]
         this.pageChange = this.pageChange.bind(this)
         this.setBarcode = this.setBarcode.bind(this)
+        this._calculateTotal = this._calculateTotal.bind(this)
     }
     async componentDidMount()
     {
@@ -142,7 +143,7 @@ export default class salesOrder extends React.Component
         {
             this.txtPrice.value = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
             this.txtVat.value = parseFloat((tmpData.result.recordset[0].PRICE * (this.barcode.vat / 100)).toFixed(3))
-            this.txtDiscount.value = 0
+            //this.txtDiscount.value = 0
             this.txtAmount.value = parseFloat((Number(this.txtPrice.value) + Number(this.txtVat.value)).toFixed(3))
         }
         if(this.chkAutoAdd.value == true)
@@ -232,7 +233,20 @@ export default class salesOrder extends React.Component
         tmpDocItems.TOTAL = parseFloat(((this.txtPrice.value * pQuantity) + (this.txtVat.value * pQuantity).toFixed(3))).toFixed(3)
         this.docObj.docOrders.addEmpty(tmpDocItems)
         this.barcodeReset()
+        this._calculateTotal()
         await this.docObj.save()
+    }
+    calculateItemPrice()
+    {
+        this.txtVat.value =  parseFloat((this.txtPrice.value * (this.barcode.vat / 100) * this.txtQuantity.value).toFixed(3))
+        this.txtAmount.value = parseFloat(((this.txtPrice.value * this.txtQuantity.value) + this.txtVat.value)).toFixed(3)
+    }
+    async _calculateTotal()
+    {
+        this.docObj.dt()[0].AMOUNT = this.docObj.docOrders.dt().sum("AMOUNT",2)
+        this.docObj.dt()[0].DISCOUNT = this.docObj.docOrders.dt().sum("DISCOUNT",2)
+        this.docObj.dt()[0].VAT = this.docObj.docOrders.dt().sum("VAT",2)
+        this.docObj.dt()[0].TOTAL = this.docObj.docOrders.dt().sum("TOTAL",2)
     }
     render()
     {
@@ -643,9 +657,12 @@ export default class salesOrder extends React.Component
                         <Label text={this.t("txtQuantity")}/>
                         <NdNumberBox id="txtQuantity" parent={this} simple={true}  
                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                            readOnly={true}
                             param={this.param.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
                             access={this.access.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
+                            onValueChanged={(async(e)=>
+                            {
+                               this.calculateItemPrice()
+                            }).bind(this)}
                             >
                         </NdNumberBox>
                     </Item>
@@ -655,10 +672,10 @@ export default class salesOrder extends React.Component
                        <NdNumberBox id="txtPrice" parent={this} simple={true}
                        param={this.param.filter({ELEMENT:'txtPrice',USERS:this.user.CODE})}
                        access={this.access.filter({ELEMENT:'txtPrice',USERS:this.user.CODE})}
-                       onEnterKey={(async(e)=>
-                           {
-
-                           }).bind(this)}
+                       onValueChanged={(async(e)=>
+                        {
+                           this.calculateItemPrice()
+                        }).bind(this)}
                        >
                        </NdNumberBox>
                     </Item>
@@ -673,7 +690,7 @@ export default class salesOrder extends React.Component
                         </NdTextBox>
                     </Item>
                     {/* txtDiscount */}
-                    <Item>
+                    {/* <Item>
                         <Label text={this.t("txtDiscount")} alignment="right" />
                         <NdTextBox id="txtDiscount" parent={this} simple={true}  
                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
@@ -682,7 +699,7 @@ export default class salesOrder extends React.Component
                         access={this.access.filter({ELEMENT:'txtDiscount',USERS:this.user.CODE})}
                         >
                         </NdTextBox>
-                    </Item>
+                    </Item> */}
                     {/* txtAmount */}
                     <Item>
                         <Label text={this.t("txtAmount")} alignment="right" />
