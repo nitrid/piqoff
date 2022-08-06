@@ -625,8 +625,10 @@ export default class salesOrder extends React.Component
                         <NdTextBox id="txtQuantity" parent={this} simple={true}  value={1}
                             param={this.param.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
                             access={this.access.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
-                            >
-                        </NdTextBox>
+                            onEnterKey={(async(e)=>
+                                {
+                                    this.addItem(this.txtQuantity.value)
+                                }).bind(this)}></NdTextBox>
                     </Item>
                     <Item>
                         <div className="row">

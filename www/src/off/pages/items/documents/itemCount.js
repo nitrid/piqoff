@@ -34,6 +34,8 @@ export default class itemCount extends React.Component
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.countObj = new itemCountCls();
+        this.tabIndex = props.data.tabkey
+
 
         this.state = 
         {
