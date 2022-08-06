@@ -255,21 +255,32 @@ export default class salesOrder extends React.Component
                             <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmPrice" + this.tabIndex}
                             onClick={async (e)=>
                             {
-                                let tmpConfObj1 =
+                                let tmpConfObj =
                                 {
-                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'350px',height:'200px',
-                                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                    id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'350px',height:'200px',
+                                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
+                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
                                 }
                                 
-                                if((await this.itemsPriceObj.save()) == 0)
-                                {                       
-                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                    await dialog(tmpConfObj1);
-                                }
-                                else
+                                let pResult = await dialog(tmpConfObj);
+                                if(pResult == 'btn01')
                                 {
-                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgFailed")}</div>)
-                                    await dialog(tmpConfObj1);
+                                    let tmpConfObj1 =
+                                    {
+                                        id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'350px',height:'200px',
+                                        button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                    }
+                                    
+                                    if((await this.itemsPriceObj.save()) == 0)
+                                    {                       
+                                        tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
+                                        await dialog(tmpConfObj1);
+                                    }
+                                    else
+                                    {
+                                        tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                        await dialog(tmpConfObj1);
+                                    }
                                 }
                             }}/>
                         </div>
