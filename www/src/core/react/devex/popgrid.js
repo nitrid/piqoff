@@ -312,7 +312,7 @@ export default class NdPopGrid extends Base
                             dataSource={typeof this.state.data == 'undefined' ? undefined : this.state.data.store} 
                             columnWidth={this.props.columnWidth}
                             showBorders={this.props.showBorders} 
-                            columnsAutoWidth={this.props.columnsAutoWidth} 
+                            columnsAutoWidth={true} 
                             allowColumnReordering={this.props.allowColumnReordering} 
                             allowColumnResizing={this.props.allowColumnResizing} 
                             height={'100%'} 

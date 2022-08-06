@@ -29,6 +29,10 @@ export default class salesOrder extends React.Component
     constructor()
     {
         super()
+        this.state = 
+        {
+            Grid:"visible",
+        }
         this.barcode = 
         {
             name:"",
@@ -78,6 +82,15 @@ export default class salesOrder extends React.Component
                             guid:tmpData.result.recordset[0].GUID
                         }
                         await this.itemsPriceObj.load({ITEM_GUID:tmpData.result.recordset[0].GUID});
+                        if(this.itemsPriceObj.dt().length > 1)
+                        {
+                            this.setState({Grid:"visible"}) 
+                            await this.grdPrice.dataRefresh({source:this.itemsPriceObj.dt('ITEM_PRICE')});
+                        }
+                        else
+                        {
+                            this.setState({Grid:"hidden"}) 
+                        }
                         this.setState({tbBarcode:"visible"})
                     }
                     else
@@ -134,6 +147,15 @@ export default class salesOrder extends React.Component
                                             }
                                             await this.itemsPriceObj.load({ITEM_GUID:data[0].GUID});
                                             this.txtBarcode.value = ""
+                                            if(this.itemsPriceObj.dt().length > 1)
+                                            {
+                                                this.setState({Grid:"visible"}) 
+                                                await this.grdPrice.dataRefresh({source:this.itemsPriceObj.dt('ITEM_PRICE')});
+                                            }
+                                            else
+                                            {
+                                                this.setState({Grid:"hidden"}) 
+                                            }
                                             this.setState({tbBarcode:"visible"})
                                         }
                                     }
@@ -171,6 +193,15 @@ export default class salesOrder extends React.Component
                                     this.barcode.guid = tmpData.result.recordset[0].GUID 
                                     await this.itemsPriceObj.load({ITEM_GUID:tmpData.result.recordset[0].GUID});
                                     this.txtBarcode.value = ""
+                                    if(this.itemsPriceObj.dt().length > 1)
+                                    {
+                                        this.setState({Grid:"visible"}) 
+                                        await this.grdPrice.dataRefresh({source:this.itemsPriceObj.dt('ITEM_PRICE')});
+                                    }
+                                    else
+                                    {
+                                        this.setState({Grid:"hidden"}) 
+                                    }
                                     this.setState({tbBarcode:"visible"})
                                 }
                                 else
@@ -206,10 +237,28 @@ export default class salesOrder extends React.Component
                 <Item> 
                     <div>
                         <h4 className="text-center">
-                            {this.barcode.price}
+                            {this.barcode.price} €
                         </h4>
                     </div>
                 </Item>
+                <div style={{visibility:this.state.Grid}}>
+                    <Item>
+                        <NdGrid parent={this} id={"grdPrice"} 
+                        showBorders={true} 
+                        columnsAutoWidth={true} 
+                        allowColumnReordering={true} 
+                        allowColumnResizing={true} 
+                        height={'100%'} 
+                        width={'100%'}
+                        dbApply={false}
+                        >
+                            <Paging defaultPageSize={5} />
+                            <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
+                            <Column dataField="QUANTITY" caption={this.t("grdPrice.clmQuantity")}/>
+                            <Column dataField="PRICE" caption={this.t("grdPrice.clmPrice")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                        </NdGrid>
+                    </Item>
+                </div>
             </Form>
             {/* Stok Seçim */}
             <NdPopGrid id={"popItemCode"} parent={this} container={"#root"}
@@ -250,170 +299,9 @@ export default class salesOrder extends React.Component
                     }
                 }}
                 >
-                    <Column dataField="CODE" caption={this.t("popItemCode.clmCode")} width={150} />
-                    <Column dataField="NAME" caption={this.t("popItemCode.clmName")} width={300} defaultSortOrder="asc" />
+                    <Column dataField="CODE" caption={this.t("popItemCode.clmCode")} width={100} />
+                    <Column dataField="NAME" caption={this.t("popItemCode.clmName")} defaultSortOrder="asc" />
             </NdPopGrid>
-            {/* FİYAT Ekle POPUP */}
-            <NdPopUp parent={this} id={"popPrice"} 
-            visible={false}                        
-            showCloseButton={true}
-            showTitle={true}
-            title={this.t("popPrice.title")}
-            container={"#root"} 
-            width={'90%'}
-            height={'400'}
-            position={{of:'#root'}}
-            >
-                <Form colCount={1} height={'fit-content'} id={"frmPrice" + this.tabIndex}>
-                     {/* Depot */}
-                     <Item>
-                        <Label text={this.t("txtDepot")} alignment="right" />
-                        <NdSelectBox simple={true} parent={this} id="popcmbDepot" notRefresh = {true}
-                        dt=""
-                        displayExpr="NAME"
-                        valueExpr="GUID"
-                        value=""
-                        searchEnabled={true}
-                        showClearButton={true}
-                        onValueChanged={(async(e)=>
-                            {
-                            }).bind(this)}
-                        data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}}}
-                        param={this.param.filter({ELEMENT:'popcmbDepot',USERS:this.user.CODE})}
-                        access={this.access.filter({ELEMENT:'popcmbDepot',USERS:this.user.CODE})}
-                        >
-                        </NdSelectBox>
-                    </Item>
-                    <Item>
-                        <Label text={this.t("popPrice.txtPopPriQuantity")} alignment="right" />
-                        <NdNumberBox id={"txtPopPriQuantity"} parent={this} simple={true} value="1">
-                            <Validator validationGroup={"frmPrice" + this.tabIndex}>
-                                <RequiredRule message="Miktar'ı boş geçemezsiniz !" />
-                                <RangeRule min={0.001} message={"Fiyat sıfırdan küçük olamaz !"} />
-                            </Validator>
-                        </NdNumberBox>
-                    </Item>
-                    <Item>
-                        <Label text={this.t("popPrice.txtPopPriPrice")} alignment="right" />
-                        <NdNumberBox id={"txtPopPriPrice"} parent={this} simple={true}>
-                            <Validator validationGroup={"frmPrice" + this.tabIndex}>
-                                <RequiredRule message="Fiyat'ı boş geçemezsiniz !" />
-                                <RangeRule min={0.001} message={"Fiyat sıfırdan küçük olamaz !"} />
-                            </Validator> 
-                        </NdNumberBox>
-                    </Item>
-                    <Item>
-                        <div className='row'>
-                            <div className='col-6'>
-                                <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmPrice" + this.tabIndex}
-                                onClick={async (e)=>
-                                {
-                                    if(e.validationGroup.validate().status == "valid")
-                                    {
-                                        let tmpPriceObj = {...this.itemsPriceObj.empty}
-                                        tmpPriceObj.ITEM_GUID = this.barcode.guid
-                                        tmpPriceObj.PRICE = this.txtPopPriPrice.value
-                                        tmpPriceObj.DEPOT = this.popcmbDepot.value == '' ? '00000000-0000-0000-0000-000000000000' : this.popcmbDepot.value
-                                        tmpPriceObj.QUANTITY = this.txtPopPriQuantity.value
-                                        this.itemsPriceObj.addEmpty(tmpPriceObj); 
-                                    
-                                        let tmpConfObj1 =
-                                        {
-                                            id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'350px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                                        }
-                                        
-                                        if((await this.itemsPriceObj.save()) == 0)
-                                        {                       
-                                            tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                            await dialog(tmpConfObj1);
-                                            this.popPrice.hide()
-                                        }
-                                        else
-                                        {
-                                            tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgFailed")}</div>)
-                                            await dialog(tmpConfObj1);
-                                            this.popPrice.hide()
-                                        }
-                                    }
-                                }}/>
-                            </div>
-                            <div className='col-6'>
-                                <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                onClick={()=>
-                                {
-                                    this.popPrice.hide();  
-                                }}/>
-                            </div>
-                        </div>
-                    </Item>
-                </Form>
-            </NdPopUp>
-            {/* FİYAT DEĞİŞTİR POPUP */}
-            <NdPopUp parent={this} id={"popChangePrice"} 
-            visible={false}                        
-            showCloseButton={true}
-            showTitle={true}
-            title={this.t("grdPrice.title")}
-            container={"#root"} 
-            width={'90%'}
-            height={'400'}
-            position={{of:'#root'}}
-            >
-                <Form colCount={1} height={'fit-content'} id={"frmPrice" + this.tabIndex}>
-                    <Item>
-                        <NdGrid parent={this} id={"grdPrice"} 
-                        showBorders={true} 
-                        columnsAutoWidth={true} 
-                        allowColumnReordering={true} 
-                        allowColumnResizing={true} 
-                        height={'100%'} 
-                        width={'100%'}
-                        dbApply={false}
-                        >
-                            <Paging defaultPageSize={5} />
-                            <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                            <Column dataField="QUANTITY" caption={this.t("grdPrice.clmQuantity")}/>
-                            <Column dataField="PRICE" caption={this.t("grdPrice.clmPrice")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
-                        </NdGrid>
-                    </Item>
-                    <Item>
-                        <div className='row'>
-                            <div className='col-6'>
-                                <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmPrice" + this.tabIndex}
-                                onClick={async (e)=>
-                                {
-                                    let tmpConfObj1 =
-                                    {
-                                        id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'350px',height:'200px',
-                                        button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                                    }
-                                    
-                                    if((await this.itemsPriceObj.save()) == 0)
-                                    {                       
-                                        tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                        await dialog(tmpConfObj1);
-                                        this.popPrice.hide()
-                                    }
-                                    else
-                                    {
-                                        tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgFailed")}</div>)
-                                        await dialog(tmpConfObj1);
-                                        this.popPrice.hide()
-                                    }
-                                }}/>
-                            </div>
-                            <div className='col-6'>
-                                <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                onClick={()=>
-                                {
-                                    this.popPrice.hide();  
-                                }}/>
-                            </div>
-                        </div>
-                    </Item>
-                </Form>
-            </NdPopUp>
         </div>
         )
     }
