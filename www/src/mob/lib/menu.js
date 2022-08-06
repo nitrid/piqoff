@@ -20,6 +20,11 @@ export const menu = (e) =>
                             path: 'items/cards/checkPrice'
                         },
                         {
+                            id: 'stk_01_005',
+                            text: e.t('menu.stk_01_005'),//'Fiyat Gör',
+                            path: 'items/cards/changePrice'
+                        },
+                        {
                             id: 'stk_01_002',
                             text: e.t('menu.stk_01_002'),//'Tedarikçi Gör',
                             path: 'items/cards/checkCustomer'
@@ -33,11 +38,6 @@ export const menu = (e) =>
                             id: 'stk_01_004',
                             text: e.t('menu.stk_01_004'),//'Ürün Grubu Değiştir',
                             path: 'items/cards/itemGrpChange'
-                        },
-                        {
-                            id: 'stk_01_005',
-                            text: e.t('menu.stk_01_005'),//'Fiyat Gör',
-                            path: 'items/cards/changePrice'
                         },
                     ]
                 },

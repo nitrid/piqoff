@@ -210,46 +210,6 @@ export default class salesOrder extends React.Component
                         </h4>
                     </div>
                 </Item>
-                <Item>
-                    <div className="row">
-                        <div className="col-6 px-4 pt-4">
-                        <NdButton text={this.t("btnAddPrice")} type="default" width="100%" onClick={async()=>
-                        {
-                            if(this.barcode.code == "")
-                            {
-                                let tmpConfObj = 
-                                {
-                                    id:'msgItemNotSelect',showTitle:true,title:this.t("msgItemNotSelect.title"),showCloseButton:true,width:'350px',height:'200px',
-                                    button:[{id:"btn01",caption:this.t("msgItemNotSelect.btn01"),location:'after'}],
-                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotSelect.msg")}</div>)
-                                }
-                                await dialog(tmpConfObj);
-                                return
-                            }
-                            this.txtPopPriQuantity.value = 1
-                            this.txtPopPriPrice.value = 0
-                            this.popPrice.show()
-                        }}></NdButton>
-                        </div>
-                        <div className="col-6 px-4 pt-4">
-                        <NdButton text={this.t("btnChangePrice")} type="default" width="100%" onClick={async()=>
-                            {
-                                if(this.barcode.code == "")
-                                {
-                                    let tmpConfObj = 
-                                    {
-                                        id:'msgItemNotSelect',showTitle:true,title:this.t("msgItemNotSelect.title"),showCloseButton:true,width:'350px',height:'200px',
-                                        button:[{id:"btn01",caption:this.t("msgItemNotSelect.btn01"),location:'after'}],
-                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotSelect.msg")}</div>)
-                                    }
-                                    await dialog(tmpConfObj);
-                                    return
-                                }
-                                this.popChangePrice.show()
-                            }}></NdButton>
-                        </div>
-                    </div>
-                </Item>
             </Form>
             {/* Stok Seçim */}
             <NdPopGrid id={"popItemCode"} parent={this} container={"#root"}
