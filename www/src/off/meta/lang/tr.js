@@ -382,6 +382,18 @@ export const langTr =
             btn01: "Tamam",
             msg: "Benzer kayıt oluşturamazsınız !"
         },
+        msgCheckCustomerCode:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Girmiş olduğunuz tedarikçi zaten tanımlı !"
+        },
+        msgCheckCustomerCode:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Girmiş olduğunuz tedarikçi zaten tanımlı !"
+        },
     },
     stk_01_002: 
     {

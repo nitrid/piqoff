@@ -338,6 +338,19 @@ export default class itemCard extends React.PureComponent
                 }
                 else
                 {
+                    // SANAL DATA DA MÜŞTERİ KODU KONTROLÜ
+                    if(this.itemsObj.itemMultiCode.dt().where({CUSTOMER_CODE:pSupply}).length > 0)
+                    {
+                        let tmpConfObj =
+                        {
+                            id:'msgCheckCustomerCode',showTitle:true,title:this.t("msgCheckCustomerCode.title"),showCloseButton:true,width:'500px',height:'200px',
+                            button:[{id:"btn01",caption:this.t("msgCheckCustomerCode.btn01"),location:'after'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCheckCustomerCode.msg")}</div>)
+                        }
+                        await dialog(tmpConfObj);
+                        resolve(3)
+                    }
+                    //*********************************** */
                     resolve(1) //KAYIT BULUNMADI
                 }
             }
@@ -1886,25 +1899,6 @@ export default class itemCard extends React.PureComponent
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
                                                 {
-                                                    // BENZER FİYAT KAYIT KONTROLÜ                                               
-                                                    let tmpCheckData = this.itemsObj.itemPrice.dt('ITEM_PRICE').where({START_DATE:new Date(moment(this.dtPopPriStartDate.value).format("YYYY-MM-DD")).toISOString()})
-                                                    tmpCheckData = tmpCheckData.where({FINISH_DATE:new Date(moment(this.dtPopPriEndDate.value).format("YYYY-MM-DD")).toISOString()})
-                                                    tmpCheckData = tmpCheckData.where({TYPE:0})
-                                                    tmpCheckData = tmpCheckData.where({QUANTITY:this.txtPopPriQuantity.value})
-                                                    
-                                                    if(tmpCheckData.length > 0)
-                                                    {
-                                                        let tmpConfObj =
-                                                        {
-                                                            id:'msgCheckPrice',showTitle:true,title:this.t("msgCheckPrice.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                            button:[{id:"btn01",caption:this.t("msgCheckPrice.btn01"),location:'after'}],
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCheckPrice.msg")}</div>)
-                                                        }
-                                                        await dialog(tmpConfObj);
-                                                        return
-                                                    }
-                                                    //*********************************** */
-
                                                     let tmpEmptyMulti = {...this.itemsObj.itemMultiCode.empty};
                                                     
                                                     tmpEmptyMulti.CUSER = this.core.auth.data.CODE,  
