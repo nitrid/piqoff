@@ -44,6 +44,11 @@ export const menu = (e) =>
                             text: e.t('menu.stk_01_004'),//'Ürün Grubu Değiştir',
                             path: 'items/cards/itemGrpChange'
                         },
+                        {
+                            id: 'stk_01_007',
+                            text: e.t('menu.stk_01_007'),//'Barkod Tanımları',
+                            path: 'items/cards/itemGrpUpdate'
+                        },
                     ]
                 },
                 {
