@@ -739,9 +739,9 @@ export default class labelPrinting extends React.Component
                     >
                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                         <Scrolling mode="infinite" />
-                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                        <Column dataField="BARCODE" caption={this.t("grdLblPrinting.clmBarcode")} width={250} />
-                        <Column dataField="NAME" caption={this.t("grdLblPrinting.clmItemName")} width={350} />
+                        <Editing mode="cell" allowUpdating={false} allowDeleting={true} confirmDelete={false}/>
+                        <Column dataField="BARCODE" caption={this.t("grdLblPrinting.clmBarcode")} width={140} />
+                        <Column dataField="NAME" caption={this.t("grdLblPrinting.clmItemName")} width={300} />
                         <Column dataField="CODE" caption={this.t("grdLblPrinting.clmItemCode")} width={150}/>
                         <Column dataField="PRICE" caption={this.t("grdLblPrinting.clmPrice")} width={250} />
                     </NdGrid>
