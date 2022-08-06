@@ -49,6 +49,7 @@ export default class Login extends React.Component
         this.cardIdRead = this.cardIdRead.bind(this)
         this.getUserList = this.getUserList.bind(this)
         this.textValueChanged = this.textValueChanged.bind(this)
+        this.barcodeScan = this.barcodeScan.bind(this)
     }
       
     async componentDidMount()
@@ -99,6 +100,27 @@ export default class Login extends React.Component
     closePage()
     {
         window.close()
+    }
+    async barcodeScan()
+    {
+        
+        cordova.plugins.barcodeScanner.scan(
+            async function (result) 
+            {
+                if(result.cancelled == false)
+                {
+                    this.cardIdCheck(result.text)
+                }
+            }.bind(this),
+            function (error) 
+            {
+                //alert("Scanning failed: " + error);
+            },
+            {
+              prompt : "Scan",
+              orientation : "portrait"
+            }
+        );
     }
     async cardIdRead()
     {
