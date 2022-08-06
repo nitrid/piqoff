@@ -129,9 +129,9 @@ export default class outageDoc extends React.Component
                             ]
                         }
                         >
-                            <Column dataField="CODE" caption={this.t("pg_txtRef.clmCode")} width={150} />
-                            <Column dataField="NAME" caption={this.t("pg_txtRef.clmName")} width={500} defaultSortOrder="asc" />
-                            <Column dataField="PRICE" caption={this.t("pg_txtRef.clmPrice")} width={150} type={"text"}/>
+                            <Column dataField="CODE" caption={this.t("pg_txtRef.clmCode")} width={100} />
+                            <Column dataField="NAME" caption={this.t("pg_txtRef.clmName")} defaultSortOrder="asc" />
+                            <Column dataField="PRICE" caption={this.t("pg_txtRef.clmPrice")}  type={"text"}/>
                         </NdPopGrid>
                     </Item>
                     {/* txtItemName */}

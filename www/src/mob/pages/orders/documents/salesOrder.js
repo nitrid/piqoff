@@ -1074,8 +1074,8 @@ export default class salesOrder extends React.Component
                     }
                 }}
                 >
-                    <Column dataField="CODE" caption={this.t("popItemCode.clmCode")} width={150} />
-                    <Column dataField="NAME" caption={this.t("popItemCode.clmName")} width={300} defaultSortOrder="asc" />
+                    <Column dataField="CODE" caption={this.t("popItemCode.clmCode")} width={100} />
+                    <Column dataField="NAME" caption={this.t("popItemCode.clmName")} defaultSortOrder="asc" />
             </NdPopGrid>
                  {/* İndirim PopUp */}
                 <div>
