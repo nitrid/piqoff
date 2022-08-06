@@ -170,7 +170,8 @@ export const langTr =
         txtCostPrice: "Maliyet Fiyatı",
         txtMinSalePrice: "Min. Satış Fiyatı",
         txtMaxSalePrice: "Max. Satış Fiyatı",
-        txtLastBuyPrice: "Son Alış Fiyatı",
+        txtLastBuyPrice: "Önceki Alış Fiyatı",
+        txtLastSalePrice: "Önceki Satış Fiyatı",
         tabTitlePrice: "Fiyat",
         tabTitleUnit: "Birim",
         tabTitleBarcode: "Barkod",
@@ -186,7 +187,8 @@ export const langTr =
         {
             title: "Stok Seçimi",
             clmCode: "KODU",
-            clmName: "ADI", 
+            clmName: "ADI",
+            clmStatus: "DURUM"
         },
         pg_txtPopCustomerCode:
         {

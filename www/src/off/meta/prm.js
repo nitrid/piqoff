@@ -534,6 +534,22 @@ export const prm =
             CAPTION : "Son Alış Fiyatı"
         }
     },
+    //txtLastSalePrice
+    {
+        TYPE : 2,
+        ID :"txtLastSalePrice",
+        VALUE : 0,
+        SPECIAL : "",
+        PAGE : "stk_01_001",
+        ELEMENT : "txtLastSalePrice",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Stok Tanımları",
+            CAPTION : "Son Satış Fiyatı"
+        }
+    },
     //Urun Grubuna Göre Menşei Validation
     {
         TYPE : 1,
@@ -566,7 +582,7 @@ export const prm =
             CAPTION : "Ürün Grubuna Göre Min Max Yetki"
         }
     },
-    //Otomatik Min ve Max Fiyat Atama
+    //Otomatik Min Fiyat Atama
     {
         TYPE : 1,
         ID :"ItemMinPricePercent",
@@ -582,6 +598,7 @@ export const prm =
             CAPTION : "Ürün Minimum Satış Yüzdesi"
         }
     },
+    //Otomatik Max Fiyat Atama 
     {
         TYPE : 1,
         ID :"ItemMaxPricePercent",
@@ -596,23 +613,39 @@ export const prm =
             PAGE_NAME : "Stok Tanımları",
             CAPTION : "Ürün MAximum Satış Yüzdesi"
         }
-        },
-         //Tax Sugar
+    },
+    //Satış Fiyatı Maliyet Kontrolü
+    {
+        TYPE : 1,
+        ID :"SalePriceCostCtrl",
+        VALUE : true,
+        SPECIAL : "",
+        PAGE : "stk_01_001",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
         {
-            TYPE : 1,
-            ID :"taxSugarGroupValidation",
-            VALUE : ['007'],
-            SPECIAL : "",
-            PAGE : "stk_01_001",
-            ELEMENT : "",
-            APP : "OFF",
-            VIEW : 
-            {
-                TYPE : "text",
-                PAGE_NAME : "Stok Tanımları",
-                CAPTION : "Tax Sugar Uygulanacak Gruplar"
-            }
-        },
+            TYPE : "text",
+            PAGE_NAME : "Stok Tanımları",
+            CAPTION : "Satış Fiyatı Maliyet Kontrolü"
+        }
+    },
+    //Tax Sugar
+    {
+        TYPE : 1,
+        ID :"taxSugarGroupValidation",
+        VALUE : ['007'],
+        SPECIAL : "",
+        PAGE : "stk_01_001",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Stok Tanımları",
+            CAPTION : "Tax Sugar Uygulanacak Gruplar"
+        }
+    },
     //#endregion
 
     //#region Stok Liste

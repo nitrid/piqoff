@@ -4,7 +4,7 @@ export const langFr =
     btnSave: "Enregistrer",
     btnCancel: "Annuler",
     btnPrint :"Imprimer",
-    btnOk: "OK",    
+    btnOk: "OK",
     msgWarning: "Attention",
     info : "Information",
     btnYes : "OK",
@@ -149,13 +149,13 @@ export const langFr =
         msg : "Le prix ne peut être inferieur au prix de revient !",
         btn01 : "OK",
     },
-    totalLine : "Ligne total :",
-    totalQuantity : "Quantite Total :",
-    loyaltyDiscount : "Remise fidélité :",
+    totalLine : "Ligne total",
+    totalQuantity : "Montant total",
+    loyaltyDiscount : "Remise fidélité",
     ticketRect : "Ticket Rest. : ",
-    amount : "Sous-total :",
-    vat : "TVA :",
-    discount : "Remise :",
+    amount : "Sous-total",
+    vat : "TVA",
+    discount : "Remise",
     msgCollectForSale: 
     {
         title : "Attention",
@@ -410,10 +410,10 @@ export const langFr =
     grdList: 
     {
         LDATE : "Date MAJ",
-        ITEM_NAME :"Désignation Produit",
-        QUANTITY : "Quantite",
-        PRICE : "Prix",
-        AMOUNT : "Total"
+        ITEM_NAME :"NOM",
+        QUANTITY : "MONTANT",
+        PRICE : "PRIX",
+        AMOUNT : "TOTAL"
     },
     grdBarcodeList : 
     {
@@ -421,7 +421,7 @@ export const langFr =
         NAME : "NOM",
         PRICE_SALE : "PRIX",
     },
-    grdPopParkList : 
+    grdBarcodeList : 
     {
         LUSER_NAME : "SAISIE UTILISATEUR",
         LDATE : "SAISIE DATE",
@@ -456,10 +456,10 @@ export const langFr =
     grdLastSale :
     {
         BARCODE : "CODE BARRE",
-        ITEM_NAME : "Désignation Produit",
-        QUANTITY : "Quantite",
-        PRICE :"Prix",
-        AMOUNT : "Total",
+        ITEM_NAME : "NOM",
+        QUANTITY : "QUANTITE",
+        PRICE :"PRIX",
+        AMOUNT : "TOTAL",
     },
     grdLastPay : 
     {
@@ -470,12 +470,12 @@ export const langFr =
     grdLastTRDetail : 
     {
         AMOUNT : "TOTAL",
-        COUNT :"COMPTE"  
-    } ,
+        COUNT  :"COMPTE"   ,
+    },
     grdTRDetail : 
     {
         AMOUNT : "TOTAL",
-        COUNT :"COMPTE"   
+        COUNT  :"COMPTE" ,
     },
     popDescbordValidation :
     {

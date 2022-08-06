@@ -337,6 +337,22 @@ export const acs =
             CAPTION : "Son Alış Fiyatı"
         }
     },
+    //txtLastSalePrice
+    {
+        TYPE : 2,
+        ID :"txtLastSalePrice",
+        VALUE : {visible:true,editable:true},
+        SPECIAL : "",
+        PAGE : "stk_01_001",
+        ELEMENT : "txtLastSalePrice",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Stok Tanımları",
+            CAPTION : "Son Satış Fiyatı"
+        }
+    },
     {
         TYPE : 2,
         ID :"popgrid",
