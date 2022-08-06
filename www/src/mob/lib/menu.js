@@ -34,6 +34,11 @@ export const menu = (e) =>
                             text: e.t('menu.stk_01_004'),//'Ürün Grubu Değiştir',
                             path: 'items/cards/itemGrpChange'
                         },
+                        {
+                            id: 'stk_01_005',
+                            text: e.t('menu.stk_01_005'),//'Fiyat Gör',
+                            path: 'items/cards/changePrice'
+                        },
                     ]
                 },
                 {
