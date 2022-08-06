@@ -430,7 +430,7 @@ export default class labelPrinting extends React.Component
                         showTitle={true} 
                         showBorders={true}
                         width={'90%'}
-                        height={'90%'}
+                        height={'80%'}
                         selection={{mode:"single"}}
                         title={this.t("pg_Docs.title")} 
                         button=

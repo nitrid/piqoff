@@ -407,7 +407,7 @@ export default class salesOrder extends React.Component
                         showTitle={true} 
                         showBorders={true}
                         width={'90%'}
-                        height={'90%'}
+                        height={'80%'}
                         title={this.t("pg_Docs.title")} 
                         selection={{mode:"single"}}
                         data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 2 AND DOC_TYPE = 2 AND REBATE = 1"},sql:this.core.sql}}}
@@ -426,11 +426,11 @@ export default class salesOrder extends React.Component
                             
                         }
                         >
-                            <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150} defaultSortOrder="asc"/>
-                            <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={300} defaultSortOrder="asc" />
-                            <Column dataField="INPUT_NAME" caption={this.t("pg_Docs.clmInputName")} width={300} defaultSortOrder="asc" />
-                            <Column dataField="OUTPUT_NAME" caption={this.t("pg_Docs.clmOutputName")} width={300} defaultSortOrder="asc" />
-                            <Column dataField="DOC_DATE" caption={this.t("pg_Docs.clmInputCode")} width={300} defaultSortOrder="asc" />
+                            <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={70} defaultSortOrder="asc"/>
+                            <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={50} defaultSortOrder="asc" />
+                            <Column dataField="INPUT_NAME" caption={this.t("pg_Docs.clmInputName")} width={150} defaultSortOrder="asc" />
+                            <Column dataField="OUTPUT_NAME" caption={this.t("pg_Docs.clmOutputName")} width={150} defaultSortOrder="asc" />
+                            <Column dataField="DOC_DATE" caption={this.t("pg_Docs.clmInputCode")} width={150} defaultSortOrder="asc" />
                             
                         </NdPopGrid>
                     </Item>
