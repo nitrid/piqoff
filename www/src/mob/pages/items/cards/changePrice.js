@@ -206,7 +206,7 @@ export default class salesOrder extends React.Component
                 <Item> 
                     <div>
                         <h4 className="text-center">
-                            {this.barcode.price}
+                            {this.barcode.price} €
                         </h4>
                     </div>
                 </Item>
