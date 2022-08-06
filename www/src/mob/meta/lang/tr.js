@@ -33,7 +33,7 @@ export const langTr =
         stk_01_007: "Ü.Grubu Güncelle",
         stk_02: "Evraklar",
         stk_02_001: "Etiket Basımı",
-        stk_02_002: "İade Deposuna Sevk",
+        stk_02_002: "İade Ürün Toplama",
         stk_02_003: "Özel Etiket Basımı",
         stk_02_004: "Skt Girişi",
         ord: "Sipariş",                

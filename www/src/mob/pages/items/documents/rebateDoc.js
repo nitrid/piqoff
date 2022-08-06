@@ -622,11 +622,11 @@ export default class salesOrder extends React.Component
                     {/* txtQuantity */}
                     <Item>
                         <Label text={this.t("txtQuantity")}/>
-                        <NdNumberBox id="txtQuantity" parent={this} simple={true}  value={1}
+                        <NdTextBox id="txtQuantity" parent={this} simple={true}  value={1}
                             param={this.param.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
                             access={this.access.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
                             >
-                        </NdNumberBox>
+                        </NdTextBox>
                     </Item>
                     <Item>
                         <div className="row">

@@ -647,7 +647,7 @@ export default class labelPrinting extends React.Component
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnPrint" parent={this} icon="print" type="default" validationGroup="frmLabelQeueu"
+                                    <NdButton id="btnPrint" parent={this} icon="print" type="default" validationGroup={"frmLabelQeueu" + this.tabIndex}
                                     onClick={async(e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -758,7 +758,7 @@ export default class labelPrinting extends React.Component
                                             param={this.param.filter({ELEMENT:'txtSer',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtSer',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmLabelQeueu"}>
+                                            <Validator validationGroup={"frmLabelQeueu" + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRef")} />
                                                 </Validator>  
                                             </NdTextBox>
@@ -815,7 +815,7 @@ export default class labelPrinting extends React.Component
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmLabelQeueu"}>
+                                            <Validator validationGroup={"frmLabelQeueu" + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRefNo")} />
                                                 </Validator> 
                                             </NdTextBox>
@@ -886,7 +886,7 @@ export default class labelPrinting extends React.Component
                                     param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmLabelQeueu"}>
+                                        <Validator validationGroup={"frmLabelQeueu" + this.tabIndex}>
                                             <RequiredRule message={this.t("validDesign")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -1022,7 +1022,7 @@ export default class labelPrinting extends React.Component
                                 </Item>
                                 <Item location="after">
                                     <Button icon="add"
-                                    validationGroup="frmLabelQeueu"
+                                    validationGroup={"frmLabelQeueu" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
