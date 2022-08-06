@@ -34,6 +34,7 @@ export default class labelPrinting extends React.Component
         this.lblObj = new labelCls();
         this.mainLblObj = new labelMainCls()
         this.pageCount = 0;
+        this.tabIndex = props.data.tabkey
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
 
