@@ -38,7 +38,7 @@ export const menu = (e) =>
                 },
                 {
                     id: 'stk_02',
-                    text : e.t('menu.stk_02'), //'Tanımlar'
+                    text : e.t('menu.stk_02'), //'evraklar'
                     expanded: false,
                     items: 
                     [
@@ -56,6 +56,11 @@ export const menu = (e) =>
                             id: 'stk_02_003',
                             text: e.t('menu.stk_02_003'),//'İade Ürün Toplama',
                             path: 'items/documents/privatePrinting'
+                        },
+                        {
+                            id: 'stk_02_004',
+                            text: e.t('menu.stk_02_004'),//'İade Ürün Toplama',
+                            path: 'items/documents/expdateEntry'
                         },
                     ]
                 },
@@ -77,6 +82,11 @@ export const menu = (e) =>
                             id: 'ord_01_001',
                             text: e.t('menu.ord_01_001'),//'Satış Sipariş',
                             path: 'orders/documents/salesOrder'
+                        },
+                        {
+                            id: 'ord_01_002',
+                            text: e.t('menu.ord_01_002'),//'Satış Sipariş',
+                            path: 'orders/documents/purchaseOrder'
                         },
                     ]
                 },

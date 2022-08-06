@@ -1514,3 +1514,82 @@ export class itemLogPriceCls
         });
     }
 }
+export class itemExpDateCls
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds = new dataset();
+        this.empty = 
+        {
+            GUID:'00000000-0000-0000-0000-000000000000',
+            CUSER: this.core.auth.data == null ? '' : this.core.auth.data.CODE,
+            ITEM_GUID : '00000000-0000-0000-0000-000000000000',            
+            ITEM_CODE : '',            
+            ITEM_NAME : '',
+            QUANTITY : 0,
+            EXP_DATE :  moment(new Date(0)).format("DD/MM/YYYY HH:mm:ss"),
+        }
+        
+        this._initDs();
+    }
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('ITEM_EXPDATE');      
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_EXPDATE_INSERT] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@ITEM_GUID = @PITEM_GUID, " + 
+                    "@QUANTITY = @PQUANTITY, " + 
+                    "@EXP_DATE = @PEXP_DATE " ,
+            param : ['PGUID:string|50','PCUSER:string|25','PITEM_GUID:string|50','PQUANTITY:float','PEXP_DATE:date'],
+            dataprm : ['GUID','CUSER','ITEM_GUID','QUANTITY','EXP_DATE']
+        } 
+        this.ds.add(tmpDt);
+    }
+    //#endregion
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0]);
+        }
+
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('ITEM_EXPDATE') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {}
+        if(arguments.length > 0)
+        {
+            tmp = {...arguments[0]}            
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('ITEM_EXPDATE').push(tmp)
+    }
+    clearAll()
+    {
+        for (let i = 0; i < this.ds.length; i++) 
+        {
+            this.dt(i).clear()
+        }
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            resolve(await this.ds.update()); 
+        });
+    }
+}

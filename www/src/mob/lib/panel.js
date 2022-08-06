@@ -2,6 +2,8 @@ import React from 'react';
 import TabPanel from 'devextreme-react/tab-panel';
 import Page from './page.js'
 import moment from 'moment';
+import { dialog } from '../../core/react/devex/dialog.js';
+
 
 const page_list = [];
 export default class Panel extends React.PureComponent
@@ -25,8 +27,20 @@ export default class Panel extends React.PureComponent
       Panel.instance = this;
     }
   }
-  addPage(e)
+  async addPage(e)
   {
+    if(this.state.dataSource.length > 2)
+    {
+      let tmpConfObj =
+      {
+          id:'msgClose',showTitle:true,title:("Dikkat"),showCloseButton:true,width:'350px',height:'200px',
+          button:[{id:"btn02",caption:("Tamam"),location:'after'}],
+          content:(<div style={{textAlign:"center",fontSize:"20px"}}>{("En fazla " + (this.state.dataSource.length) + "Adet Sayfa Açabilirsiniz.! Lütfen Birini Kapatın"  )}</div>)
+      }
+      
+      await dialog(tmpConfObj);
+      return
+    }
     //AYNI EKRANI BİRDEN ÇOK AÇMAK İÇİN YAPILDI. MENÜDEN GELEN DATA TAB ÜZERİNDE BENZERSİZ HALE GETİRİLİYOR.
     let Tmp = {...e}
     
