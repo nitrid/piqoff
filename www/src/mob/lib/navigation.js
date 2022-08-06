@@ -28,6 +28,7 @@ export default class Navigation extends React.PureComponent
             }
         }
         this.menu = menu(App.instance.lang);        
+        console.log(this.menu)
         
         this.state = 
         {

@@ -30,6 +30,11 @@ export const menu = (e) =>
                             path: 'items/cards/checkCustomer'
                         },
                         {
+                            id: 'stk_01_006',
+                            text: e.t('menu.stk_01_006'),//'Barkod Tanımları',
+                            path: 'items/cards/barcodeAdd'
+                        },
+                        {
                             id: 'stk_01_003',
                             text: e.t('menu.stk_01_003'),//'Barkod Tanımları',
                             path: 'items/cards/barcodeCard'

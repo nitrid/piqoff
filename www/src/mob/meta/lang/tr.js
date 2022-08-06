@@ -29,6 +29,7 @@ export const langTr =
         stk_01_003: "Barkod Tanımlama",
         stk_01_004: "Ürün Grubu Değiştir",
         stk_01_005: "Fiyat Değiştir",
+        stk_01_006: "Barkod Ekle",
         stk_02: "Evraklar",
         stk_02_001: "Etiket Basımı",
         stk_02_002: "İade Deposuna Sevk",
@@ -343,6 +344,83 @@ export const langTr =
             msg: "Barkod Bulunamadı !"
         },
         txtDepot : "Depo",
+
+    },
+    stk_01_006 :
+    {
+        btnDropmenu : "İşlemler",
+        txtRefRefno : "Seri-Sıra",
+        chkAutoAdd : "Oto Ekle",
+        AddItems : "Ekle",
+        txtBarcode : "Barkod Ekle",
+        txtBarcodePlace : "Lütfen Barkod Okutunuz",
+        btnSave : "Kaydet",
+        btnNew : "Yeni",
+        btnDelete : "Sil",
+        btnDeleteRow : "Satır Sil",
+        btnBarcodeEntry : "Barkod Girişi",
+        validDesign : "Lütfen Dizayn Seçin",
+        numPrice :"Fiyat",
+        btnAddPrice: "Yeni Fiyat Ekle",
+        btnChangePrice: "Fiyat Değiştir",
+        btnAdd :"Ekle",
+        popItemCode : 
+        {
+            title : "Stok Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+        },
+        popPrice : 
+        {
+            title : "Fiyat Ekle",
+            dtPopPriStartDate :  "Başlangıç Tarihi",
+            dtPopPriEndDate : "Bitiş Tarihi",
+            txtPopPriQuantity : "Miktar",
+            txtPopPriPrice : "Fiyat"
+        },
+        grdBarcode :
+        {
+           clmBarcode : "Barkod"
+        },
+        msgDoubleBarcode :
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Eklediğiniz Barkod Sistemde Mevcut ! Lütfen Kontrol Ediniz.."
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgItemNotSelect:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Stok Seçiniz !"
+        },
+        msgBarcodeNotFound:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Barkod Bulunamadı !"
+        },
+        txtNewBarcodePlace : "Yeni Barkodu Giriniz"
 
     },
     stk_02_001 :
