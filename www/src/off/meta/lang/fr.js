@@ -375,6 +375,12 @@ export const langFr =
             lDate: "Dernière Date de Modification",
             lUser : "Utilisateur Ayant Modifié",
         },
+        msgCheckPrice:
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Benzer kayıt oluşturamazsınız !" //BAK
+        },
     },
     stk_01_002: 
     {
