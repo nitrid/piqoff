@@ -27,9 +27,10 @@ export const langTr =
         stk_01_001: "Fiyat Gör",
         stk_01_002: "Tedarikçi Gör",
         stk_01_003: "Barkod Tanımlama",
-        stk_01_004: "Ürün Grubu GÖr ve Değiştir",
+        stk_01_004: "Ü.Grubu Gör-Değiştir",
         stk_01_005: "Fiyat Değiştir",
         stk_01_006: "Barkod Ekle",
+        stk_01_007: "Ü.Grubu Güncelle",
         stk_02: "Evraklar",
         stk_02_001: "Etiket Basımı",
         stk_02_002: "İade Deposuna Sevk",
@@ -422,6 +423,50 @@ export const langTr =
         },
         txtNewBarcodePlace : "Yeni Barkodu Giriniz"
 
+    },
+    stk_01_007 :
+    {
+        chkAllItems : "Tüm Ürünler",
+        chkAutoAdd : "Oto Ekle",
+        btnChangeGroup : "Ürün Grubu Değiştir",
+        txtBarcode : "Barkod",
+        txtBarcodePlace : "Lütfen Barkod Okutunuz",
+        btnItemEntry : "Stok Girişi",
+        txtBarcodeEnter: "Barkod Girişi",
+        cmbItemGrp: "Ürün Grubu",
+        thisGrp :"Mevcut Grup",
+        btnUpdate :"Güncelle",
+        popItemCode : 
+        {
+            title : "Stok Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+        },
+        grdChkCustomer :
+        {
+            clmDate :"Tarih",
+            clmCustomerCode: "Kodu",
+            clmCustomerName: "Adı",
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgItemNotSelect:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Stok Seçiniz !"
+        },
+        msgBarcodeNotFound:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Barkod Bulunamadı !"
+        },
     },
     stk_02_001 :
     {
