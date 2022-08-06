@@ -31,7 +31,7 @@ export default class salesOrder extends React.Component
         super()
         this.state = 
         {
-            Grid:"visible",
+            Grid:"hidden",
         }
         this.barcode = 
         {
@@ -55,7 +55,7 @@ export default class salesOrder extends React.Component
     }
     async init()
     {
-        await this.grdPrice.dataRefresh({source:this.itemsPriceObj.dt('ITEM_PRICE')});
+       
     }
     async barcodeScan()
     {
@@ -84,7 +84,7 @@ export default class salesOrder extends React.Component
                         await this.itemsPriceObj.load({ITEM_GUID:tmpData.result.recordset[0].GUID});
                         if(this.itemsPriceObj.dt().length > 1)
                         {
-                            this.setState({Grid:"visible"}) 
+                            await this.setState({Grid:"visible"}) 
                             await this.grdPrice.dataRefresh({source:this.itemsPriceObj.dt('ITEM_PRICE')});
                         }
                         else
@@ -149,7 +149,7 @@ export default class salesOrder extends React.Component
                                             this.txtBarcode.value = ""
                                             if(this.itemsPriceObj.dt().length > 1)
                                             {
-                                                this.setState({Grid:"visible"}) 
+                                                await this.setState({Grid:"visible"}) 
                                                 await this.grdPrice.dataRefresh({source:this.itemsPriceObj.dt('ITEM_PRICE')});
                                             }
                                             else
@@ -195,7 +195,7 @@ export default class salesOrder extends React.Component
                                     this.txtBarcode.value = ""
                                     if(this.itemsPriceObj.dt().length > 1)
                                     {
-                                        this.setState({Grid:"visible"}) 
+                                        await this.setState({Grid:"visible"}) 
                                         await this.grdPrice.dataRefresh({source:this.itemsPriceObj.dt('ITEM_PRICE')});
                                     }
                                     else
@@ -241,25 +241,28 @@ export default class salesOrder extends React.Component
                         </h4>
                     </div>
                 </Item>
-                <div style={{visibility:this.state.Grid}}>
-                    <Item>
-                        <NdGrid parent={this} id={"grdPrice"} 
-                        showBorders={true} 
-                        columnsAutoWidth={true} 
-                        allowColumnReordering={true} 
-                        allowColumnResizing={true} 
-                        height={'100%'} 
-                        width={'100%'}
-                        dbApply={false}
-                        >
-                            <Paging defaultPageSize={5} />
-                            <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
-                            <Column dataField="QUANTITY" caption={this.t("grdPrice.clmQuantity")}/>
-                            <Column dataField="PRICE" caption={this.t("grdPrice.clmPrice")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
-                        </NdGrid>
-                    </Item>
-                </div>
             </Form>
+            <div style={{visibility:this.state.Grid}}>
+                <Form>
+                    <Item>
+                            <NdGrid parent={this} id={"grdPrice"} 
+                            showBorders={true} 
+                            columnsAutoWidth={true} 
+                            allowColumnReordering={true} 
+                            allowColumnResizing={true} 
+                            height={'100%'} 
+                            width={'100%'}
+                            dbApply={false}
+                            >
+                                <Paging defaultPageSize={5} />
+                                <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
+                                <Column dataField="QUANTITY" caption={this.t("grdPrice.clmQuantity")}/>
+                                <Column dataField="PRICE" caption={this.t("grdPrice.clmPrice")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                            </NdGrid>
+                        </Item>
+                </Form>
+                   
+                </div>
             {/* Stok Seçim */}
             <NdPopGrid id={"popItemCode"} parent={this} container={"#root"}
                 visible={false}
