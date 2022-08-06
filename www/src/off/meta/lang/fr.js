@@ -188,6 +188,7 @@ export const langFr =
             title: "Sélectionner Stock",
             clmCode: "CODE",
             clmName: "NOM", 
+            clmStatus: "DURUM" //BAK
         },
         pg_txtPopCustomerCode:
         {
@@ -386,6 +387,12 @@ export const langFr =
             title: "Dikkat", //BAK
             btn01: "Tamam", //BAK
             msg: "Girmiş olduğunuz tedarikçi zaten tanımlı !" //BAK
+        },
+        msgSalePriceToCustomerPrice:
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Girmiş olduğunuz tedarikçi fiyatı satış fiyatından yüksek olamaz! Lütfen satış fiyatınızı kontrol ediniz." //BAK
         },
     },
     stk_01_002: 
@@ -5947,7 +5954,7 @@ export const langFr =
             title: "Sélectionner Stock",
             clmCode: "CODE",
             clmName: "NOM", 
-            clmStatus: "DURUM" //BAK
+            clmPrice: "FİYAT" //BAK            
         },
         msgSave:
         {

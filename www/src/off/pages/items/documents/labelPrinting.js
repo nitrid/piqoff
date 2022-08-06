@@ -25,9 +25,9 @@ import tr from '../../../meta/lang/devexpress/tr.js';
 
 export default class labelPrinting extends React.Component
 {
-    constructor()
+    constructor(props)
     {
-        super()
+        super(props)
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
@@ -982,45 +982,7 @@ export default class labelPrinting extends React.Component
                     {/* Grid */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={1} onInitialized={(e)=>
-                            {
-                                this.frmOutwas = e.component
-                            }}>
-                               
-                                 <Item>
-                                    <NdGrid parent={this} id={"grdLabelQueue"} 
-                                    showBorders={true} 
-                                    columnsAutoWidth={true} 
-                                    allowColumnReordering={true} 
-                                    allowColumnResizing={true} 
-                                    height={'600'} 
-                                    width={'100%'}
-                                    dbApply={false}
-                                    loadPanel={{enabled:true}}
-                                    onRowUpdated={async(e)=>{
-                                        if(typeof e.data.PRICE != 'undefined' || typeof e.data.UNDER_UNIT_VALUE != 'undefined')
-                                        {
-                                            e.key.UNDER_UNIT_PRICE = parseFloat(((e.key.PRICE * (e.key.UNDER_UNIT_VALUE *100)) / 100).toFixed(3))
-                                        }
-                                    }}
-                                    onRowRemoved={(e)=>{
-                                        this.calculateCount()
-                                    }}
-                                    >
-                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
-                                        <Scrolling mode="standard" />
-                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                        <Export fileName={this.lang.t("menu.stk_02_004")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="CODE" caption={this.t("grdLabelQueue.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="BARCODE" caption={this.t("grdLabelQueue.clmBarcode")} width={150} />
-                                        <Column dataField="NAME" caption={this.t("grdLabelQueue.clmItemName")} width={550} />
-                                        <Column dataField="ITEM_GRP_NAME" caption={this.t("grdLabelQueue.clmItemGrpName")}  width={200}/>
-                                        <Column dataField="PRICE" caption={this.t("grdLabelQueue.clmPrice")} width={70}/>
-                                        <Column dataField="UNDER_UNIT_VALUE" caption={this.t("grdLabelQueue.clmUnderUnit")} width={80}/>
-                                        <Column dataField="UNDER_UNIT_PRICE" caption={this.t("grdLabelQueue.clmUnderUnitPrice")}width={70} />
-                                        <Column dataField="DESCRIPTION" caption={this.t("grdLabelQueue.clmDescription")} />
-                                    </NdGrid>
-                                </Item>
+                            <Form colCount={1} onInitialized={(e)=>{this.frmOutwas = e.component}}>
                                 <Item location="after">
                                     <Button icon="add"
                                     validationGroup={"frmLabelQeueu" + this.tabIndex}
@@ -1108,6 +1070,40 @@ export default class labelPrinting extends React.Component
                                         }
                                     }}/>
                                 </Item>
+                                <Item>
+                                    <NdGrid parent={this} id={"grdLabelQueue"} 
+                                    showBorders={true} 
+                                    columnsAutoWidth={true} 
+                                    allowColumnReordering={true} 
+                                    allowColumnResizing={true} 
+                                    height={'600'} 
+                                    width={'100%'}
+                                    dbApply={false}
+                                    loadPanel={{enabled:true}}
+                                    onRowUpdated={async(e)=>{
+                                        if(typeof e.data.PRICE != 'undefined' || typeof e.data.UNDER_UNIT_VALUE != 'undefined')
+                                        {
+                                            e.key.UNDER_UNIT_PRICE = parseFloat(((e.key.PRICE * (e.key.UNDER_UNIT_VALUE *100)) / 100).toFixed(3))
+                                        }
+                                    }}
+                                    onRowRemoved={(e)=>{
+                                        this.calculateCount()
+                                    }}
+                                    >
+                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
+                                        <Scrolling mode="standard" />
+                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
+                                        <Export fileName={this.lang.t("menu.stk_02_004")} enabled={true} allowExportSelectedData={true} />
+                                        <Column dataField="CODE" caption={this.t("grdLabelQueue.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="BARCODE" caption={this.t("grdLabelQueue.clmBarcode")} width={150} />
+                                        <Column dataField="NAME" caption={this.t("grdLabelQueue.clmItemName")} width={550} />
+                                        <Column dataField="ITEM_GRP_NAME" caption={this.t("grdLabelQueue.clmItemGrpName")}  width={200}/>
+                                        <Column dataField="PRICE" caption={this.t("grdLabelQueue.clmPrice")} width={70}/>
+                                        <Column dataField="UNDER_UNIT_VALUE" caption={this.t("grdLabelQueue.clmUnderUnit")} width={80}/>
+                                        <Column dataField="UNDER_UNIT_PRICE" caption={this.t("grdLabelQueue.clmUnderUnitPrice")}width={70} />
+                                        <Column dataField="DESCRIPTION" caption={this.t("grdLabelQueue.clmDescription")} />
+                                    </NdGrid>
+                                </Item>                                
                             </Form>
                         </div>
                     </div>
@@ -1141,7 +1137,7 @@ export default class labelPrinting extends React.Component
                                         "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE())) AS PRICE  , " +
                                         "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE " +
                                         "FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID),'') <> '') AS TMP " +
-                                        "WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) " ,
+                                        "WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) AND STATUS = 1" ,
                                 param : ['VAL:string|50']
                             },
                             sql:this.core.sql
