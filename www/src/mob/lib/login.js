@@ -301,6 +301,19 @@ export default class Login extends React.Component
                                        this.cardIdCheck(this.cardRead.value)
                                     }
                                 }}
+                                button={
+                                    [
+                                      
+                                        {
+                                            id:'02',
+                                            icon:'photo',
+                                            onClick:async()=>
+                                            {
+                                                this.barcodeScan()
+                                            }
+                                        }
+                                    ]
+                                    }
                                 />
                             </Item>
                             </Form>

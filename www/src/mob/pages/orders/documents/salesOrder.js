@@ -712,7 +712,15 @@ export default class salesOrder extends React.Component
                                             }
                                         }
                                     }
+                                },
+                                {
+                                id:'02',
+                                icon:'photo',
+                                onClick:async()=>
+                                {
+                                    this.barcodeScan()
                                 }
+                            }
                             ]
                             }
                             onEnterKey={(async(e)=>

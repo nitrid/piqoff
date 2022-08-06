@@ -27,7 +27,7 @@ export const langTr =
         stk_01_001: "Fiyat Gör",
         stk_01_002: "Tedarikçi Gör",
         stk_01_003: "Barkod Tanımlama",
-        stk_01_004: "Ürün Grubu Değiştir",
+        stk_01_004: "Ürün Grubu GÖr ve Değiştir",
         stk_01_005: "Fiyat Değiştir",
         stk_01_006: "Barkod Ekle",
         stk_02: "Evraklar",
