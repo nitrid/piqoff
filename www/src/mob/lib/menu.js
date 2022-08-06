@@ -52,6 +52,11 @@ export const menu = (e) =>
                             text: e.t('menu.stk_02_002'),//'İade Ürün Toplama',
                             path: 'items/documents/rebateDoc'
                         },
+                        {
+                            id: 'stk_02_003',
+                            text: e.t('menu.stk_02_003'),//'İade Ürün Toplama',
+                            path: 'items/documents/privatePrinting'
+                        },
                     ]
                 },
             ]

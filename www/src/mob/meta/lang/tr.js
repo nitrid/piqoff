@@ -31,6 +31,7 @@ export const langTr =
         stk_02: "Evraklar",
         stk_02_001: "Etiket Basımı",
         stk_02_002: "İade Deposuna Sevk",
+        stk_02_003: "Özel Etiket Basımı",
         ord: "Sipariş",                
         ord_01: "Evraklar",
         ord_01_001: "Satış Sipariş"
@@ -563,6 +564,45 @@ export const langTr =
         txtBarcodePlace : "Lütfen Barkod Okutunuz",
         txtQuantity : "Miktar",
         chkAutoAdd : "Oto Ekle",
+    },
+    stk_02_003 :
+    {
+        txtRef: "Referans",
+        txtPrice : "Fiyat",
+        txtDescription : "Açıklama",
+        txtItemName : "Ürün Adı",
+        txtQuantity : "Adet",
+        valPrice : "Fiyat 0 dan Küçük Olamaz",
+        valCode : "Lütfen Stok Girin",
+        valName : "Ürün Adı Boş Olamaz",
+        btnSave: "Kaydet",
+        btnPrint: "Yazdır",
+        pg_txtRef:
+        {
+            title: "Stok Seçimi",
+            clmCode: "KODU",
+            clmName: "ADI", 
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
     },
     ord_01_001 :
     {
