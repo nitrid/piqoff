@@ -258,6 +258,8 @@ export default class labelPrinting extends React.Component
         tmpDocItems.PRICE = this.barcode.price
         this.lblObj.addEmpty(tmpDocItems)
         this.barcodeReset()
+        let Data = {data:this.lblObj.dt().toArray()}
+        this.mainLblObj.dt()[0].DATA = JSON.stringify(Data)
         await this.mainLblObj.save()
        
     }
