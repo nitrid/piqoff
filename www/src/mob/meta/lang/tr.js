@@ -677,6 +677,13 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
         },
+        msgBigQuantity:
+        {
+            title: "Dikkat",
+            btn01: "Ekle",
+            btn02: "Vazgeç",
+            msg: "Miktar Eklemek İstediğinize Emin Misiniz?"
+        },
         msgSave:
         {
             title: "Dikkat",

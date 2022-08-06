@@ -250,6 +250,24 @@ export default class salesOrder extends React.Component
     }
     async addItem(pQuantity)
     {
+        if(pQuantity > 99)
+        {
+            let tmpConfObj = 
+            {
+                id:'msgBigQuantity',showTitle:true,title:this.t("msgBigQuantity.title"),showCloseButton:true,width:'350px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgBigQuantity.btn01"),location:'before'},{id:"btn02",caption:this.t("msgBigQuantity.btn02"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{pQuantity + " " + this.t("msgBigQuantity.msg")}</div>)
+            }
+            let pResult = await dialog(tmpConfObj);
+            if(pResult == 'btn01')
+            {                   
+               
+            }
+            else
+            {
+                return
+            }
+        }
         if(this.txtBarcode.value == "")
         {
             let tmpConfObj = 
