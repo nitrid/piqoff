@@ -381,6 +381,12 @@ export const langFr =
             btn01: "Tamam", //BAK
             msg: "Benzer kayıt oluşturamazsınız !" //BAK
         },
+        msgCheckCustomerCode:
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Girmiş olduğunuz tedarikçi zaten tanımlı !" //BAK
+        },
     },
     stk_01_002: 
     {
