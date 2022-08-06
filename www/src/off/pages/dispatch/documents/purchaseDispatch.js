@@ -1372,7 +1372,7 @@ export default class purchaseDispatch extends React.Component
                                     ></NdTextBox>
                                 </Item>
                                 {/* İndirim */}
-                                <EmptyItem />
+                                <EmptyItem colSpan={3}/>
                                 <Item>
                                 <Label text={this.t("txtDiscount")} alignment="right" />
                                     <NdTextBox id="txtDiscount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"DISCOUNT"}}
@@ -1398,7 +1398,7 @@ export default class purchaseDispatch extends React.Component
                                     ></NdTextBox>
                                 </Item>
                                 {/* KDV */}
-                                <EmptyItem />
+                                <EmptyItem colSpan={3}/>
                                 <Item>
                                 <Label text={this.t("txtVat")} alignment="right" />
                                     <NdTextBox id="txtVat" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"VAT"}}
@@ -1437,7 +1437,7 @@ export default class purchaseDispatch extends React.Component
                                     ></NdTextBox>
                                 </Item>
                                 {/* KDV */}
-                                <EmptyItem />
+                                <EmptyItem colSpan={3}/>
                                 <Item>
                                 <Label text={this.t("txtTotal")} alignment="right" />
                                     <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}}

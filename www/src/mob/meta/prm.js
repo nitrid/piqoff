@@ -1092,7 +1092,7 @@ export const prm =
         VIEW : 
         {
             TYPE : "checkbox",
-            PAGE_NAME : "Kayıp Ürün Fiçi",
+            PAGE_NAME : "Kayıp Ürün Fişi",
             CAPTION : "Satır Açıklamalarını Zorunlu Kıl"
         }
     },
