@@ -431,6 +431,7 @@ export default class labelPrinting extends React.Component
                         showBorders={true}
                         width={'90%'}
                         height={'90%'}
+                        selection={{mode:"single"}}
                         title={this.t("pg_Docs.title")} 
                         button=
                         {
@@ -726,7 +727,7 @@ export default class labelPrinting extends React.Component
                 <Item>
                     <NdGrid parent={this} id={"grdLblPrinting"} 
                     showBorders={true} 
-                    columnsAutoWidth={true} 
+                    columnsAutoWidth={false} 
                     allowColumnReordering={true} 
                     allowColumnResizing={true} 
                     height={'400'} 
@@ -742,10 +743,9 @@ export default class labelPrinting extends React.Component
                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                         <Scrolling mode="infinite" />
                         <Editing mode="cell" allowUpdating={false} allowDeleting={true} confirmDelete={false}/>
-                        <Column dataField="BARCODE" caption={this.t("grdLblPrinting.clmBarcode")} width={140} />
-                        <Column dataField="NAME" caption={this.t("grdLblPrinting.clmItemName")} width={300} />
-                        <Column dataField="CODE" caption={this.t("grdLblPrinting.clmItemCode")} width={150}/>
-                        <Column dataField="PRICE" caption={this.t("grdLblPrinting.clmPrice")} width={250} />
+                        <Column dataField="BARCODE" caption={this.t("grdLblPrinting.clmBarcode")} width={130} />
+                        <Column dataField="NAME" caption={this.t("grdLblPrinting.clmItemName")}  width={200}/>
+                        <Column dataField="PRICE" caption={this.t("grdLblPrinting.clmPrice")} width={60} />
                     </NdGrid>
                 </Item>
                 </Form>
