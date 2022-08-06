@@ -6,7 +6,7 @@ export const langFr =
     btnPrint :"Imprime",
     btnOk: "OK",
     msgWarning: "Attention",
-    btnYes : "Evet",
+    btnYes : "Oui",
     btnGet: "Getir",
     btnNo : "Non",
     msgClose : "Etes vous sûr de vouloir quitter la page ?",
@@ -107,7 +107,7 @@ export const langFr =
         fns_01_004 : "Liste mouvement coffre",
         fns_02 : "Document",
         fns_02_001 : "Paiement",
-        fns_02_002 : "Tahsilat",
+        fns_02_002 : "Encaissement",
         fns_03 : "Mouvement caisse-banque",
         fns_03_001 : "Choix caisse",
         fns_03_002 : "Sélection banque",
@@ -120,9 +120,12 @@ export const langFr =
         pos_02_001 : "Rapport ticket de vente",
         pos_02_002 : "Rapport point fidelité client",
         pos_02_003 : "Rapport vente Pos",
+        pos_02_004 : "Pos Satış Detay Raporu", //BAK
+        pos_03 :"Operasyonlar", //BAK
+        pos_03_001 : "Gün Sonu", //BAK
         promo: "Promotion",
         promo_01: "Saisie",
-        promo_01_001: "Promosyon Tanımları",
+        promo_01_001: "Promosyon Tanımları", //BAK
         promo_02: "Listes",
         promo_02_001: "Liste promotion",
         promo_03: "Rapports",
@@ -168,6 +171,7 @@ export const langFr =
         txtMinSalePrice: "Prix Vente Min.",
         txtMaxSalePrice: "Prix Vente Max.",
         txtLastBuyPrice: "Dernier Prix Achat",
+        txtLastSalePrice: "Dernier Prix Vente",
         tabTitlePrice: "Prix ",
         tabTitleUnit: "Unité",
         tabTitleBarcode: "Code barre",
@@ -214,7 +218,7 @@ export const langFr =
         popBarcode:
         {
             title: "Ajouter Code Barre",
-            txtPopBarcode: "Barkodu",
+            txtPopBarcode: "Code Barre",
             cmbPopBarUnit: "Unité", 
             cmbPopBarType: "Type"
         },
@@ -554,7 +558,7 @@ export const langFr =
         msgQuantiy:
         {
             title: "Attention",
-            btn01: "Ekle",
+            btn01: "Ajoute",
             btn02: "Abandonne",
             msg: "Veuillez Saisir la Quantité !" ,
         },
@@ -632,8 +636,8 @@ export const langFr =
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Cari Kodu Boş Geçilemez",
-        validDocDate : "Tarih Seçmelisiniz",
+        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validDocDate : "Sélectionner Date" ,
 
     },
     stk_02_002 :
@@ -794,11 +798,11 @@ export const langFr =
             clmQuantity : "Quantité",
             clmCreateDate: "Date d'Enregistrement",
             clmDescription :"Motif",
-            clmCostPrice : "Maliyet",
+            clmCostPrice : "Coût" ,
         },
         pg_dispatchGrid : 
         {
-            title : "İrsaliye Seçimi",
+            title : "Sélectionner Bon De Livraison" ,
             clmReferans : "Série - Quantité",
             clmCode : "Code",
             clmName : "Nom",
@@ -908,33 +912,33 @@ export const langFr =
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Cari Kodu Boş Geçilemez",
-        validDocDate : "Tarih Seçmelisiniz",
+        validCustomerCode : "Langue Document" ,
+        validDocDate : "Sélectionner Date" ,
         pg_quickDesc : 
         {
-            title : "Hızlı Açıklama Seçimi",
-            clmDesc:  "AÇIKLAMA"
+            title : "Sélection Touche Rapide" ,
+            clmDesc: "MOTIF" 
         },
         popQDescAdd : 
         {
-            title : "Hızlı Açıklama Ekle",
-            description : "Yeni Açılama",
+            title : "Ajoute Saisie Rapide" ,
+            description : "Nouvelle Saisie" ,
             btnApprove : "Enregistre "        }
 
     },
     stk_02_004 :
     {
         txtRefRefno : "Série-Numéro Doc.",
-        design : "Dizayn",
-        txtPage : "Sayfa",
-        txtFreeLabel : "Boş Alan",
-        txtLineCount : "Okutulan Satır",
-        chkLastChange : "Son yazdırma tarihinden itibaren değişenler",
-        chkSelectChange : "Seçilen tarihten itibaren değişenler",
-        chkGroup : "Grup",
-        chkCustomer : "Tedarikçi Ürünleri",
-        chkAllItems : "Tüm Ürünler",
-        AddItems : "Ekle",
+        design : "Design" ,
+        txtPage : "Page" ,
+        txtFreeLabel : "Champ Vide" ,
+        txtLineCount : "Lecture Ligne" ,
+        chkLastChange : "Dernière Modification Après Impression" ,
+        chkSelectChange :"Dernière Modification Après Date Sélectionnée" ,
+        chkGroup : "Groupe" ,
+        chkCustomer : "Produits Fournisseur",
+        chkAllItems : "Produits",
+        AddItems : "Ajoute",
         txtBarcode : "Ajouter Code Barre",
         pg_Docs : 
         {
@@ -957,7 +961,7 @@ export const langFr =
             clmPrice: "Prix ",
             clmUnderUnit : "Sous unité",
             clmUnderUnit : "Sous unité",
-            clmUnderUnitPrice : "Alt Birim Fiyatı",
+            clmUnderUnitPrice : "Prix sous Unité" ,
             clmDescription :"Motif"
         },
         msgDocValid:
@@ -970,14 +974,14 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Evrakta Değişiklik Yapılmış! Lütfen Kayıt Edin Yada Değişiklikleri Geri Alın"
+            msg: "Modification Effectué Dans Document ! Veuillez Enregistrer ou Annuler Les Modifications" 
         },
         msgAddItems:
         {
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonne",
-            msg: "Seçmiş olduğunuz kritere uygun ürünler eklenecektir.Onaylıyormusunuz ?"
+            msg: "Ajout De Produit Selon Vos Critères.Validez-vous ?"
         },
         msgSave:
         {
@@ -1047,24 +1051,24 @@ export const langFr =
             title: "Attention",
             btn01: "Abandonne",
             btn02: "Nouvel Ajout",
-            msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Yeni Satır Eklensin Mi ?"
+            msg: "Produit Sélectionné Déjà Existant Dans Document !Voulez -vous Ajouter une Ligne ? "
         },
         popWizard : 
         {
-            title : "Ürün Seçme Sihirbazı",
+            title : "Assistant Sélection Produit",
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Cari Kodu Boş Geçilemez",
-        validDocDate : "Tarih Seçmelisiniz",
+        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validDocDate : "Sélectionner Date" ,
 
     },
     stk_02_005 :
     {
         txtRefRefno : "Série-Numéro Doc.",
         cmbDepot1: "Sortie Dépot",
-        cmbDepot2: "İade Deposu",
+        cmbDepot2: "Retour Dépot",
         dtDocDate : "Date",
         getRebate :"İade Deposudan Getir",
         txtBarcode : "Ajouter Code Barre",
@@ -1121,7 +1125,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !"
+            msg: "Veuillez saisir les zones concernées !"
         },
         msgDelete:
         {
@@ -1176,8 +1180,8 @@ export const langFr =
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Cari Kodu Boş Geçilemez",
-        validDocDate : "Tarih Seçmelisiniz",
+        validCustomerCode : "Le Code  Produit",
+        validDocDate : "Sélectionner Date" ,
 
     },
     stk_03_001 : 
@@ -1190,25 +1194,25 @@ export const langFr =
         btnGet :"Apporter",
         chkMasterBarcode : "Regrouper code barre ",
         txtMulticode : "Code Fournisseur",
-        multicodePlaceHolder : "Aratmak İstediğiniz Tedarikçi Kodlarını Giriniz",
-        barkodPlaceHolder :"Aratmak İstediğiniz Bir yada Birden Fazla Ürün Kodu yada Barkod Giriniz",
-        ItemNamePlaceHolder :"Ürün Adının Tamamını yada İçinde Geçen Bir Hece Giriniz",
+        multicodePlaceHolder : "Veuillez Entrer les Codes Fournisseur Recherchés" ,
+        barkodPlaceHolder :"Veuillez Entrer Le ou Les Codes Produits ou Codes Barres",
+        ItemNamePlaceHolder :"Veuillez Entrer le Nom Complet ou une Syllabe",
         grdListe : 
         {
-            clmCode: "Ürün Kodu",
+            clmCode: "Code Produit",
             clmName : "Nom du produit",
             clmMainGrp : "Famille produit",
             clmCustomer : "Fournisseur",
-            clmSname : "Ürün Kısa Adı",
+            clmSname : "Nom Court",
             clmMulticode : "T. Kodu",
             clmUnit : "Unité",
             clmBarcode : "Code barre",
             clmCostPrice : "Coût achat",
-            clmPriceSale : "Satış Fiyatı",
+            clmPriceSale : "Prix Vente",
             clmVat : "Taxe",
-            clmMinPrice : "Min Fiyatı",
-            clmMaxPrice : "Max  Fiyatı",
-            clmStatus : "Durum",
+            clmMinPrice : "Prix Min",
+            clmMaxPrice : "Prix Max",
+            clmStatus : "Etat",
             clmNetMargin : "Marge Nette",
             clmMargin : "Marge Brute"
         },
@@ -1259,26 +1263,26 @@ export const langFr =
         btnGet :"Apporter",
         grdListe : 
         {
-            clmCode: "Ürün Kodu",
+            clmCode: "Code Produit",
             clmName : "Nom du produit",
             clmMainGrp : "Famille produit",
             clmCustomer : "Fournisseur",
-            clmSname : "Ürün Kısa Adı",
+            clmSname : "Nom Court",
             clmMulticode : "Code Fournisseur",
             clmUnit : "Unité",
             clmBarcode : "Code barre",
             clmCostPrice : "Coût achat",
             clmVat : "Taxe",
-            clmMinPrice : "Minimum Satış Fiyatı",
-            clmMaxPrice : "Maximum Satış Fiyatı",
-            clmStatus : "Durum",
+            clmMinPrice : "Prix Minimum de Vente",
+            clmMaxPrice : "Prix Maximum de Vente",
+            clmStatus : "Etat",
 
         },
     },
     stk_03_006 : 
     {
         txtItemName : "Nom du produit",
-        chkZeroQuantity : "0 Miktarlar Gösterilsin",
+        chkZeroQuantity : "Montrer les Montants 0",
         cmbDepot : "Réserve",
         btnCheck : "Actif",
         btnGet :"Apporter",
@@ -1287,7 +1291,7 @@ export const langFr =
             clmCode: "Code",
             clmName : "Nom",           
             clmQuantity : "Quantité",
-            clmBarcode : "Barkodu"
+            clmBarcode : "Code Barre"
         },
         txtTotalQuantity : "Quantité Total"
     },
@@ -1300,12 +1304,12 @@ export const langFr =
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
-        cmbItemGroup : 'Ürün Grubu',
+        cmbItemGroup : "Groupe Produit",
         btnGet : 'Getir',
-        txtCode : 'Ürün Kodu',
-        txtName : 'Ürün Adı',
+        txtCode : "Code Produit",
+        txtName : "Nom Produit",
         grdItemList : 
         {
             clmCode: "Code",
@@ -1313,8 +1317,8 @@ export const langFr =
             clmBarcode : "Code barre",
             clmMulticode : "Multicode",
             clmCustomerName : "Fournisseur",
-            clmCustomerPrice : "T. Fiyatı",
-            clmPriceSale : "Satış Fiyatı",
+            clmCustomerPrice : "Prix T.",
+            clmPriceSale : "Prix Vente",
             clmVat : "Taxe",
             clmOrgins : "Origine",
             clmStatus : "Actif",
@@ -1327,33 +1331,33 @@ export const langFr =
             title: "Attention",
             btn01: "Valide",
             btn02: "Abandonne",
-            msg: "Kayıt Etmek İstediğinize Eminmisiniz !"
+            msg: "Etes-vous sûr de Vouloir Enregistrer !"
         },
         msgSaveResult:
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: " Kayıt Başarılı..!",
+            msgSuccess: "Enregistré avec Succès ..!",
             msgFailed: "Enregistrement échoué !"
         },
     },
     stk_04_002 : 
     {
         txtCustomerCode : "Fournisseur",
-        validDepot : "Lütfen Depo Seçiniz",
-        ItemNamePlaceHolder :"Ürün Adının Tamamını yada İçinde Geçen Bir Hece Giriniz",
+        validDepot : "Sélectionner Dépot",
+        ItemNamePlaceHolder :"Veuillez Entrer le Nom Complet ou une Syllabe",
         pg_txtCustomerCode : 
         {
             title : "Choix Fournisseur",
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
-        cmbDepot : 'Depo',
+        cmbDepot : 'Depo',  
         btnGet : 'Getir',
-        btnInvoice : 'Faturaya Çevir',
-        btnDispatch : 'İrsaliyeye Çevir',
+        btnInvoice : "Convertir En Facture",
+        btnDispatch : 'Convertir en Bon de Livraison',
         grdRebateList : 
         {
             clmCode: "Code",
@@ -1367,46 +1371,46 @@ export const langFr =
             title: "Attention",
             btn01: "Valide",
             btn02: "Abandonne",
-            msg: "Seçili Satırları İade Etmek İstediğinize Eminmisiniz !"
+            msg: "Etes-vous sûr de Vouloir Faire Retour des Lignes Sélectionnées !"
         },
         msgSaveResult:
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: " İade Evraklarınız Oluşturuldu..!",
+            msgSuccess: "Création de Bon de Retour..!",
             msgFailed: "Enregistrement échoué !"
         },
         msgDublicateItem : 
         {
-            title: " Dikkat",
+            title: "Attention",
             btn01 : "OK",
-            msg : "Ürünü Birden Fazla Cari İçin Seçilmiş Lütfen Kontol Ediniz"
+            msg : "Produit Sélectionné Pour Plusieurs Compte Veuillez Vérifier"
         },
         msgCustomerFound : 
         {
-            title: " Dikkat",
+            title: "Attention",
             btn01 : "OK",
-            msg : "Carisi Tanımlanmamış Ürünler Seçilemez. Lütfen Cari Tanımlayın"
+            msg : "Compte Produit non Défini.Veuillez Sélectionner un Compte"
         }
     },
     stk_04_003 : 
     {
         cmbDepot : "Réserve",
-        chkNotCountItems : "Sayılmayan Ürünler Sıfırlansın",
+        chkNotCountItems : "Mise à Zéro des Produits non Comptabilisés",
         btnGet : 'Getir',
-        btnAddCount : "Sayımı Birleştir",
+        btnAddCount : "Fusionner Inventaire",
         dtFirstDate :"Date Début",
         dtLastDate : "Date Fin",
         btnSuccess : "Valide",
-        validDepot : "Lütfen Depo Seçiniz",
+        validDepot : "Sélectionner Dépot",
         popCount : 
         {
-            title : "Stok Miktarları",
+            title : "Quantité Stock",
         },
         grdCountDocument : 
         {
-            clmRef: "Seri",
-            clmRefNo : "Sıra",
+            clmRef: "Série",
+            clmRefNo : "Ligne",
             clmQuantity : "Quantité Total",
             clmDate : "Date",
         },
@@ -1414,7 +1418,7 @@ export const langFr =
         {
             clmName: "Nom",
             clmCode : "Code",
-            clmQuantity : "Sayılan Miktar",
+            clmQuantity : "Quantité Compté",
         },
         msgSave:
         {
@@ -1427,101 +1431,101 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: " Serisi İle Evrakınız Oluşturuldu..!",
+            msgSuccess: "Document Créé via Série",
             msgFailed: "Enregistrement échoué !"
         },
         msgNotItems:
         {
             title: "Attention",
             btn01: "OK",
-            msg: " Depo Miktarları Güncel !! Yeni Kayıt Oluşturulmadı",
+            msg: "Quantité Dépot Mis à jour ! ! Nouvelle Création Non Effectuée",
         },
     },
     cri_01_001:
     {
         cmbType :"Type",
-        cmbGenus :"Cinsi",
+        cmbGenus :"Genre",
         txtCode : "Code",
-        txtTitle : "Ünvan",
-        txtCustomerName : "Nom",
-        txtCustomerLastname : "Soyadı",
-        txtPhone1 : "Telefon 1",
-        txtPhone2 : "Telefon 2",
-        txtGsmPhone : "Gsm Tel.",
-        txtOtherPhone : "Diğer Tel.",
+        txtTitle : "Titre",
+        txtCustomerName : "Prénom",
+        txtCustomerLastname : "Nom De Famille",
+        txtPhone1 : "Téléphone 1",
+        txtPhone2 : "Téléphone 2",
+        txtGsmPhone : "Port Tel.",
+        txtOtherPhone : "Autre Tel.",
         txtEmail : "E-Mail",
         txtWeb : "Web",
-        tabTitleAdress : "Adres",
-        tabTitleLegal : "Yasal",
-        tabTitleOffical : "Yetkili",
-        tabCustomerBank : "Banka Bilgileri",
-        txtLegal :"Yasal Bilgiler",
-        chkRebate :"İade Alır",
+        tabTitleAdress : "Adresse",
+        tabTitleLegal : "Légal",
+        tabTitleOffical : "Administrateur",
+        tabCustomerBank : "Données Bancaire",
+        txtLegal :"Données Légales",
+        chkRebate :"Retour Reprise",
         pg_txtCode : 
         {
             title : "Cari Seçim",
             clmCode : "CODE",
-            clmTitle : "Ünvan",
+            clmTitle : "Titre",
             clmName : "Nom",
-            clmLastName  : "Soyadı",
+            clmLastName  : "Nom De Famille",
         },
         grdAdress : 
         {
-            clmAdress : "Adres",
-            clmZipcode : "Posta Kodu",
-            clmCity :"Şehir",
-            clmCountry : "Ülke",
+            clmAdress : "Adresse",
+            clmZipcode : "Code Postale",
+            clmCity :"Ville",
+            clmCountry : "Pays",
         },
         grdLegal : 
         {
             clmSiretID : "Siret ID",
-            clmApeCode : "Ape Kodu",
+            clmApeCode : "Code Ape",
             clmTaxOffice : "Vergi Dairesi",
             clmTaxNo : "Vergi No",
-            clmIntVatNo : "Ulus. KDV No",
+            clmIntVatNo : "No TVA inter.",
             clmTaxType : "Vergi Tipi"
         },
         grdOffical : 
         {
             clmName :"Nom",
-            clmLastName : "Soyadı",
-            clmPhone1 : "Telefon 1",
-            clmPhone2 : "Telefon 2",
-            clmGsmPhone : "GSM Tel.",
+            clmLastName : "Nom De Famille",
+            clmPhone1 : "Téléphone 1",
+            clmPhone2 : "Téléphone 2",
+            clmGsmPhone : "Tél. Port",
             clmEMail : "E-Mail"
         },
         grdBank : 
         {
-            clmName : "Banka Adı",
+            clmName : "Nom Banque",
             clmIban : "IBAN",
-            clmOffice : "Şube",
-            clmSwift : "Swift Kodu",
+            clmOffice : "Centre",
+            clmSwift : "Code Swift",
         },
         popAdress : 
         {
-            title : "Adres",
-            txtPopAdress : "Adres",
-            cmbPopZipcode :"Posta Kodu",
-            cmbPopCity :"Şehir",
-            cmbPopCountry :"Ülke",
+            title : "Adresse",
+            txtPopAdress : "Adresse",
+            cmbPopZipcode :"Code Postale",
+            cmbPopCity :"Ville",
+            cmbPopCountry :"Pays",
         },
         popBank : 
         {
-            title : "Banka Bilgileri",
-            txtName : "Banka Adı",
+            title : "Données Bancaire",
+            txtName : "Nom de Banque",
             txtIban :"IBAN",
-            txtOffice :"Şube",
-            txtSwift :"Swift Kodu",
+            txtOffice :"Centre",
+            txtSwift :"Code Swift",
         },
         popOffical : 
         {
-            title : "Yetkili",
+            title : "Administrateur",
             txtPopName : "Nom",
-            txtPopLastName : "Soyadı",
-            txtPopPhone1 :"Telefon 1",
-            txtPopPhone2 :"Telefon 2",
-            txtPopGsmPhone : "GSM Tel.",
-            txtPopOtherPhone : "Diğer Tel.",
+            txtPopLastName : "Nom De Famille",
+            txtPopPhone1 :"Téléphone 1",
+            txtPopPhone2 :"Téléphone  2",
+            txtPopGsmPhone : "Port Tel.",
+            txtPopOtherPhone : "Autre Tel.",
             txtPopMail :"E-Mail"
         },
         msgSave:
@@ -1548,7 +1552,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Lütfen Yasal Bölümündeki alanları doldurunuz !"
+            msg: "Veuillez Saisir les Zones Légales !"
         },
         msgAdressNotValid:
         {
@@ -1565,19 +1569,19 @@ export const langFr =
         },
         cmbTypeData : 
         {
-            individual : "Bireysel",
-            company : "Firma"
+            individual :  "Individuel",
+            company :  "Entreprise"
         },
         cmbGenusData:
         {
-            Customer : "Müşteri",
+            Customer : "Client",
             supplier : "Fournisseur",
-            both : "Her İkisi",
+            both : "Tous les Deux",
         },
         cmbTaxTypeData : 
         {
-            individual : "Bireysel",
-            company : "Firma"
+            individual :  "Individuel",
+            company :  "Entreprise"
         },
         msgCode : 
         {
@@ -1591,31 +1595,31 @@ export const langFr =
     cri_01_002:
     {
         txtCode : "Code",
-        txtTitle : "Ünvan",
+        txtTitle : "Titre",
         txtCustomerName : "Nom",
-        tabTitleAdress : "Adres",
+        tabTitleAdress : "Adresse",
         pg_txtCode : 
         {
             title : "Cari Seçim",
             clmCode : "CODE",
-            clmTitle : "Ünvan",
+            clmTitle : "Titre",
             clmName : "Nom",
-            clmLastName  : "Soyadı",
+            clmLastName  : "Nom De Famille",
         },
         grdAdress : 
         {
-            clmAdress : "Adres",
-            clmZipcode : "Posta Kodu",
-            clmCity :"Şehir",
-            clmCountry : "Ülke",
+            clmAdress : "Adresse",
+            clmZipcode : "Code Postale",
+            clmCity :"Ville",
+            clmCountry : "Pays",
         },
         popAdress : 
         {
-            title : "Adres",
-            txtPopAdress : "Adres",
-            cmbPopZipcode :"Posta Kodu",
-            cmbPopCity :"Şehir",
-            cmbPopCountry :"Ülke",
+            title : "Adresse",
+            txtPopAdress : "Adresse",
+            cmbPopZipcode :"Code Postale",
+            cmbPopCity :"Ville",
+            cmbPopCountry :"Pays",
         },
         msgSave:
         {
@@ -1642,7 +1646,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonne",
-            msg: "Etes-vous sûr de vouloir supprimer l'enregistrement ?"
+            msg: "Etes-vous sur de vouloir supprimer l'enregistrement ?"
         },
         msgCode : 
         {
@@ -1656,55 +1660,55 @@ export const langFr =
     cri_02_001:
     {
         txtCustomerName : "Nom fournisseur",
-        cmbGenus :"Cinsi",
+        cmbGenus :"Genre",
         menu: "Fournisseur saisie",
         btnGet : "Apporter",
         grdListe : 
         {
             clmCode: "Code fournisseur",
-            clmTitle : "Ünvan",
-            clmType : "Tipi",
-            clmGenus : "Cinsi",
-            clmAdress :"Adres",
-            clmZipcode : "Posta Kodu",
-            clmCountry :"Ülke",
-            clmCity : "Şehir",
-            clmPhone1 :"Telefon",
+            clmTitle : "Titre",
+            clmType : "Type",
+            clmGenus : "Genre",
+            clmAdress :"Adresse",
+            clmZipcode : "Code Postale",
+            clmCountry :"Pays",
+            clmCity : "Ville",
+            clmPhone1 :"Téléphone",
             clmGsm : "GSM No.",
             clmEmail :"E-Mail",
             clmIban :"Iban"
         },
         cmbGenusData:
         {
-            allGenus : "Hepsi",
-            Customer : "Müşteri",
+            allGenus : "Tout",
+            Customer : "Client",
             supplier : "Fournisseur",
-            both : "Her İkisi",
+            both : "Tous les Deux",
         },
     },
     cri_02_002:
     {
         txtCustomerName : "Nom fournisseur",
-        cmbGenus :"Cinsi",
+        cmbGenus :"Genre",
         menu: "Fournisseur saisie",
         btnGet : "Apporter",
         grdListe : 
         {
             clmCode: "Code fournisseur",
-            clmTitle : "Ünvan",
-            clmType : "Tipi",
-            clmGenus : "Cinsi",
-            clmAddress : "Adres",
-            clmCity : "Şehir",
-            clmCountry : "Ülke",
-            clmZipcode : "Posta Kodu"
+            clmTitle : "Titre",
+            clmType : "Type",
+            clmGenus : "Genre",
+            clmAddress : "Adresse",
+            clmCity : "Ville",
+            clmCountry : "Pays",
+            clmZipcode : "Code Postale"
         },
         cmbGenusData:
         {
-            allGenus : "Hepsi",
-            Customer : "Müşteri",
+            allGenus : "Tout",
+            Customer : "Client",
             supplier : "Fournisseur",
-            both : "Her İkisi",
+            both : "Tous les Deux",
         },
     },
     ftr_01_001 :
@@ -1717,22 +1721,22 @@ export const langFr =
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
         btnGet :"Apporter",
         dtFirst : "Date Début",
         dtLast : "Date Fin",
         grdPurcIvcList: 
         {
-            clmRef: "Seri",
-            clmRefNo: "Sıra",
+            clmRef: "Série",
+            clmRefNo: "Ligne",
             clmPrice: "Prix ",
             clmOutputCode : "Code fournisseur",
             clmOutputName : "Nom fournisseur",
             clmDate: "Date",
-            clmVat : "KDV",
-            clmAmount : "Tutar",
-            clmTotal : "Toplam",
+            clmVat : "TVA",
+            clmAmount : "Montant" ,
+            clmTotal : "Total",
             clmInputName : "Réserve",
         },
 
@@ -1747,22 +1751,22 @@ export const langFr =
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
         btnGet :"Apporter",
         dtFirst : "Date Début",
         dtLast : "Date Fin",
         grdSlsIvcList: 
         {
-            clmRef: "Seri",
-            clmRefNo: "Sıra",
+            clmRef: "Série",
+            clmRefNo: "Ligne",
             clmPrice: "Prix ",
             clmInputCode : "Code fournisseur",
             clmInputName : "Nom fournisseur",
             clmDate: "Date",
-            clmVat : "KDV",
-            clmAmount : "Tutar",
-            clmTotal : "Toplam",
+            clmVat : "TVA",
+            clmAmount : "Montant" ,
+            clmTotal : "Total",
             clmOutputName :"Réserve",
         },
 
@@ -1777,22 +1781,22 @@ export const langFr =
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
         btnGet :"Apporter",
         dtFirst : "Date Début",
         dtLast : "Date Fin",
         grdSlsIvcList: 
         {
-            clmRef: "Seri",
-            clmRefNo: "Sıra",
+            clmRef: "Série",
+            clmRefNo: "Ligne",
             clmPrice: "Prix ",
             clmInputCode : "Code fournisseur",
             clmInputName : "Nom fournisseur",
             clmDate: "Date",
-            clmVat : "KDV",
-            clmAmount : "Tutar",
-            clmTotal : "Toplam",
+            clmVat : "TVA",
+            clmAmount : "Montant" ,
+            clmTotal : "Total",
         },
 
     },
@@ -1806,22 +1810,22 @@ export const langFr =
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
         btnGet :"Apporter",
         dtFirst : "Date Début",
         dtLast : "Date Fin",
         grdSlsIvcList: 
         {
-            clmRef: "Seri",
-            clmRefNo: "Sıra",
+            clmRef: "Série",
+            clmRefNo: "Ligne",
             clmPrice: "Prix ",
             clmInputCode : "Code fournisseur",
             clmInputName : "Nom fournisseur",
             clmDate: "Date",
-            clmVat : "KDV",
-            clmAmount : "Tutar",
-            clmTotal : "Toplam",
+            clmVat : "TVA",
+            clmAmount : "Montant" ,
+            clmTotal : "Total",
         },
 
     },
@@ -1832,26 +1836,26 @@ export const langFr =
         txtCustomerCode : "Code fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
-        txtAmount : "Tutar",
-        txtDiscount : "İndirim",
-        txtMargin : "Marj",
-        txtVat : "Kdv",
-        txtTotal : "Genel Toplam",
-        dtShipDate :"Sevk Tarihi",
+        txtAmount : "Montant" ,
+        txtDiscount : "Remise",
+        txtMargin : "Marge",
+        txtVat : "TVA",
+        txtTotal : "Total Général",
+        dtShipDate :"Date Expédition",
         getDispatch : "Recherche BL",
-        getPayment : "Ödemeler",
-        cash : "Tutar",
+        getPayment : "Paiement",
+        cash : "Montant" ,
         description :"Motif",
         checkReference : "Référence",
         btnCash : "Espèce",
-        btnCheck : "Çek",
-        btnBank : "Havale",
-        cmbCashSafe : "Nakit Kasası",
-        cmbCheckSafe : "Çek Kasası",
-        cmbBank : "Banka Seçimi",
-        txtPayInvoıceTotal : "Fatura Tutarı",
-        txtPayTotal : "Ödeme Toplamı",
-        txtRemainder : "Kalan",
+        btnCheck : "Chèque",
+        btnBank : "Virement",
+        cmbCashSafe : "Caisse Espèce",
+        cmbCheckSafe : "Caisse Chèque",
+        cmbBank : "Sélection Banque",
+        txtPayInvoıceTotal : "Total Facture",
+        txtPayTotal : "Total Paiement",
+        txtRemainder : "Reste",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -1866,24 +1870,24 @@ export const langFr =
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
         pg_txtItemsCode : 
         {
             title : "Sélectionner Stock",
             clmCode :  "CODE STOCK",
             clmName : "NOM STOCK",
-            clmMulticode : "TEDARİKÇİ KODU",
+            clmMulticode : "CODE FOURNISSEUR",
         },
         pg_dispatchGrid : 
         {
-            title : "İrsaliye Seçimi",
+            title : "Sélectionner Bon De Livraison" ,
             clmReferans : "Série - Quantité",
             clmCode : "Code",
             clmName : "Nom",
             clmQuantity : "Quantité",
             clmPrice : "Prix ",
-            clmTotal : "Tutar"
+            clmTotal : "Montant" 
         },
         grdPurcInv: 
         {
@@ -1891,32 +1895,32 @@ export const langFr =
             clmItemName: "Nom",
             clmPrice: "Prix ",
             clmQuantity : "Quantité",
-            clmDiscount : "İndirim",
-            clmDiscountRate : "İndirim %",
-            clmVat : "KDV",
-            clmAmount : "Tutar",
-            clmTotal : "Genel Toplam",
-            clmDispatch : "İrsaliye No",
+            clmDiscount : "Remise",
+            clmDiscountRate : "Remise %",
+            clmVat : "TVA",
+            clmAmount : "Montant" ,
+            clmTotal : "Total Général",
+            clmDispatch : "No Bon de Livraison",
             clmCreateDate: "Date d'Enregistrement",
-            clmMargin :"Marj"
+            clmMargin :"Marge"
         },
         grdInvoicePayment: 
         {
-            clmInputName: "Kasa",
-            clmTypeName: "Tipi",
+            clmInputName: "Caisse",
+            clmTypeName: "Type",
             clmPrice: "Prix ",
             clmCreateDate: "Date d'Enregistrement",
 
         },
         popPayment:
         {
-            title: "Ödemeler",
+            title: "Paiement",
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            title: "Télécharger Document",
+            Percent : "Pourcentage",
+            Price : "Montant" 
         },
         popPassword : 
         {
@@ -1934,27 +1938,27 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Kalan Tutardan Fazla Ödeme Girilemez !"
+            msg: "Vous ne Pouvez Entrer de Montant Supérieur au Paiement Restant !"
         },
         msgSave:
         {
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            msg: "Etes-vous sûr de vouloir enregistrer !"
         },
         msgSaveResult:
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Enregistrement avec succès !",
+            msgSuccess: "Enregistrement effectué avec succès !",
             msgFailed: "Enregistrement échoué !"
         },
         msgSaveValid:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !"
+            msg: "Veuillez saisir les zones concernées !"
         },
         msgDelete:
         {
@@ -1968,19 +1972,19 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonne",
-            msg: "Vergiyi Sıfırlamak istediğinize eminmisiniz !"
+            msg: "Etes vous sûr de Vouloir Mettre à Zéro la TVA !"
         },
         msgDiscountPrice:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Tutardan Büyük İndirim Yapılamaz !"
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieur au Montant Total !"
         },
         msgDiscountPercent:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Tutardan Büyük İndirim Yapılamaz !"
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieur au Montant Total !"
         },
         msgLocked:
         {
@@ -2016,7 +2020,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "İndirim Tutardan Yüksek Olamaz !"
+            msg: "Remise ne peut être Supérieur au Total ! "
         },
         msgItemNotFound:
         {
@@ -2040,15 +2044,15 @@ export const langFr =
         msgUnderPrice1:
         {
             title: "Attention",
-            btn01: "Evet",
+            btn01: "Oui",
             btn02: "Abandonne",
-            msg: "Maliyetten Düşük Fiyat !! Devam Etmek İstiyormusunuz"
+            msg: "Prix Inférieur à l'Achat ! ! Voulez Vous Continuer"
         },
         msgUnderPrice2:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Maliyet Fiyatından Daha Düşük Satılamaz !!"
+            msg: "Vous ne Pouvez Vendre en Dessous du Prix d'Achat ! !"
         },
         msgCombineItem:
         {
@@ -2061,57 +2065,57 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Lütfen Cari Seçiniz !"
+            msg: "Veuillez Saisir un Client !"
         },
         popCash : 
         {
-            title: "Nakit Girişi",
-            btnApprove : "Ekle"
+            title: "Entrée Espèce",
+            btnApprove : "Ajoute"
         },
         popCheck : 
         {
-            title: "Çek Girişi",
-            btnApprove : "Ekle"
+            title: "Entrée Chèque",
+            btnApprove : "Ajoute"
         },
         popBank : 
         {
-            title: "Havale Girişi",
-            btnApprove : "Ekle"
+            title: "Saise Virement",
+            btnApprove : "Ajoute"
         },
         popDesign : 
         {
-            title: "Dizayn seçimi",
-            design : "Dizayn",
-            lang : "Evrak Dili"
+            title: "Choix du Désign",
+            design : "Design" ,
+            lang : "Langue Document" 
         },
         msgMissItemCode:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Bulunamayan Kodlar :"
+            msg: "Code Non Retrouvé"
         },
         msgMultiCodeCount:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Eklenen Ürün Sayısı"
+            msg: "Nombre de Produit Ajouté"
         },
         popMultiItem:
         {
-            title: "Toplu Ürün Ekleme",
+            title: "Ajout Groupé de Produit",
             btnApprove: "Ürünleri Getir",
             btnClear : "Temizle",
-            btnSave : "Satırları Ekle",
+            btnSave : "Ajouter Lignes",
         },
         cmbMultiItemType : 
         {
-            title : "Arama Şekli",
+            title : "Mode de Recherche",
             customerCode : "Tedarikçi Koduna Göre",
-            ItemCode : "Ürün Koduna Göre"
+            ItemCode : "En Fonction du Code Produit"
         },
         grdMultiItem : 
         {
-            clmCode : "Ürün Kodu",
+            clmCode : "Code Produit",
             clmMulticode : "Tedarikçi Kodun",
             clmName : "Nom du produit",
             clmQuantity : "Quantité"
@@ -2119,14 +2123,14 @@ export const langFr =
         msgMultiData:
         {
             title: "Attention",
-            btn01: "Listeyi Temizle ve Hepsini Ekle",
-            btn02: "Yeni Yazılanları Listeye Ekle",
-            msg: "Listede Ürünler Var! "
+            btn01: "Effacer Liste et Ajoute le Tout",
+            btn02: "Inclure Les Nouvelles Saisies à la Liste",
+            msg: "Produits Présents dans la Liste! "
         },
         popDetail:
         {
-            title: "Evrak İçeriği",
-            count: "Toplam Satır",
+            title: "Contenu Document",
+            count:  "Quantité Ligne",
             quantity: "Quantité Total",
             quantity2: "2. Birim Toplamı "
         },
@@ -2142,9 +2146,9 @@ export const langFr =
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Cari Kodu Boş Geçilemez",
-        validDocDate : "Tarih Seçmelisiniz",
-        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz"
+        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validDocDate : "Sélectionner Date" ,
+        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter"
        
 
     },
@@ -2155,26 +2159,26 @@ export const langFr =
         txtCustomerCode : "Code fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
-        txtAmount : "Tutar",
-        txtDiscount : "İndirim",
-        txtMargin : "Marj",
-        txtVat : "Kdv",
-        txtTotal : "Genel Toplam",
-        dtShipDate :"Sevk Tarihi",
+        txtAmount : "Montant" ,
+        txtDiscount : "Remise",
+        txtMargin : "Marge",
+        txtVat : "TVA",
+        txtTotal : "Total Général",
+        dtShipDate :"Date Expédition",
         getDispatch : "Recherche BL",
-        getPayment : "Tahsilatlar",
-        cash : "Tutar",
+        getPayment : "Encaissement",
+        cash : "Montant" ,
         description :"Motif",
         checkReference : "Référence",
         btnCash : "Espèce",
-        btnCheck : "Çek",
-        btnBank : "Havale",
-        cmbCashSafe : "Nakit Kasası",
-        cmbCheckSafe : "Çek Kasası",
-        cmbBank : "Banka Seçimi",
-        txtPayInvoıceTotal : "Fatura Tutarı",
-        txtPayTotal : "Tahsilat Toplamı",
-        txtRemainder : "Kalan",
+        btnCheck : "Chèque",
+        btnBank : "Virement",
+        cmbCashSafe : "Caisse Espèce",
+        cmbCheckSafe : "Caisse Chèque",
+        cmbBank : "Sélection Banque",
+        txtPayInvoıceTotal : "Total Facture",
+        txtPayTotal : "Total Encaissement",
+        txtRemainder : "Reste",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -2189,7 +2193,7 @@ export const langFr =
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
         pg_txtItemsCode : 
         {
@@ -2199,13 +2203,13 @@ export const langFr =
         },
         pg_dispatchGrid : 
         {
-            title : "İrsaliye Seçimi",
+            title : "Sélectionner Bon De Livraison" ,
             clmReferans : "Série - Quantité",
             clmCode : "Code",
             clmName : "Nom",
             clmQuantity : "Quantité",
             clmPrice : "Prix ",
-            clmTotal : "Tutar"
+            clmTotal : "Montant" 
         },
         grdSlsInv: 
         {
@@ -2213,33 +2217,33 @@ export const langFr =
             clmItemName: "Nom",
             clmPrice: "Prix ",
             clmQuantity : "Quantité",
-            clmDiscount : "İndirim",
-            clmDiscountRate : "İndirim %",
-            clmVat : "KDV",
-            clmAmount : "Tutar",
-            clmTotal : "Genel Toplam",
-            clmDispatch : "İrsaliye No",
+            clmDiscount : "Remise",
+            clmDiscountRate : "Remise %",
+            clmVat : "TVA",
+            clmAmount : "Montant" ,
+            clmTotal : "Total Général",
+            clmDispatch : "No Bon de Livraison",
             clmCreateDate: "Date d'Enregistrement",
-            clmMargin :"Marj"
+            clmMargin :"Marge"
 
         },
         grdInvoicePayment: 
         {
-            clmInputName: "Kasa",
-            clmTypeName: "Tipi",
+            clmInputName: "Caisse",
+            clmTypeName: "Type",
             clmPrice: "Prix ",
             clmCreateDate: "Date d'Enregistrement",
 
         },
         popPayment:
         {
-            title: "Tahsilatlar",
+            title: "Encaissement",
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            title: "Télécharger Document",
+            Percent : "Pourcentage",
+            Price : "Montant" 
         },
         popPassword : 
         {
@@ -2291,19 +2295,19 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonne",
-            msg: "Vergiyi Sıfırlamak istediğinize eminmisiniz !"
+            msg: "Etes vous sur de Vouloir Mettre à Zéro la TVA !"
         },
         msgDiscountPrice:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Tutardan Büyük İndirim Yapılamaz !"
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieur au Montant Total !"
         },
         msgDiscountPercent:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Tutardan Büyük İndirim Yapılamaz !"
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieur au Montant Total !"
         },
         msgLocked:
         {
@@ -2339,7 +2343,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "İndirim Tutardan Yüksek Olamaz !"
+            msg: "Remise ne peut être Supérieur au Total ! "
         },
         msgItemNotFound:
         {
@@ -2358,63 +2362,63 @@ export const langFr =
             title: "Attention",
             btn01: "Regroupe",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez vous Combiner ?"
+            msg: "Produit Existant dans Document ! Voulez vous Regrouper ?"
         },
         msgCustomerSelect:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Lütfen Cari Seçiniz !"
+            msg: "Veuillez Saisir un Client !"
         },
         popCash : 
         {
-            title: "Nakit Girişi",
-            btnApprove : "Ekle"
+            title: "Entrée Espèce",
+            btnApprove : "Ajoute"
         },
         popCheck : 
         {
-            title: "Çek Girişi",
-            btnApprove : "Ekle"
+            title: "Entrée Chèque",
+            btnApprove : "Ajoute"
         },
         popBank : 
         {
-            title: "Havale Girişi",
-            btnApprove : "Ekle"
+            title: "Saise Virement",
+            btnApprove : "Ajoute"
         },
         popDesign : 
         {
-            title: "Dizayn seçimi",
-            design : "Dizayn",
-            lang : "Evrak Dili"
+            title: "Choix du Désign",
+            design : "Design" ,
+            lang : "Langue Document" 
         },
         msgMissItemCode:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Bulunamayan Kodlar :"
+            msg: "Code Non Retrouvé"
         },
         msgMultiCodeCount:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Eklenen Ürün Sayısı"
+            msg: "Nombre de Produit Ajouté"
         },
         popMultiItem:
         {
-            title: "Toplu Ürün Ekleme",
+            title: "Ajout Groupé de Produit",
             btnApprove: "Ürünleri Getir",
             btnClear : "Temizle",
-            btnSave : "Satırları Ekle",
+            btnSave : "Ajoujer Lignes",
         },
         cmbMultiItemType : 
         {
-            title : "Arama Şekli",
+            title : "Mode de Recherche",
             customerCode : "Tedarikçi Koduna Göre",
-            ItemCode : "Ürün Koduna Göre"
+            ItemCode : "En Fonction du Code Produit"
         },
         grdMultiItem : 
         {
-            clmCode : "Ürün Kodu",
+            clmCode : "Code Produit",
             clmMulticode : "Tedarikçi Kodun",
             clmName : "Nom du produit",
             clmQuantity : "Quantité"
@@ -2422,16 +2426,16 @@ export const langFr =
         msgMultiData:
         {
             title: "Attention",
-            btn01: "Listeyi Temizle ve Hepsini Ekle",
-            btn02: "Yeni Yazılanları Listeye Ekle",
-            msg: "Listede Ürünler Var! "
+            btn01: "Effacer Liste et Ajoute le Tout",
+            btn02: "Inclure Les Nouvelles Saisies à la Liste",
+            msg: "Produits Présents dans la Liste! "
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Cari Kodu Boş Geçilemez",
-        validDocDate : "Tarih Seçmelisiniz",
-        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz"
+        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validDocDate : "Sélectionner Date" ,
+        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter"
     },
     ftr_02_003 :
     {
@@ -2440,26 +2444,26 @@ export const langFr =
         txtCustomerCode : "Code fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
-        txtAmount : "Tutar",
-        txtDiscount : "İndirim",
-        txtMargin : "Marj",
-        txtVat : "Kdv",
-        txtTotal : "Genel Toplam",
-        dtShipDate :"Sevk Tarihi",
-        getPayment : "Tahsilatlar",
+        txtAmount : "Montant" ,
+        txtDiscount : "Remise",
+        txtMargin : "Marge",
+        txtVat : "TVA",
+        txtTotal : "Total Général",
+        dtShipDate :"Date Expédition",
+        getPayment : "Encaissement",
         getDispatch : "Recherche BL",
-        cash : "Tutar",
+        cash : "Montant" ,
         description :"Motif",
         checkReference : "Référence",
         btnCash : "Espèce",
-        btnCheck : "Çek",
-        btnBank : "Havale",
-        cmbCashSafe : "Nakit Kasası",
-        cmbCheckSafe : "Çek Kasası",
-        cmbBank : "Banka Seçimi",
-        txtPayInvoıceTotal : "Fatura Tutarı",
-        txtPayTotal : "Tahsilat Toplamı",
-        txtRemainder : "Kalan",
+        btnCheck : "Chèque",
+        btnBank : "Virement",
+        cmbCashSafe : "Caisse Espèce",
+        cmbCheckSafe : "Caisse Chèque",
+        cmbBank : "Sélection Banque",
+        txtPayInvoıceTotal : "Totale Facture",
+        txtPayTotal : "Total Encaissement",
+        txtRemainder : "Reste",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -2474,7 +2478,7 @@ export const langFr =
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
         pg_txtItemsCode : 
         {
@@ -2484,13 +2488,13 @@ export const langFr =
         },
         pg_dispatchGrid : 
         {
-            title : "İrsaliye Seçimi",
+            title : "Sélectionner Bon De Livraison" ,
             clmReferans : "Série - Quantité",
             clmCode : "Code",
             clmName : "Nom",
             clmQuantity : "Quantité",
             clmPrice : "Prix ",
-            clmTotal : "Tutar"
+            clmTotal : "Montant" 
         },
         grdRebtInv: 
         {
@@ -2498,33 +2502,33 @@ export const langFr =
             clmItemName: "Nom",
             clmPrice: "Prix ",
             clmQuantity : "Quantité",
-            clmDiscount : "İndirim",
-            clmDiscountRate : "İndirim %",
-            clmVat : "KDV",
-            clmAmount : "Tutar",
-            clmTotal : "Genel Toplam",
-            clmDispatch : "İrsaliye No",
+            clmDiscount : "Remise",
+            clmDiscountRate : "Remise %",
+            clmVat : "TVA",
+            clmAmount : "Montant" ,
+            clmTotal : "Total Général",
+            clmDispatch : "No Bon de Livraison",
             clmCreateDate: "Date d'Enregistrement",
-            clmMargin :"Marj"
+            clmMargin :"Marge"
 
         },
         grdInvoicePayment: 
         {
-            clmInputName: "Kasa",
-            clmTypeName: "Tipi",
+            clmInputName: "Caisse",
+            clmTypeName: "Type",
             clmPrice: "Prix ",
             clmCreateDate: "Date d'Enregistrement",
 
         },
         popPayment:
         {
-            title: "Tahsilatlar",
+            title: "Encaissement",
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            title: "Télécharger Document",
+            Percent : "Pourcentage",
+            Price : "Montant" 
         },
         popPassword : 
         {
@@ -2576,19 +2580,19 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonne",
-            msg: "Vergiyi Sıfırlamak istediğinize eminmisiniz !"
+            msg: "Etes vous sur de Vouloir Mettre à Zéro la TVA !"
         },
         msgDiscountPrice:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Tutardan Büyük İndirim Yapılamaz !"
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieur au Montant Total !"
         },
         msgDiscountPercent:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Tutardan Büyük İndirim Yapılamaz !"
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieur au Montant Total !"
         },
         msgLocked:
         {
@@ -2624,7 +2628,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "İndirim Tutardan Yüksek Olamaz !"
+            msg: "Remise ne peut être Supérieur au Total ! "
         },
         msgItemNotFound:
         {
@@ -2649,34 +2653,34 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Lütfen Cari Seçiniz !"
+            msg: "Veuillez Saisir un Client !"
         },
         popCash : 
         {
-            title: "Nakit Girişi",
-            btnApprove : "Ekle"
+            title: "Entrée Espèce",
+            btnApprove : "Ajoute"
         },
         popCheck : 
         {
-            title: "Çek Girişi",
-            btnApprove : "Ekle"
+            title: "Entrée Chèque",
+            btnApprove : "Ajoute"
         },
         popBank : 
         {
-            title: "Havale Girişi",
-            btnApprove : "Ekle"
+            title: "Saise Virement",
+            btnApprove : "Ajoute"
         },
         popDesign : 
         {
-            title: "Dizayn seçimi",
-            design : "Dizayn",
-            lang : "Evrak Dili"
+            title: "Choix du Désign",
+            design : "Design" ,
+            lang : "Langue Document" 
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Cari Kodu Boş Geçilemez",
-        validDocDate : "Tarih Seçmelisiniz",
+        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validDocDate : "Sélectionner Date" ,
 
 
 
@@ -2688,26 +2692,26 @@ export const langFr =
         txtCustomerCode : "Code fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
-        txtAmount : "Tutar",
-        txtDiscount : "İndirim",
-        txtMargin : "Marj",
-        txtVat : "Kdv",
-        txtTotal : "Genel Toplam",
-        dtShipDate :"Sevk Tarihi",
+        txtAmount : "Montant" ,
+        txtDiscount : "Remise",
+        txtMargin : "Marge",
+        txtVat : "TVA",
+        txtTotal : "Total Général",
+        dtShipDate :"Date Expédition",
         getContract : "Anlaşmadan Getir",
-        getPayment : "Tahsilatlar",
-        cash : "Tutar",
+        getPayment : "Encaissement",
+        cash : "Montant" ,
         description :"Motif",
         checkReference : "Référence",
         btnCash : "Espèce",
-        btnCheck : "Çek",
-        btnBank : "Havale",
-        cmbCashSafe : "Nakit Kasası",
-        cmbCheckSafe : "Çek Kasası",
-        cmbBank : "Banka Seçimi",
-        txtPayInvoıceTotal : "Fatura Tutarı",
-        txtPayTotal : "Tahsilat Toplamı",
-        txtRemainder : "Kalan",
+        btnCheck : "Chèque",
+        btnBank : "Virement",
+        cmbCashSafe : "Caisse Espèce",
+        cmbCheckSafe : "Caisse Chèque",
+        cmbBank : "Sélection Banque",
+        txtPayInvoıceTotal : "Totale Facture",
+        txtPayTotal : "Total Encaissement",
+        txtRemainder : "Reste",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -2722,7 +2726,7 @@ export const langFr =
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
         pg_txtItemsCode : 
         {
@@ -2735,7 +2739,7 @@ export const langFr =
             title : "Fatura Seçimi",
             clmReferans : "Série - Quantité",
             clmDocDate : "Evrak Tarihi",
-            clmTotal : "Tutar"
+            clmTotal : "Montant" 
         },
         grdDiffInv: 
         {
@@ -2743,11 +2747,11 @@ export const langFr =
             clmItemName: "Nom",
             clmPrice: "Prix ",
             clmQuantity : "Quantité",
-            clmDiscount : "İndirim",
-            clmDiscountRate : "İndirim %",
-            clmVat : "KDV",
-            clmAmount : "Tutar",
-            clmTotal : "Genel Toplam",
+            clmDiscount : "Remise",
+            clmDiscountRate : "Remise %",
+            clmVat : "TVA",
+            clmAmount : "Montant" ,
+            clmTotal : "Total Général",
             clmCreateDate: "Date d'Enregistrement",
             clmInvNo : "Fatura No",
             clmInvDate : "Fatura Tarihi"
@@ -2755,21 +2759,21 @@ export const langFr =
         },
         grdInvoicePayment: 
         {
-            clmInputName: "Kasa",
-            clmTypeName: "Tipi",
+            clmInputName: "Caisse",
+            clmTypeName: "Type",
             clmPrice: "Prix ",
             clmCreateDate: "Date d'Enregistrement",
 
         },
         popPayment:
         {
-            title: "Tahsilatlar",
+            title: "Encaissement",
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            title: "Télécharger Document",
+            Percent : "Pourcentage",
+            Price : "Montant" 
         },
         popPassword : 
         {
@@ -2815,7 +2819,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonne",
-            msg: "Vergiyi Sıfırlamak istediğinize eminmisiniz !"
+            msg: "Etes vous sur de Vouloir Mettre à Zéro la TVA !"
         },
         msgMoreAmount:
         {
@@ -2827,13 +2831,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Tutardan Büyük İndirim Yapılamaz !"
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieur au Montant Total !"
         },
         msgDiscountPercent:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Tutardan Büyük İndirim Yapılamaz !"
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieur au Montant Total !"
         },
         msgLocked:
         {
@@ -2869,7 +2873,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "İndirim Tutardan Yüksek Olamaz !"
+            msg: "Remise ne peut être Supérieur au Total ! "
         },
         msgItemNotFound:
         {
@@ -2892,30 +2896,30 @@ export const langFr =
         },
         popCash : 
         {
-            title: "Nakit Girişi",
-            btnApprove : "Ekle"
+            title: "Entrée Espèce",
+            btnApprove : "Ajoute"
         },
         popCheck : 
         {
-            title: "Çek Girişi",
-            btnApprove : "Ekle"
+            title: "Entrée Chèque",
+            btnApprove : "Ajoute"
         },
         popBank : 
         {
-            title: "Havale Girişi",
-            btnApprove : "Ekle"
+            title: "Saise Virement",
+            btnApprove : "Ajoute"
         },
         popDesign : 
         {
-            title: "Dizayn seçimi",
-            design : "Dizayn",
-            lang : "Evrak Dili"
+            title: "Choix du Désign",
+            design : "Design" ,
+            lang : "Langue Document" 
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Cari Kodu Boş Geçilemez",
-        validDocDate : "Tarih Seçmelisiniz",
+        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validDocDate : "Sélectionner Date" ,
 
 
 
@@ -2930,18 +2934,18 @@ export const langFr =
         txtCustomerCode: "Code fournisseur",
         txtCustomerName: "Nom fournisseur",
         cmbPrmType: "Promosyon Tipi",
-        txtPrmItem: "Stok",
-        txtPrmItemGrp: "Grup",
+        txtPrmItem:  "Stock",
+        txtPrmItemGrp: "Groupe" ,
         txtPrmQuantity: "Quantité",
-        txtPrmAmount: "Tutar",
-        cmbRstType: "Tipi",
-        txtRstQuantity: "Değer",
-        txtRstItem : "Stok",
+        txtPrmAmount: "Montant" ,
+        cmbRstType: "Type",
+        txtRstQuantity:  "Valeur",
+        txtRstItem :  "Stock",
         cmbRstItemType: "Type",
-        txtRstItemQuantity: "Değer",
+        txtRstItemQuantity:  "Valeur",
         pg_Grid:
         {
-            title: "Seçim",
+            title:  "Choix",
             clmCode: "CODE",
             clmName: "NOM", 
         },
@@ -2950,7 +2954,7 @@ export const langFr =
             title: "Attention",
             btn01: "Promosyona Git",
             btn02: "OK",
-            msg: "Girmiş olduğunuz promosyon sistem de kayıtlı !"
+            msg: "Promotion Saisie Déja Existant "
         },
         msgSave:
         {
@@ -2994,19 +2998,19 @@ export const langFr =
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
         grdPurcDisList: 
         {
-            clmRef: "Seri",
-            clmRefNo: "Sıra",
+            clmRef: "Série",
+            clmRefNo: "Ligne",
             clmPrice: "Prix ",
             clmOutputCode : "Code fournisseur",
             clmOutputName : "Nom fournisseur",
             clmDate: "Date",
-            clmVat : "KDV",
-            clmAmount : "Tutar",
-            clmTotal : "Toplam",
+            clmVat : "TVA",
+            clmAmount : "Montant" ,
+            clmTotal : "Total",
             clmInputName : "Réserve",
         },
 
@@ -3018,26 +3022,26 @@ export const langFr =
         dtFirst : "Date Début",
         dtLast : "Date Fin",
         txtCustomerCode : "Fournisseur",
-        menu:"Satış İrsaliyesi",
+        menu:"Bon de Livraison de Vente ",
         pg_txtCustomerCode : 
         {
             title : "Choix Fournisseur",
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
         grdSlsDisList: 
         {
-            clmRef: "Seri",
-            clmRefNo: "Sıra",
+            clmRef: "Série",
+            clmRefNo: "Ligne",
             clmPrice: "Prix ",
             clmInputCode : "Code fournisseur",
             clmInputName : "Nom fournisseur",
             clmDate: "Date",
-            clmVat : "KDV",
-            clmAmount : "Tutar",
-            clmTotal : "Toplam",
+            clmVat : "TVA",
+            clmAmount : "Montant" ,
+            clmTotal : "Total",
             clmOutputName :"Réserve",
         },
 
@@ -3056,19 +3060,19 @@ export const langFr =
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
         grdSlsDisList: 
         {
-            clmRef: "Seri",
-            clmRefNo: "Sıra",
+            clmRef: "Série",
+            clmRefNo: "Ligne",
             clmPrice: "Prix ",
             clmInputCode : "Code fournisseur",
             clmInputName : "Nom fournisseur",
             clmDate: "Date",
-            clmVat : "KDV",
-            clmAmount : "Tutar",
-            clmTotal : "Toplam",
+            clmVat : "TVA",
+            clmAmount : "Montant" ,
+            clmTotal : "Total",
         },
 
     },
@@ -3079,12 +3083,12 @@ export const langFr =
         txtCustomerCode : "Code fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
-        txtAmount : "Tutar",
-        txtDiscount : "İndirim",
-        txtMargin : "Marj",
-        txtVat : "Kdv",
-        txtTotal : "Genel Toplam",
-        dtShipDate :"Sevk Tarihi",
+        txtAmount : "Montant" ,
+        txtDiscount : "Remise",
+        txtMargin : "Marge",
+        txtVat : "TVA",
+        txtTotal : "Total Général",
+        dtShipDate :"Date Expédition",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3099,14 +3103,14 @@ export const langFr =
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
         pg_txtItemsCode : 
         {
             title : "Sélectionner Stock",
             clmCode :  "CODE STOCK",
             clmName : "NOM STOCK",
-            clmMulticode : "TEDARİKÇİ KODU"
+            clmMulticode : "CODE FOURNISSEUR"
         },
         grdPurcDispatch: 
         {
@@ -3114,24 +3118,24 @@ export const langFr =
             clmItemName: "Nom",
             clmPrice: "Prix ",
             clmQuantity : "Quantité",
-            clmDiscount : "İndirim",
-            clmDiscountRate : "İndirim %",
-            clmVat : "KDV",
-            clmAmount : "Tutar",
-            clmTotal : "Genel Toplam",
+            clmDiscount : "Remise",
+            clmDiscountRate : "Remise %",
+            clmVat : "TVA",
+            clmAmount : "Montant" ,
+            clmTotal : "Total Général",
             clmCreateDate: "Date d'Enregistrement",
-            clmMargin :"Marj"
+            clmMargin :"Marge"
 
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            title: "Télécharger Document",
+            Percent : "Pourcentage",
+            Price : "Montant" 
         },
         popPassword : 
         {
-            title: "Veuillez Saisir MDP Administrateur pour Acces au Document ",
+            title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
             btnApprove : "Valide"
         },
@@ -3173,19 +3177,19 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonne",
-            msg: "Vergiyi Sıfırlamak istediğinize eminmisiniz !"
+            msg: "Etes vous sur de Vouloir Mettre à Zéro la TVA !"
         },
         msgDiscountPrice:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Tutardan Büyük İndirim Yapılamaz !"
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieur au Montant Total !"
         },
         msgDiscountPercent:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Tutardan Büyük İndirim Yapılamaz !"
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieur au Montant Total !"
         },
         msgLocked:
         {
@@ -3209,7 +3213,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Faturaya Çevirilmiş Evrak Kilidi Açılamaz"
+            msg: "Document Transformé en Facture Vous ne Pouvez Dévérouiller"
         },
         msgGetLocked:
         {
@@ -3227,7 +3231,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "İndirim Tutardan Yüksek Olamaz !"
+            msg: "Remise ne peut être Supérieur au Total ! "
         },
         msgItemNotFound:
         {
@@ -3257,38 +3261,38 @@ export const langFr =
         },
         popDesign : 
         {
-            title: "Dizayn seçimi",
-            design : "Dizayn",
-            lang : "Evrak Dili"
+            title: "Choix du Désign",
+            design : "Design" ,
+            lang : "Langue Document" 
         },
                 msgMissItemCode:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Bulunamayan Kodlar :"
+            msg: "Code Non Retrouvé"
         },
         msgMultiCodeCount:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Eklenen Ürün Sayısı"
+            msg: "Nombre de Produit Ajouté"
         },
         popMultiItem:
         {
-            title: "Toplu Ürün Ekleme",
+            title: "Ajout Groupé de Produit",
             btnApprove: "Ürünleri Getir",
             btnClear : "Temizle",
-            btnSave : "Satırları Ekle",
+            btnSave : "Ajoujer Lignes",
         },
         cmbMultiItemType : 
         {
-            title : "Arama Şekli",
+            title : "Mode de Recherche",
             customerCode : "Tedarikçi Koduna Göre",
-            ItemCode : "Ürün Koduna Göre"
+            ItemCode : "En Fonction du Code Produit"
         },
         grdMultiItem : 
         {
-            clmCode : "Ürün Kodu",
+            clmCode : "Code Produit",
             clmMulticode : "Tedarikçi Kodun",
             clmName : "Nom du produit",
             clmQuantity : "Quantité"
@@ -3296,16 +3300,16 @@ export const langFr =
         msgMultiData:
         {
             title: "Attention",
-            btn01: "Listeyi Temizle ve Hepsini Ekle",
-            btn02: "Yeni Yazılanları Listeye Ekle",
-            msg: "Listede Ürünler Var! "
+            btn01: "Effacer Liste et Ajoute le Tout",
+            btn02: "Inclure Les Nouvelles Saisies à la Liste",
+            msg: "Produits Présents dans la Liste! "
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Cari Kodu Boş Geçilemez",
-        validDocDate : "Tarih Seçmelisiniz",
-        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz"
+        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validDocDate : "Sélectionner Date" ,
+        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter"
 
 
 
@@ -3317,12 +3321,12 @@ export const langFr =
         txtCustomerCode : "Code fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
-        txtAmount : "Tutar",
-        txtDiscount : "İndirim",
-        txtMargin : "Marj",
-        txtVat : "Kdv",
-        txtTotal : "Genel Toplam",
-        dtShipDate :"Sevk Tarihi",
+        txtAmount : "Montant" ,
+        txtDiscount : "Remise",
+        txtMargin : "Marge",
+        txtVat : "TVA",
+        txtTotal : "Total Général",
+        dtShipDate :"Date Expédition",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3337,7 +3341,7 @@ export const langFr =
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
         pg_txtItemsCode : 
         {
@@ -3351,19 +3355,19 @@ export const langFr =
             clmItemName: "Nom",
             clmPrice: "Prix ",
             clmQuantity : "Quantité",
-            clmDiscount : "İndirim",
-            clmDiscountRate : "İndirim %",
-            clmVat : "KDV",
-            clmAmount : "Tutar",
-            clmTotal : "Genel Toplam",
+            clmDiscount : "Remise",
+            clmDiscountRate : "Remise %",
+            clmVat : "TVA",
+            clmAmount : "Montant" ,
+            clmTotal : "Total Général",
             clmCreateDate: "Date d'Enregistrement",
-            clmMargin :"Marj"
+            clmMargin :"Marge"
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            title: "Télécharger Document",
+            Percent : "Pourcentage",
+            Price : "Montant" 
         },
         popPassword : 
         {
@@ -3409,19 +3413,19 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonne",
-            msg: "Vergiyi Sıfırlamak istediğinize eminmisiniz !"
+            msg: "Etes vous sur de Vouloir Mettre à Zéro la TVA !"
         },
         msgDiscountPrice:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Tutardan Büyük İndirim Yapılamaz !"
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieur au Montant Total !"
         },
         msgDiscountPercent:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Tutardan Büyük İndirim Yapılamaz !"
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieur au Montant Total !"
         },
         msgLocked:
         {
@@ -3445,7 +3449,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Faturaya Çevirilmiş Evrak Kilidi Açılamaz"
+            msg: "Document Transformé en Facture Vous ne Pouvez Dévérouiller"
         },
         msgGetLocked:
         {
@@ -3463,7 +3467,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "İndirim Tutardan Yüksek Olamaz !"
+            msg: "Remise ne peut être Supérieur au Total ! "
         },
         msgItemNotFound:
         {
@@ -3480,15 +3484,15 @@ export const langFr =
         msgUnderPrice1:
         {
             title: "Attention",
-            btn01: "Evet",
+            btn01: "Oui",
             btn02: "Abandonne",
-            msg: "Maliyetten Düşük Fiyat !! Devam Etmek İstiyormusunuz"
+            msg: "Prix Inférieur à l'Achat ! ! Voulez Vous Continuer"
         },
         msgUnderPrice2:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Maliyet Fiyatından Daha Düşük Satılamaz !!"
+            msg: "Vous ne Pouvez Vendre en Dessous du Prix d'Achat ! !"
         },
         msgCombineItem:
         {
@@ -3499,38 +3503,38 @@ export const langFr =
         },
         popDesign : 
         {
-            title: "Dizayn seçimi",
-            design : "Dizayn",
-            lang : "Evrak Dili"
+            title: "Choix du Désign",
+            design : "Design" ,
+            lang : "Langue Document" 
         },
         msgMissItemCode:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Bulunamayan Kodlar :"
+            msg: "Code Non Retrouvé"
         },
         msgMultiCodeCount:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Eklenen Ürün Sayısı"
+            msg: "Nombre de Produit Ajouté"
         },
         popMultiItem:
         {
-            title: "Toplu Ürün Ekleme",
+            title: "Ajout Groupé de Produit",
             btnApprove: "Ürünleri Getir",
             btnClear : "Temizle",
-            btnSave : "Satırları Ekle",
+            btnSave : "Ajoujer Lignes",
         },
         cmbMultiItemType : 
         {
-            title : "Arama Şekli",
+            title : "Mode de Recherche",
             customerCode : "Tedarikçi Koduna Göre",
-            ItemCode : "Ürün Koduna Göre"
+            ItemCode : "En Fonction du Code Produit"
         },
         grdMultiItem : 
         {
-            clmCode : "Ürün Kodu",
+            clmCode : "Code Produit",
             clmMulticode : "Tedarikçi Kodun",
             clmName : "Nom du produit",
             clmQuantity : "Quantité"
@@ -3538,16 +3542,16 @@ export const langFr =
         msgMultiData:
         {
             title: "Attention",
-            btn01: "Listeyi Temizle ve Hepsini Ekle",
-            btn02: "Yeni Yazılanları Listeye Ekle",
-            msg: "Listede Ürünler Var! "
+            btn01: "Effacer Liste et Ajoute le Tout",
+            btn02: "Inclure Les Nouvelles Saisies à la Liste",
+            msg: "Produits Présents dans la Liste! "
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Cari Kodu Boş Geçilemez",
-        validDocDate : "Tarih Seçmelisiniz",
-        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz"
+        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validDocDate : "Sélectionner Date" ,
+        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter"
     },
     irs_02_003 :
     {
@@ -3557,12 +3561,12 @@ export const langFr =
         txtCustomerCode : "Code fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
-        txtAmount : "Tutar",
-        txtDiscount : "İndirim",
-        txtMargin : "Marj",
-        txtVat : "Kdv",
-        txtTotal : "Genel Toplam",
-        dtShipDate :"Sevk Tarihi",
+        txtAmount : "Montant" ,
+        txtDiscount : "Remise",
+        txtMargin : "Marge",
+        txtVat : "TVA",
+        txtTotal : "Total Général",
+        dtShipDate :"Date Expédition",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3577,7 +3581,7 @@ export const langFr =
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
         pg_txtItemsCode : 
         {
@@ -3591,7 +3595,7 @@ export const langFr =
             title : "İade Stok Seçimi",
             clmCode :  "CODE STOCK",
             clmName : "NOM STOCK",
-            clmQuantity :"MİKTAR"
+            clmQuantity :"QUANTITE "
         },
         grdRebtDispatch: 
         {
@@ -3599,19 +3603,19 @@ export const langFr =
             clmItemName: "Nom",
             clmPrice: "Prix ",
             clmQuantity : "Quantité",
-            clmDiscount : "İndirim",
-            clmDiscountRate : "İndirim %",
-            clmVat : "KDV",
-            clmAmount : "Tutar",
-            clmTotal : "Genel Toplam",
+            clmDiscount : "Remise",
+            clmDiscountRate : "Remise %",
+            clmVat : "TVA",
+            clmAmount : "Montant" ,
+            clmTotal : "Total Général",
             clmCreateDate: "Date d'Enregistrement",
-            clmMargin :"Marj"
+            clmMargin :"Marge"
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            title: "Télécharger Document",
+            Percent : "Pourcentage",
+            Price : "Montant" 
         },
         popPassword : 
         {
@@ -3657,19 +3661,19 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonne",
-            msg: "Vergiyi Sıfırlamak istediğinize eminmisiniz !"
+            msg: "Etes vous sur de Vouloir Mettre à Zéro la TVA !"
         },
         msgDiscountPrice:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Tutardan Büyük İndirim Yapılamaz !"
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieur au Montant Total !"
         },
         msgDiscountPercent:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Tutardan Büyük İndirim Yapılamaz !"
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieur au Montant Total !"
         },
         msgLocked:
         {
@@ -3693,7 +3697,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Faturaya Çevirilmiş Evrak Kilidi Açılamaz"
+            msg: "Document Transformé en Facture Vous ne Pouvez Dévérouiller"
         },
         msgGetLocked:
         {
@@ -3711,7 +3715,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "İndirim Tutardan Yüksek Olamaz !"
+            msg: "Remise ne peut être Supérieur au Total ! "
         },
         msgItemNotFound:
         {
@@ -3728,15 +3732,15 @@ export const langFr =
         msgUnderPrice1:
         {
             title: "Attention",
-            btn01: "Evet",
+            btn01: "Oui",
             btn02: "Abandonne",
-            msg: "Maliyetten Düşük Fiyat !! Devam Etmek İstiyormusunuz"
+            msg: "Prix Inférieur à l'Achat ! ! Voulez Vous Continuer"
         },
         msgUnderPrice2:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Maliyet Fiyatından Daha Düşük Satılamaz !!"
+            msg: "Vous ne Pouvez Vendre en Dessous du Prix d'Achat ! !"
         },
         msgCombineItem:
         {
@@ -3747,15 +3751,15 @@ export const langFr =
         },
         popDesign : 
         {
-            title: "Dizayn seçimi",
-            design : "Dizayn",
-            lang : "Evrak Dili"
+            title: "Choix du Désign",
+            design : "Design" ,
+            lang : "Langue Document" 
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Cari Kodu Boş Geçilemez",
-        validDocDate : "Tarih Seçmelisiniz",
+        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validDocDate : "Sélectionner Date" ,
     },
     sip_01_001 :
     {
@@ -3771,19 +3775,19 @@ export const langFr =
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
         grdPurcOrdList: 
         {
-            clmRef: "Seri",
-            clmRefNo: "Sıra",
+            clmRef: "Série",
+            clmRefNo: "Ligne",
             clmPrice: "Prix ",
             clmOutputCode : "Code fournisseur",
             clmOutputName : "Nom fournisseur",
             clmDate: "Date",
-            clmVat : "KDV",
-            clmAmount : "Tutar",
-            clmTotal : "Toplam",
+            clmVat : "TVA",
+            clmAmount : "Montant" ,
+            clmTotal : "Total",
             clmInputName : "Réserve",
         },
     },
@@ -3801,19 +3805,19 @@ export const langFr =
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
         grdSlsOrdList: 
         {
-            clmRef: "Seri",
-            clmRefNo: "Sıra",
+            clmRef: "Série",
+            clmRefNo: "Ligne",
             clmPrice: "Prix ",
             clmInputCode : "Code fournisseur",
             clmInputName : "Nom fournisseur",
             clmDate: "Date",
-            clmVat : "KDV",
-            clmAmount : "Tutar",
-            clmTotal : "Toplam",
+            clmVat : "TVA",
+            clmAmount : "Montant" ,
+            clmTotal : "Total",
             clmOutputName :"Réserve",
         },
 
@@ -3825,12 +3829,12 @@ export const langFr =
         txtCustomerCode : "Code fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
-        txtAmount : "Tutar",
-        txtDiscount : "İndirim",
-        txtMargin : "Marj",
-        txtVat : "Kdv",
-        txtTotal : "Genel Toplam",
-        dtShipDate :"Sevk Tarihi",
+        txtAmount : "Montant" ,
+        txtDiscount : "Remise",
+        txtMargin : "Marge",
+        txtVat : "TVA",
+        txtTotal : "Total Général",
+        dtShipDate :"Date Expédition",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3845,14 +3849,14 @@ export const langFr =
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
         pg_txtItemsCode : 
         {
             title : "Sélectionner Stock",
             clmCode :  "CODE STOCK",
             clmName : "NOM STOCK",
-            clmMulticode : "TEDARİKÇİ KODU"
+            clmMulticode : "CODE FOURNISSEUR"
         },
         grdPurcOrders: 
         {
@@ -3860,21 +3864,21 @@ export const langFr =
             clmItemName: "Nom",
             clmPrice: "Prix ",
             clmQuantity : "Quantité",
-            clmDiscount : "İndirim",
-            clmDiscountRate : "İndirim %",
-            clmVat : "KDV",
-            clmAmount : "Tutar",
-            clmTotal : "Genel Toplam",
+            clmDiscount : "Remise",
+            clmDiscountRate : "Remise %",
+            clmVat : "TVA",
+            clmAmount : "Montant" ,
+            clmTotal : "Total Général",
             clmCreateDate: "Date d'Enregistrement",
-            clmMargin :"Marj",
+            clmMargin :"Marge",
             clmMulticode :"T. Kodu",
-            clmBarcode :"Barkodu"
+            clmBarcode :"Code Barre"
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            title: "Télécharger Document",
+            Percent : "Pourcentage",
+            Price : "Montant" 
         },
         popPassword : 
         {
@@ -3884,9 +3888,9 @@ export const langFr =
         },
         popDesign : 
         {
-            title: "Dizayn seçimi",
-            design : "Dizayn",
-            lang : "Evrak Dili"
+            title: "Choix du Désign",
+            design : "Design" ,
+            lang : "Langue Document" 
         },
         msgDocValid:
         {
@@ -3926,19 +3930,19 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonne",
-            msg: "Vergiyi Sıfırlamak istediğinize eminmisiniz !"
+            msg: "Etes vous sur de Vouloir Mettre à Zéro la TVA !"
         },
         msgDiscountPrice:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Tutardan Büyük İndirim Yapılamaz !"
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieur au Montant Total !"
         },
         msgDiscountPercent:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Tutardan Büyük İndirim Yapılamaz !"
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieur au Montant Total !"
         },
         msgLocked:
         {
@@ -3962,7 +3966,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Faturaya Çevirilmiş Evrak Kilidi Açılamaz"
+            msg: "Document Transformé en Facture Vous ne Pouvez Dévérouiller"
         },
         msgGetLocked:
         {
@@ -3980,7 +3984,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "İndirim Tutardan Yüksek Olamaz !"
+            msg: "Remise ne peut être Supérieur au Total ! "
         },
         msgItemNotFound:
         {
@@ -4012,30 +4016,30 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Bulunamayan Kodlar :"
+            msg: "Code Non Retrouvé"
         },
         msgMultiCodeCount:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Eklenen Ürün Sayısı"
+            msg: "Nombre de Produit Ajouté"
         },
         popMultiItem:
         {
-            title: "Toplu Ürün Ekleme",
+            title: "Ajout Groupé de Produit",
             btnApprove: "Ürünleri Getir",
             btnClear : "Temizle",
-            btnSave : "Satırları Ekle",
+            btnSave : "Ajouter Lignes",
         },
         cmbMultiItemType : 
         {
-            title : "Arama Şekli",
+            title : "Mode de Recherche",
             customerCode : "Tedarikçi Koduna Göre",
-            ItemCode : "Ürün Koduna Göre"
+            ItemCode : "En Fonction du Code Produit"
         },
         grdMultiItem : 
         {
-            clmCode : "Ürün Kodu",
+            clmCode : "Code Produit",
             clmMulticode : "Tedarikçi Kodun",
             clmName : "Nom du produit",
             clmQuantity : "Quantité"
@@ -4043,16 +4047,16 @@ export const langFr =
         msgMultiData:
         {
             title: "Attention",
-            btn01: "Listeyi Temizle ve Hepsini Ekle",
-            btn02: "Yeni Yazılanları Listeye Ekle",
-            msg: "Listede Ürünler Var! "
+            btn01: "Effacer Liste et Ajoute le Tout",
+            btn02: "Inclure Les Nouvelles Saisies à la Liste",
+            msg: "Produits Présents dans la Liste! "
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Cari Kodu Boş Geçilemez",
-        validDocDate : "Tarih Seçmelisiniz",
-        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz"
+        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validDocDate : "Sélectionner Date" ,
+        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter"
     },
     sip_02_002 :
     {
@@ -4061,12 +4065,12 @@ export const langFr =
         txtCustomerCode : "Code fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
-        txtAmount : "Tutar",
-        txtDiscount : "İndirim",
-        txtMargin : "Marj",
-        txtVat : "Kdv",
-        txtTotal : "Genel Toplam",
-        dtShipDate :"Sevk Tarihi",
+        txtAmount : "Montant" ,
+        txtDiscount : "Remise",
+        txtMargin : "Marge",
+        txtVat : "TVA",
+        txtTotal : "Total Général",
+        dtShipDate :"Date Expédition",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -4081,7 +4085,7 @@ export const langFr =
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
         pg_txtItemsCode : 
         {
@@ -4095,19 +4099,19 @@ export const langFr =
             clmItemName: "Nom",
             clmPrice: "Prix ",
             clmQuantity : "Quantité",
-            clmDiscount : "İndirim",
-            clmDiscountRate : "İndirim %",
-            clmVat : "KDV",
-            clmAmount : "Tutar",
-            clmTotal : "Genel Toplam",
+            clmDiscount : "Remise",
+            clmDiscountRate : "Remise %",
+            clmVat : "TVA",
+            clmAmount : "Montant" ,
+            clmTotal : "Total Général",
             clmCreateDate: "Date d'Enregistrement",
-            clmMargin :"Marj"
+            clmMargin :"Marge"
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            title: "Télécharger Document",
+            Percent : "Pourcentage",
+            Price : "Montant" 
         },
         popPassword : 
         {
@@ -4153,19 +4157,19 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonne",
-            msg: "Vergiyi Sıfırlamak istediğinize eminmisiniz !"
+            msg: "Etes vous sur de Vouloir Mettre à Zéro la TVA !"
         },
         msgDiscountPrice:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Tutardan Büyük İndirim Yapılamaz !"
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieur au Montant Total !"
         },
         msgDiscountPercent:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Tutardan Büyük İndirim Yapılamaz !"
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieur au Montant Total !"
         },
         msgLocked:
         {
@@ -4189,7 +4193,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Faturaya Çevirilmiş Evrak Kilidi Açılamaz"
+            msg: "Document Transformé en Facture Vous ne Pouvez Dévérouiller"
         },
         msgGetLocked:
         {
@@ -4207,7 +4211,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "İndirim Tutardan Yüksek Olamaz !"
+            msg: "Remise ne peut être Supérieur au Total ! "
         },
         msgItemNotFound:
         {
@@ -4224,15 +4228,15 @@ export const langFr =
         msgUnderPrice1:
         {
             title: "Attention",
-            btn01: "Evet",
+            btn01: "Oui",
             btn02: "Abandonne",
-            msg: "Maliyetten Düşük Fiyat !! Devam Etmek İstiyormusunuz"
+            msg: "Prix Inférieur à l'Achat ! ! Voulez Vous Continuer"
         },
         msgUnderPrice2:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Maliyet Fiyatından Daha Düşük Satılamaz !!"
+            msg: "Vous ne Pouvez Vendre en Dessous du Prix d'Achat ! !"
         },
         msgCombineItem:
         {
@@ -4243,38 +4247,38 @@ export const langFr =
         },
         popDesign : 
         {
-            title: "Dizayn seçimi",
-            design : "Dizayn",
-            lang : "Evrak Dili"
+            title: "Choix du Design",
+            design : "Design" ,
+            lang : "Langue Document" 
         },
         msgMissItemCode:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Bulunamayan Kodlar :"
+            msg: "Code Non Trouvé"
         },
         msgMultiCodeCount:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Eklenen Ürün Sayısı"
+            msg: "Nombre de Produit Ajouté"
         },
         popMultiItem:
         {
-            title: "Toplu Ürün Ekleme",
+            title: "Ajout Groupé de Produit",
             btnApprove: "Ürünleri Getir",
             btnClear : "Temizle",
-            btnSave : "Satırları Ekle",
+            btnSave : "Ajouter Lignes",
         },
         cmbMultiItemType : 
         {
-            title : "Arama Şekli",
+            title : "Mode de Recherche",
             customerCode : "Tedarikçi Koduna Göre",
-            ItemCode : "Ürün Koduna Göre"
+            ItemCode : "En Fonction du Code Produit"
         },
         grdMultiItem : 
         {
-            clmCode : "Ürün Kodu",
+            clmCode : "Code Produit",
             clmMulticode : "Tedarikçi Kodun",
             clmName : "Nom du produit",
             clmQuantity : "Quantité"
@@ -4282,16 +4286,16 @@ export const langFr =
         msgMultiData:
         {
             title: "Attention",
-            btn01: "Listeyi Temizle ve Hepsini Ekle",
-            btn02: "Yeni Yazılanları Listeye Ekle",
-            msg: "Listede Ürünler Var! "
+            btn01: "Effacer Liste et Ajoute le Tout",
+            btn02: "Inclure Les Nouvelles Saisies à la Liste",
+            msg: "Produits Présents dans la Liste! "
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Cari Kodu Boş Geçilemez",
-        validDocDate : "Tarih Seçmelisiniz",
-        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz"
+        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validDocDate : "Sélectionner Date" ,
+        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter"
 
 
 
@@ -4306,7 +4310,7 @@ export const langFr =
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
         btnGet : "Apporter",
         grdPurcContList: 
@@ -4317,8 +4321,8 @@ export const langFr =
             clmCustomerName : "Nom fournisseur",
             clmPrıce : "Prix ",
             clmQuantity: "Quantité",
-            clmStartDate : "Başlangıç",
-            clmFinishDate :"Bitiş",
+            clmStartDate : "Début ",
+            clmFinishDate :"Fin ",
             clmDepot : "Réserve",
             clmUser : "Utilisateur"
         },
@@ -4326,14 +4330,14 @@ export const langFr =
     cnt_01_002 :
     {
         txtCustomerCode : "Fournisseur",
-        menu : "Satış Anlaşması",
+        menu :  "Accord de Vente",
         pg_txtCustomerCode : 
         {
             title : "Choix Fournisseur",
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
         btnGet : "Apporter",
         grdPurcContList: 
@@ -4344,8 +4348,8 @@ export const langFr =
             clmCustomerName : "Nom fournisseur",
             clmPrıce : "Prix ",
             clmQuantity: "Quantité",
-            clmStartDate : "Başlangıç",
-            clmFinishDate :"Bitiş",
+            clmStartDate : "Début ",
+            clmFinishDate :"Fin ",
             clmDepot : "Réserve",
              clmUser : "Utilisateur"
         },
@@ -4361,14 +4365,14 @@ export const langFr =
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
         pg_txtPopItemsCode : 
         {
             title : "Sélectionner Stock",
             clmCode :  "CODE STOCK",
             clmName : "NOM STOCK",
-            clmMulticode : "TEDARİKÇİ KODU"
+            clmMulticode : "CODE FOURNISSEUR"
         },
         msgContractValid:
         {
@@ -4415,22 +4419,22 @@ export const langFr =
             clmItemName: "Nom",
             clmPrice: "Prix ",
             clmQuantity : "Quantité",
-            clmStartDate : "Başlangıç",
-            clmFinishDate : "Bitiş",
+            clmStartDate : "Début ",
+            clmFinishDate : "Fin ",
             clmCreateDate: "Date d'Enregistrement",
             clmDepotName : "Réserve",
         },
         popItems: 
         {
-            title: "Anlaşma Ekle",
+            title: "Inclus un Accord",
             txtPopItemsCode : "CODE STOCK",
             txtPopItemsName: "Nom Stock",
             txtPopItemsPrice : "Prix ",
             txtPopItemsQuantity : "Quantité",
-            dtPopStartDate :"Başlangıç",
-            dtPopEndDate : "Bitiş"
+            dtPopStartDate :"Début ",
+            dtPopEndDate : "Fin "
         },
-        validCustomerCode : "Cari Kodu Boş Geçilemez",
+        validCustomerCode : "Le Code Produit ne peut être Vide ",
     },
     cnt_02_002 :
     {
@@ -4444,15 +4448,15 @@ export const langFr =
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
         pg_txtPopItemsCode : 
         {
             title : "Sélectionner Stock",
             clmCode :  "CODE STOCK",
             clmName : "NOM STOCK",
-            clmCostPrice : "ALIŞ FİYATI",
-            clmSalesPrice :"SATIŞ FİYATI"
+            clmCostPrice :  "PRIX D'ACHAT",
+            clmSalesPrice : "PRIX DE VENTE"
         },
         msgContractValid:
         {
@@ -4499,123 +4503,123 @@ export const langFr =
             clmItemName: "Nom",
             clmPrice: "Prix ",
             clmQuantity : "Quantité",
-            clmStartDate : "Başlangıç",
-            clmFinishDate : "Bitiş",
+            clmStartDate : "Début ",
+            clmFinishDate : "Fin ",
             clmCreateDate: "Date d'Enregistrement",
             clmDepotName : "Réserve",
         },
         popItems: 
         {
-            title: "Anlaşma Ekle",
+            title: "Inclus un Accord",
             txtPopItemsCode : "CODE STOCK",
             txtPopItemsName: "Nom Stock",
             txtPopItemsPrice : "Prix ",
             txtPopItemsQuantity : "Quantité",
-            dtPopStartDate :"Başlangıç",
-            dtPopEndDate : "Bitiş"
+            dtPopStartDate :"Début ",
+            dtPopEndDate : "Fin "
         },
         msgDiscount:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "İzin Verilen Tutardan Yüksek İndirim Yapılamaz.!! İzin Verilen Tutar : "
+            msg: "Ne Peut Etre Remisé plus que L'Autorisation.!! Montant Autorisé : "
         },
-        validCustomerCode : "Cari Kodu Boş Geçilemez",
+        validCustomerCode : "Le Code Produit ne peut être Vide ",
     },
     fns_01_001 :
     {
         txtCustomerCode : "Fournisseur",
         menu  : "Paiement",
-        txtTotal : "Toplam",
+        txtTotal : "Total",
         pg_txtCustomerCode : 
         {
             title : "Choix Fournisseur",
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
         btnGet :"Apporter",
         dtFirst : "Date Début",
         dtLast : "Date Fin",
         grdPayList: 
         {
-            clmRef: "Seri",
-            clmRefNo: "Sıra",
+            clmRef: "Série",
+            clmRefNo: "Ligne",
             clmPrice: "Prix ",
             clmInputCode : "Code fournisseur",
             clmInputName : "Nom fournisseur",
             clmDate: "Date",
-            clmTotal : "Tutar",
-            clmOutputName :"Kasa/Banka",
+            clmTotal : "Montant" ,
+            clmOutputName :"Caisse/Banque",
         },
 
     },
     fns_01_002 :
     {
         txtCustomerCode : "Fournisseur",
-        txtTotal : "Toplam",
-        menu : "Tahsilat",
+        txtTotal : "Total",
+        menu : "Encaissement",
         pg_txtCustomerCode : 
         {
             title : "Choix Fournisseur",
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
         btnGet :"Apporter",
         dtFirst : "Date Début",
         dtLast : "Date Fin",
         grdColList: 
         {
-            clmRef: "Seri",
-            clmRefNo: "Sıra",
+            clmRef: "Série",
+            clmRefNo: "Ligne",
             clmPrice: "Prix ",
             clmOutputCode : "Code fournisseur",
             clmOutputName : "Nom fournisseur",
             clmDate: "Date",
-            clmTotal : "Tutar",
-            clmInputName :"Kasa/Banka",
+            clmTotal : "Montant" ,
+            clmInputName :"Caisse/Banque",
         },
 
     },
     fns_01_003 :
     {
-        cmbBank : "Hesap",
+        cmbBank : "Compte",
         txtAmount : "Banka Bakiyesi",
-        menu : "Tahsilat",
+        menu : "Encaissement",
         btnGet :"Apporter",
         dtFirst : "Date Début",
         dtLast : "Date Fin",
         grdBankList: 
         {
-            clmRef: "Seri",
-            clmRefNo: "Sıra",
-            clmOutputName : "Çıkış Hesabı",
-            clmInputName : "Giriş Hesabı",
+            clmRef: "Série",
+            clmRefNo: "Ligne",
+            clmOutputName :  "Compte Sortant",
+            clmInputName :  "Compte Entrant",
             clmDate: "Date",
-            clmAmount : "Tutar",
+            clmAmount : "Montant" ,
             clmDate : "Date",
         },
 
     },
     fns_01_004 :
     {
-        cmbSafe : "Hesap",
+        cmbSafe : "Compte",
         txtAmount : "Kasa Bakiyesi",
-        menu : "Tahsilat",
+        menu : "Encaissement",
         btnGet :"Apporter",
         dtFirst : "Date Début",
         dtLast : "Date Fin",
         grdSafeList: 
         {
-            clmRef: "Seri",
-            clmRefNo: "Sıra",
-            clmOutputName : "Çıkış Hesabı",
-            clmInputName : "Giriş Hesabı",
+            clmRef: "Série",
+            clmRefNo: "Ligne",
+            clmOutputName :  "Compte Entrant",
+            clmInputName :  "Compte Entrant",
             clmDate: "Date",
-            clmAmount : "Tutar",
+            clmAmount : "Montant" ,
             clmDate : "Date",
         },
 
@@ -4625,25 +4629,25 @@ export const langFr =
         txtRefRefno : "Série-Numéro Doc.",
         menu  : "Paiement",
         cmbDepot: "Réserve",
-        cmbCashSafe : "Nakit Kasası",
-        cmbCheckSafe : "Çek Kasası",
-        cmbBank : "Banka Seçimi",
+        cmbCashSafe : "Caisse Espèce",
+        cmbCheckSafe : "Caisse Chèque",
+        cmbBank : "Sélection Banque",
         txtCustomerCode : "Code fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
-        txtAmount : "Tutar",
-        txtDiscount : "İndirim",
-        txtMargin : "Marj",
-        txtVat : "Kdv",
-        txtTotal : "Genel Toplam",
-        dtShipDate :"Sevk Tarihi",
+        txtAmount : "Montant" ,
+        txtDiscount : "Remise",
+        txtMargin : "Marge",
+        txtVat : "TVA",
+        txtTotal : "Total Général",
+        dtShipDate :"Date Expédition",
         getDispatch : "Recherche BL",
-        cash : "Tutar",
+        cash : "Montant" ,
         description :"Motif",
         checkReference : "Référence",
         btnCash : "Espèce",
-        btnCheck : "Çek",
-        btnBank : "Havale",
+        btnCheck : "Chèque",
+        btnBank : "Virement",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -4658,13 +4662,13 @@ export const langFr =
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
         grdDocPayments: 
         {
             clmCreateDate: "Date d'Enregistrement",
-            clmAmount : "Tutar",
-            clmOutputName : "Kasa/Banka",
+            clmAmount : "Montant" ,
+            clmOutputName : "Caisse/Banque",
             clmDescription : "Motif"
         },
         msgDocValid:
@@ -4738,45 +4742,45 @@ export const langFr =
         },
         popCash : 
         {
-            title: "Nakit Girişi",
-            btnApprove : "Ekle"
+            title: "Saisie Espèce",
+            btnApprove : "Ajoute"
         },
         popCheck : 
         {
-            title: "Çek Girişi",
-            btnApprove : "Ekle"
+            title: "Saisie Chèque",
+            btnApprove : "Ajoute"
         },
         popBank : 
         {
-            title: "Havale Girişi",
-            btnApprove : "Ekle"
+            title: "Saise Virement",
+            btnApprove : "Ajoute"
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Cari Kodu Boş Geçilemez",
-        validDocDate : "Tarih Seçmelisiniz",
+        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validDocDate : "Sélectionner Date" ,
     },
     fns_02_002 :
     {
         txtRefRefno : "Série-Numéro Doc.",
-        menu : "Tahsilat",
+        menu : "Encaissement",
         cmbDepot: "Réserve",
-        cmbCashSafe : "Nakit Kasası",
-        cmbCheckSafe : "Çek Kasası",
-        cmbBank : "Banka Seçimi",
+        cmbCashSafe : "Caisse Espèce",
+        cmbCheckSafe : "Caisse Chèque",
+        cmbBank : "Sélection Banque",
         txtCustomerCode : "Code fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
-        txtAmount : "Tutar",
-        txtTotal : "Genel Toplam",
-        dtShipDate :"Sevk Tarihi",
-        cash : "Tutar",
+        txtAmount : "Montant" ,
+        txtTotal : "Total Général",
+        dtShipDate :"Date Expédition",
+        cash : "Montant" ,
         description :"Motif",
         checkReference : "Référence",
         btnCash : "Espèce",
-        btnCheck : "Çek",
-        btnBank : "Havale",
+        btnCheck : "Chèque",
+        btnBank : "Virement",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -4791,13 +4795,13 @@ export const langFr =
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
         grdDocPayments: 
         {
             clmCreateDate: "Date d'Enregistrement",
-            clmAmount : "Tutar",
-            clmInputName : "Kasa/Banka",
+            clmAmount : "Montant" ,
+            clmInputName : "Caisse/Banque",
             clmDescription : "Motif"
         },
         msgDocValid:
@@ -4871,24 +4875,24 @@ export const langFr =
         },
         popCash : 
         {
-            title: "Nakit Girişi",
-            btnApprove : "Ekle"
+            title: "Entrée Espèce",
+            btnApprove : "Ajoute"
         },
         popCheck : 
         {
-            title: "Çek Girişi",
-            btnApprove : "Ekle"
+            title: "Entrée Chèque",
+            btnApprove : "Ajoute"
         },
         popBank : 
         {
-            title: "Havale Girişi",
-            btnApprove : "Ekle"
+            title: "Saise Virement",
+            btnApprove : "Ajoute"
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Cari Kodu Boş Geçilemez",
-        validDocDate : "Tarih Seçmelisiniz",
+        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validDocDate : "Sélectionner Date" ,
     },
     fns_03_001 :
     {
@@ -4899,7 +4903,7 @@ export const langFr =
         cmbTypeData : 
         {
             cash : "Espèce",
-            check : "Çek",
+            check : "Chèque",
             pos : "Pos"
         },
         pg_txtCode : 
@@ -4950,13 +4954,13 @@ export const langFr =
         txtCode : "Code",
         txtName :"Nom",
         txtIban :"Iban",
-        validCode :"Vous ne pouvez ne pas sasir le code !",
+        validCode :"Vous ne pouvez ne pas saisir le code !",
         validIban : "Iban Boş Geçilemez !",
-        cmbCurrentyType :"Döviz",
+        cmbCurrentyType :"Devise",
         txtSwift: "Swift",
-        txtOffical :"Yetkili",
-        txtPhone :  "Telefon",
-        txtAdress :"Adres",
+        txtOffical :"Administrateur",
+        txtPhone :  "Téléphone",
+        txtAdress :"Adresse",
         pg_txtCode : 
         {
             title : "Kasa Seçimi",
@@ -5003,19 +5007,19 @@ export const langFr =
     fns_03_003 :
     {
         txtRefRefno : "Série-Numéro Doc.",
-        cmbOutAccount: "Çıkış Hesabı",
-        cmbInAccount: "Giriş Hesabı",
+        cmbOutAccount:  "Compte Entrant",
+        cmbInAccount:  "Compte Entrant",
         dtDocDate : "Date",
-        txtAmount : "Tutar",
-        txtTotal : "Genel Toplam",
+        txtAmount : "Montant" ,
+        txtTotal : "Total Général",
         description :"Motif",
-        amount : "Tutar",
-        cmbSafe : "Çıkış Hesabı",
-        cmbSafe2 : "Giriş Hesabı",
-        btnSafeToSafe : "Kasalar Arası ",
-        btnSafeToBank : "Kasadan Bankaya ",
-        btnBankToSafe : "Bankadan Kasaya ",
-        btnBankToBank : "Bankalar Arası ",
+        amount : "Montant" ,
+        cmbSafe :  "Compte Entrant",
+        cmbSafe2 :  "Compte Entrant",
+        btnSafeToSafe :  "Entre Caisse",
+        btnSafeToBank :  "De Caisse à Banque",
+        btnBankToSafe :  "De Banque à Caisse",
+        btnBankToBank :  "Entre Banque ",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -5026,9 +5030,9 @@ export const langFr =
         grdDocVirement: 
         {
             clmCreateDate: "Date d'Enregistrement",
-            clmAmount : "Tutar",
-            clmInputName : "Giriş Hesabı",
-            clmOutputName : "Çıkış Hesabı",
+            clmAmount : "Montant" ,
+            clmInputName :  "Compte Entrant",
+            clmOutputName :  "Compte Sortant",
             clmDescription : "Motif"
         },
         msgDocValid:
@@ -5102,29 +5106,29 @@ export const langFr =
         },
         popSafeToSafe: 
         {
-            title: "Kasadan Kasaya Virman",
-            btnApprove : "Ekle",
+            title:  "Virement Entre Caisse ",
+            btnApprove : "Ajoute",
         },
         popSafeToBank: 
         {
-            title: "Kasadan Bankaya Virman",
-            btnApprove : "Ekle",
+            title:  "Virement de Banque à Caisse ",
+            btnApprove : "Ajoute",
         },
         popBankToSafe: 
         {
-            title: "Bankadan Kasaya Virman",
-            btnApprove : "Ekle",
+            title: "Virement de Banque à Caisse ",
+            btnApprove : "Ajoute",
         },
         popBankToBank: 
         {
-            title: "Bankadan Bankaya Virman",
-            btnApprove : "Ekle",
+            title: "Virement Entre Banque  ",
+            btnApprove : "Ajoute",
         },
         
         validRef : "Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
-        validAccount : "Hesap Seçmelisiniz",
-        validDocDate : "Tarih Seçmelisiniz",
+        validAccount : "Sélectionner un Compte ",
+        validDocDate : "Sélectionner Date" ,
     },
     set_01_001 :
     {
@@ -5153,7 +5157,7 @@ export const langFr =
         popTaxSugar : 
         {
             title: "Şeker Oranı Ekleme",
-            btnApprove : "Ekle",
+            btnApprove : "Ajoute",
             minValue : "Min. Şeker Oranı(100ML/GR)",
             maxValue : "Max.  Şeker Oranı(100ML/GR)",
             price : "Çarpan Fiyat",
@@ -5243,10 +5247,10 @@ export const langFr =
         txtCustomerCode : "Fournisseur",
         cmbDevice :"Cihaz",
         txtTicketno : "Fiş I.D",
-        numTicketAmount : "Tutar",
-        cmbPayType :"Ödeme Tipi",
+        numTicketAmount : "Montant" ,
+        cmbPayType :"Mode de Règlement ",
         cmbUser :"Kulanıcı",
-        txtItem :"Ürün Kodu",
+        txtItem :"Code Produit",
         ckhDoublePay : "Birden Fazla Ödeme",
         pg_txtCustomerCode : 
         {
@@ -5254,7 +5258,7 @@ export const langFr =
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
         grdSaleTicketReport: 
         {
@@ -5262,11 +5266,11 @@ export const langFr =
             clmTime: "Saat",
             slmUser: "Utilisateur",
             clmCustomer : "Fournisseur",
-            clmDiscount : "İndirim",
+            clmDiscount : "Remise",
             clmLoyalyt: "Loyalyt",
             clmHT : "Ara Toplam",
             clmVTA : "Taxe",
-            clmTTC : "Toplam",
+            clmTTC : "Total",
             clmTicketID :"Fiş I.D",
         },
         pg_txtItem:
@@ -5281,16 +5285,16 @@ export const langFr =
             clmName : "Nom du produit",
             clmQuantity : "Quantité",
             clmPrice : "Prix ",
-            clmTotal : "Tutar"
+            clmTotal : "Montant" 
         },
         grdSaleTicketPays : 
         {
-            clmPayName : "Ödeme Tipi", 
-            clmTotal : "Tutar",
+            clmPayName : "Mode de Règlement ", 
+            clmTotal : "Montant" ,
         },
         popDetail : 
         {
-            title : "Fiş Detayı"
+            title : "Détail Ticket "
         }
 
     },
@@ -5306,14 +5310,14 @@ export const langFr =
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
         grdCustomerPointReport: 
         {
             clmCode: "Code",
             clmTitle: "Nom",
             clmPoint: "Puan",
-            clmLdate : "Son Güncelleme Tarihi",
+            clmLdate : "Dernière Date MAJ",
         },
 
     },
@@ -5331,19 +5335,19 @@ export const langFr =
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
         grdPurcOrdList: 
         {
-            clmRef: "Seri",
-            clmRefNo: "Sıra",
+            clmRef: "Série",
+            clmRefNo: "Ligne",
             clmPrice: "Prix ",
             clmOutputCode : "Code fournisseur",
             clmOutputName : "Nom fournisseur",
             clmDate: "Date",
-            clmVat : "KDV",
-            clmAmount : "Tutar",
-            clmTotal : "Toplam",
+            clmVat : "TVA",
+            clmAmount : "Montant" ,
+            clmTotal : "Total",
             clmInputName : "Réserve",
         },
     },
@@ -5361,19 +5365,19 @@ export const langFr =
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
         grdSlsOrdList: 
         {
-            clmRef: "Seri",
-            clmRefNo: "Sıra",
+            clmRef: "Série",
+            clmRefNo: "Ligne",
             clmPrice: "Prix ",
             clmInputCode : "Code fournisseur",
             clmInputName : "Nom fournisseur",
             clmDate: "Date",
-            clmVat : "KDV",
-            clmAmount : "Tutar",
-            clmTotal : "Toplam",
+            clmVat : "TVA",
+            clmAmount : "Montant" ,
+            clmTotal : "Total",
             clmOutputName :"Réserve",
         },
 
@@ -5385,12 +5389,12 @@ export const langFr =
         txtCustomerCode : "Code fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
-        txtAmount : "Tutar",
-        txtDiscount : "İndirim",
-        txtMargin : "Marj",
-        txtVat : "Kdv",
-        txtTotal : "Genel Toplam",
-        dtShipDate :"Sevk Tarihi",
+        txtAmount : "Montant" ,
+        txtDiscount : "Remise",
+        txtMargin : "Marge",
+        txtVat : "TVA",
+        txtTotal : "Total Général",
+        dtShipDate :"Date Expédition",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -5405,14 +5409,14 @@ export const langFr =
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
         pg_txtItemsCode : 
         {
             title : "Sélectionner Stock",
             clmCode :  "CODE STOCK",
             clmName : "NOM STOCK",
-            clmMulticode : "TEDARİKÇİ KODU"
+            clmMulticode : "CODE FOURNISSEUR"
         },
         grdPurcoffers: 
         {
@@ -5420,21 +5424,21 @@ export const langFr =
             clmItemName: "Nom",
             clmPrice: "Prix ",
             clmQuantity : "Quantité",
-            clmDiscount : "İndirim",
-            clmDiscountRate : "İndirim %",
-            clmVat : "KDV",
-            clmAmount : "Tutar",
-            clmTotal : "Genel Toplam",
+            clmDiscount : "Remise",
+            clmDiscountRate : "Remise %",
+            clmVat : "TVA",
+            clmAmount : "Montant" ,
+            clmTotal : "Total Général",
             clmCreateDate: "Date d'Enregistrement",
-            clmMargin :"Marj",
+            clmMargin :"Marge",
             clmMulticode :"T. Kodu",
-            clmBarcode :"Barkodu"
+            clmBarcode :"Code Barre"
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            title: "Télécharger Document",
+            Percent : "Pourcentage",
+            Price : "Montant" 
         },
         popPassword : 
         {
@@ -5444,9 +5448,9 @@ export const langFr =
         },
         popDesign : 
         {
-            title: "Dizayn seçimi",
-            design : "Dizayn",
-            lang : "Evrak Dili"
+            title: "Choix du Désign",
+            design : "Design" ,
+            lang : "Langue Document" 
         },
         msgDocValid:
         {
@@ -5486,19 +5490,19 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonne",
-            msg: "Vergiyi Sıfırlamak istediğinize eminmisiniz !"
+            msg: "Etes vous sur de Vouloir Mettre à Zéro la TVA !"
         },
         msgDiscountPrice:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Tutardan Büyük İndirim Yapılamaz !"
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieur au Montant Total !"
         },
         msgDiscountPercent:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Tutardan Büyük İndirim Yapılamaz !"
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieur au Montant Total !"
         },
         msgLocked:
         {
@@ -5522,7 +5526,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Faturaya Çevirilmiş Evrak Kilidi Açılamaz"
+            msg: "Document Transformé en Facture Vous ne Pouvez Dévérouiller"
         },
         msgGetLocked:
         {
@@ -5540,7 +5544,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "İndirim Tutardan Yüksek Olamaz !"
+            msg: "Remise ne peut être Supérieur au Total ! "
         },
         msgItemNotFound:
         {
@@ -5572,30 +5576,30 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Bulunamayan Kodlar :"
+            msg: "Code Non Retrouvé"
         },
         msgMultiCodeCount:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Eklenen Ürün Sayısı"
+            msg: "Nombre de Produit Ajouté"
         },
         popMultiItem:
         {
-            title: "Toplu Ürün Ekleme",
+            title: "Ajout Groupé de Produit",
             btnApprove: "Ürünleri Getir",
             btnClear : "Temizle",
-            btnSave : "Satırları Ekle",
+            btnSave : "Ajouter Lignes",
         },
         cmbMultiItemType : 
         {
-            title : "Arama Şekli",
+            title : "Mode de Recherche",
             customerCode : "Tedarikçi Koduna Göre",
-            ItemCode : "Ürün Koduna Göre"
+            ItemCode : "En Fonction du Code Produit"
         },
         grdMultiItem : 
         {
-            clmCode : "Ürün Kodu",
+            clmCode : "Code Produit",
             clmMulticode : "Tedarikçi Kodun",
             clmName : "Nom du produit",
             clmQuantity : "Quantité"
@@ -5603,16 +5607,16 @@ export const langFr =
         msgMultiData:
         {
             title: "Attention",
-            btn01: "Listeyi Temizle ve Hepsini Ekle",
-            btn02: "Yeni Yazılanları Listeye Ekle",
-            msg: "Listede Ürünler Var! "
+            btn01: "Effacer Liste et Ajoute le Tout",
+            btn02: "Inclure Les Nouvelles Saisies à la Liste",
+            msg: "Produits Présents dans la Liste! "
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Cari Kodu Boş Geçilemez",
-        validDocDate : "Tarih Seçmelisiniz",
-        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz"
+        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validDocDate : "Sélectionner Date" ,
+        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter"
     },
     tkf_02_002 :
     {
@@ -5621,12 +5625,12 @@ export const langFr =
         txtCustomerCode : "Code fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
-        txtAmount : "Tutar",
-        txtDiscount : "İndirim",
-        txtMargin : "Marj",
-        txtVat : "Kdv",
-        txtTotal : "Genel Toplam",
-        dtShipDate :"Sevk Tarihi",
+        txtAmount : "Montant" ,
+        txtDiscount : "Remise",
+        txtMargin : "Marge",
+        txtVat : "TVA",
+        txtTotal : "Total Général",
+        dtShipDate :"Date Expédition",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -5641,7 +5645,7 @@ export const langFr =
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TYPE",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "GENRE"
         },
         pg_txtItemsCode : 
         {
@@ -5655,19 +5659,19 @@ export const langFr =
             clmItemName: "Nom",
             clmPrice: "Prix ",
             clmQuantity : "Quantité",
-            clmDiscount : "İndirim",
-            clmDiscountRate : "İndirim %",
-            clmVat : "KDV",
-            clmAmount : "Tutar",
-            clmTotal : "Genel Toplam",
+            clmDiscount : "Remise",
+            clmDiscountRate : "Remise %",
+            clmVat : "TVA",
+            clmAmount : "Montant" ,
+            clmTotal : "Total Général",
             clmCreateDate: "Date d'Enregistrement",
-            clmMargin :"Marj"
+            clmMargin :"Marge"
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            title: "Télécharger Document",
+            Percent : "Pourcentage",
+            Price : "Montant" 
         },
         popPassword : 
         {
@@ -5713,19 +5717,19 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonne",
-            msg: "Vergiyi Sıfırlamak istediğinize eminmisiniz !"
+            msg: "Etes vous sur de Vouloir Mettre à Zéro la TVA !"
         },
         msgDiscountPrice:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Tutardan Büyük İndirim Yapılamaz !"
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieur au Montant Total !"
         },
         msgDiscountPercent:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Tutardan Büyük İndirim Yapılamaz !"
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieur au Montant Total !"
         },
         msgLocked:
         {
@@ -5749,7 +5753,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Faturaya Çevirilmiş Evrak Kilidi Açılamaz"
+            msg: "Document Transformé en Facture Vous ne Pouvez Dévérouiller"
         },
         msgGetLocked:
         {
@@ -5767,7 +5771,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "İndirim Tutardan Yüksek Olamaz !"
+            msg: "Remise ne peut être Supérieur au Total ! "
         },
         msgItemNotFound:
         {
@@ -5784,15 +5788,15 @@ export const langFr =
         msgUnderPrice1:
         {
             title: "Attention",
-            btn01: "Evet",
+            btn01: "Oui",
             btn02: "Abandonne",
-            msg: "Maliyetten Düşük Fiyat !! Devam Etmek İstiyormusunuz"
+            msg: "Prix Inférieur à l'Achat ! ! Voulez Vous Continuer"
         },
         msgUnderPrice2:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Maliyet Fiyatından Daha Düşük Satılamaz !!"
+            msg: "Vous ne Pouvez Vendre en Dessous du Prix d'Achat ! !"
         },
         msgCombineItem:
         {
@@ -5803,38 +5807,38 @@ export const langFr =
         },
         popDesign : 
         {
-            title: "Dizayn seçimi",
-            design : "Dizayn",
-            lang : "Evrak Dili"
+            title: "Choix du Désign",
+            design : "Design" ,
+            lang : "Langue Document" 
         },
         msgMissItemCode:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Bulunamayan Kodlar :"
+            msg: "Code Non Retrouvé"
         },
         msgMultiCodeCount:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Eklenen Ürün Sayısı"
+            msg: "Nombre de Produit Ajouté"
         },
         popMultiItem:
         {
-            title: "Toplu Ürün Ekleme",
+            title: "Ajout Groupé de Produit",
             btnApprove: "Ürünleri Getir",
             btnClear : "Temizle",
-            btnSave : "Satırları Ekle",
+            btnSave : "Ajoujer Lignes",
         },
         cmbMultiItemType : 
         {
-            title : "Arama Şekli",
+            title : "Mode de Recherche",
             customerCode : "Tedarikçi Koduna Göre",
-            ItemCode : "Ürün Koduna Göre"
+            ItemCode : "En Fonction du Code Produit"
         },
         grdMultiItem : 
         {
-            clmCode : "Ürün Kodu",
+            clmCode : "Code Produit",
             clmMulticode : "Tedarikçi Kodun",
             clmName : "Nom du produit",
             clmQuantity : "Quantité"
@@ -5842,23 +5846,23 @@ export const langFr =
         msgMultiData:
         {
             title: "Attention",
-            btn01: "Listeyi Temizle ve Hepsini Ekle",
-            btn02: "Yeni Yazılanları Listeye Ekle",
-            msg: "Listede Ürünler Var! "
+            btn01: "Effacer Liste et Ajoute le Tout",
+            btn02: "Inclure Les Nouvelles Saisies à la Liste",
+            msg: "Produits Présents dans la Liste! "
         },
         popDetail:
         {
-            title: "Evrak İçeriği",
-            count: "Toplam Satır",
+            title: "Contenu Document",
+            count:  "Quantité Ligne",
             quantity: "Quantité Total",
             quantity2: "2. Birim Toplamı "
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Cari Kodu Boş Geçilemez",
-        validDocDate : "Tarih Seçmelisiniz",
-        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz"
+        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validDocDate : "Sélectionner Date" ,
+        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter"
 
     },
     proces_01_001 : 
@@ -5871,26 +5875,26 @@ export const langFr =
         btnGet :"Apporter",
         chkMasterBarcode : "Regrouper code barre ",
         txtMulticode : "Code Fournisseur",
-        multicodePlaceHolder : "Aratmak İstediğiniz Tedarikçi Kodlarını Giriniz",
-        barkodPlaceHolder :"Aratmak İstediğiniz Bir yada Birden Fazla Ürün Kodu yada Barkod Giriniz",
-        ItemNamePlaceHolder :"Ürün Adının Tamamını yada İçinde Geçen Bir Hece Giriniz",
+        multicodePlaceHolder : "Veuillez Entrer les Codes Fournisseur Recherchés" ,
+        barkodPlaceHolder :"Veuillez Entrer Le ou Les Codes Produits ou Codes Barres",
+        ItemNamePlaceHolder :"Veuillez Entrer le Nom Complet ou une Syllabe",
         btnOk : "Güncelle",
         grdListe : 
         {
-            clmCode: "Ürün Kodu",
+            clmCode: "Code Produit",
             clmName : "Nom du produit",
             clmMainGrp : "Famille produit",
             clmCustomer : "Fournisseur",
-            clmSname : "Ürün Kısa Adı",
+            clmSname : "Nom Court",
             clmMulticode : "T. Kodu",
             clmUnit : "Unité",
             clmBarcode : "Code barre",
             clmCostPrice : "Coût achat",
-            clmPriceSale : "Satış Fiyatı",
+            clmPriceSale : "Prix Vente",
             clmVat : "Taxe",
-            clmMinPrice : "Min Fiyatı",
-            clmMaxPrice : "Max  Fiyatı",
-            clmStatus : "Durum",
+            clmMinPrice : "Prix Min",
+            clmMaxPrice : "Prix Max",
+            clmStatus : "Etat",
             clmNetMargin : "Marge Nette",
             clmMargin : "Marge Brute"
         },
@@ -5922,15 +5926,16 @@ export const langFr =
         txtPrice : "Prix ",
         txtDescription : "Motif",
         txtItemName : "Nom du produit",
-        txtQuantity : "Adet",
-        valPrice : "Fiyat 0 dan Küçük Olamaz",
-        valCode : "Lütfen Stok Girin",
-        valName : "Ürün Adı Boş Olamaz",
+        txtQuantity : "Adet", //BAK
+        valPrice : "Fiyat 0 dan Küçük Olamaz", //BAK
+        valCode : "Lütfen Stok Girin", //BAK
+        valName : "Ürün Adı Boş Olamaz", //BAK
         pg_txtRef:
         {
             title: "Sélectionner Stock",
             clmCode: "CODE",
             clmName: "NOM", 
+            clmStatus: "DURUM" //BAK
         },
         msgSave:
         {

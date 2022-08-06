@@ -186,6 +186,17 @@ export default class itemCard extends React.PureComponent
         //TEDARİKÇİ FİYAT GETİR İŞLEMİ.  
         await this.itemsPriceSupply.load({ITEM_GUID:this.itemsObj.dt()[0].GUID,TYPE:1})  
         await this.itemsPriceLogObj.load({ITEM_GUID:this.itemsObj.dt()[0].GUID})
+
+        if(this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE').length > 0 && this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE').length == 1)
+        {
+            this.txtLastBuyPrice.value = this.itemsPriceSupply.dt()[0].CUSTOMER_PRICE
+        }
+        else if(this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE').length > 0)
+        {
+            this.txtLastBuyPrice.value = this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[1].CUSTOMER_PRICE
+        }
+        
+
         this.txtBarcode.readOnly = true;
         let tmpQuery = 
         {
@@ -736,7 +747,7 @@ export default class itemCard extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,NAME FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                                query : "SELECT GUID,CODE,NAME,STATUS FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
@@ -756,8 +767,9 @@ export default class itemCard extends React.PureComponent
                                         ]
                                     }
                                     >
-                                        <Column dataField="CODE" caption={this.t("pg_txtRef.clmCode")} width={150} />
-                                        <Column dataField="NAME" caption={this.t("pg_txtRef.clmName")} width={650} defaultSortOrder="asc" />
+                                        <Column dataField="CODE" caption={this.t("pg_txtRef.clmCode")} width={'20%'} />
+                                        <Column dataField="NAME" caption={this.t("pg_txtRef.clmName")} width={'70%'} defaultSortOrder="asc" />
+                                        <Column dataField="STATUS" caption={this.t("pg_txtRef.clmStatus")} width={'10%'} />
                                     </NdPopGrid>
                                 </Item>
                                 {/* cmbItemGrp */}
@@ -1016,7 +1028,6 @@ export default class itemCard extends React.PureComponent
                                     }}/>
                                 </div>
                             </div>
-                            
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -1059,22 +1070,22 @@ export default class itemCard extends React.PureComponent
                                 <Item title={this.t("tabTitlePrice")}>
                                     {/* FİYAT PANELI */}
                                     <div className='row px-2 py-2'>
-                                        <div className='col-2'>
+                                        <div className='col-1'>
                                             <NdNumberBox id="txtCostPrice" parent={this} title={this.t("txtCostPrice")}  titleAlign={"top"} tabIndex={this.tabIndex}
                                             dt={{data:this.itemsObj.dt('ITEMS'),field:"COST_PRICE"}}
                                             format={"#,##0.000"} step={0.1}
                                             param={this.param.filter({ELEMENT:'txtCostPrice',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtCostPrice',USERS:this.user.CODE})}>
                                             </NdNumberBox>
-                                        </div>
-                                        <div className='col-2'>
+                                        </div>                                        
+                                        <div className='col-1'>
                                             <NdNumberBox id="txtTotalExtraCost" parent={this} title={this.t("txtTotalExtraCost")}  titleAlign={"top"} tabIndex={this.tabIndex}
                                             format={"#,##0.000"} readOnly={true}
                                             param={this.param.filter({ELEMENT:'txtTotalExtraCost',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtTotalExtraCost',USERS:this.user.CODE})}>
                                             </NdNumberBox>
                                         </div>
-                                        <div className='col-2'>
+                                        <div className='col-1'>
                                             <NdNumberBox id="txtMinSalePrice" parent={this} title={this.t("txtMinSalePrice")} titleAlign={"top"} tabIndex={this.tabIndex}
                                             dt={{data:this.itemsObj.dt('ITEMS'),field:"MIN_PRICE"}}
                                             format={"#,##0.000"} step={0.1}
@@ -1083,7 +1094,7 @@ export default class itemCard extends React.PureComponent
                                             access={this.access.filter({ELEMENT:'txtMinSalePrice',USERS:this.user.CODE})}>
                                             </NdNumberBox>
                                         </div>
-                                        <div className='col-2'>
+                                        <div className='col-1'>
                                             <NdNumberBox id="txtMaxSalePrice" parent={this} title={this.t("txtMaxSalePrice")} titleAlign={"top"} tabIndex={this.tabIndex}
                                             dt={{data:this.itemsObj.dt('ITEMS'),field:"MAX_PRICE"}}
                                             format={"#,##0.000"} step={0.1}
@@ -1092,27 +1103,33 @@ export default class itemCard extends React.PureComponent
                                             access={this.access.filter({ELEMENT:'txtMaxSalePrice',USERS:this.user.CODE})}>
                                             </NdNumberBox>
                                         </div>
-                                        <div className='col-2'>
-                                            <NdNumberBox id="txtLastBuyPrice" parent={this} title={this.t("txtLastBuyPrice")} titleAlign={"top"}
+                                        <div className='col-1'>
+                                            <NdNumberBox id="txtLastBuyPrice" parent={this} title={this.t("txtLastBuyPrice")} titleAlign={"top"} readOnly={true}
                                             format={"#,##0.000"} step={0.1}
                                             param={this.param.filter({ELEMENT:'txtLastBuyPrice',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtLastBuyPrice',USERS:this.user.CODE})}/>
                                         </div>
-                                        <div className='col-2 py-3'>
+                                        <div className='col-1'>
+                                            <NdNumberBox id="txtLastSalePrice" parent={this} title={this.t("txtLastSalePrice")} titleAlign={"top"}
+                                            format={"#,##0.000"} step={0.1}
+                                            param={this.param.filter({ELEMENT:'txtLastSalePrice',USERS:this.user.CODE})}
+                                            access={this.access.filter({ELEMENT:'txtLastSalePrice',USERS:this.user.CODE})}/>
+                                        </div>
+                                        <div className='col-1 offset-5 py-3'>
                                             <Toolbar>
-                                            <Item location="after">
-                                                    <Button icon="add"
-                                                    text={'Satış Fiyat Ekle'}
-                                                    onClick={()=>
-                                                    {                                                        
-                                                        this.dtPopPriStartDate.value = "1970-01-01"
-                                                        this.dtPopPriEndDate.value = "1970-01-01"
-                                                        this.txtPopPriQuantity.value = 1
-                                                        this.txtPopPriPrice.value = 0
+                                                <Item location="after">
+                                                        <Button icon="add"
+                                                        text={'Satış Fiyat Ekle'}
+                                                        onClick={()=>
+                                                        {                                                        
+                                                            this.dtPopPriStartDate.value = "1970-01-01"
+                                                            this.dtPopPriEndDate.value = "1970-01-01"
+                                                            this.txtPopPriQuantity.value = 1
+                                                            this.txtPopPriPrice.value = 0
 
-                                                        this.popPrice.show();
-                                                    }}/>
-                                            </Item>
+                                                            this.popPrice.show();
+                                                        }}/>
+                                                </Item>
                                             </Toolbar>
                                         </div>
                                     </div>
@@ -1466,7 +1483,7 @@ export default class itemCard extends React.PureComponent
                                                 if(e.validationGroup.validate().status == "valid")
                                                 {
                                                     //FİYAT GİRERKEN MALİYET FİYAT KONTROLÜ
-                                                    if(this.txtCostPrice.value != 0 && this.txtCostPrice.value >= this.txtPopPriPrice.value)
+                                                    if(this.prmObj.filter({ID:'SalePriceCostCtrl'}).getValue() && this.txtCostPrice.value != 0 && this.txtCostPrice.value >= this.txtPopPriPrice.value)
                                                     {
                                                         let tmpConfObj =
                                                         {

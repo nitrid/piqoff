@@ -143,28 +143,30 @@ export default class NdPopGrid extends Base
         else
         {
             return (
-                <div className="row">
-                    <div className="row pb-1">
-                        <div className="col-12">
-                            <NdTextBox id={"txt" + this.props.id} parent={this} simple={true} 
-                            onChange={(async()=>{this.getData()}).bind(this)}
-                            />     
-                        </div>                            
-                    </div>           
-                    <div className="row">
-                        <div className="col-6 py-2">
-                            <NdButton parent={this} id={"btn1_" + this.props.id} text={this.lang.t('popGrid.btnSearch')} width={'100%'} type={"default"}
-                                onClick={()=> {this.getData()}}
-                                param={this.param.btn} 
-                                access={this.access.btn} 
-                            />
-                        </div>
-                        <div className="col-6 py-2">
-                            <NdButton parent={this} id={"btn2_" + this.props.id} text={this.lang.t('popGrid.btnSelection')} width={'100%'} type={"default"}
-                                onClick={this._onClick}
-                                param={this.param.btn} 
-                                access={this.access.btn} 
-                            />
+                <div className="row pb-1">
+                    <div className='col-12'>
+                        <div className="row pb-1">
+                            <div className="col-12">
+                                <NdTextBox id={"txt" + this.props.id} parent={this} simple={true} 
+                                onChange={(async()=>{this.getData()}).bind(this)}
+                                />     
+                            </div>                            
+                        </div>           
+                        <div className="row">
+                            <div className="col-6 py-2">
+                                <NdButton parent={this} id={"btn1_" + this.props.id} text={this.lang.t('popGrid.btnSearch')} width={'100%'} type={"default"}
+                                    onClick={()=> {this.getData()}}
+                                    param={this.param.btn} 
+                                    access={this.access.btn} 
+                                />
+                            </div>
+                            <div className="col-6 py-2">
+                                <NdButton parent={this} id={"btn2_" + this.props.id} text={this.lang.t('popGrid.btnSelection')} width={'100%'} type={"default"}
+                                    onClick={this._onClick}
+                                    param={this.param.btn} 
+                                    access={this.access.btn} 
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>   
@@ -310,7 +312,7 @@ export default class NdPopGrid extends Base
                             dataSource={typeof this.state.data == 'undefined' ? undefined : this.state.data.store} 
                             columnWidth={this.props.columnWidth}
                             showBorders={this.props.showBorders} 
-                            columnsAutoWidth={this.props.columnsAutoWidth} 
+                            columnsAutoWidth={true} 
                             allowColumnReordering={this.props.allowColumnReordering} 
                             allowColumnResizing={this.props.allowColumnResizing} 
                             height={'100%'} 
