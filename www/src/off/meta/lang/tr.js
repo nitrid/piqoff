@@ -376,6 +376,12 @@ export const langTr =
             lDate: "Son Değiştirilme Tarihi",
             lUser : "Son Değiştiren Kullanıcı",
         },
+        msgCheckPrice:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Benzer kayıt oluşturamazsınız !"
+        },
     },
     stk_01_002: 
     {

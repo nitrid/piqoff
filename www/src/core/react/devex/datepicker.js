@@ -23,7 +23,6 @@ export default class NdDatePicker extends Base
     //#region Private
     _onValueChanged(e) 
     {           
-        console.log(e)
         this.value = e.value;
         if(typeof this.props.onValueChanged != 'undefined')
         {

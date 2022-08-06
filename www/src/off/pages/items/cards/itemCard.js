@@ -35,7 +35,13 @@ export default class itemCard extends React.PureComponent
         this.itemsObj = new itemsCls();
         this.itemsPriceSupply = new itemPriceCls();   
         this.itemsPriceLogObj = new itemLogPriceCls();    
-        this.salesPriceLogObj = new datatable    
+        this.salesPriceLogObj = new datatable()
+        this.salesPriceLogObj.selectCmd =
+        {
+            query :"SELECT * FROM [ITEM_PRICE_LOG_VW_01] WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 0 ORDER BY LDATE DESC ",
+            param : ['ITEM_GUID:string|50']
+        }
+
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
         this._onItemRendered = this._onItemRendered.bind(this)
@@ -189,29 +195,23 @@ export default class itemCard extends React.PureComponent
 
         if(this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE').length > 0 && this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE').length == 1)
         {
-            this.txtLastBuyPrice.value = this.itemsPriceSupply.dt()[0].CUSTOMER_PRICE
+            this.txtLastBuyPrice.value = this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_PRICE
         }
         else if(this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE').length > 0)
         {
             this.txtLastBuyPrice.value = this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[1].CUSTOMER_PRICE
-        }
-        
+        }        
 
         this.txtBarcode.readOnly = true;
-        let tmpQuery = 
+
+        this.salesPriceLogObj.selectCmd.value = [this.itemsObj.dt()[0].GUID]
+        await this.salesPriceLogObj.refresh();
+
+        if(this.salesPriceLogObj.length > 0)
         {
-            query :"SELECT * FROM [ITEM_PRICE_LOG_VW_01] WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 0 ORDER BY LDATE DESC ",
-            param : ['ITEM_GUID:string|50'],
-            value : [this.itemsObj.dt()[0].GUID]
+            this.txtLastSalePrice.value = this.salesPriceLogObj[0].PRICE
         }
-        let tmpData = await this.core.sql.execute(tmpQuery) 
-        if(tmpData.result.recordset.length > 0)
-        {
-            for (let i = 0; i < tmpData.result.recordset.length; i++) 
-            {
-                this.salesPriceLogObj.push(tmpData.result.recordset[i])
-            }
-        }
+
         App.instance.setState({isExecute:false})
         console.log("12 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
     }
@@ -310,7 +310,7 @@ export default class itemCard extends React.PureComponent
             if(pCode !== '')
             {
                 let tmpData = await new itemMultiCodeCls().load({MULTICODE:pCode,CUSTOMER_CODE:pSupply});
-
+                //console.log(tmpData)
                 if(tmpData.length > 0)
                 {
                     let tmpConfObj =
@@ -558,7 +558,6 @@ export default class itemCard extends React.PureComponent
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmItems" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
-                                        console.log(e.validationGroup)
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             //FIYAT GİRMEDEN KAYIT EDİLEMEZ KONTROLÜ
@@ -594,7 +593,7 @@ export default class itemCard extends React.PureComponent
                                                 
                                                 if((await this.itemsObj.save()) == 0)
                                                 {                                                    
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
+                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
                                                     this.btnSave.setState({disabled:true});
                                                     this.btnNew.setState({disabled:false});
@@ -602,7 +601,7 @@ export default class itemCard extends React.PureComponent
                                                 }
                                                 else
                                                 {
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
                                                     await dialog(tmpConfObj1);
                                                 }
                                             }
@@ -812,7 +811,7 @@ export default class itemCard extends React.PureComponent
                                             this.txtPopCustomerCode.value = "";
                                             this.txtPopCustomerName.value = "";
                                             this.txtPopCustomerItemCode.value = "";
-                                            this.txtPopCustomerPrice.value = "0";
+                                            this.txtPopCustomerPrice.value = 0;
                                             this.popCustomer.show();
                                         }
                                     }]}
@@ -1072,7 +1071,7 @@ export default class itemCard extends React.PureComponent
                                     <div className='row px-2 py-2'>
                                         <div className='col-1'>
                                             <NdNumberBox id="txtCostPrice" parent={this} title={this.t("txtCostPrice")}  titleAlign={"top"} tabIndex={this.tabIndex}
-                                            dt={{data:this.itemsObj.dt('ITEMS'),field:"COST_PRICE"}}
+                                            dt={{data:this.itemsObj.dt('ITEMS'),field:"COST_PRICE"}} readOnly={true}
                                             format={"#,##0.000"} step={0.1}
                                             param={this.param.filter({ELEMENT:'txtCostPrice',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtCostPrice',USERS:this.user.CODE})}>
@@ -1111,7 +1110,7 @@ export default class itemCard extends React.PureComponent
                                         </div>
                                         <div className='col-1'>
                                             <NdNumberBox id="txtLastSalePrice" parent={this} title={this.t("txtLastSalePrice")} titleAlign={"top"}
-                                            format={"#,##0.000"} step={0.1}
+                                            format={"#,##0.000"} step={0.1} readOnly={true}
                                             param={this.param.filter({ELEMENT:'txtLastSalePrice',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtLastSalePrice',USERS:this.user.CODE})}/>
                                         </div>
@@ -1152,6 +1151,27 @@ export default class itemCard extends React.PureComponent
                                                 if(e.rowType === "data" && e.column.dataField === "NET_MARGIN")
                                                 {
                                                     e.cellElement.style.color = e.data.NET_MARGIN_RATE < 30 ? "red" : "blue";
+                                                }
+                                            }}
+                                            onRowUpdating={async(e)=>
+                                            {
+                                                if(typeof e.newData.PRICE != 'undefined')
+                                                {
+                                                    //FİYAT GİRERKEN MALİYET FİYAT KONTROLÜ
+                                                    if(this.prmObj.filter({ID:'SalePriceCostCtrl'}).getValue() && this.txtCostPrice.value != 0 && this.txtCostPrice.value >= e.newData.PRICE)
+                                                    {
+                                                        e.cancel = true;
+                                                        e.component.cancelEditData()  
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'msgCostPriceValid',showTitle:true,title:this.t("msgCostPriceValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.t("msgCostPriceValid.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCostPriceValid.msg")}</div>)
+                                                        }
+                                                        
+                                                        await dialog(tmpConfObj);  
+                                                    }
+                                                    //********************************** */
                                                 }
                                             }}
                                             >
@@ -1295,7 +1315,7 @@ export default class itemCard extends React.PureComponent
                                                     onClick={()=>
                                                     {
                                                         this.txtPopCustomerItemCode.value = "";
-                                                        this.txtPopCustomerPrice.value = "0";
+                                                        this.txtPopCustomerPrice.value = 0;
                                                         this.popCustomer.show();
                                                     }}/>                                                                                                            
                                                 </Item>
@@ -1347,7 +1367,7 @@ export default class itemCard extends React.PureComponent
                                         </div>
                                     </div>
                                 </Item>
-                                   <Item title={this.t("tabTitleSalesPriceHistory")}>
+                                <Item title={this.t("tabTitleSalesPriceHistory")}>
                                     <div className='row px-2 py-2'>
                                         <div className='col-12'>
                                             <NdGrid parent={this} id={"grdSalesPrice"} 
@@ -1481,7 +1501,25 @@ export default class itemCard extends React.PureComponent
                                             onClick={async (e)=>
                                             {
                                                 if(e.validationGroup.validate().status == "valid")
-                                                {
+                                                {     
+                                                    // BENZER FİYAT KAYIT KONTROLÜ                                               
+                                                    let tmpCheckData = this.itemsObj.itemPrice.dt('ITEM_PRICE').where({START_DATE:new Date(moment(this.dtPopPriStartDate.value).format("YYYY-MM-DD")).toISOString()})
+                                                    tmpCheckData = tmpCheckData.where({FINISH_DATE:new Date(moment(this.dtPopPriEndDate.value).format("YYYY-MM-DD")).toISOString()})
+                                                    tmpCheckData = tmpCheckData.where({TYPE:0})
+                                                    tmpCheckData = tmpCheckData.where({QUANTITY:this.txtPopPriQuantity.value})
+                                                    
+                                                    if(tmpCheckData.length > 0)
+                                                    {
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'msgCheckPrice',showTitle:true,title:this.t("msgCheckPrice.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.t("msgCheckPrice.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCheckPrice.msg")}</div>)
+                                                        }
+                                                        await dialog(tmpConfObj);
+                                                        return
+                                                    }
+                                                    //*********************************** */
                                                     //FİYAT GİRERKEN MALİYET FİYAT KONTROLÜ
                                                     if(this.prmObj.filter({ID:'SalePriceCostCtrl'}).getValue() && this.txtCostPrice.value != 0 && this.txtCostPrice.value >= this.txtPopPriPrice.value)
                                                     {
@@ -1491,9 +1529,7 @@ export default class itemCard extends React.PureComponent
                                                             button:[{id:"btn01",caption:this.t("msgCostPriceValid.btn01"),location:'after'}],
                                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCostPriceValid.msg")}</div>)
                                                         }
-                                                        
                                                         await dialog(tmpConfObj);
-
                                                         return;
                                                     }
                                                     //********************************** */
@@ -1503,8 +1539,8 @@ export default class itemCard extends React.PureComponent
                                                     tmpEmpty.TYPE_NAME = 'Standart'
                                                     tmpEmpty.ITEM_GUID = this.itemsObj.dt()[0].GUID 
                                                     tmpEmpty.DEPOT = '00000000-0000-0000-0000-000000000000'
-                                                    tmpEmpty.START_DATE = this.dtPopPriStartDate.value
-                                                    tmpEmpty.FINISH_DATE = this.dtPopPriEndDate.value
+                                                    tmpEmpty.START_DATE = new Date(moment(this.dtPopPriStartDate.value).format("YYYY-MM-DD")).toISOString()
+                                                    tmpEmpty.FINISH_DATE = new Date(moment(this.dtPopPriEndDate.value).format("YYYY-MM-DD")).toISOString()
                                                     tmpEmpty.PRICE = this.txtPopPriPrice.value
                                                     tmpEmpty.QUANTITY = this.txtPopPriQuantity.value
 
@@ -1850,6 +1886,25 @@ export default class itemCard extends React.PureComponent
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
                                                 {
+                                                    // BENZER FİYAT KAYIT KONTROLÜ                                               
+                                                    let tmpCheckData = this.itemsObj.itemPrice.dt('ITEM_PRICE').where({START_DATE:new Date(moment(this.dtPopPriStartDate.value).format("YYYY-MM-DD")).toISOString()})
+                                                    tmpCheckData = tmpCheckData.where({FINISH_DATE:new Date(moment(this.dtPopPriEndDate.value).format("YYYY-MM-DD")).toISOString()})
+                                                    tmpCheckData = tmpCheckData.where({TYPE:0})
+                                                    tmpCheckData = tmpCheckData.where({QUANTITY:this.txtPopPriQuantity.value})
+                                                    
+                                                    if(tmpCheckData.length > 0)
+                                                    {
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'msgCheckPrice',showTitle:true,title:this.t("msgCheckPrice.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.t("msgCheckPrice.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCheckPrice.msg")}</div>)
+                                                        }
+                                                        await dialog(tmpConfObj);
+                                                        return
+                                                    }
+                                                    //*********************************** */
+
                                                     let tmpEmptyMulti = {...this.itemsObj.itemMultiCode.empty};
                                                     
                                                     tmpEmptyMulti.CUSER = this.core.auth.data.CODE,  
@@ -1875,10 +1930,10 @@ export default class itemCard extends React.PureComponent
                                                     // Min ve Max Fiyat 
                                                     let tmpMinData = this.prmObj.filter({ID:'ItemMinPricePercent'}).getValue()
                                                     let tmpMinPrice = this.txtPopCustomerPrice.value + (this.txtPopCustomerPrice.value * tmpMinData) /100
-                                                    this.txtMinSalePrice.value = (tmpMinPrice).toFixed(2)
+                                                    this.txtMinSalePrice.value = Number((tmpMinPrice).toFixed(2))
                                                     let tmpMaxData = this.prmObj.filter({ID:'ItemMaxPricePercent'}).getValue()
                                                     let tmpMAxPrice = this.txtPopCustomerPrice.value + (this.txtPopCustomerPrice.value * tmpMaxData) /100
-                                                    this.txtMaxSalePrice.value = (tmpMAxPrice).toFixed(2)
+                                                    this.txtMaxSalePrice.value = Number((tmpMAxPrice).toFixed(2))
                                                     this.taxSugarValidCheck()
                                                 }                              
                                                 else
