@@ -512,5 +512,6 @@ export const langTr =
         msg : "Local Database'i Güncellemek İstermisiniz ?",
         btn01 : "Tamam",
         btn02 : "İptal",
-    }
+    },
+    msgTransferStatus : 'Tablosu Aktarılıyor'
 }

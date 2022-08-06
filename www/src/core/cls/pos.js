@@ -46,7 +46,12 @@ export class posCls
         tmpDt.selectCmd = 
         {
             query : "SELECT * FROM [dbo].[POS_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000'))",
-            param : ['GUID:string|50']
+            param : ['GUID:string|50'],
+            local : 
+            {
+                type : "select",
+                from : "POS_VW_01",
+            }
         } 
         tmpDt.insertCmd = 
         {
@@ -68,7 +73,17 @@ export class posCls
                     "@STATUS = @PSTATUS ", 
             param : ['PGUID:string|50','PCUSER:string|25','PDEVICE:string|25','PDEPOT:string|50','PTYPE:int','PDOC_DATE:date','PCUSTOMER:string|50',
                     'PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PTICKET:string|50','PSTATUS:int'],
-            dataprm : ['GUID','CUSER','DEVICE','DEPOT_GUID','TYPE','DOC_DATE','CUSTOMER_GUID','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','TICKET','STATUS']
+            dataprm : ['GUID','CUSER','DEVICE','DEPOT_GUID','TYPE','DOC_DATE','CUSTOMER_GUID','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','TICKET','STATUS'],
+            local : 
+            {
+                type : "insert",
+                into : "POS_VW_01",
+                values : [{GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
+                LUSER_NAME : {map:'LUSER_NAME'},DEVICE : {map:'DEVICE'},DEPOT_GUID : {map:'DEPOT_GUID'},DEPOT_CODE : {map:'DEPOT_CODE'},DEPOT_NAME : {map:'DEPOT_NAME'},TYPE : {map:'TYPE'},
+                DOC_DATE : {map:'DOC_DATE',type:'date_time'},CUSTOMER_GUID : {map:'CUSTOMER_GUID'},CUSTOMER_CODE : {map:'CUSTOMER_CODE'},CUSTOMER_NAME : {map:'CUSTOMER_NAME'},CUSTOMER_POINT : {map:'CUSTOMER_POINT'},
+                FAMOUNT : {map:'FAMOUNT'},AMOUNT : {map:'AMOUNT'},DISCOUNT : {map:'DISCOUNT'},LOYALTY : {map:'LOYALTY'},VAT : {map:'VAT'},TOTAL : {map:'TOTAL'},TICKET : {map:'TICKET'},
+                REBATE_CHEQPAY : {map:'REBATE_CHEQPAY'},STATUS : {map:'STATUS'},DESCRIPTION : {map:'DESCRIPTION'},REF : {map:'REF'}}]
+            }
         } 
         tmpDt.updateCmd = 
         {
@@ -90,7 +105,18 @@ export class posCls
                     "@STATUS = @PSTATUS ", 
             param : ['PGUID:string|50','PCUSER:string|25','PDEVICE:string|25','PDEPOT:string|50','PTYPE:int','PDOC_DATE:date','PCUSTOMER:string|50',
                     'PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PTICKET:string|50','PSTATUS:int'],
-            dataprm : ['GUID','CUSER','DEVICE','DEPOT_GUID','TYPE','DOC_DATE','CUSTOMER_GUID','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','TICKET','STATUS']
+            dataprm : ['GUID','CUSER','DEVICE','DEPOT_GUID','TYPE','DOC_DATE','CUSTOMER_GUID','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','TICKET','STATUS'],
+            local : 
+            {
+                type : "update",
+                in : "POS_VW_01",
+                set : {CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
+                LUSER_NAME : {map:'LUSER_NAME'},DEVICE : {map:'DEVICE'},DEPOT_GUID : {map:'DEPOT_GUID'},DEPOT_CODE : {map:'DEPOT_CODE'},DEPOT_NAME : {map:'DEPOT_NAME'},TYPE : {map:'TYPE'},
+                DOC_DATE : {map:'DOC_DATE',type:'date_time'},CUSTOMER_GUID : {map:'CUSTOMER_GUID'},CUSTOMER_CODE : {map:'CUSTOMER_CODE'},CUSTOMER_NAME : {map:'CUSTOMER_NAME'},CUSTOMER_POINT : {map:'CUSTOMER_POINT'},
+                FAMOUNT : {map:'FAMOUNT'},AMOUNT : {map:'AMOUNT'},DISCOUNT : {map:'DISCOUNT'},LOYALTY : {map:'LOYALTY'},VAT : {map:'VAT'},TOTAL : {map:'TOTAL'},TICKET : {map:'TICKET'},
+                REBATE_CHEQPAY : {map:'REBATE_CHEQPAY'},STATUS : {map:'STATUS'},DESCRIPTION : {map:'DESCRIPTION'},REF : {map:'REF'}},
+                where : {GUID : {map:'GUID'}}
+            }
         } 
         tmpDt.deleteCmd = 
         {
@@ -152,6 +178,16 @@ export class posCls
             {
                 tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
             }
+            
+            Object.keys(tmpPrm).forEach(key =>
+            {
+                if (tmpPrm[key] === undefined || tmpPrm[key] == '00000000-0000-0000-0000-000000000000' || tmpPrm[key] == '' || tmpPrm[key] == -1) 
+                {
+                    delete tmpPrm[key];
+                }
+            })
+
+            this.ds.get('POS').selectCmd.local.where = Object.keys(tmpPrm).length == 0 ? undefined : tmpPrm
 
             this.ds.get('POS').selectCmd.value = Object.values(tmpPrm);
               
@@ -242,7 +278,12 @@ export class posSaleCls
         tmpDt.selectCmd = 
         {
             query : "SELECT * FROM [dbo].[POS_SALE_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((POS_GUID = @POS_GUID) OR (@POS_GUID = '00000000-0000-0000-0000-000000000000')) ORDER BY LINE_NO DESC",
-            param : ['GUID:string|50','POS_GUID:string|50']
+            param : ['GUID:string|50','POS_GUID:string|50'],
+            local : 
+            {
+                type : "select",
+                from : "POS_SALE_VW_01",
+            }
         } 
         tmpDt.insertCmd = 
         {
@@ -270,7 +311,21 @@ export class posSaleCls
             param : ['PGUID:string|50','PCUSER:string|25','PCDATE:datetime','PLDATE:datetime','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PINPUT:string|25','PBARCODE:string|50','PUNIT:string|50',
                     'PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int','PPROMO_TYPE:int'],
             dataprm : ['GUID','CUSER','LDATE','LDATE','POS_GUID','LINE_NO','ITEM_GUID','INPUT','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY','VAT',
-                    'TOTAL','SUBTOTAL','PROMO_TYPE']
+                    'TOTAL','SUBTOTAL','PROMO_TYPE'],
+            local : 
+            {
+                type : "insert",
+                into : "POS_SALE_VW_01",
+                values : [{GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
+                LUSER_NAME : {map:'LUSER_NAME'},POS_GUID : {map:'POS_GUID'},DEVICE : {map:'DEVICE'},DEPOT_GUID : {map:'DEPOT_GUID'},DEPOT_CODE : {map:'DEPOT_CODE'},DEPOT_NAME : {map:'DEPOT_NAME'},TYPE : {map:'TYPE'},
+                DOC_DATE : {map:'DOC_DATE',type:'date_time'},CUSTOMER_GUID : {map:'CUSTOMER_GUID'},CUSTOMER_CODE : {map:'CUSTOMER_CODE'},CUSTOMER_NAME : {map:'CUSTOMER_NAME'},LINE_NO : {map:'LINE_NO'},
+                ITEM_GUID : {map:'ITEM_GUID'},ITEM_CODE : {map:'ITEM_CODE'},ITEM_NAME : {map:'ITEM_NAME'},ITEM_SNAME : {map:'ITEM_SNAME'},ITEM_GRP_CODE : {map:'ITEM_GRP_CODE'},ITEM_GRP_NAME : {map:'ITEM_GRP_NAME'},
+                COST_PRICE : {map:'COST_PRICE'},MIN_PRICE : {map:'MIN_PRICE'},MAX_PRICE : {map:'MAX_PRICE'},TICKET_REST : {map:'TICKET_REST'},INPUT : {map:'INPUT'},BARCODE_GUID : {map:'BARCODE_GUID'},
+                BARCODE : {map:'BARCODE'},UNIT_GUID : {map:'UNIT_GUID'},UNIT_NAME : {map:'UNIT_NAME'},UNIT_FACTOR : {map:'UNIT_FACTOR'},UNIT_SHORT : {map:'UNIT_SHORT'},QUANTITY : {map:'QUANTITY'},
+                PRICE : {map:'PRICE'},FAMOUNT : {map:'FAMOUNT'},AMOUNT : {map:'AMOUNT'},DISCOUNT : {map:'DISCOUNT'},LOYALTY : {map:'LOYALTY'},VAT : {map:'VAT'},VAT_RATE : {map:'VAT_RATE'},VAT_TYPE : {map:'VAT_TYPE'},
+                TOTAL : {map:'TOTAL'},SUBTOTAL : {map:'SUBTOTAL'},PROMO_TYPE : {map:'PROMO_TYPE'},GRAND_AMOUNT : {map:'GRAND_AMOUNT'},GRAND_DISCOUNT : {map:'GRAND_DISCOUNT'},GRAND_LOYALTY : {map:'GRAND_LOYALTY'},
+                GRAND_VAT : {map:'GRAND_VAT'},GRAND_TOTAL : {map:'GRAND_TOTAL'},STATUS : {map:'STATUS'},REBATE_TICKET : {map:'REBATE_TICKET'}}]
+            }
         } 
         tmpDt.updateCmd = 
         {
@@ -297,7 +352,22 @@ export class posSaleCls
             param : ['PGUID:string|50','PCUSER:string|25','PLDATE:datetime','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PINPUT:string|25','PBARCODE:string|50','PUNIT:string|50',
                      'PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int','PPROMO_TYPE:int'],
             dataprm : ['GUID','CUSER','LDATE','POS_GUID','LINE_NO','ITEM_GUID','INPUT','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY',
-                    'VAT','TOTAL','SUBTOTAL','PROMO_TYPE']
+                    'VAT','TOTAL','SUBTOTAL','PROMO_TYPE'],
+            local : 
+            {
+                type : "update",
+                in : "POS_SALE_VW_01",
+                set : {CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
+                LUSER_NAME : {map:'LUSER_NAME'},POS_GUID : {map:'POS_GUID'},DEVICE : {map:'DEVICE'},DEPOT_GUID : {map:'DEPOT_GUID'},DEPOT_CODE : {map:'DEPOT_CODE'},DEPOT_NAME : {map:'DEPOT_NAME'},TYPE : {map:'TYPE'},
+                DOC_DATE : {map:'DOC_DATE',type:'date_time'},CUSTOMER_GUID : {map:'CUSTOMER_GUID'},CUSTOMER_CODE : {map:'CUSTOMER_CODE'},CUSTOMER_NAME : {map:'CUSTOMER_NAME'},LINE_NO : {map:'LINE_NO'},
+                ITEM_GUID : {map:'ITEM_GUID'},ITEM_CODE : {map:'ITEM_CODE'},ITEM_NAME : {map:'ITEM_NAME'},ITEM_SNAME : {map:'ITEM_SNAME'},ITEM_GRP_CODE : {map:'ITEM_GRP_CODE'},ITEM_GRP_NAME : {map:'ITEM_GRP_NAME'},
+                COST_PRICE : {map:'COST_PRICE'},MIN_PRICE : {map:'MIN_PRICE'},MAX_PRICE : {map:'MAX_PRICE'},TICKET_REST : {map:'TICKET_REST'},INPUT : {map:'INPUT'},BARCODE_GUID : {map:'BARCODE_GUID'},
+                BARCODE : {map:'BARCODE'},UNIT_GUID : {map:'UNIT_GUID'},UNIT_NAME : {map:'UNIT_NAME'},UNIT_FACTOR : {map:'UNIT_FACTOR'},UNIT_SHORT : {map:'UNIT_SHORT'},QUANTITY : {map:'QUANTITY'},
+                PRICE : {map:'PRICE'},FAMOUNT : {map:'FAMOUNT'},AMOUNT : {map:'AMOUNT'},DISCOUNT : {map:'DISCOUNT'},LOYALTY : {map:'LOYALTY'},VAT : {map:'VAT'},VAT_RATE : {map:'VAT_RATE'},VAT_TYPE : {map:'VAT_TYPE'},
+                TOTAL : {map:'TOTAL'},SUBTOTAL : {map:'SUBTOTAL'},PROMO_TYPE : {map:'PROMO_TYPE'},GRAND_AMOUNT : {map:'GRAND_AMOUNT'},GRAND_DISCOUNT : {map:'GRAND_DISCOUNT'},GRAND_LOYALTY : {map:'GRAND_LOYALTY'},
+                GRAND_VAT : {map:'GRAND_VAT'},GRAND_TOTAL : {map:'GRAND_TOTAL'},STATUS : {map:'STATUS'},REBATE_TICKET : {map:'REBATE_TICKET'}},
+                where : {GUID : {map:'GUID'}}
+            }
         } 
         tmpDt.deleteCmd = 
         {
@@ -360,7 +430,17 @@ export class posSaleCls
             }
 
             this.ds.get('POS_SALE').selectCmd.value = Object.values(tmpPrm);
-              
+            
+            Object.keys(tmpPrm).forEach(key =>
+            {
+                if (tmpPrm[key] === undefined || tmpPrm[key] == '00000000-0000-0000-0000-000000000000' || tmpPrm[key] == '' || tmpPrm[key] == -1) 
+                {
+                    delete tmpPrm[key];
+                }
+            })
+
+            this.ds.get('POS_SALE').selectCmd.local.where = Object.keys(tmpPrm).length == 0 ? undefined : tmpPrm
+
             await this.ds.get('POS_SALE').refresh();
             
             resolve(this.ds.get('POS_SALE'));    
@@ -456,7 +536,12 @@ export class posPaymentCls
         tmpDt.selectCmd = 
         {
             query : "SELECT * FROM [dbo].[POS_PAYMENT_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((POS_GUID = @POS_GUID) OR (@POS_GUID = '00000000-0000-0000-0000-000000000000'))",
-            param : ['GUID:string|50','POS_GUID:string|50']
+            param : ['GUID:string|50','POS_GUID:string|50'],
+            local : 
+            {
+                type : "select",
+                from : "POS_PAYMENT_VW_01",
+            }
         } 
         tmpDt.insertCmd = 
         {
@@ -542,9 +627,19 @@ export class posPaymentCls
             {
                 tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
                 tmpPrm.POS_GUID = typeof arguments[0].POS_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].POS_GUID;
-            }
-
+            }            
+                 
             this.ds.get('POS_PAYMENT').selectCmd.value = Object.values(tmpPrm);
+
+            Object.keys(tmpPrm).forEach(key =>
+            {
+                if (tmpPrm[key] === undefined || tmpPrm[key] == '00000000-0000-0000-0000-000000000000' || tmpPrm[key] == '' || tmpPrm[key] == -1) 
+                {
+                    delete tmpPrm[key];
+                }
+            })
+
+            this.ds.get('POS_PAYMENT').selectCmd.local.where = Object.keys(tmpPrm).length == 0 ? undefined : tmpPrm
               
             await this.ds.get('POS_PAYMENT').refresh();
             
@@ -595,8 +690,12 @@ export class posPluCls
             local : 
             {
                 type : "select",
-                from : "PLU",
-                where : {GUID : "",CUSER : "",TYPE : 0}
+                from : "PLU_VW_01",
+                order: 
+                {
+                    by: "LOCATION",
+                    type: "asc"
+                }
             }
         } 
         tmpDt.insertCmd = 
@@ -730,9 +829,18 @@ export class posPluCls
             }
 
             this.ds.get('PLU').selectCmd.value = Object.values(tmpPrm);
-              
-            await this.ds.get('PLU').refresh();
             
+            Object.keys(tmpPrm).forEach(key =>
+            {
+                if (tmpPrm[key] === undefined || tmpPrm[key] == '00000000-0000-0000-0000-000000000000' || tmpPrm[key] == '' || tmpPrm[key] == -1) 
+                {
+                    delete tmpPrm[key];
+                }
+            })
+
+            this.ds.get('PLU').selectCmd.local.where = Object.keys(tmpPrm).length == 0 ? undefined : tmpPrm 
+            
+            await this.ds.get('PLU').refresh();
             resolve(this.ds.get('PLU'));    
         });
     }
@@ -775,8 +883,7 @@ export class posExtraCls
             local : 
             {
                 type : "select",
-                from : "POS_EXTRA",
-                where : {GUID : "",POS_GUID : ""}
+                from : "POS_EXTRA_VW_01",
             }
         } 
         tmpDt.insertCmd = 
@@ -903,7 +1010,17 @@ export class posExtraCls
             }
 
             this.ds.get('POS_EXTRA').selectCmd.value = Object.values(tmpPrm);
-              
+            
+            Object.keys(tmpPrm).forEach(key =>
+            {
+                if (tmpPrm[key] === undefined || tmpPrm[key] == '00000000-0000-0000-0000-000000000000' || tmpPrm[key] == '' || tmpPrm[key] == -1) 
+                {
+                    delete tmpPrm[key];
+                }
+            })
+
+            this.ds.get('POS_EXTRA').selectCmd.local.where = Object.keys(tmpPrm).length == 0 ? undefined : tmpPrm
+
             await this.ds.get('POS_EXTRA').refresh();
             
             resolve(this.ds.get('POS_EXTRA'));    
@@ -960,7 +1077,12 @@ export class posDeviceCls
         tmpDt.selectCmd = 
         {
             query : "SELECT * FROM [dbo].[POS_DEVICE_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((CODE = @CODE) OR (@CODE = ''))",
-            param : ['GUID:string|50','CODE:string|25']
+            param : ['GUID:string|50','CODE:string|25'],
+            local : 
+            {
+                type : "select",
+                from : "POS_DEVICE_VW_01",
+            }
         } 
         tmpDt.insertCmd = 
         {
@@ -1056,6 +1178,16 @@ export class posDeviceCls
                 tmpPrm.CODE = typeof arguments[0].CODE == 'undefined' ? '' : arguments[0].CODE;
             }
             this.ds.get('POS_DEVICE').selectCmd.value = Object.values(tmpPrm)
+
+            Object.keys(tmpPrm).forEach(key =>
+            {
+                if (tmpPrm[key] === undefined || tmpPrm[key] == '00000000-0000-0000-0000-000000000000' || tmpPrm[key] == '' || tmpPrm[key] == -1) 
+                {
+                    delete tmpPrm[key];
+                }
+            })
+
+            this.ds.get('POS_DEVICE').selectCmd.local.where = Object.keys(tmpPrm).length == 0 ? undefined : tmpPrm
 
             await this.ds.get('POS_DEVICE').refresh();
             resolve(this.ds.get('POS_DEVICE'));    

@@ -50,6 +50,8 @@ export default class posDoc extends React.PureComponent
         // NUMBER İÇİN PARAMETREDEN PARA SEMBOLÜ ATANIYOR.
         Number.money = this.prmObj.filter({ID:'MoneySymbol',TYPE:0}).getValue()
         
+        //this.core.offline = true
+
         this.posObj = new posCls()
         this.posDevice = new posDeviceCls();
         this.parkDt = new datatable();
@@ -130,7 +132,13 @@ export default class posDoc extends React.PureComponent
         {
             query : "SELECT * FROM CHEQPAY_VW_01 WHERE DOC = @DOC",
             param : ['DOC:string|50'], 
-            value : [this.posObj.dt()[0].GUID]           
+            value : [this.posObj.dt()[0].GUID],
+            local : 
+            {
+                type : "select",
+                from : "CHEQPAY_VW_01",
+                where : {DOC:this.posObj.dt()[0].GUID}
+            }
         }
         await this.cheqDt.refresh();         
 
@@ -140,7 +148,14 @@ export default class posDoc extends React.PureComponent
                     "ISNULL((SELECT TOP 1 DESCRIPTION FROM POS_EXTRA WHERE POS_GUID = POS_VW_01.GUID AND TAG = 'PARK DESC'),'') AS DESCRIPTION " +
                     "FROM POS_VW_01 WHERE STATUS = 0 AND LUSER = @LUSER ORDER BY LDATE DESC",
             param : ["LUSER:string|25"],
-            value : [this.core.auth.data.CODE]
+            value : [this.core.auth.data.CODE],
+            local : 
+            {
+                type : "select",
+                from : "POS_VW_01",
+                where : {STATUS:0,LUSER:this.core.auth.data.CODE},
+                order: {by: "LDATE",type: "desc"}
+            }
         }
         await this.parkDt.refresh();     
 
@@ -210,7 +225,30 @@ export default class posDoc extends React.PureComponent
                 query : "SELECT TOP 1 *,@CODE AS INPUT FROM ITEMS_POS_VW_01 WHERE CODE = @CODE OR BARCODE = @CODE AND STATUS = 1",
                 param : ['CODE:string|25'],
                 value: [pCode],
-                // timeout : 3000
+                local : 
+                {
+                    type : "select",
+                    from : "ITEMS_POS_VW_01",
+                    where : 
+                    {
+                        CODE : pCode,
+                        or :
+                        {
+                            BARCODE : pCode
+                        },
+                        STATUS : true
+                    },
+                    case: 
+                    {
+                        INPUT: 
+                        [
+                            {
+                                '=': '',
+                                then: pCode
+                            }
+                        ]
+                    }
+                }
             }
             await tmpDt.refresh();
             //UNIQ BARKOD
@@ -220,7 +258,27 @@ export default class posDoc extends React.PureComponent
                 {
                     query : "SELECT TOP 1 *,@CODE AS INPUT FROM ITEMS_POS_VW_01 WHERE UNIQ_CODE = @CODE AND STATUS = 1",
                     param : ['CODE:string|25'],
-                    value: [pCode]
+                    value: [pCode],
+                    local : 
+                    {
+                        type : "select",
+                        from : "ITEMS_POS_VW_01",
+                        where : 
+                        {
+                            UNIQ_CODE : pCode,
+                            STATUS : true
+                        },
+                        case: 
+                        {
+                            INPUT: 
+                            [
+                                {
+                                    '=': '',
+                                    then: pCode
+                                }
+                            ]
+                        }
+                    }
                 }
 
                 await tmpDt.refresh();
@@ -256,7 +314,16 @@ export default class posDoc extends React.PureComponent
             tmpCustomerDt.selectCmd = 
             {
                 query : "SELECT GUID,CODE,TITLE,ADRESS,dbo.FN_CUSTOMER_TOTAL_POINT(GUID,GETDATE()) AS CUSTOMER_POINT FROM [dbo].[CUSTOMER_VW_02] WHERE CODE LIKE @CODE + '%'",
-                param : ['CODE:string|50']
+                param : ['CODE:string|50'],
+                local : 
+                {
+                    type : "select",
+                    from : "CUSTOMER_VW_02",
+                    where : 
+                    {
+                        CODE : { like : pCode + '%'},
+                    },
+                }
             }
             tmpCustomerDt.selectCmd.value = [pCode]
             await tmpCustomerDt.refresh();
@@ -338,8 +405,18 @@ export default class posDoc extends React.PureComponent
             tmpPriceDt.selectCmd = 
             {
                 query : "SELECT dbo.FN_PRICE_SALE(@GUID,@QUANTITY,GETDATE()) AS PRICE",
-                param : ['GUID:string|50','QUANTITY:float']
+                param : ['GUID:string|50','QUANTITY:float'],
+                local : 
+                {
+                    type : "select",
+                    from : "ITEMS_POS_VW_01",
+                    where : 
+                    {
+                        GUID : tmpItemsDt[0].GUID
+                    },
+                }
             }
+
             tmpPriceDt.selectCmd.value = [tmpItemsDt[0].GUID,tmpQuantity]
             await tmpPriceDt.refresh();                  
             if(tmpPriceDt.length > 0 && tmpPrice == 0)
@@ -569,6 +646,8 @@ export default class posDoc extends React.PureComponent
             {                  
                 let tmpPosSale = this.posObj.posSale.dt().where({GUID:{'<>' : '00000000-0000-0000-0000-000000000000'}})  
 
+                this.posObj.dt()[0].CDATE = moment(new Date()).utcOffset(0, true)
+                this.posObj.dt()[0].LDATE = moment(new Date()).utcOffset(0, true)
                 this.posObj.dt()[0].FAMOUNT = Number(parseFloat(tmpPosSale.sum('FAMOUNT',2)).toFixed(2))
                 this.posObj.dt()[0].AMOUNT = Number(parseFloat(tmpPosSale.sum('AMOUNT',2)).toFixed(2))
                 this.posObj.dt()[0].DISCOUNT = Number(parseFloat(tmpPosSale.sum('DISCOUNT',2)).toFixed(2))
@@ -1131,7 +1210,17 @@ export default class posDoc extends React.PureComponent
             {
                 query : "SELECT *,DATEDIFF(DAY,CDATE,GETDATE()) AS EXDAY FROM CHEQPAY_VW_01 WHERE CODE = @CODE AND TYPE = 1",
                 param : ['CODE:string|50'],
-                value : [pCode]
+                value : [pCode],
+                local : 
+                {
+                    type : "select",
+                    from : "CHEQPAY_VW_01",
+                    where : 
+                    {
+                        CODE : pCode,
+                        TYPE : 1
+                    },
+                }
             }     
 
             if(this.posObj.posPay.dt().where({TYPE:0}).length > 0)
@@ -1219,7 +1308,17 @@ export default class posDoc extends React.PureComponent
             {
                 query : "SELECT * FROM CHEQPAY_VW_01 WHERE REFERENCE = @REFERENCE AND TYPE = 0",
                 param : ['REFERENCE:string|50'],
-                value : [pCode.substring(0,9)]
+                value : [pCode.substring(0,9)],
+                local : 
+                {
+                    type : "select",
+                    from : "CHEQPAY_VW_01",
+                    where : 
+                    {
+                        REFERENCE : pCode.substring(0,9),
+                        TYPE : 0
+                    },
+                }
             }                                            
         }
         else
@@ -1657,7 +1756,16 @@ export default class posDoc extends React.PureComponent
                                                 tmpDt.selectCmd = 
                                                 {
                                                     query : "SELECT BARCODE,NAME,PRICE_SALE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE LIKE '%' + @BARCODE AND STATUS = 1",
-                                                    param : ['BARCODE:string|25']
+                                                    param : ['BARCODE:string|25'],
+                                                    local : 
+                                                    {
+                                                        type : "select",
+                                                        from : "ITEMS_BARCODE_MULTICODE_VW_01",
+                                                        where : 
+                                                        {
+                                                            BARCODE : {like : '%' + this.txtBarcode.value},
+                                                        },
+                                                    }
                                                 }
                                                 tmpDt.selectCmd.value = [this.txtBarcode.value]
                                                 await tmpDt.refresh();
@@ -2665,8 +2773,16 @@ export default class posDoc extends React.PureComponent
                                                         let tmpDt = new datatable(); 
                                                         tmpDt.selectCmd = 
                                                         {
-                                                            query : "SELECT AMOUNT AS AMOUNT,COUNT(AMOUNT) AS COUNT FROM CHEQPAY WHERE DOC = @DOC GROUP BY AMOUNT",
-                                                            param : ['DOC:string|50']
+                                                            query : "SELECT AMOUNT AS AMOUNT,COUNT(AMOUNT) AS COUNT FROM CHEQPAY_VW_01 WHERE DOC = @DOC GROUP BY AMOUNT",
+                                                            param : ['DOC:string|50'],
+                                                            local : 
+                                                            {
+                                                                type : "select",
+                                                                from : "CHEQPAY_VW_01",
+                                                                where : {DOC : this.posObj.dt()[0].GUID},
+                                                                aggregate:{count: "AMOUNT"},
+                                                                groupBy: "AMOUNT",
+                                                            }
                                                         }
                                                         tmpDt.selectCmd.value = [this.posObj.dt()[0].GUID]
                                                         await tmpDt.refresh();

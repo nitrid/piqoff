@@ -172,7 +172,6 @@ export class local
         if(typeof JsStore != 'undefined')
         {
             this.conn = new JsStore.Connection(new Worker(getWorkerPath().default));
-            //this.conn = new JsStore.Connection(new Worker(URL.createObjectURL(new Blob(["("+jsworker.toString()+")()"], {type: 'text/javascript'}))));
         }
     }
     async init(pDb)
@@ -313,7 +312,9 @@ export class local
                 {
                     if(pQuery.local.type == 'select')
                     {
-                        resolve(await this.select(pQuery.local))
+                        let tmpData = await this.select(pQuery.local)
+                        let tmpResult = {result:{recordset:tmpData.result}}
+                        resolve(tmpResult)
                     }
                     else if(pQuery.local.type == 'insert')
                     {
@@ -331,6 +332,14 @@ export class local
                 resolve({result:{}});
             }
         });        
+    }
+    clearTbl(pTblName)
+    {
+        return new Promise(async resolve => 
+        {
+            await this.conn.clear(pTblName);
+            resolve()
+        });
     }
     dropDb()
     {
@@ -699,8 +708,8 @@ export class datatable
     on(pEvt, pCallback) 
     {
         if (!this.listeners.hasOwnProperty(pEvt))
-        this.listeners[pEvt] = Array();
-        this.listeners[pEvt].push(pCallback); 
+            this.listeners[pEvt] = Array();
+            this.listeners[pEvt].push(pCallback); 
     }
     emit(pEvt, pParams)
     {
@@ -844,13 +853,13 @@ export class datatable
         {
             if(typeof this[i].stat != 'undefined' && typeof tmpStat.find(x => x == this[i].stat))
             {
-
                 let tmpQuery = undefined;
+
                 if(this[i].stat == 'new')
                 {
                     tmpQuery = {...this.insertCmd}
                     //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 28.02.2022
-                    if(typeof tmpQuery.local != 'undefined' && typeof tmpQuery.local.values != 'undefined' && tmpQuery.local.values.length > 0)
+                    if(core.instance.offline && typeof tmpQuery.local != 'undefined' && typeof tmpQuery.local.values != 'undefined' && tmpQuery.local.values.length > 0)
                     {
                         for (let x = 0; x < Object.keys(tmpQuery.local.values[0]).length; x++) 
                         {
@@ -858,7 +867,14 @@ export class datatable
                             let tmpMap = Object.values(tmpQuery.local.values[0])[x]
                             if(typeof tmpMap.map != 'undefined')
                             {
-                                tmpQuery.local.values[0][tmpKey] = this[i][tmpMap.map]
+                                if(typeof tmpMap.type != 'undefined' && tmpMap.type == 'date_time')
+                                {
+                                    tmpQuery.local.values[0][tmpKey] = new Date(this[i][tmpMap.map])
+                                }
+                                else
+                                {
+                                    tmpQuery.local.values[0][tmpKey] = this[i][tmpMap.map]  
+                                }
                             }
                         }
                     }
@@ -867,7 +883,7 @@ export class datatable
                 {
                     tmpQuery = {...this.updateCmd}
                     //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 28.02.2022
-                    if(typeof tmpQuery.local != 'undefined' && typeof tmpQuery.local.set != 'undefined')
+                    if(core.instance.offline && typeof tmpQuery.local != 'undefined' && typeof tmpQuery.local.set != 'undefined')
                     {
                         //SET
                         for (let x = 0; x < Object.keys(tmpQuery.local.set).length; x++) 
@@ -876,13 +892,20 @@ export class datatable
                             let tmpMap = Object.values(tmpQuery.local.set)[x]
                             if(typeof tmpMap.map != 'undefined')
                             {
-                                tmpQuery.local.set[tmpKey] = this[i][tmpMap.map]
+                                if(typeof tmpMap.type != 'undefined' && tmpMap.type == 'date_time')
+                                {
+                                    tmpQuery.local.set[tmpKey] = new Date(this[i][tmpMap.map])
+                                }
+                                else
+                                {
+                                    tmpQuery.local.set[tmpKey] = this[i][tmpMap.map]
+                                }                                
                             }
                         }
                         
                     }
                     //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 28.02.2022
-                    if(typeof tmpQuery.local != 'undefined' && typeof tmpQuery.local.where != 'undefined')
+                    if(core.instance.offline && typeof tmpQuery.local != 'undefined' && typeof tmpQuery.local.where != 'undefined')
                     {
                         //WHERE
                         for (let x = 0; x < Object.keys(tmpQuery.local.where).length; x++) 
@@ -891,11 +914,20 @@ export class datatable
                             let tmpMap = Object.values(tmpQuery.local.where)[x]
                             if(typeof tmpMap.map != 'undefined')
                             {
-                                tmpQuery.local.where[tmpKey] = this[i][tmpMap.map]
+                                if(typeof tmpMap.type != 'undefined' && tmpMap.type == 'date_time')
+                                {
+                                    tmpQuery.local.where[tmpKey] = new Date(this[i][tmpMap.map])
+                                }
+                                else
+                                {
+                                    tmpQuery.local.where[tmpKey] = this[i][tmpMap.map]
+                                }        
+                                
                             }
                         }
                     }
                 }
+                
             
                 if(typeof tmpQuery != 'undefined')
                 {
