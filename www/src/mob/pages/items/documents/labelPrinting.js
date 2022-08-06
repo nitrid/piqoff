@@ -428,6 +428,7 @@ export default class labelPrinting extends React.Component
                         visible={false}
                         position={{of:'#root'}} 
                         showTitle={true} 
+                        columnsAutoWidth={false}
                         showBorders={true}
                         width={'90%'}
                         height={'80%'}
