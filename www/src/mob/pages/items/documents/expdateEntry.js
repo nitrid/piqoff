@@ -119,6 +119,29 @@ export default class labelPrinting extends React.Component
     }
     async addItem()
     {
+        for (let i = 0; i < this.expObj.dt().length; i++) 
+        {
+            if(this.expObj.dt()[i].ITEM_CODE == this.barcode.code)
+            {
+                let tmpConfObj = 
+                {
+                    id:'msgCombineItem',showTitle:true,title:this.t("msgCombineItem.title"),showCloseButton:true,width:'350px',height:'200px',
+                    button:[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>)
+                }
+                let pResult = await dialog(tmpConfObj);
+                if(pResult == 'btn01')
+                {                   
+                    this.barcodeReset()
+                    return
+                }
+                else
+                {
+                    break
+                }
+                
+            }
+        }
         let tmpDocItems = {...this.expObj.empty}
         tmpDocItems.ITEM_GUID = this.barcode.guid
         tmpDocItems.ITEM_CODE = this.barcode.code

@@ -869,6 +869,13 @@ export const langTr =
             clmCode :  "STOK KODU",
             clmName : "STOK ADI",
         },
+        msgCombineItem:
+        {
+            title: "Dikkat",
+            btn01: "Vazgeç",
+            btn02: "Yeni Ekle",
+            msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Yeni Satır Eklensin Mi ?"
+        },
     },
     ord_01_001 :
     {
