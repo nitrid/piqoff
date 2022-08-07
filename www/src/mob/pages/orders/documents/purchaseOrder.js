@@ -256,7 +256,7 @@ export default class salesOrder extends React.Component
             this.txtAmount.value = parseFloat((Number(this.txtPrice.value) + Number(this.txtVat.value)).toFixed(2))
             let tmpQuery2 =
             {
-                query :"SELECT CUSTOMER_PRICE AS PRICE,SUBSTRING(CUSTOMER_NAME, 1,5) AS CUSTOMER,CUSTOMER_PRICE_DATE AS PRICE_DATE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE",
+                query :"SELECT CUSTOMER_PRICE AS PRICE,SUBSTRING(CUSTOMER_NAME, 1,10) AS CUSTOMER,CUSTOMER_PRICE_DATE AS PRICE_DATE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE",
                 param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50'],
                 value : [this.barcode.code,this.docObj.dt()[0].OUTPUT]
             }
