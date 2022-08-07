@@ -203,7 +203,7 @@ export default class labelPrinting extends React.Component
             code:"",
             guid : "00000000-0000-0000-0000-000000000000",
         }
-        this.txtPopQuantity.value = 0
+        this.txtPopQuantity.value = 1
         this.dtlastDate.value = moment(new Date()).format("DD/MM/YYYY HH:mm:ss")
         this.txtBarcode.focus()
     }
