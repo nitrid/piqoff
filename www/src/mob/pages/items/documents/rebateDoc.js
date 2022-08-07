@@ -25,7 +25,7 @@ import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
 import { triggerHandler } from 'devextreme/events';
 
-export default class salesOrder extends React.Component
+export default class rebateDoc extends React.Component
 {
     constructor()
     {
@@ -234,14 +234,12 @@ export default class salesOrder extends React.Component
     }    
     barcodeReset()
     {
-        if(this.chkAutoAdd.value == false)
+        
+        this.barcode = 
         {
-            this.barcode = 
-            {
-                name:"",
-                barcode: "",
-                code:""
-            }
+            name:"",
+            barcode: "",
+            code:""
         }
         this.txtBarcode.value = ""
         this.txtQuantity.value=1
@@ -528,9 +526,6 @@ export default class salesOrder extends React.Component
                         </div>
                         <div className="col-4 px-2 pt-2">
                             
-                            <NdCheckBox id="chkAutoAdd" text={this.t("chkAutoAdd")} parent={this} defaultValue={false} 
-                            param={this.param.filter({ELEMENT:'chkAutoAdd',USERS:this.user.CODE})}
-                            access={this.access.filter({ELEMENT:'chkAutoAdd',USERS:this.user.CODE})}/>
                         </div>
                     </div>
                     </Item>
@@ -605,14 +600,8 @@ export default class salesOrder extends React.Component
                                         this.barcode.barcode = tmpData.result.recordset[0].BARCODE 
                                         this.barcode.code = tmpData.result.recordset[0].CODE 
                                         this.barcode.guid = tmpData.result.recordset[0].GUID 
-                                        if(this.chkAutoAdd.value == true)
-                                        {
-                                            this.addItem(1)
-                                        }
-                                        else
-                                        {
-                                            this.txtQuantity.focus()
-                                        }
+                                        
+                                        this.txtQuantity.focus()
                                         this.setState({tbBarcode:"visible"})
                                     }
                                     else

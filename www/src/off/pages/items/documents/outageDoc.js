@@ -35,6 +35,7 @@ export default class outageDoc extends React.Component
         this.docObj = new docCls();
         this.qDescObj = new quickDescCls();
      
+     
 
         this._getDispatch = this._getDispatch.bind(this)
         this._cellRoleRender = this._cellRoleRender.bind(this)
