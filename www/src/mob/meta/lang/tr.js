@@ -1149,6 +1149,12 @@ export const langTr =
             clmOutputName : "CARİ ADI",
             clmOutputCode  : "CARİ KODU",
         },
+        grdChkCustomer : 
+        {
+            clmDate : "TARIH",
+            clmPrice : "FIYAT",
+            clmCustomer : "CARİ ADI",
+        },
         pg_CustomerSelect :
         {
             title : "Cari Seçimi",
@@ -1156,6 +1162,12 @@ export const langTr =
             clmTitle : "CARİ ADI",
             clmTypeName : "TİPİ",
             clmGenusName : "CİNSİ"
+        },
+        msgQuantity:
+        {
+            title: "Miktar",
+            btn01: "Ekle",
+            msg: "Miktar Giriniz"
         },
         pg_txtItemsCode : 
         {

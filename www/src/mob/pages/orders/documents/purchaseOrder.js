@@ -34,7 +34,8 @@ export default class salesOrder extends React.Component
         {
             tbMain:"visible",
             tbBarcode:"hidden",
-            tbDocument: "hidden"
+            tbDocument: "hidden",
+            grid : "hidden"
         }     
         this.barcode = 
         {
@@ -49,6 +50,7 @@ export default class salesOrder extends React.Component
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
 
         this.docObj = new docCls();
+        this.itemCustomerObj = new datatable  
 
         this.dropmenuMainItems = [this.t("btnNew"),this.t("btnSave")]
         this.dropmenuDocItems = [this.t("btnSave")]
@@ -78,6 +80,7 @@ export default class salesOrder extends React.Component
         this.txtRefno.readOnly = false
         this.txtRef.readOnly = true
         await this.grdSlsOrder.dataRefresh({source:this.docObj.docOrders.dt('DOC_ORDERS')});
+        await this.grdChkCustomer.dataRefresh({source:this.itemCustomerObj});
 
     }
     async dropmenuClick(e)
@@ -220,6 +223,7 @@ export default class salesOrder extends React.Component
     }
     async setBarcode()
     {
+        this.itemCustomerObj.clear()
         this.txtQuantity.value = 1
         let tmpCheckQuery = 
         {
@@ -243,28 +247,42 @@ export default class salesOrder extends React.Component
                 return
             }
         }
-        let tmpQuery =
+        
+        if(tmpCheckData.result.recordset.length > 0)
         {
-            query :"SELECT CUSTOMER_PRICE AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
-            param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50'],
-            value : [this.barcode.code,this.docObj.dt()[0].OUTPUT]
-        }
-        let tmpData = await this.core.sql.execute(tmpQuery) 
-        if(tmpData.result.recordset.length > 0)
-        {
-            this.txtPrice.value = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(2))
-            this.txtVat.value = parseFloat((tmpData.result.recordset[0].PRICE * (this.barcode.vat / 100)).toFixed(2))
+            this.txtPrice.value = parseFloat((tmpCheckData.result.recordset[0].PRICE).toFixed(2))
+            this.txtVat.value = parseFloat((tmpCheckData.result.recordset[0].PRICE * (this.barcode.vat / 100)).toFixed(2))
             //this.txtDiscount.value = 0
             this.txtAmount.value = parseFloat((Number(this.txtPrice.value) + Number(this.txtVat.value)).toFixed(2))
+            let tmpQuery2 =
+            {
+                query :"SELECT CUSTOMER_PRICE AS PRICE,SUBSTRING(CUSTOMER_NAME, 1,5) AS CUSTOMER,CUSTOMER_PRICE_DATE AS PRICE_DATE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE",
+                param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50'],
+                value : [this.barcode.code,this.docObj.dt()[0].OUTPUT]
+            }
+            let tmpData2 = await this.core.sql.execute(tmpQuery2) 
+            if(tmpData2.result.recordset.length > 1)
+            {
+                for (let i = 0; i < tmpData2.result.recordset.length; i++) 
+                {
+                    this.itemCustomerObj.push(tmpData2.result.recordset[i])
+                }
+                this.setState({grid:"visible"})
+            }
+            else
+            {
+                this.setState({grid:"hidden"})
+            }
         }
         if(this.chkAutoAdd.value == true)
         {
+            setTimeout(async () => 
+            {
+               this.txtPopQuantity.focus()
+            }, 700);
             await this.msgQuantity.show().then(async (e) =>
             {
-                setTimeout(async () => 
-                {
-                   this.txtPopQuantity.focus()
-                }, 500);
+               
                 if(e == 'btn01')
                 {
                     this.addItem(this.txtPopQuantity.value)
@@ -296,6 +314,7 @@ export default class salesOrder extends React.Component
         this.txtQuantity.value = 0
         this.txtPrice.value = 0
         this.setState({tbBarcode:"visible"})
+        this.setState({grid:"hidden"})
         this.txtBarcode.focus()
     }
     async addItem(pQuantity)
@@ -688,7 +707,7 @@ export default class salesOrder extends React.Component
                     </div>
                     </Item>
                     <Item>
-                    <div className="col-12 px-2 pt-2">
+                    <div className="col-12 px-1 pt-1">
                             <NdTextBox id="txtBarcode" parent={this} placeholder={this.t("txtBarcodePlace")}
                             button=
                             {
@@ -798,7 +817,7 @@ export default class salesOrder extends React.Component
                     {/* txtQuantity */}
                    <Item>
                         <Label text={this.t("txtQuantity")}/>
-                        <NdNumberBox id="txtQuantity" parent={this} simple={true}  
+                        <NdTextBox id="txtQuantity" parent={this} simple={true}  
                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                             param={this.param.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
                             access={this.access.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
@@ -811,7 +830,7 @@ export default class salesOrder extends React.Component
                                     this.addItem()
                                 }).bind(this)}
                             >
-                        </NdNumberBox>
+                        </NdTextBox>
                     </Item>
                     {/* txtPrice */}
                     <Item>
@@ -864,12 +883,33 @@ export default class salesOrder extends React.Component
                     </Item>
                     <Item>
                         <div className="row">
-                            <div className="col-12 px-4 pt-4">
+                            <div className="col-12 px-1 pt-1">
                                 <NdButton text={this.t("btnItemAdd")} type="default" width="100%" onClick={()=>this.addItem(this.txtQuantity.value)}></NdButton>
                             </div>
                         </div>
                     </Item>
                 </Form>
+                <div style={{visibility:this.state.grid}}>
+                    <Form>
+                        <Item>
+                            <NdGrid parent={this} id={"grdChkCustomer"} 
+                            showBorders={true} 
+                            columnsAutoWidth={true} 
+                            allowColumnReordering={true} 
+                            allowColumnResizing={true} 
+                            height={'100%'} 
+                            width={'100%'}
+                            dbApply={false}
+                            >
+                                <Paging defaultPageSize={5} />
+                                <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
+                                <Column dataField="CUSTOMER" caption={this.t("grdChkCustomer.clmCustomer")} width={80}/>
+                                <Column dataField="PRICE" caption={this.t("grdChkCustomer.clmPrice")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}} width={70}/>
+                                <Column dataField="PRICE_DATE" caption={this.t("grdChkCustomer.clmDate")} width={100} />
+                            </NdGrid>
+                        </Item>
+                    </Form>           
+                </div>
             </div>
             <div className="row px-2 pt-2" style={{visibility:this.state.tbDocument,position:"fixed"}}>
                 <Form colCount={1} >
@@ -990,7 +1030,7 @@ export default class salesOrder extends React.Component
                     </NdGrid>
                 </Item>
                 </Form>
-                <div className="row px-2 pt-2">
+                <div className="row px-1 pt-1">
                         <div className="col-12">
                             <Form colCount={4} parent={this} id="frmslsDoc">
                                 {/* Ara Toplam */}
@@ -1232,9 +1272,9 @@ export default class salesOrder extends React.Component
                                     {/* checkCustomer */}
                                     <Item>
                                         <Label text={this.t("txtQuantity")} alignment="right" />
-                                        <NdNumberBox id="txtPopQuantity" parent={this} simple={true}  
+                                        <NdTextBox id="txtPopQuantity" parent={this} simple={true}  
                                         >
-                                    </NdNumberBox>
+                                    </NdTextBox>
                                     </Item>
                                 </Form>
                             </div>

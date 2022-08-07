@@ -133,6 +133,7 @@ export default class labelPrinting extends React.Component
             }
             await dialog(tmpConfObj);
             this.txtPopQuantity.focus()
+            return
         }
         for (let i = 0; i < this.expObj.dt().length; i++) 
         {

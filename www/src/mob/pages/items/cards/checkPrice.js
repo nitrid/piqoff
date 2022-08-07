@@ -262,8 +262,7 @@ export default class salesOrder extends React.Component
                                 <Column dataField="PRICE" caption={this.t("grdPrice.clmPrice")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
                             </NdGrid>
                         </Item>
-                </Form>
-                   
+                </Form>           
                 </div>
             {/* Stok Seçim */}
             <NdPopGrid id={"popItemCode"} parent={this} container={"#root"}
