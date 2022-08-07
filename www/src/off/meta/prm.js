@@ -630,6 +630,22 @@ export const prm =
             CAPTION : "Satış Fiyatı Maliyet Kontrolü"
         }
     },
+    //Tedarikçi Fiyatı Satış Fiyatından Yüksek Olamaz Kontrolü
+    {
+        TYPE : 1,
+        ID :"SalePriceToCustomerPriceCtrl",
+        VALUE : true,
+        SPECIAL : "",
+        PAGE : "stk_01_001",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Stok Tanımları",
+            CAPTION : "Ted. Fiyatı Yüksek Olamaz Kontrolü"
+        }
+    },
     //Tax Sugar
     {
         TYPE : 1,

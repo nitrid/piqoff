@@ -388,11 +388,11 @@ export const langTr =
             btn01: "Tamam",
             msg: "Girmiş olduğunuz tedarikçi zaten tanımlı !"
         },
-        msgCheckCustomerCode:
+        msgSalePriceToCustomerPrice:
         {
             title: "Dikkat",
             btn01: "Tamam",
-            msg: "Girmiş olduğunuz tedarikçi zaten tanımlı !"
+            msg: "Girmiş olduğunuz tedarikçi fiyatı satış fiyatından yüksek olamaz! Lütfen satış fiyatınızı kontrol ediniz."
         },
     },
     stk_01_002: 
@@ -6097,6 +6097,7 @@ export const langTr =
             title: "Stok Seçimi",
             clmCode: "KODU",
             clmName: "ADI", 
+            clmPrice: "FİYAT"
         },
         msgSave:
         {

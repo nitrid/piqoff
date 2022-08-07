@@ -397,6 +397,7 @@ export default class itemCard extends React.PureComponent
         }
         else if(e.itemData.title == this.t("tabTitleInfo"))
         {
+            console.log(this.itemsObj.dt())
             await this.grdItemInfo.dataRefresh({source:this.itemsObj.dt()});
         }
     }
@@ -664,6 +665,13 @@ export default class itemCard extends React.PureComponent
                                     onClick={()=>
                                     {
                                         this.popDesign.show()
+                                    }}/>
+                                </Item>
+                                <Item location="after" locateInMenu="auto">
+                                    <NdButton id="btnAnalysis" parent={this} icon="chart" type="default"
+                                    onClick={()=>
+                                    {
+                                        
                                     }}/>
                                 </Item>
                                 <Item location="after"
@@ -1344,6 +1352,28 @@ export default class itemCard extends React.PureComponent
                                             allowColumnResizing={true} 
                                             height={'100%'} 
                                             width={'100%'}
+                                            onRowUpdating={async(e)=>
+                                            {
+                                                if(typeof e.newData.CUSTOMER_PRICE != 'undefined')
+                                                {
+                                                    let tmpSalePriceData = this.itemsObj.itemPrice.dt().where({START_DATE:new Date('1970-01-01').toISOString()}).where({FINISH_DATE:new Date('1970-01-01').toISOString()}).where({TYPE:0}).where({QUANTITY:1})
+                                                    //TEDARİKÇİ FİYATI SATIŞ FİYATINDAN YÜKSEK OLAMAZ KONTROLÜ
+                                                    if(this.prmObj.filter({ID:'SalePriceToCustomerPriceCtrl'}).getValue() && tmpSalePriceData.length > 0 && e.newData.CUSTOMER_PRICE >= tmpSalePriceData[0].PRICE)
+                                                    {
+                                                        e.cancel = true;
+                                                        e.component.cancelEditData()  
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'msgSalePriceToCustomerPrice',showTitle:true,title:this.t("msgSalePriceToCustomerPrice.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.t("msgSalePriceToCustomerPrice.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSalePriceToCustomerPrice.msg")}</div>)
+                                                        }
+                                                        
+                                                        await dialog(tmpConfObj);  
+                                                    }
+                                                    //********************************** */
+                                                }
+                                            }}
                                             >
                                                 <Paging defaultPageSize={5} />
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
@@ -1458,9 +1488,9 @@ export default class itemCard extends React.PureComponent
                                             >
                                                 <Paging defaultPageSize={5} />
                                                 <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
-                                                <Column dataField="CDATE" caption={this.t("grdItemInfo.cDate")}  dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
+                                                <Column dataField="CDATE" caption={this.t("grdItemInfo.cDate")} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ssZ"}/>
                                                 <Column dataField="CUSER" caption={this.t("grdItemInfo.cUser")} />
-                                                <Column dataField="LDATE" caption={this.t("grdItemInfo.lDate")} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
+                                                <Column dataField="LDATE" caption={this.t("grdItemInfo.lDate")} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ssZ"}/>
                                                 <Column dataField="LUSER" caption={this.t("grdItemInfo.lUser")} />
                                             </NdGrid>
                                         </div>
