@@ -23,12 +23,13 @@ import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
 
-export default class outageDoc extends React.Component
+export default class privatePrinting extends React.Component
 {
     constructor()
     {
         super()
         this.core = App.instance.core;
+
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.prilabelCls = new priLabelObj();
@@ -79,7 +80,12 @@ export default class outageDoc extends React.Component
             this.btnSave.setState({disabled:true});
             this.btnPrint.setState({disabled:true});          
         })
-       
+
+        this.txtBarkod.readOnly = false
+        this.txtItemName.readOnly = false
+        this.txtPrice.readOnly = false
+        this.txtDescription.readOnly = false
+        this.txtQuantity.readOnly = false
     }
     render()
     {
@@ -167,7 +173,13 @@ export default class outageDoc extends React.Component
                                                     this.btnNew.setState({disabled:false});
                                                     this.btnPrint.setState({disabled:false});
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                                    await dialog(tmpConfObj1);     
+                                                    await dialog(tmpConfObj1);  
+                                                    
+                                                    this.txtBarkod.readOnly = true
+                                                    this.txtItemName.readOnly = true
+                                                    this.txtPrice.readOnly = true
+                                                    this.txtDescription.readOnly = true
+                                                    this.txtQuantity.readOnly = true
                                                 }
                                                 else
                                                 {
@@ -207,13 +219,8 @@ export default class outageDoc extends React.Component
                                         {
                                             if(pResult.split('|')[0] != 'ERR')
                                             {
-                                                var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
-                                                mywindow.onload = async function() 
-                                                {
-                                                    mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"  
-                                                    
-                                                }   
-                                               
+                                                let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
+                                                mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
                                             }
                                         });
                                     }}/>
@@ -249,34 +256,61 @@ export default class outageDoc extends React.Component
                     <div className="row px-2 pt-2">                        
                         <div className="col-9">
                             <Form colCount={2} id={"frmPriLabel" + this.tabIndex}>
+                                <Item>
+                                    <Label text={this.t("txtBarkod")} alignment="right" />
+                                    <NdTextBox id="txtBarkod" parent={this} simple={true} tabIndex={this.tabIndex}
+                                    onChange={(async()=>
+                                    {
+                                        let tmpBarData = new datatable()
+                                        tmpBarData.selectCmd = 
+                                        {
+                                            query :"SELECT ITEM_GUID AS GUID,ITEM_CODE AS CODE,ITEM_NAME AS NAME,[dbo].[FN_PRICE_SALE](GUID,1,GETDATE()) AS PRICE FROM [ITEM_BARCODE_VW_01] WHERE BARCODE = @BARCODE ",
+                                            param : ['BARCODE:string|50'],
+                                            value : [this.txtBarkod.value]
+                                        }
+                                        await tmpBarData.refresh()
+                                        if(tmpBarData.length > 0)
+                                        {
+                                            this.txtRef.value = tmpBarData[0].CODE
+                                            this.txtItemName.value = tmpBarData[0].NAME
+                                            this.txtRef.GUID = tmpBarData[0].GUID
+                                            this.txtPrice.value = tmpBarData[0].PRICE
+
+                                            this.txtBarkod.value = ""                                            
+                                        }
+                                    }).bind(this)} 
+                                    param={this.param.filter({ELEMENT:'txtBarkod',USERS:this.user.CODE})} 
+                                    access={this.access.filter({ELEMENT:'txtBarkod',USERS:this.user.CODE})}     
+                                    selectAll={true}                           
+                                    />     
+                                </Item>
+                                <EmptyItem/>
                                 {/* txtRef */}
                                 <Item>                                    
                                     <Label text={this.t("txtRef")} alignment="right" />
                                     <NdTextBox id="txtRef" parent={this} simple={true} tabIndex={this.tabIndex} readOnly={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    button=
-                                    {
-                                        [
+                                    button={
+                                    [
+                                        {
+                                            id:'01',
+                                            icon:'more',
+                                            onClick:()=>
                                             {
-                                                id:'01',
-                                                icon:'more',
-                                                onClick:()=>
+                                                this.pg_txtRef.show()
+                                                this.pg_txtRef.onClick = (data) =>
                                                 {
-                                                    this.pg_txtRef.show()
-                                                    this.pg_txtRef.onClick = (data) =>
+                                                    if(data.length > 0)
                                                     {
-                                                        if(data.length > 0)
-                                                        {
-                                                            this.txtRef.value = data[0].CODE
-                                                            this.txtItemName.value = data[0].NAME
-                                                            this.txtRef.GUID = data[0].GUID
-                                                            this.txtPrice.value = data[0].PRICE
-                                                        }
+                                                        this.txtRef.value = data[0].CODE
+                                                        this.txtItemName.value = data[0].NAME
+                                                        this.txtRef.GUID = data[0].GUID
+                                                        this.txtPrice.value = data[0].PRICE
                                                     }
                                                 }
-                                            },
-                                        ]
-                                    }
+                                            }
+                                        },
+                                    ]}
                                     onChange={(async()=>
                                     {
 
@@ -332,7 +366,7 @@ export default class outageDoc extends React.Component
                                 {/* txtItemName */}
                                 <Item>
                                     <Label text={this.t("txtItemName")} alignment="right" />
-                                    <NdTextBox id="txtItemName" parent={this} simple={true} 
+                                    <NdTextBox id="txtItemName" parent={this} simple={true}
                                     param={this.param.filter({ELEMENT:'txtItemName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtItemName',USERS:this.user.CODE})}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}

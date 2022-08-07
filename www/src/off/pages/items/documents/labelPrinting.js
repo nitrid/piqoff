@@ -95,16 +95,16 @@ export default class labelPrinting extends React.Component
         tmpLbl.REF = this.user.CODE
         this.mainLblObj.addEmpty(tmpLbl);
         
-        this.txtSer.readOnly = false
+        this.txtRef.readOnly = false
         this.txtRefno.readOnly = false
         this.dtSelectChange.value =  moment(new Date()).format("YYYY-MM-DD"),
-        this.txtSer.readOnly = true
+        this.txtRef.readOnly = true
         this.calculateCount()
         
         
         await this.grdLabelQueue.dataRefresh({source:this.lblObj.dt('LABEL_QUEUE')});
 
-        this.txtSer.props.onChange()
+        this.txtRef.props.onChange()
     }
     async getDoc(pGuid)
     {
@@ -113,14 +113,14 @@ export default class labelPrinting extends React.Component
         await this.lblObj.load({GUID:pGuid});
         this.mainLblObj.load({GUID:pGuid});
 
-        this.txtSer.readOnly = true
+        this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
     }
     async getDocs(pType)
     {
         let tmpQuery = 
         {
-            query : "SELECT GUID,REF,REF_NO FROM LABEL_QUEUE WHERE STATUS IN("+pType+") AND REF = '" +this.txtSer.value+"' " 
+            query : "SELECT GUID,REF,REF_NO FROM LABEL_QUEUE WHERE STATUS IN("+pType+") AND REF = '" +this.txtRef.value+"' " 
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
         let tmpRows = []
@@ -532,9 +532,11 @@ export default class labelPrinting extends React.Component
         this.lblObj.dt()[pIndex].NAME = pData.NAME
         this.lblObj.dt()[pIndex].ITEM_GRP = pData.ITEM_GRP
         this.lblObj.dt()[pIndex].ITEM_GRP_NAME = pData.ITEM_GRP_NAME
+        this.lblObj.dt()[pIndex].CUSTOMER_NAME = pData.CUSTOMER_NAME
         this.lblObj.dt()[pIndex].PRICE = pData.PRICE
         this.lblObj.dt()[pIndex].UNDER_UNIT_VALUE = pData.UNDER_UNIT_VALUE
         this.lblObj.dt()[pIndex].UNDER_UNIT_PRICE = pData.UNDER_UNIT_PRICE
+        this.lblObj.dt()[pIndex].UNDER_UNIT_SYMBOL = pData.UNDER_UNIT_SYMBOL
         this.lblObj.dt()[pIndex].PRICE = pData.PRICE
         this.lblObj.dt()[pIndex].LINE_NO = pIndex + 1
         this.calculateCount()
@@ -549,9 +551,11 @@ export default class labelPrinting extends React.Component
         tmpDocItems.NAME = pData.NAME
         tmpDocItems.ITEM_GRP = pData.ITEM_GRP
         tmpDocItems.ITEM_GRP_NAME = pData.ITEM_GRP_NAME
+        tmpDocItems.CUSTOMER_NAME = pData.CUSTOMER_NAME
         tmpDocItems.PRICE = pData.PRICE
         tmpDocItems.UNDER_UNIT_VALUE = pData.UNDER_UNIT_VALUE
         tmpDocItems.UNDER_UNIT_PRICE = pData.UNDER_UNIT_PRICE
+        tmpDocItems.UNDER_UNIT_SYMBOL = pData.UNDER_UNIT_SYMBOL
         tmpDocItems.PRICE = pData.PRICE
         tmpDocItems.LINE_NO = this.lblObj.dt().length + 1
         this.lblObj.addEmpty(tmpDocItems)
@@ -583,7 +587,7 @@ export default class labelPrinting extends React.Component
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
-                            <Item location="after" locateInMenu="auto">
+                                <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnWizard" parent={this} icon="tips" type="default"
                                         onClick={()=>
                                         {
@@ -659,16 +663,14 @@ export default class labelPrinting extends React.Component
                                                         "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH " +
                                                         "FROM  ITEM_LABEL_QUEUE_VW_01 WHERE GUID  = @GUID" ,
                                                 param:  ['GUID:string|50','DESIGN:string|25'],
-                                                value:  [this.lblObj.dt()[0].GUID,this.cmbDesignList.value]
+                                                value:  [this.mainLblObj.dt()[0].GUID,this.cmbDesignList.value]
                                             }
-
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
+
                                             this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" +  JSON.stringify(tmpData.result.recordset)+ "}",(pResult) => 
-                                            {
-                                                console.log(pResult)
+                                            {                                                
                                                 if(pResult.split('|')[0] != 'ERR')
                                                 {
-                                                    console.log(11)
                                                     var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
                                                     mywindow.onload = async function() 
                                                     {
@@ -733,12 +735,12 @@ export default class labelPrinting extends React.Component
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Form colCount={3} id="frmLabelQeueu">
-                                {/* txtSer-Refno */}
+                                {/* txtRef-Refno */}
                                 <Item>
                                     <Label text={this.t("txtRefRefno")} alignment="right" />
                                     <div className="row">
                                         <div className="col-4 pe-0">
-                                            <NdTextBox id="txtSer" parent={this} simple={true} dt={{data:this.mainLblObj.dt('MAIN_LABEL_QUEUE'),field:"REF"}}
+                                            <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.mainLblObj.dt('MAIN_LABEL_QUEUE'),field:"REF"}}
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             readOnly={true}
                                             maxLength={32}
@@ -748,16 +750,16 @@ export default class labelPrinting extends React.Component
                                                 {
                                                     query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM LABEL_QUEUE WHERE  REF = @REF ",
                                                     param : ['REF:string|25'],
-                                                    value : [this.txtSer.value]
+                                                    value : [this.txtRef.value]
                                                 }
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
                                                 if(tmpData.result.recordset.length > 0)
                                                 {
-                                                    this.txtRefno.setState({value:tmpData.result.recordset[0].REF_NO})
+                                                    this.txtRefno.value = tmpData.result.recordset[0].REF_NO
                                                 }
                                             }).bind(this)}
-                                            param={this.param.filter({ELEMENT:'txtSer',USERS:this.user.CODE})}
-                                            access={this.access.filter({ELEMENT:'txtSer',USERS:this.user.CODE})}
+                                            param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
+                                            access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             >
                                             <Validator validationGroup={"frmLabelQeueu" + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRef")} />
@@ -807,7 +809,7 @@ export default class labelPrinting extends React.Component
                                             }
                                             onChange={(async()=>
                                             {
-                                                let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtSer.value,this.txtRefno.value)
+                                                let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
                                                 if(tmpResult == 3)
                                                 {
                                                     this.txtRefno.value = "";
@@ -916,17 +918,19 @@ export default class labelPrinting extends React.Component
                                             "CASE WHEN UNDER_UNIT_VALUE =0 " +
                                             "THEN 0 " +
                                             "ELSE " +
-                                            "ROUND((PRICE * UNDER_UNIT_VALUE),2) " +
+                                            "ROUND((PRICE / UNDER_UNIT_VALUE),2) " +
                                             "END AS UNDER_UNIT_PRICE " +
-                                            "FROM ( SELECT ITEMS.GUID,    " +
+                                            "FROM ( SELECT ITEMS.GUID, " +
                                             "ITEM_BARCODE.CDATE, " +
-                                            "ITEMS.CODE,    " +
-                                            "ITEMS.NAME,    " +
-                                            "ITEM_BARCODE.BARCODE,    " +
-                                            "MAIN_GRP AS ITEM_GRP,    " +
-                                            "MAIN_GRP_NAME AS ITEM_GRP_NAME,    " +
+                                            "ITEMS.CODE, " +
+                                            "ITEMS.NAME, " +
+                                            "ITEM_BARCODE.BARCODE, " +
+                                            "MAIN_GRP AS ITEM_GRP, " +
+                                            "MAIN_GRP_NAME AS ITEM_GRP_NAME, " +
+                                            "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS.GUID),'') AS CUSTOMER_NAME, " +
                                             "(SELECT [dbo].[FN_PRICE_SALE](ITEMS.GUID,1,GETDATE())) AS PRICE  ,  " +
-                                            "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS.GUID),0) AS UNDER_UNIT_VALUE   " +
+                                            "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS.GUID),0) AS UNDER_UNIT_VALUE, " +
+                                            "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE TYPE = 1 AND ITEM_UNIT_VW_01.ITEM_GUID = ITEMS.GUID),0) AS UNDER_UNIT_SYMBOL " +
                                             "FROM ITEMS_VW_01 AS ITEMS INNER JOIN ITEM_BARCODE ON ITEMS.GUID = ITEM_BARCODE.ITEM  " +
                                             "WHERE ((ITEMS.CODE = @CODE) OR (ITEM_BARCODE.BARCODE = @CODE))  " +
                                             " ) AS TMP ORDER BY CDATE DESC ",
@@ -1023,11 +1027,11 @@ export default class labelPrinting extends React.Component
                                                     return
                                                 }
                                             }
-                                           
+                                            console.log(this.mainLblObj.dt())
                                             let tmpDocItems = {...this.lblObj.empty}
                                             tmpDocItems.REF = this.mainLblObj.dt()[0].REF
                                             tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
-                                            this.txtSer.readOnly = true
+                                            this.txtRef.readOnly = true
                                             this.txtRefno.readOnly = true
                                             this.lblObj.addEmpty(tmpDocItems)
                                             this.pg_txtItemsCode.show()
@@ -1126,18 +1130,20 @@ export default class labelPrinting extends React.Component
                                         "CASE WHEN UNDER_UNIT_VALUE =0  " +
                                         "THEN 0 " +
                                         "ELSE " +
-                                        "ROUND((PRICE * UNDER_UNIT_VALUE),2) " +
+                                        "ROUND((PRICE / UNDER_UNIT_VALUE),2) " +
                                         "END AS UNDER_UNIT_PRICE " +
                                         "FROM  (  SELECT GUID,   " +
                                         "CODE,   " +
                                         "NAME,   " +
                                         "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
                                         "MAIN_GRP AS ITEM_GRP,   " +
-                                        "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
+                                        "MAIN_GRP_NAME AS ITEM_GRP_NAME, " +
+                                        "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID),'') AS CUSTOMER_NAME, " +
                                         "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE())) AS PRICE  , " +
-                                        "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE " +
-                                        "FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID),'') <> '') AS TMP " +
-                                        "WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) AND STATUS = 1" ,
+                                        "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE, " +
+                                        "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE TYPE = 1 AND ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_SYMBOL " +
+                                        "FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID),'') <> '' AND STATUS = 1) AS TMP " +
+                                        "WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)" ,
                                 param : ['VAL:string|50']
                             },
                             sql:this.core.sql

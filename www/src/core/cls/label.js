@@ -20,10 +20,12 @@ export class labelCls
             NAME : '',
             ITEM_GRP : '',
             ITEM_GRP_NAME : '',
+            CUSTOMER_NAME : '',
             PRICE : 0,
             FACTOR : '',
-            UNDER_UNIT_VALUE :'' ,
+            UNDER_UNIT_VALUE : '' ,
             UNDER_UNIT_PRICE : 0,
+            UNDER_UNIT_SYMBOL : '',
             DESCRIPTION : '',
             LINE_NO : 0
         }

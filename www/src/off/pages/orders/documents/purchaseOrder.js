@@ -25,7 +25,7 @@ import tr from '../../../meta/lang/devexpress/tr.js';
 
 export default class purchaseOrder extends React.Component
 {
-    constructor(vprops)
+    constructor(props)
     {
         super(props)
         this.core = App.instance.core;

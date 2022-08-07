@@ -6084,6 +6084,7 @@ export const langTr =
     },
     stk_02_006 : 
     {
+        txtBarkod: "Barkod",
         txtRef: "Referans",
         txtPrice : "Fiyat",
         txtDescription : "Açıklama",

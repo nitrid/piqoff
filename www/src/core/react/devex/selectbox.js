@@ -23,8 +23,10 @@ export default class NdSelectBox extends Base
     }  
     _selectBoxView()
     {
+        console.log(this.props.id + " - " + this.props.acceptCustomValue)
         return (
             <SelectBox id={this.props.id}
+            acceptCustomValue={this.props.acceptCustomValue}
             dataSource={typeof this.state.data == 'undefined' ? typeof this.props.dataSource != 'undefined' ? this.props.dataSource : undefined : this.state.data.store} 
             displayExpr={this.props.displayExpr} 
             valueExpr={this.props.valueExpr}

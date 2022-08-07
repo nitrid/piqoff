@@ -849,14 +849,14 @@ export default class CustomerCard extends React.Component
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popAdress.cmbPopZipcode")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbPopZipcode"
+                                    <NdSelectBox simple={true} parent={this} id="cmbPopZipcode" acceptCustomValue={true}
                                     displayExpr="ZIPNAME"                       
                                     valueExpr="ZIPCODE"
                                     value=""
                                     searchEnabled={true}
                                     showClearButton={true}
-                                    pageSize ={50}
-                                    notRefresh = {true}
+                                    pageSize={50}
+                                    notRefresh={true}
                                     data={{source:{select:{query : "SELECT [COUNTRY_CODE],[ZIPCODE],[PLACE],ZIPCODE + ' ' + PLACE AS ZIPNAME  FROM [dbo].[ZIPCODE]"},sql:this.core.sql}}}
                                     />
                                 </Item>

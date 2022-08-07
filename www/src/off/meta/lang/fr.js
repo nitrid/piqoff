@@ -5941,6 +5941,7 @@ export const langFr =
     },
     stk_02_006 : 
     {
+        txtBarkod: "Barkod", //BAK
         txtRef: "Référence",
         txtPrice : "Prix ",
         txtDescription : "Motif",

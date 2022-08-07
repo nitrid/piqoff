@@ -199,7 +199,7 @@ export default class barcodeList extends React.Component
                                     <NdSelectBox simple={true} parent={this} id="cmbGenus" height='fit-content'
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
-                                    value={"-1"}
+                                    value={-1}
                                     data={{source:[{ID:-1,VALUE:this.t("cmbGenusData.allGenus")},{ID:0,VALUE:this.t("cmbGenusData.Customer")},{ID:1,VALUE:this.t("cmbGenusData.supplier")},{ID:2,VALUE:this.t("cmbGenusData.both")}]}}
                                     />
                                 </Item>       
