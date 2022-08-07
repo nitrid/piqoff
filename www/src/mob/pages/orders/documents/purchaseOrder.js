@@ -332,7 +332,7 @@ export default class salesOrder extends React.Component
         }
         for (let i = 0; i < this.docObj.docOrders.dt().length; i++) 
         {
-            if(this.docObj.docOrders.dt()[i].CODE == this.barcode.code)
+            if(this.docObj.docOrders.dt()[i].ITEM_CODE == this.barcode.code)
             {
                 let tmpConfObj = 
                 {
@@ -932,7 +932,7 @@ export default class salesOrder extends React.Component
                     columnsAutoWidth={true} 
                     allowColumnReordering={true} 
                     allowColumnResizing={true} 
-                    height={'400'} 
+                    height={'250'} 
                     width={'100%'}
                     dbApply={false}
                     onRowUpdated={async(e)=>{
