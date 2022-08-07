@@ -263,6 +263,7 @@ export default class rebateDoc extends React.Component
             }
             else
             {
+                this.txtQuantity.focus()
                 return
             }
         }
