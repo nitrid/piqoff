@@ -53,6 +53,7 @@ export default class rebateDoc extends React.Component
         this.dropmenuDocItems = [this.t("btnSave")]
         this.pageChange = this.pageChange.bind(this)
         this.dropmenuClick = this.dropmenuClick.bind(this)
+        this.barcodeScan = this.barcodeScan.bind(this)
 
     }
     async componentDidMount()
@@ -280,8 +281,9 @@ export default class rebateDoc extends React.Component
         }
         for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
         {
-            if(this.docObj.docItems.dt()[i].CODE == this.barcode.code)
+            if(this.docObj.docItems.dt()[i].ITEM_CODE == this.barcode.code)
             {
+                document.getElementById("Sound2").play(); 
                 let tmpConfObj = 
                 {
                     id:'msgCombineItem',showTitle:true,title:this.t("msgCombineItem.title"),showCloseButton:true,width:'350px',height:'200px',
@@ -291,6 +293,7 @@ export default class rebateDoc extends React.Component
                 let pResult = await dialog(tmpConfObj);
                 if(pResult == 'btn01')
                 {                   
+                    this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + pQuantity
                     this.barcodeReset()
                     return
                 }
@@ -322,6 +325,56 @@ export default class rebateDoc extends React.Component
         this.docObj.docItems.addEmpty(tmpDocItems)
         this.barcodeReset()
         await this.docObj.save()
+    }
+    async barcodeScan()
+    {
+        
+        cordova.plugins.barcodeScanner.scan(
+            async function (result) 
+            {
+                if(result.cancelled == false)
+                {
+                    this.txtBarcode.value = result.text;
+                    let tmpQuery = 
+                    {
+                        query : "SELECT ITEM_CODE AS CODE,ITEM_NAME AS NAME,ITEM_GUID AS GUID,BARCODE,[dbo].[FN_PRICE_SALE](ITEM_GUID,1,GETDATE()) AS PRICE FROM ITEM_BARCODE_VW_01  WHERE BARCODE = @BARCODE OR ITEM_CODE = @BARCODE ",
+                        param : ['BARCODE:string|50'],
+                        value : [result.text]
+                    }
+                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                    if(tmpData.result.recordset.length >0)
+                    {
+                        this.barcode.name = tmpData.result.recordset[0].NAME
+                        this.barcode.barcode = tmpData.result.recordset[0].BARCODE 
+                        this.barcode.code = tmpData.result.recordset[0].CODE 
+                        this.barcode.guid = tmpData.result.recordset[0].GUID 
+                        
+                        this.txtQuantity.focus()
+                        this.setState({tbBarcode:"visible"})
+                    }
+                    else
+                    {
+                        document.getElementById("Sound").play(); 
+                        let tmpConfObj = 
+                        {
+                            id:'msgBarcodeNotFound',showTitle:true,title:this.t("msgBarcodeNotFound.title"),showCloseButton:true,width:'350px',height:'200px',
+                            button:[{id:"btn01",caption:this.t("msgBarcodeNotFound.btn01"),location:'after'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcodeNotFound.msg")}</div>)
+                        }
+                        await dialog(tmpConfObj);
+                        this.barcodeReset()
+                    }
+                }
+            }.bind(this),
+            function (error) 
+            {
+                //alert("Scanning failed: " + error);
+            },
+            {
+              prompt : "Scan",
+              orientation : "portrait"
+            }
+        );
     }
     render()
     {
@@ -579,6 +632,14 @@ export default class rebateDoc extends React.Component
                                             }
                                         }
                                     }
+                                },
+                                {
+                                    id:'02',
+                                    icon:'photo',
+                                    onClick:async()=>
+                                    {
+                                        this.barcodeScan()
+                                    }
                                 }
                             ]
                             }
@@ -607,6 +668,7 @@ export default class rebateDoc extends React.Component
                                     }
                                     else
                                     {
+                                        document.getElementById("Sound").play(); 
                                         let tmpConfObj = 
                                         {
                                             id:'msgBarcodeNotFound',showTitle:true,title:this.t("msgBarcodeNotFound.title"),showCloseButton:true,width:'350px',height:'200px',

@@ -68,11 +68,6 @@ export const menu = (e) =>
                             path: 'items/documents/rebateDoc'
                         },
                         {
-                            id: 'stk_02_003',
-                            text: e.t('menu.stk_02_003'),//'Özel Etilet',
-                            path: 'items/documents/privatePrinting'
-                        },
-                        {
                             id: 'stk_02_004',
                             text: e.t('menu.stk_02_004'),// Skt Giriş',
                             path: 'items/documents/expdateEntry'

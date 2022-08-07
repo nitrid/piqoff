@@ -684,6 +684,12 @@ export const langTr =
             btn02: "Vazgeç",
             msg: "Miktar Eklemek İstediğinize Emin Misiniz?"
         },
+        msgBarcodeNotFound:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Barkod Bulunamadı !"
+        },
         msgSave:
         {
             title: "Dikkat",
