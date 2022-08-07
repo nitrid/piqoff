@@ -863,6 +863,12 @@ export const langTr =
             btn01: "Tamam",
             msg: "Barkod Bulunamadı !"
         },
+        msgZeroQuantity:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Miktar 0 Olamaz !"
+        },
         popItemCode : 
         {
             title : "Stok Seçimi",

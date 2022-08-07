@@ -123,6 +123,17 @@ export default class labelPrinting extends React.Component
         {
             return
         }
+        if(this.txtPopQuantity.value == 0)
+        {
+            let tmpConfObj = 
+            {
+                id:'msgZeroQuantity',showTitle:true,title:this.t("msgZeroQuantity.title"),showCloseButton:true,width:'350px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgZeroQuantity.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgZeroQuantity.msg")}</div>)
+            }
+            await dialog(tmpConfObj);
+            this.txtPopQuantity.focus()
+        }
         for (let i = 0; i < this.expObj.dt().length; i++) 
         {
             if(this.expObj.dt()[i].ITEM_CODE == this.barcode.code)
