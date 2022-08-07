@@ -280,9 +280,13 @@ export default class labelPrinting extends React.Component
                 </Item>
                 <Item>
                     <Label text={this.t("txtQuantity")} alignment="right" />
-                    <NdNumberBox id="txtPopQuantity" parent={this} simple={true}  
+                    <NdTextBox id="txtPopQuantity" parent={this} simple={true}  
+                       onEnterKey={(async(e)=>
+                        {
+                            this.addItem()
+                        }).bind(this)}
                     >
-                    </NdNumberBox>
+                    </NdTextBox>
                 </Item>
                 <Item>
                     <Label text={this.t("dtlastDate")} alignment="right" />
