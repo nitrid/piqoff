@@ -293,13 +293,15 @@ export default class rebateDoc extends React.Component
                 let pResult = await dialog(tmpConfObj);
                 if(pResult == 'btn01')
                 {                   
-                    this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + pQuantity
+                    this.docObj.docItems.dt()[i].QUANTITY = Number(this.docObj.docItems.dt()[i].QUANTITY) + Number(pQuantity)
                     this.barcodeReset()
                     return
                 }
                 else
                 {
-                    break
+                    this.docObj.docItems.dt()[i].QUANTITY = pQuantity
+                    this.barcodeReset()
+                    return
                 }
                 
             }

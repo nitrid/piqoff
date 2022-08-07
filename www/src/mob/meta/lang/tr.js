@@ -756,8 +756,8 @@ export const langTr =
         msgCombineItem:
         {
             title: "Dikkat",
-            btn01: "Birleştir",
-            btn02: "Yeni Ekle",
+            btn01: "Üstüne Ekle",
+            btn02: "Değiştir",
             msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Satırlar Birleştirilsin mi ?"
         },
         validRef :"Seri Boş Geçilemez",
