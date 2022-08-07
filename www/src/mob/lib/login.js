@@ -29,7 +29,7 @@ export default class Login extends React.Component
                 position: 'inherit',
                 margin:'auto',
                 top: '30%',
-                width: '350px',
+                width: '250px',
                 height: 'fit-content',
                 backgroundColor : '#f8f9fa',  
             }

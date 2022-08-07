@@ -1047,6 +1047,7 @@ export class posDeviceCls
             this.escpos.USB = global.require('escpos-usb');
             this.path = global.require('path')
             this.serialport = global.require('serialport');
+            console.log(this.escpos.USB)
         }
 
         this.core = core.instance;
@@ -1067,9 +1068,29 @@ export class posDeviceCls
             PAY_CARD_PORT : '',
             PRINT_DESING : '',
         }
+        this.listeners = Object();
 
         this._initDs();
     }
+    //#region  "EVENT"
+    on(pEvt, pCallback) 
+    {
+        if (!this.listeners.hasOwnProperty(pEvt))
+            this.listeners[pEvt] = Array();
+            this.listeners[pEvt].push(pCallback); 
+    }
+    emit(pEvt, pParams)
+    {
+        if (pEvt in this.listeners) 
+        {
+            let callbacks = this.listeners[pEvt];
+            for (var x in callbacks)
+            {
+                callbacks[x](pParams);
+            }
+        } 
+    }
+    //#endregion
     //#region Private
     _initDs()
     {
@@ -1242,8 +1263,11 @@ export class posDeviceCls
             return
         }
         let device  = new this.escpos.USB();
+        console.log(device)
+        console.log(11)
         let options = { encoding: "GB18030" /* default */ }
         let printer = new this.escpos.Printer(device, options);
+        console.log(printer)
         device.open(function(error)
         {
             printer.cashdraw(2);
@@ -1590,5 +1614,38 @@ export class posDeviceCls
                 });
             });  
         });
+    }
+    scanner()
+    {
+        if(!core.instance.util.isElectron())
+        {
+            return
+        }
+
+        const port = new this.serialport(this.dt().length > 0 ? this.dt()[0].SCANNER_PORT : "")               
+        let tmpSerialCount = 0;
+        let tmpBarcode = "";
+
+        port.on('data',(data) =>
+        {
+            tmpSerialCount++;
+            tmpBarcode = tmpBarcode + data.toString("utf8")
+
+            if(tmpSerialCount == 2)
+            {
+                if(tmpBarcode.length == 11)
+                {
+                    tmpBarcode = tmpBarcode.substring(2,10)
+                }
+                else
+                {
+                    tmpBarcode = tmpBarcode.substring(1,14)
+                }
+                
+                emit('scanner',tmpBarcode);   
+                tmpSerialCount = 0;
+                tmpBarcode = "";            
+            }
+        })
     }
 }
