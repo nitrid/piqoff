@@ -119,6 +119,10 @@ export default class labelPrinting extends React.Component
     }
     async addItem()
     {
+        if(this.barcode.code == '')
+        {
+            return
+        }
         for (let i = 0; i < this.expObj.dt().length; i++) 
         {
             if(this.expObj.dt()[i].ITEM_CODE == this.barcode.code)
@@ -201,6 +205,7 @@ export default class labelPrinting extends React.Component
         }
         this.txtPopQuantity.value = 0
         this.dtlastDate.value = moment(new Date()).format("DD/MM/YYYY HH:mm:ss")
+        this.txtBarcode.focus()
     }
     render()
     {
