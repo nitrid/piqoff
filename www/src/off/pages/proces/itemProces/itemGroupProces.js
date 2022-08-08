@@ -81,7 +81,7 @@ export default class itemList extends React.Component
             id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
             button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
         }
-        tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
+        tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
         await dialog(tmpConfObj1);
         this._btnGetirClick()
        
