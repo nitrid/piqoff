@@ -819,7 +819,7 @@ export default class salesOrder extends React.Component
                             {/* txtQuantity */}
                         <Item>
                                 <Label text={this.t("txtQuantity")}/>
-                                <NdTextBox id="txtQuantity" parent={this} simple={true}  
+                                <NdNumberBox id="txtQuantity" parent={this} simple={true}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     param={this.param.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
@@ -832,7 +832,7 @@ export default class salesOrder extends React.Component
                                             this.addItem()
                                         }).bind(this)}
                                     >
-                                </NdTextBox>
+                                </NdNumberBox>
                             </Item>
                             {/* txtPrice */}
                             <Item>
@@ -1019,16 +1019,14 @@ export default class salesOrder extends React.Component
                                 <Scrolling mode="infinite" />
                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                 <Export fileName={this.lang.t("menu.sip_02_002")} enabled={true} allowExportSelectedData={true} />
-                                <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsOrder.clmCreateDate")} width={150} allowEditing={false}/>
-                                <Column dataField="ITEM_CODE" caption={this.t("grdSlsOrder.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
                                 <Column dataField="ITEM_NAME" caption={this.t("grdSlsOrder.clmItemName")} width={350} />
-                                <Column dataField="PRICE" caption={this.t("grdSlsOrder.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={150}/>
-                                <Column dataField="QUANTITY" caption={this.t("grdSlsOrder.clmQuantity")} dataType={'number'} width={150}/>
-                                <Column dataField="AMOUNT" caption={this.t("grdSlsOrder.clmAmount")} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}} width={150}/>
-                                <Column dataField="DISCOUNT" caption={this.t("grdSlsOrder.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={150}/>
-                                <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsOrder.clmDiscountRate")} dataType={'number'} width={150}/>
-                                <Column dataField="VAT" caption={this.t("grdSlsOrder.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} width={150}/>
-                                <Column dataField="TOTAL" caption={this.t("grdSlsOrder.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} width={150}/>
+                                <Column dataField="QUANTITY" caption={this.t("grdSlsOrder.clmQuantity")} dataType={'number'} width={80}/>
+                                <Column dataField="PRICE" caption={this.t("grdSlsOrder.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={80}/>
+                                <Column dataField="AMOUNT" caption={this.t("grdSlsOrder.clmAmount")} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}} width={80}/>
+                                <Column dataField="DISCOUNT" caption={this.t("grdSlsOrder.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={80}/>
+                                <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsOrder.clmDiscountRate")} dataType={'number'} width={80}/>
+                                <Column dataField="VAT" caption={this.t("grdSlsOrder.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} width={80}/>
+                                <Column dataField="TOTAL" caption={this.t("grdSlsOrder.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} width={100}/>
                             </NdGrid>
                         </Item>
                         </Form>
@@ -1274,9 +1272,9 @@ export default class salesOrder extends React.Component
                                         {/* checkCustomer */}
                                         <Item>
                                             <Label text={this.t("txtQuantity")} alignment="right" />
-                                            <NdTextBox id="txtPopQuantity" parent={this} simple={true}  
+                                            <NdNumberBox id="txtPopQuantity" parent={this} simple={true}  
                                             >
-                                        </NdTextBox>
+                                        </NdNumberBox>
                                         </Item>
                                     </Form>
                                 </div>
