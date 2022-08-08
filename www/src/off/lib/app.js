@@ -44,7 +44,7 @@ export default class App extends React.PureComponent
         i18n.changeLanguage(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'))
         this.lang = i18n;  
         moment.locale(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'));
-        
+                
         this.style =
         {
             splash_body : 
