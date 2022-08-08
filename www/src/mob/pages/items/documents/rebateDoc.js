@@ -381,6 +381,7 @@ export default class rebateDoc extends React.Component
     render()
     {
         return(
+        <ScrollView>
         <div className="row px-2 pt-2">
             <div className="row px-2 pt-2" style={{visibility:this.state.tbMain,position:"absolute"}}>
                 <Form colCount={1}>
@@ -804,6 +805,8 @@ export default class rebateDoc extends React.Component
                     <Column dataField="NAME" caption={this.t("popItemCode.clmName")} defaultSortOrder="asc" />
             </NdPopGrid>
         </div>
+        </ScrollView>
+
         )
     }
 }
