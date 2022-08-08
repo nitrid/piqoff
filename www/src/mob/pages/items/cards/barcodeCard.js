@@ -116,8 +116,9 @@ export default class barcodeCard extends React.Component
         }
     }
    render()
-    {           
+    {          
         return (
+            <ScrollView>
             <div>                
                 <ScrollView>                    
                     <div className="row px-2 pt-2">                        
@@ -356,6 +357,7 @@ export default class barcodeCard extends React.Component
                     </div>                                   
                 </ScrollView>
             </div>
-        )        
+            </ScrollView>   
+        )    
     }
 }
