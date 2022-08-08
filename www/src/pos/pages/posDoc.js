@@ -102,7 +102,11 @@ export default class posDoc extends React.PureComponent
                 
             }
         }
-
+        
+        this.posDevice.on('scanner',(tmpBarkod)=>
+        {
+            this.getItem(tmpBarkod)
+        })
         this.init();        
     }
     async init()
@@ -122,10 +126,10 @@ export default class posDoc extends React.PureComponent
         this.device.value = this.posObj.dt()[this.posObj.dt().length - 1].DEVICE
 
         await this.posDevice.load({CODE:this.posObj.dt()[this.posObj.dt().length - 1].DEVICE})        
-        
+        this.posDevice.scanner();
+
         await this.grdList.dataRefresh({source:this.posObj.posSale.dt()});
         await this.grdPay.dataRefresh({source:this.posObj.posPay.dt()});
-
         await this.grdLastPos.dataRefresh({source:this.lastPosDt});
 
         this.cheqDt.selectCmd = 
@@ -1036,6 +1040,10 @@ export default class posDoc extends React.PureComponent
                             }
                         }
                     }
+                    else
+                    {
+                        return
+                    }
                 }
                 else //Başarısız veya İptal
                 {
@@ -1126,8 +1134,8 @@ export default class posDoc extends React.PureComponent
                         let tmpConfObj =
                         {
                             id:'msgPayFailed',showTitle:true,title:this.lang.t("msgPayFailed.title"),showCloseButton:true,width:'500px',height:'250px',
-                            button:[{id:"btn01",caption:this.lang.t("msgPayFailed.title"),location:'after'}],
-                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPayFailed.title")}</div>)
+                            button:[{id:"btn01",caption:this.lang.t("msgPayFailed.btn01"),location:'after'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPayFailed.msg")}</div>)
                         }
                         await dialog(tmpConfObj);
                         resolve(0) // Başarısız
@@ -4558,7 +4566,7 @@ export default class posDoc extends React.PureComponent
                     >
                         <div className="row">
                             <div className="col-12 py-2">
-                                <div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCardPayment.btn01")}</div>
+                                <div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCardPayment.msg")}</div>
                             </div>
                         </div>
                     </NdDialog>

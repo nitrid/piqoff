@@ -68,8 +68,16 @@ export default class Login extends React.Component
         App.instance.transfer.on('onState',(pParam)=>
         {
             this.setState({msgTransferStatus:pParam.text})
-            console.log(pParam)
         })
+
+        //YENİ KURULMUŞ CİHAZLARDA DEFAULT TR SEÇİMİ.
+        if(localStorage.getItem('lang') == null)
+        {
+            localStorage.setItem('lang','tr')
+            i18n.changeLanguage('tr')
+            locale('tr')
+            window.location.reload()
+        }
     }
     async onLoginClick(e)
     {
@@ -169,159 +177,163 @@ export default class Login extends React.Component
             <div style={this.style.body}>
                 <div className="p-3"></div>
                 <div className="card" style={this.style.login_box}>
-                   <div className="card-header">Login</div>
-                   <div className="card-body">
-                        <div className="row">
-                            <div className="col-12 pb-2">
-                                <h6 className="text-center" style={{color:'#ff7675'}}>{this.state.alert}</h6>
-                            </div>
+                    <div className="card-header">
+                        <div className='row'>
+                            <div className='col-9'>Login</div>
                         </div>
-                        <div className="dx-field">
-                            <div className="dx-field-label">{this.lang.t("txtLangSelect")}</div>
-                            <div className="dx-field-value">
-                            <NdSelectBox simple={true} parent={this} id="cmbType" height='fit-content'
-                            displayExpr="text"                       
-                            valueExpr="id"
-                            value= {localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang')}
-                            data={{source:[{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"tr",text:"TR"}]}}
-                            onValueChanged={(async(args)=>
-                                    {
-                                        localStorage.setItem('lang',args.value)
-                                        i18n.changeLanguage(args.value)
-                                        locale(args.value)
-                                        window.location.reload()
-                                }).bind(this)}
-                            />
-                            </div>
-                        </div>
-                        <div className="dx-field">
-                            <div className="dx-field-label">{this.lang.t("txtUser")}</div>
-                            <div className="dx-field-value">
-                                <NdTextBox id="Kullanici" parent={this} simple={true} showClearButton={true} height='fit-content' valueChangeEvent="keyup" onValueChanging={(e)=>{this.keyboard.setInput(e)}}  
-                                onFocusIn={()=>{this.keyboard.inputName = "Kullanici"}} placeholder={this.lang.t("txtUser")}
-                                />
-                            </div>
-                        </div>
-                        <div className="dx-field">
-                            <div className="dx-field-label">{this.lang.t("txtPass")}</div>
-                            <div className="dx-field-value">
-                                <NdTextBox id="Sifre" parent={this} mode="password" showClearButton={true} height='fit-content' valueChangeEvent="keyup" onValueChanging={(e)=>{this.keyboard.setInput(e)}} 
-                                onEnterKey={this.onLoginClick}
-                                onFocusIn={()=>{this.keyboard.inputName = "Sifre"}} placeholder={this.lang.t("txtPass")}
-                                />
-                            </div>
-                        </div>
-                        <div className="row py-1">
-                            <div className="col-12">
-                                <div className="dx-field">
-                                    <Button
-                                    width={'100%'}
-                                    height='fit-content'
-                                    text={this.lang.t("btnUserSelect")}
-                                    type="success"
-                                    stylingMode="contained"
-                                    onClick={this.getUserList}
-                                    />
+                    </div>
+                    <div className="card-body">
+                            <div className="row">
+                                <div className="col-12 pb-2">
+                                    <h6 className="text-center" style={{color:'#ff7675'}}>{this.state.alert}</h6>
                                 </div>
                             </div>
-                        </div>
-                        <div className="row py-1">
-                            <div className="col-6">
-                                <div className="dx-field">
-                                    <Button
-                                    width={'100%'}
-                                    height='fit-content'
-                                    text={this.lang.t("btnLogin")}
-                                    type="default"
-                                    stylingMode="contained"
-                                    onClick={this.onLoginClick}
-                                    />
-                                </div>
-                            </div>
-                            <div className="col-6">
-                                <div className="dx-field">
-                                    <Button
-                                    width={'100%'}
-                                    height='fit-content'
-                                    text={this.lang.t("btnLogout")}
-                                    type="danger"
-                                    stylingMode="contained"
-                                    onClick={this.closePage}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row py-1">
-                            <div className="col-12">
-                                <div className="dx-field">
-                                    <Button
-                                    icon={"fa-regular fa-id-card"}
-                                    width={'100%'}
-                                    height='50px'
-                                    type="default"
-                                    stylingMode="contained"
-                                    onClick={this.cardIdRead}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <NdPopGrid id={"pg_users"} parent={this} container={"#root"}
-                            visible={false}
-                            position={{of:'#root'}} 
-                            showTitle={true} 
-                            showBorders={true}
-                            width={'50%'}
-                            height={'90%'}
-                            title="Kullanıcı Listesi"
-                            >
-                                <Column dataField="CODE" caption="CODE" width={150} defaultSortOrder="asc"/>
-                                <Column dataField="NAME" caption="NAME" width={150} defaultSortOrder="asc" />                            
-                            </NdPopGrid>
-                        </div>
-                        {/* CardId PopUp */}
-                        <div>
-                            <NdPopUp parent={this} id={"popCardId"} 
-                            visible={false}
-                            showCloseButton={false}
-                            showTitle={true}
-                            container={"#root"} 
-                            width={'500'}
-                            height={'500'}
-                            position={{of:'#root'}}
-                            >
-                                <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <img src="./css/img/cardicon3.png" height="300px"/>
-                                </Item>
-                                <Item>
-                                <NdTextBox id="cardRead" parent={this} simple={true}  mode="password" showClearButton={true} height='fit-content'
-                                placeholder={this.lang.t("txtCardRead")}
-                                onKeyUp={async(k)=>
+                            <div className="dx-field">
+                                <div className="dx-field-label">{this.lang.t("txtLangSelect")}</div>
+                                <div className="dx-field-value">
+                                <NdSelectBox simple={true} parent={this} id="cmbType" height='fit-content'
+                                displayExpr="text"                       
+                                valueExpr="id"
+                                value= {localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang')}
+                                data={{source:[{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"tr",text:"TR"}]}}
+                                onValueChanged={(async(args)=>
                                 {
-                                    if(k.event.code != 'Enter')
-                                    {
-                                        setTimeout(() => {
-                                            this.cardRead.value = ''
-                                        }, 500);
-                                    }
-                                    else
-                                    {
-                                        this.cardIdCheck(this.cardRead.value)
-                                    }
-                                }}
+                                    localStorage.setItem('lang',args.value)
+                                    i18n.changeLanguage(args.value)
+                                    locale(args.value)
+                                    window.location.reload()
+                                }).bind(this)}
                                 />
-                                </Item>
-                                <Item>
-                                    <Button width={'100%'} height='fit-content' text={this.lang.t("btnCancel")} type="default" stylingMode="contained"
-                                    disabled={this.state.btnCardIdCancel}
-                                    onClick={()=>{this.popCardId.hide()}}
+                                </div>
+                            </div>
+                            <div className="dx-field">
+                                <div className="dx-field-label">{this.lang.t("txtUser")}</div>
+                                <div className="dx-field-value">
+                                    <NdTextBox id="Kullanici" parent={this} simple={true} showClearButton={true} height='fit-content' valueChangeEvent="keyup" onValueChanging={(e)=>{this.keyboard.setInput(e)}}  
+                                    onFocusIn={()=>{this.keyboard.inputName = "Kullanici"}} placeholder={this.lang.t("txtUser")}
                                     />
-                                </Item>
-                                </Form>
-                            </NdPopUp>
-                        </div>                        
-                   </div>
+                                </div>
+                            </div>
+                            <div className="dx-field">
+                                <div className="dx-field-label">{this.lang.t("txtPass")}</div>
+                                <div className="dx-field-value">
+                                    <NdTextBox id="Sifre" parent={this} mode="password" showClearButton={true} height='fit-content' valueChangeEvent="keyup" onValueChanging={(e)=>{this.keyboard.setInput(e)}} 
+                                    onEnterKey={this.onLoginClick}
+                                    onFocusIn={()=>{this.keyboard.inputName = "Sifre"}} placeholder={this.lang.t("txtPass")}
+                                    />
+                                </div>
+                            </div>
+                            <div className="row py-1">
+                                <div className="col-12">
+                                    <div className="dx-field">
+                                        <Button
+                                        width={'100%'}
+                                        height='fit-content'
+                                        text={this.lang.t("btnUserSelect")}
+                                        type="success"
+                                        stylingMode="contained"
+                                        onClick={this.getUserList}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="row py-1">
+                                <div className="col-6">
+                                    <div className="dx-field">
+                                        <Button
+                                        width={'100%'}
+                                        height='fit-content'
+                                        text={this.lang.t("btnLogin")}
+                                        type="default"
+                                        stylingMode="contained"
+                                        onClick={this.onLoginClick}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="col-6">
+                                    <div className="dx-field">
+                                        <Button
+                                        width={'100%'}
+                                        height='fit-content'
+                                        text={this.lang.t("btnLogout")}
+                                        type="danger"
+                                        stylingMode="contained"
+                                        onClick={this.closePage}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="row py-1">
+                                <div className="col-12">
+                                    <div className="dx-field">
+                                        <Button
+                                        icon={"fa-regular fa-id-card"}
+                                        width={'100%'}
+                                        height='50px'
+                                        type="default"
+                                        stylingMode="contained"
+                                        onClick={this.cardIdRead}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <NdPopGrid id={"pg_users"} parent={this} container={"#root"}
+                                visible={false}
+                                position={{of:'#root'}} 
+                                showTitle={true} 
+                                showBorders={true}
+                                width={'50%'}
+                                height={'90%'}
+                                title="Kullanıcı Listesi"
+                                >
+                                    <Column dataField="CODE" caption="CODE" width={150} defaultSortOrder="asc"/>
+                                    <Column dataField="NAME" caption="NAME" width={150} defaultSortOrder="asc" />                            
+                                </NdPopGrid>
+                            </div>
+                            {/* CardId PopUp */}
+                            <div>
+                                <NdPopUp parent={this} id={"popCardId"} 
+                                visible={false}
+                                showCloseButton={false}
+                                showTitle={true}
+                                container={"#root"} 
+                                width={'500'}
+                                height={'500'}
+                                position={{of:'#root'}}
+                                >
+                                    <Form colCount={1} height={'fit-content'}>
+                                    <Item>
+                                        <img src="./css/img/cardicon3.png" height="300px"/>
+                                    </Item>
+                                    <Item>
+                                    <NdTextBox id="cardRead" parent={this} simple={true}  mode="password" showClearButton={true} height='fit-content'
+                                    placeholder={this.lang.t("txtCardRead")}
+                                    onKeyUp={async(k)=>
+                                    {
+                                        if(k.event.code != 'Enter')
+                                        {
+                                            setTimeout(() => {
+                                                this.cardRead.value = ''
+                                            }, 500);
+                                        }
+                                        else
+                                        {
+                                            this.cardIdCheck(this.cardRead.value)
+                                        }
+                                    }}
+                                    />
+                                    </Item>
+                                    <Item>
+                                        <Button width={'100%'} height='fit-content' text={this.lang.t("btnCancel")} type="default" stylingMode="contained"
+                                        disabled={this.state.btnCardIdCancel}
+                                        onClick={()=>{this.popCardId.hide()}}
+                                        />
+                                    </Item>
+                                    </Form>
+                                </NdPopUp>
+                            </div>                        
+                    </div>
                 </div>
                 <div className="p-2"></div>
                 <div className="card" style={this.style.keyboardBox}>
