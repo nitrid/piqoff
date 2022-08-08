@@ -147,7 +147,7 @@ export default class salesOrder extends React.Component
                                                     price:data[0].PRICE,
                                                     guid:data[0].GUID
                                                 }
-                                                await this.itemsPriceObj.load({ITEM_GUID:data[0].GUID});
+                                                await this.itemsPriceObj.load({TYPE:0,ITEM_GUID:data[0].GUID});
                                                 this.txtBarcode.value = ""
                                                 if(this.itemsPriceObj.dt().length > 1)
                                                 {

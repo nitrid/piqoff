@@ -23,7 +23,6 @@ export default class NdSelectBox extends Base
     }  
     _selectBoxView()
     {
-        console.log(this.props.id + " - " + this.props.acceptCustomValue)
         return (
             <SelectBox id={this.props.id}
             acceptCustomValue={this.props.acceptCustomValue}
