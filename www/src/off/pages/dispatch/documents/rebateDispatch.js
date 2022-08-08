@@ -24,7 +24,7 @@ import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
 
-export default class rebateDispatch extends React.Component
+export default class rebateDispatch extends React.PureComponent
 {
     constructor(props)
     {
@@ -1004,84 +1004,7 @@ export default class rebateDispatch extends React.Component
                             {
                                 this.frmDocItems = e.component
                             }}>
-                                
-                                 <Item>
-                                 <React.Fragment>
-                                    <NdGrid parent={this} id={"grdRebtDispatch"} 
-                                    showBorders={true} 
-                                    columnsAutoWidth={true} 
-                                    allowColumnReordering={true} 
-                                    allowColumnResizing={true} 
-                                    height={'400'} 
-                                    width={'100%'}
-                                    dbApply={false}
-                                    onRowUpdated={async(e)=>{
-                                        let rowIndex = e.component.getRowIndexByKey(e.key)
-
-                                        if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgDiscount',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgDiscount.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscount.msg")}</div>)
-                                            }
-                                        
-                                            dialog(tmpConfObj);
-                                            this.docObj.docItems.dt()[rowIndex].DISCOUNT = 0 
-                                            return
-                                        }
-                                        if(this.docObj.docItems.dt()[rowIndex].VAT > 0)
-                                        {
-                                            this.docObj.docItems.dt()[rowIndex].VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(3));
-                                        }
-                                        this.docObj.docItems.dt()[rowIndex].AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3))
-                                        this.docObj.docItems.dt()[rowIndex].TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +this.docObj.docItems.dt()[rowIndex].VAT).toFixed(3))
-
-                                        
-                                        if(this.docObj.docItems.dt()[rowIndex].DISCOUNT > 0)
-                                        {
-                                            this.docObj.docItems.dt()[rowIndex].DISCOUNT_RATE = parseFloat((100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100)).toFixed(3))
-                                        }
-                                        this._calculateTotal()
-                                       
-                                    }}
-                                    onRowRemoved={async (e)=>{
-                                        this._calculateTotal()
-                                        await this.docObj.save()
-                                    }}
-                                    >
-                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
-                                        <Scrolling mode="infinite" />
-                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                        <Export fileName={this.lang.t("menu.irs_02_003")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdRebtDispatch.clmCreateDate")} width={150} allowEditing={false}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdRebtDispatch.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdRebtDispatch.clmItemName")} width={350} />
-                                        <Column dataField="PRICE" caption={this.t("grdRebtDispatch.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdRebtDispatch.clmQuantity")} dataType={'number'}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdRebtDispatch.clmAmount")} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                        <Column dataField="VAT" caption={this.t("grdRebtDispatch.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
-                                        <Column dataField="TOTAL" caption={this.t("grdRebtDispatch.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
-                                    </NdGrid>
-                                    <ContextMenu
-                                    dataSource={this.rightItems}
-                                    width={200}
-                                    target="#grdRebtDispatch"
-                                    onItemClick={(async(e)=>
-                                    {
-                                        this._getRebate()
-                                    }).bind(this)} />
-                                </React.Fragment> 
-                                </Item>
-                            </Form>
-                        </div>
-                    </div>
-                    <div className="row px-2 pt-2">
-                        <div className="col-12">
-                            <Form colCount={4} parent={this} id={"frmRebateDis"  + this.tabIndex}>
-                                {/* Ara Toplam */}
-                                <Item location="after" colSpan={3}>
+                                <Item location="after">
                                     <Button icon="add"
                                     validationGroup={"frmRebateDis"  + this.tabIndex}
                                     onClick={async (e)=>
@@ -1213,6 +1136,83 @@ export default class rebateDispatch extends React.Component
                                         }
                                     }}/>
                                 </Item>
+                                <Item>
+                                 <React.Fragment>
+                                    <NdGrid parent={this} id={"grdRebtDispatch"} 
+                                    showBorders={true} 
+                                    columnsAutoWidth={true} 
+                                    allowColumnReordering={true} 
+                                    allowColumnResizing={true} 
+                                    height={'400'} 
+                                    width={'100%'}
+                                    dbApply={false}
+                                    onRowUpdated={async(e)=>{
+                                        let rowIndex = e.component.getRowIndexByKey(e.key)
+
+                                        if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDiscount',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgDiscount.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscount.msg")}</div>)
+                                            }
+                                        
+                                            dialog(tmpConfObj);
+                                            this.docObj.docItems.dt()[rowIndex].DISCOUNT = 0 
+                                            return
+                                        }
+                                        if(this.docObj.docItems.dt()[rowIndex].VAT > 0)
+                                        {
+                                            this.docObj.docItems.dt()[rowIndex].VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(3));
+                                        }
+                                        this.docObj.docItems.dt()[rowIndex].AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3))
+                                        this.docObj.docItems.dt()[rowIndex].TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +this.docObj.docItems.dt()[rowIndex].VAT).toFixed(3))
+
+                                        
+                                        if(this.docObj.docItems.dt()[rowIndex].DISCOUNT > 0)
+                                        {
+                                            this.docObj.docItems.dt()[rowIndex].DISCOUNT_RATE = parseFloat((100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100)).toFixed(3))
+                                        }
+                                        this._calculateTotal()
+                                       
+                                    }}
+                                    onRowRemoved={async (e)=>{
+                                        this._calculateTotal()
+                                        await this.docObj.save()
+                                    }}
+                                    >
+                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
+                                        <Scrolling mode="infinite" />
+                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
+                                        <Export fileName={this.lang.t("menu.irs_02_003")} enabled={true} allowExportSelectedData={true} />
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdRebtDispatch.clmCreateDate")} width={150} allowEditing={false}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdRebtDispatch.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdRebtDispatch.clmItemName")} width={350} />
+                                        <Column dataField="PRICE" caption={this.t("grdRebtDispatch.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdRebtDispatch.clmQuantity")} dataType={'number'}/>
+                                        <Column dataField="AMOUNT" caption={this.t("grdRebtDispatch.clmAmount")} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                        <Column dataField="VAT" caption={this.t("grdRebtDispatch.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                        <Column dataField="TOTAL" caption={this.t("grdRebtDispatch.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                    </NdGrid>
+                                    <ContextMenu
+                                    dataSource={this.rightItems}
+                                    width={200}
+                                    target="#grdRebtDispatch"
+                                    onItemClick={(async(e)=>
+                                    {
+                                        this._getRebate()
+                                    }).bind(this)} />
+                                </React.Fragment> 
+                                </Item>
+                            </Form>
+                        </div>
+                    </div>
+                    <div className="row px-2 pt-2">
+                        <div className="col-12">
+                            <Form colCount={4} parent={this} id={"frmRebateDis"  + this.tabIndex}>
+                                {/* Ara Toplam */}
+                                <EmptyItem colSpan={3}/>
                                 <Item  >
                                 <Label text={this.t("txtAmount")} alignment="right" />
                                     <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}

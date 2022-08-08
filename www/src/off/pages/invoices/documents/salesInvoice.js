@@ -1278,139 +1278,7 @@ export default class salesInvoice extends React.PureComponent
                             {
                                 this.frmSalesInv = e.component
                             }}>
-                              
-                                 <Item>
-                                 <React.Fragment>
-                                    <NdGrid parent={this} id={"grdSlsInv"} 
-                                    showBorders={true} 
-                                    columnsAutoWidth={true} 
-                                    allowColumnReordering={true} 
-                                    allowColumnResizing={true} 
-                                    headerFilter={{visible:true}}
-                                    height={'400'} 
-                                    width={'100%'}
-                                    dbApply={false}
-                                    onRowUpdated={async(e)=>{
-                                        let rowIndex = e.component.getRowIndexByKey(e.key)
-                                        if(typeof e.data.DISCOUNT_RATE != 'undefined')
-                                        {
-                                            e.key.DISCOUNT = parseFloat((((this.docObj.docItems.dt()[rowIndex].AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(3))
-                                        }
-                                        if(e.key.COST_PRICE > e.key.PRICE )
-                                        {
-                                            let tmpData = this.acsobj.filter({ID:'underMinCostPrice',USERS:this.user.CODE}).getValue()
-                                            if(typeof tmpData != 'undefined' && tmpData ==  true)
-                                            {
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgUnderPrice1',showTitle:true,title:this.t("msgUnderPrice1.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgUnderPrice1.btn01"),location:'before'},{id:"btn02",caption:this.t("msgUnderPrice1.btn02"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgUnderPrice1.msg")}</div>)
-                                                }
-                                                
-                                                let pResult = await dialog(tmpConfObj);
-                                                if(pResult == 'btn01')
-                                                {
-                                                    
-                                                }
-                                                else if(pResult == 'btn02')
-                                                {
-                                                    e.component.cancelEditData()
-                                                    return
-                                                }
-                                            }
-                                            else
-                                            {
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgUnderPrice2',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgUnderPrice2.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"msgUnderPrice2.msg"}</div>)
-                                                }
-                                                dialog(tmpConfObj);
-                                                return
-                                            }
-                                        }
-                                        if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgDiscount',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgDiscount.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscount.msg")}</div>)
-                                            }
-                                        
-                                            dialog(tmpConfObj);
-                                            this.docObj.docItems.dt()[rowIndex].DISCOUNT = 0 
-                                            return
-                                        }
-                                        if(this.docObj.docItems.dt()[rowIndex].VAT > 0)
-                                        {
-                                            this.docObj.docItems.dt()[rowIndex].VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(3));
-                                        }
-                                        this.docObj.docItems.dt()[rowIndex].AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3))
-                                        this.docObj.docItems.dt()[rowIndex].TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +this.docObj.docItems.dt()[rowIndex].VAT).toFixed(3))
-                                       
-                                        let tmpMargin = (this.docObj.docItems.dt()[rowIndex].TOTAL - this.docObj.docItems.dt()[rowIndex].VAT) - (this.docObj.docItems.dt()[rowIndex].COST_PRICE * this.docObj.docItems.dt()[rowIndex].QUANTITY)
-                                        let tmpMarginRate = (tmpMargin /(this.docObj.docItems.dt()[rowIndex].TOTAL - this.docObj.docItems.dt()[rowIndex].VAT)) * 100
-                                        this.docObj.docItems.dt()[rowIndex].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
-                                        if(this.docObj.docItems.dt()[rowIndex].DISCOUNT > 0)
-                                        {
-                                            this.docObj.docItems.dt()[rowIndex].DISCOUNT_RATE = parseFloat(100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100).toFixed(3))
-                                        }
-                                        this._calculateTotal()
-                                            
-                                        
-                                    }}
-                                    onRowRemoved={async (e)=>{
-                                        this._calculateTotal()
-                                    }}
-                                    >
-                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
-                                        <Scrolling mode="infinite" />
-                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                        <Export fileName={this.lang.t("menu.ftr_02_002")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsInv.clmCreateDate")} width={150} allowEditing={false} headerFilter={{visible:true}}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdSlsInv.clmItemCode")} width={150} editCellRender={this._cellRoleRender} headerFilter={{visible:true}}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdSlsInv.clmItemName")} width={350} headerFilter={{visible:true}}/>
-                                        <Column dataField="PRICE" caption={this.t("grdSlsInv.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} headerFilter={{visible:true}}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdSlsInv.clmQuantity")} dataType={'number'} headerFilter={{visible:true}}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdSlsInv.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
-                                        <Column dataField="DISCOUNT" caption={this.t("grdSlsInv.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} headerFilter={{visible:true}}/>
-                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsInv.clmDiscountRate")} dataType={'number'} headerFilter={{visible:true}}/>
-                                        <Column dataField="MARGIN" caption={this.t("grdSlsInv.clmMargin")} width={150} allowEditing={false} headerFilter={{visible:true}}/>
-                                        <Column dataField="VAT" caption={this.t("grdSlsInv.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
-                                        <Column dataField="TOTAL" caption={this.t("grdSlsInv.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
-                                        <Column dataField="CONNECT_REF" caption={this.t("grdSlsInv.clmDispatch")} width={200} allowEditing={false} headerFilter={{visible:true}}/>
-
-                                    </NdGrid>
-                                    <ContextMenu
-                                    dataSource={this.rightItems}
-                                    width={200}
-                                    target="#grdSlsInv"
-                                    onItemClick={(async(e)=>
-                                    {
-                                        if(e.itemData.text == this.t("getDispatch"))
-                                        {
-                                            this._getDispatch()
-                                        }
-                                        else if(e.itemData.text == this.t("getPayment"))
-                                        {
-                                            await this._getPayment()
-                                            this.popPayment.show()
-                                        }
-                                        
-                                    }).bind(this)} />
-                                </React.Fragment>    
-                                </Item>
-                            </Form>
-                        </div>
-                    </div>
-                    <div className="row px-2 pt-2">
-                        <div className="col-12">
-                            <Form colCount={4} parent={this} id="frmSalesInv">
-                                {/* Ara Toplam */}
-                                <Item location="after" colSpan={3}>
+                                <Item location="after">
                                     <Button icon="add"
                                     validationGroup={"frmSalesInv"  + this.tabIndex}
                                     onClick={async (e)=>
@@ -1561,6 +1429,138 @@ export default class salesInvoice extends React.PureComponent
                                         }
                                     }}/>
                                 </Item>
+                                <Item>
+                                 <React.Fragment>
+                                    <NdGrid parent={this} id={"grdSlsInv"} 
+                                    showBorders={true} 
+                                    columnsAutoWidth={true} 
+                                    allowColumnReordering={true} 
+                                    allowColumnResizing={true} 
+                                    headerFilter={{visible:true}}
+                                    height={'400'} 
+                                    width={'100%'}
+                                    dbApply={false}
+                                    onRowUpdated={async(e)=>{
+                                        let rowIndex = e.component.getRowIndexByKey(e.key)
+                                        if(typeof e.data.DISCOUNT_RATE != 'undefined')
+                                        {
+                                            e.key.DISCOUNT = parseFloat((((this.docObj.docItems.dt()[rowIndex].AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(3))
+                                        }
+                                        if(e.key.COST_PRICE > e.key.PRICE )
+                                        {
+                                            let tmpData = this.acsobj.filter({ID:'underMinCostPrice',USERS:this.user.CODE}).getValue()
+                                            if(typeof tmpData != 'undefined' && tmpData ==  true)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgUnderPrice1',showTitle:true,title:this.t("msgUnderPrice1.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgUnderPrice1.btn01"),location:'before'},{id:"btn02",caption:this.t("msgUnderPrice1.btn02"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgUnderPrice1.msg")}</div>)
+                                                }
+                                                
+                                                let pResult = await dialog(tmpConfObj);
+                                                if(pResult == 'btn01')
+                                                {
+                                                    
+                                                }
+                                                else if(pResult == 'btn02')
+                                                {
+                                                    e.component.cancelEditData()
+                                                    return
+                                                }
+                                            }
+                                            else
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgUnderPrice2',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgUnderPrice2.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"msgUnderPrice2.msg"}</div>)
+                                                }
+                                                dialog(tmpConfObj);
+                                                return
+                                            }
+                                        }
+                                        if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDiscount',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgDiscount.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscount.msg")}</div>)
+                                            }
+                                        
+                                            dialog(tmpConfObj);
+                                            this.docObj.docItems.dt()[rowIndex].DISCOUNT = 0 
+                                            return
+                                        }
+                                        if(this.docObj.docItems.dt()[rowIndex].VAT > 0)
+                                        {
+                                            this.docObj.docItems.dt()[rowIndex].VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(3));
+                                        }
+                                        this.docObj.docItems.dt()[rowIndex].AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3))
+                                        this.docObj.docItems.dt()[rowIndex].TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +this.docObj.docItems.dt()[rowIndex].VAT).toFixed(3))
+                                       
+                                        let tmpMargin = (this.docObj.docItems.dt()[rowIndex].TOTAL - this.docObj.docItems.dt()[rowIndex].VAT) - (this.docObj.docItems.dt()[rowIndex].COST_PRICE * this.docObj.docItems.dt()[rowIndex].QUANTITY)
+                                        let tmpMarginRate = (tmpMargin /(this.docObj.docItems.dt()[rowIndex].TOTAL - this.docObj.docItems.dt()[rowIndex].VAT)) * 100
+                                        this.docObj.docItems.dt()[rowIndex].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+                                        if(this.docObj.docItems.dt()[rowIndex].DISCOUNT > 0)
+                                        {
+                                            this.docObj.docItems.dt()[rowIndex].DISCOUNT_RATE = parseFloat(100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100).toFixed(3))
+                                        }
+                                        this._calculateTotal()
+                                            
+                                        
+                                    }}
+                                    onRowRemoved={async (e)=>{
+                                        this._calculateTotal()
+                                    }}
+                                    >
+                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
+                                        <Scrolling mode="infinite" />
+                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
+                                        <Export fileName={this.lang.t("menu.ftr_02_002")} enabled={true} allowExportSelectedData={true} />
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsInv.clmCreateDate")} width={150} allowEditing={false} headerFilter={{visible:true}}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdSlsInv.clmItemCode")} width={150} editCellRender={this._cellRoleRender} headerFilter={{visible:true}}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdSlsInv.clmItemName")} width={350} headerFilter={{visible:true}}/>
+                                        <Column dataField="PRICE" caption={this.t("grdSlsInv.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} headerFilter={{visible:true}}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdSlsInv.clmQuantity")} dataType={'number'} headerFilter={{visible:true}}/>
+                                        <Column dataField="AMOUNT" caption={this.t("grdSlsInv.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
+                                        <Column dataField="DISCOUNT" caption={this.t("grdSlsInv.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} headerFilter={{visible:true}}/>
+                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsInv.clmDiscountRate")} dataType={'number'} headerFilter={{visible:true}}/>
+                                        <Column dataField="MARGIN" caption={this.t("grdSlsInv.clmMargin")} width={150} allowEditing={false} headerFilter={{visible:true}}/>
+                                        <Column dataField="VAT" caption={this.t("grdSlsInv.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
+                                        <Column dataField="TOTAL" caption={this.t("grdSlsInv.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
+                                        <Column dataField="CONNECT_REF" caption={this.t("grdSlsInv.clmDispatch")} width={200} allowEditing={false} headerFilter={{visible:true}}/>
+
+                                    </NdGrid>
+                                    <ContextMenu
+                                    dataSource={this.rightItems}
+                                    width={200}
+                                    target="#grdSlsInv"
+                                    onItemClick={(async(e)=>
+                                    {
+                                        if(e.itemData.text == this.t("getDispatch"))
+                                        {
+                                            this._getDispatch()
+                                        }
+                                        else if(e.itemData.text == this.t("getPayment"))
+                                        {
+                                            await this._getPayment()
+                                            this.popPayment.show()
+                                        }
+                                        
+                                    }).bind(this)} />
+                                </React.Fragment>    
+                                </Item>
+                            </Form>
+                        </div>
+                    </div>
+                    <div className="row px-2 pt-2">
+                        <div className="col-12">
+                            <Form colCount={4} parent={this} id="frmSalesInv">
+                                {/* Ara Toplam */}
+                                <EmptyItem colSpan={3}/>
                                 <Item  >
                                 <Label text={this.t("txtAmount")} alignment="right" />
                                     <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}

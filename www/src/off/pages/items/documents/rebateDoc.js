@@ -23,7 +23,7 @@ import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
 
-export default class rebateDoc extends React.Component
+export default class rebateDoc extends React.PureComponent
 {
     constructor()
     {
@@ -722,8 +722,8 @@ export default class rebateDoc extends React.Component
                                 </Item>
                                 {/* Boş */}
                                 <EmptyItem />
-                               {/* cmbDepot */}
-                               <Item>
+                                {/* cmbDepot */}
+                                <Item>
                                     <Label text={this.t("cmbDepot1")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbDepot1"
                                     dt={{data:this.docObj.dt('DOC'),field:"OUTPUT"}}  
@@ -743,8 +743,8 @@ export default class rebateDoc extends React.Component
                                         </Validator> 
                                     </NdSelectBox>
                                 </Item>
-                               {/* cmbDepot */}
-                               <Item>
+                                {/* cmbDepot */}
+                                <Item>
                                     <Label text={this.t("cmbDepot2")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbDepot2"
                                     dt={{data:this.docObj.dt('DOC'),field:"INPUT"}}  
@@ -766,8 +766,8 @@ export default class rebateDoc extends React.Component
                                 </Item>
                                 {/* Boş */}
                                 <EmptyItem />
-                                 {/* BARKOD EKLEME */}
-                                 <Item>
+                                {/* BARKOD EKLEME */}
+                                <Item>
                                     <Label text={this.t("txtBarcode")} alignment="right" />
                                     <NdTextBox id="txtBarcode" parent={this} simple={true}  validationGroup="frmRbtDoc"
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
@@ -836,7 +836,6 @@ export default class rebateDoc extends React.Component
                                     >
                                     </NdTextBox>
                                 </Item>
-                                
                             </Form>
                         </div>
                     </div>
@@ -847,35 +846,6 @@ export default class rebateDoc extends React.Component
                             {
                                 this.frmDocItems = e.component
                             }}>
-                               
-                                 <Item>
-                                    <NdGrid parent={this} id={"grdRebItems"} 
-                                    showBorders={true} 
-                                    columnsAutoWidth={true} 
-                                    allowColumnReordering={true} 
-                                    allowColumnResizing={true} 
-                                    height={'400'} 
-                                    width={'100%'}
-                                    dbApply={false}
-                                    loadPanel={{enabled:true}}
-                                    onRowUpdated={async(e)=>{
-                                       
-                                    }}
-                                    onRowRemoved={(e)=>{
-
-                                    }}
-                                    >
-                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                                        <Scrolling mode="standard" />
-                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                        <Export fileName={this.lang.t("menu.stk_02_005")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdRebItems.clmCreateDate")} width={150} allowEditing={false}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdRebItems.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdRebItems.clmItemName")} width={350} />
-                                        <Column dataField="QUANTITY" caption={this.t("grdRebItems.clmQuantity")} dataType={'number'} width={150}/>
-                                        <Column dataField="DESCRIPTION" caption={this.t("grdRebItems.clmDescription")} />
-                                    </NdGrid>
-                                </Item>
                                 <Item location="after">
                                     <Button icon="add"
                                     validationGroup="frmRbtDoc"
@@ -998,6 +968,34 @@ export default class rebateDoc extends React.Component
                                         }
                                     }}/>
                                 </Item>
+                                <Item>
+                                    <NdGrid parent={this} id={"grdRebItems"} 
+                                    showBorders={true} 
+                                    columnsAutoWidth={true} 
+                                    allowColumnReordering={true} 
+                                    allowColumnResizing={true} 
+                                    height={'400'} 
+                                    width={'100%'}
+                                    dbApply={false}
+                                    loadPanel={{enabled:true}}
+                                    onRowUpdated={async(e)=>{
+                                       
+                                    }}
+                                    onRowRemoved={(e)=>{
+
+                                    }}
+                                    >
+                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
+                                        <Scrolling mode="standard" />
+                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
+                                        <Export fileName={this.lang.t("menu.stk_02_005")} enabled={true} allowExportSelectedData={true} />
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdRebItems.clmCreateDate")} width={150} allowEditing={false}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdRebItems.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdRebItems.clmItemName")} width={350} />
+                                        <Column dataField="QUANTITY" caption={this.t("grdRebItems.clmQuantity")} dataType={'number'} width={150}/>
+                                        <Column dataField="DESCRIPTION" caption={this.t("grdRebItems.clmDescription")} />
+                                    </NdGrid>
+                                </Item>
                             </Form>
                         </div>
                     </div>
@@ -1056,8 +1054,8 @@ export default class rebateDoc extends React.Component
                         <div className='row'>
                     
                         </div>
-                    </NdDialog>  
-                </ScrollView>                
+                    </NdDialog>
+                </ScrollView>
             </div>
         )
     }

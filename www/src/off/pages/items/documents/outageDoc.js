@@ -24,7 +24,7 @@ import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
 
-export default class outageDoc extends React.Component
+export default class outageDoc extends React.PureComponent
 {
     constructor()
     {
@@ -951,56 +951,6 @@ export default class outageDoc extends React.Component
                             {
                                 this.frmOutwas = e.component
                             }}>
-                               
-                                 <Item>
-                                 <React.Fragment>    
-                                    <NdGrid parent={this} id={"grdOutwasItems"} 
-                                    showBorders={true} 
-                                    columnsAutoWidth={true} 
-                                    allowColumnReordering={true} 
-                                    allowColumnResizing={true} 
-                                    height={'400'} 
-                                    width={'100%'}
-                                    dbApply={false}
-                                    loadPanel={{enabled:true}}
-                                    onRowUpdated={async(e)=>{
-                                        this._calculateTotal()
-                                    }}
-                                    onRowRemoved={(e)=>{
-                                        this._calculateTotal()
-                                    }}
-                                    >
-                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                                        <Scrolling mode="standard" />
-                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                        <Export fileName={this.lang.t("menu.stk_02_003")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdOutwasItems.clmCreateDate")} width={150} allowEditing={false}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdOutwasItems.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdOutwasItems.clmItemName")} width={350} />
-                                        <Column dataField="QUANTITY" caption={this.t("grdOutwasItems.clmQuantity")} dataType={'number'} width={150}/>
-                                        <Column dataField="COST_PRICE" caption={this.t("grdOutwasItems.clmCostPrice")} dataType={'number'} width={150} allowEditing={false}/>
-                                        <Column dataField="DESCRIPTION" caption={this.t("grdOutwasItems.clmDescription")} editCellRender={this._cellRoleRender}>
-                                        </Column>
-                                    </NdGrid>
-                                    <ContextMenu
-                                    dataSource={this.rightItems}
-                                    width={200}
-                                    target="#grdOutwasItems"
-                                    onItemClick={(async(e)=>
-                                    {
-                                        if(e.itemData.text == this.t("getDispatch"))
-                                        {
-                                            this._getDispatch()
-                                        }
-                                        else if(e.itemData.text == this.t("getPayment"))
-                                        {
-                                            await this._getPayment()
-                                            this.popPayment.show()
-                                        }
-                                        
-                                    }).bind(this)} />
-                                    </React.Fragment>    
-                                </Item>
                                 <Item location="after">
                                     <Button icon="add"
                                     validationGroup="frmOutwasFrom"
@@ -1123,6 +1073,55 @@ export default class outageDoc extends React.Component
                                         }
                                     }}/>
                                 </Item>
+                                <Item>
+                                    <React.Fragment>    
+                                    <NdGrid parent={this} id={"grdOutwasItems"} 
+                                    showBorders={true} 
+                                    columnsAutoWidth={true} 
+                                    allowColumnReordering={true} 
+                                    allowColumnResizing={true} 
+                                    height={'400'} 
+                                    width={'100%'}
+                                    dbApply={false}
+                                    loadPanel={{enabled:true}}
+                                    onRowUpdated={async(e)=>{
+                                        this._calculateTotal()
+                                    }}
+                                    onRowRemoved={(e)=>{
+                                        this._calculateTotal()
+                                    }}
+                                    >
+                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
+                                        <Scrolling mode="standard" />
+                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
+                                        <Export fileName={this.lang.t("menu.stk_02_003")} enabled={true} allowExportSelectedData={true} />
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdOutwasItems.clmCreateDate")} width={150} allowEditing={false}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdOutwasItems.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdOutwasItems.clmItemName")} width={350} />
+                                        <Column dataField="QUANTITY" caption={this.t("grdOutwasItems.clmQuantity")} dataType={'number'} width={150}/>
+                                        <Column dataField="COST_PRICE" caption={this.t("grdOutwasItems.clmCostPrice")} dataType={'number'} width={150} allowEditing={false}/>
+                                        <Column dataField="DESCRIPTION" caption={this.t("grdOutwasItems.clmDescription")} editCellRender={this._cellRoleRender}>
+                                        </Column>
+                                    </NdGrid>
+                                    <ContextMenu
+                                    dataSource={this.rightItems}
+                                    width={200}
+                                    target="#grdOutwasItems"
+                                    onItemClick={(async(e)=>
+                                    {
+                                        if(e.itemData.text == this.t("getDispatch"))
+                                        {
+                                            this._getDispatch()
+                                        }
+                                        else if(e.itemData.text == this.t("getPayment"))
+                                        {
+                                            await this._getPayment()
+                                            this.popPayment.show()
+                                        }
+                                        
+                                    }).bind(this)} />
+                                    </React.Fragment>    
+                                </Item>
                             </Form>
                         </div>
                     </div>
@@ -1130,7 +1129,7 @@ export default class outageDoc extends React.Component
                         <div className="col-12">
                             <Form colCount={4} parent={this} id="frmPurcoffer">
                                 {/* TOPLAM MALIYET */}
-                                <EmptyItem />
+                                <EmptyItem colSpan={3}/>
                                 <Item  >
                                     <Label text={this.t("txtTotalCost")} alignment="right" />
                                         <NdTextBox id="txtTotalCost" parent={this} simple={true} readOnly={true} 
@@ -1139,7 +1138,7 @@ export default class outageDoc extends React.Component
                                         ></NdTextBox>
                                 </Item>
                                 {/* Toplam Miktar */}
-                                <EmptyItem />
+                                <EmptyItem colSpan={3}/>
                                 <Item  >
                                     <Label text={this.t("txtTotalQuantity")} alignment="right" />
                                         <NdTextBox id="txtTotalQuantity" parent={this} simple={true} readOnly={true} 

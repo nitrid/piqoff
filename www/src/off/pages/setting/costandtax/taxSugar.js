@@ -23,7 +23,7 @@ import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
 
-export default class taxSugar extends React.Component
+export default class taxSugar extends React.PureComponent
 {
     constructor(props)
     {

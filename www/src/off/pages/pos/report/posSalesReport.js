@@ -12,7 +12,7 @@ import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdPivot,{FieldChooser} from '../../../../core/react/devex/pivot.js';
 import NdButton from '../../../../core/react/devex/button.js';
 
-export default class posSalesReport extends React.Component
+export default class posSalesReport extends React.PureComponent
 {
     constructor(props)
     {

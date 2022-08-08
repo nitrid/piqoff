@@ -23,7 +23,7 @@ import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
 
-export default class depotTransfer extends React.Component
+export default class depotTransfer extends React.PureComponent
 {
     constructor(props)
     {
@@ -899,36 +899,6 @@ export default class depotTransfer extends React.Component
                             {
                                 this.frmTrnsfItems = e.component
                             }}>
-                               
-                                 <Item>
-                                    <NdGrid parent={this} id={"grdTrnsfItems"} 
-                                    showBorders={true} 
-                                    columnsAutoWidth={true} 
-                                    allowColumnReordering={true} 
-                                    allowColumnResizing={true} 
-                                    height={'400'} 
-                                    width={'100%'}
-                                    dbApply={false}
-                                    onRowUpdated={async(e)=>{
-                                       
-                                    }}
-                                    onRowRemoved={(e)=>{
-
-                                    }}
-                                    loadPanel={{enabled:true}}
-                                    >
-                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
-                                        <Scrolling mode="standard" />
-                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                        <Export fileName={this.lang.t("menu.stk_02_002")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdTrnsfItems.clmCreateDate")} width={150} allowEditing={false}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdTrnsfItems.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdTrnsfItems.clmItemName")} width={350} />
-                                        <Column dataField="QUANTITY" caption={this.t("grdTrnsfItems.clmQuantity")} dataType={'number'} width={150}/>
-                                        <Column dataField="DESCRIPTION" caption={this.t("grdTrnsfItems.clmDescription")} />
-                                      
-                                    </NdGrid>
-                                </Item>
                                 <Item location="after">
                                     <Button icon="add"
                                     validationGroup="frmTrnsfr"
@@ -1050,8 +1020,36 @@ export default class depotTransfer extends React.Component
                                         }
                                     }}/>
                                 </Item>
+                                <Item>
+                                    <NdGrid parent={this} id={"grdTrnsfItems"} 
+                                    showBorders={true} 
+                                    columnsAutoWidth={true} 
+                                    allowColumnReordering={true} 
+                                    allowColumnResizing={true} 
+                                    height={'400'} 
+                                    width={'100%'}
+                                    dbApply={false}
+                                    onRowUpdated={async(e)=>{
+                                       
+                                    }}
+                                    onRowRemoved={(e)=>{
+
+                                    }}
+                                    loadPanel={{enabled:true}}
+                                    >
+                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
+                                        <Scrolling mode="standard" />
+                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
+                                        <Export fileName={this.lang.t("menu.stk_02_002")} enabled={true} allowExportSelectedData={true} />
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdTrnsfItems.clmCreateDate")} width={150} allowEditing={false}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdTrnsfItems.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdTrnsfItems.clmItemName")} width={350} />
+                                        <Column dataField="QUANTITY" caption={this.t("grdTrnsfItems.clmQuantity")} dataType={'number'} width={150}/>
+                                        <Column dataField="DESCRIPTION" caption={this.t("grdTrnsfItems.clmDescription")} />
+                                      
+                                    </NdGrid>
+                                </Item>
                             </Form>
-                           
                         </div>
                     </div>
                     <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={"#root"}

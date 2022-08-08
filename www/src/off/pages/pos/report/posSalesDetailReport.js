@@ -21,7 +21,7 @@ import { dialog } from '../../../../core/react/devex/dialog.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdPivot,{FieldChooser} from '../../../../core/react/devex/pivot.js';
 
-export default class posSalesDetailReport extends React.Component
+export default class posSalesDetailReport extends React.PureComponent
 {
     constructor(props)
     {

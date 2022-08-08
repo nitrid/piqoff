@@ -24,7 +24,7 @@ import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
 
-export default class collection extends React.Component
+export default class collection extends React.PureComponent
 {
     constructor(props)
     {
@@ -803,7 +803,7 @@ export default class collection extends React.Component
                         <div className="col-12">
                             <Form colCount={4} parent={this} id={"frmCollection"  + this.tabIndex}>                            
                                 {/* TOPLAM */}
-                                <EmptyItem />
+                                <EmptyItem colSpan={3}/>
                                 <Item>
                                 <Label text={this.t("txtTotal")} alignment="right" />
                                     <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}}

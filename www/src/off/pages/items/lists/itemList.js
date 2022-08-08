@@ -17,7 +17,7 @@ import NdTagBox from '../../../../core/react/devex/tagbox.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 
 
-export default class itemList extends React.Component
+export default class itemList extends React.PureComponent
 {
     constructor(props)
     {

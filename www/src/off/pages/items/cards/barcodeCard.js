@@ -21,7 +21,7 @@ import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 
-export default class barcodeCard extends React.Component
+export default class barcodeCard extends React.PureComponent
 {
     constructor()
     {

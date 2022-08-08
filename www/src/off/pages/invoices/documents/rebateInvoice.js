@@ -24,7 +24,7 @@ import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
 
-export default class rebateInvoice extends React.Component
+export default class rebateInvoice extends React.PureComponent
 {
     constructor(props)
     {
@@ -1156,8 +1156,133 @@ export default class rebateInvoice extends React.Component
                             {
                                 this.frmRebateInv = e.component
                             }}>
-                              
-                                 <Item>
+                                <Item location="after">
+                                    <Button icon="add"
+                                    validationGroup={"frmRebateInv"  + this.tabIndex}
+                                    onClick={async (e)=>
+                                    {
+                                        if(e.validationGroup.validate().status == "valid")
+                                        {
+                                            
+                                            if(typeof this.docObj.docItems.dt()[0] != 'undefined')
+                                            {
+                                                if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
+                                                {
+                                                    this.pg_txtItemsCode.show()
+                                                    this.pg_txtItemsCode.onClick = async(data) =>
+                                                    {
+                                                        this.combineControl = true
+                                                        this.combineNew = false
+                                                        if(data.length == 1)
+                                                        {
+                                                            await this.addItem(data[0],this.docObj.docItems.dt().length-1)
+                                                        }
+                                                        else if(data.length > 1)
+                                                        {
+                                                            for (let i = 0; i < data.length; i++) 
+                                                            {
+                                                                if(i == 0)
+                                                                {
+                                                                    await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                                }
+                                                                else
+                                                                {
+                                                                    let tmpDocItems = {...this.docObj.docItems.empty}
+                                                                    tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                                                                    tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                                                                    tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                                    tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                                                                    tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                                                                    tmpDocItems.REF = this.docObj.dt()[0].REF
+                                                                    tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                                                                    tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                                    tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                                                                    tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                                    tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                                                                    this.txtRef.readOnly = true
+                                                                    this.txtRefno.readOnly = true
+                                                                    this.docObj.docItems.addEmpty(tmpDocItems)
+                                                                    await this.core.util.waitUntil(100)
+                                                                    await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    return
+                                                }
+                                            }
+                                           
+                                            let tmpDocItems = {...this.docObj.docItems.empty}
+                                            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                                            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                                            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                            tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                                            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                                            tmpDocItems.REF = this.docObj.dt()[0].REF
+                                            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                                            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                                            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                            tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                                            this.txtRef.readOnly = true
+                                            this.txtRefno.readOnly = true
+                                            this.docObj.docItems.addEmpty(tmpDocItems)
+                                            await this.core.util.waitUntil(100)
+                                            this.pg_txtItemsCode.show()
+                                            this.pg_txtItemsCode.onClick = async(data) =>
+                                            {
+                                                this.combineControl = true
+                                                this.combineNew = false
+                                                if(data.length == 1)
+                                                {
+                                                    await this.addItem(data[0],this.docObj.docItems.dt().length-1)
+                                                }
+                                                else if(data.length > 1)
+                                                {
+                                                    for (let i = 0; i < data.length; i++) 
+                                                    {
+                                                        if(i == 0)
+                                                        {
+                                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                        }
+                                                        else
+                                                        {
+                                                            let tmpDocItems = {...this.docObj.docItems.empty}
+                                                            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                                                            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                                                            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                            tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                                                            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                                                            tmpDocItems.REF = this.docObj.dt()[0].REF
+                                                            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                                                            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                                                            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                            tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                                                            this.txtRef.readOnly = true
+                                                            this.txtRefno.readOnly = true
+                                                            this.docObj.docItems.addEmpty(tmpDocItems)
+                                                            await this.core.util.waitUntil(100)
+                                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
+                                            }
+                                            
+                                            await dialog(tmpConfObj);
+                                        }
+                                    }}/>
+                                </Item>
+                                <Item>
                                  <React.Fragment>
                                     <NdGrid parent={this} id={"grdRebtInv"} 
                                     showBorders={true} 
@@ -1285,132 +1410,7 @@ export default class rebateInvoice extends React.Component
                         <div className="col-12">
                             <Form colCount={4} parent={this} id={"frmRebateInv"  + this.tabIndex}>
                                 {/* Ara Toplam */}
-                                <Item location="after" colSpan={3}>
-                                    <Button icon="add"
-                                    validationGroup={"frmRebateInv"  + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            
-                                            if(typeof this.docObj.docItems.dt()[0] != 'undefined')
-                                            {
-                                                if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
-                                                {
-                                                    this.pg_txtItemsCode.show()
-                                                    this.pg_txtItemsCode.onClick = async(data) =>
-                                                    {
-                                                        this.combineControl = true
-                                                        this.combineNew = false
-                                                        if(data.length == 1)
-                                                        {
-                                                            await this.addItem(data[0],this.docObj.docItems.dt().length-1)
-                                                        }
-                                                        else if(data.length > 1)
-                                                        {
-                                                            for (let i = 0; i < data.length; i++) 
-                                                            {
-                                                                if(i == 0)
-                                                                {
-                                                                    await this.addItem(data[i],this.docObj.docItems.dt().length-1)
-                                                                }
-                                                                else
-                                                                {
-                                                                    let tmpDocItems = {...this.docObj.docItems.empty}
-                                                                    tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                                                                    tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                                                                    tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                                    tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                                    tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                                                                    tmpDocItems.REF = this.docObj.dt()[0].REF
-                                                                    tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                                                                    tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                                    tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                                                                    tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                                    tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                                                                    this.txtRef.readOnly = true
-                                                                    this.txtRefno.readOnly = true
-                                                                    this.docObj.docItems.addEmpty(tmpDocItems)
-                                                                    await this.core.util.waitUntil(100)
-                                                                    await this.addItem(data[i],this.docObj.docItems.dt().length-1)
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    return
-                                                }
-                                            }
-                                           
-                                            let tmpDocItems = {...this.docObj.docItems.empty}
-                                            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                                            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                                            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                            tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                                            tmpDocItems.REF = this.docObj.dt()[0].REF
-                                            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                                            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                                            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                            tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                                            this.txtRef.readOnly = true
-                                            this.txtRefno.readOnly = true
-                                            this.docObj.docItems.addEmpty(tmpDocItems)
-                                            await this.core.util.waitUntil(100)
-                                            this.pg_txtItemsCode.show()
-                                            this.pg_txtItemsCode.onClick = async(data) =>
-                                            {
-                                                this.combineControl = true
-                                                this.combineNew = false
-                                                if(data.length == 1)
-                                                {
-                                                    await this.addItem(data[0],this.docObj.docItems.dt().length-1)
-                                                }
-                                                else if(data.length > 1)
-                                                {
-                                                    for (let i = 0; i < data.length; i++) 
-                                                    {
-                                                        if(i == 0)
-                                                        {
-                                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
-                                                        }
-                                                        else
-                                                        {
-                                                            let tmpDocItems = {...this.docObj.docItems.empty}
-                                                            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                                                            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                                                            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                            tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                                                            tmpDocItems.REF = this.docObj.dt()[0].REF
-                                                            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                                                            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                                                            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                            tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                                                            this.txtRef.readOnly = true
-                                                            this.txtRefno.readOnly = true
-                                                            this.docObj.docItems.addEmpty(tmpDocItems)
-                                                            await this.core.util.waitUntil(100)
-                                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        else
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
-                                        }
-                                    }}/>
-                                </Item>
+                                <EmptyItem colSpan={3}/>
                                 <Item  >
                                 <Label text={this.t("txtAmount")} alignment="right" />
                                     <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}
@@ -1761,7 +1761,7 @@ export default class rebateInvoice extends React.Component
                                         this.popBank.show()
                                     }}/>
                                 </Item>
-                                </Form>
+                            </Form>
                                 <NdGrid parent={this} id={"grdInvoicePayment"} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 

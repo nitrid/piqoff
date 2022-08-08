@@ -21,7 +21,7 @@ import NdTagBox from '../../../../core/react/devex/tagbox.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 
-export default class purchaseContract extends React.Component
+export default class purchaseContract extends React.PureComponent
 {
     constructor(props)
     {

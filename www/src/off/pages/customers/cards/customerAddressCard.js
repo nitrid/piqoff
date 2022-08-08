@@ -22,7 +22,7 @@ import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 
-export default class customerAddressCard extends React.Component
+export default class customerAddressCard extends React.PureComponent
 {
     constructor(props)
     {

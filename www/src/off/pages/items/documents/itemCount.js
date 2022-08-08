@@ -25,7 +25,7 @@ import NdListBox from '../../../../core/react/devex/listbox.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
 
-export default class itemCount extends React.Component
+export default class itemCount extends React.PureComponent
 {
     constructor(props)
     {
@@ -934,46 +934,6 @@ export default class itemCount extends React.Component
                             {
                                 this.frmCount = e.component
                             }}>
-                                <Item>
-                                    <NdGrid parent={this} id={"grdItemCount"} 
-                                    showBorders={true} 
-                                    columnsAutoWidth={true} 
-                                    allowColumnReordering={true} 
-                                    allowColumnResizing={true} 
-                                    height={'400'} 
-                                    width={'100%'}
-                                    dbApply={false}
-                                    filterRow={{visible:true}} 
-                                    loadPanel={{enabled:true}}
-                                    onRowUpdated={async(e)=>{
-                                        if(typeof e.data.QUANTITY != 'undefined' || typeof e.data.COST_PRICE != 'undefined')
-                                        {
-                                            e.key.TOTAL_COST = parseFloat(((e.key.QUANTITY * e.key.COST_PRICE) )).toFixed(3)
-                                            let totalPrice= await this.countObj.dt().sum("TOTAL_COST",2)
-                                            this.txtAmount.setState({value :totalPrice})
-                                        }
-                                    }}
-                                    onRowRemoved={(e)=>{
-
-                                    }}
-                                    >
-                                        <Paging defaultPageSize={15} />
-                                         <Pager visible={true} allowedPageSizes={[5,10,50,500,1000]} showPageSizeSelector={true} />
-                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
-                                        <Scrolling mode="standard" />
-                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                        <Export fileName={this.lang.t("menu.stk_02_001")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdItemCount.clmCreateDate")} width={200} visible={true} allowEditing={false}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdItemCount.clmItemCode")} width={150} visible={true} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="BARCODE" caption={this.t("grdItemCount.clmBarcode")} width={150} visible={true} allowEditing={false}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdItemCount.clmItemName")} width={350} visible={true} allowEditing={false}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdItemCount.clmQuantity")} dataType={'number'} editCellRender={this._cellRoleRender} width={150} visible={true}/>
-                                        <Column dataField="COST_PRICE" caption={this.t("grdItemCount.clmCostPrice")} dataType={'number'} width={100} visible={true} allowEditing={false}/>
-                                        <Column dataField="TOTAL_COST" caption={this.t("grdItemCount.clmTotalCost")} dataType={'number'}  width={100} visible={true} allowEditing={false}/>
-                                        <Column dataField="MULTICODE" caption={this.t("grdItemCount.clmMulticode")} dataType={'text'}  width={100} visible={true} allowEditing={false}/>
-                                        <Column dataField="CUSTOMER_NAME" caption={this.t("grdItemCount.clmCustomerName")} dataType={'text'}  width={150} visible={true} allowEditing={false}/>
-                                    </NdGrid>
-                                </Item>
                                 <Item location="after">
                                     <Button icon="add"
                                     validationGroup="frmCountFrom"
@@ -1080,13 +1040,52 @@ export default class itemCount extends React.Component
                                         }
                                     }}/>
                                 </Item>
+                                <Item>
+                                    <NdGrid parent={this} id={"grdItemCount"} 
+                                    showBorders={true} 
+                                    columnsAutoWidth={true} 
+                                    allowColumnReordering={true} 
+                                    allowColumnResizing={true} 
+                                    height={'400'} 
+                                    width={'100%'}
+                                    dbApply={false}
+                                    filterRow={{visible:true}} 
+                                    loadPanel={{enabled:true}}
+                                    onRowUpdated={async(e)=>{
+                                        if(typeof e.data.QUANTITY != 'undefined' || typeof e.data.COST_PRICE != 'undefined')
+                                        {
+                                            e.key.TOTAL_COST = parseFloat(((e.key.QUANTITY * e.key.COST_PRICE) )).toFixed(3)
+                                            let totalPrice= await this.countObj.dt().sum("TOTAL_COST",2)
+                                            this.txtAmount.setState({value :totalPrice})
+                                        }
+                                    }}
+                                    onRowRemoved={(e)=>{
+
+                                    }}
+                                    >
+                                        <Paging defaultPageSize={15} />
+                                         <Pager visible={true} allowedPageSizes={[5,10,50,500,1000]} showPageSizeSelector={true} />
+                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
+                                        <Scrolling mode="standard" />
+                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
+                                        <Export fileName={this.lang.t("menu.stk_02_001")} enabled={true} allowExportSelectedData={true} />
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdItemCount.clmCreateDate")} width={200} visible={true} allowEditing={false}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdItemCount.clmItemCode")} width={150} visible={true} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="BARCODE" caption={this.t("grdItemCount.clmBarcode")} width={150} visible={true} allowEditing={false}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdItemCount.clmItemName")} width={350} visible={true} allowEditing={false}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdItemCount.clmQuantity")} dataType={'number'} editCellRender={this._cellRoleRender} width={150} visible={true}/>
+                                        <Column dataField="COST_PRICE" caption={this.t("grdItemCount.clmCostPrice")} dataType={'number'} width={100} visible={true} allowEditing={false}/>
+                                        <Column dataField="TOTAL_COST" caption={this.t("grdItemCount.clmTotalCost")} dataType={'number'}  width={100} visible={true} allowEditing={false}/>
+                                        <Column dataField="MULTICODE" caption={this.t("grdItemCount.clmMulticode")} dataType={'text'}  width={100} visible={true} allowEditing={false}/>
+                                        <Column dataField="CUSTOMER_NAME" caption={this.t("grdItemCount.clmCustomerName")} dataType={'text'}  width={150} visible={true} allowEditing={false}/>
+                                    </NdGrid>
+                                </Item>
                             </Form>
                         </div>
                         <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Form colCount={4} parent={this} id="frmslsDoc">
-                                {/* Ara Toplam */}
-                                <EmptyItem />
+                                <EmptyItem colSpan={3}/>
                                 {/*  Toplam Maliyet */}
                                 <Item>
                                 <Label text={this.t("txtAmount")} alignment="right" />
