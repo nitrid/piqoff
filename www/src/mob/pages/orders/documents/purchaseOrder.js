@@ -1010,6 +1010,9 @@ export default class salesOrder extends React.Component
                                 this._calculateTotal()
                                 
                             }}
+                            onContentReady={async(e)=>{
+                                e.component.columnOption("command:edit", 'visibleIndex', -1)
+                            }}
                             onRowRemoved={async (e)=>{
                                 this._calculateTotal()
                                 await this.docObj.save()

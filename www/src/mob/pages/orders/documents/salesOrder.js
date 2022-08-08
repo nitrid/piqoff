@@ -934,6 +934,9 @@ export default class salesOrder extends React.Component
                         this._calculateTotal()
                         
                     }}
+                    onContentReady={async(e)=>{
+                            e.component.columnOption("command:edit", 'visibleIndex', -1)
+                        }}
                     onRowRemoved={async (e)=>{
                         this._calculateTotal()
                         await this.docObj.save()
@@ -943,11 +946,9 @@ export default class salesOrder extends React.Component
                         <Scrolling mode="infinite" />
                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                         <Export fileName={this.lang.t("menu.sip_02_002")} enabled={true} allowExportSelectedData={true} />
-                        <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsOrder.clmCreateDate")} width={150} allowEditing={false}/>
-                        <Column dataField="ITEM_CODE" caption={this.t("grdSlsOrder.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
                         <Column dataField="ITEM_NAME" caption={this.t("grdSlsOrder.clmItemName")} width={350} />
-                        <Column dataField="PRICE" caption={this.t("grdSlsOrder.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={150}/>
                         <Column dataField="QUANTITY" caption={this.t("grdSlsOrder.clmQuantity")} dataType={'number'} width={150}/>
+                        <Column dataField="PRICE" caption={this.t("grdSlsOrder.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={150}/>
                         <Column dataField="AMOUNT" caption={this.t("grdSlsOrder.clmAmount")} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}} width={150}/>
                         <Column dataField="DISCOUNT" caption={this.t("grdSlsOrder.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={150}/>
                         <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsOrder.clmDiscountRate")} dataType={'number'} width={150}/>

@@ -27,6 +27,7 @@ export default class NdGrid extends Base
         this._onRowInserting = this._onRowInserting.bind(this);
         this._onRowInserted = this._onRowInserted.bind(this);
         this._onRowUpdated = this._onRowUpdated.bind(this);
+        this._onContentReady = this._onContentReady.bind(this);
         this._onRowUpdating = this._onRowUpdating.bind(this);
         this._onRowRemoving = this._onRowRemoving.bind(this);
         this._onRowRemoved = this._onRowRemoved.bind(this);
@@ -96,6 +97,13 @@ export default class NdGrid extends Base
         if(typeof this.props.onRowUpdated != 'undefined')
         {
             this.props.onRowUpdated(e);
+        }
+    }
+    async _onContentReady(e)
+    {        
+        if(typeof this.props.onContentReady != 'undefined')
+        {
+            this.props.onContentReady(e);
         }
     }
     _onRowRemoving(e)
@@ -298,7 +306,7 @@ export default class NdGrid extends Base
                 width={this.props.width}
                 onInitialized={this._onInitialized} onSelectionChanged={this._onSelectionChanged} 
                 onInitNewRow={this._onInitNewRow} onEditingStart={this._onEditingStart} onRowInserting={this._onRowInserting} onRowInserted={this._onRowInserted}
-                onRowUpdating={this._onRowUpdating} onRowUpdated={this._onRowUpdated} onRowRemoving={this._onRowRemoving} onRowRemoved={this._onRowRemoved}
+                onRowUpdating={this._onRowUpdating} onRowUpdated={this._onRowUpdated} onContentReady={this._onContentReady} onRowRemoving={this._onRowRemoving} onRowRemoved={this._onRowRemoved}
                 onSaving={this._onSaving} onSaved={this._onSaved} onEditCanceling={this._onEditCanceling} onEditCanceled={this._onEditCanceled}
                 onCellPrepared={this._onCellPrepared} onRowDblClick={this._onRowDblClick} onKeyDown = {this._onKeyDown}
                 onCellClick={this._onCellClick} onCellDblClick={this._onCellDblClick} onRowClick={this._onRowClick}
@@ -327,7 +335,7 @@ export default class NdGrid extends Base
                     loadPanel={this.props.loadPanel}
                     onInitialized={this._onInitialized} onSelectionChanged={this._onSelectionChanged} 
                     onInitNewRow={this._onInitNewRow} onEditingStart={this._onEditingStart} onRowInserting={this._onRowInserting} onRowInserted={this._onRowInserted}
-                    onRowUpdating={this._onRowUpdating} onRowUpdated={this._onRowUpdated} onRowRemoving={this._onRowRemoving} onRowRemoved={this._onRowRemoved}
+                    onRowUpdating={this._onRowUpdating} onRowUpdated={this._onRowUpdated} onContentReady={this._onContentReady} onRowRemoving={this._onRowRemoving} onRowRemoved={this._onRowRemoved}
                     onSaving={this._onSaving} onSaved={this._onSaved} onEditCanceling={this._onEditCanceling} onEditCanceled={this._onEditCanceled}
                     onCellPrepared={this._onCellPrepared} onRowDblClick={this._onRowDblClick} onKeyDown = {this._onKeyDown}
                     onCellClick={this._onCellClick} onCellDblClick={this._onCellDblClick} onRowClick={this._onRowClick}
