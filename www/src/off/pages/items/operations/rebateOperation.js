@@ -232,7 +232,7 @@ export default class rebateOperation extends React.Component
         }
         if((await this.docObj.save()) == 0)
         {                                                    
-            tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
+            tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
             await dialog(tmpConfObj1);
             this.docObj.clearAll()
             this.txtRef = Math.floor(Date.now() / 1000)
@@ -240,7 +240,7 @@ export default class rebateOperation extends React.Component
         }
         else
         {
-            tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+            tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
             await dialog(tmpConfObj1);
         }
         
