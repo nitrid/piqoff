@@ -204,7 +204,10 @@ export default class labelPrinting extends React.Component
             this.setState({tbMain:"hidden"})
             this.setState({tbBarcode:"visible"})
             this.setState({tbDocument:"hidden"})
-            this.txtBarcode.focus()
+            if(this.chkAutoAdd.value == false)
+            {
+                this.txtBarcode.focus()
+            }
         }
         if(pPage == "Document")
         {
@@ -278,7 +281,10 @@ export default class labelPrinting extends React.Component
         }
         this.txtBarcode.value = ""
         this.setState({tbBarcode:"visible"})
-        this.txtBarcode.focus()
+        if(this.chkAutoAdd.value == false)
+        {
+            this.txtBarcode.focus()
+        }
         this.calculateCount()
     }
     async barcodeScan()
