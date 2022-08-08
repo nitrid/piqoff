@@ -222,6 +222,8 @@ export default class labelPrinting extends React.Component
     render()
     {
         return(
+
+        <ScrollView>
             <div className="row px-2 pt-2">
             <Form colCount={1}>
             <Item>
@@ -410,7 +412,8 @@ export default class labelPrinting extends React.Component
                     <Column dataField="CODE" caption={this.t("popItemCode.clmCode")} width={100} />
                     <Column dataField="NAME" caption={this.t("popItemCode.clmName")} defaultSortOrder="asc" />
             </NdPopGrid>
-        </div>
+            </div>
+        </ScrollView>
             
         )
     }

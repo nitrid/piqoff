@@ -340,52 +340,216 @@ export default class labelPrinting extends React.Component
     render()
     {
         return(
-        <div className="row px-2 pt-2">
-            <div className="row px-2 pt-2" style={{visibility:this.state.tbMain,position:"fixed"}}>
-                <Form colCount={1}>
-                    <Item>
+            <ScrollView>
+            <div className="row px-2 pt-2">
+                <div className="row px-2 pt-2" style={{visibility:this.state.tbMain,position:"absolute"}}>
+                    <Form colCount={1}>
+                        <Item>
+                            <div className="row">
+                                <div className="col-8"></div>
+                                <div className="col-4">
+                                    <DropDownButton text={this.t("btnDropmenu")} icon="menu" items={this.dropmenuMainItems}  onItemClick={this.dropmenuClick}/>
+                                </div>
+                            </div>
+                        </Item>
+                        {/* txtSer-Refno */}
+                        <Item>
+                            <Label text={this.t("txtRefRefno")} alignment="right" />
+                            <div className="row">
+                                <div className="col-5 pe-0">
+                                    <NdTextBox id="txtSer" parent={this} simple={true} dt={{data:this.mainLblObj.dt('MAIN_LABEL_QUEUE'),field:"REF"}}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    readOnly={true}
+                                    maxLength={32}
+                                    onChange={(async()=>
+                                    {
+                                        let tmpQuery = 
+                                        {
+                                            query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM LABEL_QUEUE WHERE  REF = @REF ",
+                                            param : ['REF:string|25'],
+                                            value : [this.txtSer.value]
+                                        }
+                                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                                        if(tmpData.result.recordset.length > 0)
+                                        {
+                                            this.txtRefno.value=tmpData.result.recordset[0].REF_NO
+                                        }
+                                    }).bind(this)}
+                                    param={this.param.filter({ELEMENT:'txtSer',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'txtSer',USERS:this.user.CODE})}
+                                    >
+                                    <Validator validationGroup={"frmLabelQeueu"}>
+                                            <RequiredRule message={this.t("validRef")} />
+                                        </Validator>  
+                                    </NdTextBox>
+                                </div>
+                                <div className="col-7 ps-0">
+                                    <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.mainLblObj.dt('MAIN_LABEL_QUEUE'),field:"REF_NO"}}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    readOnly={true}
+                                    button=
+                                    {
+                                        [
+                                            {
+                                                id:'01',
+                                                icon:'more',
+                                                onClick:async()=>
+                                                {
+                                                    this.getDocs(0)   
+                                                }
+                                            },
+                                            {
+                                                id:'02',
+                                                icon:'arrowdown',
+                                                onClick:()=>
+                                                {
+                                                    this.txtRefno.value = Math.floor(Date.now() / 1000)
+                                                }
+                                            }
+                                        ]
+                                    }
+                                    onChange={(async()=>
+                                    {
+                                        let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtSer.value,this.txtRefno.value)
+                                        if(tmpResult == 3)
+                                        {
+                                            this.txtRefno.value = "";
+                                        }
+                                    }).bind(this)}
+                                    param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
+                                    >
+                                    <Validator validationGroup={"frmLabelQeueu"}>
+                                            <RequiredRule message={this.t("validRefNo")} />
+                                        </Validator> 
+                                    </NdTextBox>
+                                </div>
+                            </div>
+                            {/*EVRAK SEÇİM */}
+                            <NdPopGrid id={"pg_Docs"} parent={this} container={"#root"}
+                            visible={false}
+                            position={{of:'#root'}} 
+                            showTitle={true} 
+                            columnsAutoWidth={false}
+                            showBorders={true}
+                            width={'90%'}
+                            height={'80%'}
+                            selection={{mode:"single"}}
+                            title={this.t("pg_Docs.title")} 
+                            button=
+                            {
+                                [
+                                    {
+                                        id:'01',
+                                        icon:'more',
+                                        onClick:()=>
+                                        {
+                                            this.pg_Docs.hide()
+                                            this.getDocs('0,1')
+                                        }
+                                    }
+                                ]
+                                
+                            }
+                            >
+                                <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={100} defaultSortOrder="asc"/>
+                                <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={50} defaultSortOrder="asc" />
+                            </NdPopGrid>
+                        </Item>
+                        {/* design */}
+                        <Item>
+                            <Label text={this.t("design")} alignment="right" />
+                            <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
+                            dt={{data:this.mainLblObj.dt('MAIN_LABEL_QUEUE'),field:"DESING"}}
+                            displayExpr="DESIGN_NAME"                       
+                            valueExpr="TAG"
+                            value=""
+                            searchEnabled={true}
+                            onValueChanged={(async(e)=>
+                                {
+                                    for (let i = 0; i < this.cmbDesignList.data.datatable.length; i++) 
+                                    {
+                                        if(this.cmbDesignList.data.datatable[i].TAG == e.value)
+                                        {
+                                            this.pageCount = this.cmbDesignList.data.datatable[i].PAGE_COUNT
+                                        }
+                                    }
+                                    this.calculateCount()
+                                }).bind(this)}
+                            data={{source:{select:{query : "SELECT TAG,DESIGN_NAME,PAGE_COUNT FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '01'"},sql:this.core.sql}}}
+                            param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                            access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                            >
+                                <Validator validationGroup={"frmLabelQeueu"}>
+                                    <RequiredRule message={this.t("validDesign")} />
+                                </Validator> 
+                            </NdSelectBox>
+                        </Item>
+                        {/* txtPage */}
+                        <Item>
+                            <Label text={this.t("txtPage")} alignment="right" />
+                            <NdTextBox id="txtPage" parent={this} simple={true}  
+                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                            readOnly={true}
+                            param={this.param.filter({ELEMENT:'txtPage',USERS:this.user.CODE})}
+                            access={this.access.filter({ELEMENT:'txtPage',USERS:this.user.CODE})}
+                            >
+                            </NdTextBox>
+                        </Item> 
+                        {/* txtFreeLabel */}
+                        <Item>
+                            <Label text={this.t("txtFreeLabel")} alignment="right" />
+                            <NdTextBox id="txtFreeLabel" parent={this} simple={true}  
+                            readOnly={true}
+                            param={this.param.filter({ELEMENT:'txtFreeLabel',USERS:this.user.CODE})}
+                            access={this.access.filter({ELEMENT:'txtFreeLabel',USERS:this.user.CODE})}
+                            >
+                            </NdTextBox>
+                        </Item> 
+                        {/* txtLineCount */}
+                        <Item>
+                            <Label text={this.t("txtLineCount")} alignment="right" />
+                            <NdTextBox id="txtLineCount" parent={this} simple={true}  
+                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                            readOnly={true}
+                            param={this.param.filter({ELEMENT:'txtLineCount',USERS:this.user.CODE})}
+                            access={this.access.filter({ELEMENT:'txtLineCount',USERS:this.user.CODE})}
+                            >
+                            </NdTextBox>
+                        </Item> 
+                        <Item>
+                            <div className="row">
+                                <div className="col-6 px-4 pt-4">
+                                    <NdButton text={this.t("btnBarcodeEntry")} type="default" width="100%" onClick={()=>this.pageChange("Barcode")}></NdButton>
+                                </div>
+                                <div className="col-6 px-4 pt-4">
+                                    <NdButton text={this.t("btnDocument")} type="default" width="100%" onClick={()=>this.pageChange("Document")}></NdButton>
+                                </div>
+                            </div>
+                        </Item>
+                    </Form>
+                </div>
+                <div className="row px-2 pt-2" style={{visibility:this.state.tbBarcode,position:"absolute"}}>
+                    <Form colCount={1} >
+                        <Item>
                         <div className="row">
-                            <div className="col-8"></div>
-                            <div className="col-4">
-                                <DropDownButton text={this.t("btnDropmenu")} icon="menu" items={this.dropmenuMainItems}  onItemClick={this.dropmenuClick}/>
+                            <div className="col-4 px-2 pt-2">
+                                <NdButton icon="arrowleft" type="default" width="100%" onClick={()=>this.pageChange("Main")}></NdButton>
+                            </div>
+                            <div className="col-4 px-2 pt-2">
+                                <NdButton icon="detailslayout" type="default" width="100%" onClick={()=>this.pageChange("Document")}></NdButton>
+                            </div>
+                            <div className="col-4 px-2 pt-2">
+                                
+                                <NdCheckBox id="chkAutoAdd" text={this.t("chkAutoAdd")} parent={this} defaultValue={false} 
+                                param={this.param.filter({ELEMENT:'chkAutoAdd',USERS:this.user.CODE})}
+                                access={this.access.filter({ELEMENT:'chkAutoAdd',USERS:this.user.CODE})}/>
                             </div>
                         </div>
-                    </Item>
-                    {/* txtSer-Refno */}
-                    <Item>
-                        <Label text={this.t("txtRefRefno")} alignment="right" />
-                        <div className="row">
-                            <div className="col-5 pe-0">
-                                <NdTextBox id="txtSer" parent={this} simple={true} dt={{data:this.mainLblObj.dt('MAIN_LABEL_QUEUE'),field:"REF"}}
-                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                readOnly={true}
-                                maxLength={32}
-                                onChange={(async()=>
-                                {
-                                    let tmpQuery = 
-                                    {
-                                        query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM LABEL_QUEUE WHERE  REF = @REF ",
-                                        param : ['REF:string|25'],
-                                        value : [this.txtSer.value]
-                                    }
-                                    let tmpData = await this.core.sql.execute(tmpQuery) 
-                                    if(tmpData.result.recordset.length > 0)
-                                    {
-                                        this.txtRefno.value=tmpData.result.recordset[0].REF_NO
-                                    }
-                                }).bind(this)}
-                                param={this.param.filter({ELEMENT:'txtSer',USERS:this.user.CODE})}
-                                access={this.access.filter({ELEMENT:'txtSer',USERS:this.user.CODE})}
-                                >
-                                <Validator validationGroup={"frmLabelQeueu"}>
-                                        <RequiredRule message={this.t("validRef")} />
-                                    </Validator>  
-                                </NdTextBox>
-                            </div>
-                            <div className="col-7 ps-0">
-                                <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.mainLblObj.dt('MAIN_LABEL_QUEUE'),field:"REF_NO"}}
-                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                readOnly={true}
+                        </Item>
+                        <Item>
+                        <div className="col-12 px-2 pt-2">
+                            <NdTextBox id="txtBarcode" parent={this} placeholder={this.t("txtBarcodePlace")}
                                 button=
                                 {
                                     [
@@ -394,409 +558,248 @@ export default class labelPrinting extends React.Component
                                             icon:'more',
                                             onClick:async()=>
                                             {
-                                                this.getDocs(0)   
+                                                this.popItemCode.show()
+                                                this.popItemCode.onClick = async(data) =>
+                                                {
+                                                    if(data.length == 1)
+                                                    {
+                                                        this.txtBarcode.value = data[0].CODE
+                                                        this.barcode = {
+                                                            name:data[0].NAME,
+                                                            code:data[0].CODE,
+                                                            barcode:data[0].BARCODE,
+                                                            price:data[0].PRICE
+                                                        }
+                                                        this.numPrice.value = data[0].PRICE
+                                                        this.setState({tbBarcode:"visible"})
+                                                    }
+                                                    else if(data.length > 1)
+                                                    {
+                                                        for (let i = 0; i < data.length; i++) 
+                                                        {
+                                                            this.txtBarcode.value = data[i].CODE
+                                                            this.barcode = {
+                                                                name:data[i].NAME,
+                                                                code:data[i].CODE,
+                                                                barcode:data[i].BARCODE,
+                                                                price:data[i].PRICE
+                                                            }
+                                                            await this.addItem()
+                                                        }
+                                                        let tmpConfObj = 
+                                                        {
+                                                            id:'msgItemsAdd',showTitle:true,title:this.t("msgItemsAdd.title"),showCloseButton:true,width:'350px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.t("msgItemsAdd.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemsAdd.msg")}</div>)
+                                                        }
+                                                        await dialog(tmpConfObj);
+                                                    }
+                                                }
                                             }
                                         },
                                         {
                                             id:'02',
-                                            icon:'arrowdown',
-                                            onClick:()=>
+                                            icon:'photo',
+                                            onClick:async()=>
                                             {
-                                                this.txtRefno.value = Math.floor(Date.now() / 1000)
+                                                this.barcodeScan()
                                             }
                                         }
                                     ]
                                 }
-                                onChange={(async()=>
-                                {
-                                    let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtSer.value,this.txtRefno.value)
-                                    if(tmpResult == 3)
+                                onEnterKey={(async(e)=>
                                     {
-                                        this.txtRefno.value = "";
-                                    }
-                                }).bind(this)}
-                                param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
-                                access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
-                                >
-                                <Validator validationGroup={"frmLabelQeueu"}>
-                                        <RequiredRule message={this.t("validRefNo")} />
-                                    </Validator> 
-                                </NdTextBox>
-                            </div>
-                        </div>
-                        {/*EVRAK SEÇİM */}
-                        <NdPopGrid id={"pg_Docs"} parent={this} container={"#root"}
-                        visible={false}
-                        position={{of:'#root'}} 
-                        showTitle={true} 
-                        columnsAutoWidth={false}
-                        showBorders={true}
-                        width={'90%'}
-                        height={'80%'}
-                        selection={{mode:"single"}}
-                        title={this.t("pg_Docs.title")} 
-                        button=
-                        {
-                            [
-                                {
-                                    id:'01',
-                                    icon:'more',
-                                    onClick:()=>
-                                    {
-                                        this.pg_Docs.hide()
-                                        this.getDocs('0,1')
-                                    }
-                                }
-                            ]
-                            
-                        }
-                        >
-                            <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={100} defaultSortOrder="asc"/>
-                            <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={50} defaultSortOrder="asc" />
-                        </NdPopGrid>
-                    </Item>
-                    {/* design */}
-                    <Item>
-                        <Label text={this.t("design")} alignment="right" />
-                        <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
-                        dt={{data:this.mainLblObj.dt('MAIN_LABEL_QUEUE'),field:"DESING"}}
-                        displayExpr="DESIGN_NAME"                       
-                        valueExpr="TAG"
-                        value=""
-                        searchEnabled={true}
-                        onValueChanged={(async(e)=>
-                            {
-                                for (let i = 0; i < this.cmbDesignList.data.datatable.length; i++) 
-                                {
-                                    if(this.cmbDesignList.data.datatable[i].TAG == e.value)
-                                    {
-                                        this.pageCount = this.cmbDesignList.data.datatable[i].PAGE_COUNT
-                                    }
-                                }
-                                this.calculateCount()
-                            }).bind(this)}
-                        data={{source:{select:{query : "SELECT TAG,DESIGN_NAME,PAGE_COUNT FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '01'"},sql:this.core.sql}}}
-                        param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
-                        access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
-                        >
-                            <Validator validationGroup={"frmLabelQeueu"}>
-                                <RequiredRule message={this.t("validDesign")} />
-                            </Validator> 
-                        </NdSelectBox>
-                    </Item>
-                    {/* txtPage */}
-                    <Item>
-                        <Label text={this.t("txtPage")} alignment="right" />
-                        <NdTextBox id="txtPage" parent={this} simple={true}  
-                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                        readOnly={true}
-                        param={this.param.filter({ELEMENT:'txtPage',USERS:this.user.CODE})}
-                        access={this.access.filter({ELEMENT:'txtPage',USERS:this.user.CODE})}
-                        >
-                        </NdTextBox>
-                    </Item> 
-                    {/* txtFreeLabel */}
-                    <Item>
-                        <Label text={this.t("txtFreeLabel")} alignment="right" />
-                        <NdTextBox id="txtFreeLabel" parent={this} simple={true}  
-                        readOnly={true}
-                        param={this.param.filter({ELEMENT:'txtFreeLabel',USERS:this.user.CODE})}
-                        access={this.access.filter({ELEMENT:'txtFreeLabel',USERS:this.user.CODE})}
-                        >
-                        </NdTextBox>
-                    </Item> 
-                    {/* txtLineCount */}
-                    <Item>
-                        <Label text={this.t("txtLineCount")} alignment="right" />
-                        <NdTextBox id="txtLineCount" parent={this} simple={true}  
-                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                        readOnly={true}
-                        param={this.param.filter({ELEMENT:'txtLineCount',USERS:this.user.CODE})}
-                        access={this.access.filter({ELEMENT:'txtLineCount',USERS:this.user.CODE})}
-                        >
-                        </NdTextBox>
-                    </Item> 
-                    <Item>
-                        <div className="row">
-                            <div className="col-6 px-4 pt-4">
-                                <NdButton text={this.t("btnBarcodeEntry")} type="default" width="100%" onClick={()=>this.pageChange("Barcode")}></NdButton>
-                            </div>
-                            <div className="col-6 px-4 pt-4">
-                                <NdButton text={this.t("btnDocument")} type="default" width="100%" onClick={()=>this.pageChange("Document")}></NdButton>
-                            </div>
-                        </div>
-                    </Item>
-                </Form>
-            </div>
-            <div className="row px-2 pt-2" style={{visibility:this.state.tbBarcode,position:"fixed"}}>
-                <Form colCount={1} >
-                    <Item>
-                    <div className="row">
-                        <div className="col-4 px-2 pt-2">
-                            <NdButton icon="arrowleft" type="default" width="100%" onClick={()=>this.pageChange("Main")}></NdButton>
-                        </div>
-                        <div className="col-4 px-2 pt-2">
-                            <NdButton icon="detailslayout" type="default" width="100%" onClick={()=>this.pageChange("Document")}></NdButton>
-                        </div>
-                        <div className="col-4 px-2 pt-2">
-                            
-                            <NdCheckBox id="chkAutoAdd" text={this.t("chkAutoAdd")} parent={this} defaultValue={false} 
-                            param={this.param.filter({ELEMENT:'chkAutoAdd',USERS:this.user.CODE})}
-                            access={this.access.filter({ELEMENT:'chkAutoAdd',USERS:this.user.CODE})}/>
-                        </div>
-                    </div>
-                    </Item>
-                    <Item>
-                    <div className="col-12 px-2 pt-2">
-                        <NdTextBox id="txtBarcode" parent={this} placeholder={this.t("txtBarcodePlace")}
-                            button=
-                            {
-                                [
-                                    {
-                                        id:'01',
-                                        icon:'more',
-                                        onClick:async()=>
+                                        if(e.component._changedValue == "")
                                         {
-                                            this.popItemCode.show()
-                                            this.popItemCode.onClick = async(data) =>
+                                            return
+                                        }
+                                        let tmpQuery = 
+                                        {
+                                            query : "SELECT ITEM_CODE AS CODE,ITEM_NAME AS NAME,ITEM_GUID AS GUID,BARCODE,[dbo].[FN_PRICE_SALE](ITEM_GUID,1,GETDATE()) AS PRICE FROM ITEM_BARCODE_VW_01  WHERE BARCODE = @BARCODE OR ITEM_CODE = @BARCODE ",
+                                            param : ['BARCODE:string|50'],
+                                            value : [e.component._changedValue]
+                                        }
+                                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                                        if(tmpData.result.recordset.length >0)
+                                        {
+                                            this.barcode.name = tmpData.result.recordset[0].NAME
+                                            this.barcode.barcode = tmpData.result.recordset[0].BARCODE 
+                                            this.barcode.code = tmpData.result.recordset[0].CODE 
+                                            this.barcode.price = tmpData.result.recordset[0].PRICE 
+                                            this.numPrice.value = parseFloat(tmpData.result.recordset[0].PRICE)
+                                            if(this.chkAutoAdd.value == true)
                                             {
-                                                if(data.length == 1)
-                                                {
-                                                    this.txtBarcode.value = data[0].CODE
-                                                    this.barcode = {
-                                                        name:data[0].NAME,
-                                                        code:data[0].CODE,
-                                                        barcode:data[0].BARCODE,
-                                                        price:data[0].PRICE
-                                                    }
-                                                    this.numPrice.value = data[0].PRICE
-                                                    this.setState({tbBarcode:"visible"})
-                                                }
-                                                else if(data.length > 1)
-                                                {
-                                                    for (let i = 0; i < data.length; i++) 
-                                                    {
-                                                        this.txtBarcode.value = data[i].CODE
-                                                        this.barcode = {
-                                                            name:data[i].NAME,
-                                                            code:data[i].CODE,
-                                                            barcode:data[i].BARCODE,
-                                                            price:data[i].PRICE
-                                                        }
-                                                        await this.addItem()
-                                                    }
-                                                    let tmpConfObj = 
-                                                    {
-                                                        id:'msgItemsAdd',showTitle:true,title:this.t("msgItemsAdd.title"),showCloseButton:true,width:'350px',height:'200px',
-                                                        button:[{id:"btn01",caption:this.t("msgItemsAdd.btn01"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemsAdd.msg")}</div>)
-                                                    }
-                                                    await dialog(tmpConfObj);
-                                                }
+                                                this.addItem()
                                             }
-                                        }
-                                    },
-                                    {
-                                        id:'02',
-                                        icon:'photo',
-                                        onClick:async()=>
-                                        {
-                                            this.barcodeScan()
-                                        }
-                                    }
-                                ]
-                            }
-                            onEnterKey={(async(e)=>
-                                {
-                                    if(e.component._changedValue == "")
-                                    {
-                                        return
-                                    }
-                                    let tmpQuery = 
-                                    {
-                                        query : "SELECT ITEM_CODE AS CODE,ITEM_NAME AS NAME,ITEM_GUID AS GUID,BARCODE,[dbo].[FN_PRICE_SALE](ITEM_GUID,1,GETDATE()) AS PRICE FROM ITEM_BARCODE_VW_01  WHERE BARCODE = @BARCODE OR ITEM_CODE = @BARCODE ",
-                                        param : ['BARCODE:string|50'],
-                                        value : [e.component._changedValue]
-                                    }
-                                    let tmpData = await this.core.sql.execute(tmpQuery) 
-                                    if(tmpData.result.recordset.length >0)
-                                    {
-                                        this.barcode.name = tmpData.result.recordset[0].NAME
-                                        this.barcode.barcode = tmpData.result.recordset[0].BARCODE 
-                                        this.barcode.code = tmpData.result.recordset[0].CODE 
-                                        this.barcode.price = tmpData.result.recordset[0].PRICE 
-                                        this.numPrice.value = parseFloat(tmpData.result.recordset[0].PRICE)
-                                        if(this.chkAutoAdd.value == true)
-                                        {
-                                            this.addItem()
+                                            else
+                                            {
+                                            }
+                                            this.setState({tbBarcode:"visible"})
                                         }
                                         else
                                         {
-                                        }
-                                        this.setState({tbBarcode:"visible"})
-                                    }
-                                    else
-                                    {
-                                        document.getElementById("Sound").play(); 
+                                            document.getElementById("Sound").play(); 
 
-                                        let tmpConfObj = 
-                                        {
-                                            id:'msgBarcodeNotFound',showTitle:true,title:this.t("msgBarcodeNotFound.title"),showCloseButton:true,width:'350px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgBarcodeNotFound.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcodeNotFound.msg")}</div>)
+                                            let tmpConfObj = 
+                                            {
+                                                id:'msgBarcodeNotFound',showTitle:true,title:this.t("msgBarcodeNotFound.title"),showCloseButton:true,width:'350px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgBarcodeNotFound.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcodeNotFound.msg")}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                            this.txtBarcode.value = ""
                                         }
-                                        await dialog(tmpConfObj);
-                                        this.txtBarcode.value = ""
-                                    }
-                                    
-                                }).bind(this)}></NdTextBox>
-                    </div>
-                    </Item>
-                    <Item> 
-                        <div>
-                            <h4 className="text-center">
-                                {this.barcode.name}
-                            </h4>
+                                        
+                                    }).bind(this)}></NdTextBox>
                         </div>
-                    </Item>
-                     {/* txtPage */}
-                     <Item>
-                        <Label text={this.t("txtPage")} alignment="right" />
-                        <NdTextBox id="txtBarPage" parent={this} simple={true}  
-                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                        readOnly={true}
-                        param={this.param.filter({ELEMENT:'txtPage',USERS:this.user.CODE})}
-                        access={this.access.filter({ELEMENT:'txtPage',USERS:this.user.CODE})}
-                        >
-                        </NdTextBox>
-                    </Item> 
-                    {/* txtFreeLabel */}
-                    <Item>
-                        <Label text={this.t("txtFreeLabel")} alignment="right" />
-                        <NdTextBox id="txtBarFreeLabel" parent={this} simple={true}  
-                        readOnly={true}
-                        param={this.param.filter({ELEMENT:'txtFreeLabel',USERS:this.user.CODE})}
-                        access={this.access.filter({ELEMENT:'txtFreeLabel',USERS:this.user.CODE})}
-                        >
-                        </NdTextBox>
-                    </Item> 
-                    {/* txtLineCount */}
-                    <Item>
-                        <Label text={this.t("txtLineCount")} alignment="right" />
-                        <NdTextBox id="txtBarLineCount" parent={this} simple={true}  
-                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                        readOnly={true}
-                        param={this.param.filter({ELEMENT:'txtLineCount',USERS:this.user.CODE})}
-                        access={this.access.filter({ELEMENT:'txtLineCount',USERS:this.user.CODE})}
-                        >
-                        </NdTextBox>
-                    </Item> 
-                     {/* txtPrice */}
-                     <Item>
-                        <Label text={this.t("numPrice")} alignment="right" />
-                        <NdNumberBox id="numPrice" parent={this} simple={true}  
-                        param={this.param.filter({ELEMENT:'numPrice',USERS:this.user.CODE})}
-                        access={this.access.filter({ELEMENT:'numPrice',USERS:this.user.CODE})}
-                        onEnterKey={(async(e)=>
-                            {
-                                this.addItem()
-                            }).bind(this)}
-                        >
-                        </NdNumberBox>
-                    </Item> 
+                        </Item>
+                        <Item> 
+                            <div>
+                                <h4 className="text-center">
+                                    {this.barcode.name}
+                                </h4>
+                            </div>
+                        </Item>
+                        {/* txtPage */}
+                        <Item>
+                            <Label text={this.t("txtPage")} alignment="right" />
+                            <NdTextBox id="txtBarPage" parent={this} simple={true}  
+                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                            readOnly={true}
+                            param={this.param.filter({ELEMENT:'txtPage',USERS:this.user.CODE})}
+                            access={this.access.filter({ELEMENT:'txtPage',USERS:this.user.CODE})}
+                            >
+                            </NdTextBox>
+                        </Item> 
+                        {/* txtFreeLabel */}
+                        <Item>
+                            <Label text={this.t("txtFreeLabel")} alignment="right" />
+                            <NdTextBox id="txtBarFreeLabel" parent={this} simple={true}  
+                            readOnly={true}
+                            param={this.param.filter({ELEMENT:'txtFreeLabel',USERS:this.user.CODE})}
+                            access={this.access.filter({ELEMENT:'txtFreeLabel',USERS:this.user.CODE})}
+                            >
+                            </NdTextBox>
+                        </Item> 
+                        {/* txtLineCount */}
+                        <Item>
+                            <Label text={this.t("txtLineCount")} alignment="right" />
+                            <NdTextBox id="txtBarLineCount" parent={this} simple={true}  
+                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                            readOnly={true}
+                            param={this.param.filter({ELEMENT:'txtLineCount',USERS:this.user.CODE})}
+                            access={this.access.filter({ELEMENT:'txtLineCount',USERS:this.user.CODE})}
+                            >
+                            </NdTextBox>
+                        </Item> 
+                        {/* txtPrice */}
+                        <Item>
+                            <Label text={this.t("numPrice")} alignment="right" />
+                            <NdNumberBox id="numPrice" parent={this} simple={true}  
+                            param={this.param.filter({ELEMENT:'numPrice',USERS:this.user.CODE})}
+                            access={this.access.filter({ELEMENT:'numPrice',USERS:this.user.CODE})}
+                            onEnterKey={(async(e)=>
+                                {
+                                    this.addItem()
+                                }).bind(this)}
+                            >
+                            </NdNumberBox>
+                        </Item> 
+                        <Item>
+                            <div className="row">
+                                <div className="col-12 px-4 pt-4">
+                                    <NdButton text={this.t("btnItemAdd")} type="default" width="100%" onClick={()=>this.addItem()}></NdButton>
+                                </div>
+                            </div>
+                        </Item>
+                    </Form>
+                </div>
+                <div className="row px-2 pt-2" style={{visibility:this.state.tbDocument,position:"absolute"}}>
+                    <Form colCount={1} >
                     <Item>
                         <div className="row">
-                            <div className="col-12 px-4 pt-4">
-                                <NdButton text={this.t("btnItemAdd")} type="default" width="100%" onClick={()=>this.addItem()}></NdButton>
+                            <div className="col-4 px-2 pt-2">
+                                <NdButton icon="arrowleft" type="default" width="100%" onClick={()=>this.pageChange("Barcode")}></NdButton>
+                            </div>
+                            <div className="col-4 px-2 pt-2">
+                                {/* <NdButton icon="plus" type="default" width="100%" onClick={()=>this.pageChange("Barcode")}></NdButton> */}
+                            </div>
+                            <div className="col-4">
+                                    <DropDownButton text={this.t("btnDropmenu")} icon="menu" items={this.dropmenuDocItems}  onItemClick={this.dropmenuClick}/>
                             </div>
                         </div>
                     </Item>
-                </Form>
-            </div>
-            <div className="row px-2 pt-2" style={{visibility:this.state.tbDocument,position:"fixed"}}>
-                <Form colCount={1} >
-                <Item>
-                    <div className="row">
-                        <div className="col-4 px-2 pt-2">
-                            <NdButton icon="arrowleft" type="default" width="100%" onClick={()=>this.pageChange("Barcode")}></NdButton>
-                        </div>
-                        <div className="col-4 px-2 pt-2">
-                            {/* <NdButton icon="plus" type="default" width="100%" onClick={()=>this.pageChange("Barcode")}></NdButton> */}
-                        </div>
-                        <div className="col-4">
-                                <DropDownButton text={this.t("btnDropmenu")} icon="menu" items={this.dropmenuDocItems}  onItemClick={this.dropmenuClick}/>
-                        </div>
-                    </div>
-                </Item>
-                <Item>
-                    <NdGrid parent={this} id={"grdLblPrinting"} 
-                    showBorders={true} 
-                    columnsAutoWidth={false} 
-                    allowColumnReordering={true} 
-                    allowColumnResizing={true} 
-                    height={'400'} 
-                    width={'100%'}
-                    dbApply={false}
-                    onRowUpdated={async(e)=>{
+                    <Item>
+                        <NdGrid parent={this} id={"grdLblPrinting"} 
+                        showBorders={true} 
+                        columnsAutoWidth={false} 
+                        allowColumnReordering={true} 
+                        allowColumnResizing={true} 
+                        height={'400'} 
+                        width={'100%'}
+                        dbApply={false}
+                        onRowUpdated={async(e)=>{
+                            
+                        }}
+                        onRowRemoved={async (e)=>{
                         
-                    }}
-                    onRowRemoved={async (e)=>{
-                       
+                        }}
+                        >
+                            <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
+                            <Scrolling mode="infinite" />
+                            <Editing mode="cell" allowUpdating={false} allowDeleting={true} confirmDelete={false}/>
+                            <Column dataField="BARCODE" caption={this.t("grdLblPrinting.clmBarcode")} width={130} />
+                            <Column dataField="NAME" caption={this.t("grdLblPrinting.clmItemName")}  width={200}/>
+                            <Column dataField="PRICE" caption={this.t("grdLblPrinting.clmPrice")} width={60} />
+                        </NdGrid>
+                    </Item>
+                    </Form>
+                </div>
+                {/* Stok Seçim */}
+                <NdPopGrid id={"popItemCode"} parent={this} container={"#root"}
+                    visible={false}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    title={this.t("popItemCode.title")} //
+                    selection={{mode:"single"}}
+                    search={true}
+                    data = 
+                    {{
+                        source:
+                        {
+                            select:
+                            {
+                                query : "SELECT  *,  " +
+                                        "CASE WHEN UNDER_UNIT_VALUE =0  " +
+                                        "THEN 0 " +
+                                        "ELSE " +
+                                        "ROUND((PRICE * UNDER_UNIT_VALUE),2) " +
+                                        "END AS UNDER_UNIT_PRICE " +
+                                        "FROM  (  SELECT GUID,   " +
+                                        "CODE,   " +
+                                        "NAME,   " +
+                                        "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
+                                        "MAIN_GRP AS ITEM_GRP,   " +
+                                        "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
+                                        "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE())) AS PRICE  , " +
+                                        "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE " +
+                                        "FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID),'') <> '') AS TMP " +
+                                        "WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) " ,
+                                param : ['VAL:string|50']
+                            },
+                            sql:this.core.sql
+                        }
                     }}
                     >
-                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
-                        <Scrolling mode="infinite" />
-                        <Editing mode="cell" allowUpdating={false} allowDeleting={true} confirmDelete={false}/>
-                        <Column dataField="BARCODE" caption={this.t("grdLblPrinting.clmBarcode")} width={130} />
-                        <Column dataField="NAME" caption={this.t("grdLblPrinting.clmItemName")}  width={200}/>
-                        <Column dataField="PRICE" caption={this.t("grdLblPrinting.clmPrice")} width={60} />
-                    </NdGrid>
-                </Item>
-                </Form>
+                        <Column dataField="CODE" caption={this.t("popItemCode.clmCode")} width={100} />
+                        <Column dataField="NAME" caption={this.t("popItemCode.clmName")} defaultSortOrder="asc" />
+                </NdPopGrid>
             </div>
-            {/* Stok Seçim */}
-            <NdPopGrid id={"popItemCode"} parent={this} container={"#root"}
-                visible={false}
-                position={{of:'#root'}} 
-                showTitle={true} 
-                showBorders={true}
-                width={'90%'}
-                height={'90%'}
-                title={this.t("popItemCode.title")} //
-                selection={{mode:"single"}}
-                search={true}
-                data = 
-                {{
-                    source:
-                    {
-                        select:
-                        {
-                            query : "SELECT  *,  " +
-                                    "CASE WHEN UNDER_UNIT_VALUE =0  " +
-                                    "THEN 0 " +
-                                    "ELSE " +
-                                    "ROUND((PRICE * UNDER_UNIT_VALUE),2) " +
-                                    "END AS UNDER_UNIT_PRICE " +
-                                    "FROM  (  SELECT GUID,   " +
-                                    "CODE,   " +
-                                    "NAME,   " +
-                                    "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
-                                    "MAIN_GRP AS ITEM_GRP,   " +
-                                    "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
-                                    "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE())) AS PRICE  , " +
-                                    "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE " +
-                                    "FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID),'') <> '') AS TMP " +
-                                    "WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) " ,
-                            param : ['VAL:string|50']
-                        },
-                        sql:this.core.sql
-                    }
-                }}
-                >
-                    <Column dataField="CODE" caption={this.t("popItemCode.clmCode")} width={100} />
-                    <Column dataField="NAME" caption={this.t("popItemCode.clmName")} defaultSortOrder="asc" />
-            </NdPopGrid>
-        </div>
+            </ScrollView>
+       
         )
     }
 }

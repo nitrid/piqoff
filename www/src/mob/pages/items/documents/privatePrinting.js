@@ -52,6 +52,7 @@ export default class outageDoc extends React.Component
     render()
     {
         return(
+            <ScrollView>
             <div>
                 <Form colCount={1} id={"frmPriLabel" + this.tabIndex}>
                     {/* txtRef */}
@@ -312,6 +313,8 @@ export default class outageDoc extends React.Component
                     </Item>
                 </Form>
             </div>
+            </ScrollView>
+
         )
     }
 }

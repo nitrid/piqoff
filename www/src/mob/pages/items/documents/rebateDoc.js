@@ -382,7 +382,7 @@ export default class rebateDoc extends React.Component
     {
         return(
         <div className="row px-2 pt-2">
-            <div className="row px-2 pt-2" style={{visibility:this.state.tbMain,position:"fixed"}}>
+            <div className="row px-2 pt-2" style={{visibility:this.state.tbMain,position:"absolute"}}>
                 <Form colCount={1}>
                     <Item>
                         <div className="row">
@@ -570,7 +570,7 @@ export default class rebateDoc extends React.Component
                     </Item>
                 </Form>
             </div>
-            <div className="row px-2 pt-2" style={{visibility:this.state.tbBarcode,position:"fixed"}}>
+            <div className="row px-2 pt-2" style={{visibility:this.state.tbBarcode,position:"absolute"}}>
                 <Form colCount={1}>
                     <Item>
                     <div className="row">
@@ -711,7 +711,7 @@ export default class rebateDoc extends React.Component
                     </Item>
                 </Form>
             </div>
-            <div className="row px-2 pt-2" style={{visibility:this.state.tbDocument,position:"fixed"}}>
+            <div className="row px-2 pt-2" style={{visibility:this.state.tbDocument,position:"absolute"}}>
                 <Form>
                 <Item>
                     <div className="row">
