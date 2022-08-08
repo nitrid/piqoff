@@ -262,7 +262,7 @@ export default class posDoc extends React.PureComponent
                 {
                     query : "SELECT TOP 1 *,@CODE AS INPUT FROM ITEMS_POS_VW_01 WHERE UNIQ_CODE = @CODE AND STATUS = 1",
                     param : ['CODE:string|25'],
-                    value: [pCode],
+                    value: [pCode.substring(pCode.lastIndexOf('F') + 1,pCode.length - 1)],
                     local : 
                     {
                         type : "select",
@@ -625,12 +625,17 @@ export default class posDoc extends React.PureComponent
             if(tmpFlag != '' && tmpPrm[i].length == pBarcode.length && pBarcode.substring(0,tmpFlag.length) == tmpFlag)
             {
                 let tmpMoney = pBarcode.substring(tmpPrm[i].indexOf('M'),tmpPrm[i].lastIndexOf('M') + 1)
+                let tmpMoneyFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('M'),tmpPrm[i].lastIndexOf('M') + 1)
                 let tmpCent = pBarcode.substring(tmpPrm[i].indexOf('C'),tmpPrm[i].lastIndexOf('C') + 1)
+                let tmpCentFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('C'),tmpPrm[i].lastIndexOf('C') + 1)
                 let tmpKg = pBarcode.substring(tmpPrm[i].indexOf('K'),tmpPrm[i].lastIndexOf('K') + 1)
+                let tmpKgFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('K'),tmpPrm[i].lastIndexOf('K') + 1)
                 let tmpGram = pBarcode.substring(tmpPrm[i].indexOf('G'),tmpPrm[i].lastIndexOf('G') + 1)
-                
+                let tmpGramFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('G'),tmpPrm[i].lastIndexOf('G') + 1)
+                let tmpSumFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('F'),tmpPrm[i].lastIndexOf('F') + 1)
+
                 return {
-                    barcode : pBarcode.substring(0,tmpPrm[i].lastIndexOf('N') + 1),
+                    barcode : pBarcode.substring(0,tmpPrm[i].lastIndexOf('N') + 1) + tmpMoneyFlag + tmpCentFlag + tmpKgFlag + tmpGramFlag + tmpSumFlag,
                     price : parseFloat((tmpMoney == '' ? "0" : tmpMoney) + "." + (tmpCent == '' ? "0" : tmpCent)),
                     quantity : parseFloat((tmpKg == '' ? "0" : tmpKg) + "." + (tmpGram == '' ? "0" : tmpGram))
                 }

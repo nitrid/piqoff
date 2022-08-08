@@ -1,6 +1,7 @@
 {
     "type": "module",
     "dependencies": {
-        "gensrv": "^1.0.80"
+        "gensrv": "^1.0.80",
+        "node-windows": "^1.0.0-beta.5"
     }
 }

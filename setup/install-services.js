@@ -3,8 +3,8 @@ const path = require('path');
 
 var svc = new Service
 ({
-    name:'GenSrv',
-    description: 'NitroGen Service.',
+    name:'Piqsoft',
+    description: 'Piqsoft Service.',
     script: path.join(process.cwd(), '..\\server.js'),
     env: 
     [
