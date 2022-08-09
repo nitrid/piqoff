@@ -23,6 +23,7 @@ export default class NbPosPopGrid extends NbBase
         }
         this.data = this.props.data
         this._onSelection = this._onSelection.bind(this)
+        console.log(props)
     }
     _onSelection(pData)
     {
@@ -47,6 +48,14 @@ export default class NbPosPopGrid extends NbBase
         //this["txt" + this.props.id].value = ""
         //await this["grd" + this.props.id].dataRefresh({source:[]})
         this[this.props.id].show()
+        if(this.props.selectAll == true)
+        {
+            this["txt" + this.props.id].value = ''
+            setTimeout(() => 
+            {
+                this["txt" + this.props.id].focus()
+            }, 500);
+        }
     }
     async clear()
     {
@@ -69,7 +78,7 @@ export default class NbPosPopGrid extends NbBase
                     <div className="row pb-1">
                         <div className="col-12">
                             <NdTextBox id={"txt" + this.props.id} parent={this} simple={true} 
-                            onChange={(async()=>{this.getData()}).bind(this)}
+                            onChange={(async()=>{this.getData()}).bind(this)} selectAll={this.props.selectAll}
                             onValueChanging={(e)=>{this.keyboard.setInput(e)}}
                             />     
                         </div>                            

@@ -3078,7 +3078,7 @@ export default class posDoc extends React.PureComponent
                 </div>
                 {/* Item List Popup */}
                 <div>
-                    <NbPosPopGrid id={"popItemList"} parent={this} width={"100%"} height={"100%"} position={"#root"} title={this.lang.t("popItemList.title")}
+                    <NbPosPopGrid id={"popItemList"} parent={this} width={"100%"} height={"100%"} position={"#root"} title={this.lang.t("popItemList.title")}  selectAll={true}
                     data={{source:
                     {
                         select:
