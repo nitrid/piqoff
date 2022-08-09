@@ -155,6 +155,7 @@ export default class labelPrinting extends React.PureComponent
                 "CODE,   " +
                 "NAME,   " +
                 "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
+                "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
                 "MAIN_GRP AS ITEM_GRP,   " +
                 "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
                 "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE())) AS PRICE  , " +
@@ -200,6 +201,7 @@ export default class labelPrinting extends React.PureComponent
                 "CODE,   " +
                 "NAME,   " +
                 "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
+                "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
                 "MAIN_GRP AS ITEM_GRP,   " +
                 "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
                 "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE())) AS PRICE  , " +
@@ -247,6 +249,7 @@ export default class labelPrinting extends React.PureComponent
                 "CODE,   " +
                 "NAME,   " +
                 "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
+                "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
                 "MAIN_GRP AS ITEM_GRP,   " +
                 "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
                 "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE())) AS PRICE  , " +
@@ -294,6 +297,7 @@ export default class labelPrinting extends React.PureComponent
                 "CODE,   " +
                 "NAME,   " +
                 "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
+                "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
                 "MAIN_GRP AS ITEM_GRP,   " +
                 "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
                 "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE())) AS PRICE  , " +
@@ -341,6 +345,7 @@ export default class labelPrinting extends React.PureComponent
                 "CODE,   " +
                 "NAME,   " +
                 "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
+                "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
                 "MAIN_GRP AS ITEM_GRP,   " +
                 "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
                 "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE())) AS PRICE  , " +
@@ -432,6 +437,7 @@ export default class labelPrinting extends React.PureComponent
                                "CODE,  " +
                                "NAME,  " +
                                "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,  " +
+                                "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
                                "MAIN_GRP AS ITEM_GRP,  " +
                                "MAIN_GRP_NAME AS ITEM_GRP_NAME,  " +
                                "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE())) AS PRICE  ," +
@@ -528,6 +534,7 @@ export default class labelPrinting extends React.PureComponent
             }
         }
         this.lblObj.dt()[pIndex].CODE = pData.CODE
+        this.lblObj.dt()[pIndex].MULTICODE = pData.MULTICODE
         this.lblObj.dt()[pIndex].BARCODE = pData.BARCODE
         this.lblObj.dt()[pIndex].NAME = pData.NAME
         this.lblObj.dt()[pIndex].ITEM_GRP = pData.ITEM_GRP
@@ -1137,6 +1144,7 @@ export default class labelPrinting extends React.PureComponent
                                         "CODE,   " +
                                         "NAME,   " +
                                         "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
+                                        "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
                                         "MAIN_GRP AS ITEM_GRP,   " +
                                         "MAIN_GRP_NAME AS ITEM_GRP_NAME, " +
                                         "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID),'') AS CUSTOMER_NAME, " +

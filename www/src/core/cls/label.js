@@ -16,6 +16,7 @@ export class labelCls
             PRINT_COUNT : 1,
             STATUS : 0,
             CODE : '',
+            MULTICODE : '',
             BARCODE : '',
             NAME : '',
             ITEM_GRP : '',
