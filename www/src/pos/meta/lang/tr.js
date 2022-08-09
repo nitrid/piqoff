@@ -454,6 +454,7 @@ export const langTr =
         DISCOUNT :"INDIRIM",
         LOYALTY : "SADAKAT",
         AMOUNT : "TUTAR",
+        DEVICE :"DEVICE"
     },
     grdLastSale :
     {

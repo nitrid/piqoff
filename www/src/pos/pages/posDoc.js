@@ -255,6 +255,7 @@ export default class posDoc extends React.PureComponent
                 }
             }
             await tmpDt.refresh();
+            console.log(pCode.substring(pCode.lastIndexOf('F') + 1,pCode.length - 1))
             //UNIQ BARKOD
             if(tmpDt.length == 0)
             {
@@ -291,7 +292,7 @@ export default class posDoc extends React.PureComponent
         });
     }
     async getItem(pCode)
-    {                
+    {           
         this.txtBarcode.value = ""; 
         let tmpQuantity = 1
         let tmpPrice = 0        
@@ -611,8 +612,9 @@ export default class posDoc extends React.PureComponent
     }
     getBarPattern(pBarcode)
     {
+        pBarcode = pBarcode.toString().trim()
         let tmpPrm = this.prmObj.filter({ID:'BarcodePattern',TYPE:0}).getValue();
-        
+        console.log(pBarcode)
         if(typeof tmpPrm == 'undefined' || tmpPrm.length == 0)
         {            
             return {barcode:pBarcode}
@@ -620,8 +622,9 @@ export default class posDoc extends React.PureComponent
         //201234012550 0211234012550
         for (let i = 0; i < tmpPrm.length; i++) 
         {
+            console.log(tmpPrm[i])
             let tmpFlag = tmpPrm[i].substring(0,tmpPrm[i].indexOf('N'))
-
+            console.log(tmpFlag + " - " + tmpPrm[i].length + " - " + pBarcode.length + " - " + pBarcode.substring(0,tmpFlag.length))
             if(tmpFlag != '' && tmpPrm[i].length == pBarcode.length && pBarcode.substring(0,tmpFlag.length) == tmpFlag)
             {
                 let tmpMoney = pBarcode.substring(tmpPrm[i].indexOf('M'),tmpPrm[i].lastIndexOf('M') + 1)
@@ -633,7 +636,7 @@ export default class posDoc extends React.PureComponent
                 let tmpGram = pBarcode.substring(tmpPrm[i].indexOf('G'),tmpPrm[i].lastIndexOf('G') + 1)
                 let tmpGramFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('G'),tmpPrm[i].lastIndexOf('G') + 1)
                 let tmpSumFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('F'),tmpPrm[i].lastIndexOf('F') + 1)
-
+                console.log(pBarcode.substring(0,tmpPrm[i].lastIndexOf('N') + 1))
                 return {
                     barcode : pBarcode.substring(0,tmpPrm[i].lastIndexOf('N') + 1) + tmpMoneyFlag + tmpCentFlag + tmpKgFlag + tmpGramFlag + tmpSumFlag,
                     price : parseFloat((tmpMoney == '' ? "0" : tmpMoney) + "." + (tmpCent == '' ? "0" : tmpCent)),
@@ -3832,7 +3835,7 @@ export default class posDoc extends React.PureComponent
                                             query:  "SELECT *, " +
                                                     "SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,36) AS REF " + 
                                                     "FROM POS_VW_01 WHERE DOC_DATE >= @START_DATE AND DOC_DATE <= @FINISH_DATE AND " +
-                                                    "((ISNULL((SELECT TOP 1 1 FROM POS_PAYMENT AS PAY WHERE PAY.POS = POS_VW_01.GUID AND TYPE = @TYPE AND DELETED = 0),0) = 1) OR (@TYPE = -1)) AND STATUS = 1",
+                                                    "((ISNULL((SELECT TOP 1 1 FROM POS_PAYMENT AS PAY WHERE PAY.POS = POS_VW_01.GUID AND TYPE = @TYPE AND DELETED = 0),0) = 1) OR (@TYPE = -1)) AND STATUS = 1 ORDER BY LDATE DESC",
                                             param:  ["START_DATE:date","FINISH_DATE:date","TYPE:int"],
                                             value:  [this.dtPopLastSaleStartDate.value,this.dtPopLastSaleFinishDate.value,this.cmbPopLastSalePayType.value]
                                         }
@@ -3899,7 +3902,7 @@ export default class posDoc extends React.PureComponent
 
                                         this.lastPosPayDt.selectCmd = 
                                         {
-                                            query:  "SELECT * FROM POS_PAYMENT_VW_01 WHERE POS_GUID = @GUID ",
+                                            query:  "SELECT * FROM POS_PAYMENT_VW_01 WHERE POS_GUID = @GUID ORDER BY LDATE DESC",
                                             param:  ["GUID:string|50"],
                                             value:  [e.selectedRowKeys[0].GUID]
                                         }
@@ -3948,6 +3951,7 @@ export default class posDoc extends React.PureComponent
                                 }}
                                 >
                                     <Column dataField="LDATE" caption={this.lang.t("grdLastPos.LDATE")} width={200} alignment={"center"} dataType={"datetime"} format={"dd-MM-yyyy - HH:mm:ss SSSZ"}/>
+                                    <Column dataField="DEVICE" caption={this.lang.t("grdLastPos.DEVICE")} width={150}/>
                                     <Column dataField="REF" caption={this.lang.t("grdLastPos.REF")} width={150}/>
                                     <Column dataField="CUSTOMER_NAME" caption={this.lang.t("grdLastPos.CUSTOMER_NAME")} width={200}/> 
                                     <Column dataField="CUSER_NAME" caption={this.lang.t("grdLastPos.CUSER_NAME")} width={100}/>

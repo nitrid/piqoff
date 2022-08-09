@@ -363,19 +363,19 @@ export default class itemCard extends React.PureComponent
     async _onItemRendered(e)
     {
         await this.core.util.waitUntil(10)
-        if(e.itemData.title == "Fiyat")
+        if(e.itemData.title == this.t("tabTitlePrice"))
         {        
             await this.grdPrice.dataRefresh({source:this.itemsObj.itemPrice.dt('ITEM_PRICE')});
         }
-        else if(e.itemData.title == "Birim")
+        else if(e.itemData.title == this.t("tabTitleUnit"))
         {
             await this.grdUnit.dataRefresh({source:this.itemsObj.itemUnit.dt('ITEM_UNIT')});
         }
-        else if(e.itemData.title == "Barkod")
+        else if(e.itemData.title == this.t("tabTitleBarcode"))
         {
             await this.grdBarcode.dataRefresh({source:this.itemsObj.itemBarcode.dt('ITEM_BARCODE')});
         }
-        else if(e.itemData.title == "Tedarikçi")
+        else if(e.itemData.title == this.t("tabTitleCustomer"))
         {
             await this.grdCustomer.dataRefresh({source:this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')});
         }

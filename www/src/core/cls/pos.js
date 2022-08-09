@@ -1425,9 +1425,13 @@ export class posDeviceCls
 
         return new Promise((resolve) =>
         {
+            console.log(1)
             let port = new this.serialport(this.dt().length > 0 ? this.dt()[0].PAY_CARD_PORT : "");
             port.on('data',(data)=> 
             {
+                console.log(2)
+                console.log(data)
+                console.log(String.fromCharCode(data[0]))
                 if(String.fromCharCode(data[0]) == String.fromCharCode(6))
                 {
                     if(ack == false)
@@ -1639,7 +1643,7 @@ export class posDeviceCls
                 {
                     tmpBarcode = tmpBarcode.substring(1,14)
                 }
-                
+                console.log(tmpBarcode)
                 this.emit('scanner',tmpBarcode);   
                 tmpSerialCount = 0;
                 tmpBarcode = "";            

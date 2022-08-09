@@ -24,6 +24,7 @@ export const prm =
         VALUE : 
         [
             '20NNNNMMMCCF',
+            '21NNNNNMMMCCF',
             '29NNNNMMMCCF',
             '29NNNNNMMMCCF',
             '020NNNNMMMCCF',
@@ -83,38 +84,38 @@ export const prm =
             [
                 {
                     id:"btn01",
-                    title:"Ürün Barkodu Çift Okutulmuş",
-                    text:"Ürün Barkodu Çift Okutulmuş"
+                    title:"Lecture double du code barre",
+                    text:"Erreur Lecture double du code barre"
                 },
                 {
                     id:"btn02",
-                    title:"Ürün Arızalı Yada Defolu",
-                    text:"Ürün Arızalı Yada Defolu"
+                    title:"Le produit est défectueux ou en panne",
+                    text:"Erreur le produit est défectueux ou en panne"
                 },
                 {
                     id:"btn03",
-                    title:"Müşteri Ürünü Beğenmedi",
-                    text:"Müşteri Ürünü Beğenmedi"
+                    title:"Le produit n´a pas plu au client",
+                    text:"Le produit n´a pas plu au client."
                 },
                 {
                     id:"btn04",
-                    title:"Müşteri Yanlış Ürünü Aldı",
-                    text:"Müşteri Yanlış Ürünü Aldı"
+                    title:"Le client s´est trompé sur son achat",
+                    text:"Le client s´est trompé sur son achat."
                 },
                 {
                     id:"btn05",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Le client fait un retour",
+                    text:"Le client fait un retour du produit car défectueux ou en panne."
                 },
                 {
                     id:"btn06",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Le client fait un retour du produit car il ne lui a pas plu",
+                    text:"Le client fait un retour du produit car il ne lui a pas plu"
                 },
                 {
                     id:"btn07",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Le client s´est trompé sur son achat il souhaite faire un retour",
+                    text:"Le client s´est trompé sur son achat il souhaite faire un retour"
                 },
                 {
                     id:"btn08",

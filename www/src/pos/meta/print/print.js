@@ -27,10 +27,10 @@ export function print()
         {align:"ct",logo:"./resources/logop.png"},
         ()=>{return {font:"a",style:"b",align:"ct",data:""}},
         // ÜST BİLGİ
-        ()=>{return {font:"a",style:"b",align:"ct",data:"ZAC HECKENWALD"}},
-        ()=>{return {font:"a",style:"b",align:"ct",data:"57740 LONGEVILLE-LES-ST-AVOLD"}},
-        ()=>{return {font:"a",style:"b",align:"ct",data:"Tel : 03 87 91 00 32"}},
-        ()=>{return {font:"a",style:"b",align:"ct",data:"longeville@prodorplus.fr"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data:"7 ALLEE DU MIDI"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data:"54270 ESSEY LES NANCY"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data:"Tel : 03 83 93 33 07"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data:"nancy@prodorplus.fr"}},
         ()=>{return {font:"a",style:"b",align:"ct",data:"www.prodorplus.fr"}},
         ()=>
         {       

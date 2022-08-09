@@ -149,13 +149,13 @@ export const langFr =
         msg : "Le prix ne peut être inferieur au prix de revient !",
         btn01 : "OK",
     },
-    totalLine : "Ligne total",
-    totalQuantity : "Montant total",
-    loyaltyDiscount : "Remise fidélité",
+    totalLine : "Qte Ligne : ",
+    totalQuantity : "Qte Art.:",
+    loyaltyDiscount : "Remise fidélité :",
     ticketRect : "Ticket Rest. : ",
-    amount : "Sous-total",
-    vat : "TVA",
-    discount : "Remise",
+    amount : "Sous-total :",
+    vat : "TVA :",
+    discount : "Remise :",
     msgCollectForSale: 
     {
         title : "Attention",
@@ -411,7 +411,7 @@ export const langFr =
     {
         LDATE : "Date MAJ",
         ITEM_NAME :"NOM",
-        QUANTITY : "MONTANT",
+        QUANTITY : "Qte.",
         PRICE : "PRIX",
         AMOUNT : "TOTAL"
     },
@@ -452,6 +452,7 @@ export const langFr =
         DISCOUNT :"REMISE",
         LOYALTY : "FIDÉLITÉ",
         AMOUNT : "TOTAL",
+        DEVICE :"DEVICE"
     },
     grdLastSale :
     {
