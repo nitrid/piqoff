@@ -1042,13 +1042,13 @@ export class datatable
                             }
                         }
                     }
-
                     tmpQuery.value = [];
 
                     if(typeof tmpQuery.param == 'undefined')
                     {
                         continue;
                     }
+
                     for (let m = 0; m < tmpQuery.param.length; m++) 
                     {
                         if(typeof tmpQuery.dataprm == 'undefined')

@@ -416,63 +416,63 @@ export const prm =
             [
                 {
                     id:"btn01",
-                    title:"Yetersiz Ödeme",
-                    text:"Müşteri ödemesi gereken tutarı karşılayamadı terkrar gelecek."
+                    title:"Montant insuffisent retour du client.",
+                    text:"Le client n'a pas le montant requis, il va venir payer et récupérer ses courses."
                 },
                 {
                     id:"btn02",
-                    title:"Ek Alış Veriş",
-                    text:"Müşteri ek ürün almak için reyona gitti."
+                    title:"Rajout d´achat...",
+                    text:"Produit manquant retour du client instantannée."
                 },
                 {
                     id:"btn03",
-                    title:"Mağaza Personeli",
-                    text:"Mağaza personeli ödemesini sonra yapacak."
+                    title:"Personnel du magasin.",
+                    text:"Mise en attente achat du personnel."
                 },
                 {
                     id:"btn04",
-                    title:"K.Kartı Geçmedi",
-                    text:"K.Kartı geçmedi müştere ödemesini yapabilmesi için tekrar gelecek."
+                    title:"Refus CB.",
+                    text:"Refus CB client ... retour journée.."
                 },
                 {
                     id:"btn05",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Produit scanné suite à test.",
+                    text:"Produit scanné suite à test pour une mise à jour."
                 },
                 {
                     id:"btn06",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn07",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn08",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn09",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn10",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn11",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn12",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 }
             ]
         },
@@ -499,63 +499,63 @@ export const prm =
             [
                 {
                     id:"btn01",
-                    title:"Yetersiz Ödeme",
-                    text:"Müşteri ödemesi gereken tutarı karşılayamadı terkrar gelecek."
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn02",
-                    title:"Ek Alış Veriş",
-                    text:"Müşteri ek ürün almak için reyona gitti."
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn03",
-                    title:"Mağaza Personeli",
-                    text:"Mağaza personeli ödemesini sonra yapacak."
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn04",
-                    title:"K.Kartı Geçmedi",
-                    text:"K.Kartı geçmedi müştere ödemesini yapabilmesi için tekrar gelecek."
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn05",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn06",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn07",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn08",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn09",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn10",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn11",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn12",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 }
             ]
         },
@@ -682,7 +682,44 @@ export const prm =
             CAPTION : "Maliyet Fiyat Kontrolü"
         }
     },
-    //Merkez Kasa
+    //Barkod Okutulduğunda Uyarı
+    {
+        TYPE : 0,
+        ID : "ItemsWarning",
+        VALUE : 
+        [
+            {
+                items : "299997",
+                title : "Attention Prix Boucherie Manuel",
+                msg : "Attention prix saisse en manuel boucherie.",
+            },
+            {
+                items : "0299997",
+                title : "Attention Prix Boucherie Manuel",
+                msg : "Attention prix saisse en manuel boucherie.",
+            },
+            {
+                items : "102000",
+                title : "Attention Prix Boucherie Manuel",
+                msg : "Attention prix saisse en manuel boucherie.",
+            },
+            {
+                items : "0102000",
+                title : "Attention Prix Boucherie Manuel",
+                msg : "Attention prix saisse en manuel boucherie.",
+            },
+        ],
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Merkez Kasa"
+        }
+    },
     {
         TYPE : 0,
         ID :"SafeCenter",

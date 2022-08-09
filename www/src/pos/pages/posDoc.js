@@ -255,7 +255,6 @@ export default class posDoc extends React.PureComponent
                 }
             }
             await tmpDt.refresh();
-            console.log(pCode.substring(pCode.lastIndexOf('F') + 1,pCode.length - 1))
             //UNIQ BARKOD
             if(tmpDt.length == 0)
             {
@@ -263,7 +262,7 @@ export default class posDoc extends React.PureComponent
                 {
                     query : "SELECT TOP 1 *,@CODE AS INPUT FROM ITEMS_POS_VW_01 WHERE UNIQ_CODE = @CODE AND STATUS = 1",
                     param : ['CODE:string|25'],
-                    value: [pCode.substring(pCode.lastIndexOf('F') + 1,pCode.length - 1)],
+                    value: [pCode],
                     local : 
                     {
                         type : "select",
@@ -284,9 +283,38 @@ export default class posDoc extends React.PureComponent
                             ]
                         }
                     }
-                }
-
+                }                
                 await tmpDt.refresh();
+                //BURASI 7 HANELI UNIQLER BİTTİĞİNDE KALDIRILACAK //BAK
+                if(tmpDt.length == 0)
+                {
+                    tmpDt.selectCmd = 
+                    {
+                        query : "SELECT TOP 1 *,@CODE AS INPUT FROM ITEMS_POS_VW_01 WHERE UNIQ_CODE = @CODE AND STATUS = 1",
+                        param : ['CODE:string|25'],
+                        value: [pCode.substring(pCode.lastIndexOf('F') + 1,pCode.length - 1)],
+                        local : 
+                        {
+                            type : "select",
+                            from : "ITEMS_POS_VW_01",
+                            where : 
+                            {
+                                UNIQ_CODE : pCode,
+                                STATUS : true
+                            },
+                            case: 
+                            {
+                                INPUT: 
+                                [
+                                    {
+                                        '=': '',
+                                        then: pCode
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
             }
             resolve(tmpDt)
         });
@@ -295,8 +323,10 @@ export default class posDoc extends React.PureComponent
     {           
         this.txtBarcode.value = ""; 
         let tmpQuantity = 1
-        let tmpPrice = 0        
-
+        let tmpPrice = 0                
+        //PARAMETREDE TANIMLI ÜRÜNLER İÇİN UYARI.
+        await this.getItemWarning(pCode)
+        
         if(pCode == '')
         {
             return
@@ -404,6 +434,7 @@ export default class posDoc extends React.PureComponent
                 tmpQuantity = tmpItemsDt[0].UNIQ_QUANTITY
                 tmpPrice = tmpItemsDt[0].UNIQ_PRICE
             }
+            console.log(tmpPrice)
             //******************************************************** */
             //FIYAT GETİRME
             let tmpPriceDt = new datatable()
@@ -614,7 +645,7 @@ export default class posDoc extends React.PureComponent
     {
         pBarcode = pBarcode.toString().trim()
         let tmpPrm = this.prmObj.filter({ID:'BarcodePattern',TYPE:0}).getValue();
-        console.log(pBarcode)
+        
         if(typeof tmpPrm == 'undefined' || tmpPrm.length == 0)
         {            
             return {barcode:pBarcode}
@@ -622,9 +653,7 @@ export default class posDoc extends React.PureComponent
         //201234012550 0211234012550
         for (let i = 0; i < tmpPrm.length; i++) 
         {
-            console.log(tmpPrm[i])
             let tmpFlag = tmpPrm[i].substring(0,tmpPrm[i].indexOf('N'))
-            console.log(tmpFlag + " - " + tmpPrm[i].length + " - " + pBarcode.length + " - " + pBarcode.substring(0,tmpFlag.length))
             if(tmpFlag != '' && tmpPrm[i].length == pBarcode.length && pBarcode.substring(0,tmpFlag.length) == tmpFlag)
             {
                 let tmpMoney = pBarcode.substring(tmpPrm[i].indexOf('M'),tmpPrm[i].lastIndexOf('M') + 1)
@@ -636,7 +665,7 @@ export default class posDoc extends React.PureComponent
                 let tmpGram = pBarcode.substring(tmpPrm[i].indexOf('G'),tmpPrm[i].lastIndexOf('G') + 1)
                 let tmpGramFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('G'),tmpPrm[i].lastIndexOf('G') + 1)
                 let tmpSumFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('F'),tmpPrm[i].lastIndexOf('F') + 1)
-                console.log(pBarcode.substring(0,tmpPrm[i].lastIndexOf('N') + 1))
+                
                 return {
                     barcode : pBarcode.substring(0,tmpPrm[i].lastIndexOf('N') + 1) + tmpMoneyFlag + tmpCentFlag + tmpKgFlag + tmpGramFlag + tmpSumFlag,
                     price : parseFloat((tmpMoney == '' ? "0" : tmpMoney) + "." + (tmpCent == '' ? "0" : tmpCent)),
@@ -646,6 +675,35 @@ export default class posDoc extends React.PureComponent
         }
 
         return {barcode : pBarcode}
+    }
+    getItemWarning(pBarcode)
+    {
+        return new Promise(async resolve => 
+        {
+            let tmpPrm = this.prmObj.filter({ID:'ItemsWarning',TYPE:0}).getValue();
+            if(typeof tmpPrm == 'undefined' || tmpPrm.length == 0)
+            {            
+                resolve()
+            }
+    
+            for(let i = 0; i < tmpPrm.length; i++) 
+            {
+                if(tmpPrm[i].items == pBarcode.substring(0,tmpPrm[i].items.length))
+                {
+                    let tmpConfObj =
+                    {
+                        id:'msgItemsWarningAlert',showTitle:true,title:tmpPrm[i].title,showCloseButton:true,width:'500px',height:'250px',
+                        button:[{id:"btn01",caption:this.lang.t("btnOk"),location:'before'}],
+                        content:(<div style={{textAlign:"center",fontSize:"25px"}}>{tmpPrm[i].msg}</div>)
+                    }
+                    await dialog(tmpConfObj);
+                    resolve()
+                }
+            }
+            resolve()
+            console.log(tmpPrm)
+        })
+        
     }
     async calcGrandTotal(pSave)
     {
@@ -965,10 +1023,10 @@ export default class posDoc extends React.PureComponent
                     }
                     await this.print(tmpData)
                     //NAKİT YADA TICKET REST. ALDIĞINDA KASA AÇMA İŞLEMİ 
-                    if(this.posObj.posPay.dt().where({PAY_TYPE:0}).length > 0 || this.posObj.posPay.dt().where({PAY_TYPE:3}).length > 0)
-                    {
-                        this.posDevice.caseOpen();
-                    }
+                    // if(this.posObj.posPay.dt().where({PAY_TYPE:0}).length > 0 || this.posObj.posPay.dt().where({PAY_TYPE:3}).length > 0)
+                    // {
+                    //     this.posDevice.caseOpen();
+                    // }
                 }
 
                 resolve(true)
@@ -1055,11 +1113,17 @@ export default class posDoc extends React.PureComponent
                 }
                 else //Başarısız veya İptal
                 {
+                    this.posDevice.cardCancel()
                     this.msgCardPayment.hide()
                     return
                 }
             }
             let tmpRowData = this.isRowMerge('PAY',{TYPE:pType})
+            //NAKİT YADA TICKET REST. ALDIĞINDA KASA AÇMA İŞLEMİ 
+            if(pType == 0 || pType == 3)
+            {
+                this.posDevice.caseOpen();
+            }
             //SATIR BİRLEŞTİR        
             if(typeof tmpRowData != 'undefined')
             {    
@@ -1195,6 +1259,7 @@ export default class posDoc extends React.PureComponent
             {
                 this.grdList.devGrid.deleteRow(this.grdList.devGrid.getRowIndexByKey(this.grdList.devGrid.getSelectedRowKeys()[0]))
             }
+            await this.posObj.posSale.dt().delete()
             await this.calcGrandTotal()
         }
         else
@@ -2182,8 +2247,16 @@ export default class posDoc extends React.PureComponent
                                                 await dialog(tmpConfObj);
                                                 return
                                             }
-
-                                            this.txtPopLoyalty.value = this.popCustomerUsePoint.value
+                                            
+                                            if(this.popCustomerUsePoint.value != 0)
+                                            {
+                                                this.txtPopLoyalty.value = this.popCustomerUsePoint.value
+                                            }
+                                            else
+                                            {
+                                                this.txtPopLoyalty.value = this.customerPoint.value
+                                            }
+                                            
                                             this.popLoyalty.show()
                                             this.txtPopLoyalty.newStart = true;
                                         }}>

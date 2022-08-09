@@ -1207,9 +1207,11 @@ export class posDeviceCls
                 }
             })
 
-            this.ds.get('POS_DEVICE').selectCmd.local.where = Object.keys(tmpPrm).length == 0 ? undefined : tmpPrm
+            this.ds.get('POS_DEVICE').selectCmd.local.where = Object.keys(tmpPrm).length == 0 ? undefined : tmpPrm                    
 
             await this.ds.get('POS_DEVICE').refresh();
+            this.payPort = new this.serialport(this.dt().length > 0 ? this.dt()[0].PAY_CARD_PORT : "");
+
             resolve(this.ds.get('POS_DEVICE'));    
         });
     }
@@ -1397,6 +1399,10 @@ export class posDeviceCls
             return port.on("close", resolve)
         });
     }
+    cardCancel()
+    {
+        this.payPort.write(String.fromCharCode(4))
+    }
     cardPayment(pAmount)
     {
         if(!core.instance.util.isElectron())
@@ -1426,14 +1432,14 @@ export class posDeviceCls
         return new Promise((resolve) =>
         {
             console.log(1)
-            let port = new this.serialport(this.dt().length > 0 ? this.dt()[0].PAY_CARD_PORT : "");
-            port.on('data',(data)=> 
+            //let port = new this.serialport(this.dt().length > 0 ? this.dt()[0].PAY_CARD_PORT : "");
+            
+            this.payPort.on('data',(data)=> 
             {
                 console.log(2)
-                console.log(data)
-                console.log(String.fromCharCode(data[0]))
+                console.log(data.toString())
                 if(String.fromCharCode(data[0]) == String.fromCharCode(6))
-                {
+                {                    
                     if(ack == false)
                     {
                         oneShoot = false;
@@ -1454,7 +1460,7 @@ export class posDeviceCls
                         if (msg.length > 34) 
                         {
                             resolve({tag:"response",msg:"error"});                 
-                            port.close();               
+                            //port.close();               
                             console.log('ERR. : failed data > 34 characters.', msg);
                             return
                         }
@@ -1463,23 +1469,23 @@ export class posDeviceCls
                         let lrc = generate_lrc(real_msg_with_etx);
                         //STX + msg + lrc
                         let tpe_msg = (String.fromCharCode(2)).concat(real_msg_with_etx).concat(String.fromCharCode(lrc));
-                        port.write(tpe_msg)
+                        this.payPort.write(tpe_msg)
                         ack = true;
                     }
                 }
                 else if(String.fromCharCode(data[0]) == String.fromCharCode(6))
                 {
-                    port.write(String.fromCharCode(4))
+                    this.payPort.write(String.fromCharCode(4))
                 }
                 else if(String.fromCharCode(data[0]) == String.fromCharCode(5))
                 {
-                    port.write(String.fromCharCode(6));
+                    this.payPort.write(String.fromCharCode(6));
                 }
                 else if(data.length >= 25)
                 {
                     if(oneShoot)
                     {
-                        port.close();
+                        //port.close();
                         resolve({tag:"response",msg:"error"});   
                         return;
                     }
@@ -1503,23 +1509,23 @@ export class posDeviceCls
                         'currency_numeric'  : str.substr(12, 3),
                         'private'           : str.substr(15, 11)
                     };
-
+                    console.log(response)
                     resolve({tag:"response",msg:JSON.stringify(response)});   
-                    port.close();
+                    //port.close();
                 }
             });
 
-            port.write(String.fromCharCode(5));
+            this.payPort.write(String.fromCharCode(5));
 
-            setTimeout(()=>
-            { 
-                if(port.isOpen)
-                {
-                    port.close(); 
-                }
-            }, 65000);
+            // setTimeout(()=>
+            // { 
+            //     if(port.isOpen)
+            //     {
+            //         port.close(); 
+            //     }
+            // }, 20000);
 
-            return port.on("close", resolve)
+            //return port.on("close", resolve)
         });
     }
     escPrinter(pData)

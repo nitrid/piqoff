@@ -6,7 +6,7 @@
       <HierarchyPrintOptions Ref="3" Indent="50.8" />
       <MultiColumn Ref="4" ColumnCount="3" ColumnWidth="620" ColumnSpacing="60" Layout="AcrossThenDown" Mode="UseColumnWidth" />
       <Controls>
-        <Item1 Ref="5" ControlType="XRPanel" Name="panel2" SizeF="657.93,361.0972" LocationFloat="0.6250022, 0" Dpi="254" BorderColor="255,79,129,189" Borders="All" BorderWidth="2">
+        <Item1 Ref="5" ControlType="XRPanel" Name="panel2" SizeF="657.93,360" LocationFloat="0.6250022, 1.0972091" Dpi="254" BorderColor="255,79,129,189" Borders="All" BorderWidth="2">
           <StylePriority Ref="6" UseBorderColor="false" UseBorders="false" UseBorderWidth="false" />
         </Item1>
         <Item2 Ref="7" ControlType="XRLabel" Name="label1" Multiline="true" Text="|" TextAlignment="BottomLeft" SizeF="21.166687,49.541748" LocationFloat="271.041656, 293.354034" Dpi="254" Font="Arial, 9.75pt, style=Bold" Padding="5,5,0,0,254">
@@ -29,7 +29,7 @@
         </Item5>
         <Item6 Ref="17" ControlType="XRLabel" Name="label8" Multiline="true" CanGrow="false" Text="000004ABC" AnchorVertical="Bottom" TextAlignment="BottomLeft" SizeF="144.489136,27.9151611" LocationFloat="292.208344, 314.980621" Dpi="254" Font="Arial, 7pt" Padding="5,5,0,0,254">
           <ExpressionBindings>
-            <Item1 Ref="18" EventName="BeforePrint" PropertyName="Text" Expression="[CODE]" />
+            <Item1 Ref="18" EventName="BeforePrint" PropertyName="Text" Expression="[MULTICODE]" />
           </ExpressionBindings>
           <StylePriority Ref="19" UseFont="false" UseTextAlignment="false" />
         </Item6>
@@ -42,7 +42,7 @@
         </Item7>
         <Item8 Ref="24" ControlType="XRLabel" Name="label5" Multiline="true" CanGrow="false" Text="BEYPAZARI EAU MIN. GAZ.GRIOTTE 6X20CL" TextAlignment="TopLeft" SizeF="480,150" LocationFloat="15, 0" Dpi="254" Font="Poppins, 9.75pt, style=Bold" Padding="0,0,0,0,254">
           <ExpressionBindings>
-            <Item1 Ref="25" EventName="BeforePrint" PropertyName="Text" Expression="[DESING_NAME]" />
+            <Item1 Ref="25" EventName="BeforePrint" PropertyName="Text" Expression="[NAME]" />
           </ExpressionBindings>
           <StylePriority Ref="26" UseFont="false" UsePadding="false" UseTextAlignment="false" />
         </Item8>

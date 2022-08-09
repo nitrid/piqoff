@@ -26,7 +26,7 @@
         </Item4>
         <Item5 Ref="15" ControlType="XRLabel" Name="label8" Multiline="true" CanGrow="false" Text="000004ABC" AnchorVertical="Bottom" TextAlignment="BottomLeft" SizeF="144.489136,32.5207825" LocationFloat="292.208374, 313.7086" Dpi="254" Font="Arial, 7pt" Padding="5,5,0,0,254">
           <ExpressionBindings>
-            <Item1 Ref="16" EventName="BeforePrint" PropertyName="Text" Expression="[CODE]" />
+            <Item1 Ref="16" EventName="BeforePrint" PropertyName="Text" Expression="[MULTICODE]" />
           </ExpressionBindings>
           <StylePriority Ref="17" UseFont="false" UseTextAlignment="false" />
         </Item5>
@@ -39,7 +39,7 @@
         </Item6>
         <Item7 Ref="22" ControlType="XRLabel" Name="label5" Multiline="true" CanGrow="false" Text="BEYPAZARI EAU MIN. GAZ.GRIOTTE 6X20CL" TextAlignment="TopLeft" SizeF="410.5418,176.187561" LocationFloat="15.0000134, 7.99995565" Dpi="254" Font="Poppins Black, 9.75pt, style=Bold" Padding="0,0,0,0,254">
           <ExpressionBindings>
-            <Item1 Ref="23" EventName="BeforePrint" PropertyName="Text" Expression="[DESING_NAME]" />
+            <Item1 Ref="23" EventName="BeforePrint" PropertyName="Text" Expression="[NAME]" />
           </ExpressionBindings>
           <StylePriority Ref="24" UseFont="false" UsePadding="false" UseTextAlignment="false" />
         </Item7>
