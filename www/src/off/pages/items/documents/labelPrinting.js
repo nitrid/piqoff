@@ -930,6 +930,7 @@ export default class labelPrinting extends React.PureComponent
                                             "END AS UNDER_UNIT_PRICE " +
                                             "FROM ( SELECT ITEMS.GUID, " +
                                             "ITEM_BARCODE.CDATE, " +
+                                            "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS.GUID ORDER BY LDATE DESC),ITEMS.CODE) AS MULTICODE,   " +
                                             "ITEMS.CODE, " +
                                             "ITEMS.NAME, " +
                                             "ITEM_BARCODE.BARCODE, " +
