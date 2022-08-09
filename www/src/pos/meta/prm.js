@@ -84,63 +84,63 @@ export const prm =
             [
                 {
                     id:"btn01",
-                    title:"Lecture double du code barre",
-                    text:"Erreur Lecture double du code barre"
+                    title:"Le prix n'est pas identique.",
+                    text:"Le prix affiché en rayon et celle du système n'est pas identique."
                 },
                 {
                     id:"btn02",
-                    title:"Le produit est défectueux ou en panne",
-                    text:"Erreur le produit est défectueux ou en panne"
+                    title:"Accord responsable.",
+                    text:"Avec accord du responsable, il y a eu une baisse du prix pour le client."
                 },
                 {
                     id:"btn03",
-                    title:"Le produit n´a pas plu au client",
-                    text:"Le produit n´a pas plu au client."
+                    title:"Erreur Prix boucherie.",
+                    text:"L'etiquette de boucherie est fausse."
                 },
                 {
                     id:"btn04",
-                    title:"Le client s´est trompé sur son achat",
-                    text:"Le client s´est trompé sur son achat."
+                    title:"Müşteri Yanlış Ürünü Aldı",
+                    text:"Müşteri Yanlış Ürünü Aldı"
                 },
                 {
                     id:"btn05",
-                    title:"Le client fait un retour",
-                    text:"Le client fait un retour du produit car défectueux ou en panne."
+                    title:"Etiquette est illisible",
+                    text:"L'etiquette du produit est illisible. Saisir manuellement."
                 },
                 {
                     id:"btn06",
-                    title:"Le client fait un retour du produit car il ne lui a pas plu",
-                    text:"Le client fait un retour du produit car il ne lui a pas plu"
+                    title:"Produit defectueux.",
+                    text:"Un prix a été fait car le produit etait defectueux."
                 },
                 {
                     id:"btn07",
-                    title:"Le client s´est trompé sur son achat il souhaite faire un retour",
-                    text:"Le client s´est trompé sur son achat il souhaite faire un retour"
+                    title:"Prix pour quantité.",
+                    text:"Un prix a été fait pour une quantité importante."
                 },
                 {
                     id:"btn08",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn09",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn10",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn11",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn12",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 }
             ]
         },
@@ -167,63 +167,63 @@ export const prm =
             [
                 {
                     id:"btn01",
-                    title:"Ürün Barkodu Çift Okutulmuş",
-                    text:"Ürün Barkodu Çift Okutulmuş"
+                    title:"Retour lecture double du code barre.",
+                    text:"Erreur de saisie lecture double du code barre."
                 },
                 {
                     id:"btn02",
-                    title:"Ürün Arızalı Yada Defolu",
-                    text:"Ürün Arızalı Yada Defolu"
+                    title:"Le produit est défectueux ou en panne.",
+                    text:"Le client a fait un retour, le produit est défectueux ou en panne."
                 },
                 {
                     id:"btn03",
-                    title:"Müşteri Ürünü Beğenmedi",
-                    text:"Müşteri Ürünü Beğenmedi"
+                    title:"Le client fait retour du produit.",
+                    text:"Le client fait retour du produit car il ne lui a pas plu."
                 },
                 {
                     id:"btn04",
-                    title:"Müşteri Yanlış Ürünü Aldı",
-                    text:"Müşteri Yanlış Ürünü Aldı"
+                    title:"Erreur d'achat.",
+                    text:"Le client s´est trompé sur son achat il souhaite faire un retour."
                 },
                 {
                     id:"btn05",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn06",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn07",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn08",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn09",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn10",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn11",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn12",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 }
             ]
         },
@@ -250,63 +250,63 @@ export const prm =
             [
                 {
                     id:"btn01",
-                    title:"Alış Verişten Vazgeçti",
-                    text:"Alış Verişten Vazgeçti"
+                    title:"Course annulé.",
+                    text:"Le client ne veux plus son produit."
                 },
                 {
                     id:"btn02",
-                    title:"Yetersiz Ödeme",
-                    text:"Yetersiz Ödeme"
+                    title:"Montant insuffisant!",
+                    text:"Le client n'a pas le montant requis pour payer ses produits."
                 },
                 {
                     id:"btn03",
-                    title:"K.Karti Yetersiz Bakiye",
-                    text:"K.Karti Yetersiz Bakiye"
+                    title:"Refus CB.",
+                    text:"Paiement Refusée de la banque CB du client."
                 },
                 {
                     id:"btn04",
-                    title:"Test Amaçlı",
-                    text:"Test Amaçlı"
+                    title:"Produit scanné suite à test.",
+                    text:"Produit scanné suite à test pour une mise à jour."
                 },
                 {
                     id:"btn05",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn06",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn07",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn08",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn09",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn10",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn11",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn12",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 }
             ]
         },
@@ -333,63 +333,63 @@ export const prm =
             [
                 {
                     id:"btn01",
-                    title:"Üründen Vazgeçti",
-                    text:"Üründen Vazgeçti"
+                    title:"Ne veut plus à cause du prix.",
+                    text:"Le client ne veux plus le produit, le prix ne lui convient plus."
                 },
                 {
                     id:"btn02",
-                    title:"Fiyat Hatalı",
-                    text:"Fiyat Hatalı"
+                    title:"Erreur du prix affiché.",
+                    text:"Le prix du rayon et celle du systhème n'est pas identique."
                 },
                 {
                     id:"btn03",
-                    title:"Hatalı Ürün",
-                    text:"Hatalı Ürün"
+                    title:"Erreur produit.",
+                    text:"Le client s'est tromper sur le produit."
                 },
                 {
                     id:"btn04",
-                    title:"Test Amaçlı Okutm",
-                    text:"Test Amaçlı Okutma"
+                    title:"Erreur de saisie dans la liste.",
+                    text:"Caissière a fait une erreur dans la saisie de la liste du produit."
                 },
                 {
                     id:"btn05",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Erreur de saisie fruits et légumes.",
+                    text:"Caissière a fait une erreur dans la saisie de la liste des fruits et légumes. "
                 },
                 {
                     id:"btn06",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Produit scanné suite à test.",
+                    text:"Produit scanné suite à test pour une mise à jour."
                 },
                 {
                     id:"btn07",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn08",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn09",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn10",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn11",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn12",
-                    title:"Boş",
-                    text:"Detaylı açıklama alanı"
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 }
             ]
         },
