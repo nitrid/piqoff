@@ -84,7 +84,7 @@ export const prm =
             [
                 {
                     id:"btn01",
-                    title:"Le prix n'est pas identique.",
+                    title:"Pas identique.",
                     text:"Le prix affiché en rayon et celle du système n'est pas identique."
                 },
                 {
@@ -167,17 +167,17 @@ export const prm =
             [
                 {
                     id:"btn01",
-                    title:"Retour lecture double du code barre.",
+                    title:"Double du code barre.",
                     text:"Erreur de saisie lecture double du code barre."
                 },
                 {
                     id:"btn02",
-                    title:"Le produit est défectueux ou en panne.",
+                    title:"Défectueux ou en panne.",
                     text:"Le client a fait un retour, le produit est défectueux ou en panne."
                 },
                 {
                     id:"btn03",
-                    title:"Le client fait retour du produit.",
+                    title:"Retour du produit.",
                     text:"Le client fait retour du produit car il ne lui a pas plu."
                 },
                 {
@@ -187,8 +187,8 @@ export const prm =
                 },
                 {
                     id:"btn05",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title:"TEST.",
+                    text:"Produit scanné suite à test pour une mise à jour."
                 },
                 {
                     id:"btn06",
@@ -265,7 +265,7 @@ export const prm =
                 },
                 {
                     id:"btn04",
-                    title:"Produit scanné suite à test.",
+                    title:"TEST.",
                     text:"Produit scanné suite à test pour une mise à jour."
                 },
                 {
@@ -333,7 +333,7 @@ export const prm =
             [
                 {
                     id:"btn01",
-                    title:"Ne veut plus à cause du prix.",
+                    title:"A cause du prix.",
                     text:"Le client ne veux plus le produit, le prix ne lui convient plus."
                 },
                 {
@@ -348,17 +348,17 @@ export const prm =
                 },
                 {
                     id:"btn04",
-                    title:"Erreur de saisie dans la liste.",
+                    title:"Saisie dans la liste.",
                     text:"Caissière a fait une erreur dans la saisie de la liste du produit."
                 },
                 {
                     id:"btn05",
-                    title:"Erreur de saisie fruits et légumes.",
+                    title:"Saisie fruits et légumes.",
                     text:"Caissière a fait une erreur dans la saisie de la liste des fruits et légumes. "
                 },
                 {
                     id:"btn06",
-                    title:"Produit scanné suite à test.",
+                    title:"TEST.",
                     text:"Produit scanné suite à test pour une mise à jour."
                 },
                 {
@@ -436,7 +436,7 @@ export const prm =
                 },
                 {
                     id:"btn05",
-                    title:"Produit scanné suite à test.",
+                    title:"TEST.",
                     text:"Produit scanné suite à test pour une mise à jour."
                 },
                 {
