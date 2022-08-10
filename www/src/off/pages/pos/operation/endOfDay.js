@@ -129,6 +129,9 @@ export default class endOfDay extends React.PureComponent
       else
       {
         let tmpCash
+        console.log(this.txtCash.value)
+        console.log(this.txtAdvance.value)
+        console.log(this.paymentData.where({'PAY_TYPE':0}).sum('AMOUNT'))
         tmpCash = (parseFloat(this.txtCash.value - this.txtAdvance.value) - parseFloat(this.paymentData.where({'PAY_TYPE':0}).sum('AMOUNT')))
         this.Cash = tmpCash.toFixed(2)
         this.setState({Cash:tmpCash})
