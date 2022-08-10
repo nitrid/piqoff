@@ -119,8 +119,6 @@ export default class endOfDay extends React.PureComponent
           this.paymentData.push(tmpData.result.recordset[i])
         }
       }
-      console.log(parseFloat(this.paymentData.where({'PAY_TYPE':0}).sum('AMOUNT')) )
-      console.log(parseFloat(this.txtCash.value - this.txtAdvance.value))
       if(parseFloat(this.paymentData.where({'PAY_TYPE':0}).sum('AMOUNT')) ==  parseFloat(this.txtCash.value - this.txtAdvance.value))
       {
         this.Cash = 'Doğru'
@@ -129,10 +127,7 @@ export default class endOfDay extends React.PureComponent
       else
       {
         let tmpCash
-        console.log(this.txtCash.value)
-        console.log(this.txtAdvance.value)
-        console.log(this.paymentData.where({'PAY_TYPE':0}))
-        tmpCash = (parseFloat(this.txtCash.value - this.txtAdvance.value) - parseFloat(this.paymentData.where({'PAY_TYPE':0})))
+        tmpCash = (parseFloat(Number(this.txtCash.value) + Number(this.txtAdvance.value)) - parseFloat(this.paymentData.where({'PAY_TYPE':0})))
         this.Cash = tmpCash.toFixed(2)
         this.setState({Cash:tmpCash})
       }
