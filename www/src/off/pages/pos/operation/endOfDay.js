@@ -108,7 +108,9 @@ export default class endOfDay extends React.PureComponent
           param : ['DOC_DATE:date','DEVICE:string|50'],
           value : [this.dtDocDate.value,this.cmbSafe.value]
       }
+      console.log(tmpQuery.value)
       let tmpData = await this.core.sql.execute(tmpQuery) 
+      console.log(tmpData)
       if(tmpData.result.recordset.length > 0)
       {
         this.paymentData.clear()
@@ -117,6 +119,8 @@ export default class endOfDay extends React.PureComponent
           this.paymentData.push(tmpData.result.recordset[i])
         }
       }
+      console.log(parseFloat(this.paymentData.where({'PAY_TYPE':0}).sum('AMOUNT')) )
+      console.log(parseFloat(this.txtCash.value - this.txtAdvance.value))
       if(parseFloat(this.paymentData.where({'PAY_TYPE':0}).sum('AMOUNT')) ==  parseFloat(this.txtCash.value - this.txtAdvance.value))
       {
         this.Cash = 'Doğru'
