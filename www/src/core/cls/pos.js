@@ -1259,20 +1259,24 @@ export class posDeviceCls
     }
     caseOpen()
     {
-        if(!core.instance.util.isElectron())
+        return new Promise((resolve) =>
         {
-            return
-        }
-        let device  = new this.escpos.USB();
-        let options = { encoding: "GB18030" /* default */ }
-        let printer = new this.escpos.Printer(device, options);
-        console.log(device)
-        console.log(printer)
-        device.open(function(error)
-        {
-            printer.cashdraw(2);
-            printer.close();
-        })
+            if(!core.instance.util.isElectron())
+            {
+                return
+            }
+            let device  = new this.escpos.USB();
+            let options = { encoding: "GB18030" /* default */ }
+            let printer = new this.escpos.Printer(device, options);
+            
+            device.open(async function(error)
+            {
+                printer.cashdraw(2);
+                printer.close();
+                await core.instance.util.waitUntil(1000)
+                resolve()
+            })
+        });
     }
     mettlerScaleSend(pPrice)
     {
@@ -1399,10 +1403,6 @@ export class posDeviceCls
             return port.on("close", resolve)
         });
     }
-    cardCancel()
-    {
-        this.payPort.write(String.fromCharCode(4))
-    }
     cardPayment(pAmount)
     {
         if(!core.instance.util.isElectron())
@@ -1431,13 +1431,9 @@ export class posDeviceCls
 
         return new Promise((resolve) =>
         {
-            console.log(1)
             //let port = new this.serialport(this.dt().length > 0 ? this.dt()[0].PAY_CARD_PORT : "");
-            
             this.payPort.on('data',(data)=> 
             {
-                console.log(2)
-                console.log(data.toString())
                 if(String.fromCharCode(data[0]) == String.fromCharCode(6))
                 {                    
                     if(ack == false)
