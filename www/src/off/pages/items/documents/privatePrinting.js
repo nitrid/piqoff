@@ -111,6 +111,18 @@ export default class privatePrinting extends React.PureComponent
                                     {
                                         if(e.validationGroup.validate().status == "valid")
                                         {
+                                            if(this.txtItemName.value.length > 49)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgItemName',showTitle:true,title:this.t("msgItemName.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgItemName.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemName.msg")}</div>)
+                                                }
+                                                
+                                                await dialog(tmpConfObj);
+                                                return
+                                            }
                                             let tmpQuery = 
                                             {
                                                 query:  "SELECT CUSTOMER_PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = @ITEM_GUID ORDER BY LDATE DESC ",
@@ -290,7 +302,7 @@ export default class privatePrinting extends React.PureComponent
                                         let tmpBarData = new datatable()
                                         tmpBarData.selectCmd = 
                                         {
-                                            query :"SELECT ITEM_GUID AS GUID,ITEM_CODE AS CODE,ITEM_NAME AS NAME,[dbo].[FN_PRICE_SALE](GUID,1,GETDATE()) AS PRICE FROM [ITEM_BARCODE_VW_01] WHERE BARCODE = @BARCODE ",
+                                            query :"SELECT ITEM_GUID AS GUID,ITEM_CODE AS CODE,ITEM_NAME AS NAME,[dbo].[FN_PRICE_SALE](ITEM_GUID,1,GETDATE()) AS PRICE FROM [ITEM_BARCODE_VW_01] WHERE BARCODE = @BARCODE ",
                                             param : ['BARCODE:string|50'],
                                             value : [this.txtBarkod.value]
                                         }

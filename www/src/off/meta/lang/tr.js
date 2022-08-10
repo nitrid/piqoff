@@ -6127,6 +6127,12 @@ export const langTr =
             btn01: "Tamam",
             msg: "Alış Fiyatından Daha Düşük Fiyat Girilemez !"
         },
+        msgItemName:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Adı Çok Uzun. Lütfen Düzeltip Tekrar Kayıt Edin !"
+        },
     },
     pos_02_003 : 
     {
