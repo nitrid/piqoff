@@ -126,7 +126,7 @@ export default class endOfDay extends React.PureComponent
       {
         let tmpCash
         tmpCash = (parseFloat(this.txtCash.value - this.txtAdvance.value) - parseFloat(this.paymentData.where({'PAY_TYPE':0}).sum('AMOUNT')))
-        this.Cash = tmpCash
+        this.Cash = tmpCash.toFixed(2)
         this.setState({Cash:tmpCash})
       }
 
@@ -139,7 +139,7 @@ export default class endOfDay extends React.PureComponent
       {
         let tmpDebit
         tmpDebit = (this.txtCreditCard.value - parseFloat(this.paymentData.where({'PAY_TYPE':1}).sum('AMOUNT')))
-        this.DebitCard = tmpDebit
+        this.DebitCard = tmpDebit.toFixed(2)
         this.setState({DebitCard:tmpDebit})
       }
       if(parseFloat(this.paymentData.where({'PAY_TYPE':2}).sum('AMOUNT')) ==  this.txtCheck.value)
@@ -151,7 +151,7 @@ export default class endOfDay extends React.PureComponent
       {
         let tmpCheck
         tmpCheck = (this.txtCheck.value - parseFloat(this.paymentData.where({'PAY_TYPE':2}).sum('AMOUNT')))
-        this.Check = tmpCheck
+        this.Check = tmpCheck.toFixed(2)
         this.setState({Check:tmpCheck})
       }
 
@@ -164,7 +164,7 @@ export default class endOfDay extends React.PureComponent
       {
         let tmpTikcet
         tmpTikcet = (this.txtRestorant.value - parseFloat(this.paymentData.where({'PAY_TYPE':3}).sum('AMOUNT')))
-        this.TicketRest = tmpTikcet
+        this.TicketRest = tmpTikcet.toFixed(2)
         this.setState({TicketRest:tmpTikcet})
       }
       this.popFinish.show()
