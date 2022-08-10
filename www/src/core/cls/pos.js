@@ -1273,7 +1273,7 @@ export class posDeviceCls
             {
                 printer.cashdraw(2);
                 printer.close();
-                await core.instance.util.waitUntil(1000)
+                await core.instance.util.waitUntil(500)
                 resolve()
             })
         });

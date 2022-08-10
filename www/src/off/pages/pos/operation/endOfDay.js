@@ -367,7 +367,7 @@ export default class endOfDay extends React.PureComponent
                                 <h2>{this.t("cash")}</h2>
                               </div>
                               <div className='col-6' style={{color:this.color.cash}}>
-                                <h2>{this.Cash}</h2>
+                                <h2> : {this.Cash}</h2>
                               </div>
                             </div>
                             <div className='row'>
@@ -375,7 +375,7 @@ export default class endOfDay extends React.PureComponent
                                 <h2>{this.t("debitCard")}</h2>
                               </div>
                               <div className='col-6' style={{color:this.color.card}}>
-                                <h2>{this.DebitCard}</h2>
+                                <h2> : {this.DebitCard}</h2>
                               </div>
                             </div>
                             <div className='row'>
@@ -383,7 +383,7 @@ export default class endOfDay extends React.PureComponent
                                 <h2>{this.t("check")}</h2>
                               </div>
                               <div className='col-6' style={{color:this.color.check}}>
-                                <h2>{this.Check}</h2>
+                                <h2> : {this.Check}</h2>
                               </div>
                             </div>
                             <div className='row'>
@@ -391,7 +391,7 @@ export default class endOfDay extends React.PureComponent
                                 <h2>{this.t("ticketRest")}</h2>
                               </div>
                               <div className='col-6' style={{color:this.color.rest}}>
-                                <h2>{this.TicketRest}</h2>
+                                <h2> : {this.TicketRest}</h2>
                               </div>
                             </div>
                           </div>
