@@ -121,8 +121,8 @@ export default class endOfDay extends React.PureComponent
       }
       if(parseFloat(this.paymentData.where({'PAY_TYPE':0}).sum('AMOUNT')) ==  parseFloat(this.txtCash.value - this.txtAdvance.value))
       {
-        this.Cash = 'Doğru'
-        this.setState({Cash:'Doğru'})
+        this.Cash = this.t("txtReal")
+        this.setState({Cash:this.t("txtReal")})
       }
       else
       {
@@ -135,8 +135,8 @@ export default class endOfDay extends React.PureComponent
 
       if(parseFloat(this.paymentData.where({'PAY_TYPE':1}).sum('AMOUNT')) ==  this.txtCreditCard.value)
       {
-        this.DebitCard = 'Doğru'
-        this.setState({DebitCard:'Doğru'})
+        this.DebitCard = this.t("txtReal")
+        this.setState({DebitCard:this.t("txtReal")})
       }
       else 
       {
@@ -147,8 +147,8 @@ export default class endOfDay extends React.PureComponent
       }
       if(parseFloat(this.paymentData.where({'PAY_TYPE':2}).sum('AMOUNT')) ==  this.txtCheck.value)
       {
-        this.Check = 'Doğru'
-        this.setState({Check:'Doğru'})
+        this.Check = this.t("txtReal")
+        this.setState({Check:this.t("txtReal")})
       }
       else 
       {
@@ -160,8 +160,8 @@ export default class endOfDay extends React.PureComponent
 
       if(parseFloat(this.paymentData.where({'PAY_TYPE':3}).sum('AMOUNT')) ==  this.txtRestorant.value)
       {
-        this.TicketRest = 'Doğru'
-        this.setState({TicketRest:'Doğru'})
+        this.TicketRest = this.t("txtReal")
+        this.setState({TicketRest:this.t("txtReal")})
       }
       else 
       {

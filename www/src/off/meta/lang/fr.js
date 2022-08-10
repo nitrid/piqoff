@@ -5977,5 +5977,30 @@ export const langFr =
             btn01: "OK",
             msg: "Veuillez saisir les zones nécessaire !"
         },
-    }
+    },
+    pos_03_001 : // KOMPLE BAK
+    {
+        title : "GÜN SONU İŞLEMİ",
+        start :"Başlangıç",
+        advance : "Avans",
+        cash : "Nakit",
+        debitCard : "Kredi Kartı",
+        check : "Çek",
+        ticketRest : "Tike Restorant",
+        previous: "Önceki",
+        finish : "Bitir",
+        next : "Sonraki",
+        dtDocDate :"Tarih",
+        cmbSafe : "Cihaz ID",
+        txtAdvance : "Avans",
+        txtCash : "Nakit",
+        txtCreditCard : "Kredi Kartı",
+        txtCheck : "Çek",
+        txtRestorant : "Tike Restorant",
+        txtReal : "Doğru",
+        popFinish : 
+        {
+            title :"Sonuç"
+        }
+    },
 }
