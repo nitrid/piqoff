@@ -283,7 +283,7 @@ export default class posDoc extends React.PureComponent
                             ]
                         }
                     }
-                }                
+                }
                 await tmpDt.refresh();
                 //BURASI 7 HANELI UNIQLER BİTTİĞİNDE KALDIRILACAK //BAK
                 if(tmpDt.length == 0)
@@ -314,6 +314,7 @@ export default class posDoc extends React.PureComponent
                             }
                         }
                     }
+                    await tmpDt.refresh();
                 }
             }
             resolve(tmpDt)
@@ -944,6 +945,7 @@ export default class posDoc extends React.PureComponent
 
                 if(this.posObj.posPay.dt().length > 0)
                 {
+                    //this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT - pPayChange
                     this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].CHANGE = pPayChange
                     if(this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE == 3)
                     {
@@ -1022,11 +1024,11 @@ export default class posDoc extends React.PureComponent
                         }
                     }
                     await this.print(tmpData)
-                    //NAKİT YADA TICKET REST. ALDIĞINDA KASA AÇMA İŞLEMİ 
-                    // if(this.posObj.posPay.dt().where({PAY_TYPE:0}).length > 0 || this.posObj.posPay.dt().where({PAY_TYPE:3}).length > 0)
-                    // {
-                    //     this.posDevice.caseOpen();
-                    // }
+                    //TICKET REST. ALDIĞINDA KASA AÇMA İŞLEMİ 
+                    if(this.posObj.posPay.dt().where({PAY_TYPE:3}).length > 0)
+                    {
+                        await this.posDevice.caseOpen();
+                    }
                 }
 
                 resolve(true)
@@ -1113,16 +1115,15 @@ export default class posDoc extends React.PureComponent
                 }
                 else //Başarısız veya İptal
                 {
-                    this.posDevice.cardCancel()
                     this.msgCardPayment.hide()
                     return
                 }
             }
             let tmpRowData = this.isRowMerge('PAY',{TYPE:pType})
-            //NAKİT YADA TICKET REST. ALDIĞINDA KASA AÇMA İŞLEMİ 
-            if(pType == 0 || pType == 3)
+            //NAKİT ALDIĞINDA KASA AÇMA İŞLEMİ 
+            if(pType == 0)
             {
-                this.posDevice.caseOpen();
+                await this.posDevice.caseOpen();
             }
             //SATIR BİRLEŞTİR        
             if(typeof tmpRowData != 'undefined')
@@ -1137,6 +1138,7 @@ export default class posDoc extends React.PureComponent
     }
     payRowAdd(pPayData)
     {
+        console.log(pPayData)
         return new Promise(async resolve => 
         {
             let tmpTypeName = ""
@@ -4024,7 +4026,7 @@ export default class posDoc extends React.PureComponent
                                 }}
                                 >
                                     <Column dataField="LDATE" caption={this.lang.t("grdLastPos.LDATE")} width={200} alignment={"center"} dataType={"datetime"} format={"dd-MM-yyyy - HH:mm:ss SSSZ"}/>
-                                    <Column dataField="DEVICE" caption={this.lang.t("grdLastPos.DEVICE")} width={150}/>
+                                    <Column dataField="DEVICE" caption={this.lang.t("grdLastPos.DEVICE")} width={100}/>
                                     <Column dataField="REF" caption={this.lang.t("grdLastPos.REF")} width={150}/>
                                     <Column dataField="CUSTOMER_NAME" caption={this.lang.t("grdLastPos.CUSTOMER_NAME")} width={200}/> 
                                     <Column dataField="CUSER_NAME" caption={this.lang.t("grdLastPos.CUSER_NAME")} width={100}/>

@@ -49,7 +49,7 @@ export default class posSalesReport extends React.PureComponent
                                             "'SALES' AS TITLE, " +
                                             "'HT' AS TYPE, " +
                                             "POS.VAT_RATE AS VAT_RATE, " +
-                                            "SUM(POS.FAMOUNT) AS AMOUNT " +
+                                            "CASE WHEN POS.TYPE = 0 THEN SUM(POS.FAMOUNT) ELSE SUM(POS.FAMOUNT) * -1 END AS AMOUNT " +
                                             "FROM POS_SALE_VW_01 AS POS " +
                                             "WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END " +
                                             "GROUP BY POS.DOC_DATE,POS.TYPE,POS.VAT_RATE,POS.DEVICE " +
@@ -61,7 +61,7 @@ export default class posSalesReport extends React.PureComponent
                                             "'SALES' AS TITLE, " +
                                             "'TVA' AS TYPE, " +
                                             "POS.VAT_RATE AS VAT_RATE, " +
-                                            "SUM(POS.VAT) AS AMOUNT " +
+                                            "CASE WHEN POS.TYPE = 0 THEN SUM(POS.VAT) ELSE SUM(POS.VAT) * -1 END AS AMOUNT " +
                                             "FROM POS_SALE_VW_01 AS POS " +
                                             "WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END " +
                                             "GROUP BY POS.DOC_DATE,POS.TYPE,POS.VAT_RATE,POS.DEVICE " +
@@ -78,7 +78,7 @@ export default class posSalesReport extends React.PureComponent
                                             "WHEN PAY_TYPE = 4 THEN 'BON D''AVOIR' " +
                                             "END AS TYPE, " +
                                             "0 AS VAT_RATE, " +
-                                            "SUM(AMOUNT - CHANGE) AS AMOUNT " +
+                                            "CASE WHEN POS.TYPE = 0 THEN SUM(AMOUNT - CHANGE) ELSE SUM(AMOUNT - CHANGE) * -1 END AS AMOUNT  " +
                                             "FROM POS_PAYMENT_VW_01 AS POS " +
                                             "WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END " +
                                             "GROUP BY POS.GUID,POS.DOC_DATE,POS.TYPE,POS.PAY_TYPE,POS.DEVICE " , 
@@ -179,7 +179,7 @@ export default class posSalesReport extends React.PureComponent
                             showBorders={true}
                             showColumnTotals={true}
                             showColumnGrandTotals={false}
-                            showRowTotals={false}
+                            showRowTotals={true}
                             showRowGrandTotals={true}
                             onCellPrepared={(e)=>
                             {
