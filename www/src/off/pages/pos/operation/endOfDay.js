@@ -102,7 +102,7 @@ export default class endOfDay extends React.PureComponent
           query : "SELECT   " +
                   "MAX(DOC_DATE) AS DOC_DATE,PAY_TYPE AS PAY_TYPE,TYPE AS TYPE,  " +
                   "PAY_TYPE_NAME AS PAY_TYPE_NAME,   " +
-                  "CASE WHEN TYPE = 0 THEN SUM(AMOUNT) ELSE SUM(AMOUNT) * -1 END AS AMOUNT   " +
+                  "CASE WHEN TYPE = 0 THEN SUM(AMOUNT - CHANGE) ELSE SUM(AMOUNT) * -1 END AS AMOUNT   " +
                   "FROM POS_PAYMENT_VW_01 WHERE DOC_DATE = @DOC_DATE AND DEVICE = @DEVICE AND STATUS = 1   " +
                   "GROUP BY PAY_TYPE_NAME,PAY_TYPE,TYPE " ,
           param : ['DOC_DATE:date','DEVICE:string|50'],
