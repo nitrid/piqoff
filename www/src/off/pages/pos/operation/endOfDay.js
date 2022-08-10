@@ -28,9 +28,9 @@ import tr from '../../../meta/lang/devexpress/tr.js';
 
 export default class endOfDay extends React.PureComponent
 {
-    constructor(props)
+    constructor()
     {
-        super(props)
+        super()
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
@@ -83,6 +83,13 @@ export default class endOfDay extends React.PureComponent
           this.DebitCard = '';
           this.Check = '';
           this.TicketRest =  ''
+          this.color =
+          {
+            cash :"green",
+            card :"green",
+            check :"green",
+            rest :"green",
+          }
           this.paymentData = new datatable
 
     }
@@ -108,9 +115,7 @@ export default class endOfDay extends React.PureComponent
           param : ['DOC_DATE:date','DEVICE:string|50'],
           value : [this.dtDocDate.value,this.cmbSafe.value]
       }
-      console.log(tmpQuery.value)
       let tmpData = await this.core.sql.execute(tmpQuery) 
-      console.log(tmpData)
       if(tmpData.result.recordset.length > 0)
       {
         this.paymentData.clear()
@@ -121,20 +126,32 @@ export default class endOfDay extends React.PureComponent
       }
       if(parseFloat(this.paymentData.where({'PAY_TYPE':0}).sum('AMOUNT')) ==  parseFloat(this.txtCash.value - this.txtAdvance.value))
       {
+        this.color.cash = "green"
         this.Cash = this.t("txtReal")
         this.setState({Cash:this.t("txtReal")})
       }
       else
       {
         let tmpCash
-        tmpCash = (parseFloat(parseFloat(this.txtCash.value) + parseFloat(this.txtAdvance.value)) - parseFloat(this.paymentData.where({'PAY_TYPE':0}).sum('AMOUNT')))
-        console.log(tmpCash)
-        this.Cash = tmpCash.toFixed(2)
-        this.setState({Cash:tmpCash})
+        tmpCash = (parseFloat(parseFloat(this.txtCash.value) - parseFloat(this.txtAdvance.value)) - parseFloat(this.paymentData.where({'PAY_TYPE':0}).sum('AMOUNT')))
+        let tmpCashValue
+        if(tmpCash > 0)
+        {
+          this.color.cash = "blue"
+          tmpCashValue = '+' + tmpCash.toLocaleString('en-IN', {style: 'currency',currency: 'eur', minimumFractionDigits: 2})
+        }
+        else
+        {
+          this.color.cash = "red"
+          tmpCashValue = tmpCash.toLocaleString('en-IN', {style: 'currency',currency: 'eur', minimumFractionDigits: 2})
+        }
+        this.Cash = tmpCashValue
+        this.setState({Cash:tmpCashValue})
       }
 
       if(parseFloat(this.paymentData.where({'PAY_TYPE':1}).sum('AMOUNT')) ==  this.txtCreditCard.value)
       {
+        this.color.card = "green"
         this.DebitCard = this.t("txtReal")
         this.setState({DebitCard:this.t("txtReal")})
       }
@@ -142,11 +159,23 @@ export default class endOfDay extends React.PureComponent
       {
         let tmpDebit
         tmpDebit = (this.txtCreditCard.value - parseFloat(this.paymentData.where({'PAY_TYPE':1}).sum('AMOUNT')))
-        this.DebitCard = tmpDebit.toFixed(2)
-        this.setState({DebitCard:tmpDebit})
+        let tmpDebitValue
+        if(tmpDebit > 0)
+        {
+          this.color.card = "blue"
+          tmpDebitValue = '+' + tmpDebit.toLocaleString('en-IN', {style: 'currency',currency: 'eur', minimumFractionDigits: 2})
+        }
+        else
+        {
+          this.color.card = "red"
+          tmpDebitValue = tmpDebit.toLocaleString('en-IN', {style: 'currency',currency: 'eur', minimumFractionDigits: 2})
+        }
+        this.DebitCard = tmpDebitValue
+        this.setState({DebitCard:tmpDebitValue})
       }
       if(parseFloat(this.paymentData.where({'PAY_TYPE':2}).sum('AMOUNT')) ==  this.txtCheck.value)
       {
+        this.color.check = "green"
         this.Check = this.t("txtReal")
         this.setState({Check:this.t("txtReal")})
       }
@@ -154,12 +183,24 @@ export default class endOfDay extends React.PureComponent
       {
         let tmpCheck
         tmpCheck = (this.txtCheck.value - parseFloat(this.paymentData.where({'PAY_TYPE':2}).sum('AMOUNT')))
-        this.Check = tmpCheck.toFixed(2)
-        this.setState({Check:tmpCheck})
+        let tmpCheckValue
+        if(tmpCheck > 0)
+        {
+          this.color.check = "blue"
+          tmpCheckValue = '+' + tmpCheck.toLocaleString('en-IN', {style: 'currency',currency: 'eur', minimumFractionDigits: 2})
+        }
+        else
+        {
+          this.color.check = "red"
+          tmpCheckValue = tmpCheck.toLocaleString('en-IN', {style: 'currency',currency: 'eur', minimumFractionDigits: 2})
+        }
+        this.Check = tmpCheckValue
+        this.setState({Check:tmpCheckValue})
       }
 
       if(parseFloat(this.paymentData.where({'PAY_TYPE':3}).sum('AMOUNT')) ==  this.txtRestorant.value)
       {
+        this.color.rest = "green"
         this.TicketRest = this.t("txtReal")
         this.setState({TicketRest:this.t("txtReal")})
       }
@@ -167,7 +208,18 @@ export default class endOfDay extends React.PureComponent
       {
         let tmpTikcet
         tmpTikcet = (this.txtRestorant.value - parseFloat(this.paymentData.where({'PAY_TYPE':3}).sum('AMOUNT')))
-        this.TicketRest = tmpTikcet.toFixed(2)
+        let tmpTicketValue
+        if(tmpTikcet > 0)
+        {
+          this.color.rest = "blue"
+          tmpTicketValue = '+' + tmpTikcet.toLocaleString('en-IN', {style: 'currency',currency: 'eur', minimumFractionDigits: 2})
+        }
+        else
+        {
+          this.color.rest = "red"
+          tmpTicketValue = tmpTikcet.toLocaleString('en-IN', {style: 'currency',currency: 'eur', minimumFractionDigits: 2})
+        }
+        this.TicketRest = tmpTicketValue
         this.setState({TicketRest:tmpTikcet})
       }
       this.popFinish.show()
@@ -314,7 +366,7 @@ export default class endOfDay extends React.PureComponent
                               <div className='col-6'>
                                 <h2>{this.t("cash")}</h2>
                               </div>
-                              <div className='col-6'>
+                              <div className='col-6' style={{color:this.color.cash}}>
                                 <h2>{this.Cash}</h2>
                               </div>
                             </div>
@@ -322,7 +374,7 @@ export default class endOfDay extends React.PureComponent
                               <div className='col-6'>
                                 <h2>{this.t("debitCard")}</h2>
                               </div>
-                              <div className='col-6'>
+                              <div className='col-6' style={{color:this.color.card}}>
                                 <h2>{this.DebitCard}</h2>
                               </div>
                             </div>
@@ -330,7 +382,7 @@ export default class endOfDay extends React.PureComponent
                               <div className='col-6'>
                                 <h2>{this.t("check")}</h2>
                               </div>
-                              <div className='col-6'>
+                              <div className='col-6' style={{color:this.color.check}}>
                                 <h2>{this.Check}</h2>
                               </div>
                             </div>
@@ -338,7 +390,7 @@ export default class endOfDay extends React.PureComponent
                               <div className='col-6'>
                                 <h2>{this.t("ticketRest")}</h2>
                               </div>
-                              <div className='col-6'>
+                              <div className='col-6' style={{color:this.color.rest}}>
                                 <h2>{this.TicketRest}</h2>
                               </div>
                             </div>
