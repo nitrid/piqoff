@@ -102,13 +102,15 @@ export default class endOfDay extends React.PureComponent
           query : "SELECT   " +
                   "MAX(DOC_DATE) AS DOC_DATE,PAY_TYPE AS PAY_TYPE,TYPE AS TYPE,  " +
                   "PAY_TYPE_NAME AS PAY_TYPE_NAME,   " +
-                  "CASE WHEN TYPE = 0 THEN SUM(AMOUNT) ELSE SUM(AMOUNT) * -1 END AS AMOUNT   " +
+                  "CASE WHEN TYPE = 0 THEN SUM(AMOUNT - CHANGE) ELSE SUM(AMOUNT) * -1 END AS AMOUNT   " +
                   "FROM POS_PAYMENT_VW_01 WHERE DOC_DATE = @DOC_DATE AND DEVICE = @DEVICE AND STATUS = 1   " +
                   "GROUP BY PAY_TYPE_NAME,PAY_TYPE,TYPE " ,
           param : ['DOC_DATE:date','DEVICE:string|50'],
           value : [this.dtDocDate.value,this.cmbSafe.value]
       }
+      console.log(tmpQuery.value)
       let tmpData = await this.core.sql.execute(tmpQuery) 
+      console.log(tmpData)
       if(tmpData.result.recordset.length > 0)
       {
         this.paymentData.clear()
@@ -119,21 +121,22 @@ export default class endOfDay extends React.PureComponent
       }
       if(parseFloat(this.paymentData.where({'PAY_TYPE':0}).sum('AMOUNT')) ==  parseFloat(this.txtCash.value - this.txtAdvance.value))
       {
-        this.Cash = 'Doğru'
-        this.setState({Cash:'Doğru'})
+        this.Cash = this.t("txtReal")
+        this.setState({Cash:this.t("txtReal")})
       }
       else
       {
         let tmpCash
-        tmpCash = (parseFloat(this.txtCash.value - this.txtAdvance.value) - parseFloat(this.paymentData.where({'PAY_TYPE':0}).sum('AMOUNT')))
+        tmpCash = (parseFloat(parseFloat(this.txtCash.value) + parseFloat(this.txtAdvance.value)) - parseFloat(this.paymentData.where({'PAY_TYPE':0}).sum('AMOUNT')))
+        console.log(tmpCash)
         this.Cash = tmpCash.toFixed(2)
         this.setState({Cash:tmpCash})
       }
 
       if(parseFloat(this.paymentData.where({'PAY_TYPE':1}).sum('AMOUNT')) ==  this.txtCreditCard.value)
       {
-        this.DebitCard = 'Doğru'
-        this.setState({DebitCard:'Doğru'})
+        this.DebitCard = this.t("txtReal")
+        this.setState({DebitCard:this.t("txtReal")})
       }
       else 
       {
@@ -144,8 +147,8 @@ export default class endOfDay extends React.PureComponent
       }
       if(parseFloat(this.paymentData.where({'PAY_TYPE':2}).sum('AMOUNT')) ==  this.txtCheck.value)
       {
-        this.Check = 'Doğru'
-        this.setState({Check:'Doğru'})
+        this.Check = this.t("txtReal")
+        this.setState({Check:this.t("txtReal")})
       }
       else 
       {
@@ -157,8 +160,8 @@ export default class endOfDay extends React.PureComponent
 
       if(parseFloat(this.paymentData.where({'PAY_TYPE':3}).sum('AMOUNT')) ==  this.txtRestorant.value)
       {
-        this.TicketRest = 'Doğru'
-        this.setState({TicketRest:'Doğru'})
+        this.TicketRest = this.t("txtReal")
+        this.setState({TicketRest:this.t("txtReal")})
       }
       else 
       {

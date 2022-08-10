@@ -15,7 +15,7 @@
         <Item2 Ref="7" ControlType="XRLabel" Name="label6" Multiline="true" Text="ORIGINE:" TextAlignment="TopRight" SizeF="217.708313,47.75482" LocationFloat="90.75001, 372.554443" Font="Arial Black, 28pt" Padding="2,2,0,0,100" Borders="None">
           <StylePriority Ref="8" UseFont="false" UseBorders="false" UseTextAlignment="false" />
         </Item2>
-        <Item3 Ref="9" ControlType="XRLabel" Name="label7" Multiline="true" Text="label6" TextAlignment="TopLeft" SizeF="292.7083,47.75482" LocationFloat="308.4583, 372.554443" Font="Arial Black, 28pt" Padding="2,2,0,0,100" Borders="None">
+        <Item3 Ref="9" ControlType="XRLabel" Name="label7" Multiline="true" Text="label6" TextAlignment="TopLeft" SizeF="505.5417,47.7548523" LocationFloat="308.4583, 372.554382" Font="Arial Black, 28pt" Padding="2,2,0,0,100" Borders="None">
           <ExpressionBindings>
             <Item1 Ref="10" EventName="BeforePrint" PropertyName="Text" Expression="[ORGINS]" />
           </ExpressionBindings>

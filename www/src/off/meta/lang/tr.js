@@ -5478,6 +5478,7 @@ export const langTr =
         txtCreditCard : "Kredi Kartı",
         txtCheck : "Çek",
         txtRestorant : "Tike Restorant",
+        txtReal : "Doğru",
         popFinish : 
         {
             title :"Sonuç"
