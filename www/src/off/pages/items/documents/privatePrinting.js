@@ -25,15 +25,17 @@ import tr from '../../../meta/lang/devexpress/tr.js';
 
 export default class privatePrinting extends React.PureComponent
 {
-    constructor()
+    constructor(props)
     {
-        super()
+        super(props)
         this.core = App.instance.core;
 
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.prilabelCls = new priLabelObj();
         this.labelMainObj = new labelMainCls();
+
+        this.tabIndex = props.data.tabkey
     }
     async componentDidMount()
     {

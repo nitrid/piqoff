@@ -28,7 +28,7 @@ export default class rebateOperation extends React.PureComponent
 {
     constructor(props)
     {
-        super()
+        super(props)
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
@@ -38,6 +38,7 @@ export default class rebateOperation extends React.PureComponent
         this._btnSave = this._btnSave.bind(this)
         this._toGroupByCustomer = this._toGroupByCustomer.bind(this)
         this.txtRef = Math.floor(Date.now() / 1000)
+        this.tabIndex = props.data.tabkey
     }
     componentDidMount()
     {
@@ -314,7 +315,7 @@ export default class rebateOperation extends React.PureComponent
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmSalesDis"}>
+                                        <Validator validationGroup={"frmSalesDis" + this.tabIndex}>
                                             <RequiredRule message={this.t("validDepot")} />
                                         </Validator> 
                                     </NdSelectBox>

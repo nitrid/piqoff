@@ -29,6 +29,8 @@ export default class salesOrdList extends React.PureComponent
         this.groupList = [];
         this._btnGetClick = this._btnGetClick.bind(this)
         this.btnGetDetail = this.btnGetDetail.bind(this)
+
+        this.tabIndex = props.data.tabkey
     }
     componentDidMount()
     {

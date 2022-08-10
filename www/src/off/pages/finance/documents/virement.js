@@ -26,9 +26,9 @@ import tr from '../../../meta/lang/devexpress/tr.js';
 
 export default class virement extends React.PureComponent
 {
-    constructor()
+    constructor(props)
     {
-        super()
+        super(props)
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
@@ -39,7 +39,7 @@ export default class virement extends React.PureComponent
        
 
         this.docLocked = false;        
-
+        this.tabIndex = props.data.tabkey
     }
     async componentDidMount()
     {
@@ -901,7 +901,7 @@ export default class virement extends React.PureComponent
                                     param={this.param.filter({ELEMENT:'cmbSafeToBank',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbSafeToBank',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmSafeToBank"}>
+                                        <Validator validationGroup={"frmSafeToBank" + this.tabIndex}>
                                             <RequiredRule message={this.t("validSafe")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -934,7 +934,7 @@ export default class virement extends React.PureComponent
                                     param={this.param.filter({ELEMENT:'cmbSafeToBank2',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbSafeToBank2',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmSafeToBank"}>
+                                        <Validator validationGroup={"frmSafeToBank" + this.tabIndex}>
                                             <RequiredRule message={this.t("validSafe")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -947,7 +947,7 @@ export default class virement extends React.PureComponent
                                         param={this.param.filter({ELEMENT:'safeToBankAmount',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'safeToBankAmount  ',USERS:this.user.CODE})}
                                         >
-                                        <Validator validationGroup={"frmSafeToBank"}>
+                                        <Validator validationGroup={"frmSafeToBank" + this.tabIndex}>
                                             <RequiredRule message={this.t("ValidAmount")} />
                                         </Validator>  
                                         </NdNumberBox>
@@ -969,7 +969,7 @@ export default class virement extends React.PureComponent
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.t("popSafeToBank.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                            validationGroup="frmCollCheck"
+                                            validationGroup={"frmCollCheck" + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
                                                     this._addVirement(21)
@@ -1029,7 +1029,7 @@ export default class virement extends React.PureComponent
                                     param={this.param.filter({ELEMENT:'cmbBankToSafe',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbBankToSafe',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmBankToSafe"}>
+                                        <Validator validationGroup={"frmBankToSafe" + this.tabIndex}>
                                             <RequiredRule message={this.t("validSafe")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -1062,7 +1062,7 @@ export default class virement extends React.PureComponent
                                     param={this.param.filter({ELEMENT:'cmbBankToSafe2',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbBankToSafe2',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmBankToSafe"}>
+                                        <Validator validationGroup={"frmBankToSafe" + this.tabIndex}>
                                             <RequiredRule message={this.t("validSafe")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -1075,7 +1075,7 @@ export default class virement extends React.PureComponent
                                         param={this.param.filter({ELEMENT:'bankToSafeAmount',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'bankToSafeAmount  ',USERS:this.user.CODE})}
                                         >
-                                        <Validator validationGroup={"frmBankToSafe"}>
+                                        <Validator validationGroup={"frmBankToSafe" + this.tabIndex}>
                                             <RequiredRule message={this.t("ValidAmount")} />
                                         </Validator>  
                                         </NdNumberBox>
@@ -1097,7 +1097,7 @@ export default class virement extends React.PureComponent
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.t("popBankToSafe.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                            validationGroup="frmCollCheck"
+                                            validationGroup={"frmCollCheck" + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
                                                 this._addVirement(22)
@@ -1157,7 +1157,7 @@ export default class virement extends React.PureComponent
                                     param={this.param.filter({ELEMENT:'cmbBankToBank',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbBankToBank',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmBankToBank"}>
+                                        <Validator validationGroup={"frmBankToBank" + this.tabIndex}>
                                             <RequiredRule message={this.t("validSafe")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -1190,7 +1190,7 @@ export default class virement extends React.PureComponent
                                     param={this.param.filter({ELEMENT:'cmbBankToBank2',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbBankToBank2',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmBankToBank"}>
+                                        <Validator validationGroup={"frmBankToBank" + this.tabIndex}>
                                             <RequiredRule message={this.t("validSafe")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -1203,7 +1203,7 @@ export default class virement extends React.PureComponent
                                         param={this.param.filter({ELEMENT:'bankToBankAmount',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'bankToBankAmount  ',USERS:this.user.CODE})}
                                         >
-                                        <Validator validationGroup={"frmBankToBank"}>
+                                        <Validator validationGroup={"frmBankToBank" + this.tabIndex}>
                                             <RequiredRule message={this.t("ValidAmount")} />
                                         </Validator>  
                                         </NdNumberBox>
@@ -1225,7 +1225,7 @@ export default class virement extends React.PureComponent
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.t("popBankToBank.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                            validationGroup="frmCollCheck"
+                                            validationGroup={"frmCollCheck" + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
                                               

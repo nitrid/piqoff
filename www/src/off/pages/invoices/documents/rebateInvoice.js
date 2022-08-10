@@ -1729,7 +1729,7 @@ export default class rebateInvoice extends React.PureComponent
                             <Form colCount={3} height={'fit-content'}>
                             <Item location="after">
                                     <Button icon="add" text={this.t("btnCash")}
-                                    validationGroup="frmPurcInv"
+                                    validationGroup={"frmPurcInv" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         this.popPayment.hide()
@@ -1740,7 +1740,7 @@ export default class rebateInvoice extends React.PureComponent
                                 </Item>
                                 <Item location="after">
                                     <Button icon="add" text={this.t("btnCheck")}
-                                    validationGroup="frmPurcInv"
+                                    validationGroup={"frmPurcInv" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         this.popPayment.hide()
@@ -1752,7 +1752,7 @@ export default class rebateInvoice extends React.PureComponent
                                 </Item>
                                 <Item location="after">
                                     <Button icon="add" text={this.t("btnBank")} width={200}
-                                    validationGroup="frmPurcInv"
+                                    validationGroup={"frmPurcInv" + this.tabIndex }
                                     onClick={async (e)=>
                                     {
                                         this.popPayment.hide()

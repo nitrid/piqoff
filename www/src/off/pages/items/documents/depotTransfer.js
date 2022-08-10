@@ -440,7 +440,7 @@ export default class depotTransfer extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmTrnsfr"
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmTrnsfr" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(this.docLocked == true)
@@ -646,7 +646,7 @@ export default class depotTransfer extends React.PureComponent
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmTrnsfr"}>
+                                            <Validator validationGroup={"frmTrnsfr" + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRef")} />
                                                 </Validator>  
                                             </NdTextBox>
@@ -695,7 +695,7 @@ export default class depotTransfer extends React.PureComponent
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmTrnsfr"}>
+                                            <Validator validationGroup={"frmTrnsfr" + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRefNo")} />
                                                 </Validator> 
                                             </NdTextBox>
@@ -743,7 +743,7 @@ export default class depotTransfer extends React.PureComponent
                                         {
                                     }).bind(this)}
                                     >
-                                        <Validator validationGroup={"frmTrnsfr"}>
+                                        <Validator validationGroup={"frmTrnsfr" + this.tabIndex}>
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
@@ -778,7 +778,7 @@ export default class depotTransfer extends React.PureComponent
                                     param={this.param.filter({ELEMENT:'cmbOutDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbOutDepot',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmTrnsfr"}>
+                                        <Validator validationGroup={"frmTrnsfr" + this.tabIndex}>
                                             <RequiredRule message={this.t("validDepot")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -811,7 +811,7 @@ export default class depotTransfer extends React.PureComponent
                                     param={this.param.filter({ELEMENT:'cmbInDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbInDepot',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmTrnsfr"}>
+                                        <Validator validationGroup={"frmTrnsfr" + this.tabIndex}>
                                             <RequiredRule message={this.t("validDepot")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -901,7 +901,7 @@ export default class depotTransfer extends React.PureComponent
                             }}>
                                 <Item location="after">
                                     <Button icon="add"
-                                    validationGroup="frmTrnsfr"
+                                    validationGroup={"frmTrnsfr" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")

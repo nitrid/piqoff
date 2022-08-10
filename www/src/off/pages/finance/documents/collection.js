@@ -933,7 +933,7 @@ export default class collection extends React.PureComponent
                                     param={this.param.filter({ELEMENT:'cmbCheckSafe',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbCheckSafe',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmCollCheck"}>
+                                        <Validator validationGroup={"frmCollCheck" + this.tabIndex}>
                                             <RequiredRule message={this.t("ValidCash")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -958,7 +958,7 @@ export default class collection extends React.PureComponent
                                         param={this.param.filter({ELEMENT:'numcheck',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'numcheck',USERS:this.user.CODE})}
                                         >
-                                        <Validator validationGroup={"frmCollCheck"}>
+                                        <Validator validationGroup={"frmCollCheck" + this.tabIndex}>
                                             <RequiredRule message={this.t("ValidCash")} />
                                         </Validator>  
                                         </NdNumberBox>
@@ -980,7 +980,7 @@ export default class collection extends React.PureComponent
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.t("popCheck.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                            validationGroup="frmCollCheck"
+                                            validationGroup={"frmCollCheck" + this.tabIndex} 
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
@@ -1032,7 +1032,7 @@ export default class collection extends React.PureComponent
                                     param={this.param.filter({ELEMENT:'cmbBank',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbBank',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmCollBank"}>
+                                        <Validator validationGroup={"frmCollBank" + this.tabIndex}>
                                             <RequiredRule message={this.t("validBank")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -1045,7 +1045,7 @@ export default class collection extends React.PureComponent
                                         param={this.param.filter({ELEMENT:'numBank',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'numBank',USERS:this.user.CODE})}
                                         >
-                                        <Validator validationGroup={"frmCollBank"}>
+                                        <Validator validationGroup={"frmCollBank" + this.tabIndex}>
                                             <RequiredRule message={this.t("ValidCash")} />
                                         </Validator>  
                                         </NdNumberBox>
@@ -1067,7 +1067,7 @@ export default class collection extends React.PureComponent
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.t("popBank.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                            validationGroup="frmCollCheck"
+                                            validationGroup={"frmCollCheck" + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")

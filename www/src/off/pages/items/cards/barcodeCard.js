@@ -23,14 +23,15 @@ import { dialog } from '../../../../core/react/devex/dialog.js';
 
 export default class barcodeCard extends React.PureComponent
 {
-    constructor()
+    constructor(props)
     {
-        super() 
+        super(props) 
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this._getUnit = this._getUnit.bind(this)
 
         this.itemBarcodeObj = new itemBarcodeCls();
+        this.tabIndex = props.data.tabkey
     }
     async componentDidMount()
     {

@@ -26,9 +26,9 @@ import tr from '../../../meta/lang/devexpress/tr.js';
 
 export default class outageDoc extends React.PureComponent
 {
-    constructor()
+    constructor(props)
     {
-        super()
+        super(props)
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
@@ -44,6 +44,7 @@ export default class outageDoc extends React.PureComponent
         this.docLocked = false;      
         this.combineControl = true
         this.combineNew = false  
+        this.tabIndex = props.data.tabkey
         
         this.rightItems = [{ text: this.t("getDispatch"), }]
     }
@@ -519,7 +520,7 @@ export default class outageDoc extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmOutwasFrom"
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmOutwasFrom" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(this.docLocked == true)
@@ -744,7 +745,7 @@ export default class outageDoc extends React.PureComponent
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmOutwasFrom"}>
+                                            <Validator validationGroup={"frmOutwasFrom" + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRef")} />
                                                 </Validator>  
                                             </NdTextBox>
@@ -792,7 +793,7 @@ export default class outageDoc extends React.PureComponent
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmOutwasFrom"}>
+                                            <Validator validationGroup={"frmOutwasFrom" + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRefNo")} />
                                                 </Validator> 
                                             </NdTextBox>
@@ -850,7 +851,7 @@ export default class outageDoc extends React.PureComponent
                                     param={this.param.filter({ELEMENT:'cmbOutDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbOutDepot',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmOutwasFrom"}>
+                                        <Validator validationGroup={"frmOutwasFrom" + this.tabIndex}>
                                             <RequiredRule message={this.t("validDepot")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -864,7 +865,7 @@ export default class outageDoc extends React.PureComponent
                                         {
                                     }).bind(this)}
                                     >
-                                        <Validator validationGroup={"frmOutwasFrom"}>
+                                        <Validator validationGroup={"frmOutwasFrom" + this.tabIndex}>
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
@@ -953,7 +954,7 @@ export default class outageDoc extends React.PureComponent
                             }}>
                                 <Item location="after">
                                     <Button icon="add"
-                                    validationGroup="frmOutwasFrom"
+                                    validationGroup={"frmOutwasFrom" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")

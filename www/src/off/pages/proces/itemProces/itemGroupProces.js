@@ -42,6 +42,7 @@ export default class itemList extends React.PureComponent
         this.groupList = [];
         this._btnGetirClick = this._btnGetirClick.bind(this)
         this._updateGroup = this._updateGroup.bind(this)
+
     }
     componentDidMount()
     {

@@ -1891,7 +1891,7 @@ export default class salesInvoice extends React.PureComponent
                             <Form colCount={3} height={'fit-content'}>
                             <Item location="after">
                                     <Button icon="add" text={this.t("btnCash")}
-                                    validationGroup="frmPurcInv"
+                                    validationGroup={"frmPurcInv" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         this.popPayment.hide()
@@ -1902,7 +1902,7 @@ export default class salesInvoice extends React.PureComponent
                                 </Item>
                                 <Item location="after">
                                     <Button icon="add" text={this.t("btnCheck")}
-                                    validationGroup="frmPurcInv"
+                                    validationGroup={"frmPurcInv" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         this.popPayment.hide()
@@ -1914,7 +1914,7 @@ export default class salesInvoice extends React.PureComponent
                                 </Item>
                                 <Item location="after">
                                     <Button icon="add" text={this.t("btnBank")} width={200}
-                                    validationGroup="frmPurcInv"
+                                    validationGroup={"frmPurcInv" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         this.popPayment.hide()
@@ -2282,7 +2282,7 @@ export default class salesInvoice extends React.PureComponent
                                 param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                 access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                 >
-                                    <Validator validationGroup={"frmPurcOrderPrint"}>
+                                    <Validator validationGroup={"frmPurcOrderPrint" + this.tabIndex}>
                                         <RequiredRule message={this.t("validDesign")} />
                                     </Validator> 
                                 </NdSelectBox>

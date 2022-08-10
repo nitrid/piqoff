@@ -25,9 +25,9 @@ import tr from '../../../meta/lang/devexpress/tr.js';
 
 export default class purchaseoffer extends React.PureComponent
 {
-    constructor()
+    constructor(props)
     {
-        super()
+        super(props)
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
@@ -46,7 +46,7 @@ export default class purchaseoffer extends React.PureComponent
 
 
         this.multiItemData = new datatable
-       
+        this.tabIndex = props.data.tabkey
     }
     async componentDidMount()
     {
