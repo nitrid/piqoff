@@ -5977,6 +5977,12 @@ export const langFr =
             btn01: "OK",
             msg: "Veuillez saisir les zones nécessaire !"
         },
+        msgPrice: // BAK
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Alış Fiyatından Daha Düşük Fiyat Girilemez !"
+        },
     },
     pos_03_001 : // KOMPLE BAK
     {

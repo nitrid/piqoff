@@ -6121,6 +6121,12 @@ export const langTr =
             btn01: "Tamam",
             msg: "Lütfen gerekli alanları doldurunuz !"
         },
+        msgPrice:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Alış Fiyatından Daha Düşük Fiyat Girilemez !"
+        },
     },
     pos_02_003 : 
     {
