@@ -1674,8 +1674,8 @@ export default class priceDifferenceInvoice extends React.PureComponent
                         <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
                         <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />
                     </NdPopGrid>
-                                        {/* Finans PopUp */}
-                                        <div>
+                    {/* Finans PopUp */}
+                    <div>
                         <NdPopUp parent={this} id={"popPayment"} 
                         visible={false}
                         showCloseButton={true}
