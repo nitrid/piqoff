@@ -110,12 +110,12 @@ export default class posDoc extends React.PureComponent
         this.init();        
     }
     async init()
-    {     
+    {             
         setInterval(()=>
         {
             this.lblTime.value = moment(new Date(),"HH:mm:ss").format("HH:mm:ss")
             this.lblDate.value = new Date().toLocaleDateString('tr-TR',{ year: 'numeric', month: 'numeric', day: 'numeric' })
-        },1000)        
+        },1000)     
         
         this.posObj.clearAll()
         await this.prmObj.load({APP:'POS'})
@@ -124,7 +124,9 @@ export default class posDoc extends React.PureComponent
         this.posObj.addEmpty()
         this.posObj.dt()[this.posObj.dt().length - 1].DEVICE = window.localStorage.getItem('device') == null ? '' : window.localStorage.getItem('device')
         this.device.value = this.posObj.dt()[this.posObj.dt().length - 1].DEVICE
-
+        
+        this.loading.current.instance.show()
+        
         await this.posDevice.load({CODE:this.posObj.dt()[this.posObj.dt().length - 1].DEVICE})        
         this.posDevice.scanner();
 
@@ -134,7 +136,7 @@ export default class posDoc extends React.PureComponent
 
         this.cheqDt.selectCmd = 
         {
-            query : "SELECT * FROM CHEQPAY_VW_01 WHERE DOC = @DOC",
+            query : "SELECT * FROM CHEQPAY_VW_01 WHERE DOC = @DOC ORDER BY CDATE DESC",
             param : ['DOC:string|50'], 
             value : [this.posObj.dt()[0].GUID],
             local : 
@@ -186,10 +188,12 @@ export default class posDoc extends React.PureComponent
                 this.cheqDt.selectCmd.value = [this.parkDt[i].GUID] 
                 await this.cheqDt.refresh();  
 
-                await this.getDoc(this.parkDt[i].GUID)                
+                await this.getDoc(this.parkDt[i].GUID)   
+                this.loading.current.instance.hide()             
                 return
             }
         }        
+        this.loading.current.instance.hide()
     }
     async deviceEntry()
     {
@@ -423,7 +427,7 @@ export default class posDoc extends React.PureComponent
         tmpQuantity = typeof tmpBarPattern.quantity == 'undefined' || tmpBarPattern.quantity == 0 ? tmpQuantity : tmpBarPattern.quantity
         pCode = tmpBarPattern.barcode     
         console.log("1 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
-        //this.loading.current.instance.show()
+        this.loading.current.instance.show()
         //ÜRÜN GETİRME        
         let tmpItemsDt = await this.getItemDb(pCode)
         if(tmpItemsDt.length > 0)
@@ -475,7 +479,7 @@ export default class posDoc extends React.PureComponent
                     }
                     await dialog(tmpConfObj);
                     this.setState({isBtnInfo:false})
-                    //this.loading.current.instance.hide()
+                    this.loading.current.instance.hide()
                     return;
                 }
                 //**************************************************** */
@@ -494,7 +498,7 @@ export default class posDoc extends React.PureComponent
                     }
                     else
                     {
-                        //this.loading.current.instance.hide()
+                        this.loading.current.instance.hide()
                         return
                     }
                 }
@@ -507,7 +511,7 @@ export default class posDoc extends React.PureComponent
                         //FIYAT DURUM KONTROLÜ
                         if(!(await this.priceCheck(tmpItemsDt[0],tmpResult)))
                         {
-                            //this.loading.current.instance.hide()
+                            this.loading.current.instance.hide()
                             return
                         }
 
@@ -520,14 +524,14 @@ export default class posDoc extends React.PureComponent
                         }
                         else
                         {
-                            //this.loading.current.instance.hide()
+                            this.loading.current.instance.hide()
                             return
                         }
                     }
                     else
                     {
                         //POPUP KAPATILMIŞ İSE YADA FİYAT BOŞ GİRİLMİŞ İSE...
-                        //this.loading.current.instance.hide()
+                        this.loading.current.instance.hide()
                         return
                     }
                 }
@@ -556,13 +560,13 @@ export default class posDoc extends React.PureComponent
                     {
                         if(tmpResult == 0)
                         {
-                            //this.loading.current.instance.hide()
+                            this.loading.current.instance.hide()
                             return
                         }
                         //FIYAT DURUM KONTROLÜ
                         if(!(await this.priceCheck(tmpItemsDt[0],tmpResult)))
                         {
-                            //this.loading.current.instance.hide()
+                            this.loading.current.instance.hide()
                             return
                         }
                         tmpPrice = tmpResult
@@ -582,7 +586,7 @@ export default class posDoc extends React.PureComponent
             //**************************************************** */
             tmpItemsDt[0].QUANTITY = tmpQuantity
             tmpItemsDt[0].PRICE = tmpPrice
-            //this.loading.current.instance.hide()
+            this.loading.current.instance.hide()
             this.saleAdd(tmpItemsDt[0])
         }
         else
@@ -600,7 +604,7 @@ export default class posDoc extends React.PureComponent
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgBarcodeNotFound.msg")}</div>)
             }
             await dialog(tmpConfObj);
-            //this.loading.current.instance.hide()
+            this.loading.current.instance.hide()
         }
         //******************************************************** */    
     }
@@ -627,9 +631,9 @@ export default class posDoc extends React.PureComponent
                     resolve()
                 }
             })
-
+            console.log(1)
             let tmpWeigh = await this.posDevice.mettlerScaleSend(pPrice)
-            
+            console.log(tmpWeigh)
             if(typeof tmpWeigh != 'undefined' && tmpWeigh != null)
             {
                 this.msgWeighing.hide()
@@ -712,7 +716,7 @@ export default class posDoc extends React.PureComponent
         let tmpPayChange = 0;
         return new Promise(async resolve => 
         {
-            //this.loading.current.instance.show()
+            this.loading.current.instance.show()
             if(this.posObj.dt().length > 0)
             {                  
                 let tmpPosSale = this.posObj.posSale.dt().where({GUID:{'<>' : '00000000-0000-0000-0000-000000000000'}})  
@@ -790,7 +794,7 @@ export default class posDoc extends React.PureComponent
                 }      
             }    
             resolve()            
-            //this.loading.current.instance.hide()
+            this.loading.current.instance.hide()
         });
     }    
     calcSaleTotal(pPrice,pQuantity,pDiscount,pLoyalty,pVatRate)
@@ -3308,7 +3312,7 @@ export default class posDoc extends React.PureComponent
                         setTimeout(() => 
                         {
                             this.txtPopCheqpay.focus()
-                        }, 500);
+                        }, 750);
                     }}
                     >
                         {/* txtPopCheqpay */}
