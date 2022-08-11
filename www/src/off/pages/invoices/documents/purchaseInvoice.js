@@ -10,6 +10,8 @@ import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
 import ContextMenu from 'devextreme-react/context-menu';
 import TabPanel from 'devextreme-react/tab-panel';
 import { Button } from 'devextreme-react/button';
+import FileUploader from 'devextreme-react/file-uploader';
+import * as xlsx from 'xlsx'
 
 import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
@@ -371,7 +373,7 @@ export default class purchaseInvoice extends React.PureComponent
             )
         }
     }
-    async addItem(pData,pIndex,pQuantity)
+    async addItem(pData,pIndex,pQuantity,pPrice,pDiscount)
     {
         if(typeof pQuantity == 'undefined')
         {
@@ -480,32 +482,45 @@ export default class purchaseInvoice extends React.PureComponent
         this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID
         this.docObj.docItems.dt()[pIndex].VAT_RATE = pData.VAT
         this.docObj.docItems.dt()[pIndex].ITEM_NAME = pData.NAME
-        this.docObj.docItems.dt()[pIndex].DISCOUNT = 0
+        this.docObj.docItems.dt()[pIndex].DISCOUNT = typeof pDiscount == 'undefined' ? 0 : pDiscount
         this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
         this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
-        let tmpQuery = 
+        console.log(pPrice)
+        if(typeof pPrice == 'undefined')
         {
-            query :"SELECT CUSTOMER_PRICE AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
-            param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50'],
-            value : [pData.CODE,this.docObj.dt()[0].OUTPUT]
-        }
-        let tmpData = await this.core.sql.execute(tmpQuery) 
-        if(tmpData.result.recordset.length > 0)
-        {
-            this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(2))
-            this.docObj.docItems.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100) * pQuantity).toFixed(2))
-            this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE  * pQuantity).toFixed(2))
-            this.docObj.docItems.dt()[pIndex].TOTAL = parseFloat(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT).toFixed(2))
-            this._calculateTotal()
+            let tmpQuery = 
+            {
+                query :"SELECT CUSTOMER_PRICE AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
+                param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50'],
+                value : [pData.CODE,this.docObj.dt()[0].OUTPUT]
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            if(tmpData.result.recordset.length > 0)
+            {
+                this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
+                this.docObj.docItems.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100) * pQuantity).toFixed(3))
+                this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE  * pQuantity).toFixed(3))
+                this.docObj.docItems.dt()[pIndex].TOTAL = parseFloat(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT).toFixed(3))
+                this._calculateTotal()
+            }
+            else
+            {
+                this.docObj.docItems.dt()[pIndex].PRICE =0
+                this.docObj.docItems.dt()[pIndex].VAT = 0
+                this.docObj.docItems.dt()[pIndex].AMOUNT = 0
+                this.docObj.docItems.dt()[pIndex].TOTAL = 0
+                this._calculateTotal()
+            }
         }
         else
         {
-            this.docObj.docItems.dt()[pIndex].PRICE =0
-            this.docObj.docItems.dt()[pIndex].VAT = 0
-            this.docObj.docItems.dt()[pIndex].AMOUNT = 0
-            this.docObj.docItems.dt()[pIndex].TOTAL = 0
+            this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((pPrice).toFixed(3))
+            this.docObj.docItems.dt()[pIndex].VAT = parseFloat((pPrice * (pData.VAT / 100) * pQuantity).toFixed(3))
+            this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((pPrice  * pQuantity).toFixed(3))
+            this.docObj.docItems.dt()[pIndex].TOTAL = parseFloat(((pPrice * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT).toFixed(3))
             this._calculateTotal()
         }
+      
     }
     async _getItems()
     {
@@ -799,6 +814,67 @@ export default class purchaseInvoice extends React.PureComponent
          await dialog(tmpConfObj);
 
     }
+    async excelAdd(pdata)
+    {
+        let tmpMissCodes = []
+        let tmpCounter = 0
+        for (let i = 0; i < pdata.length; i++) 
+        {
+            let tmpQuery = 
+            {
+                query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY," + 
+                "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
+                " FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') = @VALUE " ,
+                param : ['VALUE:string|50'],
+                value : [pdata[i].CODE]
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            if(tmpData.result.recordset.length > 0)
+            {               
+                let tmpDocItems = {...this.docObj.docItems.empty}
+                tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                tmpDocItems.REF = this.docObj.dt()[0].REF
+                tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                this.txtRef.readOnly = true
+                this.txtRefno.readOnly = true
+                this.docObj.docItems.addEmpty(tmpDocItems)
+                await this.core.util.waitUntil(100)
+                await this.addItem(tmpData.result.recordset[0],this.docObj.docItems.dt().length-1,pdata[i].QTY,pdata[i].PRICE,pdata[i].DISC)
+                tmpCounter = tmpCounter + 1
+            }
+            else
+            {
+                tmpMissCodes.push("'" +pdata[0].CODE + "'")
+            }
+        }
+        if(tmpMissCodes.length > 0)
+        {
+            let tmpConfObj =
+            {
+                id:'msgMissItemCode',showTitle:true,title:this.t("msgMissItemCode.title"),showCloseButton:true,width:'500px',height:'auto',
+                button:[{id:"btn01",caption:this.t("msgMissItemCode.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",wordWrap:"break-word",fontSize:"20px"}}>{this.t("msgMissItemCode.msg") + ' ' +tmpMissCodes}</div>)
+            }
+        
+            await dialog(tmpConfObj);
+        }
+        let tmpConfObj =
+        {
+            id:'msgMultiCodeCount',showTitle:true,title:this.t("msgMultiCodeCount.title"),showCloseButton:true,width:'500px',height:'200px',
+            button:[{id:"btn01",caption:this.t("msgMultiCodeCount.btn01"),location:'after'}],
+            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgMultiCodeCount.msg") + ' ' +tmpCounter}</div>)
+        }
+    
+         await dialog(tmpConfObj);
+    }
     async multiItemSave()
     {
         this.customerControl = true
@@ -831,7 +907,6 @@ export default class purchaseInvoice extends React.PureComponent
     {
         return(
             <div>
-                
                 <ScrollView>
                     {/* Toolbar */}
                     <div className="row px-2 pt-2">
@@ -1332,14 +1407,14 @@ export default class purchaseInvoice extends React.PureComponent
                                 <EmptyItem />
                             </Form>
                         </div>
-                    </div>
+                    </div>                    
                     {/* Grid */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Form colCount={1} onInitialized={(e)=>
                             {
                                 this.frmDocItems = e.component
-                            }}>
+                            }}>                                
                                 <Item colSpan={3}>
                                     <Button icon="add"
                                     validationGroup={"frmPurcInv"  + this.tabIndex}
@@ -1493,7 +1568,26 @@ export default class purchaseInvoice extends React.PureComponent
                                             
                                             await dialog(tmpConfObj);
                                         }
-                                    }}/>
+                                    }}/>  
+                                     <input type="file" name="upload" id="upload" text={"Excel Aktarım"} onChange={(e)=>
+                                    {
+                                        e.preventDefault();
+                                        if (e.target.files) 
+                                        {
+                                            const reader = new FileReader();
+                                            reader.onload = (e) => 
+                                            {
+                                                console.log(this)
+                                                const data = e.target.result;
+                                                const workbook = xlsx.read(data, { type: "array" });
+                                                const sheetName = workbook.SheetNames[0];
+                                                const worksheet = workbook.Sheets[sheetName];
+                                                const json = xlsx.utils.sheet_to_json(worksheet);
+                                                this.excelAdd(json)
+                                            };
+                                            reader.readAsArrayBuffer(e.target.files[0]);
+                                        }
+                                    }}/>                                  
                                 </Item>
                                 <Item>
                                  <React.Fragment>
@@ -1776,8 +1870,8 @@ export default class purchaseInvoice extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div>  
-                     {/* Yönetici PopUp */}
-                     <div>
+                    {/* Yönetici PopUp */}
+                    <div>
                         <NdPopUp parent={this} id={"popPassword"} 
                         visible={false}
                         showCloseButton={true}
@@ -1842,8 +1936,8 @@ export default class purchaseInvoice extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div> 
-                   {/* İrsaliye Grid */}
-                   <NdPopGrid id={"pg_dispatchGrid"} parent={this} container={"#root"}
+                    {/* İrsaliye Grid */}
+                    <NdPopGrid id={"pg_dispatchGrid"} parent={this} container={"#root"}
                     visible={false}
                     position={{of:'#root'}} 
                     showTitle={true} 
@@ -1875,8 +1969,8 @@ export default class purchaseInvoice extends React.PureComponent
                         <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc"/>
                         <Column dataField="MULTICODE" caption={this.t("pg_txtItemsCode.clmMulticode")} width={200}/>
                     </NdPopGrid>
-                     {/* Finans PopUp */}
-                     <div>
+                    {/* Finans PopUp */}
+                    <div>
                         <NdPopUp parent={this} id={"popPayment"} 
                         visible={false}
                         showCloseButton={true}
@@ -1981,7 +2075,7 @@ export default class purchaseInvoice extends React.PureComponent
                             </div>
                         </NdPopUp>
                     </div> 
-                     {/* Cash PopUp */}
+                    {/* Cash PopUp */}
                     <div>
                         <NdPopUp parent={this} id={"popCash"} 
                         visible={false}
@@ -2068,7 +2162,7 @@ export default class purchaseInvoice extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div> 
-                      {/* check PopUp */}
+                    {/* check PopUp */}
                     <div>
                         <NdPopUp parent={this} id={"popCheck"} 
                         visible={false}
@@ -2343,8 +2437,8 @@ export default class purchaseInvoice extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div>  
-                     {/* Toplu Stok PopUp */}
-                     <div>
+                    {/* Toplu Stok PopUp */}
+                    <div>
                         <NdPopUp parent={this} id={"popMultiItem"} 
                         visible={false}
                         showCloseButton={true}
@@ -2432,8 +2526,8 @@ export default class purchaseInvoice extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div> 
-                      {/* Detay PopUp */}
-                      <div>
+                    {/* Detay PopUp */}
+                    <div>
                         <NdPopUp parent={this} id={"popDetail"} 
                         visible={false}
                         showCloseButton={true}
@@ -2502,8 +2596,8 @@ export default class purchaseInvoice extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div>  
-                       {/* Birim PopUp */}
-                       <div>
+                    {/* Birim PopUp */}
+                    <div>
                         <NdPopUp parent={this} id={"popUnit2"} 
                         visible={false}
                         showCloseButton={true}
@@ -2538,72 +2632,71 @@ export default class purchaseInvoice extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div>  
-                {/* notCustomer Dialog  */}
-                <NdDialog id={"msgCustomerNotFound"} container={"#root"} parent={this}
-                    position={{of:'#root'}} 
-                    showTitle={true} 
-                    title={this.t("msgCustomerNotFound.title")} 
-                    showCloseButton={false}
-                    width={"500px"}
-                    height={"250px"}
-                    button={[{id:"btn01",caption:this.t("msgCustomerNotFound.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCustomerNotFound.btn02"),location:'after'}]}
-                    >
-                        <div className="row">
-                            <div className="col-12 py-2">
-                                <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerNotFound.msg")}</div>
+                    {/* notCustomer Dialog  */}
+                    <NdDialog id={"msgCustomerNotFound"} container={"#root"} parent={this}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        title={this.t("msgCustomerNotFound.title")} 
+                        showCloseButton={false}
+                        width={"500px"}
+                        height={"250px"}
+                        button={[{id:"btn01",caption:this.t("msgCustomerNotFound.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCustomerNotFound.btn02"),location:'after'}]}
+                        >
+                            <div className="row">
+                                <div className="col-12 py-2">
+                                    <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerNotFound.msg")}</div>
+                                </div>
+                                <div className="col-12 py-2">
+                                <Form>
+                                    {/* checkCustomer */}
+                                    <Item>
+                                        <Label text={this.lang.t("checkAll")} alignment="right" />
+                                        <NdCheckBox id="checkCustomer" parent={this} simple={true}  
+                                        value ={false}
+                                        >
+                                        </NdCheckBox>
+                                    </Item>
+                                </Form>
                             </div>
-                            <div className="col-12 py-2">
-                            <Form>
-                                {/* checkCustomer */}
-                                <Item>
-                                    <Label text={this.lang.t("checkAll")} alignment="right" />
-                                    <NdCheckBox id="checkCustomer" parent={this} simple={true}  
-                                    value ={false}
-                                    >
-                                    </NdCheckBox>
-                                </Item>
-                            </Form>
-                        </div>
-                        </div>
-                        <div className='row'>
-                       
-                        </div>
-                       
-                </NdDialog>  
-                {/* combineItem Dialog  */}
-                <NdDialog id={"msgCombineItem"} container={"#root"} parent={this}
-                    position={{of:'#root'}} 
-                    showTitle={true} 
-                    title={this.t("msgCombineItem.title")} 
-                    showCloseButton={false}
-                    width={"500px"}
-                    height={"250px"}
-                    button={[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}]}
-                    >
-                        <div className="row">
-                            <div className="col-12 py-2">
-                                <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>
                             </div>
-                            <div className="col-12 py-2">
-                            <Form>
-                                {/* checkCustomer */}
-                                <Item>
-                                    <Label text={this.lang.t("checkAll")} alignment="right" />
-                                    <NdCheckBox id="checkCombine" parent={this} simple={true}  
-                                    value ={false}
-                                    >
-                                    </NdCheckBox>
-                                </Item>
-                            </Form>
-                        </div>
-                        </div>
-                        <div className='row'>
-                       
-                        </div>
-                       
-                </NdDialog>  
+                            <div className='row'>
+                        
+                            </div>
+                        
+                    </NdDialog>  
+                    {/* combineItem Dialog  */}
+                    <NdDialog id={"msgCombineItem"} container={"#root"} parent={this}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        title={this.t("msgCombineItem.title")} 
+                        showCloseButton={false}
+                        width={"500px"}
+                        height={"250px"}
+                        button={[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}]}
+                        >
+                            <div className="row">
+                                <div className="col-12 py-2">
+                                    <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>
+                                </div>
+                                <div className="col-12 py-2">
+                                <Form>
+                                    {/* checkCustomer */}
+                                    <Item>
+                                        <Label text={this.lang.t("checkAll")} alignment="right" />
+                                        <NdCheckBox id="checkCombine" parent={this} simple={true}  
+                                        value ={false}
+                                        >
+                                        </NdCheckBox>
+                                    </Item>
+                                </Form>
+                            </div>
+                            </div>
+                            <div className='row'>
+                        
+                            </div>
+                        
+                    </NdDialog>  
                 </ScrollView>     
-               
             </div>
         )
     }
