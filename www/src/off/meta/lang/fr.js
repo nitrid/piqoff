@@ -167,7 +167,7 @@ export const langFr =
         chkCaseWeighed: "Pesée en caisse ",
         chkLineMerged: "Détacher les Lignes de Vente",
         chkTicketRest: "Ticket Rest.",
-        txtCostPrice: "Coût achat",
+        txtCostPrice: "Prix de Revient",
         txtMinSalePrice: "Prix Vente Min.",
         txtMaxSalePrice: "Prix Vente Max.",
         txtLastBuyPrice: "Dernier Prix Achat",
@@ -181,7 +181,7 @@ export const langFr =
         tabTitleSalesContract: "Accord de Vente",
         tabTitleInfo: "Information",
         txtTaxSugar: "Taux Sucre(100ML/GR)",
-        txtTotalExtraCost : "Prix de Revient",
+        txtTotalExtraCost : "Coût achat",
         clmtaxSugar : "Taxe Sucre",
         pg_txtRef:
         {
@@ -5982,6 +5982,12 @@ export const langFr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Alış Fiyatından Daha Düşük Fiyat Girilemez !"
+        },
+        msgItemName:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Adı Çok Uzun. Lütfen Düzeltip Tekrar Kayıt Edin !"
         },
     },
     pos_03_001 : // KOMPLE BAK
