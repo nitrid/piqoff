@@ -426,8 +426,8 @@ export default class posDoc extends React.PureComponent
         tmpPrice = typeof tmpBarPattern.price == 'undefined' || tmpBarPattern.price == 0 ? tmpPrice : tmpBarPattern.price
         tmpQuantity = typeof tmpBarPattern.quantity == 'undefined' || tmpBarPattern.quantity == 0 ? tmpQuantity : tmpBarPattern.quantity
         pCode = tmpBarPattern.barcode     
-        console.log("1 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
-        
+        //console.log("1 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
+        this.loading.current.instance.show()
         //ÜRÜN GETİRME        
         let tmpItemsDt = await this.getItemDb(pCode)
         if(tmpItemsDt.length > 0)
@@ -439,7 +439,6 @@ export default class posDoc extends React.PureComponent
                 tmpQuantity = tmpItemsDt[0].UNIQ_QUANTITY
                 tmpPrice = tmpItemsDt[0].UNIQ_PRICE
             }
-            console.log(tmpPrice)
             //******************************************************** */
             //FIYAT GETİRME
             let tmpPriceDt = new datatable()
@@ -479,7 +478,7 @@ export default class posDoc extends React.PureComponent
                     }
                     await dialog(tmpConfObj);
                     this.setState({isBtnInfo:false})
-                    
+                    this.loading.current.instance.hide()
                     return;
                 }
                 //**************************************************** */
@@ -488,6 +487,7 @@ export default class posDoc extends React.PureComponent
             //EĞER ÜRÜN TERAZİLİ İSE
             if(tmpItemsDt[0].WEIGHING)
             {
+                this.loading.current.instance.hide()
                 if(tmpPrice > 0)
                 {
                     //TERAZİYE İSTEK YAPILIYOR.
@@ -554,6 +554,7 @@ export default class posDoc extends React.PureComponent
             //**************************************************** */
             if(tmpPrice == 0)
             {
+                this.loading.current.instance.hide()
                 let tmpConfObj =
                 {
                     id:'msgPriceNotFound',
@@ -599,11 +600,12 @@ export default class posDoc extends React.PureComponent
             //**************************************************** */
             tmpItemsDt[0].QUANTITY = tmpQuantity
             tmpItemsDt[0].PRICE = tmpPrice
-            
+            this.loading.current.instance.hide()
             this.saleAdd(tmpItemsDt[0])
         }
         else
         {
+            this.loading.current.instance.hide()
             document.getElementById("Sound").play(); 
             let tmpConfObj =
             {
@@ -644,9 +646,7 @@ export default class posDoc extends React.PureComponent
                     resolve()
                 }
             })
-            console.log(1)
             let tmpWeigh = await this.posDevice.mettlerScaleSend(pPrice)
-            console.log(tmpWeigh)
             if(typeof tmpWeigh != 'undefined' && tmpWeigh != null)
             {
                 this.msgWeighing.hide()
@@ -719,7 +719,6 @@ export default class posDoc extends React.PureComponent
                 }
             }
             resolve()
-            console.log(tmpPrm)
         })
         
     }
@@ -791,7 +790,7 @@ export default class posDoc extends React.PureComponent
                     })
                 }
             }            
-            console.log("100 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
+            //console.log("100 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
             //HER EKLEME İŞLEMİNDEN SONRA İLK SATIR SEÇİLİYOR.
             setTimeout(() => 
             {
@@ -800,7 +799,7 @@ export default class posDoc extends React.PureComponent
             if(typeof pSave == 'undefined' || pSave)
             {
                 let tmpClose = await this.saleClosed(true,tmpPayRest,tmpPayChange)
-                await this.posObj.save()                      
+                let tmpSaveResult = await this.posObj.save()
                 if(tmpClose)
                 {
                     this.init()
@@ -1155,7 +1154,6 @@ export default class posDoc extends React.PureComponent
     }
     payRowAdd(pPayData)
     {
-        console.log(pPayData)
         return new Promise(async resolve => 
         {
             let tmpTypeName = ""
