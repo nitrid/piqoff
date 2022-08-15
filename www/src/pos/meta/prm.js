@@ -699,7 +699,7 @@ export const prm =
                 msg : "Attention prix saisse en manuel boucherie.",
             },
             {
-                items : "102000",
+                items : "102000MMMCCF",
                 title : "Attention Prix Boucherie Manuel",
                 msg : "Attention prix saisse en manuel boucherie.",
             },

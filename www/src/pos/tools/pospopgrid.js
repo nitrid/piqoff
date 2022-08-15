@@ -23,7 +23,6 @@ export default class NbPosPopGrid extends NbBase
         }
         this.data = this.props.data
         this._onSelection = this._onSelection.bind(this)
-        console.log(props)
     }
     _onSelection(pData)
     {

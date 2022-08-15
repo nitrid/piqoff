@@ -1068,6 +1068,7 @@ export class posDeviceCls
             PRINT_DESING : '',
         }
         this.listeners = Object();
+        this.payPort = null;
 
         this._initDs();
     }
@@ -1209,8 +1210,7 @@ export class posDeviceCls
 
             this.ds.get('POS_DEVICE').selectCmd.local.where = Object.keys(tmpPrm).length == 0 ? undefined : tmpPrm                    
 
-            await this.ds.get('POS_DEVICE').refresh();
-            this.payPort = new this.serialport(this.dt().length > 0 ? this.dt()[0].PAY_CARD_PORT : "");
+            await this.ds.get('POS_DEVICE').refresh();            
 
             resolve(this.ds.get('POS_DEVICE'));    
         });
@@ -1409,7 +1409,12 @@ export class posDeviceCls
         {
             return
         }
-        
+
+        if(this.payPort == null)
+        {
+            this.payPort = new this.serialport(this.dt().length > 0 ? this.dt()[0].PAY_CARD_PORT : "");
+        }
+
         let ack = false;
         let oneShoot = false;
         let payMethod = "card";
