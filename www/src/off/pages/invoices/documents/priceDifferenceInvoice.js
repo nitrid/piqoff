@@ -1674,8 +1674,8 @@ export default class priceDifferenceInvoice extends React.PureComponent
                         <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
                         <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />
                     </NdPopGrid>
-                                        {/* Finans PopUp */}
-                                        <div>
+                    {/* Finans PopUp */}
+                    <div>
                         <NdPopUp parent={this} id={"popPayment"} 
                         visible={false}
                         showCloseButton={true}
@@ -1689,7 +1689,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                             <Form colCount={3} height={'fit-content'}>
                                 <Item location="after">
                                     <Button icon="add" text={this.t("btnCash")}
-                                    validationGroup="frmPurcInv"
+                                    validationGroup={"frmPurcInv" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         this.popPayment.hide()
@@ -1700,7 +1700,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                 </Item>
                                 <Item location="after">
                                     <Button icon="add" text={this.t("btnCheck")}
-                                    validationGroup="frmPurcInv"
+                                    validationGroup={"frmPurcInv" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         this.popPayment.hide()
@@ -1712,7 +1712,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                 </Item>
                                 <Item location="after">
                                     <Button icon="add" text={this.t("btnBank")} width={200}
-                                    validationGroup="frmPurcInv"
+                                    validationGroup={"frmPurcInv" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         this.popPayment.hide()
@@ -2083,7 +2083,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                     param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmPurcOrderPrint"}>
+                                        <Validator validationGroup={"frmPurcOrderPrint" + this.tabIndex}>
                                             <RequiredRule message={this.t("validDesign")} />
                                         </Validator> 
                                     </NdSelectBox>

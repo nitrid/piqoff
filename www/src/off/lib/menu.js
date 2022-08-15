@@ -610,45 +610,7 @@ export const menu = (e) =>
                         }
                     ]
                 },
-                //Raporlar
-                {
-                    id: 'pos_02',
-                    text : e.t('menu.pos_02'),
-                    expanded: false,
-                    items: 
-                    [
-                        //Satış Fiş Raporu
-                        {
-                            id: 'pos_02_001',
-                            text: e.t('menu.pos_02_001'),
-                            path: 'pos/report/salesTicketReport'
-                        },
-                        //Müşteri Puan Raporu
-                        {
-                            id: 'pos_02_002',
-                            text: e.t('menu.pos_02_002'),
-                            path: 'pos/report/customerPointReport'
-                        },
-                        //Pos Satış Raporu
-                        {
-                            id: 'pos_02_003',
-                            text: e.t('menu.pos_02_003'),
-                            path: 'pos/report/posSalesReport'
-                        },
-                        //Pos Satış Detay Raporu
-                        {
-                            id: 'pos_02_004',
-                            text: e.t('menu.pos_02_004'),
-                            path: 'pos/report/posSalesDetailReport'
-                        },
-                        //Pos Satış Detay Raporu
-                        {
-                            id: 'pos_02_005',
-                            text: e.t('menu.pos_02_005'),
-                            path: 'test1'
-                        }
-                    ]
-                },
+          
                 //Operasyonlar
                  {
                     id: 'pos_03',
@@ -663,6 +625,39 @@ export const menu = (e) =>
                         }
                     ]
                 },
+                      //Raporlar
+                      {
+                        id: 'pos_02',
+                        text : e.t('menu.pos_02'),
+                        expanded: false,
+                        items: 
+                        [
+                            //Satış Fiş Raporu
+                            {
+                                id: 'pos_02_001',
+                                text: e.t('menu.pos_02_001'),
+                                path: 'pos/report/salesTicketReport'
+                            },
+                            //Müşteri Puan Raporu
+                            {
+                                id: 'pos_02_002',
+                                text: e.t('menu.pos_02_002'),
+                                path: 'pos/report/customerPointReport'
+                            },
+                            //Pos Satış Raporu
+                            {
+                                id: 'pos_02_003',
+                                text: e.t('menu.pos_02_003'),
+                                path: 'pos/report/posSalesReport'
+                            },
+                            //Pos Satış Detay Raporu
+                            {
+                                id: 'pos_02_004',
+                                text: e.t('menu.pos_02_004'),
+                                path: 'pos/report/posSalesDetailReport'
+                            },
+                        ]
+                    },
             ]
         },
         //Promosyon

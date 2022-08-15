@@ -11,6 +11,7 @@ export default class Navigation extends React.PureComponent
     {        
         super();
         this.core = App.instance.core;
+       
         this.init();
     }
     async init()
@@ -26,8 +27,17 @@ export default class Navigation extends React.PureComponent
                 padding:'8px'
             }
         }
-        this.menu = menu(App.instance.lang);        
+        this.menu = menu(App.instance.lang);   
+
+        // POS RAPOLARI SADECE ADMİNDE GÖKUÜKMESİ İÇİN GEÇİCİ OLARAK YAPILDI BURAYA BAKILACAK
+        if(this.core.auth.data.ROLE != 'Administrator')
+        {
+            this.menu[8].items[2] = {}
+
+        }  
+
         
+
         this.state = 
         {
             loading: true,

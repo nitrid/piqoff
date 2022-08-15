@@ -188,8 +188,17 @@ export default class taxSugar extends React.PureComponent
                             {
                                 this.frmTrnsfItems = e.component
                             }}>
-                               
-                                 <Item>
+                                <Item location="after">
+                                    <Button icon="add" text="Yeni Değer Ekle"
+                                    onClick={async (e)=>
+                                    {
+                                        this.minValue.value = 0
+                                        this.maxValue.value = 0
+                                        this.price.value = 0
+                                        this.popTaxSugar.show()
+                                    }}/>
+                                </Item>
+                                <Item>
                                     <NdGrid parent={this} id={"grdTaxSugar"} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 
@@ -229,16 +238,6 @@ export default class taxSugar extends React.PureComponent
                                         <Column dataField="PRICE" caption={this.t("grdTaxSugar.clmPrice")} dataType={'number'} width={300}  format={"#,##0.00 €'(100ML/GR)'"}>
                                         <RangeRule min={0.01} message={"Fiyat sıfırdan küçük olamaz !"} /><RequiredRule/></Column>
                                     </NdGrid>
-                                </Item>
-                                <Item location="after">
-                                    <Button icon="add" text="Yeni Değer Ekle"
-                                    onClick={async (e)=>
-                                    {
-                                        this.minValue.value = 0
-                                        this.maxValue.value = 0
-                                        this.price.value = 0
-                                        this.popTaxSugar.show()
-                                    }}/>
                                 </Item>
                             </Form>
                                {/* TaxSugar PopUp */}

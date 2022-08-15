@@ -40,6 +40,7 @@ export default class barcodeList extends React.PureComponent
         this.groupList = [];
         this._btnGetirClick = this._btnGetirClick.bind(this)
         this._columnListBox = this._columnListBox.bind(this)
+        
     }
     componentDidMount()
     {

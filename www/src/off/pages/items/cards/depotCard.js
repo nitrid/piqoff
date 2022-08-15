@@ -24,13 +24,14 @@ import { datatable } from '../../../../core/core.js';
 
 export default class DepotCard extends React.PureComponent
 {
-    constructor()
+    constructor(props)
     {
-        super()
+        super(props)
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.depotObj = new depotCls();
         this.prevCode = "";
+        this.tabIndex = props.data.tabkey
     }
     async componentDidMount()
     {

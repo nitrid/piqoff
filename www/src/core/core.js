@@ -615,18 +615,18 @@ export class dataset
                 });
             }
             
+            for (let i = 0; i < this.length; i++) 
+            {
+                let tmp = this.get(i);
+                tmp.forEach(e => 
+                {
+                    Object.setPrototypeOf(e,{stat:''})   
+                });
+            }
+
             let tmpResult = await this.sql.execute(tmpQuerys)
             if(typeof tmpResult.result.err == 'undefined')
-            {
-                for (let i = 0; i < this.length; i++) 
-                {
-                    let tmp = this.get(i);
-                    tmp.forEach(e => 
-                    {
-                        Object.setPrototypeOf(e,{stat:''})   
-                    });
-                }
-                
+            {                            
                 resolve(0)
             }
             else
@@ -742,7 +742,7 @@ export class datatable
                         if(typeof this.noColumnEdit.find(x => x == prop) == 'undefined')
                         {
                             this.emit('onEdit',{data:{[prop]:receiver},rowIndex:this.findIndex(x => x === pItem),rowData:pItem});
-    
+                            
                             //EĞER EDİT EDİLDİĞİNDE STATE DURUMUNUN DEĞİŞMEMESİNİ İSTEDİĞİN KOLON VARSA BURDA KONTROL EDİLİYOR
                             if(target.stat != 'new')
                             {
@@ -753,7 +753,7 @@ export class datatable
                                     tmpColumn = [...target.editColumn];
                                 }
                                 tmpColumn.push(prop)
-                                Object.setPrototypeOf(target,{stat:'edit',editColumn:tmpColumn})                    
+                                Object.setPrototypeOf(target,{stat:'edit',editColumn:tmpColumn})   
                             }
                         }
                     }
@@ -977,13 +977,14 @@ export class datatable
                 tmpQuerys = this.toCommands(arguments[0]);
             }
             
+            for (let i = 0; i < this.length; i++) 
+            {
+                Object.setPrototypeOf(this[i],{stat:''})
+            }
+
             let tmpResult = await this.sql.execute(tmpQuerys)
             if(typeof tmpResult.result.err == 'undefined')
-            {
-                for (let i = 0; i < this.length; i++) 
-                {
-                    Object.setPrototypeOf(this[i],{stat:''})
-                }
+            {                
                 resolve(0)
             }
             else

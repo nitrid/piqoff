@@ -110,12 +110,12 @@ export default class posDoc extends React.PureComponent
         this.init();        
     }
     async init()
-    {     
+    {             
         setInterval(()=>
         {
             this.lblTime.value = moment(new Date(),"HH:mm:ss").format("HH:mm:ss")
             this.lblDate.value = new Date().toLocaleDateString('tr-TR',{ year: 'numeric', month: 'numeric', day: 'numeric' })
-        },1000)        
+        },1000)     
         
         this.posObj.clearAll()
         await this.prmObj.load({APP:'POS'})
@@ -124,7 +124,9 @@ export default class posDoc extends React.PureComponent
         this.posObj.addEmpty()
         this.posObj.dt()[this.posObj.dt().length - 1].DEVICE = window.localStorage.getItem('device') == null ? '' : window.localStorage.getItem('device')
         this.device.value = this.posObj.dt()[this.posObj.dt().length - 1].DEVICE
-
+        
+        
+        
         await this.posDevice.load({CODE:this.posObj.dt()[this.posObj.dt().length - 1].DEVICE})        
         this.posDevice.scanner();
 
@@ -134,7 +136,7 @@ export default class posDoc extends React.PureComponent
 
         this.cheqDt.selectCmd = 
         {
-            query : "SELECT * FROM CHEQPAY_VW_01 WHERE DOC = @DOC",
+            query : "SELECT * FROM CHEQPAY_VW_01 WHERE DOC = @DOC ORDER BY CDATE DESC",
             param : ['DOC:string|50'], 
             value : [this.posObj.dt()[0].GUID],
             local : 
@@ -186,10 +188,12 @@ export default class posDoc extends React.PureComponent
                 this.cheqDt.selectCmd.value = [this.parkDt[i].GUID] 
                 await this.cheqDt.refresh();  
 
-                await this.getDoc(this.parkDt[i].GUID)                
+                await this.getDoc(this.parkDt[i].GUID)   
+                             
                 return
             }
         }        
+        
     }
     async deviceEntry()
     {
@@ -283,7 +287,7 @@ export default class posDoc extends React.PureComponent
                             ]
                         }
                     }
-                }                
+                }
                 await tmpDt.refresh();
                 //BURASI 7 HANELI UNIQLER BİTTİĞİNDE KALDIRILACAK //BAK
                 if(tmpDt.length == 0)
@@ -314,6 +318,7 @@ export default class posDoc extends React.PureComponent
                             }
                         }
                     }
+                    await tmpDt.refresh();
                 }
             }
             resolve(tmpDt)
@@ -421,8 +426,8 @@ export default class posDoc extends React.PureComponent
         tmpPrice = typeof tmpBarPattern.price == 'undefined' || tmpBarPattern.price == 0 ? tmpPrice : tmpBarPattern.price
         tmpQuantity = typeof tmpBarPattern.quantity == 'undefined' || tmpBarPattern.quantity == 0 ? tmpQuantity : tmpBarPattern.quantity
         pCode = tmpBarPattern.barcode     
-        console.log("1 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
-        //this.loading.current.instance.show()
+        //console.log("1 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
+        this.loading.current.instance.show()
         //ÜRÜN GETİRME        
         let tmpItemsDt = await this.getItemDb(pCode)
         if(tmpItemsDt.length > 0)
@@ -434,7 +439,6 @@ export default class posDoc extends React.PureComponent
                 tmpQuantity = tmpItemsDt[0].UNIQ_QUANTITY
                 tmpPrice = tmpItemsDt[0].UNIQ_PRICE
             }
-            console.log(tmpPrice)
             //******************************************************** */
             //FIYAT GETİRME
             let tmpPriceDt = new datatable()
@@ -474,7 +478,7 @@ export default class posDoc extends React.PureComponent
                     }
                     await dialog(tmpConfObj);
                     this.setState({isBtnInfo:false})
-                    //this.loading.current.instance.hide()
+                    this.loading.current.instance.hide()
                     return;
                 }
                 //**************************************************** */
@@ -483,17 +487,31 @@ export default class posDoc extends React.PureComponent
             //EĞER ÜRÜN TERAZİLİ İSE
             if(tmpItemsDt[0].WEIGHING)
             {
+                this.loading.current.instance.hide()
                 if(tmpPrice > 0)
                 {
                     //TERAZİYE İSTEK YAPILIYOR.
                     let tmpWResult = await this.getWeighing(tmpPrice)
                     if(typeof tmpWResult != 'undefined')
                     {
-                        tmpQuantity = tmpWResult.Result.Scale
+                        if(typeof tmpWResult.Result == 'undefined')
+                        {
+                            tmpQuantity = tmpWResult
+                        }
+                        else
+                        {
+                            if(tmpWResult.Type == "02")
+                            {
+                                tmpQuantity = tmpWResult.Result.Scale
+                            }
+                            else
+                            {
+                                return
+                            }
+                        }
                     }
                     else
                     {
-                        //this.loading.current.instance.hide()
                         return
                     }
                 }
@@ -506,7 +524,7 @@ export default class posDoc extends React.PureComponent
                         //FIYAT DURUM KONTROLÜ
                         if(!(await this.priceCheck(tmpItemsDt[0],tmpResult)))
                         {
-                            //this.loading.current.instance.hide()
+                            
                             return
                         }
 
@@ -519,14 +537,14 @@ export default class posDoc extends React.PureComponent
                         }
                         else
                         {
-                            //this.loading.current.instance.hide()
+                            
                             return
                         }
                     }
                     else
                     {
                         //POPUP KAPATILMIŞ İSE YADA FİYAT BOŞ GİRİLMİŞ İSE...
-                        //this.loading.current.instance.hide()
+                        
                         return
                     }
                 }
@@ -536,6 +554,7 @@ export default class posDoc extends React.PureComponent
             //**************************************************** */
             if(tmpPrice == 0)
             {
+                this.loading.current.instance.hide()
                 let tmpConfObj =
                 {
                     id:'msgPriceNotFound',
@@ -555,37 +574,38 @@ export default class posDoc extends React.PureComponent
                     {
                         if(tmpResult == 0)
                         {
-                            //this.loading.current.instance.hide()
+                            
                             return
                         }
                         //FIYAT DURUM KONTROLÜ
                         if(!(await this.priceCheck(tmpItemsDt[0],tmpResult)))
                         {
-                            //this.loading.current.instance.hide()
+                            
                             return
                         }
                         tmpPrice = tmpResult
                     }
                     else
                     {
-                        //this.loading.current.instance.hide()
+                        //
                         return
                     }
                 }
                 else if(tmpMsgResult == 'btn02')
                 {
-                    //this.loading.current.instance.hide()
+                    //
                     return
                 }
             }
             //**************************************************** */
             tmpItemsDt[0].QUANTITY = tmpQuantity
             tmpItemsDt[0].PRICE = tmpPrice
-            //this.loading.current.instance.hide()
+            this.loading.current.instance.hide()
             this.saleAdd(tmpItemsDt[0])
         }
         else
         {
+            this.loading.current.instance.hide()
             document.getElementById("Sound").play(); 
             let tmpConfObj =
             {
@@ -599,7 +619,7 @@ export default class posDoc extends React.PureComponent
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgBarcodeNotFound.msg")}</div>)
             }
             await dialog(tmpConfObj);
-            //this.loading.current.instance.hide()
+            
         }
         //******************************************************** */    
     }
@@ -626,9 +646,7 @@ export default class posDoc extends React.PureComponent
                     resolve()
                 }
             })
-
             let tmpWeigh = await this.posDevice.mettlerScaleSend(pPrice)
-            
             if(typeof tmpWeigh != 'undefined' && tmpWeigh != null)
             {
                 this.msgWeighing.hide()
@@ -707,7 +725,6 @@ export default class posDoc extends React.PureComponent
                 }
             }
             resolve()
-            console.log(tmpPrm)
         })
     }
     async calcGrandTotal(pSave)
@@ -716,7 +733,7 @@ export default class posDoc extends React.PureComponent
         let tmpPayChange = 0;
         return new Promise(async resolve => 
         {
-            //this.loading.current.instance.show()
+            
             if(this.posObj.dt().length > 0)
             {                  
                 let tmpPosSale = this.posObj.posSale.dt().where({GUID:{'<>' : '00000000-0000-0000-0000-000000000000'}})  
@@ -778,7 +795,7 @@ export default class posDoc extends React.PureComponent
                     })
                 }
             }            
-            console.log("100 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
+            //console.log("100 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
             //HER EKLEME İŞLEMİNDEN SONRA İLK SATIR SEÇİLİYOR.
             setTimeout(() => 
             {
@@ -787,14 +804,14 @@ export default class posDoc extends React.PureComponent
             if(typeof pSave == 'undefined' || pSave)
             {
                 let tmpClose = await this.saleClosed(true,tmpPayRest,tmpPayChange)
-                await this.posObj.save()                      
+                let tmpSaveResult = await this.posObj.save()
                 if(tmpClose)
                 {
                     this.init()
                 }      
             }    
             resolve()            
-            //this.loading.current.instance.hide()
+            
         });
     }    
     calcSaleTotal(pPrice,pQuantity,pDiscount,pLoyalty,pVatRate)
@@ -861,6 +878,7 @@ export default class posDoc extends React.PureComponent
         let tmpMaxLine = this.posObj.posSale.dt().where({SUBTOTAL:{'<>':-1}}).max('LINE_NO')
         
         this.posObj.posSale.addEmpty()
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].NO = this.posObj.posSale.dt().length + 1
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].LDATE = moment(new Date()).utcOffset(0, true)
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].SAFE = ''
@@ -949,6 +967,7 @@ export default class posDoc extends React.PureComponent
 
                 if(this.posObj.posPay.dt().length > 0)
                 {
+                    //this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT - pPayChange
                     this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].CHANGE = pPayChange
                     if(this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE == 3)
                     {
@@ -1027,11 +1046,11 @@ export default class posDoc extends React.PureComponent
                         }
                     }
                     await this.print(tmpData)
-                    //NAKİT YADA TICKET REST. ALDIĞINDA KASA AÇMA İŞLEMİ 
-                    // if(this.posObj.posPay.dt().where({PAY_TYPE:0}).length > 0 || this.posObj.posPay.dt().where({PAY_TYPE:3}).length > 0)
-                    // {
-                    //     this.posDevice.caseOpen();
-                    // }
+                    //TICKET REST. ALDIĞINDA KASA AÇMA İŞLEMİ 
+                    if(this.posObj.posPay.dt().where({PAY_TYPE:3}).length > 0)
+                    {
+                        await this.posDevice.caseOpen();
+                    }
                 }
 
                 resolve(true)
@@ -1118,16 +1137,15 @@ export default class posDoc extends React.PureComponent
                 }
                 else //Başarısız veya İptal
                 {
-                    this.posDevice.cardCancel()
                     this.msgCardPayment.hide()
                     return
                 }
             }
             let tmpRowData = this.isRowMerge('PAY',{TYPE:pType})
-            //NAKİT YADA TICKET REST. ALDIĞINDA KASA AÇMA İŞLEMİ 
-            if(pType == 0 || pType == 3)
+            //NAKİT ALDIĞINDA KASA AÇMA İŞLEMİ 
+            if(pType == 0)
             {
-                this.posDevice.caseOpen();
+                await this.posDevice.caseOpen();
             }
             //SATIR BİRLEŞTİR        
             if(typeof tmpRowData != 'undefined')
@@ -1879,14 +1897,15 @@ export default class posDoc extends React.PureComponent
                             <div className="col-12">
                                 <NdGrid parent={this} id={"grdList"} 
                                 showBorders={true} 
-                                columnsAutoWidth={true} 
-                                allowColumnReordering={true} 
+                                columnsAutoWidth={false} 
                                 allowColumnResizing={true} 
+                                allowColumnReordering={false}
                                 height={"200px"} 
                                 width={"100%"}
                                 dbApply={false}
                                 selection={{mode:"single"}}
                                 loadPanel={{enabled:false}}
+                                sorting={{ mode: 'none' }}
                                 onRowPrepared={(e)=>
                                 {
                                     if(e.rowType == "header")
@@ -1940,8 +1959,14 @@ export default class posDoc extends React.PureComponent
                                 }}
                                 >
                                     <Editing confirmDelete={false}/>
+                                    <Scrolling mode="infinite" />
                                     <Column dataField="LDATE" caption={this.lang.t("grdList.LDATE")} width={40} alignment={"center"} dataType={"datetime"} format={"dd-MM-yyyy - HH:mm:ss SSSZ"} defaultSortOrder="desc" visible={false}/>
-                                    <Column dataField="ITEM_NAME" caption={this.lang.t("grdList.ITEM_NAME")} width={290}/>
+                                    <Column dataField="NO" caption={""} width={30} cellTemplate={(cellElement,cellInfo)=>
+                                    {
+                                        cellElement.innerText = this.posObj.posSale.dt().length - cellInfo.rowIndex
+                                    }}
+                                    alignment={"center"}/>                                    
+                                    <Column dataField="ITEM_SNAME" caption={this.lang.t("grdList.ITEM_NAME")} width={290}/>
                                     <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} width={50}/>
                                     <Column dataField="PRICE" caption={this.lang.t("grdList.PRICE")} width={70} format={"#,##0.00" + Number.money.sign}/>
                                     <Column dataField="AMOUNT" alignment={"right"} caption={this.lang.t("grdList.AMOUNT")} width={60} format={"#,##0.00" + Number.money.sign}/>                                                
@@ -3311,7 +3336,7 @@ export default class posDoc extends React.PureComponent
                         setTimeout(() => 
                         {
                             this.txtPopCheqpay.focus()
-                        }, 500);
+                        }, 750);
                     }}
                     >
                         {/* txtPopCheqpay */}
@@ -4029,7 +4054,7 @@ export default class posDoc extends React.PureComponent
                                 }}
                                 >
                                     <Column dataField="LDATE" caption={this.lang.t("grdLastPos.LDATE")} width={200} alignment={"center"} dataType={"datetime"} format={"dd-MM-yyyy - HH:mm:ss SSSZ"}/>
-                                    <Column dataField="DEVICE" caption={this.lang.t("grdLastPos.DEVICE")} width={150}/>
+                                    <Column dataField="DEVICE" caption={this.lang.t("grdLastPos.DEVICE")} width={100}/>
                                     <Column dataField="REF" caption={this.lang.t("grdLastPos.REF")} width={150}/>
                                     <Column dataField="CUSTOMER_NAME" caption={this.lang.t("grdLastPos.CUSTOMER_NAME")} width={200}/> 
                                     <Column dataField="CUSER_NAME" caption={this.lang.t("grdLastPos.CUSER_NAME")} width={100}/>
@@ -4319,7 +4344,7 @@ export default class posDoc extends React.PureComponent
                                                         if(this.rbtnTotalPayType.value == 0)
                                                         {
                                                             tmpChange = tmpChange * -1
-                                                            tmpAmount = this.txtPopLastTotal.value  - tmpChange
+                                                            tmpAmount = this.txtPopLastTotal.value  //- tmpChange
                                                         }
                                                         else
                                                         {       

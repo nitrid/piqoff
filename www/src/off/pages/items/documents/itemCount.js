@@ -552,7 +552,7 @@ export default class itemCount extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmCountFrom"
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmCountFrom" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(this.docLocked == true)
@@ -711,7 +711,7 @@ export default class itemCount extends React.PureComponent
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmCountFrom"}>
+                                            <Validator validationGroup={"frmCountFrom" + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRef")} />
                                                 </Validator>  
                                             </NdTextBox>
@@ -759,7 +759,7 @@ export default class itemCount extends React.PureComponent
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmCountFrom"}>
+                                            <Validator validationGroup={"frmCountFrom" + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRefNo")} />
                                                 </Validator> 
                                             </NdTextBox>
@@ -820,7 +820,7 @@ export default class itemCount extends React.PureComponent
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmCountFrom"}>
+                                        <Validator validationGroup={"frmCountFrom" + this.tabIndex}>
                                             <RequiredRule message={this.t("validDepot")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -834,7 +834,7 @@ export default class itemCount extends React.PureComponent
                                         {
                                     }).bind(this)}
                                     >
-                                        <Validator validationGroup={"frmCountFrom"}>
+                                        <Validator validationGroup={"frmCountFrom" + this.tabIndex}>
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
@@ -936,7 +936,7 @@ export default class itemCount extends React.PureComponent
                             }}>
                                 <Item location="after">
                                     <Button icon="add"
-                                    validationGroup="frmCountFrom"
+                                    validationGroup={"frmCountFrom" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")

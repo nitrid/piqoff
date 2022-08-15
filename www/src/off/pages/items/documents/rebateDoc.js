@@ -25,9 +25,9 @@ import tr from '../../../meta/lang/devexpress/tr.js';
 
 export default class rebateDoc extends React.PureComponent
 {
-    constructor()
+    constructor(props)
     {
-        super()
+        super(props)
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
@@ -39,6 +39,7 @@ export default class rebateDoc extends React.PureComponent
         this.docLocked = false;       
         this.combineControl = true
         this.combineNew = false  
+        this.tabIndex = props.data.tabkey
     }
     async componentDidMount()
     {
@@ -414,7 +415,7 @@ export default class rebateDoc extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup="frmRbtDoc"
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmRbtDoc" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(this.docLocked == true)
@@ -619,7 +620,7 @@ export default class rebateDoc extends React.PureComponent
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmRbtDoc"}>
+                                            <Validator validationGroup={"frmRbtDoc" + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRef")} />
                                                 </Validator>  
                                             </NdTextBox>
@@ -667,7 +668,7 @@ export default class rebateDoc extends React.PureComponent
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmRbtDoc"}>
+                                            <Validator validationGroup={"frmRbtDoc" + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRefNo")} />
                                                 </Validator> 
                                             </NdTextBox>
@@ -715,7 +716,7 @@ export default class rebateDoc extends React.PureComponent
                                         {
                                     }).bind(this)}
                                     >
-                                        <Validator validationGroup={"frmRbtDoc"}>
+                                        <Validator validationGroup={"frmRbtDoc" + this.tabIndex}>
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
@@ -738,7 +739,7 @@ export default class rebateDoc extends React.PureComponent
                                     param={this.param.filter({ELEMENT:'cmbDepot1',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot1',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmRbtDoc"}>
+                                        <Validator validationGroup={"frmRbtDoc" + this.tabIndex}>
                                             <RequiredRule message={this.t("validDepot")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -759,7 +760,7 @@ export default class rebateDoc extends React.PureComponent
                                     param={this.param.filter({ELEMENT:'cmbDepot2',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot2',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmRbtDoc"}>
+                                        <Validator validationGroup={"frmRbtDoc" + this.tabIndex}>
                                             <RequiredRule message={this.t("validDepot")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -769,7 +770,7 @@ export default class rebateDoc extends React.PureComponent
                                 {/* BARKOD EKLEME */}
                                 <Item>
                                     <Label text={this.t("txtBarcode")} alignment="right" />
-                                    <NdTextBox id="txtBarcode" parent={this} simple={true}  validationGroup="frmRbtDoc"
+                                    <NdTextBox id="txtBarcode" parent={this} simple={true}  validationGroup={"frmRbtDoc" + this.tabIndex}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     onEnterKey={(async(e)=>
                                     {
@@ -848,7 +849,7 @@ export default class rebateDoc extends React.PureComponent
                             }}>
                                 <Item location="after">
                                     <Button icon="add"
-                                    validationGroup="frmRbtDoc"
+                                    validationGroup={"frmRbtDoc" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")

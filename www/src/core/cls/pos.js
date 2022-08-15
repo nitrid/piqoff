@@ -219,7 +219,7 @@ export class posSaleCls
         this.core = core.instance;
         this.ds = new dataset();
         this.empty = 
-        {
+        {            
             GUID : '00000000-0000-0000-0000-000000000000',
             CUSER : this.core.auth.data.CODE,
             LUSER : this.core.auth.data.CODE,
@@ -267,7 +267,8 @@ export class posSaleCls
             GRAND_LOYALTY : 0,
             GRAND_VAT : 0,
             GRAND_TOTAL : 0,
-            STATUS : 0
+            STATUS : 0,
+            NO : 0,
         }
         this._initDs();
     }
@@ -277,7 +278,7 @@ export class posSaleCls
         let tmpDt = new datatable('POS_SALE');            
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [dbo].[POS_SALE_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((POS_GUID = @POS_GUID) OR (@POS_GUID = '00000000-0000-0000-0000-000000000000')) ORDER BY LINE_NO DESC",
+            query : "SELECT ROW_NUMBER() OVER (ORDER BY LDATE ASC) AS NO,* FROM [dbo].[POS_SALE_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((POS_GUID = @POS_GUID) OR (@POS_GUID = '00000000-0000-0000-0000-000000000000')) ORDER BY LDATE DESC",
             param : ['GUID:string|50','POS_GUID:string|50'],
             local : 
             {
@@ -1068,7 +1069,6 @@ export class posDeviceCls
             PRINT_DESING : '',
         }
         this.listeners = Object();
-        this.payPort = null;
 
         this._initDs();
     }
@@ -1210,7 +1210,9 @@ export class posDeviceCls
 
             this.ds.get('POS_DEVICE').selectCmd.local.where = Object.keys(tmpPrm).length == 0 ? undefined : tmpPrm                    
 
-            await this.ds.get('POS_DEVICE').refresh();            
+            await this.ds.get('POS_DEVICE').refresh();
+            //PAY PORT İÇİN GLOBAL DEĞİŞKEN
+            //this.payPort = new this.serialport(this.dt().length > 0 ? this.dt()[0].PAY_CARD_PORT : "");
 
             resolve(this.ds.get('POS_DEVICE'));    
         });
@@ -1259,20 +1261,24 @@ export class posDeviceCls
     }
     caseOpen()
     {
-        if(!core.instance.util.isElectron())
+        return new Promise((resolve) =>
         {
-            return
-        }
-        let device  = new this.escpos.USB();
-        let options = { encoding: "GB18030" /* default */ }
-        let printer = new this.escpos.Printer(device, options);
-        console.log(device)
-        console.log(printer)
-        device.open(function(error)
-        {
-            printer.cashdraw(2);
-            printer.close();
-        })
+            if(!core.instance.util.isElectron())
+            {
+                return
+            }
+            let device  = new this.escpos.USB();
+            let options = { encoding: "GB18030" /* default */ }
+            let printer = new this.escpos.Printer(device, options);
+            
+            device.open(async function(error)
+            {
+                printer.cashdraw(2);
+                printer.close();
+                await core.instance.util.waitUntil(500)
+                resolve()
+            })
+        });
     }
     mettlerScaleSend(pPrice)
     {
@@ -1399,22 +1405,13 @@ export class posDeviceCls
             return port.on("close", resolve)
         });
     }
-    cardCancel()
-    {
-        this.payPort.write(String.fromCharCode(4))
-    }
     cardPayment(pAmount)
     {
         if(!core.instance.util.isElectron())
         {
             return
         }
-
-        if(this.payPort == null)
-        {
-            this.payPort = new this.serialport(this.dt().length > 0 ? this.dt()[0].PAY_CARD_PORT : "");
-        }
-
+        
         let ack = false;
         let oneShoot = false;
         let payMethod = "card";
@@ -1436,13 +1433,9 @@ export class posDeviceCls
 
         return new Promise((resolve) =>
         {
-            console.log(1)
-            //let port = new this.serialport(this.dt().length > 0 ? this.dt()[0].PAY_CARD_PORT : "");
-            
-            this.payPort.on('data',(data)=> 
+            let port = new this.serialport(this.dt().length > 0 ? this.dt()[0].PAY_CARD_PORT : "");
+            port.on('data',(data)=> 
             {
-                console.log(2)
-                console.log(data.toString())
                 if(String.fromCharCode(data[0]) == String.fromCharCode(6))
                 {                    
                     if(ack == false)
@@ -1465,7 +1458,7 @@ export class posDeviceCls
                         if (msg.length > 34) 
                         {
                             resolve({tag:"response",msg:"error"});                 
-                            //port.close();               
+                            port.close();               
                             console.log('ERR. : failed data > 34 characters.', msg);
                             return
                         }
@@ -1474,23 +1467,23 @@ export class posDeviceCls
                         let lrc = generate_lrc(real_msg_with_etx);
                         //STX + msg + lrc
                         let tpe_msg = (String.fromCharCode(2)).concat(real_msg_with_etx).concat(String.fromCharCode(lrc));
-                        this.payPort.write(tpe_msg)
+                        port.write(tpe_msg)
                         ack = true;
                     }
                 }
                 else if(String.fromCharCode(data[0]) == String.fromCharCode(6))
                 {
-                    this.payPort.write(String.fromCharCode(4))
+                    port.write(String.fromCharCode(4))
                 }
                 else if(String.fromCharCode(data[0]) == String.fromCharCode(5))
                 {
-                    this.payPort.write(String.fromCharCode(6));
+                    port.write(String.fromCharCode(6));
                 }
                 else if(data.length >= 25)
                 {
                     if(oneShoot)
                     {
-                        //port.close();
+                        port.close();
                         resolve({tag:"response",msg:"error"});   
                         return;
                     }
@@ -1516,21 +1509,21 @@ export class posDeviceCls
                     };
                     console.log(response)
                     resolve({tag:"response",msg:JSON.stringify(response)});   
-                    //port.close();
+                    port.close();
                 }
             });
 
-            this.payPort.write(String.fromCharCode(5));
+            port.write(String.fromCharCode(5));
 
-            // setTimeout(()=>
-            // { 
-            //     if(port.isOpen)
-            //     {
-            //         port.close(); 
-            //     }
-            // }, 20000);
+            setTimeout(()=>
+            { 
+                if(port.isOpen)
+                {
+                    port.close(); 
+                }
+            }, 70000);
 
-            //return port.on("close", resolve)
+           //return port.on("close", resolve)
         });
     }
     escPrinter(pData)

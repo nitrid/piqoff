@@ -1924,7 +1924,9 @@ export const langTr =
             clmTotal : "Genel Toplam",
             clmDispatch : "İrsaliye No",
             clmCreateDate: "Kayıt Tarihi",
-            clmMargin :"Marj"
+            clmMargin :"Marj",
+            clmDiffPrice : "Fark",
+            clmCustomerPrice : "T. Fiyat"
         },
         grdInvoicePayment: 
         {
@@ -5464,10 +5466,10 @@ export const langTr =
         title : "GÜN SONU İŞLEMİ",
         start :"Başlangıç",
         advance : "Avans",
-        cash : "Nakit",
+        cash : "Nakit ",
         debitCard : "Kredi Kartı",
         check : "Çek",
-        ticketRest : "Tike Restorant",
+        ticketRest : "T.Restorant",
         previous: "Önceki",
         finish : "Bitir",
         next : "Sonraki",
@@ -5478,6 +5480,7 @@ export const langTr =
         txtCreditCard : "Kredi Kartı",
         txtCheck : "Çek",
         txtRestorant : "Tike Restorant",
+        txtReal : "Doğru",
         popFinish : 
         {
             title :"Sonuç"
@@ -6119,6 +6122,18 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgPrice:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Alış Fiyatından Daha Düşük Fiyat Girilemez !"
+        },
+        msgItemName:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Adı Çok Uzun. Lütfen Düzeltip Tekrar Kayıt Edin !"
         },
     },
     pos_02_003 : 

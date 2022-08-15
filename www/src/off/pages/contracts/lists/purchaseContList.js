@@ -45,6 +45,7 @@ export default class purchaseContList extends React.PureComponent
         this.groupList = [];
         this._btnGetClick = this._btnGetClick.bind(this)
         this._columnListBox = this._columnListBox.bind(this)
+
     }
     componentDidMount()
     {

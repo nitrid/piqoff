@@ -21,9 +21,9 @@ import { dialog } from '../../../../core/react/devex/dialog.js';
 
 export default class promotionCard extends React.PureComponent
 {
-    constructor()
+    constructor(props)
     {
-        super() 
+        super(props) 
         this.state = 
         {
             prmType:0,
@@ -33,6 +33,8 @@ export default class promotionCard extends React.PureComponent
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
 
         this.promoObj = new promotionCls();
+
+        this.tabIndex = props.data.tabkey
     }   
     async componentDidMount()
     {
