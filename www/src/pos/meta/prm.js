@@ -689,12 +689,12 @@ export const prm =
         VALUE : 
         [
             {
-                items : "299997",
+                items : "299997MMMCCF",
                 title : "Attention Prix Boucherie Manuel",
                 msg : "Attention prix saisse en manuel boucherie.",
             },
             {
-                items : "0299997",
+                items : "0299997MMMCCF",
                 title : "Attention Prix Boucherie Manuel",
                 msg : "Attention prix saisse en manuel boucherie.",
             },
@@ -704,7 +704,7 @@ export const prm =
                 msg : "Attention prix saisse en manuel boucherie.",
             },
             {
-                items : "0102000",
+                items : "0102000MMMCCF",
                 title : "Attention Prix Boucherie Manuel",
                 msg : "Attention prix saisse en manuel boucherie.",
             },

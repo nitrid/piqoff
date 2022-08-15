@@ -191,9 +191,6 @@ export default class App extends React.PureComponent
             App.instance.setState({connected:false});
             this.core.auth.logout()
         })    
-        
-        let x = {}
-        console.log(x)
     }
     menuClick(data)
     {
