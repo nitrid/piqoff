@@ -192,7 +192,7 @@ export default class itemCard extends React.PureComponent
         //TEDARİKÇİ FİYAT GETİR İŞLEMİ.  
         await this.itemsPriceSupply.load({ITEM_GUID:this.itemsObj.dt()[0].GUID,TYPE:1})  
         await this.itemsPriceLogObj.load({ITEM_GUID:this.itemsObj.dt()[0].GUID})
-
+        console.log(this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE'))
         if(this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE').length > 0 && this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE').length == 1)
         {
             this.txtLastBuyPrice.value = this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_PRICE
@@ -1370,6 +1370,20 @@ export default class itemCard extends React.PureComponent
                                                         }
                                                         
                                                         await dialog(tmpConfObj);  
+                                                    }
+                                                    else
+                                                    {
+                                                        this.txtCostPrice.value = e.newData.CUSTOMER_PRICE
+                                                        // Min ve Max Fiyat 
+                                                        let tmpMinData = this.prmObj.filter({ID:'ItemMinPricePercent'}).getValue()
+                                                        let tmpMinPrice = e.newData.CUSTOMER_PRICE + (e.newData.CUSTOMER_PRICE * tmpMinData) /100
+                                                        this.txtMinSalePrice.value = Number((tmpMinPrice).toFixed(2))
+                                                        let tmpMaxData = this.prmObj.filter({ID:'ItemMaxPricePercent'}).getValue()
+                                                        let tmpMAxPrice = e.newData.CUSTOMER_PRICE + (e.newData.CUSTOMER_PRICE * tmpMaxData) /100
+                                                        this.txtMaxSalePrice.value = Number((tmpMAxPrice).toFixed(2))
+                                                        this.taxSugarValidCheck()
+                                                        this.btnSave.setState({disabled:false});
+
                                                     }
                                                     //********************************** */
                                                 }

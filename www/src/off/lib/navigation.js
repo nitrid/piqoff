@@ -29,7 +29,7 @@ export default class Navigation extends React.PureComponent
         }
         this.menu = menu(App.instance.lang);   
 
-        // POS RAPOLARI SADECE ADMİNDE GÖKUÜKMESİ İÇİN GEÇİCİ OLARAK YAPILDI BURAYA BAKILACAK
+        // POS RAPOLARI SADECE ADMİNDE GÖKZÜKMESİ İÇİN GEÇİCİ OLARAK YAPILDI BURAYA BAKILACAK
         if(this.core.auth.data.ROLE != 'Administrator')
         {
             this.menu[8].items[2] = {}
