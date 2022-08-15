@@ -373,7 +373,7 @@ export default class posDoc extends React.PureComponent
                 this.posObj.dt()[0].CUSTOMER_NAME = tmpCustomerDt[0].TITLE
                 this.posObj.dt()[0].CUSTOMER_POINT = tmpCustomerDt[0].CUSTOMER_POINT
 
-                this.calcGrandTotal(false);
+                this.calcGrandTotal(true);
                 this.setState({isBtnGetCustomer:false})
             }
             else
@@ -1745,7 +1745,37 @@ export default class posDoc extends React.PureComponent
                                         <span className="text-white"><i className="text-white fa-solid fa-circle-user pe-2"></i><NbLabel id="customerName" parent={this} value={""}/></span>
                                     </div>    
                                 </div>
-                                <div className="row" style={{height:"25px"}}>
+                                <div className="row" style={{height:"25px"}} onClick={async()=>
+                                {
+                                    if(this.state.isBtnGetCustomer)
+                                    {
+                                        this.setState({isBtnGetCustomer:false})                                                
+                                    }
+                                    else
+                                    {
+                                        if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgCancelCustomerConfirm',showTitle:true,title:this.lang.t("msgCancelCustomerConfirm.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("msgCancelCustomerConfirm.btn01"),location:'after'},{id:"btn02",caption:this.lang.t("msgLineDeleteConfirm.btn02"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCancelCustomerConfirm.msg")}</div>)
+                                            }
+                                            let tmpResult = await dialog(tmpConfObj);
+                                            if(tmpResult == "btn01")
+                                            {
+                                                this.posObj.dt()[0].CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000'
+                                                this.posObj.dt()[0].CUSTOMER_CODE = ''
+                                                this.posObj.dt()[0].CUSTOMER_NAME = ''
+                                                this.posObj.dt()[0].CUSTOMER_POINT = 0
+                                                this.btnPopLoyaltyDel.props.onClick()
+
+                                                this.calcGrandTotal(true);
+                                            }
+                                            return
+                                        }
+                                    }
+                                }}>
                                     <div className="col-12">                                        
                                         <span className="text-light"><i className="text-light fa-solid fa-user-plus pe-2"></i><NbLabel id="customerPoint" parent={this} value={""}/></span>
                                     </div> 
@@ -2658,28 +2688,7 @@ export default class posDoc extends React.PureComponent
                                             }
                                             else
                                             {
-                                                if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
-                                                {
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgCancelCustomerConfirm',showTitle:true,title:this.lang.t("msgCancelCustomerConfirm.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:this.lang.t("msgCancelCustomerConfirm.btn01"),location:'after'},{id:"btn02",caption:this.lang.t("msgLineDeleteConfirm.btn02"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCancelCustomerConfirm.msg")}</div>)
-                                                    }
-                                                    let tmpResult = await dialog(tmpConfObj);
-                                                    if(tmpResult == "btn01")
-                                                    {
-                                                        this.posObj.dt()[0].CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000'
-                                                        this.posObj.dt()[0].CUSTOMER_CODE = ''
-                                                        this.posObj.dt()[0].CUSTOMER_NAME = ''
-                                                        this.posObj.dt()[0].CUSTOMER_POINT = 0
-                                                        this.btnPopLoyaltyDel.props.onClick()
-        
-                                                        this.calcGrandTotal(false);
-                                                    }
-                                                    return
-                                                }
-                                                else
+                                                if(this.posObj.dt()[0].CUSTOMER_GUID == '00000000-0000-0000-0000-000000000000')
                                                 {
                                                     //TICKET REST. SADAKAT PUAN KULLANIMI PARAMETRESI
                                                     if(this.prmObj.filter({ID:'UseTicketRestLoyalty',TYPE:0}).getValue() == 0)
