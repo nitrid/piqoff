@@ -4339,7 +4339,7 @@ export default class posDoc extends React.PureComponent
                                                         if(this.rbtnTotalPayType.value == 0)
                                                         {
                                                             tmpChange = tmpChange * -1
-                                                            tmpAmount = this.txtPopLastTotal.value  - tmpChange
+                                                            tmpAmount = this.txtPopLastTotal.value  //- tmpChange
                                                         }
                                                         else
                                                         {       

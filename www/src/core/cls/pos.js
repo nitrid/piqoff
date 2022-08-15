@@ -1523,7 +1523,7 @@ export class posDeviceCls
                 }
             }, 70000);
 
-           return port.on("close", resolve)
+           //return port.on("close", resolve)
         });
     }
     escPrinter(pData)
