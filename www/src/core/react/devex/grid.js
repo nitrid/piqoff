@@ -315,7 +315,8 @@ export default class NdGrid extends Base
                 selection={this.state.selection}
                 onEditorPrepared={this._onEditorPrepared}
                 onEditorPreparing={this._onEditorPreparing}
-                onRowPrepared = {this._onRowPrepared}                
+                onRowPrepared = {this._onRowPrepared}   
+                sorting = {this.props.sorting}
                 >
                     {this.props.children}
                 </DataGrid>

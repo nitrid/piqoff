@@ -873,6 +873,7 @@ export default class posDoc extends React.PureComponent
         let tmpMaxLine = this.posObj.posSale.dt().where({SUBTOTAL:{'<>':-1}}).max('LINE_NO')
         
         this.posObj.posSale.addEmpty()
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].NO = this.posObj.posSale.dt().length + 1
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].LDATE = moment(new Date()).utcOffset(0, true)
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].SAFE = ''
@@ -1891,14 +1892,15 @@ export default class posDoc extends React.PureComponent
                             <div className="col-12">
                                 <NdGrid parent={this} id={"grdList"} 
                                 showBorders={true} 
-                                columnsAutoWidth={true} 
-                                allowColumnReordering={true} 
+                                columnsAutoWidth={false} 
                                 allowColumnResizing={true} 
+                                allowColumnReordering={false}
                                 height={"200px"} 
                                 width={"100%"}
                                 dbApply={false}
                                 selection={{mode:"single"}}
                                 loadPanel={{enabled:false}}
+                                sorting={{ mode: 'none' }}
                                 onRowPrepared={(e)=>
                                 {
                                     if(e.rowType == "header")
@@ -1954,7 +1956,12 @@ export default class posDoc extends React.PureComponent
                                     <Editing confirmDelete={false}/>
                                     <Scrolling mode="infinite" />
                                     <Column dataField="LDATE" caption={this.lang.t("grdList.LDATE")} width={40} alignment={"center"} dataType={"datetime"} format={"dd-MM-yyyy - HH:mm:ss SSSZ"} defaultSortOrder="desc" visible={false}/>
-                                    <Column dataField="ITEM_NAME" caption={this.lang.t("grdList.ITEM_NAME")} width={290}/>
+                                    <Column dataField="NO" caption={""} width={30} cellTemplate={(cellElement,cellInfo)=>
+                                    {
+                                        cellElement.innerText = this.posObj.posSale.dt().length - cellInfo.rowIndex
+                                    }}
+                                    alignment={"center"}/>                                    
+                                    <Column dataField="ITEM_SNAME" caption={this.lang.t("grdList.ITEM_NAME")} width={290}/>
                                     <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} width={50}/>
                                     <Column dataField="PRICE" caption={this.lang.t("grdList.PRICE")} width={70} format={"#,##0.00" + Number.money.sign}/>
                                     <Column dataField="AMOUNT" alignment={"right"} caption={this.lang.t("grdList.AMOUNT")} width={60} format={"#,##0.00" + Number.money.sign}/>                                                
