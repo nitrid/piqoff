@@ -149,7 +149,9 @@ export default class endOfDay extends React.PureComponent
         this.setState({Cash:tmpCashValue})
       }
 
-      if(parseFloat(this.paymentData.where({'PAY_TYPE':1}).sum('AMOUNT')) ==  this.txtCreditCard.value)
+      console.log(parseFloat(this.paymentData.where({'PAY_TYPE':1}).sum('AMOUNT')) )
+      console.log(this.txtCreditCard.value)
+      if(this.paymentData.where({'PAY_TYPE':1}).sum('AMOUNT') ==  this.txtCreditCard.value)
       {
         this.color.card = "green"
         this.DebitCard = this.t("txtReal")

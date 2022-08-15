@@ -225,6 +225,8 @@ export class docItemsCls
             LINE_NO : 0,
             QUANTITY : 1,
             PRICE : 0,
+            CUSTOMER_PRICE : 0,
+            DIFF_PRICE : 0,
             DISCOUNT : 0,
             VAT: 0,
             AMOUNT : 0,

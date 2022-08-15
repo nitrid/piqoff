@@ -1924,7 +1924,9 @@ export const langTr =
             clmTotal : "Genel Toplam",
             clmDispatch : "İrsaliye No",
             clmCreateDate: "Kayıt Tarihi",
-            clmMargin :"Marj"
+            clmMargin :"Marj",
+            clmDiffPrice : "Fark",
+            clmCustomerPrice : "T. Fiyat"
         },
         grdInvoicePayment: 
         {

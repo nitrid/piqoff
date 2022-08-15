@@ -26,6 +26,7 @@ import NdTagBox from '../../../../core/react/devex/tagbox.js';
 import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
+import { data } from 'jquery';
 
 export default class purchaseInvoice extends React.PureComponent
 {
@@ -485,16 +486,17 @@ export default class purchaseInvoice extends React.PureComponent
         this.docObj.docItems.dt()[pIndex].DISCOUNT = typeof pDiscount == 'undefined' ? 0 : pDiscount
         this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
         this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
-        console.log(pPrice)
+
+        let tmpQuery = 
+        {
+            query :"SELECT CUSTOMER_PRICE AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
+            param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50'],
+            value : [pData.CODE,this.docObj.dt()[0].OUTPUT]
+        }
+        let tmpData = await this.core.sql.execute(tmpQuery) 
         if(typeof pPrice == 'undefined')
         {
-            let tmpQuery = 
-            {
-                query :"SELECT CUSTOMER_PRICE AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
-                param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50'],
-                value : [pData.CODE,this.docObj.dt()[0].OUTPUT]
-            }
-            let tmpData = await this.core.sql.execute(tmpQuery) 
+           
             if(tmpData.result.recordset.length > 0)
             {
                 this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
@@ -519,6 +521,11 @@ export default class purchaseInvoice extends React.PureComponent
             this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((pPrice  * pQuantity).toFixed(3))
             this.docObj.docItems.dt()[pIndex].TOTAL = parseFloat(((pPrice * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT).toFixed(3))
             this._calculateTotal()
+        }
+        if(tmpData.result.recordset.length > 0)
+        {
+            this.docObj.docItems.dt()[pIndex].CUSTOMER_PRICE = tmpData.result.recordset[0].PRICE
+            this.docObj.docItems.dt()[pIndex].DIFF_PRICE = this.docObj.docItems.dt()[pIndex].PRICE - this.docObj.docItems.dt()[pIndex].CUSTOMER_PRICE
         }
       
     }
@@ -1600,6 +1607,14 @@ export default class purchaseInvoice extends React.PureComponent
                                     height={'400'} 
                                     width={'100%'}
                                     dbApply={false}
+                                    onCellPrepared={(e) =>
+                                        {
+                                            if(e.rowType === "data" && e.column.dataField === "DIFF_PRICE" )
+                                            {
+                                                this.docObj.docItems.dt()[e.rowIndex].DIFF_PRICE = e.data.PRICE - e.data.CUSTOMER_PRICE
+                                                e.cellElement.style.color = e.data.PRICE > e.data.CUSTOMER_PRICE ? "red" : "blue";
+                                            }
+                                        }}
                                     onRowUpdated={async(e)=>{
                                         let rowIndex = e.component.getRowIndexByKey(e.key)
 
@@ -1611,7 +1626,7 @@ export default class purchaseInvoice extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgDiscount',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgDiscount',showTitle:true,title:this.t("msgDiscount.title"),showCloseButton:true,width:'500px',height:'200px',
                                                 button:[{id:"btn01",caption:this.t("msgDiscount.btn01"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscount.msg")}</div>)
                                             }
@@ -1643,8 +1658,10 @@ export default class purchaseInvoice extends React.PureComponent
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcInv.clmCreateDate")} width={200} allowEditing={false} allowHeaderFiltering={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdPurcInv.clmItemCode")} width={150} editCellRender={this._cellRoleRender} allowHeaderFiltering={false}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdPurcInv.clmItemName")} width={400} allowHeaderFiltering={false}/>
-                                        <Column dataField="PRICE" caption={this.t("grdPurcInv.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} allowHeaderFiltering={false}/>
                                         <Column dataField="QUANTITY" caption={this.t("grdPurcInv.clmQuantity")} dataType={'number'} allowHeaderFiltering={false}/>
+                                        <Column dataField="PRICE" caption={this.t("grdPurcInv.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} allowHeaderFiltering={false}/>
+                                        <Column dataField="CUSTOMER_PRICE" caption={this.t("grdPurcInv.clmCustomerPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} allowHeaderFiltering={false} allowEditing={false}/>
+                                        <Column dataField="DIFF_PRICE" caption={this.t("grdPurcInv.clmDiffPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} allowHeaderFiltering={false} allowEditing={false}/>
                                         <Column dataField="AMOUNT" caption={this.t("grdPurcInv.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} allowHeaderFiltering={false}/>
                                         <Column dataField="DISCOUNT" caption={this.t("grdPurcInv.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} allowHeaderFiltering={false}/>
                                         <Column dataField="DISCOUNT_RATE" caption={this.t("grdPurcInv.clmDiscountRate")} dataType={'number'} allowHeaderFiltering={false}/>
