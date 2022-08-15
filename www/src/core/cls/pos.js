@@ -1211,9 +1211,6 @@ export class posDeviceCls
             this.ds.get('POS_DEVICE').selectCmd.local.where = Object.keys(tmpPrm).length == 0 ? undefined : tmpPrm                    
 
             await this.ds.get('POS_DEVICE').refresh();
-            //PAY PORT İÇİN GLOBAL DEĞİŞKEN
-            //this.payPort = new this.serialport(this.dt().length > 0 ? this.dt()[0].PAY_CARD_PORT : "");
-
             resolve(this.ds.get('POS_DEVICE'));    
         });
     }

@@ -125,8 +125,6 @@ export default class posDoc extends React.PureComponent
         this.posObj.dt()[this.posObj.dt().length - 1].DEVICE = window.localStorage.getItem('device') == null ? '' : window.localStorage.getItem('device')
         this.device.value = this.posObj.dt()[this.posObj.dt().length - 1].DEVICE
         
-        
-        
         await this.posDevice.load({CODE:this.posObj.dt()[this.posObj.dt().length - 1].DEVICE})        
         this.posDevice.scanner();
 
@@ -703,10 +701,16 @@ export default class posDoc extends React.PureComponent
             {            
                 resolve()
             }
-    
+            
             for(let i = 0; i < tmpPrm.length; i++) 
             {
-                if(tmpPrm[i].items == pBarcode.substring(0,tmpPrm[i].items.length))
+                let tmpBar = tmpPrm[i].items.replace('M','').replace('M','').replace('M','')
+                tmpBar = tmpBar.replace('C','').replace('C','').replace('C','')                
+                tmpBar = tmpBar.replace('K','').replace('K','').replace('K','')
+                tmpBar = tmpBar.replace('G','').replace('G','').replace('G','')
+                tmpBar = tmpBar.replace('F','').replace('F','').replace('F','')
+                
+                if(tmpPrm[i].items.length == pBarcode.length && tmpBar == pBarcode.substring(0,tmpBar.length))
                 {
                     let tmpConfObj =
                     {
@@ -720,7 +724,6 @@ export default class posDoc extends React.PureComponent
             }
             resolve()
         })
-        
     }
     async calcGrandTotal(pSave)
     {
