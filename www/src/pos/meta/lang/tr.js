@@ -409,6 +409,10 @@ export const langTr =
     {
         title :"Fiyat Farkı",
     },
+    popGridList: 
+    {
+        title :"Liste"
+    },
     grdList: 
     {
         LDATE : "LDATE",
