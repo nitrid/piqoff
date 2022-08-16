@@ -2588,7 +2588,7 @@ export default class posDoc extends React.PureComponent
                                     </div>
                                     {/* Grid List */}
                                     <div className="col px-1">
-                                        <NbButton id={"btnGrdList"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}
+                                        <NbButton id={"btnGrdList"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}
                                         onClick={async()=>
                                             {          
                                                 await this.grdPopGrdList.dataRefresh({source:this.posObj.posSale.dt()});
