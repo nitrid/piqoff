@@ -309,17 +309,20 @@ export default class CustomerCard extends React.PureComponent
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmCustomers"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
-                                        if(this.customerObj.dt()[0].SIRET_ID == '' || this.customerObj.dt()[0].APE_CODE == '' || this.customerObj.dt()[0].TAX_OFFICE == '' || this.customerObj.dt()[0].TAX_NO == '')
+                                        if(this.cmbType.value == 1)
                                         {
-                                            let tmpConfObj =
+                                            if(this.customerObj.dt()[0].SIRET_ID == '' || this.customerObj.dt()[0].APE_CODE == '' || this.customerObj.dt()[0].TAX_OFFICE == '' || this.customerObj.dt()[0].TAX_NO == '')
                                             {
-                                                id:'msgLegalNotValid',showTitle:true,title:this.t("msgLegalNotValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgLegalNotValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgLegalNotValid.msg")}</div>)
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgLegalNotValid',showTitle:true,title:this.t("msgLegalNotValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgLegalNotValid.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgLegalNotValid.msg")}</div>)
+                                                }
+                                                
+                                                await dialog(tmpConfObj);
+                                                return
                                             }
-                                            
-                                            await dialog(tmpConfObj);
-                                            return
                                         }
                                         // ADRES BÖLÜMÜNDEKİ ÜLKE KONTROLÜ İÇİN YAPILMIŞTI AMA TAX_SUCRE SEBEBİYLE GEREK KALMAMIS OLABİLİR 
                                         // if(typeof this.customerObj.customerAdress.dt()[0] == 'undefined' || this.customerObj.customerAdress.dt()[0].COUNTRY == '' )
