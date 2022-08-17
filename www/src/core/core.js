@@ -171,7 +171,6 @@ export class local
         };
         if(typeof JsStore != 'undefined')
         {
-            console.log(JsStore)
             this.conn = new JsStore.JsStore.Connection(new Worker(getWorkerPath().default));
         }
     }
