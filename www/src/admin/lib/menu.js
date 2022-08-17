@@ -49,5 +49,19 @@ export const menu =
         text: 'Yetkilendirme',
         expanded: false,
         items: []
+    },
+    {
+        id: 'menu',
+        text: 'Menü Düzenleme',
+        expanded: false,
+        items: 
+        [
+            {
+                id: 'menu.01',
+                text: 'Kullanıcı Menü Ayarları',
+                path: 'menuEdit'
+            },
+            
+        ]
     }
 ]
