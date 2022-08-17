@@ -32,10 +32,17 @@ export const menu =
         ]
     },
     {
-        id: 'prm',
+        id: 'prm_01',
         text: 'Parametre',
         expanded: false,
-        items: []
+        items: 
+        [
+            {
+                id: 'prm_01_001',
+                text: 'Sistem Parametreleri',
+                path: 'systemParameter'
+            },
+        ]
     },
     {
         id: 'acs',
