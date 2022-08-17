@@ -50,14 +50,14 @@ export const langFr =
         stk_04_002: "Saisie retour",
         stk_04_003 : "Inventaire validé",
         stk_04_004 :"Saisie groupé",
-        cri: "Fournisseur",
+        cri: "Fournisseur - Client",
         cri_01: "Saisie",
         cri_02: "Listes",
         cri_03: "Rapports",
-        cri_01_001: "Fournisseur saisie",
+        cri_01_001: "Fournisseur-Client saisie",
         cri_01_002: "Adresse saisie",
         cri_01_003:"Catégorie saisie",
-        cri_02_001: "Liste fournisseur",
+        cri_02_001: "Liste Fournisseur-Client",
         cri_02_002: "Liste adresse",
         cri_02_003: "Liste Catégorie ",
         ftr: "Facture ",
@@ -1608,7 +1608,9 @@ export const langFr =
             btn01: "Cariye Git",
             btn02: "OK",
             msg : "Girmiş olduğunuz Cari sistem de kayıtlı !"
-        }
+        },
+        chkTaxSucre : "Tax Sugar",
+        tabTitleDetail : "Detay Bilgileri"
 
     },
     cri_01_002:

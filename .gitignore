@@ -6,3 +6,4 @@ node_modules/
 package-lock.json
 www/public/
 www/node_modules/
+daemon/
