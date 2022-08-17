@@ -610,7 +610,6 @@ export const menu = (e) =>
                         }
                     ]
                 },
-          
                 //Operasyonlar
                  {
                     id: 'pos_03',
