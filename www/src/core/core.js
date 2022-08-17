@@ -171,7 +171,8 @@ export class local
         };
         if(typeof JsStore != 'undefined')
         {
-            this.conn = new JsStore.Connection(new Worker(getWorkerPath().default));
+            console.log(JsStore)
+            this.conn = new JsStore.JsStore.Connection(new Worker(getWorkerPath().default));
         }
     }
     async init(pDb)
