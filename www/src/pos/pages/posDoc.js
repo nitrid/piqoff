@@ -180,8 +180,8 @@ export default class posDoc extends React.PureComponent
         }
 
         for (let i = 0; i < this.parkDt.length; i++) 
-        {
-            if(this.parkDt[i].DESCRIPTION == '')
+        {            
+            if(typeof this.parkDt[i].DESCRIPTION == 'undefined' || this.parkDt[i].DESCRIPTION == '')
             {
                 this.cheqDt.selectCmd.value = [this.parkDt[i].GUID] 
                 await this.cheqDt.refresh();  
@@ -301,7 +301,7 @@ export default class posDoc extends React.PureComponent
                             from : "ITEMS_POS_VW_01",
                             where : 
                             {
-                                UNIQ_CODE : pCode,
+                                UNIQ_CODE : pCode.substring(pCode.lastIndexOf('F') + 1,pCode.length - 1),
                                 STATUS : true
                             },
                             case: 
@@ -310,7 +310,7 @@ export default class posDoc extends React.PureComponent
                                 [
                                     {
                                         '=': '',
-                                        then: pCode
+                                        then: pCode.substring(pCode.lastIndexOf('F') + 1,pCode.length - 1)
                                     }
                                 ]
                             }
@@ -459,6 +459,7 @@ export default class posDoc extends React.PureComponent
             await tmpPriceDt.refresh();                  
             if(tmpPriceDt.length > 0 && tmpPrice == 0)
             {
+                console.log(tmpPriceDt[0].PRICE)
                 tmpPrice = tmpPriceDt[0].PRICE
                 //FİYAT GÖR
                 if(this.state.isBtnInfo)
@@ -920,7 +921,7 @@ export default class posDoc extends React.PureComponent
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_LOYALTY = 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_VAT = 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_TOTAL = 0
-
+        
         await this.calcGrandTotal();
     }
     async saleRowUpdate(pRowData,pItemData)
@@ -1062,7 +1063,7 @@ export default class posDoc extends React.PureComponent
     async payAdd(pType,pAmount)
     {
         if(this.state.payRest > 0)
-        {
+        {            
             //KREDİ KARTI İSE
             if(pType == 1)
             {
@@ -1145,6 +1146,7 @@ export default class posDoc extends React.PureComponent
             {
                 await this.posDevice.caseOpen();
             }
+            this.loading.current.instance.show()
             //SATIR BİRLEŞTİR        
             if(typeof tmpRowData != 'undefined')
             {    
@@ -1154,6 +1156,7 @@ export default class posDoc extends React.PureComponent
             {
                 await this.payRowAdd({PAY_TYPE:pType,AMOUNT:pAmount,CHANGE:0})
             }            
+            this.loading.current.instance.hide()
         }        
     }
     payRowAdd(pPayData)

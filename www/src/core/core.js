@@ -927,7 +927,6 @@ export class datatable
                         }
                     }
                 }
-                
             
                 if(typeof tmpQuery != 'undefined')
                 {
