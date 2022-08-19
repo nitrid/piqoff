@@ -217,6 +217,8 @@ export default class posDoc extends React.PureComponent
         {
             this.posObj.clearAll()
             await this.posObj.load({GUID:pGuid})
+            this.posObj.dt()[0].DEVICE = window.localStorage.getItem('device')
+            this.posObj.dt()[0].DOC_DATE =  moment(new Date()).format("YYYY-MM-DD"),
             await this.calcGrandTotal(false)
             resolve();
         });        
