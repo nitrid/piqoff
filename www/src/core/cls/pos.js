@@ -82,7 +82,7 @@ export class posCls
                 LUSER_NAME : {map:'LUSER_NAME'},DEVICE : {map:'DEVICE'},DEPOT_GUID : {map:'DEPOT_GUID'},DEPOT_CODE : {map:'DEPOT_CODE'},DEPOT_NAME : {map:'DEPOT_NAME'},TYPE : {map:'TYPE'},
                 DOC_DATE : {map:'DOC_DATE',type:'date_time'},CUSTOMER_GUID : {map:'CUSTOMER_GUID'},CUSTOMER_CODE : {map:'CUSTOMER_CODE'},CUSTOMER_NAME : {map:'CUSTOMER_NAME'},CUSTOMER_POINT : {map:'CUSTOMER_POINT'},
                 FAMOUNT : {map:'FAMOUNT'},AMOUNT : {map:'AMOUNT'},DISCOUNT : {map:'DISCOUNT'},LOYALTY : {map:'LOYALTY'},VAT : {map:'VAT'},TOTAL : {map:'TOTAL'},TICKET : {map:'TICKET'},
-                REBATE_CHEQPAY : {map:'REBATE_CHEQPAY'},STATUS : {map:'STATUS'},DESCRIPTION : {map:'DESCRIPTION'},REF : {map:'REF'}}]
+                REBATE_CHEQPAY : {map:'REBATE_CHEQPAY'},STATUS : {map:'STATUS'},DESCRIPTION : '',REF : {map:'REF'}}]
             }
         } 
         tmpDt.updateCmd = 
@@ -239,7 +239,7 @@ export class posSaleCls
             ITEM_CODE : '',
             ITEM_NAME : '',
             ITEM_SNAME : '',
-            TICKET_REST : 0,
+            TICKET_REST : false,
             COST_PRICE : 0,
             MIN_PRICE : 0,
             MAX_PRICE : 0,
@@ -1262,6 +1262,7 @@ export class posDeviceCls
         {
             if(!core.instance.util.isElectron())
             {
+                resolve()
                 return
             }
             let device  = new this.escpos.USB();

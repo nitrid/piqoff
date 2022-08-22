@@ -11,5 +11,14 @@ export const langTr =
             clmStatus : "Durum",
             clmPwd : "Parola"
         }    
+    },
+    P0003 : 
+    {
+        RoleEdit : "Rol Düzenle",
+        grdRoleList : 
+        {
+            clmCode : "Kodu",
+            clmName : "Adı"
+        }    
     }
 }

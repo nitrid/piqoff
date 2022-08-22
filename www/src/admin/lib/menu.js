@@ -27,7 +27,7 @@ export const menu =
             {
                 id: 'P0003',
                 text: 'Roller',
-                path: 'test'
+                path: 'rolesPage'
             },
         ]
     },
