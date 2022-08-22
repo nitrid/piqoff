@@ -50,7 +50,7 @@ export default class posDoc extends React.PureComponent
         // NUMBER İÇİN PARAMETREDEN PARA SEMBOLÜ ATANIYOR.
         Number.money = this.prmObj.filter({ID:'MoneySymbol',TYPE:0}).getValue()
         
-        //this.core.offline = true
+        this.core.offline = true
 
         this.posObj = new posCls()
         this.posDevice = new posDeviceCls();
@@ -461,7 +461,6 @@ export default class posDoc extends React.PureComponent
             await tmpPriceDt.refresh();                  
             if(tmpPriceDt.length > 0 && tmpPrice == 0)
             {
-                console.log(tmpPriceDt[0].PRICE)
                 tmpPrice = tmpPriceDt[0].PRICE
                 //FİYAT GÖR
                 if(this.state.isBtnInfo)
