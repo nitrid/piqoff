@@ -1621,6 +1621,146 @@ export class access extends datatable
         }
     }
 }
+export class menuCls
+{
+    constructor()
+    {
+        this.metaMenu = null;
+
+        if(arguments.length > 0)
+        {            
+            this.metaMenu = arguments[0]
+        }
+        this.core = core.instance;
+        this.ds =  new dataset()
+        this.empty = {
+            GUID : '00000000-0000-0000-0000-000000000000',
+            TYPE : 0,
+            ID : "",
+            VALUE : "",
+            SPECIAL : "",
+            USERS : "",
+            PAGE : "",
+            ELEMENT : "",
+            APP : ""
+        }
+
+        this._initDs();
+    }
+     //#region private
+     _initDs()
+     {
+         let tmpDt = new datatable('PARAM');
+         tmpDt.selectCmd = 
+         {
+             query : "SELECT * FROM [dbo].[PARAM] WHERE ((USERS = @USER) OR (@USER = '')) AND APP=@APP AND ID='menu'",
+             param : ['USER:string|50','APP:string|50']
+         }
+         tmpDt.insertCmd = 
+         {
+             query : "EXEC [dbo].[PRD_PARAM_INSERT] " + 
+                     "@TYPE = @PTYPE, " + 
+                     "@ID = @PID, " + 
+                     "@VALUE = @PVALUE, " + 
+                     "@SPECIAL = @PSPECIAL, " + 
+                     "@USERS = @PUSERS, " + 
+                     "@PAGE = @PPAGE, " + 
+                     "@ELEMENT = @PELEMENT, " + 
+                     "@APP = @PAPP ", 
+             param : ['PTYPE:int','PID:string|100','PVALUE:string|max','PSPECIAL:string|150','PUSERS:string|25','PPAGE:string|25','PELEMENT:string|250','PAPP:string|50'],
+             dataprm : ['TYPE','ID','VALUE','SPECIAL','USERS','PAGE','ELEMENT','APP']
+         } 
+         tmpDt.updateCmd = 
+         {
+             query : "EXEC [dbo].[PRD_PARAM_UPDATE] " + 
+                     "@GUID = @PGUID, " + 
+                     "@TYPE = @PTYPE, " + 
+                     "@ID = @PID, " + 
+                     "@VALUE = @PVALUE, " + 
+                     "@SPECIAL = @PSPECIAL, " + 
+                     "@USERS = @PUSERS, " + 
+                     "@PAGE = @PPAGE, " + 
+                     "@ELEMENT = @PELEMENT, " + 
+                     "@APP = @PAPP ", 
+             param : ['PGUID:string|50','PTYPE:int','PID:string|100','PVALUE:string|max','PSPECIAL:string|150','PUSERS:string|25','PPAGE:string|25','PELEMENT:string|250','PAPP:string|50'],
+             dataprm : ['GUID','TYPE','ID','VALUE','SPECIAL','USERS','PAGE','ELEMENT','APP']
+         } 
+         this.ds.add(tmpDt);
+     }
+     //#region
+     dt()
+     {
+         if(arguments.length > 0)
+         {
+             return this.ds.get(arguments[0])
+         }
+ 
+         return this.ds.get(0)
+     }
+     async addEmpty()
+     {
+         if(typeof this.dt('PARAM') == 'undefined')
+         {
+             return;
+         }
+         let tmp = {};
+         if(arguments.length > 0)
+         {
+             tmp = {...arguments[0]}
+         }
+         else
+         {
+             tmp = {...this.empty}
+         }
+         if(typeof arguments[1] == 'undefined' || arguments[1] == true)
+         {
+             tmp.GUID = datatable.uuidv4()
+         }
+         this.dt('PARAM').push(tmp,arguments[1])
+         
+     }
+     clearAll()
+     {
+         for(let i = 0; i < this.ds.length; i++)
+         {
+             this.dt(i).clear()
+         }
+     }
+     save()
+     {
+         return new Promise(async resolve => 
+         {
+             this.ds.delete()
+             resolve(await this.ds.update()); 
+         });
+     }
+     load()
+     {
+         //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİR.
+         return new Promise(async resolve =>
+         {
+             let tmpPrm = {USER:"",APP:""}
+             if(arguments.length > 0)
+             {
+                 tmpPrm.USER = typeof arguments[0].USER == 'undefined' ? '' : arguments[0].USER;
+                 tmpPrm.APP = typeof arguments[0].APP == 'undefined' ? '' : arguments[0].APP;
+             }
+ 
+             this.ds.get('PARAM').selectCmd.value = Object.values(tmpPrm);
+ 
+             await this.ds.get('PARAM').refresh();
+
+             if(this.ds.get('PARAM').length > 0)
+             {
+                resolve(JSON.parse(this.ds.get('PARAM')[0].VALUE));
+             }
+             else
+             {
+                resolve(this.metaMenu)
+             }             
+         });
+     }
+}
 Object.setPrototypeOf(datatable.prototype,Array.prototype);
 //* DİZİ İÇİN GROUP BY */
 Array.prototype.toGroupBy = function(pKey)
