@@ -4027,6 +4027,7 @@ export default class posDoc extends React.PureComponent
                                 allowColumnReordering={true} 
                                 allowColumnResizing={true} 
                                 showRowLines={true}
+                                sorting={{ mode: 'single' }}
                                 showColumnLines={true}
                                 height={"250px"} 
                                 width={"100%"}

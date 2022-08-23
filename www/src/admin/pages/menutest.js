@@ -8,10 +8,10 @@ import NdTreeView from '../tools/NdTreeView.js';
 import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
 import NdSelectBox from '../../core/react/devex/selectbox.js';
 import NdButton from '../../core/react/devex/button.js';
-import {menu as menuOff} from '../../off/lib/menu.js'
+import {testData as menuOff} from '../meta/testMeta.js'
 import {menu as menuMob} from '../../mob/lib/menu.js'
 
-export default class menuEdit extends React.Component
+export default class menutest extends React.Component
 {
     constructor(props)
     {
@@ -20,7 +20,6 @@ export default class menuEdit extends React.Component
         this.core = App.instance.core;
        
 
-        this.treeViewSelectionChanged = this.treeViewSelectionChanged.bind(this);
         this.getKeyByValue = this.getKeyByValue.bind(this);
 
         this.menu =  {}   
@@ -31,15 +30,12 @@ export default class menuEdit extends React.Component
     }
     async init()
     {
-        console.log(this.menuOff)
+        this.menu = menuOff(App.instance.lang);
+        this.setState({menu:menuOff(App.instance.lang)})
     }
     componentDidMount()
     {
         this.init()
-    }
-    treeViewSelectionChanged(e) 
-    {
-       console.log(e)
     }
     getKeyByValue(object, value) 
     {
@@ -66,13 +62,62 @@ export default class menuEdit extends React.Component
                             console.log(y + '++++' +  counter)
                             console.log(this.menu[i].items[x].items[y].id)
                             deneme[i].items[x].items.splice(y,1)
-                            // counter = counter + 1
+                           
                         }
                     }
                 }
             }
         }
-        console.log(deneme)
+    }
+    async test2(pData)
+    {
+        return new Promise(async resolve => 
+        {
+            pData.forEach(async function (element,index,object)
+            {
+                if(typeof element.items != 'undefined')
+                {
+                    this.test2(element.items)
+                }
+                else
+                {
+                    if(typeof element.selected == 'undefined' || element.selected == false)
+                    {
+                        object.splice(index,1)
+                        index = index -1 
+                        this.test2(object)
+                    }
+                }
+            }.bind(this));
+            resolve()
+        });
+    }
+    async test3()
+    {
+        await this.test2(this.menu)
+        await this.test4(this.menu)
+    }
+    async test4(pData)
+    {
+        return new Promise(async resolve => 
+            {
+                pData.forEach(async function (element,index,object)
+                {
+                    if(typeof element.items != 'undefined')
+                    {
+                        if(element.items.length == 0)
+                        {
+                            object.splice(index,1)
+                            this.test4(object)
+                        }
+                        else
+                        {
+                            this.test4(element.items)
+                        }
+                    }
+                }.bind(this));
+                resolve()
+            });
     }
     render()
     {
@@ -82,52 +127,8 @@ export default class menuEdit extends React.Component
                     <div className="row p-2">
                         <div className="col-6">
                             <div className="row">
-                                <div className="col-3">
-                                    <Label text={"Kullanıcı"} alignment="right" />
-                                        <NdSelectBox simple={true} parent={this} id="cmbUser"
-                                        displayExpr="CODE"                       
-                                        valueExpr="CODE"
-                                        value=""
-                                        searchEnabled={true} 
-                                        showClearButton={true}
-                                        pageSize ={50}
-                                        notRefresh={true}
-                                        data={{source:{select:{query : "SELECT CODE FROM USERS ORDER BY CODE ASC"},sql:this.core.sql}}}
-                                        onValueChanged={(e)=>
-                                        {
-
-                                        }}
-                                        />
-                                </div>
-                                <div className="col-3">
-                                <Label text={"Uygulama"} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbApp"
-                                    displayExpr="VALUE"                       
-                                    valueExpr="VALUE"
-                                    value=""
-                                    searchEnabled={true} 
-                                    showClearButton={true}
-                                    pageSize ={50}
-                                    notRefresh={true}
-                                    data={{source:[{ID:0,VALUE:"OFF"},{ID:1,VALUE:"MOB"}]}}
-                                    onValueChanged={(e)=>
-                                    {
-                                        if(e.value == 'OFF')
-                                        {
-                                            this.menu = menuOff(App.instance.lang);
-                                            this.setState({menu:menuOff(App.instance.lang)})
-                                        }
-                                        else if(e.value == 'OFF')
-                                        {
-                                            this.menu = menuMob(App.instance.lang);
-                                            this.setState({menu:menuMob(App.instance.lang)})
-                                        }
-                                        console.log(this)
-                                    }}
-                                    />
-                                </div>
                                 <div className="col-6">
-                                <NdButton text={this.t("Getir")} type="default" width="100%" onClick={async()=>{this.Test()}}></NdButton>
+                                <NdButton text={"run"} type="default" width="100%" onClick={async()=>{this.test3()}}></NdButton>
                                 </div>
                             </div>
                         </div>
