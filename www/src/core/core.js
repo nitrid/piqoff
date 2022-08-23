@@ -1,5 +1,5 @@
 import { isProxy } from 'is-proxy';
-import * as JsStore from 'jsstore';
+import {Connection} from 'jsstore';
 import { jsworker } from './jsworker.js';
 
 export class core
@@ -169,9 +169,9 @@ export class local
                 return require("file-loader?name=scripts/[name].[hash].js!jsstore/dist/jsstore.worker.min.js");
             }
         };
-        if(typeof JsStore != 'undefined')
+        if(typeof Connection != 'undefined')
         {
-            this.conn = new JsStore.JsStore.Connection(new Worker(getWorkerPath().default));
+            this.conn = new Connection(new Worker(getWorkerPath().default));
         }
     }
     async init(pDb)
@@ -282,26 +282,34 @@ export class local
     }
     async execute(pQuery)
     {
+        //DÜZENLEME - ALI KEMAL KARACA 23.08.2022
         return new Promise(async resolve => 
         {
             if(Array.isArray(pQuery))
             {
-                for (let i = 0; i < pQuery.length; i++) 
+                let tmpQuery = pQuery
+                console.log(tmpQuery)
+                for (let i = 0; i < tmpQuery.length; i++) 
                 {
-                    if(typeof pQuery[i].local != 'undefined')
+                    if(typeof tmpQuery[i].local != 'undefined')
                     {
-                        if(pQuery[i].local.type == 'insert')
-                        {                                        
-                            await this.insert(pQuery[i].local);
-                        } 
-                        else if(pQuery[i].local.type == 'update')
-                        {                                        
-                            await this.update(pQuery[i].local);
-                        } 
-                        else if(pQuery[i].local.type == 'delete')
-                        {                                        
-                            await this.delete(pQuery[i].local);
-                        }      
+                        let tmpLocs = Array.isArray(tmpQuery[i].local) ? tmpQuery[i].local : [tmpQuery[i].local]
+                        tmpLocs.forEach(async pItem => 
+                        {
+                            if(pItem.type == 'insert')
+                            {                                        
+                                await this.insert(pItem);
+                            } 
+                            else if(pItem.type == 'update')
+                            {                                        
+                                await this.update(pItem);
+                            } 
+                            else if(pItem.type == 'delete')
+                            {                     
+                                console.log(pItem)
+                                await this.remove(pItem);
+                            }      
+                        });
                     }
                 }
                 resolve({result:{state:true}})
@@ -326,7 +334,7 @@ export class local
                     } 
                     else if(pQuery.local.type == 'delete')
                     {
-                        resolve(await this.delete(pQuery.local))
+                        resolve(await this.remove(pQuery.local))
                     }                       
                 }
                 resolve({result:{}});
@@ -817,7 +825,26 @@ export class datatable
         {
             if(typeof this.selectCmd != 'undefined')
             {
-                let TmpData = await this.sql.execute(this.selectCmd)
+                let tmpQuery = JSON.parse(JSON.stringify(this.selectCmd))
+                //LOCAL DB İÇİN YAPILDI. WHERE ŞARTINDA {index} ŞEKLİNDE DEĞER ATAMASI... ALI KEMAL KARACA - 22.08.2022 
+                if(typeof tmpQuery.local != 'undefined' && typeof tmpQuery.local.where != 'undefined' && typeof tmpQuery.param != 'undefined')
+                {
+                    let tmpLocStr = JSON.stringify(tmpQuery.local.where)
+                    for (let i = 0; i < tmpQuery.param.length; i++) 
+                    {
+                        tmpLocStr = tmpLocStr.replace("{" + i + "}",tmpQuery.value[i])
+                        tmpLocStr = tmpLocStr.replace("{" + i + "}",tmpQuery.value[i])
+                        tmpLocStr = tmpLocStr.replace("{" + i + "}",tmpQuery.value[i])
+                        tmpLocStr = tmpLocStr.replace("{" + i + "}",tmpQuery.value[i])
+                        tmpLocStr = tmpLocStr.replace("{" + i + "}",tmpQuery.value[i])
+                        tmpLocStr = tmpLocStr.replace("{" + i + "}",tmpQuery.value[i])
+                        tmpLocStr = tmpLocStr.replace("{" + i + "}",tmpQuery.value[i])
+                    }
+                    tmpQuery.local.where = JSON.parse(tmpLocStr)
+                }                
+                
+                let TmpData = await this.sql.execute(tmpQuery)
+                
                 if(typeof TmpData.result.err == 'undefined') 
                 {
                     if(typeof TmpData.result.recordset != 'undefined')
@@ -832,7 +859,6 @@ export class datatable
                 }
                 else
                 {
-                    console.log(this.selectCmd)
                     console.log(TmpData.result.err)
                 }                
             }
@@ -857,14 +883,15 @@ export class datatable
 
                 if(this[i].stat == 'new')
                 {
-                    tmpQuery = {...this.insertCmd}
+                    tmpQuery = JSON.parse(JSON.stringify(this.insertCmd))
                     //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 28.02.2022
                     if(core.instance.offline && typeof tmpQuery.local != 'undefined' && typeof tmpQuery.local.values != 'undefined' && tmpQuery.local.values.length > 0)
-                    {
+                    {                        
                         for (let x = 0; x < Object.keys(tmpQuery.local.values[0]).length; x++) 
                         {
                             let tmpKey = Object.keys(tmpQuery.local.values[0])[x]
                             let tmpMap = Object.values(tmpQuery.local.values[0])[x]
+                            
                             if(typeof tmpMap.map != 'undefined')
                             {
                                 if(typeof tmpMap.type != 'undefined' && tmpMap.type == 'date_time')
@@ -881,15 +908,16 @@ export class datatable
                 }
                 else if(this[i].stat == 'edit')
                 {
-                    tmpQuery = {...this.updateCmd}
+                    tmpQuery = JSON.parse(JSON.stringify(this.updateCmd))
                     //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 28.02.2022
                     if(core.instance.offline && typeof tmpQuery.local != 'undefined' && typeof tmpQuery.local.set != 'undefined')
                     {
                         //SET
                         for (let x = 0; x < Object.keys(tmpQuery.local.set).length; x++) 
-                        {
+                        {                            
                             let tmpKey = Object.keys(tmpQuery.local.set)[x]
                             let tmpMap = Object.values(tmpQuery.local.set)[x]
+                            
                             if(typeof tmpMap.map != 'undefined')
                             {
                                 if(typeof tmpMap.type != 'undefined' && tmpMap.type == 'date_time')
@@ -912,6 +940,7 @@ export class datatable
                         {
                             let tmpKey = Object.keys(tmpQuery.local.where)[x]
                             let tmpMap = Object.values(tmpQuery.local.where)[x]
+
                             if(typeof tmpMap.map != 'undefined')
                             {
                                 if(typeof tmpMap.type != 'undefined' && tmpMap.type == 'date_time')
@@ -922,7 +951,6 @@ export class datatable
                                 {
                                     tmpQuery.local.where[tmpKey] = this[i][tmpMap.map]
                                 }        
-                                
                             }
                         }
                     }
@@ -1003,44 +1031,52 @@ export class datatable
                 if(typeof this.deleteCmd != 'undefined')
                 {                    
                     let tmpQuery = undefined;
-                    tmpQuery = {...this.deleteCmd}
-                    //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 28.02.2022
-                    if(typeof tmpQuery.local != 'undefined' && tmpQuery.local.type == 'update')
+                    tmpQuery = JSON.parse(JSON.stringify(this.deleteCmd)) //{...this.deleteCmd}
+                    
+                    //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 28.02.2022 - DÜZENLEME : 23.08.2022
+                    if(typeof tmpQuery.local != 'undefined')
                     {
-                        if(typeof tmpQuery.local.set != 'undefined')
+                        let tmpLocs = Array.isArray(tmpQuery.local) ? tmpQuery.local : [tmpQuery.local]
+                        tmpLocs.forEach(pItem => 
                         {
-                            //SET
-                            for (let x = 0; x < Object.keys(tmpQuery.local.set).length; x++) 
+                            if(pItem.type == 'update')
                             {
-                                let tmpKey = Object.keys(tmpQuery.local.set)[x]
-                                let tmpMap = Object.values(tmpQuery.local.set)[x]
-                                tmpQuery.local.set[tmpKey] = this._deleteList[i][tmpMap.map]
-                            }                            
-                        }
-                        if(typeof tmpQuery.local.where != 'undefined')
-                        {
-                            //WHERE
-                            for (let x = 0; x < Object.keys(tmpQuery.local.where).length; x++) 
-                            {
-                                let tmpKey = Object.keys(tmpQuery.local.where)[x]
-                                let tmpMap = Object.values(tmpQuery.local.where)[x]
-                                tmpQuery.local.where[tmpKey] = this._deleteList[i][tmpMap.map]
+                                if(typeof pItem.set != 'undefined')
+                                {
+                                    //SET
+                                    for (let x = 0; x < Object.keys(pItem.set).length; x++) 
+                                    {                                        
+                                        let tmpKey = Object.keys(pItem.set)[x]
+                                        let tmpMap = Object.values(pItem.set)[x]
+                                        console.log(this._deleteList[i][tmpMap.map])
+                                        pItem.set[tmpKey] = this._deleteList[i][tmpMap.map]
+                                    }                            
+                                }
+                                if(typeof pItem.where != 'undefined')
+                                {
+                                    //WHERE
+                                    for (let x = 0; x < Object.keys(pItem.where).length; x++) 
+                                    {
+                                        let tmpKey = Object.keys(pItem.where)[x]
+                                        let tmpMap = Object.values(pItem.where)[x]
+                                        pItem.where[tmpKey] = this._deleteList[i][tmpMap.map]
+                                    }
+                                }
                             }
-                        }
-                    }
-                    //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 28.02.2022
-                    if(typeof tmpQuery.local != 'undefined' && tmpQuery.local.type == 'delete')
-                    {
-                        if(typeof tmpQuery.local.where != 'undefined')
-                        {
-                            //WHERE
-                            for (let x = 0; x < Object.keys(tmpQuery.local.where).length; x++) 
+                            if(pItem.type == 'delete')
                             {
-                                let tmpKey = Object.keys(tmpQuery.local.where)[x]
-                                let tmpMap = Object.values(tmpQuery.local.where)[x]
-                                tmpQuery.local.where[tmpKey] = this._deleteList[i][tmpMap.map]
+                                if(typeof pItem.where != 'undefined')
+                                {
+                                    //WHERE
+                                    for (let x = 0; x < Object.keys(pItem.where).length; x++) 
+                                    {
+                                        let tmpKey = Object.keys(pItem.where)[x]
+                                        let tmpMap = Object.values(pItem.where)[x]
+                                        pItem.where[tmpKey] = this._deleteList[i][tmpMap.map]
+                                    }
+                                }
                             }
-                        }
+                        });
                     }
                     tmpQuery.value = [];
 

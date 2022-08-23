@@ -50,7 +50,7 @@ export default class posDoc extends React.PureComponent
         // NUMBER İÇİN PARAMETREDEN PARA SEMBOLÜ ATANIYOR.
         Number.money = this.prmObj.filter({ID:'MoneySymbol',TYPE:0}).getValue()
         
-        this.core.offline = true
+        //this.core.offline = true
 
         this.posObj = new posCls()
         this.posDevice = new posDeviceCls();
@@ -191,7 +191,6 @@ export default class posDoc extends React.PureComponent
                 return
             }
         }        
-        
     }
     async deviceEntry()
     {
@@ -1183,7 +1182,7 @@ export default class posDoc extends React.PureComponent
             this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].LINE_NO = this.posObj.posPay.dt().length + 1
             this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = Number(parseFloat(pPayData.AMOUNT).toFixed(2))
             this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].CHANGE = pPayData.CHANGE
-    
+            
             await this.calcGrandTotal();
             resolve()
         });
@@ -2527,6 +2526,7 @@ export default class posDoc extends React.PureComponent
                                         <NbButton id={"btnItemReturn"} parent={this} className="form-group btn btn-block my-1" style={{height:"70px",width:"100%",backgroundColor:"#e84393"}}
                                         onClick={async ()=>
                                         {
+                                            console.log(this.core.offline)
                                             if(this.posObj.posSale.dt().length > 0)
                                             {
                                                 await this.msgItemReturnTicket.show().then(async (e) =>
@@ -2728,8 +2728,19 @@ export default class posDoc extends React.PureComponent
                                     {/* Print */}
                                     <div className="col px-1">
                                         <NbButton id={"btnPrint"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
-                                        onClick={()=>
+                                        onClick={async()=>
                                         {     
+                                            if(this.core.offline)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgOfflineWarning',showTitle:true,title:this.lang.t("msgOfflineWarning.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("msgOfflineWarning.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOfflineWarning.msg")}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                                return
+                                            }
                                             this.dtPopLastSaleStartDate.value = moment(new Date()).format("YYYY-MM-DD")
                                             this.dtPopLastSaleFinishDate.value = moment(new Date()).format("YYYY-MM-DD")
                                             this.popLastSaleList.show();
@@ -3175,7 +3186,20 @@ export default class posDoc extends React.PureComponent
                         select:
                         {
                             query : "SELECT GUID,CODE,TITLE,ADRESS,dbo.FN_CUSTOMER_TOTAL_POINT(GUID,GETDATE()) AS CUSTOMER_POINT FROM [dbo].[CUSTOMER_VW_02] WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
-                            param : ['VAL:string|50']
+                            param : ['VAL:string|50'],
+                            local : 
+                            {
+                                type : "select",
+                                from : "CUSTOMER_VW_02",
+                                where : 
+                                {
+                                    CODE : { like : '{0}'},
+                                    or: 
+                                    {
+                                        TITLE: { like : '{0}'}
+                                    }
+                                },
+                            }
                         },
                         sql:this.core.sql
                     }}}
@@ -3205,7 +3229,20 @@ export default class posDoc extends React.PureComponent
                         select:
                         {
                             query : "SELECT CODE,NAME,dbo.FN_PRICE_SALE(GUID,1,GETDATE()) AS PRICE FROM [dbo].[ITEMS_VW_01] WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) AND STATUS = 1",
-                            param : ['VAL:string|50']
+                            param : ['VAL:string|50'],
+                            local : 
+                            {
+                                type : "select",
+                                from : "ITEMS_VW_01",
+                                where : 
+                                {
+                                    CODE : { like : "{0}"},
+                                    or: 
+                                    {
+                                        NAME: { like : "{0}"}
+                                    }
+                                },
+                            }
                         },
                         sql:this.core.sql
                     }}}
@@ -4281,8 +4318,16 @@ export default class posDoc extends React.PureComponent
                                                         let tmpDt = new datatable(); 
                                                         tmpDt.selectCmd = 
                                                         {
-                                                            query : "SELECT AMOUNT AS AMOUNT,COUNT(AMOUNT) AS COUNT FROM CHEQPAY WHERE DOC = @DOC GROUP BY AMOUNT",
-                                                            param : ['DOC:string|50']
+                                                            query : "SELECT AMOUNT AS AMOUNT,COUNT(AMOUNT) AS COUNT FROM CHEQPAY_VW_01 WHERE DOC = @DOC GROUP BY AMOUNT",
+                                                            param : ['DOC:string|50'],
+                                                            local : 
+                                                            {
+                                                                type : "select",
+                                                                from : "CHEQPAY_VW_01",
+                                                                where : {DOC : this.lastPosPayDt[0].POS_GUID},
+                                                                aggregate:{count: "AMOUNT"},
+                                                                groupBy: "AMOUNT",
+                                                            }
                                                         }
                                                         tmpDt.selectCmd.value = [this.lastPosPayDt[0].POS_GUID]
                                                         await tmpDt.refresh();

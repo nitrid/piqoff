@@ -518,5 +518,11 @@ export const langTr =
         btn01 : "Tamam",
         btn02 : "İptal",
     },
-    msgTransferStatus : 'Tablosu Aktarılıyor'
+    msgTransferStatus : 'Tablosu Aktarılıyor',
+    msgOfflineWarning: 
+    {
+        title : "Dikkat",
+        msg : "Bu işlemi offline modda iken yapamazsınız !",
+        btn01 : "Tamam"
+    },
 }

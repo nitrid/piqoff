@@ -492,4 +492,31 @@ export const langFr =
         btn01 : "Ok",
     },
     listed : "Rechercher",
+    msgDeviceEntryAlert : 
+    {
+        title : "Uyarı",
+        msg : "Lütfen cihaz kodunu boş geçmeyiniz !",
+        btn01 : "Tamam",
+    },
+    popTitleDevice : "Kasa Kodu Giriş",
+    msgDeviceNotChange : 
+    {
+        title : "Uyarı",
+        msg : "Satış Yapılıken Kasa Değiştirilemez! Lütfen Satışı İptal Edin..",
+        btn01 : "Tamam",
+    },
+    msgDbTransferAlert : 
+    {
+        title : "Uyarı",
+        msg : "Local Database'i Güncellemek İstermisiniz ?",
+        btn01 : "Tamam",
+        btn02 : "İptal",
+    },
+    msgTransferStatus : 'Tablosu Aktarılıyor',
+    msgOfflineWarning: 
+    {
+        title : "Dikkat",
+        msg : "Bu işlemi offline modda iken yapamazsınız !",
+        btn01 : "Tamam"
+    },
 }

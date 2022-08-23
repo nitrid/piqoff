@@ -43,6 +43,7 @@ export default class transferCls
                 name : "USERS",
                 columns :
                 {
+                    DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
                     GUID : {dataType: "string"},
                     CDATE : {dataType: "date_time"},
                     CUSER : {dataType: "string"},
@@ -62,6 +63,7 @@ export default class transferCls
                 name : "ACCESS",
                 columns :
                 {
+                    DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
                     GUID : {dataType: "string"},
                     ID : {dataType: "string"},
                     VALUE : {dataType: "string"},
@@ -77,6 +79,7 @@ export default class transferCls
                 name : "PARAM",
                 columns :
                 {
+                    DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
                     GUID : {dataType: "string"},
                     TYPE : {dataType: "number"},
                     ID : {dataType: "string"},
@@ -93,6 +96,7 @@ export default class transferCls
                 name : "ITEMS_VW_01",
                 columns :
                 {
+                    DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
                     GUID : {dataType: "string"},
                     CDATE : {dataType: "date_time"},
                     CUSER : {dataType: "string"},
@@ -130,6 +134,7 @@ export default class transferCls
                 name : "ITEMS_POS_VW_01",
                 columns :
                 {
+                    DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
                     GUID : {dataType: "string"},
                     SPECIAL : {dataType: "string"},
                     CODE : {dataType: "string"},
@@ -163,6 +168,7 @@ export default class transferCls
                 name : "ITEMS_BARCODE_MULTICODE_VW_01",
                 columns :
                 {
+                    DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
                     GUID : {dataType: "string"},
                     CDATE : {dataType: "date_time"},
                     CUSER : {dataType: "string"},
@@ -212,6 +218,7 @@ export default class transferCls
                 name : "CHEQPAY_VW_01",
                 columns :
                 {
+                    DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
                     GUID : {dataType: "string"},
                     CDATE : {dataType: "date_time"},
                     CUSER : {dataType: "string"},
@@ -238,7 +245,8 @@ export default class transferCls
                 name : "CUSTOMER_VW_02",
                 columns :
                 {
-                    GUID : {dataType: "string"},
+                    DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
+                    GUID : {dataType: "string",primaryKey: true},
                     CDATE : {dataType: "date_time"},
                     CUSER : {dataType: "string"},
                     CUSER_NAME : {dataType: "string"},
@@ -280,6 +288,7 @@ export default class transferCls
                 name : "POS_VW_01",
                 columns :
                 {
+                    DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
                     GUID : {dataType: "string"},
                     CDATE : {dataType: "date_time"},
                     CUSER : {dataType: "string"},
@@ -315,6 +324,7 @@ export default class transferCls
                 name : "POS_SALE_VW_01",
                 columns :
                 {
+                    DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
                     GUID : {dataType: "string"},
                     CDATE : {dataType: "date_time"},
                     CUSER : {dataType: "string"},
@@ -376,6 +386,7 @@ export default class transferCls
                 name : "POS_PAYMENT_VW_01",
                 columns :
                 {
+                    DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
                     GUID : {dataType: "string"},
                     CDATE : {dataType: "date_time"},
                     CUSER : {dataType: "string"},
@@ -404,7 +415,7 @@ export default class transferCls
                     GRAND_LOYALTY : {dataType: "number"},
                     GRAND_VAT : {dataType: "number"},
                     GRAND_TOTAL : {dataType: "number"},
-                    STATUS : {dataType: "string"},
+                    STATUS : {dataType: "number"},
                 }
             },
             //PLU_VW_01
@@ -412,6 +423,7 @@ export default class transferCls
                 name : "PLU_VW_01",
                 columns :
                 {
+                    DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
                     GUID : {dataType: "string"},
                     CDATE : {dataType: "date_time"},
                     CUSER : {dataType: "string"},
@@ -432,6 +444,7 @@ export default class transferCls
                 name : "PLU_IMAGE_VW_01",
                 columns :
                 {
+                    DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
                     GUID : {dataType: "string"},
                     MAIN_CODE : {dataType: "string"},
                     MAIN_NAME : {dataType: "string"},
@@ -449,6 +462,7 @@ export default class transferCls
                 name : "POS_EXTRA_VW_01",
                 columns :
                 {
+                    DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
                     GUID : {dataType: "string"},
                     CDATE : {dataType: "date_time"},
                     CUSER : {dataType: "string"},
@@ -467,6 +481,7 @@ export default class transferCls
                 name : "POS_DEVICE_VW_01",
                 columns :
                 {
+                    DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
                     GUID : {dataType: "string"},
                     CDATE : {dataType: "date_time"},
                     CUSER : {dataType: "string"},
@@ -631,6 +646,20 @@ export default class transferCls
                     into : "PLU_IMAGE_VW_01",
                     values : [{GUID : {map:'GUID'},MAIN_CODE : {map:'MAIN_CODE'},MAIN_NAME : {map:'MAIN_NAME'},ORGINS_CODE : {map:'ORGINS_CODE'},ORGINS_NAME : {map:'ORGINS_NAME'},
                     ITEM_GUID : {map:'ITEM_GUID'},ITEM_CODE : {map:'ITEM_CODE'},ITEM_NAME : {map:'ITEM_NAME'},PRICE : {map:'PRICE'},IMAGE : {map:'IMAGE'}}]
+                }
+            },
+            //POS_DEVICE_VW_01
+            {
+                from : 
+                {
+                    query : "SELECT * FROM POS_DEVICE_VW_01"
+                },
+                to : 
+                {
+                    into : "POS_DEVICE_VW_01",
+                    values : [{GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
+                    CODE : {map:'CODE'},NAME : {map:'NAME'},LCD_PORT : {map:'LCD_PORT'},SCALE_PORT : {map:'SCALE_PORT'},PAY_CARD_PORT : {map:'PAY_CARD_PORT'},
+                    PRINT_DESING : {map:'PRINT_DESING'},SAFE_GUID : {map:'SAFE_GUID'}}]
                 }
             }
         ]
