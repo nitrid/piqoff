@@ -125,7 +125,26 @@ export class posCls
                     "@UPDATE = 1, " + 
                     "@GUID = @PGUID ", 
             param : ['PCUSER:string|25','PGUID:string|50'],
-            dataprm : ['CUSER','GUID']
+            dataprm : ['CUSER','GUID'],
+            local : 
+            [{
+                type : "update",
+                in : "POS_VW_01",
+                set : {DELETED:true},
+                where : {GUID : {map:'GUID'}}
+            },
+            {
+                type : "update",
+                in : "POS_SALE_VW_01",
+                set : {DELETED:true},
+                where : {POS_GUID : {map:'GUID'}}
+            },
+            {
+                type : "update",
+                in : "POS_PAYMENT_VW_01",
+                set : {DELETED:true},
+                where : {POS_GUID : {map:'GUID'}}
+            }]
         }
 
         this.ds.add(tmpDt);
@@ -378,7 +397,13 @@ export class posSaleCls
                     "@GUID = @PGUID, " + 
                     "@POS_GUID = @PPOS_GUID ", 
             param : ['PCUSER:string|25','PGUID:string|50','PPOS_GUID:string|50'],
-            dataprm : ['CUSER','GUID','POS_GUID']
+            dataprm : ['CUSER','GUID','POS_GUID'],
+            local : 
+            {
+                type : "delete",
+                from : "POS_SALE_VW_01",
+                where : {GUID : {map:'GUID'}}
+            }
         }
 
         this.ds.add(tmpDt);
@@ -555,7 +580,17 @@ export class posPaymentCls
                     "@AMOUNT = @PAMOUNT, " + 
                     "@CHANGE = @PCHANGE ", 
             param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
-            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE']
+            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE'],
+            local : 
+            {
+                type : "insert",
+                into : "POS_PAYMENT_VW_01",
+                values : [{GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
+                LUSER_NAME : {map:'LUSER_NAME'},POS_GUID : {map:'POS_GUID'},DEVICE : {map:'DEVICE'},DEPOT_GUID : {map:'DEPOT_GUID'},DEPOT_CODE : {map:'DEPOT_CODE'},DEPOT_NAME : {map:'DEPOT_NAME'},TYPE : {map:'TYPE'},
+                DOC_DATE : {map:'DOC_DATE',type:'date_time'},CUSTOMER_GUID : {map:'CUSTOMER_GUID'},CUSTOMER_CODE : {map:'CUSTOMER_CODE'},CUSTOMER_NAME : {map:'CUSTOMER_NAME'},PAY_TYPE : {map:'PAY_TYPE'},
+                PAY_TYPE_NAME : {map:'PAY_TYPE_NAME'},LINE_NO : {map:'LINE_NO'},AMOUNT : {map:'AMOUNT'},CHANGE : {map:'CHANGE'},TICKET_PLUS : {map:'TICKET_PLUS'},GRAND_AMOUNT : {map:'GRAND_AMOUNT'},
+                GRAND_DISCOUNT : {map:'GRAND_DISCOUNT'},GRAND_LOYALTY : {map:'GRAND_LOYALTY'},GRAND_VAT : {map:'GRAND_VAT'},GRAND_TOTAL : {map:'GRAND_TOTAL'},STATUS : {map:'STATUS'}}]
+            }
         } 
         tmpDt.updateCmd = 
         {
@@ -568,7 +603,18 @@ export class posPaymentCls
                     "@AMOUNT = @PAMOUNT, " + 
                     "@CHANGE = @PCHANGE ", 
             param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
-            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE']
+            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE'],
+            local : 
+            {
+                type : "update",
+                in : "POS_PAYMENT_VW_01",
+                set : {CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
+                LUSER_NAME : {map:'LUSER_NAME'},POS_GUID : {map:'POS_GUID'},DEVICE : {map:'DEVICE'},DEPOT_GUID : {map:'DEPOT_GUID'},DEPOT_CODE : {map:'DEPOT_CODE'},DEPOT_NAME : {map:'DEPOT_NAME'},TYPE : {map:'TYPE'},
+                DOC_DATE : {map:'DOC_DATE',type:'date_time'},CUSTOMER_GUID : {map:'CUSTOMER_GUID'},CUSTOMER_CODE : {map:'CUSTOMER_CODE'},CUSTOMER_NAME : {map:'CUSTOMER_NAME'},PAY_TYPE : {map:'PAY_TYPE'},
+                PAY_TYPE_NAME : {map:'PAY_TYPE'},LINE_NO : {map:'LINE_NO'},AMOUNT : {map:'AMOUNT'},CHANGE : {map:'CHANGE'},TICKET_PLUS : {map:'TICKET_PLUS'},GRAND_AMOUNT : {map:'GRAND_AMOUNT'},
+                GRAND_DISCOUNT : {map:'GRAND_DISCOUNT'},GRAND_LOYALTY : {map:'GRAND_LOYALTY'},GRAND_VAT : {map:'GRAND_VAT'},GRAND_TOTAL : {map:'GRAND_TOTAL'},STATUS : {map:'STATUS'}},
+                where : {GUID : {map:'GUID'}}
+            }
         } 
         tmpDt.deleteCmd = 
         {
@@ -578,7 +624,13 @@ export class posPaymentCls
                     "@GUID = @PGUID, " + 
                     "@POS_GUID = @PPOS_GUID ", 
             param : ['PCUSER:string|25','PGUID:string|50','PPOS_GUID:string|50'],
-            dataprm : ['CUSER','GUID','POS_GUID']
+            dataprm : ['CUSER','GUID','POS_GUID'],
+            local : 
+            {
+                type : "delete",
+                from : "POS_PAYMENT_VW_01",
+                where : {GUID : {map:'GUID'}}
+            }
         }
 
         this.ds.add(tmpDt);
@@ -842,6 +894,7 @@ export class posPluCls
             this.ds.get('PLU').selectCmd.local.where = Object.keys(tmpPrm).length == 0 ? undefined : tmpPrm 
             
             await this.ds.get('PLU').refresh();
+            console.log(this.ds.get('PLU'))
             resolve(this.ds.get('PLU'));    
         });
     }
@@ -901,7 +954,7 @@ export class posExtraCls
             local : 
             {
                 type : "insert",
-                into : "POS_EXTRA",
+                into : "POS_EXTRA_VW_01",
                 values : 
                 [
                     {
@@ -929,7 +982,7 @@ export class posExtraCls
             local : 
             {
                 type : "update",
-                in : "POS_EXTRA",
+                in : "POS_EXTRA_VW_01",
                 set : 
                 {
                     CUSER : {map:'CUSER'},
@@ -952,7 +1005,7 @@ export class posExtraCls
             local : 
             {
                 type : "delete",
-                from : "POS_EXTRA",
+                from : "POS_EXTRA_VW_01",
                 where : 
                 {
                     CUSER : {map:'CUSER'},

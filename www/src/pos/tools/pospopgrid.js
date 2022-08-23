@@ -40,6 +40,7 @@ export default class NbPosPopGrid extends NbBase
         let tmpQuery = {...this.data}
         tmpQuery.source.select.value = []
         tmpQuery.source.select.value.push(this["txt" + this.props.id].value.replaceAll('%','%')+'%')
+
         await this["grd" + this.props.id].dataRefresh(tmpQuery)
     }
     async show()
