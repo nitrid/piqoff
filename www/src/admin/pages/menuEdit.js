@@ -10,6 +10,8 @@ import NdSelectBox from '../../core/react/devex/selectbox.js';
 import NdButton from '../../core/react/devex/button.js';
 import {menu as menuOff} from '../../off/lib/menu.js'
 import {menu as menuMob} from '../../mob/lib/menu.js'
+import {menuCls} from '../../core/core'
+
 
 export default class menuEdit extends React.Component
 {
@@ -18,61 +20,78 @@ export default class menuEdit extends React.Component
         super(props)
 
         this.core = App.instance.core;
-       
-
-        this.treeViewSelectionChanged = this.treeViewSelectionChanged.bind(this);
-        this.getKeyByValue = this.getKeyByValue.bind(this);
-
         this.menu =  {}   
+        this.prmObj = new menuCls()
+        console.log(this.prmObj)
     }
     _cellRoleRender(e)
     {
-       
+        
     }
     async init()
     {
-        console.log(this.menuOff)
+        this.menu =  {}   
+        this.setState({menu:{}})
+        this.cmbApp.value = ''
+        this.cmbUser.value = ''
+    }
+    async menuBuild(pData)
+    {
+        return new Promise(async resolve => 
+        {
+            pData.forEach(async function (element,index,object)
+            {
+                if(typeof element.items != 'undefined')
+                {
+                    this.menuBuild(element.items)
+                }
+                else
+                {
+                    if(typeof element.selected == 'undefined' || element.selected == false)
+                    {
+                        object[index].visible = false
+                    }
+                }
+            }.bind(this));
+            resolve()
+        });
+    }
+    async menuClear(pData)
+    {
+        return new Promise(async resolve => 
+            {
+                pData.forEach(async function (element,index,object)
+                {
+                    if(typeof element.items != 'undefined')
+                    {
+                        if(element.items.length == 0)
+                        {
+                            object.splice(index,1)
+                            this.menuClear(object)
+                        }
+                        else
+                        {
+                            this.menuClear(element.items)
+                        }
+                    }
+                }.bind(this));
+                resolve()
+            });
+    }
+    async menuSave()
+    {
+        await this.menuBuild(this.menu)
+        console.log(this.menu)
+        await this.menuClear(this.menu)
+        console.log(this.menu)
+        let tmpPrm = {TYPE:0,ID:"menu",VALUE:this.menu,USERS:this.cmbUser.value,APP:this.cmbApp.value}
+        
+        this.prmObj.add(tmpPrm)
+        this.prmObj.save()
     }
     componentDidMount()
     {
         this.init()
-    }
-    treeViewSelectionChanged(e) 
-    {
-       console.log(e)
-    }
-    getKeyByValue(object, value) 
-    {
-        return Object.keys(object).find(key => object[key] === value);
-    }
-    Test()
-    {
-        let deneme = [...this.menu]
-       
-        for (let i = 0; i < this.menu.length; i++) 
-        {
-            for (let x = 0; x < this.menu[i].items.length; x++) 
-            {
-                if(typeof this.menu[i].items[x].items != 'undefined')
-                {
-                    let counter = 0
-                    for (let y = 0; y < this.menu[i].items[x].items.length; y++) 
-                    {
-                        counter = counter + 1
-                        console.log(counter)
-                        console.log(this.menu[i].items[x].items[y])
-                        if(this.menu[i].items[x].items[y].selected == false || typeof this.menu[i].items[x].items[y].selected == 'undefined')
-                        {
-                            console.log(y + '++++' +  counter)
-                            console.log(this.menu[i].items[x].items[y].id)
-                            deneme[i].items[x].items.splice(y,1)
-                            // counter = counter + 1
-                        }
-                    }
-                }
-            }
-        }
-        console.log(deneme)
     }
     render()
     {
@@ -82,23 +101,6 @@ export default class menuEdit extends React.Component
                     <div className="row p-2">
                         <div className="col-6">
                             <div className="row">
-                                <div className="col-3">
-                                    <Label text={"Kullanıcı"} alignment="right" />
-                                        <NdSelectBox simple={true} parent={this} id="cmbUser"
-                                        displayExpr="CODE"                       
-                                        valueExpr="CODE"
-                                        value=""
-                                        searchEnabled={true} 
-                                        showClearButton={true}
-                                        pageSize ={50}
-                                        notRefresh={true}
-                                        data={{source:{select:{query : "SELECT CODE FROM USERS ORDER BY CODE ASC"},sql:this.core.sql}}}
-                                        onValueChanged={(e)=>
-                                        {
-
-                                        }}
-                                        />
-                                </div>
                                 <div className="col-3">
                                 <Label text={"Uygulama"} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbApp"
@@ -112,22 +114,31 @@ export default class menuEdit extends React.Component
                                     data={{source:[{ID:0,VALUE:"OFF"},{ID:1,VALUE:"MOB"}]}}
                                     onValueChanged={(e)=>
                                     {
-                                        if(e.value == 'OFF')
-                                        {
-                                            this.menu = menuOff(App.instance.lang);
-                                            this.setState({menu:menuOff(App.instance.lang)})
-                                        }
-                                        else if(e.value == 'OFF')
-                                        {
-                                            this.menu = menuMob(App.instance.lang);
-                                            this.setState({menu:menuMob(App.instance.lang)})
-                                        }
-                                        console.log(this)
+                                       
                                     }}
                                     />
                                 </div>
+                                <div className="col-3">
+                                    <Label text={"Kullanıcı"} alignment="right" />
+                                        <NdSelectBox simple={true} parent={this} id="cmbUser"
+                                        displayExpr="CODE"                       
+                                        valueExpr="CODE"
+                                        value=""
+                                        searchEnabled={true} 
+                                        showClearButton={true}
+                                        pageSize ={50}
+                                        notRefresh={true}
+                                        data={{source:{select:{query : "SELECT CODE FROM USERS ORDER BY CODE ASC"},sql:this.core.sql}}}
+                                        onValueChanged={async (e)=>
+                                        {
+                                           
+                                            this.menu = menuOff(App.instance.lang)
+                                            this.setState({menu:menuOff(App.instance.lang)})
+                                        }}
+                                        />
+                                </div>
                                 <div className="col-6">
-                                <NdButton text={this.t("Getir")} type="default" width="100%" onClick={async()=>{this.Test()}}></NdButton>
+                                <NdButton text={"Kaydet"} type="default" width="100%" onClick={async()=>{this.menuSave()}}></NdButton>
                                 </div>
                             </div>
                         </div>
@@ -141,7 +152,7 @@ export default class menuEdit extends React.Component
                             selectionMode={"multiple"}
                             onSelectionChanged={async(e)=>
                                 {
-
+                                    
                                 }}
                             >
                             </NdTreeView>  
