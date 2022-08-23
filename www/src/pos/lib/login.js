@@ -89,20 +89,20 @@ export default class Login extends React.Component
         if((await this.core.auth.login(this.Kullanici.value,this.Sifre.value,'POS')))
         {            
             //LOCAL DB AKTARIMI İÇİN UYARI VE AKTARIM.
-            // let tmpConfObj =
-            // {
-            //     id:'msgDbTransferAlert',showTitle:true,title:this.lang.t("msgDbTransferAlert.title"),showCloseButton:true,width:'500px',height:'200px',
-            //     button:[{id:"btn01",caption:this.lang.t("msgDbTransferAlert.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgDbTransferAlert.btn02"),location:'after'}],
-            //     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDbTransferAlert.msg")}</div>)
-            // }
-            // if((await dialog(tmpConfObj)) == 'btn01')
-            // {
-            //     this.msgTransfer.show()
-            //     await App.instance.transfer.transferSql()
-            //     this.msgTransfer.hide()                
-            // }
+            let tmpConfObj =
+            {
+                id:'msgDbTransferAlert',showTitle:true,title:this.lang.t("msgDbTransferAlert.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.lang.t("msgDbTransferAlert.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgDbTransferAlert.btn02"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDbTransferAlert.msg")}</div>)
+            }
+            if((await dialog(tmpConfObj)) == 'btn01')
+            {
+                this.msgTransfer.show()
+                await App.instance.transfer.transferSql()
+                this.msgTransfer.hide()                
+            }
             
-            // await this.core.util.waitUntil(300)
+            await this.core.util.waitUntil(300)
             App.instance.setState({logined:true});
         }
         else

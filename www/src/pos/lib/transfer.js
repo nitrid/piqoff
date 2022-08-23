@@ -317,6 +317,7 @@ export default class transferCls
                     STATUS : {dataType: "number"},
                     DESCRIPTION : {dataType: "string"},
                     REF : {dataType: "string"},
+                    DELETED : {dataType: "boolean"},
                 }
             },
             //POS_SALE_VW_01
@@ -379,6 +380,7 @@ export default class transferCls
                     GRAND_TOTAL : {dataType: "number"},
                     STATUS : {dataType: "number"},
                     REBATE_TICKET : {dataType: "string"},
+                    DELETED : {dataType: "boolean"},
                 }
             },
             //POS_PAYMENT_VW_01
@@ -416,6 +418,7 @@ export default class transferCls
                     GRAND_VAT : {dataType: "number"},
                     GRAND_TOTAL : {dataType: "number"},
                     STATUS : {dataType: "number"},
+                    DELETED : {dataType: "boolean"},
                 }
             },
             //PLU_VW_01

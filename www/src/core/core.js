@@ -288,7 +288,6 @@ export class local
             if(Array.isArray(pQuery))
             {
                 let tmpQuery = pQuery
-                console.log(tmpQuery)
                 for (let i = 0; i < tmpQuery.length; i++) 
                 {
                     if(typeof tmpQuery[i].local != 'undefined')
@@ -1048,8 +1047,14 @@ export class datatable
                                     {                                        
                                         let tmpKey = Object.keys(pItem.set)[x]
                                         let tmpMap = Object.values(pItem.set)[x]
-                                        console.log(this._deleteList[i][tmpMap.map])
-                                        pItem.set[tmpKey] = this._deleteList[i][tmpMap.map]
+                                        if(typeof tmpMap.map != 'undefined')
+                                        {
+                                            pItem.set[tmpKey] = this._deleteList[i][tmpMap.map]
+                                        }
+                                        else
+                                        {
+                                            pItem.set[tmpKey] = tmpMap
+                                        }
                                     }                            
                                 }
                                 if(typeof pItem.where != 'undefined')
@@ -1059,7 +1064,14 @@ export class datatable
                                     {
                                         let tmpKey = Object.keys(pItem.where)[x]
                                         let tmpMap = Object.values(pItem.where)[x]
-                                        pItem.where[tmpKey] = this._deleteList[i][tmpMap.map]
+                                        if(typeof tmpMap.map != 'undefined')
+                                        {
+                                            pItem.where[tmpKey] = this._deleteList[i][tmpMap.map]
+                                        }
+                                        else
+                                        {
+                                            pItem.where[tmpKey] = tmpMap
+                                        }
                                     }
                                 }
                             }
@@ -1072,7 +1084,14 @@ export class datatable
                                     {
                                         let tmpKey = Object.keys(pItem.where)[x]
                                         let tmpMap = Object.values(pItem.where)[x]
-                                        pItem.where[tmpKey] = this._deleteList[i][tmpMap.map]
+                                        if(typeof tmpMap.map != 'undefined')
+                                        {
+                                            pItem.where[tmpKey] = this._deleteList[i][tmpMap.map]
+                                        }
+                                        else
+                                        {
+                                            pItem.where[tmpKey] = tmpMap
+                                        }                                        
                                     }
                                 }
                             }
@@ -1102,16 +1121,16 @@ export class datatable
             
             if(tmpQueryList.length > 0)
             {
-                let TmpDeleteData = await this.sql.execute(tmpQueryList)
+                let tmpDeleteData = await this.sql.execute(tmpQueryList)
 
-                if(typeof TmpDeleteData.result.err == 'undefined')
+                if(typeof tmpDeleteData.result.err == 'undefined')
                 {
                     this._deleteList.splice(0,this._deleteList.length);
                     resolve(0)
                 }
                 else
                 {
-                    console.log(TmpDeleteData.result.err)
+                    console.log(tmpDeleteData.result.err)
                     resolve(1)
                 }   
             }            
