@@ -61,13 +61,7 @@ export default class App extends React.Component
         {
             opened : true,
             logined : false,
-            connected : true,
-            splash : 
-            {
-                type : 0,
-                headers : 'Warning',
-                title : 'Sunucu ile bağlantı kuruluyor.',
-            },
+            splash : true,
             vtadi : ''
         }
         this.toolbarItems = 
@@ -121,7 +115,6 @@ export default class App extends React.Component
         this.transfer = new transferCls()
 
         this.textValueChanged = this.textValueChanged.bind(this)
-        this.onDbClick = this.onDbClick.bind(this)        
         
         if(!App.instance)
         {
@@ -129,43 +122,27 @@ export default class App extends React.Component
         }
 
         this.core.on('connect',async () => 
-        {
-            if(!this.state.connected)
-            {
-                let tmpConfObj =
-                {
-                    id:'msgOnlineAlert',showTitle:true,title:this.lang.t("msgOnlineAlert.title"),showCloseButton:true,width:'500px',height:'200px',
-                    button:[{id:"btn01",caption:this.lang.t("msgOnlineAlert.btn01"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOnlineAlert.msg")}</div>)
-                }
-                await dialog(tmpConfObj);
-            }
-            
+        {                        
             //SUNUCUYA BAĞLANDIKDAN SONRA AUTH ILE LOGIN DENETLENIYOR
             if((await this.core.auth.login(window.sessionStorage.getItem('auth'),'POS')))
             {
-                App.instance.setState({logined:true,connected:true});
+                App.instance.setState({logined:true,splash:false});
             }
             else
             {
-                App.instance.setState({logined:false,connected:true});
+                App.instance.setState({logined:false,splash:false});
             }
+            this.core.offline = false;
         })
-        this.core.on('connect_error',(error) => 
+        this.core.socket.on('connect_error',(error) => 
         {
-            //this.setState({connected:false});
+            App.instance.setState({splash:false});
         })
         this.core.on('disconnect',async () => 
         {
-            App.instance.setState({connected:false});
-            let tmpConfObj =
-            {
-                id:'msgOfflineAlert',showTitle:true,title:this.lang.t("msgOfflineAlert.title"),showCloseButton:true,width:'500px',height:'200px',
-                button:[{id:"btn01",caption:this.lang.t("msgOfflineAlert.btn01"),location:'after'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOfflineAlert.msg")}</div>)
-            }
-            await dialog(tmpConfObj);
-        })        
+            App.instance.setState({splash:false});
+            this.core.offline = true;
+        })
     }    
     menuClick(data)
     {
@@ -181,35 +158,6 @@ export default class App extends React.Component
             this.setState({vtadi: e.value});
         } 
     }
-    async onDbClick(e)
-    {
-        if(this.state.vtadi == '')
-        {
-            return;
-        }
-
-        let tmpResult = await this.core.sql.createDb(this.state.vtadi)
-        if(tmpResult.msg == "")
-        {
-            let tmpSplash = 
-            {
-                type : 1,
-                headers : 'Veritabanı yok. Oluşturmak istermisiniz.',
-                title: 'Vt kurulumu başarılı.Lütfen config dosyasını kontrol edip sunucuyu restart ediniz.',
-            }
-            App.instance.setState({logined:false,connected:false,splash:tmpSplash});
-        }
-        else
-        {
-            let tmpSplash = 
-            {
-                type : 1,
-                headers : 'Veritabanı yok. Oluşturmak istermisiniz.',
-                title: tmpResult.msg,
-            }
-            App.instance.setState({logined:false,connected:false,splash:tmpSplash});
-        }
-    }
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
@@ -217,8 +165,25 @@ export default class App extends React.Component
     }
     render() 
     {
-        const { opened,logined,connected,splash } = this.state;
+        const { logined,splash } = this.state;
 
+        if(splash)
+        {
+            return(
+                <div style={this.style.splash_body}>
+                    <div className="card" style={this.style.splash_box}>
+                        <div className="card-header">{"Warning"}</div>
+                        <div className="card-body">
+                            <div className="row">
+                                <div className="col-12 pb-2">
+                                    <h5 className="text-center">{"Yükleniyor..."}</h5>
+                                </div>
+                            </div>
+                        </div>                        
+                    </div>
+                </div>
+            )           
+        }
         if(!logined)
         {
             return <Login />

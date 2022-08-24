@@ -38,7 +38,6 @@ export class core
     {
         this.socket.on('connect',() => 
         {
-            this.offline = true;
             this.emit('connect',()=>{})
         });
         this.socket.on('connect_error',(error) => 
@@ -51,7 +50,6 @@ export class core
         });
         this.socket.on('disconnect', () => 
         {
-            this.offline = false;
             this.emit('disconnect',()=>{})
         });
     }
@@ -1808,7 +1806,7 @@ Array.prototype.findSub = function(pFilters,pFindSub)
             }
             else if(Array.isArray(this[i][pFindSub]))
             {
-                let tmpData = this[i][pFindSub].treeFind(pFilters,pFindSub)
+                let tmpData = this[i][pFindSub].findSub(pFilters,pFindSub)
                 if (typeof tmpData != 'undefined')
                 {
                     return tmpData
