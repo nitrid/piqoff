@@ -10,7 +10,7 @@ import NdSelectBox from '../../core/react/devex/selectbox.js';
 import NdButton from '../../core/react/devex/button.js';
 import {menu as menuOff} from '../../off/lib/menu.js'
 import {menu as menuMob} from '../../mob/lib/menu.js'
-import {menuCls} from '../../core/core'
+import {menu} from '../../core/core'
 
 
 export default class menuEdit extends React.Component
@@ -21,7 +21,7 @@ export default class menuEdit extends React.Component
 
         this.core = App.instance.core;
         this.menu =  {}   
-        this.prmObj = new menuCls()
+        this.prmObj = new menu()
         console.log(this.prmObj)
     }
     _cellRoleRender(e)
@@ -81,13 +81,18 @@ export default class menuEdit extends React.Component
     async menuSave()
     {
         await this.menuBuild(this.menu)
-        console.log(this.menu)
         await this.menuClear(this.menu)
-        console.log(this.menu)
-        let tmpPrm = {TYPE:0,ID:"menu",VALUE:this.menu,USERS:this.cmbUser.value,APP:this.cmbApp.value}
         
-        this.prmObj.add(tmpPrm)
-        this.prmObj.save()
+        let tmpEmpty = {...this.prmObj.empty};
+        tmpEmpty.TYPE = 0
+        tmpEmpty.ID = "menu"
+        tmpEmpty.VALUE = JSON.stringify(this.menu)
+        tmpEmpty.USERS = this.cmbUser.value
+        tmpEmpty.APP = this.cmbApp.value
+
+        this.prmObj.addEmpty(tmpEmpty);    
+        this.prmObj.save()        
+        
     }
     componentDidMount()
     {
@@ -112,9 +117,21 @@ export default class menuEdit extends React.Component
                                     pageSize ={50}
                                     notRefresh={true}
                                     data={{source:[{ID:0,VALUE:"OFF"},{ID:1,VALUE:"MOB"}]}}
-                                    onValueChanged={(e)=>
+                                    onValueChanged={async (e)=>
                                     {
-                                       
+                                        console.log(e)
+                                        if(e.value == 'OFF')
+                                        {
+                                            this.prmObj = new menu(menuOff(App.instance.lang))
+                                        }
+                                        else if(e.value == 'MOB')
+                                        {
+                                            this.prmObj = new menu(menuMob(App.instance.lang))
+                                        }
+                                        let tmpMenu = await this.prmObj.load({USER:this.cmbUser.value,APP:this.cmbApp.value})
+                                        this.menu = tmpMenu
+                                        this.setState({menu:tmpMenu})
+                                        console.log(this.prmObj)
                                     }}
                                     />
                                 </div>
@@ -131,9 +148,10 @@ export default class menuEdit extends React.Component
                                         data={{source:{select:{query : "SELECT CODE FROM USERS ORDER BY CODE ASC"},sql:this.core.sql}}}
                                         onValueChanged={async (e)=>
                                         {
-                                           
-                                            this.menu = menuOff(App.instance.lang)
-                                            this.setState({menu:menuOff(App.instance.lang)})
+
+                                            let tmpMenu = await this.prmObj.load({USER:this.cmbUser.value,APP:this.cmbApp.value})
+                                            this.menu = tmpMenu
+                                            this.setState({menu:tmpMenu})
                                         }}
                                         />
                                 </div>
