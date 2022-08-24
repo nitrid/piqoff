@@ -1642,7 +1642,7 @@ export class access extends datatable
         }
     }
 }
-export class menuCls
+export class menu
 {
     constructor()
     {
