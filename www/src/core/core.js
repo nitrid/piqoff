@@ -38,7 +38,6 @@ export class core
     {
         this.socket.on('connect',() => 
         {
-            this.offline = true;
             this.emit('connect',()=>{})
         });
         this.socket.on('connect_error',(error) => 
@@ -51,7 +50,6 @@ export class core
         });
         this.socket.on('disconnect', () => 
         {
-            this.offline = false;
             this.emit('disconnect',()=>{})
         });
     }

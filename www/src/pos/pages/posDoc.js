@@ -74,8 +74,9 @@ export default class posDoc extends React.PureComponent
             cheqCount:0,
             cheqTotalAmount:0,
             cheqLastAmount:0,
+            isConnected:true
         }   
-
+        
         document.onkeydown = (e) =>
         {
             //EĞER FORMUN ÖNÜNDE POPUP YADA LOADING PANEL VARSA BARCODE TEXTBOX ÇALIŞMIYOR.
@@ -108,6 +109,34 @@ export default class posDoc extends React.PureComponent
             this.getItem(tmpBarkod)
         })
         this.init();
+
+        this.core.on('connect',async () => 
+        {                     
+            if(!this.state.isConnected)
+            {
+                let tmpConfObj =
+                {
+                    id:'msgOnlineAlert',showTitle:true,title:this.lang.t("msgOnlineAlert.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.lang.t("msgOnlineAlert.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOnlineAlert.msg")}</div>)
+                }
+                await dialog(tmpConfObj);
+            }
+            this.setState({isConnected:true})
+
+
+        })
+        this.core.on('disconnect',async () => 
+        {
+            this.setState({isConnected:false})
+            let tmpConfObj =
+            {
+                id:'msgOfflineAlert',showTitle:true,title:this.lang.t("msgOfflineAlert.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.lang.t("msgOfflineAlert.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOfflineAlert.msg")}</div>)
+            }
+            await dialog(tmpConfObj);
+        })
     }
     async init()
     {             
@@ -2687,7 +2716,7 @@ export default class posDoc extends React.PureComponent
                                     </div>
                                     {/* Offline */}
                                     <div className="col px-1">
-                                        <NbButton id={"btnOffline"} parent={this} className={this.state.isBtnGetCustomer == true ? "form-group btn btn-danger btn-block my-1" : "form-group btn btn-success btn-block my-1"} style={{height:"70px",width:"100%",fontSize:"10pt"}}>
+                                        <NbButton id={"btnOffline"} parent={this} className={this.state.isConnected == false ? "form-group btn btn-danger btn-block my-1" : "form-group btn btn-success btn-block my-1"} style={{height:"70px",width:"100%",fontSize:"10pt"}}>
                                             <i className="text-white fa-solid fa-signal" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
@@ -2717,7 +2746,7 @@ export default class posDoc extends React.PureComponent
                                     </div>
                                     {/* Get Customer */}
                                     <div className="col px-1">
-                                        <NbButton id={"btnGetCustomer"} parent={this} className={App.instance.state.connected == false ? "form-group btn btn-danger btn-block my-1" : "form-group btn btn-info btn-block my-1"} style={{height:"70px",width:"100%"}}
+                                        <NbButton id={"btnGetCustomer"} parent={this} className={this.state.isBtnGetCustomer == true ? "form-group btn btn-danger btn-block my-1" : "form-group btn btn-info btn-block my-1"} style={{height:"70px",width:"100%"}}
                                         onClick={async ()=>
                                         {
                                             if(this.state.isBtnGetCustomer)
