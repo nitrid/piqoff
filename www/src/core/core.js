@@ -1793,7 +1793,7 @@ Array.prototype.toGroupBy = function(pKey)
     }, {});
 }
 //* DİZİ İÇİN ALT ELEMANLARDA ARATMA İŞLEMİ - ALI KEMAL KARACA - 24.08.2022 */
-Array.prototype.subFind = function(pFilters,pFindSub)
+Array.prototype.findSub = function(pFilters,pFindSub)
 {
     if(typeof pFilters == 'object')
     {
