@@ -20,7 +20,7 @@ export default class menuEdit extends React.Component
         super(props)
 
         this.core = App.instance.core;
-        this.menu =  {}   
+        this.menu =  []  
         this.prmObj = new menu()
         console.log(this.prmObj)
     }
@@ -30,7 +30,8 @@ export default class menuEdit extends React.Component
     }
     async init()
     {
-        this.menu =  {}   
+        console.log(this.core)
+        this.menu =  []   
         this.setState({menu:{}})
         this.cmbApp.value = ''
         this.cmbUser.value = ''
@@ -98,6 +99,50 @@ export default class menuEdit extends React.Component
     {
         this.init()
     }
+    mergeMenu(tmpMenu)
+    {
+  
+        return new Promise(async resolve => 
+        {
+            tmpMenu.forEach(async function (element,index,object)
+            {
+                if(typeof element.items != 'undefined')
+                {
+                    console.log(this.menu)
+                    let tmpMerge = await this.menu.findSub({id:element.id},'items')
+                    console.log(tmpMerge)
+                    this.mergeMenu(element.items)
+                }
+                else
+                {
+                    let tmpMerge = await this.menu.findSub({id:element.id},'items')
+                    console.log(tmpMerge)
+                }
+            }.bind(this));
+            resolve()
+        });
+    }
+    async visibleClear(pData)
+    {
+        return new Promise(async resolve => 
+        {
+            pData.forEach(async function (element,index,object)
+            {
+                if(typeof element.items != 'undefined')
+                {
+                    this.visibleClear(element.items)
+                }
+                else
+                {
+                    if(typeof element.visible != 'undefined' || element.visible == false)
+                    {
+                        object[index].visible = true
+                    }
+                }
+            }.bind(this));
+            resolve()
+        });
+    }
     render()
     {
         return(
@@ -129,9 +174,7 @@ export default class menuEdit extends React.Component
                                             this.prmObj = new menu(menuMob(App.instance.lang))
                                         }
                                         let tmpMenu = await this.prmObj.load({USER:this.cmbUser.value,APP:this.cmbApp.value})
-                                        this.menu = tmpMenu
-                                        this.setState({menu:tmpMenu})
-                                        console.log(this.prmObj)
+                                        this.mergeMenu(tmpMenu)
                                     }}
                                     />
                                 </div>

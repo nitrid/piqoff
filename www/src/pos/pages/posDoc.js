@@ -50,7 +50,7 @@ export default class posDoc extends React.PureComponent
         // NUMBER İÇİN PARAMETREDEN PARA SEMBOLÜ ATANIYOR.
         Number.money = this.prmObj.filter({ID:'MoneySymbol',TYPE:0}).getValue()
         
-        this.core.offline = true
+        //this.core.offline = true
 
         this.posObj = new posCls()
         this.posDevice = new posDeviceCls();
