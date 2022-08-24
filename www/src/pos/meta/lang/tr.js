@@ -525,4 +525,16 @@ export const langTr =
         msg : "Bu işlemi offline modda iken yapamazsınız !",
         btn01 : "Tamam"
     },
+    msgOfflineAlert: 
+    {
+        title : "Dikkat",
+        msg : "Sunucu ile bağlantınız kesildi ! Offline olarak işleminize devam edebilirsiniz.",
+        btn01 : "Tamam"
+    },
+    msgOnlineAlert: 
+    {
+        title : "Dikkat",
+        msg : "Sunucu ile bağlantı kuruldu ! Online olarak işleminize devam edebilirsiniz.",
+        btn01 : "Tamam"
+    },
 }

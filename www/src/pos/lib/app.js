@@ -18,12 +18,12 @@ import i18n from './i18n.js'
 import TextBox from 'devextreme-react/text-box';
 import Button from 'devextreme-react/button';
 import { LoadPanel } from 'devextreme-react/load-panel';
-
 import HTMLReactParser from 'html-react-parser';
 
 import Login from './login.js'
 import Pos from '../pages/posDoc.js'
 import transferCls from './transfer.js'
+import NdDialog,{dialog} from '../../core/react/devex/dialog';
 
 export default class App extends React.Component
 {
@@ -61,7 +61,7 @@ export default class App extends React.Component
         {
             opened : true,
             logined : false,
-            connected : false,
+            connected : true,
             splash : 
             {
                 type : 0,
@@ -130,37 +130,17 @@ export default class App extends React.Component
 
         this.core.on('connect',async () => 
         {
-            if((await this.core.sql.try()).status == 1)
+            if(!this.state.connected)
             {
-                let tmpSplash = 
+                let tmpConfObj =
                 {
-                    type : 0,
-                    headers : 'Warning',
-                    title: 'Sql sunucuya bağlanılamıyor.',
+                    id:'msgOnlineAlert',showTitle:true,title:this.lang.t("msgOnlineAlert.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.lang.t("msgOnlineAlert.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOnlineAlert.msg")}</div>)
                 }
-                App.instance.setState({logined:false,connected:false,splash:tmpSplash});
+                await dialog(tmpConfObj);
             }
-            else if((await this.core.sql.try()).status == 2)
-            {
-                let tmpSplash = 
-                {
-                    type : 1,
-                    headers : 'Veritabanı yok. Oluşturmak istermisiniz.',
-                    title: '',
-                }
-
-                App.instance.setState({logined:false,connected:false,splash:tmpSplash});
-            }
-            else
-            {
-                let tmpSplash = 
-                {
-                    type : 0,
-                    headers : 'Warning',
-                    title : 'Sunucu ile bağlantı kuruluyor.',
-                }
-                App.instance.setState({splash:tmpSplash});
-            }
+            
             //SUNUCUYA BAĞLANDIKDAN SONRA AUTH ILE LOGIN DENETLENIYOR
             if((await this.core.auth.login(window.sessionStorage.getItem('auth'),'POS')))
             {
@@ -173,13 +153,19 @@ export default class App extends React.Component
         })
         this.core.on('connect_error',(error) => 
         {
-            this.setState({connected:false});
+            //this.setState({connected:false});
         })
         this.core.on('disconnect',async () => 
         {
             App.instance.setState({connected:false});
-            this.core.auth.logout()
-        })
+            let tmpConfObj =
+            {
+                id:'msgOfflineAlert',showTitle:true,title:this.lang.t("msgOfflineAlert.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.lang.t("msgOfflineAlert.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOfflineAlert.msg")}</div>)
+            }
+            await dialog(tmpConfObj);
+        })        
     }    
     menuClick(data)
     {
@@ -233,62 +219,6 @@ export default class App extends React.Component
     {
         const { opened,logined,connected,splash } = this.state;
 
-        if(!connected)
-        {
-            //SPLASH EKRANI
-            if(splash.type == 0)
-            {
-                //BAĞLANTI YOKSA YA DA SQL SUNUCUYA BAĞLANAMIYORSA...
-                return(
-                    <div style={this.style.splash_body}>
-                        <div className="card" style={this.style.splash_box}>
-                            <div className="card-header">{splash.headers}</div>
-                            <div className="card-body">
-                                <div className="row">
-                                    <div className="col-12 pb-2">
-                                        <h5 className="text-center">{splash.title}</h5>
-                                    </div>
-                                </div>
-                            </div>                        
-                        </div>
-                    </div>
-                )                
-            }
-            else
-            {
-                //VERITABANI OLUŞTURMAK İÇİN AÇILAN EKRAN.
-                return(
-                    <div style={this.style.splash_body}>
-                        <div className="card" style={this.style.splash_box}>
-                            <div className="card-header" style={{height:'40px'}}>{splash.headers}</div>
-                            <div className="card-body">
-                                <div className="row">
-                                    <div className="col-12 pb-2">
-                                        <h6 className="text-center">{splash.title}</h6>
-                                    </div>
-                                </div>
-                                <div className="dx-field">
-                                    <div className="dx-field-label">Veritabanı Adı</div>
-                                    <div className="dx-field-value">
-                                        <TextBox id="VtAdi" showClearButton={true} height='fit-content' valueChangeEvent="keyup" onValueChanged={this.textValueChanged} />
-                                    </div>
-                                </div>
-                                <div className="dx-field">
-                                    <Button
-                                        width={'100%'}
-                                        height='fit-content'
-                                        text="Oluştur"
-                                        type="default"
-                                        stylingMode="contained"
-                                        onClick={this.onDbClick}
-                                    />
-                                </div>
-                            </div>                        
-                        </div>
-                    </div>
-                )                
-            }
-        }
         if(!logined)
         {
             return <Login />

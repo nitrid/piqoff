@@ -38,6 +38,7 @@ export class core
     {
         this.socket.on('connect',() => 
         {
+            this.offline = true;
             this.emit('connect',()=>{})
         });
         this.socket.on('connect_error',(error) => 
@@ -50,6 +51,7 @@ export class core
         });
         this.socket.on('disconnect', () => 
         {
+            this.offline = false;
             this.emit('disconnect',()=>{})
         });
     }
@@ -1789,6 +1791,31 @@ Array.prototype.toGroupBy = function(pKey)
         (rv[x[pKey]] = rv[x[pKey]] || []).push(x);
         return rv;
     }, {});
+}
+//* DİZİ İÇİN ALT ELEMANLARDA ARATMA İŞLEMİ - ALI KEMAL KARACA - 24.08.2022 */
+Array.prototype.subFind = function(pFilters,pFindSub)
+{
+    if(typeof pFilters == 'object')
+    {
+        let tmpKey = Object.keys(pFilters)[0];
+        let tmpVal = Object.values(pFilters)[0];
+    
+        for (let i = 0; i < this.length; i++) 
+        {
+            if(this[i][tmpKey] == tmpVal)
+            {
+                return this[i]
+            }
+            else if(Array.isArray(this[i][pFindSub]))
+            {
+                let tmpData = this[i][pFindSub].treeFind(pFilters,pFindSub)
+                if (typeof tmpData != 'undefined')
+                {
+                    return tmpData
+                }
+            }
+        }
+    }
 }
 //* SAYI İÇERİSİNDEKİ ORAN. ÖRN: 10 SAYISININ YÜZDE 18 İ 1.8. */
 Number.prototype.rateInc = function(pRate,pDigit)

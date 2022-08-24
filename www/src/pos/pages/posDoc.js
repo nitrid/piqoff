@@ -73,7 +73,7 @@ export default class posDoc extends React.PureComponent
             payRest:0,
             cheqCount:0,
             cheqTotalAmount:0,
-            cheqLastAmount:0
+            cheqLastAmount:0,
         }   
 
         document.onkeydown = (e) =>
@@ -107,7 +107,7 @@ export default class posDoc extends React.PureComponent
         {
             this.getItem(tmpBarkod)
         })
-        this.init();        
+        this.init();
     }
     async init()
     {             
@@ -2685,9 +2685,11 @@ export default class posDoc extends React.PureComponent
                                     <div className="col px-1">
                                         <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
                                     </div>
-                                    {/* Blank */}
+                                    {/* Offline */}
                                     <div className="col px-1">
-                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
+                                        <NbButton id={"btnOffline"} parent={this} className={this.state.isBtnGetCustomer == true ? "form-group btn btn-danger btn-block my-1" : "form-group btn btn-success btn-block my-1"} style={{height:"70px",width:"100%",fontSize:"10pt"}}>
+                                            <i className="text-white fa-solid fa-signal" style={{fontSize: "24px"}} />
+                                        </NbButton>
                                     </div>
                                 </div>
                                 {/* Line 8 */}
@@ -2715,7 +2717,7 @@ export default class posDoc extends React.PureComponent
                                     </div>
                                     {/* Get Customer */}
                                     <div className="col px-1">
-                                        <NbButton id={"btnGetCustomer"} parent={this} className={this.state.isBtnGetCustomer == true ? "form-group btn btn-danger btn-block my-1" : "form-group btn btn-info btn-block my-1"} style={{height:"70px",width:"100%"}}
+                                        <NbButton id={"btnGetCustomer"} parent={this} className={App.instance.state.connected == false ? "form-group btn btn-danger btn-block my-1" : "form-group btn btn-info btn-block my-1"} style={{height:"70px",width:"100%"}}
                                         onClick={async ()=>
                                         {
                                             if(this.state.isBtnGetCustomer)
