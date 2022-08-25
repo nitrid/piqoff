@@ -119,31 +119,48 @@ export default class App extends React.Component
         if(!App.instance)
         {
             App.instance = this;
-        }
+        }        
 
         this.core.on('connect',async () => 
-        {                        
-            //SUNUCUYA BAĞLANDIKDAN SONRA AUTH ILE LOGIN DENETLENIYOR
-            if((await this.core.auth.login(window.sessionStorage.getItem('auth'),'POS')))
-            {
-                App.instance.setState({logined:true,splash:false});
-            }
-            else
-            {
-                App.instance.setState({logined:false,splash:false});
-            }
-            this.core.offline = false;
+        {   
+            this.core.offline = false;                     
+            this.login()
         })
-        this.core.socket.on('connect_error',(error) => 
+        let tmpOneShoot = false;
+        this.core.socket.on('connect_error',async(error) => 
         {
-            App.instance.setState({splash:false});
+            this.core.offline = true;
+            if(!tmpOneShoot)
+            {                
+                tmpOneShoot = true
+                if(window.sessionStorage.getItem('auth') == null)
+                {
+                    App.instance.setState({logined:false,splash:false});
+                }
+                else
+                {
+                    this.login()
+                }                
+            }
         })
         this.core.on('disconnect',async () => 
         {
             App.instance.setState({splash:false});
             this.core.offline = true;
         })
-    }    
+    }
+    async login()
+    {
+        //SUNUCUYA BAĞLANDIKDAN SONRA AUTH ILE LOGIN DENETLENIYOR
+        if((await this.core.auth.login(window.sessionStorage.getItem('auth'),'POS')))
+        {
+            App.instance.setState({logined:true,splash:false});
+        }
+        else
+        {
+            App.instance.setState({logined:false,splash:false});
+        }
+    }
     menuClick(data)
     {
         if(typeof data.path != 'undefined')

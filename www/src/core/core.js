@@ -372,19 +372,46 @@ export class auth
     }
     login()
     {
-        return new Promise(resolve => 
+        return new Promise(async resolve => 
         {
-            let TmpData = []
+            let tmpData = []
+            let tmpLocWhere = {}
             if(arguments.length == 2)
             {
-                TmpData.push(arguments[0],arguments[1])
+                tmpData.push(arguments[0],arguments[1])
+                tmpLocWhere = {SHA:arguments[0]}
             }
             else if(arguments.length == 3)
             {
-                TmpData.push(arguments[0],arguments[1],arguments[2])
+                tmpData.push(arguments[0],arguments[1],arguments[2])
+                tmpLocWhere = {CODE:arguments[0],PWD:btoa(arguments[1])}
             }
-            
-            core.instance.socket.emit('login',TmpData,async (data) =>
+            //LOCAL DB İÇİN YAPILDI
+            if(core.instance.offline)
+            {
+                let tmpData = await core.instance.local.select({from:"USERS",where:tmpLocWhere})
+
+                if(tmpData.result.length > 0)
+                {
+                    this.data = tmpData.result[0]
+                    if(typeof window != 'undefined')
+                        window.sessionStorage.setItem('auth',tmpData.result[0].SHA)
+
+                    resolve(true)
+                    return
+                }
+                else 
+                {
+                    if(typeof window != 'undefined')
+                        window.sessionStorage.removeItem('auth')
+                    
+                    this.data = null
+                    resolve(false)
+                    return
+                }
+            }
+            /************************************************************************************ */
+            core.instance.socket.emit('login',tmpData,async (data) =>
             {
                 if(data.length > 0)
                 {
@@ -407,9 +434,24 @@ export class auth
     }
     getUserList()
     {
-        return new Promise(resolve => 
+        return new Promise(async resolve => 
         {   
-            console.log('core-core')
+            //LOCAL DB İÇİN YAPILDI
+            if(core.instance.offline)
+            {
+                let tmpData = await core.instance.local.select({from:"USERS"})
+                if(tmpData.result.length > 0)
+                {                   
+                    resolve(tmpData.result)
+                    return
+                }
+                else 
+                {
+                    resolve([])
+                    return
+                }
+            }
+            /************************************************************************************ */
             core.instance.socket.emit('getUserList',async (data) =>
             {
                 if(data.length > 0)
@@ -492,7 +534,7 @@ export class util
         }
     
         return false;
-    }
+    }    
 }
 export class dataset
 {    
