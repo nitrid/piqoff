@@ -1672,7 +1672,7 @@ export class menu
          let tmpDt = new datatable('PARAM');
          tmpDt.selectCmd = 
          {
-             query : "SELECT * FROM [dbo].[PARAM] WHERE ((USERS = @USER) OR (@USER = '')) AND APP=@APP AND ID='menu'",
+             query : "SELECT * FROM [dbo].[PARAM] WHERE USERS = @USER AND APP = @APP AND ID='menu'",
              param : ['USER:string|50','APP:string|50']
          }
          tmpDt.insertCmd = 
