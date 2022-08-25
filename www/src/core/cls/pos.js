@@ -1492,7 +1492,7 @@ export class posDeviceCls
 
         return new Promise((resolve) =>
         {
-            let port = new this.serialport(this.dt().length > 0 ? this.dt()[0].PAY_CARD_PORT : "");
+            let port = new this.serialport(this.dt().length > 0 ? this.dt()[0].PAY_CARD_PORT : "",{baudRate: 9600,dataBits: 7,parity:'odd',parser: new this.serialport.parsers.Readline()});
             port.on('data',(data)=> 
             {
                 if(String.fromCharCode(data[0]) == String.fromCharCode(6))

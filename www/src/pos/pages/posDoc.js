@@ -136,6 +136,12 @@ export default class posDoc extends React.PureComponent
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOfflineAlert.msg")}</div>)
             }
             await dialog(tmpConfObj);
+
+            for (let i = 0; i < array.length; i++) {
+                const element = array[i];
+                
+            }
+            console.log(this.posObj)
         })
     }
     async init()
@@ -1170,13 +1176,13 @@ export default class posDoc extends React.PureComponent
                     return
                 }
             }
+            this.loading.current.instance.show()
             let tmpRowData = this.isRowMerge('PAY',{TYPE:pType})
             //NAKİT ALDIĞINDA KASA AÇMA İŞLEMİ 
             if(pType == 0)
             {
                 await this.posDevice.caseOpen();
-            }
-            this.loading.current.instance.show()
+            }            
             //SATIR BİRLEŞTİR        
             if(typeof tmpRowData != 'undefined')
             {    
