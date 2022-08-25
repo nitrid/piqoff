@@ -50,8 +50,6 @@ export default class posDoc extends React.PureComponent
         // NUMBER İÇİN PARAMETREDEN PARA SEMBOLÜ ATANIYOR.
         Number.money = this.prmObj.filter({ID:'MoneySymbol',TYPE:0}).getValue()
         
-        //this.core.offline = true
-
         this.posObj = new posCls()
         this.posDevice = new posDeviceCls();
         this.parkDt = new datatable();
@@ -123,9 +121,11 @@ export default class posDoc extends React.PureComponent
                 await dialog(tmpConfObj);
             }
             this.setState({isConnected:true})
-
-
         })
+        this.core.socket.on('connect_error',async(error) => 
+        {
+            this.setState({isConnected:false})
+        });
         this.core.on('disconnect',async () => 
         {
             this.setState({isConnected:false})
