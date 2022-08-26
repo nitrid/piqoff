@@ -27,6 +27,7 @@ import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
 import { data } from 'jquery';
+import {itemMultiCodeCls,itemsCls} from '../../../../core/cls/items.js'
 
 export default class purchaseInvoice extends React.PureComponent
 {
@@ -56,6 +57,7 @@ export default class purchaseInvoice extends React.PureComponent
         this.rightItems = [{ text: this.t("getDispatch"), },{ text: this.t("getPayment"), }]
         this.multiItemData = new datatable
         this.unitDetailData = new datatable
+        this.newPrice = new datatable
     }
     async componentDidMount()
     {
@@ -70,6 +72,7 @@ export default class purchaseInvoice extends React.PureComponent
     {
         this.docObj.clearAll()
         this.paymentObj.clearAll()
+        this.newPrice.clear()
 
         this.docObj.ds.on('onAddRow',(pTblName,pData) =>
         {
@@ -139,6 +142,7 @@ export default class purchaseInvoice extends React.PureComponent
         await this.grdInvoicePayment.dataRefresh({source:this.paymentObj.docCustomer.dt()});
         await this.grdMultiItem.dataRefresh({source:this.multiItemData});
         await this.grdUnit2.dataRefresh({source:this.unitDetailData})
+        await this.grdNewPrice.dataRefresh({source:this.newPrice})
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -169,7 +173,6 @@ export default class purchaseInvoice extends React.PureComponent
         }
         this._getItems()
         this._getPayment(this.docObj.dt()[0].GUID)
-        console.log(11)
        
     }
     async checkDoc(pGuid,pRef,pRefno)
@@ -491,7 +494,7 @@ export default class purchaseInvoice extends React.PureComponent
 
         let tmpQuery = 
         {
-            query :"SELECT CUSTOMER_PRICE AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
+            query :"SELECT CUSTOMER_PRICE AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID ORDER BY LDATE DESC",
             param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50'],
             value : [pData.CODE,this.docObj.dt()[0].OUTPUT]
         }
@@ -916,13 +919,7 @@ export default class purchaseInvoice extends React.PureComponent
     }
     async saveDoc()
     {
-        for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
-        {
-            if(this.docObj.docItems.dt()[i].CUSTOMER_PRICE != this.docObj.docItems.dt()[i].PRICE)
-            {
-                
-            }
-        }
+       
         let tmpConfObj =
         {
             id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -933,6 +930,42 @@ export default class purchaseInvoice extends React.PureComponent
         let pResult = await dialog(tmpConfObj);
         if(pResult == 'btn01')
         {
+            let tmpData = this.sysParam.filter({ID:'purcInvoıcePriceSave',USERS:this.user.CODE}).getValue()
+            console.log(tmpData)
+            if(typeof tmpData != 'undefined' && tmpData.value ==  true)
+            {
+                this.newPrice.clear()
+                for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+                {
+                    if(this.docObj.docItems.dt()[i].CUSTOMER_PRICE != this.docObj.docItems.dt()[i].PRICE)
+                    {
+                        this.newPrice.push(this.docObj.docItems.dt()[i])
+                    }
+                }
+                if(this.newPrice.length > 0)
+                {
+                    await this.msgNewPrice.show().then(async (e) =>
+                    {
+            
+                        if(e == 'btn01')
+                        {
+                        
+                            return
+                        }
+                        if(e == 'btn02')
+                        {
+                            for (let i = 0; i < this.grdNewPrice.getSelectedData().length; i++) 
+                            {
+                                let tmpMulticodeObj = new itemMultiCodeCls()
+                                await tmpMulticodeObj.load({ITEM_CODE:this.grdNewPrice.getSelectedData()[i].ITEM_CODE,CUSTOMER_CODE:this.grdNewPrice.getSelectedData()[i].CUSTOMER_CODE});
+                                tmpMulticodeObj.dt()[0].CUSTOMER_PRICE = this.grdNewPrice.getSelectedData()[i].PRICE
+                                tmpMulticodeObj.save()
+                            }
+                            return
+                        }
+                    })
+                }    
+            }
             let tmpConfObj1 =
             {
                 id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -2740,6 +2773,55 @@ export default class purchaseInvoice extends React.PureComponent
                                         value ={false}
                                         >
                                         </NdCheckBox>
+                                    </Item>
+                                </Form>
+                            </div>
+                            </div>
+                            <div className='row'>
+                        
+                            </div>
+                        
+                    </NdDialog>  
+                       {/* Yeni Fiyat Dialog  */}
+                    <NdDialog id={"msgNewPrice"} container={"#root"} parent={this}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        title={this.t("msgNewPrice.title")} 
+                        showCloseButton={false}
+                        width={"800px"}
+                        height={"600PX"}
+                        button={[{id:"btn01",caption:this.t("msgNewPrice.btn01"),location:'before'},{id:"btn02",caption:this.t("msgNewPrice.btn02"),location:'after'}]}
+                        >
+                            <div className="row">
+                                <div className="col-12 py-2">
+                                    <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNewPrice.msg")}</div>
+                                </div>
+                                <div className="col-12 py-2">
+                                <Form>
+                                    {/* grdNewPrice */}
+                                    <Item>
+                                    <NdGrid parent={this} id={"grdNewPrice"} 
+                                    showBorders={true} 
+                                    columnsAutoWidth={true} 
+                                    allowColumnReordering={true} 
+                                    allowColumnResizing={true} 
+                                    headerFilter={{visible:true}}
+                                    filterRow = {{visible:true}}
+                                    height={400} 
+                                    width={'100%'}
+                                    dbApply={false}
+                                    selection={{mode:"multiple"}}
+                                    onRowRemoved={async (e)=>{
+                                    }}
+                                    >
+                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
+                                        <Scrolling mode="virtual" />
+                                        <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdNewPrice.clmCode")} width={150} />
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdNewPrice.clmName")} width={250} />
+                                        <Column dataField="CUSTOMER_PRICE" caption={this.t("grdNewPrice.clmPrice")} width={130}  />
+                                        <Column dataField="PRICE" caption={this.t("grdNewPrice.clmPrice2")} dataType={'number'} width={80}/>
+                                    </NdGrid>
                                     </Item>
                                 </Form>
                             </div>

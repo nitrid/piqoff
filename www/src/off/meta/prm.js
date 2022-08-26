@@ -17,6 +17,7 @@ export const prm =
             CAPTION : "Sadece Büyük Harf Kullanımı"
         }
     },
+    //Tedarikçi kodu Seri olsun
     {
         TYPE : 0,
         ID :"refForCustomerCode",
@@ -25,7 +26,6 @@ export const prm =
             value : true
         },
         SPECIAL : "",
-        PAGE : "ftr_02_002",
         ELEMENT : "",
         APP : "OFF",
         VIEW : 
@@ -33,6 +33,24 @@ export const prm =
             TYPE : "checkbox",
             PAGE_NAME : "Sistem",
             CAPTION : "Seri Numarası İçin Cari Kodu Kullan"
+        }
+    },
+    // Alış Faturasından Fiyat Güncelleme
+    {
+        TYPE : 0,
+        ID :"purcInvoıcePriceSave",
+        VALUE : 
+        {
+            value : false
+        },
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Alış Faturasından Alış Fiyatı Güncelleme"
         }
     },
     //#endregion

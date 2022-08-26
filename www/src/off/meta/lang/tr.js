@@ -2172,9 +2172,21 @@ export const langTr =
         validDepot : "Depo Seçmelisiniz",
         validCustomerCode : "Cari Kodu Boş Geçilemez",
         validDocDate : "Tarih Seçmelisiniz",
-        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz"
-       
-
+        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz",
+        msgNewPrice : 
+        {
+            title: "Dikkat",
+            btn01: "Hiç Birini Güncelleme",
+            btn02: "Seçilen Fiyatları Güncelle",
+            msg: "Lütfen Tedarikçi Fiyatını Güncellemek İstediğiniz Ürünleri Seçiniz.. "
+        },
+        grdNewPrice: 
+        {
+            clmCode: "Kodu",
+            clmName: "Adı",
+            clmPrice: "Eski Fiyat",
+            clmPrice2: "Yeni Fiyat",
+        },
     },
     ftr_02_002 :
     {
