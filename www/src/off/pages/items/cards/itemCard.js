@@ -192,7 +192,6 @@ export default class itemCard extends React.PureComponent
         //TEDARİKÇİ FİYAT GETİR İŞLEMİ.  
         await this.itemsPriceSupply.load({ITEM_GUID:this.itemsObj.dt()[0].GUID,TYPE:1})  
         await this.itemsPriceLogObj.load({ITEM_GUID:this.itemsObj.dt()[0].GUID})
-        console.log(this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE'))
         if(this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE').length > 0 && this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE').length == 1)
         {
             this.txtLastBuyPrice.value = this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_PRICE

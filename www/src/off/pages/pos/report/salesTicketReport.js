@@ -47,7 +47,7 @@ export default class salesOrdList extends React.PureComponent
     }
     async _btnGetClick()
     {
-        
+        console.log(this.cmbPayType.value)
         let tmpSource =
         {
             source : 
@@ -72,6 +72,7 @@ export default class salesOrdList extends React.PureComponent
                     " MAX(HT) AS HT,  "  +
                     " MAX(TVA) AS TVA,  "  +
                     " MAX(TTC) AS TTC,  "  +
+                    " MAX(PAYMENT_TYPE) AS PAYMENT_TYPE,  "  +
                     " MAX(PAYMENT) AS PAYMENT  "  +
                     " FROM (  "  +
                     " SELECT  "  +
@@ -85,32 +86,33 @@ export default class salesOrdList extends React.PureComponent
                     " ISNULL((SELECT NAME FROM USERS WHERE CODE = MAX(SALE.LUSER)),'') AS USERS,  "  +
                     " SALE.TYPE AS SALE_TYPE,  "  +
                     " PAYMENT.TYPE AS PAYMENT_TYPE,  "  +
-                    "PAYMENT.PAY_TYPE_NAME AS PAY_TYPE_NAME, "  +
+                    " PAYMENT.PAY_TYPE_NAME AS PAY_TYPE_NAME, "  +
                     " MAX(SALE.CUSTOMER_CODE) AS CUSTOMER,  "  +
-                    " ROUND(MAX(SALE.GRAND_DISCOUNT),2) DISCOUNT,  "  +
-                    " ROUND(MAX(SALE.GRAND_LOYALTY),2) LOYALTY,  "  +
-                    " ROUND(MAX(SALE.GRAND_AMOUNT),2) HT, "  +
-                    " ROUND(MAX(SALE.GRAND_VAT),2) TVA, "  +
-                    " ROUND(MAX(SALE.GRAND_TOTAL),2) TTC,  "  +
-                    " ROUND((SELECT SUM(AMOUNT) FROM [POS_PAYMENT_VW_01] AS PAY WHERE PAY.POS_GUID = SALE.POS_GUID ) ,2) AS PAYMENT   "  +
+                    " MAX(SALE.GRAND_DISCOUNT) DISCOUNT,  "  +
+                    " MAX(SALE.GRAND_LOYALTY) LOYALTY,  "  +
+                    " MAX(SALE.GRAND_AMOUNT) HT, "  +
+                    " MAX(SALE.GRAND_VAT) TVA, "  +
+                    " MAX(SALE.GRAND_TOTAL) TTC,  "  +
+                    " (SELECT SUM(AMOUNT) FROM [POS_PAYMENT_VW_01] AS PAY WHERE PAY.POS_GUID = SALE.POS_GUID ) AS PAYMENT   "  +
                     " FROM [dbo].[POS_SALE_VW_01] AS SALE  "  +
                     " INNER JOIN [dbo].[POS_PAYMENT_VW_01] AS PAYMENT ON  "  +
                     " PAYMENT.POS_GUID = SALE.POS_GUID AND PAYMENT.STATUS = 1  "  +
                     " WHERE SALE.DOC_DATE >= @FIRST_DATE AND SALE.DOC_DATE <= @LAST_DATE AND   "  +
                     " ((SALE.CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND  "  +
                     " ((SALE.DEVICE = @DEVICE) OR (@DEVICE = '')) AND  "  +
-                    " ((PAYMENT.TYPE = @PAY_TYPE) OR (@PAY_TYPE = -1)) AND  "  +
-                    " ((ITEM_CODE = @ITEM_CODE) OR (@ITEM_CODE = '')) AND  ((SUBSTRING(CONVERT(NVARCHAR(50),SALE.POS_GUID),19,25) = @TICKET_ID) OR (@TICKET_ID = '')) AND "  +
+                    " ((PAYMENT.PAY_TYPE = @PAY_TYPE) OR (@PAY_TYPE = -1)) AND "  +
+                    " ((ITEM_CODE = @ITEM_CODE) OR (@ITEM_CODE = '')) AND  ((SUBSTRING(CONVERT(NVARCHAR(50),SALE.POS_GUID),20,25) = @TICKET_ID) OR (@TICKET_ID = '')) AND "  +
                     " ((SALE.LUSER = @LUSER) OR (@LUSER = '')) AND SALE.STATUS = 1  "  +
                     " GROUP BY SALE.TYPE,PAYMENT.TYPE,PAYMENT.PAY_TYPE_NAME,PAYMENT.POS_GUID,SALE.POS_GUID) AS TMP  "  +
-                    "GROUP BY SALE_POS_GUID,PAYMENT_POS_GUID HAVING COUNT(PAYMENT_TYPE) >= @PAY_COUNT",
-                    param : ['FIRST_DATE:date','LAST_DATE:date','CUSTOMER_CODE:string|50','DEVICE:string|25','PAY_TYPE:int','ITEM_CODE:string|50','TICKET_ID:string|50','LUSER:string|50','PAY_COUNT:string|50'],
-                    value : [this.dtFirst.value,this.dtLast.value,this.txtCustomerCode.value,this.cmbDevice.value,-1,this.txtItem.value,this.txtTicketno.value,this.cmbUser.value,this.ckhDoublePay.value ? 2 : 1]
+                    " GROUP BY SALE_POS_GUID,PAYMENT_POS_GUID HAVING COUNT(PAYMENT_TYPE) >= @PAY_COUNT AND  ((MAX(TTC) >= @FIRST_AMOUNT) OR (@FIRST_AMOUNT = 0)) AND ((MAX(TTC) <= @LAST_AMOUNT) OR (@LAST_AMOUNT = 0)) ",
+                    param : ['FIRST_DATE:date','LAST_DATE:date','CUSTOMER_CODE:string|50','DEVICE:string|25','PAY_TYPE:int','ITEM_CODE:string|50','TICKET_ID:string|50','LUSER:string|50','PAY_COUNT:string|50','FIRST_AMOUNT:float','LAST_AMOUNT:float'],
+                    value : [this.dtFirst.value,this.dtLast.value,this.txtCustomerCode.value,this.cmbDevice.value,this.cmbPayType.value,this.txtItem.value,this.txtTicketno.value,this.cmbUser.value,this.ckhDoublePay.value ? 2 : 1,this.numFirstTicketAmount.value,this.numLastTicketAmount.value]
                 },
                 sql : this.core.sql
             }
         }
         await this.grdSaleTicketReport.dataRefresh(tmpSource)
+        console.log(this.grdSaleTicketReport)
     }
     async btnGetDetail(pGuid)
     {
@@ -279,34 +281,53 @@ export default class salesOrdList extends React.PureComponent
                                     access={this.access.filter({ELEMENT:'cmbDevice',USERS:this.user.CODE})}
                                     />
                                 </Item>
-                                {/* txtTicketno */}
+                                {/* numFirstTicketAmount */}
                                 <Item>
-                                    <Label text={this.t("txtTicketno")} alignment="right" />
-                                    <NdTextBox id="txtTicketno" title={this.t("txtTicketno")} parent={this} simple={true} 
-                                        param={this.param.filter({ELEMENT:'txtTicketno',USERS:this.user.CODE})}
-                                        access={this.access.filter({ELEMENT:'txtTicketno',USERS:this.user.CODE})}
-                                        onValueChanged={(e)=>
-                                        {
-                                        
-                                        }}>
-                                    </NdTextBox>
+                                    <Label text={this.t("numFirstTicketAmount")} alignment="right" />
+                                    <NdNumberBox id="numFirstTicketAmount" title={this.t("numFirstTicketAmount")} parent={this} simple={true} tabIndex={this.tabIndex} style={{borderTopLeftRadius:'0px',borderBottomLeftRadius:'0px'}} 
+                                        param={this.param.filter({ELEMENT:'numFirstTicketAmount',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'numFirstTicketAmount',USERS:this.user.CODE})}
+                                        onChange={(e)=>
+                                            {
+                                                if(this.numFirstTicketAmount.value == null)
+                                                {
+                                                    this.numFirstTicketAmount.value = 0
+                                                }
+                                            }}
+                                            onValueChanged={(e)=>
+                                            {
+                                                if(e.value != null)
+                                                {
+                                                    this.numLastTicketAmount.value = e.value
+                                                }
+                                            }}>
+                                    </NdNumberBox>
                                 </Item>
-                                {/* numTicketAmount */}
+                                {/* numLastTicketAmount */}
                                 <Item>
-                                    <Label text={this.t("numTicketAmount")} alignment="right" />
-                                    <NdNumberBox id="numTicketAmount" title={this.t("numTicketAmount")} parent={this} simple={true} tabIndex={this.tabIndex} style={{borderTopLeftRadius:'0px',borderBottomLeftRadius:'0px'}} 
-                                        param={this.param.filter({ELEMENT:'numTicketAmount',USERS:this.user.CODE})}
-                                        access={this.access.filter({ELEMENT:'numTicketAmount',USERS:this.user.CODE})}>
+                                    <Label text={this.t("numLastTicketAmount")} alignment="right" />
+                                    <NdNumberBox id="numLastTicketAmount" title={this.t("numLastTicketAmount")} parent={this} simple={true} tabIndex={this.tabIndex} style={{borderTopLeftRadius:'0px',borderBottomLeftRadius:'0px'}} 
+                                        param={this.param.filter({ELEMENT:'numLastTicketAmount',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'numLastTicketAmount',USERS:this.user.CODE})}
+                                        onChange={(e)=>
+                                            {
+                                                if(this.numLastTicketAmount.value == null)
+                                                {
+                                                    this.numLastTicketAmount.value = this.numFirstTicketAmount.value
+                                                }
+                                            }}>
                                     </NdNumberBox>
                                 </Item>
                                {/* cmbPayType */}
                                <Item>
-                                    <Label text={this.t("cmbPayType")} alignment="right" />
+                                    <Label text={this.t("cmbPayType.title")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbPayType"
-                                    displayExpr="DISPLAY"                       
-                                    valueExpr="CODE"
-                                    showClearButton={true}
-                                    data={{source:{select:{query:""},sql:this.core.sql}}}
+                                    displayExpr="VALUE"                       
+                                    valueExpr="ID"
+                                    value={-1}
+                                    data={{source:[{ID:-1,VALUE:this.t("cmbPayType.all")},{ID:0,VALUE:this.t("cmbPayType.esc")},{ID:1,VALUE:this.t("cmbPayType.cb")},{ID:2,VALUE:this.t("cmbPayType.check")},
+                                    {ID:3,VALUE:this.t("cmbPayType.ticket")},{ID:4,VALUE:this.t("cmbPayType.bonD")},{ID:5,VALUE:this.t("cmbPayType.avoir")},{ID:6,VALUE:this.t("cmbPayType.virment")},
+                                    {ID:7,VALUE:this.t("cmbPayType.prlv")}]}}
                                     param={this.param.filter({ELEMENT:'cmbPayType',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbPayType',USERS:this.user.CODE})}
                                     />
@@ -323,6 +344,18 @@ export default class salesOrdList extends React.PureComponent
                                     access={this.access.filter({ELEMENT:'cmbUser',USERS:this.user.CODE})}
                                     />
                                 </Item>
+                                    {/* txtTicketno */}
+                                    <Item>
+                                        <Label text={this.t("txtTicketno")} alignment="right" />
+                                        <NdTextBox id="txtTicketno" title={this.t("txtTicketno")} parent={this} simple={true} 
+                                            param={this.param.filter({ELEMENT:'txtTicketno',USERS:this.user.CODE})}
+                                            access={this.access.filter({ELEMENT:'txtTicketno',USERS:this.user.CODE})}
+                                            onValueChanged={(e)=>
+                                            {
+                                            
+                                            }}>
+                                        </NdTextBox>
+                                    </Item>
                                        {/* txtItem */}
                                        <Item>                                    
                                     <Label text={this.t("txtItem")} alignment="right" />

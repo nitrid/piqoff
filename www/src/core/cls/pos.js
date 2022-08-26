@@ -1411,7 +1411,6 @@ export class posDeviceCls
         }
         
         let ack = false;
-        let oneShoot = false;
         let payMethod = "card";
 
         let generate_lrc = function(real_msg_with_etx)
@@ -1429,16 +1428,17 @@ export class posDeviceCls
             return lrc;
         }
 
-        return new Promise((resolve) =>
+        return new Promise(async (resolve) =>
         {
-            let port = new this.serialport(this.dt().length > 0 ? this.dt()[0].PAY_CARD_PORT : "");
-            port.on('data',(data)=> 
+            let port = new this.serialport(this.dt().length > 0 ? this.dt()[0].PAY_CARD_PORT : "",{baudRate: 9600,dataBits: 7,parity:'odd',parser: new this.serialport.parsers.Readline()});
+            port.on('data',async(data)=> 
             {
-                if(String.fromCharCode(data[0]) == String.fromCharCode(6))
-                {                    
+                console.log("1454 - " + data.toString() + " - " + data[0])              
+                if(String.fromCharCode(data[0]) == String.fromCharCode(6) || (String.fromCharCode(data[0]) == String.fromCharCode(21) && data.length == 1) || 
+                (String.fromCharCode(data[0]) == String.fromCharCode(4) && data.length == 2) || (String.fromCharCode(data[0]) == String.fromCharCode(3) && data.length == 4))
+                {     
                     if(ack == false)
                     {
-                        oneShoot = false;
                         let tmpData = 
                         {
                             'pos_number': '01',
@@ -1455,8 +1455,8 @@ export class posDeviceCls
                         let msg = Object.keys(tmpData).map( k => tmpData[k] ).join('');
                         if (msg.length > 34) 
                         {
+                            await port.close();
                             resolve({tag:"response",msg:"error"});                 
-                            port.close();               
                             console.log('ERR. : failed data > 34 characters.', msg);
                             return
                         }
@@ -1479,14 +1479,7 @@ export class posDeviceCls
                 }
                 else if(data.length >= 25)
                 {
-                    if(oneShoot)
-                    {
-                        port.close();
-                        resolve({tag:"response",msg:"error"});   
-                        return;
-                    }
-    
-                    oneShoot = true;
+                    console.log(1453)
                     let str = "";
                     if(isNaN(data.toString().substr(1)))
                     {
@@ -1494,8 +1487,10 @@ export class posDeviceCls
                     }
                     else
                     {
-                        str = data.toString().substr(0, data.toString().length-3);;
+                        str = data.toString().substr(0, data.toString().length-3);
                     }
+                    console.log(str)
+                    console.log(1455)
                     let response = 
                     {
                         'pos_number'        : str.substr(0, 2),
@@ -1506,20 +1501,26 @@ export class posDeviceCls
                         'private'           : str.substr(15, 11)
                     };
                     console.log(response)
+                    await port.close();
                     resolve({tag:"response",msg:JSON.stringify(response)});   
-                    port.close();
                 }
+                // else if((String.fromCharCode(data[0]) != String.fromCharCode(2)) && (String.fromCharCode(data[0]) != String.fromCharCode(50)))
+                // {
+                //     console.log("1453 - " + data.toString() + " - " + data[0])
+                //     await port.close();
+                //     resolve({tag:"response",msg:"error"});
+                // }
             });
 
             port.write(String.fromCharCode(5));
 
-            setTimeout(()=>
+            setTimeout(async()=>
             { 
                 if(port.isOpen)
                 {
-                    port.close(); 
+                    await port.close(); 
                 }
-            }, 70000);
+            }, 60000);
 
            //return port.on("close", resolve)
         });

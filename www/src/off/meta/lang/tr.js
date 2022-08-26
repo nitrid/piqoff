@@ -5387,8 +5387,8 @@ export const langTr =
         txtCustomerCode : "Cari",
         cmbDevice :"Cihaz",
         txtTicketno : "Fiş I.D",
-        numTicketAmount : "Tutar",
-        cmbPayType :"Ödeme Tipi",
+        numFirstTicketAmount : "Alt Tutar",
+        numLastTicketAmount : "Üst Tutar",
         cmbUser :"Kulanıcı",
         txtItem :"Ürün Kodu",
         ckhDoublePay : "Birden Fazla Ödeme",
@@ -5435,8 +5435,20 @@ export const langTr =
         popDetail : 
         {
             title : "Fiş Detayı"
+        },
+        cmbPayType : 
+        {
+            title : "Ödeme Tipi",
+            esc:"Nakit",
+            cb : "K. Kartı",
+            check : "Çek",
+            ticket : "T. Rest",
+            bonD : "İade Fişi",
+            avoir : "İade",
+            virment : "Havale",
+            prlv :"Oto. Ödeme",
+            all :"Tümü",
         }
-
     },
     pos_02_002 :
     {

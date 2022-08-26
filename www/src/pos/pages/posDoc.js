@@ -50,7 +50,7 @@ export default class posDoc extends React.PureComponent
         // NUMBER İÇİN PARAMETREDEN PARA SEMBOLÜ ATANIYOR.
         Number.money = this.prmObj.filter({ID:'MoneySymbol',TYPE:0}).getValue()
         
-        this.core.offline = true
+        //this.core.offline = true
 
         this.posObj = new posCls()
         this.posDevice = new posDeviceCls();
@@ -506,6 +506,14 @@ export default class posDoc extends React.PureComponent
                             }
                             else
                             {
+                                document.getElementById("Sound").play();
+                                let tmpConfObj =
+                                {
+                                    id:'msgNotWeighing',showTitle:true,title:this.lang.t("msgNotWeighing.title"),showCloseButton:true,width:'400px',height:'200px',
+                                    button:[{id:"btn01",caption:this.lang.t("msgNotWeighing.btn01"),location:'before'}],
+                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgNotWeighing.msg")}</div>)
+                                }
+                                await dialog(tmpConfObj);
                                 return
                             }
                         }
@@ -1064,7 +1072,7 @@ export default class posDoc extends React.PureComponent
     async payAdd(pType,pAmount)
     {
         if(this.state.payRest > 0)
-        {            
+        {                    
             //KREDİ KARTI İSE
             if(pType == 1)
             {
@@ -1081,9 +1089,9 @@ export default class posDoc extends React.PureComponent
                     this.txtPopCardPay.focus()
                     return
                 }
-
                 this.popCardPay.hide()
                 let tmpPayCard = await this.payCard(pAmount)
+
                 if(tmpPayCard == 1) //Başarılı
                 {
                     this.msgCardPayment.hide()
@@ -1135,19 +1143,39 @@ export default class posDoc extends React.PureComponent
                         return
                     }
                 }
+                else if(tmpPayCard == 3) //iptal
+                {
+                    this.msgCardPayment.hide()
+                    return
+                    //HER TURLU CEVAP DÖNDÜĞÜ İÇİN POPUP KAPANIYOR YENİDEN ACINCA 2. KEZ GÖNDERMEYE CALISIYOR BURAYA IPTAL DEYINCE CIHAZDANDA IPTAL ETMEYI YAPMAK LAZIM
+                    // let tmpAcsVal = this.acsObj.filter({ID:'btnDeviceEntry',TYPE:2,USERS:this.user.CODE})
+                                     
+                    // if(typeof tmpAcsVal.getValue().dialog != 'undefined' && tmpAcsVal.getValue().dialog.type != -1)
+                    // {   
+                    //     let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:tmpAcsVal.getValue().dialog.type})
+                    //     if(tmpResult)
+                    //     {
+                    //         return
+                    //     }
+                    //     else
+                    //     {
+                    //         return
+                    //     }
+                    // }
+                }
                 else //Başarısız veya İptal
                 {
                     this.msgCardPayment.hide()
                     return
                 }
             }
+            this.loading.current.instance.show()
             let tmpRowData = this.isRowMerge('PAY',{TYPE:pType})
             //NAKİT ALDIĞINDA KASA AÇMA İŞLEMİ 
             if(pType == 0)
             {
                 await this.posDevice.caseOpen();
-            }
-            this.loading.current.instance.show()
+            }            
             //SATIR BİRLEŞTİR        
             if(typeof tmpRowData != 'undefined')
             {    
@@ -1225,6 +1253,8 @@ export default class posDoc extends React.PureComponent
             {
                 if(tmpCardPay.tag == "response")
                 {
+                    console.log(14)
+                    console.log(tmpCardPay.msg)
                     if(JSON.parse(tmpCardPay.msg).transaction_result != 0)
                     {
                         this.msgCardPayment.hide()

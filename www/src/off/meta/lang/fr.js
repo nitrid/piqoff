@@ -5253,9 +5253,9 @@ export const langFr =
         msgCode : 
         {
             title: "Attention",
-            btn01: "Cihaza Git",
+            btn01: "Cihaza Git", // BAK
             btn02: "OK",
-            msg : "Girmiş olduğunuz Cihaz Kodu sistem de kayıtlı !"
+            msg : "Girmiş olduğunuz Cihaz Kodu sistem de kayıtlı !" // BAK
         }
       
     },
@@ -5268,8 +5268,8 @@ export const langFr =
         txtCustomerCode : "Fournisseur",
         cmbDevice :"Cihaz",
         txtTicketno : "Fiş I.D",
-        numTicketAmount : "Montant" ,
-        cmbPayType :"Mode de Règlement ",
+        numFirstTicketAmount : "Alt Tutar", // BAK
+        numLastTicketAmount : "Üst Tutar", // BAK
         cmbUser :"Kulanıcı",
         txtItem :"Code Produit",
         ckhDoublePay : "Birden Fazla Ödeme",
@@ -5316,8 +5316,20 @@ export const langFr =
         popDetail : 
         {
             title : "Détail Ticket "
+        },
+        cmbPayType : 
+        {
+            title : "Mode de Règlement ",
+            esc:"Espece",
+            cb : "CB",
+            check : "Cheque",
+            ticket : "CHEQue",
+            bonD : "Bon D'Avoir",
+            avoir : "Avoir",
+            virment : "Virment",
+            prlv :"Prélèvement ",
+            all :"Tout"
         }
-
     },
     pos_02_002 :
     {

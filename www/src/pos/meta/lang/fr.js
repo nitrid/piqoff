@@ -243,13 +243,16 @@ export const langFr =
     {
         title : "Attention",
         msg : " La remise ne peut être supérieure à la remise !" ,
-
         btn01 : "OK"
     },
-    availablePoint : " Solde disponible : " ,
-    usePoint : " Points utilisés :" ,
-    remainderPoint : " Points restants :" ,
-    pointtoCash : "Valeur des points en € : ",
+    popLoyalty:
+    {
+        title : "Sadakat İndirimi",
+        availablePoint : " Solde disponible : " ,
+        usePoint : " Points utilisés :" ,
+        remainderPoint : " Points restants :" ,
+        pointtoCash : "Valeur des points en € : ",
+    },
     msgPointNotBigToPoint: 
     {
         title : "Attention",
@@ -297,7 +300,6 @@ export const langFr =
     {
         head : "Veuillez saisir le motif de suppression",
         title : "Veuillez saisir le motif de suppression",
-
     },
     popRowDeleteDesc : 
     {
@@ -407,6 +409,10 @@ export const langFr =
     {
         title :"Différence de prix",
     },
+    popGridList: 
+    {
+        title :"Liste"
+    },
     grdList: 
     {
         LDATE : "Date MAJ",
@@ -421,7 +427,7 @@ export const langFr =
         NAME : "NOM",
         PRICE_SALE : "PRIX",
     },
-    grdBarcodeList : 
+    grdPopParkList : 
     {
         LUSER_NAME : "SAISIE UTILISATEUR",
         LDATE : "SAISIE DATE",
@@ -492,4 +498,49 @@ export const langFr =
         btn01 : "Ok",
     },
     listed : "Rechercher",
+    msgDeviceEntryAlert : //Bak
+    {
+        title : "Uyarı",
+        msg : "Lütfen cihaz kodunu boş geçmeyiniz !",
+        btn01 : "Tamam",
+    },
+    popTitleDevice : "Kasa Kodu Giriş", //Bak
+    msgDeviceNotChange : //Bak
+    {
+        title : "Uyarı",
+        msg : "Satış Yapılıken Kasa Değiştirilemez! Lütfen Satışı İptal Edin..",
+        btn01 : "Tamam",
+    },
+    msgDbTransferAlert : //Bak
+    {
+        title : "Uyarı",
+        msg : "Local Database'i Güncellemek İstermisiniz ?",
+        btn01 : "Tamam",
+        btn02 : "İptal",
+    },
+    msgTransferStatus : 'Tablosu Aktarılıyor',//Bak
+    msgOfflineWarning: //Bak
+    {
+        title : "Dikkat",
+        msg : "Bu işlemi offline modda iken yapamazsınız !",
+        btn01 : "Tamam"
+    },
+    msgOfflineAlert: //Bak
+    {
+        title : "Dikkat",
+        msg : "Sunucu ile bağlantınız kesildi ! Offline olarak işleminize devam edebilirsiniz.",
+        btn01 : "Tamam"
+    },
+    msgOnlineAlert: //Bak
+    {
+        title : "Dikkat",
+        msg : "Sunucu ile bağlantı kuruldu ! Online olarak işleminize devam edebilirsiniz.",
+        btn01 : "Tamam"
+    },
+    msgNotWeighing: //Bak
+    {
+        title : "Dikkat",
+        msg : "Ürün Tartılamadı Lütfen Tekrar Ekleyiniz",
+        btn01 : "Tamam"
+    },
 }
