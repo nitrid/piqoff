@@ -1130,7 +1130,7 @@ export class posDeviceCls
             PRINT_DESING : '',
         }
         this.listeners = Object();
-
+        this.payPort = null;
         this._initDs();
     }
     //#region  "EVENT"
@@ -1464,7 +1464,7 @@ export class posDeviceCls
             return port.on("close", resolve)
         });
     }
-    cardPayment(pAmount)
+    async cardPayment(pAmount)
     {
         if(!core.instance.util.isElectron())
         {
@@ -1488,11 +1488,12 @@ export class posDeviceCls
             console.log('lrc => ', lrc);
             return lrc;
         }
-
+        
         return new Promise(async (resolve) =>
         {
-            let port = new this.serialport(this.dt().length > 0 ? this.dt()[0].PAY_CARD_PORT : "",{baudRate: 9600,dataBits: 7,parity:'odd',parser: new this.serialport.parsers.Readline()});
-            port.on('data',async(data)=> 
+            this.payPort = new this.serialport(this.dt().length > 0 ? this.dt()[0].PAY_CARD_PORT : "",{baudRate: 9600,dataBits: 7,parity:'odd',parser: new this.serialport.parsers.Readline()});
+
+            this.payPort.on('data',async(data)=> 
             {
                 console.log("1454 - " + data.toString() + " - " + data[0])              
                 if(String.fromCharCode(data[0]) == String.fromCharCode(6) || (String.fromCharCode(data[0]) == String.fromCharCode(21) && data.length == 1) || 
@@ -1516,7 +1517,7 @@ export class posDeviceCls
                         let msg = Object.keys(tmpData).map( k => tmpData[k] ).join('');
                         if (msg.length > 34) 
                         {
-                            await port.close();
+                            await this.payPort.close();
                             resolve({tag:"response",msg:"error"});                 
                             console.log('ERR. : failed data > 34 characters.', msg);
                             return
@@ -1526,32 +1527,29 @@ export class posDeviceCls
                         let lrc = generate_lrc(real_msg_with_etx);
                         //STX + msg + lrc
                         let tpe_msg = (String.fromCharCode(2)).concat(real_msg_with_etx).concat(String.fromCharCode(lrc));
-                        port.write(tpe_msg)
+                        this.payPort.write(tpe_msg)
                         ack = true;
                     }
                 }
                 else if(String.fromCharCode(data[0]) == String.fromCharCode(6))
                 {
-                    port.write(String.fromCharCode(4))
+                    this.payPort.write(String.fromCharCode(4))
                 }
                 else if(String.fromCharCode(data[0]) == String.fromCharCode(5))
                 {
-                    port.write(String.fromCharCode(6));
+                    this.payPort.write(String.fromCharCode(6));
                 }
                 else if(data.length >= 25)
                 {
-                    console.log(1453)
+                    if(!ack)
+                    {
+                        this.payPort.write(String.fromCharCode(5));
+                        return
+                    }
+
                     let str = "";
-                    if(isNaN(data.toString().substr(1)))
-                    {
-                        str = data.toString().substr(1).substr(0, data.toString().length-3);
-                    }
-                    else
-                    {
-                        str = data.toString().substr(0, data.toString().length-3);
-                    }
+                    str = data.toString().substr(0, data.toString().length-3);
                     console.log(str)
-                    console.log(1455)
                     let response = 
                     {
                         'pos_number'        : str.substr(0, 2),
@@ -1562,24 +1560,18 @@ export class posDeviceCls
                         'private'           : str.substr(15, 11)
                     };
                     console.log(response)
-                    await port.close();
+                    await this.payPort.close();
                     resolve({tag:"response",msg:JSON.stringify(response)});   
                 }
-                // else if((String.fromCharCode(data[0]) != String.fromCharCode(2)) && (String.fromCharCode(data[0]) != String.fromCharCode(50)))
-                // {
-                //     console.log("1453 - " + data.toString() + " - " + data[0])
-                //     await port.close();
-                //     resolve({tag:"response",msg:"error"});
-                // }
             });
 
-            port.write(String.fromCharCode(5));
+            this.payPort.write(String.fromCharCode(5));
 
             setTimeout(async()=>
             { 
-                if(port.isOpen)
+                if(this.payPort.isOpen)
                 {
-                    await port.close(); 
+                    await this.payPort.close(); 
                 }
             }, 60000);
 

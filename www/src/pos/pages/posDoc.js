@@ -1269,6 +1269,10 @@ export default class posDoc extends React.PureComponent
         {
             this.msgCardPayment.show().then(async (e) =>
             {
+                if(this.posDevice.payPort.isOpen)
+                {
+                    await this.posDevice.payPort.close()
+                }
                 if(e == 'btn01')
                 {
                     resolve(await this.payCard(pAmount)) // Tekrar
