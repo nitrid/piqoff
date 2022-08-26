@@ -920,10 +920,9 @@ export default class purchaseInvoice extends React.PureComponent
         {
             if(this.docObj.docItems.dt()[i].CUSTOMER_PRICE != this.docObj.docItems.dt()[i].PRICE)
             {
-                console.log(this.docObj.docItems.dt()[i].CUSTOMER_PRICE)
+                
             }
         }
-        return
         let tmpConfObj =
         {
             id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
