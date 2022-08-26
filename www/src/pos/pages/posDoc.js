@@ -50,8 +50,6 @@ export default class posDoc extends React.PureComponent
         // NUMBER İÇİN PARAMETREDEN PARA SEMBOLÜ ATANIYOR.
         Number.money = this.prmObj.filter({ID:'MoneySymbol',TYPE:0}).getValue()
         
-        //this.core.offline = true
-
         this.posObj = new posCls()
         this.posDevice = new posDeviceCls();
         this.parkDt = new datatable();
@@ -73,9 +71,10 @@ export default class posDoc extends React.PureComponent
             payRest:0,
             cheqCount:0,
             cheqTotalAmount:0,
-            cheqLastAmount:0
+            cheqLastAmount:0,
+            isConnected:true
         }   
-
+        
         document.onkeydown = (e) =>
         {
             //EĞER FORMUN ÖNÜNDE POPUP YADA LOADING PANEL VARSA BARCODE TEXTBOX ÇALIŞMIYOR.
@@ -107,7 +106,43 @@ export default class posDoc extends React.PureComponent
         {
             this.getItem(tmpBarkod)
         })
-        this.init();        
+        this.init();
+
+        this.core.on('connect',async () => 
+        {                     
+            if(!this.state.isConnected)
+            {
+                let tmpConfObj =
+                {
+                    id:'msgOnlineAlert',showTitle:true,title:this.lang.t("msgOnlineAlert.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.lang.t("msgOnlineAlert.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOnlineAlert.msg")}</div>)
+                }
+                await dialog(tmpConfObj);
+            }
+            this.setState({isConnected:true})
+        })
+        this.core.socket.on('connect_error',async(error) => 
+        {
+            this.setState({isConnected:false})
+        });
+        this.core.on('disconnect',async () => 
+        {
+            this.setState({isConnected:false})
+            let tmpConfObj =
+            {
+                id:'msgOfflineAlert',showTitle:true,title:this.lang.t("msgOfflineAlert.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.lang.t("msgOfflineAlert.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOfflineAlert.msg")}</div>)
+            }
+            await dialog(tmpConfObj);
+
+            for (let i = 0; i < array.length; i++) {
+                const element = array[i];
+                
+            }
+            console.log(this.posObj)
+        })
     }
     async init()
     {             
@@ -157,7 +192,7 @@ export default class posDoc extends React.PureComponent
             {
                 type : "select",
                 from : "POS_VW_01",
-                where : {STATUS:0,LUSER:this.core.auth.data.CODE},
+                where : {STATUS:0,LUSER:this.core.auth.data.CODE,DELETED:false},
                 order: {by: "LDATE",type: "desc"}
             }
         }
@@ -191,7 +226,6 @@ export default class posDoc extends React.PureComponent
                 return
             }
         }        
-        
     }
     async deviceEntry()
     {
@@ -930,6 +964,7 @@ export default class posDoc extends React.PureComponent
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_LOYALTY = 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_VAT = 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_TOTAL = 0
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DELETED = false
         
         await this.calcGrandTotal();
     }
@@ -1211,7 +1246,8 @@ export default class posDoc extends React.PureComponent
             this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].LINE_NO = this.posObj.posPay.dt().length + 1
             this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = Number(parseFloat(pPayData.AMOUNT).toFixed(2))
             this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].CHANGE = pPayData.CHANGE
-    
+            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].DELETED = false
+
             await this.calcGrandTotal();
             resolve()
         });
@@ -1284,6 +1320,9 @@ export default class posDoc extends React.PureComponent
         return new Promise(async resolve => 
         {
             let tmpDt = this.posObj.posExtra.dt().where({TAG:pTag})
+            //LOCAL DB İÇİN YAPILDI
+            this.posObj.dt()[0].DESCRIPTION = pDesc
+
             if(tmpDt.length > 0)
             {
                 tmpDt[0].DESCRIPTION = pDesc
@@ -1856,7 +1895,18 @@ export default class posDoc extends React.PureComponent
                             <div className="col-1 px-1">
                                 <NbButton id={"btnPluEdit"} parent={this} className={"form-group btn btn-primary btn-block"} style={{height:"55px",width:"100%"}}
                                 onClick={async()=>
-                                {       
+                                {      
+                                    if(this.core.offline)
+                                    {
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgOfflineWarning',showTitle:true,title:this.lang.t("msgOfflineWarning.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.lang.t("msgOfflineWarning.btn01"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOfflineWarning.msg")}</div>)
+                                        }
+                                        await dialog(tmpConfObj);
+                                        return
+                                    } 
                                     if(this.pluBtnGrp.edit)
                                     {
                                         this.pluBtnGrp.edit = false
@@ -1991,7 +2041,6 @@ export default class posDoc extends React.PureComponent
                                         if(this.prmObj.filter({ID:'QuantityEdit',TYPE:0}).getValue() == true)
                                         {                                            
                                             let tmpResult = await this.popNumber.show('Miktar',e.value)
-                                                                                        
                                             if(typeof tmpResult != 'undefined' && tmpResult != '')
                                             {
                                                 if(this.prmObj.filter({ID:'QuantityCheckZero',TYPE:0}).getValue() == true && tmpResult == 0)
@@ -2006,7 +2055,7 @@ export default class posDoc extends React.PureComponent
                                                     return
                                                 }
 
-                                                let tmpData = {QUANTITY:tmpResult,PRICE:e.key.PRICE}
+                                                let tmpData = {QUANTITY:Number(tmpResult),PRICE:e.key.PRICE}
                                                 this.saleRowUpdate(e.key,tmpData)
                                             }
                                         }
@@ -2557,6 +2606,17 @@ export default class posDoc extends React.PureComponent
                                         <NbButton id={"btnItemReturn"} parent={this} className="form-group btn btn-block my-1" style={{height:"70px",width:"100%",backgroundColor:"#e84393"}}
                                         onClick={async ()=>
                                         {
+                                            if(this.core.offline)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgOfflineWarning',showTitle:true,title:this.lang.t("msgOfflineWarning.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("msgOfflineWarning.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOfflineWarning.msg")}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                                return
+                                            }
                                             if(this.posObj.posSale.dt().length > 0)
                                             {
                                                 await this.msgItemReturnTicket.show().then(async (e) =>
@@ -2690,9 +2750,11 @@ export default class posDoc extends React.PureComponent
                                     <div className="col px-1">
                                         <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
                                     </div>
-                                    {/* Blank */}
+                                    {/* Offline */}
                                     <div className="col px-1">
-                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
+                                        <NbButton id={"btnOffline"} parent={this} className={this.state.isConnected == false ? "form-group btn btn-danger btn-block my-1" : "form-group btn btn-success btn-block my-1"} style={{height:"70px",width:"100%",fontSize:"10pt"}}>
+                                            <i className="text-white fa-solid fa-signal" style={{fontSize: "24px"}} />
+                                        </NbButton>
                                     </div>
                                 </div>
                                 {/* Line 8 */}
@@ -2758,8 +2820,20 @@ export default class posDoc extends React.PureComponent
                                     {/* Print */}
                                     <div className="col px-1">
                                         <NbButton id={"btnPrint"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
-                                        onClick={()=>
+                                        onClick={async()=>
                                         {     
+                                            //LOCAL DB İÇİN YAPILDI - ALI KEMAL KARACA 24.08.2022
+                                            if(this.core.offline)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgOfflineWarning',showTitle:true,title:this.lang.t("msgOfflineWarning.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("msgOfflineWarning.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOfflineWarning.msg")}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                                return
+                                            }
                                             this.dtPopLastSaleStartDate.value = moment(new Date()).format("YYYY-MM-DD")
                                             this.dtPopLastSaleFinishDate.value = moment(new Date()).format("YYYY-MM-DD")
                                             this.popLastSaleList.show();
@@ -3205,7 +3279,20 @@ export default class posDoc extends React.PureComponent
                         select:
                         {
                             query : "SELECT GUID,CODE,TITLE,ADRESS,dbo.FN_CUSTOMER_TOTAL_POINT(GUID,GETDATE()) AS CUSTOMER_POINT FROM [dbo].[CUSTOMER_VW_02] WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
-                            param : ['VAL:string|50']
+                            param : ['VAL:string|50'],
+                            local : 
+                            {
+                                type : "select",
+                                from : "CUSTOMER_VW_02",
+                                where : 
+                                {
+                                    CODE : { like : '{0}'},
+                                    or: 
+                                    {
+                                        TITLE: { like : '{0}'}
+                                    }
+                                },
+                            }
                         },
                         sql:this.core.sql
                     }}}
@@ -3235,7 +3322,20 @@ export default class posDoc extends React.PureComponent
                         select:
                         {
                             query : "SELECT CODE,NAME,dbo.FN_PRICE_SALE(GUID,1,GETDATE()) AS PRICE FROM [dbo].[ITEMS_VW_01] WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) AND STATUS = 1",
-                            param : ['VAL:string|50']
+                            param : ['VAL:string|50'],
+                            local : 
+                            {
+                                type : "select",
+                                from : "ITEMS_VW_01",
+                                where : 
+                                {
+                                    CODE : { like : "{0}"},
+                                    or: 
+                                    {
+                                        NAME: { like : "{0}"}
+                                    }
+                                },
+                            }
                         },
                         sql:this.core.sql
                     }}}
@@ -4311,8 +4411,16 @@ export default class posDoc extends React.PureComponent
                                                         let tmpDt = new datatable(); 
                                                         tmpDt.selectCmd = 
                                                         {
-                                                            query : "SELECT AMOUNT AS AMOUNT,COUNT(AMOUNT) AS COUNT FROM CHEQPAY WHERE DOC = @DOC GROUP BY AMOUNT",
-                                                            param : ['DOC:string|50']
+                                                            query : "SELECT AMOUNT AS AMOUNT,COUNT(AMOUNT) AS COUNT FROM CHEQPAY_VW_01 WHERE DOC = @DOC GROUP BY AMOUNT",
+                                                            param : ['DOC:string|50'],
+                                                            local : 
+                                                            {
+                                                                type : "select",
+                                                                from : "CHEQPAY_VW_01",
+                                                                where : {DOC : this.lastPosPayDt[0].POS_GUID},
+                                                                aggregate:{count: "AMOUNT"},
+                                                                groupBy: "AMOUNT",
+                                                            }
                                                         }
                                                         tmpDt.selectCmd.value = [this.lastPosPayDt[0].POS_GUID]
                                                         await tmpDt.refresh();
@@ -4544,7 +4652,7 @@ export default class posDoc extends React.PureComponent
                                 await this.descSave("PRICE DESC",e,this.grdList.devGrid.getSelectedRowKeys()[0].LINE_NO)                                
                                 if((await this.priceCheck(this.grdList.devGrid.getSelectedRowKeys()[0],tmpResult)))
                                 {
-                                    let tmpData = {QUANTITY:this.grdList.devGrid.getSelectedRowKeys()[0].QUANTITY,PRICE:tmpResult}
+                                    let tmpData = {QUANTITY:this.grdList.devGrid.getSelectedRowKeys()[0].QUANTITY,PRICE:Number(tmpResult)}
                                     this.saleRowUpdate(this.grdList.devGrid.getSelectedRowKeys()[0],tmpData)
                                 }
                             }                            

@@ -55,7 +55,14 @@ export default class NbPluButtonGrp extends NbBase
         {
             query : "SELECT * FROM PLU_IMAGE_VW_01 WHERE MAIN_CODE IN (SELECT value FROM STRING_SPLIT(@MAIN_CODE,',')) ORDER BY ITEM_NAME ASC",
             param : ['MAIN_CODE:string|250'],
-            value : [tmpArr.toString()]
+            value : [tmpArr.toString()],
+            local : 
+            {
+                type : "select",
+                from : "PLU_IMAGE_VW_01",
+                where : {MAIN_CODE:{in:tmpArr}},
+                order: {by: "ITEM_NAME",type: "asc"}
+            }
         }        
         await this.pluImageDt.refresh()
         this.setState({isLoading:false})
