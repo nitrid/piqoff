@@ -30,6 +30,7 @@ import NbKeyboard from "../../core/react/bootstrap/keyboard.js";
 
 import { posCls,posSaleCls,posPaymentCls,posPluCls,posDeviceCls } from "../../core/cls/pos.js";
 import { docCls} from "../../core/cls/doc.js"
+import transferCls from "../lib/transfer.js";
 
 import { itemsCls } from "../../core/cls/items.js";
 import { dataset,datatable,param,access } from "../../core/core.js";
@@ -57,6 +58,7 @@ export default class posDoc extends React.PureComponent
         this.lastPosDt = new datatable();
         this.lastPosSaleDt = new datatable();
         this.lastPosPayDt = new datatable();
+        this.transfer = new transferCls();
 
         this.loading = React.createRef();
 
@@ -119,6 +121,8 @@ export default class posDoc extends React.PureComponent
                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOnlineAlert.msg")}</div>)
                 }
                 await dialog(tmpConfObj);
+
+                window.location.reload()
             }
             this.setState({isConnected:true})
         })
@@ -137,11 +141,66 @@ export default class posDoc extends React.PureComponent
             }
             await dialog(tmpConfObj);
 
-            for (let i = 0; i < array.length; i++) {
-                const element = array[i];
-                
+            //OFFLINE MODA DÖNDÜĞÜNDE EĞER EKRANDA KAYITLAR VARSA LOCAL DB YE GÖNDERİLİYOR
+            for (let i = 0; i < this.posObj.dt("POS").length; i++) 
+            {
+                let tmpCtrl = await this.core.local.select({from:"POS_VW_01",where:{GUID:this.posObj.dt("POS")[i].GUID}})
+                if(tmpCtrl.result.length > 0)
+                {
+                    Object.setPrototypeOf(this.posObj.dt("POS")[i],{stat:'edit'})
+                }
+                else
+                {
+                    Object.setPrototypeOf(this.posObj.dt("POS")[i],{stat:'new'})
+                }
             }
-            console.log(this.posObj)
+            for (let i = 0; i < this.posObj.dt("POS_SALE").length; i++) 
+            {
+                if(this.posObj.dt("POS_SALE")[i].GUID != '00000000-0000-0000-0000-000000000000')
+                {
+                    let tmpCtrl = await this.core.local.select({from:"POS_SALE_VW_01",where:{POS_GUID:this.posObj.dt("POS_SALE")[i].POS_GUID}})
+                
+                    if(tmpCtrl.result.length > 0)
+                    {
+                        Object.setPrototypeOf(this.posObj.dt("POS_SALE")[i],{stat:'edit'})
+                    }
+                    else
+                    {
+                        Object.setPrototypeOf(this.posObj.dt("POS_SALE")[i],{stat:'new'})
+                    }
+                }
+                else
+                {
+                    Object.setPrototypeOf(this.posObj.dt("POS_SALE")[i],{stat:''})
+                }
+            }
+            for (let i = 0; i < this.posObj.dt("POS_PAYMENT").length; i++) 
+            {
+                let tmpCtrl = await this.core.local.select({from:"POS_PAYMENT_VW_01",where:{POS_GUID:this.posObj.dt("POS_PAYMENT")[i].POS_GUID}})
+                if(tmpCtrl.result.length > 0)
+                {
+                    Object.setPrototypeOf(this.posObj.dt("POS_PAYMENT")[i],{stat:'edit'})
+                }
+                else
+                {
+                    Object.setPrototypeOf(this.posObj.dt("POS_PAYMENT")[i],{stat:'new'})
+                }
+            }
+            for (let i = 0; i < this.posObj.dt("POS_EXTRA").length; i++) 
+            {
+                let tmpCtrl = await this.core.local.select({from:"POS_EXTRA_VW_01",where:{POS_GUID:this.posObj.dt("POS_EXTRA")[i].POS_GUID}})
+                if(tmpCtrl.result.length > 0)
+                {
+                    Object.setPrototypeOf(this.posObj.dt("POS_EXTRA")[i],{stat:'edit'})
+                }
+                else
+                {
+                    Object.setPrototypeOf(this.posObj.dt("POS_EXTRA")[i],{stat:'new'})
+                }
+            }
+            await this.posObj.save()
+            setTimeout(()=>{window.location.reload()},500)
+            //*************************************************************************** */
         })
     }
     async init()
@@ -225,7 +284,7 @@ export default class posDoc extends React.PureComponent
                              
                 return
             }
-        }        
+        }   
     }
     async deviceEntry()
     {
@@ -453,6 +512,11 @@ export default class posDoc extends React.PureComponent
             }
             tmpQuantity = pCode.split("*")[0];
             pCode = pCode.split("*")[1];
+
+            if(pCode.substring(0,1) == 'F')
+            {
+                pCode = pCode.substring(1,pCode.length)
+            }
         }
         //******************************************************** */
         //BARKOD DESENİ
