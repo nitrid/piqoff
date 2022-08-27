@@ -22,7 +22,6 @@ export default class menuEdit extends React.Component
         this.core = App.instance.core;
         this.menu =  []  
         this.prmObj = new menu()
-        console.log(this.prmObj)
     }
     _cellRoleRender(e)
     {
@@ -30,7 +29,6 @@ export default class menuEdit extends React.Component
     }
     async init()
     {
-        console.log(this.core)
         this.menu =  []   
         this.setState({menu:{}})
         this.cmbApp.value = ''
@@ -52,75 +50,87 @@ export default class menuEdit extends React.Component
                     {
                         object[index].visible = false
                     }
+                    else if( element.selected == true)
+                    {
+                        object[index].visible = true
+                    }
                 }
             }.bind(this));
             resolve()
         });
     }
-    async menuClear(pData)
-    {
-        return new Promise(async resolve => 
-            {
-                pData.forEach(async function (element,index,object)
-                {
-                    if(typeof element.items != 'undefined')
-                    {
-                        if(element.items.length == 0)
-                        {
-                            object.splice(index,1)
-                            this.menuClear(object)
-                        }
-                        else
-                        {
-                            this.menuClear(element.items)
-                        }
-                    }
-                }.bind(this));
-                resolve()
-            });
-    }
     async menuSave()
     {
         await this.menuBuild(this.menu)
-        await this.menuClear(this.menu)
-        
-        let tmpEmpty = {...this.prmObj.empty};
-        tmpEmpty.TYPE = 0
-        tmpEmpty.ID = "menu"
-        tmpEmpty.VALUE = JSON.stringify(this.menu)
-        tmpEmpty.USERS = this.cmbUser.value
-        tmpEmpty.APP = this.cmbApp.value
+        await this.Test(this.menu)
 
-        this.prmObj.addEmpty(tmpEmpty);    
-        this.prmObj.save()        
+        setTimeout(() => {
+            if(this.prmObj.dt().length > 0)
+            {
+                this.prmObj.dt()[0].VALUE = JSON.stringify(this.menu)
+                this.prmObj.save()
+            }
+            else
+            {
+                let tmpEmpty = {...this.prmObj.empty};
+                tmpEmpty.TYPE = 0
+                tmpEmpty.ID = "menu"
+                tmpEmpty.VALUE = JSON.stringify(this.menu)
+                tmpEmpty.USERS = this.cmbUser.value
+                tmpEmpty.APP = this.cmbApp.value
+        
+                this.prmObj.addEmpty(tmpEmpty);    
+                this.prmObj.save()    
+            }
+        }, 2000);
+        
         
     }
     componentDidMount()
     {
         this.init()
     }
-    mergeMenu(tmpMenu)
+    mergeMenu(tmpMenu,tmpMenuData)
     {
-  
         return new Promise(async resolve => 
         {
             tmpMenu.forEach(async function (element,index,object)
             {
                 if(typeof element.items != 'undefined')
                 {
-                    console.log(this.menu)
-                    let tmpMerge = await this.menu.findSub({id:element.id},'items')
-                    console.log(tmpMerge)
-                    this.mergeMenu(element.items)
+                    this.mergeMenu(element.items,tmpMenuData)
                 }
                 else
                 {
-                    let tmpMerge = await this.menu.findSub({id:element.id},'items')
-                    console.log(tmpMerge)
+                    let tmpMerge = await tmpMenuData.findSub({id:element.id},'items')
+                    if(typeof tmpMerge != 'undefined' && typeof tmpMerge.selected != 'undefined')
+                    {
+                        object[index].selected = tmpMerge.selected
+                    }
                 }
             }.bind(this));
+            
             resolve()
         });
+    }
+    async Test(tmpMenu)
+    {
+        return new Promise(async resolve => 
+            {
+                tmpMenu.forEach(async function (element,index,object)
+                {
+                    if(typeof element.items != 'undefined')
+                    {
+                        await this.Test(element.items)
+                        let tmpVisible = await element.items.findSub({visible:true},'items')
+                        if(typeof tmpVisible == 'undefined')
+                        {
+                            object[index].visible = false
+                        }
+                    }
+                }.bind(this));
+                resolve(this.menu)
+            });
     }
     async visibleClear(pData)
     {
@@ -164,17 +174,22 @@ export default class menuEdit extends React.Component
                                     data={{source:[{ID:0,VALUE:"OFF"},{ID:1,VALUE:"MOB"}]}}
                                     onValueChanged={async (e)=>
                                     {
-                                        console.log(e)
                                         if(e.value == 'OFF')
                                         {
-                                            this.prmObj = new menu(menuOff(App.instance.lang))
+                                            this.menu = menuOff(App.instance.lang)
+                                            this.prmObj = new menu(this.menu)
+                                            
                                         }
                                         else if(e.value == 'MOB')
                                         {
-                                            this.prmObj = new menu(menuMob(App.instance.lang))
+                                            this.menu = menuMob(App.instance.lang)
+                                            this.prmObj = new menu(this.menu )
+                                            
                                         }
                                         let tmpMenu = await this.prmObj.load({USER:this.cmbUser.value,APP:this.cmbApp.value})
-                                        this.mergeMenu(tmpMenu)
+                                        await this.mergeMenu(this.menu,tmpMenu)
+                                        this.setState({menu:this.menu})
+                                        
                                     }}
                                     />
                                 </div>
@@ -191,10 +206,22 @@ export default class menuEdit extends React.Component
                                         data={{source:{select:{query : "SELECT CODE FROM USERS ORDER BY CODE ASC"},sql:this.core.sql}}}
                                         onValueChanged={async (e)=>
                                         {
-
+                                            if(this.cmbApp.value == 'OFF')
+                                            {
+                                                this.menu = menuOff(App.instance.lang)
+                                                this.prmObj = new menu(this.menu)
+                                                
+                                            }
+                                            else if(this.cmbApp.value == 'MOB')
+                                            {
+                                                this.menu = menuMob(App.instance.lang)
+                                                this.prmObj = new menu(this.menu)
+                                                
+                                            }
                                             let tmpMenu = await this.prmObj.load({USER:this.cmbUser.value,APP:this.cmbApp.value})
-                                            this.menu = tmpMenu
-                                            this.setState({menu:tmpMenu})
+                                            await this.mergeMenu(this.menu,tmpMenu)
+                                            this.setState({menu:this.menu})
+
                                         }}
                                         />
                                 </div>
