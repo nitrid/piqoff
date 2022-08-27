@@ -709,6 +709,7 @@ export default class transferCls
             resolve()
         });
     }
+    //LOCAL DEN SQL E GÖNDER
     sendToSql()
     {
         return new Promise(async resolve => 
