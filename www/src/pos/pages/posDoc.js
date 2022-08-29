@@ -1292,6 +1292,8 @@ export default class posDoc extends React.PureComponent
         return new Promise(async resolve => 
         {
             let tmpTypeName = ""
+            let tmpMaxLine = this.posObj.posPay.dt().max('LINE_NO')
+
             if(pPayData.PAY_TYPE == 0)
                 tmpTypeName = "ESC"
             else if(pPayData.PAY_TYPE == 1)
@@ -1307,7 +1309,7 @@ export default class posDoc extends React.PureComponent
             this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
             this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE = pPayData.PAY_TYPE
             this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE_NAME = tmpTypeName
-            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].LINE_NO = this.posObj.posPay.dt().length + 1
+            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].LINE_NO = tmpMaxLine + 1
             this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = Number(parseFloat(pPayData.AMOUNT).toFixed(2))
             this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].CHANGE = pPayData.CHANGE
             this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].DELETED = false
