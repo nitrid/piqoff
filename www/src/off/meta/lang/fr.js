@@ -394,6 +394,19 @@ export const langFr =
             btn01: "Tamam", //BAK
             msg: "Girmiş olduğunuz tedarikçi fiyatı satış fiyatından yüksek olamaz! Lütfen satış fiyatınızı kontrol ediniz." //BAK
         },
+        popAnalysis :  //BAK
+        {
+            title : "Satış İstatistiği" 
+        },
+        grdAnalysis:  //BAK
+        {
+            clmToday: "Bugün",
+            clmYesterday: "Dün",
+            clmWeek: "Bu Hafta",
+            clmMount : "Bu Ay",
+            clmYear : "Bu Yıl",
+            clmLastYear : "Geçen Yıl"
+        },
     },
     stk_01_002: 
     {
