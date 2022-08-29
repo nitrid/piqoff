@@ -22,6 +22,8 @@ import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NbButton from "../../../../core/react/bootstrap/button.js";
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { dataset,datatable,param,access } from "../../../../core/core.js";
+import { posExtraCls} from "../../../../core/cls/pos.js";
+
 
 
 export default class salesOrdList extends React.PureComponent
@@ -706,7 +708,7 @@ export default class salesOrdList extends React.PureComponent
                                         </div>                                        
                                     </div>
                                 </div>
-                                <div className="row pt-2">
+                                <div className="row pt-4">
                                     <div className="col-12">
                                         <div className="row">
                                         {/* T.R Detail */}
@@ -888,6 +890,14 @@ export default class salesOrdList extends React.PureComponent
                                             await this.lastPosPayDt.delete()
                                             await this.lastPosPayDt.update() 
                                             this.popLastTotal.hide()
+                                            this.extraObj = new posExtraCls()
+                                            let tmpExtra = {...this.extraObj.empty}
+                                            this.extraObj.addEmpty(tmpExtra);
+                                            this.extraObj.dt()[0].TAG = 'PAYMENT_CHANGE'
+                                            this.extraObj.dt()[0].POS_GUID = this.lastPosPayDt[0].POS_GUID
+                                            this.extraObj.dt()[0].DESCRIPTION = this.txtPayChangeDesc.value
+                                            
+                                            this.extraObj.save()
                                         }}>
                                             <i className="text-white fa-solid fa-floppy-disk" style={{fontSize: "24px"}} />
                                         </NbButton>

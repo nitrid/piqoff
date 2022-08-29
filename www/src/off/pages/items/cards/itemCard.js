@@ -691,6 +691,7 @@ export default class itemCard extends React.PureComponent
                                             }
                                         }
                                         await this.grdAnalysis.dataRefresh(tmpSource)
+                                        console.log(this.grdAnalysis)
                                         this.popAnalysis.show()
                                     }}/>
                                 </Item>
@@ -2027,8 +2028,8 @@ export default class itemCard extends React.PureComponent
                         showTitle={true}
                         title={this.t("popAnalysis.title")}
                         container={"#root"} 
-                        width={'800'}
-                        height={'250'}
+                        width={'700'}
+                        height={'200'}
                         position={{of:'#root'}}
                         >
                             <Form colCount={1} height={'fit-content'}>
@@ -2039,7 +2040,7 @@ export default class itemCard extends React.PureComponent
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
                                     headerFilter={{visible:false}}
-                                    filterRow = {{visible:true}}
+                                    filterRow = {{visible:false}}
                                     height={'100%'} 
                                     width={'100%'}
                                     dbApply={false}
