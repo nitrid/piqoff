@@ -305,7 +305,6 @@ export class local
                             } 
                             else if(pItem.type == 'delete')
                             {                     
-                                console.log(pItem)
                                 await this.remove(pItem);
                             }      
                         });
@@ -944,6 +943,10 @@ export class datatable
                                     tmpQuery.local.values[0][tmpKey] = this[i][tmpMap.map]  
                                 }
                             }
+                            else
+                            {
+                                tmpQuery.local.values[0][tmpKey] = tmpMap
+                            }
                         }
                     }
                 }
@@ -970,6 +973,10 @@ export class datatable
                                     tmpQuery.local.set[tmpKey] = this[i][tmpMap.map]
                                 }                                
                             }
+                            else
+                            {
+                                tmpQuery.local.set[tmpKey] = tmpMap
+                            }
                         }
                         
                     }
@@ -992,6 +999,10 @@ export class datatable
                                 {
                                     tmpQuery.local.where[tmpKey] = this[i][tmpMap.map]
                                 }        
+                            }
+                            else
+                            {
+                                tmpQuery.local.where[tmpKey] = tmpMap
                             }
                         }
                     }

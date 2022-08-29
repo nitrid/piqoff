@@ -31,7 +31,7 @@ export const menu = (e) =>
                         },
                         {
                             id: 'stk_01_006',
-                            text: e.t('menu.stk_01_006'),//'Barkod Tanımları',
+                            text: e.t('menu.stk_01_006'),//'Barkod Ekleme',
                             path: 'items/cards/barcodeAdd'
                         },
                         {
