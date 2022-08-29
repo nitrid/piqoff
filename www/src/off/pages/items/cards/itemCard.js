@@ -7,6 +7,7 @@ import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item } from 'devextreme-react/form';
 import TabPanel from 'devextreme-react/tab-panel';
+import { Chart, Series } from 'devextreme-react/chart';
 import { Button } from 'devextreme-react/button';
 
 import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
@@ -669,29 +670,33 @@ export default class itemCard extends React.PureComponent
                                     <NdButton id="btnAnalysis" parent={this} icon="chart" type="default"
                                     onClick={async ()=>
                                     {
-                                        let tmpSource =
+                                        this.dtFirstAnalysis.value = moment(new Date())
+                                        this.dtLastAnalysis.value = moment(new Date())
+                                        let tmpQuery = 
                                         {
-                                            source : 
-                                            {
-                                                groupBy : this.groupList,
-                                                select : 
-                                                {
-                                                    query :"SELECT " +
-                                                    " ISNULL((SELECT SUM(QUANTITY) FROM POS_SALE_VW_01 WHERE POS_SALE_VW_01.ITEM_CODE = ITEMS.CODE AND DOC_DATE =  CONVERT(NVARCHAR,GETDATE(),112)),0) AS TODAY, " +
-                                                    " ISNULL((SELECT SUM(QUANTITY) FROM POS_SALE_VW_01 WHERE POS_SALE_VW_01.ITEM_CODE = ITEMS.CODE AND DOC_DATE =  CONVERT(NVARCHAR,GETDATE()-1,112)),0) AS YESTERDAY, " +
-                                                    " ISNULL((SELECT SUM(QUANTITY) FROM POS_SALE_VW_01 WHERE POS_SALE_VW_01.ITEM_CODE = ITEMS.CODE AND DOC_DATE >=  dateadd(day, 2-datepart(dw, getdate()), CONVERT(NVARCHAR,getdate(),112)) AND DOC_DATE <=CONVERT(NVARCHAR,GETDATE(),112)),0) AS WEEK, " +
-                                                    " ISNULL((SELECT SUM(QUANTITY) FROM POS_SALE_VW_01 WHERE POS_SALE_VW_01.ITEM_CODE = ITEMS.CODE AND DOC_DATE >=  dateadd(day, 1-datepart(dd, getdate()), CONVERT(NVARCHAR,getdate(),112)) AND DOC_DATE <=CONVERT(NVARCHAR,GETDATE(),112)),0) AS MOUNT, " +
-                                                    " ISNULL((SELECT SUM(QUANTITY) FROM POS_SALE_VW_01 WHERE POS_SALE_VW_01.ITEM_CODE = ITEMS.CODE AND DOC_DATE >=  dateadd(day, 1-datepart(dy, getdate()), CONVERT(NVARCHAR,getdate(),112)) AND DOC_DATE <=CONVERT(NVARCHAR,GETDATE(),112)),0) AS YEAR, " +
-                                                    "ISNULL((SELECT SUM(QUANTITY) FROM POS_SALE_VW_01 WHERE POS_SALE_VW_01.ITEM_CODE = ITEMS.CODE AND DOC_DATE >= CONVERT(NVARCHAR,YEAR(GETDATE()) -1)+ '0101' AND DOC_DATE <=CONVERT(NVARCHAR,YEAR(GETDATE()) -1)+ '1231'),0) AS LASTYEAR " +
-                                                    " FROM ITEMS WHERE ITEMS.CODE = @CODE",
-                                                    param : ['CODE:string|50'],
-                                                    value : [this.txtRef.value]
-                                                },
-                                                sql : this.core.sql
-                                            }
+                                            query :"SELECT ISNULL(SUM(QUANTITY),0) AS QUANTITY,'BUGÜN' AS DOC_DATE FROM POS_SALE_VW_01 WHERE ITEM_CODE = @CODE  AND DOC_DATE =  CONVERT(NVARCHAR,GETDATE(),112) GROUP BY ITEM_CODE " +
+                                            "UNION ALL " +
+                                            "SELECT ISNULL(SUM(QUANTITY),0) AS QUANTITY,'DÜN' AS DOC_DATE FROM POS_SALE_VW_01 WHERE ITEM_CODE = @CODE  AND DOC_DATE =  CONVERT(NVARCHAR,GETDATE()-1,112) GROUP BY ITEM_CODE  "+
+                                            "UNION ALL "+
+                                            "SELECT ISNULL(SUM(QUANTITY),0) AS QUANTITY,'BU HAFTA' AS DOC_DATE FROM POS_SALE_VW_01 WHERE ITEM_CODE = @CODE AND DOC_DATE >=  dateadd(day, 2-datepart(dw, getdate()), CONVERT(NVARCHAR,getdate(),112)) AND DOC_DATE <=CONVERT(NVARCHAR,GETDATE(),112) GROUP BY ITEM_CODE  "+
+                                            "UNION ALL "+
+                                            "SELECT ISNULL(SUM(QUANTITY),0) AS QUANTITY,'BU AY' AS DOC_DATE FROM POS_SALE_VW_01 WHERE ITEM_CODE = @CODE  AND DOC_DATE >=  dateadd(day, 1-datepart(dd, getdate()), CONVERT(NVARCHAR,getdate(),112)) AND DOC_DATE <=CONVERT(NVARCHAR,GETDATE(),112) GROUP BY DOC_DATE,ITEM_CODE  "+
+                                            "UNION ALL "+
+                                            "SELECT ISNULL(SUM(QUANTITY),0) AS QUANTITY,'BU AY' AS DOC_DATE FROM POS_SALE_VW_01 WHERE ITEM_CODE = @CODE  AND DOC_DATE >=  dateadd(day, 1-datepart(dd, getdate()), CONVERT(NVARCHAR,getdate(),112)) AND DOC_DATE <=CONVERT(NVARCHAR,GETDATE(),112) GROUP BY DOC_DATE,ITEM_CODE  "+
+                                            "UNION ALL "+
+                                            "SELECT ISNULL(SUM(QUANTITY),0) AS QUANTITY,'BU YIL' AS DOC_DATE FROM POS_SALE_VW_01 WHERE ITEM_CODE = @CODE  AND DOC_DATE >=  dateadd(day, 1-datepart(dy, getdate()), CONVERT(NVARCHAR,getdate(),112)) AND DOC_DATE <=CONVERT(NVARCHAR,GETDATE(),112) GROUP BY DOC_DATE,ITEM_CODE  ",
+                                            param : ['CODE:string|50'],
+                                            value : [this.txtRef.value]
                                         }
-                                        await this.grdAnalysis.dataRefresh(tmpSource)
-                                        console.log(this.grdAnalysis)
+                                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                                        if(tmpData.result.recordset.length > 0)
+                                        {
+                                            this.setState({dataSource:tmpData.result.recordset})
+                                        }
+                                        else
+                                        {
+                                            this.setState({dataRefresh:{0:{QUANTITY:0,DOC_DATE:''}}})
+                                        }
                                         this.popAnalysis.show()
                                     }}/>
                                 </Item>
@@ -2029,35 +2034,51 @@ export default class itemCard extends React.PureComponent
                         title={this.t("popAnalysis.title")}
                         container={"#root"} 
                         width={'700'}
-                        height={'200'}
+                        height={'600'}
                         position={{of:'#root'}}
                         >
-                            <Form colCount={1} height={'fit-content'}>
-                              <Item>
-                                <NdGrid parent={this} id={"grdAnalysis"} 
-                                    showBorders={true} 
-                                    columnsAutoWidth={true} 
-                                    allowColumnReordering={true} 
-                                    allowColumnResizing={true} 
-                                    headerFilter={{visible:false}}
-                                    filterRow = {{visible:false}}
-                                    height={'100%'} 
-                                    width={'100%'}
-                                    dbApply={false}
-                                    onRowRemoved={async (e)=>{
-                                        
-                                    }}
-                                    >
-                                        <Scrolling mode="infinite" />
-                                        <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
-                                        <Column dataField="TODAY" caption={this.t("grdAnalysis.clmToday")} dataType={'number'}  width={100} />
-                                        <Column dataField="YESTERDAY" caption={this.t("grdAnalysis.clmYesterday")} dataType={'number'}  width={100} />
-                                        <Column dataField="WEEK" caption={this.t("grdAnalysis.clmWeek")} dataType={'number'}  width={100}   />
-                                        <Column dataField="MOUNT" caption={this.t("grdAnalysis.clmMount")} dataType={'number'} width={100} />
-                                        <Column dataField="YEAR" caption={this.t("grdAnalysis.clmYear")} dataType={'number'} width={100} />
-                                        <Column dataField="LASTYEAR" caption={this.t("grdAnalysis.clmLastYear")} dataType={'number'} width={100} />
-                                </NdGrid>
-                              </Item>
+                            <Form colCount={3} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("dtFirstAnalysis")} alignment="right" />
+                                    <NdDatePicker simple={true}  parent={this} id={"dtFirstAnalysis"}/>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("dtLastAnalysis")} alignment="right" />
+                                    <NdDatePicker simple={true}  parent={this} id={"dtLastAnalysis"}/>
+                                </Item>
+                                <Item >
+                                <NdButton id="btnGet" parent={this} text={this.t("btnGet")} type="default" width='100%'
+                                    onClick={async()=>
+                                    {
+                                        let tmpQuery = 
+                                        {
+                                            query :"SELECT SUM(QUANTITY) AS QUANTITY,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE FROM POS_SALE_VW_01 " +
+                                                    "WHERE ITEM_CODE = @CODE AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE " +
+                                                    "GROUP BY DOC_DATE,ITEM_CODE ",
+                                            param : ['CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
+                                            value : [this.txtRef.value,this.dtFirstAnalysis.value,this.dtLastAnalysis.value]
+                                        }
+                                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                                        if(tmpData.result.recordset.length > 0)
+                                        {
+                                            this.setState({dataSource:tmpData.result.recordset})
+                                        }
+                                        else
+                                        {
+                                            this.setState({dataRefresh:{0:{QUANTITY:0,DOC_DATE:''}}})
+                                        }
+                                    }}/>
+                                </Item>
+                                <Item colSpan={3}>
+                                    <Chart id="chart" dataSource={this.state.dataSource}>
+                                        <Series
+                                        valueField="QUANTITY"
+                                        argumentField="DOC_DATE"
+                                        name="Şatış"
+                                        type="bar"
+                                        color="#ffaa66" />
+                                    </Chart>
+                                </Item>
                             </Form>
                         </NdPopUp>
                     </div>                                

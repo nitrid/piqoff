@@ -407,6 +407,9 @@ export const langTr =
             clmYear : "Bu Yıl",
             clmLastYear : "Geçen Yıl"
         },
+        dtFirstAnalysis : "Başlangıç",
+        dtLastAnalysis : "Bitiş",
+        btnGet : "Getir"
         
     },
     stk_01_002: 
