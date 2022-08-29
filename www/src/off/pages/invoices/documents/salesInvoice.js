@@ -461,6 +461,7 @@ export default class salesInvoice extends React.PureComponent
                 }
             }
         }
+        console.log(pData.VAT)
         this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
         this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID
         this.docObj.docItems.dt()[pIndex].VAT_RATE = pData.VAT
@@ -1494,10 +1495,8 @@ export default class salesInvoice extends React.PureComponent
                                             this.docObj.docItems.dt()[rowIndex].DISCOUNT = 0 
                                             return
                                         }
-                                        if(this.docObj.docItems.dt()[rowIndex].VAT > 0)
-                                        {
-                                            this.docObj.docItems.dt()[rowIndex].VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(3));
-                                        }
+                                       
+                                        this.docObj.docItems.dt()[rowIndex].VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(3));
                                         this.docObj.docItems.dt()[rowIndex].AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3))
                                         this.docObj.docItems.dt()[rowIndex].TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +this.docObj.docItems.dt()[rowIndex].VAT).toFixed(3))
                                        
@@ -2326,8 +2325,13 @@ export default class salesInvoice extends React.PureComponent
                                             {
                                                 if(pResult.split('|')[0] != 'ERR')
                                                 {
-                                                    let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                                                    mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
+                                                    var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
+                                                    mywindow.onload = function() 
+                                                    {
+                                                        mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                                                    } 
+                                                    // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
+                                                    // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
                                                 }
                                             });
                                             this.popDesign.hide();  
