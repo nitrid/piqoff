@@ -309,7 +309,6 @@ export default class itemCard extends React.PureComponent
             if(pCode !== '')
             {
                 let tmpData = await new itemMultiCodeCls().load({MULTICODE:pCode,CUSTOMER_CODE:pSupply});
-                //console.log(tmpData)
                 if(tmpData.length > 0)
                 {
                     let tmpConfObj =
@@ -668,9 +667,31 @@ export default class itemCard extends React.PureComponent
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnAnalysis" parent={this} icon="chart" type="default"
-                                    onClick={()=>
+                                    onClick={async ()=>
                                     {
-                                        
+                                        let tmpSource =
+                                        {
+                                            source : 
+                                            {
+                                                groupBy : this.groupList,
+                                                select : 
+                                                {
+                                                    query :"SELECT " +
+                                                    " ISNULL((SELECT SUM(QUANTITY) FROM POS_SALE_VW_01 WHERE POS_SALE_VW_01.ITEM_CODE = ITEMS.CODE AND DOC_DATE =  CONVERT(NVARCHAR,GETDATE(),112)),0) AS TODAY, " +
+                                                    " ISNULL((SELECT SUM(QUANTITY) FROM POS_SALE_VW_01 WHERE POS_SALE_VW_01.ITEM_CODE = ITEMS.CODE AND DOC_DATE =  CONVERT(NVARCHAR,GETDATE()-1,112)),0) AS YESTERDAY, " +
+                                                    " ISNULL((SELECT SUM(QUANTITY) FROM POS_SALE_VW_01 WHERE POS_SALE_VW_01.ITEM_CODE = ITEMS.CODE AND DOC_DATE >=  dateadd(day, 2-datepart(dw, getdate()), CONVERT(NVARCHAR,getdate(),112)) AND DOC_DATE <=CONVERT(NVARCHAR,GETDATE(),112)),0) AS WEEK, " +
+                                                    " ISNULL((SELECT SUM(QUANTITY) FROM POS_SALE_VW_01 WHERE POS_SALE_VW_01.ITEM_CODE = ITEMS.CODE AND DOC_DATE >=  dateadd(day, 1-datepart(dd, getdate()), CONVERT(NVARCHAR,getdate(),112)) AND DOC_DATE <=CONVERT(NVARCHAR,GETDATE(),112)),0) AS MOUNT, " +
+                                                    " ISNULL((SELECT SUM(QUANTITY) FROM POS_SALE_VW_01 WHERE POS_SALE_VW_01.ITEM_CODE = ITEMS.CODE AND DOC_DATE >=  dateadd(day, 1-datepart(dy, getdate()), CONVERT(NVARCHAR,getdate(),112)) AND DOC_DATE <=CONVERT(NVARCHAR,GETDATE(),112)),0) AS YEAR, " +
+                                                    "ISNULL((SELECT SUM(QUANTITY) FROM POS_SALE_VW_01 WHERE POS_SALE_VW_01.ITEM_CODE = ITEMS.CODE AND DOC_DATE >= CONVERT(NVARCHAR,YEAR(GETDATE()) -1)+ '0101' AND DOC_DATE <=CONVERT(NVARCHAR,YEAR(GETDATE()) -1)+ '1231'),0) AS LASTYEAR " +
+                                                    " FROM ITEMS WHERE ITEMS.CODE = @CODE",
+                                                    param : ['CODE:string|50'],
+                                                    value : [this.txtRef.value]
+                                                },
+                                                sql : this.core.sql
+                                            }
+                                        }
+                                        await this.grdAnalysis.dataRefresh(tmpSource)
+                                        this.popAnalysis.show()
                                     }}/>
                                 </Item>
                                 <Item location="after"
@@ -1997,7 +2018,48 @@ export default class itemCard extends React.PureComponent
                                 </Item>
                             </Form>
                         </NdPopUp>
-                    </div>                                      
+                    </div>      
+                    {/* İstatistik POPUP */}
+                    <div>
+                        <NdPopUp parent={this} id={"popAnalysis"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popAnalysis.title")}
+                        container={"#root"} 
+                        width={'800'}
+                        height={'250'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                              <Item>
+                                <NdGrid parent={this} id={"grdAnalysis"} 
+                                    showBorders={true} 
+                                    columnsAutoWidth={true} 
+                                    allowColumnReordering={true} 
+                                    allowColumnResizing={true} 
+                                    headerFilter={{visible:false}}
+                                    filterRow = {{visible:true}}
+                                    height={'100%'} 
+                                    width={'100%'}
+                                    dbApply={false}
+                                    onRowRemoved={async (e)=>{
+                                        
+                                    }}
+                                    >
+                                        <Scrolling mode="infinite" />
+                                        <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
+                                        <Column dataField="TODAY" caption={this.t("grdAnalysis.clmToday")} dataType={'number'}  width={100} />
+                                        <Column dataField="YESTERDAY" caption={this.t("grdAnalysis.clmYesterday")} dataType={'number'}  width={100} />
+                                        <Column dataField="WEEK" caption={this.t("grdAnalysis.clmWeek")} dataType={'number'}  width={100}   />
+                                        <Column dataField="MOUNT" caption={this.t("grdAnalysis.clmMount")} dataType={'number'} width={100} />
+                                        <Column dataField="YEAR" caption={this.t("grdAnalysis.clmYear")} dataType={'number'} width={100} />
+                                        <Column dataField="LASTYEAR" caption={this.t("grdAnalysis.clmLastYear")} dataType={'number'} width={100} />
+                                </NdGrid>
+                              </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div>                                
                 </ScrollView>
             </React.Fragment>
         )
