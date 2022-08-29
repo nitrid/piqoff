@@ -7,7 +7,7 @@ import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item } from 'devextreme-react/form';
 import TabPanel from 'devextreme-react/tab-panel';
-import { Chart, Series } from 'devextreme-react/chart';
+import {  Chart, Series, CommonSeriesSettings,  Format, Legend, Export } from 'devextreme-react/chart';
 import { Button } from 'devextreme-react/button';
 
 import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
@@ -2071,12 +2071,22 @@ export default class itemCard extends React.PureComponent
                                 </Item>
                                 <Item colSpan={3}>
                                     <Chart id="chart" dataSource={this.state.dataSource}>
+                                    <CommonSeriesSettings
+                                        argumentField="state"
+                                        type="bar"
+                                        hoverMode="allArgumentPoints"
+                                        selectionMode="allArgumentPoints"
+                                        >
+                                        <Label visible={true}>
+                                            <Format type="fixedPoint" precision={0} />
+                                        </Label>
+                                        </CommonSeriesSettings>
                                         <Series
                                         valueField="QUANTITY"
                                         argumentField="DOC_DATE"
                                         name="Şatış"
                                         type="bar"
-                                        color="#ffaa66" />
+                                        color="#008000" />
                                     </Chart>
                                 </Item>
                             </Form>
