@@ -28,6 +28,7 @@ export default class salesOrdList extends React.PureComponent
         this.core = App.instance.core;
         this.groupList = [];
         this._btnGetClick = this._btnGetClick.bind(this)
+        this.state={ticketId :""}
     }
     componentDidMount()
     {
@@ -38,8 +39,6 @@ export default class salesOrdList extends React.PureComponent
     }
     async Init()
     {
-        this.dtFirst.value=moment(new Date()).format("YYYY-MM-DD");
-        this.dtLast.value=moment(new Date()).format("YYYY-MM-DD");
         this.txtCustomerCode.CODE = ''
     }
     async _btnGetClick()
@@ -61,6 +60,61 @@ export default class salesOrdList extends React.PureComponent
             }
         }
         await this.grdCustomerPointReport.dataRefresh(tmpSource)
+    }
+    async getPointDetail(pCustomer)
+    {
+        let tmpSource =
+        {
+            source : 
+            {
+                groupBy : this.groupList,
+                select : 
+                {
+                    query : "SELECT *, CASE TYPE WHEN 0 THEN '+' + CONVERT(NVARCHAR, POINT) WHEN 1 THEN '-' + CONVERT(NVARCHAR, POINT) END AS POINT_TYPE, " +
+                    "(CONVERT(NVARCHAR, CDATE, 104) + ' ' + CONVERT(NVARCHAR, CDATE, 24)) AS F_DATE,SUBSTRING(CONVERT(NVARCHAR(50),DOC),20,25) AS POS_ID FROM CUSTOMER_POINT_VW_01 WHERE CUSTOMER_CODE = @CODE ORDER BY CDATE " ,
+                    param : ['CODE:string|50'],
+                    value : [pCustomer]
+                },
+                sql : this.core.sql
+            }
+        }
+        await this.grdPointDetail.dataRefresh(tmpSource)
+        this.popPointDetail.show()
+    }
+    async btnGetDetail(pGuid)
+    {
+        let tmpItemsSource =
+        {
+            source : 
+            {
+                groupBy : this.groupList,
+                select : 
+                {
+                    query :  "SELECT BARCODE,ITEM_NAME,QUANTITY,PRICE,TOTAL FROM POS_SALE_VW_01  WHERE POS_GUID = @POS_GUID ",
+                    param : ['POS_GUID:string|50'],
+                    value : [pGuid]
+                },
+                sql : this.core.sql
+            }
+        }
+        await this.grdSaleTicketItems.dataRefresh(tmpItemsSource)
+        let tmpPaysSource =
+        {
+            source : 
+            {
+                groupBy : this.groupList,
+                select : 
+                {
+                    query :  "SELECT PAY_TYPE_NAME,(AMOUNT-CHANGE) AS LINE_TOTAL FROM POS_PAYMENT_VW_01  WHERE POS_GUID = @POS_GUID ",
+                    param : ['POS_GUID:string|50'],
+                    value : [pGuid]
+                },
+                sql : this.core.sql
+            }
+        }
+        await this.grdSaleTicketPays.dataRefresh(tmpPaysSource)
+
+        this.popDetail.show()
     }
     render()
     {
@@ -121,12 +175,27 @@ export default class salesOrdList extends React.PureComponent
                                                     {
                                                         this.txtCustomerCode.setState({value:data[0].CODE})
                                                         this.txtCustomerName.setState({value:data[0].TITLE})
+                                                        this._btnGetClick()
                                                     }
                                                 }
                                             }
                                         },
                                     ]
                                 }
+                                onEnterKey={(async()=>
+                                    {
+                                        await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
+                                        this.pg_txtCustomerCode.show()
+                                        this.pg_txtCustomerCode.onClick = (data) =>
+                                        {
+                                            if(data.length > 0)
+                                            {
+                                                this.txtCustomerCode.setState({value:data[0].CODE})
+                                                this.txtCustomerName.setState({value:data[0].TITLE})
+                                                this._btnGetClick()
+                                            }
+                                        }
+                                    }).bind(this)}
                                 >
                                 </NdTextBox>
                                 {/*CARI SECIMI POPUP */}
@@ -201,7 +270,7 @@ export default class salesOrdList extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <NdGrid id="grdCustomerPointReport" parent={this} 
-                            selection={{mode:"multiple"}} 
+                            selection={{mode:"single"}} 
                             showBorders={true}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
@@ -210,6 +279,7 @@ export default class salesOrdList extends React.PureComponent
                             allowColumnResizing={true}
                             onRowDblClick={async(e)=>
                                 {
+                                    this.getPointDetail(e.data.CODE)
                                 }}
                             >                            
                                 <Paging defaultPageSize={20} />
@@ -221,6 +291,127 @@ export default class salesOrdList extends React.PureComponent
                                 <Column dataField="LDATE_FORMAT" caption={this.t("grdCustomerPointReport.clmLdate")} visible={true} /> 
                             </NdGrid>
                         </div>
+                    </div>
+                    {/* Puan Detayı PopUp */}
+                    <div>
+                        <NdPopUp parent={this} id={"popPointDetail"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popPointDetail.title")}
+                        container={"#root"} 
+                        width={'800'}
+                        height={'600'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <NdGrid id="grdPointDetail" parent={this} 
+                                    selection={{mode:"none"}} 
+                                    showBorders={true}
+                                    filterRow={{visible:true}} 
+                                    headerFilter={{visible:true}}
+                                    height={'400'} 
+                                    width={'100%'}
+                                    columnAutoWidth={true}
+                                    allowColumnReordering={true}
+                                    allowColumnResizing={true}
+                                    onCellPrepared={(e) =>
+                                    {
+                                        if(e.rowType === "data" && e.column.dataField === "POINT_TYPE" )
+                                        {
+                                            if(e.data.TYPE == 0)
+                                            {
+                                                e.cellElement.style.color ="blue"
+                                            }
+                                            else
+                                            {
+                                                e.cellElement.style.color ="red"
+                                            }
+                                        }
+                                    }}
+                                    onRowDblClick={async(e)=>
+                                    {
+                                        this.btnGetDetail(e.data.DOC)
+                                        this.setState({ticketId:e.data.POS_ID})
+                                    }}
+                                    >                            
+                                        <Scrolling mode="virtual" />
+                                        <Export fileName={this.lang.t("menu.pos_02_001")} enabled={true} allowExportSelectedData={true} />
+                                        <Column dataField="F_DATE" caption={this.t("grdPointDetail.clmDate")} visible={true} width={250}/> 
+                                        <Column dataField="POS_ID" caption={this.t("grdPointDetail.clmPosId")} visible={true} width={200}/> 
+                                        <Column dataField="POINT_TYPE" caption={this.t("grdPointDetail.clmPoint")} visible={true} width={150}/> 
+                                    </NdGrid>
+                                </Item>
+                         
+                            </Form>
+                        </NdPopUp>
+                    </div> 
+                    <div>
+                        <NdPopUp parent={this} id={"popDetail"} 
+                        visible={false}                        
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popDetail.title")}
+                        container={"#root"} 
+                        width={'100%'}
+                        height={'100%'}
+                        position={{of:'#root'}}
+                        >
+                         <div className="row">
+                         <div className="col-1 pe-0"></div>
+                            <div className="col-7 pe-0">
+                            {this.t("TicketId")} : {this.state.ticketId}
+                            </div>
+                         </div>
+                          <div className="row">
+                          <div className="col-1 pe-0"></div>
+                            <div className="col-7 pe-0">
+                            <NdGrid id="grdSaleTicketItems" parent={this} 
+                                selection={{mode:"multiple"}} 
+                                showBorders={true}
+                                filterRow={{visible:true}} 
+                                headerFilter={{visible:true}}
+                                columnAutoWidth={true}
+                                allowColumnReordering={true}
+                                allowColumnResizing={true}
+                                onRowDblClick={async(e)=>
+                                    {
+                                    }}
+                                >                            
+                                    <Paging defaultPageSize={20} />
+                                    <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
+                                    <Export fileName={this.lang.t("menu.pos_02_001")} enabled={true} allowExportSelectedData={true} />
+                                    <Column dataField="BARCODE" caption={this.t("grdSaleTicketItems.clmBarcode")} visible={true} width={150}/> 
+                                    <Column dataField="ITEM_NAME" caption={this.t("grdSaleTicketItems.clmName")} visible={true} width={250}/> 
+                                    <Column dataField="QUANTITY" caption={this.t("grdSaleTicketItems.clmQuantity")} visible={true} width={100}/> 
+                                    <Column dataField="PRICE" caption={this.t("grdSaleTicketItems.clmPrice")} visible={true} width={150} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
+                                    <Column dataField="TOTAL" caption={this.t("grdSaleTicketItems.clmTotal")} visible={true} width={150} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
+                            </NdGrid>
+                            </div>
+                            <div className="col-3 ps-0">
+                            <NdGrid id="grdSaleTicketPays" parent={this} 
+                                selection={{mode:"multiple"}} 
+                                showBorders={true}
+                                filterRow={{visible:true}} 
+                                headerFilter={{visible:true}}
+                                columnAutoWidth={false}
+                                allowColumnReordering={true}
+                                allowColumnResizing={true}
+                                onRowDblClick={async(e)=>
+                                    {
+                                    
+                                    }}
+                                >                            
+                                    <Paging defaultPageSize={20} />
+                                    <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
+                                    <Export fileName={this.lang.t("menu.pos_02_001")} enabled={true} allowExportSelectedData={true} />
+                                    <Column dataField="PAY_TYPE_NAME" caption={this.t("grdSaleTicketPays.clmPayName")} visible={true} width={155}/> 
+                                    <Column dataField="LINE_TOTAL" caption={this.t("grdSaleTicketPays.clmTotal")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}  width={150}/> 
+                            </NdGrid>
+                            </div>
+                            </div>
+                        </NdPopUp>
                     </div>
                 </ScrollView>
             </div>

@@ -5392,6 +5392,7 @@ export const langTr =
     },
     pos_02_001 :
     {
+        TicketId :"Fiş I.D",
         cmbCustomer :"Cari",
         btnGet :"Getir",
         dtFirst : "İlk Tarih",
@@ -5460,7 +5461,18 @@ export const langTr =
             virment : "Havale",
             prlv :"Oto. Ödeme",
             all :"Tümü",
-        }
+        },
+        payChangeNote : "Fiş üzerinde yapılan değişiklikler istisnai olarak yapılmalı ve hataların düzeltilmesine izin verilmelidir!",
+        payChangeNote2 : "Değişikliklerin geçmişi kaydedilir!",
+        txtPayChangeDescPlace : "Lütfen Açıklama Giriniz",
+        txtPayChangeDesc :"Ödeme tipi hatalı girilmiştir.Düzeltmesi yapıldı.",
+        popLastTotal : 
+        {
+            title : "Tahsilat"
+        },
+        trDeatil: "T.R Detay",
+        lineDelete :"Satır İptal",
+        cancel : "Vazgeç",
     },
     pos_02_002 :
     {
@@ -5483,7 +5495,36 @@ export const langTr =
             clmPoint: "Puan",
             clmLdate : "Son Güncelleme Tarihi",
         },
-
+        popPointDetail : 
+        {
+            title: "Puan Detayı"
+        },
+        grdPointDetail : 
+        {
+            clmDate : "Tarih",
+            clmPoint : "Puan",
+            clmPointType : "Tip",
+            clmPosId :"Fiş No"
+        },
+        grdSaleTicketItems :
+        {
+            clmBarcode : "Barkod",
+            clmName : "Ürün Adı",
+            clmQuantity : "Miktar",
+            clmPrice : "Fiyat",
+            clmTotal : "Tutar"
+        },
+        grdSaleTicketPays : 
+        {
+            clmPayName : "Ödeme Tipi", 
+            clmTotal : "Tutar",
+        },
+        popDetail : 
+        {
+            title : "Fiş Detayı"
+        },
+        TicketId :"Fiş I.D",
+       
     },
     pos_03_001 : 
     {

@@ -5261,6 +5261,7 @@ export const langFr =
     },
     pos_02_001 :
     {
+        TicketId :"Ticket I.D",
         cmbCustomer :"Fournisseur",
         btnGet :"Apporter",
         dtFirst : "Date Début",
@@ -5329,7 +5330,11 @@ export const langFr =
             virment : "Virment",
             prlv :"Prélèvement ",
             all :"Tout"
-        }
+        },
+        payChangeNote : "La modification de ticket doit rester exceptionnelle et permetter de corriger les erreurs !",
+        payChangeNote2 : "Un historique des modifications est enregistre !",
+        txtPayChangeDescPlace : "Lütfen Açıklama Giriniz", // BAK
+        txtPayChangeDesc :"Ödeme tipi hatalı girilmiştir.Düzeltmesi yapıldı." // BAK
     },
     pos_02_002 :
     {
@@ -5352,6 +5357,42 @@ export const langFr =
             clmPoint: "Puan",
             clmLdate : "Dernière Date MAJ",
         },
+        popPointDetail : // BAK
+        {
+            title: "Puan Detayı"
+        },
+        grdPointDetail : // BAK
+        {
+            clmDate : "Tarih",
+            clmPoint : "Puan",
+            clmPointType : "Tip",
+            clmPosId :"Fiş No"
+        },
+        grdSaleTicketItems :// BAK
+        {
+            clmBarcode : "Barkod",
+            clmName : "Ürün Adı",
+            clmQuantity : "Miktar",
+            clmPrice : "Fiyat",
+            clmTotal : "Tutar"
+        },
+        grdSaleTicketPays : // BAK
+        {
+            clmPayName : "Ödeme Tipi", 
+            clmTotal : "Tutar",
+        },
+        popDetail : // BAK
+        {
+            title : "Fiş Detayı"
+        },
+        TicketId :"Fiş I.D", // BAK
+        popLastTotal : // BAK
+        {
+            title : "Tahsilat"
+        },
+        trDeatil: "T.R Detay", // BAK
+        lineDelete :"Satır İptal", // BAK
+        cancel : "Vazgeç", // BAK
 
     },
     tkf_01_001 :
