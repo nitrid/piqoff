@@ -1267,22 +1267,7 @@ export default class posDoc extends React.PureComponent
                 else if(tmpPayCard == 3) //iptal
                 {
                     this.msgCardPayment.hide()
-                    return
-                    //HER TURLU CEVAP DÖNDÜĞÜ İÇİN POPUP KAPANIYOR YENİDEN ACINCA 2. KEZ GÖNDERMEYE CALISIYOR BURAYA IPTAL DEYINCE CIHAZDANDA IPTAL ETMEYI YAPMAK LAZIM
-                    // let tmpAcsVal = this.acsObj.filter({ID:'btnDeviceEntry',TYPE:2,USERS:this.user.CODE})
-                                     
-                    // if(typeof tmpAcsVal.getValue().dialog != 'undefined' && tmpAcsVal.getValue().dialog.type != -1)
-                    // {   
-                    //     let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:tmpAcsVal.getValue().dialog.type})
-                    //     if(tmpResult)
-                    //     {
-                    //         return
-                    //     }
-                    //     else
-                    //     {
-                    //         return
-                    //     }
-                    // }
+                    return                    
                 }
                 else //Başarısız veya İptal
                 {
@@ -1355,25 +1340,56 @@ export default class posDoc extends React.PureComponent
     {
         return new Promise(async resolve => 
         {
-            this.msgCardPayment.show().then(async (e) =>
+            let tmpFn = () =>
             {
-                if(this.posDevice.payPort.isOpen)
-                {
-                    await this.posDevice.payPort.close()
-                }
-                if(e == 'btn01')
-                {
-                    resolve(await this.payCard(pAmount)) // Tekrar
-                }
-                else if(e == 'btn02')
-                {
-                    resolve(3) // İptal
-                }
-                else if(e == 'btn03')
-                {
-                    resolve(2) // Zorla
-                }
-            })
+                this.msgCardPayment.show().then(async (e) =>
+                {                    
+                    if(e == 'btn01')
+                    {
+                        if(this.posDevice.payPort.isOpen)
+                        {
+                            await this.posDevice.payPort.close()
+                        }
+                        this.msgCardPayment.hide();
+                        resolve(await this.payCard(pAmount)) // Tekrar
+                    }
+                    else if(e == 'btn02')
+                    {
+                        //HER TURLU CEVAP DÖNDÜÜ 0Ç0N POPUP KAPANIYOR YEN0DEN ACINCA 2. KEZ GÖNDERMEYE CALISIYOR BURAYA IPTAL DEYINCE CIHAZDANDA IPTAL ETMEYI YAPMAK LAZIM
+                        let tmpAcsVal = this.acsObj.filter({ID:'btnDeviceEntry',TYPE:2,USERS:this.user.CODE})
+                                        
+                        if(typeof tmpAcsVal.getValue().dialog != 'undefined' && tmpAcsVal.getValue().dialog.type != -1)
+                        {   
+                            let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:tmpAcsVal.getValue().dialog.type})
+
+                            if(tmpResult)
+                            {
+                                if(this.posDevice.payPort.isOpen)
+                                {
+                                    await this.posDevice.payPort.close()
+                                }
+                                this.msgCardPayment.hide();
+                                resolve(3) // İptal
+                            }
+                            else
+                            {
+                                tmpFn()
+                            }
+                        }
+                    }
+                    else if(e == 'btn03')
+                    {       
+                        if(this.posDevice.payPort.isOpen)
+                        {
+                            await this.posDevice.payPort.close()
+                        }
+                        this.msgCardPayment.hide();             
+                        resolve(2) // Zorla
+                    }
+                })
+            }
+
+            tmpFn()
             
             let tmpCardPay = await this.posDevice.cardPayment(pAmount)
             
@@ -1872,14 +1888,12 @@ export default class posDoc extends React.PureComponent
     {
         return(
             <div>     
-                <IdleTimer
-                timeout={this.prmObj.filter({ID:'ScreenTimeOut',TYPE:0}).getValue()}
+                <IdleTimer timeout={this.prmObj.filter({ID:'ScreenTimeOut',TYPE:0}).getValue()}
                 onIdle={()=>
                 {
                     this.core.auth.logout()
                     window.location.reload()
-                }}
-                ></IdleTimer>           
+                }}/>           
                 <LoadPanel
                 shadingColor="rgba(0,0,0,0.0)"
                 position={{ of: '#root' }}

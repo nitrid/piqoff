@@ -1333,4 +1333,244 @@ export const langTr =
             msg: "Seçilen Ürün Cariye Tanımlı Değil ! Devam Etmek İstiyormusunuz"
         },
     },
+    irs_01_001 :
+    {
+        btnDropmenu : "İşlemler",
+        getRebate : "İade Deposundan Getir",
+        txtRefRefno : "Seri-Sıra",
+        cmbDepot: "Depo",
+        txtCustomerCode : "Cari Kodu",
+        txtCustomerName : "Cari Adı",
+        dtDocDate : "Tarih",
+        txtAmount : "Tutar",
+        txtDiscount : "İndirim",
+        txtMargin : "Marj",
+        txtVat : "Kdv",
+        txtTotal : "Genel Toplam",
+        txtQuantity : "Miktar",
+        txtPrice :"Fiyat",
+        dtShipDate :"Sevk Tarihi",
+        pg_Docs : 
+        {
+            title : "Evrak Seçimi",
+            clmRef : "SERİ",
+            clmRefNo : "SIRA",
+            clmInputName : "CARİ ADI",
+            clmInputCode  : "CARİ KODU",
+        },
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        pg_txtItemsCode : 
+        {
+            title : "Stok Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+           
+        },
+        pg_RebateGrid : 
+        {
+            title : "İade Stok Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+            clmQuantity :"MİKTAR"
+        },
+        grdRebtDispatch: 
+        {
+            clmItemCode: "Kodu",
+            clmItemName: "Adı",
+            clmPrice: "Fiyat",
+            clmQuantity : "Miktar",
+            clmDiscount : "İndirim",
+            clmDiscountRate : "İndirim %",
+            clmVat : "KDV",
+            clmAmount : "Tutar",
+            clmTotal : "Genel Toplam",
+            clmCreateDate: "Kayıt Tarihi",
+            clmMargin :"Marj"
+        },
+        popDiscount : 
+        {
+            title: "Evrak İndirimi",
+            Percent : "Yüzde",
+            Price : "Tutar"
+        },
+        popPassword : 
+        {
+            title: "Evrakı Açmak İçin Yönetici Şifresini Girmelisiniz",
+            Password : "Şifre",
+            btnApprove : "Onayla"
+        },
+        msgDocValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgVatDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Vergiyi Sıfırlamak istediğinize eminmisiniz !"
+        },
+        msgDiscountPrice:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Tutardan Büyük İndirim Yapılamaz !"
+        },
+        msgDiscountPercent:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Tutardan Büyük İndirim Yapılamaz !"
+        },
+        msgLocked:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kayıt Edildi Ve Kilitlendi !"
+        },
+        msgPasswordSucces:
+        {
+            title: "Başarılı",
+            btn01: "Tamam",
+            msg: "Evrakın Kilidi Açıldı !",
+        },
+        msgPasswordWrong:
+        {
+            title: "Başarısız",
+            btn01: "Tamam",
+            msg: "Şifreniz Hatalı !"
+        },
+        msgLockedType2:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Faturaya Çevirilmiş Evrak Kilidi Açılamaz"
+        },
+        msgGetLocked:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
+        },
+        msgDoclocked:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kilidi Açılmadan Kayıt Edilemez !"
+        },
+        msgDiscount:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "İndirim Tutardan Yüksek Olamaz !"
+        },
+        msgItemNotFound:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Stok Bulunmadı !!"
+        },
+        msgNotCustomer:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Cari Bulunmadı !!"
+        },
+        msgUnderPrice1:
+        {
+            title: "Dikkat",
+            btn01: "Evet",
+            btn02: "Vazgeç",
+            msg: "Maliyetten Düşük Fiyat !! Devam Etmek İstiyormusunuz"
+        },
+        msgUnderPrice2:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Maliyet Fiyatından Daha Düşük Satılamaz !!"
+        },
+        msgCombineItem:
+        {
+            title: "Dikkat",
+            btn01: "Birleştir",
+            btn02: "Yeni Ekle",
+            msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Satırlar Birleştirilsin mi ?"
+        },
+        popDesign : 
+        {
+            title: "Dizayn seçimi",
+            design : "Dizayn",
+            lang : "Evrak Dili"
+        },
+        validRef :"Seri Boş Geçilemez",
+        validRefNo : "Sıra Boş Geçilemez",
+        validDepot : "Depo Seçmelisiniz",
+        validCustomerCode : "Cari Kodu Boş Geçilemez",
+        validDocDate : "Tarih Seçmelisiniz",
+        msgDepotSelect:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Depo Seçiniz.."
+        },
+        msgCustomerSelect:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Cari Seçiniz.."
+        },
+        txtGrandTotal : "Toplam",
+        btnBarcodeEntry : "Barkod Girişi",
+        btnDocument : "İşlem Satırları",
+        chkAutoAdd : "Oto. Ekle",
+        txtBarcodePlace : "Lütfen Barkod Okutunuz",
+        btnSave : "Kaydet",
+        btnNew : "Yeni",
+        btnDelete : "Sil",
+        btnItemAdd : "Ekle",
+        msgCustomerNotFound:
+        {
+            title: "Dikkat",
+            btn01: "Devam Et",
+            btn02: "Vazgeç",
+            msg: "Seçilen Ürün Cariye Tanımlı Değil ! Devam Etmek İstiyormusunuz"
+        },
+
+    },
 }

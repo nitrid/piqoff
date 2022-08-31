@@ -38,7 +38,7 @@ export default class NdDialog extends Base
             this.props.onShowed();
         }
     }
-    async show()
+    async show(pClose)
     {
         this.result = null;
         this["dia_" + this.props.id].setState({show:true})
@@ -50,7 +50,10 @@ export default class NdDialog extends Base
             {
                 setTimeout(() => 
                 {
-                    this.hide();
+                    if(typeof pClose == 'undefined' || pClose)
+                    {
+                        this.hide();
+                    }
                     resolve();
                 }, this.props.timeout);    
             }
@@ -58,7 +61,10 @@ export default class NdDialog extends Base
             this._onClick = function(e)
             {
                 this.result = e;
-                this.hide();
+                if(typeof pClose == 'undefined' || pClose)
+                {
+                    this.hide();
+                }
                 resolve(e)
             }
         });

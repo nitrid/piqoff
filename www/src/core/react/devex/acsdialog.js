@@ -27,6 +27,14 @@ export default class NdAcsDialog extends NdBase
         {
             this._onClick = async (pCode,pPwd) =>
             {
+                //IPTAL BUTONUNA BASILDIĞINDA BURASI ÇALIŞIYOR.
+                if(typeof pCode != 'undefined' && pCode == 0 && typeof pPwd == 'undefined')
+                {
+                    this[this.props.id].hide()
+                    resolve(false)
+                    return
+                }            
+
                 let tmpCode = this.user.CODE
                 let tmpPass = btoa(this["txt" + this.props.id].value);
                 
@@ -130,7 +138,7 @@ export default class NdAcsDialog extends NdBase
                     <div className="row pt-2">
                         <div className="col-6">
                             <NbButton id={"btn" + this.props.id} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
-                            onClick={()=>{this[this.props.id].hide()}}>
+                            onClick={()=>{this._onClick(0)}}>
                                 <i className="text-white fa-solid fa-xmark" style={{fontSize: "24px"}} />
                             </NbButton>
                         </div>
