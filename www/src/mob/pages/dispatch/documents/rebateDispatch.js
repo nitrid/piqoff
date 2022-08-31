@@ -52,7 +52,6 @@ export default class rebateDispatch extends React.PureComponent
         this.dropmenuMainItems = [this.t("btnNew"),this.t("btnSave")]
         this.dropmenuDocItems = [this.t("btnSave")]
 
-        this._cellRoleRender = this._cellRoleRender.bind(this)
         this._calculateTotal = this._calculateTotal.bind(this)
         this._getRebate = this._getRebate.bind(this)
         this.pageChange = this.pageChange.bind(this)
@@ -80,52 +79,6 @@ export default class rebateDispatch extends React.PureComponent
     {
         this.docObj.clearAll()
 
-        this.docObj.ds.on('onAddRow',(pTblName,pData) =>
-        {
-            if(pData.stat == 'new')
-            {
-                this.btnNew.setState({disabled:false});
-                this.btnBack.setState({disabled:false});
-                this.btnNew.setState({disabled:false});
-                this.btnBack.setState({disabled:true});
-                this.btnSave.setState({disabled:false});
-                this.btnDelete.setState({disabled:false});
-                this.btnCopy.setState({disabled:false});
-                this.btnPrint.setState({disabled:false});
-            }
-        })
-        this.docObj.ds.on('onEdit',(pTblName,pData) =>
-        {            
-            if(pData.rowData.stat == 'edit')
-            {
-                this.btnBack.setState({disabled:false});
-                this.btnNew.setState({disabled:true});
-                this.btnSave.setState({disabled:false});
-                this.btnDelete.setState({disabled:false});
-                this.btnCopy.setState({disabled:false});
-                this.btnPrint.setState({disabled:false});
-
-                pData.rowData.CUSER = this.user.CODE
-            }                 
-        })
-        this.docObj.ds.on('onRefresh',(pTblName) =>
-        {            
-            this.btnBack.setState({disabled:true});
-            this.btnNew.setState({disabled:false});
-            this.btnSave.setState({disabled:true});
-            this.btnDelete.setState({disabled:false});
-            this.btnCopy.setState({disabled:false});
-            this.btnPrint.setState({disabled:false});          
-        })
-        this.docObj.ds.on('onDelete',(pTblName) =>
-        {            
-            this.btnBack.setState({disabled:false});
-            this.btnNew.setState({disabled:false});
-            this.btnSave.setState({disabled:false});
-            this.btnDelete.setState({disabled:false});
-            this.btnCopy.setState({disabled:false});
-            this.btnPrint.setState({disabled:false});
-        })
 
 
         let tmpDoc = {...this.docObj.empty}
@@ -244,161 +197,7 @@ export default class rebateDispatch extends React.PureComponent
         }
        
     }
-    _cellRoleRender(e)
-    {
-        if(e.column.dataField == "ITEM_CODE")
-        {
-            return (
-                <NdTextBox id={"txtGrdItemsCode"+e.rowIndex} parent={this} simple={true} 
-                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                value={e.value}
-                onKeyDown={async(k)=>
-                {
-                    console.log(k)
-                    if(k.event.key == 'F10' || k.event.key == 'ArrowRight')
-                    {
-                        this.combineControl = true
-                        this.combineNew = false
-                        await this.pg_txtItemsCode.setVal(e.value)
-                        this.pg_txtItemsCode.onClick = async(data) =>
-                        {
-                            this.combineControl = true
-                            this.combineNew = false
-                            if(data.length > 0)
-                            {
-                                if(data.length == 1)
-                                {
-                                    await this.addItem(data[0],e.rowIndex)
-                                }
-                                else if(data.length > 1)
-                                {
-                                    for (let i = 0; i < data.length; i++) 
-                                    {
-                                        if(i == 0)
-                                        {
-                                            await this.addItem(data[i],e.rowIndex)
-                                        }
-                                        else
-                                        {
-                                            let tmpDocItems = {...this.docObj.docItems.empty}
-                                            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                                            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                                            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                            tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                                            tmpDocItems.REF = this.docObj.dt()[0].REF
-                                            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                                            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                                            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                            tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                                            this.txtRef.readOnly = true
-                                            this.txtRefno.readOnly = true
-                                            this.docObj.docItems.addEmpty(tmpDocItems)
-                                            await this.core.util.waitUntil(100)
-                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }}
-                    onValueChanged={(v)=>
-                    {
-                        e.value = v.value
-                    }}
-                onChange={(async(r)=>
-                    {
-                        if(typeof r.event.isTrusted == 'undefined')
-                        {
-                            let tmpQuery = 
-                            {
-                                query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
-                                param : ['CODE:string|50'],
-                                value : [r.component._changedValue]
-                            }
-                            let tmpData = await this.core.sql.execute(tmpQuery) 
-                            if(tmpData.result.recordset.length > 0)
-                            {
-                             
-                                this.combineControl = true
-                                this.combineNew = false
-                                await this.addItem(tmpData.result.recordset[0],e.rowIndex)
-                            }
-                            else
-                            {
-                                let tmpConfObj =
-                                {
-                                    id:'msgItemNotFound',showTitle:true,title:this.t("msgItemNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
-                                    button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
-                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
-                                }
-                    
-                                await dialog(tmpConfObj);
-                            }
-                        }
-                    }).bind(this)}
-                button=
-                {
-                    [
-                        {
-                            id:'01',
-                            icon:'more',
-                            onClick:()  =>
-                            {
-                                this.pg_txtItemsCode.show()
-                                this.pg_txtItemsCode.onClick = async(data) =>
-                                {
-                                    this.combineControl = true
-                                    this.combineNew = false
-                                    if(data.length > 0)
-                                    {
-                                        if(data.length == 1)
-                                        {
-                                            await this.addItem(data[0],e.rowIndex)
-                                        }
-                                        else if(data.length > 1)
-                                        {
-                                            for (let i = 0; i < data.length; i++) 
-                                            {
-                                                if(i == 0)
-                                                {
-                                                    await this.addItem(data[i],e.rowIndex)
-                                                }
-                                                else
-                                                {
-                                                    let tmpDocItems = {...this.docObj.docItems.empty}
-                                                    tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                                                    tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                                                    tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                    tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                    tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                                                    tmpDocItems.REF = this.docObj.dt()[0].REF
-                                                    tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                                                    tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                    tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                                                    tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                    tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                                                    this.txtRef.readOnly = true
-                                                    this.txtRefno.readOnly = true
-                                                    this.docObj.docItems.addEmpty(tmpDocItems)
-                                                    await this.core.util.waitUntil(100)
-                                                    await this.addItem(data[i],this.docObj.docItems.dt().length-1)
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                    ]
-                }
-                >  
-                </NdTextBox>
-            )
-        }
-    }
+
     async addItem(pQuantity)
     {
         if(typeof pQuantity == 'undefined')
@@ -585,16 +384,30 @@ export default class rebateDispatch extends React.PureComponent
         this.txtQuantity.value = 1
         let tmpQuery = 
         {
-            query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,1,GETDATE()) AS PRICE",
-            param : ['GUID:string|50'],
-            value : [this.barcode.guid]
+            query :"SELECT MULTICODE,CUSTOMER_PRICE AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
+            param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50'],
+            value : [this.barcode.code,this.docObj.dt()[0].INPUT]
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
+        if(tmpData.result.recordset.length == 0)
+        {
+            let tmpConfObj = 
+            {
+                id:'msgCustomerNotFound',showTitle:true,title:this.t("msgCustomerNotFound.title"),showCloseButton:true,width:'350px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgCustomerNotFound.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCustomerNotFound.btn02"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerNotFound.msg")}</div>)
+            }
+            let pResult = await dialog(tmpConfObj);
+            if(pResult == 'btn02')
+            {                
+                this.barcodeReset()   
+                return
+            }
+        }
         if(tmpData.result.recordset.length > 0)
         {
             this.txtPrice.value = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(2))
             this.txtVat.value = parseFloat((tmpData.result.recordset[0].PRICE * (this.barcode.vat / 100)).toFixed(2))
-            //this.txtDiscount.value = 0
             this.txtAmount.value = parseFloat((Number(this.txtPrice.value) + Number(this.txtVat.value)).toFixed(2))
         }
         if(this.chkAutoAdd.value == true)
@@ -741,7 +554,7 @@ export default class rebateDispatch extends React.PureComponent
                                 }
                                 >
                                 <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150} defaultSortOrder="asc"/>
-                                <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={300} defaultSortOrder="asc" />
+                                <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={100} defaultSortOrder="asc" />
                                 <Column dataField="INPUT_NAME" caption={this.t("pg_Docs.clmInputName")} width={300} defaultSortOrder="asc" />
                                 <Column dataField="INPUT_CODE" caption={this.t("pg_Docs.clmInputCode")} width={300} defaultSortOrder="asc" />
                                 </NdPopGrid>
@@ -1134,10 +947,15 @@ export default class rebateDispatch extends React.PureComponent
                                     <NdButton icon="plus" type="default" width="100%" onClick={()=>this.pageChange("Barcode")}></NdButton>
                                 </div>
                                 <div className="col-4">
-                                    <DropDownButton text={this.t("btnDropmenu")} icon="menu" items={this.dropmenuDocItems}  onItemClick={this.dropmenuClick}/>
+                               
                                 </div>
                             </div>
                         </Item>
+                        </Form>
+                        <Form colCount={1} onInitialized={(e)=>
+                            {
+                                this.frmDocItems = e.component
+                            }}>
                         <Item>
                                 <React.Fragment>
                                 <NdGrid parent={this} id={"grdRebtDispatch"} 
@@ -1145,7 +963,7 @@ export default class rebateDispatch extends React.PureComponent
                                 columnsAutoWidth={true} 
                                 allowColumnReordering={true} 
                                 allowColumnResizing={true} 
-                                height={'400'} 
+                                height={'300'} 
                                 width={'100%'}
                                 dbApply={false}
                                 onRowUpdated={async(e)=>{
@@ -1183,19 +1001,21 @@ export default class rebateDispatch extends React.PureComponent
                                     this._calculateTotal()
                                     await this.docObj.save()
                                 }}
+                                onContentReady={async(e)=>{
+                                    e.component.columnOption("command:edit", 'visibleIndex', -1)
+                                }}
                                 >
                                     <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
-                                    <Scrolling mode="infinite" />
+                                    <Scrolling mode="virtual" />
                                     <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                     <Export fileName={this.lang.t("menu.irs_02_003")} enabled={true} allowExportSelectedData={true} />
-                                    <Column dataField="CDATE_FORMAT" caption={this.t("grdRebtDispatch.clmCreateDate")} width={150} allowEditing={false}/>
-                                    <Column dataField="ITEM_CODE" caption={this.t("grdRebtDispatch.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
-                                    <Column dataField="ITEM_NAME" caption={this.t("grdRebtDispatch.clmItemName")} width={350} />
-                                    <Column dataField="PRICE" caption={this.t("grdRebtDispatch.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                    <Column dataField="QUANTITY" caption={this.t("grdRebtDispatch.clmQuantity")} dataType={'number'}/>
-                                    <Column dataField="AMOUNT" caption={this.t("grdRebtDispatch.clmAmount")} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                    <Column dataField="VAT" caption={this.t("grdRebtDispatch.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
-                                    <Column dataField="TOTAL" caption={this.t("grdRebtDispatch.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                    <Column dataField="ITEM_NAME" caption={this.t("grdRebtDispatch.clmItemName")} width={300} />
+                                    <Column dataField="ITEM_CODE" caption={this.t("grdRebtDispatch.clmItemCode")} width={150} />
+                                    <Column dataField="PRICE" caption={this.t("grdRebtDispatch.clmPrice")} dataType={'number'} width={80} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                    <Column dataField="QUANTITY" caption={this.t("grdRebtDispatch.clmQuantity")} dataType={'number'} width={80}/>
+                                    <Column dataField="AMOUNT" caption={this.t("grdRebtDispatch.clmAmount")} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}} width={80}/>
+                                    <Column dataField="VAT" caption={this.t("grdRebtDispatch.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} width={80} allowEditing={false}/>
+                                    <Column dataField="TOTAL" caption={this.t("grdRebtDispatch.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} width={100} allowEditing={false}/>
                                 </NdGrid>
                                 <ContextMenu
                                 dataSource={this.rightItems}
