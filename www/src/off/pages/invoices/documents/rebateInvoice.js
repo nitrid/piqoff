@@ -95,7 +95,7 @@ export default class rebateInvoice extends React.PureComponent
         {            
             this.btnBack.setState({disabled:true});
             this.btnNew.setState({disabled:false});
-            this.btnSave.setState({disabled:false});
+            this.btnSave.setState({disabled:true});
             this.btnDelete.setState({disabled:false});
             this.btnCopy.setState({disabled:false});
             this.btnPrint.setState({disabled:false});          
@@ -1382,7 +1382,7 @@ export default class rebateInvoice extends React.PureComponent
                                         <Column dataField="DISCOUNT_RATE" caption={this.t("grdRebtInv.clmDiscountRate")} dataType={'number'}/>
                                         <Column dataField="VAT" caption={this.t("grdRebtInv.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
                                         <Column dataField="TOTAL" caption={this.t("grdRebtInv.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
-
+                                        <Column dataField="DESCRIPTION" caption={this.t("grdSlsInv.clmDescription")} width={160}  headerFilter={{visible:true}}/>
                                     </NdGrid>
                                     <ContextMenu
                                     dataSource={this.rightItems}

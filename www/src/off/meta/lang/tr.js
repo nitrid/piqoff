@@ -409,7 +409,13 @@ export const langTr =
         },
         dtFirstAnalysis : "Başlangıç",
         dtLastAnalysis : "Bitiş",
-        btnGet : "Getir"
+        btnGet : "Getir",
+        msgNotDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Bu ürün işlem gördüğü için silinemez !!"
+        },
         
     },
     stk_01_002: 
@@ -1943,7 +1949,9 @@ export const langTr =
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
             clmDiffPrice : "Fark",
-            clmCustomerPrice : "T. Fiyat"
+            clmCustomerPrice : "T. Fiyat",
+            clmDescription :"Açıklama"
+
         },
         grdInvoicePayment: 
         {
@@ -2277,8 +2285,8 @@ export const langTr =
             clmTotal : "Genel Toplam",
             clmDispatch : "İrsaliye No",
             clmCreateDate: "Kayıt Tarihi",
-            clmMargin :"Marj"
-
+            clmMargin :"Marj",
+            clmDescription :"Açıklama"
         },
         grdInvoicePayment: 
         {
@@ -2562,8 +2570,8 @@ export const langTr =
             clmTotal : "Genel Toplam",
             clmDispatch : "İrsaliye No",
             clmCreateDate: "Kayıt Tarihi",
-            clmMargin :"Marj"
-
+            clmMargin :"Marj",
+            clmDescription :"Açıklama"
         },
         grdInvoicePayment: 
         {
@@ -5490,6 +5498,17 @@ export const langTr =
         trDeatil: "T.R Detay",
         lineDelete :"Satır İptal",
         cancel : "Vazgeç",
+        popOpenTike :
+        {
+            title : "Tamamlanmamış Fişler"
+        },
+        grdOpenTike: 
+        {
+            clmUser : "Kullanıcı",
+            clmDevice : "Cihaz",
+            clmDate : "Tarih",
+            clmTicketId : "Fiş No"
+        }
     },
     pos_02_002 :
     {
@@ -5566,7 +5585,19 @@ export const langTr =
         popFinish : 
         {
             title :"Sonuç"
+        },
+        popOpenTike :
+        {
+            title : "Tamamlanmamış Fişler"
+        },
+        grdOpenTike: 
+        {
+            clmUser : "Kullanıcı",
+            clmDevice : "Cihaz",
+            clmDate : "Tarih",
+            clmTicketId : "Fiş No"
         }
+
     },
     tkf_01_001 :
     {

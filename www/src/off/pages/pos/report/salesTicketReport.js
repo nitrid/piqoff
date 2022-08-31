@@ -58,6 +58,25 @@ export default class salesOrdList extends React.PureComponent
         this.dtLast.value=moment(new Date()).format("YYYY-MM-DD");
         this.txtCustomerCode.CODE = ''
         this.txtPayChangeDesc.value = this.t("txtPayChangeDesc")
+        let tmpSource =
+        {
+            source : 
+            {
+                groupBy : this.groupList,
+                select : 
+                {
+                    query : "SELECT *,CONVERT(NVARCHAR,DOC_DATE,104) AS DATE,SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,25) AS TICKET_ID FROM POS_VW_01 WHERE STATUS = 0 ORDER BY DOC_DATE"
+                },
+                sql : this.core.sql
+            }
+        }
+        await this.grdOpenTike.dataRefresh(tmpSource)
+        console.log(this.grdOpenTike)
+        if(this.grdOpenTike.data.datatable.length > 0)
+        {
+            console.log(1321)
+          this.popOpenTike.show()
+        }
     }
     async _btnGetClick()
     {
@@ -127,7 +146,6 @@ export default class salesOrdList extends React.PureComponent
             }
         }
         await this.grdSaleTicketReport.dataRefresh(tmpSource)
-        console.log(this.grdSaleTicketReport)
     }
     async btnGetDetail(pGuid)
     {
@@ -902,10 +920,48 @@ export default class salesOrdList extends React.PureComponent
                                             <i className="text-white fa-solid fa-floppy-disk" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
-                                </div>                              
+                                </div>       
+                                             
                             </div>
                         </div>
                     </NdPopUp>
+                        {/* Açık Fişler PopUp */}
+                        <div>
+                            <NdPopUp parent={this} id={"popOpenTike"} 
+                            visible={false}
+                            showCloseButton={true}
+                            showTitle={true}
+                            title={this.t("popOpenTike.title")}
+                            container={"#root"} 
+                            width={'700'}
+                            height={'500'}
+                            position={{of:'#root'}}
+                            >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                <NdGrid parent={this} id={"grdOpenTike"} 
+                                        showBorders={true} 
+                                        columnsAutoWidth={true} 
+                                        allowColumnReordering={true} 
+                                        allowColumnResizing={true} 
+                                        headerFilter={{visible:true}}
+                                        height={350} 
+                                        width={'100%'}
+                                        dbApply={false}
+                                        onRowRemoved={async (e)=>{
+                                        }}
+                                        >
+                                            <Scrolling mode="virtual" />
+                                            <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
+                                            <Column dataField="CUSER" caption={this.t("grdOpenTike.clmUser")} width={120}  headerFilter={{visible:true}}/>
+                                            <Column dataField="DEVICE" caption={this.t("grdOpenTike.clmDevice")} width={100}  headerFilter={{visible:true}}/>
+                                            <Column dataField="DATE" caption={this.t("grdOpenTike.clmDate")} width={150} allowEditing={false} />
+                                            <Column dataField="TICKET_ID" caption={this.t("grdOpenTike.clmTicketId")} width={150}  headerFilter={{visible:true}}/>
+                                    </NdGrid>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                        </div>          
                 </div>
                 </ScrollView>
             </div>

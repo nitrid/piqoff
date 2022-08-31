@@ -407,6 +407,15 @@ export const langFr =
             clmYear : "Bu Yıl",
             clmLastYear : "Geçen Yıl"
         },
+        dtFirstAnalysis : "Başlangıç",  //BAK
+        dtLastAnalysis : "Bitiş", //BAK
+        btnGet : "Getir", //BAK
+        msgNotDelete: //BAK
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Bu ürün işlem gördüğü için silinemez !!"
+        },
     },
     stk_01_002: 
     {
@@ -1936,7 +1945,8 @@ export const langFr =
             clmTotal : "Total Général",
             clmDispatch : "No Bon de Livraison",
             clmCreateDate: "Date d'Enregistrement",
-            clmMargin :"Marge"
+            clmMargin :"Marge",
+            clmDescription :"Motif"
         },
         grdInvoicePayment: 
         {
@@ -2258,8 +2268,8 @@ export const langFr =
             clmTotal : "Total Général",
             clmDispatch : "No Bon de Livraison",
             clmCreateDate: "Date d'Enregistrement",
-            clmMargin :"Marge"
-
+            clmMargin :"Marge",
+            clmDescription : "Motif"
         },
         grdInvoicePayment: 
         {
@@ -2543,8 +2553,8 @@ export const langFr =
             clmTotal : "Total Général",
             clmDispatch : "No Bon de Livraison",
             clmCreateDate: "Date d'Enregistrement",
-            clmMargin :"Marge"
-
+            clmMargin :"Marge",
+            clmDescription :"Motif"
         },
         grdInvoicePayment: 
         {
@@ -5347,7 +5357,18 @@ export const langFr =
         payChangeNote : "La modification de ticket doit rester exceptionnelle et permetter de corriger les erreurs !",
         payChangeNote2 : "Un historique des modifications est enregistre !",
         txtPayChangeDescPlace : "Lütfen Açıklama Giriniz", // BAK
-        txtPayChangeDesc :"Ödeme tipi hatalı girilmiştir.Düzeltmesi yapıldı." // BAK
+        txtPayChangeDesc :"Ödeme tipi hatalı girilmiştir.Düzeltmesi yapıldı.", // BAK
+        popOpenTike :
+        {
+            title : "Tamamlanmamış Fişler" //BAK
+        },
+        grdOpenTike: //BAK
+        {
+            clmUser : "Kullanıcı",
+            clmDevice : "Cihaz",
+            clmDate : "Tarih",
+            clmTicketId : "Fiş No"
+        }
     },
     pos_02_002 :
     {
@@ -6081,6 +6102,17 @@ export const langFr =
         popFinish : 
         {
             title :"Sonuç"
+        },
+        popOpenTike :
+        {
+            title : "Tamamlanmamış Fişler"
+        },
+        grdOpenTike: 
+        {
+            clmUser : "Kullanıcı",
+            clmDevice : "Cihaz",
+            clmDate : "Tarih",
+            clmTicketId : "Fiş No"
         }
     },
 }

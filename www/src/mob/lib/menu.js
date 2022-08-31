@@ -102,5 +102,26 @@ export const menu = (e) =>
                 },
             ]
         },
+        {
+            id: 'irs',
+            text: e.t('menu.irs'),
+            expanded: false,
+            items: 
+            [
+                {
+                    id: 'irs_01',
+                    text : e.t('menu.irs_01'),//'Evraklar'
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'irs_01_001',
+                            text: e.t('menu.irs_01_001'),//'İade İrsaliyesi',
+                            path: 'dispatch/documents/rebateDispatch'
+                        },
+                    ]
+                },
+            ]
+        },
     ]
 }
