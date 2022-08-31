@@ -57,8 +57,7 @@ export default class posDoc extends React.PureComponent
         this.cheqDt = new datatable();
         this.lastPosDt = new datatable();
         this.lastPosSaleDt = new datatable();
-        this.lastPosPayDt = new datatable();
-        this.transfer = new transferCls();
+        this.lastPosPayDt = new datatable();        
 
         this.loading = React.createRef();
 
@@ -74,7 +73,9 @@ export default class posDoc extends React.PureComponent
             cheqCount:0,
             cheqTotalAmount:0,
             cheqLastAmount:0,
-            isConnected:true
+            isConnected:true,
+            msgTransfer1:"",
+            msgTransfer2:""
         }   
         
         document.onkeydown = (e) =>
@@ -108,10 +109,21 @@ export default class posDoc extends React.PureComponent
         {
             this.getItem(tmpBarkod)
         })
-        this.init();
 
-        this.core.on('connect',async () => 
-        {                     
+        this.init();
+        //DATA TRANSFER İŞLEMİ
+        this.transfer = new transferCls();
+        this.interval = null;
+        this.transferStart();
+        //DATA TRANSFER İÇİN EVENT.
+        this.transfer.on('onState',(pParam)=>
+        {
+            this.setState({msgTransfer2:pParam.text + " " + this.lang.t("popTransfer.msg3")})
+        })
+        //****************************** */
+
+        this.core.socket.on('connect',async () => 
+        {               
             if(!this.state.isConnected)
             {
                 let tmpConfObj =
@@ -122,15 +134,24 @@ export default class posDoc extends React.PureComponent
                 }
                 await dialog(tmpConfObj);
 
+                let tmpResult = await this.transfer.transferLocal()
+                if(tmpResult)
+                {
+                    await this.transfer.clearTbl("POS_VW_01")
+                    await this.transfer.clearTbl("POS_SALE_VW_01")
+                    await this.transfer.clearTbl("POS_PAYMENT_VW_01")
+                    await this.transfer.clearTbl("POS_EXTRA_VW_01")
+                }
                 window.location.reload()
             }
-            this.setState({isConnected:true})
+            this.setState({isConnected:true})            
         })
         this.core.socket.on('connect_error',async(error) => 
         {
             this.setState({isConnected:false})
+            this.transferStop()
         });
-        this.core.on('disconnect',async () => 
+        this.core.socket.on('disconnect',async () => 
         {
             this.setState({isConnected:false})
             let tmpConfObj =
@@ -201,7 +222,7 @@ export default class posDoc extends React.PureComponent
             await this.posObj.save()
             setTimeout(()=>{window.location.reload()},500)
             //*************************************************************************** */
-        })
+        })        
     }
     async init()
     {             
@@ -1292,6 +1313,8 @@ export default class posDoc extends React.PureComponent
         return new Promise(async resolve => 
         {
             let tmpTypeName = ""
+            let tmpMaxLine = this.posObj.posPay.dt().max('LINE_NO')
+
             if(pPayData.PAY_TYPE == 0)
                 tmpTypeName = "ESC"
             else if(pPayData.PAY_TYPE == 1)
@@ -1307,7 +1330,7 @@ export default class posDoc extends React.PureComponent
             this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].POS_GUID = this.posObj.dt()[0].GUID
             this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE = pPayData.PAY_TYPE
             this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE_NAME = tmpTypeName
-            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].LINE_NO = this.posObj.posPay.dt().length + 1
+            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].LINE_NO = tmpMaxLine + 1
             this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = Number(parseFloat(pPayData.AMOUNT).toFixed(2))
             this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].CHANGE = pPayData.CHANGE
             this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].DELETED = false
@@ -1820,6 +1843,29 @@ export default class posDoc extends React.PureComponent
                 resolve()
             })
         });
+    }
+    transferStart(pTime)
+    {
+        let tmpCounter = 0
+        let tmpPrmTime = typeof pTime != 'undefined' ? pTime : this.prmObj.filter({ID:'TransferTime',TYPE:0}).getValue()
+
+        this.interval = setInterval(async ()=>
+        {
+            this.setState({msgTransfer1:this.lang.t("popTransfer.msg1") + (tmpPrmTime - tmpCounter).toString() + " Sn.",msgTransfer2:""})
+            tmpCounter += 1
+            if(tmpCounter == tmpPrmTime)
+            {
+                this.setState({msgTransfer1:this.lang.t("popTransfer.msg2")})
+                this.transferStop()
+                await this.transfer.transferSql()
+                await this.transfer.transferLocal()
+                this.transferStart()
+            }
+        },1000)
+    }
+    transferStop()
+    {
+        clearInterval(this.interval)
     }
     render()
     {
@@ -2820,7 +2866,11 @@ export default class posDoc extends React.PureComponent
                                     </div>
                                     {/* Offline */}
                                     <div className="col px-1">
-                                        <NbButton id={"btnOffline"} parent={this} className={this.state.isConnected == false ? "form-group btn btn-danger btn-block my-1" : "form-group btn btn-success btn-block my-1"} style={{height:"70px",width:"100%",fontSize:"10pt"}}>
+                                        <NbButton id={"btnOffline"} parent={this} className={this.state.isConnected == false ? "form-group btn btn-danger btn-block my-1" : "form-group btn btn-success btn-block my-1"} style={{height:"70px",width:"100%",fontSize:"10pt"}}
+                                        onClick={()=>
+                                        {
+                                            this.popTransfer.show()
+                                        }}>
                                             <i className="text-white fa-solid fa-signal" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
@@ -5384,6 +5434,56 @@ export default class posDoc extends React.PureComponent
                                     <Column dataField="PRICE" caption={this.lang.t("grdList.PRICE")} width={70} format={"#,##0.00" + Number.money.sign}/>
                                     <Column dataField="AMOUNT" alignment={"right"} caption={this.lang.t("grdList.AMOUNT")} width={60} format={"#,##0.00" + Number.money.sign}/>                                                
                                 </NdGrid>
+                            </div>
+                        </div>
+                    </NdPopUp>
+                </div>
+                {/* Transfer Popup */}
+                <div>
+                    <NdPopUp parent={this} id={"popTransfer"} 
+                    visible={false}                        
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={this.lang.t("popTransfer.title")}
+                    container={"#root"} 
+                    width={"600"}
+                    height={"300"}
+                    position={{of:"#root"}}
+                    >
+                        {/* Button Group */}
+                        <div className="row pb-2">
+                            {/* btnPopTransferManuel */}
+                            <div className="col-6">
+                                <NbButton id={"btnPopTransferManuel"} parent={this} className="form-group btn btn-success btn-block" style={{height:"50px",width:"100%"}}
+                                onClick={()=>
+                                {
+                                    this.transferStop();
+                                    this.transferStart(1)
+                                }}>
+                                    {this.lang.t("popTransfer.btnPopTransferManuel")}
+                                </NbButton>
+                            </div>
+                            {/* btnPopTransferStop */}
+                            <div className="col-6">
+                                <NbButton id={"btnPopTransferStop"} parent={this} className="form-group btn btn-success btn-block" style={{height:"50px",width:"100%"}}
+                                onClick={()=>
+                                {
+                                    this.transferStop();
+                                }}>
+                                    {this.lang.t("popTransfer.btnPopTransferStop")}
+                                </NbButton>
+                            </div>
+                        </div>
+                        {/* msg1 */}
+                        <div className="row">
+                            <div className="col-12">
+                                <h3 className="text-center">{this.state.msgTransfer1}</h3>
+                            </div>
+                        </div>
+                        {/* msg1 */}
+                        <div className="row">
+                            <div className="col-12">
+                                <h3 className="text-center">{this.state.msgTransfer2}</h3>
                             </div>
                         </div>
                     </NdPopUp>

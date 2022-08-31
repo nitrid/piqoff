@@ -1567,13 +1567,13 @@ export class posDeviceCls
 
             this.payPort.write(String.fromCharCode(5));
 
-            setTimeout(async()=>
-            { 
-                if(this.payPort.isOpen)
-                {
-                    await this.payPort.close(); 
-                }
-            }, 60000);
+            // setTimeout(async()=>
+            // { 
+            //     if(this.payPort.isOpen)
+            //     {
+            //         await this.payPort.close(); 
+            //     }
+            // }, 60000);
 
            //return port.on("close", resolve)
         });

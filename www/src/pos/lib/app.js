@@ -121,7 +121,7 @@ export default class App extends React.Component
             App.instance = this;
         }        
 
-        this.core.on('connect',async () => 
+        this.core.socket.on('connect',async () => 
         {   
             this.core.offline = false;                     
             this.login()
@@ -143,11 +143,27 @@ export default class App extends React.Component
                 }                
             }
         })
-        this.core.on('disconnect',async () => 
+        this.core.socket.on('disconnect',async () => 
         {
             App.instance.setState({splash:false});
             this.core.offline = true;
         })
+        this.core.socket.on('general',async(e)=>
+        {
+            if(typeof e.id != 'undefined' && e.id == 'M004')
+            {
+                let tmpConfObj =
+                {
+                    id:'msgAnotherUserAlert',showTitle:true,title:this.lang.t("msgAnotherUserAlert.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.lang.t("msgAnotherUserAlert.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgAnotherUserAlert.msg")}</div>)
+                }
+                await dialog(tmpConfObj);
+
+                this.core.auth.logout()
+                window.location.reload()
+            }
+        })        
     }
     async login()
     {

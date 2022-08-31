@@ -518,7 +518,15 @@ export const langFr =
         btn01 : "Tamam",
         btn02 : "İptal",
     },
-    msgTransferStatus : 'Tablosu Aktarılıyor',//Bak
+    popTransfer : //Bak
+    {
+        title : "Data Aktarımı",
+        msg1 : "Aktarım Başlamasına : ",
+        msg2 : "Aktarım Başlatıldı.",
+        msg3 : "Tablosu Aktarılıyor.",
+        btnPopTransferManuel : "Manuel Başlat",
+        btnPopTransferStop : "Durdur"
+    },
     msgOfflineWarning: //Bak
     {
         title : "Dikkat",
@@ -541,6 +549,12 @@ export const langFr =
     {
         title : "Dikkat",
         msg : "Ürün Tartılamadı Lütfen Tekrar Ekleyiniz",
+        btn01 : "Tamam"
+    },
+    msgAnotherUserAlert: //Bak
+    {
+        title : "Dikkat",
+        msg : "Sizin kullanıcı bilgileriniz ile başka bir cihazdan giriş yapıldı",
         btn01 : "Tamam"
     },
 }
