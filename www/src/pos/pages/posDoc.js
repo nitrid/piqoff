@@ -27,6 +27,7 @@ import NbLabel from "../../core/react/bootstrap/label.js";
 import NdPosBarBox from "../tools/posbarbox.js";
 import NdAcsDialog,{acsDialog} from "../../core/react/devex/acsdialog.js";
 import NbKeyboard from "../../core/react/bootstrap/keyboard.js";
+import IdleTimer from 'react-idle-timer'
 
 import { posCls,posSaleCls,posPaymentCls,posPluCls,posDeviceCls } from "../../core/cls/pos.js";
 import { docCls} from "../../core/cls/doc.js"
@@ -47,7 +48,7 @@ export default class posDoc extends React.PureComponent
         this.t = App.instance.lang.getFixedT(null,null,"pos")
         this.user = this.core.auth.data
         this.prmObj = new param(prm)
-        this.acsObj = new access(acs);
+        this.acsObj = new access(acs);        
         // NUMBER İÇİN PARAMETREDEN PARA SEMBOLÜ ATANIYOR.
         Number.money = this.prmObj.filter({ID:'MoneySymbol',TYPE:0}).getValue()
         
@@ -75,7 +76,7 @@ export default class posDoc extends React.PureComponent
             cheqLastAmount:0,
             isConnected:true,
             msgTransfer1:"",
-            msgTransfer2:""
+            msgTransfer2:"",
         }   
         
         document.onkeydown = (e) =>
@@ -1870,7 +1871,15 @@ export default class posDoc extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div>     
+                <IdleTimer
+                timeout={600000}
+                onIdle={()=>
+                {
+                    this.core.auth.logout()
+                    window.location.reload()
+                }}
+                ></IdleTimer>           
                 <LoadPanel
                 shadingColor="rgba(0,0,0,0.0)"
                 position={{ of: '#root' }}
