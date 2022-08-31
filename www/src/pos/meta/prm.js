@@ -751,6 +751,22 @@ export const prm =
             PAGE_NAME : "Pos",
             CAPTION : "Aktarım Süresi"
         }
+    },
+    //Ekran Zaman Aşımı
+    {
+        TYPE : 0,
+        ID :"ScreenTimeOut",
+        VALUE : 600000,
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Ekran Zaman Aşımı"
+        }
     }
     //#endregion
 ]

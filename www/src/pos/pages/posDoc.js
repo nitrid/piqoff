@@ -1873,7 +1873,7 @@ export default class posDoc extends React.PureComponent
         return(
             <div>     
                 <IdleTimer
-                timeout={600000}
+                timeout={this.prmObj.filter({ID:'ScreenTimeOut',TYPE:0}).getValue()}
                 onIdle={()=>
                 {
                     this.core.auth.logout()
