@@ -43,6 +43,7 @@ export default class transferCls
                 name : "USERS",
                 columns :
                 {
+                    DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
                     GUID : {dataType: "string"},
                     CDATE : {dataType: "date_time"},
                     CUSER : {dataType: "string"},
@@ -62,6 +63,7 @@ export default class transferCls
                 name : "ACCESS",
                 columns :
                 {
+                    DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
                     GUID : {dataType: "string"},
                     ID : {dataType: "string"},
                     VALUE : {dataType: "string"},
@@ -77,6 +79,7 @@ export default class transferCls
                 name : "PARAM",
                 columns :
                 {
+                    DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
                     GUID : {dataType: "string"},
                     TYPE : {dataType: "number"},
                     ID : {dataType: "string"},
@@ -93,6 +96,7 @@ export default class transferCls
                 name : "ITEMS_VW_01",
                 columns :
                 {
+                    DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
                     GUID : {dataType: "string"},
                     CDATE : {dataType: "date_time"},
                     CUSER : {dataType: "string"},
@@ -130,6 +134,7 @@ export default class transferCls
                 name : "ITEMS_POS_VW_01",
                 columns :
                 {
+                    DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
                     GUID : {dataType: "string"},
                     SPECIAL : {dataType: "string"},
                     CODE : {dataType: "string"},
@@ -163,6 +168,7 @@ export default class transferCls
                 name : "ITEMS_BARCODE_MULTICODE_VW_01",
                 columns :
                 {
+                    DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
                     GUID : {dataType: "string"},
                     CDATE : {dataType: "date_time"},
                     CUSER : {dataType: "string"},
@@ -212,6 +218,7 @@ export default class transferCls
                 name : "CHEQPAY_VW_01",
                 columns :
                 {
+                    DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
                     GUID : {dataType: "string"},
                     CDATE : {dataType: "date_time"},
                     CUSER : {dataType: "string"},
@@ -238,7 +245,8 @@ export default class transferCls
                 name : "CUSTOMER_VW_02",
                 columns :
                 {
-                    GUID : {dataType: "string"},
+                    DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
+                    GUID : {dataType: "string",primaryKey: true},
                     CDATE : {dataType: "date_time"},
                     CUSER : {dataType: "string"},
                     CUSER_NAME : {dataType: "string"},
@@ -280,6 +288,7 @@ export default class transferCls
                 name : "POS_VW_01",
                 columns :
                 {
+                    DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
                     GUID : {dataType: "string"},
                     CDATE : {dataType: "date_time"},
                     CUSER : {dataType: "string"},
@@ -308,6 +317,7 @@ export default class transferCls
                     STATUS : {dataType: "number"},
                     DESCRIPTION : {dataType: "string"},
                     REF : {dataType: "string"},
+                    DELETED : {dataType: "boolean"},
                 }
             },
             //POS_SALE_VW_01
@@ -315,6 +325,7 @@ export default class transferCls
                 name : "POS_SALE_VW_01",
                 columns :
                 {
+                    DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
                     GUID : {dataType: "string"},
                     CDATE : {dataType: "date_time"},
                     CUSER : {dataType: "string"},
@@ -369,6 +380,7 @@ export default class transferCls
                     GRAND_TOTAL : {dataType: "number"},
                     STATUS : {dataType: "number"},
                     REBATE_TICKET : {dataType: "string"},
+                    DELETED : {dataType: "boolean"},
                 }
             },
             //POS_PAYMENT_VW_01
@@ -376,6 +388,7 @@ export default class transferCls
                 name : "POS_PAYMENT_VW_01",
                 columns :
                 {
+                    DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
                     GUID : {dataType: "string"},
                     CDATE : {dataType: "date_time"},
                     CUSER : {dataType: "string"},
@@ -404,7 +417,8 @@ export default class transferCls
                     GRAND_LOYALTY : {dataType: "number"},
                     GRAND_VAT : {dataType: "number"},
                     GRAND_TOTAL : {dataType: "number"},
-                    STATUS : {dataType: "string"},
+                    STATUS : {dataType: "number"},
+                    DELETED : {dataType: "boolean"},
                 }
             },
             //PLU_VW_01
@@ -412,6 +426,7 @@ export default class transferCls
                 name : "PLU_VW_01",
                 columns :
                 {
+                    DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
                     GUID : {dataType: "string"},
                     CDATE : {dataType: "date_time"},
                     CUSER : {dataType: "string"},
@@ -432,6 +447,7 @@ export default class transferCls
                 name : "PLU_IMAGE_VW_01",
                 columns :
                 {
+                    DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
                     GUID : {dataType: "string"},
                     MAIN_CODE : {dataType: "string"},
                     MAIN_NAME : {dataType: "string"},
@@ -449,6 +465,7 @@ export default class transferCls
                 name : "POS_EXTRA_VW_01",
                 columns :
                 {
+                    DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
                     GUID : {dataType: "string"},
                     CDATE : {dataType: "date_time"},
                     CUSER : {dataType: "string"},
@@ -467,6 +484,7 @@ export default class transferCls
                 name : "POS_DEVICE_VW_01",
                 columns :
                 {
+                    DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
                     GUID : {dataType: "string"},
                     CDATE : {dataType: "date_time"},
                     CUSER : {dataType: "string"},
@@ -632,6 +650,240 @@ export default class transferCls
                     values : [{GUID : {map:'GUID'},MAIN_CODE : {map:'MAIN_CODE'},MAIN_NAME : {map:'MAIN_NAME'},ORGINS_CODE : {map:'ORGINS_CODE'},ORGINS_NAME : {map:'ORGINS_NAME'},
                     ITEM_GUID : {map:'ITEM_GUID'},ITEM_CODE : {map:'ITEM_CODE'},ITEM_NAME : {map:'ITEM_NAME'},PRICE : {map:'PRICE'},IMAGE : {map:'IMAGE'}}]
                 }
+            },
+            //POS_DEVICE_VW_01
+            {
+                from : 
+                {
+                    query : "SELECT * FROM POS_DEVICE_VW_01"
+                },
+                to : 
+                {
+                    into : "POS_DEVICE_VW_01",
+                    values : [{GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
+                    CODE : {map:'CODE'},NAME : {map:'NAME'},LCD_PORT : {map:'LCD_PORT'},SCALE_PORT : {map:'SCALE_PORT'},PAY_CARD_PORT : {map:'PAY_CARD_PORT'},
+                    PRINT_DESING : {map:'PRINT_DESING'},SAFE_GUID : {map:'SAFE_GUID'}}]
+                }
+            }
+        ]
+        return tmpSchema
+    }
+    sendSchema()
+    {
+        let tmpSchema = 
+        [
+            //POS_VW_01
+            {
+                from : 
+                {
+                    from : "POS_VW_01"
+                },
+                to : 
+                {
+                    insert : 
+                    {
+                        query : "EXEC [dbo].[PRD_POS_INSERT] " + 
+                                "@GUID = @PGUID, " +
+                                "@CUSER = @PCUSER, " + 
+                                "@DEVICE = @PDEVICE, " +
+                                "@DEPOT = @PDEPOT, " +
+                                "@TYPE = @PTYPE, " +                      
+                                "@DOC_DATE = @PDOC_DATE, " + 
+                                "@CUSTOMER = @PCUSTOMER, " + 
+                                "@FAMOUNT = @PFAMOUNT, " + 
+                                "@AMOUNT = @PAMOUNT, " + 
+                                "@DISCOUNT = @PDISCOUNT, " + 
+                                "@LOYALTY = @PLOYALTY, " + 
+                                "@VAT = @PVAT, " + 
+                                "@TOTAL = @PTOTAL, " + 
+                                "@TICKET = @PTICKET, " + 
+                                "@STATUS = @PSTATUS ", 
+                        param : ['PGUID:string|50','PCUSER:string|25','PDEVICE:string|25','PDEPOT:string|50','PTYPE:int','PDOC_DATE:date','PCUSTOMER:string|50',
+                                'PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PTICKET:string|50','PSTATUS:int'],
+                        dataprm : ['GUID','CUSER','DEVICE','DEPOT_GUID','TYPE','DOC_DATE','CUSTOMER_GUID','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','TICKET','STATUS'],
+                    },
+                    update : 
+                    {
+                        query : "EXEC [dbo].[PRD_POS_UPDATE] " + 
+                                "@GUID = @PGUID, " +
+                                "@CUSER = @PCUSER, " + 
+                                "@DEVICE = @PDEVICE, " +
+                                "@DEPOT = @PDEPOT, " +
+                                "@TYPE = @PTYPE, " +                      
+                                "@DOC_DATE = @PDOC_DATE, " + 
+                                "@CUSTOMER = @PCUSTOMER, " + 
+                                "@FAMOUNT = @PFAMOUNT, " +
+                                "@AMOUNT = @PAMOUNT, " + 
+                                "@DISCOUNT = @PDISCOUNT, " + 
+                                "@LOYALTY = @PLOYALTY, " + 
+                                "@VAT = @PVAT, " + 
+                                "@TOTAL = @PTOTAL, " + 
+                                "@TICKET = @PTICKET, " + 
+                                "@STATUS = @PSTATUS ", 
+                        param : ['PGUID:string|50','PCUSER:string|25','PDEVICE:string|25','PDEPOT:string|50','PTYPE:int','PDOC_DATE:date','PCUSTOMER:string|50',
+                                'PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PTICKET:string|50','PSTATUS:int'],
+                        dataprm : ['GUID','CUSER','DEVICE','DEPOT_GUID','TYPE','DOC_DATE','CUSTOMER_GUID','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','TICKET','STATUS'],
+                    },
+                    control :
+                    {
+                        query : "SELECT * FROM [dbo].[POS_VW_01] WHERE GUID = @GUID",
+                        param : ['GUID:string|50'],
+                        dataprm : ['GUID'],
+                    }
+                }
+            },
+            //POS_SALE_VW_01
+            {
+                from : 
+                {
+                    from : "POS_SALE_VW_01"
+                },
+                to : 
+                {
+                    insert : 
+                    {
+                        query : "EXEC [dbo].[PRD_POS_SALE_INSERT] " + 
+                                "@GUID = @PGUID, " +
+                                "@CUSER = @PCUSER, " +
+                                "@CDATE = @PCDATE, " + 
+                                "@LDATE = @PLDATE, " + 
+                                "@POS = @PPOS, " +
+                                "@LINE_NO = @PLINE_NO, " +
+                                "@ITEM = @PITEM, " +  
+                                "@INPUT = @PINPUT, " +                      
+                                "@BARCODE = @PBARCODE, " + 
+                                "@UNIT = @PUNIT, " + 
+                                "@QUANTITY = @PQUANTITY, " + 
+                                "@PRICE = @PPRICE, " + 
+                                "@FAMOUNT = @PFAMOUNT, " + 
+                                "@AMOUNT = @PAMOUNT, " + 
+                                "@DISCOUNT = @PDISCOUNT, " + 
+                                "@LOYALTY = @PLOYALTY, " + 
+                                "@VAT = @PVAT, " + 
+                                "@TOTAL = @PTOTAL, " + 
+                                "@SUBTOTAL = @PSUBTOTAL, " + 
+                                "@PROMO_TYPE = @PPROMO_TYPE ", 
+                        param : ['PGUID:string|50','PCUSER:string|25','PCDATE:datetime','PLDATE:datetime','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PINPUT:string|25','PBARCODE:string|50','PUNIT:string|50',
+                                'PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int','PPROMO_TYPE:int'],
+                        dataprm : ['GUID','CUSER','LDATE','LDATE','POS_GUID','LINE_NO','ITEM_GUID','INPUT','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY','VAT',
+                                'TOTAL','SUBTOTAL','PROMO_TYPE'],
+                    },
+                    update : 
+                    {
+                        query : "EXEC [dbo].[PRD_POS_SALE_UPDATE] " + 
+                                "@GUID = @PGUID, " +
+                                "@CUSER = @PCUSER, " + 
+                                "@LDATE = @PLDATE, " + 
+                                "@POS = @PPOS, " +
+                                "@LINE_NO = @PLINE_NO, " +
+                                "@ITEM = @PITEM, " + 
+                                "@INPUT = @PINPUT, " +                   
+                                "@BARCODE = @PBARCODE, " + 
+                                "@UNIT = @PUNIT, " + 
+                                "@QUANTITY = @PQUANTITY, " + 
+                                "@PRICE = @PPRICE, " + 
+                                "@FAMOUNT = @PFAMOUNT, " +
+                                "@AMOUNT = @PAMOUNT, " + 
+                                "@DISCOUNT = @PDISCOUNT, " + 
+                                "@LOYALTY = @PLOYALTY, " + 
+                                "@VAT = @PVAT, " + 
+                                "@TOTAL = @PTOTAL, " + 
+                                "@SUBTOTAL = @PSUBTOTAL, " + 
+                                "@PROMO_TYPE = @PPROMO_TYPE ", 
+                        param : ['PGUID:string|50','PCUSER:string|25','PLDATE:datetime','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PINPUT:string|25','PBARCODE:string|50','PUNIT:string|50',
+                                'PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int','PPROMO_TYPE:int'],
+                        dataprm : ['GUID','CUSER','LDATE','POS_GUID','LINE_NO','ITEM_GUID','INPUT','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY',
+                                'VAT','TOTAL','SUBTOTAL','PROMO_TYPE'],
+                    },
+                    control :
+                    {
+                        query : "SELECT * FROM [dbo].[POS_SALE_VW_01] WHERE GUID = @GUID",
+                        param : ['GUID:string|50'],
+                        dataprm : ['GUID'],
+                    }
+                }
+            },
+            //POS_PAYMENT_VW_01
+            {
+                from : 
+                {
+                    from : "POS_PAYMENT_VW_01"
+                },
+                to : 
+                {
+                    insert : 
+                    {
+                        query : "EXEC [dbo].[PRD_POS_PAYMENT_INSERT] " + 
+                                "@GUID = @PGUID, " +
+                                "@CUSER = @PCUSER, " + 
+                                "@POS = @PPOS, " +
+                                "@TYPE = @PTYPE, " +
+                                "@LINE_NO = @PLINE_NO, " +
+                                "@AMOUNT = @PAMOUNT, " + 
+                                "@CHANGE = @PCHANGE ", 
+                        param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
+                        dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE'],
+                    },
+                    update : 
+                    {
+                        query : "EXEC [dbo].[PRD_POS_PAYMENT_UPDATE] " + 
+                                "@GUID = @PGUID, " +
+                                "@CUSER = @PCUSER, " + 
+                                "@POS = @PPOS, " +
+                                "@TYPE = @PTYPE, " +
+                                "@LINE_NO = @PLINE_NO, " +
+                                "@AMOUNT = @PAMOUNT, " + 
+                                "@CHANGE = @PCHANGE ", 
+                        param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
+                        dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE'],
+                    },
+                    control :
+                    {
+                        query : "SELECT * FROM [dbo].[POS_PAYMENT_VW_01] WHERE GUID = @GUID",
+                        param : ['GUID:string|50'],
+                        dataprm : ['GUID'],
+                    }
+                }
+            },
+            //POS_EXTRA_VW_01
+            {
+                from : 
+                {
+                    from : "POS_EXTRA_VW_01"
+                },
+                to : 
+                {
+                    insert : 
+                    {
+                        query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
+                                "@GUID = @PGUID, " +
+                                "@CUSER = @PCUSER, " + 
+                                "@TAG = @PTAG, " +
+                                "@POS_GUID = @PPOS_GUID, " +
+                                "@LINE_NO = @PLINE_NO, " +
+                                "@DESCRIPTION = @PDESCRIPTION ", 
+                        param : ['PGUID:string|50','PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_NO:int','PDESCRIPTION:string|max'],
+                        dataprm : ['GUID','CUSER','TAG','POS_GUID','LINE_NO','DESCRIPTION'],
+                    },
+                    update : 
+                    {
+                        query : "EXEC [dbo].[PRD_POS_EXTRA_UPDATE] " + 
+                                "@GUID = @PGUID, " +
+                                "@CUSER = @PCUSER, " + 
+                                "@TAG = @PTAG, " +
+                                "@POS_GUID = @PPOS_GUID, " +
+                                "@LINE_NO = @PLINE_NO, " +
+                                "@DESCRIPTION = @PDESCRIPTION ",  
+                        param : ['PGUID:string|50','PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_NO:int','PDESCRIPTION:string|max'],
+                        dataprm : ['GUID','CUSER','TAG','POS_GUID','LINE_NO','DESCRIPTION'],
+                    },
+                    control :
+                    {
+                        query : "SELECT * FROM [dbo].[POS_EXTRA_VW_01] WHERE GUID = @GUID",
+                        param : ['GUID:string|50'],
+                        dataprm : ['GUID'],
+                    }
+                }
             }
         ]
         return tmpSchema
@@ -646,7 +898,7 @@ export default class transferCls
             
             if(typeof tmpData.result.err == 'undefined')
             {
-                await this.core.local.clearTbl(pTemp.to.into)
+                await this.clearTbl(pTemp.to.into)
                 tmpData = tmpData.result.recordset 
 
                 for (let i = 0; i < tmpData.length; i++) 
@@ -667,7 +919,11 @@ export default class transferCls
                             {
                                 tmpLocQuery.values[0][tmpKey] = tmpData[i][tmpMap.map]    
                             }
-                        }                        
+                        }
+                        else
+                        {
+                            tmpLocQuery.values[0][tmpKey] = tmpMap
+                        }
                     }
                     tmpValues.push(tmpLocQuery.values[0])
                 } 
@@ -677,11 +933,57 @@ export default class transferCls
             resolve()
         });
     }
-    sendToSql()
+    //LOCAL DEN SQL E GÖNDER
+    sendToSql(pTemp)
     {
         return new Promise(async resolve => 
         {
+            let tmpData = await this.core.local.select(pTemp.from)
 
+            if(typeof tmpData.result.err == 'undefined')
+            {
+                tmpData = tmpData.result 
+                for (let i = 0; i < tmpData.length; i++) 
+                {
+                    let tmpCtrlQuery = JSON.parse(JSON.stringify(pTemp.to.control))
+                    tmpCtrlQuery.value = this.setSqlValues(tmpCtrlQuery,tmpData[i])
+                    
+                    let tmpCtrlData = await this.core.sql.execute(tmpCtrlQuery)
+                    if(typeof tmpCtrlData.result.err == 'undefined')
+                    {
+                        if(tmpCtrlData.result.recordset.length > 0)
+                        {                        
+                            let tmpQuery = JSON.parse(JSON.stringify(pTemp.to.update))
+                            tmpQuery.value = this.setSqlValues(tmpQuery,tmpData[i])
+    
+                            let tmpResult = await this.core.sql.execute(tmpQuery)
+                            if(typeof tmpResult.result.err != 'undefined')
+                            {
+                                resolve(false)
+                                return
+                            }
+                        }
+                        else
+                        {                        
+                            let tmpQuery = JSON.parse(JSON.stringify(pTemp.to.insert))
+                            tmpQuery.value = this.setSqlValues(tmpQuery,tmpData[i])
+    
+                            let tmpResult = await this.core.sql.execute(tmpQuery)
+                            if(typeof tmpResult.result.err != 'undefined')
+                            {
+                                resolve(false)
+                                return
+                            }
+                        }
+                    }
+                    else
+                    {
+                        resolve(false)
+                    }
+                    
+                } 
+            }
+            resolve(true)
         });
     }
     //SQL DEN LOCAL E ŞEMA AKTARIMI.
@@ -698,12 +1000,59 @@ export default class transferCls
             resolve()
         });
     }
+    //LOCAL DEN SQL E ŞEMA AKTARIMI.
+    transferLocal()
+    {
+        return new Promise(async resolve => 
+        {
+            let tmpSchema = this.sendSchema()
+            for (let i = 0; i < tmpSchema.length; i++) 
+            {
+                this.emit('onState',{tag:'',text: tmpSchema[i].from.from})
+                let tmpResult = await this.sendToSql(tmpSchema[i])
+                if(!tmpResult)
+                {
+                    resolve(false)
+                    return
+                }
+            }
+            resolve(true)
+        });
+    }
+    //SQL İÇİN DATA İLE SORGUDAKİ PARAMETRELER EŞLEŞTİRİLİYOR GERİ DÖNÜŞ OLARAK VALUES DİZİSİ DÖNDÜRÜLÜYOR.
+    setSqlValues(pQuery,pData)
+    {
+        let tmpArr = []
+        if(typeof pQuery != 'undefined' && typeof pQuery.param != 'undefined')
+        {
+            for (let i = 0;i < pQuery.param.length; i++) 
+            {         
+                if(typeof pQuery.dataprm == 'undefined')
+                {
+                    tmpArr.push(pData[pQuery.param[i].split(':')[0]]);
+                }
+                else
+                {
+                    tmpArr.push(pData[pQuery.dataprm[i]]);
+                }                                                       
+            }
+        }
+        return tmpArr;
+    }
     dropDb(pDbName)
     {
         return new Promise(async resolve => 
         {
             await this.core.local.dropDb()    
             await this.core.local.init({name:pDbName,tables: this.tableSchema()})
+            resolve()
+        });
+    }
+    clearTbl(pTblName)
+    {
+        return new Promise(async resolve => 
+        {
+            await this.core.local.clearTbl(pTblName)
             resolve()
         });
     }

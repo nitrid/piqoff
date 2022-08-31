@@ -7,6 +7,7 @@ import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item } from 'devextreme-react/form';
 import TabPanel from 'devextreme-react/tab-panel';
+import {  Chart, Series, CommonSeriesSettings,  Format, Legend, Export } from 'devextreme-react/chart';
 import { Button } from 'devextreme-react/button';
 
 import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
@@ -192,7 +193,6 @@ export default class itemCard extends React.PureComponent
         //TEDARİKÇİ FİYAT GETİR İŞLEMİ.  
         await this.itemsPriceSupply.load({ITEM_GUID:this.itemsObj.dt()[0].GUID,TYPE:1})  
         await this.itemsPriceLogObj.load({ITEM_GUID:this.itemsObj.dt()[0].GUID})
-        console.log(this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE'))
         if(this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE').length > 0 && this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE').length == 1)
         {
             this.txtLastBuyPrice.value = this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_PRICE
@@ -310,7 +310,6 @@ export default class itemCard extends React.PureComponent
             if(pCode !== '')
             {
                 let tmpData = await new itemMultiCodeCls().load({MULTICODE:pCode,CUSTOMER_CODE:pSupply});
-                //console.log(tmpData)
                 if(tmpData.length > 0)
                 {
                     let tmpConfObj =
@@ -637,6 +636,26 @@ export default class itemCard extends React.PureComponent
                                     <NdButton id="btnDelete" parent={this} icon="trash" type="default"
                                     onClick={async()=>
                                     {
+                                        let tmpQuery = 
+                                        {
+                                            query : "SELECT TOP 1 * FROM POS_SALE_VW_01 WHERE ITEM_GUID = @CODE ",
+                                            param : ['CODE:string|50'],
+                                            value : [this.itemsObj.dt()[0].GUID]
+                                        }
+                                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                                        console.log(tmpData)
+                                        if(tmpData.result.recordset.length > 0)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgNotDelete',showTitle:true,title:this.t("msgNotDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgNotDelete.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotDelete.msg")}</div>)
+                                            }
+                                            
+                                            await dialog(tmpConfObj); 
+                                            return
+                                        }
                                         let tmpConfObj =
                                         {
                                             id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -669,9 +688,36 @@ export default class itemCard extends React.PureComponent
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnAnalysis" parent={this} icon="chart" type="default"
-                                    onClick={()=>
+                                    onClick={async ()=>
                                     {
-                                        
+                                        this.dtFirstAnalysis.value = moment(new Date())
+                                        this.dtLastAnalysis.value = moment(new Date())
+                                        let tmpQuery = 
+                                        {
+                                            query :"SELECT ISNULL(SUM(QUANTITY),0) AS QUANTITY,'BUGÜN' AS DOC_DATE FROM POS_SALE_VW_01 WHERE ITEM_CODE = @CODE  AND DOC_DATE =  CONVERT(NVARCHAR,GETDATE(),112) GROUP BY ITEM_CODE " +
+                                            "UNION ALL " +
+                                            "SELECT ISNULL(SUM(QUANTITY),0) AS QUANTITY,'DÜN' AS DOC_DATE FROM POS_SALE_VW_01 WHERE ITEM_CODE = @CODE  AND DOC_DATE =  CONVERT(NVARCHAR,GETDATE()-1,112) GROUP BY ITEM_CODE  "+
+                                            "UNION ALL "+
+                                            "SELECT ISNULL(SUM(QUANTITY),0) AS QUANTITY,'BU HAFTA' AS DOC_DATE FROM POS_SALE_VW_01 WHERE ITEM_CODE = @CODE AND DOC_DATE >=  dateadd(day, 2-datepart(dw, getdate()), CONVERT(NVARCHAR,getdate(),112)) AND DOC_DATE <=CONVERT(NVARCHAR,GETDATE(),112) GROUP BY ITEM_CODE  "+
+                                            "UNION ALL "+
+                                            "SELECT ISNULL(SUM(QUANTITY),0) AS QUANTITY,'BU AY' AS DOC_DATE FROM POS_SALE_VW_01 WHERE ITEM_CODE = @CODE  AND DOC_DATE >=  dateadd(day, 1-datepart(dd, getdate()), CONVERT(NVARCHAR,getdate(),112)) AND DOC_DATE <=CONVERT(NVARCHAR,GETDATE(),112) GROUP BY DOC_DATE,ITEM_CODE  "+
+                                            "UNION ALL "+
+                                            "SELECT ISNULL(SUM(QUANTITY),0) AS QUANTITY,'BU AY' AS DOC_DATE FROM POS_SALE_VW_01 WHERE ITEM_CODE = @CODE  AND DOC_DATE >=  dateadd(day, 1-datepart(dd, getdate()), CONVERT(NVARCHAR,getdate(),112)) AND DOC_DATE <=CONVERT(NVARCHAR,GETDATE(),112) GROUP BY DOC_DATE,ITEM_CODE  "+
+                                            "UNION ALL "+
+                                            "SELECT ISNULL(SUM(QUANTITY),0) AS QUANTITY,'BU YIL' AS DOC_DATE FROM POS_SALE_VW_01 WHERE ITEM_CODE = @CODE  AND DOC_DATE >=  dateadd(day, 1-datepart(dy, getdate()), CONVERT(NVARCHAR,getdate(),112)) AND DOC_DATE <=CONVERT(NVARCHAR,GETDATE(),112) GROUP BY DOC_DATE,ITEM_CODE  ",
+                                            param : ['CODE:string|50'],
+                                            value : [this.txtRef.value]
+                                        }
+                                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                                        if(tmpData.result.recordset.length > 0)
+                                        {
+                                            this.setState({dataSource:tmpData.result.recordset})
+                                        }
+                                        else
+                                        {
+                                            this.setState({dataRefresh:{0:{QUANTITY:0,DOC_DATE:''}}})
+                                        }
+                                        this.popAnalysis.show()
                                     }}/>
                                 </Item>
                                 <Item location="after"
@@ -1998,7 +2044,74 @@ export default class itemCard extends React.PureComponent
                                 </Item>
                             </Form>
                         </NdPopUp>
-                    </div>                                      
+                    </div>      
+                    {/* İstatistik POPUP */}
+                    <div>
+                        <NdPopUp parent={this} id={"popAnalysis"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popAnalysis.title")}
+                        container={"#root"} 
+                        width={'700'}
+                        height={'600'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={3} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("dtFirstAnalysis")} alignment="right" />
+                                    <NdDatePicker simple={true}  parent={this} id={"dtFirstAnalysis"}/>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("dtLastAnalysis")} alignment="right" />
+                                    <NdDatePicker simple={true}  parent={this} id={"dtLastAnalysis"}/>
+                                </Item>
+                                <Item >
+                                <NdButton id="btnGet" parent={this} text={this.t("btnGet")} type="default" width='100%'
+                                    onClick={async()=>
+                                    {
+                                        let tmpQuery = 
+                                        {
+                                            query :"SELECT SUM(QUANTITY) AS QUANTITY,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE FROM POS_SALE_VW_01 " +
+                                                    "WHERE ITEM_CODE = @CODE AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE " +
+                                                    "GROUP BY DOC_DATE,ITEM_CODE ",
+                                            param : ['CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
+                                            value : [this.txtRef.value,this.dtFirstAnalysis.value,this.dtLastAnalysis.value]
+                                        }
+                                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                                        if(tmpData.result.recordset.length > 0)
+                                        {
+                                            this.setState({dataSource:tmpData.result.recordset})
+                                        }
+                                        else
+                                        {
+                                            this.setState({dataRefresh:{0:{QUANTITY:0,DOC_DATE:''}}})
+                                        }
+                                    }}/>
+                                </Item>
+                                <Item colSpan={3}>
+                                    <Chart id="chart" dataSource={this.state.dataSource}>
+                                    <CommonSeriesSettings
+                                        argumentField="state"
+                                        type="bar"
+                                        hoverMode="allArgumentPoints"
+                                        selectionMode="allArgumentPoints"
+                                        >
+                                        <Label visible={true}>
+                                            <Format type="fixedPoint" precision={0} />
+                                        </Label>
+                                        </CommonSeriesSettings>
+                                        <Series
+                                        valueField="QUANTITY"
+                                        argumentField="DOC_DATE"
+                                        name="Şatış"
+                                        type="bar"
+                                        color="#008000" />
+                                    </Chart>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div>                                
                 </ScrollView>
             </React.Fragment>
         )

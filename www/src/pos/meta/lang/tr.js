@@ -518,5 +518,43 @@ export const langTr =
         btn01 : "Tamam",
         btn02 : "İptal",
     },
-    msgTransferStatus : 'Tablosu Aktarılıyor'
+    popTransfer : 
+    {
+        title : "Data Aktarımı",
+        msg1 : "Aktarım Başlamasına : ",
+        msg2 : "Aktarım Başlatıldı.",
+        msg3 : "Tablosu Aktarılıyor.",
+        btnPopTransferManuel : "Manuel Başlat",
+        btnPopTransferStop : "Durdur"
+    },
+    msgOfflineWarning: 
+    {
+        title : "Dikkat",
+        msg : "Bu işlemi offline modda iken yapamazsınız !",
+        btn01 : "Tamam"
+    },
+    msgOfflineAlert: 
+    {
+        title : "Dikkat",
+        msg : "Sunucu ile bağlantınız kesildi ! Offline olarak işleminize devam edebilirsiniz.",
+        btn01 : "Tamam"
+    },
+    msgOnlineAlert: 
+    {
+        title : "Dikkat",
+        msg : "Sunucu ile bağlantı kuruldu ! Online olarak işleminize devam edebilirsiniz.",
+        btn01 : "Tamam"
+    },
+    msgNotWeighing: 
+    {
+        title : "Dikkat",
+        msg : "Ürün Tartılamadı Lütfen Tekrar Ekleyiniz",
+        btn01 : "Tamam"
+    },
+    msgAnotherUserAlert: 
+    {
+        title : "Dikkat",
+        msg : "Sizin kullanıcı bilgileriniz ile başka bir cihazdan giriş yapıldı",
+        btn01 : "Tamam"
+    },
 }

@@ -394,6 +394,28 @@ export const langFr =
             btn01: "Tamam", //BAK
             msg: "Girmiş olduğunuz tedarikçi fiyatı satış fiyatından yüksek olamaz! Lütfen satış fiyatınızı kontrol ediniz." //BAK
         },
+        popAnalysis :  //BAK
+        {
+            title : "Satış İstatistiği" 
+        },
+        grdAnalysis:  //BAK
+        {
+            clmToday: "Bugün",
+            clmYesterday: "Dün",
+            clmWeek: "Bu Hafta",
+            clmMount : "Bu Ay",
+            clmYear : "Bu Yıl",
+            clmLastYear : "Geçen Yıl"
+        },
+        dtFirstAnalysis : "Başlangıç",  //BAK
+        dtLastAnalysis : "Bitiş", //BAK
+        btnGet : "Getir", //BAK
+        msgNotDelete: //BAK
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Bu ürün işlem gördüğü için silinemez !!"
+        },
     },
     stk_01_002: 
     {
@@ -1923,7 +1945,8 @@ export const langFr =
             clmTotal : "Total Général",
             clmDispatch : "No Bon de Livraison",
             clmCreateDate: "Date d'Enregistrement",
-            clmMargin :"Marge"
+            clmMargin :"Marge",
+            clmDescription :"Motif"
         },
         grdInvoicePayment: 
         {
@@ -2245,8 +2268,8 @@ export const langFr =
             clmTotal : "Total Général",
             clmDispatch : "No Bon de Livraison",
             clmCreateDate: "Date d'Enregistrement",
-            clmMargin :"Marge"
-
+            clmMargin :"Marge",
+            clmDescription : "Motif"
         },
         grdInvoicePayment: 
         {
@@ -2530,8 +2553,8 @@ export const langFr =
             clmTotal : "Total Général",
             clmDispatch : "No Bon de Livraison",
             clmCreateDate: "Date d'Enregistrement",
-            clmMargin :"Marge"
-
+            clmMargin :"Marge",
+            clmDescription :"Motif"
         },
         grdInvoicePayment: 
         {
@@ -5253,14 +5276,15 @@ export const langFr =
         msgCode : 
         {
             title: "Attention",
-            btn01: "Cihaza Git",
+            btn01: "Cihaza Git", // BAK
             btn02: "OK",
-            msg : "Girmiş olduğunuz Cihaz Kodu sistem de kayıtlı !"
+            msg : "Girmiş olduğunuz Cihaz Kodu sistem de kayıtlı !" // BAK
         }
       
     },
     pos_02_001 :
     {
+        TicketId :"Ticket I.D",
         cmbCustomer :"Fournisseur",
         btnGet :"Apporter",
         dtFirst : "Date Début",
@@ -5268,8 +5292,8 @@ export const langFr =
         txtCustomerCode : "Fournisseur",
         cmbDevice :"Cihaz",
         txtTicketno : "Fiş I.D",
-        numTicketAmount : "Montant" ,
-        cmbPayType :"Mode de Règlement ",
+        numFirstTicketAmount : "Alt Tutar", // BAK
+        numLastTicketAmount : "Üst Tutar", // BAK
         cmbUser :"Kulanıcı",
         txtItem :"Code Produit",
         ckhDoublePay : "Birden Fazla Ödeme",
@@ -5316,8 +5340,35 @@ export const langFr =
         popDetail : 
         {
             title : "Détail Ticket "
+        },
+        cmbPayType : 
+        {
+            title : "Mode de Règlement ",
+            esc:"Espece",
+            cb : "CB",
+            check : "Cheque",
+            ticket : "CHEQue",
+            bonD : "Bon D'Avoir",
+            avoir : "Avoir",
+            virment : "Virment",
+            prlv :"Prélèvement ",
+            all :"Tout"
+        },
+        payChangeNote : "La modification de ticket doit rester exceptionnelle et permetter de corriger les erreurs !",
+        payChangeNote2 : "Un historique des modifications est enregistre !",
+        txtPayChangeDescPlace : "Lütfen Açıklama Giriniz", // BAK
+        txtPayChangeDesc :"Ödeme tipi hatalı girilmiştir.Düzeltmesi yapıldı.", // BAK
+        popOpenTike :
+        {
+            title : "Tamamlanmamış Fişler" //BAK
+        },
+        grdOpenTike: //BAK
+        {
+            clmUser : "Kullanıcı",
+            clmDevice : "Cihaz",
+            clmDate : "Tarih",
+            clmTicketId : "Fiş No"
         }
-
     },
     pos_02_002 :
     {
@@ -5340,6 +5391,42 @@ export const langFr =
             clmPoint: "Puan",
             clmLdate : "Dernière Date MAJ",
         },
+        popPointDetail : // BAK
+        {
+            title: "Puan Detayı"
+        },
+        grdPointDetail : // BAK
+        {
+            clmDate : "Tarih",
+            clmPoint : "Puan",
+            clmPointType : "Tip",
+            clmPosId :"Fiş No"
+        },
+        grdSaleTicketItems :// BAK
+        {
+            clmBarcode : "Barkod",
+            clmName : "Ürün Adı",
+            clmQuantity : "Miktar",
+            clmPrice : "Fiyat",
+            clmTotal : "Tutar"
+        },
+        grdSaleTicketPays : // BAK
+        {
+            clmPayName : "Ödeme Tipi", 
+            clmTotal : "Tutar",
+        },
+        popDetail : // BAK
+        {
+            title : "Fiş Detayı"
+        },
+        TicketId :"Fiş I.D", // BAK
+        popLastTotal : // BAK
+        {
+            title : "Tahsilat"
+        },
+        trDeatil: "T.R Detay", // BAK
+        lineDelete :"Satır İptal", // BAK
+        cancel : "Vazgeç", // BAK
 
     },
     tkf_01_001 :
@@ -6015,6 +6102,17 @@ export const langFr =
         popFinish : 
         {
             title :"Sonuç"
+        },
+        popOpenTike :
+        {
+            title : "Tamamlanmamış Fişler"
+        },
+        grdOpenTike: 
+        {
+            clmUser : "Kullanıcı",
+            clmDevice : "Cihaz",
+            clmDate : "Tarih",
+            clmTicketId : "Fiş No"
         }
     },
 }

@@ -1,5 +1,5 @@
 import { isProxy } from 'is-proxy';
-import * as JsStore from 'jsstore';
+import {Connection} from 'jsstore';
 import { jsworker } from './jsworker.js';
 
 export class core
@@ -169,9 +169,9 @@ export class local
                 return require("file-loader?name=scripts/[name].[hash].js!jsstore/dist/jsstore.worker.min.js");
             }
         };
-        if(typeof JsStore != 'undefined')
+        if(typeof Connection != 'undefined')
         {
-            this.conn = new JsStore.JsStore.Connection(new Worker(getWorkerPath().default));
+            this.conn = new Connection(new Worker(getWorkerPath().default));
         }
     }
     async init(pDb)
@@ -282,26 +282,32 @@ export class local
     }
     async execute(pQuery)
     {
+        //DÜZENLEME - ALI KEMAL KARACA 23.08.2022
         return new Promise(async resolve => 
         {
             if(Array.isArray(pQuery))
             {
-                for (let i = 0; i < pQuery.length; i++) 
+                let tmpQuery = pQuery
+                for (let i = 0; i < tmpQuery.length; i++) 
                 {
-                    if(typeof pQuery[i].local != 'undefined')
+                    if(typeof tmpQuery[i].local != 'undefined')
                     {
-                        if(pQuery[i].local.type == 'insert')
-                        {                                        
-                            await this.insert(pQuery[i].local);
-                        } 
-                        else if(pQuery[i].local.type == 'update')
-                        {                                        
-                            await this.update(pQuery[i].local);
-                        } 
-                        else if(pQuery[i].local.type == 'delete')
-                        {                                        
-                            await this.delete(pQuery[i].local);
-                        }      
+                        let tmpLocs = Array.isArray(tmpQuery[i].local) ? tmpQuery[i].local : [tmpQuery[i].local]
+                        tmpLocs.forEach(async pItem => 
+                        {
+                            if(pItem.type == 'insert')
+                            {                                        
+                                await this.insert(pItem);
+                            } 
+                            else if(pItem.type == 'update')
+                            {                                        
+                                await this.update(pItem);
+                            } 
+                            else if(pItem.type == 'delete')
+                            {                     
+                                await this.remove(pItem);
+                            }      
+                        });
                     }
                 }
                 resolve({result:{state:true}})
@@ -326,7 +332,7 @@ export class local
                     } 
                     else if(pQuery.local.type == 'delete')
                     {
-                        resolve(await this.delete(pQuery.local))
+                        resolve(await this.remove(pQuery.local))
                     }                       
                 }
                 resolve({result:{}});
@@ -365,19 +371,46 @@ export class auth
     }
     login()
     {
-        return new Promise(resolve => 
+        return new Promise(async resolve => 
         {
-            let TmpData = []
+            let tmpData = []
+            let tmpLocWhere = {}
             if(arguments.length == 2)
             {
-                TmpData.push(arguments[0],arguments[1])
+                tmpData.push(arguments[0],arguments[1])
+                tmpLocWhere = {SHA:arguments[0]}
             }
             else if(arguments.length == 3)
             {
-                TmpData.push(arguments[0],arguments[1],arguments[2])
+                tmpData.push(arguments[0],arguments[1],arguments[2])
+                tmpLocWhere = {CODE:arguments[0],PWD:btoa(arguments[1])}
             }
-            
-            core.instance.socket.emit('login',TmpData,async (data) =>
+            //LOCAL DB İÇİN YAPILDI
+            if(core.instance.offline)
+            {
+                let tmpData = await core.instance.local.select({from:"USERS",where:tmpLocWhere})
+
+                if(tmpData.result.length > 0)
+                {
+                    this.data = tmpData.result[0]
+                    if(typeof window != 'undefined')
+                        window.sessionStorage.setItem('auth',tmpData.result[0].SHA)
+
+                    resolve(true)
+                    return
+                }
+                else 
+                {
+                    if(typeof window != 'undefined')
+                        window.sessionStorage.removeItem('auth')
+                    
+                    this.data = null
+                    resolve(false)
+                    return
+                }
+            }
+            /************************************************************************************ */
+            core.instance.socket.emit('login',tmpData,async (data) =>
             {
                 if(data.length > 0)
                 {
@@ -400,9 +433,24 @@ export class auth
     }
     getUserList()
     {
-        return new Promise(resolve => 
+        return new Promise(async resolve => 
         {   
-            console.log('core-core')
+            //LOCAL DB İÇİN YAPILDI
+            if(core.instance.offline)
+            {
+                let tmpData = await core.instance.local.select({from:"USERS"})
+                if(tmpData.result.length > 0)
+                {                   
+                    resolve(tmpData.result)
+                    return
+                }
+                else 
+                {
+                    resolve([])
+                    return
+                }
+            }
+            /************************************************************************************ */
             core.instance.socket.emit('getUserList',async (data) =>
             {
                 if(data.length > 0)
@@ -485,7 +533,7 @@ export class util
         }
     
         return false;
-    }
+    }    
 }
 export class dataset
 {    
@@ -817,7 +865,26 @@ export class datatable
         {
             if(typeof this.selectCmd != 'undefined')
             {
-                let TmpData = await this.sql.execute(this.selectCmd)
+                let tmpQuery = JSON.parse(JSON.stringify(this.selectCmd))
+                //LOCAL DB İÇİN YAPILDI. WHERE ŞARTINDA {index} ŞEKLİNDE DEĞER ATAMASI... ALI KEMAL KARACA - 22.08.2022 
+                if(typeof tmpQuery.local != 'undefined' && typeof tmpQuery.local.where != 'undefined' && typeof tmpQuery.param != 'undefined')
+                {
+                    let tmpLocStr = JSON.stringify(tmpQuery.local.where)
+                    for (let i = 0; i < tmpQuery.param.length; i++) 
+                    {
+                        tmpLocStr = tmpLocStr.replace("{" + i + "}",tmpQuery.value[i])
+                        tmpLocStr = tmpLocStr.replace("{" + i + "}",tmpQuery.value[i])
+                        tmpLocStr = tmpLocStr.replace("{" + i + "}",tmpQuery.value[i])
+                        tmpLocStr = tmpLocStr.replace("{" + i + "}",tmpQuery.value[i])
+                        tmpLocStr = tmpLocStr.replace("{" + i + "}",tmpQuery.value[i])
+                        tmpLocStr = tmpLocStr.replace("{" + i + "}",tmpQuery.value[i])
+                        tmpLocStr = tmpLocStr.replace("{" + i + "}",tmpQuery.value[i])
+                    }
+                    tmpQuery.local.where = JSON.parse(tmpLocStr)
+                }                
+                
+                let TmpData = await this.sql.execute(tmpQuery)
+                
                 if(typeof TmpData.result.err == 'undefined') 
                 {
                     if(typeof TmpData.result.recordset != 'undefined')
@@ -832,7 +899,6 @@ export class datatable
                 }
                 else
                 {
-                    console.log(this.selectCmd)
                     console.log(TmpData.result.err)
                 }                
             }
@@ -857,14 +923,15 @@ export class datatable
 
                 if(this[i].stat == 'new')
                 {
-                    tmpQuery = {...this.insertCmd}
+                    tmpQuery = JSON.parse(JSON.stringify(this.insertCmd))
                     //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 28.02.2022
                     if(core.instance.offline && typeof tmpQuery.local != 'undefined' && typeof tmpQuery.local.values != 'undefined' && tmpQuery.local.values.length > 0)
-                    {
+                    {                        
                         for (let x = 0; x < Object.keys(tmpQuery.local.values[0]).length; x++) 
                         {
                             let tmpKey = Object.keys(tmpQuery.local.values[0])[x]
                             let tmpMap = Object.values(tmpQuery.local.values[0])[x]
+                            
                             if(typeof tmpMap.map != 'undefined')
                             {
                                 if(typeof tmpMap.type != 'undefined' && tmpMap.type == 'date_time')
@@ -876,20 +943,25 @@ export class datatable
                                     tmpQuery.local.values[0][tmpKey] = this[i][tmpMap.map]  
                                 }
                             }
+                            else
+                            {
+                                tmpQuery.local.values[0][tmpKey] = tmpMap
+                            }
                         }
                     }
                 }
                 else if(this[i].stat == 'edit')
                 {
-                    tmpQuery = {...this.updateCmd}
+                    tmpQuery = JSON.parse(JSON.stringify(this.updateCmd))
                     //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 28.02.2022
                     if(core.instance.offline && typeof tmpQuery.local != 'undefined' && typeof tmpQuery.local.set != 'undefined')
                     {
                         //SET
                         for (let x = 0; x < Object.keys(tmpQuery.local.set).length; x++) 
-                        {
+                        {                            
                             let tmpKey = Object.keys(tmpQuery.local.set)[x]
                             let tmpMap = Object.values(tmpQuery.local.set)[x]
+                            
                             if(typeof tmpMap.map != 'undefined')
                             {
                                 if(typeof tmpMap.type != 'undefined' && tmpMap.type == 'date_time')
@@ -900,6 +972,10 @@ export class datatable
                                 {
                                     tmpQuery.local.set[tmpKey] = this[i][tmpMap.map]
                                 }                                
+                            }
+                            else
+                            {
+                                tmpQuery.local.set[tmpKey] = tmpMap
                             }
                         }
                         
@@ -912,6 +988,7 @@ export class datatable
                         {
                             let tmpKey = Object.keys(tmpQuery.local.where)[x]
                             let tmpMap = Object.values(tmpQuery.local.where)[x]
+
                             if(typeof tmpMap.map != 'undefined')
                             {
                                 if(typeof tmpMap.type != 'undefined' && tmpMap.type == 'date_time')
@@ -922,7 +999,10 @@ export class datatable
                                 {
                                     tmpQuery.local.where[tmpKey] = this[i][tmpMap.map]
                                 }        
-                                
+                            }
+                            else
+                            {
+                                tmpQuery.local.where[tmpKey] = tmpMap
                             }
                         }
                     }
@@ -1003,44 +1083,72 @@ export class datatable
                 if(typeof this.deleteCmd != 'undefined')
                 {                    
                     let tmpQuery = undefined;
-                    tmpQuery = {...this.deleteCmd}
-                    //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 28.02.2022
-                    if(typeof tmpQuery.local != 'undefined' && tmpQuery.local.type == 'update')
+                    tmpQuery = JSON.parse(JSON.stringify(this.deleteCmd)) //{...this.deleteCmd}
+                    
+                    //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 28.02.2022 - DÜZENLEME : 23.08.2022
+                    if(typeof tmpQuery.local != 'undefined')
                     {
-                        if(typeof tmpQuery.local.set != 'undefined')
+                        let tmpLocs = Array.isArray(tmpQuery.local) ? tmpQuery.local : [tmpQuery.local]
+                        tmpLocs.forEach(pItem => 
                         {
-                            //SET
-                            for (let x = 0; x < Object.keys(tmpQuery.local.set).length; x++) 
+                            if(pItem.type == 'update')
                             {
-                                let tmpKey = Object.keys(tmpQuery.local.set)[x]
-                                let tmpMap = Object.values(tmpQuery.local.set)[x]
-                                tmpQuery.local.set[tmpKey] = this._deleteList[i][tmpMap.map]
-                            }                            
-                        }
-                        if(typeof tmpQuery.local.where != 'undefined')
-                        {
-                            //WHERE
-                            for (let x = 0; x < Object.keys(tmpQuery.local.where).length; x++) 
-                            {
-                                let tmpKey = Object.keys(tmpQuery.local.where)[x]
-                                let tmpMap = Object.values(tmpQuery.local.where)[x]
-                                tmpQuery.local.where[tmpKey] = this._deleteList[i][tmpMap.map]
+                                if(typeof pItem.set != 'undefined')
+                                {
+                                    //SET
+                                    for (let x = 0; x < Object.keys(pItem.set).length; x++) 
+                                    {                                        
+                                        let tmpKey = Object.keys(pItem.set)[x]
+                                        let tmpMap = Object.values(pItem.set)[x]
+                                        if(typeof tmpMap.map != 'undefined')
+                                        {
+                                            pItem.set[tmpKey] = this._deleteList[i][tmpMap.map]
+                                        }
+                                        else
+                                        {
+                                            pItem.set[tmpKey] = tmpMap
+                                        }
+                                    }                            
+                                }
+                                if(typeof pItem.where != 'undefined')
+                                {
+                                    //WHERE
+                                    for (let x = 0; x < Object.keys(pItem.where).length; x++) 
+                                    {
+                                        let tmpKey = Object.keys(pItem.where)[x]
+                                        let tmpMap = Object.values(pItem.where)[x]
+                                        if(typeof tmpMap.map != 'undefined')
+                                        {
+                                            pItem.where[tmpKey] = this._deleteList[i][tmpMap.map]
+                                        }
+                                        else
+                                        {
+                                            pItem.where[tmpKey] = tmpMap
+                                        }
+                                    }
+                                }
                             }
-                        }
-                    }
-                    //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 28.02.2022
-                    if(typeof tmpQuery.local != 'undefined' && tmpQuery.local.type == 'delete')
-                    {
-                        if(typeof tmpQuery.local.where != 'undefined')
-                        {
-                            //WHERE
-                            for (let x = 0; x < Object.keys(tmpQuery.local.where).length; x++) 
+                            if(pItem.type == 'delete')
                             {
-                                let tmpKey = Object.keys(tmpQuery.local.where)[x]
-                                let tmpMap = Object.values(tmpQuery.local.where)[x]
-                                tmpQuery.local.where[tmpKey] = this._deleteList[i][tmpMap.map]
+                                if(typeof pItem.where != 'undefined')
+                                {
+                                    //WHERE
+                                    for (let x = 0; x < Object.keys(pItem.where).length; x++) 
+                                    {
+                                        let tmpKey = Object.keys(pItem.where)[x]
+                                        let tmpMap = Object.values(pItem.where)[x]
+                                        if(typeof tmpMap.map != 'undefined')
+                                        {
+                                            pItem.where[tmpKey] = this._deleteList[i][tmpMap.map]
+                                        }
+                                        else
+                                        {
+                                            pItem.where[tmpKey] = tmpMap
+                                        }                                        
+                                    }
+                                }
                             }
-                        }
+                        });
                     }
                     tmpQuery.value = [];
 
@@ -1066,16 +1174,16 @@ export class datatable
             
             if(tmpQueryList.length > 0)
             {
-                let TmpDeleteData = await this.sql.execute(tmpQueryList)
+                let tmpDeleteData = await this.sql.execute(tmpQueryList)
 
-                if(typeof TmpDeleteData.result.err == 'undefined')
+                if(typeof tmpDeleteData.result.err == 'undefined')
                 {
                     this._deleteList.splice(0,this._deleteList.length);
                     resolve(0)
                 }
                 else
                 {
-                    console.log(TmpDeleteData.result.err)
+                    console.log(tmpDeleteData.result.err)
                     resolve(1)
                 }   
             }            
@@ -1585,6 +1693,146 @@ export class access extends datatable
         }
     }
 }
+export class menu
+{
+    constructor()
+    {
+        this.metaMenu = null;
+
+        if(arguments.length > 0)
+        {            
+            this.metaMenu = arguments[0]
+        }
+        this.core = core.instance;
+        this.ds =  new dataset()
+        this.empty = {
+            GUID : '00000000-0000-0000-0000-000000000000',
+            TYPE : 0,
+            ID : "",
+            VALUE : "",
+            SPECIAL : "",
+            USERS : "",
+            PAGE : "",
+            ELEMENT : "",
+            APP : ""
+        }
+
+        this._initDs();
+    }
+     //#region private
+     _initDs()
+     {
+         let tmpDt = new datatable('PARAM');
+         tmpDt.selectCmd = 
+         {
+             query : "SELECT * FROM [dbo].[PARAM] WHERE USERS = @USER AND APP = @APP AND ID='menu'",
+             param : ['USER:string|50','APP:string|50']
+         }
+         tmpDt.insertCmd = 
+         {
+             query : "EXEC [dbo].[PRD_PARAM_INSERT] " + 
+                     "@TYPE = @PTYPE, " + 
+                     "@ID = @PID, " + 
+                     "@VALUE = @PVALUE, " + 
+                     "@SPECIAL = @PSPECIAL, " + 
+                     "@USERS = @PUSERS, " + 
+                     "@PAGE = @PPAGE, " + 
+                     "@ELEMENT = @PELEMENT, " + 
+                     "@APP = @PAPP ", 
+             param : ['PTYPE:int','PID:string|100','PVALUE:string|max','PSPECIAL:string|150','PUSERS:string|25','PPAGE:string|25','PELEMENT:string|250','PAPP:string|50'],
+             dataprm : ['TYPE','ID','VALUE','SPECIAL','USERS','PAGE','ELEMENT','APP']
+         } 
+         tmpDt.updateCmd = 
+         {
+             query : "EXEC [dbo].[PRD_PARAM_UPDATE] " + 
+                     "@GUID = @PGUID, " + 
+                     "@TYPE = @PTYPE, " + 
+                     "@ID = @PID, " + 
+                     "@VALUE = @PVALUE, " + 
+                     "@SPECIAL = @PSPECIAL, " + 
+                     "@USERS = @PUSERS, " + 
+                     "@PAGE = @PPAGE, " + 
+                     "@ELEMENT = @PELEMENT, " + 
+                     "@APP = @PAPP ", 
+             param : ['PGUID:string|50','PTYPE:int','PID:string|100','PVALUE:string|max','PSPECIAL:string|150','PUSERS:string|25','PPAGE:string|25','PELEMENT:string|250','PAPP:string|50'],
+             dataprm : ['GUID','TYPE','ID','VALUE','SPECIAL','USERS','PAGE','ELEMENT','APP']
+         } 
+         this.ds.add(tmpDt);
+     }
+     //#region
+     dt()
+     {
+         if(arguments.length > 0)
+         {
+             return this.ds.get(arguments[0])
+         }
+ 
+         return this.ds.get(0)
+     }
+     async addEmpty()
+     {
+         if(typeof this.dt('PARAM') == 'undefined')
+         {
+             return;
+         }
+         let tmp = {};
+         if(arguments.length > 0)
+         {
+             tmp = {...arguments[0]}
+         }
+         else
+         {
+             tmp = {...this.empty}
+         }
+         if(typeof arguments[1] == 'undefined' || arguments[1] == true)
+         {
+             tmp.GUID = datatable.uuidv4()
+         }
+         this.dt('PARAM').push(tmp,arguments[1])
+         
+     }
+     clearAll()
+     {
+         for(let i = 0; i < this.ds.length; i++)
+         {
+             this.dt(i).clear()
+         }
+     }
+     save()
+     {
+         return new Promise(async resolve => 
+         {
+             this.ds.delete()
+             resolve(await this.ds.update()); 
+         });
+     }
+     load()
+     {
+         //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİR.
+         return new Promise(async resolve =>
+         {
+             let tmpPrm = {USER:"",APP:""}
+             if(arguments.length > 0)
+             {
+                 tmpPrm.USER = typeof arguments[0].USER == 'undefined' ? '' : arguments[0].USER;
+                 tmpPrm.APP = typeof arguments[0].APP == 'undefined' ? '' : arguments[0].APP;
+             }
+ 
+             this.ds.get('PARAM').selectCmd.value = Object.values(tmpPrm);
+ 
+             await this.ds.get('PARAM').refresh();
+
+             if(this.ds.get('PARAM').length > 0)
+             {
+                resolve(JSON.parse(this.ds.get('PARAM')[0].VALUE));
+             }
+             else
+             {
+                resolve(this.metaMenu)
+             }             
+         });
+     }
+}
 Object.setPrototypeOf(datatable.prototype,Array.prototype);
 //* DİZİ İÇİN GROUP BY */
 Array.prototype.toGroupBy = function(pKey)
@@ -1594,6 +1842,31 @@ Array.prototype.toGroupBy = function(pKey)
         (rv[x[pKey]] = rv[x[pKey]] || []).push(x);
         return rv;
     }, {});
+}
+//* DİZİ İÇİN ALT ELEMANLARDA ARATMA İŞLEMİ - ALI KEMAL KARACA - 24.08.2022 */
+Array.prototype.findSub = function(pFilters,pFindSub)
+{
+    if(typeof pFilters == 'object')
+    {
+        let tmpKey = Object.keys(pFilters)[0];
+        let tmpVal = Object.values(pFilters)[0];
+    
+        for (let i = 0; i < this.length; i++) 
+        {
+            if(this[i][tmpKey] == tmpVal)
+            {
+                return this[i]
+            }
+            else if(Array.isArray(this[i][pFindSub]))
+            {
+                let tmpData = this[i][pFindSub].findSub(pFilters,pFindSub)
+                if (typeof tmpData != 'undefined')
+                {
+                    return tmpData
+                }
+            }
+        }
+    }
 }
 //* SAYI İÇERİSİNDEKİ ORAN. ÖRN: 10 SAYISININ YÜZDE 18 İ 1.8. */
 Number.prototype.rateInc = function(pRate,pDigit)

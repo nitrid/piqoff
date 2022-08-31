@@ -56,7 +56,13 @@ export default class NdAcsDialog extends NdBase
                     {
                         query : "SELECT TOP 1 * FROM USERS WHERE PWD = @PWD AND ROLE = 'Administrator'", 
                         param : ['PWD:string|50'],
-                        value : [tmpPass]
+                        value : [tmpPass],
+                        local : 
+                        {
+                            type : "select",
+                            from : "USERS",
+                            where : {PWD:tmpPass}
+                        }
                     }
                 }
                 else
@@ -65,7 +71,13 @@ export default class NdAcsDialog extends NdBase
                     {
                         query : "SELECT TOP 1 * FROM USERS WHERE CODE = @CODE AND PWD = @PWD", 
                         param : ['CODE:string|25','PWD:string|50'],
-                        value : [tmpCode,tmpPass]
+                        value : [tmpCode,tmpPass],
+                        local : 
+                        {
+                            type : "select",
+                            from : "USERS",
+                            where : {CODE:tmpCode,PWD:tmpPass}
+                        }
                     }
                 }
                 

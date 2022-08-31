@@ -2,6 +2,7 @@ import React from 'react';
 import {TreeView,SearchEditorOptions} from 'devextreme-react/tree-view';
 import {menu} from './menu.js'
 import App from './app.js';
+import {menu as userMenu} from '../../core/core'
 
 // DOUBLE CLİCK ICIN YAPILDI
 let timeout = null;
@@ -11,7 +12,8 @@ export default class Navigation extends React.PureComponent
     {        
         super();
         this.core = App.instance.core;
-       
+        this.menuobj= new userMenu(menu(App.instance.lang))
+
         this.init();
     }
     async init()
@@ -27,16 +29,8 @@ export default class Navigation extends React.PureComponent
                 padding:'8px'
             }
         }
-        this.menu = menu(App.instance.lang);   
-
-        // POS RAPOLARI SADECE ADMİNDE GÖKZÜKMESİ İÇİN GEÇİCİ OLARAK YAPILDI BURAYA BAKILACAK
-        if(this.core.auth.data.ROLE != 'Administrator')
-        {
-            this.menu[8].items[2] = {}
-
-        }  
-
         
+        this.menu = menu(App.instance.lang);   
 
         this.state = 
         {
@@ -45,6 +39,49 @@ export default class Navigation extends React.PureComponent
             currentItem: Object.assign({},this.menu[0]),
         }
         this.selectItem = this.selectItem.bind(this);
+        let tmpMenuData = await this.menuobj.load({USER:this.core.auth.data.CODE,APP:"OFF"})
+        let tmpMenu = await this.mergeMenu(this.menu,tmpMenuData)
+        for (let i = 0; i < tmpMenu.length; i++) 
+        {
+            tmpMenu[i].id
+            for (let x = 0; x < tmpMenuData.length; x++) 
+            {
+                tmpMenuData[x]
+                if(tmpMenu[i].id == tmpMenuData[x].id)
+                {
+                    console.log(tmpMenuData[x])
+                    if(typeof tmpMenuData[x].visible != 'undefined')
+                    {
+                        tmpMenu[i].visible = tmpMenuData[x].visible
+                    }
+                    
+                }
+            }
+        }
+        await this.core.util.waitUntil(0)
+        this.menu= tmpMenu
+        this.setState({menu:tmpMenu})
+    }
+    async mergeMenu(tmpMenu,tmpMenuData)
+    {
+        return new Promise(async resolve => 
+        {
+            tmpMenu.forEach(async function (element,index,object)
+            {
+                let tmpMerge = await tmpMenuData.findSub({id:element.id},'items')
+                if(typeof tmpMerge != 'undefined' && typeof tmpMerge.visible != 'undefined')
+                {
+                    object[index].visible = tmpMerge.visible
+                }
+                if(typeof element.items != 'undefined')
+                {
+                    this.mergeMenu(element.items,tmpMenuData)
+                    
+                }
+            }.bind(this));
+            
+            resolve(tmpMenu)
+        });
     }
     async pluginMenu()
     {

@@ -27,6 +27,7 @@ import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
 import { data } from 'jquery';
+import {itemMultiCodeCls,itemsCls} from '../../../../core/cls/items.js'
 
 export default class purchaseInvoice extends React.PureComponent
 {
@@ -56,6 +57,7 @@ export default class purchaseInvoice extends React.PureComponent
         this.rightItems = [{ text: this.t("getDispatch"), },{ text: this.t("getPayment"), }]
         this.multiItemData = new datatable
         this.unitDetailData = new datatable
+        this.newPrice = new datatable
     }
     async componentDidMount()
     {
@@ -70,6 +72,7 @@ export default class purchaseInvoice extends React.PureComponent
     {
         this.docObj.clearAll()
         this.paymentObj.clearAll()
+        this.newPrice.clear()
 
         this.docObj.ds.on('onAddRow',(pTblName,pData) =>
         {
@@ -134,11 +137,12 @@ export default class purchaseInvoice extends React.PureComponent
         this.txtRefno.readOnly = false
         this.docLocked = false
         
-        this.frmDocItems.option('disabled',false)
+        this.frmDocItems.option('disabled',true)
         await this.grdPurcInv.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
         await this.grdInvoicePayment.dataRefresh({source:this.paymentObj.docCustomer.dt()});
         await this.grdMultiItem.dataRefresh({source:this.multiItemData});
         await this.grdUnit2.dataRefresh({source:this.unitDetailData})
+        await this.grdNewPrice.dataRefresh({source:this.newPrice})
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -169,6 +173,7 @@ export default class purchaseInvoice extends React.PureComponent
         }
         this._getItems()
         this._getPayment(this.docObj.dt()[0].GUID)
+       
     }
     async checkDoc(pGuid,pRef,pRefno)
     {
@@ -489,7 +494,7 @@ export default class purchaseInvoice extends React.PureComponent
 
         let tmpQuery = 
         {
-            query :"SELECT CUSTOMER_PRICE AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
+            query :"SELECT CUSTOMER_PRICE AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID ORDER BY LDATE DESC",
             param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50'],
             value : [pData.CODE,this.docObj.dt()[0].OUTPUT]
         }
@@ -836,6 +841,8 @@ export default class purchaseInvoice extends React.PureComponent
                 value : [pdata[i].CODE]
             }
             let tmpData = await this.core.sql.execute(tmpQuery) 
+            console.log(tmpData)
+
             if(tmpData.result.recordset.length > 0)
             {               
                 let tmpDocItems = {...this.docObj.docItems.empty}
@@ -910,6 +917,76 @@ export default class purchaseInvoice extends React.PureComponent
             this.popMultiItem.hide()
         }
     }
+    async saveDoc()
+    {
+       
+        let tmpConfObj =
+        {
+            id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+            button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
+            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
+        }
+        
+        let pResult = await dialog(tmpConfObj);
+        if(pResult == 'btn01')
+        {
+            let tmpData = this.sysParam.filter({ID:'purcInvoıcePriceSave',USERS:this.user.CODE}).getValue()
+            console.log(tmpData)
+            if(typeof tmpData != 'undefined' && tmpData.value ==  true)
+            {
+                this.newPrice.clear()
+                for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+                {
+                    if(this.docObj.docItems.dt()[i].CUSTOMER_PRICE != this.docObj.docItems.dt()[i].PRICE)
+                    {
+                        this.newPrice.push(this.docObj.docItems.dt()[i])
+                    }
+                }
+                if(this.newPrice.length > 0)
+                {
+                    await this.msgNewPrice.show().then(async (e) =>
+                    {
+            
+                        if(e == 'btn01')
+                        {
+                        
+                            return
+                        }
+                        if(e == 'btn02')
+                        {
+                            for (let i = 0; i < this.grdNewPrice.getSelectedData().length; i++) 
+                            {
+                                let tmpMulticodeObj = new itemMultiCodeCls()
+                                await tmpMulticodeObj.load({ITEM_CODE:this.grdNewPrice.getSelectedData()[i].ITEM_CODE,CUSTOMER_CODE:this.grdNewPrice.getSelectedData()[i].CUSTOMER_CODE});
+                                tmpMulticodeObj.dt()[0].CUSTOMER_PRICE = this.grdNewPrice.getSelectedData()[i].PRICE
+                                tmpMulticodeObj.save()
+                            }
+                            return
+                        }
+                    })
+                }    
+            }
+            let tmpConfObj1 =
+            {
+                id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+            }
+            
+            if((await this.docObj.save()) == 0)
+            {                                                    
+                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
+                await dialog(tmpConfObj1);
+                this._getPayment()
+                this.btnSave.setState({disabled:true});
+                this.btnNew.setState({disabled:false});
+            }
+            else
+            {
+                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                await dialog(tmpConfObj1);
+            }
+        }
+    }
     render()
     {
         return(
@@ -937,7 +1014,6 @@ export default class purchaseInvoice extends React.PureComponent
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmPurcInv"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
-                                        console.log(this.docObj.dt())
                                         if(this.docLocked == true)
                                         {
                                             let tmpConfObj =
@@ -956,36 +1032,7 @@ export default class purchaseInvoice extends React.PureComponent
                                         }
                                         if(e.validationGroup.validate().status == "valid")
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
-                                            }
-                                            
-                                            let pResult = await dialog(tmpConfObj);
-                                            if(pResult == 'btn01')
-                                            {
-                                                let tmpConfObj1 =
-                                                {
-                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                                                }
-                                                
-                                                if((await this.docObj.save()) == 0)
-                                                {                                                    
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                                    await dialog(tmpConfObj1);
-                                                    this._getPayment()
-                                                    this.btnSave.setState({disabled:true});
-                                                    this.btnNew.setState({disabled:false});
-                                                }
-                                                else
-                                                {
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
-                                                    await dialog(tmpConfObj1);
-                                                }
-                                            }
+                                           this.saveDoc()
                                         }                              
                                         else
                                         {
@@ -1249,6 +1296,10 @@ export default class purchaseInvoice extends React.PureComponent
                                     onValueChanged={(async()=>
                                         {
                                             this.docObj.docCustomer.dt()[0].INPUT = this.cmbDepot.value
+                                            if(this.txtCustomerCode.value != '')
+                                            {
+                                                this.frmDocItems.option('disabled',false)
+                                            }
                                         }).bind(this)}
                                     data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE IN(0,2)"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
@@ -1311,6 +1362,10 @@ export default class purchaseInvoice extends React.PureComponent
                                                             {
                                                                 this.txtRef.value = data[0].CODE
                                                                 this.txtRef.props.onValueChanged()
+                                                            }
+                                                            if(this.cmbDepot.value != '')
+                                                            {
+                                                                this.frmDocItems.option('disabled',false)
                                                             }
                                                             this._getItems()
                                                         }
@@ -1609,10 +1664,24 @@ export default class purchaseInvoice extends React.PureComponent
                                     dbApply={false}
                                     onCellPrepared={(e) =>
                                         {
+                                            
                                             if(e.rowType === "data" && e.column.dataField === "DIFF_PRICE" )
                                             {
                                                 this.docObj.docItems.dt()[e.rowIndex].DIFF_PRICE = e.data.PRICE - e.data.CUSTOMER_PRICE
-                                                e.cellElement.style.color = e.data.PRICE > e.data.CUSTOMER_PRICE ? "red" : "blue";
+                                                if(e.data.PRICE > e.data.CUSTOMER_PRICE)
+                                                {
+                                                    e.cellElement.style.color ="red"
+                                                    e.cellElement.style.fontWeight ="bold"
+                                                }
+                                                else if(e.data.PRICE < e.data.CUSTOMER_PRICE)
+                                                {
+                                                    e.cellElement.style.color ="green"
+                                                    e.cellElement.style.fontWeight ="bold"
+                                                }
+                                                else
+                                                {
+                                                    e.cellElement.style.color ="blue"
+                                                }
                                             }
                                         }}
                                     onRowUpdated={async(e)=>{
@@ -1652,22 +1721,23 @@ export default class purchaseInvoice extends React.PureComponent
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
-                                        <Scrolling mode="infinite" />
+                                        <Scrolling mode="virtual" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.ftr_02_001")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcInv.clmCreateDate")} width={200} allowEditing={false} allowHeaderFiltering={false}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdPurcInv.clmItemCode")} width={150} editCellRender={this._cellRoleRender} allowHeaderFiltering={false}/>
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcInv.clmCreateDate")} width={120} allowEditing={false} allowHeaderFiltering={false}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdPurcInv.clmItemCode")} width={140} editCellRender={this._cellRoleRender} allowHeaderFiltering={false}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdPurcInv.clmItemName")} width={400} allowHeaderFiltering={false}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdPurcInv.clmQuantity")} dataType={'number'} allowHeaderFiltering={false}/>
-                                        <Column dataField="PRICE" caption={this.t("grdPurcInv.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} allowHeaderFiltering={false}/>
-                                        <Column dataField="CUSTOMER_PRICE" caption={this.t("grdPurcInv.clmCustomerPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} allowHeaderFiltering={false} allowEditing={false}/>
-                                        <Column dataField="DIFF_PRICE" caption={this.t("grdPurcInv.clmDiffPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} allowHeaderFiltering={false} allowEditing={false}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdPurcInv.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} allowHeaderFiltering={false}/>
-                                        <Column dataField="DISCOUNT" caption={this.t("grdPurcInv.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} allowHeaderFiltering={false}/>
-                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdPurcInv.clmDiscountRate")} dataType={'number'} allowHeaderFiltering={false}/>
-                                        <Column dataField="VAT" caption={this.t("grdPurcInv.clmVat")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} allowHeaderFiltering={false}/>
-                                        <Column dataField="TOTAL" caption={this.t("grdPurcInv.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} allowHeaderFiltering={false}/>
-                                        <Column dataField="CONNECT_REF" caption={this.t("grdPurcInv.clmDispatch")}  width={200} allowEditing={false}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdPurcInv.clmQuantity")} dataType={'number'} width={80} allowHeaderFiltering={false}/>
+                                        <Column dataField="PRICE" caption={this.t("grdPurcInv.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={80} allowHeaderFiltering={false}/>
+                                        <Column dataField="CUSTOMER_PRICE" caption={this.t("grdPurcInv.clmCustomerPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={80} allowHeaderFiltering={false} allowEditing={false}/>
+                                        <Column dataField="DIFF_PRICE" caption={this.t("grdPurcInv.clmDiffPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={80} allowHeaderFiltering={false} allowEditing={false}/>
+                                        <Column dataField="AMOUNT" caption={this.t("grdPurcInv.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={100} allowHeaderFiltering={false}/>
+                                        <Column dataField="DISCOUNT" caption={this.t("grdPurcInv.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} width={80} allowHeaderFiltering={false}/>
+                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdPurcInv.clmDiscountRate")} dataType={'number'} width={80} allowHeaderFiltering={false}/>
+                                        <Column dataField="VAT" caption={this.t("grdPurcInv.clmVat")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={80} allowHeaderFiltering={false}/>
+                                        <Column dataField="TOTAL" caption={this.t("grdPurcInv.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={80} allowHeaderFiltering={false}/>
+                                        <Column dataField="DESCRIPTION" caption={this.t("grdSlsInv.clmDescription")} width={160}  headerFilter={{visible:true}}/>
+                                        <Column dataField="CONNECT_REF" caption={this.t("grdPurcInv.clmDispatch")}  width={150} allowEditing={false}/>
                                     </NdGrid>
                                     <ContextMenu
                                     dataSource={this.rightItems}
@@ -2704,6 +2774,55 @@ export default class purchaseInvoice extends React.PureComponent
                                         value ={false}
                                         >
                                         </NdCheckBox>
+                                    </Item>
+                                </Form>
+                            </div>
+                            </div>
+                            <div className='row'>
+                        
+                            </div>
+                        
+                    </NdDialog>  
+                       {/* Yeni Fiyat Dialog  */}
+                    <NdDialog id={"msgNewPrice"} container={"#root"} parent={this}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        title={this.t("msgNewPrice.title")} 
+                        showCloseButton={false}
+                        width={"800px"}
+                        height={"600PX"}
+                        button={[{id:"btn01",caption:this.t("msgNewPrice.btn01"),location:'before'},{id:"btn02",caption:this.t("msgNewPrice.btn02"),location:'after'}]}
+                        >
+                            <div className="row">
+                                <div className="col-12 py-2">
+                                    <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNewPrice.msg")}</div>
+                                </div>
+                                <div className="col-12 py-2">
+                                <Form>
+                                    {/* grdNewPrice */}
+                                    <Item>
+                                    <NdGrid parent={this} id={"grdNewPrice"} 
+                                    showBorders={true} 
+                                    columnsAutoWidth={true} 
+                                    allowColumnReordering={true} 
+                                    allowColumnResizing={true} 
+                                    headerFilter={{visible:true}}
+                                    filterRow = {{visible:true}}
+                                    height={400} 
+                                    width={'100%'}
+                                    dbApply={false}
+                                    selection={{mode:"multiple"}}
+                                    onRowRemoved={async (e)=>{
+                                    }}
+                                    >
+                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
+                                        <Scrolling mode="virtual" />
+                                        <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdNewPrice.clmCode")} width={150} />
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdNewPrice.clmName")} width={250} />
+                                        <Column dataField="CUSTOMER_PRICE" caption={this.t("grdNewPrice.clmPrice")} width={130}  />
+                                        <Column dataField="PRICE" caption={this.t("grdNewPrice.clmPrice2")} dataType={'number'} width={80}/>
+                                    </NdGrid>
                                     </Item>
                                 </Form>
                             </div>
