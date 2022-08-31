@@ -39,7 +39,10 @@ export const langTr =
         ord: "Sipariş",                
         ord_01: "Evraklar",
         ord_01_001: "Satış Sipariş",
-        ord_01_002: "Alış Sipariş"
+        ord_01_002: "Alış Sipariş",
+        irs: "İrsaliyeler",
+        irs_01: "Evraklar",
+        irs_01_001: "İade İrsaliyesi"
     },
     login:
     {

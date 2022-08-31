@@ -98,9 +98,26 @@ export default class endOfDay extends React.PureComponent
         await this.core.util.waitUntil(0)
         this.init();
     }
-    init()
+    async init()
     {
       this.dtDocDate.value = moment(new Date()).format("YYYY-MM-DD")
+      let tmpSource =
+      {
+          source : 
+          {
+              groupBy : this.groupList,
+              select : 
+              {
+                  query : "SELECT *,CONVERT(NVARCHAR,DOC_DATE,104) AS DATE,SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,25) AS TICKET_ID FROM POS_VW_01 WHERE STATUS = 0 ORDER BY DOC_DATE"
+              },
+              sql : this.core.sql
+          }
+      }
+      await this.grdOpenTike.dataRefresh(tmpSource)
+      if(this.grdOpenTike.data.datatable.length > 0)
+      {
+        this.popOpenTike.show()
+      }
     }
     async finishButtonClick()
     {
@@ -243,11 +260,11 @@ export default class endOfDay extends React.PureComponent
           <Item>
                 <Label text={this.t("cmbSafe")} alignment="right" />
                 <NdSelectBox simple={true} parent={this} id="cmbSafe" notRefresh = {true}
-                displayExpr="CODE"                       
+                displayExpr="NAME"                       
                 valueExpr="CODE"
                 showClearButton={true}
                 value=""
-                data={{source:{select:{query : "SELECT CODE FROM POS_DEVICE ORDER BY CODE"},sql:this.core.sql}}}
+                data={{source:{select:{query : "SELECT CODE,NAME FROM POS_DEVICE ORDER BY CODE"},sql:this.core.sql}}}
                 param={this.param.filter({ELEMENT:'cmbSafe',USERS:this.user.CODE})}
                 access={this.access.filter({ELEMENT:'cmbSafe',USERS:this.user.CODE})}
                 >
@@ -398,7 +415,44 @@ export default class endOfDay extends React.PureComponent
                             </div>
                           </div>
                         </NdPopUp>
-                    </div> 
+                  </div> 
+                    {/* Açık Fişler PopUp */}
+                    <div>
+                      <NdPopUp parent={this} id={"popOpenTike"} 
+                      visible={false}
+                      showCloseButton={true}
+                      showTitle={true}
+                      title={this.t("popOpenTike.title")}
+                      container={"#root"} 
+                      width={'700'}
+                      height={'500'}
+                      position={{of:'#root'}}
+                      >
+                          <Form colCount={1} height={'fit-content'}>
+                              <Item>
+                               <NdGrid parent={this} id={"grdOpenTike"} 
+                                      showBorders={true} 
+                                      columnsAutoWidth={true} 
+                                      allowColumnReordering={true} 
+                                      allowColumnResizing={true} 
+                                      headerFilter={{visible:true}}
+                                      height={350} 
+                                      width={'100%'}
+                                      dbApply={false}
+                                      onRowRemoved={async (e)=>{
+                                      }}
+                                      >
+                                          <Scrolling mode="virtual" />
+                                          <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
+                                          <Column dataField="CUSER" caption={this.t("grdOpenTike.clmUser")} width={120}  headerFilter={{visible:true}}/>
+                                          <Column dataField="DEVICE" caption={this.t("grdOpenTike.clmDevice")} width={100}  headerFilter={{visible:true}}/>
+                                          <Column dataField="DATE" caption={this.t("grdOpenTike.clmDate")} width={150} allowEditing={false} />
+                                          <Column dataField="TICKET_ID" caption={this.t("grdOpenTike.clmTicketId")} width={150}  headerFilter={{visible:true}}/>
+                                  </NdGrid>
+                             </Item>
+                          </Form>
+                      </NdPopUp>
+                    </div>  
             </div>
         )
     }
