@@ -598,7 +598,7 @@ export default class transferCls
             {
                 from : 
                 {
-                    query : "SELECT *,DATEDIFF(DAY,CDATE,GETDATE()) AS EXDAY FROM CHEQPAY_VW_01"
+                    query : "SELECT *,DATEDIFF(DAY,CDATE,GETDATE()) AS EXDAY FROM CHEQPAY_VW_01 WHERE [YEAR] = 2"
                 },
                 to : 
                 {
