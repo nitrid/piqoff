@@ -618,7 +618,7 @@ export class posPaymentCls
                 set : {CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
                 LUSER_NAME : {map:'LUSER_NAME'},POS_GUID : {map:'POS_GUID'},DEVICE : {map:'DEVICE'},DEPOT_GUID : {map:'DEPOT_GUID'},DEPOT_CODE : {map:'DEPOT_CODE'},DEPOT_NAME : {map:'DEPOT_NAME'},TYPE : {map:'TYPE'},
                 DOC_DATE : {map:'DOC_DATE',type:'date_time'},CUSTOMER_GUID : {map:'CUSTOMER_GUID'},CUSTOMER_CODE : {map:'CUSTOMER_CODE'},CUSTOMER_NAME : {map:'CUSTOMER_NAME'},PAY_TYPE : {map:'PAY_TYPE'},
-                PAY_TYPE_NAME : {map:'PAY_TYPE'},LINE_NO : {map:'LINE_NO'},AMOUNT : {map:'AMOUNT'},CHANGE : {map:'CHANGE'},TICKET_PLUS : {map:'TICKET_PLUS'},GRAND_AMOUNT : {map:'GRAND_AMOUNT'},
+                PAY_TYPE_NAME : {map:'PAY_TYPE_NAME'},LINE_NO : {map:'LINE_NO'},AMOUNT : {map:'AMOUNT'},CHANGE : {map:'CHANGE'},TICKET_PLUS : {map:'TICKET_PLUS'},GRAND_AMOUNT : {map:'GRAND_AMOUNT'},
                 GRAND_DISCOUNT : {map:'GRAND_DISCOUNT'},GRAND_LOYALTY : {map:'GRAND_LOYALTY'},GRAND_VAT : {map:'GRAND_VAT'},GRAND_TOTAL : {map:'GRAND_TOTAL'},STATUS : {map:'STATUS'},DELETED:false},
                 where : {GUID : {map:'GUID'}}
             }

@@ -105,7 +105,7 @@ export default class posDoc extends React.PureComponent
                 
             }
         }
-        console.log(this.core.offline)
+        
         this.posDevice.on('scanner',(tmpBarkod)=>
         {
             this.getItem(tmpBarkod)
@@ -116,6 +116,7 @@ export default class posDoc extends React.PureComponent
         this.transfer = new transferCls();
         this.interval = null;
         this.transferStart();
+        this.transferLocal();
         //DATA TRANSFER İÇİN EVENT.
         this.transfer.on('onState',(pParam)=>
         {
@@ -135,14 +136,7 @@ export default class posDoc extends React.PureComponent
                 }
                 await dialog(tmpConfObj);
 
-                let tmpResult = await this.transfer.transferLocal()
-                if(tmpResult)
-                {
-                    await this.transfer.clearTbl("POS_VW_01")
-                    await this.transfer.clearTbl("POS_SALE_VW_01")
-                    await this.transfer.clearTbl("POS_PAYMENT_VW_01")
-                    await this.transfer.clearTbl("POS_EXTRA_VW_01")
-                }
+                await this.transferLocal();
                 window.location.reload()
             }
             this.setState({isConnected:true})            
@@ -223,7 +217,7 @@ export default class posDoc extends React.PureComponent
             await this.posObj.save()
             setTimeout(()=>{window.location.reload()},500)
             //*************************************************************************** */
-        })        
+        })
     }
     async init()
     {             
@@ -307,7 +301,7 @@ export default class posDoc extends React.PureComponent
                 return
             }
         }   
-    }
+    }    
     async deviceEntry()
     {
         let tmpResult = await this.popNumber.show(this.lang.t("popTitleDevice"),window.localStorage.getItem('device') == null ? '' : window.localStorage.getItem('device'),false)
@@ -1883,6 +1877,22 @@ export default class posDoc extends React.PureComponent
     transferStop()
     {
         clearInterval(this.interval)
+    }
+    async transferLocal()
+    {
+        return new Promise(async resolve => 
+        {
+            let tmpResult = await this.transfer.transferLocal()
+            if(tmpResult)
+            {
+                await this.transfer.clearTbl("POS_VW_01")
+                await this.transfer.clearTbl("POS_SALE_VW_01")
+                await this.transfer.clearTbl("POS_PAYMENT_VW_01")
+                await this.transfer.clearTbl("POS_EXTRA_VW_01")
+            }
+
+            resolve()
+        });
     }
     render()
     {
