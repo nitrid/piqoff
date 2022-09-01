@@ -41,7 +41,7 @@ export const prm =
         ID :"purcInvoıcePriceSave",
         VALUE : 
         {
-            value : false
+            value : true
         },
         SPECIAL : "",
         ELEMENT : "",

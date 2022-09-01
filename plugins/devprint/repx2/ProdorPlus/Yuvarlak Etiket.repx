@@ -7,7 +7,7 @@
       <Controls>
         <Item1 Ref="4" ControlType="XRLabel" Name="label1" Multiline="true" Text="label3" TextAlignment="MiddleCenter" SizeF="339.999969,58.4200134" LocationFloat="0, 30" Dpi="254" Font="Arial, 7pt, style=Bold" Padding="5,5,0,0,254">
           <ExpressionBindings>
-            <Item1 Ref="5" EventName="BeforePrint" PropertyName="Text" Expression="[DESING_NAME]" />
+            <Item1 Ref="5" EventName="BeforePrint" PropertyName="Text" Expression="[NAME]" />
           </ExpressionBindings>
           <StylePriority Ref="6" UseFont="false" UseTextAlignment="false" />
         </Item1>
@@ -27,7 +27,7 @@
           </ExpressionBindings>
           <StylePriority Ref="15" UseFont="false" UseTextAlignment="false" />
         </Item4>
-        <Item5 Ref="16" ControlType="XRLabel" Name="label4" Multiline="true" Text="label3" TextAlignment="MiddleCenter" SizeF="339.999969,58.4200058" LocationFloat="0, 81.99998" Dpi="254" Font="Arial, 8pt, style=Bold" Padding="5,5,0,0,254">
+        <Item5 Ref="16" ControlType="XRLabel" Name="label4" Multiline="true" Text="label3" TextAlignment="MiddleCenter" SizeF="314.999969,30.8333435" LocationFloat="10.583333, 88.29501" Dpi="254" Font="Arial, 7pt, style=Bold" Padding="5,5,0,0,254">
           <ExpressionBindings>
             <Item1 Ref="17" EventName="BeforePrint" PropertyName="Text" Expression="[DESCRIPTION]" />
           </ExpressionBindings>

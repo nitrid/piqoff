@@ -1098,6 +1098,17 @@ export default class labelPrinting extends React.PureComponent
                                         {
                                             e.key.UNDER_UNIT_PRICE = parseFloat(((e.key.PRICE * (e.key.UNDER_UNIT_VALUE *100)) / 100).toFixed(3))
                                         }
+                                        if(this.lblObj.dt()[this.lblObj.dt().length - 1].CODE == '')
+                                        {
+                                            await this.grdLabelQueue.devGrid.deleteRow(this.lblObj.dt().length - 1)
+                                        }
+                                        let Data = {data:this.lblObj.dt().toArray()}
+                                        this.mainLblObj.dt()[0].DATA = JSON.stringify(Data)
+                                        setTimeout(() => 
+                                        {
+                                            await this.mainLblObj.save()
+                                        }, 500);
+
                                     }}
                                     onRowRemoved={(e)=>{
                                         this.calculateCount()

@@ -1499,6 +1499,7 @@ export class posDeviceCls
                 if(String.fromCharCode(data[0]) == String.fromCharCode(6) || (String.fromCharCode(data[0]) == String.fromCharCode(21) && data.length == 1) || 
                 (String.fromCharCode(data[0]) == String.fromCharCode(4) && data.length == 2) || (String.fromCharCode(data[0]) == String.fromCharCode(3) && data.length == 4))
                 {     
+                    await this.core.util.waitUntil(500)
                     if(ack == false)
                     {
                         let tmpData = 

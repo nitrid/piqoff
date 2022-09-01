@@ -123,29 +123,31 @@ export default class privatePrinting extends React.PureComponent
                                                 await dialog(tmpConfObj);
                                                 return
                                             }
-                                            let tmpQuery = 
-                                            {
-                                                query:  "SELECT CUSTOMER_PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = @ITEM_GUID ORDER BY LDATE DESC ",
-                                                param:  ['ITEM_GUID:string|50'],
-                                                value:  [this.txtRef.GUID]
-                                            }
+                                            // geçici olarak kapatıldı.....
+
+                                            // let tmpQuery = 
+                                            // {
+                                            //     query:  "SELECT CUSTOMER_PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = @ITEM_GUID ORDER BY LDATE DESC ",
+                                            //     param:  ['ITEM_GUID:string|50'],
+                                            //     value:  [this.txtRef.GUID]
+                                            // }
     
-                                            let tmpData = await this.core.sql.execute(tmpQuery) 
-                                            if(tmpData.result.recordset.length > 0)
-                                            {
-                                                if(tmpData.result.recordset[0].CUSTOMER_PRICE >= parseFloat(this.txtPrice.value))
-                                                {
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgPrice',showTitle:true,title:this.t("msgPrice.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:this.t("msgPrice.btn01"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPrice.msg")}</div>)
-                                                    }
+                                            // let tmpData = await this.core.sql.execute(tmpQuery) 
+                                            // if(tmpData.result.recordset.length > 0)
+                                            // {
+                                            //     if(tmpData.result.recordset[0].CUSTOMER_PRICE >= parseFloat(this.txtPrice.value))
+                                            //     {
+                                            //         let tmpConfObj =
+                                            //         {
+                                            //             id:'msgPrice',showTitle:true,title:this.t("msgPrice.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            //             button:[{id:"btn01",caption:this.t("msgPrice.btn01"),location:'after'}],
+                                            //             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPrice.msg")}</div>)
+                                            //         }
                                                     
-                                                    await dialog(tmpConfObj);
-                                                    return
-                                                }
-                                            }
+                                            //         await dialog(tmpConfObj);
+                                            //         return
+                                            //     }
+                                            // }
                                             let tmpConfObj =
                                             {
                                                 id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
