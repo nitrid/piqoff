@@ -278,7 +278,7 @@ export default class posDoc extends React.PureComponent
             }
         }
         await this.parkDt.refresh();     
-
+        console.log(this.parkDt)
         setTimeout(() => 
         {
             this.posDevice.lcdPrint
