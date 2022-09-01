@@ -495,6 +495,7 @@ export default class transferCls
                     LCD_PORT : {dataType: "string"},
                     SCALE_PORT : {dataType: "string"},
                     PAY_CARD_PORT : {dataType: "string"},
+                    SCANNER_PORT : {dataType: "string"},
                     PRINT_DESING : {dataType: "string"},
                     SAFE_GUID : {dataType: "string"},
                 }
@@ -661,7 +662,7 @@ export default class transferCls
                 {
                     into : "POS_DEVICE_VW_01",
                     values : [{GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
-                    CODE : {map:'CODE'},NAME : {map:'NAME'},LCD_PORT : {map:'LCD_PORT'},SCALE_PORT : {map:'SCALE_PORT'},PAY_CARD_PORT : {map:'PAY_CARD_PORT'},
+                    CODE : {map:'CODE'},NAME : {map:'NAME'},LCD_PORT : {map:'LCD_PORT'},SCALE_PORT : {map:'SCALE_PORT'},PAY_CARD_PORT : {map:'PAY_CARD_PORT'},SCANNER_PORT : {map:'SCANNER_PORT'},
                     PRINT_DESING : {map:'PRINT_DESING'},SAFE_GUID : {map:'SAFE_GUID'}}]
                 }
             }
