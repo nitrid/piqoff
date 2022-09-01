@@ -109,6 +109,7 @@ export default class itemCard extends React.PureComponent
                 this.btnPrint.setState({disabled:false});
 
                 pData.rowData.CUSER = this.user.CODE
+                this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSER = this.user.CODE
             }    
             if(pTblName == 'ITEM_PRICE' || pTblName == 'ITEM_UNIT')
             {
@@ -1437,9 +1438,9 @@ export default class itemCard extends React.PureComponent
                                             >
                                                 <Paging defaultPageSize={5} />
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                                <Column dataField="CUSTOMER_CODE" caption={this.t("grdCustomer.clmCode")} />
-                                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdCustomer.clmName")} />
-                                                <Column dataField="CUSTOMER_PRICE_USER_NAME" caption={this.t("grdCustomer.clmPriceUserName")} />
+                                                <Column dataField="CUSTOMER_CODE" caption={this.t("grdCustomer.clmCode")} allowEditing={false}/>
+                                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdCustomer.clmName")} allowEditing={false}/>
+                                                <Column dataField="LUSER" caption={this.t("grdCustomer.clmPriceUserName")} allowEditing={false}/>
                                                 <Column dataField="CUSTOMER_PRICE_DATE" caption={this.t("grdCustomer.clmPriceDate")} allowEditing={false}  />
                                                 <Column dataField="CUSTOMER_PRICE" caption={this.t("grdCustomer.clmPrice")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                                 <Column dataField="MULTICODE" caption={this.t("grdCustomer.clmMulticode")} />

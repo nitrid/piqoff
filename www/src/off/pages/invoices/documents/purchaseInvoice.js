@@ -866,7 +866,7 @@ export default class purchaseInvoice extends React.PureComponent
             }
             else
             {
-                tmpMissCodes.push("'" +pdata[0].CODE + "'")
+                tmpMissCodes.push("'" +pdata[i].CODE + "'")
             }
         }
         if(tmpMissCodes.length > 0)
