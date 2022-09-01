@@ -416,7 +416,6 @@ export const langTr =
             btn01: "Tamam",
             msg: "Bu ürün işlem gördüğü için silinemez !!"
         },
-        
     },
     stk_01_002: 
     {
@@ -967,7 +966,6 @@ export const langTr =
             description : "Yeni Açılama",
             btnApprove : "Kaydet"
         }
-
     },
     stk_02_004 :
     {
@@ -1951,7 +1949,6 @@ export const langTr =
             clmDiffPrice : "Fark",
             clmCustomerPrice : "T. Fiyat",
             clmDescription :"Açıklama"
-
         },
         grdInvoicePayment: 
         {
@@ -5560,7 +5557,13 @@ export const langTr =
             title : "Fiş Detayı"
         },
         TicketId :"Fiş I.D",
-       
+        popLastTotal : 
+        {
+            title : "Tahsilat"
+        },
+        trDeatil: "T.R Detay", 
+        lineDelete :"Satır İptal", 
+        cancel : "Vazgeç", 
     },
     pos_03_001 : 
     {
@@ -5597,7 +5600,6 @@ export const langTr =
             clmDate : "Tarih",
             clmTicketId : "Fiş No"
         }
-
     },
     tkf_01_001 :
     {
