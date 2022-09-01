@@ -74,7 +74,7 @@ export default class posDoc extends React.PureComponent
             cheqCount:0,
             cheqTotalAmount:0,
             cheqLastAmount:0,
-            isConnected:true,
+            isConnected:this.core.offline ? false : true,
             msgTransfer1:"",
             msgTransfer2:"",
         }   
@@ -105,7 +105,7 @@ export default class posDoc extends React.PureComponent
                 
             }
         }
-        
+        console.log(this.core.offline)
         this.posDevice.on('scanner',(tmpBarkod)=>
         {
             this.getItem(tmpBarkod)
@@ -278,7 +278,7 @@ export default class posDoc extends React.PureComponent
             }
         }
         await this.parkDt.refresh();     
-
+        console.log(this.parkDt)
         setTimeout(() => 
         {
             this.posDevice.lcdPrint

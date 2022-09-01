@@ -3,8 +3,8 @@ const path = require('path');
 
 var svc = new Service
 ({
-    name:'piqsoft',
-    description: 'piqsoft service.',
+    name:'piqsofts',
+    description: 'piqsoft services',
     script: path.join(process.cwd(), '..\\server.js'),
     env: 
     [

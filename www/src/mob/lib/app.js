@@ -41,10 +41,10 @@ export default class App extends React.PureComponent
         loadMessages(enMessages);
         loadMessages(frMessages);
         loadMessages(trMessages);
-        locale(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'));
-        i18n.changeLanguage(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'))
+        locale(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'));
+        i18n.changeLanguage(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'))
         this.lang = i18n;  
-        moment.locale(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'));
+        moment.locale(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'));
         
         this.style =
         {

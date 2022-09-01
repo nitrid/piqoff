@@ -740,7 +740,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"TransferTime",
-        VALUE : 120,
+        VALUE : 1800,
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",
