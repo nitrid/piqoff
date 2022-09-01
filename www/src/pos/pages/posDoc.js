@@ -136,7 +136,7 @@ export default class posDoc extends React.PureComponent
                 }
                 await dialog(tmpConfObj);
 
-                this.transferLocal();
+                await this.transferLocal();
                 window.location.reload()
             }
             this.setState({isConnected:true})            
@@ -1880,14 +1880,19 @@ export default class posDoc extends React.PureComponent
     }
     async transferLocal()
     {
-        let tmpResult = await this.transfer.transferLocal()
-        if(tmpResult)
+        return new Promise(async resolve => 
         {
-            await this.transfer.clearTbl("POS_VW_01")
-            await this.transfer.clearTbl("POS_SALE_VW_01")
-            await this.transfer.clearTbl("POS_PAYMENT_VW_01")
-            await this.transfer.clearTbl("POS_EXTRA_VW_01")
-        }
+            let tmpResult = await this.transfer.transferLocal()
+            if(tmpResult)
+            {
+                await this.transfer.clearTbl("POS_VW_01")
+                await this.transfer.clearTbl("POS_SALE_VW_01")
+                await this.transfer.clearTbl("POS_PAYMENT_VW_01")
+                await this.transfer.clearTbl("POS_EXTRA_VW_01")
+            }
+
+            resolve()
+        });
     }
     render()
     {
