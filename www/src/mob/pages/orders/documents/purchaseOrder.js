@@ -712,11 +712,9 @@ export default class salesOrder extends React.Component
                             </div>
                             </Item>
                             <Item>
-                            <div className="col-12 px-1 pt-1">
+                                <div className="col-12 px-1 pt-1">
                                     <NdTextBox id="txtBarcode" parent={this} placeholder={this.t("txtBarcodePlace")}
-                                    button=
-                                    {
-                                    [
+                                    button={[
                                         {
                                             id:'01',
                                             icon:'more',
@@ -728,7 +726,8 @@ export default class salesOrder extends React.Component
                                                     if(data.length == 1)
                                                     {
                                                         this.txtBarcode.value = data[0].CODE
-                                                        this.barcode = {
+                                                        this.barcode = 
+                                                        {
                                                             name:data[0].NAME,
                                                             code:data[0].CODE,
                                                             barcode:data[0].BARCODE,
@@ -743,7 +742,8 @@ export default class salesOrder extends React.Component
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
                                                             this.txtBarcode.value = data[i].CODE
-                                                            this.barcode = {
+                                                            this.barcode = 
+                                                            {
                                                                 name:data[i].NAME,
                                                                 code:data[i].CODE,
                                                                 barcode:data[i].BARCODE,
@@ -772,9 +772,11 @@ export default class salesOrder extends React.Component
                                                 this.barcodeScan()
                                             }
                                         }
-                                    ]
-                                    }
-                                    onEnterKey={(async(e)=>
+                                    ]}
+                                    onKeyUp={(async(e)=>
+                                    {
+                                        console.log(e)
+                                        if(e.event.key == 'Enter')
                                         {
                                             if(e.component._changedValue == "")
                                             {
@@ -808,8 +810,8 @@ export default class salesOrder extends React.Component
                                                 await dialog(tmpConfObj);
                                                 this.txtBarcode.value = ""
                                             }
-                                            
-                                        }).bind(this)}></NdTextBox>
+                                        }
+                                    }).bind(this)}></NdTextBox>
                                 </div>
                             </Item>
                             <Item> 
@@ -820,7 +822,7 @@ export default class salesOrder extends React.Component
                                 </div>
                             </Item>
                             {/* txtQuantity */}
-                        <Item>
+                            <Item>
                                 <Label text={this.t("txtQuantity")}/>
                                 <NdNumberBox id="txtQuantity" parent={this} simple={true}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
