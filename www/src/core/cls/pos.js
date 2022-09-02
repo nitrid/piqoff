@@ -1567,7 +1567,7 @@ export class posDeviceCls
                         {
                             await this.payPort.close(); 
                         }
-                    }, 1000);
+                    }, 3000);
                     
                     resolve({tag:"response",msg:JSON.stringify(response)});   
                 }
