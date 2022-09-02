@@ -1473,7 +1473,9 @@ export class posDeviceCls
         
         let ack = false;
         let payMethod = "card";
-
+        
+        await this.core.util.waitUntil(3000)
+        
         let generate_lrc = function(real_msg_with_etx)
         {
             let lrc = 0, text = real_msg_with_etx.split('');
