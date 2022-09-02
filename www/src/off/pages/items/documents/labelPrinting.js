@@ -1106,7 +1106,7 @@ export default class labelPrinting extends React.PureComponent
                                         this.mainLblObj.dt()[0].DATA = JSON.stringify(Data)
                                         setTimeout(() => 
                                         {
-                                            await this.mainLblObj.save()
+                                            this.mainLblObj.save()
                                         }, 500);
 
                                     }}
