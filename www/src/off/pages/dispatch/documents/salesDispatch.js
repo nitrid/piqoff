@@ -1674,6 +1674,8 @@ export default class salesDispatch extends React.PureComponent
                                                     query:  "SELECT *, " +
                                                             "CONVERT(NVARCHAR,AMOUNT) AS AMOUNTF, " +
                                                             "ISNULL((SELECT TOP 1 NAME FROM COMPANY),'') AS FIRMA, " +
+                                                            "REPLACE(ISNULL((SELECT ADRESS + ' | ' + ZIPCODE  + '  ' + CITY  FROM CUSTOMER_ADRESS WHERE TYPE = 0 AND CUSTOMER = INPUT),''),'|', CHAR(13)) AS ADDRESS," +
+                                                            "REPLACE(ISNULL((SELECT PHONE1 + ' | ' + EMAIL  FROM CUSTOMER_OFFICAL WHERE TYPE = 0 AND CUSTOMER = INPUT),''),'|', CHAR(13)) AS CONTACT," +
                                                             "REPLACE(ISNULL((SELECT ADDRESS1 + ' | ' + ADDRESS2  + ' | ' + TEL + ' | ' + MAIL FROM COMPANY),''),'|', CHAR(13)) AS BASLIK," +
                                                             "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH " +
                                                             "FROM DOC_ITEMS_VW_01 " +

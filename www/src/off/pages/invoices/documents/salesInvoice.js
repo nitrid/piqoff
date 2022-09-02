@@ -1530,8 +1530,8 @@ export default class salesInvoice extends React.PureComponent
                                         <Column dataField="MARGIN" caption={this.t("grdSlsInv.clmMargin")} width={150} allowEditing={false} headerFilter={{visible:true}}/>
                                         <Column dataField="VAT" caption={this.t("grdSlsInv.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
                                         <Column dataField="TOTAL" caption={this.t("grdSlsInv.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
+                                        <Column dataField="DESCRIPTION" caption={this.t("grdRebtInv.clmDescription")} width={160}  headerFilter={{visible:true}}/>
                                         <Column dataField="CONNECT_REF" caption={this.t("grdSlsInv.clmDispatch")} width={200} allowEditing={false} headerFilter={{visible:true}}/>
-
                                     </NdGrid>
                                     <ContextMenu
                                     dataSource={this.rightItems}
