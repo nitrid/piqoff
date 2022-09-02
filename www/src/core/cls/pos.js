@@ -1474,7 +1474,11 @@ export class posDeviceCls
         let ack = false;
         let payMethod = "card";
         
-        //await this.core.util.waitUntil(2000)
+        if(this.payPort.isOpen)
+        {
+            await this.core.util.waitUntil(2000)
+        }
+        
         
         let generate_lrc = function(real_msg_with_etx)
         {
@@ -1549,14 +1553,7 @@ export class posDeviceCls
                 else if(String.fromCharCode(5) == String.fromCharCode(data[0]))
                 {
                     this.payPort.write(String.fromCharCode(6))
-                }
-                else if(checkSum(4,data))
-                {
-                    if(this.payPort.isOpen)
-                    {
-                        await this.payPort.close(); 
-                    }
-                }
+                }                
                 else if(data.length >= 25)
                 {
                     let str = "";
@@ -1589,6 +1586,13 @@ export class posDeviceCls
                     // }, 3000);
                     
                     resolve({tag:"response",msg:JSON.stringify(response)});   
+                }
+                else if(checkSum(4,data))
+                {
+                    if(this.payPort.isOpen)
+                    {
+                        await this.payPort.close(); 
+                    }
                 }
             })
             // this.payPort.on('data',async(data)=> 
