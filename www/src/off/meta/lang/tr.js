@@ -416,6 +416,12 @@ export const langTr =
             btn01: "Tamam",
             msg: "Bu ürün işlem gördüğü için silinemez !!"
         },
+        cmbItemGenusData :
+        {
+            item : "Mal",
+            service : "Hizmet",
+            deposit : "Depozit"
+        }
     },
     stk_01_002: 
     {

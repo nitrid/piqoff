@@ -1,6 +1,6 @@
 export const langFr = 
 {
-    popGrid: {btnSelection:"Seç",btnSearch:"Listele"},
+    popGrid: {btnSelection:"Choix",btnSearch:"Listes"},
     btnSave: "Enregistre",
     btnCancel: "Supprime",
     btnPrint :"Imprime",
@@ -56,7 +56,7 @@ export const langFr =
         cri_03: "Rapports",
         cri_01_001: "Fournisseur-Client saisie",
         cri_01_002: "Adresse saisie",
-        cri_01_003:"Catégorie saisie",
+        cri_01_003: "Catégorie saisie",
         cri_02_001: "Liste Fournisseur-Client",
         cri_02_002: "Liste adresse",
         cri_02_003: "Liste Catégorie ",
@@ -115,14 +115,14 @@ export const langFr =
         fns_04 : "Rapports",
         pos: "Traitement Pos",
         pos_01 : "Saisie",
-        pos_01_001 : "Pos Cihaz Tanıtım",
+        pos_01_001 : "Identifier Caisse",
         pos_02 : "Rapports",
         pos_02_001 : "Rapport ticket de vente",
         pos_02_002 : "Rapport point fidelité client",
         pos_02_003 : "Rapport vente Pos",
-        pos_02_004 : "Pos Satış Detay Raporu", //BAK
+        pos_02_004 : "Rapport de Vente",
         pos_03 :"Operasyonlar", //BAK
-        pos_03_001 : "Gün Sonu", //BAK
+        pos_03_001 : "Opérations de fin de journée",
         promo: "Promotion",
         promo_01: "Saisie",
         promo_01_001: "Promosyon Tanımları", //BAK
@@ -416,6 +416,12 @@ export const langFr =
             btn01: "Tamam",
             msg: "Bu ürün işlem gördüğü için silinemez !!"
         },
+        cmbItemGenusData :
+        {
+            item : "Article",
+            service : "Sevice",
+            deposit : "Consigné"
+        }
     },
     stk_01_002: 
     {
@@ -5567,27 +5573,27 @@ export const langFr =
     },
     pos_03_001 : // KOMPLE BAK
     {
-        title : "GÜN SONU İŞLEMİ",
-        start :"Başlangıç",
-        advance : "Avans",
-        cash : "Nakit ",
-        debitCard : "Kredi Kartı",
-        check : "Çek",
-        ticketRest : "T.Restorant",
-        previous: "Önceki",
-        finish : "Bitir",
-        next : "Sonraki",
-        dtDocDate :"Tarih",
-        cmbSafe : "Cihaz ID",
+        title : "Opérations de fin de journée",
+        start :"Démarrer",
+        advance : "Fonde De Caisse",
+        cash : "Espece ",
+        debitCard : "CB",
+        check : "Cheque",
+        ticketRest : "Ticket Resturant",
+        previous: "Précédent",
+        finish : "Terminez",
+        next : "Suivant",
+        dtDocDate :"Date",
+        cmbSafe : " Caisse No",
         txtAdvance : "Avans",
-        txtCash : "Nakit",
-        txtCreditCard : "Kredi Kartı",
-        txtCheck : "Çek",
-        txtRestorant : "Tike Restorant",
-        txtReal : "Doğru",
+        txtCash : "Espece",
+        txtCreditCard : "CB",
+        txtCheck : "Cheque",
+        txtRestorant : "Ticket Restaurant",
+        txtReal : "Ok",
         popFinish : 
         {
-            title :"Sonuç"
+            title :"Resultat"
         },
         popOpenTike :
         {
