@@ -1541,7 +1541,7 @@ export class posDeviceCls
                 else if(data.length >= 25)
                 {
                     let str = "";
-                    if(String.fromCharCode(data[0]) == 2)
+                    if(String.fromCharCode(data[0]) == String.fromCharCode(2))
                     {
                         str = data.toString().substr(1, data.toString().length-3);    
                     }
