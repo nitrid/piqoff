@@ -866,7 +866,7 @@ export default class purchaseInvoice extends React.PureComponent
             }
             else
             {
-                tmpMissCodes.push("'" +pdata[0].CODE + "'")
+                tmpMissCodes.push("'" +pdata[i].CODE + "'")
             }
         }
         if(tmpMissCodes.length > 0)
@@ -1736,6 +1736,7 @@ export default class purchaseInvoice extends React.PureComponent
                                         <Column dataField="DISCOUNT_RATE" caption={this.t("grdPurcInv.clmDiscountRate")} dataType={'number'} width={80} allowHeaderFiltering={false}/>
                                         <Column dataField="VAT" caption={this.t("grdPurcInv.clmVat")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={80} allowHeaderFiltering={false}/>
                                         <Column dataField="TOTAL" caption={this.t("grdPurcInv.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={80} allowHeaderFiltering={false}/>
+                                        <Column dataField="DESCRIPTION" caption={this.t("grdSlsInv.clmDescription")} width={160}  headerFilter={{visible:true}}/>
                                         <Column dataField="CONNECT_REF" caption={this.t("grdPurcInv.clmDispatch")}  width={150} allowEditing={false}/>
                                     </NdGrid>
                                     <ContextMenu

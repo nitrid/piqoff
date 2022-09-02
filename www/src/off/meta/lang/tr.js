@@ -394,6 +394,28 @@ export const langTr =
             btn01: "Tamam",
             msg: "Girmiş olduğunuz tedarikçi fiyatı satış fiyatından yüksek olamaz! Lütfen satış fiyatınızı kontrol ediniz."
         },
+        popAnalysis :
+        {
+            title : "Satış İstatistiği"
+        },
+        grdAnalysis: 
+        {
+            clmToday: "Bugün",
+            clmYesterday: "Dün",
+            clmWeek: "Bu Hafta",
+            clmMount : "Bu Ay",
+            clmYear : "Bu Yıl",
+            clmLastYear : "Geçen Yıl"
+        },
+        dtFirstAnalysis : "Başlangıç",
+        dtLastAnalysis : "Bitiş",
+        btnGet : "Getir",
+        msgNotDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Bu ürün işlem gördüğü için silinemez !!"
+        },
     },
     stk_01_002: 
     {
@@ -944,7 +966,6 @@ export const langTr =
             description : "Yeni Açılama",
             btnApprove : "Kaydet"
         }
-
     },
     stk_02_004 :
     {
@@ -1926,7 +1947,8 @@ export const langTr =
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
             clmDiffPrice : "Fark",
-            clmCustomerPrice : "T. Fiyat"
+            clmCustomerPrice : "T. Fiyat",
+            clmDescription :"Açıklama"
         },
         grdInvoicePayment: 
         {
@@ -2172,9 +2194,21 @@ export const langTr =
         validDepot : "Depo Seçmelisiniz",
         validCustomerCode : "Cari Kodu Boş Geçilemez",
         validDocDate : "Tarih Seçmelisiniz",
-        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz"
-       
-
+        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz",
+        msgNewPrice : 
+        {
+            title: "Dikkat",
+            btn01: "Hiç Birini Güncelleme",
+            btn02: "Seçilen Fiyatları Güncelle",
+            msg: "Lütfen Tedarikçi Fiyatını Güncellemek İstediğiniz Ürünleri Seçiniz.. "
+        },
+        grdNewPrice: 
+        {
+            clmCode: "Kodu",
+            clmName: "Adı",
+            clmPrice: "Eski Fiyat",
+            clmPrice2: "Yeni Fiyat",
+        },
     },
     ftr_02_002 :
     {
@@ -2248,8 +2282,8 @@ export const langTr =
             clmTotal : "Genel Toplam",
             clmDispatch : "İrsaliye No",
             clmCreateDate: "Kayıt Tarihi",
-            clmMargin :"Marj"
-
+            clmMargin :"Marj",
+            clmDescription :"Açıklama"
         },
         grdInvoicePayment: 
         {
@@ -2533,8 +2567,8 @@ export const langTr =
             clmTotal : "Genel Toplam",
             clmDispatch : "İrsaliye No",
             clmCreateDate: "Kayıt Tarihi",
-            clmMargin :"Marj"
-
+            clmMargin :"Marj",
+            clmDescription :"Açıklama"
         },
         grdInvoicePayment: 
         {
@@ -5380,6 +5414,7 @@ export const langTr =
     },
     pos_02_001 :
     {
+        TicketId :"Fiş I.D",
         cmbCustomer :"Cari",
         btnGet :"Getir",
         dtFirst : "İlk Tarih",
@@ -5387,8 +5422,8 @@ export const langTr =
         txtCustomerCode : "Cari",
         cmbDevice :"Cihaz",
         txtTicketno : "Fiş I.D",
-        numTicketAmount : "Tutar",
-        cmbPayType :"Ödeme Tipi",
+        numFirstTicketAmount : "Alt Tutar",
+        numLastTicketAmount : "Üst Tutar",
         cmbUser :"Kulanıcı",
         txtItem :"Ürün Kodu",
         ckhDoublePay : "Birden Fazla Ödeme",
@@ -5435,8 +5470,42 @@ export const langTr =
         popDetail : 
         {
             title : "Fiş Detayı"
+        },
+        cmbPayType : 
+        {
+            title : "Ödeme Tipi",
+            esc:"Nakit",
+            cb : "K. Kartı",
+            check : "Çek",
+            ticket : "T. Rest",
+            bonD : "İade Fişi",
+            avoir : "İade",
+            virment : "Havale",
+            prlv :"Oto. Ödeme",
+            all :"Tümü",
+        },
+        payChangeNote : "Fiş üzerinde yapılan değişiklikler istisnai olarak yapılmalı ve hataların düzeltilmesine izin verilmelidir!",
+        payChangeNote2 : "Değişikliklerin geçmişi kaydedilir!",
+        txtPayChangeDescPlace : "Lütfen Açıklama Giriniz",
+        txtPayChangeDesc :"Ödeme tipi hatalı girilmiştir.Düzeltmesi yapıldı.",
+        popLastTotal : 
+        {
+            title : "Tahsilat"
+        },
+        trDeatil: "T.R Detay",
+        lineDelete :"Satır İptal",
+        cancel : "Vazgeç",
+        popOpenTike :
+        {
+            title : "Tamamlanmamış Fişler"
+        },
+        grdOpenTike: 
+        {
+            clmUser : "Kullanıcı",
+            clmDevice : "Cihaz",
+            clmDate : "Tarih",
+            clmTicketId : "Fiş No"
         }
-
     },
     pos_02_002 :
     {
@@ -5459,7 +5528,42 @@ export const langTr =
             clmPoint: "Puan",
             clmLdate : "Son Güncelleme Tarihi",
         },
-
+        popPointDetail : 
+        {
+            title: "Puan Detayı"
+        },
+        grdPointDetail : 
+        {
+            clmDate : "Tarih",
+            clmPoint : "Puan",
+            clmPointType : "Tip",
+            clmPosId :"Fiş No"
+        },
+        grdSaleTicketItems :
+        {
+            clmBarcode : "Barkod",
+            clmName : "Ürün Adı",
+            clmQuantity : "Miktar",
+            clmPrice : "Fiyat",
+            clmTotal : "Tutar"
+        },
+        grdSaleTicketPays : 
+        {
+            clmPayName : "Ödeme Tipi", 
+            clmTotal : "Tutar",
+        },
+        popDetail : 
+        {
+            title : "Fiş Detayı"
+        },
+        TicketId :"Fiş I.D",
+        popLastTotal : 
+        {
+            title : "Tahsilat"
+        },
+        trDeatil: "T.R Detay", 
+        lineDelete :"Satır İptal", 
+        cancel : "Vazgeç", 
     },
     pos_03_001 : 
     {
@@ -5484,6 +5588,17 @@ export const langTr =
         popFinish : 
         {
             title :"Sonuç"
+        },
+        popOpenTike :
+        {
+            title : "Tamamlanmamış Fişler"
+        },
+        grdOpenTike: 
+        {
+            clmUser : "Kullanıcı",
+            clmDevice : "Cihaz",
+            clmDate : "Tarih",
+            clmTicketId : "Fiş No"
         }
     },
     tkf_01_001 :

@@ -394,6 +394,28 @@ export const langFr =
             btn01: "Tamam", //BAK
             msg: "Girmiş olduğunuz tedarikçi fiyatı satış fiyatından yüksek olamaz! Lütfen satış fiyatınızı kontrol ediniz." //BAK
         },
+        popAnalysis :  //BAK
+        {
+            title : "Satış İstatistiği" 
+        },
+        grdAnalysis:  //BAK
+        {
+            clmToday: "Bugün",
+            clmYesterday: "Dün",
+            clmWeek: "Bu Hafta",
+            clmMount : "Bu Ay",
+            clmYear : "Bu Yıl",
+            clmLastYear : "Geçen Yıl"
+        },
+        dtFirstAnalysis : "Başlangıç",  //BAK
+        dtLastAnalysis : "Bitiş", //BAK
+        btnGet : "Getir", //BAK
+        msgNotDelete: //BAK
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Bu ürün işlem gördüğü için silinemez !!"
+        },
     },
     stk_01_002: 
     {
@@ -942,8 +964,8 @@ export const langFr =
         {
             title : "Ajoute Saisie Rapide" ,
             description : "Nouvelle Saisie" ,
-            btnApprove : "Enregistre "        }
-
+            btnApprove : "Enregistre "        
+        }
     },
     stk_02_004 :
     {
@@ -1923,7 +1945,10 @@ export const langFr =
             clmTotal : "Total Général",
             clmDispatch : "No Bon de Livraison",
             clmCreateDate: "Date d'Enregistrement",
-            clmMargin :"Marge"
+            clmMargin :"Marge",
+            clmDiffPrice : "Fark",
+            clmCustomerPrice : "T. Fiyat",
+            clmDescription :"Motif"
         },
         grdInvoicePayment: 
         {
@@ -2169,9 +2194,21 @@ export const langFr =
         validDepot : "Sélectionner Dépot",
         validCustomerCode : "Le Code Produit ne peut être Vide ",
         validDocDate : "Sélectionner Date" ,
-        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter"
-       
-
+        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
+        msgNewPrice :      // BAK
+        {     // BAK
+            title: "Dikkat",     // BAK
+            btn01: "Hiç Birini Güncelleme",     // BAK
+            btn02: "Seçilen Fiyatları Güncelle",     // BAK
+            msg: "Lütfen Tedarikçi Fiyatını Güncellemek İstediğiniz Ürünleri Seçiniz.. "     // BAK
+        },     // BAK
+        grdNewPrice:      // BAK
+        {     // BAK
+            clmCode: "Kodu",     // BAK
+            clmName: "Adı",     // BAK
+            clmPrice: "Eski Fiyat",     // BAK
+            clmPrice2: "Yeni Fiyat",     // BAK
+        },
     },
     ftr_02_002 :
     {
@@ -2245,8 +2282,8 @@ export const langFr =
             clmTotal : "Total Général",
             clmDispatch : "No Bon de Livraison",
             clmCreateDate: "Date d'Enregistrement",
-            clmMargin :"Marge"
-
+            clmMargin :"Marge",
+            clmDescription : "Motif"
         },
         grdInvoicePayment: 
         {
@@ -2530,8 +2567,8 @@ export const langFr =
             clmTotal : "Total Général",
             clmDispatch : "No Bon de Livraison",
             clmCreateDate: "Date d'Enregistrement",
-            clmMargin :"Marge"
-
+            clmMargin :"Marge",
+            clmDescription :"Motif"
         },
         grdInvoicePayment: 
         {
@@ -4380,6 +4417,14 @@ export const langFr =
         cmbDepot: "Réserve",
         txtCustomerCode : "Code fournisseur",
         txtCustomerName : "Nom fournisseur",
+        pg_Docs : 
+        {
+            title : "Evrak Seçimi",
+            clmRef : "SERİ",
+            clmRefNo : "SIRA",
+            clmOutputName : "CARİ ADI",
+            clmOutputCode  : "CARİ KODU",
+        },
         pg_txtCustomerCode : 
         {
             title : "Choix Fournisseur",
@@ -4456,6 +4501,56 @@ export const langFr =
             dtPopEndDate : "Fin "
         },
         validCustomerCode : "Le Code Produit ne peut être Vide ",
+        txtRefRefno : 'Seri-Sıra',    // BAK
+        startDate :'Başlangıç Tarihi',    // BAK
+        finishDate : 'Bitiş Tarihi',    // BAK
+        msgMissItemCode:    // BAK
+        {    // BAK
+            title: "Dikkat",    // BAK
+            btn01: "Tamam",    // BAK
+            msg: "Bulunamayan Kodlar :"    // BAK
+        },    // BAK
+        msgMultiCodeCount:    // BAK
+        {    // BAK
+            title: "Dikkat",    // BAK
+            btn01: "Tamam",    // BAK
+            msg: "Eklenen Ürün Sayısı"    // BAK
+        },    // BAK
+        popMultiItem:    // BAK
+        {    // BAK
+            title: "Toplu Ürün Ekleme",    // BAK
+            btnApprove: "Ürünleri Getir",    // BAK
+            btnClear : "Temizle",    // BAK
+            btnSave : "Satırları Ekle",    // BAK
+        },    // BAK
+        cmbMultiItemType :     // BAK
+        {    // BAK
+            title : "Arama Şekli",    // BAK
+            customerCode : "Tedarikçi Koduna Göre",    // BAK
+            ItemCode : "Ürün Koduna Göre"    // BAK
+        },    // BAK
+        grdMultiItem :     // BAK
+        {    // BAK
+            clmCode : "Ürün Kodu",    // BAK
+            clmMulticode : "Tedarikçi Kodun",    // BAK
+            clmName : "Ürün Adı",    // BAK
+            clmQuantity : "Miktar",    // BAK
+            clmPrice : "Fiyat"    // BAK
+        },    // BAK
+        msgMultiData:    // BAK
+        {    // BAK
+            title: "Dikkat",    // BAK
+            btn01: "Listeyi Temizle ve Hepsini Ekle",    // BAK
+            btn02: "Yeni Yazılanları Listeye Ekle",    // BAK
+            msg: "Listede Ürünler Var! "    // BAK
+        },    // BAK
+        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz",    // BAK
+        msgDocValid:    // BAK
+        {    // BAK
+            title: "Dikkat",    // BAK
+            btn01: "Tamam",    // BAK
+            msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"    // BAK
+        },
     },
     cnt_02_002 :
     {
@@ -4463,6 +4558,14 @@ export const langFr =
         txtCustomerCode : "Code fournisseur",
         txtCustomerName : "Nom fournisseur",
         validItemsCode : "Sélectionner Stock",
+        pg_Docs :      //BAK
+        {     //BAK
+            title : "Evrak Seçimi",     //BAK
+            clmRef : "SERİ",     //BAK
+            clmRefNo : "SIRA",     //BAK
+            clmOutputName : "CARİ ADI",     //BAK
+            clmOutputCode  : "CARİ KODU",     //BAK
+        },     //BAK
         pg_txtCustomerCode : 
         {
             title : "Choix Fournisseur",
@@ -4546,6 +4649,56 @@ export const langFr =
             msg: "Ne Peut Etre Remisé plus que L'Autorisation.!! Montant Autorisé : "
         },
         validCustomerCode : "Le Code Produit ne peut être Vide ",
+        txtRefRefno : 'Seri-Sıra',   //BAK
+        startDate :'Başlangıç Tarihi',   //BAK
+        finishDate : 'Bitiş Tarihi',   //BAK
+        msgMissItemCode:   //BAK
+        {   //BAK
+            title: "Dikkat",   //BAK
+            btn01: "Tamam",   //BAK
+            msg: "Bulunamayan Kodlar :"   //BAK
+        },   //BAK
+        msgMultiCodeCount:   //BAK
+        {   //BAK
+            title: "Dikkat",   //BAK
+            btn01: "Tamam",   //BAK
+            msg: "Eklenen Ürün Sayısı"   //BAK
+        },   //BAK
+        popMultiItem:   //BAK
+        {   //BAK
+            title: "Toplu Ürün Ekleme",   //BAK
+            btnApprove: "Ürünleri Getir",   //BAK
+            btnClear : "Temizle",   //BAK
+            btnSave : "Satırları Ekle",   //BAK
+        },   //BAK
+        cmbMultiItemType :    //BAK
+        {   //BAK
+            title : "Arama Şekli",   //BAK
+            customerCode : "Tedarikçi Koduna Göre",   //BAK
+            ItemCode : "Ürün Koduna Göre"   //BAK
+        },   //BAK
+        grdMultiItem :    //BAK
+        {   //BAK
+            clmCode : "Ürün Kodu",   //BAK
+            clmMulticode : "Tedarikçi Kodun",   //BAK
+            clmName : "Ürün Adı",   //BAK
+            clmQuantity : "Miktar",   //BAK
+            clmPrice : "Fiyat"   //BAK
+        },   //BAK
+        msgMultiData:   //BAK
+        {   //BAK
+            title: "Dikkat",   //BAK
+            btn01: "Listeyi Temizle ve Hepsini Ekle",   //BAK
+            btn02: "Yeni Yazılanları Listeye Ekle",   //BAK
+            msg: "Listede Ürünler Var! "   //BAK
+        },   //BAK
+        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz",   //BAK
+        msgDocValid:   //BAK
+        {   //BAK
+            title: "Dikkat",   //BAK
+            btn01: "Tamam",   //BAK
+            msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"   //BAK
+        },
     },
     fns_01_001 :
     {
@@ -5253,14 +5406,15 @@ export const langFr =
         msgCode : 
         {
             title: "Attention",
-            btn01: "Cihaza Git",
+            btn01: "Cihaza Git", // BAK
             btn02: "OK",
-            msg : "Girmiş olduğunuz Cihaz Kodu sistem de kayıtlı !"
+            msg : "Girmiş olduğunuz Cihaz Kodu sistem de kayıtlı !" // BAK
         }
       
     },
     pos_02_001 :
     {
+        TicketId :"Ticket I.D",
         cmbCustomer :"Fournisseur",
         btnGet :"Apporter",
         dtFirst : "Date Début",
@@ -5268,8 +5422,8 @@ export const langFr =
         txtCustomerCode : "Fournisseur",
         cmbDevice :"Cihaz",
         txtTicketno : "Fiş I.D",
-        numTicketAmount : "Montant" ,
-        cmbPayType :"Mode de Règlement ",
+        numFirstTicketAmount : "Alt Tutar", // BAK
+        numLastTicketAmount : "Üst Tutar", // BAK
         cmbUser :"Kulanıcı",
         txtItem :"Code Produit",
         ckhDoublePay : "Birden Fazla Ödeme",
@@ -5316,8 +5470,42 @@ export const langFr =
         popDetail : 
         {
             title : "Détail Ticket "
+        },
+        cmbPayType : 
+        {
+            title : "Mode de Règlement ",
+            esc:"Espece",
+            cb : "CB",
+            check : "Cheque",
+            ticket : "CHEQue",
+            bonD : "Bon D'Avoir",
+            avoir : "Avoir",
+            virment : "Virment",
+            prlv :"Prélèvement ",
+            all :"Tout"
+        },
+        payChangeNote : "La modification de ticket doit rester exceptionnelle et permetter de corriger les erreurs !",
+        payChangeNote2 : "Un historique des modifications est enregistre !",
+        txtPayChangeDescPlace : "Lütfen Açıklama Giriniz", // BAK
+        txtPayChangeDesc :"Ödeme tipi hatalı girilmiştir.Düzeltmesi yapıldı.", // BAK
+        popLastTotal :       //BAK
+        {      //BAK
+            title : "Tahsilat"      //BAK
+        },      //BAK
+        trDeatil: "T.R Detay",      //BAK
+        lineDelete :"Satır İptal",      //BAK
+        cancel : "Vazgeç",      //BAK
+        popOpenTike :
+        {
+            title : "Tamamlanmamış Fişler" //BAK
+        },
+        grdOpenTike: //BAK
+        {
+            clmUser : "Kullanıcı",
+            clmDevice : "Cihaz",
+            clmDate : "Tarih",
+            clmTicketId : "Fiş No"
         }
-
     },
     pos_02_002 :
     {
@@ -5340,7 +5528,78 @@ export const langFr =
             clmPoint: "Puan",
             clmLdate : "Dernière Date MAJ",
         },
-
+        popPointDetail : // BAK
+        {
+            title: "Puan Detayı"
+        },
+        grdPointDetail : // BAK
+        {
+            clmDate : "Tarih",
+            clmPoint : "Puan",
+            clmPointType : "Tip",
+            clmPosId :"Fiş No"
+        },
+        grdSaleTicketItems :// BAK
+        {
+            clmBarcode : "Barkod",
+            clmName : "Ürün Adı",
+            clmQuantity : "Miktar",
+            clmPrice : "Fiyat",
+            clmTotal : "Tutar"
+        },
+        grdSaleTicketPays : // BAK
+        {
+            clmPayName : "Ödeme Tipi", 
+            clmTotal : "Tutar",
+        },
+        popDetail : // BAK
+        {
+            title : "Fiş Detayı"
+        },
+        TicketId :"Fiş I.D", // BAK
+        popLastTotal : // BAK
+        {
+            title : "Tahsilat"
+        },
+        trDeatil: "T.R Detay", // BAK
+        lineDelete :"Satır İptal", // BAK
+        cancel : "Vazgeç", // BAK
+    },
+    pos_03_001 : // KOMPLE BAK
+    {
+        title : "GÜN SONU İŞLEMİ",
+        start :"Başlangıç",
+        advance : "Avans",
+        cash : "Nakit ",
+        debitCard : "Kredi Kartı",
+        check : "Çek",
+        ticketRest : "T.Restorant",
+        previous: "Önceki",
+        finish : "Bitir",
+        next : "Sonraki",
+        dtDocDate :"Tarih",
+        cmbSafe : "Cihaz ID",
+        txtAdvance : "Avans",
+        txtCash : "Nakit",
+        txtCreditCard : "Kredi Kartı",
+        txtCheck : "Çek",
+        txtRestorant : "Tike Restorant",
+        txtReal : "Doğru",
+        popFinish : 
+        {
+            title :"Sonuç"
+        },
+        popOpenTike :
+        {
+            title : "Tamamlanmamış Fişler"
+        },
+        grdOpenTike: 
+        {
+            clmUser : "Kullanıcı",
+            clmDevice : "Cihaz",
+            clmDate : "Tarih",
+            clmTicketId : "Fiş No"
+        }
     },
     tkf_01_001 :
     {
@@ -5992,29 +6251,8 @@ export const langFr =
             msg: "Ürün Adı Çok Uzun. Lütfen Düzeltip Tekrar Kayıt Edin !"
         },
     },
-    pos_03_001 : // KOMPLE BAK
+    pos_02_003 : 
     {
-        title : "GÜN SONU İŞLEMİ",
-        start :"Başlangıç",
-        advance : "Avans",
-        cash : "Nakit",
-        debitCard : "Kredi Kartı",
-        check : "Çek",
-        ticketRest : "Tike Restorant",
-        previous: "Önceki",
-        finish : "Bitir",
-        next : "Sonraki",
-        dtDocDate :"Tarih",
-        cmbSafe : "Cihaz ID",
-        txtAdvance : "Avans",
-        txtCash : "Nakit",
-        txtCreditCard : "Kredi Kartı",
-        txtCheck : "Çek",
-        txtRestorant : "Tike Restorant",
-        txtReal : "Doğru",
-        popFinish : 
-        {
-            title :"Sonuç"
-        }
-    },
+        chkRowTotal : "Satır Toplamları" //BAK
+    }
 }

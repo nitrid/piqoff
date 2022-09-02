@@ -63,13 +63,7 @@ export default class Login extends React.Component
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
-        this.Kullanici.focus()
-        //DATA TRANSFER İÇİN EVENT.
-        App.instance.transfer.on('onState',(pParam)=>
-        {
-            this.setState({msgTransferStatus:pParam.text})
-        })
-
+        this.Kullanici.focus()        
         //YENİ KURULMUŞ CİHAZLARDA DEFAULT TR SEÇİMİ.
         if(localStorage.getItem('lang') == null)
         {
@@ -88,21 +82,6 @@ export default class Login extends React.Component
         
         if((await this.core.auth.login(this.Kullanici.value,this.Sifre.value,'POS')))
         {            
-            //LOCAL DB AKTARIMI İÇİN UYARI VE AKTARIM.
-            // let tmpConfObj =
-            // {
-            //     id:'msgDbTransferAlert',showTitle:true,title:this.lang.t("msgDbTransferAlert.title"),showCloseButton:true,width:'500px',height:'200px',
-            //     button:[{id:"btn01",caption:this.lang.t("msgDbTransferAlert.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgDbTransferAlert.btn02"),location:'after'}],
-            //     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDbTransferAlert.msg")}</div>)
-            // }
-            // if((await dialog(tmpConfObj)) == 'btn01')
-            // {
-            //     this.msgTransfer.show()
-            //     await App.instance.transfer.transferSql()
-            //     this.msgTransfer.hide()                
-            // }
-            
-            // await this.core.util.waitUntil(300)
             App.instance.setState({logined:true});
         }
         else
@@ -338,23 +317,6 @@ export default class Login extends React.Component
                 <div className="p-2"></div>
                 <div className="card" style={this.style.keyboardBox}>
                     <NbKeyboard id={"keyboard"} parent={this} inputName="Kullanici"/>
-                </div>
-                {/* Alert Transfer Popup */} 
-                <div>
-                    <NdDialog id={"msgTransfer"} container={"#root"} parent={this}
-                    position={{of:'#root'}} 
-                    showTitle={true} 
-                    title={"Uyarı"} 
-                    showCloseButton={false}
-                    width={"500px"}
-                    height={"200px"}
-                    >
-                        <div className="row">
-                            <div className="col-12 py-2">
-                                <div style={{textAlign:"center",fontSize:"20px"}}>{this.state.msgTransferStatus + " " + this.lang.t("msgTransferStatus")}</div>
-                            </div>
-                        </div>
-                    </NdDialog>
                 </div>
             </div>
         )

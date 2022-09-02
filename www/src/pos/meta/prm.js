@@ -720,6 +720,7 @@ export const prm =
             CAPTION : "Merkez Kasa"
         }
     },
+    //Avans vs İşlemleri İçin Merkez Kasa
     {
         TYPE : 0,
         ID :"SafeCenter",
@@ -733,6 +734,38 @@ export const prm =
             TYPE : "text",
             PAGE_NAME : "Pos",
             CAPTION : "Merkez Kasa"
+        }
+    },
+    //Aktarım Süresi
+    {
+        TYPE : 0,
+        ID :"TransferTime",
+        VALUE : 1800,
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Aktarım Süresi"
+        }
+    },
+    //Ekran Zaman Aşımı
+    {
+        TYPE : 0,
+        ID :"ScreenTimeOut",
+        VALUE : 600000,
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Ekran Zaman Aşımı"
         }
     }
     //#endregion

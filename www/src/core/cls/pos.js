@@ -30,7 +30,9 @@ export class posCls
             TOTAL : 0,
             TICKET : '', //İADE ALINAN TICKET
             REBATE_CHEQPAY : '', //İADE CEKİ
-            STATUS : 0
+            STATUS : 0,
+            DELETED : false,
+            DESCRIPTION : ''
         }
 
         this.posSale = new posSaleCls();
@@ -82,7 +84,7 @@ export class posCls
                 LUSER_NAME : {map:'LUSER_NAME'},DEVICE : {map:'DEVICE'},DEPOT_GUID : {map:'DEPOT_GUID'},DEPOT_CODE : {map:'DEPOT_CODE'},DEPOT_NAME : {map:'DEPOT_NAME'},TYPE : {map:'TYPE'},
                 DOC_DATE : {map:'DOC_DATE',type:'date_time'},CUSTOMER_GUID : {map:'CUSTOMER_GUID'},CUSTOMER_CODE : {map:'CUSTOMER_CODE'},CUSTOMER_NAME : {map:'CUSTOMER_NAME'},CUSTOMER_POINT : {map:'CUSTOMER_POINT'},
                 FAMOUNT : {map:'FAMOUNT'},AMOUNT : {map:'AMOUNT'},DISCOUNT : {map:'DISCOUNT'},LOYALTY : {map:'LOYALTY'},VAT : {map:'VAT'},TOTAL : {map:'TOTAL'},TICKET : {map:'TICKET'},
-                REBATE_CHEQPAY : {map:'REBATE_CHEQPAY'},STATUS : {map:'STATUS'},DESCRIPTION : '',REF : {map:'REF'}}]
+                REBATE_CHEQPAY : {map:'REBATE_CHEQPAY'},STATUS : {map:'STATUS'},DESCRIPTION : '',REF : {map:'REF'},DELETED:false}]
             }
         } 
         tmpDt.updateCmd = 
@@ -114,7 +116,7 @@ export class posCls
                 LUSER_NAME : {map:'LUSER_NAME'},DEVICE : {map:'DEVICE'},DEPOT_GUID : {map:'DEPOT_GUID'},DEPOT_CODE : {map:'DEPOT_CODE'},DEPOT_NAME : {map:'DEPOT_NAME'},TYPE : {map:'TYPE'},
                 DOC_DATE : {map:'DOC_DATE',type:'date_time'},CUSTOMER_GUID : {map:'CUSTOMER_GUID'},CUSTOMER_CODE : {map:'CUSTOMER_CODE'},CUSTOMER_NAME : {map:'CUSTOMER_NAME'},CUSTOMER_POINT : {map:'CUSTOMER_POINT'},
                 FAMOUNT : {map:'FAMOUNT'},AMOUNT : {map:'AMOUNT'},DISCOUNT : {map:'DISCOUNT'},LOYALTY : {map:'LOYALTY'},VAT : {map:'VAT'},TOTAL : {map:'TOTAL'},TICKET : {map:'TICKET'},
-                REBATE_CHEQPAY : {map:'REBATE_CHEQPAY'},STATUS : {map:'STATUS'},DESCRIPTION : {map:'DESCRIPTION'},REF : {map:'REF'}},
+                REBATE_CHEQPAY : {map:'REBATE_CHEQPAY'},STATUS : {map:'STATUS'},DESCRIPTION : {map:'DESCRIPTION'},REF : {map:'REF'},DELETED:false},
                 where : {GUID : {map:'GUID'}}
             }
         } 
@@ -125,7 +127,26 @@ export class posCls
                     "@UPDATE = 1, " + 
                     "@GUID = @PGUID ", 
             param : ['PCUSER:string|25','PGUID:string|50'],
-            dataprm : ['CUSER','GUID']
+            dataprm : ['CUSER','GUID'],
+            local : 
+            [{
+                type : "update",
+                in : "POS_VW_01",
+                set : {DELETED:true},
+                where : {GUID : {map:'GUID'}}
+            },
+            {
+                type : "update",
+                in : "POS_SALE_VW_01",
+                set : {DELETED:true},
+                where : {POS_GUID : {map:'GUID'}}
+            },
+            {
+                type : "update",
+                in : "POS_PAYMENT_VW_01",
+                set : {DELETED:true},
+                where : {POS_GUID : {map:'GUID'}}
+            }]
         }
 
         this.ds.add(tmpDt);
@@ -188,6 +209,7 @@ export class posCls
             })
 
             this.ds.get('POS').selectCmd.local.where = Object.keys(tmpPrm).length == 0 ? undefined : tmpPrm
+            this.ds.get('POS').selectCmd.local.where.DELETED = false
 
             this.ds.get('POS').selectCmd.value = Object.values(tmpPrm);
               
@@ -269,6 +291,7 @@ export class posSaleCls
             GRAND_TOTAL : 0,
             STATUS : 0,
             NO : 0,
+            DELETED : false
         }
         this._initDs();
     }
@@ -325,7 +348,7 @@ export class posSaleCls
                 BARCODE : {map:'BARCODE'},UNIT_GUID : {map:'UNIT_GUID'},UNIT_NAME : {map:'UNIT_NAME'},UNIT_FACTOR : {map:'UNIT_FACTOR'},UNIT_SHORT : {map:'UNIT_SHORT'},QUANTITY : {map:'QUANTITY'},
                 PRICE : {map:'PRICE'},FAMOUNT : {map:'FAMOUNT'},AMOUNT : {map:'AMOUNT'},DISCOUNT : {map:'DISCOUNT'},LOYALTY : {map:'LOYALTY'},VAT : {map:'VAT'},VAT_RATE : {map:'VAT_RATE'},VAT_TYPE : {map:'VAT_TYPE'},
                 TOTAL : {map:'TOTAL'},SUBTOTAL : {map:'SUBTOTAL'},PROMO_TYPE : {map:'PROMO_TYPE'},GRAND_AMOUNT : {map:'GRAND_AMOUNT'},GRAND_DISCOUNT : {map:'GRAND_DISCOUNT'},GRAND_LOYALTY : {map:'GRAND_LOYALTY'},
-                GRAND_VAT : {map:'GRAND_VAT'},GRAND_TOTAL : {map:'GRAND_TOTAL'},STATUS : {map:'STATUS'},REBATE_TICKET : {map:'REBATE_TICKET'}}]
+                GRAND_VAT : {map:'GRAND_VAT'},GRAND_TOTAL : {map:'GRAND_TOTAL'},STATUS : {map:'STATUS'},REBATE_TICKET : {map:'REBATE_TICKET'},DELETED:false}]
             }
         } 
         tmpDt.updateCmd = 
@@ -366,7 +389,7 @@ export class posSaleCls
                 BARCODE : {map:'BARCODE'},UNIT_GUID : {map:'UNIT_GUID'},UNIT_NAME : {map:'UNIT_NAME'},UNIT_FACTOR : {map:'UNIT_FACTOR'},UNIT_SHORT : {map:'UNIT_SHORT'},QUANTITY : {map:'QUANTITY'},
                 PRICE : {map:'PRICE'},FAMOUNT : {map:'FAMOUNT'},AMOUNT : {map:'AMOUNT'},DISCOUNT : {map:'DISCOUNT'},LOYALTY : {map:'LOYALTY'},VAT : {map:'VAT'},VAT_RATE : {map:'VAT_RATE'},VAT_TYPE : {map:'VAT_TYPE'},
                 TOTAL : {map:'TOTAL'},SUBTOTAL : {map:'SUBTOTAL'},PROMO_TYPE : {map:'PROMO_TYPE'},GRAND_AMOUNT : {map:'GRAND_AMOUNT'},GRAND_DISCOUNT : {map:'GRAND_DISCOUNT'},GRAND_LOYALTY : {map:'GRAND_LOYALTY'},
-                GRAND_VAT : {map:'GRAND_VAT'},GRAND_TOTAL : {map:'GRAND_TOTAL'},STATUS : {map:'STATUS'},REBATE_TICKET : {map:'REBATE_TICKET'}},
+                GRAND_VAT : {map:'GRAND_VAT'},GRAND_TOTAL : {map:'GRAND_TOTAL'},STATUS : {map:'STATUS'},REBATE_TICKET : {map:'REBATE_TICKET'},DELETED:false},
                 where : {GUID : {map:'GUID'}}
             }
         } 
@@ -378,7 +401,14 @@ export class posSaleCls
                     "@GUID = @PGUID, " + 
                     "@POS_GUID = @PPOS_GUID ", 
             param : ['PCUSER:string|25','PGUID:string|50','PPOS_GUID:string|50'],
-            dataprm : ['CUSER','GUID','POS_GUID']
+            dataprm : ['CUSER','GUID','POS_GUID'],
+            local : 
+            {
+                type : "update",
+                in : "POS_SALE_VW_01",
+                set : {DELETED:true},
+                where : {POS_GUID : {map:'GUID'}}
+            }
         }
 
         this.ds.add(tmpDt);
@@ -441,6 +471,7 @@ export class posSaleCls
             })
 
             this.ds.get('POS_SALE').selectCmd.local.where = Object.keys(tmpPrm).length == 0 ? undefined : tmpPrm
+            this.ds.get('POS_SALE').selectCmd.local.where.DELETED = false
 
             await this.ds.get('POS_SALE').refresh();
             
@@ -482,7 +513,7 @@ export class posSaleCls
                     tmpItem.ITEM_NAME = "SUB TOTAL";
                     tmpItem.ITEM_SNAME = "SUB TOTAL";
                     tmpItem.SUBTOTAL = tmpSubIndex;
-                    tmpItem.AMOUNT = tmpData.where({SUBTOTAL:tmpSubIndex}).sum('AMOUNT',2);
+                    tmpItem.AMOUNT = Number(tmpData.where({SUBTOTAL:tmpSubIndex}).sum('AMOUNT',2));
 
                     tmpArr.push(tmpItem)
                 }
@@ -525,7 +556,8 @@ export class posPaymentCls
             GRAND_LOYALTY : 0,
             GRAND_VAT : 0,
             GRAND_TOTAL : 0,
-            STATUS : 0
+            STATUS : 0,
+            DELETED : false
         }
 
         this._initDs();
@@ -555,7 +587,17 @@ export class posPaymentCls
                     "@AMOUNT = @PAMOUNT, " + 
                     "@CHANGE = @PCHANGE ", 
             param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
-            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE']
+            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE'],
+            local : 
+            {
+                type : "insert",
+                into : "POS_PAYMENT_VW_01",
+                values : [{GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
+                LUSER_NAME : {map:'LUSER_NAME'},POS_GUID : {map:'POS_GUID'},DEVICE : {map:'DEVICE'},DEPOT_GUID : {map:'DEPOT_GUID'},DEPOT_CODE : {map:'DEPOT_CODE'},DEPOT_NAME : {map:'DEPOT_NAME'},TYPE : {map:'TYPE'},
+                DOC_DATE : {map:'DOC_DATE',type:'date_time'},CUSTOMER_GUID : {map:'CUSTOMER_GUID'},CUSTOMER_CODE : {map:'CUSTOMER_CODE'},CUSTOMER_NAME : {map:'CUSTOMER_NAME'},PAY_TYPE : {map:'PAY_TYPE'},
+                PAY_TYPE_NAME : {map:'PAY_TYPE_NAME'},LINE_NO : {map:'LINE_NO'},AMOUNT : {map:'AMOUNT'},CHANGE : {map:'CHANGE'},TICKET_PLUS : {map:'TICKET_PLUS'},GRAND_AMOUNT : {map:'GRAND_AMOUNT'},
+                GRAND_DISCOUNT : {map:'GRAND_DISCOUNT'},GRAND_LOYALTY : {map:'GRAND_LOYALTY'},GRAND_VAT : {map:'GRAND_VAT'},GRAND_TOTAL : {map:'GRAND_TOTAL'},STATUS : {map:'STATUS'},DELETED:false}]
+            }
         } 
         tmpDt.updateCmd = 
         {
@@ -568,7 +610,18 @@ export class posPaymentCls
                     "@AMOUNT = @PAMOUNT, " + 
                     "@CHANGE = @PCHANGE ", 
             param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
-            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE']
+            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE'],
+            local : 
+            {
+                type : "update",
+                in : "POS_PAYMENT_VW_01",
+                set : {CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
+                LUSER_NAME : {map:'LUSER_NAME'},POS_GUID : {map:'POS_GUID'},DEVICE : {map:'DEVICE'},DEPOT_GUID : {map:'DEPOT_GUID'},DEPOT_CODE : {map:'DEPOT_CODE'},DEPOT_NAME : {map:'DEPOT_NAME'},TYPE : {map:'TYPE'},
+                DOC_DATE : {map:'DOC_DATE',type:'date_time'},CUSTOMER_GUID : {map:'CUSTOMER_GUID'},CUSTOMER_CODE : {map:'CUSTOMER_CODE'},CUSTOMER_NAME : {map:'CUSTOMER_NAME'},PAY_TYPE : {map:'PAY_TYPE'},
+                PAY_TYPE_NAME : {map:'PAY_TYPE_NAME'},LINE_NO : {map:'LINE_NO'},AMOUNT : {map:'AMOUNT'},CHANGE : {map:'CHANGE'},TICKET_PLUS : {map:'TICKET_PLUS'},GRAND_AMOUNT : {map:'GRAND_AMOUNT'},
+                GRAND_DISCOUNT : {map:'GRAND_DISCOUNT'},GRAND_LOYALTY : {map:'GRAND_LOYALTY'},GRAND_VAT : {map:'GRAND_VAT'},GRAND_TOTAL : {map:'GRAND_TOTAL'},STATUS : {map:'STATUS'},DELETED:false},
+                where : {GUID : {map:'GUID'}}
+            }
         } 
         tmpDt.deleteCmd = 
         {
@@ -578,7 +631,14 @@ export class posPaymentCls
                     "@GUID = @PGUID, " + 
                     "@POS_GUID = @PPOS_GUID ", 
             param : ['PCUSER:string|25','PGUID:string|50','PPOS_GUID:string|50'],
-            dataprm : ['CUSER','GUID','POS_GUID']
+            dataprm : ['CUSER','GUID','POS_GUID'],
+            local : 
+            {
+                type : "update",
+                in : "POS_PAYMENT_VW_01",
+                set : {DELETED:true},
+                where : {POS_GUID : {map:'GUID'}}
+            }
         }
 
         this.ds.add(tmpDt);
@@ -641,7 +701,8 @@ export class posPaymentCls
             })
 
             this.ds.get('POS_PAYMENT').selectCmd.local.where = Object.keys(tmpPrm).length == 0 ? undefined : tmpPrm
-              
+            this.ds.get('POS_PAYMENT').selectCmd.local.where.DELETED = false
+
             await this.ds.get('POS_PAYMENT').refresh();
             
             resolve(this.ds.get('POS_PAYMENT'));    
@@ -901,7 +962,7 @@ export class posExtraCls
             local : 
             {
                 type : "insert",
-                into : "POS_EXTRA",
+                into : "POS_EXTRA_VW_01",
                 values : 
                 [
                     {
@@ -929,7 +990,7 @@ export class posExtraCls
             local : 
             {
                 type : "update",
-                in : "POS_EXTRA",
+                in : "POS_EXTRA_VW_01",
                 set : 
                 {
                     CUSER : {map:'CUSER'},
@@ -952,7 +1013,7 @@ export class posExtraCls
             local : 
             {
                 type : "delete",
-                from : "POS_EXTRA",
+                from : "POS_EXTRA_VW_01",
                 where : 
                 {
                     CUSER : {map:'CUSER'},
@@ -1069,7 +1130,7 @@ export class posDeviceCls
             PRINT_DESING : '',
         }
         this.listeners = Object();
-
+        this.payPort = null;
         this._initDs();
     }
     //#region  "EVENT"
@@ -1403,7 +1464,7 @@ export class posDeviceCls
             return port.on("close", resolve)
         });
     }
-    cardPayment(pAmount)
+    async cardPayment(pAmount)
     {
         if(!core.instance.util.isElectron())
         {
@@ -1411,7 +1472,6 @@ export class posDeviceCls
         }
         
         let ack = false;
-        let oneShoot = false;
         let payMethod = "card";
 
         let generate_lrc = function(real_msg_with_etx)
@@ -1428,17 +1488,20 @@ export class posDeviceCls
             console.log('lrc => ', lrc);
             return lrc;
         }
-
-        return new Promise((resolve) =>
+        
+        return new Promise(async (resolve) =>
         {
-            let port = new this.serialport(this.dt().length > 0 ? this.dt()[0].PAY_CARD_PORT : "");
-            port.on('data',(data)=> 
+            this.payPort = new this.serialport(this.dt().length > 0 ? this.dt()[0].PAY_CARD_PORT : "",{baudRate: 9600,dataBits: 7,parity:'odd',parser: new this.serialport.parsers.Readline()});
+
+            this.payPort.on('data',async(data)=> 
             {
-                if(String.fromCharCode(data[0]) == String.fromCharCode(6))
-                {                    
+                console.log("1454 - " + data.toString() + " - " + data[0])              
+                if(String.fromCharCode(data[0]) == String.fromCharCode(6) || (String.fromCharCode(data[0]) == String.fromCharCode(21) && data.length == 1) || 
+                (String.fromCharCode(data[0]) == String.fromCharCode(4) && data.length == 2) || (String.fromCharCode(data[0]) == String.fromCharCode(3) && data.length == 4))
+                {     
+                    await this.core.util.waitUntil(500)
                     if(ack == false)
                     {
-                        oneShoot = false;
                         let tmpData = 
                         {
                             'pos_number': '01',
@@ -1455,8 +1518,8 @@ export class posDeviceCls
                         let msg = Object.keys(tmpData).map( k => tmpData[k] ).join('');
                         if (msg.length > 34) 
                         {
+                            await this.payPort.close();
                             resolve({tag:"response",msg:"error"});                 
-                            port.close();               
                             console.log('ERR. : failed data > 34 characters.', msg);
                             return
                         }
@@ -1465,37 +1528,29 @@ export class posDeviceCls
                         let lrc = generate_lrc(real_msg_with_etx);
                         //STX + msg + lrc
                         let tpe_msg = (String.fromCharCode(2)).concat(real_msg_with_etx).concat(String.fromCharCode(lrc));
-                        port.write(tpe_msg)
+                        this.payPort.write(tpe_msg)
                         ack = true;
                     }
                 }
                 else if(String.fromCharCode(data[0]) == String.fromCharCode(6))
                 {
-                    port.write(String.fromCharCode(4))
+                    this.payPort.write(String.fromCharCode(4))
                 }
                 else if(String.fromCharCode(data[0]) == String.fromCharCode(5))
                 {
-                    port.write(String.fromCharCode(6));
+                    this.payPort.write(String.fromCharCode(6));
                 }
                 else if(data.length >= 25)
                 {
-                    if(oneShoot)
+                    if(!ack)
                     {
-                        port.close();
-                        resolve({tag:"response",msg:"error"});   
-                        return;
+                        this.payPort.write(String.fromCharCode(5));
+                        return
                     }
-    
-                    oneShoot = true;
+
                     let str = "";
-                    if(isNaN(data.toString().substr(1)))
-                    {
-                        str = data.toString().substr(1).substr(0, data.toString().length-3);
-                    }
-                    else
-                    {
-                        str = data.toString().substr(0, data.toString().length-3);;
-                    }
+                    str = data.toString().substr(0, data.toString().length-3);
+                    console.log(str)
                     let response = 
                     {
                         'pos_number'        : str.substr(0, 2),
@@ -1506,20 +1561,20 @@ export class posDeviceCls
                         'private'           : str.substr(15, 11)
                     };
                     console.log(response)
+                    await this.payPort.close();
                     resolve({tag:"response",msg:JSON.stringify(response)});   
-                    port.close();
                 }
             });
 
-            port.write(String.fromCharCode(5));
+            this.payPort.write(String.fromCharCode(5));
 
-            setTimeout(()=>
-            { 
-                if(port.isOpen)
-                {
-                    port.close(); 
-                }
-            }, 70000);
+            // setTimeout(async()=>
+            // { 
+            //     if(this.payPort.isOpen)
+            //     {
+            //         await this.payPort.close(); 
+            //     }
+            // }, 60000);
 
            //return port.on("close", resolve)
         });

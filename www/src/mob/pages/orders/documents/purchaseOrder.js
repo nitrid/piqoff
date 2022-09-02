@@ -1,6 +1,5 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { labelCls,labelMainCls } from '../../../../core/cls/label.js';
 import { docCls,docOrdersCls, docCustomerCls } from '../../../../core/cls/doc.js';
 import moment from 'moment';
 
@@ -319,6 +318,10 @@ export default class salesOrder extends React.Component
     }
     async addItem(pQuantity)
     {
+        if(typeof pQuantity == 'undefined')
+        {
+            pQuantity = 1
+        }
         if(this.txtBarcode.value == "")
         {
             let tmpConfObj = 

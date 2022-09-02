@@ -31,7 +31,7 @@ export const menu = (e) =>
                         },
                         {
                             id: 'stk_01_006',
-                            text: e.t('menu.stk_01_006'),//'Barkod Tanımları',
+                            text: e.t('menu.stk_01_006'),//'Barkod Ekleme',
                             path: 'items/cards/barcodeAdd'
                         },
                         {
@@ -97,6 +97,27 @@ export const menu = (e) =>
                             id: 'ord_01_002',
                             text: e.t('menu.ord_01_002'),//'Satış Sipariş',
                             path: 'orders/documents/purchaseOrder'
+                        },
+                    ]
+                },
+            ]
+        },
+        {
+            id: 'irs',
+            text: e.t('menu.irs'),
+            expanded: false,
+            items: 
+            [
+                {
+                    id: 'irs_01',
+                    text : e.t('menu.irs_01'),//'Evraklar'
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'irs_01_001',
+                            text: e.t('menu.irs_01_001'),//'İade İrsaliyesi',
+                            path: 'dispatch/documents/rebateDispatch'
                         },
                     ]
                 },

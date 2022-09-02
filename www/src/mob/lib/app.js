@@ -28,6 +28,7 @@ import HTMLReactParser from 'html-react-parser';
 import Navigation from './navigation.js'
 import Panel from './panel.js'
 import Login from './login.js'
+import NdDialog,{dialog} from '../../core/react/devex/dialog';
 
 export default class App extends React.PureComponent
 {
@@ -40,10 +41,10 @@ export default class App extends React.PureComponent
         loadMessages(enMessages);
         loadMessages(frMessages);
         loadMessages(trMessages);
-        locale(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'));
-        i18n.changeLanguage(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'))
+        locale(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'));
+        i18n.changeLanguage(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'))
         this.lang = i18n;  
-        moment.locale(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'));
+        moment.locale(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'));
         
         this.style =
         {
@@ -204,8 +205,23 @@ export default class App extends React.PureComponent
         {
             App.instance.setState({connected:false});
             this.core.auth.logout()
-        })    
-        
+        })
+        this.core.socket.on('general',async(e)=>
+        {
+            if(typeof e.id != 'undefined' && e.id == 'M004')
+            {
+                let tmpConfObj =
+                {
+                    id:'msgAnotherUserAlert',showTitle:true,title:this.lang.t("msgAnotherUserAlert.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.lang.t("msgAnotherUserAlert.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgAnotherUserAlert.msg")}</div>)
+                }
+                await dialog(tmpConfObj);
+
+                this.core.auth.logout()
+                window.location.reload()
+            }
+        })
     }
     menuClick(data)
     {

@@ -678,15 +678,15 @@ export default class labelPrinting extends React.PureComponent
                                             {                                                
                                                 if(pResult.split('|')[0] != 'ERR')
                                                 {
-                                                    let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                                                    mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
-                                                    // var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
-                                                    // mywindow.onload = async function() 
-                                                    // {
-                                                    //     console.log(pResult.split('|')[1])
-                                                    //     mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"  
+                                                    // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
+                                                    // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
+                                                    var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
+                                                    mywindow.onload = async function() 
+                                                    {
+                                                        console.log(pResult.split('|')[1])
+                                                        mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"  
                                                         
-                                                    // }   
+                                                    }   
                                                 }
                                             });
                                             let updateQuery = 
@@ -1098,6 +1098,17 @@ export default class labelPrinting extends React.PureComponent
                                         {
                                             e.key.UNDER_UNIT_PRICE = parseFloat(((e.key.PRICE * (e.key.UNDER_UNIT_VALUE *100)) / 100).toFixed(3))
                                         }
+                                        if(this.lblObj.dt()[this.lblObj.dt().length - 1].CODE == '')
+                                        {
+                                            await this.grdLabelQueue.devGrid.deleteRow(this.lblObj.dt().length - 1)
+                                        }
+                                        let Data = {data:this.lblObj.dt().toArray()}
+                                        this.mainLblObj.dt()[0].DATA = JSON.stringify(Data)
+                                        setTimeout(() => 
+                                        {
+                                            await this.mainLblObj.save()
+                                        }, 500);
+
                                     }}
                                     onRowRemoved={(e)=>{
                                         this.calculateCount()

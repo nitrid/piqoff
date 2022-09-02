@@ -63,5 +63,12 @@ export const menu =
             },
             
         ]
+    },
+    {
+        
+        id: 'test',
+        text: 'test',
+        path: 'menutest'
+        
     }
 ]
