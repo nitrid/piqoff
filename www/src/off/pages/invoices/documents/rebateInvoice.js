@@ -1346,10 +1346,6 @@ export default class rebateInvoice extends React.PureComponent
                                             this.docObj.docItems.dt()[rowIndex].DISCOUNT = 0 
                                             return
                                         }
-                                        if(this.docObj.docItems.dt()[rowIndex].VAT > 0)
-                                        {
-                                            this.docObj.docItems.dt()[rowIndex].VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(3));
-                                        }
                                         this.docObj.docItems.dt()[rowIndex].AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3))
                                         this.docObj.docItems.dt()[rowIndex].TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +this.docObj.docItems.dt()[rowIndex].VAT).toFixed(3))
                                        
@@ -1382,7 +1378,7 @@ export default class rebateInvoice extends React.PureComponent
                                         <Column dataField="DISCOUNT_RATE" caption={this.t("grdRebtInv.clmDiscountRate")} dataType={'number'}/>
                                         <Column dataField="VAT" caption={this.t("grdRebtInv.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
                                         <Column dataField="TOTAL" caption={this.t("grdRebtInv.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
-                                        <Column dataField="DESCRIPTION" caption={this.t("grdSlsInv.clmDescription")} width={160}  headerFilter={{visible:true}}/>
+                                        <Column dataField="DESCRIPTION" caption={this.t("grdRebtInv.clmDescription")} width={160}  headerFilter={{visible:true}}/>
                                     </NdGrid>
                                     <ContextMenu
                                     dataSource={this.rightItems}

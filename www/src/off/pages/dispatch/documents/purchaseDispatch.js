@@ -1323,10 +1323,7 @@ export default class purchaseDispatch extends React.PureComponent
                                             this.docObj.docItems.dt()[rowIndex].DISCOUNT = 0 
                                             return
                                         }
-                                        if(this.docObj.docItems.dt()[rowIndex].VAT > 0)
-                                        {
-                                            this.docObj.docItems.dt()[rowIndex].VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(2));
-                                        }
+                                        
                                         this.docObj.docItems.dt()[rowIndex].AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(2))
                                         this.docObj.docItems.dt()[rowIndex].TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +this.docObj.docItems.dt()[rowIndex].VAT).toFixed(2))
                                         if(this.docObj.docItems.dt()[rowIndex].DISCOUNT > 0)

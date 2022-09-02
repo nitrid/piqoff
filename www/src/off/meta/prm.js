@@ -163,7 +163,7 @@ export const prm =
         ID :"cmbItemGenus",
         VALUE : 
         {
-            value : "1"
+            value : "0"
         },
         SPECIAL : "",
         PAGE : "stk_01_001",
@@ -427,7 +427,7 @@ export const prm =
         ID :"chkLineMerged",
         VALUE : 
         {
-            value : false
+            value : true
         },
         SPECIAL : "",
         PAGE : "stk_01_001",

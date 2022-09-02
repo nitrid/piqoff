@@ -949,7 +949,6 @@ export default class purchaseInvoice extends React.PureComponent
             
                         if(e == 'btn01')
                         {
-                        
                             return
                         }
                         if(e == 'btn02')
@@ -1704,10 +1703,7 @@ export default class purchaseInvoice extends React.PureComponent
                                             this.docObj.docItems.dt()[rowIndex].DISCOUNT = 0 
                                             return
                                         }
-                                        if(this.docObj.docItems.dt()[rowIndex].VAT > 0)
-                                        {
-                                            this.docObj.docItems.dt()[rowIndex].VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(2));
-                                        }
+                                        
                                         this.docObj.docItems.dt()[rowIndex].AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(2))
                                         this.docObj.docItems.dt()[rowIndex].TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +this.docObj.docItems.dt()[rowIndex].VAT).toFixed(2))
                                         if(this.docObj.docItems.dt()[rowIndex].DISCOUNT > 0)
@@ -1736,7 +1732,7 @@ export default class purchaseInvoice extends React.PureComponent
                                         <Column dataField="DISCOUNT_RATE" caption={this.t("grdPurcInv.clmDiscountRate")} dataType={'number'} width={80} allowHeaderFiltering={false}/>
                                         <Column dataField="VAT" caption={this.t("grdPurcInv.clmVat")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={80} allowHeaderFiltering={false}/>
                                         <Column dataField="TOTAL" caption={this.t("grdPurcInv.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={80} allowHeaderFiltering={false}/>
-                                        <Column dataField="DESCRIPTION" caption={this.t("grdSlsInv.clmDescription")} width={160}  headerFilter={{visible:true}}/>
+                                        <Column dataField="DESCRIPTION" caption={this.t("grdPurcInv.clmDescription")} width={160}  headerFilter={{visible:true}}/>
                                         <Column dataField="CONNECT_REF" caption={this.t("grdPurcInv.clmDispatch")}  width={150} allowEditing={false}/>
                                     </NdGrid>
                                     <ContextMenu
