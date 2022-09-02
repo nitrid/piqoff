@@ -1490,7 +1490,17 @@ export class posDeviceCls
             console.log('lrc => ', lrc);
             return lrc;
         }
-        
+        let checkSum = (pCode,pData) =>
+        {
+            for (let i = 0; i < pData.length; i++) 
+            {
+                if(String.fromCharCode(pData[i]) == String.fromCharCode(pCode))
+                {
+                    return true
+                }
+            }
+            return false
+        }
         return new Promise(async (resolve) =>
         {
             this.payPort = new this.serialport(this.dt().length > 0 ? this.dt()[0].PAY_CARD_PORT : "",{baudRate: 9600,dataBits: 7,parity:'odd',parser: new this.serialport.parsers.Readline()});
@@ -1540,6 +1550,13 @@ export class posDeviceCls
                 {
                     this.payPort.write(String.fromCharCode(6))
                 }
+                else if(checkSum(4,data))
+                {
+                    if(this.payPort.isOpen)
+                    {
+                        await this.payPort.close(); 
+                    }
+                }
                 else if(data.length >= 25)
                 {
                     let str = "";
@@ -1563,13 +1580,13 @@ export class posDeviceCls
                         'private'           : str.substr(15, 11)
                     };
                     console.log(response)
-                    setTimeout(async() => 
-                    {
-                        if(this.payPort.isOpen)
-                        {
-                            await this.payPort.close(); 
-                        }
-                    }, 3000);
+                    // setTimeout(async() => 
+                    // {
+                    //     if(this.payPort.isOpen)
+                    //     {
+                    //         await this.payPort.close(); 
+                    //     }
+                    // }, 3000);
                     
                     resolve({tag:"response",msg:JSON.stringify(response)});   
                 }
