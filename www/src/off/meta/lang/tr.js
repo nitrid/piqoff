@@ -2818,8 +2818,8 @@ export const langTr =
             clmTotal : "Genel Toplam",
             clmCreateDate: "Kayıt Tarihi",
             clmInvNo : "Fatura No",
-            clmInvDate : "Fatura Tarihi"
-
+            clmInvDate : "Fatura Tarihi",
+            clmDescription :"Açıklama"
         },
         grdInvoicePayment: 
         {
@@ -3188,8 +3188,8 @@ export const langTr =
             clmAmount : "Tutar",
             clmTotal : "Genel Toplam",
             clmCreateDate: "Kayıt Tarihi",
-            clmMargin :"Marj"
-
+            clmMargin :"Marj",
+            clmDescription :"Açıklama"
         },
         popDiscount : 
         {
@@ -3425,7 +3425,8 @@ export const langTr =
             clmAmount : "Tutar",
             clmTotal : "Genel Toplam",
             clmCreateDate: "Kayıt Tarihi",
-            clmMargin :"Marj"
+            clmMargin :"Marj",
+            clmDescription :"Açıklama"
         },
         popDiscount : 
         {
@@ -3673,7 +3674,8 @@ export const langTr =
             clmAmount : "Tutar",
             clmTotal : "Genel Toplam",
             clmCreateDate: "Kayıt Tarihi",
-            clmMargin :"Marj"
+            clmMargin :"Marj",
+            clmDescription :"Açıklama"
         },
         popDiscount : 
         {
@@ -3936,7 +3938,8 @@ export const langTr =
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
             clmMulticode :"T. Kodu",
-            clmBarcode :"Barkodu"
+            clmBarcode :"Barkodu",
+            clmDescription :"Açıklama"
         },
         popDiscount : 
         {
@@ -4169,7 +4172,8 @@ export const langTr =
             clmAmount : "Tutar",
             clmTotal : "Genel Toplam",
             clmCreateDate: "Kayıt Tarihi",
-            clmMargin :"Marj"
+            clmMargin :"Marj",
+            clmDescription :"Açıklama"
         },
         popDiscount : 
         {
@@ -5718,7 +5722,8 @@ export const langTr =
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
             clmMulticode :"T. Kodu",
-            clmBarcode :"Barkodu"
+            clmBarcode :"Barkodu",
+            clmDescription :"Açıklama"
         },
         popDiscount : 
         {
@@ -5951,7 +5956,8 @@ export const langTr =
             clmAmount : "Tutar",
             clmTotal : "Genel Toplam",
             clmCreateDate: "Kayıt Tarihi",
-            clmMargin :"Marj"
+            clmMargin :"Marj",
+            clmDescription :"Açıklama"
         },
         popDiscount : 
         {
