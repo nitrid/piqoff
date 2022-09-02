@@ -2818,8 +2818,8 @@ export const langFr =
             clmTotal : "Total Général",
             clmCreateDate: "Date d'Enregistrement",
             clmInvNo : "Fatura No",
-            clmInvDate : "Fatura Tarihi"
-
+            clmInvDate : "Fatura Tarihi",
+            clmDescription :"Motif",
         },
         grdInvoicePayment: 
         {
@@ -3188,8 +3188,8 @@ export const langFr =
             clmAmount : "Montant" ,
             clmTotal : "Total Général",
             clmCreateDate: "Date d'Enregistrement",
-            clmMargin :"Marge"
-
+            clmMargin :"Marge",
+            clmDescription :"Motif",
         },
         popDiscount : 
         {
@@ -3425,7 +3425,8 @@ export const langFr =
             clmAmount : "Montant" ,
             clmTotal : "Total Général",
             clmCreateDate: "Date d'Enregistrement",
-            clmMargin :"Marge"
+            clmMargin :"Marge",
+            clmDescription :"Motif",
         },
         popDiscount : 
         {
@@ -3673,7 +3674,8 @@ export const langFr =
             clmAmount : "Montant" ,
             clmTotal : "Total Général",
             clmCreateDate: "Date d'Enregistrement",
-            clmMargin :"Marge"
+            clmMargin :"Marge",
+            clmDescription :"Motif",
         },
         popDiscount : 
         {
@@ -3936,7 +3938,8 @@ export const langFr =
             clmCreateDate: "Date d'Enregistrement",
             clmMargin :"Marge",
             clmMulticode :"T. Kodu",
-            clmBarcode :"Code Barre"
+            clmBarcode :"Code Barre",
+            clmDescription :"Motif",
         },
         popDiscount : 
         {
@@ -4169,7 +4172,8 @@ export const langFr =
             clmAmount : "Montant" ,
             clmTotal : "Total Général",
             clmCreateDate: "Date d'Enregistrement",
-            clmMargin :"Marge"
+            clmMargin :"Marge",
+            clmDescription : "Motif"
         },
         popDiscount : 
         {
@@ -5718,7 +5722,8 @@ export const langFr =
             clmCreateDate: "Date d'Enregistrement",
             clmMargin :"Marge",
             clmMulticode :"T. Kodu",
-            clmBarcode :"Code Barre"
+            clmBarcode :"Code Barre",
+            clmDescription : "Motif"
         },
         popDiscount : 
         {
@@ -5951,7 +5956,8 @@ export const langFr =
             clmAmount : "Montant" ,
             clmTotal : "Total Général",
             clmCreateDate: "Date d'Enregistrement",
-            clmMargin :"Marge"
+            clmMargin :"Marge",
+            clmDescription : "Motif"
         },
         popDiscount : 
         {

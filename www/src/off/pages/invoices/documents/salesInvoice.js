@@ -103,7 +103,7 @@ export default class salesInvoice extends React.PureComponent
         {            
             this.btnBack.setState({disabled:true});
             this.btnNew.setState({disabled:false});
-            this.btnSave.setState({disabled:true});
+            this.btnSave.setState({disabled:false});
             this.btnDelete.setState({disabled:false});
             this.btnCopy.setState({disabled:false});
             this.btnPrint.setState({disabled:false});          
@@ -461,7 +461,6 @@ export default class salesInvoice extends React.PureComponent
                 }
             }
         }
-        console.log(pData.VAT)
         this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
         this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID
         this.docObj.docItems.dt()[pIndex].VAT_RATE = pData.VAT
@@ -1050,6 +1049,7 @@ export default class salesInvoice extends React.PureComponent
                                                 if(tmpResult == 3)
                                                 {
                                                     this.txtRefno.value = "";
+                                                    this.docObj.docCustomer.dt()[0].REF_NO = this.txtRefno.value
                                                 }
                                             }).bind(this)}
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
@@ -1495,7 +1495,7 @@ export default class salesInvoice extends React.PureComponent
                                             this.docObj.docItems.dt()[rowIndex].DISCOUNT = 0 
                                             return
                                         }
-                                       
+                                        
                                         this.docObj.docItems.dt()[rowIndex].VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(3));
                                         this.docObj.docItems.dt()[rowIndex].AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3))
                                         this.docObj.docItems.dt()[rowIndex].TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +this.docObj.docItems.dt()[rowIndex].VAT).toFixed(3))
@@ -1519,19 +1519,18 @@ export default class salesInvoice extends React.PureComponent
                                         <Scrolling mode="infinite" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.ftr_02_002")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsInv.clmCreateDate")} width={120} allowEditing={false} headerFilter={{visible:true}}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdSlsInv.clmItemCode")} width={120} editCellRender={this._cellRoleRender} headerFilter={{visible:true}}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdSlsInv.clmItemName")} width={300} headerFilter={{visible:true}}/>
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsInv.clmCreateDate")} width={150} allowEditing={false} headerFilter={{visible:true}}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdSlsInv.clmItemCode")} width={150} editCellRender={this._cellRoleRender} headerFilter={{visible:true}}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdSlsInv.clmItemName")} width={350} headerFilter={{visible:true}}/>
                                         <Column dataField="PRICE" caption={this.t("grdSlsInv.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} headerFilter={{visible:true}}/>
                                         <Column dataField="QUANTITY" caption={this.t("grdSlsInv.clmQuantity")} dataType={'number'} headerFilter={{visible:true}}/>
                                         <Column dataField="AMOUNT" caption={this.t("grdSlsInv.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
                                         <Column dataField="DISCOUNT" caption={this.t("grdSlsInv.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} headerFilter={{visible:true}}/>
                                         <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsInv.clmDiscountRate")} dataType={'number'} headerFilter={{visible:true}}/>
-                                        <Column dataField="MARGIN" caption={this.t("grdSlsInv.clmMargin")} width={120} allowEditing={false} headerFilter={{visible:true}}/>
+                                        <Column dataField="MARGIN" caption={this.t("grdSlsInv.clmMargin")} width={150} allowEditing={false} headerFilter={{visible:true}}/>
                                         <Column dataField="VAT" caption={this.t("grdSlsInv.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
                                         <Column dataField="TOTAL" caption={this.t("grdSlsInv.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
-                                        <Column dataField="DESCRIPTION" caption={this.t("grdSlsInv.clmDescription")} width={160}  headerFilter={{visible:true}}/>
-                                        <Column dataField="CONNECT_REF" caption={this.t("grdSlsInv.clmDispatch")} width={150} allowEditing={false} headerFilter={{visible:true}}/>
+                                        <Column dataField="CONNECT_REF" caption={this.t("grdSlsInv.clmDispatch")} width={200} allowEditing={false} headerFilter={{visible:true}}/>
 
                                     </NdGrid>
                                     <ContextMenu
@@ -2307,8 +2306,6 @@ export default class salesInvoice extends React.PureComponent
                                         <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} 
                                         onClick={async ()=>
                                         {       
-                                            let TmpFirma = "DORACAN Distribution SARL";
-                                            let TmpBaslik = "7 ALLE DU MIDI" + '\n' + "54270 ESSEY-LES-NANCY" + '\n' + "Tel : 03 87 91 00 32" + '\n' + "longeville@prodorplus.fr" + '\n' 
                                             let tmpQuery = 
                                             {
                                                 query:  "SELECT *, ISNULL((SELECT ADRESS FROM CUSTOMER_ADRESS WHERE CUSTOMER = INPUT AND TYPE = 0),'') AS ADRESS, " +
@@ -2316,16 +2313,15 @@ export default class salesInvoice extends React.PureComponent
                                                         "ISNULL((SELECT CITY FROM CUSTOMER_ADRESS WHERE CUSTOMER = INPUT AND TYPE = 0),'') AS CITY, " + 
                                                         "ISNULL((SELECT COUNTRY FROM CUSTOMER_ADRESS WHERE CUSTOMER = INPUT AND TYPE = 0),'') AS COUNTRY, " + 
                                                         "CONVERT(NVARCHAR,AMOUNT) AS AMOUNTF, " +
-                                                        "@FIRMA AS FIRMA, " +
-                                                        "@BASLIK AS BASLIK," +
+                                                        "ISNULL((SELECT TOP 1 NAME FROM COMPANY),'') AS FIRMA, " +
+                                                        "REPLACE(ISNULL((SELECT ADDRESS1 + ' | ' + ADDRESS2  + ' | ' + TEL + ' | ' + MAIL FROM COMPANY),''),'|', CHAR(13)) AS BASLIK," +
                                                         "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH " +
                                                         "FROM DOC_ITEMS_VW_01 " +
                                                         "WHERE ((DOC_GUID = @DOC_GUID) OR (INVOICE_GUID = @DOC_GUID)) ORDER BY LINE_NO ASC",
-                                                param:  ['DOC_GUID:string|50','DESIGN:string|25','FIRMA:string|250','BASLIK:string|250'],
-                                                value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,TmpFirma,TmpBaslik]
+                                                param:  ['DOC_GUID:string|50','DESIGN:string|25'],
+                                                value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value]
                                             }
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
-                                            console.log(tmpData)
                                             this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
                                             {
                                                 if(pResult.split('|')[0] != 'ERR')
