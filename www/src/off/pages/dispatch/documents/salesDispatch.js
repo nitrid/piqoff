@@ -943,7 +943,7 @@ export default class salesDispatch extends React.PureComponent
                                                     let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                     if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                     {
-                                                        this.txtRef.setState({value:data[0].CODE});
+                                                        this.txtRef.value = data[0].CODE;
                                                         this.txtRef.props.onChange()
                                                     }
                                                 }
@@ -968,7 +968,7 @@ export default class salesDispatch extends React.PureComponent
                                                             let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
-                                                                this.txtRef.setState({value:data[0].CODE});
+                                                                this.txtRef.value = data[0].CODE;
                                                                 this.txtRef.props.onChange()
                                                             }
                                                         }
@@ -1300,6 +1300,7 @@ export default class salesDispatch extends React.PureComponent
                                             return
                                         }
                                         
+                                        this.docObj.docItems.dt()[rowIndex].VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(3));
                                         this.docObj.docItems.dt()[rowIndex].AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3))
                                         this.docObj.docItems.dt()[rowIndex].TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +this.docObj.docItems.dt()[rowIndex].VAT).toFixed(3))
 
@@ -1334,6 +1335,7 @@ export default class salesDispatch extends React.PureComponent
                                         <Column dataField="MARGIN" caption={this.t("grdSlsDispatch.clmMargin")} width={150} allowEditing={false}/>
                                         <Column dataField="VAT" caption={this.t("grdSlsDispatch.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
                                         <Column dataField="TOTAL" caption={this.t("grdSlsDispatch.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                        <Column dataField="DESCRIPTION" caption={this.t("grdSlsDispatch.clmDescription")} width={160}  headerFilter={{visible:true}}/>
                                     </NdGrid>
                                 </Item>
                             </Form>
@@ -1630,7 +1632,7 @@ export default class salesDispatch extends React.PureComponent
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
                                     <Label text={this.t("popDesign.design")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
+                                    <NdSelectBox simple={true} parent={this} id="cmbDesignList" 
                                     displayExpr="DESIGN_NAME"                       
                                     valueExpr="TAG"
                                     value=""
@@ -1667,19 +1669,17 @@ export default class salesDispatch extends React.PureComponent
                                             <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} 
                                             onClick={async ()=>
                                             {       
-                                                let TmpFirma = "DORACAN Distribution SARL";
-                                                let TmpBaslik = "ZAC HECKENWALD" + '\n' + "57740 LONGEVILLE-LES-ST-AVOLD" + '\n' + "Tel : 03 87 91 00 32" + '\n' + "longeville@prodorplus.fr" + '\n' 
                                                 let tmpQuery = 
                                                 {
                                                     query:  "SELECT *, " +
                                                             "CONVERT(NVARCHAR,AMOUNT) AS AMOUNTF, " +
-                                                            "@FIRMA AS FIRMA, " +
-                                                            "@BASLIK AS BASLIK," +
+                                                            "ISNULL((SELECT TOP 1 NAME FROM COMPANY),'') AS FIRMA, " +
+                                                            "REPLACE(ISNULL((SELECT ADDRESS1 + ' | ' + ADDRESS2  + ' | ' + TEL + ' | ' + MAIL FROM COMPANY),''),'|', CHAR(13)) AS BASLIK," +
                                                             "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH " +
                                                             "FROM DOC_ITEMS_VW_01 " +
                                                             "WHERE DOC_GUID=@DOC_GUID ORDER BY LINE_NO ASC",
-                                                    param:  ['DOC_GUID:string|50','DESIGN:string|25','FIRMA:string|250','BASLIK:string|250'],
-                                                    value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,TmpFirma,TmpBaslik]
+                                                    param:  ['DOC_GUID:string|50','DESIGN:string|25'],
+                                                    value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value]
                                                 }
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
                                                 this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
@@ -1705,96 +1705,6 @@ export default class salesDispatch extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div> 
-                    {/* Dizayn Seçim PopUp */}
-                    <div>
-                        <NdPopUp parent={this} id={"popDesign"} 
-                        visible={false}
-                        showCloseButton={true}
-                        showTitle={true}
-                        title={this.t("popDesign.title")}
-                        container={"#root"} 
-                        width={'500'}
-                        height={'250'}
-                        position={{of:'#root'}}
-                        >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("popDesign.design")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
-                                    displayExpr="DESIGN_NAME"                       
-                                    valueExpr="TAG"
-                                    value=""
-                                    searchEnabled={true}
-                                    onValueChanged={(async()=>
-                                        {
-                                        }).bind(this)}
-                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '20'"},sql:this.core.sql}}}
-                                    param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
-                                    >
-                                        <Validator validationGroup={"frmPurcOrderPrint"  + this.tabIndex}>
-                                            <RequiredRule message={this.t("validDesign")} />
-                                        </Validator> 
-                                    </NdSelectBox>
-                                </Item>
-                                <Item>
-                                <Label text={this.t("popDesign.lang")} alignment="right" />
-                                <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
-                                    displayExpr="VALUE"                       
-                                    valueExpr="ID"
-                                    value=""
-                                    searchEnabled={true}
-                                    onValueChanged={(async()=>
-                                        {
-                                        }).bind(this)}
-                                    data={{source:[{ID:"FR",VALUE:"FR"},{ID:"TR",VALUE:"TR"}]}}
-                                    >
-                                    </NdSelectBox>
-                                </Item>
-                                <Item>
-                                    <div className='row'>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} 
-                                            onClick={async ()=>
-                                            {       
-                                                let TmpFirma = "DORACAN Distribution SARL";
-                                                let TmpBaslik = "ZAC HECKENWALD" + '\n' + "57740 LONGEVILLE-LES-ST-AVOLD" + '\n' + "Tel : 03 87 91 00 32" + '\n' + "longeville@prodorplus.fr" + '\n' 
-                                                let tmpQuery = 
-                                                {
-                                                    query:  "SELECT *, " +
-                                                            "CONVERT(NVARCHAR,AMOUNT) AS AMOUNTF, " +
-                                                            "@FIRMA AS FIRMA, " +
-                                                            "@BASLIK AS BASLIK," +
-                                                            "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH " +
-                                                            "FROM DOC_ITEMS_VW_01 " +
-                                                            "WHERE ((DOC_GUID = @DOC_GUID) OR (INVOICE_GUID = @DOC_GUID)) ORDER BY LINE_NO ASC",
-                                                    param:  ['DOC_GUID:string|50','DESIGN:string|25','FIRMA:string|250','BASLIK:string|250'],
-                                                    value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,TmpFirma,TmpBaslik]
-                                                }
-                                                let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
-                                                {
-                                                    if(pResult.split('|')[0] != 'ERR')
-                                                    {
-                                                        let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                                                        mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
-                                                    }
-                                                });
-                                                this.popDesign.hide();  
-                                            }}/>
-                                        </div>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popDesign.hide();  
-                                            }}/>
-                                        </div>
-                                    </div>
-                                </Item>
-                            </Form>
-                        </NdPopUp>
-                    </div>  
                      {/* Toplu Stok PopUp */}
                      <div>
                         <NdPopUp parent={this} id={"popMultiItem"} 
