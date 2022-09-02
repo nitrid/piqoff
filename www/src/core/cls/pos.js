@@ -1474,7 +1474,7 @@ export class posDeviceCls
         let ack = false;
         let payMethod = "card";
         
-        if(this.payPort.isOpen)
+        if(this.payPort != null && this.payPort.isOpen)
         {
             await this.core.util.waitUntil(2000)
         }
