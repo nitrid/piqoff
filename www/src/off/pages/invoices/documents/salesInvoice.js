@@ -2308,10 +2308,13 @@ export default class salesInvoice extends React.PureComponent
                                         onClick={async ()=>
                                         {       
                                             let TmpFirma = "DORACAN Distribution SARL";
-                                            let TmpBaslik = "ZAC HECKENWALD" + '\n' + "57740 LONGEVILLE-LES-ST-AVOLD" + '\n' + "Tel : 03 87 91 00 32" + '\n' + "longeville@prodorplus.fr" + '\n' 
+                                            let TmpBaslik = "7 ALLE DU MIDI" + '\n' + "54270 ESSEY-LES-NANCY" + '\n' + "Tel : 03 87 91 00 32" + '\n' + "longeville@prodorplus.fr" + '\n' 
                                             let tmpQuery = 
                                             {
-                                                query:  "SELECT *, " +
+                                                query:  "SELECT *, ISNULL((SELECT ADRESS FROM CUSTOMER_ADRESS WHERE CUSTOMER = INPUT AND TYPE = 0),'') AS ADRESS, " +
+                                                        "ISNULL((SELECT ZIPCODE FROM CUSTOMER_ADRESS WHERE CUSTOMER = INPUT AND TYPE = 0),'') AS ZIPCODE, " + 
+                                                        "ISNULL((SELECT CITY FROM CUSTOMER_ADRESS WHERE CUSTOMER = INPUT AND TYPE = 0),'') AS CITY, " + 
+                                                        "ISNULL((SELECT COUNTRY FROM CUSTOMER_ADRESS WHERE CUSTOMER = INPUT AND TYPE = 0),'') AS COUNTRY, " + 
                                                         "CONVERT(NVARCHAR,AMOUNT) AS AMOUNTF, " +
                                                         "@FIRMA AS FIRMA, " +
                                                         "@BASLIK AS BASLIK," +
@@ -2322,6 +2325,7 @@ export default class salesInvoice extends React.PureComponent
                                                 value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,TmpFirma,TmpBaslik]
                                             }
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
+                                            console.log(tmpData)
                                             this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
                                             {
                                                 if(pResult.split('|')[0] != 'ERR')
