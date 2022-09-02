@@ -893,7 +893,7 @@ export default class itemCard extends React.PureComponent
                                     <NdSelectBox simple={true} parent={this} id="cmbItemGenus" dt={{data:this.itemsObj.dt('ITEMS'),field:"TYPE"}}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
-                                    data={{source:{select:{query:"SELECT ID,VALUE FROM ITEM_TYPE ORDER BY ID ASC"},sql:this.core.sql}}}
+                                    data={{source:[{ID:"0",VALUE:this.t("cmbItemGenusData.item")},{ID:"1",VALUE:this.t("cmbItemGenusData.service")},{ID:"2",VALUE:this.t("cmbItemGenusData.deposit")}]}}
                                     param={this.param.filter({ELEMENT:'cmbItemGenus',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbItemGenus',USERS:this.user.CODE})}
                                     />
@@ -1118,8 +1118,9 @@ export default class itemCard extends React.PureComponent
                                 <Item>
                                     <Label text={this.t("chkLineMerged")} alignment="right" />
                                     <NdCheckBox id="chkLineMerged" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"SALE_JOIN_LINE"}}
-                                    param={this.param.filter({ELEMENT:'chkLineMerged',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'chkLineMerged',USERS:this.user.CODE})}/>
+                                    //param={this.param.filter({ELEMENT:'chkLineMerged',USERS:this.user.CODE})}
+                                    //access={this.access.filter({ELEMENT:'chkLineMerged',USERS:this.user.CODE})}
+                                    />
                                 </Item>
                                 {/* chkTicketRest */}
                                 <Item>

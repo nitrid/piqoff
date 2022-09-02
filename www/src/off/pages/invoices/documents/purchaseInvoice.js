@@ -949,7 +949,6 @@ export default class purchaseInvoice extends React.PureComponent
             
                         if(e == 'btn01')
                         {
-                        
                             return
                         }
                         if(e == 'btn02')

@@ -30,7 +30,7 @@ export class itemsCls
             RAYON : '',
             SHELF : '',
             WEIGHING : false,
-            SALE_JOIN_LINE : true,
+            SALE_JOIN_LINE : false,
             TICKET_REST: false,
             SUGAR_RATE: 0,
         }

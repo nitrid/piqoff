@@ -681,12 +681,10 @@ export default class labelPrinting extends React.PureComponent
                                                     // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
                                                     // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
                                                     var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
-                                                    mywindow.onload = async function() 
+                                                    mywindow.onload = function() 
                                                     {
-                                                        console.log(pResult.split('|')[1])
-                                                        mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"  
-                                                        
-                                                    }   
+                                                        mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                                                    } 
                                                 }
                                             });
                                             let updateQuery = 
