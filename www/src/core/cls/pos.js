@@ -1492,22 +1492,21 @@ export class posDeviceCls
         return new Promise(async (resolve) =>
         {
             this.payPort = new this.serialport(this.dt().length > 0 ? this.dt()[0].PAY_CARD_PORT : "",{baudRate: 9600,dataBits: 7,parity:'odd',parser: new this.serialport.parsers.Readline()});
+            
+            this.payPort.write(String.fromCharCode(5)); //ENQ
 
-            this.payPort.on('data',async(data)=> 
+            this.payPort.on('data',async(data) =>
             {
-                console.log("1454 - " + data.toString() + " - " + data[0])              
-                if(String.fromCharCode(data[0]) == String.fromCharCode(6) || (String.fromCharCode(data[0]) == String.fromCharCode(21) && data.length == 1) || 
-                (String.fromCharCode(data[0]) == String.fromCharCode(4) && data.length == 2) || (String.fromCharCode(data[0]) == String.fromCharCode(3) && data.length == 4))
-                {     
-                    await this.core.util.waitUntil(500)
-                    if(ack == false)
-                    {
+                console.log(data.toString())
+                console.log(data)
+                if((!ack && String.fromCharCode(6) == String.fromCharCode(data[0])) || String.fromCharCode(21) == String.fromCharCode(data[0]))
+                {   
                         let tmpData = 
                         {
                             'pos_number': '01',
                             'amount_msg': ('0000000' + (pAmount * 100).toFixed(0)).substr(-8),
                             'answer_flag': '0',
-                            'payment_mode': payMethod  == 'check' ? 'C' : '1', 
+                            'payment_mode': payMethod  == 'check' ? 'C' : '1',  
                             'transaction_type': '0',
                             'currency_numeric': 978, 
                             'private': '          ',
@@ -1529,25 +1528,18 @@ export class posDeviceCls
                         //STX + msg + lrc
                         let tpe_msg = (String.fromCharCode(2)).concat(real_msg_with_etx).concat(String.fromCharCode(lrc));
                         this.payPort.write(tpe_msg)
-                        ack = true;
-                    }
+                        ack = true
                 }
-                else if(String.fromCharCode(data[0]) == String.fromCharCode(6))
+                else if(ack && String.fromCharCode(6) == String.fromCharCode(data[0]))
                 {
                     this.payPort.write(String.fromCharCode(4))
                 }
-                else if(String.fromCharCode(data[0]) == String.fromCharCode(5))
+                else if(String.fromCharCode(5) == String.fromCharCode(data[0]))
                 {
-                    this.payPort.write(String.fromCharCode(6));
+                    this.payPort.write(String.fromCharCode(6))
                 }
                 else if(data.length >= 25)
                 {
-                    if(!ack)
-                    {
-                        this.payPort.write(String.fromCharCode(5));
-                        return
-                    }
-
                     let str = "";
                     str = data.toString().substr(0, data.toString().length-3);
                     console.log(str)
@@ -1561,12 +1553,88 @@ export class posDeviceCls
                         'private'           : str.substr(15, 11)
                     };
                     console.log(response)
-                    await this.payPort.close();
+                    setTimeout(async() => 
+                    {
+                        await this.payPort.close();
+                    }, 1000);
+                    
                     resolve({tag:"response",msg:JSON.stringify(response)});   
                 }
-            });
+            })
+            // this.payPort.on('data',async(data)=> 
+            // {
+            //     console.log("1454 - " + data.toString() + " - " + data[0])              
+            //     if(String.fromCharCode(data[0]) == String.fromCharCode(6) || (String.fromCharCode(data[0]) == String.fromCharCode(21) && data.length == 1) || 
+            //     (String.fromCharCode(data[0]) == String.fromCharCode(4) && data.length == 2) || (String.fromCharCode(data[0]) == String.fromCharCode(3) && data.length == 4))
+            //     {     
+            //         await this.core.util.waitUntil(500)
+            //         if(ack == false)
+            //         {
+            //             let tmpData = 
+            //             {
+            //                 'pos_number': '01',
+            //                 'amount_msg': ('0000000' + (pAmount * 100).toFixed(0)).substr(-8),
+            //                 'answer_flag': '0',
+            //                 'payment_mode': payMethod  == 'check' ? 'C' : '1', 
+            //                 'transaction_type': '0',
+            //                 'currency_numeric': 978, 
+            //                 'private': '          ',
+            //                 'delay': 'A010',
+            //                 'auto': 'B010'
+            //             };
+                        
+            //             let msg = Object.keys(tmpData).map( k => tmpData[k] ).join('');
+            //             if (msg.length > 34) 
+            //             {
+            //                 await this.payPort.close();
+            //                 resolve({tag:"response",msg:"error"});                 
+            //                 console.log('ERR. : failed data > 34 characters.', msg);
+            //                 return
+            //             }
+            //             let real_msg_with_etx = msg.toString().concat(String.fromCharCode(3));//ETX
+                        
+            //             let lrc = generate_lrc(real_msg_with_etx);
+            //             //STX + msg + lrc
+            //             let tpe_msg = (String.fromCharCode(2)).concat(real_msg_with_etx).concat(String.fromCharCode(lrc));
+            //             this.payPort.write(tpe_msg)
+            //             ack = true;
+            //         }
+            //     }
+            //     else if(String.fromCharCode(data[0]) == String.fromCharCode(6))
+            //     {
+            //         this.payPort.write(String.fromCharCode(4))
+            //     }
+            //     else if(String.fromCharCode(data[0]) == String.fromCharCode(5))
+            //     {
+            //         this.payPort.write(String.fromCharCode(6));
+            //     }
+            //     else if(data.length >= 25)
+            //     {
+            //         if(!ack)
+            //         {
+            //             this.payPort.write(String.fromCharCode(5));
+            //             return
+            //         }
 
-            this.payPort.write(String.fromCharCode(5));
+            //         let str = "";
+            //         str = data.toString().substr(0, data.toString().length-3);
+            //         console.log(str)
+            //         let response = 
+            //         {
+            //             'pos_number'        : str.substr(0, 2),
+            //             'transaction_result': str.charAt(2),
+            //             'amount_msg'        : str.substr(3, 8),
+            //             'payment_mode'      : str.charAt(11),
+            //             'currency_numeric'  : str.substr(12, 3),
+            //             'private'           : str.substr(15, 11)
+            //         };
+            //         console.log(response)
+            //         await this.payPort.close();
+            //         resolve({tag:"response",msg:JSON.stringify(response)});   
+            //     }
+            // });
+
+            //this.payPort.write(String.fromCharCode(5));
 
             // setTimeout(async()=>
             // { 
