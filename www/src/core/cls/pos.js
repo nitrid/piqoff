@@ -1563,7 +1563,10 @@ export class posDeviceCls
                     console.log(response)
                     setTimeout(async() => 
                     {
-                        await this.payPort.close();
+                        if(this.payPort.isOpen)
+                        {
+                            await this.payPort.close(); 
+                        }
                     }, 1000);
                     
                     resolve({tag:"response",msg:JSON.stringify(response)});   
