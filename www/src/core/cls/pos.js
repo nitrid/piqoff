@@ -1795,6 +1795,10 @@ export class posDeviceCls
         {
             this.scannerPort = new this.serialport(this.dt().length > 0 ? this.dt()[0].SCANNER_PORT : "")               
         }
+        else
+        {
+            return
+        }
         
         let tmpSerialCount = 0;
         let tmpBarcode = "";
