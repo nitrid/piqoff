@@ -18,13 +18,16 @@ export default class NbPopUp extends NbBase
         this.setState({show:true})
     }
     hide()
-    {        
-        this.setState({show:false})
+    {  
+        setTimeout(() => 
+        {
+            this.setState({show:false})    
+        }, 100);   
     }
     render()
     {
         return(
-            <Modal show={this.state.show} fullscreen={this.state.fullscreen} onHide={()=>{this.hide()}}>
+            <Modal show={this.state.show} fullscreen={this.state.fullscreen} onHide={()=>{this.hide()}} backdrop="static">
                 <Modal.Header closeButton>
                     <Modal.Title>{typeof this.props.title == 'undefined' ? '' : this.props.title}</Modal.Title>
                 </Modal.Header>
