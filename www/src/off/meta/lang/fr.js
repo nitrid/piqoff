@@ -1954,7 +1954,8 @@ export const langFr =
             clmMargin :"Marge",
             clmDiffPrice : "Fark",
             clmCustomerPrice : "T. Fiyat",
-            clmDescription :"Motif"
+            clmDescription :"Motif",
+            clmCuser :"Utilisateur",
         },
         grdInvoicePayment: 
         {
@@ -2289,7 +2290,8 @@ export const langFr =
             clmDispatch : "No Bon de Livraison",
             clmCreateDate: "Date d'Enregistrement",
             clmMargin :"Marge",
-            clmDescription : "Motif"
+            clmDescription : "Motif",
+            clmCuser :"Utilisateur",
         },
         grdInvoicePayment: 
         {
@@ -2574,7 +2576,8 @@ export const langFr =
             clmDispatch : "No Bon de Livraison",
             clmCreateDate: "Date d'Enregistrement",
             clmMargin :"Marge",
-            clmDescription :"Motif"
+            clmDescription :"Motif",
+            clmCuser :"Utilisateur",
         },
         grdInvoicePayment: 
         {
@@ -2818,8 +2821,9 @@ export const langFr =
             clmTotal : "Total Général",
             clmCreateDate: "Date d'Enregistrement",
             clmInvNo : "Fatura No",
-            clmInvDate : "Fatura Tarihi"
-
+            clmInvDate : "Fatura Tarihi",
+            clmDescription :"Motif",
+            clmCuser :"Utilisateur",
         },
         grdInvoicePayment: 
         {
@@ -3188,8 +3192,9 @@ export const langFr =
             clmAmount : "Montant" ,
             clmTotal : "Total Général",
             clmCreateDate: "Date d'Enregistrement",
-            clmMargin :"Marge"
-
+            clmMargin :"Marge",
+            clmDescription :"Motif",
+            clmCuser :"Utilisateur",
         },
         popDiscount : 
         {
@@ -3425,7 +3430,9 @@ export const langFr =
             clmAmount : "Montant" ,
             clmTotal : "Total Général",
             clmCreateDate: "Date d'Enregistrement",
-            clmMargin :"Marge"
+            clmMargin :"Marge",
+            clmDescription :"Motif",
+            clmCuser :"Utilisateur",
         },
         popDiscount : 
         {
@@ -3673,7 +3680,9 @@ export const langFr =
             clmAmount : "Montant" ,
             clmTotal : "Total Général",
             clmCreateDate: "Date d'Enregistrement",
-            clmMargin :"Marge"
+            clmMargin :"Marge",
+            clmDescription :"Motif",
+            clmCuser :"Utilisateur",
         },
         popDiscount : 
         {
@@ -3936,7 +3945,9 @@ export const langFr =
             clmCreateDate: "Date d'Enregistrement",
             clmMargin :"Marge",
             clmMulticode :"T. Kodu",
-            clmBarcode :"Code Barre"
+            clmBarcode :"Code Barre",
+            clmDescription :"Motif",
+            clmCuser :"Utilisateur",
         },
         popDiscount : 
         {
@@ -4169,7 +4180,9 @@ export const langFr =
             clmAmount : "Montant" ,
             clmTotal : "Total Général",
             clmCreateDate: "Date d'Enregistrement",
-            clmMargin :"Marge"
+            clmMargin :"Marge",
+            clmDescription : "Motif",
+            clmCuser :"Utilisateur",
         },
         popDiscount : 
         {
@@ -5718,7 +5731,9 @@ export const langFr =
             clmCreateDate: "Date d'Enregistrement",
             clmMargin :"Marge",
             clmMulticode :"T. Kodu",
-            clmBarcode :"Code Barre"
+            clmBarcode :"Code Barre",
+            clmDescription : "Motif",
+            clmCuser :"Utilisateur",
         },
         popDiscount : 
         {
@@ -5951,7 +5966,9 @@ export const langFr =
             clmAmount : "Montant" ,
             clmTotal : "Total Général",
             clmCreateDate: "Date d'Enregistrement",
-            clmMargin :"Marge"
+            clmMargin :"Marge",
+            clmDescription : "Motif",
+            clmCuser :"Utilisateur",
         },
         popDiscount : 
         {

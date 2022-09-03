@@ -1306,10 +1306,8 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                             this.docObj.docItems.dt()[rowIndex].DISCOUNT = 0 
                                             return
                                         }
-                                        if(this.docObj.docItems.dt()[rowIndex].VAT > 0)
-                                        {
-                                            this.docObj.docItems.dt()[rowIndex].VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(3));
-                                        }
+
+                                        this.docObj.docItems.dt()[rowIndex].VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(3));
                                         this.docObj.docItems.dt()[rowIndex].AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3))
                                         this.docObj.docItems.dt()[rowIndex].TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +this.docObj.docItems.dt()[rowIndex].VAT).toFixed(3))
                                        
@@ -1333,6 +1331,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.ftr_02_004")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdDiffInv.clmCreateDate")} width={200} allowEditing={false} headerFilter={{visible:true}}/>
+                                        <Column dataField="CUSER_NAME" caption={this.t("grdDiffInv.clmCuser")} width={120} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdDiffInv.clmItemCode")} width={150} editCellRender={this._cellRoleRender} headerFilter={{visible:true}}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdDiffInv.clmItemName")} width={400} headerFilter={{visible:true}}/>
                                         <Column dataField="PRICE" caption={this.t("grdDiffInv.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} headerFilter={{visible:true}}/>
@@ -1340,6 +1339,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                         <Column dataField="AMOUNT" caption={this.t("grdDiffInv.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
                                         <Column dataField="VAT" caption={this.t("grdDiffInv.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
                                         <Column dataField="TOTAL" caption={this.t("grdDiffInv.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
+                                        <Column dataField="DESCRIPTION" caption={this.t("grdDiffInv.clmDescription")} width={160}  headerFilter={{visible:true}}/>
                                         <Column dataField="CONNECT_REF" caption={this.t("grdDiffInv.clmInvNo")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
                                         <Column dataField="CONNECT_DOC_DATE" caption={this.t("grdDiffInv.clmInvDate")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
 
@@ -2114,13 +2114,13 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                                 {
                                                     query:  "SELECT *, " +
                                                             "CONVERT(NVARCHAR,AMOUNT) AS AMOUNTF, " +
-                                                            "@FIRMA AS FIRMA, " +
-                                                            "@BASLIK AS BASLIK," +
+                                                            "ISNULL((SELECT TOP 1 NAME FROM COMPANY),'') AS FIRMA, " +
+                                                            "REPLACE(ISNULL((SELECT ADDRESS1 + ' | ' + ADDRESS2  + ' | ' + TEL + ' | ' + MAIL FROM COMPANY),''),'|', CHAR(13)) AS BASLIK," +
                                                             "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH " +
                                                             "FROM DOC_ITEMS_VW_01 " +
                                                             "WHERE DOC_GUID=@DOC_GUID ORDER BY LINE_NO ASC",
-                                                    param:  ['DOC_GUID:string|50','DESIGN:string|25','FIRMA:string|250','BASLIK:string|250'],
-                                                    value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,TmpFirma,TmpBaslik]
+                                                    param:  ['DOC_GUID:string|50','DESIGN:string|25'],
+                                                    value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value]
                                                 }
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
                                                 this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 

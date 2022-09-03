@@ -1954,7 +1954,8 @@ export const langTr =
             clmMargin :"Marj",
             clmDiffPrice : "Fark",
             clmCustomerPrice : "T. Fiyat",
-            clmDescription :"Açıklama"
+            clmDescription :"Açıklama",
+            clmCuser :"Kullanıcı",
         },
         grdInvoicePayment: 
         {
@@ -2289,7 +2290,8 @@ export const langTr =
             clmDispatch : "İrsaliye No",
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
-            clmDescription :"Açıklama"
+            clmDescription :"Açıklama",
+            clmCuser :"Kullanıcı",
         },
         grdInvoicePayment: 
         {
@@ -2574,7 +2576,9 @@ export const langTr =
             clmDispatch : "İrsaliye No",
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
-            clmDescription :"Açıklama"
+            clmDescription :"Açıklama",
+            clmCuser :"Kullanıcı",
+
         },
         grdInvoicePayment: 
         {
@@ -2818,7 +2822,9 @@ export const langTr =
             clmTotal : "Genel Toplam",
             clmCreateDate: "Kayıt Tarihi",
             clmInvNo : "Fatura No",
-            clmInvDate : "Fatura Tarihi"
+            clmInvDate : "Fatura Tarihi",
+            clmDescription :"Açıklama",
+            clmCuser :"Kullanıcı",
 
         },
         grdInvoicePayment: 
@@ -3188,8 +3194,9 @@ export const langTr =
             clmAmount : "Tutar",
             clmTotal : "Genel Toplam",
             clmCreateDate: "Kayıt Tarihi",
-            clmMargin :"Marj"
-
+            clmMargin :"Marj",
+            clmDescription :"Açıklama",
+            clmCuser :"Kullanıcı",
         },
         popDiscount : 
         {
@@ -3425,7 +3432,9 @@ export const langTr =
             clmAmount : "Tutar",
             clmTotal : "Genel Toplam",
             clmCreateDate: "Kayıt Tarihi",
-            clmMargin :"Marj"
+            clmMargin :"Marj",
+            clmDescription :"Açıklama",
+            clmCuser :"Kullanıcı",
         },
         popDiscount : 
         {
@@ -3673,7 +3682,9 @@ export const langTr =
             clmAmount : "Tutar",
             clmTotal : "Genel Toplam",
             clmCreateDate: "Kayıt Tarihi",
-            clmMargin :"Marj"
+            clmMargin :"Marj",
+            clmDescription :"Açıklama",
+            clmCuser :"Kullanıcı",
         },
         popDiscount : 
         {
@@ -3936,7 +3947,9 @@ export const langTr =
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
             clmMulticode :"T. Kodu",
-            clmBarcode :"Barkodu"
+            clmBarcode :"Barkodu",
+            clmDescription :"Açıklama",
+            clmCuser :"Kullanıcı",
         },
         popDiscount : 
         {
@@ -4169,7 +4182,10 @@ export const langTr =
             clmAmount : "Tutar",
             clmTotal : "Genel Toplam",
             clmCreateDate: "Kayıt Tarihi",
-            clmMargin :"Marj"
+            clmMargin :"Marj",
+            clmDescription :"Açıklama",
+            clmCuser :"Kullanıcı",
+
         },
         popDiscount : 
         {
@@ -5718,7 +5734,9 @@ export const langTr =
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
             clmMulticode :"T. Kodu",
-            clmBarcode :"Barkodu"
+            clmBarcode :"Barkodu",
+            clmDescription :"Açıklama",
+            clmCuser :"Kullanıcı",
         },
         popDiscount : 
         {
@@ -5951,7 +5969,10 @@ export const langTr =
             clmAmount : "Tutar",
             clmTotal : "Genel Toplam",
             clmCreateDate: "Kayıt Tarihi",
-            clmMargin :"Marj"
+            clmMargin :"Marj",
+            clmDescription :"Açıklama",
+            clmCuser :"Kullanıcı",
+
         },
         popDiscount : 
         {

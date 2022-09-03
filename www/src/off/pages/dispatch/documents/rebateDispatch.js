@@ -868,7 +868,7 @@ export default class rebateDispatch extends React.PureComponent
                                                     let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                     if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                     {
-                                                        this.txtRef.setState({value:data[0].CODE});
+                                                        this.txtRef.value = data[0].CODE;
                                                         this.txtRef.props.onChange()
                                                     }
                                                 }
@@ -893,7 +893,7 @@ export default class rebateDispatch extends React.PureComponent
                                                             let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
-                                                                this.txtRef.setState({value:data[0].CODE});
+                                                                this.txtRef.value = data[0].CODE;
                                                                 this.txtRef.props.onChange()
                                                             }
                                                         }
@@ -1163,6 +1163,7 @@ export default class rebateDispatch extends React.PureComponent
                                             return
                                         }
                                         
+                                        this.docObj.docItems.dt()[rowIndex].VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(3));
                                         this.docObj.docItems.dt()[rowIndex].AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3))
                                         this.docObj.docItems.dt()[rowIndex].TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +this.docObj.docItems.dt()[rowIndex].VAT).toFixed(3))
 
@@ -1184,6 +1185,7 @@ export default class rebateDispatch extends React.PureComponent
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.irs_02_003")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdRebtDispatch.clmCreateDate")} width={150} allowEditing={false}/>
+                                        <Column dataField="CUSER_NAME" caption={this.t("grdRebtDispatch.clmCuser")} width={120} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdRebtDispatch.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdRebtDispatch.clmItemName")} width={350} />
                                         <Column dataField="PRICE" caption={this.t("grdRebtDispatch.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
@@ -1191,6 +1193,7 @@ export default class rebateDispatch extends React.PureComponent
                                         <Column dataField="AMOUNT" caption={this.t("grdRebtDispatch.clmAmount")} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}}/>
                                         <Column dataField="VAT" caption={this.t("grdRebtDispatch.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
                                         <Column dataField="TOTAL" caption={this.t("grdRebtDispatch.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                        <Column dataField="DESCRIPTION" caption={this.t("grdRebtDispatch.clmDescription")} width={160}  headerFilter={{visible:true}}/>
                                     </NdGrid>
                                     <ContextMenu
                                     dataSource={this.rightItems}
@@ -1549,19 +1552,17 @@ export default class rebateDispatch extends React.PureComponent
                                             <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} 
                                             onClick={async ()=>
                                             {       
-                                                let TmpFirma = "DORACAN Distribution SARL";
-                                                let TmpBaslik = "ZAC HECKENWALD" + '\n' + "57740 LONGEVILLE-LES-ST-AVOLD" + '\n' + "Tel : 03 87 91 00 32" + '\n' + "longeville@prodorplus.fr" + '\n' 
                                                 let tmpQuery = 
                                                 {
                                                     query:  "SELECT *, " +
                                                             "CONVERT(NVARCHAR,AMOUNT) AS AMOUNTF, " +
-                                                            "@FIRMA AS FIRMA, " +
-                                                            "@BASLIK AS BASLIK," +
+                                                            "ISNULL((SELECT TOP 1 NAME FROM COMPANY),'') AS FIRMA, " +
+                                                            "REPLACE(ISNULL((SELECT ADDRESS1 + ' | ' + ADDRESS2  + ' | ' + TEL + ' | ' + MAIL FROM COMPANY),''),'|', CHAR(13)) AS BASLIK," +
                                                             "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH " +
                                                             "FROM DOC_ITEMS_VW_01 " +
                                                             "WHERE DOC_GUID=@DOC_GUID ORDER BY LINE_NO ASC",
-                                                    param:  ['DOC_GUID:string|50','DESIGN:string|25','FIRMA:string|250','BASLIK:string|250'],
-                                                    value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,TmpFirma,TmpBaslik]
+                                                    param:  ['DOC_GUID:string|50','DESIGN:string|25'],
+                                                    value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value]
                                                 }
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
                                                 this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
