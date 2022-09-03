@@ -147,7 +147,8 @@ export default class salesOrder extends React.Component
                 <div className="row px-2 pt-2">
                     <Form colCount={2}>
                         <Item>
-                        <div className="col-12 px-2 pt-2">
+                        <div className="row">
+                        <div className="col-9 px-1 pt-2">
                                 <NdTextBox id="txtBarcode" parent={this} placeholder={this.t("txtBarcodePlace")}
                                 button=
                                 {
@@ -236,6 +237,52 @@ export default class salesOrder extends React.Component
                                         }
                                         
                                     }).bind(this)}></NdTextBox>
+                            </div>
+                            <div className="col-3 px-1 pt-2">
+                            <NdButton text={this.lang.t("btnGet")} type="default" width="100%" onClick={async()=>
+                                {
+                                    let tmpQuery = 
+                                    {
+                                        query : "SELECT ITEM_CODE AS CODE,ITEM_NAME AS NAME,ITEM_GUID AS GUID,BARCODE,ISNULL((SELECT TOP 1 GUID FROM ITEM_UNIT WHERE ITEM = ITEM_GUID AND TYPE = 0),'00000000-0000-0000-0000-000000000000') AS UNIT FROM ITEM_BARCODE_VW_01  WHERE BARCODE = @BARCODE OR ITEM_CODE = @BARCODE ",
+                                        param : ['BARCODE:string|50'],
+                                        value : [this.txtBarcode.value]
+                                    }
+                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                    if(tmpData.result.recordset.length >0)
+                                    {
+                                        this.barcode.name = tmpData.result.recordset[0].NAME
+                                        this.barcode.barcode = tmpData.result.recordset[0].BARCODE 
+                                        this.barcode.code = tmpData.result.recordset[0].CODE 
+                                        this.barcode.unit = tmpData.result.recordset[0].UNIT 
+                                        this.barcode.guid = tmpData.result.recordset[0].GUID 
+                                        await this.itemBarcodeObj.load({ITEM_GUID:tmpData.result.recordset[0].GUID});
+                                        this.txtBarcode.value = ""
+                                        this.txtNewBarcode.focus()
+                                        this.setState({tbBarcode:"visible"})
+                                    }
+                                    else
+                                    {
+
+                                        document.getElementById("Sound").play(); 
+                                        let tmpConfObj = 
+                                        {
+                                            id:'msgBarcodeNotFound',showTitle:true,title:this.t("msgBarcodeNotFound.title"),showCloseButton:true,width:'350px',height:'200px',
+                                            button:[{id:"btn01",caption:this.t("msgBarcodeNotFound.btn01"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcodeNotFound.msg")}</div>)
+                                        }
+                                        await dialog(tmpConfObj);
+                                        this.txtBarcode.value = ""
+                                        this.barcode = 
+                                        {
+                                            name:"",
+                                            price:0,
+                                            barcode: "",
+                                            code:"",
+                                            guid:"00000000-0000-0000-0000-000000000000"
+                                        }
+                                    }
+                                }}></NdButton>
+                            </div>
                             </div>
                         </Item>
                         <Item> 
