@@ -1297,6 +1297,7 @@ export default class salesOrder extends React.PureComponent
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.sip_02_002")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsOffer.clmCreateDate")} width={150} allowEditing={false}/>
+                                        <Column dataField="CUSER_NAME" caption={this.t("grdSlsOffer.clmCuser")} width={120} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdSlsOffer.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdSlsOffer.clmItemName")} width={350} />
                                         <Column dataField="PRICE" caption={this.t("grdSlsOffer.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>

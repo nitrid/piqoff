@@ -1326,6 +1326,7 @@ export default class purchaseoffer extends React.PureComponent
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.sip_02_001")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcoffers.clmCreateDate")} width={180} allowEditing={false}/>
+                                        <Column dataField="CUSER_NAME" caption={this.t("grdPurcoffers.clmCuser")} width={120} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdPurcoffers.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="MULTICODE" caption={this.t("grdPurcoffers.clmMulticode")} width={150}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdPurcoffers.clmItemName")} width={400} />

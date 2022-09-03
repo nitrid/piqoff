@@ -1954,7 +1954,8 @@ export const langTr =
             clmMargin :"Marj",
             clmDiffPrice : "Fark",
             clmCustomerPrice : "T. Fiyat",
-            clmDescription :"Açıklama"
+            clmDescription :"Açıklama",
+            clmCuser :"Kullanıcı",
         },
         grdInvoicePayment: 
         {
@@ -2289,7 +2290,8 @@ export const langTr =
             clmDispatch : "İrsaliye No",
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
-            clmDescription :"Açıklama"
+            clmDescription :"Açıklama",
+            clmCuser :"Kullanıcı",
         },
         grdInvoicePayment: 
         {
@@ -2574,7 +2576,9 @@ export const langTr =
             clmDispatch : "İrsaliye No",
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
-            clmDescription :"Açıklama"
+            clmDescription :"Açıklama",
+            clmCuser :"Kullanıcı",
+
         },
         grdInvoicePayment: 
         {
@@ -2819,7 +2823,9 @@ export const langTr =
             clmCreateDate: "Kayıt Tarihi",
             clmInvNo : "Fatura No",
             clmInvDate : "Fatura Tarihi",
-            clmDescription :"Açıklama"
+            clmDescription :"Açıklama",
+            clmCuser :"Kullanıcı",
+
         },
         grdInvoicePayment: 
         {
@@ -3189,7 +3195,8 @@ export const langTr =
             clmTotal : "Genel Toplam",
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
-            clmDescription :"Açıklama"
+            clmDescription :"Açıklama",
+            clmCuser :"Kullanıcı",
         },
         popDiscount : 
         {
@@ -3426,7 +3433,8 @@ export const langTr =
             clmTotal : "Genel Toplam",
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
-            clmDescription :"Açıklama"
+            clmDescription :"Açıklama",
+            clmCuser :"Kullanıcı",
         },
         popDiscount : 
         {
@@ -3675,7 +3683,8 @@ export const langTr =
             clmTotal : "Genel Toplam",
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
-            clmDescription :"Açıklama"
+            clmDescription :"Açıklama",
+            clmCuser :"Kullanıcı",
         },
         popDiscount : 
         {
@@ -3939,7 +3948,8 @@ export const langTr =
             clmMargin :"Marj",
             clmMulticode :"T. Kodu",
             clmBarcode :"Barkodu",
-            clmDescription :"Açıklama"
+            clmDescription :"Açıklama",
+            clmCuser :"Kullanıcı",
         },
         popDiscount : 
         {
@@ -4173,7 +4183,9 @@ export const langTr =
             clmTotal : "Genel Toplam",
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
-            clmDescription :"Açıklama"
+            clmDescription :"Açıklama",
+            clmCuser :"Kullanıcı",
+
         },
         popDiscount : 
         {
@@ -5723,7 +5735,8 @@ export const langTr =
             clmMargin :"Marj",
             clmMulticode :"T. Kodu",
             clmBarcode :"Barkodu",
-            clmDescription :"Açıklama"
+            clmDescription :"Açıklama",
+            clmCuser :"Kullanıcı",
         },
         popDiscount : 
         {
@@ -5957,7 +5970,9 @@ export const langTr =
             clmTotal : "Genel Toplam",
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
-            clmDescription :"Açıklama"
+            clmDescription :"Açıklama",
+            clmCuser :"Kullanıcı",
+
         },
         popDiscount : 
         {

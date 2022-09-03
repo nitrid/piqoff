@@ -1343,6 +1343,7 @@ export default class purchaseDispatch extends React.PureComponent
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.irs_02_001")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcDispatch.clmCreateDate")} width={200} allowEditing={false}/>
+                                        <Column dataField="CUSER_NAME" caption={this.t("grdPurcDispatch.clmCuser")} width={120} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdPurcDispatch.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdPurcDispatch.clmItemName")} width={400} />
                                         <Column dataField="PRICE" caption={this.t("grdPurcDispatch.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>

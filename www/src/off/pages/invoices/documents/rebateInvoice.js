@@ -1371,6 +1371,7 @@ export default class rebateInvoice extends React.PureComponent
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.ftr_02_003")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdRebtInv.clmCreateDate")} width={200} allowEditing={false}/>
+                                        <Column dataField="CUSER_NAME" caption={this.t("grdRebtInv.clmCuser")} width={120} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdRebtInv.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdRebtInv.clmItemName")} width={400} />
                                         <Column dataField="PRICE" caption={this.t("grdRebtInv.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
