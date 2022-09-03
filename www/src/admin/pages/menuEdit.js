@@ -83,8 +83,6 @@ export default class menuEdit extends React.Component
                 this.prmObj.save()    
             }
         }, 2000);
-        
-        
     }
     componentDidMount()
     {
@@ -248,7 +246,6 @@ export default class menuEdit extends React.Component
                     </div>
                 </ScrollView>
             </div>
-           
         )
     }
 }
