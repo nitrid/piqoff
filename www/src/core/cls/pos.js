@@ -1507,7 +1507,10 @@ export class posDeviceCls
         }
         return new Promise(async (resolve) =>
         {
-            this.payPort = new this.serialport(this.dt().length > 0 ? this.dt()[0].PAY_CARD_PORT : "",{baudRate: 9600,dataBits: 7,parity:'odd',parser: new this.serialport.parsers.Readline()});
+            if(this.payPort == null || !this.payPort.isOpen)
+            {
+                this.payPort = new this.serialport(this.dt().length > 0 ? this.dt()[0].PAY_CARD_PORT : "",{baudRate: 9600,dataBits: 7,parity:'odd',parser: new this.serialport.parsers.Readline()});
+            }
             
             this.payPort.write(String.fromCharCode(5)); //ENQ
 
