@@ -107,11 +107,11 @@ export function print()
                     
                     if(Number.isInteger(parseFloat(data.possale[i].QUANTITY)))
                     {
-                        tmpQt = data.possale[i].QUANTITY + " " + data.possale[i].UNIT_SHORT;
+                        tmpQt = parseInt(data.possale[i].QUANTITY / data.possale[i].UNIT_FACTOR) + " " + data.possale[i].UNIT_SHORT;
                     }
                     else
                     {
-                        tmpQt = parseFloat(parseFloat(data.possale[i].QUANTITY).toFixed(3)) + " " + data.possale[i].UNIT_SHORT;
+                        tmpQt = parseFloat(parseFloat(data.possale[i].QUANTITY / data.possale[i].UNIT_FACTOR).toFixed(3)) + " " + data.possale[i].UNIT_SHORT;
                     }
                                         
                     tmpArr.push( 
@@ -122,7 +122,7 @@ export function print()
                         data: data.possale[i].VAT_TYPE + " " +
                             (data.possale[i].GUID == "00000000-0000-0000-0000-000000000000" ? data.possale[i].ITEM_SNAME.space(30,'s') : (data.possale[i].TICKET_REST ? "*" + data.possale[i].ITEM_SNAME : data.possale[i].ITEM_SNAME).toString().space(34)) + " " +
                             (data.possale[i].GUID == "00000000-0000-0000-0000-000000000000" ? "" : tmpQt).space(8,'s') + " " + //SUBTOTAL
-                            (data.possale[i].GUID == "00000000-0000-0000-0000-000000000000" ? "" : parseFloat(data.possale[i].PRICE).toFixed(2)).space(7,"s") + " " + //SUBTOTAL
+                            (data.possale[i].GUID == "00000000-0000-0000-0000-000000000000" ? "" : parseFloat(data.possale[i].PRICE * data.possale[i].UNIT_FACTOR).toFixed(2)).space(7,"s") + " " + //SUBTOTAL
                             (parseFloat(data.possale[i].AMOUNT).toFixed(2) + "EUR").space(10,"s")
                     })
                 }

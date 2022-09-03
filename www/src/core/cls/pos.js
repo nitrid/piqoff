@@ -1131,6 +1131,7 @@ export class posDeviceCls
         }
         this.listeners = Object();
         this.payPort = null;
+        this.scannerPort = null;
         this._initDs();
     }
     //#region  "EVENT"
@@ -1466,9 +1467,14 @@ export class posDeviceCls
     }
     async cardPayment(pAmount)
     {
+        let tmpSerialPort = null
         if(!core.instance.util.isElectron())
         {
             return
+        }
+        else
+        {
+            tmpSerialPort = global.require('serialport');
         }
         
         let ack = false;
@@ -1507,7 +1513,10 @@ export class posDeviceCls
         }
         return new Promise(async (resolve) =>
         {
-            this.payPort = new this.serialport(this.dt().length > 0 ? this.dt()[0].PAY_CARD_PORT : "",{baudRate: 9600,dataBits: 7,parity:'odd',parser: new this.serialport.parsers.Readline()});
+            if(this.payPort == null || !this.payPort.isOpen)
+            {
+                this.payPort = new tmpSerialPort(this.dt().length > 0 ? this.dt()[0].PAY_CARD_PORT : "",{baudRate: 9600,dataBits: 7,parity:'odd',parser: new this.serialport.parsers.Readline()});
+            }
             
             this.payPort.write(String.fromCharCode(5)); //ENQ
 
@@ -1782,12 +1791,19 @@ export class posDeviceCls
         {
             return
         }
+        if(this.scannerPort == null || !this.scannerPort.isOpen)
+        {
+            this.scannerPort = new this.serialport(this.dt().length > 0 ? this.dt()[0].SCANNER_PORT : "")               
+        }
+        else
+        {
+            return
+        }
         
-        const port = new this.serialport(this.dt().length > 0 ? this.dt()[0].SCANNER_PORT : "")               
         let tmpSerialCount = 0;
         let tmpBarcode = "";
 
-        port.on('data',(data) =>
+        this.scannerPort.on('data',(data) =>
         {
             tmpSerialCount++;
             tmpBarcode = tmpBarcode + data.toString("utf8")
@@ -1802,7 +1818,7 @@ export class posDeviceCls
                 {
                     tmpBarcode = tmpBarcode.substring(1,14)
                 }
-                console.log(tmpBarcode)
+                
                 this.emit('scanner',tmpBarcode);   
                 tmpSerialCount = 0;
                 tmpBarcode = "";            

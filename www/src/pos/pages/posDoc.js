@@ -537,7 +537,6 @@ export default class posDoc extends React.PureComponent
         //******************************************************** */
         //BARKOD DESENİ
         let tmpBarPattern = this.getBarPattern(pCode)
-        console.log(tmpBarPattern)
         tmpPrice = typeof tmpBarPattern.price == 'undefined' || tmpBarPattern.price == 0 ? tmpPrice : tmpBarPattern.price
         tmpQuantity = typeof tmpBarPattern.quantity == 'undefined' || tmpBarPattern.quantity == 0 ? tmpQuantity : tmpBarPattern.quantity
         pCode = tmpBarPattern.barcode     
@@ -547,7 +546,6 @@ export default class posDoc extends React.PureComponent
         let tmpItemsDt = await this.getItemDb(pCode)
         if(tmpItemsDt.length > 0)
         {     
-            console.log(111)                        
             //******************************************************** */
             //UNIQ BARKODU
             if(tmpItemsDt[0].UNIQ_CODE == tmpItemsDt[0].INPUT)
@@ -572,10 +570,9 @@ export default class posDoc extends React.PureComponent
                     },
                 }
             }
-            console.log(222)
-            tmpPriceDt.selectCmd.value = [tmpItemsDt[0].GUID,tmpQuantity]
+            console.log(tmpItemsDt[0].UNIT_FACTOR)
+            tmpPriceDt.selectCmd.value = [tmpItemsDt[0].GUID,tmpQuantity * tmpItemsDt[0].UNIT_FACTOR]
             await tmpPriceDt.refresh();  
-            console.log(tmpPriceDt)                
             if(tmpPriceDt.length > 0 && tmpPrice == 0)
             {
                 tmpPrice = tmpPriceDt[0].PRICE
@@ -985,7 +982,7 @@ export default class posDoc extends React.PureComponent
     }
     async saleAdd(pItemData)
     {
-        let tmpRowData = this.isRowMerge('SALE',pItemData)        
+        let tmpRowData = this.isRowMerge('SALE',pItemData)     
         //SATIR BİRLEŞTİR        
         if(typeof tmpRowData != 'undefined')
         {
@@ -1027,7 +1024,7 @@ export default class posDoc extends React.PureComponent
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].INPUT = pItemData.INPUT
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].BARCODE_GUID = pItemData.BARCODE_GUID
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].BARCODE = pItemData.BARCODE
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_GUID = '00000000-0000-0000-0000-000000000000'
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_GUID = pItemData.UNIT_GUID
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_NAME = pItemData.UNIT_NAME
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_SHORT = pItemData.UNIT_SHORT
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].UNIT_FACTOR = pItemData.UNIT_FACTOR
