@@ -369,9 +369,9 @@ export default class purchaseOrder extends React.PureComponent
 
         let tmpCheckQuery = 
         {
-            query :"SELECT MULTICODE,CUSTOMER_PRICE AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
-            param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50'],
-            value : [pData.CODE,this.docObj.dt()[0].OUTPUT]
+            query :"SELECT MULTICODE,(SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM_GUID,CUSTOMER_GUID,@QUANTITY,GETDATE())) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
+            param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+            value : [pData.CODE,this.docObj.dt()[0].OUTPUT,pQuantity]
         }
         let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
 
@@ -482,11 +482,11 @@ export default class purchaseOrder extends React.PureComponent
         this.docObj.docOrders.dt()[pIndex].DISCOUNT_RATE = 0
         this.docObj.docOrders.dt()[pIndex].QUANTITY = pQuantity
 
-        let tmpQuery =
+        let tmpQuery = 
         {
-            query :"SELECT CUSTOMER_PRICE AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
-            param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50'],
-            value : [pData.CODE,this.docObj.dt()[0].OUTPUT]
+            query :"SELECT (SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM_GUID,CUSTOMER_GUID,@QUANTITY,GETDATE())) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID ORDER BY LDATE DESC",
+            param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+            value : [pData.CODE,this.docObj.dt()[0].OUTPUT,pQuantity]
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
 

@@ -449,9 +449,9 @@ export default class rebateInvoice extends React.PureComponent
         this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
         let tmpQuery = 
         {
-            query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,1,GETDATE()) AS PRICE",
-            param : ['GUID:string|50'],
-            value : [pData.GUID]
+            query :"SELECT dbo.[FN_CUSTOMER_PRICE](@GUID,@CUSTOMER,@QUANTITY,GETDATE()) AS PRICE",
+            param : ['GUID:string|50','CUSTOMER:string|50','QUANTITY:float'],
+            value : [pData.GUID,this.docObj.dt()[0].INPUT,pQuantity]
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
         if(tmpData.result.recordset.length > 0)
