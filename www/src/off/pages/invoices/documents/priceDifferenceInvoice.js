@@ -503,12 +503,12 @@ export default class priceDifferenceInvoice extends React.PureComponent
                 {
                     let tmpQuery = 
                     {
-                        query :"SELECT [dbo].[FN_CONTRACT_PRICE](@ITEM,@CUSTOMER,@QUANTITY,GETDATE(),@TYPE) AS PRICE  ",
-                        param : ['ITEM:string|50','CUSTOMER:string|50','QUANTITY:float','TYPE:int'],
-                        value : [tmpItems[i][x].ITEM,tmpItems[i][x].OUTPUT,tmpItems[i][x].QUANTITY,1]
+                        query :"SELECT [dbo].[FN_CUSTOMER_PRICE](@ITEM,@CUSTOMER,@QUANTITY,GETDATE()) AS PRICE  ",
+                        param : ['ITEM:string|50','CUSTOMER:string|50','QUANTITY:float'],
+                        value : [tmpItems[i][x].ITEM,tmpItems[i][x].OUTPUT,tmpItems[i][x].QUANTITY]
                     }
                     let tmpData = await this.core.sql.execute(tmpQuery) 
-                    console.log(tmpItems[i][x].PRICE)
+                    console.log(tmpData)
                     console.log( tmpData.result.recordset[0].PRICE)
                     if(tmpData.result.recordset[0].PRICE < tmpItems[i][x].PRICE && tmpData.result.recordset[0].PRICE != 0)
                     {
