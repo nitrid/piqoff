@@ -1909,7 +1909,8 @@ export default class posDoc extends React.PureComponent
     render()
     {
         return(
-            <div>     
+            <div>
+                {/* Ekranda belirli bir süre boş beklediğinde logout olması için yapıldı */}
                 <IdleTimer timeout={this.prmObj.filter({ID:'ScreenTimeOut',TYPE:0}).getValue()}
                 onIdle={()=>
                 {
