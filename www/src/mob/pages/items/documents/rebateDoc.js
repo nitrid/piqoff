@@ -66,6 +66,7 @@ export default class rebateDoc extends React.Component
         this.docObj.clearAll()
 
         this.txtRef.setState({value:this.user.CODE})
+        this.txtRef.value = this.user.CODE
         let tmpDoc = {...this.docObj.empty}
         tmpDoc.REF = this.user.CODE
         tmpDoc.TYPE = 2

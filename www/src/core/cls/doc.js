@@ -234,6 +234,7 @@ export class docItemsCls
             DESCRIPTION : '',
             INVOICE_GUID : '00000000-0000-0000-0000-000000000000',
             VAT_RATE : 0 ,
+            OLD_VAT : 0,
             DISCOUNT_RATE : 0,
             CONNECT_REF : '',
             CONNECT_DOC_DATE : '',

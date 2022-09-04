@@ -109,7 +109,7 @@ export default class posSalesReport extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <NdPivot id="pvtData" parent={this}
+                            <NdPivot id="pvtData" parent={this} height={'750'}
                             fields={
                             [
                                 {
@@ -183,6 +183,31 @@ export default class posSalesReport extends React.PureComponent
                             showRowGrandTotals={true}
                             onCellPrepared={(e)=>
                             {
+                                if(e.area == 'column' && e.cell.type == 'D')
+                                {
+                                    e.cellElement.style.color = '#1e272e'
+                                    e.cellElement.style.fontWeight = 'bold';
+                                }
+                                if(e.area == 'row' && e.cell.type == 'T')
+                                {
+                                    e.cellElement.style.color = '#636e72'
+                                    e.cellElement.style.fontWeight = 'bold';
+                                }
+                                if(e.area == 'data' && e.cell.rowType == 'T')
+                                {
+                                    e.cellElement.style.color = '#636e72'
+                                    e.cellElement.style.fontWeight = 'bold';
+                                }
+                                if(e.area == 'row' && e.cell.type == 'GT')
+                                {
+                                    e.cellElement.style.color = '#1e272e'
+                                    e.cellElement.style.fontWeight = 'bold';
+                                }
+                                if(e.area == 'data' && e.cell.rowType == 'GT')
+                                {
+                                    e.cellElement.style.color = '#1e272e'
+                                    e.cellElement.style.fontWeight = 'bold';
+                                }
                                 if(e.area == 'column' && e.cell.type == 'T' && e.cell.path.length == 1 && e.cell.path[0] == "PAYMENT")
                                 {
                                     e.cellElement.innerText = "Total"

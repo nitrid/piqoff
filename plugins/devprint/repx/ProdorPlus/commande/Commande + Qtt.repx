@@ -120,7 +120,7 @@
                   </ExpressionBindings>
                   <StylePriority Ref="62" UseBorders="false" UseTextAlignment="false" />
                 </Item2>
-                <Item3 Ref="63" ControlType="XRTableCell" Name="tableCell19" Weight="0.16294854078748922" Multiline="true" Text="[CUSTOMER_ITEM_CODE]" StyleName="DetailData1" />
+                <Item3 Ref="63" ControlType="XRTableCell" Name="tableCell19" Weight="0.16294854078748922" Multiline="true" Text="[MULTICODE]" StyleName="DetailData1" />
                 <Item4 Ref="64" ControlType="XRTableCell" Name="tableCell11" Weight="0.51211545780749912" StyleName="DetailData1">
                   <ExpressionBindings>
                     <Item1 Ref="65" EventName="BeforePrint" PropertyName="Text" Expression="[ITEM_NAME]" />

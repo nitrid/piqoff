@@ -2216,6 +2216,20 @@ export const langTr =
             clmPrice: "Eski Fiyat",
             clmPrice2: "Yeni Fiyat",
         },
+        msgNewVat : 
+        {
+            title: "Dikkat",
+            btn01: "Hiç Birini Güncelleme",
+            btn02: "Seçilen Oranları Güncelle",
+            msg: "Fatura ile Sistemde Farklı KDV oranları mevcut.. "
+        },
+        grdNewVat: 
+        {
+            clmCode: "Kodu",
+            clmName: "Adı",
+            clmVat: "Sistemdeki KDV",
+            clmVat2: "Yeni KDV",
+        },
     },
     ftr_02_002 :
     {
