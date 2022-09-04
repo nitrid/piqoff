@@ -557,4 +557,10 @@ export const langFr =
         msg : "Sizin kullanıcı bilgileriniz ile başka bir cihazdan giriş yapıldı",
         btn01 : "Tamam"
     },
+    msgPayAmountAlert: //Bak
+    {
+        title : "Dikkat",
+        msg : "Lütfen geçerli bir tutar giriniz.",
+        btn01 : "Tamam"
+    },
 }

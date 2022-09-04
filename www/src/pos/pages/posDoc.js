@@ -1186,9 +1186,20 @@ export default class posDoc extends React.PureComponent
         });
     }   
     async payAdd(pType,pAmount)
-    {
+    {        
         if(this.state.payRest > 0)
         {                    
+            if(isNaN(Number(pAmount)) || Number(pAmount) == 0)
+            {
+                let tmpConfObj =
+                {
+                    id:'msgPayAmountAlert',showTitle:true,title:this.lang.t("msgPayAmountAlert.title"),showCloseButton:true,width:'500px',height:'250px',
+                    button:[{id:"btn01",caption:this.lang.t("msgPayAmountAlert.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPayAmountAlert.msg")}</div>)
+                }
+                await dialog(tmpConfObj);
+                return
+            }
             //KREDİ KARTI İSE
             if(pType == 1)
             {
@@ -2188,7 +2199,7 @@ export default class posDoc extends React.PureComponent
                                     {
                                         if(this.prmObj.filter({ID:'QuantityEdit',TYPE:0}).getValue() == true)
                                         {                                            
-                                            let tmpResult = await this.popNumber.show('Miktar',e.value)
+                                            let tmpResult = await this.popNumber.show('Miktar',Number(e.value) / Number(e.key.UNIT_FACTOR))
                                             if(typeof tmpResult != 'undefined' && tmpResult != '')
                                             {
                                                 if(this.prmObj.filter({ID:'QuantityCheckZero',TYPE:0}).getValue() == true && tmpResult == 0)
@@ -2202,8 +2213,7 @@ export default class posDoc extends React.PureComponent
                                                     await dialog(tmpConfObj);
                                                     return
                                                 }
-
-                                                let tmpData = {QUANTITY:Number(tmpResult),PRICE:e.key.PRICE}
+                                                let tmpData = {QUANTITY:Number(tmpResult) * Number(e.key.UNIT_FACTOR),PRICE:e.key.PRICE}
                                                 this.saleRowUpdate(e.key,tmpData)
                                             }
                                         }
@@ -2593,7 +2603,7 @@ export default class posDoc extends React.PureComponent
                                                 {
                                                     let tmpData = 
                                                     {
-                                                        QUANTITY:this.grdList.devGrid.getSelectedRowsData()[0].QUANTITY - 1,
+                                                        QUANTITY:Number(this.grdList.devGrid.getSelectedRowsData()[0].QUANTITY) - Number(this.grdList.devGrid.getSelectedRowsData()[0].UNIT_FACTOR),
                                                         PRICE:this.grdList.devGrid.getSelectedRowsData()[0].PRICE
                                                     }
                                                     this.saleRowUpdate(this.grdList.devGrid.getSelectedRowsData()[0],tmpData)
@@ -2610,7 +2620,7 @@ export default class posDoc extends React.PureComponent
                                             {
                                                 let tmpData = 
                                                 {
-                                                    QUANTITY:Number(this.grdList.devGrid.getSelectedRowsData()[0].QUANTITY) + 1,
+                                                    QUANTITY:Number(this.grdList.devGrid.getSelectedRowsData()[0].QUANTITY) + Number(this.grdList.devGrid.getSelectedRowsData()[0].UNIT_FACTOR),
                                                     PRICE:this.grdList.devGrid.getSelectedRowsData()[0].PRICE
                                                 }
                                                 this.saleRowUpdate(this.grdList.devGrid.getSelectedRowsData()[0],tmpData)
@@ -5426,7 +5436,7 @@ export default class posDoc extends React.PureComponent
                                     {
                                         if(this.prmObj.filter({ID:'QuantityEdit',TYPE:0}).getValue() == true)
                                         {                                            
-                                            let tmpResult = await this.popNumber.show('Miktar',e.value)
+                                            let tmpResult = await this.popNumber.show('Miktar',Number(e.value) / Number(e.key.UNIT_FACTOR))
                                                                                         
                                             if(typeof tmpResult != 'undefined' && tmpResult != '')
                                             {
@@ -5442,7 +5452,7 @@ export default class posDoc extends React.PureComponent
                                                     return
                                                 }
 
-                                                let tmpData = {QUANTITY:tmpResult,PRICE:e.key.PRICE}
+                                                let tmpData = {QUANTITY:Number(tmpResult) * Number(e.key.UNIT_FACTOR),PRICE:e.key.PRICE}
                                                 this.saleRowUpdate(e.key,tmpData)
                                             }
                                         }
