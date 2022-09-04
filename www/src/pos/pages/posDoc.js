@@ -2493,8 +2493,9 @@ export default class posDoc extends React.PureComponent
                                             
                                             await this.cheqDt.refresh();
                                             await this.grdPopCheqpayList.dataRefresh({source:this.cheqDt});
-                                            this.calcGrandTotal(false);
-
+                                            await this.calcGrandTotal(false);
+                                            await this.core.util.waitUntil(500)
+                                            
                                             this.popCheqpay.show();
                                         }}>
                                             <i className="text-white fa-solid fa-ticket" style={{fontSize: "24px"}} />

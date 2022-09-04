@@ -21,7 +21,7 @@ export default class NdPivot extends Base
             showColumnTotals : props.showColumnTotals,
             showColumnGrandTotals : props.showColumnGrandTotals,
             showRowTotals : props.showRowTotals,
-            showRowGrandTotals : props.showRowGrandTotals
+            showRowGrandTotals : props.showRowGrandTotals,
         } 
     }
     setDataSource(pData,pField)
@@ -51,6 +51,7 @@ export default class NdPivot extends Base
             showRowTotals={this.state.showRowTotals}
             showRowGrandTotals={this.state.showRowGrandTotals}
             onCellPrepared={this.props.onCellPrepared}
+            height={this.props.height}
             >
                 {this.props.children}
             </PivotGrid>

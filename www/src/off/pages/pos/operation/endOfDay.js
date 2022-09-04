@@ -118,6 +118,12 @@ export default class endOfDay extends React.PureComponent
       {
         this.popOpenTike.show()
       }
+      // let tmpQuery = 
+      // {
+      //     query : "SELECT   " +
+      //     param : [],
+      //     value : [this.dtDocDate.value,this.cmbSafe.value]
+      // }
     }
     async finishButtonClick()
     {

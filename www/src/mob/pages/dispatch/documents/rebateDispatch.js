@@ -600,7 +600,7 @@ export default class rebateDispatch extends React.PureComponent
                                                     let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                     if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                     {
-                                                        this.txtRef.setState({value:data[0].CODE});
+                                                        this.txtRef.value = data[0].CODE 
                                                         this.txtRef.props.onChange()
                                                     }
                                                 }
@@ -625,7 +625,7 @@ export default class rebateDispatch extends React.PureComponent
                                                             let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
-                                                                this.txtRef.setState({value:data[0].CODE});
+                                                                this.txtRef.value = data[0].CODE 
                                                                 this.txtRef.props.onChange()
                                                             }
                                                         }

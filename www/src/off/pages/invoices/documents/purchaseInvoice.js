@@ -58,6 +58,7 @@ export default class purchaseInvoice extends React.PureComponent
         this.multiItemData = new datatable
         this.unitDetailData = new datatable
         this.newPrice = new datatable
+        this.newVat = new datatable
     }
     async componentDidMount()
     {
@@ -73,6 +74,8 @@ export default class purchaseInvoice extends React.PureComponent
         this.docObj.clearAll()
         this.paymentObj.clearAll()
         this.newPrice.clear()
+        this.newVat.clear()
+
 
         this.docObj.ds.on('onAddRow',(pTblName,pData) =>
         {
@@ -143,6 +146,7 @@ export default class purchaseInvoice extends React.PureComponent
         await this.grdMultiItem.dataRefresh({source:this.multiItemData});
         await this.grdUnit2.dataRefresh({source:this.unitDetailData})
         await this.grdNewPrice.dataRefresh({source:this.newPrice})
+        await this.grdNewVat.dataRefresh({source:this.newVat})
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -379,7 +383,7 @@ export default class purchaseInvoice extends React.PureComponent
             )
         }
     }
-    async addItem(pData,pIndex,pQuantity,pPrice,pDiscount)
+    async addItem(pData,pIndex,pQuantity,pPrice,pDiscount,pDiscountPer,pVat)
     {
         if(typeof pQuantity == 'undefined')
         {
@@ -487,10 +491,18 @@ export default class purchaseInvoice extends React.PureComponent
         }
         this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
         this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID
-        this.docObj.docItems.dt()[pIndex].VAT_RATE = pData.VAT
+        if(typeof pVat == 'undefined')
+        {
+            this.docObj.docItems.dt()[pIndex].VAT_RATE = pData.VAT
+            this.docObj.docItems.dt()[pIndex].OLD_VAT = pData.VAT
+        }
+        else
+        {
+            this.docObj.docItems.dt()[pIndex].VAT_RATE = pVat
+            this.docObj.docItems.dt()[pIndex].OLD_VAT = pData.VAT
+        }
         this.docObj.docItems.dt()[pIndex].ITEM_NAME = pData.NAME
-        this.docObj.docItems.dt()[pIndex].DISCOUNT = typeof pDiscount == 'undefined' ? 0 : pDiscount
-        this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
+
         this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
 
         let tmpQuery = 
@@ -506,7 +518,7 @@ export default class purchaseInvoice extends React.PureComponent
             if(tmpData.result.recordset.length > 0)
             {
                 this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
-                this.docObj.docItems.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100) * pQuantity).toFixed(3))
+                this.docObj.docItems.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100) * pQuantity).toFixed(3))
                 this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE  * pQuantity).toFixed(3))
                 this.docObj.docItems.dt()[pIndex].TOTAL = parseFloat(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT).toFixed(3))
                 this._calculateTotal()
@@ -523,9 +535,21 @@ export default class purchaseInvoice extends React.PureComponent
         else
         {
             this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((pPrice).toFixed(3))
-            this.docObj.docItems.dt()[pIndex].VAT = parseFloat((pPrice * (pData.VAT / 100) * pQuantity).toFixed(3))
+            if(typeof pDiscountPer != 'undefined')
+            {
+                this.docObj.docItems.dt()[pIndex].DISCOUNT = typeof pDiscountPer == 'undefined' ? 0 : (this.docObj.docItems.dt()[pIndex].PRICE * pDiscountPer / 100) * pQuantity
+                this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = typeof pDiscountPer == 'undefined' ? 0 : pDiscountPer
+            }
+            else
+            {
+                this.docObj.docItems.dt()[pIndex].DISCOUNT = typeof pDiscount == 'undefined' ? 0 : pDiscount
+                this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = typeof pDiscount == 'undefined' ? 0 : (pDiscount / this.docObj.docItems.dt()[pIndex].AMOUNT)  * 100
+            }
+          
+
+            this.docObj.docItems.dt()[pIndex].VAT = parseFloat((((pPrice * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT) * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100) ).toFixed(3))
             this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((pPrice  * pQuantity).toFixed(3))
-            this.docObj.docItems.dt()[pIndex].TOTAL = parseFloat(((pPrice * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT).toFixed(3))
+            this.docObj.docItems.dt()[pIndex].TOTAL = parseFloat(((pPrice * pQuantity)- this.docObj.docItems.dt()[pIndex].DISCOUNT + this.docObj.docItems.dt()[pIndex].VAT).toFixed(3))
             this._calculateTotal()
         }
         if(tmpData.result.recordset.length > 0)
@@ -533,7 +557,7 @@ export default class purchaseInvoice extends React.PureComponent
             this.docObj.docItems.dt()[pIndex].CUSTOMER_PRICE = tmpData.result.recordset[0].PRICE
             this.docObj.docItems.dt()[pIndex].DIFF_PRICE = this.docObj.docItems.dt()[pIndex].PRICE - this.docObj.docItems.dt()[pIndex].CUSTOMER_PRICE
         }
-      
+       
     }
     async _getItems()
     {
@@ -837,7 +861,7 @@ export default class purchaseInvoice extends React.PureComponent
             {
                 query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY," + 
                 "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
-                " FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') = @VALUE " ,
+                " FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') = @VALUE AND STATUS = 1 " ,
                 param : ['VALUE:string|50'],
                 value : [pdata[i].CODE]
             }
@@ -862,7 +886,7 @@ export default class purchaseInvoice extends React.PureComponent
                 this.txtRefno.readOnly = true
                 this.docObj.docItems.addEmpty(tmpDocItems)
                 await this.core.util.waitUntil(100)
-                await this.addItem(tmpData.result.recordset[0],this.docObj.docItems.dt().length-1,pdata[i].QTY,pdata[i].PRICE,pdata[i].DISC)
+                await this.addItem(tmpData.result.recordset[0],this.docObj.docItems.dt().length-1,pdata[i].QTY,pdata[i].PRICE,pdata[i].DISC,pdata[i].DISC_PER,pdata[i].TVA)
                 tmpCounter = tmpCounter + 1
             }
             else
@@ -932,12 +956,17 @@ export default class purchaseInvoice extends React.PureComponent
         if(pResult == 'btn01')
         {
             let tmpData = this.sysParam.filter({ID:'purcInvoıcePriceSave',USERS:this.user.CODE}).getValue()
-            console.log(tmpData)
             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
             {
                 this.newPrice.clear()
+                this.newVat.clear()
                 for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
                 {
+
+                    if(typeof this.docObj.docItems.dt()[i].OLD_VAT != 'undefined' && this.docObj.docItems.dt()[i].VAT_RATE != this.docObj.docItems.dt()[i].OLD_VAT)
+                    {
+                        this.newVat.push(this.docObj.docItems.dt()[i])
+                    }
                     if(this.docObj.docItems.dt()[i].CUSTOMER_PRICE != this.docObj.docItems.dt()[i].PRICE)
                     {
                         this.newPrice.push(this.docObj.docItems.dt()[i])
@@ -950,8 +979,7 @@ export default class purchaseInvoice extends React.PureComponent
             
                         if(e == 'btn01')
                         {
-                        
-                            return
+                            
                         }
                         if(e == 'btn02')
                         {
@@ -962,11 +990,38 @@ export default class purchaseInvoice extends React.PureComponent
                                 tmpMulticodeObj.dt()[0].CUSTOMER_PRICE = this.grdNewPrice.getSelectedData()[i].PRICE
                                 tmpMulticodeObj.save()
                             }
-                            return
+                            
+                        }
+                    })
+                }    
+                if(this.newVat.length > 0)
+                {
+                    await this.msgNewVat.show().then(async (e) =>
+                    {
+            
+                        if(e == 'btn01')
+                        {
+                            
+                        }
+                        if(e == 'btn02')
+                        {
+                            for (let i = 0; i < this.grdNewVat.getSelectedData().length; i++) 
+                            {
+                                console.log(this.grdNewVat.getSelectedData()[i])
+                                let tmpQuery = 
+                                {
+                                    query :"UPDATE ITEMS SET VAT = @VAT WHERE GUID = @GUID",
+                                    param : ['GUID:string|50','VAT:float'],
+                                    value : [this.grdNewVat.getSelectedData()[i].ITEM,this.grdNewVat.getSelectedData()[i].VAT_RATE]
+                                }
+                                await this.core.sql.execute(tmpQuery) 
+                            }
+                            
                         }
                     })
                 }    
             }
+            
             let tmpConfObj1 =
             {
                 id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -1728,13 +1783,14 @@ export default class purchaseInvoice extends React.PureComponent
                                         <Column dataField="ITEM_CODE" caption={this.t("grdPurcInv.clmItemCode")} width={140} editCellRender={this._cellRoleRender} allowHeaderFiltering={false}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdPurcInv.clmItemName")} width={400} allowHeaderFiltering={false}/>
                                         <Column dataField="QUANTITY" caption={this.t("grdPurcInv.clmQuantity")} dataType={'number'} width={80} allowHeaderFiltering={false}/>
-                                        <Column dataField="PRICE" caption={this.t("grdPurcInv.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={80} allowHeaderFiltering={false}/>
-                                        <Column dataField="CUSTOMER_PRICE" caption={this.t("grdPurcInv.clmCustomerPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={80} allowHeaderFiltering={false} allowEditing={false}/>
-                                        <Column dataField="DIFF_PRICE" caption={this.t("grdPurcInv.clmDiffPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={80} allowHeaderFiltering={false} allowEditing={false}/>
+                                        <Column dataField="PRICE" caption={this.t("grdPurcInv.clmPrice")} dataType={'number'} format={'€#,##0.000'} width={80} allowHeaderFiltering={false}/>
+                                        <Column dataField="CUSTOMER_PRICE" caption={this.t("grdPurcInv.clmCustomerPrice")} dataType={'number'} format={'€#,##0.000'} width={80} allowHeaderFiltering={false} allowEditing={false}/>
+                                        <Column dataField="DIFF_PRICE" caption={this.t("grdPurcInv.clmDiffPrice")} dataType={'number'} format={'€#,##0.000'} width={80} allowHeaderFiltering={false} allowEditing={false}/>
                                         <Column dataField="AMOUNT" caption={this.t("grdPurcInv.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={100} allowHeaderFiltering={false}/>
                                         <Column dataField="DISCOUNT" caption={this.t("grdPurcInv.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} width={80} allowHeaderFiltering={false}/>
                                         <Column dataField="DISCOUNT_RATE" caption={this.t("grdPurcInv.clmDiscountRate")} dataType={'number'} width={80} allowHeaderFiltering={false}/>
-                                        <Column dataField="VAT" caption={this.t("grdPurcInv.clmVat")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={80} allowHeaderFiltering={false}/>
+                                        <Column dataField="VAT" caption={this.t("grdPurcInv.clmVat")} format={'€#,##0.000'}allowEditing={false} width={80} allowHeaderFiltering={false}/>
+                                        <Column dataField="VAT_RATE" caption={this.t("grdPurcInv.clmVat")} format={'%#,##'} allowEditing={false} width={80} allowHeaderFiltering={false}/>
                                         <Column dataField="TOTAL" caption={this.t("grdPurcInv.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={80} allowHeaderFiltering={false}/>
                                         <Column dataField="DESCRIPTION" caption={this.t("grdPurcInv.clmDescription")} width={160}  headerFilter={{visible:true}}/>
                                         <Column dataField="CONNECT_REF" caption={this.t("grdPurcInv.clmDispatch")}  width={150} allowEditing={false}/>
@@ -2826,6 +2882,55 @@ export default class purchaseInvoice extends React.PureComponent
                                     </Item>
                                 </Form>
                             </div>
+                            </div>
+                            <div className='row'>
+                        
+                            </div>
+                        
+                    </NdDialog>  
+                         {/* Yeni KDV Dialog  */}
+                    <NdDialog id={"msgNewVat"} container={"#root"} parent={this}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        title={this.t("msgNewVat.title")} 
+                        showCloseButton={false}
+                        width={"800px"}
+                        height={"600PX"}
+                        button={[{id:"btn01",caption:this.t("msgNewVat.btn01"),location:'before'},{id:"btn02",caption:this.t("msgNewVat.btn02"),location:'after'}]}
+                        >
+                            <div className="row">
+                                <div className="col-12 py-2">
+                                    <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNewVat.msg")}</div>
+                                </div>
+                                <div className="col-12 py-2">
+                                    <Form>
+                                        {/* grdNewVat */}
+                                        <Item>
+                                        <NdGrid parent={this} id={"grdNewVat"} 
+                                        showBorders={true} 
+                                        columnsAutoWidth={true} 
+                                        allowColumnReordering={true} 
+                                        allowColumnResizing={true} 
+                                        headerFilter={{visible:true}}
+                                        filterRow = {{visible:true}}
+                                        height={400} 
+                                        width={'100%'}
+                                        dbApply={false}
+                                        selection={{mode:"multiple"}}
+                                        onRowRemoved={async (e)=>{
+                                        }}
+                                        >
+                                            <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
+                                            <Scrolling mode="virtual" />
+                                            <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
+                                            <Column dataField="ITEM_CODE" caption={this.t("grdNewVat.clmCode")} width={150} />
+                                            <Column dataField="ITEM_NAME" caption={this.t("grdNewVat.clmName")} width={250} />
+                                            <Column dataField="OLD_VAT" caption={this.t("grdNewVat.clmVat")} width={130}  />
+                                            <Column dataField="VAT_RATE" caption={this.t("grdNewVat.clmVat2")} dataType={'number'} width={80}/>
+                                        </NdGrid>
+                                        </Item>
+                                    </Form>
+                                </div>
                             </div>
                             <div className='row'>
                         
