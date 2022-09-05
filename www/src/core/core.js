@@ -1,6 +1,7 @@
 import { isProxy } from 'is-proxy';
 import {Connection} from 'jsstore';
 import { jsworker } from './jsworker.js';
+import moment from 'moment';
 
 export class core
 {        
@@ -473,7 +474,8 @@ export class util
 {
     constructor()
     {
-        this.core = core.instance;        
+        this.core = core.instance;
+        this.logPath = ""
     }
     folder_list(pPath)
     {
@@ -533,7 +535,30 @@ export class util
         }
     
         return false;
-    }    
+    }
+    writeLog(pMsg,pPath)
+    {
+        return new Promise(resolve => 
+        {
+            let tmpPath = this.logPath
+            if(typeof pPath != 'undefined')
+            {
+                tmpPath = pPath
+            }
+
+            if(tmpPath != "")
+            {
+                this.core.socket.emit('util',{cmd:'write_log',prm: {path:tmpPath,data:moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS") + " - " + pMsg + "\n"}},(data) =>
+                {
+                    resolve(data)
+                });
+            }
+            else
+            {
+                resolve(false)
+            }
+        });
+    }
 }
 export class dataset
 {    

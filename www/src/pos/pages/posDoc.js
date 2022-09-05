@@ -225,8 +225,8 @@ export default class posDoc extends React.PureComponent
         {
             this.lblTime.value = moment(new Date(),"HH:mm:ss").format("HH:mm:ss")
             this.lblDate.value = new Date().toLocaleDateString('tr-TR',{ year: 'numeric', month: 'numeric', day: 'numeric' })
-        },1000)     
-        
+        },1000)             
+
         this.posObj.clearAll()
         await this.prmObj.load({APP:'POS'})
         await this.acsObj.load({APP:'POS'})
@@ -284,6 +284,8 @@ export default class posDoc extends React.PureComponent
         
         await this.calcGrandTotal(false) 
         
+        this.core.util.logPath = "\\www\\log\\pos_" + this.posObj.dt()[this.posObj.dt().length - 1].DEVICE + ".txt"        
+
         if(this.posObj.dt()[this.posObj.dt().length - 1].DEVICE == '')
         {
             this.deviceEntry()
@@ -300,7 +302,7 @@ export default class posDoc extends React.PureComponent
                              
                 return
             }
-        }   
+        }           
     }    
     async deviceEntry()
     {

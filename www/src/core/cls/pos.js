@@ -1485,7 +1485,6 @@ export class posDeviceCls
             await this.core.util.waitUntil(2000)
         }
         
-        
         let generate_lrc = function(real_msg_with_etx)
         {
             let lrc = 0, text = real_msg_with_etx.split('');
@@ -1513,19 +1512,23 @@ export class posDeviceCls
         }
         return new Promise(async (resolve) =>
         {
+            this.core.util.writeLog("signal : 1")
             if(this.payPort == null || !this.payPort.isOpen)
             {
                 this.payPort = new tmpSerialPort(this.dt().length > 0 ? this.dt()[0].PAY_CARD_PORT : "",{baudRate: 9600,dataBits: 7,parity:'odd',parser: new this.serialport.parsers.Readline()});
             }
-            
+            this.core.util.writeLog("signal : 2")
             this.payPort.write(String.fromCharCode(5)); //ENQ
 
             this.payPort.on('data',async(data) =>
             {
-                console.log(data.toString())
-                console.log(data)
+                this.core.util.writeLog("signal : 3")
+                this.core.util.writeLog(data.toString())
+                this.core.util.writeLog(data)
+
                 if((!ack && String.fromCharCode(6) == String.fromCharCode(data[0])) || String.fromCharCode(21) == String.fromCharCode(data[0]))
                 {   
+                        this.core.util.writeLog("signal : 4")
                         let tmpData = 
                         {
                             'pos_number': '01',
@@ -1554,13 +1557,17 @@ export class posDeviceCls
                         let tpe_msg = (String.fromCharCode(2)).concat(real_msg_with_etx).concat(String.fromCharCode(lrc));
                         this.payPort.write(tpe_msg)
                         ack = true
+                        this.core.util.writeLog("signal : 5")
+                        this.core.util.writeLog(tpe_msg)
                 }
                 else if(ack && String.fromCharCode(6) == String.fromCharCode(data[0]))
                 {
+                    this.core.util.writeLog("signal : 6")
                     this.payPort.write(String.fromCharCode(4))
                 }
                 else if(String.fromCharCode(5) == String.fromCharCode(data[0]))
                 {
+                    this.core.util.writeLog("signal : 7")
                     this.payPort.write(String.fromCharCode(6))
                 }                
                 else if(data.length >= 25)
@@ -1575,7 +1582,7 @@ export class posDeviceCls
                         str = data.toString().substr(0, data.toString().length-3);
                     }
                     
-                    console.log(str)
+                    this.core.util.writeLog(str)
                     let response = 
                     {
                         'pos_number'        : str.substr(0, 2),
@@ -1585,7 +1592,7 @@ export class posDeviceCls
                         'currency_numeric'  : str.substr(12, 3),
                         'private'           : str.substr(15, 11)
                     };
-                    console.log(response)
+                    this.core.util.writeLog(response)
                     // setTimeout(async() => 
                     // {
                     //     if(this.payPort.isOpen)
@@ -1598,8 +1605,10 @@ export class posDeviceCls
                 }
                 else if(checkSum(4,data))
                 {
+                    this.core.util.writeLog("signal : 8")
                     if(this.payPort.isOpen)
                     {
+                        this.core.util.writeLog("signal : 9")
                         await this.payPort.close(); 
                     }
                 }
