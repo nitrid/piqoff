@@ -3558,8 +3558,11 @@ export default class posDoc extends React.PureComponent
                                 }}
                                 onSelectionChanged={(e)=>
                                 {
-                                    this.getItem(this.txtBarcode.value + e.currentSelectedRowKeys[0].BARCODE)
-                                    this.popBarcodeList.hide()
+                                    if(typeof e.currentSelectedRowKeys[0] != 'undefined')
+                                    {
+                                        this.getItem(this.txtBarcode.value + e.currentSelectedRowKeys[0].BARCODE)
+                                        this.popBarcodeList.hide()
+                                    }
                                 }}
                                 >
                                     <Column dataField="BARCODE" caption={this.lang.t("grdBarcodeList.BARCODE")} width={150}/>
