@@ -7,3 +7,4 @@ package-lock.json
 www/public/
 www/node_modules/
 daemon/
+www/log
