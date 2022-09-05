@@ -1523,8 +1523,7 @@ export class posDeviceCls
             this.payPort.on('data',async(data) =>
             {
                 this.core.util.writeLog("signal : 3")
-                this.core.util.writeLog(data.toString())
-                this.core.util.writeLog(data)
+                this.core.util.writeLog("full data : " + data.toString())                
 
                 if((!ack && String.fromCharCode(6) == String.fromCharCode(data[0])) || String.fromCharCode(21) == String.fromCharCode(data[0]))
                 {   
@@ -1557,17 +1556,17 @@ export class posDeviceCls
                         let tpe_msg = (String.fromCharCode(2)).concat(real_msg_with_etx).concat(String.fromCharCode(lrc));
                         this.payPort.write(tpe_msg)
                         ack = true
-                        this.core.util.writeLog("signal : 5")
-                        this.core.util.writeLog(tpe_msg)
+                        
+                        this.core.util.writeLog("send data : " + tpe_msg)
                 }
                 else if(ack && String.fromCharCode(6) == String.fromCharCode(data[0]))
                 {
-                    this.core.util.writeLog("signal : 6")
+                    this.core.util.writeLog("send eot")
                     this.payPort.write(String.fromCharCode(4))
                 }
                 else if(String.fromCharCode(5) == String.fromCharCode(data[0]))
                 {
-                    this.core.util.writeLog("signal : 7")
+                    this.core.util.writeLog("send ack")
                     this.payPort.write(String.fromCharCode(6))
                 }                
                 else if(data.length >= 25)
@@ -1582,7 +1581,6 @@ export class posDeviceCls
                         str = data.toString().substr(0, data.toString().length-3);
                     }
                     
-                    this.core.util.writeLog(str)
                     let response = 
                     {
                         'pos_number'        : str.substr(0, 2),
@@ -1592,7 +1590,7 @@ export class posDeviceCls
                         'currency_numeric'  : str.substr(12, 3),
                         'private'           : str.substr(15, 11)
                     };
-                    this.core.util.writeLog(response)
+                    this.core.util.writeLog("response : " + response)
                     // setTimeout(async() => 
                     // {
                     //     if(this.payPort.isOpen)
