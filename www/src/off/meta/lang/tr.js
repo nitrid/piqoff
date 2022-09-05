@@ -2169,7 +2169,7 @@ export const langTr =
         grdMultiItem : 
         {
             clmCode : "Ürün Kodu",
-            clmMulticode : "Tedarikçi Kodun",
+            clmMulticode : "Tedarikçi Kodu",
             clmName : "Ürün Adı",
             clmQuantity : "Miktar"
         },
@@ -2499,7 +2499,7 @@ export const langTr =
         grdMultiItem : 
         {
             clmCode : "Ürün Kodu",
-            clmMulticode : "Tedarikçi Kodun",
+            clmMulticode : "Tedarikçi Kodu",
             clmName : "Ürün Adı",
             clmQuantity : "Miktar"
         },
@@ -3378,7 +3378,7 @@ export const langTr =
         grdMultiItem : 
         {
             clmCode : "Ürün Kodu",
-            clmMulticode : "Tedarikçi Kodun",
+            clmMulticode : "Tedarikçi Kodu",
             clmName : "Ürün Adı",
             clmQuantity : "Miktar"
         },
@@ -3622,7 +3622,7 @@ export const langTr =
         grdMultiItem : 
         {
             clmCode : "Ürün Kodu",
-            clmMulticode : "Tedarikçi Kodun",
+            clmMulticode : "Tedarikçi Kodu",
             clmName : "Ürün Adı",
             clmQuantity : "Miktar"
         },
@@ -4131,7 +4131,7 @@ export const langTr =
         grdMultiItem : 
         {
             clmCode : "Ürün Kodu",
-            clmMulticode : "Tedarikçi Kodun",
+            clmMulticode : "Tedarikçi Kodu",
             clmName : "Ürün Adı",
             clmQuantity : "Miktar"
         },
@@ -4373,7 +4373,7 @@ export const langTr =
         grdMultiItem : 
         {
             clmCode : "Ürün Kodu",
-            clmMulticode : "Tedarikçi Kodun",
+            clmMulticode : "Tedarikçi Kodu",
             clmName : "Ürün Adı",
             clmQuantity : "Miktar"
         },
@@ -4568,7 +4568,7 @@ export const langTr =
         grdMultiItem : 
         {
             clmCode : "Ürün Kodu",
-            clmMulticode : "Tedarikçi Kodun",
+            clmMulticode : "Tedarikçi Kodu",
             clmName : "Ürün Adı",
             clmQuantity : "Miktar",
             clmPrice : "Fiyat"
@@ -4716,7 +4716,7 @@ export const langTr =
         grdMultiItem : 
         {
             clmCode : "Ürün Kodu",
-            clmMulticode : "Tedarikçi Kodun",
+            clmMulticode : "Tedarikçi Kodu",
             clmName : "Ürün Adı",
             clmQuantity : "Miktar",
             clmPrice : "Fiyat"
@@ -5918,7 +5918,7 @@ export const langTr =
         grdMultiItem : 
         {
             clmCode : "Ürün Kodu",
-            clmMulticode : "Tedarikçi Kodun",
+            clmMulticode : "Tedarikçi Kodu",
             clmName : "Ürün Adı",
             clmQuantity : "Miktar"
         },
@@ -6160,7 +6160,7 @@ export const langTr =
         grdMultiItem : 
         {
             clmCode : "Ürün Kodu",
-            clmMulticode : "Tedarikçi Kodun",
+            clmMulticode : "Tedarikçi Kodu",
             clmName : "Ürün Adı",
             clmQuantity : "Miktar"
         },
