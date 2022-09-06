@@ -1,5 +1,6 @@
 export const langTr = 
 {
+    popGrid: {btnSelection:"Kaydet",btnSearch:"Listele"},
     menu:
     {
         stk: "Stok",                
@@ -134,7 +135,7 @@ export const langTr =
             clmRole : "Rol",
             clmStatus : "Durum",
             clmPwd : "Parola"
-        }    
+        }
     },
     P0003 : 
     {
@@ -144,5 +145,15 @@ export const langTr =
             clmCode : "Kodu",
             clmName : "Adı"
         }    
+    },
+    menu_01 :
+    {
+        pg_CltvSave :
+        {
+            clmCode : "Kodu",
+            clmName : "Adı",
+            title : "Toplu Kaydet",
+            btnSelection: "Kaydet"
+        }
     }
 }

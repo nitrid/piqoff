@@ -57,11 +57,10 @@ export const menu =
         items: 
         [
             {
-                id: 'menu.01',
+                id: 'menu_01',
                 text: 'Kullanıcı Menü Ayarları',
                 path: 'menuEdit'
             },
-            
         ]
     },
     {

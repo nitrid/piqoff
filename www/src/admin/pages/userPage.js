@@ -35,7 +35,7 @@ export default class userPage extends React.Component
         return(
             <div className="row p-2">
                 <div className="col-12">
-                <NdGrid id="grdUserList" parent={this} onSelectionChanged={this.onSelectionChanged} 
+                    <NdGrid id="grdUserList" parent={this} onSelectionChanged={this.onSelectionChanged} 
                     showBorders={true}
                     allowColumnResizing={true}
                     selection={{mode:"single"}} 
@@ -45,8 +45,16 @@ export default class userPage extends React.Component
                     filterRow={{visible:true}} headerFilter={{visible:true}}
                     param={this.param.filter({ELEMENT:'grdUserList',USERS:this.user.CODE})} 
                     access={this.access.filter({ELEMENT:'grdUserList',USERS:this.user.CODE})}
+                    onRowUpdating={(e)=>
+                    {
+                        console.log(e)
+                        if(typeof e.newData.PWD != 'undefined')
+                        {
+                            e.newData.PWD = btoa(e.newData.PWD)
+                        }
+                    }}
                 >
-                    <Editing
+                <Editing
                     mode="popup"
                     allowUpdating={true}
                     allowAdding={true}
@@ -56,7 +64,7 @@ export default class userPage extends React.Component
                     <Item itemType="group" colCount={2}>
                         <Item dataField="CODE" />
                         <Item dataField="NAME" />
-                        <Item dataField="PWD" />
+                        <Item dataField="PWD"/>
                         <Item dataField="ROLE" />
                         <Item dataField="STATUS" editorType="boolean" />
                     </Item>
@@ -64,11 +72,11 @@ export default class userPage extends React.Component
                 </Editing>
                 <Column dataField="CODE" caption={this.t("grdUserList.clmCode")} />
                 <Column dataField="NAME" caption={this.t("grdUserList.clmName")} />
-                <Column dataField="PWD" caption={this.t("grdUserList.clmPwd")} visible={false}/>
+                <Column dataField="PWD" editorOptions={{mode:"password"}} caption={this.t("grdUserList.clmPwd")} visible={false}/>
                 <Column dataField="ROLE" caption={this.t("grdUserList.clmRole")} >
                 <Lookup dataSource={this.RoleCmb} valueExpr="CODE" displayExpr="CODE" /> </Column>
                 <Column dataField="STATUS" caption={this.t("grdUserList.clmStatus")} dataType="boolean" />
-                </NdGrid>
+                    </NdGrid>
                 </div>
             </div>
         )

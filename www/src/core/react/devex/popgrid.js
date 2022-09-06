@@ -35,6 +35,7 @@ export default class NdPopGrid extends Base
         this._onSelectionChanged = this._onSelectionChanged.bind(this);
         this._onClick = this._onClick.bind(this);
         this._onRowDblClick = this._onRowDblClick.bind(this);
+        this._onRowPrepared = this._onRowPrepared.bind(this);
         this.setSource = this.setSource.bind(this);
         this.setData = this.setData.bind(this);
         this.setVal = this.setVal.bind(this);
@@ -205,6 +206,13 @@ export default class NdPopGrid extends Base
             this.props.onRowDblClick(e);
         }
     }
+    _onRowPrepared(e)
+    {
+        if(typeof this.props.onRowPrepared != 'undefined')
+        {
+            this.props.onRowPrepared(e);
+        }
+    }
     //#endregion
     async componentDidMount()
     {
@@ -319,6 +327,7 @@ export default class NdPopGrid extends Base
                             width={'100%'}
                             onSelectionChanged={this._onSelectionChanged} 
                             onRowDblClick={this._onRowDblClick}
+                            onRowPrepared={this._onRowPrepared}
                             columns={this.state.columns}
                             filterRow={this.state.filterRow}
                             headerFilter={this.state.headerFilter}
