@@ -253,7 +253,7 @@ export const prm =
                     },
                     {
                         type : "range",
-                        msg : "Le multiplicateur d'unité pricipale ne peut pas être inférieur à un !!",
+                        msg : "Ana birim çarpanı bir den küçük olamaz !",
                         min : 1
                     }
                 ]
@@ -328,7 +328,7 @@ export const prm =
                     },
                     {
                         type : "range",
-                        msg : "Le contenue ne peut pas être nul ou inférieur à zéro !",
+                        msg : "Alt birim çarpanı sıfır ve sıfır dan küçük olamaz !",
                         min : 0.01
                     }
                 ]
@@ -473,7 +473,7 @@ export const prm =
                 [
                     {
                         type : "range",
-                        msg : "Ne peut pas saisir 0!",
+                        msg : "Sıfır değer giremezsiniz !",
                         min : 0.01
                     }
                 ]
@@ -504,7 +504,7 @@ export const prm =
                 [
                     {
                         type : "range",
-                        msg : "Ne peut pas saisir 0!",
+                        msg : "Sıfır değer giremezsiniz !",
                         min : 0.01
                     }
                 ]
@@ -535,7 +535,7 @@ export const prm =
                 [
                     {
                         type : "range",
-                        msg : "Ne peut pas saisir 0!",
+                        msg : "Sıfır değer giremezsiniz !",
                         min : 0.01
                     }
                 ]
@@ -770,7 +770,7 @@ export const prm =
                 [
                     {
                         type : "required",
-                        msg : "Vous ne pouvez pas laisser le code vide!"
+                        msg : "Kodu'ı boş geçemezsiniz !"
                     }
                 ]
             }
@@ -818,7 +818,7 @@ export const prm =
                 [
                     {
                         type : "required",
-                        msg : "Vous ne pouvez pas laisser le nom vide. !"
+                        msg : "Adı boş geçemezsiniz !"
                     }
                 ]
             }
@@ -847,7 +847,7 @@ export const prm =
                 [
                     {
                         type : "required",
-                        msg : "Vous ne pouvez pas laisser le nom vide"
+                        msg : "Soyadı boş geçemezsiniz !"
                     }
                 ]
             }

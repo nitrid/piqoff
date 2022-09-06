@@ -1,8 +1,6 @@
 export const langFr = 
 {
     popGrid: {btnSelection:"Choix",btnSearch:"Listes"},
-    serverConnection : "Établissement de la connexion avec le serveur",
-    loading : "Connexion En Cours",
     btnSave: "Enregistre",
     btnCancel: "Supprime",
     btnPrint :"Imprime",
@@ -131,7 +129,7 @@ export const langFr =
         promo_02: "Listes",
         promo_02_001: "Liste promotion",
         promo_03: "Rapports",
-        set : "Coût Suplument",
+        set : "Réglages",
         set_01 : "Coût et taxe annexe",
         set_01_001 : "Taxe sucre",
         proces : "Saisie groupée",
@@ -5150,7 +5148,7 @@ export const langFr =
         txtName :"Nom",
         txtIban :"Iban",
         validCode :"Vous ne pouvez ne pas saisir le code !",
-        validIban : "Iban ne peut pas être vide !",
+        validIban : "Iban Boş Geçilemez !",
         cmbCurrentyType :"Devise",
         txtSwift: "Swift",
         txtOffical :"Administrateur",
@@ -5297,7 +5295,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Les comptes d'entrées et de sorties ne peuvent pas être les mêmes !" /// DUZ
+            msg: "Giriş Ve Çıkış Hesapları Aynı Olamaz !" /// DUZ
         },
         popSafeToSafe: 
         {
@@ -5346,7 +5344,7 @@ export const langFr =
         {
             clmCreateDate: "Date d'Enregistrement",
             clmMinValue : "Min. Evaluer Sucre Dans(100ML/GR)", ///duz
-            clmMaxvalue : "Max. Evaluer Sucre Dans(100ML/GR)",
+            clmMaxvalue : "Max. Evaluer Sucre Şeker Oranı(100ML/GR)",
             clmPrice : "Prix ​​Multiplicateur"
         },
         popTaxSugar : 
@@ -5354,7 +5352,7 @@ export const langFr =
             title: "Evaluer Sucre",
             btnApprove : "Ajoute",
             minValue : "Min. Evaluer Sucre Dans(100ML/GR)", ///duz
-            maxValue : "Max. Evaluer Sucre Dans(100ML/GR)",
+            maxValue : "Max. Evaluer Sucre Şeker Oranı(100ML/GR)",
             price : "Prix ​​Multiplicateur",
         },
         msgSave:
@@ -5378,7 +5376,7 @@ export const langFr =
             msg: "Veuillez saisir les zones nécessaire !"
         },
         validValue :"Ne peut être Vide",
-        zeroValid : "Ne peut pas être '0'"  ///duz
+        zeroValid : "0'dan Büyük Olmalıdır"  ///duz
 
     },
     pos_01_001 :
@@ -5390,7 +5388,7 @@ export const langFr =
         txtScalePort : "Scale Port",
         txtLcdPort : "LCD Port",
         txtPayCardPort : "Pay Card Port",
-        txtPrintDesing : "Tickets de caisse.",
+        txtPrintDesing : "Fiş Dizaynı",
         pg_txtCode : 
         {
             title : "Sélection Caisse",
@@ -5427,9 +5425,9 @@ export const langFr =
         msgCode : 
         {
             title: "Attention",
-            btn01: "Aller à l'appareil ", // BAK
+            btn01: "Cihaza Git", // BAK
             btn02: "OK",
-            msg : "Le code d'appareil que vous avez entré est enregistré dans le système !" // BAK
+            msg : "Girmiş olduğunuz Cihaz Kodu sistem de kayıtlı !" // BAK
         }
       
     },
@@ -5441,13 +5439,13 @@ export const langFr =
         dtFirst : "Date Début",
         dtLast : "Date Fin",
         txtCustomerCode : "Fournisseur",
-        cmbDevice :"Appareil",
-        txtTicketno : "Numéro de ticket",
-        numFirstTicketAmount : "Contenu", // BAK
-        numLastTicketAmount : "Unité supérieur", // BAK
-        cmbUser :"Utilisateur",
+        cmbDevice :"Cihaz",
+        txtTicketno : "Fiş I.D",
+        numFirstTicketAmount : "Alt Tutar", // BAK
+        numLastTicketAmount : "Üst Tutar", // BAK
+        cmbUser :"Kulanıcı",
         txtItem :"Code Produit",
-        ckhDoublePay : "Paiements multiples",
+        ckhDoublePay : "Birden Fazla Ödeme",
         pg_txtCustomerCode : 
         {
             title : "Choix Fournisseur",
@@ -5459,15 +5457,15 @@ export const langFr =
         grdSaleTicketReport: 
         {
             clmDate: "Date",
-            clmTime: "Heure",
+            clmTime: "Saat",
             slmUser: "Utilisateur",
             clmCustomer : "Fournisseur",
             clmDiscount : "Remise",
-            clmLoyalyt: "Fidelité",
-            clmHT : "Total",
+            clmLoyalyt: "Loyalyt",
+            clmHT : "Ara Toplam",
             clmVTA : "Taxe",
             clmTTC : "Total",
-            clmTicketID :"ID Ticket",
+            clmTicketID :"Fiş I.D",
         },
         pg_txtItem:
         {
@@ -5498,7 +5496,7 @@ export const langFr =
             esc:"Espece",
             cb : "CB",
             check : "Cheque",
-            ticket : "Cheque",
+            ticket : "CHEQue",
             bonD : "Bon D'Avoir",
             avoir : "Avoir",
             virment : "Virment",
@@ -5507,25 +5505,25 @@ export const langFr =
         },
         payChangeNote : "La modification de ticket doit rester exceptionnelle et permetter de corriger les erreurs !",
         payChangeNote2 : "Un historique des modifications est enregistre !",
-        txtPayChangeDescPlace : "Veuillez entrée la description.", // BAK
-        txtPayChangeDesc :"Le type de paiement a été saisi de manière incorrecte.Il a été Corrigé.", // BAK
+        txtPayChangeDescPlace : "Lütfen Açıklama Giriniz", // BAK
+        txtPayChangeDesc :"Ödeme tipi hatalı girilmiştir.Düzeltmesi yapıldı.", // BAK
         popLastTotal :       //BAK
         {      //BAK
-            title : "Règlement"      //BAK
+            title : "Tahsilat"      //BAK
         },      //BAK
-        trDeatil: "T.R Detaille",      //BAK
-        lineDelete :"ligne annulé",      //BAK
-        cancel : "Abandonne",      //BAK
+        trDeatil: "T.R Detay",      //BAK
+        lineDelete :"Satır İptal",      //BAK
+        cancel : "Vazgeç",      //BAK
         popOpenTike :
         {
-            title : "Reçus incomplet" //BAK
+            title : "Tamamlanmamış Fişler" //BAK
         },
         grdOpenTike: //BAK
         {
-            clmUser : "Utilisateur",
-            clmDevice : "Appareil",
-            clmDate : "Date",
-            clmTicketId : "Numéro de ticket"
+            clmUser : "Kullanıcı",
+            clmDevice : "Cihaz",
+            clmDate : "Tarih",
+            clmTicketId : "Fiş No"
         }
     },
     pos_02_002 :
@@ -5546,45 +5544,45 @@ export const langFr =
         {
             clmCode: "Code",
             clmTitle: "Nom",
-            clmPoint: "Points",
+            clmPoint: "Puan",
             clmLdate : "Dernière Date MAJ",
         },
         popPointDetail : // BAK
         {
-            title: "Detaille de points"
+            title: "Puan Detayı"
         },
         grdPointDetail : // BAK
         {
-            clmDate : "Date",
-            clmPoint : "Poitns",
-            clmPointType : "Type",
-            clmPosId :"Numéro de ticket"
+            clmDate : "Tarih",
+            clmPoint : "Puan",
+            clmPointType : "Tip",
+            clmPosId :"Fiş No"
         },
         grdSaleTicketItems :// BAK
         {
-            clmBarcode : "Code barre",
-            clmName : "Nom produit ",
-            clmQuantity : "Quantité",
-            clmPrice : "Prix",
-            clmTotal : "Montant"
+            clmBarcode : "Barkod",
+            clmName : "Ürün Adı",
+            clmQuantity : "Miktar",
+            clmPrice : "Fiyat",
+            clmTotal : "Tutar"
         },
         grdSaleTicketPays : // BAK
         {
-            clmPayName : "Type de paiement", 
-            clmTotal : "Montant",
+            clmPayName : "Ödeme Tipi", 
+            clmTotal : "Tutar",
         },
         popDetail : // BAK
         {
-            title : "Detaille ticket"
+            title : "Fiş Detayı"
         },
-        TicketId :"ID Ticket", // BAK
+        TicketId :"Fiş I.D", // BAK
         popLastTotal : // BAK
         {
-            title : "Receuil"
+            title : "Tahsilat"
         },
-        trDeatil: "T.R Detaille", // BAK
-        lineDelete :"Ligne annulé", // BAK
-        cancel : "Abandonne", // BAK
+        trDeatil: "T.R Detay", // BAK
+        lineDelete :"Satır İptal", // BAK
+        cancel : "Vazgeç", // BAK
     },
     pos_03_001 : // KOMPLE BAK
     {
@@ -5612,14 +5610,14 @@ export const langFr =
         },
         popOpenTike :
         {
-            title : "Ticket incomplet"
+            title : "Tamamlanmamış Fişler"
         },
         grdOpenTike: 
         {
-            clmUser : "Utilisateur",
-            clmDevice : "Utilisateur",
-            clmDate : "Date",
-            clmTicketId : "Numéro ticket"
+            clmUser : "Kullanıcı",
+            clmDevice : "Cihaz",
+            clmDate : "Tarih",
+            clmTicketId : "Fiş No"
         }
     },
     tkf_01_001 :
@@ -5732,7 +5730,7 @@ export const langFr =
             clmTotal : "Total Général",
             clmCreateDate: "Date d'Enregistrement",
             clmMargin :"Marge",
-            clmMulticode :"Code fournisseur",
+            clmMulticode :"T. Kodu",
             clmBarcode :"Code Barre",
             clmDescription : "Motif",
             clmCuser :"Utilisateur",
@@ -6095,13 +6093,13 @@ export const langFr =
             title: "Attention",
             btn01: "Oui",
             btn02: "Abandonne",
-            msg: "Prix Inférieur à l'Achat ! ! Voulez Vous Continuer ?"
+            msg: "Prix Inférieur à l'Achat ! ! Voulez Vous Continuer"
         },
         msgUnderPrice2:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Vendre en Dessous du Prix d'Achat !"
+            msg: "Vous ne Pouvez Vendre en Dessous du Prix d'Achat ! !"
         },
         msgCombineItem:
         {
@@ -6160,7 +6158,7 @@ export const langFr =
             title: "Contenu Document",
             count:  "Quantité Ligne",
             quantity: "Quantité Total",
-            quantity2: "2.Total de l'unité "
+            quantity2: "2. Birim Toplamı "
         },
         validRef :"Saisir numéro de serie",
         validRefNo : "Saisir numéro de référence",
@@ -6183,7 +6181,7 @@ export const langFr =
         multicodePlaceHolder : "Veuillez Entrer les Codes Fournisseur Recherchés" ,
         barkodPlaceHolder :"Veuillez Entrer Le ou Les Codes Produits ou Codes Barres",
         ItemNamePlaceHolder :"Veuillez Entrer le Nom Complet ou une Syllabe",
-        btnOk : "Mettre à jour",
+        btnOk : "Güncelle",
         grdListe : 
         {
             clmCode: "Code Produit",
@@ -6191,7 +6189,7 @@ export const langFr =
             clmMainGrp : "Famille produit",
             clmCustomer : "Fournisseur",
             clmSname : "Nom Court",
-            clmMulticode : "Code fournisseur ",
+            clmMulticode : "T. Kodu",
             clmUnit : "Unité",
             clmBarcode : "Code barre",
             clmCostPrice : "Coût achat",
@@ -6206,7 +6204,7 @@ export const langFr =
         msgWarning : 
         {
             title : "Attention",
-            msg: "Les groupes de produits des produits sélectionnés changeront. Vous confirmez ?",
+            msg: "Seçilen Ürünlerin Ürün Grupları Değişecek. Onaylıyormusunuz?",
             btn01 : "Abandonne",
             btn02 : "Valide"
         },
@@ -6227,15 +6225,15 @@ export const langFr =
     },
     stk_02_006 : 
     {
-        txtBarkod: "Barre code", //BAK
+        txtBarkod: "Barkod", //BAK
         txtRef: "Référence",
         txtPrice : "Prix ",
         txtDescription : "Motif",
         txtItemName : "Nom du produit",
-        txtQuantity : "Pièce", //BAK
-        valPrice : "Le prix ne peut pas être en dessous de 0", //BAK
-        valCode : "Veuillez entrer le stock", //BAK
-        valName : "Le nom du produit ne peut pas être vide", //BAK
+        txtQuantity : "Adet", //BAK
+        valPrice : "Fiyat 0 dan Küçük Olamaz", //BAK
+        valCode : "Lütfen Stok Girin", //BAK
+        valName : "Ürün Adı Boş Olamaz", //BAK
         pg_txtRef:
         {
             title: "Sélectionner Stock",
@@ -6267,17 +6265,17 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Un prix inférieur au prix d'achat ne peut pas être entré !"
+            msg: "Alış Fiyatından Daha Düşük Fiyat Girilemez !"
         },
         msgItemName:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Nom du produit trop long. Veuillez le corriger et le réinscrire !"
+            msg: "Ürün Adı Çok Uzun. Lütfen Düzeltip Tekrar Kayıt Edin !"
         },
     },
     pos_02_003 : 
     {
-        chkRowTotal : "Totaux des lignes." //BAK
+        chkRowTotal : "Satır Toplamları" //BAK
     }
 }

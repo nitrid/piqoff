@@ -70,8 +70,8 @@ export default class App extends React.PureComponent
             splash : 
             {
                 type : 0,
-                headers : 'Warning',
-                title : 'Sunucu ile bağlantı kuruluyor.',
+                headers :this.lang.t("loading"),
+                title :  this.lang.t('serverConnection'),
             },
             vtadi : '',
             isExecute:false
@@ -167,8 +167,8 @@ export default class App extends React.PureComponent
                 let tmpSplash = 
                 {
                     type : 0,
-                    headers : 'Warning',
-                    title : 'Sunucu ile bağlantı kuruluyor.',
+                    headers :this.lang.t("loading"),
+                    title :  this.lang.t('serverConnection'),
                 }
                 App.instance.setState({splash:tmpSplash});
             }

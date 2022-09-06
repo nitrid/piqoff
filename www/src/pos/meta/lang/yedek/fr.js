@@ -1,8 +1,6 @@
 export const langFr = 
 {
     popGrid: {btnSelection:"Sélectionner",btnSearch:"Rechercher"},
-    serverConnection : "Établissement de la connexion avec le serveur",
-    loading : "Connexion En Cours",
     btnSave: "Enregistrer",
     btnCancel: "Annuler",
     btnPrint :"Imprimer",
@@ -224,7 +222,7 @@ export const langFr =
     total : "Total : ",
     remainder : "Restant : ",
     moneyChange : "Rendu monnaie : ",
-    trDeatil: "T.R Detaille",
+    trDeatil: "T.R Detay",
     lineDelete :"Supprimer ligne ",
     cancel : "Abandonner",
     send: "Envoyer",
@@ -249,7 +247,7 @@ export const langFr =
     },
     popLoyalty:
     {
-        title : "Remise fidélité",
+        title : "Sadakat İndirimi",
         availablePoint : " Solde disponible : " ,
         usePoint : " Points utilisés :" ,
         remainderPoint : " Points restants :" ,
@@ -503,66 +501,66 @@ export const langFr =
     msgDeviceEntryAlert : //Bak
     {
         title : "Attention",
-        msg : "Veuillez ne pas laisser le code de l'appareil vide !",
+        msg : "Lütfen cihaz kodunu boş geçmeyiniz !",
         btn01 : "OK",
     },
-    popTitleDevice : "Code de sécurité", //Bak
+    popTitleDevice : "Kasa Kodu Giriş", //Bak
     msgDeviceNotChange : //Bak
     {
         title : "Attention",
-        msg : "La caisse ne peut pas être modifié pendant la vente ! Veuillez annuler la vente..",
+        msg : "Satış Yapılıken Kasa Değiştirilemez! Lütfen Satışı İptal Edin..",
         btn01 : "OK",
     },
     msgDbTransferAlert : //Bak
     {
         title : "Attention",
-        msg : "Voulez-vous mettre à jour la base de données locale ?",
+        msg : "Local Database'i Güncellemek İstermisiniz ?",
         btn01 : "OK",
         btn02 : "Annuler",
     },
     popTransfer : //Bak
     {
-        title : "Transfert de données",
-        msg1 : "Début du transfert : ",
-        msg2 : "Transfert commencé.",
-        msg3 : "Table de transfert.",
-        btnPopTransferManuel : "Démarrage manuel",
-        btnPopTransferStop : "Arrêter"
+        title : "Data Aktarımı",
+        msg1 : "Aktarım Başlamasına : ",
+        msg2 : "Aktarım Başlatıldı.",
+        msg3 : "Tablosu Aktarılıyor.",
+        btnPopTransferManuel : "Manuel Başlat",
+        btnPopTransferStop : "Durdur"
     },
     msgOfflineWarning: //Bak
     {
         title : "Attention",
-        msg : "Vous ne pouvez pas faire cela en mode hors ligne !",
+        msg : "Bu işlemi offline modda iken yapamazsınız !",
         btn01 : "OK"
     },
     msgOfflineAlert: //Bak
     {
         title : "Attention",
-        msg : "Votre connexion au serveur a été perdue ! Vous pouvez poursuivre votre transaction hors ligne.",
+        msg : "Sunucu ile bağlantınız kesildi ! Offline olarak işleminize devam edebilirsiniz.",
         btn01 : "OK"
     },
     msgOnlineAlert: //Bak
     {
         title : "Attention",
-        msg : "Connexion au serveur établie ! Vous pouvez poursuivre votre transaction en ligne.",
+        msg : "Sunucu ile bağlantı kuruldu ! Online olarak işleminize devam edebilirsiniz.",
         btn01 : "OK"
     },
     msgNotWeighing: //Bak
     {
         title : "Attention",
-        msg : "Article non pesé Veuillez ajouter à nouveau",
+        msg : "Ürün Tartılamadı Lütfen Tekrar Ekleyiniz",
         btn01 : "OK"
     },
     msgAnotherUserAlert: //Bak
     {
         title : "Attention",
-        msg : "Connectez-vous à partir d'un autre appareil avec vos informations d'utilisateur.",
+        msg : "Sizin kullanıcı bilgileriniz ile başka bir cihazdan giriş yapıldı",
         btn01 : "OK"
     },
     msgPayAmountAlert: //Bak
     {
         title : "Attention",
-        msg : "Veuillez entrer un montant valide.",
+        msg : "Lütfen geçerli bir tutar giriniz.",
         btn01 : "OK"
     },
 }

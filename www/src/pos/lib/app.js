@@ -205,11 +205,11 @@ export default class App extends React.Component
             return(
                 <div style={this.style.splash_body}>
                     <div className="card" style={this.style.splash_box}>
-                        <div className="card-header">{"Warning"}</div>
+                        <div className="card-header">{this.lang.t("loading")}</div>
                         <div className="card-body">
                             <div className="row">
                                 <div className="col-12 pb-2">
-                                    <h5 className="text-center">{"Yükleniyor..."}</h5>
+                                    <h5 className="text-center">{this.lang.t("serverConnection")}</h5>
                                 </div>
                             </div>
                         </div>                        

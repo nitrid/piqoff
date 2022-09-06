@@ -68,7 +68,7 @@ export default class App extends React.Component
             {
                 type : 0,
                 headers : 'Warning',
-                title : 'Sunucu ile bağlantı kuruluyor.',
+                title : this.lang.t('serverConnection'),
             },
             vtadi : '',
             isExecute:false
@@ -165,7 +165,7 @@ export default class App extends React.Component
                 {
                     type : 0,
                     headers : 'Warning',
-                    title : 'Sunucu ile bağlantı kuruluyor.',
+                    title :  this.lang.t('serverConnection'),
                 }
                 App.instance.setState({splash:tmpSplash});
             }
