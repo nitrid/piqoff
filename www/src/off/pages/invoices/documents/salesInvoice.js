@@ -1526,11 +1526,11 @@ export default class salesInvoice extends React.PureComponent
                                         <Column dataField="PRICE" caption={this.t("grdSlsInv.clmPrice")} dataType={'number'} width={80} format={{ style: "currency", currency: "EUR",precision: 3}} headerFilter={{visible:true}}/>
                                         <Column dataField="QUANTITY" caption={this.t("grdSlsInv.clmQuantity")} dataType={'number'} width={80} headerFilter={{visible:true}}/>
                                         <Column dataField="AMOUNT" caption={this.t("grdSlsInv.clmAmount")} width={80} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
-                                        <Column dataField="DISCOUNT" caption={this.t("grdSlsInv.clmDiscount")} dataType={'number'} width={80} format={{ style: "currency", currency: "EUR",precision: 3}} headerFilter={{visible:true}}/>
-                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsInv.clmDiscountRate")} width={80} dataType={'number'} headerFilter={{visible:true}}/>
+                                        <Column dataField="DISCOUNT" caption={this.t("grdSlsInv.clmDiscount")} dataType={'number'} width={90} format={{ style: "currency", currency: "EUR",precision: 3}} headerFilter={{visible:true}}/>
+                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsInv.clmDiscountRate")} width={100} dataType={'number'} headerFilter={{visible:true}}/>
                                         <Column dataField="MARGIN" caption={this.t("grdSlsInv.clmMargin")} width={100} allowEditing={false} headerFilter={{visible:true}}/>
                                         <Column dataField="VAT" caption={this.t("grdSlsInv.clmVat")} width={80} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
-                                        <Column dataField="TOTAL" caption={this.t("grdSlsInv.clmTotal")} width={90} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
+                                        <Column dataField="TOTAL" caption={this.t("grdSlsInv.clmTotal")} width={150} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
                                         <Column dataField="DESCRIPTION" caption={this.t("grdSlsInv.clmDescription")} width={120}  headerFilter={{visible:true}}/>
                                         <Column dataField="CONNECT_REF" caption={this.t("grdSlsInv.clmDispatch")} width={100} allowEditing={false} headerFilter={{visible:true}}/>
                                     </NdGrid>
