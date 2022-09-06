@@ -151,11 +151,11 @@ export const langFr =
     },
     totalLine : "Qte Ligne : ",
     totalQuantity : "Qte Art.:",
-    loyaltyDiscount : "Remise fidélité :",
+    loyaltyDiscount : "Remisé fidélité :",
     ticketRect : "Ticket Rest. : ",
     amount : "Sous-total :",
     vat : "TVA :",
-    discount : "Remise :",
+    discount : "Remisé :",
     msgCollectForSale: 
     {
         title : "Attention",
@@ -230,19 +230,19 @@ export const langFr =
     lastRead: " Dernière lecture ",
     totalRead : " Totale lecture ",
     remainderPay : " Montant restant ",
-    discountpercent: " Remise % -",
-    applyDiscountPercent : " Effectuer remise (%)",
-    discountPrice : " Remise ",
+    discountpercent: " Remisé % -",
+    applyDiscountPercent : " Effectuer Remisé (%)",
+    discountPrice : " Remisé ",
     msgDeletePayForDiscount: 
     {
         title : "Attention",
-        msg : " Veuillez supprimer les paiements avant d'appliquer la remise !",
+        msg : " Veuillez supprimer les paiements avant d'appliquer la Remisé !",
         btn01 : "OK"
     },
     msgDiscountNotBigAmount: 
     {
         title : "Attention",
-        msg : " La remise ne peut être supérieure à la remise !" ,
+        msg : " La Remisé ne peut être supérieure à la Remisé !" ,
         btn01 : "OK"
     },
     popLoyalty:
@@ -371,7 +371,7 @@ export const langFr =
     },
     popDiscount :
     {
-        title :"Remise",
+        title :"Remisé",
     },
     popCheqpay :
     {
@@ -416,73 +416,73 @@ export const langFr =
     grdList: 
     {
         LDATE : "Date MAJ",
-        ITEM_NAME :"NOM",
+        ITEM_NAME :"Nom",
         QUANTITY : "Qte.",
-        PRICE : "PRIX",
-        AMOUNT : "TOTAL"
+        PRICE : "Prix",
+        AMOUNT : "Total"
     },
     grdBarcodeList : 
     {
-        BARCODE : "CODE BARRE",
-        NAME : "NOM",
-        PRICE_SALE : "PRIX",
+        BARCODE : "Code Barre",
+        NAME : "Nom",
+        PRICE_SALE : "Prix",
     },
     grdPopParkList : 
     {
-        LUSER_NAME : "SAISIE UTILISATEUR",
-        LDATE : "SAISIE DATE",
-        TOTAL :"TOTAL",
-        DESCRIPTION : "MOTIF",
+        LUSER_NAME : "Saissie Utilisateur",
+        LDATE : "Saisie Date",
+        TOTAL :"Total",
+        DESCRIPTION : "Motif",
     },
     grdPopCheqpayList :
     {
-        CODE : "CODE",
-        AMOUNT : "TOTAL"
+        CODE : "Code",
+        AMOUNT : "Total"
     },
     grdDiscList :
     {
-        LDATE : "SAISIE DATE ",
-        ITEM_NAME : "NOM",
-        INDIRIM : "REMISE",
-        DISCOUNT : "REMISE",
-        PRICE :"PRIX",
-        INDFIYAT : "PRIX REMISÉ",
-        AMOUNT : "TOTAL",
+        LDATE : "Saisie Date",
+        ITEM_NAME : "Nom",
+        INDIRIM : "Remisé",
+        DISCOUNT : "Remisé",
+        PRICE :"Prix",
+        INDFIYAT : "Prix Remisé",
+        AMOUNT : "Total",
     },
     grdLastPos :
     {
-        LDATE : "DATE",
-        REF : "REF",
-        CUSTOMER_NAME : "CLIENT",
-        CUSER_NAME : "UTILISATEUR",
-        DISCOUNT :"REMISE",
-        LOYALTY : "FIDÉLITÉ",
-        AMOUNT : "TOTAL",
-        DEVICE :"DEVICE"
+        LDATE : "Date",
+        REF : "Réf",
+        CUSTOMER_NAME : "Client",
+        CUSER_NAME : "Utilisateur",
+        DISCOUNT :"Remisé",
+        LOYALTY : "Fidélité",
+        AMOUNT : "Total",
+        DEVICE :"Caisse"
     },
     grdLastSale :
     {
-        BARCODE : "CODE BARRE",
-        ITEM_NAME : "NOM",
-        QUANTITY : "QUANTITE",
-        PRICE :"PRIX",
-        AMOUNT : "TOTAL",
+        BARCODE : "Code Barre",
+        ITEM_NAME : "Nom",
+        QUANTITY : "Quantité",
+        PRICE :"Prix",
+        AMOUNT : "Total",
     },
     grdLastPay : 
     {
-        PAY_TYPE_NAME : "MODE DE PAIEMENT",
-        AMOUNT : "TOTAL",
-        CHANGE : "RENDU"
+        PAY_TYPE_NAME : "Mode Paiement",
+        AMOUNT : "Total",
+        CHANGE : "Rendu"
     },
     grdLastTRDetail : 
     {
-        AMOUNT : "TOTAL",
-        COUNT  :"COMPTE"   ,
+        AMOUNT : "Total",
+        COUNT  :"Compte"   ,
     },
     grdTRDetail : 
     {
-        AMOUNT : "TOTAL",
-        COUNT  :"COMPTE" ,
+        AMOUNT : "Total",
+        COUNT  :"Compte" ,
     },
     popDescbordValidation :
     {
@@ -500,23 +500,23 @@ export const langFr =
     listed : "Rechercher",
     msgDeviceEntryAlert : //Bak
     {
-        title : "Uyarı",
+        title : "Attention",
         msg : "Lütfen cihaz kodunu boş geçmeyiniz !",
-        btn01 : "Tamam",
+        btn01 : "OK",
     },
     popTitleDevice : "Kasa Kodu Giriş", //Bak
     msgDeviceNotChange : //Bak
     {
-        title : "Uyarı",
+        title : "Attention",
         msg : "Satış Yapılıken Kasa Değiştirilemez! Lütfen Satışı İptal Edin..",
-        btn01 : "Tamam",
+        btn01 : "OK",
     },
     msgDbTransferAlert : //Bak
     {
-        title : "Uyarı",
+        title : "Attention",
         msg : "Local Database'i Güncellemek İstermisiniz ?",
-        btn01 : "Tamam",
-        btn02 : "İptal",
+        btn01 : "OK",
+        btn02 : "Annuler",
     },
     popTransfer : //Bak
     {
@@ -529,38 +529,38 @@ export const langFr =
     },
     msgOfflineWarning: //Bak
     {
-        title : "Dikkat",
+        title : "Attention",
         msg : "Bu işlemi offline modda iken yapamazsınız !",
-        btn01 : "Tamam"
+        btn01 : "OK"
     },
     msgOfflineAlert: //Bak
     {
-        title : "Dikkat",
+        title : "Attention",
         msg : "Sunucu ile bağlantınız kesildi ! Offline olarak işleminize devam edebilirsiniz.",
-        btn01 : "Tamam"
+        btn01 : "OK"
     },
     msgOnlineAlert: //Bak
     {
-        title : "Dikkat",
+        title : "Attention",
         msg : "Sunucu ile bağlantı kuruldu ! Online olarak işleminize devam edebilirsiniz.",
-        btn01 : "Tamam"
+        btn01 : "OK"
     },
     msgNotWeighing: //Bak
     {
-        title : "Dikkat",
+        title : "Attention",
         msg : "Ürün Tartılamadı Lütfen Tekrar Ekleyiniz",
-        btn01 : "Tamam"
+        btn01 : "OK"
     },
     msgAnotherUserAlert: //Bak
     {
-        title : "Dikkat",
+        title : "Attention",
         msg : "Sizin kullanıcı bilgileriniz ile başka bir cihazdan giriş yapıldı",
-        btn01 : "Tamam"
+        btn01 : "OK"
     },
     msgPayAmountAlert: //Bak
     {
-        title : "Dikkat",
+        title : "Attention",
         msg : "Lütfen geçerli bir tutar giriniz.",
-        btn01 : "Tamam"
+        btn01 : "OK"
     },
 }

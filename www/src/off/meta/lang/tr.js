@@ -6295,5 +6295,5 @@ export const langTr =
     pos_02_003 : 
     {
         chkRowTotal : "Satır Toplamları"
-    }
+    },    
 }

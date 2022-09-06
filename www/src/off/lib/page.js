@@ -64,9 +64,9 @@ export default class Page extends React.PureComponent
         
           let tmpConfObj =
           {
-              id:'msgClose',showTitle:true,title:("Dikkat"),showCloseButton:true,width:'500px',height:'200px',
-              button:[{id:"btn01",caption:("Evet"),location:'before'},{id:"btn02",caption:("Hayır"),location:'after'}],
-              content:(<div style={{textAlign:"center",fontSize:"20px"}}>{("Sayfayı Kapatmak İstediğinize Eminmisiniz?")}</div>)
+              id:'msgClose',showTitle:true,title:App.instance.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+              button:[{id:"btn01",caption:App.instance.lang.t("btnYes"),location:'before'},{id:"btn02",caption:App.instance.lang.t("btnNo"),location:'after'}],
+              content:(<div style={{textAlign:"center",fontSize:"20px"}}>{App.instance.lang.t("msgClose")}</div>)
           }
           
           let pResult = await dialog(tmpConfObj);
