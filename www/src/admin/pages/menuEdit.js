@@ -1,6 +1,6 @@
 import React from 'react';
 import App from '../lib/app.js';
-import NdGrid,{Column,Editing,Popup,Paging,Scrolling,KeyboardNavigation,Lookup,Selection} from  '../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Popup,Paging,Scrolling,KeyboardNavigation,Lookup} from  '../../core/react/devex/grid.js';
 import NdCheckBox from  '../../core/react/devex/checkbox';
 import ScrollView from 'devextreme-react/scroll-view';
 import NdTreeView from '../tools/NdTreeView.js';
@@ -24,7 +24,6 @@ export default class menuEdit extends React.Component
         this.core = App.instance.core;
         this.menu =  []
         this.prmObj = new menu()
-        this.focusedRowKey = 1;
     }
     _cellRoleRender(e)
     {
