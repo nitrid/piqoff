@@ -1329,15 +1329,15 @@ export default class purchaseoffer extends React.PureComponent
                                         <Column dataField="CUSER_NAME" caption={this.t("grdPurcoffers.clmCuser")} width={120} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdPurcoffers.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="MULTICODE" caption={this.t("grdPurcoffers.clmMulticode")} width={150}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdPurcoffers.clmItemName")} width={400} />
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdPurcoffers.clmItemName")} width={350} />
                                         <Column dataField="ITEM_BARCODE" caption={this.t("grdPurcoffers.clmBarcode")} width={150} allowEditing={false}/>
-                                        <Column dataField="PRICE" caption={this.t("grdPurcoffers.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdPurcoffers.clmQuantity")} dataType={'number'}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdPurcoffers.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
-                                        <Column dataField="DISCOUNT" caption={this.t("grdPurcoffers.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
-                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdPurcoffers.clmDiscountRate")} dataType={'number'}/>
-                                        <Column dataField="VAT" caption={this.t("grdPurcoffers.clmVat")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
-                                        <Column dataField="TOTAL" caption={this.t("grdPurcoffers.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
+                                        <Column dataField="PRICE" caption={this.t("grdPurcoffers.clmPrice")} width={80} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdPurcoffers.clmQuantity")} width={80} dataType={'number'}/>
+                                        <Column dataField="AMOUNT" caption={this.t("grdPurcoffers.clmAmount")} width={80} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
+                                        <Column dataField="DISCOUNT" caption={this.t("grdPurcoffers.clmDiscount")} width={80} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdPurcoffers.clmDiscountRate")} width={100} dataType={'number'}/>
+                                        <Column dataField="VAT" caption={this.t("grdPurcoffers.clmVat")} width={80} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
+                                        <Column dataField="TOTAL" caption={this.t("grdPurcoffers.clmTotal")} width={150} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
                                         <Column dataField="DESCRIPTION" caption={this.t("grdPurcoffers.clmDescription")} width={160}  headerFilter={{visible:true}}/>
                                     </NdGrid>
                                 </Item>

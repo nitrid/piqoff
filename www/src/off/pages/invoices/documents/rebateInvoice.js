@@ -1374,13 +1374,13 @@ export default class rebateInvoice extends React.PureComponent
                                         <Column dataField="CUSER_NAME" caption={this.t("grdRebtInv.clmCuser")} width={120} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdRebtInv.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdRebtInv.clmItemName")} width={400} />
-                                        <Column dataField="PRICE" caption={this.t("grdRebtInv.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdRebtInv.clmQuantity")} dataType={'number'}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdRebtInv.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
-                                        <Column dataField="DISCOUNT" caption={this.t("grdRebtInv.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdRebtInv.clmDiscountRate")} dataType={'number'}/>
-                                        <Column dataField="VAT" caption={this.t("grdRebtInv.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
-                                        <Column dataField="TOTAL" caption={this.t("grdRebtInv.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                        <Column dataField="PRICE" caption={this.t("grdRebtInv.clmPrice")} width={80} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdRebtInv.clmQuantity")} width={80} dataType={'number'}/>
+                                        <Column dataField="AMOUNT" caption={this.t("grdRebtInv.clmAmount")} width={80} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                        <Column dataField="DISCOUNT" caption={this.t("grdRebtInv.clmDiscount")} width={80} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdRebtInv.clmDiscountRate")} width={100} dataType={'number'}/>
+                                        <Column dataField="VAT" caption={this.t("grdRebtInv.clmVat")} width={80} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                        <Column dataField="TOTAL" caption={this.t("grdRebtInv.clmTotal")} width={150} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
                                         <Column dataField="DESCRIPTION" caption={this.t("grdRebtInv.clmDescription")} width={160}  headerFilter={{visible:true}}/>
                                     </NdGrid>
                                     <ContextMenu

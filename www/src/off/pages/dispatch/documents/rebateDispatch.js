@@ -1188,11 +1188,11 @@ export default class rebateDispatch extends React.PureComponent
                                         <Column dataField="CUSER_NAME" caption={this.t("grdRebtDispatch.clmCuser")} width={120} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdRebtDispatch.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdRebtDispatch.clmItemName")} width={350} />
-                                        <Column dataField="PRICE" caption={this.t("grdRebtDispatch.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdRebtDispatch.clmQuantity")} dataType={'number'}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdRebtDispatch.clmAmount")} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                        <Column dataField="VAT" caption={this.t("grdRebtDispatch.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
-                                        <Column dataField="TOTAL" caption={this.t("grdRebtDispatch.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                        <Column dataField="PRICE" caption={this.t("grdRebtDispatch.clmPrice")} width={80} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdRebtDispatch.clmQuantity")} width={80} dataType={'number'}/>
+                                        <Column dataField="AMOUNT" caption={this.t("grdRebtDispatch.clmAmount")} width={80} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                        <Column dataField="VAT" caption={this.t("grdRebtDispatch.clmVat")} width={80} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                        <Column dataField="TOTAL" caption={this.t("grdRebtDispatch.clmTotal")} width={150} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
                                         <Column dataField="DESCRIPTION" caption={this.t("grdRebtDispatch.clmDescription")} width={160}  headerFilter={{visible:true}}/>
                                     </NdGrid>
                                     <ContextMenu
