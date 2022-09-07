@@ -995,6 +995,12 @@ export const langFr =
             clmRef : "Série",
             clmRefNo : "Numéro",
         },
+        pg_DocsCombine : 
+        {
+            title : "Sélection Document",
+            clmRef : "Série",
+            clmRefNo : "Numéro",
+        },
         pg_txtItemsCode : 
         {
             title : "Sélectionner Stock",

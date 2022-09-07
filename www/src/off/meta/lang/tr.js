@@ -984,6 +984,7 @@ export const langTr =
         txtLineCount : "Okutulan Satır",
         chkLastChange : "Son yazdırma tarihinden itibaren değişenler",
         chkSelectChange : "Seçilen tarihten itibaren değişenler",
+        btnLabelCombine : "Etiket Birleştirme",
         chkGroup : "Grup",
         chkCustomer : "Tedarikçi Ürünleri",
         chkAllItems : "Tüm Ürünler",
@@ -991,6 +992,12 @@ export const langTr =
         txtBarcode : "Barkod Ekle",
         validDesign : "Lütfen Dizayn Seçin",
         pg_Docs : 
+        {
+            title : "Evrak Seçimi",
+            clmRef : "SERİ",
+            clmRefNo : "SIRA",
+        },
+        pg_DocsCombine : 
         {
             title : "Evrak Seçimi",
             clmRef : "SERİ",

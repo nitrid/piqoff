@@ -108,8 +108,10 @@ export default class labelPrinting extends React.PureComponent
     }
     async getDoc(pGuid)
     {
+    
         this.lblObj.clearAll()
         this.mainLblObj.clearAll()
+        
         await this.lblObj.load({GUID:pGuid});
         this.mainLblObj.load({GUID:pGuid});
 
@@ -129,12 +131,51 @@ export default class labelPrinting extends React.PureComponent
             tmpRows = tmpData.result.recordset
         }
         await this.pg_Docs.setData(tmpRows)
+     
         this.pg_Docs.show()
         this.pg_Docs.onClick = (data) =>
         {
+            console.log(data)
             if(data.length > 0)
             {
                 this.getDoc(data[0].GUID)
+            }
+        }
+    }
+    async getDocsCombine(pType)
+    {
+        let tmpQuery = 
+        {
+            query : "SELECT GUID,REF,REF_NO FROM LABEL_QUEUE WHERE STATUS IN("+pType+") AND REF = '" +this.txtRef.value+"' " 
+        }
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        let tmpRows = []
+        if(tmpData.result.recordset.length > 0)
+        {
+            tmpRows = tmpData.result.recordset
+        }
+
+        await this.pg_DocsCombine.setData(tmpRows)   
+
+        this.pg_DocsCombine.show()
+        this.pg_DocsCombine.onClick = async (data)  =>
+        {
+            if(data.length > 0)
+            {
+                for (let i = 0; i < data.length; i++) 
+                {
+                    let lblCombineObj = new labelCls();
+                    await lblCombineObj.load({GUID:data[i].GUID});
+
+                    for (let i = 0; i < lblCombineObj.dt().length; i++) 
+                    {
+                        let tmpDocItems = {...this.lblObj.empty}
+                        tmpDocItems.REF = this.mainLblObj.dt()[0].REF
+                        tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
+                        this.lblObj.addEmpty(tmpDocItems)
+                        this.addItem(lblCombineObj.dt()[i],this.lblObj.dt().length - 1)
+                    }
+                }
             }
         }
     }
@@ -767,7 +808,7 @@ export default class labelPrinting extends React.PureComponent
                                             >
                                             <Validator validationGroup={"frmLabelQeueu" + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRef")} />
-                                                </Validator>  
+                                            </Validator>
                                             </NdTextBox>
                                         </div>
                                         <div className="col-5 ps-0">
@@ -782,21 +823,22 @@ export default class labelPrinting extends React.PureComponent
                                                         icon:'more',
                                                         onClick:async()=>
                                                         {
-                                                            if(typeof this.btnSave.state.disabled != 'undefined')
-                                                            {
-                                                                if(this.btnSave.state.disabled == false)
-                                                                {
-                                                                    let tmpConfObj =
-                                                                    {
-                                                                        id:'msgNotSave',showTitle:true,title:this.t("msgNotSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                                        button:[{id:"btn01",caption:this.t("msgNotSave.btn01"),location:'after'}],
-                                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotSave.msg")}</div>)
-                                                                    }
+                                                            // Yeni deyince evrak seçtirtmiyor
+                                                            // if(typeof this.btnSave.state.disabled != 'undefined')
+                                                            // {
+                                                            //     if(this.btnSave.state.disabled == false)
+                                                            //     {
+                                                            //         let tmpConfObj =
+                                                            //         {
+                                                            //             id:'msgNotSave',showTitle:true,title:this.t("msgNotSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            //             button:[{id:"btn01",caption:this.t("msgNotSave.btn01"),location:'after'}],
+                                                            //             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotSave.msg")}</div>)
+                                                            //         }
                                                         
-                                                                    await dialog(tmpConfObj);
-                                                                    return
-                                                                }
-                                                            }
+                                                            //         await dialog(tmpConfObj);
+                                                            //         return
+                                                            //     }
+                                                            // }
                                                            
                                                             this.getDocs(0)   
                                                         }
@@ -898,8 +940,8 @@ export default class labelPrinting extends React.PureComponent
                                         </Validator> 
                                     </NdSelectBox>
                                 </Item>
-                                 {/* txtFreeLabel */}
-                                 <Item>
+                                {/* txtFreeLabel */}
+                                <Item>
                                     <Label text={this.t("txtFreeLabel")} alignment="right" />
                                     <NdTextBox id="txtFreeLabel" parent={this} simple={true}  
                                     readOnly={true}
@@ -907,11 +949,11 @@ export default class labelPrinting extends React.PureComponent
                                     access={this.access.filter({ELEMENT:'txtFreeLabel',USERS:this.user.CODE})}
                                     >
                                     </NdTextBox>
-                                </Item> 
+                                </Item>
                                 {/* Boş */}
                                 <EmptyItem />
-                                 {/* txtBarcode */}
-                                 <Item>
+                                {/* txtBarcode */}
+                                <Item>
                                     <Label text={this.t("txtBarcode")} alignment="right" />
                                     <NdTextBox id="txtBarcode" parent={this} simple={true}  
                                     onEnterKey={(async(e)=>
@@ -974,8 +1016,8 @@ export default class labelPrinting extends React.PureComponent
                                     >
                                     </NdTextBox>
                                 </Item> 
-                                 {/* txtLineCount */}
-                                 <Item>
+                                {/* txtLineCount */}
+                                <Item>
                                     <Label text={this.t("txtLineCount")} alignment="right" />
                                     <NdTextBox id="txtLineCount" parent={this} simple={true}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
@@ -1032,7 +1074,6 @@ export default class labelPrinting extends React.PureComponent
                                                     return
                                                 }
                                             }
-                                            console.log(this.mainLblObj.dt())
                                             let tmpDocItems = {...this.lblObj.empty}
                                             tmpDocItems.REF = this.mainLblObj.dt()[0].REF
                                             tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
@@ -1078,6 +1119,25 @@ export default class labelPrinting extends React.PureComponent
                                             await dialog(tmpConfObj);
                                         }
                                     }}/>
+                                    <Button text={this.t("btnLabelCombine")}
+                                    validationGroup={"frmLabelQeueu" + this.tabIndex}
+                                    onClick={async (e)=>
+                                    {
+                                        if(e.validationGroup.validate().status == "valid")
+                                        {
+                                            this.getDocsCombine(0)
+                                        }
+                                        else
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                        }
+                                    }}/>
                                 </Item>
                                 <Item>
                                     <NdGrid parent={this} id={"grdLabelQueue"} 
@@ -1104,7 +1164,6 @@ export default class labelPrinting extends React.PureComponent
                                         {
                                             this.mainLblObj.save()
                                         }, 500);
-
                                     }}
                                     onRowRemoved={(e)=>{
                                         this.calculateCount()
@@ -1123,7 +1182,7 @@ export default class labelPrinting extends React.PureComponent
                                         <Column dataField="UNDER_UNIT_PRICE" caption={this.t("grdLabelQueue.clmUnderUnitPrice")}width={70} />
                                         <Column dataField="DESCRIPTION" caption={this.t("grdLabelQueue.clmDescription")} />
                                     </NdGrid>
-                                </Item>                                
+                                </Item>
                             </Form>
                         </div>
                     </div>
@@ -1169,6 +1228,18 @@ export default class labelPrinting extends React.PureComponent
                     >
                         <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
                         <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />
+                    </NdPopGrid>
+                    <NdPopGrid id={"pg_DocsCombine"} parent={this} container={"#root"}
+                    visible={false}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    title={this.t("pg_DocsCombine.title")}
+                    >
+                        <Column dataField="REF" caption={this.t("pg_DocsCombine.clmRef")} width={150} defaultSortOrder="asc"/>
+                        <Column dataField="REF_NO" caption={this.t("pg_DocsCombine.clmRefNo")} width={300} defaultSortOrder="asc" />
                     </NdPopGrid>
                     {/* popWizard */}
                     <div>
