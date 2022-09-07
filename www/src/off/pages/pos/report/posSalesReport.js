@@ -9,7 +9,7 @@ import ScrollView from 'devextreme-react/scroll-view';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
-import NdPivot,{FieldChooser} from '../../../../core/react/devex/pivot.js';
+import NdPivot,{FieldChooser,Export} from '../../../../core/react/devex/pivot.js';
 import NdButton from '../../../../core/react/devex/button.js';
 
 export default class posSalesReport extends React.PureComponent
@@ -226,6 +226,7 @@ export default class posSalesReport extends React.PureComponent
                                 }
                             }}
                             >
+                                <Export fileName={"Report"} enabled={true} allowExportSelectedData={true} />
                                 <FieldChooser enabled={true} height={400} />
                             </NdPivot>
                         </div>
