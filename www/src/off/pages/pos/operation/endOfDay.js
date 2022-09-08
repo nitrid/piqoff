@@ -20,6 +20,8 @@ import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Export} from '
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdTagBox from '../../../../core/react/devex/tagbox.js';
+import { docCls} from "../../../../core/cls/doc.js"
+
 
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
@@ -34,6 +36,8 @@ export default class endOfDay extends React.PureComponent
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
+        this.docObj = new docCls()
+
         this.finishButtonClick = this.finishButtonClick.bind(this)
         ReactWizard.defaultProps = {
           validate: true,
@@ -97,6 +101,7 @@ export default class endOfDay extends React.PureComponent
     {
         await this.core.util.waitUntil(0)
         this.init();
+
     }
     async init()
     {
@@ -124,6 +129,8 @@ export default class endOfDay extends React.PureComponent
       //     param : [],
       //     value : [this.dtDocDate.value,this.cmbSafe.value]
       // }
+
+      await this.grdAdvance.dataRefresh({source:this.docObj.docCustomer.dt('DOC_CUSTOMER')});
     }
     async finishButtonClick()
     {
@@ -254,12 +261,38 @@ export default class endOfDay extends React.PureComponent
     {
       return (
         <Form colCount={2}>
+           <Item>
+            <NdButton text={this.t("addAdvance")}
+             onClick={async ()=>
+              {       
+                this.dtAdvanceDate.value = moment(new Date()).add(1,'days').format("YYYY-MM-DD")
+                  this.popAdvance.show()
+              }}
+            />
+          </Item>
+          <EmptyItem/>
           <Item>
               <Label text={this.t("dtDocDate")} alignment="right" />
               <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
-              onValueChanged={(async()=>
+               onValueChanged={(async(e)=>
+                {
+                  if(this.cmbSafe.value != '')
                   {
-              }).bind(this)}
+                    let tmpQuery = 
+                    {
+                      query : "SELECT (SUM(AMOUNT) - ISNULL((SELECT SUM(AMOUNT) FROM DOC_CUSTOMER_VW_01 AS DOCOUT WHERE DOCOUT.OUTPUT = DOCIN.INPUT AND TYPE = 2 AND DOC_TYPE = 201 AND PAY_TYPE = 20),0)) AS AMOUNT FROM DOC_CUSTOMER_VW_01 AS DOCIN " + 
+                      "WHERE INPUT_CODE = @INPUT_CODE AND DOC_DATE = @DOC_DATE AND TYPE = 2 AND DOC_TYPE = 201 AND PAY_TYPE = 20 GROUP BY INPUT", 
+                        param : ['INPUT_CODE:string|50','DOC_DATE:date'],
+                        value : [this.cmbSafe.value,this.dtDocDate.value]
+                    }
+                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                    if(tmpData.result.recordset.length > 0)
+                    {
+                      this.txtAdvance.value =tmpData.result.recordset[0].AMOUNT 
+                    }
+                  }
+                  
+                }).bind(this)}
               >
               </NdDatePicker>
           </Item>
@@ -270,9 +303,26 @@ export default class endOfDay extends React.PureComponent
                 valueExpr="CODE"
                 showClearButton={true}
                 value=""
-                data={{source:{select:{query : "SELECT CODE,NAME FROM POS_DEVICE ORDER BY CODE"},sql:this.core.sql}}}
+                data={{source:{select:{query : "SELECT NAME,CODE,GUID FROM [dbo].[SAFE_VW_01] WHERE TYPE = 2"},sql:this.core.sql}}}
                 param={this.param.filter({ELEMENT:'cmbSafe',USERS:this.user.CODE})}
                 access={this.access.filter({ELEMENT:'cmbSafe',USERS:this.user.CODE})}
+                onValueChanged={(async(e)=>
+                  {
+                    let tmpQuery = 
+                    {
+                        query : "SELECT (SUM(AMOUNT) - ISNULL((SELECT SUM(AMOUNT) FROM DOC_CUSTOMER_VW_01 AS DOCOUT WHERE DOCOUT.OUTPUT = DOCIN.INPUT AND TYPE = 2 AND DOC_TYPE = 201 AND PAY_TYPE = 20),0)) AS AMOUNT FROM DOC_CUSTOMER_VW_01 AS DOCIN " + 
+                        "WHERE INPUT_CODE = @INPUT_CODE AND DOC_DATE = @DOC_DATE AND TYPE = 2 AND DOC_TYPE = 201 AND PAY_TYPE = 20 GROUP BY INPUT", 
+                        param : ['INPUT_CODE:string|50','DOC_DATE:date'],
+                        value : [this.cmbSafe.value,this.dtDocDate.value]
+                    }
+                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                    console.log(tmpData)
+                    if(tmpData.result.recordset.length > 0)
+                    {
+                      console.log(tmpData.result.recordset[0].AMOUNT)
+                      this.txtAdvance.value =tmpData.result.recordset[0].AMOUNT 
+                    }
+                  }).bind(this)}
                 >
                 </NdSelectBox>
           </Item>
@@ -286,7 +336,7 @@ export default class endOfDay extends React.PureComponent
           <EmptyItem/>
           <Item>
               <Label text={this.t("txtAdvance")} alignment="right" />
-              <NdNumberBox id="txtAdvance" parent={this} simple={true}
+              <NdNumberBox id="txtAdvance" parent={this} simple={true} readOnly={true}
               param={this.param.filter({ELEMENT:'txtAdvance',USERS:this.user.CODE})}
               access={this.access.filter({ELEMENT:'txtAdvance',USERS:this.user.CODE})}
               >
@@ -456,6 +506,126 @@ export default class endOfDay extends React.PureComponent
                                           <Column dataField="TICKET_ID" caption={this.t("grdOpenTike.clmTicketId")} width={150}  headerFilter={{visible:true}}/>
                                   </NdGrid>
                              </Item>
+                          </Form>
+                      </NdPopUp>
+                    </div>  
+                      {/* Avans PopUp */}
+                      <div>
+                      <NdPopUp parent={this} id={"popAdvance"} 
+                      visible={false}
+                      showCloseButton={true}
+                      showTitle={true}
+                      title={this.t("popAdvance.title")}
+                      container={"#root"} 
+                      width={'700'}
+                      height={'600'}
+                      position={{of:'#root'}}
+                      >
+                          <Form colCount={1} height={'fit-content'}>
+                            <Item>
+                              <Label text={this.t("dtAdvanceDate")} alignment="right" />
+                              <NdDatePicker simple={true}  parent={this} id={"dtAdvanceDate"}
+                              onValueChanged={(async()=>
+                                  {
+                              }).bind(this)}
+                              >
+                              </NdDatePicker>
+                            </Item>
+                            <Item>
+                                  <Label text={this.t("cmbPopSafe")} alignment="right" />
+                                  <NdSelectBox simple={true} parent={this} id="cmbPopSafe" notRefresh = {true}
+                                  displayExpr="NAME"                       
+                                  valueExpr="GUID"
+                                  value=""
+                                  searchEnabled={true}
+                                  
+                                  data={{source:{select:{query : "SELECT NAME,CODE,GUID FROM [dbo].[SAFE_VW_01] WHERE TYPE = 2"},sql:this.core.sql}}}
+                                  >
+                                  </NdSelectBox>
+                              </Item>
+                              <Item>
+                                <Label text={this.t("txtPopAdvance")} alignment="right" />
+                                <NdNumberBox id="txtPopAdvance" parent={this} simple={true}
+                                >
+                                </NdNumberBox>
+                              </Item>
+                              <Item>
+                              <div className='row'>
+                                        <div className='col-6'>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("btnPopAdd")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={async ()=>
+                                            {
+                                              console.log(this.cmbPopSafe)
+                                              if(this.cmbPopSafe.value != '')
+                                              {
+                                                this.docObj.addEmpty()
+                                                this.docObj.dt()[0].TYPE = 2
+                                                this.docObj.dt()[0].DOC_TYPE = 201
+                                                this.docObj.dt()[0].REF = 'POS'
+                                                this.docObj.dt()[0].REF_NO = Math.floor(Date.now() / 1000)
+                                                this.docObj.dt()[0].DOC_DATE = this.dtAdvanceDate.value
+                                                this.docObj.dt()[0].INPUT = this.cmbPopSafe.value
+                                                this.docObj.dt()[0].OUTPUT = this.prmObj.filter({ID:'SafeCenter',TYPE:0}).getValue()
+                                                this.docObj.dt()[0].AMOUNT = this.txtPopAdvance.value
+                                                this.docObj.dt()[0].TOTAL = this.txtPopAdvance.value
+                
+                                                this.docObj.docCustomer.addEmpty()
+                                                this.docObj.docCustomer.dt()[0].TYPE = 2
+                                                this.docObj.docCustomer.dt()[0].DOC_GUID = this.docObj.dt()[0].GUID
+                                                this.docObj.docCustomer.dt()[0].DOC_TYPE = 201
+                                                this.docObj.docCustomer.dt()[0].DOC_DATE = this.dtAdvanceDate.value
+                                                this.docObj.docCustomer.dt()[0].REF = 'POS'
+                                                this.docObj.docCustomer.dt()[0].REF_NO = this.docObj.dt()[0].REF_NO
+                                                this.docObj.docCustomer.dt()[0].INPUT = this.docObj.dt()[0].INPUT
+                                                this.docObj.docCustomer.dt()[0].INPUT_NAME =  this.cmbPopSafe.displayValue
+                                                this.docObj.docCustomer.dt()[0].OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                this.docObj.docCustomer.dt()[0].PAY_TYPE = 20
+                                                this.docObj.docCustomer.dt()[0].AMOUNT = this.txtPopAdvance.value
+                                                this.docObj.docCustomer.dt()[0].DESCRIPTION = ''
+                                                
+  
+                                                await this.docObj.save()
+                                              }
+                                            }}/>
+                                        </div>
+                                    </div>
+                              </Item>
+                              <Item>
+                               <NdGrid parent={this} id={"grdAdvance"} 
+                                      showBorders={true} 
+                                      columnsAutoWidth={true} 
+                                      allowColumnReordering={true} 
+                                      allowColumnResizing={true} 
+                                      headerFilter={{visible:true}}
+                                      height={250} 
+                                      width={'100%'}
+                                      dbApply={false}
+                                      onRowRemoved={async (e)=>{
+                                        this.docObj.save()
+                                      }}
+                                      >
+                                          <Scrolling mode="virtual" />
+                                          <Editing mode="cell" allowUpdating={false} allowDeleting={true} />
+                                          <Column dataField="CUSER" caption={this.t("grdAdvance.clmUser")} width={120}  headerFilter={{visible:true}}/>
+                                          <Column dataField="INPUT_NAME" caption={this.t("grdAdvance.clmInput")} width={250}  headerFilter={{visible:true}}/>
+                                          <Column dataField="AMOUNT" caption={this.t("grdAdvance.clmAmount")} width={100} allowEditing={false} />
+                                  </NdGrid>
+                             </Item>
+                             <Item>
+                              <div className='row'>
+                                        <div className='col-6'>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("btnPopOk")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                              this.popAdvance.hide()
+                                            }}/>
+                                        </div>
+                                    </div>
+                              </Item>
                           </Form>
                       </NdPopUp>
                     </div>  

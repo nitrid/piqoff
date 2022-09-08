@@ -495,6 +495,10 @@ export default class itemList extends React.PureComponent
                                     }
                                 }
                             }}
+                            onRowPrepared={(e) =>
+                                {
+                                    console.log(e)
+                                }}
                             onRowDblClick={async(e)=>
                             {
                                 App.instance.menuClick(
