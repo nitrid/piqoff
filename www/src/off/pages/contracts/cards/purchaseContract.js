@@ -322,6 +322,27 @@ export default class purchaseContract extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
+                                    <NdButton id="btnDelete" parent={this} icon="trash" type="default"
+                                    onClick={async()=>
+                                    {
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
+                                        }
+                                        
+                                        let pResult = await dialog(tmpConfObj);
+                                        if(pResult == 'btn01')
+                                        {
+                                            this.contractObj.dt().removeAt(0)
+                                            await this.contractObj.dt().delete();
+                                            this.init(); 
+                                        }
+                                        
+                                    }}/>
+                                </Item>
+                                <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                     onClick={()=>
                                     {
@@ -603,8 +624,10 @@ export default class purchaseContract extends React.PureComponent
                                     <Label text={this.t("startDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"startDate"}
                                     dt={{data:this.contractObj.dt('SALES_CONTRACT'),field:"START_DATE"}}
-                                    onValueChanged={(async()=>
+                                    readOnly={true}
+                                    onValueChanged={(async(e)=>
                                         {
+                                            console.log(e)
                                     }).bind(this)}
                                     >
                                     </NdDatePicker>

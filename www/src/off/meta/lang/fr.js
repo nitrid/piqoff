@@ -4583,6 +4583,7 @@ export const langFr =
     },
     cnt_02_002 :
     {
+        validDate : "Lütfen Tarih Seçiniz.",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom fournisseur",

@@ -173,7 +173,7 @@ export const langTr =
         txtMinSalePrice: "Min. Satış Fiyatı",
         txtMaxSalePrice: "Max. Satış Fiyatı",
         txtLastBuyPrice: "Önceki Alış Fiyatı",
-        txtLastSalePrice: "Önceki Satış Fiyatı",
+        txtLastSalePrice: "Önceki Sat. Fiyatı",
         tabTitlePrice: "Fiyat",
         tabTitleUnit: "Birim",
         tabTitleBarcode: "Barkod",
@@ -4599,6 +4599,7 @@ export const langTr =
     },
     cnt_02_002 :
     {
+        validDate : "Lütfen Tarih Seçiniz.",
         cmbDepot: "Depo",
         txtCustomerCode : "Cari Kodu",
         txtCustomerName : "Cari Adı",

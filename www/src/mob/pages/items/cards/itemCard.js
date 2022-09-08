@@ -1363,7 +1363,7 @@ export default class itemCard extends React.PureComponent
                                             >
                                                 <Paging defaultPageSize={5} />
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                                <Column dataField="CUSER" caption={this.t("grdSalesContract.clmUser")} />
+                                                <Column dataField="CUSER_NAME" caption={this.t("grdSalesContract.clmUser")} />
                                                 <Column dataField="CUSTOMER_CODE" caption={this.t("grdSalesContract.clmCode")} />
                                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdSalesContract.clmName")} />
                                                 <Column dataField="CHANGE_DATE" caption={this.t("grdSalesContract.clmDate")} allowEditing={false} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
@@ -1409,9 +1409,9 @@ export default class itemCard extends React.PureComponent
                                                 <Paging defaultPageSize={5} />
                                                 <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
                                                 <Column dataField="CDATE" caption={this.t("grdItemInfo.cDate")}  dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
-                                                <Column dataField="CUSER" caption={this.t("grdItemInfo.cUser")} />
+                                                <Column dataField="CUSER_NAME" caption={this.t("grdItemInfo.cUser")} />
                                                 <Column dataField="LDATE" caption={this.t("grdItemInfo.lDate")} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
-                                                <Column dataField="LUSER" caption={this.t("grdItemInfo.lUser")} />
+                                                <Column dataField="LUSER_NAME" caption={this.t("grdItemInfo.lUser")} />
                                             </NdGrid>
                                         </div>
                                     </div>

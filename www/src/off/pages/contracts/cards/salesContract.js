@@ -322,6 +322,27 @@ export default class purchaseContract extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
+                                    <NdButton id="btnDelete" parent={this} icon="trash" type="default"
+                                    onClick={async()=>
+                                    {
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
+                                        }
+                                        
+                                        let pResult = await dialog(tmpConfObj);
+                                        if(pResult == 'btn01')
+                                        {
+                                            this.contractObj.dt().removeAt(0)
+                                            await this.contractObj.dt().delete();
+                                            this.init(); 
+                                        }
+                                        
+                                    }}/>
+                                </Item>
+                                <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                     onClick={()=>
                                     {
@@ -385,7 +406,7 @@ export default class purchaseContract extends React.PureComponent
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmPurcOrder"  + this.tabIndex}>
+                                            <Validator validationGroup={"frmPurcContract"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRef")} />
                                                 </Validator>  
                                             </NdTextBox>
@@ -433,7 +454,7 @@ export default class purchaseContract extends React.PureComponent
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmPurcOrder"  + this.tabIndex}>
+                                            <Validator validationGroup={"frmPurcContract"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRefNo")} />
                                                 </Validator> 
                                             </NdTextBox>
@@ -607,6 +628,9 @@ export default class purchaseContract extends React.PureComponent
                                         {
                                     }).bind(this)}
                                     >
+                                        < Validator validationGroup={"frmPurcContract"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validDate")} />
+                                        </Validator>  
                                     </NdDatePicker>
                                 </Item>
                                 {/* finishDate */}
@@ -618,6 +642,9 @@ export default class purchaseContract extends React.PureComponent
                                     {
                                     }).bind(this)}
                                     >
+                                        < Validator validationGroup={"frmPurcContract"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validDate")} />
+                                        </Validator>  
                                     </NdDatePicker>
                                 </Item>
                             </Form>
@@ -871,7 +898,6 @@ export default class purchaseContract extends React.PureComponent
                     >           
                     <Column dataField="CODE" caption={this.t("pg_txtPopItemsCode.clmCode")} width={150} />
                     <Column dataField="NAME" caption={this.t("pg_txtPopItemsCode.clmName")} width={300} defaultSortOrder="asc" />
-                    <Column dataField="MULTICODE" caption={this.t("pg_txtPopItemsCode.clmMulticode")} width={200}/>
                     </NdPopGrid>
                                     
                 </ScrollView>

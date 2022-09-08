@@ -500,7 +500,7 @@ export default class endOfDay extends React.PureComponent
                                       >
                                           <Scrolling mode="virtual" />
                                           <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
-                                          <Column dataField="CUSER" caption={this.t("grdOpenTike.clmUser")} width={120}  headerFilter={{visible:true}}/>
+                                          <Column dataField="CUSER_NAME" caption={this.t("grdOpenTike.clmUser")} width={120}  headerFilter={{visible:true}}/>
                                           <Column dataField="DEVICE" caption={this.t("grdOpenTike.clmDevice")} width={100}  headerFilter={{visible:true}}/>
                                           <Column dataField="DATE" caption={this.t("grdOpenTike.clmDate")} width={150} allowEditing={false} />
                                           <Column dataField="TICKET_ID" caption={this.t("grdOpenTike.clmTicketId")} width={150}  headerFilter={{visible:true}}/>
@@ -608,7 +608,7 @@ export default class endOfDay extends React.PureComponent
                                       >
                                           <Scrolling mode="virtual" />
                                           <Editing mode="cell" allowUpdating={false} allowDeleting={true} />
-                                          <Column dataField="CUSER" caption={this.t("grdAdvance.clmUser")} width={120}  headerFilter={{visible:true}}/>
+                                          <Column dataField="CUSER_NAME" caption={this.t("grdAdvance.clmUser")} width={120}  headerFilter={{visible:true}}/>
                                           <Column dataField="INPUT_NAME" caption={this.t("grdAdvance.clmInput")} width={250}  headerFilter={{visible:true}}/>
                                           <Column dataField="AMOUNT" caption={this.t("grdAdvance.clmAmount")} width={100} allowEditing={false} />
                                   </NdGrid>

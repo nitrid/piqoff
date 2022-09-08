@@ -410,28 +410,31 @@ export default class itemCard extends React.PureComponent
             this.setState({underPrice: (tmpPrice / tmpFactor).toFixed(2)});
         }
     }
-    grossMargin()
+    async grossMargin()
     {
         for (let i = 0; i < this.itemsObj.itemPrice.dt().length; i++) 
         {
             let tmpExVat = this.itemsObj.itemPrice.dt()[i].PRICE / ((this.itemsObj.dt("ITEMS")[0].VAT / 100) + 1)
-            let tmpMargin = tmpExVat - this.itemsObj.dt("ITEMS")[0].COST_PRICE;
-            let tmpMarginRate = ((tmpExVat - this.itemsObj.dt("ITEMS")[0].COST_PRICE) / tmpExVat) * 100
+            let tmpMargin = tmpExVat - this.txtCostPrice.value;
+            let tmpMarginRate = ((tmpExVat - this.txtCostPrice.value) / tmpExVat) * 100
             this.itemsObj.itemPrice.dt()[i].VAT_EXT = tmpExVat
             this.itemsObj.itemPrice.dt()[i].GROSS_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2);                 
-            this.itemsObj.itemPrice.dt()[i].GROSS_MARGIN_RATE = tmpMarginRate.toFixed(2);                 
+            this.itemsObj.itemPrice.dt()[i].GROSS_MARGIN_RATE = tmpMarginRate.toFixed(2);     
         }
+        await this.grdPrice.dataRefresh({source:this.itemsObj.itemPrice.dt('ITEM_PRICE')});
     }
-    netMargin()
+    async netMargin()
     {
         for (let i = 0; i < this.itemsObj.itemPrice.dt().length; i++) 
         {
             let tmpExVat = this.itemsObj.itemPrice.dt()[i].PRICE / ((this.itemsObj.dt("ITEMS")[0].VAT / 100) + 1)
-            let tmpMargin = (tmpExVat - this.itemsObj.dt("ITEMS")[0].COST_PRICE) / 1.12;
-            let tmpMarginRate = (((tmpExVat - this.itemsObj.dt("ITEMS")[0].COST_PRICE) / 1.12) / tmpExVat) * 100
+            let tmpMargin = (tmpExVat - this.txtCostPrice.value) / 1.12;
+            let tmpMarginRate = (((tmpExVat - this.txtCostPrice.value) / 1.12) / tmpExVat) * 100
             this.itemsObj.itemPrice.dt()[i].NET_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2); 
-            this.itemsObj.itemPrice.dt()[i].NET_MARGIN_RATE = tmpMarginRate.toFixed(2);                 
+            this.itemsObj.itemPrice.dt()[i].NET_MARGIN_RATE = tmpMarginRate.toFixed(2);    
         }
+        await this.grdPrice.dataRefresh({source:this.itemsObj.itemPrice.dt('ITEM_PRICE')});
+
     }   
     itemGrpForOrginsValidCheck()
     {
@@ -460,6 +463,7 @@ export default class itemCard extends React.PureComponent
     async taxSugarValidCheck()
     {
         let tmpData = this.prmObj.filter({ID:'taxSugarGroupValidation'}).getValue()
+        console.log(tmpData)
         if((typeof tmpData != 'undefined' && Array.isArray(tmpData) && typeof tmpData.find(x => x == this.cmbItemGrp.value) != 'undefined'))
         {
             
@@ -1020,6 +1024,7 @@ export default class itemCard extends React.PureComponent
                                 <Item>
                                     <Label text={this.t("txtTaxSugar")} alignment="right" />
                                     <NdNumberBox id="txtTaxSugar" parent={this} simple={true} readOnly={true}
+                                     showSpinButtons={true} step={1.0} format={"###.00"} style={{borderTopLeftRadius:'0px',borderBottomLeftRadius:'0px'}} 
                                     dt={{data:this.itemsObj.dt('ITEMS'),field:"SUGAR_RATE"}} 
                                     param={this.param.filter({ELEMENT:'txtTaxSugar',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtTaxSugar',USERS:this.user.CODE})}
@@ -1246,9 +1251,9 @@ export default class itemCard extends React.PureComponent
                                             >
                                                 <Paging defaultPageSize={5} />
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                                <Column dataField="TYPE_NAME" caption={this.t("grdPrice.clmType")} />
-                                                <Column dataField="DEPOT_NAME" caption={this.t("grdPrice.clmDepot")} />
-                                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdPrice.clmCustomerName")}/>
+                                                <Column dataField="TYPE_NAME" caption={this.t("grdPrice.clmType")} allowEditing={false}/>
+                                                <Column dataField="DEPOT_NAME" caption={this.t("grdPrice.clmDepot")} allowEditing={false}/>
+                                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdPrice.clmCustomerName")} allowEditing={false}/>
                                                 <Column dataField="START_DATE" caption={this.t("grdPrice.clmStartDate")} dataType="date" 
                                                 editorOptions={{value:null}}
                                                 cellRender={(e) => 
@@ -1272,10 +1277,10 @@ export default class itemCard extends React.PureComponent
                                                     return
                                                 }}/>
                                                 <Column dataField="QUANTITY" caption={this.t("grdPrice.clmQuantity")}/>
-                                                <Column dataField="VAT_EXT" caption={this.t("grdPrice.clmVatExt")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>                                                
+                                                <Column dataField="VAT_EXT" caption={this.t("grdPrice.clmVatExt")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>                                                
                                                 <Column dataField="PRICE" caption={this.t("grdPrice.clmPrice")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
-                                                <Column dataField="GROSS_MARGIN" caption={this.t("grdPrice.clmGrossMargin")} dataType="string"/>
-                                                <Column dataField="NET_MARGIN" caption={this.t("grdPrice.clmNetMargin")} dataType="string" format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                                <Column dataField="GROSS_MARGIN" caption={this.t("grdPrice.clmGrossMargin")} dataType="string" allowEditing={false}/>
+                                                <Column dataField="NET_MARGIN" caption={this.t("grdPrice.clmNetMargin")} dataType="string" format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
                                             </NdGrid>
                                         </div>
                                     </div>
@@ -1319,8 +1324,8 @@ export default class itemCard extends React.PureComponent
                                             >
                                                 <Paging defaultPageSize={5} />
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                                <Column dataField="TYPE_NAME" caption={this.t("grdUnit.clmType")} />
-                                                <Column dataField="NAME" caption={this.t("grdUnit.clmName")} />
+                                                <Column dataField="TYPE_NAME" caption={this.t("grdUnit.clmType")} allowEditing={false}/>
+                                                <Column dataField="NAME" caption={this.t("grdUnit.clmName")} allowEditing={false}/>
                                                 <Column dataField="FACTOR" caption={this.t("grdUnit.clmFactor")}/>
                                                 <Column dataField="WEIGHT" caption={this.t("grdUnit.clmWeight")}/>
                                                 <Column dataField="VOLUME" caption={this.t("grdUnit.clmVolume")}/>
@@ -1362,9 +1367,9 @@ export default class itemCard extends React.PureComponent
                                             >
                                                 <Paging defaultPageSize={5} />
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                                <Column dataField="BARCODE" caption={this.t("grdBarcode.clmBarcode")} />
-                                                <Column dataField="UNIT_NAME" caption={this.t("grdBarcode.clmUnit")} />
-                                                <Column dataField="TYPE_NAME" caption={this.t("grdBarcode.clmType")}/>
+                                                <Column dataField="BARCODE" caption={this.t("grdBarcode.clmBarcode")} allowEditing={false}/>
+                                                <Column dataField="UNIT_NAME" caption={this.t("grdBarcode.clmUnit")} allowEditing={false}/>
+                                                <Column dataField="TYPE_NAME" caption={this.t("grdBarcode.clmType")}allowEditing={false}/>
                                             </NdGrid>
                                         </div>
                                     </div>
@@ -1441,7 +1446,7 @@ export default class itemCard extends React.PureComponent
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                                 <Column dataField="CUSTOMER_CODE" caption={this.t("grdCustomer.clmCode")} allowEditing={false}/>
                                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdCustomer.clmName")} allowEditing={false}/>
-                                                <Column dataField="LUSER" caption={this.t("grdCustomer.clmPriceUserName")} allowEditing={false}/>
+                                                <Column dataField="LUSER_NAME" caption={this.t("grdCustomer.clmPriceUserName")} allowEditing={false}/>
                                                 <Column dataField="CUSTOMER_PRICE_DATE" caption={this.t("grdCustomer.clmPriceDate")} allowEditing={false}  />
                                                 <Column dataField="CUSTOMER_PRICE" caption={this.t("grdCustomer.clmPrice")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                                 <Column dataField="MULTICODE" caption={this.t("grdCustomer.clmMulticode")} />
@@ -1461,7 +1466,7 @@ export default class itemCard extends React.PureComponent
                                             width={'100%'}
                                             >
                                                 <Paging defaultPageSize={5} />
-                                                <Editing mode="cell" allowUpdating={true}  />
+                                                <Editing mode="cell" allowUpdating={false}  />
                                                 <Column dataField="CUSER_NAME" caption={this.t("grdCustomerPrice.clmUser")} />
                                                 <Column dataField="CUSTOMER_CODE" caption={this.t("grdCustomerPrice.clmCode")} />
                                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdCustomerPrice.clmName")} />
@@ -1484,7 +1489,7 @@ export default class itemCard extends React.PureComponent
                                             width={'100%'}
                                             >
                                                 <Paging defaultPageSize={5} />
-                                                <Editing mode="cell" allowUpdating={true} />
+                                                <Editing mode="cell" allowUpdating={false} />
                                                 <Column dataField="CUSER_NAME" caption={this.t("grdSalesPrice.clmUser")} />
                                                 <Column dataField="CHANGE_DATE" caption={this.t("grdSalesPrice.clmDate")} allowEditing={false} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
                                                 <Column dataField="PRICE" caption={this.t("grdSalesPrice.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
@@ -1504,8 +1509,8 @@ export default class itemCard extends React.PureComponent
                                             width={'100%'}
                                             >
                                                 <Paging defaultPageSize={5} />
-                                                <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                                <Column dataField="CUSER" caption={this.t("grdSalesContract.clmUser")} />
+                                                <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
+                                                <Column dataField="CUSER_NAME" caption={this.t("grdSalesContract.clmUser")} />
                                                 <Column dataField="CUSTOMER_CODE" caption={this.t("grdSalesContract.clmCode")} />
                                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdSalesContract.clmName")} />
                                                 <Column dataField="CHANGE_DATE" caption={this.t("grdSalesContract.clmDate")} allowEditing={false} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
@@ -1527,7 +1532,7 @@ export default class itemCard extends React.PureComponent
                                             dbApply={false}
                                             >
                                                 <Paging defaultPageSize={5} />
-                                                <Editing mode="cell" allowUpdating={false} allowDeleting={true} />
+                                                <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
                                                 <Column dataField="CUSTOMER" caption={this.t("grdExtraCost.clmCustomer")} />
                                                 <Column dataField="TYPE_NAME" caption={this.t("grdExtraCost.clmTypeName")} />
                                                 <Column dataField="CUSTOMER_PRICE" caption={this.t("grdExtraCost.clmCustomerPrice")} format={"#,##0.000 €"}/>
@@ -1551,9 +1556,9 @@ export default class itemCard extends React.PureComponent
                                                 <Paging defaultPageSize={5} />
                                                 <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
                                                 <Column dataField="CDATE" caption={this.t("grdItemInfo.cDate")} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ssZ"}/>
-                                                <Column dataField="CUSER" caption={this.t("grdItemInfo.cUser")} />
+                                                <Column dataField="CUSER_NAME" caption={this.t("grdItemInfo.cUser")} />
                                                 <Column dataField="LDATE" caption={this.t("grdItemInfo.lDate")} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ssZ"}/>
-                                                <Column dataField="LUSER" caption={this.t("grdItemInfo.lUser")} />
+                                                <Column dataField="LUSER_NAME" caption={this.t("grdItemInfo.lUser")} />
                                             </NdGrid>
                                         </div>
                                     </div>

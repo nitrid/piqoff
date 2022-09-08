@@ -45,6 +45,7 @@ export default class taxSugar extends React.PureComponent
     {
         this.taxSugarObj.clearAll()
         this.addTaxObj.clearAll()
+        this.getDoc()
 
         this.taxSugarObj.ds.on('onAddRow',(pTblName,pData) =>
         {
@@ -79,8 +80,9 @@ export default class taxSugar extends React.PureComponent
         tmpAdd.TYPE = 0
         this.addTaxObj.addEmpty(tmpAdd);
 
+      
+
         await this.grdTaxSugar.dataRefresh({source:this.taxSugarObj.dt('TAX_SUGAR_TABLE')});
-        this.getDoc()
     }
     async getDoc()
     {
@@ -229,7 +231,7 @@ export default class taxSugar extends React.PureComponent
                                             </Popup>
                                         </Editing>
                                         <Export fileName={this.lang.t("menu.stk_02_002")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="CUSER" caption={this.t("grdTaxSugar.clmCreateDate")} width={200} allowEditing={false}/>
+                                        <Column dataField="CUSER_NAME" caption={this.t("grdTaxSugar.clmCreateDate")} width={200} allowEditing={false}/>
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdTaxSugar.clmCreateDate")} width={200} allowEditing={false}/>
                                         <Column dataField="MIN_VALUE" caption={this.t("grdTaxSugar.clmMinValue")} width={300} dataType={'number'}  format={"#,##0.00 '(100ML/GR)'"}>
                                         <RangeRule min={0.01} message={"Oran sıfırdan küçük olamaz !"} /><RequiredRule/></Column>

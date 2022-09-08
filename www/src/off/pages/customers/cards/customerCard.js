@@ -692,7 +692,7 @@ export default class CustomerCard extends React.PureComponent
                                                 dbApply={false}
                                                 >
                                                     <Paging defaultPageSize={5} />
-                                                    <Editing mode="cell" allowUpdating={false} allowDeleting={true} />
+                                                    <Editing mode="popup" allowUpdating={true} allowDeleting={true} />
                                                     <Column dataField="ADRESS" caption={this.t("grdAdress.clmAdress")} />
                                                     <Column dataField="ZIPCODE" caption={this.t("grdAdress.clmZipcode")} />
                                                     <Column dataField="CITY" caption={this.t("grdAdress.clmCity")}/>

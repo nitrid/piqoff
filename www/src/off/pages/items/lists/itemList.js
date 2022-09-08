@@ -496,9 +496,17 @@ export default class itemList extends React.PureComponent
                                 }
                             }}
                             onRowPrepared={(e) =>
+                            {
+                                console.log(e)
+                                if(e.rowType == 'data' && e.data.STATUS == false)
                                 {
-                                    console.log(e)
-                                }}
+                                    e.rowElement.style.color ="Silver"
+                                }
+                                else if(e.rowType == 'data' && e.data.STATUS == true)
+                                {
+                                    e.rowElement.style.color ="Black"
+                                }
+                            }}
                             onRowDblClick={async(e)=>
                             {
                                 App.instance.menuClick(
@@ -510,7 +518,7 @@ export default class itemList extends React.PureComponent
                                     })
                             }}
                             >                                    
-                                <Paging defaultPageSize={15} />
+                                <Paging defaultPageSize={50} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
                                 <Export fileName={this.lang.t("menu.stk_03_001")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true}/> 

@@ -46,7 +46,7 @@ export default class NdDatePicker extends Base
             disabled={this.state.editable}
             type={this.state.type}
             dateSerializationFormat={"yyyy-MM-dd"}
-            editorOptions={this.state.editorOptions}
+            editorOptions={this.state.editorOptions} 
             onEnterKey={this._onEnterKey} onValueChanged={this._onValueChanged}>
                 {this.props.children}
                 {this.validationView()}
