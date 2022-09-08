@@ -498,6 +498,7 @@ export default class itemList extends React.PureComponent
                             onRowPrepared={(e) =>
                                 {
                                     console.log(e)
+                                    e.rowElement.style.color ="red"
                                 }}
                             onRowDblClick={async(e)=>
                             {

@@ -205,6 +205,7 @@ export default class safeCard extends React.PureComponent
                                                 {                                                    
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
+                                                    this.init()
                                                 }
                                                 else
                                                 {
