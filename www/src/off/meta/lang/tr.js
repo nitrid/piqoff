@@ -5661,7 +5661,6 @@ export const langTr =
         dtAdvanceDate : "Tarih",
         cmbPopSafe :"Kasa",
         addAdvance : "Avans Girişi"
-
     },
     tkf_01_001 :
     {

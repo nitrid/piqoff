@@ -5628,7 +5628,23 @@ export const langFr =
             clmDevice : "Utilisateur",
             clmDate : "Date",
             clmTicketId : "Numéro ticket"
-        }
+        },
+        popAdvance : 
+        {
+            title : "Avans Girişi"
+        },
+        txtPopAdvance :"Tutar",
+        btnPopAdd : "Ekle",
+        grdAdvance : 
+        {
+            clmUser : 'Kullanıcı',
+            clmInput : "Kasa",
+            clmAmount : "Tutar"
+        },
+        btnPopOk : "Tamam",
+        dtAdvanceDate : "Tarih",
+        cmbPopSafe :"Kasa",
+        addAdvance : "Avans Girişi"
     },
     tkf_01_001 :
     {
