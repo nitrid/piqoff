@@ -31,6 +31,11 @@ export default class Navigation extends React.PureComponent
         }
         
         this.menu = menu(App.instance.lang);   
+        // POS RAPOLARI SADECE ADMİNDE GÖKZÜKMESİ İÇİN GEÇİCİ OLARAK YAPILDI BURAYA BAKILACAK
+        if(this.core.auth.data.ROLE != 'Administrator')
+        {
+            this.menu[8].items[2] = {}
+        }  
 
         this.state = 
         {
@@ -39,28 +44,35 @@ export default class Navigation extends React.PureComponent
             currentItem: Object.assign({},this.menu[0]),
         }
         this.selectItem = this.selectItem.bind(this);
-        let tmpMenuData = await this.menuobj.load({USER:this.core.auth.data.CODE,APP:"OFF"})
-        let tmpMenu = await this.mergeMenu(this.menu,tmpMenuData)
-        for (let i = 0; i < tmpMenu.length; i++) 
-        {
-            tmpMenu[i].id
-            for (let x = 0; x < tmpMenuData.length; x++) 
-            {
-                tmpMenuData[x]
-                if(tmpMenu[i].id == tmpMenuData[x].id)
-                {
-                    console.log(tmpMenuData[x])
-                    if(typeof tmpMenuData[x].visible != 'undefined')
-                    {
-                        tmpMenu[i].visible = tmpMenuData[x].visible
-                    }
+
+        // MENUNUN DATABASE PARAMETRESINDEN GELMESI
+
+        // let tmpMenuData = await this.menuobj.load({USER:this.core.auth.data.CODE,APP:"OFF"})
+        // let tmpMenu = await this.mergeMenu(this.menu,tmpMenuData)
+        // for (let i = 0; i < tmpMenu.length; i++) 
+        // {
+        //     tmpMenu[i].id
+        //     for (let x = 0; x < tmpMenuData.length; x++) 
+        //     {
+        //         tmpMenuData[x]
+        //         if(tmpMenu[i].id == tmpMenuData[x].id)
+        //         {
+        //             console.log(tmpMenuData[x])
+        //             if(typeof tmpMenuData[x].visible != 'undefined')
+        //             {
+        //                 tmpMenu[i].visible = tmpMenuData[x].visible
+        //             }
                     
-                }
-            }
-        }
-        await this.core.util.waitUntil(0)
-        this.menu= tmpMenu
-        this.setState({menu:tmpMenu})
+        //         }
+        //     }
+        // }
+
+        // await this.core.util.waitUntil(0)
+
+        // await this.core.util.waitUntil(0)
+        // console.log(tmpMenu)
+        // this.menu= tmpMenu
+        // this.setState({menu:tmpMenu})
     }
     async mergeMenu(tmpMenu,tmpMenuData)
     {
