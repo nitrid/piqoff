@@ -984,11 +984,13 @@ export const langFr =
         txtLineCount : "Lecture Ligne" ,
         chkLastChange : "Dernière Modification Après Impression" ,
         chkSelectChange :"Dernière Modification Après Date Sélectionnée" ,
+        btnLabelCombine : "Etiket Birlestirme",
         chkGroup : "Groupe" ,
         chkCustomer : "Produits Fournisseur",
         chkAllItems : "Produits",
         AddItems : "Ajoute",
         txtBarcode : "Ajouter Code Barre",
+        validDesign : "Veuillez choisir le design de l'étiquette",
         pg_Docs : 
         {
             title : "Sélection Document",

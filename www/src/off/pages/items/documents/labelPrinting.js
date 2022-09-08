@@ -146,7 +146,7 @@ export default class labelPrinting extends React.PureComponent
     {
         let tmpQuery = 
         {
-            query : "SELECT GUID,REF,REF_NO FROM LABEL_QUEUE WHERE STATUS IN("+pType+") AND REF = '" +this.txtRef.value+"' " 
+            query : "SELECT GUID,REF,REF_NO FROM LABEL_QUEUE WHERE STATUS IN("+pType+") " 
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
         let tmpRows = []
@@ -614,11 +614,12 @@ export default class labelPrinting extends React.PureComponent
         this.txtPage.value = Math.ceil(this.lblObj.dt().length /this.pageCount)
         if(this.txtPage.value == '')
         {
-            this.txtPage.value = 'Lütfen Dizayn Seçiniz'
+            this.txtPage.value = this.t("validDesign")
         }
         if(this.pageCount == 0)
         {
-            this.txtFreeLabel.value = 'Lütfen Dizayn Seçiniz'
+            this.txtPage.value = this.t("validDesign")
+            this.txtFreeLabel.value = this.t("validDesign")
         }
         else
         {
@@ -1237,6 +1238,21 @@ export default class labelPrinting extends React.PureComponent
                     width={'90%'}
                     height={'90%'}
                     title={this.t("pg_DocsCombine.title")}
+                    button=
+                    {
+                        [
+                            {
+                                id:'01',
+                                icon:'more',
+                                onClick:()=>
+                                {
+                                   this.pg_DocsCombine.hide()
+                                   this.getDocsCombine('0,1')
+                                }
+                            }
+                        ]
+                        
+                    }
                     >
                         <Column dataField="REF" caption={this.t("pg_DocsCombine.clmRef")} width={150} defaultSortOrder="asc"/>
                         <Column dataField="REF_NO" caption={this.t("pg_DocsCombine.clmRefNo")} width={300} defaultSortOrder="asc" />
