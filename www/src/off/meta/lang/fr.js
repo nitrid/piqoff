@@ -42,6 +42,7 @@ export const langFr =
         stk_02_004: "Imprimer étiquette",
         stk_02_005: "Liste produit retour",
         stk_02_006: "Imprimer étiquette spéciale",
+        stk_02_007: "SKT Girişi",
         stk_03_001: "Liste stock",
         stk_03_002: "Liste prix",
         stk_03_003: "Liste code barre",
@@ -1239,6 +1240,103 @@ export const langFr =
         validDepot : "Sélectionner Dépot",
         validCustomerCode : "Le Code  Produit",
         validDocDate : "Sélectionner Date" ,
+
+    },
+    stk_02_007 :
+    {
+        design : "Dizayn",
+        txtPage : "Sayfa",
+        txtFreeLabel : "Boş Alan",
+        AddItems : "Ekle",
+        txtBarcode : "Barkod Ekle",
+        txtBarcodePlace: "Barkod Okutunuz",
+        pg_Docs : 
+        {
+            title : "Evrak Seçimi",
+            clmRef : "SERİ",
+            clmRefNo : "SIRA",
+        },
+        popItemsCode : 
+        {
+            title : "Stok Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+        },
+        popItems: 
+        {
+            title: "Stok Ekle",
+            txtPopItemsCode : "Stok Kodu",
+            txtPopItemsName: "Stok Adı",
+            txtPopItemsQuantity : "Miktar",
+            dtPopDate : "Tarih"
+        },
+        grdExpDate:
+        {
+            clmName: "Adı",
+            clmCode: "Kodu",
+            clmDate: "Tarih"
+        },
+        msgDocValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
+        },
+        msgNotSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrakta Değişiklik Yapılmış! Lütfen Kayıt Edin Yada Değişiklikleri Geri Alın"
+        },
+        msgAddItems:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Seçmiş olduğunuz kritere uygun ürünler eklenecektir.Onaylıyormusunuz ?"
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgItemNotFound:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Stok Bulunmadı !!"
+        },
+        msgCombineItem:
+        {
+            title: "Dikkat",
+            btn01: "Vazgeç",
+            btn02: "Yeni Ekle",
+            msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Yeni Satır Eklensin Mi ?"
+        },
+        validDepot : "Depo Seçmelisiniz",
+        validDocDate : "Tarih Seçmelisiniz",
 
     },
     stk_03_001 : 
