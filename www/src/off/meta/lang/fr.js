@@ -24,13 +24,13 @@ export const langFr =
     checkAll :"Tout saisir",
     menu:
     {
-        stk: "Stock",                
+        stk: "Produit",                
         stk_01: "Définition",
         stk_02: "Documents",
         stk_03: "Listes",
         stk_04: "Traitements",
         stk_05: "Rapports",
-        stk_01_001: "Saisie nouveau stock",
+        stk_01_001: "Saisie nouveau Produit",
         stk_01_002: "Saisie code barre",
         stk_01_003: "Saisie prix",
         stk_01_004: "Saisie unité",
@@ -42,7 +42,7 @@ export const langFr =
         stk_02_004: "Imprimer étiquette",
         stk_02_005: "Liste produit retour",
         stk_02_006: "Imprimer étiquette spéciale",
-        stk_03_001: "Liste stock",
+        stk_03_001: "Liste Produit",
         stk_03_002: "Liste prix",
         stk_03_003: "Liste code barre",
         stk_03_004: "Liste dépot/magasin",
@@ -123,19 +123,19 @@ export const langFr =
         pos_02_002 : "Rapport point fidelité client",
         pos_02_003 : "Rapport vente Pos",
         pos_02_004 : "Rapport de Vente",
-        pos_03 :"Traitements", //BAK
+        pos_03 :"Traitements", 
         pos_03_001 : "Opérations de fin de journée",
         promo: "Promotion",
         promo_01: "Saisie",
-        promo_01_001: "Saisie promotions", //BAK
+        promo_01_001: "Saisie promotions", 
         promo_02: "Listes",
         promo_02_001: "Liste promotion",
         promo_03: "Rapports",
-        set : "Coût Suplument",
+        set : "Coût Suplement",
         set_01 : "Coût et taxe annexe",
         set_01_001 : "Taxe sucre",
         proces : "Saisie groupée",
-        proces_01 : "Traitement stock",
+        proces_01 : "Traitement Produit",
         proces_01_001 : "MAJ groupe produit",
         tkf: "Proposition",
         tkf_01: "Listes",
@@ -183,14 +183,14 @@ export const langFr =
         tabTitleSalesContract: "Accord de Vente",
         tabTitleInfo: "Information",
         txtTaxSugar: "Taux Sucre(100ML/GR)",
-        txtTotalExtraCost : "Coût achat",
+        txtTotalExtraCost : "Prix achat",
         clmtaxSugar : "Taxe Sucre",
         pg_txtRef:
         {
-            title: "Sélectionner Stock",
+            title: "Sélectionner Produit",
             clmCode: "Code",
             clmName: "Nom", 
-            clmStatus: "Statut" //BAK
+            clmStatus: "Statut" 
         },
         pg_txtPopCustomerCode:
         {
@@ -230,7 +230,7 @@ export const langFr =
             title: "Nouveau fournisseur",
             txtPopCustomerCode: "Code",
             txtPopCustomerName: "Nom", 
-            txtPopCustomerItemCode: "Code Stock",
+            txtPopCustomerItemCode: "Code Produit",
             txtPopCustomerPrice: "Prix "
         },
         grdPrice: 
@@ -278,7 +278,7 @@ export const langFr =
             clmPriceUserName: "Utilisateur",
             clmPriceDate: "Date Dernier Prix de Revient",
             clmPrice: "Prix ",
-            clmMulticode: "Code Stock Fournisseur"
+            clmMulticode: "Code Produit Fournisseur"
         },
         grdSalesContract: 
         {
@@ -287,7 +287,7 @@ export const langFr =
             clmName: "Nom",
             clmDate: "Date Dernier Prix de Revient",
             clmPrice: "Prix ",
-            clmMulticode: "Code Stock Fournisseur"
+            clmMulticode: "Code Produit Fournisseur"
         },
         grdCustomerPrice: 
         {
@@ -296,14 +296,14 @@ export const langFr =
             clmName: "Nom",
             clmDate: "Date Dernier Prix de Revient",
             clmPrice: "Prix ",
-            clmMulticode: "Code Stock Fournisseur"
+            clmMulticode: "Code Produit Fournisseur"
         },
         msgRef:
         {
             title: "Attention",
             btn01: "Aller au Produit",
             btn02: "OK",
-            msg: "Stock Saisie Existant !"
+            msg: "Produit Saisie Existant !"
         },
         msgBarcode:
         {
@@ -317,7 +317,7 @@ export const langFr =
             title: "Attention",
             btn01: "Aller au Produit",
             btn02: "OK",
-            msg: "Code Stock Fournisseur Saisie Existant !"
+            msg: "Code Produit Fournisseur Saisie Existant !"
         },
         msgPriceSave:
         {
@@ -380,27 +380,27 @@ export const langFr =
         },
         msgCheckPrice:
         {
-            title: "Attention", //BAK
-            btn01: "OK", //BAK
-            msg: "Enregistrement similaire non créable" //BAK
+            title: "Attention", 
+            btn01: "OK", 
+            msg: "Enregistrement similaire non créable" 
         },
         msgCheckCustomerCode:
         {
-            title: "Attention", //BAK
-            btn01: "OK", //BAK
-            msg: "Fournisseur deja existant !" //BAK
+            title: "Attention", 
+            btn01: "OK", 
+            msg: "Fournisseur deja existant !" 
         },
         msgSalePriceToCustomerPrice:
         {
-            title: "Attention", //BAK
-            btn01: "OK", //BAK
-            msg: "Prix de revient ne peux être plus élevé que le prix de vente! Veuillez verifier le prix de vente." //BAK
+            title: "Attention", 
+            btn01: "OK", 
+            msg: "Prix de revient ne peux être plus élevé que le prix de vente! Veuillez verifier le prix de vente." 
         },
-        popAnalysis :  //BAK
+        popAnalysis :  
         {
             title : "Statistique de Vente" 
         },
-        grdAnalysis:  //BAK
+        grdAnalysis:  
         {
             clmToday: "Aujour'hui",
             clmYesterday: "Hier",
@@ -409,10 +409,10 @@ export const langFr =
             clmYear : "Cette Année",
             clmLastYear : "Année Précedent"
         },
-        dtFirstAnalysis : "Début",  //BAK
-        dtLastAnalysis : "Fin", //BAK
-        btnGet : "Validé", //BAK
-        msgNotDelete: //BAK
+        dtFirstAnalysis : "Début",  
+        dtLastAnalysis : "Fin", 
+        btnGet : "Validé", 
+        msgNotDelete: 
         {
             title: "Attention",
             btn01: "OK",
@@ -428,8 +428,8 @@ export const langFr =
     stk_01_002: 
     {
         txtBarcode: "Code barre",
-        txtItem: "Code Stock",
-        txtItemName: "Nom Stock",
+        txtItem: "Code Produit",
+        txtItemName: "Nom Produit",
         cmbBarUnit: "Unité",
         txtBarUnitFactor: "Coefficient",
         cmbPopBarType : "Type",
@@ -446,15 +446,15 @@ export const langFr =
         {
             title: "Sélection Code barre",
             clmBarcode: "Code Barre",
-            clmItemName: "Nom Stock", 
-            clmItemCode: "Code Stock"
+            clmItemName: "Nom Produit", 
+            clmItemCode: "Code Produit"
         },
        
         msgCheckBarcode:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Code barre saisie déjà enregistré ! Importé Stock.",
+            msg: "Code barre saisie déjà enregistré ! Importé Produit.",
         },
         msgBarcode:
         {
@@ -490,7 +490,7 @@ export const langFr =
             btn02: "Abandonne",
             msg: "Etes-vous sur de vouloir supprimer l'enregistrement ?" ,
         },
-        validCode :"Veuillez Sélectionner le Stock",
+        validCode :"Veuillez Sélectionner le Produit",
     },
     stk_01_006 :
     {
@@ -568,9 +568,9 @@ export const langFr =
         },
         pg_txtItemsCode : 
         {
-            title : "Sélectionner Stock",
-            clmCode :  "Code Stock",
-            clmName : "Nom Stock",
+            title : "Sélectionner Produit",
+            clmCode :  "Code Produit",
+            clmName : "Nom Produit",
         },
         grdItemCount: 
         {
@@ -672,7 +672,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Stock Introuvable !!"
+            msg: "Produit Introuvable !!"
         },
         msgCombineItem:
         {
@@ -707,9 +707,9 @@ export const langFr =
         },
         pg_txtItemsCode : 
         {
-            title : "Sélectionner Stock",
-            clmCode :  "Code Stock",
-            clmName : "Nom Stock",
+            title : "Sélectionner Produit",
+            clmCode :  "Code Produit",
+            clmName : "Nom Produit",
         },
         grdTrnsfItems: 
         {
@@ -804,7 +804,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Stock Introuvable !!"
+            msg: "Produit Introuvable !!"
         },
         msgCombineItem:
         {
@@ -836,9 +836,9 @@ export const langFr =
         },
         pg_txtItemsCode : 
         {
-            title : "Sélectionner Stock",
-            clmCode :  "Code Stock",
-            clmName : "Nom Stock",
+            title : "Sélectionner Produit",
+            clmCode :  "Code Produit",
+            clmName : "Nom Produit",
         },
         grdOutwasItems: 
         {
@@ -847,7 +847,7 @@ export const langFr =
             clmQuantity : "Quantité",
             clmCreateDate: "Date d'Enregistrement",
             clmDescription :"Motif",
-            clmCostPrice : "Coût" ,
+            clmCostPrice : "Prix" ,
         },
         pg_dispatchGrid : 
         {
@@ -949,7 +949,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Stock Introuvable !!"
+            msg: "Produit Introuvable !!"
         },
         msgCombineItem:
         {
@@ -984,7 +984,7 @@ export const langFr =
         txtLineCount : "Lecture Ligne" ,
         chkLastChange : "Dernière Modification Après Impression" ,
         chkSelectChange :"Dernière Modification Après Date Sélectionnée" ,
-        btnLabelCombine : "Etiket Birlestirme",
+        btnLabelCombine : "Regrouper Les Etiquette ",
         chkGroup : "Groupe" ,
         chkCustomer : "Produits Fournisseur",
         chkAllItems : "Produits",
@@ -1005,9 +1005,9 @@ export const langFr =
         },
         pg_txtItemsCode : 
         {
-            title : "Sélectionner Stock",
-            clmCode :  "Code Stock",
-            clmName : "Nom Stock",
+            title : "Sélectionner Produit",
+            clmCode :  "Code Produit",
+            clmName : "Nom Produit",
         },
         grdLabelQueue: 
         {
@@ -1101,7 +1101,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Stock Introuvable !!"
+            msg: "Produit Introuvable !!"
         },
         msgCombineItem:
         {
@@ -1140,9 +1140,9 @@ export const langFr =
         },
         pg_txtItemsCode : 
         {
-            title : "Sélectionner Stock",
-            clmCode :  "Code Stock",
-            clmName : "Nom Stock",
+            title : "Sélectionner Produit",
+            clmCode :  "Code Produit",
+            clmName : "Nom Produit",
         },
         grdRebItems: 
         {
@@ -1225,7 +1225,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Stock Introuvable !!"
+            msg: "Produit Introuvable !!"
         },
         msgCombineItem:
         {
@@ -1264,7 +1264,7 @@ export const langFr =
             clmMulticode : "Sélection Document",
             clmUnit : "Unité",
             clmBarcode : "Code barre",
-            clmCostPrice : "Coût achat",
+            clmCostPrice : "Prix achat",
             clmPriceSale : "Prix Vente",
             clmVat : "Taxe",
             clmMinPrice : "Prix Min",
@@ -1328,10 +1328,10 @@ export const langFr =
             clmMulticode : "Sélection Document",
             clmUnit : "Unité",
             clmBarcode : "Code barre",
-            clmCostPrice : "Coût achat",
+            clmCostPrice : "Prix achat",
             clmVat : "Taxe",
-            clmMinPrice : "Prix Minimum de Vente",
-            clmMaxPrice : "Prix Maximum de Vente",
+            clmMinPrice : "Prix Min. Vente",
+            clmMaxPrice : "Prix Max. Vente",
             clmStatus : "Etat",
 
         },
@@ -1462,7 +1462,7 @@ export const langFr =
         validDepot : "Sélectionner Dépot",
         popCount : 
         {
-            title : "Quantité Stock",
+            title : "Quantité Produit",
         },
         grdCountDocument : 
         {
@@ -1933,9 +1933,9 @@ export const langFr =
         },
         pg_txtItemsCode : 
         {
-            title : "Sélectionner Stock",
-            clmCode :  "Code Stock",
-            clmName : "Nom Stock",
+            title : "Sélectionner Produit",
+            clmCode :  "Code Produit",
+            clmName : "Nom Produit",
             clmMulticode : "Sélection Document",
         },
         pg_dispatchGrid : 
@@ -2089,7 +2089,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Stock Introuvable !!"
+            msg: "Produit Introuvable !!"
         },
         msgCustomerNotFound:
         {
@@ -2212,19 +2212,19 @@ export const langFr =
         validCustomerCode : "Le Code Produit ne peut être Vide ",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
-        msgNewPrice :      // BAK
-        {     // BAK
-            title: "Attention",     // BAK
-            btn01: "Ne pas mettre à jour",     // BAK
-            btn02: "Mettre prix sélectionné à jour ",     // BAK
-            msg: "Veuillez sélectionner et mettre à jour les prix du fournisseur... "     // BAK
-        },     // BAK
-        grdNewPrice:      // BAK
-        {     // BAK
-            clmCode: "Code",     // BAK
-            clmName: "Nom",     // BAK
-            clmPrice: "Ancien Prix",     // BAK
-            clmPrice2: "Nouveau Prix",     // BAK
+        msgNewPrice :      
+        {     
+            title: "Attention",     
+            btn01: "Ne pas mettre à jour",     
+            btn02: "Mettre prix sélectionné à jour ",     
+            msg: "Veuillez sélectionner et mettre à jour les prix du fournisseur... "     
+        },     
+        grdNewPrice:      
+        {     
+            clmCode: "Code",     
+            clmName: "Nom",     
+            clmPrice: "Ancien Prix",     
+            clmPrice2: "Nouveau Prix",     
         },
     },
     ftr_02_002 :
@@ -2272,9 +2272,9 @@ export const langFr =
         },
         pg_txtItemsCode : 
         {
-            title : "Sélectionner Stock",
-            clmCode :  "Code Stock",
-            clmName : "Nom Stock",
+            title : "Sélectionner Produit",
+            clmCode :  "Code Produit",
+            clmName : "Nom Produit",
         },
         pg_dispatchGrid : 
         {
@@ -2425,7 +2425,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Stock Introuvable !!"
+            msg: "Produit Introuvable !!"
         },
         msgNotCustomer:
         {
@@ -2558,9 +2558,9 @@ export const langFr =
         },
         pg_txtItemsCode : 
         {
-            title : "Sélectionner Stock",
-            clmCode :  "Code Stock",
-            clmName : "Nom Stock",
+            title : "Sélectionner Produit",
+            clmCode :  "Code Produit",
+            clmName : "Nom Produit",
         },
         pg_dispatchGrid : 
         {
@@ -2711,7 +2711,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Stock Introuvable !!"
+            msg: "Produit Introuvable !!"
         },
         msgNotCustomer:
         {
@@ -2775,7 +2775,7 @@ export const langFr =
         txtVat : "TVA",
         txtTotal : "Total Général",
         dtShipDate :"Date Expédition",
-        getContract : "Anlaşmadan Getir",
+        getContract : "Rechercher l'Accord de Prix",
         getPayment : "Encaissement",
         cash : "Montant" ,
         description :"Motif",
@@ -2807,9 +2807,9 @@ export const langFr =
         },
         pg_txtItemsCode : 
         {
-            title : "Sélectionner Stock",
-            clmCode :  "Code Stock",
-            clmName : "Nom Stock",
+            title : "Sélectionner Produit",
+            clmCode :  "Code Produit",
+            clmName : "Nom Produit",
         },
         pg_contractGrid : 
         {
@@ -2957,7 +2957,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Stock Introuvable !!"
+            msg: "Produit Introuvable !!"
         },
         msgNotCustomer:
         {
@@ -3012,13 +3012,13 @@ export const langFr =
         txtCustomerCode: "Sélection Document",
         txtCustomerName: "Nom fournisseur",
         cmbPrmType: "Type de Promotion",
-        txtPrmItem:  "Stock",
+        txtPrmItem:  "Produit",
         txtPrmItemGrp: "Groupe" ,
         txtPrmQuantity: "Quantité",
         txtPrmAmount: "Montant" ,
         cmbRstType: "Type",
         txtRstQuantity:  "Valeur",
-        txtRstItem :  "Stock",
+        txtRstItem :  "Produit",
         cmbRstItemType: "Type",
         txtRstItemQuantity:  "Valeur",
         pg_Grid:
@@ -3185,9 +3185,9 @@ export const langFr =
         },
         pg_txtItemsCode : 
         {
-            title : "Sélectionner Stock",
-            clmCode :  "Code Stock",
-            clmName : "Nom Stock",
+            title : "Sélectionner Produit",
+            clmCode :  "Code Produit",
+            clmName : "Nom Produit",
             clmMulticode : "Sélection Document"
         },
         grdPurcDispatch: 
@@ -3316,7 +3316,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Stock Introuvable !!"
+            msg: "Produit Introuvable !!"
         },
         msgCustomerNotFound:
         {
@@ -3424,9 +3424,9 @@ export const langFr =
         },
         pg_txtItemsCode : 
         {
-            title : "Sélectionner Stock",
-            clmCode :  "Code Stock",
-            clmName : "Nom Stock",
+            title : "Sélectionner Produit",
+            clmCode :  "Code Produit",
+            clmName : "Nom Produit",
         },
         grdSlsDispatch: 
         {
@@ -3554,7 +3554,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Stock Introuvable !!"
+            msg: "Produit Introuvable !!"
         },
         msgNotCustomer:
         {
@@ -3666,16 +3666,16 @@ export const langFr =
         },
         pg_txtItemsCode : 
         {
-            title : "Sélectionner Stock",
-            clmCode :  "Code Stock",
-            clmName : "Nom Stock",
+            title : "Sélectionner Produit",
+            clmCode :  "Code Produit",
+            clmName : "Nom Produit",
            
         },
         pg_RebateGrid : 
         {
             title : "İade Stok Seçimi",
-            clmCode :  "Code Stock",
-            clmName : "Nom Stock",
+            clmCode :  "Code Produit",
+            clmName : "Nom Produit",
             clmQuantity :"Quantité "
         },
         grdRebtDispatch: 
@@ -3804,7 +3804,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Stock Introuvable !!"
+            msg: "Produit Introuvable !!"
         },
         msgNotCustomer:
         {
@@ -3936,9 +3936,9 @@ export const langFr =
         },
         pg_txtItemsCode : 
         {
-            title : "Sélectionner Stock",
-            clmCode :  "Code Stock",
-            clmName : "Nom Stock",
+            title : "Sélectionner Produit",
+            clmCode :  "Code Produit",
+            clmName : "Nom Produit",
             clmMulticode : "Sélection Document"
         },
         grdPurcOrders: 
@@ -4075,7 +4075,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Stock Introuvable !!"
+            msg: "Produit Introuvable !!"
         },
         msgCustomerNotFound:
         {
@@ -4174,9 +4174,9 @@ export const langFr =
         },
         pg_txtItemsCode : 
         {
-            title : "Sélectionner Stock",
-            clmCode :  "Code Stock",
-            clmName : "Nom Stock",
+            title : "Sélectionner Produit",
+            clmCode :  "Code Produit",
+            clmName : "Nom Produit",
         },
         grdSlsOrder: 
         {
@@ -4304,7 +4304,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Stock Introuvable !!"
+            msg: "Produit Introuvable !!"
         },
         msgNotCustomer:
         {
@@ -4403,8 +4403,8 @@ export const langFr =
         grdPurcContList: 
         {
             clmCreateDate: "Date d'Enregistrement",
-            clmCode: "Code Stock",
-            clmName: "Nom Stock",
+            clmCode: "Code Produit",
+            clmName: "Nom Produit",
             clmCustomerName : "Nom fournisseur",
             clmPrıce : "Prix ",
             clmQuantity: "Quantité",
@@ -4430,8 +4430,8 @@ export const langFr =
         grdPurcContList: 
         {
             clmCreateDate: "Date d'Enregistrement",
-            clmCode: "Code Stock",
-            clmName: "Nom Stock",
+            clmCode: "Code Produit",
+            clmName: "Nom Produit",
             clmCustomerName : "Nom fournisseur",
             clmPrıce : "Prix ",
             clmQuantity: "Quantité",
@@ -4449,8 +4449,8 @@ export const langFr =
         pg_Docs : 
         {
             title : "Sélection Documents",
-            clmRef : "SERİ",
-            clmRefNo : "SIRA",
+            clmRef : "Serie",
+            clmRefNo : "Numéro",
             clmOutputName : "Nom Fournisseur",
             clmOutputCode  : "Code Client",
         },
@@ -4464,9 +4464,9 @@ export const langFr =
         },
         pg_txtPopItemsCode : 
         {
-            title : "Sélectionner Stock",
-            clmCode :  "Code Stock",
-            clmName : "Nom Stock",
+            title : "Sélectionner Produit",
+            clmCode :  "Code Produit",
+            clmName : "Nom Produit",
             clmMulticode : "Sélection Document"
         },
         msgContractValid:
@@ -4522,80 +4522,80 @@ export const langFr =
         popItems: 
         {
             title: "Inclus un Accord",
-            txtPopItemsCode : "Code Stock",
-            txtPopItemsName: "Nom Stock",
+            txtPopItemsCode : "Code Produit",
+            txtPopItemsName: "Nom Produit",
             txtPopItemsPrice : "Prix ",
             txtPopItemsQuantity : "Quantité",
             dtPopStartDate :"Début ",
             dtPopEndDate : "Fin "
         },
         validCustomerCode : "Le Code Produit ne peut être Vide ",
-        txtRefRefno : "Serie-Referance",    // BAK
-        startDate :"Date Début",    // BAK
-        finishDate : "Date Fin",    // BAK
-        msgMissItemCode:    // BAK
-        {    // BAK
-            title: "Attention",    // BAK
-            btn01: "OK",    // BAK
-            msg: "Code non trouvé :"    // BAK
-        },    // BAK
-        msgMultiCodeCount:    // BAK
-        {    // BAK
-            title: "Attention",    // BAK
-            btn01: "OK",    // BAK
-            msg: "Eklenen Ürün Sayısı"    // BAK
-        },    // BAK
-        popMultiItem:    // BAK
-        {    // BAK
-            title: "Toplu Ürün Ekleme",    // BAK
-            btnApprove: "Chercher Produits",    // BAK
-            btnClear : "Vider",    // BAK
-            btnSave : "Satırları Ekle",    // BAK
-        },    // BAK
-        cmbMultiItemType :     // BAK
-        {    // BAK
-            title : "Arama Şekli",    // BAK
-            customerCode : "En Fonction du Code Fournisseur ",    // BAK
-            ItemCode : "Ürün Koduna Göre"    // BAK
-        },    // BAK
-        grdMultiItem :     // BAK
-        {    // BAK
-            clmCode : "Ürün Kodu",    // BAK
-            clmMulticode : "Sélection Document",    // BAK
-            clmName : "Ürün Adı",    // BAK
-            clmQuantity : "Miktar",    // BAK
-            clmPrice : "Fiyat"    // BAK
-        },    // BAK
-        msgMultiData:    // BAK
-        {    // BAK
-            title: "Attention",    // BAK
-            btn01: "Listeyi Temizle ve Hepsini Ekle",    // BAK
-            btn02: "Yeni Yazılanları Listeye Ekle",    // BAK
-            msg: "Listede Ürünler Var! "    // BAK
-        },    // BAK
-        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz",    // BAK
-        msgDocValid:    // BAK
-        {    // BAK
-            title: "Attention",    // BAK
-            btn01: "OK",    // BAK
-            msg: "Veuillez saisir les en-tête avant l'achèvement !"    // BAK
+        txtRefRefno : "Série-Numéro",    
+        startDate :"Date Début",    
+        finishDate : "Date Fin",    
+        msgMissItemCode:    
+        {    
+            title: "Attention",    
+            btn01: "OK",    
+            msg: "Code non trouvé :"    
+        },    
+        msgMultiCodeCount:    
+        {    
+            title: "Attention",    
+            btn01: "OK",    
+            msg: "Ajoute Produit"    
+        },    
+        popMultiItem:    
+        {    
+            title: "Ajouté plusieurs produits",    
+            btnApprove: "Chercher Produits",    
+            btnClear : "Vider",    
+            btnSave : "Ajoutez les lignes",    
+        },    
+        cmbMultiItemType :     
+        {    
+            title : "Type De Recharche",    
+            customerCode : "En Fonction du Code Fournisseur ",    
+            ItemCode : "Code Produit"    
+        },    
+        grdMultiItem :     
+        {    
+            clmCode : "Referance",    
+            clmMulticode : "Sélection Document",    
+            clmName : "Nom Produit",    
+            clmQuantity : "Quantité",    
+            clmPrice : "Prix"    
+        },    
+        msgMultiData:    
+        {    
+            title: "Attention",    
+            btn01: "Ajouter Les produits et réinitialiser la Liste",    
+            btn02: "Ajouter les nouveaux produits à la liste",    
+            msg: "Les produits saisis sont déjà existants. "    
+        },    
+        tagItemCodePlaceholder: "Saisir les références produits",    
+        msgDocValid:    
+        {    
+            title: "Attention",    
+            btn01: "OK",    
+            msg: "Veuillez saisir l'en-tête avant l'achèvement !"    
         },
     },
     cnt_02_002 :
     {
-        validDate : "Lütfen Tarih Seçiniz.",
+        validDate : "Sélection Date.",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom fournisseur",
-        validItemsCode : "Sélectionner Stock",
-        pg_Docs :      //BAK
-        {     //BAK
-            title : "Sélection Documents",     //BAK
-            clmRef : "SERİ",     //BAK
-            clmRefNo : "SIRA",     //BAK
-            clmOutputName : "Nom Fournisseur",     //BAK
-            clmOutputCode  : "Code Client",     //BAK
-        },     //BAK
+        validItemsCode : "Sélectionner Produit",
+        pg_Docs :      
+        {     
+            title : "Sélection Documents",     
+            clmRef : "Serie",     
+            clmRefNo : "Numéro",     
+            clmOutputName : "Nom Fournisseur",     
+            clmOutputCode  : "Code Client",     
+        },     
         pg_txtCustomerCode : 
         {
             title : "Choix Fournisseur",
@@ -4606,11 +4606,11 @@ export const langFr =
         },
         pg_txtPopItemsCode : 
         {
-            title : "Sélectionner Stock",
-            clmCode :  "Code Stock",
-            clmName : "Nom Stock",
-            clmCostPrice :  "PRIX D'ACHAT",
-            clmSalesPrice : "PRIX DE VENTE"
+            title : "Sélectionner Produit",
+            clmCode :  "Code Produit",
+            clmName : "Nom Produit",
+            clmCostPrice :  "Prix D'Achat",
+            clmSalesPrice : "Prix De Vente"
         },
         msgContractValid:
         {
@@ -4665,8 +4665,8 @@ export const langFr =
         popItems: 
         {
             title: "Inclus un Accord",
-            txtPopItemsCode : "Code Stock",
-            txtPopItemsName: "Nom Stock",
+            txtPopItemsCode : "Code Produit",
+            txtPopItemsName: "Nom Produit",
             txtPopItemsPrice : "Prix ",
             txtPopItemsQuantity : "Quantité",
             dtPopStartDate :"Début ",
@@ -4679,55 +4679,55 @@ export const langFr =
             msg: "Ne Peut Etre Remisé plus que L'Autorisation.!! Montant Autorisé : "
         },
         validCustomerCode : "Le Code Produit ne peut être Vide ",
-        txtRefRefno : "Serie-Réferance",   //BAK
-        startDate :"Date Début",   //BAK
-        finishDate : "Date Fin",   //BAK
-        msgMissItemCode:   //BAK
-        {   //BAK
-            title: "Attention",   //BAK
-            btn01: "OK",   //BAK
-            msg: "Code non trouvé :"   //BAK
-        },   //BAK
-        msgMultiCodeCount:   //BAK
-        {   //BAK
-            title: "Attention",   //BAK
-            btn01: "OK",   //BAK
-            msg: "Nombre de produit ajouté"   //BAK
-        },   //BAK
-        popMultiItem:   //BAK
-        {   //BAK
-            title: "Ajouté plusieurs produits",   //BAK
-            btnApprove: "Chercher Produits",   //BAK
-            btnClear : "Vider",   //BAK
-            btnSave : "Ajoutez les lignes",   //BAK
-        },   //BAK
-        cmbMultiItemType :    //BAK
-        {   //BAK
-            title : "Type de Recherche",   //BAK
-            customerCode : "En Fonction du Code Fournisseur ",   //BAK
-            ItemCode : "En fonction du code produit"   //BAK
-        },   //BAK
-        grdMultiItem :    //BAK
-        {   //BAK
-            clmCode : "Code Produit",   //BAK
-            clmMulticode : "Sélection Document",   //BAK
-            clmName : "Nom Produit",   //BAK
-            clmQuantity : "Quantité",   //BAK
-            clmPrice : "Prix"   //BAK
-        },   //BAK
-        msgMultiData:   //BAK
-        {   //BAK
-            title: "Attention",   //BAK
-            btn01: "Videz la liste et rajouté le tout",   //BAK
-            btn02: "Rajouté les nouveau a la liste",   //BAK
-            msg: "Produits déja existant ! "   //BAK
-        },   //BAK
-        tagItemCodePlaceholder: "Saisir les codes que vous voulez rajouté",   //BAK
-        msgDocValid:   //BAK
-        {   //BAK
-            title: "Attention",   //BAK
-            btn01: "OK",   //BAK
-            msg: "Veuillez saisir les en-tête avant l'achèvement !"   //BAK
+        txtRefRefno : "Serie-Réferance",   
+        startDate :"Date Début",   
+        finishDate : "Date Fin",   
+        msgMissItemCode:   
+        {   
+            title: "Attention",   
+            btn01: "OK",   
+            msg: "Code non trouvé :"   
+        },   
+        msgMultiCodeCount:   
+        {   
+            title: "Attention",   
+            btn01: "OK",   
+            msg: "Nombre de produit ajouté"   
+        },   
+        popMultiItem:   
+        {   
+            title: "Ajouté plusieurs produits",   
+            btnApprove: "Chercher Produits",   
+            btnClear : "Vider",   
+            btnSave : "Ajoutez les lignes",   
+        },   
+        cmbMultiItemType :    
+        {   
+            title : "Type de Recherche",   
+            customerCode : "En Fonction du Code Fournisseur ",   
+            ItemCode : "En fonction du code produit"   
+        },   
+        grdMultiItem :    
+        {   
+            clmCode : "Code Produit",   
+            clmMulticode : "Sélection Document",   
+            clmName : "Nom Produit",   
+            clmQuantity : "Quantité",   
+            clmPrice : "Prix"   
+        },   
+        msgMultiData:   
+        {   
+            title: "Attention",   
+            btn01: "Videz la liste et rajouté le tout",   
+            btn02: "Rajouté les nouveau a la liste",   
+            msg: "Produits déja existant ! "   
+        },   
+        tagItemCodePlaceholder: "Saisir les codes que vous voulez rajouté",   
+        msgDocValid:   
+        {   
+            title: "Attention",   
+            btn01: "OK",   
+            msg: "Veuillez saisir les en-tête avant l'achèvement !"   
         },
     },
     fns_01_001 :
@@ -5347,14 +5347,14 @@ export const langFr =
         },
         pg_txtItemsCode : 
         {
-            title : "Sélectionner Stock",
-            clmCode :  "Code Stock",
-            clmName : "Nom Stock",
+            title : "Sélectionner Produit",
+            clmCode :  "Code Produit",
+            clmName : "Nom Produit",
         },
         grdTaxSugar: 
         {
             clmCreateDate: "Date d'Enregistrement",
-            clmMinValue : "Min. Evaluer Sucre Dans(100ML/GR)", ///duz
+            clmMinValue : "Min. Evaluer Sucre Dans(100ML/GR)", 
             clmMaxvalue : "Max. Evaluer Sucre Dans(100ML/GR)",
             clmPrice : "Prix ​​Multiplicateur"
         },
@@ -5362,7 +5362,7 @@ export const langFr =
         {
             title: "Evaluer Sucre",
             btnApprove : "Ajoute",
-            minValue : "Min. Evaluer Sucre Dans(100ML/GR)", ///duz
+            minValue : "Min. Evaluer Sucre Dans(100ML/GR)",
             maxValue : "Max. Evaluer Sucre Dans(100ML/GR)",
             price : "Prix ​​Multiplicateur",
         },
@@ -5394,7 +5394,7 @@ export const langFr =
     {
         txtCode : "Code",
         txtName :"Nom",
-        txtIban :"Iban",
+        txtIban :"IBAN",
         validCode :"Vous ne pouvez ne pas sasir le code !",
         txtScalePort : "Scale Port",
         txtLcdPort : "LCD Port",
@@ -5436,9 +5436,9 @@ export const langFr =
         msgCode : 
         {
             title: "Attention",
-            btn01: "Aller à l'appareil ", // BAK
+            btn01: "Aller à l'appareil ", 
             btn02: "OK",
-            msg : "Le code d'appareil que vous avez entré est enregistré dans le système !" // BAK
+            msg : "Le code d'appareil que vous avez entré est enregistré dans le système !" 
         }
       
     },
@@ -5452,8 +5452,8 @@ export const langFr =
         txtCustomerCode : "Fournisseur",
         cmbDevice :"Appareil",
         txtTicketno : "Numéro de ticket",
-        numFirstTicketAmount : "Contenu", // BAK
-        numLastTicketAmount : "Unité supérieur", // BAK
+        numFirstTicketAmount : "Contenu", 
+        numLastTicketAmount : "Unité supérieur", 
         cmbUser :"Utilisateur",
         txtItem :"Code Produit",
         ckhDoublePay : "Paiements multiples",
@@ -5516,20 +5516,20 @@ export const langFr =
         },
         payChangeNote : "La modification de ticket doit rester exceptionnelle et permetter de corriger les erreurs !",
         payChangeNote2 : "Un historique des modifications est enregistre !",
-        txtPayChangeDescPlace : "Veuillez entrée la description.", // BAK
-        txtPayChangeDesc :"Le type de paiement a été saisi de manière incorrecte.Il a été Corrigé.", // BAK
-        popLastTotal :       //BAK
-        {      //BAK
-            title : "Règlement"      //BAK
-        },      //BAK
-        trDeatil: "T.R Detaille",      //BAK
-        lineDelete :"ligne annulé",      //BAK
-        cancel : "Abandonne",      //BAK
+        txtPayChangeDescPlace : "Veuillez entrée la description.", 
+        txtPayChangeDesc :"Le type de paiement a été saisi de manière incorrecte.Il a été Corrigé.", 
+        popLastTotal :       
+        {      
+            title : "Règlement"      
+        },      
+        trDeatil: "T.R Detaille",      
+        lineDelete :"ligne annulé",      
+        cancel : "Abandonne",      
         popOpenTike :
         {
-            title : "Reçus incomplet" //BAK
+            title : "Reçus incomplet" 
         },
-        grdOpenTike: //BAK
+        grdOpenTike: 
         {
             clmUser : "Utilisateur",
             clmDevice : "Appareil",
@@ -5558,18 +5558,18 @@ export const langFr =
             clmPoint: "Points",
             clmLdate : "Dernière Date MAJ",
         },
-        popPointDetail : // BAK
+        popPointDetail : 
         {
             title: "Detaille de points"
         },
-        grdPointDetail : // BAK
+        grdPointDetail : 
         {
             clmDate : "Date",
             clmPoint : "Poitns",
             clmPointType : "Type",
             clmPosId :"Numéro de ticket"
         },
-        grdSaleTicketItems :// BAK
+        grdSaleTicketItems :
         {
             clmBarcode : "Code barre",
             clmName : "Nom produit ",
@@ -5577,25 +5577,25 @@ export const langFr =
             clmPrice : "Prix",
             clmTotal : "Montant"
         },
-        grdSaleTicketPays : // BAK
+        grdSaleTicketPays : 
         {
             clmPayName : "Type de paiement", 
             clmTotal : "Montant",
         },
-        popDetail : // BAK
+        popDetail : 
         {
             title : "Detaille ticket"
         },
-        TicketId :"ID Ticket", // BAK
-        popLastTotal : // BAK
+        TicketId :"ID Ticket", 
+        popLastTotal : 
         {
             title : "Receuil"
         },
-        trDeatil: "T.R Detaille", // BAK
-        lineDelete :"Ligne annulé", // BAK
-        cancel : "Abandonne", // BAK
+        trDeatil: "T.R Detaille", 
+        lineDelete :"Ligne annulé", 
+        cancel : "Abandonne", 
     },
-    pos_03_001 : // KOMPLE BAK
+    pos_03_001 :
     {
         title : "Opérations de fin de journée",
         start :"Démarrer",
@@ -5632,21 +5632,29 @@ export const langFr =
         },
         popAdvance : 
         {
-            title : "Avans Girişi"
+            title : "Fonde De Caisse"
         },
-        txtPopAdvance :"Tutar",
-        btnPopAdd : "Ekle",
+        txtPopAdvance :"Total",
+        btnPopAdd : "Valide",
         grdAdvance : 
         {
-            clmUser : 'Kullanıcı',
-            clmInput : "Kasa",
-            clmAmount : "Tutar",
-            clmDate :"Tarih"
+            clmUser : 'Utilisateur',
+            clmInput : "Caisse",
+            clmAmount : "Total",
+            clmDate :"Date"
         },
-        btnPopOk : "Tamam",
-        dtAdvanceDate : "Tarih",
-        cmbPopSafe :"Kasa",
-        addAdvance : "Avans Girişi"
+        btnPopOk : "OK",
+        dtAdvanceDate : "date",
+        cmbPopSafe :"Caisse",
+        addAdvance : "Fonde De Caisse",
+        msgDoubleAdvence:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Le fond de caisse est déjà saisie. Il faut modifier ceci à partir du tableau."
+        },
+        advanceMsg1 : "Soyez sûr que le fond de caisse est de",
+        advanceMsg2 : "Etre sûr!!!"
     },
     tkf_01_001 :
     {
@@ -5740,9 +5748,9 @@ export const langFr =
         },
         pg_txtItemsCode : 
         {
-            title : "Sélectionner Stock",
-            clmCode :  "Code Stock",
-            clmName : "Nom Stock",
+            title : "Sélectionner Produit",
+            clmCode :  "Code Produit",
+            clmName : "Nom Produit",
             clmMulticode : "Sélection Document"
         },
         grdPurcoffers: 
@@ -5879,7 +5887,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Stock Introuvable !!"
+            msg: "Produit Introuvable !!"
         },
         msgCustomerNotFound:
         {
@@ -5978,9 +5986,9 @@ export const langFr =
         },
         pg_txtItemsCode : 
         {
-            title : "Sélectionner Stock",
-            clmCode :  "Code Stock",
-            clmName : "Nom Stock",
+            title : "Sélectionner Produit",
+            clmCode :  "Code Produit",
+            clmName : "Nom Produit",
         },
         grdSlsOffer: 
         {
@@ -6108,7 +6116,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Stock Introuvable !!"
+            msg: "Produit Introuvable !!"
         },
         msgNotCustomer:
         {
@@ -6220,7 +6228,7 @@ export const langFr =
             clmMulticode : "Code fournisseur ",
             clmUnit : "Unité",
             clmBarcode : "Code barre",
-            clmCostPrice : "Coût achat",
+            clmCostPrice : "Prix achat",
             clmPriceSale : "Prix Vente",
             clmVat : "Taxe",
             clmMinPrice : "Prix Min",
@@ -6253,21 +6261,21 @@ export const langFr =
     },
     stk_02_006 : 
     {
-        txtBarkod: "Barre code", //BAK
+        txtBarkod: "Barre code", 
         txtRef: "Référence",
         txtPrice : "Prix ",
         txtDescription : "Motif",
         txtItemName : "Nom du produit",
-        txtQuantity : "Pièce", //BAK
-        valPrice : "Le prix ne peut pas être en dessous de 0", //BAK
-        valCode : "Veuillez entrer le stock", //BAK
-        valName : "Le nom du produit ne peut pas être vide", //BAK
+        txtQuantity : "Pièce", 
+        valPrice : "Le prix ne peut pas être en dessous de 0", 
+        valCode : "Veuillez entrer le Produit", 
+        valName : "Le nom du produit ne peut pas être vide", 
         pg_txtRef:
         {
-            title: "Sélectionner Stock",
+            title: "Sélectionner Produit",
             clmCode: "Code",
             clmName: "Nom", 
-            clmPrice: "FİYAT" //BAK            
+            clmPrice: "Prix"             
         },
         msgSave:
         {
@@ -6289,7 +6297,7 @@ export const langFr =
             btn01: "OK",
             msg: "Veuillez saisir les zones nécessaire !"
         },
-        msgPrice: // BAK
+        msgPrice: 
         {
             title: "Attention",
             btn01: "OK",
@@ -6304,6 +6312,6 @@ export const langFr =
     },
     pos_02_003 : 
     {
-        chkRowTotal : "Totaux des lignes." //BAK
+        chkRowTotal : "Totaux des lignes." 
     }
 }

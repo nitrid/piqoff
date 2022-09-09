@@ -5669,6 +5669,8 @@ export const langTr =
             btn01: "Tamam",
             msg: "Bu kasaya avans girilmiş ! Lütfen Grid Üzerinden düzenleyiniz..."
         },
+        advanceMsg1 : "Lütfen Avans Tutarınızın",
+        advanceMsg2 : "Olduğundan Emin Olunuz"
     },
     tkf_01_001 :
     {

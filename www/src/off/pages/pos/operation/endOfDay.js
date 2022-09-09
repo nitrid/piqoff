@@ -37,6 +37,7 @@ export default class endOfDay extends React.PureComponent
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.docObj = new docCls()
+        this.message = ''
 
         this.finishButtonClick = this.finishButtonClick.bind(this)
         ReactWizard.defaultProps = {
@@ -131,9 +132,11 @@ export default class endOfDay extends React.PureComponent
       // }
 
       await this.grdAdvance.dataRefresh({source:this.docObj.docCustomer.dt('DOC_CUSTOMER')});
+      
     }
     async finishButtonClick()
     {
+      this.message = this.txtAdvance.value.toLocaleString('en-IN', {style: 'currency',currency: 'eur', minimumFractionDigits: 2})
       let tmpQuery = 
       {
           query : "SELECT   " +
@@ -252,8 +255,8 @@ export default class endOfDay extends React.PureComponent
         this.TicketRest = tmpTicketValue
         this.setState({TicketRest:tmpTikcet})
       }
+      
       this.popFinish.show()
-     
     }
     stepStart()
     {
@@ -315,10 +318,8 @@ export default class endOfDay extends React.PureComponent
                         value : [this.cmbSafe.value,this.dtDocDate.value]
                     }
                     let tmpData = await this.core.sql.execute(tmpQuery) 
-                    console.log(tmpData)
                     if(tmpData.result.recordset.length > 0)
                     {
-                      console.log(tmpData.result.recordset[0].AMOUNT)
                       this.txtAdvance.value =tmpData.result.recordset[0].AMOUNT 
                     }
                   }).bind(this)}
@@ -466,6 +467,21 @@ export default class endOfDay extends React.PureComponent
                               </div>
                               <div className='col-6' style={{color:this.color.rest}}>
                                 <h2> : {this.TicketRest}</h2>
+                              </div>
+                            </div>
+                             <div className='row px-4'>
+                              <div className='col-12'>
+                                <h2>{this.t("advanceMsg1")}</h2>
+                              </div>
+                            </div>
+                            <div className='row px-4'>
+                              <div className='col-4 offset-4'>
+                                <h2>{this.message}</h2>
+                              </div>
+                            </div>
+                            <div className='row px-4'>
+                              <div className='col-12'>
+                                <h2>{this.t("advanceMsg2")}</h2>
                               </div>
                             </div>
                           </div>

@@ -1180,21 +1180,37 @@ export const prm =
         }
     },
     //#endregion
-        //#region Gün sonu
+    //#region Gün sonu
     // Merkez kasa 
     {
         TYPE : 1,
         ID :"SafeCenter",
         VALUE : "df8b4f69-9e2d-449a-996a-0001abcf0308",
         SPECIAL : "",
-        PAGE : "pos",
+        PAGE : "pos_03_001",
         ELEMENT : "",
-        APP : "POS",
+        APP : "OFF",
         VIEW : 
         {
             TYPE : "text",
             PAGE_NAME : "Pos",
             CAPTION : "Merkez Kasa"
+        }
+    },
+     // Anavas Tutar
+     {
+        TYPE : 1,
+        ID :"advanceAmount",
+        VALUE : "450",
+        SPECIAL : "",
+        PAGE : "pos_03_001",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Avans Tutarı"
         }
     },
     //#endregion
