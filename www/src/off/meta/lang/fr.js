@@ -230,7 +230,7 @@ export const langFr =
             title: "Nouveau fournisseur",
             txtPopCustomerCode: "Code",
             txtPopCustomerName: "Nom", 
-            txtPopCustomerItemCode: "Code Produit",
+            txtPopCustomerItemCode: "Référence Produit",
             txtPopCustomerPrice: "Prix "
         },
         grdPrice: 
@@ -428,7 +428,7 @@ export const langFr =
     stk_01_002: 
     {
         txtBarcode: "Code barre",
-        txtItem: "Code Produit",
+        txtItem: "Référence Produit",
         txtItemName: "Nom Produit",
         cmbBarUnit: "Unité",
         txtBarUnitFactor: "Coefficient",
@@ -447,7 +447,7 @@ export const langFr =
             title: "Sélection Code barre",
             clmBarcode: "Code Barre",
             clmItemName: "Nom Produit", 
-            clmItemCode: "Code Produit"
+            clmItemCode: "Référence Produit"
         },
        
         msgCheckBarcode:
@@ -569,7 +569,7 @@ export const langFr =
         pg_txtItemsCode : 
         {
             title : "Sélectionner Produit",
-            clmCode :  "Code Produit",
+            clmCode :  "Référence Produit",
             clmName : "Nom Produit",
         },
         grdItemCount: 
@@ -582,7 +582,7 @@ export const langFr =
             clmCostPrice :"Coût Unitaire",
             clmTotalCost :"Coût Total",
             clmCustomerName :"Compte Fournisseur",
-            clmMulticode : "Sélection Document",
+            clmMulticode : "Code Fournisseur",
             clmBarcode : "Code barre",
         },
         popPassword : 
@@ -708,7 +708,7 @@ export const langFr =
         pg_txtItemsCode : 
         {
             title : "Sélectionner Produit",
-            clmCode :  "Code Produit",
+            clmCode :  "Référence Produit",
             clmName : "Nom Produit",
         },
         grdTrnsfItems: 
@@ -837,7 +837,7 @@ export const langFr =
         pg_txtItemsCode : 
         {
             title : "Sélectionner Produit",
-            clmCode :  "Code Produit",
+            clmCode :  "Référence Produit",
             clmName : "Nom Produit",
         },
         grdOutwasItems: 
@@ -1006,7 +1006,7 @@ export const langFr =
         pg_txtItemsCode : 
         {
             title : "Sélectionner Produit",
-            clmCode :  "Code Produit",
+            clmCode :  "Référence Produit",
             clmName : "Nom Produit",
         },
         grdLabelQueue: 
@@ -1141,7 +1141,7 @@ export const langFr =
         pg_txtItemsCode : 
         {
             title : "Sélectionner Produit",
-            clmCode :  "Code Produit",
+            clmCode :  "Référence Produit",
             clmName : "Nom Produit",
         },
         grdRebItems: 
@@ -1256,12 +1256,12 @@ export const langFr =
         ItemNamePlaceHolder :"Veuillez Entrer le Nom Complet ou une Syllabe",
         grdListe : 
         {
-            clmCode: "Code Produit",
+            clmCode: "Référence Produit",
             clmName : "Nom du produit",
             clmMainGrp : "Famille produit",
             clmCustomer : "Fournisseur",
             clmSname : "Nom Court",
-            clmMulticode : "Sélection Document",
+            clmMulticode : "Code Fournisseur",
             clmUnit : "Unité",
             clmBarcode : "Code barre",
             clmCostPrice : "Prix achat",
@@ -1320,12 +1320,12 @@ export const langFr =
         btnGet :"Apporter",
         grdListe : 
         {
-            clmCode: "Code Produit",
+            clmCode: "Référence Produit",
             clmName : "Nom du produit",
             clmMainGrp : "Famille produit",
             clmCustomer : "Fournisseur",
             clmSname : "Nom Court",
-            clmMulticode : "Sélection Document",
+            clmMulticode : "Code Fournisseur",
             clmUnit : "Unité",
             clmBarcode : "Code barre",
             clmCostPrice : "Prix achat",
@@ -1365,7 +1365,7 @@ export const langFr =
         },
         cmbItemGroup : "Groupe Produit",
         btnGet : 'Cherche',
-        txtCode : "Code Produit",
+        txtCode : "Référence Produit",
         txtName : "Nom Produit",
         grdItemList : 
         {
@@ -1934,9 +1934,9 @@ export const langFr =
         pg_txtItemsCode : 
         {
             title : "Sélectionner Produit",
-            clmCode :  "Code Produit",
+            clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmMulticode : "Sélection Document",
+            clmMulticode : "Code Fournisseur",
         },
         pg_dispatchGrid : 
         {
@@ -2178,8 +2178,8 @@ export const langFr =
         },
         grdMultiItem : 
         {
-            clmCode : "Code Produit",
-            clmMulticode : "Sélection Document",
+            clmCode : "Référence Produit",
+            clmMulticode : "Code Fournisseur",
             clmName : "Nom du produit",
             clmQuantity : "Quantité"
         },
@@ -2273,7 +2273,7 @@ export const langFr =
         pg_txtItemsCode : 
         {
             title : "Sélectionner Produit",
-            clmCode :  "Code Produit",
+            clmCode :  "Référence Produit",
             clmName : "Nom Produit",
         },
         pg_dispatchGrid : 
@@ -2494,8 +2494,8 @@ export const langFr =
         },
         grdMultiItem : 
         {
-            clmCode : "Code Produit",
-            clmMulticode : "Sélection Document",
+            clmCode : "Référence Produit",
+            clmMulticode : "Code Fournisseur",
             clmName : "Nom du produit",
             clmQuantity : "Quantité"
         },
@@ -2559,7 +2559,7 @@ export const langFr =
         pg_txtItemsCode : 
         {
             title : "Sélectionner Produit",
-            clmCode :  "Code Produit",
+            clmCode :  "Référence Produit",
             clmName : "Nom Produit",
         },
         pg_dispatchGrid : 
@@ -2808,7 +2808,7 @@ export const langFr =
         pg_txtItemsCode : 
         {
             title : "Sélectionner Produit",
-            clmCode :  "Code Produit",
+            clmCode :  "Référence Produit",
             clmName : "Nom Produit",
         },
         pg_contractGrid : 
@@ -3186,7 +3186,7 @@ export const langFr =
         pg_txtItemsCode : 
         {
             title : "Sélectionner Produit",
-            clmCode :  "Code Produit",
+            clmCode :  "Référence Produit",
             clmName : "Nom Produit",
             clmMulticode : "Sélection Document"
         },
@@ -3371,8 +3371,8 @@ export const langFr =
         },
         grdMultiItem : 
         {
-            clmCode : "Code Produit",
-            clmMulticode : "Sélection Document",
+            clmCode : "Référence Produit",
+            clmMulticode : "Code Fournisseur",
             clmName : "Nom du produit",
             clmQuantity : "Quantité"
         },
@@ -3425,7 +3425,7 @@ export const langFr =
         pg_txtItemsCode : 
         {
             title : "Sélectionner Produit",
-            clmCode :  "Code Produit",
+            clmCode :  "Référence Produit",
             clmName : "Nom Produit",
         },
         grdSlsDispatch: 
@@ -3615,8 +3615,8 @@ export const langFr =
         },
         grdMultiItem : 
         {
-            clmCode : "Code Produit",
-            clmMulticode : "Sélection Document",
+            clmCode : "Référence Produit",
+            clmMulticode : "Code Fournisseur",
             clmName : "Nom du produit",
             clmQuantity : "Quantité"
         },
@@ -3667,14 +3667,14 @@ export const langFr =
         pg_txtItemsCode : 
         {
             title : "Sélectionner Produit",
-            clmCode :  "Code Produit",
+            clmCode :  "Référence Produit",
             clmName : "Nom Produit",
            
         },
         pg_RebateGrid : 
         {
             title : "İade Stok Seçimi",
-            clmCode :  "Code Produit",
+            clmCode :  "Référence Produit",
             clmName : "Nom Produit",
             clmQuantity :"Quantité "
         },
@@ -3937,7 +3937,7 @@ export const langFr =
         pg_txtItemsCode : 
         {
             title : "Sélectionner Produit",
-            clmCode :  "Code Produit",
+            clmCode :  "Référence Produit",
             clmName : "Nom Produit",
             clmMulticode : "Sélection Document"
         },
@@ -4124,8 +4124,8 @@ export const langFr =
         },
         grdMultiItem : 
         {
-            clmCode : "Code Produit",
-            clmMulticode : "Sélection Document",
+            clmCode : "Référence Produit",
+            clmMulticode : "Code Fournisseur",
             clmName : "Nom du produit",
             clmQuantity : "Quantité"
         },
@@ -4175,7 +4175,7 @@ export const langFr =
         pg_txtItemsCode : 
         {
             title : "Sélectionner Produit",
-            clmCode :  "Code Produit",
+            clmCode :  "Référence Produit",
             clmName : "Nom Produit",
         },
         grdSlsOrder: 
@@ -4365,8 +4365,8 @@ export const langFr =
         },
         grdMultiItem : 
         {
-            clmCode : "Code Produit",
-            clmMulticode : "Sélection Document",
+            clmCode : "Référence Produit",
+            clmMulticode : "Code Fournisseur",
             clmName : "Nom du produit",
             clmQuantity : "Quantité"
         },
@@ -4403,7 +4403,7 @@ export const langFr =
         grdPurcContList: 
         {
             clmCreateDate: "Date d'Enregistrement",
-            clmCode: "Code Produit",
+            clmCode: "Référence Produit",
             clmName: "Nom Produit",
             clmCustomerName : "Nom fournisseur",
             clmPrıce : "Prix ",
@@ -4430,7 +4430,7 @@ export const langFr =
         grdPurcContList: 
         {
             clmCreateDate: "Date d'Enregistrement",
-            clmCode: "Code Produit",
+            clmCode: "Référence Produit",
             clmName: "Nom Produit",
             clmCustomerName : "Nom fournisseur",
             clmPrıce : "Prix ",
@@ -4465,7 +4465,7 @@ export const langFr =
         pg_txtPopItemsCode : 
         {
             title : "Sélectionner Produit",
-            clmCode :  "Code Produit",
+            clmCode :  "Référence Produit",
             clmName : "Nom Produit",
             clmMulticode : "Sélection Document"
         },
@@ -4522,7 +4522,7 @@ export const langFr =
         popItems: 
         {
             title: "Inclus un Accord",
-            txtPopItemsCode : "Code Produit",
+            txtPopItemsCode : "Référence Produit",
             txtPopItemsName: "Nom Produit",
             txtPopItemsPrice : "Prix ",
             txtPopItemsQuantity : "Quantité",
@@ -4556,12 +4556,12 @@ export const langFr =
         {    
             title : "Type De Recharche",    
             customerCode : "En Fonction du Code Fournisseur ",    
-            ItemCode : "Code Produit"    
+            ItemCode : "Référence Produit"    
         },    
         grdMultiItem :     
         {    
             clmCode : "Referance",    
-            clmMulticode : "Sélection Document",    
+            clmMulticode : "Code Fournisseur",    
             clmName : "Nom Produit",    
             clmQuantity : "Quantité",    
             clmPrice : "Prix"    
@@ -4607,7 +4607,7 @@ export const langFr =
         pg_txtPopItemsCode : 
         {
             title : "Sélectionner Produit",
-            clmCode :  "Code Produit",
+            clmCode :  "Référence Produit",
             clmName : "Nom Produit",
             clmCostPrice :  "Prix D'Achat",
             clmSalesPrice : "Prix De Vente"
@@ -4665,7 +4665,7 @@ export const langFr =
         popItems: 
         {
             title: "Inclus un Accord",
-            txtPopItemsCode : "Code Produit",
+            txtPopItemsCode : "Référence Produit",
             txtPopItemsName: "Nom Produit",
             txtPopItemsPrice : "Prix ",
             txtPopItemsQuantity : "Quantité",
@@ -4709,8 +4709,8 @@ export const langFr =
         },   
         grdMultiItem :    
         {   
-            clmCode : "Code Produit",   
-            clmMulticode : "Sélection Document",   
+            clmCode : "Référence Produit",   
+            clmMulticode : "Code Fournisseur",   
             clmName : "Nom Produit",   
             clmQuantity : "Quantité",   
             clmPrice : "Prix"   
@@ -5348,7 +5348,7 @@ export const langFr =
         pg_txtItemsCode : 
         {
             title : "Sélectionner Produit",
-            clmCode :  "Code Produit",
+            clmCode :  "Référence Produit",
             clmName : "Nom Produit",
         },
         grdTaxSugar: 
@@ -5455,7 +5455,7 @@ export const langFr =
         numFirstTicketAmount : "Contenu", 
         numLastTicketAmount : "Unité supérieur", 
         cmbUser :"Utilisateur",
-        txtItem :"Code Produit",
+        txtItem :"Référence Produit",
         ckhDoublePay : "Paiements multiples",
         pg_txtCustomerCode : 
         {
@@ -5749,7 +5749,7 @@ export const langFr =
         pg_txtItemsCode : 
         {
             title : "Sélectionner Produit",
-            clmCode :  "Code Produit",
+            clmCode :  "Référence Produit",
             clmName : "Nom Produit",
             clmMulticode : "Sélection Document"
         },
@@ -5936,8 +5936,8 @@ export const langFr =
         },
         grdMultiItem : 
         {
-            clmCode : "Code Produit",
-            clmMulticode : "Sélection Document",
+            clmCode : "Référence Produit",
+            clmMulticode : "Code Fournisseur",
             clmName : "Nom du produit",
             clmQuantity : "Quantité"
         },
@@ -5987,7 +5987,7 @@ export const langFr =
         pg_txtItemsCode : 
         {
             title : "Sélectionner Produit",
-            clmCode :  "Code Produit",
+            clmCode :  "Référence Produit",
             clmName : "Nom Produit",
         },
         grdSlsOffer: 
@@ -6177,8 +6177,8 @@ export const langFr =
         },
         grdMultiItem : 
         {
-            clmCode : "Code Produit",
-            clmMulticode : "Sélection Document",
+            clmCode : "Référence Produit",
+            clmMulticode : "Code Fournisseur",
             clmName : "Nom du produit",
             clmQuantity : "Quantité"
         },
@@ -6220,7 +6220,7 @@ export const langFr =
         btnOk : "Mettre à jour",
         grdListe : 
         {
-            clmCode: "Code Produit",
+            clmCode: "Référence Produit",
             clmName : "Nom du produit",
             clmMainGrp : "Famille produit",
             clmCustomer : "Fournisseur",
