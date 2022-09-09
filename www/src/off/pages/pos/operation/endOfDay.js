@@ -154,7 +154,7 @@ export default class endOfDay extends React.PureComponent
           this.paymentData.push(tmpData.result.recordset[i])
         }
       }
-      if(parseFloat(this.paymentData.where({'PAY_TYPE':0}).sum('AMOUNT')) ==  parseFloat(this.txtCash.value - this.txtAdvance.value))
+      if(parseFloat(this.paymentData.where({'PAY_TYPE':0}).sum('AMOUNT').toFixed(2)) ==  parseFloat((this.txtCash.value - this.txtAdvance.value).toFixed(2)))
       {
         this.color.cash = "green"
         this.Cash = this.t("txtReal")
@@ -163,7 +163,7 @@ export default class endOfDay extends React.PureComponent
       else
       {
         let tmpCash
-        tmpCash = (parseFloat(parseFloat(this.txtCash.value) - parseFloat(this.txtAdvance.value)) - parseFloat(this.paymentData.where({'PAY_TYPE':0}).sum('AMOUNT')))
+        tmpCash = (parseFloat((parseFloat(this.txtCash.value) - parseFloat(this.txtAdvance.value).toFixed(2))) - parseFloat((this.paymentData.where({'PAY_TYPE':0}).sum('AMOUNT').toFixed(2))))
         let tmpCashValue
         if(tmpCash > 0)
         {
@@ -179,9 +179,7 @@ export default class endOfDay extends React.PureComponent
         this.setState({Cash:tmpCashValue})
       }
 
-      console.log(parseFloat(this.paymentData.where({'PAY_TYPE':1}).sum('AMOUNT')) )
-      console.log(this.txtCreditCard.value)
-      if(this.paymentData.where({'PAY_TYPE':1}).sum('AMOUNT') ==  this.txtCreditCard.value)
+      if((this.paymentData.where({'PAY_TYPE':1}).sum('AMOUNT')).toFixed(2) ==  (this.txtCreditCard.value).toFixed(2))
       {
         this.color.card = "green"
         this.DebitCard = this.t("txtReal")
@@ -190,7 +188,7 @@ export default class endOfDay extends React.PureComponent
       else 
       {
         let tmpDebit
-        tmpDebit = (this.txtCreditCard.value - parseFloat(this.paymentData.where({'PAY_TYPE':1}).sum('AMOUNT')))
+        tmpDebit = (this.txtCreditCard.value - parseFloat(this.paymentData.where({'PAY_TYPE':1}).sum('AMOUNT'))).toFixed(2)
         let tmpDebitValue
         if(tmpDebit > 0)
         {
@@ -205,7 +203,7 @@ export default class endOfDay extends React.PureComponent
         this.DebitCard = tmpDebitValue
         this.setState({DebitCard:tmpDebitValue})
       }
-      if(parseFloat(this.paymentData.where({'PAY_TYPE':2}).sum('AMOUNT')) ==  this.txtCheck.value)
+      if(parseFloat((this.paymentData.where({'PAY_TYPE':2}).sum('AMOUNT')).toFixed(2)) ==  this.txtCheck.value)
       {
         this.color.check = "green"
         this.Check = this.t("txtReal")
@@ -214,7 +212,7 @@ export default class endOfDay extends React.PureComponent
       else 
       {
         let tmpCheck
-        tmpCheck = (this.txtCheck.value - parseFloat(this.paymentData.where({'PAY_TYPE':2}).sum('AMOUNT')))
+        tmpCheck = parseFloat((this.txtCheck.value - parseFloat(this.paymentData.where({'PAY_TYPE':2}).sum('AMOUNT'))).toFixed(2))
         let tmpCheckValue
         if(tmpCheck > 0)
         {
@@ -239,7 +237,7 @@ export default class endOfDay extends React.PureComponent
       else 
       {
         let tmpTikcet
-        tmpTikcet = (this.txtRestorant.value - parseFloat(this.paymentData.where({'PAY_TYPE':3}).sum('AMOUNT')))
+        tmpTikcet = parseFloat((this.txtRestorant.value - parseFloat(this.paymentData.where({'PAY_TYPE':3}).sum('AMOUNT'))).toFixed(2))
         let tmpTicketValue
         if(tmpTikcet > 0)
         {
@@ -266,7 +264,8 @@ export default class endOfDay extends React.PureComponent
              onClick={async ()=>
               {       
                 this.dtAdvanceDate.value = moment(new Date()).add(1,'days').format("YYYY-MM-DD")
-                  this.popAdvance.show()
+                this.docObj.load({DOC_DATE:this.dtAdvanceDate.value,DOC_TYPE:201})
+                this.popAdvance.show()
               }}
             />
           </Item>
@@ -336,7 +335,7 @@ export default class endOfDay extends React.PureComponent
           <EmptyItem/>
           <Item>
               <Label text={this.t("txtAdvance")} alignment="right" />
-              <NdNumberBox id="txtAdvance" parent={this} simple={true} readOnly={true}
+              <NdNumberBox id="txtAdvance" parent={this} simple={true} readOnly={true} 
               param={this.param.filter({ELEMENT:'txtAdvance',USERS:this.user.CODE})}
               access={this.access.filter({ELEMENT:'txtAdvance',USERS:this.user.CODE})}
               >
@@ -353,7 +352,7 @@ export default class endOfDay extends React.PureComponent
           <EmptyItem/>
           <Item>
               <Label text={this.t("txtCash")} alignment="right" />
-              <NdNumberBox id="txtCash" parent={this} simple={true} 
+              <NdNumberBox id="txtCash" parent={this} simple={true} value=''
               param={this.param.filter({ELEMENT:'txtCash',USERS:this.user.CODE})}
               access={this.access.filter({ELEMENT:'txtCash',USERS:this.user.CODE})}
               >
@@ -369,7 +368,7 @@ export default class endOfDay extends React.PureComponent
           <EmptyItem/>
           <Item>
               <Label text={this.t("txtCreditCard")} alignment="right" />
-              <NdNumberBox id="txtCreditCard" parent={this} simple={true}  
+              <NdNumberBox id="txtCreditCard" parent={this} simple={true}  value=''
               param={this.param.filter({ELEMENT:'txtCreditCard',USERS:this.user.CODE})}
               access={this.access.filter({ELEMENT:'txtCreditCard',USERS:this.user.CODE})}
               >
@@ -385,7 +384,7 @@ export default class endOfDay extends React.PureComponent
           <EmptyItem/>
           <Item>
               <Label text={this.t("txtCheck")} alignment="right" />
-              <NdNumberBox id="txtCheck" parent={this} simple={true}  
+              <NdNumberBox id="txtCheck" parent={this} simple={true} 
               param={this.param.filter({ELEMENT:'txtCheck',USERS:this.user.CODE})}
               access={this.access.filter({ELEMENT:'txtCheck',USERS:this.user.CODE})}
               >
@@ -401,7 +400,7 @@ export default class endOfDay extends React.PureComponent
           <EmptyItem/>
           <Item>
               <Label text={this.t("txtRestorant")} alignment="right" />
-              <NdNumberBox id="txtRestorant" parent={this} simple={true}  
+              <NdNumberBox id="txtRestorant" parent={this} simple={true}  value=''
               param={this.param.filter({ELEMENT:'txtRestorant',USERS:this.user.CODE})}
               access={this.access.filter({ELEMENT:'txtRestorant',USERS:this.user.CODE})}
               >
@@ -526,7 +525,8 @@ export default class endOfDay extends React.PureComponent
                               <Label text={this.t("dtAdvanceDate")} alignment="right" />
                               <NdDatePicker simple={true}  parent={this} id={"dtAdvanceDate"}
                               onValueChanged={(async()=>
-                                  {
+                              {
+                                this.docObj.load({DOC_DATE:this.dtAdvanceDate.value,DOC_TYPE:201})
                               }).bind(this)}
                               >
                               </NdDatePicker>
@@ -545,7 +545,7 @@ export default class endOfDay extends React.PureComponent
                               </Item>
                               <Item>
                                 <Label text={this.t("txtPopAdvance")} alignment="right" />
-                                <NdNumberBox id="txtPopAdvance" parent={this} simple={true}
+                                <NdNumberBox id="txtPopAdvance" parent={this} simple={true} value=''
                                 >
                                 </NdNumberBox>
                               </Item>
@@ -557,35 +557,47 @@ export default class endOfDay extends React.PureComponent
                                             <NdButton text={this.t("btnPopAdd")} type="normal" stylingMode="contained" width={'100%'}
                                             onClick={async ()=>
                                             {
-                                              console.log(this.cmbPopSafe)
                                               if(this.cmbPopSafe.value != '')
                                               {
-                                                this.docObj.addEmpty()
-                                                this.docObj.dt()[0].TYPE = 2
-                                                this.docObj.dt()[0].DOC_TYPE = 201
-                                                this.docObj.dt()[0].REF = 'POS'
-                                                this.docObj.dt()[0].REF_NO = Math.floor(Date.now() / 1000)
-                                                this.docObj.dt()[0].DOC_DATE = this.dtAdvanceDate.value
-                                                this.docObj.dt()[0].INPUT = this.cmbPopSafe.value
-                                                this.docObj.dt()[0].OUTPUT = this.prmObj.filter({ID:'SafeCenter',TYPE:0}).getValue()
-                                                this.docObj.dt()[0].AMOUNT = this.txtPopAdvance.value
-                                                this.docObj.dt()[0].TOTAL = this.txtPopAdvance.value
-                
+                                                if(this.docObj.dt().length == 0)
+                                                {
+                                                  this.docObj.addEmpty()
+                                                  this.docObj.dt()[0].TYPE = 2
+                                                  this.docObj.dt()[0].DOC_TYPE = 201
+                                                  this.docObj.dt()[0].REF = 'POS'
+                                                  this.docObj.dt()[0].REF_NO = Math.floor(Date.now() / 1000)
+                                                  this.docObj.dt()[0].DOC_DATE = this.dtAdvanceDate.value
+                                                  this.docObj.dt()[0].INPUT = this.cmbPopSafe.value
+                                                  this.docObj.dt()[0].OUTPUT = this.prmObj.filter({ID:'SafeCenter',TYPE:0}).getValue()
+                                                  this.docObj.dt()[0].AMOUNT = this.txtPopAdvance.value
+                                                  this.docObj.dt()[0].TOTAL = this.txtPopAdvance.value
+                                                }
+                                                if(this.docObj.docCustomer.dt().where({INPUT:this.cmbPopSafe.value}).length > 0)
+                                                {
+                                                  let tmpConfObj =
+                                                  {
+                                                      id:'msgDoubleAdvence',showTitle:true,title:this.t("msgDoubleAdvence.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                      button:[{id:"btn01",caption:this.t("msgDoubleAdvence.btn01"),location:'after'}],
+                                                      content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDoubleAdvence.msg")}</div>)
+                                                  }
+                                                  
+                                                  await dialog(tmpConfObj);
+                                                  return
+                                                }
                                                 this.docObj.docCustomer.addEmpty()
-                                                this.docObj.docCustomer.dt()[0].TYPE = 2
-                                                this.docObj.docCustomer.dt()[0].DOC_GUID = this.docObj.dt()[0].GUID
-                                                this.docObj.docCustomer.dt()[0].DOC_TYPE = 201
-                                                this.docObj.docCustomer.dt()[0].DOC_DATE = this.dtAdvanceDate.value
-                                                this.docObj.docCustomer.dt()[0].REF = 'POS'
-                                                this.docObj.docCustomer.dt()[0].REF_NO = this.docObj.dt()[0].REF_NO
-                                                this.docObj.docCustomer.dt()[0].INPUT = this.docObj.dt()[0].INPUT
-                                                this.docObj.docCustomer.dt()[0].INPUT_NAME =  this.cmbPopSafe.displayValue
-                                                this.docObj.docCustomer.dt()[0].OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                this.docObj.docCustomer.dt()[0].PAY_TYPE = 20
-                                                this.docObj.docCustomer.dt()[0].AMOUNT = this.txtPopAdvance.value
-                                                this.docObj.docCustomer.dt()[0].DESCRIPTION = ''
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].TYPE = 2
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_GUID = this.docObj.dt()[0].GUID
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_TYPE = 201
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_DATE = this.dtAdvanceDate.value
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF = 'POS'
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF_NO = this.docObj.dt()[0].REF_NO
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT = this.cmbPopSafe.value
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT_NAME =  this.cmbPopSafe.displayValue
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].PAY_TYPE = 20
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].AMOUNT = this.txtPopAdvance.value
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DESCRIPTION = ''
                                                 
-  
                                                 await this.docObj.save()
                                               }
                                             }}/>
@@ -603,14 +615,18 @@ export default class endOfDay extends React.PureComponent
                                       width={'100%'}
                                       dbApply={false}
                                       onRowRemoved={async (e)=>{
-                                        this.docObj.save()
+                                        await this.docObj.save()
+                                      }}
+                                      onRowUpdated={async (e)=>{
+                                        await this.docObj.save()
                                       }}
                                       >
                                           <Scrolling mode="virtual" />
-                                          <Editing mode="cell" allowUpdating={false} allowDeleting={true} />
-                                          <Column dataField="CUSER_NAME" caption={this.t("grdAdvance.clmUser")} width={120}  headerFilter={{visible:true}}/>
-                                          <Column dataField="INPUT_NAME" caption={this.t("grdAdvance.clmInput")} width={250}  headerFilter={{visible:true}}/>
-                                          <Column dataField="AMOUNT" caption={this.t("grdAdvance.clmAmount")} width={100} allowEditing={false} />
+                                          <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
+                                          <Column dataField="CUSER_NAME" caption={this.t("grdAdvance.clmUser")} width={120}  headerFilter={{visible:true}} allowEditing={false} />
+                                          <Column dataField="DOC_DATE" caption={this.t("grdAdvance.clmDate")} width={120} dataType={'date'} allowEditing={false}  headerFilter={{visible:true}}/>
+                                          <Column dataField="INPUT_NAME" caption={this.t("grdAdvance.clmInput")} width={120}  allowEditing={false}  headerFilter={{visible:true}}/>
+                                          <Column dataField="AMOUNT" caption={this.t("grdAdvance.clmAmount")} width={100} />
                                   </NdGrid>
                              </Item>
                              <Item>

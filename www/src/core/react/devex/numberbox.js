@@ -12,7 +12,7 @@ export default class NdNumberBox extends Base
 
         this.dev = null;
         
-        this.state.value = typeof props.value != 'undefined' ? props.value : 0 
+        this.state.value = typeof props.value != 'undefined' ? props.value : 0
         this.state.title = typeof props.title == 'undefined' ? '' : props.title
         this.state.titleAlign = typeof props.titleAlign == 'undefined' ? 'left' : props.titleAlign
         this.state.showClearButton = typeof props.showClearButton == 'undefined' ? false : props.showClearButton
@@ -45,11 +45,15 @@ export default class NdNumberBox extends Base
             this.props.onEnterKey();
         }
     }
-    _onFocusIn()
+    _onFocusIn(e)
     {
+        if(typeof this.props.selectAll == 'undefined' || this.props.selectAll == true)
+        {
+            this.dev.element().getElementsByTagName('input')[0].select()
+        }
         if(typeof this.props.onFocusIn != 'undefined')
         {
-            this.props.onFocusIn();
+            this.props.onFocusIn(e);
         }
     }
     _onFocusOut()

@@ -5656,12 +5656,19 @@ export const langTr =
         {
             clmUser : 'Kullanıcı',
             clmInput : "Kasa",
-            clmAmount : "Tutar"
+            clmAmount : "Tutar",
+            clmDate :"Tarih"
         },
         btnPopOk : "Tamam",
         dtAdvanceDate : "Tarih",
         cmbPopSafe :"Kasa",
-        addAdvance : "Avans Girişi"
+        addAdvance : "Avans Girişi",
+        msgDoubleAdvence:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Bu kasaya avans girilmiş ! Lütfen Grid Üzerinden düzenleyiniz..."
+        },
     },
     tkf_01_001 :
     {

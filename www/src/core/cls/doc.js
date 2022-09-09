@@ -48,8 +48,8 @@ export class docCls
         {
             query : "SELECT * FROM DOC_VW_01 WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND " + 
             " ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0)) AND ((TYPE = @TYPE) OR (@TYPE = -1)) AND ((TYPE = @TYPE) OR (@TYPE = -1)) AND" +
-            "((PAYMENT_DOC_GUID = @PAYMENT_DOC_GUID) OR (@PAYMENT_DOC_GUID = '00000000-0000-0000-0000-000000000000')) " ,
-            param : ['GUID:string|50','REF:string|25','REF_NO:int','TYPE:int','DOC_TYPE:int','PAYMENT_DOC_GUID:string|50']
+            "((PAYMENT_DOC_GUID = @PAYMENT_DOC_GUID) OR (@PAYMENT_DOC_GUID = '00000000-0000-0000-0000-000000000000')) AND ((DOC_DATE = @DOC_DATE) OR (@DOC_DATE ='19700101'))" ,
+            param : ['GUID:string|50','REF:string|25','REF_NO:int','TYPE:int','DOC_TYPE:int','PAYMENT_DOC_GUID:string|50','DOC_DATE:date']
         }
         tmpDt.insertCmd = 
         {
@@ -169,6 +169,7 @@ export class docCls
                 tmpPrm.TYPE = typeof arguments[0].TYPE == 'undefined' ? -1 : arguments[0].TYPE;
                 tmpPrm.DOC_TYPE = typeof arguments[0].DOC_TYPE == 'undefined' ? -1 : arguments[0].DOC_TYPE;
                 tmpPrm.PAYMENT_DOC_GUID = typeof arguments[0].PAYMENT_DOC_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].PAYMENT_DOC_GUID;
+                tmpPrm.DOC_DATE = typeof arguments[0].DOC_DATE == 'undefined' ? '19700101' : arguments[0].DOC_DATE;
             }
             this.ds.get('DOC').selectCmd.value = Object.values(tmpPrm);
 
@@ -405,6 +406,7 @@ export class docCustomerCls
         this.empty = {
             GUID : '00000000-0000-0000-0000-000000000000',
             CUSER : this.core.auth.data.CODE,
+            CUSER_NAME : this.core.auth.data.NAME,
             CDATE_FORMAT :  moment(new Date()).format("YYYY-MM-DD"),
             TYPE: 0,
             DOC_GUID : '00000000-0000-0000-0000-000000000000',

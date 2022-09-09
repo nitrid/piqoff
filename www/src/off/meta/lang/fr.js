@@ -5603,7 +5603,7 @@ export const langFr =
         cash : "Espece ",
         debitCard : "CB",
         check : "Cheque",
-        ticketRest : "Ticket Resturant",
+        ticketRest : "T. Resturant",
         previous: "Précédent",
         finish : "Terminez",
         next : "Suivant",
@@ -5613,7 +5613,7 @@ export const langFr =
         txtCash : "Espece",
         txtCreditCard : "CB",
         txtCheck : "Cheque",
-        txtRestorant : "Ticket Restaurant",
+        txtRestorant : "T. Restaurant",
         txtReal : "Ok",
         popFinish : 
         {
@@ -5640,7 +5640,8 @@ export const langFr =
         {
             clmUser : 'Kullanıcı',
             clmInput : "Kasa",
-            clmAmount : "Tutar"
+            clmAmount : "Tutar",
+            clmDate :"Tarih"
         },
         btnPopOk : "Tamam",
         dtAdvanceDate : "Tarih",
