@@ -100,7 +100,7 @@ export const langTr =
         cnt_01_002 : "Satış Anlaşmaları Listesi",
         cnt_02 : "Evraklar",
         cnt_02_001 : "Alış Anlaşması",
-        cnt_02_002 : "Şatış Anlaşması",
+        cnt_02_002 : "Satış Anlaşması",
         cnt_03 : "Raporlar",
         fns : "Finans",
         fns_01 : "Listeler",
@@ -171,6 +171,7 @@ export const langTr =
         chkLineMerged: "Satış da Satırları Ayır",
         chkTicketRest: "Ticket Rest.",
         txtCostPrice: "Maliyet Fiyatı",
+        txtSalePrice : "Satış Fiyatı",
         txtMinSalePrice: "Min. Satış Fiyatı",
         txtMaxSalePrice: "Max. Satış Fiyatı",
         txtLastBuyPrice: "Önceki Alış Fiyatı",
@@ -183,6 +184,7 @@ export const langTr =
         tabTitleCustomerPrice: "Tedarikçi Fiyat Geçmişi",
         tabTitleSalesContract: "Satış Anlaşmaları",
         tabTitleInfo: "Bilgi",
+        tabTitleOtherShop :"Diğer Şube Bilgileri",
         txtTaxSugar: "Şeker Oranı(100ML/GR)",
         txtTotalExtraCost : "Ek Maliyetler",
         clmtaxSugar : "Şeker Vergisi",
@@ -298,6 +300,17 @@ export const langTr =
             clmDate: "Son Fiyat Tarih",
             clmPrice: "Fiyat",
             clmMulticode: "Tedarikçi Stok Kodu"
+        },
+        grdOtherShop: 
+        {
+            clmCode: "Ürün Kodu",
+            clmName: "Ürün Adı",
+            clmBarcode: "Barkod",
+            clmPrice: "Fiyat",
+            clmMulticode: "T. Kodu",
+            clmCustomer: "Tedarikçi",
+            clmCustomerPrice: "T. Fiyatı",
+            clmShop: "Şube"
         },
         msgRef:
         {
@@ -546,7 +559,8 @@ export const langTr =
             btn01: "Kasaya Git",
             btn02: "Tamam",
             msg : "Girmiş olduğunuz Kasa sistem de kayıtlı !"
-        }
+        },
+        chkActive: "Aktif",
       
     },
     stk_02_001 :
@@ -4632,6 +4646,9 @@ export const langTr =
             clmFinishDate : "Bitiş",
             clmCreateDate: "Kayıt Tarihi",
             clmDepotName : "Depo",
+            clmMargin :"Marj",
+            clmVatExtPrice : "KDV Hariç",
+            clmCostPrice : "Maliyet",
         },
         popItems: 
         {
@@ -4775,6 +4792,9 @@ export const langTr =
             clmFinishDate : "Bitiş",
             clmCreateDate: "Kayıt Tarihi",
             clmDepotName : "Depo",
+            clmMargin :"Marj",
+            clmVatExtPrice : "KDV Hariç",
+            clmCostPrice : "Maliyet",
         },
         popItems: 
         {

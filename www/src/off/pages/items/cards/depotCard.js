@@ -394,7 +394,14 @@ export default class DepotCard extends React.PureComponent
                                                
                                         }).bind(this)}
                                     />
-                                </Item>          
+                                </Item>    
+                                 {/* chkActive */}
+                                 <Item>
+                                    <Label text={this.t("chkActive")} alignment="right" />
+                                    <NdCheckBox id="chkActive" parent={this} defaultValue={true} dt={{data:this.depotObj.dt('DEPOT'),field:"STATUS"}}
+                                    param={this.param.filter({ELEMENT:'chkActive',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'chkActive',USERS:this.user.CODE})}/>
+                                </Item>      
                             </Form>
                         </div>
                     </div>

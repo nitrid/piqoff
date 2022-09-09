@@ -33,6 +33,9 @@ export class contractCls
             ITEM_NAME : '',
             QUANTITY : 0,
             PRICE : 0,
+            COST_PRICE : 0,
+            PRICE_VAT_EXT : 0,
+            VAT_RATE : 0, 
         }
 
         this._initDs();

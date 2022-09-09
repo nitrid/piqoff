@@ -170,6 +170,7 @@ export const langFr =
         chkLineMerged: "Détacher les Lignes de Vente",
         chkTicketRest: "Ticket Rest.",
         txtCostPrice: "Prix de Revient",
+        txtSalePrice : "Prix Vente",
         txtMinSalePrice: "Prix Vente Min.",
         txtMaxSalePrice: "Prix Vente Max.",
         txtLastBuyPrice: "Dernier Prix Achat",
@@ -182,6 +183,7 @@ export const langFr =
         tabTitleCustomerPrice: "Historique Prix Fournisseur",
         tabTitleSalesContract: "Accord de Vente",
         tabTitleInfo: "Information",
+        tabTitleOtherShop :"Diğer Şube Bilgileri", // bak
         txtTaxSugar: "Taux Sucre(100ML/GR)",
         txtTotalExtraCost : "Prix achat",
         clmtaxSugar : "Taxe Sucre",
@@ -297,6 +299,17 @@ export const langFr =
             clmDate: "Date Dernier Prix de Revient",
             clmPrice: "Prix ",
             clmMulticode: "Code Produit Fournisseur"
+        },
+        grdOtherShop: 
+        {
+            clmCode: "Réferance P.",
+            clmName: "Nom de Produit",
+            clmBarcode: "Code Barre",
+            clmPrice: "Prix Vente",
+            clmMulticode: "Code Fournisseur",
+            clmCustomer: "Fournisseur",
+            clmCustomerPrice: "Prix Achat",
+            clmShop: "Magasin"
         },
         msgRef:
         {
@@ -4518,6 +4531,9 @@ export const langFr =
             clmFinishDate : "Fin ",
             clmCreateDate: "Date d'Enregistrement",
             clmDepotName : "Réserve",
+            clmMargin :"Marj", // BAK
+            clmVatExtPrice : "KDV Hariç", // BAK
+            clmCostPrice : "Maliyet", // BAK
         },
         popItems: 
         {
@@ -4661,6 +4677,9 @@ export const langFr =
             clmFinishDate : "Fin ",
             clmCreateDate: "Date d'Enregistrement",
             clmDepotName : "Réserve",
+            clmMargin :"Marj", // BAK
+            clmVatExtPrice : "KDV Hariç", // BAK
+            clmCostPrice : "Maliyet", // BAK
         },
         popItems: 
         {

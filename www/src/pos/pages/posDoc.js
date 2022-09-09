@@ -560,8 +560,8 @@ export default class posDoc extends React.PureComponent
             let tmpPriceDt = new datatable()
             tmpPriceDt.selectCmd = 
             {
-                query : "SELECT dbo.FN_PRICE_SALE(@GUID,@QUANTITY,GETDATE()) AS PRICE",
-                param : ['GUID:string|50','QUANTITY:float'],
+                query : "SELECT dbo.FN_PRICE_SALE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER) AS PRICE",
+                param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50',],
                 local : 
                 {
                     type : "select",
@@ -573,8 +573,9 @@ export default class posDoc extends React.PureComponent
                 }
             }
             console.log(tmpItemsDt[0].UNIT_FACTOR)
-            tmpPriceDt.selectCmd.value = [tmpItemsDt[0].GUID,tmpQuantity * tmpItemsDt[0].UNIT_FACTOR]
+            tmpPriceDt.selectCmd.value = [tmpItemsDt[0].GUID,tmpQuantity * tmpItemsDt[0].UNIT_FACTOR,this.posObj.dt()[0].CUSTOMER_GUID]
             await tmpPriceDt.refresh();  
+            console.log(tmpPriceDt)
             if(tmpPriceDt.length > 0 && tmpPrice == 0)
             {
                 tmpPrice = tmpPriceDt[0].PRICE

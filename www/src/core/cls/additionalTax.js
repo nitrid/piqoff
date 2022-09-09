@@ -38,7 +38,7 @@ export class additionalTax
                     "@JSON = @PJSON, " + 
                     "@STATUS = @PSTATUS ",
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PNAME:string|25','PJSON:string|max',
-                     'PSTATUS:int',],
+                     'PSTATUS:bit',],
             dataprm : ['GUID','CUSER','TYPE','NAME','JSON','STATUS']
         } 
         tmpDt.updateCmd = 

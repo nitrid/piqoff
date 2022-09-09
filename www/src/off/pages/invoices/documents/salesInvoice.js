@@ -230,7 +230,6 @@ export default class salesInvoice extends React.PureComponent
     }
     async _calculateTotalMargin()
     {
-        console.log(1)
         let tmpTotalCost = 0
 
         for (let  i= 0; i < this.docObj.docItems.dt().length; i++) 
@@ -238,11 +237,9 @@ export default class salesInvoice extends React.PureComponent
             console.log(this.docObj.docItems.dt()[i])
             tmpTotalCost += this.docObj.docItems.dt()[i].COST_PRICE * this.docObj.docItems.dt()[i].QUANTITY
         }
-        console.log(tmpTotalCost)
         let tmpMargin = ((this.docObj.dt()[0].TOTAL - this.docObj.dt()[0].VAT) - tmpTotalCost)
         let tmpMarginRate = (tmpMargin / (this.docObj.dt()[0].TOTAL - this.docObj.dt()[0].VAT)) * 100
         this.docObj.dt()[0].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
-        console.log(this.docObj.dt()[0].MARGIN)
         this.txtMargin.setState({value:this.docObj.dt()[0].MARGIN})
     }
     async _calculateMargin()
@@ -470,11 +467,12 @@ export default class salesInvoice extends React.PureComponent
         this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
         let tmpQuery = 
         {
-            query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,1,GETDATE()) AS PRICE",
-            param : ['GUID:string|50'],
-            value : [pData.GUID]
+            query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,1,GETDATE(),@CUSTOMER) AS PRICE",
+            param : ['GUID:string|50','CUSTOMER:string|50'],
+            value : [pData.GUID,this.docObj.dt()[0].INPUT]
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
+        console.log(tmpData)
         if(tmpData.result.recordset.length > 0)
         {
             this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
