@@ -83,6 +83,11 @@ export const menu = (e) =>
                             text: e.t('menu.stk_02_005'),//'İade Deposuna Sevk',
                             path: 'items/documents/rebateDoc'
                         },
+                        {
+                            id: 'stk_02_007',
+                            text: e.t('menu.stk_02_007'),//'SKT Girişi',
+                            path: 'items/documents/expdateEntry'
+                        }
                     ]
                 },
                 {
