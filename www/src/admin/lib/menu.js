@@ -10,6 +10,11 @@ export const menu =
                 id: 'P0001',
                 text: 'Terminal',
                 path: 'terminal'
+            },
+            {
+                id: 'P0001_1',
+                text: 'Cihaz Seçimi',
+                path: 'deviceChoose'
             }
         ]
     },
