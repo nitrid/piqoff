@@ -1180,5 +1180,23 @@ export const prm =
         }
     },
     //#endregion
+        //#region Gün sonu
+    // Merkez kasa 
+    {
+        TYPE : 1,
+        ID :"SafeCenter",
+        VALUE : "df8b4f69-9e2d-449a-996a-0001abcf0308",
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Merkez Kasa"
+        }
+    },
+    //#endregion
 
 ]
