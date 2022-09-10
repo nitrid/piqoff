@@ -199,7 +199,7 @@ export default class labelPrinting extends React.PureComponent
                 "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
                 "MAIN_GRP AS ITEM_GRP,   " +
                 "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
-                "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE())) AS PRICE  , " +
+                "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE  , " +
                 "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE " +
                 "FROM ITEMS_VW_01  " +
                 "WHERE (SELECT TOP 1 LDATE FROM LABEL_QUEUE ORDER BY LDATE DESC) < (SELECT TOP 1 LDATE FROM ITEM_PRICE WHERE TYPE = 0  AND ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC) OR  (SELECT TOP 1 LDATE FROM LABEL_QUEUE ORDER BY LDATE DESC) < ITEMS_VW_01.LDATE) AS TMP ", 
@@ -245,7 +245,7 @@ export default class labelPrinting extends React.PureComponent
                 "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
                 "MAIN_GRP AS ITEM_GRP,   " +
                 "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
-                "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE())) AS PRICE  , " +
+                "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE  , " +
                 "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE " +
                 "FROM ITEMS_VW_01  " +
                 "WHERE @DATE < (SELECT TOP 1 LDATE FROM ITEM_PRICE WHERE TYPE = 0  AND ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC) OR @DATE < ITEMS_VW_01.LDATE) AS TMP ", 
@@ -293,7 +293,7 @@ export default class labelPrinting extends React.PureComponent
                 "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
                 "MAIN_GRP AS ITEM_GRP,   " +
                 "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
-                "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE())) AS PRICE  , " +
+                "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE  , " +
                 "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE " +
                 "FROM ITEMS_VW_01  " +
                 "WHERE  MAIN_GRP = @GROUP) AS TMP ", 
@@ -341,7 +341,7 @@ export default class labelPrinting extends React.PureComponent
                 "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
                 "MAIN_GRP AS ITEM_GRP,   " +
                 "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
-                "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE())) AS PRICE  , " +
+                "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE  , " +
                 "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE " +
                 "FROM ITEMS_VW_01  " +
                 "WHERE  ISNULL((SELECT TOP 1 [CODE] FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID AND CUSTOMER = @CUSTOMER),'') <> '') AS TMP ", 
@@ -389,7 +389,7 @@ export default class labelPrinting extends React.PureComponent
                 "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
                 "MAIN_GRP AS ITEM_GRP,   " +
                 "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
-                "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE())) AS PRICE  , " +
+                "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE  , " +
                 "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE " +
                 "FROM ITEMS_VW_01  " +
                 " ) AS TMP ", 
@@ -481,7 +481,7 @@ export default class labelPrinting extends React.PureComponent
                                 "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
                                "MAIN_GRP AS ITEM_GRP,  " +
                                "MAIN_GRP_NAME AS ITEM_GRP_NAME,  " +
-                               "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE())) AS PRICE  ," +
+                               "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE  ," +
                                "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE " +
                                "FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID),'') <> '') AS TMP WHERE CODE = @CODE  ",
                                 param : ['CODE:string|50'],
@@ -976,7 +976,7 @@ export default class labelPrinting extends React.PureComponent
                                             "MAIN_GRP AS ITEM_GRP, " +
                                             "MAIN_GRP_NAME AS ITEM_GRP_NAME, " +
                                             "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS.GUID),'') AS CUSTOMER_NAME, " +
-                                            "(SELECT [dbo].[FN_PRICE_SALE](ITEMS.GUID,1,GETDATE())) AS PRICE  ,  " +
+                                            "(SELECT [dbo].[FN_PRICE_SALE](ITEMS.GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE  ,  " +
                                             "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS.GUID),0) AS UNDER_UNIT_VALUE, " +
                                             "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE TYPE = 1 AND ITEM_UNIT_VW_01.ITEM_GUID = ITEMS.GUID),0) AS UNDER_UNIT_SYMBOL " +
                                             "FROM ITEMS_VW_01 AS ITEMS INNER JOIN ITEM_BARCODE ON ITEMS.GUID = ITEM_BARCODE.ITEM  " +
@@ -1216,7 +1216,7 @@ export default class labelPrinting extends React.PureComponent
                                         "MAIN_GRP AS ITEM_GRP,   " +
                                         "MAIN_GRP_NAME AS ITEM_GRP_NAME, " +
                                         "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID),'') AS CUSTOMER_NAME, " +
-                                        "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE())) AS PRICE  , " +
+                                        "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE  , " +
                                         "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE, " +
                                         "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE TYPE = 1 AND ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_SYMBOL " +
                                         "FROM ITEMS_VW_01 WHERE  STATUS = 1) AS TMP " +

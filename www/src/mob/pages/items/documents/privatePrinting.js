@@ -111,7 +111,7 @@ export default class outageDoc extends React.Component
                             {
                                 select:
                                 {
-                                    query : "SELECT GUID,CODE,NAME,[dbo].[FN_PRICE_SALE](GUID,1,GETDATE()) AS PRICE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                    query : "SELECT GUID,CODE,NAME,[dbo].[FN_PRICE_SALE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000') AS PRICE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
                                     param : ['VAL:string|50']
                                 },
                                 sql:this.core.sql

@@ -115,7 +115,6 @@ export default class itemCard extends React.PureComponent
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
                 this.btnCopy.setState({disabled:false});
-                this.btnPrint.setState({disabled:false});
             }
             //ALT BİRİM FİYAT HESAPLAMASI
             this.underPrice();
@@ -134,7 +133,6 @@ export default class itemCard extends React.PureComponent
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
                 this.btnCopy.setState({disabled:false});
-                this.btnPrint.setState({disabled:false});
 
                 pData.rowData.CUSER = this.user.CODE
                 this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSER = this.user.CODE
@@ -157,7 +155,6 @@ export default class itemCard extends React.PureComponent
             this.btnSave.setState({disabled:true});
             this.btnDelete.setState({disabled:false});
             this.btnCopy.setState({disabled:false});
-            this.btnPrint.setState({disabled:false});
             //ALT BİRİM FİYAT HESAPLAMASI
             this.underPrice()
             //MARGIN HESAPLAMASI
@@ -171,7 +168,6 @@ export default class itemCard extends React.PureComponent
             this.btnSave.setState({disabled:false});
             this.btnDelete.setState({disabled:false});
             this.btnCopy.setState({disabled:false});
-            this.btnPrint.setState({disabled:false});
         })        
 
         this.itemsObj.addEmpty();
@@ -763,16 +759,10 @@ export default class itemCard extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnPrint" parent={this} icon="print" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.popDesign.show()
-                                    }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnAnalysis" parent={this} icon="chart" type="default"
                                     onClick={async ()=>
                                     {
+                                        App.instance.setState({isExecute:true})
                                         this.dtFirstAnalysis.value = moment(new Date())
                                         this.dtLastAnalysis.value = moment(new Date())
                                         let tmpQuery = 
@@ -800,6 +790,7 @@ export default class itemCard extends React.PureComponent
                                         {
                                             this.setState({dataRefresh:{0:{QUANTITY:0,DOC_DATE:''}}})
                                         }
+                                        App.instance.setState({isExecute:false})
                                         this.popAnalysis.show()
                                     }}/>
                                 </Item>
