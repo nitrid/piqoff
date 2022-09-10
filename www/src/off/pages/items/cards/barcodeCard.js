@@ -45,6 +45,7 @@ export default class barcodeCard extends React.PureComponent
         this.txtBarUnitFactor.setState({value:'0'})
         this.txtItem.setState({value:''})
         this.txtItemName.setState({value:''})
+        this.txtBarcode.setState({value:''})
     }
     async checkBarcode(pCode)
     {
@@ -54,7 +55,7 @@ export default class barcodeCard extends React.PureComponent
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT BARCODE FROM ITEM_BARCODE WHERE BARCODE = @CODE",
+                    query :"SELECT BARCODE FROM ITEM_BARCODE_vw_01 WHERE BARCODE = @CODE",
                     param : ['CODE:string|50'],
                     value : [pCode]
                 }
@@ -87,7 +88,10 @@ export default class barcodeCard extends React.PureComponent
     async getBarcode(pCode)
     {
         this.itemBarcodeObj.clearAll();
+        
+        await this.core.util.waitUntil(0)
         await this.itemBarcodeObj.load({BARCODE:pCode});
+        console.log(this.itemBarcodeObj.dt())
         this._getUnit(this.itemBarcodeObj.dt()[0].ITEM_GUID)
     }
     async _getUnit(pGuid)
@@ -111,7 +115,6 @@ export default class barcodeCard extends React.PureComponent
             this.txtBarUnitFactor.setState({value:this.cmbBarUnit.data.datatable.where({'TYPE':0})[0].FACTOR});
             let tmpGuid = this.cmbBarUnit.data.datatable.where({'TYPE':0})[0].GUID
             this.cmbBarUnit.value = tmpGuid;
-            console.log(this.cmbBarUnit.value)
             this.txtUnitTypeName.setState({value:this.t("MainUnit")})
            
         }
@@ -124,16 +127,6 @@ export default class barcodeCard extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnBack" parent={this} icon="revert" type="default"
-                                    onClick={()=>
-                                    {
-                                        if(this.prevCode != '')
-                                        {
-                                            this.getItem(this.prevCode); 
-                                        }
-                                    }}/>
-                                </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
                                     onClick={()=>
@@ -213,7 +206,7 @@ export default class barcodeCard extends React.PureComponent
                                     <NdButton id="btnCopy" parent={this} icon="copy" type="default"
                                     onClick={()=>
                                     {
-                                        
+                                        console.log(this.cmbBarUnit.data.datatable)
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -280,6 +273,7 @@ export default class barcodeCard extends React.PureComponent
                                                             tmpEmpty.ITEM_NAME = data[0].NAME
                                                             tmpEmpty.ITEM_CODE = data[0].CODE
                                                             tmpEmpty.UNIT_GUID = ''
+                                                            console.log(tmpEmpty)
                                                             this.itemBarcodeObj.addEmpty(tmpEmpty);  
                                                             this._getUnit(data[0].GUID)
                                                         }

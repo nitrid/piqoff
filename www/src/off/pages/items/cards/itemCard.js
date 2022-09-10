@@ -108,7 +108,7 @@ export default class itemCard extends React.PureComponent
                 else
                 {
                     this.btnNew.setState({disabled:false});
-                    this.btnBack.setState({disabled:true});
+                    this.btnBack.setState({disabled:false});
                 }
                 
                 this.btnSave.setState({disabled:false});
@@ -149,7 +149,7 @@ export default class itemCard extends React.PureComponent
         this.itemsObj.ds.on('onRefresh',(pTblName) =>
         {        
             this.prevCode = this.itemsObj.dt('ITEMS').length > 0 ? this.itemsObj.dt('ITEMS')[0].CODE : '';
-            this.btnBack.setState({disabled:true});
+            this.btnBack.setState({disabled:false});
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:true});
             this.btnDelete.setState({disabled:false});
@@ -786,6 +786,7 @@ export default class itemCard extends React.PureComponent
                                         this.itemsObj.dt()[0].WEIGHING = tmpItem.WEIGHING
                                         this.itemsObj.dt()[0].SALE_JOIN_LINE = tmpItem.SALE_JOIN_LINE
                                         this.itemsObj.dt()[0].TICKET_REST = tmpItem.TICKET_REST
+                                        this.itemsObj.dt()[0].SNAME = tmpItem.SNAME
 
                                         console.log(this.itemsObj.dt())
 
