@@ -68,7 +68,6 @@ export default class itemCard extends React.PureComponent
             param : ['ITEM_GUID:string|50']
         }
         
-
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
         this._onItemRendered = this._onItemRendered.bind(this)
@@ -214,6 +213,11 @@ export default class itemCard extends React.PureComponent
         console.log("11 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
         App.instance.setState({isExecute:true})
         this.itemsObj.clearAll();
+        this.txtRef.value = Math.floor(Date.now() / 1000)
+        this.txtCustomer.value = "";
+        this.txtCustomer.displayValue = "";   
+        this.txtBarcode.readOnly = false;   
+        this.imgFile.value = ""; 
         await this.itemsObj.load({CODE:pCode});
         //TEDARİKÇİ FİYAT GETİR İŞLEMİ.  
         await this.itemsPriceSupply.load({ITEM_GUID:this.itemsObj.dt()[0].GUID,TYPE:1})  
@@ -753,9 +757,38 @@ export default class itemCard extends React.PureComponent
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnCopy" parent={this} icon="copy" type="default"
-                                    onClick={()=>
+                                    onClick={async()=>
                                     {
                                         
+                                        let tmpItem = {...this.itemsObj.dt()[0]}
+                                        this.itemsObj.clearAll();
+
+                                        this.txtRef.value = Math.floor(Date.now() / 1000)
+                                        this.txtCustomer.value = "";
+                                        this.txtCustomer.displayValue = "";   
+                                        this.txtBarcode.displayValue = ""; 
+                                        this.txtBarcode.value = ""; 
+                                        this.txtBarcode.readOnly = false;   
+                                        this.imgFile.value = ""; 
+                                        this.itemsPriceSupply.clearAll();     
+                                        this.itemsPriceLogObj.clearAll();     
+                                        this.salesPriceLogObj.clear()   
+                                        this.salesContractObj.clear()   
+                                        this.otherShopObj.clear()
+
+                                        this.core.util.waitUntil(0)
+                                        this.itemsObj.addEmpty(); 
+                                        this.itemsObj.dt()[0].VAT = tmpItem.VAT
+                                        this.itemsObj.dt()[0].NAME = tmpItem.NAME
+                                        this.itemsObj.dt()[0].MAIN_GRP = tmpItem.MAIN_GRP
+                                        this.itemsObj.dt()[0].TYPE = tmpItem.TYPE
+                                        this.itemsObj.dt()[0].CODE= Math.floor(Date.now() / 1000)
+                                        this.itemsObj.dt()[0].WEIGHING = tmpItem.WEIGHING
+                                        this.itemsObj.dt()[0].SALE_JOIN_LINE = tmpItem.SALE_JOIN_LINE
+                                        this.itemsObj.dt()[0].TICKET_REST = tmpItem.TICKET_REST
+
+                                        console.log(this.itemsObj.dt())
+
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -2104,6 +2137,7 @@ export default class itemCard extends React.PureComponent
                                                 {
                                                     let tmpEmptyMulti = {...this.itemsObj.itemMultiCode.empty};
                                                     
+                                                    console.log(this.itemsObj.dt())
                                                     tmpEmptyMulti.CUSER = this.core.auth.data.CODE,  
                                                     tmpEmptyMulti.ITEM_GUID = this.itemsObj.dt()[0].GUID 
                                                     tmpEmptyMulti.CUSTOMER_GUID = this.txtPopCustomerCode.GUID                              
