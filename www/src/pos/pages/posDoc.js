@@ -572,7 +572,7 @@ export default class posDoc extends React.PureComponent
                     },
                 }
             }
-            console.log(tmpItemsDt[0].UNIT_FACTOR)
+            
             tmpPriceDt.selectCmd.value = [tmpItemsDt[0].GUID,tmpQuantity * tmpItemsDt[0].UNIT_FACTOR,this.posObj.dt()[0].CUSTOMER_GUID]
             await tmpPriceDt.refresh();  
             console.log(tmpPriceDt)

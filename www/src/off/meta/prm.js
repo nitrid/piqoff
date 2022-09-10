@@ -53,15 +53,14 @@ export const prm =
             CAPTION : "Alış Faturasından Alış Fiyatı Güncelleme"
         }
     },
-     //Para Sembolu
+    //Para Sembolu
     {
         TYPE : 0,
         ID :"MoneySymbol",
         VALUE : {code:"EUR",sign:"€"},
         SPECIAL : "",
-        PAGE : "pos",
         ELEMENT : "",
-        APP : "POS",
+        APP : "OFF",
         VIEW : 
         {
             TYPE : "text",

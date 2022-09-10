@@ -3083,8 +3083,10 @@ export const langFr =
         },
         popDiscount: //BAK
         {
+            title: "İndirim",
             txtDiscRate : "Yüzde",
             txtDiscAmount : "Tutar",
+            btnSave: "Kaydet"
         },
     },
     irs_01_001 :
