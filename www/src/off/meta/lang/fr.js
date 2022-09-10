@@ -1490,7 +1490,8 @@ export const langFr =
             clmQuantity : "Quantité",
             clmBarcode : "Code Barre"
         },
-        txtTotalQuantity : "Quantité Total"
+        txtTotalQuantity : "Quantité Total",
+        ItemNamePlaceHolder : "Ürün Adı Giriniz.."
     },
     stk_04_001 : 
     {

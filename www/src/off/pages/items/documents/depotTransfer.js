@@ -136,6 +136,15 @@ export default class depotTransfer extends React.PureComponent
             this.frmTrnsfItems.option('disabled',false)
         }
     }
+    async checkRow()
+    {
+        for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+        {
+            this.docObj.docItems.dt()[i].INPUT = this.docObj.dt()[0].INPUT
+            this.docObj.docItems.dt()[i].OUTPUT = this.docObj.dt()[0].OUTPUT
+            this.docObj.docItems.dt()[i].DOC_DATE = this.docObj.dt()[0].DOC_DATE
+        }
+    }
     async checkDoc(pGuid,pRef,pRefno)
     {
         return new Promise(async resolve =>
@@ -330,8 +339,10 @@ export default class depotTransfer extends React.PureComponent
     async addItem(pData,pIndex)
     {
         let tmpDatas = this.prmObj.filter({ID:'negativeQuantity',USERS:this.user.CODE}).getValue()
+        console.log(tmpDatas)
         if(typeof tmpDatas != 'undefined' && tmpDatas.value ==  true)
         {
+            console.log(tmpDatas)
             let tmpCheckQuery = 
             {
                 query :"SELECT [dbo].[FN_DEPOT_QUANTITY](@GUID,@DEPOT,GETDATE()) AS QUANTITY ",
@@ -339,6 +350,7 @@ export default class depotTransfer extends React.PureComponent
                 value : [pData.GUID,this.docObj.dt()[0].OUTPUT]
             }
             let tmpQuantity = await this.core.sql.execute(tmpCheckQuery) 
+            console.log(tmpQuantity)
             if(tmpQuantity.result.recordset.length > 0)
             {
                 console.log(tmpQuantity.result.recordset[0].QUANTITY )
@@ -732,6 +744,7 @@ export default class depotTransfer extends React.PureComponent
                                     dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
                                     onValueChanged={(async()=>
                                         {
+                                            this.checkRow()
                                     }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmTrnsfr" + this.tabIndex}>
@@ -763,7 +776,9 @@ export default class depotTransfer extends React.PureComponent
                                             
                                                 await dialog(tmpConfObj);
                                                 this.cmbOutDepot.setState({value:''});
+                                                return
                                             }
+                                            this.checkRow()
                                         }).bind(this)}
                                     data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 "},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbOutDepot',USERS:this.user.CODE})}
@@ -796,7 +811,9 @@ export default class depotTransfer extends React.PureComponent
                                             
                                                 await dialog(tmpConfObj);
                                                 this.cmbInDepot.setState({value:''});
+                                                return
                                             }
+                                            this.checkRow()
                                         }).bind(this)}
                                     data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 "},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbInDepot',USERS:this.user.CODE})}

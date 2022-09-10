@@ -1146,7 +1146,7 @@ export const prm =
             value : true
         },
         SPECIAL : "",
-        PAGE : "stk_03_004",
+        PAGE : "stk_02_002",
         ELEMENT : "",
         APP : "OFF",
         VIEW : 

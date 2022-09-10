@@ -1116,10 +1116,10 @@ export default class rebateDoc extends React.PureComponent
                                             {
                                                 query:  "SELECT *, " +
                                                         "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH " +
-                                                        "FROM [dbo].[ITEM_COUNT_VW_01] " +
-                                                        "WHERE REF=@REF AND REF_NO=@REF_NO ORDER BY LINE_NO ASC",
-                                                param:  ['REF:string|50','REF_NO:int','DESIGN:string|25'],
-                                                value:  [this.countObj.dt()[0].REF,this.countObj.dt()[0].REF_NO,this.cmbDesignList.value]
+                                                        "FROM DOC_ITEMS_VW_01 " +
+                                                        "WHERE ((DOC_GUID = @DOC_GUID) OR (INVOICE_GUID = @DOC_GUID)) ORDER BY LINE_NO ASC",
+                                                param:  ['DOC_GUID:string|50','DESIGN:string|25'],
+                                                value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value]
                                             }
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
                                             this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 

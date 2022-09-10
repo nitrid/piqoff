@@ -1490,7 +1490,8 @@ export const langTr =
             clmQuantity : "Miktar",
             clmBarcode : "Barkodu"
         },
-        txtTotalQuantity : "Toplam Miktar"
+        txtTotalQuantity : "Toplam Miktar",
+        ItemNamePlaceHolder : "Ürün Adı Giriniz.."
     },
     stk_04_001 : 
     {
