@@ -522,7 +522,7 @@ export default class promotionCard extends React.PureComponent
                                                     {
                                                         select:
                                                         {
-                                                            query : "SELECT GUID,CODE,NAME,VAT FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                                            query : "SELECT GUID,CODE,NAME,VAT,MAIN_GRP_NAME FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
                                                             param : ['VAL:string|50']
                                                         },
                                                         sql:this.core.sql
@@ -530,6 +530,7 @@ export default class promotionCard extends React.PureComponent
                                                 }}>
                                                     <Column dataField="CODE" caption={this.t("pg_Grid.clmCode")} width={150} />
                                                     <Column dataField="NAME" caption={this.t("pg_Grid.clmName")} width={650} defaultSortOrder="asc" />
+                                                    <Column dataField="MAIN_GRP_NAME" caption={this.t("pg_Grid.clmGrpName")} width={150}/>
                                                 </NdPopGrid>
                                                 {/* SEÇİM LİSTE POPUP */}
                                                 <NdPopUp parent={this} id={"pop_PrmItemList"} container={"#root"}
@@ -698,7 +699,7 @@ export default class promotionCard extends React.PureComponent
                                                     {
                                                         select:
                                                         {
-                                                            query : "SELECT GUID,CODE,NAME,VAT FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                                            query : "SELECT GUID,CODE,NAME,VAT,MAIN_GRP_NAME FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
                                                             param : ['VAL:string|50']
                                                         },
                                                         sql:this.core.sql
@@ -706,6 +707,7 @@ export default class promotionCard extends React.PureComponent
                                                 }}>
                                                     <Column dataField="CODE" caption={this.t("pg_Grid.clmCode")} width={150} />
                                                     <Column dataField="NAME" caption={this.t("pg_Grid.clmName")} width={650} defaultSortOrder="asc" />
+                                                    <Column dataField="MAIN_GRP_NAME" caption={this.t("pg_Grid.clmGrpName")} width={150}/>
                                                 </NdPopGrid>
                                             </Item>     
                                             {/* txtRstItemQuantity */}  

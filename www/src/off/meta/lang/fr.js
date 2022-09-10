@@ -3052,6 +3052,7 @@ export const langFr =
             title:  "Choix",
             clmCode: "Code",
             clmName: "Nom", 
+            clmGrpName: "GRUP", //BAK
         },
         msgRef:
         {

@@ -3164,6 +3164,7 @@ export const langTr =
             title: "Seçim",
             clmCode: "KODU",
             clmName: "ADI", 
+            clmGrpName: "GRUP", 
         },
         msgRef:
         {
