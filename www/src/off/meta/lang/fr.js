@@ -3052,6 +3052,7 @@ export const langFr =
             title:  "Choix",
             clmCode: "Code",
             clmName: "Nom", 
+            clmGrpName: "GRUP", //BAK
         },
         msgRef:
         {
@@ -3095,8 +3096,10 @@ export const langFr =
         },
         popDiscount: //BAK
         {
+            title: "İndirim",
             txtDiscRate : "Yüzde",
             txtDiscAmount : "Tutar",
+            btnSave: "Kaydet"
         },
     },
     irs_01_001 :

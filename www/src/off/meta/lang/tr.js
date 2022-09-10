@@ -3182,6 +3182,7 @@ export const langTr =
             title: "Seçim",
             clmCode: "KODU",
             clmName: "ADI", 
+            clmGrpName: "GRUP", 
         },
         msgRef:
         {
@@ -3225,8 +3226,10 @@ export const langTr =
         },
         popDiscount:
         {
+            title: "İndirim",
             txtDiscRate : "Yüzde",
             txtDiscAmount : "Tutar",
+            btnSave: "Kaydet"
         },
     },
     irs_01_001 :

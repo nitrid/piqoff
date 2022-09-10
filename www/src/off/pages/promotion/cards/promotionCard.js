@@ -27,7 +27,8 @@ export default class promotionCard extends React.PureComponent
         this.state = 
         {
             prmType:0,
-            rstType:0
+            rstType:0,
+            discPrice:0,
         }               
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
@@ -35,6 +36,8 @@ export default class promotionCard extends React.PureComponent
         this.promo = new promoCls();
 
         this.tabIndex = props.data.tabkey
+
+        Number.money = this.sysParam.filter({ID:'MoneySymbol',TYPE:0}).getValue()
     }   
     async componentDidMount()
     {
@@ -113,6 +116,32 @@ export default class promotionCard extends React.PureComponent
             }
         });
     }
+    async getPrice(pGuid)
+    {
+        return new Promise(async resolve => 
+        {
+            if(pGuid == '00000000-0000-0000-0000-000000000000')
+            {
+                resolve(0)
+            }
+
+            let tmpQuery = 
+            {
+                query : "SELECT dbo.FN_PRICE_SALE(@GUID,1,GETDATE(),@CUSTOMER) AS PRICE",
+                param : ['GUID:string|50','CUSTOMER:string|50'],
+                value : [pGuid,this.promo.dt()[0].CUSTOMER_GUID]           
+            }
+
+            let tmpData = await this.core.sql.execute(tmpQuery)
+
+            if(tmpData.result.recordset.length > 0)
+            {
+                resolve(tmpData.result.recordset[0].PRICE)
+            }
+    
+            resolve(0)
+        });
+    }
     render()
     {
         return (
@@ -153,6 +182,8 @@ export default class promotionCard extends React.PureComponent
                                                 this.promo.cond.dt()[0].PROMO = this.promo.dt()[0].GUID
                                                 this.promo.app.dt()[0].PROMO = this.promo.dt()[0].GUID
                                                 
+                                                console.log(this.promo.app)
+
                                                 if((await this.promo.save()) == 0)
                                                 {                                                    
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
@@ -491,7 +522,7 @@ export default class promotionCard extends React.PureComponent
                                                     {
                                                         select:
                                                         {
-                                                            query : "SELECT GUID,CODE,NAME,VAT FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                                            query : "SELECT GUID,CODE,NAME,VAT,MAIN_GRP_NAME FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
                                                             param : ['VAL:string|50']
                                                         },
                                                         sql:this.core.sql
@@ -499,6 +530,7 @@ export default class promotionCard extends React.PureComponent
                                                 }}>
                                                     <Column dataField="CODE" caption={this.t("pg_Grid.clmCode")} width={150} />
                                                     <Column dataField="NAME" caption={this.t("pg_Grid.clmName")} width={650} defaultSortOrder="asc" />
+                                                    <Column dataField="MAIN_GRP_NAME" caption={this.t("pg_Grid.clmGrpName")} width={150}/>
                                                 </NdPopGrid>
                                                 {/* SEÇİM LİSTE POPUP */}
                                                 <NdPopUp parent={this} id={"pop_PrmItemList"} container={"#root"}
@@ -569,20 +601,51 @@ export default class promotionCard extends React.PureComponent
                                         data={{source:[{ID:0,NAME:"İskonto"},{ID:1,NAME:"Para Puan"},{ID:2,NAME:"Hediye Çeki"},{ID:3,NAME:"Stok"}]}}  
                                         onValueChanged={(e) =>
                                         {
-                                            this.setState({rstType:e.value})
+                                            this.setState({rstType:e.value,discPrice:0})
+
+                                            this.promo.app.dt()[0].ITEM_GUID = "00000000-0000-0000-0000-000000000000";
+                                            this.promo.app.dt()[0].ITEM_CODE = "";
+                                            this.promo.app.dt()[0].ITEM_NAME = "";
+                                            this.promo.app.dt()[0].QUANTITY = 1;
+                                            this.promo.app.dt()[0].AMOUNT = 0;                                            
                                         }}                                  
                                         />
                                     </Item>                                
                                     <EmptyItem/>
                                     <EmptyItem/>
                                     <GroupItem colSpan={3}>
-                                        <GroupItem colCount={3} visible={this.state.rstType != 3 ? true : false}>
+                                        <GroupItem colCount={3} visible={this.state.rstType == 0 ? true : false}>
                                             {/* txtRstQuantity */}
-                                            <Item>                                    
+                                            <Item>
                                                 <Label text={this.t("txtRstQuantity")} alignment="right" />
-                                                <NdTextBox id="txtRstQuantity" parent={this} simple={true}
-                                                dt={{data:this.promo.dt("PROMO_APPLICATION"),field:"VALUE"}} 
-                                                />     
+                                                <NdTextBox id="txtRstQuantity" parent={this} simple={true} readOnly={true} dt={{data:this.promo.dt("PROMO_APPLICATION"),field:"AMOUNT"}} value={"0"}
+                                                button=
+                                                {[
+                                                    {
+                                                        id:'01',
+                                                        icon:'more',
+                                                        onClick:async()=>
+                                                        {
+                                                            if(this.promo.cond.dt().length > 0)
+                                                            {
+                                                                let tmpPrice = await this.getPrice(this.promo.cond.dt()[0].ITEM_GUID)
+                                                                this.setState({discPrice:tmpPrice})
+                                                            }
+                                                            this.txtDiscRate.value = this.txtRstQuantity.value
+                                                            this.txtDiscAmount.value = Number(this.state.discPrice - Number(this.state.discPrice).rateInc(this.txtRstQuantity.value,2)).toFixed(2)
+                                                            this.popDiscount.show()
+                                                        }
+                                                    }
+                                                ]}/>
+                                            </Item>
+                                            <EmptyItem/>
+                                            <EmptyItem/>
+                                        </GroupItem>
+                                        <GroupItem colCount={3} visible={this.state.rstType == 1 || this.state.rstType == 2 ? true : false}>
+                                            {/* txtRstQuantity */}
+                                            <Item>
+                                                <Label text={this.t("txtRstQuantity")} alignment="right" />
+                                                <NdTextBox id="txtRstPointGift" parent={this} simple={true} dt={{data:this.promo.dt("PROMO_APPLICATION"),field:"AMOUNT"}} value={"0"}/>
                                             </Item>
                                             <EmptyItem/>
                                             <EmptyItem/>
@@ -613,6 +676,7 @@ export default class promotionCard extends React.PureComponent
                                                                     this.promo.app.dt()[0].QUANTITY = 1;
                                                                     this.promo.app.dt()[0].AMOUNT = 0;
                                                                 }
+                                                                console.log(this.promo.app.dt())
                                                             }
                                                         }
                                                     }
@@ -635,7 +699,7 @@ export default class promotionCard extends React.PureComponent
                                                     {
                                                         select:
                                                         {
-                                                            query : "SELECT GUID,CODE,NAME,VAT FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                                            query : "SELECT GUID,CODE,NAME,VAT,MAIN_GRP_NAME FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
                                                             param : ['VAL:string|50']
                                                         },
                                                         sql:this.core.sql
@@ -643,29 +707,96 @@ export default class promotionCard extends React.PureComponent
                                                 }}>
                                                     <Column dataField="CODE" caption={this.t("pg_Grid.clmCode")} width={150} />
                                                     <Column dataField="NAME" caption={this.t("pg_Grid.clmName")} width={650} defaultSortOrder="asc" />
+                                                    <Column dataField="MAIN_GRP_NAME" caption={this.t("pg_Grid.clmGrpName")} width={150}/>
                                                 </NdPopGrid>
                                             </Item>     
-                                            {/* txtPrmQuantity */}  
-                                            <Item>                                                                    
-                                                <Label text={this.t("txtPrmQuantity")} alignment="right" />
-                                                <NdTextBox id="txtPrmQuantity" parent={this} simple={true} 
-                                                dt={{data:this.promo.dt("PROMO_APPLICATION"),field:"QUANTITY"}}
-                                                />     
-                                            </Item> 
                                             {/* txtRstItemQuantity */}  
                                             <Item>                                                                    
                                                 <Label text={this.t("txtRstItemQuantity")} alignment="right" />
-                                                <NdTextBox id="txtRstItemQuantity" parent={this} simple={true} 
-                                                dt={{data:this.promo.dt("PROMO_APPLICATION"),field:"AMOUNT"}}
-                                                />     
+                                                <NdTextBox id="txtRstItemQuantity" parent={this} simple={true} dt={{data:this.promo.dt("PROMO_APPLICATION"),field:"QUANTITY"}} value={"1"}/>     
+                                            </Item> 
+                                            {/* txtRstItemAmount */}  
+                                            <Item>                                                                    
+                                                <Label text={this.t("txtRstItemAmount")} alignment="right" />
+                                                <NdTextBox id="txtRstItemAmount" parent={this} simple={true} readOnly={true} dt={{data:this.promo.dt("PROMO_APPLICATION"),field:"AMOUNT"}} value={"0"}
+                                                button=
+                                                {[
+                                                    {
+                                                        id:'01',
+                                                        icon:'more',
+                                                        onClick:async()=>
+                                                        {
+                                                            if(this.promo.app.dt().length > 0)
+                                                            {
+                                                                let tmpPrice = await this.getPrice(this.promo.app.dt()[0].ITEM_GUID)
+                                                                this.setState({discPrice:tmpPrice})
+                                                            }
+                                                            this.txtDiscRate.value = this.txtRstQuantity.value
+                                                            this.txtDiscAmount.value = Number(this.state.discPrice - Number(this.state.discPrice).rateInc(this.txtRstItemAmount.value,2)).toFixed(2)
+                                                            this.popDiscount.show()
+                                                        }
+                                                    }
+                                                ]}/>     
                                             </Item>
                                         </GroupItem>
                                     </GroupItem>
                                 </GroupItem>
                             </Form>
                         </div>
-                    </div>
+                    </div>                    
                 </ScrollView>
+                {/* ISKONTO POPUP */}
+                <div>
+                    <NdPopUp parent={this} id={"popDiscount"} container={"#root"}
+                    position={{of:'#root'}}
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={this.t("popDiscount.title")}
+                    width={'400'}
+                    height={'260'}
+                    >
+                        <div className='row'>
+                            <div className='col-12'>
+                                <h5 className='text-center'>{this.state.discPrice}</h5>
+                            </div>
+                        </div>
+                        <div className='row'>
+                            <Form colCount={1}>
+                                <Item>
+                                    <Label text={this.t("popDiscount.txtDiscRate")} alignment="right" />
+                                    <NdTextBox id="txtDiscRate" parent={this} simple={true} 
+                                    onValueChanged={(e)=>
+                                    { 
+                                        this.txtDiscAmount.value = Number(this.state.discPrice - Number(this.state.discPrice).rateInc(e.value,2)).toFixed(2)
+                                    }}/>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("popDiscount.txtDiscAmount")} alignment="right" />
+                                    <NdTextBox id="txtDiscAmount" parent={this} simple={true}
+                                    onValueChanged={(e)=>
+                                    { 
+                                        this.txtDiscRate.value = Number(100 - Number(this.state.discPrice).rate2Num(e.value,2)).toFixed(2)
+                                    }}/>
+                                </Item>
+                                <Item>
+                                    <NdButton id="btnDiscSave" parent={this} text={this.t("popDiscount.btnSave")} type="default" width={'100%'}
+                                    onClick={()=>
+                                    {
+                                        if(this.state.rstType == 0)
+                                        {
+                                            this.txtRstQuantity.value = this.txtDiscRate.value
+                                        }
+                                        else if(this.state.rstType == 3)
+                                        {
+                                            this.txtRstItemAmount.value = this.txtDiscRate.value
+                                        }
+                                        this.popDiscount.hide()
+                                    }}/>
+                                </Item>
+                            </Form>
+                        </div>
+                    </NdPopUp>
+                </div>
             </div>
         )
     }
