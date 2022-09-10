@@ -3148,7 +3148,7 @@ export const langTr =
         txtRstItem : "Stok",
         cmbRstItemType: "Tip",
         txtRstItemQuantity: "Miktar",
-        txtRstItemAmount: "Tutar",
+        txtRstItemAmount: "Değer",
         pg_Grid:
         {
             title: "Seçim",

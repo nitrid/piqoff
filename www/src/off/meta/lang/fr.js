@@ -3034,7 +3034,7 @@ export const langFr =
         txtRstItem :  "Produit",
         cmbRstItemType: "Type",
         txtRstItemQuantity:  "Valeur",
-        txtRstItemAmount: "Tutar",//BAK
+        txtRstItemAmount: "Değer",//BAK
         pg_Grid:
         {
             title:  "Choix",
