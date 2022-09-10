@@ -42,6 +42,7 @@ export const langFr =
         stk_02_004: "Imprimer étiquette",
         stk_02_005: "Liste produit retour",
         stk_02_006: "Imprimer étiquette spéciale",
+        stk_02_007: "Entrée DLC",
         stk_03_001: "Liste Produit",
         stk_03_002: "Liste prix",
         stk_03_003: "Liste code barre",
@@ -558,7 +559,8 @@ export const langFr =
             btn01: "Sélection Coffre",
             btn02: "OK",
             msg : "Coffre Saisie déjà enregistré dans notre base ! " ,
-        }
+        },
+        chkActive: "Actif",
       
     },
     stk_02_001 :
@@ -700,7 +702,12 @@ export const langFr =
         validDepot : "Sélectionner Dépot",
         validCustomerCode : "Le Code Produit ne peut être Vide ",
         validDocDate : "Sélectionner Date" ,
-
+        popDesign : 
+        {
+            title: "Choix du Désign",
+            design : "Design" ,
+            lang : "Langue Document" 
+        },
     },
     stk_02_002 :
     {
@@ -826,7 +833,12 @@ export const langFr =
             btn02: "Nouvel Ajout",
             msg: "Produit Existant dans Document ! Voulez vous Combiner ?"
         },
-       
+        popDesign : 
+        {
+            title: "Choix du Désign",
+            design : "Design" ,
+            lang : "Langue Document" 
+        },
 
     },
     stk_02_003 :
