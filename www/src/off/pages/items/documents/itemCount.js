@@ -79,8 +79,6 @@ export default class itemCount extends React.PureComponent
             if(pData.stat == 'new')
             {
                 this.btnNew.setState({disabled:false});
-                this.btnBack.setState({disabled:false});
-                this.btnNew.setState({disabled:false});
                 this.btnBack.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
@@ -104,7 +102,7 @@ export default class itemCount extends React.PureComponent
         {            
             this.btnBack.setState({disabled:true});
             this.btnNew.setState({disabled:false});
-            this.btnSave.setState({disabled:true});
+            this.btnSave.setState({disabled:false});
             this.btnDelete.setState({disabled:false});
             this.btnPrint.setState({disabled:false});          
         })
@@ -144,7 +142,22 @@ export default class itemCount extends React.PureComponent
 
         let totalPrice= await this.countObj.dt().sum("TOTAL_COST",2)
         this.txtAmount.setState({value :totalPrice})
-        
+        if(this.countObj.dt()[0].LOCKED != 0)
+        {
+            let tmpConfObj =
+            {
+                id:'msgGetLocked',showTitle:true,title:this.t("msgGetLocked.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgGetLocked.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgGetLocked.msg")}</div>)
+            }
+
+            await dialog(tmpConfObj);
+            this.frmCount.option('disabled',true)
+        }
+        else
+        {
+            this.frmCount.option('disabled',false)
+        }
     }
     async checkDoc(pGuid,pRef,pRefno)
     {
@@ -551,7 +564,7 @@ export default class itemCount extends React.PureComponent
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmCountFrom" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
-                                        if(this.docLocked == true)
+                                        if(this.countObj.dt()[0].LOCKED == 1)
                                         {
                                             let tmpConfObj =
                                             {
@@ -617,6 +630,18 @@ export default class itemCount extends React.PureComponent
                                     onClick={async()=>
                                     {
                                         
+                                        if(this.countObj.dt()[0].LOCKED == 1)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDocLocked',showTitle:true,title:this.t("msgDocLocked.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgDocLocked.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocLocked.msg")}</div>)
+                                            }
+                                
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
                                         let tmpConfObj =
                                         {
                                             id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -630,6 +655,47 @@ export default class itemCount extends React.PureComponent
                                             this.countObj.dt('DOC').removeAt(0)
                                             await this.countObj.dt('DOC').delete();
                                             this.init(); 
+                                        }
+                                        
+                                    }}/>
+                                </Item>
+                                <Item location="after" locateInMenu="auto">
+                                    <NdButton id="btnLock" parent={this} icon="key" type="default"
+                                    onClick={async()=>
+                                    {
+                                       
+                                        if(this.countObj.dt()[0].LOCKED == 0)
+                                        {
+                                            for (let i = 0; i < this.countObj.dt().length; i++) 
+                                            {
+                                                this.countObj.dt()[i].LOCKED = 1
+                                            }
+                                            this.frmCount.option('disabled',true)
+                                            if(this.countObj.dt()[this.countObj.dt().length - 1].ITEM_CODE == '')
+                                            {
+                                                await this.grdRebItems.devGrid.deleteRow(this.countObj.dt().length - 1)
+                                            }
+                                            if((await this.countObj.save()) == 0)
+                                            {                                                    
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgLocked',showTitle:true,title:this.t("msgLocked.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgLocked.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgLocked.msg")}</div>)
+                                                }
+
+                                                await dialog(tmpConfObj);
+                                            }
+                                            else
+                                            {
+                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                                await dialog(tmpConfObj1);
+                                            }
+                                            
+                                        }
+                                        else if(this.countObj.dt()[0].LOCKED == 1)
+                                        {
+                                            this.popPassword.show()
                                         }
                                         
                                     }}/>
@@ -1240,7 +1306,76 @@ export default class itemCount extends React.PureComponent
                             </Item>
                         </Form>
                     </NdPopUp>
-                    </div>        
+                    </div>      
+                    {/* Yönetici PopUp */}
+                    <div>
+                        <NdPopUp parent={this} id={"popPassword"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popPassword.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'200'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("popPassword.Password")} alignment="right" />
+                                    <NdTextBox id="txtPassword" parent={this} simple={true}
+                                            maxLength={32}
+
+                                    ></NdTextBox>
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("popPassword.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
+                                            onClick={async ()=>
+                                            {       
+                                                if(this.txtPassword.value == '1234')
+                                                {
+                                                    for (let i = 0; i < this.countObj.dt().length; i++) 
+                                                    {
+                                                        this.countObj.dt()[i].LOCKED = 0
+                                                    }
+                                                    this.frmCount.option('disabled',false)
+                                                    this.docLocked = false
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgPasswordSucces',showTitle:true,title:this.t("msgPasswordSucces.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.t("msgPasswordSucces.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPasswordSucces.msg")}</div>)
+                                                    }
+                                        
+                                                    await dialog(tmpConfObj);
+                                                    this.popPassword.hide();  
+                                                }
+                                                else
+                                                {
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgPasswordWrong',showTitle:true,title:this.t("msgPasswordWrong.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.t("msgPasswordWrong.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPasswordWrong.msg")}</div>)
+                                                    }
+                                        
+                                                    await dialog(tmpConfObj);
+                                                }
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popPassword.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div>   
             </div>
         )
     }

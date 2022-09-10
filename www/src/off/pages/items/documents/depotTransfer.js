@@ -540,6 +540,7 @@ export default class depotTransfer extends React.PureComponent
                                     {
                                         if(this.docObj.dt()[0].LOCKED == 0)
                                         {
+                                            this.docLocked = true
                                             this.docObj.dt()[0].LOCKED = 1
                                             if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
@@ -1183,8 +1184,8 @@ export default class depotTransfer extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div>  
-                         {/* Yönetici PopUp */}
-                         <div>
+                    {/* Yönetici PopUp */}
+                    <div>
                         <NdPopUp parent={this} id={"popPassword"} 
                         visible={false}
                         showCloseButton={true}

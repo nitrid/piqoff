@@ -60,7 +60,6 @@ export default class rebateDoc extends React.PureComponent
                 this.btnBack.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
-                this.btnCopy.setState({disabled:false});
                 this.btnPrint.setState({disabled:false});
             }
         })
@@ -72,7 +71,6 @@ export default class rebateDoc extends React.PureComponent
                 this.btnNew.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
-                this.btnCopy.setState({disabled:false});
                 this.btnPrint.setState({disabled:false});
 
                 pData.rowData.CUSER = this.user.CODE
@@ -84,7 +82,6 @@ export default class rebateDoc extends React.PureComponent
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:true});
             this.btnDelete.setState({disabled:false});
-            this.btnCopy.setState({disabled:false});
             this.btnPrint.setState({disabled:false});          
         })
         this.docObj.ds.on('onDelete',(pTblName) =>
@@ -93,7 +90,6 @@ export default class rebateDoc extends React.PureComponent
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:false});
             this.btnDelete.setState({disabled:false});
-            this.btnCopy.setState({disabled:false});
             this.btnPrint.setState({disabled:false});
         })
 
@@ -484,6 +480,18 @@ export default class rebateDoc extends React.PureComponent
                                     onClick={async()=>
                                     {
                                         
+                                        if(this.docLocked == true)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDocLocked',showTitle:true,title:this.t("msgDocLocked.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgDocLocked.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocLocked.msg")}</div>)
+                                            }
+                                
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
                                         let tmpConfObj =
                                         {
                                             id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -508,6 +516,8 @@ export default class rebateDoc extends React.PureComponent
                                         if(this.docObj.dt()[0].LOCKED == 0)
                                         {
                                             this.docObj.dt()[0].LOCKED = 1
+                                            this.docLocked = true
+                                            this.frmDocItems.option('disabled',true)
                                             if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
                                                 await this.grdRebItems.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
@@ -545,13 +555,6 @@ export default class rebateDoc extends React.PureComponent
 
                                             await dialog(tmpConfObj);
                                         }
-                                        
-                                    }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnCopy" parent={this} icon="copy" type="default"
-                                    onClick={()=>
-                                    {
                                         
                                     }}/>
                                 </Item>
@@ -1056,6 +1059,158 @@ export default class rebateDoc extends React.PureComponent
                     
                         </div>
                     </NdDialog>
+                      {/* Dizayn Seçim PopUp */}
+                      <div>
+                    <NdPopUp parent={this} id={"popDesign"} 
+                    visible={false}
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={this.t("popDesign.title")}
+                    container={"#root"} 
+                    width={'500'}
+                    height={'250'}
+                    position={{of:'#root'}}
+                    >
+                        <Form colCount={1} height={'fit-content'}>
+                            <Item>
+                                <Label text={this.t("popDesign.design")} alignment="right" />
+                                <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
+                                displayExpr="DESIGN_NAME"                       
+                                valueExpr="TAG"
+                                value=""
+                                searchEnabled={true}
+                                onValueChanged={(async()=>
+                                    {
+                                    }).bind(this)}
+                                data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '60'"},sql:this.core.sql}}}
+                                param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                >
+                                    <Validator validationGroup={"frmPurcofferPrint"  + this.tabIndex}>
+                                        <RequiredRule message={this.t("validDesign")} />
+                                    </Validator> 
+                                </NdSelectBox>
+                            </Item>
+                            <Item>
+                            <Label text={this.t("popDesign.lang")} alignment="right" />
+                            <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
+                                displayExpr="VALUE"                       
+                                valueExpr="ID"
+                                value=""
+                                searchEnabled={true}
+                                onValueChanged={(async()=>
+                                    {
+                                    }).bind(this)}
+                                data={{source:[{ID:"FR",VALUE:"FR"},{ID:"TR",VALUE:"TR"}]}}
+                                >
+                                </NdSelectBox>
+                            </Item>
+                            <Item>
+                                <div className='row'>
+                                    <div className='col-6'>
+                                        <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} 
+                                        onClick={async ()=>
+                                        {       
+                                        
+                                            let tmpQuery = 
+                                            {
+                                                query:  "SELECT *, " +
+                                                        "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH " +
+                                                        "FROM [dbo].[ITEM_COUNT_VW_01] " +
+                                                        "WHERE REF=@REF AND REF_NO=@REF_NO ORDER BY LINE_NO ASC",
+                                                param:  ['REF:string|50','REF_NO:int','DESIGN:string|25'],
+                                                value:  [this.countObj.dt()[0].REF,this.countObj.dt()[0].REF_NO,this.cmbDesignList.value]
+                                            }
+                                            let tmpData = await this.core.sql.execute(tmpQuery) 
+                                            this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                            {
+                                                if(pResult.split('|')[0] != 'ERR')
+                                                {
+                                                    let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
+                                                    mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");  
+                                                }
+                                            });
+                                            this.popDesign.hide();  
+                                        }}/>
+                                    </div>
+                                    <div className='col-6'>
+                                        <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                        onClick={()=>
+                                        {
+                                            this.popDesign.hide();  
+                                        }}/>
+                                    </div>
+                                </div>
+                            </Item>
+                        </Form>
+                    </NdPopUp>
+                    </div>      
+                     {/* Yönetici PopUp */}
+                     <div>
+                        <NdPopUp parent={this} id={"popPassword"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popPassword.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'200'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("popPassword.Password")} alignment="right" />
+                                    <NdTextBox id="txtPassword" parent={this} simple={true}
+                                            maxLength={32}
+
+                                    ></NdTextBox>
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("popPassword.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
+                                            onClick={async ()=>
+                                            {       
+                                                if(this.txtPassword.value == '1234')
+                                                {
+                                                    this.docObj.dt()[0].LOCKED = 0
+                                                    this.frmDocItems.option('disabled',false)
+                                                    this.docLocked = false
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgPasswordSucces',showTitle:true,title:this.t("msgPasswordSucces.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.t("msgPasswordSucces.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPasswordSucces.msg")}</div>)
+                                                    }
+                                        
+                                                    await dialog(tmpConfObj);
+                                                    this.popPassword.hide();  
+                                                }
+                                                else
+                                                {
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgPasswordWrong',showTitle:true,title:this.t("msgPasswordWrong.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.t("msgPasswordWrong.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPasswordWrong.msg")}</div>)
+                                                    }
+                                        
+                                                    await dialog(tmpConfObj);
+                                                }
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popPassword.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div> 
                 </ScrollView>
             </div>
         )

@@ -26,7 +26,8 @@ export class itemCountCls
             TOTAL_COST :0,
             COST_PRICE : 0,
             MULTICODE : '',
-            BARCODE : ''
+            BARCODE : '',
+            LOCKED : 0
         }
 
         this._initDs();
@@ -52,10 +53,11 @@ export class itemCountCls
                     "@DEPOT = @PDEPOT, " + 
                     "@LINE_NO = @PLINE_NO, " +
                     "@ITEM = @PITEM, " +
-                    "@QUANTITY = @PQUANTITY " ,
+                    "@QUANTITY = @PQUANTITY, " +
+                    "@LOCKED = @PLOCKED " ,
             param : ['PGUID:string|50','PCUSER:string|25','PREF:string|25','PREF_NO:int','PDOC_DATE:date',
-                     'PDEPOT:string|50','PLINE_NO:int','PITEM:string|50','PQUANTITY:float'],
-            dataprm : ['GUID','CUSER','REF','REF_NO','DOC_DATE','DEPOT','LINE_NO','ITEM','QUANTITY']
+                     'PDEPOT:string|50','PLINE_NO:int','PITEM:string|50','PQUANTITY:float','PLOCKED:int'],
+            dataprm : ['GUID','CUSER','REF','REF_NO','DOC_DATE','DEPOT','LINE_NO','ITEM','QUANTITY','LOCKED']
         } 
         tmpDt.updateCmd = 
         {
@@ -68,10 +70,10 @@ export class itemCountCls
                     "@DEPOT = @PDEPOT, " + 
                     "@LINE_NO = @PLINE_NO, " +
                     "@ITEM = @PITEM, " +
-                    "@QUANTITY = @PQUANTITY " ,
+                    "@LOCKED = @PLOCKED " ,
             param : ['PGUID:string|50','PCUSER:string|25','PREF:string|25','PREF_NO:int','PDOC_DATE:date',
-                     'PDEPOT:string|50','PLINE_NO:int','PITEM:string|50','PQUANTITY:float'],
-            dataprm : ['GUID','CUSER','REF','REF_NO','DOC_DATE','DEPOT','LINE_NO','ITEM','QUANTITY']
+                        'PDEPOT:string|50','PLINE_NO:int','PITEM:string|50','PQUANTITY:float','PLOCKED:int'],
+            dataprm : ['GUID','CUSER','REF','REF_NO','DOC_DATE','DEPOT','LINE_NO','ITEM','QUANTITY','LOCKED']
         } 
         tmpDt.deleteCmd = 
         {
