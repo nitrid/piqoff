@@ -283,7 +283,6 @@ export default class NdBase extends React.PureComponent
                     {
                         load: (loadOption) =>
                         {      
-                            console.log(e)
                             return new Promise(async resolve => 
                             {       
                                 // EĞER FONKSİYONA PARAMETRE GÖNDERİLMEMİŞ İSE VE STATE DEĞİŞKENİNDE DAHA ÖNCEDEN ATANMIŞ DATA SOURCE VARSA GRİD REFRESH EDİLİYOR.
@@ -368,8 +367,6 @@ export default class NdBase extends React.PureComponent
                                             }
                                             resolve({data: tmpData,totalCount:tmpData.length});
                                         }
-                                        
-                                        
                                     }
                                     mresolve()
                                 }
