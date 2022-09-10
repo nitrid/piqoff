@@ -41,11 +41,12 @@ export default class barcodeCard extends React.PureComponent
     async init()
     {
         this.itemBarcodeObj.clearAll();
-        this.cmbBarUnit.value = ''
+        this.cmbBarUnit.value= ''
         this.txtBarUnitFactor.setState({value:'0'})
         this.txtItem.setState({value:''})
         this.txtItemName.setState({value:''})
         this.txtBarcode.setState({value:''})
+
     }
     async checkBarcode(pCode)
     {
@@ -96,28 +97,26 @@ export default class barcodeCard extends React.PureComponent
     }
     async _getUnit(pGuid)
     {
-        let tmpSource =
+        let tmpQuery = 
         {
-            source : 
-            {
-                select : 
-                {
-                    query : "SELECT GUID,NAME,FACTOR,TYPE FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID =@ITEM_GUID",
-                    param : ['ITEM_GUID:string|50'],
-                    value : [pGuid]
-                },
-                sql : this.core.sql
-            }
+            query : "SELECT GUID,NAME,FACTOR,TYPE FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID = @ITEM_GUID",
+            param : ['ITEM_GUID:string|50'],
+            value : [pGuid]
         }
-        await this.cmbBarUnit.dataRefresh(tmpSource)
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        if(tmpData.result.recordset.length > 0)
+        {
+            await this.cmbBarUnit.dataRefresh({source:tmpData.result.recordset})
+        }
         if(this.cmbBarUnit.data.datatable.length > 0)
         {
             this.txtBarUnitFactor.setState({value:this.cmbBarUnit.data.datatable.where({'TYPE':0})[0].FACTOR});
             let tmpGuid = this.cmbBarUnit.data.datatable.where({'TYPE':0})[0].GUID
             this.cmbBarUnit.value = tmpGuid;
             this.txtUnitTypeName.setState({value:this.t("MainUnit")})
-           
         }
+        await this.cmbBarUnit.data.datatable.refresh()
+
     }
    render()
     {           
@@ -418,7 +417,7 @@ export default class barcodeCard extends React.PureComponent
                                 {/* cmbBarUnit */}
                                 <Item>
                                     <Label text={this.t("cmbBarUnit")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbBarUnit" 
+                                    <NdSelectBox simple={true} parent={this} id="cmbBarUnit"  searchEnabled={true}
                                     dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"UNIT_GUID"}} 
                                     displayExpr="NAME"                       
                                     valueExpr="GUID"
