@@ -3034,7 +3034,7 @@ export const langFr =
         txtRstItem :  "Produit",
         cmbRstItemType: "Type",
         txtRstItemQuantity:  "Valeur",
-        txtRstItemAmount: "Değer",//BAK
+        txtRstItemAmount: "Değer", //BAK
         pg_Grid:
         {
             title:  "Choix",
@@ -3080,6 +3080,11 @@ export const langFr =
             title: "Seçilmiş Stoklar",
             clmCode: "KODU",
             clmName: "ADI", 
+        },
+        popDiscount: //BAK
+        {
+            txtDiscRate : "Yüzde",
+            txtDiscAmount : "Tutar",
         },
     },
     irs_01_001 :

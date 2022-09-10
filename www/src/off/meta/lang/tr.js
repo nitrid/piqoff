@@ -3148,7 +3148,7 @@ export const langTr =
         txtRstItem : "Stok",
         cmbRstItemType: "Tip",
         txtRstItemQuantity: "Miktar",
-        txtRstItemAmount: "Değer",
+        txtRstItemAmount: "Değer",        
         pg_Grid:
         {
             title: "Seçim",
@@ -3194,6 +3194,11 @@ export const langTr =
             title: "Seçilmiş Stoklar",
             clmCode: "KODU",
             clmName: "ADI", 
+        },
+        popDiscount:
+        {
+            txtDiscRate : "Yüzde",
+            txtDiscAmount : "Tutar",
         },
     },
     irs_01_001 :
