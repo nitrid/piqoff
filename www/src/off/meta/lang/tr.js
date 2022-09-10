@@ -677,11 +677,11 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
         },
-        msgDoclocked:
+        msgDocLocked:
         {
             title: "Dikkat",
             btn01: "Tamam",
-            msg: "Evrak Kilidi Açılmadan Kayıt Edilemez !"
+            msg: "Evrak Kilidi Açılmadan İşlem Yapılamaz !"
         },
         msgItemNotFound:
         {
@@ -702,7 +702,12 @@ export const langTr =
         validDepot : "Depo Seçmelisiniz",
         validCustomerCode : "Cari Kodu Boş Geçilemez",
         validDocDate : "Tarih Seçmelisiniz",
-
+        popDesign : 
+        {
+            title: "Dizayn seçimi",
+            design : "Dizayn",
+            lang : "Evrak Dili"
+        },
     },
     stk_02_002 :
     {
@@ -809,11 +814,11 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
         },
-        msgDoclocked:
+        msgDocLocked:
         {
             title: "Dikkat",
             btn01: "Tamam",
-            msg: "Evrak Kilidi Açılmadan Kayıt Edilemez !"
+            msg: "Evrak Kilidi Açılmadan İşlem Yapılamaz !"
         },
         msgItemNotFound:
         {
@@ -828,7 +833,12 @@ export const langTr =
             btn02: "Yeni Ekle",
             msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Satırlar Birleştirilsin mi ?"
         },
-       
+        popDesign : 
+        {
+            title: "Dizayn seçimi",
+            design : "Dizayn",
+            lang : "Evrak Dili"
+        },
 
     },
     stk_02_003 :
@@ -889,7 +899,7 @@ export const langTr =
         {
             title: "Dikkat",
             btn01: "Tamam",
-            msg: "Evrak Kilidi Açılmadan Kayıt Edilemez !"
+            msg: "Evrak Kilidi Açılmadan İşlem Yapılamaz !"
         },
         msgDocValid:
         {
@@ -954,11 +964,11 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
         },
-        msgDoclocked:
+        msgDocLocked:
         {
             title: "Dikkat",
             btn01: "Tamam",
-            msg: "Evrak Kilidi Açılmadan Kayıt Edilemez !"
+            msg: "Evrak Kilidi Açılmadan İşlem Yapılamaz !"
         },
         msgItemNotFound:
         {
@@ -1106,11 +1116,11 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
         },
-        msgDoclocked:
+        msgDocLocked:
         {
             title: "Dikkat",
             btn01: "Tamam",
-            msg: "Evrak Kilidi Açılmadan Kayıt Edilemez !"
+            msg: "Evrak Kilidi Açılmadan İşlem Yapılamaz !"
         },
         msgItemNotFound:
         {
@@ -1230,11 +1240,11 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
         },
-        msgDoclocked:
+        msgDocLocked:
         {
             title: "Dikkat",
             btn01: "Tamam",
-            msg: "Evrak Kilidi Açılmadan Kayıt Edilemez !"
+            msg: "Evrak Kilidi Açılmadan İşlem Yapılamaz !"
         },
         msgItemNotFound:
         {
@@ -2184,11 +2194,11 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
         },
-        msgDoclocked:
+        msgDocLocked:
         {
             title: "Dikkat",
             btn01: "Tamam",
-            msg: "Evrak Kilidi Açılmadan Kayıt Edilemez !"
+            msg: "Evrak Kilidi Açılmadan İşlem Yapılamaz !"
         },
         msgDiscount:
         {
@@ -2534,11 +2544,11 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
         },
-        msgDoclocked:
+        msgDocLocked:
         {
             title: "Dikkat",
             btn01: "Tamam",
-            msg: "Evrak Kilidi Açılmadan Kayıt Edilemez !"
+            msg: "Evrak Kilidi Açılmadan İşlem Yapılamaz !"
         },
         msgDiscount:
         {
@@ -2821,11 +2831,11 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
         },
-        msgDoclocked:
+        msgDocLocked:
         {
             title: "Dikkat",
             btn01: "Tamam",
-            msg: "Evrak Kilidi Açılmadan Kayıt Edilemez !"
+            msg: "Evrak Kilidi Açılmadan İşlem Yapılamaz !"
         },
         msgDiscount:
         {
@@ -3068,11 +3078,11 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
         },
-        msgDoclocked:
+        msgDocLocked:
         {
             title: "Dikkat",
             btn01: "Tamam",
-            msg: "Evrak Kilidi Açılmadan Kayıt Edilemez !"
+            msg: "Evrak Kilidi Açılmadan İşlem Yapılamaz !"
         },
         msgDiscount:
         {
@@ -3441,11 +3451,11 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
         },
-        msgDoclocked:
+        msgDocLocked:
         {
             title: "Dikkat",
             btn01: "Tamam",
-            msg: "Evrak Kilidi Açılmadan Kayıt Edilemez !"
+            msg: "Evrak Kilidi Açılmadan İşlem Yapılamaz !"
         },
         msgDiscount:
         {
@@ -3679,11 +3689,11 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
         },
-        msgDoclocked:
+        msgDocLocked:
         {
             title: "Dikkat",
             btn01: "Tamam",
-            msg: "Evrak Kilidi Açılmadan Kayıt Edilemez !"
+            msg: "Evrak Kilidi Açılmadan İşlem Yapılamaz !"
         },
         msgDiscount:
         {
@@ -3929,11 +3939,11 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
         },
-        msgDoclocked:
+        msgDocLocked:
         {
             title: "Dikkat",
             btn01: "Tamam",
-            msg: "Evrak Kilidi Açılmadan Kayıt Edilemez !"
+            msg: "Evrak Kilidi Açılmadan İşlem Yapılamaz !"
         },
         msgDiscount:
         {
@@ -4200,11 +4210,11 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
         },
-        msgDoclocked:
+        msgDocLocked:
         {
             title: "Dikkat",
             btn01: "Tamam",
-            msg: "Evrak Kilidi Açılmadan Kayıt Edilemez !"
+            msg: "Evrak Kilidi Açılmadan İşlem Yapılamaz !"
         },
         msgDiscount:
         {
@@ -4430,11 +4440,11 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
         },
-        msgDoclocked:
+        msgDocLocked:
         {
             title: "Dikkat",
             btn01: "Tamam",
-            msg: "Evrak Kilidi Açılmadan Kayıt Edilemez !"
+            msg: "Evrak Kilidi Açılmadan İşlem Yapılamaz !"
         },
         msgDiscount:
         {
@@ -5080,11 +5090,11 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
         },
-        msgDoclocked:
+        msgDocLocked:
         {
             title: "Dikkat",
             btn01: "Tamam",
-            msg: "Evrak Kilidi Açılmadan Kayıt Edilemez !"
+            msg: "Evrak Kilidi Açılmadan İşlem Yapılamaz !"
         },
         msgNotCustomer:
         {
@@ -5213,11 +5223,11 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
         },
-        msgDoclocked:
+        msgDocLocked:
         {
             title: "Dikkat",
             btn01: "Tamam",
-            msg: "Evrak Kilidi Açılmadan Kayıt Edilemez !"
+            msg: "Evrak Kilidi Açılmadan İşlem Yapılamaz !"
         },
         msgNotCustomer:
         {
@@ -5444,11 +5454,11 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
         },
-        msgDoclocked:
+        msgDocLocked:
         {
             title: "Dikkat",
             btn01: "Tamam",
-            msg: "Evrak Kilidi Açılmadan Kayıt Edilemez !"
+            msg: "Evrak Kilidi Açılmadan İşlem Yapılamaz !"
         },
         msgDblAccount:
         {
@@ -6019,11 +6029,11 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
         },
-        msgDoclocked:
+        msgDocLocked:
         {
             title: "Dikkat",
             btn01: "Tamam",
-            msg: "Evrak Kilidi Açılmadan Kayıt Edilemez !"
+            msg: "Evrak Kilidi Açılmadan İşlem Yapılamaz !"
         },
         msgDiscount:
         {
@@ -6249,11 +6259,11 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
         },
-        msgDoclocked:
+        msgDocLocked:
         {
             title: "Dikkat",
             btn01: "Tamam",
-            msg: "Evrak Kilidi Açılmadan Kayıt Edilemez !"
+            msg: "Evrak Kilidi Açılmadan İşlem Yapılamaz !"
         },
         msgDiscount:
         {

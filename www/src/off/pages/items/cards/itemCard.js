@@ -78,10 +78,13 @@ export default class itemCard extends React.PureComponent
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
-        this.init(); 
         if(typeof this.pagePrm != 'undefined')
         {
             this.getItem(this.pagePrm.CODE)
+        }
+        else
+        {
+            this.init(); 
         }
         console.log("2 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
     }    

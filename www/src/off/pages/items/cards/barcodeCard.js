@@ -181,40 +181,6 @@ export default class barcodeCard extends React.PureComponent
                                         }                               
                                     }}/>
                                 </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnDelete" parent={this} icon="trash" type="default"
-                                    onClick={async()=>
-                                    {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
-                                        }
-                                        
-                                        let pResult = await dialog(tmpConfObj);
-                                        if(pResult == 'btn01')
-                                        {
-                                            this.itemBarcodeObj.dt('ITEM_BARCODE').removeAt(0)
-                                            await this.itemBarcodeObj.dt('ITEM_BARCODE').delete();
-                                            this.init(); 
-                                        }
-                                    }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnCopy" parent={this} icon="copy" type="default"
-                                    onClick={()=>
-                                    {
-                                        console.log(this.cmbBarUnit.data.datatable)
-                                    }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnPrint" parent={this} icon="print" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.popDesign.show()
-                                    }}/>
-                                </Item>
                                 <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
