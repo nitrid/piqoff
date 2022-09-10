@@ -3188,6 +3188,12 @@ export const langTr =
             btn02: "Vazgeç",
             msg: "Kaydı silmek istediğinize eminmisiniz ?"
         },
+        pop_PrmItemList:
+        {
+            title: "Seçilmiş Stoklar",
+            clmCode: "KODU",
+            clmName: "ADI", 
+        },
     },
     irs_01_001 :
     {

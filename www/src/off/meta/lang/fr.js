@@ -3074,6 +3074,12 @@ export const langFr =
             btn02: "Abandonne",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
+        pop_PrmItemList: //BAK
+        {
+            title: "Seçilmiş Stoklar",
+            clmCode: "KODU",
+            clmName: "ADI", 
+        },
     },
     irs_01_001 :
     {
