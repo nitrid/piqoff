@@ -184,7 +184,7 @@ export const langFr =
         tabTitleCustomerPrice: "Historique Prix Fournisseur",
         tabTitleSalesContract: "Accord de Vente",
         tabTitleInfo: "Information",
-        tabTitleOtherShop :"Diğer Şube Bilgileri", // bak
+        tabTitleOtherShop :"Autre information sur le magasin.", // bak
         txtTaxSugar: "Taux Sucre(100ML/GR)",
         txtTotalExtraCost : "Prix achat",
         clmtaxSugar : "Taxe Sucre",
@@ -3046,13 +3046,13 @@ export const langFr =
         txtRstItem :  "Produit",
         cmbRstItemType: "Type",
         txtRstItemQuantity:  "Valeur",
-        txtRstItemAmount: "Değer", //BAK
+        txtRstItemAmount: "Évaluer", //BAK
         pg_Grid:
         {
             title:  "Choix",
             clmCode: "Code",
             clmName: "Nom", 
-            clmGrpName: "GRUP", //BAK
+            clmGrpName: "Groupe", //BAK
         },
         msgRef:
         {
@@ -3090,16 +3090,16 @@ export const langFr =
         },
         pop_PrmItemList: //BAK
         {
-            title: "Seçilmiş Stoklar",
-            clmCode: "KODU",
-            clmName: "ADI", 
+            title: "Stock sélectionnées",
+            clmCode: "Code",
+            clmName: "Nom", 
         },
         popDiscount: //BAK
         {
-            title: "İndirim",
-            txtDiscRate : "Yüzde",
-            txtDiscAmount : "Tutar",
-            btnSave: "Kaydet"
+            title: "Promotion",
+            txtDiscRate : "Pourcentage",
+            txtDiscAmount : "Montant",
+            btnSave: "Enregistre"
         },
     },
     irs_01_001 :
@@ -4558,9 +4558,9 @@ export const langFr =
             clmFinishDate : "Fin ",
             clmCreateDate: "Date d'Enregistrement",
             clmDepotName : "Réserve",
-            clmMargin :"Marj", // BAK
-            clmVatExtPrice : "KDV Hariç", // BAK
-            clmCostPrice : "Maliyet", // BAK
+            clmMargin :"Marje", // BAK
+            clmVatExtPrice : "TVA mise appart", // BAK
+            clmCostPrice : "Coût", // BAK
         },
         popItems: 
         {
@@ -4704,9 +4704,9 @@ export const langFr =
             clmFinishDate : "Fin ",
             clmCreateDate: "Date d'Enregistrement",
             clmDepotName : "Réserve",
-            clmMargin :"Marj", // BAK
-            clmVatExtPrice : "KDV Hariç", // BAK
-            clmCostPrice : "Maliyet", // BAK
+            clmMargin :"Marje", // BAK
+            clmVatExtPrice : "TVA mise appart", // BAK
+            clmCostPrice : "Coût", // BAK
         },
         popItems: 
         {
@@ -5352,7 +5352,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Les comptes d'entrées et de sorties ne peuvent pas être les mêmes !" /// DUZ
+            msg: "Les comptes d'entrées et de sorties ne peuvent pas être les mêmes !"
         },
         popSafeToSafe: 
         {
@@ -5433,7 +5433,7 @@ export const langFr =
             msg: "Veuillez saisir les zones nécessaire !"
         },
         validValue :"Ne peut être Vide",
-        zeroValid : "Ne peut pas être '0'"  ///duz
+        zeroValid : "Ne peut pas être 0"
 
     },
     pos_01_001 :
