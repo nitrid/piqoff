@@ -241,6 +241,7 @@ export class docItemsCls
             CONNECT_DOC_DATE : '',
             COST_PRICE : 0,
             MARGIN : 0,
+            DEPOT_QUANTITY : 0
         }
 
         this._initDs();

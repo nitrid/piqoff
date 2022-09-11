@@ -575,6 +575,15 @@ export default class salesOrder extends React.PureComponent
             this.popMultiItem.hide()
         }
     }
+    async checkRow()
+    {
+        for (let i = 0; i < this.docObj.docOrders.dt().length; i++) 
+        {
+            this.docObj.docOrders.dt()[i].INPUT = this.docObj.dt()[0].INPUT
+            this.docObj.docOrders.dt()[i].OUTPUT = this.docObj.dt()[0].OUTPUT
+            this.docObj.docOrders.dt()[i].DOC_DATE = this.docObj.dt()[0].DOC_DATE
+        }
+    }
     render()
     {
         return(
@@ -901,8 +910,9 @@ export default class salesOrder extends React.PureComponent
                                     value=""
                                     searchEnabled={true}
                                     onValueChanged={(async()=>
-                                        {
-                                        }).bind(this)}
+                                    {
+                                        this.checkRow()
+                                    }).bind(this)}
                                     data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE IN(0,2)"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
@@ -1036,7 +1046,8 @@ export default class salesOrder extends React.PureComponent
                                     <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
                                     dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
                                     onValueChanged={(async()=>
-                                        {
+                                    {
+                                        this.checkRow()
                                     }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmslsDoc" + this.tabIndex}>

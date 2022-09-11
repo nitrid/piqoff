@@ -1043,6 +1043,16 @@ export default class purchaseInvoice extends React.PureComponent
             }
         }
     }
+    async checkRow()
+    {
+        for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+        {
+            this.docObj.docItems.dt()[i].INPUT = this.docObj.dt()[0].INPUT
+            this.docObj.docItems.dt()[i].OUTPUT = this.docObj.dt()[0].OUTPUT
+            this.docObj.docItems.dt()[i].DOC_DATE = this.docObj.dt()[0].DOC_DATE
+            this.docObj.docItems.dt()[i].SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+        }
+    }
     render()
     {
         return(
@@ -1352,6 +1362,7 @@ export default class purchaseInvoice extends React.PureComponent
                                     onValueChanged={(async()=>
                                         {
                                             this.docObj.docCustomer.dt()[0].INPUT = this.cmbDepot.value
+                                            this.checkRow()
                                             if(this.txtCustomerCode.value != '')
                                             {
                                                 this.frmDocItems.option('disabled',false)
@@ -1498,8 +1509,9 @@ export default class purchaseInvoice extends React.PureComponent
                                     <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
                                     dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
                                     onValueChanged={(async()=>
-                                        {
-                                            this.docObj.docCustomer.dt()[0].DOC_DATE = moment(this.dtDocDate.value).format("DD/MM/YYYY") 
+                                    {
+                                        this.checkRow()
+                                        this.docObj.docCustomer.dt()[0].DOC_DATE = moment(this.dtDocDate.value).format("DD/MM/YYYY") 
                                     }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmPurcInv"  + this.tabIndex}>
@@ -1514,6 +1526,7 @@ export default class purchaseInvoice extends React.PureComponent
                                     dt={{data:this.docObj.dt('DOC'),field:"SHIPMENT_DATE"}}
                                     onValueChanged={(async()=>
                                     {
+                                        this.checkRow()
                                     }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmPurcInv"  + this.tabIndex}>
@@ -1719,27 +1732,27 @@ export default class purchaseInvoice extends React.PureComponent
                                     width={'100%'}
                                     dbApply={false}
                                     onCellPrepared={(e) =>
+                                    {
+                                        
+                                        if(e.rowType === "data" && e.column.dataField === "DIFF_PRICE" )
                                         {
-                                            
-                                            if(e.rowType === "data" && e.column.dataField === "DIFF_PRICE" )
+                                            this.docObj.docItems.dt()[e.rowIndex].DIFF_PRICE = e.data.PRICE - e.data.CUSTOMER_PRICE
+                                            if(e.data.PRICE > e.data.CUSTOMER_PRICE)
                                             {
-                                                this.docObj.docItems.dt()[e.rowIndex].DIFF_PRICE = e.data.PRICE - e.data.CUSTOMER_PRICE
-                                                if(e.data.PRICE > e.data.CUSTOMER_PRICE)
-                                                {
-                                                    e.cellElement.style.color ="red"
-                                                    e.cellElement.style.fontWeight ="bold"
-                                                }
-                                                else if(e.data.PRICE < e.data.CUSTOMER_PRICE)
-                                                {
-                                                    e.cellElement.style.color ="green"
-                                                    e.cellElement.style.fontWeight ="bold"
-                                                }
-                                                else
-                                                {
-                                                    e.cellElement.style.color ="blue"
-                                                }
+                                                e.cellElement.style.color ="red"
+                                                e.cellElement.style.fontWeight ="bold"
                                             }
-                                        }}
+                                            else if(e.data.PRICE < e.data.CUSTOMER_PRICE)
+                                            {
+                                                e.cellElement.style.color ="green"
+                                                e.cellElement.style.fontWeight ="bold"
+                                            }
+                                            else
+                                            {
+                                                e.cellElement.style.color ="blue"
+                                            }
+                                        }
+                                    }}
                                     onRowUpdated={async(e)=>{
                                         let rowIndex = e.component.getRowIndexByKey(e.key)
 
