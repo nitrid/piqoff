@@ -39,7 +39,7 @@ export default class salesOrdList extends React.PureComponent
         this.lastPosSaleDt = new datatable();
         this.lastPosPayDt = new datatable();
         this.state={ticketId :""}
-        console.log(this)
+        
         Number.money = this.sysParam.filter({ID:'MoneySymbol',TYPE:0}).getValue()
 
 

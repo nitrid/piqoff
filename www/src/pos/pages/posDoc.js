@@ -560,8 +560,8 @@ export default class posDoc extends React.PureComponent
             let tmpPriceDt = new datatable()
             tmpPriceDt.selectCmd = 
             {
-                query : "SELECT dbo.FN_PRICE_SALE(@GUID,@QUANTITY,GETDATE()) AS PRICE",
-                param : ['GUID:string|50','QUANTITY:float'],
+                query : "SELECT dbo.FN_PRICE_SALE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER) AS PRICE",
+                param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50'],
                 local : 
                 {
                     type : "select",
@@ -572,9 +572,10 @@ export default class posDoc extends React.PureComponent
                     },
                 }
             }
-            console.log(tmpItemsDt[0].UNIT_FACTOR)
-            tmpPriceDt.selectCmd.value = [tmpItemsDt[0].GUID,tmpQuantity * tmpItemsDt[0].UNIT_FACTOR]
+            
+            tmpPriceDt.selectCmd.value = [tmpItemsDt[0].GUID,tmpQuantity * tmpItemsDt[0].UNIT_FACTOR,this.posObj.dt()[0].CUSTOMER_GUID]
             await tmpPriceDt.refresh();  
+            console.log(tmpPriceDt)
             if(tmpPriceDt.length > 0 && tmpPrice == 0)
             {
                 tmpPrice = tmpPriceDt[0].PRICE
@@ -3487,8 +3488,8 @@ export default class posDoc extends React.PureComponent
                     {
                         select:
                         {
-                            query : "SELECT CODE,NAME,dbo.FN_PRICE_SALE(GUID,1,GETDATE()) AS PRICE FROM [dbo].[ITEMS_VW_01] WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) AND STATUS = 1",
-                            param : ['VAL:string|50'],
+                            query : "SELECT CODE,NAME,dbo.FN_PRICE_SALE(GUID,1,GETDATE(),@CUSTOMER) AS PRICE FROM [dbo].[ITEMS_VW_01] WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) AND STATUS = 1",
+                            param : ['VAL:string|50','CUSTOMER:string|50'],
                             local : 
                             {
                                 type : "select",
@@ -3509,7 +3510,7 @@ export default class posDoc extends React.PureComponent
                     {
                         if(pData.length > 0)
                         {
-                            this.getItem(this.txtBarcode.value + pData[0].CODE)
+                            this.getItem(this.txtBarcode.value + pData[0].CODE,this.posObj.dt()[0].CUSTOMER_GUID)
                         }
                     }}>
                         <Column dataField="CODE" caption={"CODE"} width={150} />

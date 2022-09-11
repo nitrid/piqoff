@@ -147,20 +147,23 @@ export default class itemList extends React.PureComponent
                     groupBy : this.groupList,
                     select : 
                     {
-                        query : "SELECT *,MAIN_UNIT_NAME AS UNIT_NAME," + 
-                                "CASE WHEN PRICE_SALE <> 0 THEN " +
-                                "CONVERT(nvarchar,ROUND((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE,2)) + '/ %' + CONVERT(nvarchar,ROUND((((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / (PRICE_SALE / ((VAT / 100) + 1))) * 100,2)) " +
+                        query : "SELECT GUID,CDATE,CUSER,CUSER_NAME,LDATE,LUSER,LUSER_NAME,TYPE,SPECIAL,CODE,NAME,SNAME,VAT,COST_PRICE,MIN_PRICE,MAX_PRICE,STATUS,MAIN_GRP,MAIN_GRP_NAME,SUB_GRP,ORGINS,ITEMS_GRP_GUID,ORGINS_NAME,RAYON,SHELF,SECTOR, " +
+                                "SALE_JOIN_LINE,TICKET_REST,WEIGHING,MAX(BARCODE) AS BARCODE,MAX(BARCODE_GUID) AS BARCODE_GUID,UNIT_ID,UNIT_NAME,UNIT_FACTOR,MULTICODE,CUSTOMER_GUID,CUSTOMER_CODE,CUSTOMER_NAME,CUSTOMER_PRICE,PRICE_SALE, " +
+                                "CASE WHEN PRICE_SALE <> 0 THEN  " +
+                                "CONVERT(nvarchar,ROUND((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE,2)) + '/ %' + CONVERT(nvarchar,ROUND((((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / (PRICE_SALE / ((VAT / 100) + 1))) * 100,2))  " +
+                                "ELSE '0'   " +
+                                "END AS MARGIN,  " +
+                                "CASE WHEN PRICE_SALE <> 0 THEN  " +
+                                "CONVERT(nvarchar,ROUND(((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / 1.12,2)) + '/ %' + CONVERT(nvarchar,ROUND(((((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / 1.12) / (PRICE_SALE / ((VAT / 100) + 1))) * 100,2))  " +
                                 "ELSE '0'  " +
-                                "END AS MARGIN, " +
-                                "CASE WHEN PRICE_SALE <> 0 THEN " +
-                                "CONVERT(nvarchar,ROUND(((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / 1.12,2)) + '/ %' + CONVERT(nvarchar,ROUND(((((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / 1.12) / (PRICE_SALE / ((VAT / 100) + 1))) * 100,2)) " +
-                                "ELSE '0' " +
-                                "END AS NETMARGIN " +
-                                "FROM ITEMS_EDIT_VW_01 " +
+                                "END AS NETMARGIN  " +
+                                "FROM ITEMS_BARCODE_MULTICODE_VW_01  " +
                                 "WHERE {0}" +
                                 "((NAME LIKE @NAME +'%') OR (@NAME = '')) AND " +
                                 "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) AND " +
-                                "((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND ((STATUS = @STATUS) OR (@STATUS = -1))",
+                                "((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND ((STATUS = @STATUS) OR (@STATUS = -1)) " +
+                                "GROUP BY GUID,CDATE,CUSER,CUSER_NAME,LDATE,LUSER,LUSER_NAME,TYPE,SPECIAL,CODE,NAME,SNAME,VAT,COST_PRICE,MIN_PRICE,MAX_PRICE,STATUS,MAIN_GRP,MAIN_GRP_NAME,SUB_GRP,ORGINS,ITEMS_GRP_GUID,ORGINS_NAME,RAYON,SHELF,SECTOR, " +
+                                "SALE_JOIN_LINE,TICKET_REST,WEIGHING,UNIT_ID,UNIT_NAME,UNIT_FACTOR,MULTICODE,CUSTOMER_GUID,CUSTOMER_CODE,CUSTOMER_NAME,CUSTOMER_PRICE,PRICE_SALE ",
                         param : ['NAME:string|250','MAIN_GRP:string|25','CUSTOMER_CODE:string|25','STATUS:int'],
                         value : [this.txtUrunAdi.value.replaceAll("*", "%"),this.cmbUrunGrup.value,this.cmbTedarikci.value,tmpStatus]
                     },

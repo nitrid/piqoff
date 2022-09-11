@@ -126,6 +126,19 @@ export default class purchaseContract extends React.PureComponent
         tmpEmpty.PRICE = this.txtPopItemsPrice.value
         tmpEmpty.START_DATE = this.dtPopStartDate.value
         tmpEmpty.FINISH_DATE = this.dtPopEndDate.value
+        let tmpQuery = 
+        {
+            query :"SELECT COST_PRICE,VAT FROM ITEMS WHERE ITEMS.GUID = @GUID",
+            param : ['GUID:string|50'],
+            value : [this.txtPopItemsCode.GUID]
+        }
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        if(tmpData.result.recordset.length > 0)
+        {
+            tmpEmpty.COST_PRICE = tmpData.result.recordset[0].COST_PRICE
+            tmpEmpty.PRICE_VAT_EXT = (this.txtPopItemsPrice.value / ((tmpData.result.recordset[0].VAT / 100) + 1))
+            tmpEmpty.VAT_RATE = tmpData.result.recordset[0].VAT
+        }
         if(this.cmbDepot.value != '')
         {
             tmpEmpty.DEPOT = this.cmbDepot.value 
@@ -134,6 +147,7 @@ export default class purchaseContract extends React.PureComponent
         
     
         this.contractObj.addEmpty(tmpEmpty);
+        this._calculateMargin()
     }
     async multiItemAdd()
     {
@@ -240,6 +254,7 @@ export default class purchaseContract extends React.PureComponent
             tmpEmpty.ITEM = this.multiItemData[i].GUID
             tmpEmpty.ITEM_CODE = this.multiItemData[i].CODE
             tmpEmpty.ITEM_NAME = this.multiItemData[i].NAME
+            tmpEmpty.COST_PRICE = this.multiItemData[i].COST_PRICE
             tmpEmpty.CUSTOMER = this.txtCustomerCode.GUID
             tmpEmpty.CUSTOMER_CODE = this.txtCustomerCode.value
             tmpEmpty.CUSTOMER_NAME = this.txtCustomerName.value
@@ -255,6 +270,18 @@ export default class purchaseContract extends React.PureComponent
             this.contractObj.addEmpty(tmpEmpty);
         }
         this.popMultiItem.hide()
+    }
+    async _calculateMargin()
+    {
+        for(let  i= 0; i < this.contractObj.dt().length; i++)
+        {
+            let tmpMargin = (this.contractObj.dt()[i].PRICE_VAT_EXT) - (this.contractObj.dt()[i].COST_PRICE )
+            let tmpMarginRate = (tmpMargin /(this.contractObj.dt()[i].PRICE_VAT_EXT)) * 100
+            this.contractObj.dt()[i].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+            console.log(tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2))
+            console.log( tmpMarginRate.toFixed(2))
+            console.log(this.contractObj.dt()[i].MARGIN)
+        }
     }
     render()
     {
@@ -718,7 +745,9 @@ export default class purchaseContract extends React.PureComponent
                                     dbApply={false}
                                     onRowUpdated={async(e)=>
                                     {
-                                       
+                                        let rowIndex = e.component.getRowIndexByKey(e.key)
+                                        this.contractObj.dt()[rowIndex].PRICE_VAT_EXT = (e.key.PRICE / ((e.key.VAT_RATE / 100) + 1))
+                                        this._calculateMargin()
                                     }}
                                     onRowRemoved={async (e)=>{
                                     }}
@@ -729,11 +758,14 @@ export default class purchaseContract extends React.PureComponent
                                         <Pager
                                         visible={true} />
                                         <Export fileName={this.lang.t("menu.cnt_02_001")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdContracts.clmCreateDate")} width={200}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdContracts.clmItemCode")} width={150} />
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdContracts.clmItemName")} width={350} />
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdContracts.clmCreateDate")} allowEditing={false} width={200}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdContracts.clmItemCode")} width={150} allowEditing={false}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdContracts.clmItemName")} width={350} allowEditing={false}/>
+                                        <Column dataField="COST_PRICE" caption={this.t("grdContracts.clmCostPrice")} width={80} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
                                         <Column dataField="PRICE" caption={this.t("grdContracts.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                        <Column dataField="PRICE_VAT_EXT" caption={this.t("grdContracts.clmVatExtPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
                                         <Column dataField="QUANTITY" caption={this.t("grdContracts.clmQuantity")} dataType={'number'}/>
+                                        <Column dataField="MARGIN" caption={this.t("grdContracts.clmMargin")} allowEditing={false}/>
                                         <Column dataField="START_DATE" caption={this.t("grdContracts.clmStartDate")} dataType={'date'}
                                         editorOptions={{value:null}}
                                         cellRender={(e) => 
@@ -756,7 +788,7 @@ export default class purchaseContract extends React.PureComponent
                                              
                                              return
                                          }}/>
-                                        <Column dataField="DEPOT_NAME" caption={this.t("grdContracts.clmDepotName")} />
+                                        <Column dataField="DEPOT_NAME" caption={this.t("grdContracts.clmDepotName")} allowEditing={false}/>
                                     </NdGrid>
                                 </Item>
                             </Form>

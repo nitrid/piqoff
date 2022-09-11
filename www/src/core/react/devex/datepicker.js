@@ -60,9 +60,9 @@ export default class NdDatePicker extends Base
     }
     set value(e)
     {        
-        if(typeof e == 'undefined')
+        if(typeof e == 'undefined' || e == null)
         {
-            return;
+            e = '1970-01-01';
         }
         //VALUE DEĞİŞTİĞİNDE BU DEĞİŞİKLİK DATATABLE A YANSITMAK İÇİN YAPILDI.
         if(typeof this.props.dt != 'undefined' && typeof this.props.dt.data != 'undefined' && this.props.dt.data.length > 0 && typeof this.props.dt.field != 'undefined')

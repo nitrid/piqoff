@@ -60,8 +60,6 @@ export default class DepotCard extends React.PureComponent
                 
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
-                this.btnCopy.setState({disabled:false});
-                this.btnPrint.setState({disabled:false});
             }
         })
         this.depotObj.ds.on('onEdit',(pTblName,pData) =>
@@ -72,8 +70,6 @@ export default class DepotCard extends React.PureComponent
                 this.btnNew.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
-                this.btnCopy.setState({disabled:false});
-                this.btnPrint.setState({disabled:false});
 
                 pData.rowData.CUSER = this.user.CODE
             }                 
@@ -85,8 +81,6 @@ export default class DepotCard extends React.PureComponent
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:true});
             this.btnDelete.setState({disabled:false});
-            this.btnCopy.setState({disabled:false});
-            this.btnPrint.setState({disabled:false});          
         })
         this.depotObj.ds.on('onDelete',(pTblName) =>
         {            
@@ -94,8 +88,6 @@ export default class DepotCard extends React.PureComponent
             this.btnNew.setState({disabled:true});
             this.btnSave.setState({disabled:false});
             this.btnDelete.setState({disabled:false});
-            this.btnCopy.setState({disabled:false});
-            this.btnPrint.setState({disabled:false});
         })
     }
     async getDepot(pCode)
@@ -248,20 +240,6 @@ export default class DepotCard extends React.PureComponent
                                         
                                     }}/>
                                 </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnCopy" parent={this} icon="copy" type="default"
-                                    onClick={()=>
-                                    {
-                                        
-                                    }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnPrint" parent={this} icon="print" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.popDesign.show()
-                                    }}/>
-                                </Item>
                                 <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
@@ -394,7 +372,14 @@ export default class DepotCard extends React.PureComponent
                                                
                                         }).bind(this)}
                                     />
-                                </Item>          
+                                </Item>    
+                                 {/* chkActive */}
+                                 <Item>
+                                    <Label text={this.t("chkActive")} alignment="right" />
+                                    <NdCheckBox id="chkActive" parent={this} defaultValue={true} dt={{data:this.depotObj.dt('DEPOT'),field:"STATUS"}}
+                                    param={this.param.filter({ELEMENT:'chkActive',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'chkActive',USERS:this.user.CODE})}/>
+                                </Item>      
                             </Form>
                         </div>
                     </div>

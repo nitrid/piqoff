@@ -1316,6 +1316,7 @@ export class depotCls
             CODE : '',
             NAME : '',
             TYPE : 0,
+            STATUS : true,
            
         }
 
@@ -1337,10 +1338,10 @@ export class depotCls
                     "@CUSER = @PCUSER, " + 
                     "@CODE = @PCODE, " + 
                     "@NAME = @PNAME, " + 
-                    "@TYPE = @PTYPE " ,
-                   
-            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PTYPE:int'],
-            dataprm : ['GUID','CUSER','CODE','NAME','TYPE']
+                    "@TYPE = @PTYPE, "  +
+                    "@STATUS = @PSTATUS " ,
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PTYPE:int','PSTATUS:bit'],
+            dataprm : ['GUID','CUSER','CODE','NAME','TYPE','STATUS']
         } 
         tmpDt.updateCmd = 
         {
@@ -1349,9 +1350,10 @@ export class depotCls
             "@CUSER = @PCUSER, " + 
             "@CODE = @PCODE, " + 
             "@NAME = @PNAME, " + 
-            "@TYPE = @PTYPE " ,
-            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PTYPE:int'],
-            dataprm : ['GUID','CUSER','CODE','NAME','TYPE']
+            "@TYPE = @PTYPE, "  +
+            "@STATUS = @PSTATUS " ,
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PTYPE:int','PSTATUS:bit'],
+            dataprm : ['GUID','CUSER','CODE','NAME','TYPE','STATUS']
         } 
         tmpDt.deleteCmd = 
         {

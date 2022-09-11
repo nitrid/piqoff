@@ -42,7 +42,32 @@ export default class itemCard extends React.PureComponent
             query :"SELECT * FROM [ITEM_PRICE_LOG_VW_01] WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 0 ORDER BY LDATE DESC ",
             param : ['ITEM_GUID:string|50']
         }
-
+        this.salesContractObj = new datatable()
+        this.salesContractObj.selectCmd =
+        {
+            query :"SELECT * FROM [SALES_CONTRACT_Vw_01] WHERE ITEM = @ITEM_GUID AND TYPE = 1 AND START_DATE <= GETDATE() AND FINISH_DATE >= GETDATE()   ORDER BY LDATE DESC ",
+            param : ['ITEM_GUID:string|50']
+        }
+        this.otherShopObj = new datatable()
+        this.otherShopObj.selectCmd =
+        {
+            query :"SELECT  " +
+            "OTHER_SHOP.CODE, " +
+            "OTHER_SHOP.NAME, " +
+            "MAX(OTHER_SHOP.BARCODE) AS BARCODE, " +
+            "OTHER_SHOP.MULTICODE, " +
+            "OTHER_SHOP.SALE_PRICE, " +
+            "OTHER_SHOP.CUSTOMER, " +
+            "OTHER_SHOP.CUSTOMER_PRICE, " +
+            "OTHER_SHOP.SHOP " +
+            "FROM ITEM_BARCODE_VW_01 AS BARCODE " +
+            "INNER JOIN OTHER_SHOP_ITEMS AS OTHER_SHOP " +
+            "ON BARCODE.BARCODE = OTHER_SHOP.BARCODE " +
+            "WHERE BARCODE.ITEM_GUID = @ITEM_GUID " +
+            "GROUP BY OTHER_SHOP.CODE,OTHER_SHOP.NAME, OTHER_SHOP.MULTICODE, OTHER_SHOP.SALE_PRICE, OTHER_SHOP.CUSTOMER_PRICE, OTHER_SHOP.CUSTOMER,OTHER_SHOP.SHOP " ,
+            param : ['ITEM_GUID:string|50']
+        }
+        
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
         this._onItemRendered = this._onItemRendered.bind(this)
@@ -53,10 +78,13 @@ export default class itemCard extends React.PureComponent
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
-        this.init(); 
         if(typeof this.pagePrm != 'undefined')
         {
             this.getItem(this.pagePrm.CODE)
+        }
+        else
+        {
+            this.init(); 
         }
         console.log("2 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
     }    
@@ -68,6 +96,8 @@ export default class itemCard extends React.PureComponent
         this.itemsPriceSupply.clearAll();     
         this.itemsPriceLogObj.clearAll();     
         this.salesPriceLogObj.clear()   
+        this.salesContractObj.clear()   
+        this.otherShopObj.clear()
 
         this.itemsObj.ds.on('onAddRow',(pTblName,pData) =>
         {            
@@ -81,13 +111,12 @@ export default class itemCard extends React.PureComponent
                 else
                 {
                     this.btnNew.setState({disabled:false});
-                    this.btnBack.setState({disabled:true});
+                    this.btnBack.setState({disabled:false});
                 }
                 
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
                 this.btnCopy.setState({disabled:false});
-                this.btnPrint.setState({disabled:false});
             }
             //ALT BİRİM FİYAT HESAPLAMASI
             this.underPrice();
@@ -106,7 +135,6 @@ export default class itemCard extends React.PureComponent
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
                 this.btnCopy.setState({disabled:false});
-                this.btnPrint.setState({disabled:false});
 
                 pData.rowData.CUSER = this.user.CODE
                 this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSER = this.user.CODE
@@ -124,12 +152,11 @@ export default class itemCard extends React.PureComponent
         this.itemsObj.ds.on('onRefresh',(pTblName) =>
         {        
             this.prevCode = this.itemsObj.dt('ITEMS').length > 0 ? this.itemsObj.dt('ITEMS')[0].CODE : '';
-            this.btnBack.setState({disabled:true});
+            this.btnBack.setState({disabled:false});
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:true});
             this.btnDelete.setState({disabled:false});
             this.btnCopy.setState({disabled:false});
-            this.btnPrint.setState({disabled:false});
             //ALT BİRİM FİYAT HESAPLAMASI
             this.underPrice()
             //MARGIN HESAPLAMASI
@@ -143,7 +170,6 @@ export default class itemCard extends React.PureComponent
             this.btnSave.setState({disabled:false});
             this.btnDelete.setState({disabled:false});
             this.btnCopy.setState({disabled:false});
-            this.btnPrint.setState({disabled:false});
         })        
 
         this.itemsObj.addEmpty();
@@ -190,6 +216,11 @@ export default class itemCard extends React.PureComponent
         console.log("11 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
         App.instance.setState({isExecute:true})
         this.itemsObj.clearAll();
+        this.txtRef.value = Math.floor(Date.now() / 1000)
+        this.txtCustomer.value = "";
+        this.txtCustomer.displayValue = "";   
+        this.txtBarcode.readOnly = false;   
+        this.imgFile.value = ""; 
         await this.itemsObj.load({CODE:pCode});
         //TEDARİKÇİ FİYAT GETİR İŞLEMİ.  
         await this.itemsPriceSupply.load({ITEM_GUID:this.itemsObj.dt()[0].GUID,TYPE:1})  
@@ -207,13 +238,39 @@ export default class itemCard extends React.PureComponent
 
         this.salesPriceLogObj.selectCmd.value = [this.itemsObj.dt()[0].GUID]
         await this.salesPriceLogObj.refresh();
+        this.salesContractObj.selectCmd.value = [this.itemsObj.dt()[0].GUID]
+        await this.salesContractObj.refresh();
+        this.otherShopObj.selectCmd.value = [this.itemsObj.dt()[0].GUID]
+        await this.otherShopObj.refresh();
 
         if(this.salesPriceLogObj.length > 0)
         {
             this.txtLastSalePrice.value = this.salesPriceLogObj[0].PRICE
         }
-
+       
         App.instance.setState({isExecute:false})
+        if(typeof this.txtSalePrice != 'undefined')
+        {
+            let tmpQuery = 
+            {
+                query :"SELECT [dbo].[FN_PRICE_SALE](@GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000') AS PRICE",
+                param : ['GUID:string|50'],
+                value : [this.itemsObj.dt()[0].GUID]
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            if(tmpData.result.recordset.length > 0)
+            {
+                this.txtSalePrice.value = tmpData.result.recordset[0].PRICE
+                this.txtSalePrice.setState({value:tmpData.result.recordset[0].PRICE})
+                console.log(this.txtSalePrice)
+            }
+            else
+            {
+                this.txtSalePrice.value = 0
+                this.txtSalePrice.setState({value:0})
+            }
+        }
+     
         console.log("12 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
     }
     async checkItem(pCode)
@@ -389,7 +446,7 @@ export default class itemCard extends React.PureComponent
         }
         else if(e.itemData.title == this.t("tabTitleSalesContract"))
         {
-            // satış anlaşması
+            await this.grdSalesContract.dataRefresh({source:this.salesContractObj});
         }
         else if(e.itemData.title == this.t("tabExtraCost"))
         {
@@ -399,6 +456,30 @@ export default class itemCard extends React.PureComponent
         {
             console.log(this.itemsObj.dt())
             await this.grdItemInfo.dataRefresh({source:this.itemsObj.dt()});
+        }
+        else if(e.itemData.title == this.t("tabTitleOtherShop"))
+        {
+            let tmpQuery = 
+            {
+                query :"SELECT [dbo].[FN_PRICE_SALE](@GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000') AS PRICE",
+                param : ['GUID:string|50'],
+                value : [this.itemsObj.dt()[0].GUID]
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            if(tmpData.result.recordset.length > 0)
+            {
+                this.txtSalePrice.value = tmpData.result.recordset[0].PRICE
+                this.txtSalePrice.setState({value:tmpData.result.recordset[0].PRICE})
+                console.log(this.txtSalePrice)
+            }
+            else
+            {
+                this.txtSalePrice.value = 0
+                this.txtSalePrice.setState({value:0})
+            }
+            this.txtTabCostPrice.value = this.txtCostPrice.value 
+            this.txtTabCostPrice.setState({value:this.txtCostPrice.value})
+            await this.grdOtherShop.dataRefresh({source:this.otherShopObj});
         }
     }
     underPrice()
@@ -679,22 +760,46 @@ export default class itemCard extends React.PureComponent
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnCopy" parent={this} icon="copy" type="default"
-                                    onClick={()=>
+                                    onClick={async()=>
                                     {
                                         
-                                    }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnPrint" parent={this} icon="print" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.popDesign.show()
+                                        let tmpItem = {...this.itemsObj.dt()[0]}
+                                        this.itemsObj.clearAll();
+
+                                        this.txtRef.value = Math.floor(Date.now() / 1000)
+                                        this.txtCustomer.value = "";
+                                        this.txtCustomer.displayValue = "";   
+                                        this.txtBarcode.displayValue = ""; 
+                                        this.txtBarcode.value = ""; 
+                                        this.txtBarcode.readOnly = false;   
+                                        this.imgFile.value = ""; 
+                                        this.itemsPriceSupply.clearAll();     
+                                        this.itemsPriceLogObj.clearAll();     
+                                        this.salesPriceLogObj.clear()   
+                                        this.salesContractObj.clear()   
+                                        this.otherShopObj.clear()
+
+                                        this.core.util.waitUntil(0)
+                                        this.itemsObj.addEmpty(); 
+                                        this.itemsObj.dt()[0].VAT = tmpItem.VAT
+                                        this.itemsObj.dt()[0].NAME = tmpItem.NAME
+                                        this.itemsObj.dt()[0].MAIN_GRP = tmpItem.MAIN_GRP
+                                        this.itemsObj.dt()[0].TYPE = tmpItem.TYPE
+                                        this.itemsObj.dt()[0].CODE= Math.floor(Date.now() / 1000)
+                                        this.itemsObj.dt()[0].WEIGHING = tmpItem.WEIGHING
+                                        this.itemsObj.dt()[0].SALE_JOIN_LINE = tmpItem.SALE_JOIN_LINE
+                                        this.itemsObj.dt()[0].TICKET_REST = tmpItem.TICKET_REST
+                                        this.itemsObj.dt()[0].SNAME = tmpItem.SNAME
+
+                                        console.log(this.itemsObj.dt())
+
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnAnalysis" parent={this} icon="chart" type="default"
                                     onClick={async ()=>
                                     {
+                                        App.instance.setState({isExecute:true})
                                         this.dtFirstAnalysis.value = moment(new Date())
                                         this.dtLastAnalysis.value = moment(new Date())
                                         let tmpQuery = 
@@ -722,6 +827,7 @@ export default class itemCard extends React.PureComponent
                                         {
                                             this.setState({dataRefresh:{0:{QUANTITY:0,DOC_DATE:''}}})
                                         }
+                                        App.instance.setState({isExecute:false})
                                         this.popAnalysis.show()
                                     }}/>
                                 </Item>
@@ -1033,7 +1139,7 @@ export default class itemCard extends React.PureComponent
                                         this.taxSugarCalculate()
                                     }}>
                                        <Validator validationGroup={this.state.isTaxSugar ? "frmItems" + this.tabIndex : ''}>
-                                            <RequiredRule message="Şeker Oranını Girmelisiniz !" />
+                                            <RangeRule min={4.001} message={"Şeker oranını doğru giriniz !"} />
                                         </Validator>
                                     </NdNumberBox>
                                 </Item>                          
@@ -1513,7 +1619,6 @@ export default class itemCard extends React.PureComponent
                                                 <Column dataField="CUSER_NAME" caption={this.t("grdSalesContract.clmUser")} />
                                                 <Column dataField="CUSTOMER_CODE" caption={this.t("grdSalesContract.clmCode")} />
                                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdSalesContract.clmName")} />
-                                                <Column dataField="CHANGE_DATE" caption={this.t("grdSalesContract.clmDate")} allowEditing={false} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
                                                 <Column dataField="PRICE" caption={this.t("grdSalesContract.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                             </NdGrid>
                                         </div>
@@ -1559,6 +1664,44 @@ export default class itemCard extends React.PureComponent
                                                 <Column dataField="CUSER_NAME" caption={this.t("grdItemInfo.cUser")} />
                                                 <Column dataField="LDATE" caption={this.t("grdItemInfo.lDate")} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ssZ"}/>
                                                 <Column dataField="LUSER_NAME" caption={this.t("grdItemInfo.lUser")} />
+                                            </NdGrid>
+                                        </div>
+                                    </div>
+                                </Item>
+                                <Item title={this.t("tabTitleOtherShop")}>
+                                <div className='row px-2 py-2'>
+                                        <div className='col-2'>
+                                            <NdNumberBox id="txtTabCostPrice" parent={this} title={this.t("txtCostPrice")}  titleAlign={"top"} tabIndex={this.tabIndex}
+                                            dt={{data:this.itemsObj.dt('ITEMS'),field:"COST_PRICE"}} readOnly={true}
+                                            format={"#,##0.000"} step={0.1}>
+                                            </NdNumberBox>
+                                        </div>                                        
+                                        <div className='col-2'>
+                                            <NdNumberBox id="txtSalePrice" parent={this} title={this.t("txtSalePrice")}  titleAlign={"top"} tabIndex={this.tabIndex}
+                                            format={"#,##0.000"} readOnly={true}>
+                                            </NdNumberBox>
+                                        </div>
+                                    </div>
+                                    <div className='row px-2 py-2'>
+                                        <div className='col-12'>
+                                            <NdGrid parent={this} id={"grdOtherShop"} 
+                                            showBorders={true} 
+                                            columnsAutoWidth={true} 
+                                            allowColumnReordering={true} 
+                                            allowColumnResizing={true} 
+                                            height={'100%'} 
+                                            width={'100%'}
+                                            >
+                                                <Paging defaultPageSize={5} />
+                                                <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
+                                                <Column dataField="CUSTOMER_PRICE" caption={this.t("grdOtherShop.clmCustomerPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                                <Column dataField="SALE_PRICE" caption={this.t("grdOtherShop.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                                <Column dataField="MULTICODE" caption={this.t("grdOtherShop.clmMulticode")} />
+                                                <Column dataField="CUSTOMER" caption={this.t("grdOtherShop.clmCustomer")} />
+                                                <Column dataField="NAME" caption={this.t("grdOtherShop.clmName")}  width={250}/>
+                                                <Column dataField="CODE" caption={this.t("grdOtherShop.clmCode")} />
+                                                <Column dataField="BARCODE" caption={this.t("grdOtherShop.clmBarcode")} />
+                                                <Column dataField="SHOP" caption={this.t("grdOtherShop.clmShop")} />
                                             </NdGrid>
                                         </div>
                                     </div>
@@ -1998,6 +2141,7 @@ export default class itemCard extends React.PureComponent
                                                 {
                                                     let tmpEmptyMulti = {...this.itemsObj.itemMultiCode.empty};
                                                     
+                                                    console.log(this.itemsObj.dt())
                                                     tmpEmptyMulti.CUSER = this.core.auth.data.CODE,  
                                                     tmpEmptyMulti.ITEM_GUID = this.itemsObj.dt()[0].GUID 
                                                     tmpEmptyMulti.CUSTOMER_GUID = this.txtPopCustomerCode.GUID                              

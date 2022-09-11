@@ -41,10 +41,12 @@ export default class barcodeCard extends React.PureComponent
     async init()
     {
         this.itemBarcodeObj.clearAll();
-        this.cmbBarUnit.value = ''
+        this.cmbBarUnit.value= ''
         this.txtBarUnitFactor.setState({value:'0'})
         this.txtItem.setState({value:''})
         this.txtItemName.setState({value:''})
+        this.txtBarcode.setState({value:''})
+
     }
     async checkBarcode(pCode)
     {
@@ -54,7 +56,7 @@ export default class barcodeCard extends React.PureComponent
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT BARCODE FROM ITEM_BARCODE WHERE BARCODE = @CODE",
+                    query :"SELECT BARCODE FROM ITEM_BARCODE_vw_01 WHERE BARCODE = @CODE",
                     param : ['CODE:string|50'],
                     value : [pCode]
                 }
@@ -87,34 +89,34 @@ export default class barcodeCard extends React.PureComponent
     async getBarcode(pCode)
     {
         this.itemBarcodeObj.clearAll();
+        
+        await this.core.util.waitUntil(0)
         await this.itemBarcodeObj.load({BARCODE:pCode});
+        console.log(this.itemBarcodeObj.dt())
         this._getUnit(this.itemBarcodeObj.dt()[0].ITEM_GUID)
     }
     async _getUnit(pGuid)
     {
-        let tmpSource =
+        let tmpQuery = 
         {
-            source : 
-            {
-                select : 
-                {
-                    query : "SELECT GUID,NAME,FACTOR,TYPE FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID =@ITEM_GUID",
-                    param : ['ITEM_GUID:string|50'],
-                    value : [pGuid]
-                },
-                sql : this.core.sql
-            }
+            query : "SELECT GUID,NAME,FACTOR,TYPE FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID = @ITEM_GUID",
+            param : ['ITEM_GUID:string|50'],
+            value : [pGuid]
         }
-        await this.cmbBarUnit.dataRefresh(tmpSource)
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        if(tmpData.result.recordset.length > 0)
+        {
+            await this.cmbBarUnit.dataRefresh({source:tmpData.result.recordset})
+        }
         if(this.cmbBarUnit.data.datatable.length > 0)
         {
             this.txtBarUnitFactor.setState({value:this.cmbBarUnit.data.datatable.where({'TYPE':0})[0].FACTOR});
             let tmpGuid = this.cmbBarUnit.data.datatable.where({'TYPE':0})[0].GUID
             this.cmbBarUnit.value = tmpGuid;
-            console.log(this.cmbBarUnit.value)
             this.txtUnitTypeName.setState({value:this.t("MainUnit")})
-           
         }
+        await this.cmbBarUnit.data.datatable.refresh()
+
     }
    render()
     {           
@@ -124,16 +126,6 @@ export default class barcodeCard extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnBack" parent={this} icon="revert" type="default"
-                                    onClick={()=>
-                                    {
-                                        if(this.prevCode != '')
-                                        {
-                                            this.getItem(this.prevCode); 
-                                        }
-                                    }}/>
-                                </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
                                     onClick={()=>
@@ -187,40 +179,6 @@ export default class barcodeCard extends React.PureComponent
                                             
                                             await dialog(tmpConfObj);
                                         }                               
-                                    }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnDelete" parent={this} icon="trash" type="default"
-                                    onClick={async()=>
-                                    {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
-                                        }
-                                        
-                                        let pResult = await dialog(tmpConfObj);
-                                        if(pResult == 'btn01')
-                                        {
-                                            this.itemBarcodeObj.dt('ITEM_BARCODE').removeAt(0)
-                                            await this.itemBarcodeObj.dt('ITEM_BARCODE').delete();
-                                            this.init(); 
-                                        }
-                                    }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnCopy" parent={this} icon="copy" type="default"
-                                    onClick={()=>
-                                    {
-                                        
-                                    }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnPrint" parent={this} icon="print" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.popDesign.show()
                                     }}/>
                                 </Item>
                                 <Item location="after"
@@ -280,6 +238,7 @@ export default class barcodeCard extends React.PureComponent
                                                             tmpEmpty.ITEM_NAME = data[0].NAME
                                                             tmpEmpty.ITEM_CODE = data[0].CODE
                                                             tmpEmpty.UNIT_GUID = ''
+                                                            console.log(tmpEmpty)
                                                             this.itemBarcodeObj.addEmpty(tmpEmpty);  
                                                             this._getUnit(data[0].GUID)
                                                         }
@@ -424,7 +383,7 @@ export default class barcodeCard extends React.PureComponent
                                 {/* cmbBarUnit */}
                                 <Item>
                                     <Label text={this.t("cmbBarUnit")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbBarUnit" 
+                                    <NdSelectBox simple={true} parent={this} id="cmbBarUnit"  searchEnabled={true}
                                     dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"UNIT_GUID"}} 
                                     displayExpr="NAME"                       
                                     valueExpr="GUID"

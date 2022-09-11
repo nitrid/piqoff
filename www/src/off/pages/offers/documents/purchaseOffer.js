@@ -1668,7 +1668,7 @@ export default class purchaseoffer extends React.PureComponent
                                                         "REPLACE(ISNULL((SELECT ADDRESS1 + ' | ' + ADDRESS2  + ' | ' + TEL + ' | ' + MAIL FROM COMPANY),''),'|', CHAR(13)) AS BASLIK," +
                                                         "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH " +
                                                         "FROM DOC_OFFERS_VW_01 " +
-                                                        "WHERE DOC_GUID=@DOC_GUID OFFER BY LINE_NO ASC",
+                                                        "WHERE DOC_GUID=@DOC_GUID ORDER BY LINE_NO ASC",
                                                 param:  ['DOC_GUID:string|50','DESIGN:string|25'],
                                                 value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value]
                                             }

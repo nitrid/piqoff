@@ -367,10 +367,7 @@ export default class NdBase extends React.PureComponent
                                             }
                                             resolve({data: tmpData,totalCount:tmpData.length});
                                         }
-                                        
-                                        
                                     }
-                                    
                                     mresolve()
                                 }
                                 else
