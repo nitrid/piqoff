@@ -4445,10 +4445,10 @@ export default class posDoc extends React.PureComponent
                                     if(this.lastPosPayDt.length > 0)
                                     {
                                         this.rbtnTotalPayType.value = 0
-                                        this.lastPayRest.value = this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT') < 0 ? 0 : Number(this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT'))
+                                        this.lastPayRest.value = this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT') < 0 ? 0 : Number(this.lastPosSaleDt[0].GRAND_TOTAL).toFixed(2) - Number(this.lastPosPayDt.sum('AMOUNT')).toFixed(2)
                                         this.txtPopLastTotal.value = this.lastPosSaleDt[0].GRAND_TOTAL;
                                         this.popLastTotal.show()
-
+                                        
                                         //HER EKLEME İŞLEMİNDEN SONRA İLK SATIR SEÇİLİYOR.
                                         setTimeout(() => 
                                         {
@@ -4611,7 +4611,7 @@ export default class posDoc extends React.PureComponent
                                                     if(this.grdLastTotalPay.devGrid.getSelectedRowKeys().length > 0)
                                                     {                                                        
                                                         this.grdLastTotalPay.devGrid.deleteRow(this.grdLastTotalPay.devGrid.getRowIndexByKey(this.grdLastTotalPay.devGrid.getSelectedRowKeys()[0]))
-                                                        this.lastPayRest.value = this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT') < 0 ? 0 : Number(this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT'))
+                                                        this.lastPayRest.value = this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT') < 0 ? 0 : Number(this.lastPosSaleDt[0].GRAND_TOTAL).toFixed(2) - Number(this.lastPosPayDt.sum('AMOUNT')).toFixed(2)
                                                         this.txtPopLastTotal.newStart = true;
 
                                                         //HER EKLEME İŞLEMİNDEN SONRA İLK SATIR SEÇİLİYOR.
@@ -4704,7 +4704,7 @@ export default class posDoc extends React.PureComponent
                                                             CHANGE : tmpChange
                                                         }
                                                         this.lastPosPayDt.push(tmpData)
-                                                        this.lastPayRest.value = this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT') < 0 ? 0 + Number.money.sign : Number(this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT'))
+                                                        this.lastPayRest.value = this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT') < 0 ? 0 : Number(this.lastPosSaleDt[0].GRAND_TOTAL).toFixed(2) - Number(this.lastPosPayDt.sum('AMOUNT')).toFixed(2)
                                                         this.txtPopLastTotal.newStart = true;
                                                     }
 
