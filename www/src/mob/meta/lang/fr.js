@@ -38,9 +38,9 @@ export const langFr =
         stk_02_004: "Entrée nouveau produit",
         ord: "Commande",                
         ord_01: "documents",
-        ord_01_001: "Satış Sipariş",
-        ord_01_002: "Alış Sipariş",
-        irs: "İrsaliyeler",
+        ord_01_001: "Bon de commande",
+        ord_01_002: "Ordre d'achat",
+        irs: "Bon de livraison",
         irs_01: "documents",
         irs_01_001: "Bon de retour"
     },
@@ -78,9 +78,9 @@ export const langFr =
         btnChangePrice: "Changer le prix",
         popItemCode : 
         {
-            title : "Stok Seçimi",
-            clmCode :  "STOK KODU",
-            clmName : "STOK ADI",
+            title : "Séléction de stock",
+            clmCode :  "Code de stockSTOK KODU",
+            clmName : "Nom de stock",
         },
         popPrice : 
         {
@@ -150,15 +150,15 @@ export const langFr =
         popItemCode : 
         {
             title : "Sélection d'actions",
-            clmCode :  "CODE DE STOCK",
-            clmName : "NOM DE STOCK",
+            clmCode :  "Code de stcok",
+            clmName : "Nom de stock",
         },
         grdChkCustomer :
         {
-            clmDate :"DATE",
-            clmCustomerCode: "CODE",
+            clmDate :"Date",
+            clmCustomerCode: "Code",
             clmCustomerName: "Nom",
-            clmMulticode : "T. Code"
+            clmMulticode : "Fournisseur code"
         },
 
     },
@@ -166,1075 +166,1075 @@ export const langFr =
     {
         txtBarcode: "Barre code",
         txtItem: "Cde de stock",
-        txtItemName: "Nomde stock",
+        txtItemName: "Nom de stock",
         cmbBarUnit: "Unité",
         txtBarUnitFactor: "Coefficient",
         cmbPopBarType : "Tip",
-        MainUnit :"Bu Barkod Ana Birime Tanımlanacaktır",
-        SubUnit : "Bu Barkod Alt Birime Tanımlanacaktır",
-        txtUnitTypeName :"Açıklama",
-        btnBarSave : "Barkod Kaydet",
+        MainUnit :"Ce code-barres sera défini pour l'unité principale.",
+        SubUnit : "Ce code-barres sera défini pour l'unité principale.",
+        txtUnitTypeName :"Explication",
+        btnBarSave : "Enregistrer le code-barre",
         pg_txtItem:
         {
-            title: "Ürün Seçim",
-            clmCode: "KODU",
-            clmName: "ADI", 
+            title: "Selection de produit",
+            clmCode: "Code",
+            clmName: "Nom", 
         },
         pg_txtBarcode:
         {
-            title: "Barkod Seçim",
-            clmBarcode: "BARKOD",
-            clmItemName: "STOK ADI", 
-            clmItemCode: "STOK KODU"
+            title: "Séléction de code barre",
+            clmBarcode: "Barre code",
+            clmItemName: "Nom de stock", 
+            clmItemCode: "Code de stock"
         },
        
         msgCheckBarcode:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Girmiş olduğunuz barkod sistem de kayıtlı ! Stok Getirildi."
+            title: "Atention",
+            btn01: "OK",
+            msg: "le code barre reçus est déjà enregistré dans le systhème.Stock reçus"
         },
         msgBarcode:
         {
-            title: "Dikkat",
-            btn01: "Barkoda Git",
-            btn02: "Tamam",
-            msg: "Girmiş olduğunuz barkod sistem de kayıtlı !"
+            title: "Attention",
+            btn01: "Aller au code-barres",
+            btn02: "OK",
+            msg: "Le code-barres que vous avez saisi est également enregistré dans le système !"
         },
         msgSave:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            btn02: "Vazgeç",
-            msg: "Kayıt etmek istediğinize eminmisiniz !"
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonne",
+            msg: "Êtes-vous sûr de vouloir vous inscrire ?"
         },
         msgSaveResult:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msgSuccess: "Kayıt işleminiz başarılı !",
-            msgFailed: "Kayıt işleminiz başarısız !"
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Votre inscription est réussi !",
+            msgFailed: "Votre inscription est réussi !"
         },
         msgSaveValid:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Lütfen gerekli alanları doldurunuz !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "S'il vous plaît remplir les champs obligatoires !"
         },
         msgDelete:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            btn02: "Vazgeç",
-            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonne",
+            msg: "Voulez-vous vraiment supprimer l'enregistrement ?"
         },
-        validCode :"Stok Seçmelisiniz",
+        validCode :"Doit choisir le stock",
     },
     stk_01_004 :
     {
-        chkAllItems : "Tüm Ürünler",
-        btnChangeGroup : "Ürün Grubu Değiştir",
-        txtBarcode : "Barkod",
-        txtBarcodePlace : "Lütfen Barkod Okutunuz",
-        btnItemEntry : "Stok Girişi",
-        txtBarcodeEnter: "Barkod Girişi",
-        cmbItemGrp: "Ürün Grubu",
-        thisGrp :"Mevcut Grup",
+        chkAllItems : "Tous les produits",
+        btnChangeGroup : "Changer de groupe de produit",
+        txtBarcode : "Barre code",
+        txtBarcodePlace : "Veillez scanner les codes-barres",
+        btnItemEntry : "Récéption de stock",
+        txtBarcodeEnter: "Entrez barre code",
+        cmbItemGrp: "Groupe de produit",
+        thisGrp :"Groupe actuel",
         popItemCode : 
         {
-            title : "Stok Seçimi",
-            clmCode :  "STOK KODU",
-            clmName : "STOK ADI",
+            title : "Choix de stock",
+            clmCode :  "Code de stock",
+            clmName : "Nom de stock",
         },
         grdChkCustomer :
         {
-            clmDate :"Tarih",
-            clmCustomerCode: "Kodu",
-            clmCustomerName: "Adı",
+            clmDate :"Date",
+            clmCustomerCode: "Code",
+            clmCustomerName: "Nom",
         },
         msgSaveResult:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msgSuccess: "Kayıt işleminiz başarılı !",
-            msgFailed: "Kayıt işleminiz başarısız !"
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Votre inscription est réussie !",
+            msgFailed: "Votre inscription est réussie !"
         },
         msgItemNotSelect:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Stok Seçiniz !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Séléctinnez stock"
         },
         msgBarcodeNotFound:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Barkod Bulunamadı !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Barre code introuvable !"
         },
     },
     stk_01_005 :
     {
-        btnDropmenu : "İşlemler",
-        txtRefRefno : "Seri-Sıra",
-        chkAutoAdd : "Oto Ekle",
-        AddItems : "Ekle",
-        txtBarcode : "Barkod Ekle",
-        txtBarcodePlace : "Lütfen Barkod Okutunuz",
-        btnSave : "Kaydet",
-        btnNew : "Yeni",
-        btnDelete : "Sil",
-        btnDeleteRow : "Satır Sil",
-        btnBarcodeEntry : "Barkod Girişi",
-        validDesign : "Lütfen Dizayn Seçin",
-        numPrice :"Fiyat",
-        btnAddPrice: "Yeni Fiyat Ekle",
-        btnChangePrice: "Fiyat Değiştir",
+        btnDropmenu : "Transactions",
+        txtRefRefno : "Série-Séquence",
+        chkAutoAdd : "Auto ajout",
+        AddItems : "Ajoute",
+        txtBarcode : "Ajoutez barre code",
+        txtBarcodePlace : "Veuillez scanner les codes-barres",
+        btnSave : "Enregistrez",
+        btnNew : "Nouveau",
+        btnDelete : "Effacez",
+        btnDeleteRow : "Suprimmez la ligne",
+        btnBarcodeEntry : "Entrée de barre code",
+        validDesign : "Veuillez sélectionner le modèle",
+        numPrice :"Prix",
+        btnAddPrice: "Ajouter un nouveau prix",
+        btnChangePrice: "Changer le prix",
         popItemCode : 
         {
-            title : "Stok Seçimi",
-            clmCode :  "STOK KODU",
-            clmName : "STOK ADI",
+            title : "Choix du stock",
+            clmCode :  "Code de stock",
+            clmName : "Nom de stock",
         },
         popPrice : 
         {
-            title : "Fiyat Ekle",
-            dtPopPriStartDate :  "Başlangıç Tarihi",
-            dtPopPriEndDate : "Bitiş Tarihi",
-            txtPopPriQuantity : "Miktar",
-            txtPopPriPrice : "Fiyat"
+            title : "Ajoutez prix",
+            dtPopPriStartDate :  "Date de début",
+            dtPopPriEndDate : "Date de fin",
+            txtPopPriQuantity : "Quantité",
+            txtPopPriPrice : "Prix"
         },
         grdPrice :
         {
-            title : "Fiyat Değiştir",
-            clmQuantity :  "Miktar",
-            clmPrice : "Fiyat",
+            title : "Cangez le prix",
+            clmQuantity :  "Quantité",
+            clmPrice : "Prix",
         },
         grdChkCustomer :
         {
-            clmDate :"Tarih",
-            clmCustomerCode: "Kodu",
-            clmCustomerName: "Adı",
+            clmDate :"Date",
+            clmCustomerCode: "Code",
+            clmCustomerName: "Nom",
         },
         msgSave:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            btn02: "Vazgeç",
-            msg: "Kayıt etmek istediğinize eminmisiniz !"
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonne",
+            msg: "Êtes-vous sûr de vouloir vous inscrire ?"
         },
         msgSaveResult:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msgSuccess: "Kayıt işleminiz başarılı !",
-            msgFailed: "Kayıt işleminiz başarısız !"
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Votre inscription a réussi !",
+            msgFailed: "Votre inscription a échoué !"
         },
         msgSaveValid:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Lütfen gerekli alanları doldurunuz !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "S'il vous plaît remplir les champs obligatoires !"
         },
         msgItemNotSelect:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Stok Seçiniz !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Sélectionner Stock !"
         },
         msgBarcodeNotFound:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Barkod Bulunamadı !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Barre code introuvable"
         },
-        txtDepot : "Depo",
+        txtDepot : "Depôt",
 
     },
     stk_01_006 :
     {
-        btnDropmenu : "İşlemler",
-        txtRefRefno : "Seri-Sıra",
-        chkAutoAdd : "Oto Ekle",
-        AddItems : "Ekle",
-        txtBarcode : "Barkod Ekle",
-        txtBarcodePlace : "Lütfen Barkod Okutunuz",
-        btnSave : "Kaydet",
-        btnNew : "Yeni",
-        btnDelete : "Sil",
-        btnDeleteRow : "Satır Sil",
-        btnBarcodeEntry : "Barkod Girişi",
-        validDesign : "Lütfen Dizayn Seçin",
-        numPrice :"Fiyat",
-        btnAddPrice: "Yeni Fiyat Ekle",
-        btnChangePrice: "Fiyat Değiştir",
-        btnAdd :"Ekle",
+        btnDropmenu : "Transactions",
+        txtRefRefno : "Série séquences",
+        chkAutoAdd : "Ajouter automatiquement",
+        AddItems : "Ajoutez",
+        txtBarcode : "Ajoutez barre code",
+        txtBarcodePlace : "Veuillez scannez le code barre",
+        btnSave : "Enregistrez",
+        btnNew : "Nouveau",
+        btnDelete : "Efface",
+        btnDeleteRow : "Effacer la ligne",
+        btnBarcodeEntry : "Entrée de barre code",
+        validDesign : "Veuillez sélectionner le modèle",
+        numPrice :"Prix",
+        btnAddPrice: "Ajoutez nouveau prix",
+        btnChangePrice: "Changer de prix",
+        btnAdd :"Ajoutez",
         popItemCode : 
         {
-            title : "Stok Seçimi",
-            clmCode :  "STOK KODU",
-            clmName : "STOK ADI",
+            title : "Sélection de stock",
+            clmCode :  "Code de stock",
+            clmName : "Nom de stock",
         },
         popPrice : 
         {
-            title : "Fiyat Ekle",
-            dtPopPriStartDate :  "Başlangıç Tarihi",
-            dtPopPriEndDate : "Bitiş Tarihi",
-            txtPopPriQuantity : "Miktar",
-            txtPopPriPrice : "Fiyat"
+            title : "Ajoutez prix",
+            dtPopPriStartDate :  "Date de début",
+            dtPopPriEndDate : "Date de fin",
+            txtPopPriQuantity : "Quantité",
+            txtPopPriPrice : "Prix"
         },
         grdBarcode :
         {
-           clmBarcode : "Barkod"
+           clmBarcode : "Barre code"
         },
         msgDoubleBarcode :
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Eklediğiniz Barkod Sistemde Mevcut ! Lütfen Kontrol Ediniz.."
+            title: "Attention",
+            btn01: "OK",
+            msg: "Le code-barres que vous avez ajouté est disponible dans le système ! Vérifiez s'il vous plaît.."
         },
         msgSave:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            btn02: "Vazgeç",
-            msg: "Kayıt etmek istediğinize eminmisiniz !"
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonne",
+            msg: "Êtes-vous sûr de vouloir vous inscrire ?"
         },
         msgSaveResult:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msgSuccess: "Kayıt işleminiz başarılı !",
-            msgFailed: "Kayıt işleminiz başarısız !"
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Votre inscription a réussi !",
+            msgFailed: "Votre inscription a échoué !"
         },
         msgSaveValid:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Lütfen gerekli alanları doldurunuz !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "S'il vous plaît remplir les champs obligatoires !"
         },
         msgItemNotSelect:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Stok Seçiniz !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Sélectionnez Stock !"
         },
         msgBarcodeNotFound:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Barkod Bulunamadı !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Barre code introuvable"
         },
-        txtNewBarcodePlace : "Yeni Barkodu Giriniz"
+        txtNewBarcodePlace : "Entrez le nouveau barre code"
 
     },
     stk_01_007 :
     {
-        chkAllItems : "Tüm Ürünler",
-        chkAutoAdd : "Oto Ekle",
-        btnChangeGroup : "Ürün Grubu Değiştir",
-        txtBarcode : "Barkod",
-        txtBarcodePlace : "Lütfen Barkod Okutunuz",
-        btnItemEntry : "Stok Girişi",
-        txtBarcodeEnter: "Barkod Girişi",
-        cmbItemGrp: "Ürün Grubu",
-        thisGrp :"Mevcut Grup",
-        btnUpdate :"Güncelle",
+        chkAllItems : "Tous les produits",
+        chkAutoAdd : "Ajouter automatiquement",
+        btnChangeGroup : "Changer le groupe de produit",
+        txtBarcode : "Barre code",
+        txtBarcodePlace : "Veuillez scannez le code barre",
+        btnItemEntry : "Entrée en stock",
+        txtBarcodeEnter: "Entrée de barre code",
+        cmbItemGrp: "Groupe de produit",
+        thisGrp :"Groupe actuel",
+        btnUpdate :"Mettre à jour.",
         popItemCode : 
         {
-            title : "Stok Seçimi",
-            clmCode :  "STOK KODU",
-            clmName : "STOK ADI",
+            title : "Choix de stock",
+            clmCode :  "Code de stock",
+            clmName : "Nom de stock",
         },
         grdChkCustomer :
         {
-            clmDate :"Tarih",
-            clmCustomerCode: "Kodu",
+            clmDate :"Date",
+            clmCustomerCode: "Code",
             clmCustomerName: "Adı",
         },
         msgSaveResult:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msgSuccess: "Kayıt işleminiz başarılı !",
-            msgFailed: "Kayıt işleminiz başarısız !"
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Votre inscription a réussi !",
+            msgFailed: "Votre inscription a échoué !"
         },
         msgItemNotSelect:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Stok Seçiniz !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Séléctionnez stock !"
         },
         msgBarcodeNotFound:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Barkod Bulunamadı !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Barre code introuvable"
         },
     },
     stk_02_001 :
     {
-        btnDropmenu : "İşlemler",
-        txtRefRefno : "Seri-Sıra",
+        btnDropmenu : "Transactions",
+        txtRefRefno : "Série séquences",
         design : "Dizayn",
-        txtPage : "Sayfa",
-        txtFreeLabel : "Boş Alan",
-        txtLineCount : "Okutulan Satır",
-        chkLastChange : "Son yazdırma tarihinden itibaren değişenler",
-        chkSelectChange : "Seçilen tarihten itibaren değişenler",
-        chkGroup : "Grup",
-        chkCustomer : "Tedarikçi Ürünleri",
-        chkAllItems : "Tüm Ürünler",
-        chkAutoAdd : "Oto Ekle",
-        AddItems : "Ekle",
-        txtBarcode : "Barkod Ekle",
-        txtBarcodePlace : "Lütfen Barkod Okutunuz",
-        btnSave : "Kaydet",
-        btnNew : "Yeni",
-        btnDelete : "Sil",
-        btnDeleteRow : "Satır Sil",
-        btnBarcodeEntry : "Barkod Girişi",
-        btnDocument : "İşlem Satırları",
-        validDesign : "Lütfen Dizayn Seçin",
-        numPrice :"Fiyat",
-        btnItemAdd: "Ekle",
+        txtPage :"Page",
+        txtFreeLabel : "Espace vide",
+        txtLineCount : "Ventes formées",
+        chkLastChange : "Modifications depuis la dernière date d'impression",
+        chkSelectChange : "Changements depuis la date sélectionnée",
+        chkGroup : "Groupe",
+        chkCustomer : "Produit du fournisseur",
+        chkAllItems : "Tous les produits",
+        chkAutoAdd : "Ajouter automatiquement",
+        AddItems : "Ajoute",
+        txtBarcode : "Ajoutez barre code",
+        txtBarcodePlace : "Veuillez scannez le code barre",
+        btnSave : "Enregistre",
+        btnNew : "Nouveau",
+        btnDelete : "Efface",
+        btnDeleteRow : "Effacer la ligne",
+        btnBarcodeEntry : "Entrée de barre code",
+        btnDocument : "Lignes de transactions",
+        validDesign : "Veuillez choisir un modèle",
+        numPrice :"Prix",
+        btnItemAdd: "Ajoutez",
         msgDesignSelect:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Lütfen Dizayn Seçiniz.."
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez sélectionner le modèle...."
         },
         pg_Docs : 
         {
-            title : "Evrak Seçimi",
-            clmRef : "SERİ",
-            clmRefNo : "SIRA",
+            title : "Sélection de document",
+            clmRef : "Série",
+            clmRefNo : "Séquence",
         },
         pg_txtItemsCode : 
         {
-            title : "Stok Seçimi",
-            clmCode :  "STOK KODU",
-            clmName : "STOK ADI",
+            title : "Sélection de stock",
+            clmCode :  "Code de stock",
+            clmName : "Nom de stock",
         },
         grdLblPrinting :
         {
-            clmItemCode: "Kodu",
-            clmBarcode : "Barkod",
-            clmItemName: "Adı",
-            clmPrice :"Fiyat",
+            clmItemCode: "Code",
+            clmBarcode : "Barre code",
+            clmItemName: "Nom",
+            clmPrice :"Prix",
         },
         popItemCode : 
         {
-            title : "Stok Seçimi",
-            clmCode :  "STOK KODU",
-            clmName : "STOK ADI",
+            title : "Sélection de stock",
+            clmCode :  "Code de stock",
+            clmName : "Nom de stock",
         },
         msgDocValid:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "L'inventaire ne peut pas être saisi avant que les en-têtes de document ne soient terminés !"
         },
         msgNotSave:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Evrakta Değişiklik Yapılmış! Lütfen Kayıt Edin Yada Değişiklikleri Geri Alın"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Le document a été modifié ! Veuillez enregistrer ou annuler les modifications"
         },
         msgAddItems:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            btn02: "Vazgeç",
-            msg: "Seçmiş olduğunuz kritere uygun ürünler eklenecektir.Onaylıyormusunuz ?"
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonne",
+            msg: "Les produits correspondant au critère que vous avez sélectionnés seront ajoutés.Êtes-vous d'accord ?"
         },
         msgSave:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            btn02: "Vazgeç",
-            msg: "Kayıt etmek istediğinize eminmisiniz !"
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonne",
+            msg: "Êtes-vous sûr de vouloir vous inscrire ?"
         },
         msgSaveResult:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msgSuccess: "Kayıt işleminiz başarılı !",
-            msgFailed: "Kayıt işleminiz başarısız !"
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Votre inscription a réussi !",
+            msgFailed: "Votre inscription a échoué !"
         },
         msgSaveValid:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Lütfen gerekli alanları doldurunuz !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "S'il vous plaît remplir les champs obligatoires !"
         },
         msgDelete:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            btn02: "Vazgeç",
-            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonne",
+            msg: "Voulez-vous vraiment supprimer l'enregistrement ?"
         },
         msgLocked:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Evrak Kayıt Edildi Ve Kilitlendi !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Document enregistré et verrouillé !"
         },
         msgBarcodeCheck:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Lütfen Barkod Okutunuz !",
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez scanner le code-barres !",
         },
         msgBarcodeNotFound:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Barkod Bulunamadı !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Barre code introuvable"
         },
         msgItemsAdd:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Seçtiğiniz Ürünler Eklendi !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Vos produits sélectionnés ont été ajoutés !"
         },
         msgDoclocked:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Evrak Kilidi Açılmadan Kayıt Edilemez !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Les documents ne peuvent pas être enregistrés sans déverrouillage !"
         },
         msgItemNotFound:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Stok Bulunmadı !!"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Stock introuvable"
         },
         msgCombineItem:
         {
-            title: "Dikkat",
-            btn01: "Vazgeç",
-            btn02: "Yeni Ekle",
-            msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Yeni Satır Eklensin Mi ?"
+            title: "Attention",
+            btn01: "Abandonne",
+            btn02: "Nouveau ajout",
+            msg: "Le produit que vous souhaitez ajouter est dans le document ! Ajouter une nouvelle ligne ? "
         },
         popWizard : 
         {
-            title : "Ürün Seçme Sihirbazı",
+            title : "Assistant de sélection de produit",
         },
         popBarcodeEntry : 
         {
-            title : "Barkod Giriş"
+            title : "Entrée barre code"
         },
-        validRef :"Seri Boş Geçilemez",
-        validRefNo : "Sıra Boş Geçilemez",
-        validDepot : "Depo Seçmelisiniz",
-        validCustomerCode : "Cari Kodu Boş Geçilemez",
-        validDocDate : "Tarih Seçmelisiniz",
+        validRef :"La série ne peut pas être vide",
+        validRefNo : "La série ne peut pas être vide",
+        validDepot : "Vous devez choisir l'entrepôt",
+        validCustomerCode : "Le code actuel ne peut pas être vide",
+        validDocDate : "Vous devez choisir une date",
 
     },
     stk_02_002 :
     {
-        btnBarcodeEntry :"Barkod Giriş",
-        btnDocument : "İşlem Satırları",
-        btnNew : "Yeni Evrak",
-        btnSave : "Kaydet",
-        btnDropmenu : "İşlemler",
-        txtRefRefno : "Seri-Sıra",
-        cmbDepot1: "Çıkış Deposu",
-        cmbDepot2: "İade Deposu",
-        dtDocDate : "Tarih",
-        getRebate :"İade Deposudan Getir",
-        txtBarcode : "Barkod Ekle",
+        btnBarcodeEntry :"Entrez barre code",
+        btnDocument : "Lignes de transaction",
+        btnNew : "Nouveau document",
+        btnSave : "Enregistre",
+        btnDropmenu : "Transactions",
+        txtRefRefno : "Série séquences",
+        cmbDepot1: "Entrepôt de sortie",
+        cmbDepot2: "Entrepôt de retour",
+        dtDocDate : "Date",
+        getRebate :"Obtenir de l'entrepôt de retour",
+        txtBarcode : "Ajoutez barre code",
         pg_Docs : 
         {
-            title : "Evrak Seçimi",
-            clmRef : "SERİ",
-            clmRefNo : "SIRA",
-            clmDocDate : "TARIH",
-            clmInputName : "GİRİŞ",
-            clmOutputName : "ÇIKIŞ",
+            title : "Sélection de documents",
+            clmRef : "Série",
+            clmRefNo : "Séquence",
+            clmDocDate : "Date",
+            clmInputName : "Entrée",
+            clmOutputName : "Sortie",
         },
         pg_txtItemsCode : 
         {
-            title : "Stok Seçimi",
-            clmCode :  "STOK KODU",
-            clmName : "STOK ADI",
+            title : "Sélection de stock",
+            clmCode :  "Code de stock",
+            clmName : "Nom de stock",
         },
         grdRebItems: 
         {
-            clmItemCode: "Kodu",
-            clmItemName: "Adı",
-            clmQuantity : "Miktar",
-            clmCreateDate: "Kayıt Tarihi",
-            clmDescription :"Açıklama"
+            clmItemCode: "Code",
+            clmItemName: "Nom",
+            clmQuantity : "Quantité",
+            clmCreateDate: "Date d'enregistrement",
+            clmDescription :"Explication"
         },
         popPassword : 
         {
-            title: "Evrakı Açmak İçin Yönetici Şifresini Girmelisiniz",
-            Password : "Şifre",
-            btnApprove : "Onayla"
+            title: "Vous devez entrer le mot de passe administrateur pour ouvrir le document.",
+            Password : "Mot de passe",
+            btnApprove : "Approuver"
         },
         msgDocValid:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "L'inventaire ne peut pas être saisi avant que les en-têtes de document ne soient terminés"
         },
         msgBigQuantity:
         {
-            title: "Dikkat",
-            btn01: "Ekle",
-            btn02: "Vazgeç",
-            msg: "Miktar Eklemek İstediğinize Emin Misiniz?"
+            title: "Attention",
+            btn01: "Ajoutez",
+            btn02: "Abandonne",
+            msg: "Voulez-vous vraiment ajouter une quantité ?"
         },
         msgBarcodeNotFound:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Barkod Bulunamadı !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Barre code introuvable"
         },
         msgSave:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            btn02: "Vazgeç",
-            msg: "Kayıt etmek istediğinize eminmisiniz !"
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonne",
+            msg: "Êtes-vous sûr de vouloir vous inscrire ?"
         },
         msgSaveResult:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msgSuccess: "Kayıt işleminiz başarılı !",
-            msgFailed: "Kayıt işleminiz başarısız !"
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Votre inscription a réussi !",
+            msgFailed: "Votre inscription a échoué !"
         },
         msgSaveValid:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Lütfen gerekli alanları doldurunuz !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "S'il vous plaît remplir les champs obligatoires !"
         },
         msgDelete:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            btn02: "Vazgeç",
-            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonne",
+            msg: "Voulez-vous vraiment supprimer l'enregistrement ?"
         },
         msgLocked:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
+            title: "Attention",
+            btn01: "OK",
             msg: "Evrak Kayıt Edildi Ve Kilitlendi !"
         },
         msgPasswordSucces:
         {
-            title: "Başarılı",
-            btn01: "Tamam",
-            msg: "Evrakın Kilidi Açıldı !",
+            title: "Réussis",
+            btn01: "OK",
+            msg: "Document déverrouillé !",
         },
         msgPasswordWrong:
         {
-            title: "Başarısız",
-            btn01: "Tamam",
-            msg: "Şifreniz Hatalı !"
+            title: "Echec",
+            btn01: "OK",
+            msg: "Votre mot de passe est incorrect !"
         },
         msgGetLocked:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Document verrouillé ! \n Pour enregistrer les modifications, vous devez déverrouiller avec le mot de passe administrateur !"
         },
         msgDoclocked:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Evrak Kilidi Açılmadan Kayıt Edilemez !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Les documents ne peuvent pas être enregistrés sans déverrouillage !"
         },
         msgItemNotFound:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Stok Bulunmadı !!"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Aucun stock trouvé !!"
         },
         msgCombineItem:
         {
-            title: "Dikkat",
-            btn01: "Üstüne Ekle",
-            btn02: "Değiştir",
-            msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Satırlar Birleştirilsin mi ?"
+            title: "Attention",
+            btn01: "Ajouter",
+            btn02: "Changer",
+            msg: "Le produit que vous souhaitez ajouter est dans le document ! Fusionner les lignes ?"
         },
-        validRef :"Seri Boş Geçilemez",
-        validRefNo : "Sıra Boş Geçilemez",
-        validDepot : "Depo Seçmelisiniz",
-        validCustomerCode : "Cari Kodu Boş Geçilemez",
-        validDocDate : "Tarih Seçmelisiniz",
-        btnItemAdd: "Ekle",
+        validRef :"La série ne peut pas être vide",
+        validRefNo : "La file d'attente ne peut pas être vide",
+        validDepot : "Vous devez choisir l'entrepôt",
+        validCustomerCode : "Le code actuel ne peut pas être vide",
+        validDocDate : "Vous devez choisir une date",
+        btnItemAdd: "Ajoutez",
         msgDepotSelect:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Lütfen Depo Seçiniz.."
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez sélectionner un entrepôt.."
         },
         popItemCode : 
         {
-            title : "Stok Seçimi",
-            clmCode :  "STOK KODU",
-            clmName : "STOK ADI",
+            title : "Sélection de stock",
+            clmCode :  "Code de stock",
+            clmName : "Nom de stock",
         },
-        txtBarcodePlace : "Lütfen Barkod Okutunuz",
-        txtQuantity : "Miktar",
-        chkAutoAdd : "Oto Ekle",
+        txtBarcodePlace : "Veuillez scannez le code barre",
+        txtQuantity : "Quantité",
+        chkAutoAdd : "Ajouter automatiquement",
     },
     stk_02_003 :
     {
-        txtRef: "Referans",
-        txtPrice : "Fiyat",
-        txtDescription : "Açıklama",
-        txtItemName : "Ürün Adı",
-        txtQuantity : "Adet",
-        valPrice : "Fiyat 0 dan Küçük Olamaz",
-        valCode : "Lütfen Stok Girin",
-        valName : "Ürün Adı Boş Olamaz",
-        btnSave: "Kaydet",
-        btnPrint: "Yazdır",
+        txtRef: "Referance",
+        txtPrice : "Prix",
+        txtDescription : "Explication",
+        txtItemName : "Nom du produit",
+        txtQuantity : "Quantité",
+        valPrice : "Le prix ne peut pas être inférieur à 0",
+        valCode : "Veuillez entrer le stock",
+        valName : "Le nom du produit ne peut pas être vide",
+        btnSave: "Enregistre",
+        btnPrint: "Imprimer",
         pg_txtRef:
         {
-            title: "Stok Seçimi",
-            clmCode: "KODU",
-            clmName: "ADI", 
+            title: "Sélection de stock",
+            clmCode: "Code",
+            clmName: "Nom", 
         },
         msgSave:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            btn02: "Vazgeç",
-            msg: "Kayıt etmek istediğinize eminmisiniz !"
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonne",
+            msg: "Êtes-vous sûr de vouloir vous inscrire ?"
         },
         msgSaveResult:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msgSuccess: "Kayıt işleminiz başarılı !",
-            msgFailed: "Kayıt işleminiz başarısız !"
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Votre inscription a réussi !",
+            msgFailed: "Votre inscription a échoué !"
         },
         msgSaveValid:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Lütfen gerekli alanları doldurunuz !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "S'il vous plaît remplir les champs obligatoires !"
         },
     },
     stk_02_004 :
     {
-        txtBarcodePlace : "Lütfen Barkod Okutunuz",
-        btnSave : "Kaydet",
-        btnNew : "Yeni",
-        btnDelete : "Sil",
-        btnDropmenu : "İşlemler",
-        txtQuantity : "Miktar",
-        dtlastDate :"SKT Tatih",
-        btnItemAdd : "Ekle",
+        txtBarcodePlace : "Veuillez scannez le code barre",
+        btnSave : "Enregistre",
+        btnNew : "Nouveau",
+        btnDelete : "Efface",
+        btnDropmenu : "Transactions",
+        txtQuantity : "Quantité",
+        dtlastDate :"Date de DLC",
+        btnItemAdd : "Ajoutez",
         grdExpDate:
         {
-            clmDate: "SKT Tarih",
-            clmCode: "KODU",
-            clmName: "ADI", 
+            clmDate: "Date de DLC",
+            clmCode: "Code",
+            clmName: "Nom", 
         },
         msgSave:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            btn02: "Vazgeç",
-            msg: "Kayıt etmek istediğinize eminmisiniz !"
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonne",
+            msg: "Êtes-vous sûr de vouloir vous inscrire ?"
         },
         msgSaveResult:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msgSuccess: "Kayıt işleminiz başarılı !",
-            msgFailed: "Kayıt işleminiz başarısız !"
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Votre inscription a réussi !",
+            msgFailed: "Votre inscription a échoué !"
         },
         msgItemNotSelect:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
+            title: "Attention",
+            btn01: "OK",
             msg: "Stok Seçiniz !"
         },
         msgBarcodeNotFound:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Barkod Bulunamadı !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Barre code introuvable"
         },
         msgZeroQuantity:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Miktar 0 Olamaz !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "La quantité ne peut pas être 0 !"
         },
         popItemCode : 
         {
-            title : "Stok Seçimi",
-            clmCode :  "STOK KODU",
-            clmName : "STOK ADI",
+            title : "Sélection de stock",
+            clmCode :  "Code de stock",
+            clmName : "Nom de stock",
         },
         msgCombineItem:
         {
-            title: "Dikkat",
-            btn01: "Vazgeç",
-            btn02: "Yeni Ekle",
-            msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Yeni Satır Eklensin Mi ?"
+            title: "Attention",
+            btn01: "Abandonne",
+            btn02: "Nouveau ajout",
+            msg: "Le produit que vous souhaitez ajouter est dans le document ! Ajouter une nouvelle ligne ?"
         },
     },
     ord_01_001 :
     {
-        btnDropmenu : "İşlemler",
-        txtRefRefno : "Seri-Sıra",
-        txtCustomerCode : "Cari Kodu",
-        txtCustomerName : "Cari Adı",
-        txtPage : "Sayfa",
-        txtDepot : "Depo",
-        txtDate : "Tarih",
-        txtAmount : "Tutar",
-        txtDiscount : "İndirim",
-        txtQuantity : "Miktar",
-        txtVat : "Kdv",
-        txtPrice :"Fiyat",
-        chkGroup : "Grup",
-        chkCustomer : "Tedarikçi Ürünleri",
-        chkAllItems : "Tüm Ürünler",
-        chkAutoAdd : "Oto Ekle",
-        AddItems : "Ekle",
-        txtBarcode : "Barkod Ekle",
-        txtBarcodePlace : "Lütfen Barkod Okutunuz",
-        btnSave : "Kaydet",
-        btnNew : "Yeni",
-        btnDelete : "Sil",
-        btnDeleteRow : "Satır Sil",
-        btnBarcodeEntry : "Barkod Girişi",
-        btnDocument : "İşlem Satırları",
-        btnItemAdd: "Ekle",
-        txtGrandTotal : "Genel Toplam",
+        btnDropmenu : "Transactions",
+        txtRefRefno : "Série séquences",
+        txtCustomerCode : "Code de fournisseur",
+        txtCustomerName : "Nom du fournisseur",
+        txtPage :"Page",
+        txtDepot : "Depôt",
+        txtDate : "Date",
+        txtAmount : "Total",
+        txtDiscount : "Promotion",
+        txtQuantity : "Quantité",
+        txtVat : "TVA",
+        txtPrice :"Prix",
+        chkGroup : "Groupe",
+        chkCustomer : "Produits du fournisseur",
+        chkAllItems : "Tous les produits",
+        chkAutoAdd : "Ajouter automatiquement",
+        AddItems : "Ajoutez",
+        txtBarcode : "Ajoutez barre code",
+        txtBarcodePlace : "Veuillez scannez le code barre",
+        btnSave : "Enregistre",
+        btnNew : "Nouveau",
+        btnDelete : "Efface",
+        btnDeleteRow : "Supprimer la ligne",
+        btnBarcodeEntry : "Entrée de barre code",
+        btnDocument : "Lignes de transaction",
+        btnItemAdd: "Ajoutez",
+        txtGrandTotal : "le total général",
         msgCustomerSelect:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Lütfen Cari Seçiniz.."
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez sélectionner le fournisseur"
         },
         msgQuantity:
         {
-            title: "Miktar",
-            btn01: "Ekle",
-            msg: "Miktar Giriniz"
+            title: "Quantité",
+            btn01: "Ajoutez",
+            msg: "Ajoutez quantité"
         },
         msgDepotSelect:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Lütfen Depo Seçiniz.."
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez sélectionner un entrepôt.."
         },
         pg_Docs : 
         {
-            title : "Evrak Seçimi",
-            clmRef : "SERİ",
-            clmRefNo : "SIRA",
-            clmInputName : "CARİ ADI",
-            clmInputCode  : "CARİ KODU",
+            title : "Sélection de documents",
+            clmRef : "Série",
+            clmRefNo : "Séquence",
+            clmInputName : "NOM ACTUEL",
+            clmInputCode  : "CODE ACTUEL",
         },
         pg_CustomerSelect :
         {
-            title : "Cari Seçimi",
-            clmCode :  "CARİ KODU",
-            clmTitle : "CARİ ADI",
-            clmTypeName : "TİPİ",
-            clmGenusName : "CİNSİ"
+            title : "Sélection du fournisseur",
+            clmCode :  "Code actuel",
+            clmTitle : "Nom actuel",
+            clmTypeName : "Type",
+            clmGenusName : "Tipi"
         },
         pg_txtItemsCode : 
         {
-            title : "Stok Seçimi",
-            clmCode :  "STOK KODU",
-            clmName : "STOK ADI",
+            title : "Sélection de stock",
+            clmCode :  "Code de stock",
+            clmName : "Nom de stock",
         },
         grdSlsOrder: 
         {
-            clmItemCode: "Kodu",
-            clmItemName: "Adı",
-            clmPrice: "Fiyat",
-            clmQuantity : "Miktar",
-            clmDiscount : "İndirim",
-            clmDiscountRate : "İndirim %",
-            clmVat : "KDV",
-            clmAmount : "Tutar",
-            clmTotal : "Genel Toplam",
-            clmCreateDate: "Kayıt Tarihi",
-            clmMargin :"Marj"
+            clmItemCode: "Code",
+            clmItemName: "Nom",
+            clmPrice: "Prix",
+            clmQuantity : "Quantité",
+            clmDiscount : "Promotion",
+            clmDiscountRate : "Promotion %",
+            clmVat : "TVA",
+            clmAmount : "Total",
+            clmTotal : "total général",
+            clmCreateDate: "Date d'enregistrement",
+            clmMargin :"Marje"
         },
         popItemCode : 
         {
-            title : "Stok Seçimi",
-            clmCode :  "STOK KODU",
-            clmName : "STOK ADI",
+            title : "Sélection de stock",
+            clmCode :  "Code de stock",
+            clmName : "Nom de stock",
         },
         msgDocValid:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "L'inventaire ne peut pas être saisi avant que les en-têtes de document ne soient terminés ! "
         },
         msgNotSave:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Evrakta Değişiklik Yapılmış! Lütfen Kayıt Edin Yada Değişiklikleri Geri Alın"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Le document a été modifié ! Veuillez enregistrer ou annuler les modifications"
         },
         msgAddItems:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            btn02: "Vazgeç",
-            msg: "Seçmiş olduğunuz kritere uygun ürünler eklenecektir.Onaylıyormusunuz ?"
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonne",
+            msg: "Les produits correspondant aux critères que vous avez sélectionnés seront ajoutés. Êtes-vous d'accord ?"
         },
         msgSave:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            btn02: "Vazgeç",
-            msg: "Kayıt etmek istediğinize eminmisiniz !"
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonne",
+            msg: "Êtes-vous sûr de vouloir vous inscrire ?"
         },
         msgSaveResult:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msgSuccess: "Kayıt işleminiz başarılı !",
-            msgFailed: "Kayıt işleminiz başarısız !"
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Votre inscription a réussi !",
+            msgFailed: "Votre inscription a échoué !"
         },
         msgSaveValid:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Lütfen gerekli alanları doldurunuz !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "S'il vous plaît remplir les champs obligatoires !"
         },
         msgDelete:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            btn02: "Vazgeç",
-            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonne",
+            msg: "Voulez-vous vraiment supprimer l'enregistrement ?"
         },
         msgLocked:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Evrak Kayıt Edildi Ve Kilitlendi !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Document enregistré et verrouillé !"
         },
         msgBarcodeCheck:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Lütfen Barkod Okutunuz !",
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez scanner le code-barres !            ",
         },
         msgBarcodeNotFound:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Barkod Bulunamadı !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Barre code introuvable"
         },
         msgItemsAdd:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Seçtiğiniz Ürünler Eklendi !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Vos produits sélectionnés ont été ajoutés !"
         },
         msgDoclocked:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Evrak Kilidi Açılmadan Kayıt Edilemez !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Les documents ne peuvent pas être enregistrés sans déverrouillage ! "
         },
         msgItemNotFound:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Stok Bulunmadı !!"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Stock introuvable!"
         },
         msgCombineItem:
         {
-            title: "Dikkat",
-            btn01: "Vazgeç",
-            btn02: "Yeni Ekle",
-            msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Yeni Satır Eklensin Mi ?"
+            title: "Attention",
+            btn01: "Abandonne",
+            btn02: "Nouveau ajout",
+            msg: "Le produit que vous souhaitez ajouter est dans le document ! Ajouter une nouvelle ligne ?"
         },
         popWizard : 
         {
-            title : "Ürün Seçme Sihirbazı",
+            title : "Assistant de sélection de produit",
         },
         popBarcodeEntry : 
         {
-            title : "Barkod Giriş"
+            title : "Entrez barre code"
         },
-        validRef :"Seri Boş Geçilemez",
-        validRefNo : "Sıra Boş Geçilemez",
-        validDepot : "Depo Seçmelisiniz",
-        validCustomerCode : "Cari Kodu Boş Geçilemez",
-        validDocDate : "Tarih Seçmelisiniz",
+        validRef :"La série ne peut pas être vide",
+        validRefNo : "La file d'attente ne peut pas être vide",
+        validDepot : "Vous devez choisir l'entrepôt",
+        validCustomerCode : "Le code actuel ne peut pas être vide",
+        validDocDate : "Vous devez choisir une date",
         popDiscount : 
         {
-            title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            title: "Remise sur les documents",
+            Percent : "%",
+            Price : "Total"
         },
         msgDiscountPrice:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Tutardan Büyük İndirim Yapılamaz !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Aucune grande promotion ne peut être faite à partir du montant !"
         },
         msgDiscountPercent:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Tutardan Büyük İndirim Yapılamaz !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Aucune grande promotion ne peut être faite à partir du montant !"
         },
         msgVatDelete:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            btn02: "Vazgeç",
-            msg: "Vergiyi Sıfırlamak istediğinize eminmisiniz !"
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonne",
+            msg: "Voulez-vous vraiment réinitialiser la taxe ?"
         },
     },
     ord_01_002 :
     {
-        btnDropmenu : "İşlemler",
-        txtRefRefno : "Seri-Sıra",
-        txtCustomerCode : "Cari Kodu",
-        txtCustomerName : "Cari Adı",
-        txtPage : "Sayfa",
-        txtDepot : "Depo",
-        txtDate : "Tarih",
-        txtAmount : "Tutar",
-        txtDiscount : "İndirim",
-        txtQuantity : "Miktar",
-        txtVat : "Kdv",
-        txtPrice :"Fiyat",
-        chkGroup : "Grup",
-        chkCustomer : "Tedarikçi Ürünleri",
-        chkAllItems : "Tüm Ürünler",
-        chkAutoAdd : "Oto Ekle",
-        AddItems : "Ekle",
-        txtBarcode : "Barkod Ekle",
-        txtBarcodePlace : "Lütfen Barkod Okutunuz",
-        btnSave : "Kaydet",
-        btnNew : "Yeni",
-        btnDelete : "Sil",
-        btnDeleteRow : "Satır Sil",
-        btnBarcodeEntry : "Barkod Girişi",
-        btnDocument : "İşlem Satırları",
-        btnItemAdd: "Ekle",
-        txtGrandTotal : "Genel Toplam",
+        btnDropmenu : "Transactions",
+        txtRefRefno : "Série séquences",
+        txtCustomerCode : "Code actuel",
+        txtCustomerName : "Nom actuel",
+        txtPage :"Page",
+        txtDepot : "Depôt",
+        txtDate : "Date",
+        txtAmount : "Total",
+        txtDiscount : "Promotion",
+        txtQuantity : "Quantité",
+        txtVat : "TVA",
+        txtPrice :"Prix",
+        chkGroup : "Groupe",
+        chkCustomer : "Produits du fournisseur",
+        chkAllItems : "Tous les produits",
+        chkAutoAdd : "Ajouter automatiquement",
+        AddItems : "Ajoutez",
+        txtBarcode : "Ajoutez barre code",
+        txtBarcodePlace : "Veuillez scannez le code barre",
+        btnSave : "Enregistrez",
+        btnNew : "Nouveau",
+        btnDelete : "Effacer",
+        btnDeleteRow : "Effacer la ligne",
+        btnBarcodeEntry : "Entrée de barre code",
+        btnDocument : "Lignes de transaction",
+        btnItemAdd: "Ajoutez",
+        txtGrandTotal : "le total global",
         msgCustomerSelect:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Lütfen Cari Seçiniz.."
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez choisir un client."
         },
         msgDepotSelect:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Lütfen Depo Seçiniz.."
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez sélectionner un entrepôt.."
         },
         pg_Docs : 
         {
-            title : "Evrak Seçimi",
-            clmRef : "SERİ",
-            clmRefNo : "SIRA",
-            clmOutputName : "CARİ ADI",
-            clmOutputCode  : "CARİ KODU",
+            title : "Sélection de documents",
+            clmRef : "Série",
+            clmRefNo : "Séquence",
+            clmOutputName : "Nom actuel",
+            clmOutputCode  : "Code actuel",
         },
         grdChkCustomer : 
         {
-            clmDate : "TARIH",
-            clmPrice : "FIYAT",
-            clmCustomer : "CARİ ADI",
+            clmDate : "Date",
+            clmPrice : "Prix",
+            clmCustomer : "Nom actuel",
         },
         pg_CustomerSelect :
         {
-            title : "Cari Seçimi",
-            clmCode :  "CARİ KODU",
-            clmTitle : "CARİ ADI",
-            clmTypeName : "TİPİ",
-            clmGenusName : "CİNSİ"
+            title : "Choix du client",
+            clmCode :  "Code actuel",
+            clmTitle : "Nom actuel",
+            clmTypeName : "Type",
+            clmGenusName : "Tipi"
         },
         msgQuantity:
         {
-            title: "Miktar",
-            btn01: "Ekle",
-            msg: "Miktar Giriniz"
+            title: "Quantité",
+            btn01: "Ajoutez",
+            msg: "Entrez une quantité"
         },
         pg_txtItemsCode : 
         {
-            title : "Stok Seçimi",
-            clmCode :  "STOK KODU",
-            clmName : "STOK ADI",
+            title : "Sélection de stock",
+            clmCode :  "Code de stock",
+            clmName : "Nom de stock",
         },
         grdSlsOrder: 
         {
-            clmItemCode: "Kodu",
-            clmItemName: "Adı",
-            clmPrice: "Fiyat",
-            clmQuantity : "Miktar",
-            clmDiscount : "İndirim",
-            clmDiscountRate : "İndirim %",
-            clmVat : "KDV",
-            clmAmount : "Tutar",
-            clmTotal : "Genel Toplam",
-            clmCreateDate: "Kayıt Tarihi",
-            clmMargin :"Marj"
+            clmItemCode: "Code",
+            clmItemName: "Nom",
+            clmPrice: "Prix",
+            clmQuantity : "Quantité",
+            clmDiscount : "Promotion",
+            clmDiscountRate : "Promotion %",
+            clmVat : "TVA",
+            clmAmount : "Total",
+            clmTotal : "le total général",
+            clmCreateDate: "Date d'enregistrement",
+            clmMargin :"Marje"
         },
         popItemCode : 
         {
-            title : "Stok Seçimi",
-            clmCode :  "STOK KODU",
-            clmName : "STOK ADI",
+            title : "Sélection de stock",
+            clmCode :  "Code de stock",
+            clmName : "Nom de stock",
         },
         msgDocValid:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "L'inventaire ne peut pas être saisi avant que les en-têtes de document ne soient terminés !"
         },
         msgNotSave:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Evrakta Değişiklik Yapılmış! Lütfen Kayıt Edin Yada Değişiklikleri Geri Alın"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Le document a été modifié ! Veuillez enregistrer ou annuler les modifications"
         },
         msgAddItems:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            btn02: "Vazgeç",
-            msg: "Seçmiş olduğunuz kritere uygun ürünler eklenecektir.Onaylıyormusunuz ?"
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonne",
+            msg: "Les produits correspondant aux critères que vous avez sélectionnés seront ajoutés. Êtes-vous d'accord ?"
         },
         msgSave:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            btn02: "Vazgeç",
-            msg: "Kayıt etmek istediğinize eminmisiniz !"
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonne",
+            msg: "Êtes-vous sûr de vouloir vous inscrire ?"
         },
         msgSaveResult:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msgSuccess: "Kayıt işleminiz başarılı !",
-            msgFailed: "Kayıt işleminiz başarısız !"
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Votre inscription a réussi !",
+            msgFailed: "Votre inscription a échoué !"
         },
         msgSaveValid:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
+            title: "Attention",
+            btn01: "OK",
             msg: "S'il vous plaît remplir les champs obligatoires !"
         },
         msgDelete:
@@ -1330,7 +1330,7 @@ export const langFr =
             title: "Attention",
             btn01: "Continuer",
             btn02: "Abandonne",
-            msg: "Seçilen Ürün Cariye Tanımlı Değil ! Devam Etmek İstiyormusunuz"
+            msg: "Le produit du client sélectionné n'est pas définie ! Voulez-vous continuer"
         },
     },
     irs_01_001 :
@@ -1345,7 +1345,7 @@ export const langFr =
         txtAmount : "Montant",
         txtDiscount : "Promotion",
         txtMargin : "Marje",
-        txtVat : "Kdv",
+        txtVat : "TVA",
         txtTotal : "le total général",
         txtQuantity : "Quantité",
         txtPrice :"Prix",
@@ -1354,23 +1354,23 @@ export const langFr =
         {
             title : "Séléction de document",
             clmRef : "Série",
-            clmRefNo : "SIRA",
+            clmRefNo : "Séquence",
             clmInputName : "Nom actuel",
-            clmInputCode  : "CODE ACTUEL",
+            clmInputCode  : "Code actuel",
         },
         pg_txtCustomerCode : 
         {
             title : "Sélection actuelle",
-            clmCode :  "CODE ACTUEL",
-            clmTitle : "NOM ACTUEL",
-            clmTypeName : "TYPE",
-            clmGenusName : "ELEVER"
+            clmCode :  "Code acuel",
+            clmTitle : "Nom actuel",
+            clmTypeName : "Type",
+            clmGenusName : "Elever"
         },
         pg_txtItemsCode : 
         {
             title : "Sélection d'actions",
-            clmCode :  "CODE DE STOCK",
-            clmName : "NOM DE STOCK",
+            clmCode :  "Code de stock",
+            clmName : "Nom de stock",
            
         },
         pg_RebateGrid : 
@@ -1387,8 +1387,8 @@ export const langFr =
             clmPrice: "Prix",
             clmQuantity : "Quantité",
             clmDiscount : "Promotion",
-            clmDiscountRate : "İndirim %",
-            clmVat : "KDV",
+            clmDiscountRate : "Promotion %",
+            clmVat : "TVA",
             clmAmount : "Montant",
             clmTotal : "le total général",
             clmCreateDate: "Date d'enregistrement ",
@@ -1410,7 +1410,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
+            msg: "L'inventaire ne peut pas être saisi avant que les en-têtes de document ne soient terminés !"
         },
         msgSave:
         {
@@ -1515,7 +1515,7 @@ export const langFr =
         msgUnderPrice1:
         {
             title: "Attention",
-            btn01: "OUI",
+            btn01: "Oui",
             btn02: "Abandonner",
             msg: "le coût du prix est bas !! Voulez-vous continuer"
         },
@@ -1569,7 +1569,7 @@ export const langFr =
             title: "Attention",
             btn01: "Continuer",
             btn02: "Abandonne",
-            msg: "Seçilen Ürün Cariye Tanımlı Değil ! Devam Etmek İstiyormusunuz"
+            msg: "Le produit du client sélectionné n'est pas définie ! Voulez-vous continuer ?"
         },
 
     },
