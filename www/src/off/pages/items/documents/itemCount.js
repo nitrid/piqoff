@@ -537,6 +537,14 @@ export default class itemCount extends React.PureComponent
             </NdListBox>
         )
     }
+    async checkRow()
+    {
+        for (let i = 0; i < this.countObj.dt().length; i++) 
+        {
+            this.countObj.dt()[i].DEPOT = this.countObj.dt()[0].DEPOT
+            this.countObj.dt()[i].DOC_DATE = this.countObj.dt()[0].DOC_DATE
+        }
+    }
     render()
     {
         return(
@@ -868,8 +876,9 @@ export default class itemCount extends React.PureComponent
                                     searchEnabled={true}
                                     notRefresh = {true}
                                     onValueChanged={(async()=>
-                                        {
-                                        }).bind(this)}
+                                    {
+                                        this.checkRow()
+                                    }).bind(this)}
                                     data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 "},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
@@ -885,7 +894,8 @@ export default class itemCount extends React.PureComponent
                                     <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
                                     dt={{data:this.countObj.dt('ITEM_COUNT'),field:"DOC_DATE"}}
                                     onValueChanged={(async()=>
-                                        {
+                                    {
+                                        this.checkRow()
                                     }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmCountFrom" + this.tabIndex}>

@@ -33,6 +33,7 @@ export default class depotTransfer extends React.PureComponent
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.docObj = new docCls();
         this.tabIndex = props.data.tabkey
+        this.quantityControl = false
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
 
@@ -92,7 +93,7 @@ export default class depotTransfer extends React.PureComponent
             this.btnDelete.setState({disabled:false});
             this.btnPrint.setState({disabled:false});
         })
-
+        this.quantityControl = this.prmObj.filter({ID:'negativeQuantity',USERS:this.user.CODE}).getValue().value
         this.txtRef.setState({value:this.user.CODE})
         let tmpDoc = {...this.docObj.empty}
         tmpDoc.REF = this.user.CODE
@@ -338,11 +339,8 @@ export default class depotTransfer extends React.PureComponent
     }
     async addItem(pData,pIndex)
     {
-        let tmpDatas = this.prmObj.filter({ID:'negativeQuantity',USERS:this.user.CODE}).getValue()
-        console.log(tmpDatas)
-        if(typeof tmpDatas != 'undefined' && tmpDatas.value ==  true)
+        if(typeof this.quantityControl != 'undefined' && this.quantityControl ==  true)
         {
-            console.log(tmpDatas)
             let tmpCheckQuery = 
             {
                 query :"SELECT [dbo].[FN_DEPOT_QUANTITY](@GUID,@DEPOT,GETDATE()) AS QUANTITY ",
@@ -350,10 +348,8 @@ export default class depotTransfer extends React.PureComponent
                 value : [pData.GUID,this.docObj.dt()[0].OUTPUT]
             }
             let tmpQuantity = await this.core.sql.execute(tmpCheckQuery) 
-            console.log(tmpQuantity)
             if(tmpQuantity.result.recordset.length > 0)
             {
-                console.log(tmpQuantity.result.recordset[0].QUANTITY )
                if(tmpQuantity.result.recordset[0].QUANTITY < 1)
                {
                     let tmpConfObj =
@@ -365,6 +361,10 @@ export default class depotTransfer extends React.PureComponent
         
                     await dialog(tmpConfObj);
                     return
+               }
+               else
+               {
+                    this.docObj.docItems.dt()[pIndex].DEPOT_QUANTITY = tmpQuantity.result.recordset[0].QUANTITY
                }
             }
         }
@@ -1037,8 +1037,23 @@ export default class depotTransfer extends React.PureComponent
                                     height={'400'} 
                                     width={'100%'}
                                     dbApply={false}
-                                    onRowUpdated={async(e)=>{
-                                       
+                                    onRowUpdating={async(e)=>
+                                    {
+                                        if(this.quantityControl == true)
+                                        {
+                                            let rowIndex = e.component.getRowIndexByKey(e.key)
+                                            if(typeof e.newData.QUANTITY != 'undefined' && e.key.DEPOT_QUANTITY < e.newData.QUANTITY)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgNotQuantity',showTitle:true,title:this.t("msgNotQuantity.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgNotQuantity.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotQuantity.msg") + e.oldData.DEPOT_QUANTITY}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                                this.docObj.docItems.dt()[rowIndex].QUANTITY = e.oldData.DEPOT_QUANTITY
+                                            }
+                                        }
                                     }}
                                     onRowRemoved={(e)=>{
 

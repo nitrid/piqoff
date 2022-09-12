@@ -47,7 +47,6 @@ export default class userPage extends React.Component
                     access={this.access.filter({ELEMENT:'grdUserList',USERS:this.user.CODE})}
                     onRowUpdating={(e)=>
                     {
-                        console.log(e)
                         if(typeof e.newData.PWD != 'undefined')
                         {
                             e.newData.PWD = btoa(e.newData.PWD)

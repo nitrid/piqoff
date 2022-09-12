@@ -32,6 +32,7 @@ export default class rebateDoc extends React.PureComponent
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.docObj = new docCls();
+        this.quantityControl = false
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
 
@@ -93,7 +94,7 @@ export default class rebateDoc extends React.PureComponent
             this.btnPrint.setState({disabled:false});
         })
 
-
+        this.quantityControl = this.prmObj.filter({ID:'negativeQuantity',USERS:this.user.CODE}).getValue().value
         this.txtRef.setState({value:this.user.CODE})
         let tmpDoc = {...this.docObj.empty}
         tmpDoc.REF = this.user.CODE
@@ -331,6 +332,35 @@ export default class rebateDoc extends React.PureComponent
     }
     async addItem(pData,pIndex)
     {
+        if(typeof this.quantityControl != 'undefined' && this.quantityControl ==  true)
+        {
+            let tmpCheckQuery = 
+            {
+                query :"SELECT [dbo].[FN_DEPOT_QUANTITY](@GUID,@DEPOT,GETDATE()) AS QUANTITY ",
+                param : ['GUID:string|50','DEPOT:string|50'],
+                value : [pData.GUID,this.docObj.dt()[0].OUTPUT]
+            }
+            let tmpQuantity = await this.core.sql.execute(tmpCheckQuery) 
+            if(tmpQuantity.result.recordset.length > 0)
+            {
+               if(tmpQuantity.result.recordset[0].QUANTITY < 1)
+               {
+                    let tmpConfObj =
+                    {
+                        id:'msgNotQuantity',showTitle:true,title:this.t("msgNotQuantity.title"),showCloseButton:true,width:'500px',height:'200px',
+                        button:[{id:"btn01",caption:this.t("msgNotQuantity.btn01"),location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotQuantity.msg")}</div>)
+                    }
+        
+                    await dialog(tmpConfObj);
+                    return
+               }
+               else
+               {
+                    this.docObj.docItems.dt()[pIndex].DEPOT_QUANTITY = tmpQuantity.result.recordset[0].QUANTITY
+               }
+            }
+        }
         for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
         {
             if(this.docObj.docItems.dt()[i].ITEM_CODE == pData.CODE)
@@ -386,6 +416,15 @@ export default class rebateDoc extends React.PureComponent
         this.docObj.docItems.dt()[pIndex].COST_PRICE = 0
         this.docObj.docItems.dt()[pIndex].DISCOUNT = 0
         this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
+    }
+    async checkRow()
+    {
+        for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+        {
+            this.docObj.docItems.dt()[i].INPUT = this.docObj.dt()[0].INPUT
+            this.docObj.docItems.dt()[i].OUTPUT = this.docObj.dt()[0].OUTPUT
+            this.docObj.docItems.dt()[i].DOC_DATE = this.docObj.dt()[0].DOC_DATE
+        }
     }
     render()
     {
@@ -716,7 +755,8 @@ export default class rebateDoc extends React.PureComponent
                                     <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
                                     dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
                                     onValueChanged={(async()=>
-                                        {
+                                    {
+                                        this.checkRow()
                                     }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmRbtDoc" + this.tabIndex}>
@@ -736,8 +776,9 @@ export default class rebateDoc extends React.PureComponent
                                     value=""
                                     searchEnabled={true}
                                     onValueChanged={(async()=>
-                                        {
-                                        }).bind(this)}
+                                    {
+                                        this.checkRow()
+                                    }).bind(this)}
                                     data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE = 0"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDepot1',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot1',USERS:this.user.CODE})}
@@ -757,8 +798,9 @@ export default class rebateDoc extends React.PureComponent
                                     value=""
                                     searchEnabled={true}
                                     onValueChanged={(async()=>
-                                        {
-                                        }).bind(this)}
+                                    {
+                                        this.checkRow()
+                                    }).bind(this)}
                                     data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE = 1"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDepot2',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot2',USERS:this.user.CODE})}
@@ -982,6 +1024,24 @@ export default class rebateDoc extends React.PureComponent
                                     width={'100%'}
                                     dbApply={false}
                                     loadPanel={{enabled:true}}
+                                    onRowUpdating={async(e)=>
+                                        {
+                                            if(this.quantityControl == true)
+                                            {
+                                                let rowIndex = e.component.getRowIndexByKey(e.key)
+                                                if(typeof e.newData.QUANTITY != 'undefined' && e.key.DEPOT_QUANTITY < e.newData.QUANTITY)
+                                                {
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgNotQuantity',showTitle:true,title:this.t("msgNotQuantity.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.t("msgNotQuantity.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotQuantity.msg") + e.oldData.DEPOT_QUANTITY}</div>)
+                                                    }
+                                                    await dialog(tmpConfObj);
+                                                    this.docObj.docItems.dt()[rowIndex].QUANTITY = e.oldData.DEPOT_QUANTITY
+                                                }
+                                            }
+                                        }}
                                     onRowUpdated={async(e)=>{
                                        
                                     }}

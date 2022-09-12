@@ -663,6 +663,16 @@ export default class rebateInvoice extends React.PureComponent
             }
         }
     }
+    async checkRow()
+    {
+        for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+        {
+            this.docObj.docItems.dt()[i].INPUT = this.docObj.dt()[0].INPUT
+            this.docObj.docItems.dt()[i].OUTPUT = this.docObj.dt()[0].OUTPUT
+            this.docObj.docItems.dt()[i].DOC_DATE = this.docObj.dt()[0].DOC_DATE
+            this.docObj.docItems.dt()[i].SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+        }
+    }
     render()
     {
         return(
@@ -982,6 +992,7 @@ export default class rebateInvoice extends React.PureComponent
                                     searchEnabled={true}
                                     onValueChanged={(async()=>
                                         {
+                                            this.checkRow()
                                             this.docObj.docCustomer.dt()[0].OUTPUT = this.cmbDepot.value
                                         }).bind(this)}
                                     data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}}}
@@ -1121,8 +1132,9 @@ export default class rebateInvoice extends React.PureComponent
                                     <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
                                     dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
                                     onValueChanged={(async()=>
-                                        {
-                                            this.docObj.docCustomer.dt()[0].DOC_DATE = moment(this.dtDocDate.value).format("DD/MM/YYYY") 
+                                    {
+                                        this.checkRow()
+                                        this.docObj.docCustomer.dt()[0].DOC_DATE = moment(this.dtDocDate.value).format("DD/MM/YYYY") 
                                     }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmRebateInv"  + this.tabIndex}>
@@ -1137,6 +1149,7 @@ export default class rebateInvoice extends React.PureComponent
                                     dt={{data:this.docObj.dt('DOC'),field:"SHIPMENT_DATE"}}
                                     onValueChanged={(async()=>
                                     {
+                                        this.checkRow()
                                     }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmRebateInv"  + this.tabIndex}>

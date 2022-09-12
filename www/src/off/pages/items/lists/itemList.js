@@ -26,7 +26,7 @@ export default class itemList extends React.PureComponent
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.state = 
         {
-            columnListValue : ['NAME','CODE','BARCODE','MULTICODE','CUSTOMER_NAME','PRICE_SALE','VAT','MAIN_GRP_NAME']
+            columnListValue : ['NAME','CODE','BARCODE','MULTICODE','CUSTOMER_NAME','CUSTOMER_PRICE','ORGINS_NAME','PRICE_SALE','VAT','MAIN_GRP_NAME']
         }
         
         this.core = App.instance.core;
@@ -40,6 +40,8 @@ export default class itemList extends React.PureComponent
             {CODE : "BARCODE",NAME :  this.t("grdListe.clmBarcode")},
             {CODE : "MULTICODE",NAME : this.t("grdListe.clmMulticode")},
             {CODE : "CUSTOMER_NAME",NAME :  this.t("grdListe.clmCustomer")},
+            {CODE : "CUSTOMER_PRICE",NAME :  this.t("grdListe.clmCustomerPrice")},
+            {CODE : "ORGINS_NAME",NAME :  this.t("grdListe.clmOrgin")},
             {CODE : "PRICE_SALE",NAME :  this.t("grdListe.clmPriceSale")},
             {CODE : "COST_PRICE",NAME :  this.t("grdListe.clmCostPrice")},
             {CODE : "MARGIN",NAME :  this.t("grdListe.clmMargin")},
@@ -531,12 +533,14 @@ export default class itemList extends React.PureComponent
                                 <Column dataField="MAIN_GRP_NAME" caption={this.t("grdListe.clmMainGrp")} visible={true}/> 
                                 <Column dataField="VAT" caption={this.t("grdListe.clmVat")} visible={true}/> 
                                 <Column dataField="PRICE_SALE" caption={this.t("grdListe.clmPriceSale")} visible={true}/> 
+                                <Column dataField="CUSTOMER_PRICE" caption={this.t("grdListe.clmCustomerPrice")} visible={true}/> 
                                 <Column dataField="COST_PRICE" caption={this.t("grdListe.clmCostPrice")} visible={false}/> 
                                 <Column dataField="MARGIN" caption={this.t("grdListe.clmMargin")} visible={false}/> 
                                 <Column dataField="NETMARGIN" caption={this.t("grdListe.clmNetMargin")} visible={false}/> 
                                 <Column dataField="MIN_PRICE" caption={this.t("grdListe.clmMinPrice")} visible={false}/> 
                                 <Column dataField="MAX_PRICE" caption={this.t("grdListe.clmMaxPrice")} visible={false}/> 
                                 <Column dataField="UNIT_NAME" caption={this.t("grdListe.clmUnit")} visible={false}/> 
+                                <Column dataField="ORGINS_NAME" caption={this.t("grdListe.clmOrgin")} visible={true}/> 
                                 <Column dataField="MULTICODE" caption={this.t("grdListe.clmMulticode")} visible={true}/> 
                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdListe.clmCustomer")} visible={true}/> 
                                 <Column dataField="STATUS" caption={this.t("grdListe.clmStatus")} visible={false}/>                             
