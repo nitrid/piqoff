@@ -102,8 +102,9 @@ export class promoCls
 
         return this.ds.get(0)
     }
-    addEmpty()
+    async addEmpty()
     {
+        await this.core.util.waitUntil(0)
         if(typeof this.dt('PROMO') == 'undefined')
         {
             return;
@@ -256,8 +257,10 @@ export class promoCondCls
 
         return this.ds.get(0)
     }
-    addEmpty()
+    async addEmpty()
     {
+        await this.core.util.waitUntil(0)
+
         if(typeof this.dt('PROMO_CONDITION') == 'undefined')
         {
             return;
@@ -272,6 +275,7 @@ export class promoCondCls
             tmp = {...this.empty}
         }
         tmp.GUID = datatable.uuidv4();
+        
         this.dt('PROMO_CONDITION').push(tmp)
     }
     clearAll()
@@ -392,8 +396,9 @@ export class promoAppCls
 
         return this.ds.get(0)
     }
-    addEmpty()
+    async addEmpty()
     {
+        await this.core.util.waitUntil(0)
         if(typeof this.dt('PROMO_APPLICATION') == 'undefined')
         {
             return;
