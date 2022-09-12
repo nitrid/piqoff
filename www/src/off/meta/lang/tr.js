@@ -755,7 +755,7 @@ export const langTr =
         {
             title: "Dikkat",
             btn01: "Tamam",
-            msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır !"
+            msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
         },
         msgDblDepot:
         {
@@ -1004,6 +1004,12 @@ export const langTr =
             title: "Dizayn seçimi",
             design : "Dizayn",
             lang : "Evrak Dili"
+        },
+        msgNotQuantity:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
         },
     },
     stk_02_004 :
@@ -1282,7 +1288,12 @@ export const langTr =
             design : "Dizayn",
             lang : "Evrak Dili"
         },
-
+        msgNotQuantity:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
+        },
     },
     stk_02_007 :
     {
@@ -2665,7 +2676,13 @@ export const langTr =
         validDepot : "Depo Seçmelisiniz",
         validCustomerCode : "Cari Kodu Boş Geçilemez",
         validDocDate : "Tarih Seçmelisiniz",
-        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz"
+        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz",
+        msgNotQuantity:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
+        },
     },
     ftr_02_003 :
     {
@@ -3560,9 +3577,6 @@ export const langTr =
         validCustomerCode : "Cari Kodu Boş Geçilemez",
         validDocDate : "Tarih Seçmelisiniz",
         tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz"
-
-
-
     },
     irs_02_002 :
     {
@@ -3803,7 +3817,13 @@ export const langTr =
         validDepot : "Depo Seçmelisiniz",
         validCustomerCode : "Cari Kodu Boş Geçilemez",
         validDocDate : "Tarih Seçmelisiniz",
-        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz"
+        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz",
+        msgNotQuantity:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
+        },
     },
     irs_02_003 :
     {

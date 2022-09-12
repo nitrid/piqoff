@@ -34,6 +34,7 @@ export default class outageDoc extends React.PureComponent
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.docObj = new docCls();
         this.qDescObj = new quickDescCls();
+        this.quantityControl = false
      
      
 
@@ -99,7 +100,7 @@ export default class outageDoc extends React.PureComponent
             this.btnPrint.setState({disabled:false});
         })
 
-
+        this.quantityControl = this.prmObj.filter({ID:'negativeQuantity',USERS:this.user.CODE}).getValue().value
         this.txtRef.setState({value:this.user.CODE})
         let tmpDoc = {...this.docObj.empty}
         tmpDoc.REF = this.user.CODE
@@ -435,6 +436,35 @@ export default class outageDoc extends React.PureComponent
     }
     async addItem(pData,pIndex)
     {
+        if(typeof this.quantityControl != 'undefined' && this.quantityControl ==  true)
+        {
+            let tmpCheckQuery = 
+            {
+                query :"SELECT [dbo].[FN_DEPOT_QUANTITY](@GUID,@DEPOT,GETDATE()) AS QUANTITY ",
+                param : ['GUID:string|50','DEPOT:string|50'],
+                value : [pData.GUID,this.docObj.dt()[0].OUTPUT]
+            }
+            let tmpQuantity = await this.core.sql.execute(tmpCheckQuery) 
+            if(tmpQuantity.result.recordset.length > 0)
+            {
+               if(tmpQuantity.result.recordset[0].QUANTITY < 1)
+               {
+                    let tmpConfObj =
+                    {
+                        id:'msgNotQuantity',showTitle:true,title:this.t("msgNotQuantity.title"),showCloseButton:true,width:'500px',height:'200px',
+                        button:[{id:"btn01",caption:this.t("msgNotQuantity.btn01"),location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotQuantity.msg")}</div>)
+                    }
+        
+                    await dialog(tmpConfObj);
+                    return
+               }
+               else
+               {
+                    this.docObj.docItems.dt()[pIndex].DEPOT_QUANTITY = tmpQuantity.result.recordset[0].QUANTITY
+               }
+            }
+        }
         for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
         {
             if(this.docObj.docItems.dt()[i].ITEM_CODE == pData.CODE)
@@ -1099,6 +1129,24 @@ export default class outageDoc extends React.PureComponent
                                     width={'100%'}
                                     dbApply={false}
                                     loadPanel={{enabled:true}}
+                                    onRowUpdating={async(e)=>
+                                    {
+                                        if(this.quantityControl == true)
+                                        {
+                                            let rowIndex = e.component.getRowIndexByKey(e.key)
+                                            if(typeof e.newData.QUANTITY != 'undefined' && e.key.DEPOT_QUANTITY < e.newData.QUANTITY)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgNotQuantity',showTitle:true,title:this.t("msgNotQuantity.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgNotQuantity.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotQuantity.msg") + e.oldData.DEPOT_QUANTITY}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                                this.docObj.docItems.dt()[rowIndex].QUANTITY = e.oldData.DEPOT_QUANTITY
+                                            }
+                                        }
+                                    }}
                                     onRowUpdated={async(e)=>{
                                         this._calculateTotal()
                                     }}

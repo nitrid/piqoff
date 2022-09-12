@@ -1046,12 +1046,12 @@ export default class depotTransfer extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgNotQuantity',showTitle:true,title:this.t("msgNotQuantity.title" + e.newData.DEPOT_QUANTITY),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgNotQuantity',showTitle:true,title:this.t("msgNotQuantity.title"),showCloseButton:true,width:'500px',height:'200px',
                                                     button:[{id:"btn01",caption:this.t("msgNotQuantity.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotQuantity.msg")}</div>)
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotQuantity.msg") + e.oldData.DEPOT_QUANTITY}</div>)
                                                 }
                                                 await dialog(tmpConfObj);
-                                                this.docObj.docItems.dt()[rowIndex].QUANTITY = e.newData.DEPOT_QUANTITY
+                                                this.docObj.docItems.dt()[rowIndex].QUANTITY = e.oldData.DEPOT_QUANTITY
                                             }
                                         }
                                     }}

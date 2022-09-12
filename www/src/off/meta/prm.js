@@ -960,7 +960,25 @@ export const prm =
             CAPTION : "Cari Adı"
         }
     },
-
+    // negativeQuantity
+    {
+    TYPE : 1,
+    ID :"negativeQuantity",
+    VALUE : 
+    {
+        value : true
+    },
+    SPECIAL : "",
+    PAGE : "ftr_02_002",
+    ELEMENT : "",
+    APP : "OFF",
+    VIEW : 
+    {
+        TYPE : "checkbox",
+        PAGE_NAME : "Satış Faturası",
+        CAPTION : "Eksiye Düşemeye İzin Verme"
+    }
+    },
     //#endregion
 
     //#region Alış Faturası
@@ -1157,6 +1175,27 @@ export const prm =
         }
     },
     //#endregion
+    //#region İade Ürün Toplama
+     // negativeQuantity
+     {
+        TYPE : 1,
+        ID :"negativeQuantity",
+        VALUE : 
+        {
+            value : true
+        },
+        SPECIAL : "",
+        PAGE : "stk_02_005",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "İade Ürün Toplama",
+            CAPTION : "Eksiye Düşemeye İzin Verme"
+        }
+    },
+    //#endregion
 
     //#region Kayıp Ürün
      // Zorunlu Açıklama
@@ -1174,8 +1213,27 @@ export const prm =
         VIEW : 
         {
             TYPE : "checkbox",
-            PAGE_NAME : "Kayıp Ürün Fiçi",
+            PAGE_NAME : "Kayıp Ürün Fişi",
             CAPTION : "Satır Açıklamalarını Zorunlu Kıl"
+        }
+    },
+     // negativeQuantity
+     {
+        TYPE : 1,
+        ID :"negativeQuantity",
+        VALUE : 
+        {
+            value : true
+        },
+        SPECIAL : "",
+        PAGE : "stk_02_003",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME :  "Kayıp Ürün Fişi",
+            CAPTION : "Eksiye Düşemeye İzin Verme"
         }
     },
     //#endregion
@@ -1213,5 +1271,25 @@ export const prm =
         }
     },
     //#endregion
-
+    //#region Satış İrsaliye
+     // negativeQuantity
+     {
+        TYPE : 1,
+        ID :"negativeQuantity",
+        VALUE : 
+        {
+            value : true
+        },
+        SPECIAL : "",
+        PAGE : "irs_02_002",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Satış İrsaliye",
+            CAPTION : "Eksiye Düşemeye İzin Verme"
+        }
+    },
+    //#endregion
 ]

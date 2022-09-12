@@ -39,6 +39,7 @@ export default class salesInvoice extends React.PureComponent
         this.docObj = new docCls();
         this.paymentObj = new docCls();
         this.tabIndex = props.data.tabkey
+        this.quantityControl = false
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
         this._calculateTotal = this._calculateTotal.bind(this)
@@ -120,6 +121,7 @@ export default class salesInvoice extends React.PureComponent
 
         this.dtDocDate.value = moment(new Date())
         this.dtShipDate.value = moment(new Date())
+        this.quantityControl = this.prmObj.filter({ID:'negativeQuantity',USERS:this.user.CODE}).getValue().value
 
         let tmpDoc = {...this.docObj.empty}
         tmpDoc.TYPE = 1
@@ -403,6 +405,35 @@ export default class salesInvoice extends React.PureComponent
         if(typeof pQuantity == 'undefined')
         {
             pQuantity = 1
+        }
+        if(typeof this.quantityControl != 'undefined' && this.quantityControl ==  true)
+        {
+            let tmpCheckQuery = 
+            {
+                query :"SELECT [dbo].[FN_DEPOT_QUANTITY](@GUID,@DEPOT,GETDATE()) AS QUANTITY ",
+                param : ['GUID:string|50','DEPOT:string|50'],
+                value : [pData.GUID,this.docObj.dt()[0].OUTPUT]
+            }
+            let tmpQuantity = await this.core.sql.execute(tmpCheckQuery) 
+            if(tmpQuantity.result.recordset.length > 0)
+            {
+               if(tmpQuantity.result.recordset[0].QUANTITY < pQuantity)
+               {
+                    let tmpConfObj =
+                    {
+                        id:'msgNotQuantity',showTitle:true,title:this.t("msgNotQuantity.title"),showCloseButton:true,width:'500px',height:'200px',
+                        button:[{id:"btn01",caption:this.t("msgNotQuantity.btn01"),location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotQuantity.msg")}</div>)
+                    }
+        
+                    await dialog(tmpConfObj);
+                    return
+               }
+               else
+               {
+                    this.docObj.docItems.dt()[pIndex].DEPOT_QUANTITY = tmpQuantity.result.recordset[0].QUANTITY
+               }
+            }
         }
         for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
         {
@@ -1452,6 +1483,24 @@ export default class salesInvoice extends React.PureComponent
                                     height={'400'} 
                                     width={'100%'}
                                     dbApply={false}
+                                    onRowUpdating={async(e)=>
+                                    {
+                                        if(this.quantityControl == true)
+                                        {
+                                            let rowIndex = e.component.getRowIndexByKey(e.key)
+                                            if(typeof e.newData.QUANTITY != 'undefined' && e.key.DEPOT_QUANTITY < e.newData.QUANTITY)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgNotQuantity',showTitle:true,title:this.t("msgNotQuantity.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgNotQuantity.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotQuantity.msg") + e.oldData.DEPOT_QUANTITY}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                                this.docObj.docItems.dt()[rowIndex].QUANTITY = e.oldData.DEPOT_QUANTITY
+                                            }
+                                        }
+                                    }}
                                     onRowUpdated={async(e)=>{
                                         let rowIndex = e.component.getRowIndexByKey(e.key)
                                         if(typeof e.data.DISCOUNT_RATE != 'undefined')

@@ -751,11 +751,11 @@ export const langFr =
             btn01: "OK",
             msg: "Veuillez saisir les en-tête avant l'achèvement !"
         },
-        msgNotQuantity:
+        msgNotQuantity: // BAK
         {
-            title: "Attention",
-            btn01: "OK",
-            msg: "La Quantité Dépot Saisie Ne Peut Etre Moins !"
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
         },
         msgDblDepot:
         {
@@ -1004,6 +1004,12 @@ export const langFr =
             title: "Choix du Désign",
             design : "Design" ,
             lang : "Langue Document" 
+        },
+        msgNotQuantity: // BAK
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
         },
     },
     stk_02_004 :
@@ -1282,7 +1288,12 @@ export const langFr =
             design : "Design" ,
             lang : "Langue Document" 
         },
-
+        msgNotQuantity: // BAK
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
+        },
     },
     stk_02_007 :
     {
@@ -2652,7 +2663,13 @@ export const langFr =
         validDepot : "Sélectionner Dépot",
         validCustomerCode : "Le Code Produit ne peut être Vide ",
         validDocDate : "Sélectionner Date" ,
-        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter"
+        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
+        msgNotQuantity: // BAK
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
+        },
     },
     ftr_02_003 :
     {
@@ -3788,7 +3805,13 @@ export const langFr =
         validDepot : "Sélectionner Dépot",
         validCustomerCode : "Le Code Produit ne peut être Vide ",
         validDocDate : "Sélectionner Date" ,
-        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter"
+        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
+        msgNotQuantity: // BAK
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
+        },
     },
     irs_02_003 :
     {
