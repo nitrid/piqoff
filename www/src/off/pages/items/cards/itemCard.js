@@ -80,6 +80,7 @@ export default class itemCard extends React.PureComponent
         await this.core.util.waitUntil(0)
         if(typeof this.pagePrm != 'undefined')
         {
+            await this.init(); 
             this.getItem(this.pagePrm.CODE)
         }
         else
@@ -270,7 +271,7 @@ export default class itemCard extends React.PureComponent
                 this.txtSalePrice.setState({value:0})
             }
         }
-     
+        this.prevCode = this.itemsObj.dt('ITEMS').length > 0 ? this.itemsObj.dt('ITEMS')[0].CODE : '';
         console.log("12 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
     }
     async checkItem(pCode)
@@ -544,7 +545,6 @@ export default class itemCard extends React.PureComponent
     async taxSugarValidCheck()
     {
         let tmpData = this.prmObj.filter({ID:'taxSugarGroupValidation'}).getValue()
-        console.log(tmpData)
         if((typeof tmpData != 'undefined' && Array.isArray(tmpData) && typeof tmpData.find(x => x == this.cmbItemGrp.value) != 'undefined'))
         {
             
@@ -790,8 +790,36 @@ export default class itemCard extends React.PureComponent
                                         this.itemsObj.dt()[0].SALE_JOIN_LINE = tmpItem.SALE_JOIN_LINE
                                         this.itemsObj.dt()[0].TICKET_REST = tmpItem.TICKET_REST
                                         this.itemsObj.dt()[0].SNAME = tmpItem.SNAME
-
-                                        console.log(this.itemsObj.dt())
+                                        let tmpUnit = new unitCls();
+                                        await tmpUnit.load()
+                                        
+                                        let tmpMainUnitObj = {...this.itemsObj.itemUnit.empty}
+                                        tmpMainUnitObj.TYPE = 0
+                                        tmpMainUnitObj.TYPE_NAME = 'Ana Birim'
+                                        tmpMainUnitObj.ITEM_GUID = this.itemsObj.dt()[0].GUID 
+                                        
+                                        if(tmpUnit.dt(0).length > 0)
+                                        {
+                                            tmpMainUnitObj.ID = tmpUnit.dt(0)[0].ID
+                                        }
+                                        
+                                        let tmpUnderUnitObj = {...this.itemsObj.itemUnit.empty}
+                                        tmpUnderUnitObj.TYPE = 1,
+                                        tmpUnderUnitObj.TYPE_NAME = 'Alt Birim'
+                                        tmpUnderUnitObj.ID  = this.cmbUnderUnit.value
+                                        tmpUnderUnitObj.ITEM_GUID = this.itemsObj.dt()[0].GUID    
+                                        tmpUnderUnitObj.FACTOR = 0
+                                        
+                                        let tmpBarcodeObj = {...this.itemsObj.itemBarcode.empty}
+                                        tmpBarcodeObj.ITEM_GUID = this.itemsObj.dt()[0].GUID 
+                                        this.itemsObj.itemBarcode.addEmpty(tmpBarcodeObj);     
+                                
+                                        this.itemsObj.itemUnit.addEmpty(tmpMainUnitObj);
+                                        this.itemsObj.itemUnit.addEmpty(tmpUnderUnitObj);
+                                
+                                        this.itemGrpForOrginsValidCheck();   
+                                        this.itemGrpForMinMaxAccessCheck();  
+                                        this.taxSugarValidCheck()
 
                                     }}/>
                                 </Item>
@@ -1090,6 +1118,7 @@ export default class itemCard extends React.PureComponent
                                     data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY CODE ASC"},sql:this.core.sql}}}
                                     onValueChanged={(e)=>
                                         {
+                                            this.btnSave.setState({disabled:false});
                                             this.taxSugarValidCheck()
                                         }}
                                     >

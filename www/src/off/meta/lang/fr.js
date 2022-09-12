@@ -1422,7 +1422,9 @@ export const langFr =
             clmMaxPrice : "Prix Max",
             clmStatus : "Etat",
             clmNetMargin : "Marge Nette",
-            clmMargin : "Marge Brute"
+            clmMargin : "Marge Brute",
+            clmCustomerPrice : "T. Fiyatı",  // BAK
+            clmOrgin : "Menşei"  // BAK
         },
     },
     stk_03_002 : 

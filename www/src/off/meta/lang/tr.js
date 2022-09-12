@@ -1422,7 +1422,9 @@ export const langTr =
             clmMaxPrice : "Max  Fiyatı",
             clmStatus : "Durum",
             clmNetMargin : "Net Marj",
-            clmMargin : "Brüt Marj"
+            clmMargin : "Brüt Marj",
+            clmCustomerPrice : "T. Fiyatı",
+            clmOrgin : "Menşei"
         },
     },
     stk_03_002 : 
