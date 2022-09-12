@@ -533,16 +533,16 @@ export default class itemList extends React.PureComponent
                                 <Column dataField="MAIN_GRP_NAME" caption={this.t("grdListe.clmMainGrp")} visible={true}/> 
                                 <Column dataField="VAT" caption={this.t("grdListe.clmVat")} visible={true}/> 
                                 <Column dataField="PRICE_SALE" caption={this.t("grdListe.clmPriceSale")} visible={true}/> 
+                                <Column dataField="CUSTOMER_PRICE" caption={this.t("grdListe.clmCustomerPrice")} visible={true}/> 
                                 <Column dataField="COST_PRICE" caption={this.t("grdListe.clmCostPrice")} visible={false}/> 
                                 <Column dataField="MARGIN" caption={this.t("grdListe.clmMargin")} visible={false}/> 
                                 <Column dataField="NETMARGIN" caption={this.t("grdListe.clmNetMargin")} visible={false}/> 
                                 <Column dataField="MIN_PRICE" caption={this.t("grdListe.clmMinPrice")} visible={false}/> 
                                 <Column dataField="MAX_PRICE" caption={this.t("grdListe.clmMaxPrice")} visible={false}/> 
                                 <Column dataField="UNIT_NAME" caption={this.t("grdListe.clmUnit")} visible={false}/> 
-                                <Column dataField="ORGINS_NAME" caption={this.t("grdListe.clmOrgin")} visible={false}/> 
+                                <Column dataField="ORGINS_NAME" caption={this.t("grdListe.clmOrgin")} visible={true}/> 
                                 <Column dataField="MULTICODE" caption={this.t("grdListe.clmMulticode")} visible={true}/> 
                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdListe.clmCustomer")} visible={true}/> 
-                                <Column dataField="CUSTOMER_PRICE" caption={this.t("grdListe.clmCustomerPrice")} visible={true}/> 
                                 <Column dataField="STATUS" caption={this.t("grdListe.clmStatus")} visible={false}/>                             
                             </NdGrid>
                         </div>
