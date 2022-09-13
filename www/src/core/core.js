@@ -465,6 +465,10 @@ export class auth
             });
         })
     }
+    refreshToken(pGuid)
+    {
+        core.instance.socket.emit('refreshToken',[pGuid])
+    }
     logout()
     {
         window.sessionStorage.removeItem('auth');
@@ -1224,6 +1228,15 @@ export class datatable
         }
         return tmpArr;
     }
+    toColumnArr(pColumn)
+    {
+        let tmpArr = []
+        this.toArray().forEach(e =>
+        {
+            tmpArr.push(e[pColumn])
+        })
+        return tmpArr
+    }
     import(pData)
     {
         for (let i = 0; i < pData.length; i++) 
@@ -1300,7 +1313,7 @@ export class datatable
                     tmpOp = Object.keys(tmpValue)[0]
                     tmpValue = Object.values(tmpValue)[0]
                 }
-
+                
                 if(tmpOp == '=')
                 {
                     tmpData = tmpData.filter(x => x[tmpKey] === tmpValue)
@@ -1316,6 +1329,19 @@ export class datatable
                 else if(tmpOp == '<')
                 {
                     tmpData = tmpData.filter(x => x[tmpKey] < tmpValue)
+                }
+                else if(tmpOp == 'IN' || tmpOp == 'in')
+                {
+                    let tmpArr = []
+                    tmpValue.forEach(e => 
+                    {
+                        tmpData.filter(x => x[tmpKey] == e).forEach(m => 
+                        {
+                            console.log(m)
+                            tmpArr.push(m)
+                        });
+                    });
+                    tmpData = tmpArr
                 }
             }
 
