@@ -966,7 +966,7 @@ export const prm =
     ID :"negativeQuantity",
     VALUE : 
     {
-        value : true
+        value : false
     },
     SPECIAL : "",
     PAGE : "ftr_02_002",
@@ -1182,7 +1182,7 @@ export const prm =
         ID :"negativeQuantity",
         VALUE : 
         {
-            value : true
+            value : false
         },
         SPECIAL : "",
         PAGE : "stk_02_005",
@@ -1194,6 +1194,44 @@ export const prm =
             PAGE_NAME : "İade Ürün Toplama",
             CAPTION : "Eksiye Düşemeye İzin Verme"
         }
+    },
+    //cmbDepot1
+    {
+    TYPE : 2,
+    ID :"cmbDepot1",
+    VALUE : 
+    {
+        value : "1A428DFC-48A9-4AC6-AF20-4D0A4D33F316"
+    },
+    SPECIAL : "",
+    PAGE : "stk_02_005",
+    ELEMENT : "cmbDepot1",
+    APP : "OFF",
+    VIEW : 
+    {
+        TYPE : "text",
+        PAGE_NAME : "İade Ürün Toplama",
+        CAPTION : "Çıkış Depo"
+    }
+    },
+    //cmbDepot2
+    {
+    TYPE : 2,
+    ID :"cmbDepot2",
+    VALUE : 
+    {
+        value : "1A428DFC-48A9-4AC6-AF20-4D0A4D33F816"
+    },
+    SPECIAL : "",
+    PAGE : "stk_02_005",
+    ELEMENT : "cmbDepot2",
+    APP : "OFF",
+    VIEW : 
+    {
+        TYPE : "text",
+        PAGE_NAME : "İade Ürün Toplama",
+        CAPTION : "Giriş Depo"
+    }
     },
     //#endregion
 
@@ -1223,7 +1261,7 @@ export const prm =
         ID :"negativeQuantity",
         VALUE : 
         {
-            value : true
+            value : false
         },
         SPECIAL : "",
         PAGE : "stk_02_003",
@@ -1278,7 +1316,7 @@ export const prm =
         ID :"negativeQuantity",
         VALUE : 
         {
-            value : true
+            value : false
         },
         SPECIAL : "",
         PAGE : "irs_02_002",

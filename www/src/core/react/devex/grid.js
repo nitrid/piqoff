@@ -316,7 +316,7 @@ export default class NdGrid extends Base
                 onEditorPrepared={this._onEditorPrepared}
                 onEditorPreparing={this._onEditorPreparing}
                 onRowPrepared = {this._onRowPrepared}   
-                sorting = {this.props.sorting}
+                sorting = {typeof this.props.sorting == 'undefined' ?{ mode: 'single' }: this.props.sorting}
                 >
                     {this.props.children}
                 </DataGrid>

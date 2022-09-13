@@ -1164,7 +1164,8 @@ export class editItemCls
             UNIT_FACTOR : '',
             CUSTOMER: '00000000-0000-0000-0000-000000000000',
             CUSTOMER_CODE : '',
-            CUSTOMER_NAME : ''
+            CUSTOMER_NAME : '',
+            WEIGHING : false
         }
 
         this._initDs();
@@ -1188,7 +1189,7 @@ export class editItemCls
                     "WHERE {0} " +
                     "((NAME LIKE @NAME +'%') OR (@NAME = '')) AND " +
                     "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) AND " +
-                    "((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = ''))",
+                    "((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) ORDER BY NAME",
             param : ['NAME:string|250','MAIN_GRP:string|25','CUSTOMER_CODE:string|25'],
         }
         tmpDt.updateCmd = 
@@ -1200,6 +1201,7 @@ export class editItemCls
                     "@NAME = @PNAME, " + 
                     "@VAT = @PVAT, " + 
                     "@COST_PRICE = @PCOST_PRICE, " + 
+                    "@WEIGHING = @PWEIGHING, " + 
                     "@STATUS = @PSTATUS, " + 
                     "@ORGINS = @PORGINS, " + 
                     "@BARCODE = @PBARCODE, " +
@@ -1215,10 +1217,10 @@ export class editItemCls
                     "@UNDER_FACTOR = @PUNDER_FACTOR, " +
                     "@UNDER_UNIT_ID = @PUNDER_UNIT_ID ",
             param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|250','PVAT:float',
-                     'PCOST_PRICE:float','PSTATUS:bit','PORGINS:string|50','PBARCODE:string|50','PBARCODE_GUID:string|50','PMULTICODE:string|50','PCUSTOMER_PRICE:string|50',
+                     'PCOST_PRICE:float','PWEIGHING:bit','PSTATUS:bit','PORGINS:string|50','PBARCODE:string|50','PBARCODE_GUID:string|50','PMULTICODE:string|50','PCUSTOMER_PRICE:string|50',
                     'PPRICE_SALE:float','PCUSTOMER_GUID:string|50','PCUSTOMER_PRICE_GUID:string|50','PPRICE_SALE_GUID:string|50','PUNDER_UNIT_GUID:string|50','PMAIN_UNIT_ID:string|25',
                     'PUNDER_FACTOR:float','PUNDER_UNIT_ID:string|50'],
-            dataprm : ['GUID','CUSER','CODE','NAME','VAT','COST_PRICE','STATUS','ORGINS',
+            dataprm : ['GUID','CUSER','CODE','NAME','VAT','COST_PRICE','WEIGHING','STATUS','ORGINS',
                        'BARCODE','BARCODE_GUID','MULTICODE','CUSTOMER_PRICE','PRICE_SALE','CUSTOMER_GUID','CUSTOMER_PRICE_GUID','PRICE_SALE_GUID',
                         'UNDER_UNIT_GUID','MAIN_UNIT_ID','UNDER_FACTOR','UNDER_UNIT_ID'],
         } 
@@ -1272,6 +1274,25 @@ export class editItemCls
                 tmpPrm.NAME = typeof arguments[0].NAME == 'undefined' ? '%' : arguments[0].NAME;
                 tmpPrm.MAIN_GRP = typeof arguments[0].MAIN_GRP == 'undefined' ? '' : arguments[0].MAIN_GRP;
                 tmpPrm.CUSTOMER_CODE = typeof arguments[0].CUSTOMER_CODE == 'undefined' ? '' : arguments[0].CUSTOMER_CODE;
+                
+                this.ds.get('ITEM_EDIT').selectCmd =
+                {
+                    query : "SELECT *,MAIN_UNIT_NAME AS UNIT_NAME," + 
+                            "CASE WHEN PRICE_SALE <> 0 THEN " +
+                            "CONVERT(nvarchar,ROUND((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE,2)) + '/ %' + CONVERT(nvarchar,ROUND((((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / (PRICE_SALE / ((VAT / 100) + 1))) * 100,2)) " +
+                            "ELSE '0'  " +
+                            "END AS MARGIN, " +
+                            "CASE WHEN PRICE_SALE <> 0 THEN " +
+                            "CONVERT(nvarchar,ROUND(((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / 1.12,2)) + '/ %' + CONVERT(nvarchar,ROUND(((((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / 1.12) / (PRICE_SALE / ((VAT / 100) + 1))) * 100,2)) " +
+                            "ELSE '0' " +
+                            "END AS NETMARGIN " +
+                            "FROM ITEMS_EDIT_VW_01 " +
+                            "WHERE {0} " +
+                            "((NAME LIKE @NAME +'%') OR (@NAME = '')) AND " +
+                            "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) AND " +
+                            "((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = ''))",
+                    param : ['NAME:string|250','MAIN_GRP:string|25','CUSTOMER_CODE:string|25'],
+                }
                 
                 if(typeof arguments[0].QUERY == 'undefined' || (typeof arguments[0].QUERY != 'undefined' && arguments[0].QUERY == ''))
                 {

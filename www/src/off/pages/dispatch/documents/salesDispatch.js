@@ -522,10 +522,11 @@ export default class salesDispatch extends React.PureComponent
                     {
                         id:'msgNotQuantity',showTitle:true,title:this.t("msgNotQuantity.title"),showCloseButton:true,width:'500px',height:'200px',
                         button:[{id:"btn01",caption:this.t("msgNotQuantity.btn01"),location:'after'}],
-                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotQuantity.msg")}</div>)
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotQuantity.msg") + tmpQuantity.result.recordset[0].QUANTITY}</div>)
                     }
         
                     await dialog(tmpConfObj);
+                    await this.grdSlsDispatch.devGrid.deleteRow(pIndex)
                     return
                }
                else

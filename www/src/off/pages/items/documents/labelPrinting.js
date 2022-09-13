@@ -92,7 +92,7 @@ export default class labelPrinting extends React.PureComponent
 
 
         let tmpLbl = {...this.lblObj.empty}
-        tmpLbl.REF = this.user.CODE
+        tmpLbl.REF = this.user.NAME
         this.mainLblObj.addEmpty(tmpLbl);
         
         this.txtRef.readOnly = false
@@ -122,7 +122,7 @@ export default class labelPrinting extends React.PureComponent
     {
         let tmpQuery = 
         {
-            query : "SELECT GUID,REF,REF_NO FROM LABEL_QUEUE WHERE STATUS IN("+pType+") AND REF = '" +this.txtRef.value+"' " 
+            query : "SELECT GUID,REF,REF_NO,CONVERT(NVARCHAR,CDATE,104) AS DOC_DATE_CONVERT,ISNULL((SELECT COUNT(CODE) FROM ITEM_LABEL_QUEUE_VW_01 WHERE ITEM_LABEL_QUEUE_VW_01.GUID = LABEL_QUEUE.GUID),0) AS COUNT FROM LABEL_QUEUE WHERE STATUS IN("+pType+") AND REF <> 'SPECIAL' " 
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
         let tmpRows = []
@@ -146,7 +146,7 @@ export default class labelPrinting extends React.PureComponent
     {
         let tmpQuery = 
         {
-            query : "SELECT GUID,REF,REF_NO FROM LABEL_QUEUE WHERE STATUS IN("+pType+") " 
+            query : "SELECT GUID,REF,REF_NO,CONVERT(NVARCHAR,CDATE,104) AS DOC_DATE_CONVERT,ISNULL((SELECT COUNT(CODE) FROM ITEM_LABEL_QUEUE_VW_01 WHERE ITEM_LABEL_QUEUE_VW_01.GUID = LABEL_QUEUE.GUID),0) AS COUNT FROM LABEL_QUEUE WHERE STATUS IN("+pType+") AND REF <> 'SPECIAL' " 
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
         let tmpRows = []
@@ -824,23 +824,6 @@ export default class labelPrinting extends React.PureComponent
                                                         icon:'more',
                                                         onClick:async()=>
                                                         {
-                                                            // Yeni deyince evrak seçtirtmiyor
-                                                            // if(typeof this.btnSave.state.disabled != 'undefined')
-                                                            // {
-                                                            //     if(this.btnSave.state.disabled == false)
-                                                            //     {
-                                                            //         let tmpConfObj =
-                                                            //         {
-                                                            //             id:'msgNotSave',showTitle:true,title:this.t("msgNotSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                            //             button:[{id:"btn01",caption:this.t("msgNotSave.btn01"),location:'after'}],
-                                                            //             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotSave.msg")}</div>)
-                                                            //         }
-                                                        
-                                                            //         await dialog(tmpConfObj);
-                                                            //         return
-                                                            //     }
-                                                            // }
-                                                           
                                                             this.getDocs(0)   
                                                         }
                                                     },
@@ -898,6 +881,8 @@ export default class labelPrinting extends React.PureComponent
                                     >
                                         <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150} defaultSortOrder="asc"/>
                                         <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={300} defaultSortOrder="asc" />
+                                        <Column dataField="COUNT" caption={this.t("pg_Docs.clmCount")} width={300} />
+                                        <Column dataField="DOC_DATE_CONVERT" caption={this.t("pg_Docs.clmDocDate")} width={300} />
                                     </NdPopGrid>
                                 </Item>
                                 {/* txtPage */}
@@ -1256,6 +1241,8 @@ export default class labelPrinting extends React.PureComponent
                     >
                         <Column dataField="REF" caption={this.t("pg_DocsCombine.clmRef")} width={150} defaultSortOrder="asc"/>
                         <Column dataField="REF_NO" caption={this.t("pg_DocsCombine.clmRefNo")} width={300} defaultSortOrder="asc" />
+                        <Column dataField="COUNT" caption={this.t("pg_Docs.clmCount")} width={300} />
+                        <Column dataField="DOC_DATE_CONVERT" caption={this.t("pg_Docs.clmDocDate")} width={300} />
                     </NdPopGrid>
                     {/* popWizard */}
                     <div>

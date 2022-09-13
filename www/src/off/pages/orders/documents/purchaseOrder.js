@@ -1347,7 +1347,7 @@ export default class purchaseOrder extends React.PureComponent
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
-                                        <Scrolling mode="infinite" />
+                                        <Scrolling mode="virtual" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.sip_02_001")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcOrders.clmCreateDate")} width={180} allowEditing={false}/>

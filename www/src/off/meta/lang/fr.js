@@ -1033,12 +1033,17 @@ export const langFr =
             title : "Sélection Document",
             clmRef : "Série",
             clmRefNo : "Numéro",
+            clmDocDate : "Date",
+            clmCount : "Qte. Scan"
+
         },
         pg_DocsCombine : 
         {
             title : "Sélection Document",
             clmRef : "Série",
             clmRefNo : "Numéro",
+            clmDocDate : "Date",
+            clmCount : "Qte. Scan"
         },
         pg_txtItemsCode : 
         {
@@ -1295,7 +1300,7 @@ export const langFr =
             msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
         },
     },
-    stk_02_007 :
+    stk_02_007 :  // BAK
     {
         design : "Dizayn",
         txtPage : "Sayfa",
@@ -1321,13 +1326,13 @@ export const langFr =
             txtPopItemsCode : "Stok Kodu",
             txtPopItemsName: "Stok Adı",
             txtPopItemsQuantity : "Miktar",
-            dtPopDate : "Tarih"
+            dtPopDate : "SKT Tarih"
         },
         grdExpDate:
         {
             clmName: "Adı",
             clmCode: "Kodu",
-            clmDate: "Tarih"
+            clmDate: "SKT Tarih"
         },
         msgDocValid:
         {
@@ -1509,6 +1514,8 @@ export const langFr =
     stk_04_001 : 
     {
         txtCustomerCode : "Fournisseur",
+        codePlaceHolder : "Lütfen Aratmak İstediğiniz Ürün Kodu,Barkod veya Tedarikçi Kodunu Giriniz",  //BAK
+        namePlaceHolder :"Ürün Adının Tamamını yada İçinde Geçen Bir Hece Giriniz",  //BAK
         pg_txtCustomerCode : 
         {
             title : "Choix Fournisseur",
@@ -1536,6 +1543,9 @@ export const langFr =
             clmUnderUnit : "Sous unité",
             clmMainUnit : "Unité Principale",
             clmUnderFactor : "Coefficient",
+            clmWeighing : "Tartılsın", // BAK
+            clmNetMargin :  "Marge Nette",
+            clmGrossMargin : "Marge Brute",
         },
         msgSave:
         {
