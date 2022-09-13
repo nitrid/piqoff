@@ -465,6 +465,10 @@ export class auth
             });
         })
     }
+    refreshToken(pGuid)
+    {
+        core.instance.socket.emit('refreshToken',[pGuid])
+    }
     logout()
     {
         window.sessionStorage.removeItem('auth');
