@@ -76,8 +76,9 @@ export default class collectiveItemEdit extends React.PureComponent
             }
             tmpSrc = "((CODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (BARCODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (MULTICODE IN (" + TmpVal.substring(1,TmpVal.length) + "))) AND"
         }
-
+        App.instance.setState({isExecute:true})
         await this.editObj.load({NAME:this.txtName.value.replaceAll("*", "%"),MAIN_GRP:this.cmbItemGroup.value,CUSTOMER_CODE:this.cmbTedarikci.value,QUERY:tmpSrc})
+        App.instance.setState({isExecute:false})
         this.netMargin()
         this.grossMargin()
        
@@ -189,14 +190,17 @@ export default class collectiveItemEdit extends React.PureComponent
                                                 id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
                                                 button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                             }
-                                            
+
+                                            App.instance.setState({isExecute:true})
                                             if(await this.editObj.save() == 0)
                                             {                                                    
+                                                App.instance.setState({isExecute:false})
                                                 tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                 await dialog(tmpConfObj1);
                                             }
                                             else
                                             {
+                                                App.instance.setState({isExecute:false})
                                                 tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
                                                 await dialog(tmpConfObj1);
                                             }
@@ -350,6 +354,24 @@ export default class collectiveItemEdit extends React.PureComponent
                                 if(e.rowType === "data" && e.column.dataField === "NET_MARGIN")
                                 {
                                     e.cellElement.style.color = e.data.NET_MARGIN_RATE < 30 ? "red" : "blue";
+                                }
+                                if(e.rowType === "data" && e.column.dataField === "PRICE_SALE")
+                                {
+                                    //GROSS_MARGIN ANINDA ETKI ETSİN DİYE YAPILDI
+                                    let tmpExVat = e.data.PRICE_SALE / ((e.data.VAT / 100) + 1)
+                                    let tmpMargin = tmpExVat - e.data.CUSTOMER_PRICE;
+                                    let tmpMarginRate = ((tmpExVat - e.data.CUSTOMER_PRICE) / tmpExVat) * 100
+                                    e.data.GROSS_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2);        
+                                    e.data.GROSS_MARGIN_RATE = tmpMarginRate.toFixed(2); 
+                                    e.values[8] =  tmpMargin.toFixed(2) + "€/ %" +  tmpMarginRate.toFixed(2); 
+
+                                    // NET_MARGIN ANINDA ETKI ETSİN DİYE YAPILDI
+                                    let tmpNetExVat = e.data.PRICE_SALE / ((e.data.VAT / 100) + 1)
+                                    let tmpNetMargin = (tmpNetExVat -e.data.CUSTOMER_PRICE) / 1.12;
+                                    let tmpNetMarginRate = (((tmpNetExVat - e.data.CUSTOMER_PRICE) / 1.12) / tmpNetExVat) * 100
+                                    e.data.NET_MARGIN = tmpNetMargin.toFixed(2) + "€ / %" +  tmpNetMarginRate.toFixed(2);
+                                    e.data.NET_MARGIN_RATE = tmpNetMarginRate.toFixed(2);    
+                                    e.values[9] =   tmpNetMargin.toFixed(2) + "€  %" +  tmpNetMarginRate.toFixed(2);
                                 }
                             }}
                             >                            
