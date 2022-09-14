@@ -204,7 +204,9 @@ export default class labelPrinting extends React.PureComponent
                 "FROM ITEMS_VW_01  " +
                 "WHERE (SELECT TOP 1 LDATE FROM LABEL_QUEUE ORDER BY LDATE DESC) < (SELECT TOP 1 LDATE FROM ITEM_PRICE WHERE TYPE = 0  AND ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC) OR  (SELECT TOP 1 LDATE FROM LABEL_QUEUE ORDER BY LDATE DESC) < ITEMS_VW_01.LDATE) AS TMP ", 
             }
+            App.instance.setState({isExecute:true})
             let tmpData = await this.core.sql.execute(tmpQuery) 
+            App.instance.setState({isExecute:false})
             if(tmpData.result.recordset.length > 0)
             {
                 for (let i = 0; i < tmpData.result.recordset.length; i++) 
@@ -252,7 +254,9 @@ export default class labelPrinting extends React.PureComponent
                 param : ['DATE:date'],
                 value : [this.dtSelectChange.value]
             }
+            App.instance.setState({isExecute:true})
             let tmpData = await this.core.sql.execute(tmpQuery) 
+            App.instance.setState({isExecute:false})
             if(tmpData.result.recordset.length > 0)
             {
                 for (let i = 0; i < tmpData.result.recordset.length; i++) 
@@ -300,7 +304,9 @@ export default class labelPrinting extends React.PureComponent
                 param : ['GROUP:string|25'],
                 value : [this.cmbGroup.value]
             }
+            App.instance.setState({isExecute:true})
             let tmpData = await this.core.sql.execute(tmpQuery) 
+            App.instance.setState({isExecute:false})
             if(tmpData.result.recordset.length > 0)
             {
                 for (let i = 0; i < tmpData.result.recordset.length; i++) 
@@ -348,7 +354,9 @@ export default class labelPrinting extends React.PureComponent
                 param : ['CUSTOMER:string|50'],
                 value : [this.cmbCustomer.value]
             }
+            App.instance.setState({isExecute:true})
             let tmpData = await this.core.sql.execute(tmpQuery) 
+            App.instance.setState({isExecute:false})
             if(tmpData.result.recordset.length > 0)
             {
                 for (let i = 0; i < tmpData.result.recordset.length; i++) 
@@ -394,7 +402,9 @@ export default class labelPrinting extends React.PureComponent
                 "FROM ITEMS_VW_01  " +
                 " ) AS TMP ", 
             }
+            App.instance.setState({isExecute:true})
             let tmpData = await this.core.sql.execute(tmpQuery) 
+            App.instance.setState({isExecute:false})
             if(tmpData.result.recordset.length > 0)
             {
                 for (let i = 0; i < tmpData.result.recordset.length; i++) 

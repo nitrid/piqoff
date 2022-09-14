@@ -245,7 +245,7 @@ export default class barcodeList extends React.PureComponent
                                             id: 'cri_01_001',
                                             text: e.data.TITLE.substring(0,10),
                                             path: 'customers/cards/customerCard.js',
-                                            pagePrm:{CODE:e.data.CODE}
+                                            pagePrm:{GUID:e.data.GUID}
                                         })
                                 }}
                             >                            

@@ -44,10 +44,12 @@ export default class CustomerCard extends React.PureComponent
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
-        await this.init()
+        this.init()
         if(typeof this.pagePrm != 'undefined')
         {
-            this.getCustomer(this.pagePrm.CODE)
+            console.log(this.pagePrm.GUID)
+            this.customerObj.clearAll()
+            await this.customerObj.load({GUID:this.pagePrm.GUID});
         }
     }
     async init()
