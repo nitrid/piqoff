@@ -153,7 +153,7 @@ export const langTr =
         logout : "Çıkış",
         selectUser : "Kullanıcı Seçim",
     },
-    stk_01_001: 
+    stk_01_001:  // "Yeni Stok Tanımlama"
     {
         txtRef: "Referans",
         cmbItemGrp: "Ürün Grubu",
@@ -439,7 +439,7 @@ export const langTr =
             deposit : "Depozit"
         }
     },
-    stk_01_002: 
+    stk_01_002:  //"Barkod Tanımları"
     {
         txtBarcode: "Barkod",
         txtItem: "Stok Kodu",
@@ -506,7 +506,7 @@ export const langTr =
         },
         validCode :"Stok Seçmelisiniz",
     },
-    stk_01_006 :
+    stk_01_006 : // "Depo/Mağaza Tanımları"
     {
         txtCode : "Kodu",
         txtName :"Adı",
@@ -563,7 +563,7 @@ export const langTr =
         chkActive: "Aktif",
       
     },
-    stk_02_001 :
+    stk_02_001 : // Sayım Evrakı"
     {
         txtRefRefno : "Seri-Sıra",
         cmbDepot: "Sayım Deposu",
@@ -709,7 +709,7 @@ export const langTr =
             lang : "Evrak Dili"
         },
     },
-    stk_02_002 :
+    stk_02_002 : //"Depo/Mağaza Arası Sevk"
     {
         txtRefRefno : "Seri-Sıra",
         cmbOutDepot: "Çıkış Deposu",
@@ -841,7 +841,7 @@ export const langTr =
         },
 
     },
-    stk_02_003 :
+    stk_02_003 : // "Kayıp Ürün Çıkışı"
     {
         txtRefRefno : "Seri-Sıra",
         cmbOutDepot: "Çıkış Deposu",
@@ -1012,7 +1012,7 @@ export const langTr =
             msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
         },
     },
-    stk_02_004 :
+    stk_02_004 : //"Kayıp Ürün Çıkışı"
     {
         txtRefRefno : "Seri-Sıra",
         design : "Dizayn",
@@ -1168,7 +1168,7 @@ export const langTr =
         },
 
     },
-    stk_02_005 :
+    stk_02_005 : // "İade Ürünü Toplama"
     {
         txtRefRefno : "Seri-Sıra",
         cmbDepot1: "Çıkış Deposu",
@@ -1299,7 +1299,7 @@ export const langTr =
             msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
         },
     },
-    stk_02_007 :
+    stk_02_007 : // "SKT Girişi",
     {
         design : "Dizayn",
         txtPage : "Sayfa",
@@ -1396,7 +1396,7 @@ export const langTr =
         validDocDate : "Tarih Seçmelisiniz",
 
     },
-    stk_03_001 : 
+    stk_03_001 :  // "Stok Listesi"
     {
         txtItemName : "Ürün Adı",
         txtBarkod : "Barkod",
@@ -1431,7 +1431,7 @@ export const langTr =
             clmOrgin : "Menşei"
         },
     },
-    stk_03_002 : 
+    stk_03_002 :   //"Fiyat Listesi" 
     {
         cmbCustomer : "Cari",
         txtItemName : "Ürün Adı",
@@ -1451,7 +1451,7 @@ export const langTr =
             clmFinishDate : "Orgin",
         },
     },
-    stk_03_003 : 
+    stk_03_003 : // "Barkod Listesi"
     {
         cmbCustomer : "Cari",
         txtItemName : "Ürün Adı",
@@ -1467,7 +1467,7 @@ export const langTr =
             clmMainGrp : "Ürün Grubu",
         },
     },
-    stk_03_005 : 
+    stk_03_005 : // "Multi Kod Listesi"
     {
         txtItemName : "Ürün Adı",
         txtBarkod : "Barkod",
@@ -1493,7 +1493,7 @@ export const langTr =
 
         },
     },
-    stk_03_006 : 
+    stk_03_006 : // "Depo Ürün Miktarları Listesi"
     {
         txtItemName : "Ürün Adı",
         chkZeroQuantity : "0 Miktarlar Gösterilsin",
@@ -1510,7 +1510,7 @@ export const langTr =
         txtTotalQuantity : "Toplam Miktar",
         ItemNamePlaceHolder : "Ürün Adı Giriniz.."
     },
-    stk_04_001 : 
+    stk_04_001 : //"Toplu Stok Düzenleme"
     {
         txtCustomerCode : "Cari",
         codePlaceHolder : "Lütfen Aratmak İstediğiniz Ürün Kodu,Barkod veya Tedarikçi Kodunu Giriniz",
@@ -1561,7 +1561,7 @@ export const langTr =
             msgFailed: "Kayıt işleminiz başarısız !"
         },
     },
-    stk_04_002 : 
+    stk_04_002 : // "İade Operasyonları"
     {
         txtCustomerCode : "Cari",
         validDepot : "Lütfen Depo Seçiniz",
@@ -1613,7 +1613,7 @@ export const langTr =
             msg : "Carisi Tanımlanmamış Ürünler Seçilemez. Lütfen Cari Tanımlayın"
         }
     },
-    stk_04_003 : 
+    stk_04_003 : //"Sayım Kesinleştirme"
     {
         cmbDepot : "Depo",
         chkNotCountItems : "Sayılmayan Ürünler Sıfırlansın",
@@ -1661,7 +1661,7 @@ export const langTr =
             msg: " Depo Miktarları Güncel !! Yeni Kayıt Oluşturulmadı",
         },
     },
-    cri_01_001:
+    cri_01_001: // "Cari Tanımları"
     {
         cmbType :"Tip",
         cmbGenus :"Cinsi",
@@ -1813,7 +1813,7 @@ export const langTr =
         chkTaxSucre : "Tax Sugar",
         tabTitleDetail : "Detay Bilgileri"
     },
-    cri_01_002:
+    cri_01_002: // "Adres Tanımları"
     {
         txtCode : "Kodu",
         txtTitle : "Ünvan",
@@ -1878,7 +1878,7 @@ export const langTr =
         }
 
     },
-    cri_02_001:
+    cri_02_001: // "Cari Listesi"
     {
         txtCustomerName : "Cari Adı",
         cmbGenus :"Cinsi",
@@ -1907,7 +1907,7 @@ export const langTr =
             both : "Her İkisi",
         },
     },
-    cri_02_002:
+    cri_02_002: //  "Adres Listesi"
     {
         txtCustomerName : "Cari Adı",
         cmbGenus :"Cinsi",
@@ -1932,7 +1932,7 @@ export const langTr =
             both : "Her İkisi",
         },
     },
-    ftr_01_001 :
+    ftr_01_001 : // "Alış Fatura Listesi"
     {
         txtCustomerCode : "Cari",
         menu:"Alış Faturası",
@@ -1962,7 +1962,7 @@ export const langTr =
         },
 
     },
-    ftr_01_002 :
+    ftr_01_002 : // "Satış Fatura Listesi"
     {
         txtCustomerCode : "Cari",
         menu:"Satış Faturası",
@@ -1992,7 +1992,7 @@ export const langTr =
         },
 
     },
-    ftr_01_003 :
+    ftr_01_003 : // "İade Fatura Listesi"
     {
         txtCustomerCode : "Cari",
         menu:"İade Faturası",
@@ -2021,7 +2021,7 @@ export const langTr =
         },
 
     },
-    ftr_01_004 :
+    ftr_01_004 : // "Fiyat Farkı Fatura Listesi"
     {
         txtCustomerCode : "Cari",
         menu:"Fiyat Farkı Faturası",
@@ -2050,7 +2050,7 @@ export const langTr =
         },
 
     },
-    ftr_02_001 :
+    ftr_02_001 : //  "Alış Faturası"
     {
         txtRefRefno : "Seri-Sıra",
         cmbDepot: "Depo",
@@ -2403,7 +2403,7 @@ export const langTr =
             clmVat2: "Yeni KDV",
         },
     },
-    ftr_02_002 :
+    ftr_02_002 : // "Satış Faturası"
     {
         txtRefRefno : "Seri-Sıra",
         cmbDepot: "Depo",
@@ -2695,7 +2695,7 @@ export const langTr =
             msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
         },
     },
-    ftr_02_003 :
+    ftr_02_003 : // "İade Faturası"
     {
         txtRefRefno : "Seri-Sıra",
         cmbDepot: "Depo",
@@ -2945,7 +2945,7 @@ export const langTr =
 
 
     },
-    ftr_02_004 :
+    ftr_02_004 : // "Fiyat Farkı Faturası"
     {
         txtRefRefno : "Seri-Sıra",
         cmbDepot: "Depo",
@@ -3186,7 +3186,7 @@ export const langTr =
 
 
     },
-    promo_01_001: 
+    promo_01_001: //  "Promosyon Tanımları"
     {
         txtCode: "Kodu",
         txtName: "Adı",
@@ -3261,7 +3261,7 @@ export const langTr =
             btnSave: "Kaydet"
         },
     },
-    irs_01_001 :
+    irs_01_001 : // "Alış İrsaliye Listesi"
     {
         cmbCustomer :"Cari",
         btnGet :"Getir",
@@ -3292,7 +3292,7 @@ export const langTr =
         },
 
     },
-    irs_01_002 :
+    irs_01_002 : //"Satış İrsaliye Listesi"
     {
         cmbCustomer :"Cari",
         btnGet :"Getir",
@@ -3323,7 +3323,7 @@ export const langTr =
         },
 
     },
-    irs_01_003 :
+    irs_01_003 : // "İade İrsaliye Listesi"
     {
         cmbCustomer :"Cari",
         btnGet :"Getir",
@@ -3353,7 +3353,7 @@ export const langTr =
         },
 
     },
-    irs_02_001 :
+    irs_02_001 : // "Alış İrsaliyesi"
     {
         txtRefRefno : "Seri-Sıra",
         cmbDepot: "Depo",
@@ -3589,7 +3589,7 @@ export const langTr =
         validDocDate : "Tarih Seçmelisiniz",
         tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz"
     },
-    irs_02_002 :
+    irs_02_002 : // Satış İrsaliyesi"
     {
         txtRefRefno : "Seri-Sıra",
         cmbDepot: "Depo",
@@ -3836,7 +3836,7 @@ export const langTr =
             msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
         },
     },
-    irs_02_003 :
+    irs_02_003 : // "İade İrsaliyesi"
     {
         getRebate : "İade Deposundan Getir",
         txtRefRefno : "Seri-Sıra",
@@ -4046,7 +4046,7 @@ export const langTr =
         validCustomerCode : "Cari Kodu Boş Geçilemez",
         validDocDate : "Tarih Seçmelisiniz",
     },
-    sip_01_001 :
+    sip_01_001 : // "Alış Sipariş Listesi"
     {
         cmbCustomer :"Cari",
         btnGet :"Getir",
@@ -4076,7 +4076,7 @@ export const langTr =
             clmInputName : "Depo",
         },
     },
-    sip_01_002 :
+    sip_01_002 : // "Satış Sipariş Listesi"
     {
         cmbCustomer :"Cari",
         btnGet :"Getir",
@@ -4107,7 +4107,7 @@ export const langTr =
         },
 
     },
-    sip_02_001 :
+    sip_02_001 : // "Alış Sipariş"
     {
         txtRefRefno : "Seri-Sıra",
         cmbDepot: "Depo",
@@ -4345,7 +4345,7 @@ export const langTr =
         validDocDate : "Tarih Seçmelisiniz",
         tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz"
     },
-    sip_02_002 :
+    sip_02_002 : // "Satış Sipariş"
     {
         txtRefRefno : "Seri-Sıra",
         cmbDepot: "Depo",
@@ -4590,7 +4590,7 @@ export const langTr =
 
 
     },
-    cnt_01_001 :
+    cnt_01_001 : // "Alış Anlaşmaları Listesi"
     {
         txtCustomerCode : "Cari",
         menu : "Alış Anlaşması",
@@ -4617,7 +4617,7 @@ export const langTr =
             clmUser : "Kullanıcı"
         },
     },
-    cnt_01_002 :
+    cnt_01_002 : //  "Satış Anlaşmaları Listesi"
     {
         txtCustomerCode : "Cari",
         menu : "Satış Anlaşması",
@@ -4644,7 +4644,7 @@ export const langTr =
              clmUser : "Kullanıcı"
         },
     },
-    cnt_02_001 :
+    cnt_02_001 : // "Alış Anlaşması"
     {
         cmbDepot: "Depo",
         txtCustomerCode : "Cari Kodu",
@@ -4787,7 +4787,7 @@ export const langTr =
             msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
         },
     },
-    cnt_02_002 :
+    cnt_02_002 : // "Satış Anlaşması"
     {
         validDate : "Lütfen Tarih Seçiniz.",
         cmbDepot: "Depo",
@@ -4939,7 +4939,7 @@ export const langTr =
             msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
         },
     },
-    fns_01_001 :
+    fns_01_001 : // "Ödeme Listesi",
     {
         txtCustomerCode : "Cari",
         menu  : "Ödeme",
@@ -4968,7 +4968,7 @@ export const langTr =
         },
 
     },
-    fns_01_002 :
+    fns_01_002 : // "Tahsilat Listesi"
     {
         txtCustomerCode : "Cari",
         txtTotal : "Toplam",
@@ -4997,7 +4997,7 @@ export const langTr =
         },
 
     },
-    fns_01_003 :
+    fns_01_003 : //  "Banka Hareketleri Listesi",
     {
         cmbBank : "Hesap",
         txtAmount : "Banka Bakiyesi",
@@ -5017,7 +5017,7 @@ export const langTr =
         },
 
     },
-    fns_01_004 :
+    fns_01_004 : //  "Kasa Hareketleri Listesi"
     {
         cmbSafe : "Hesap",
         txtAmount : "Kasa Bakiyesi",
@@ -5037,7 +5037,7 @@ export const langTr =
         },
 
     },
-    fns_02_001 :
+    fns_02_001 : // Ödeme
     {
         txtRefRefno : "Seri-Sıra",
         menu  : "Ödeme",
@@ -5174,7 +5174,7 @@ export const langTr =
         validCustomerCode : "Cari Kodu Boş Geçilemez",
         validDocDate : "Tarih Seçmelisiniz",
     },
-    fns_02_002 :
+    fns_02_002 : // Tahsilat
     {
         txtRefRefno : "Seri-Sıra",
         menu : "Tahsilat",
@@ -5307,7 +5307,7 @@ export const langTr =
         validCustomerCode : "Cari Kodu Boş Geçilemez",
         validDocDate : "Tarih Seçmelisiniz",
     },
-    fns_03_001 :
+    fns_03_001 : //  "Kasa Tanıtım",
     {
         txtCode : "Kodu",
         txtName :"Adı",
@@ -5362,7 +5362,7 @@ export const langTr =
         }
       
     },
-    fns_03_002 :
+    fns_03_002 : // "Banka Tanıtım"
     {
         txtCode : "Kodu",
         txtName :"Adı",
@@ -5417,7 +5417,7 @@ export const langTr =
         }
       
     },
-    fns_03_003 :
+    fns_03_003 : // "Hesaplar Arası Virman",
     {
         txtRefRefno : "Seri-Sıra",
         cmbOutAccount: "Çıkış Hesabı",
@@ -5543,7 +5543,7 @@ export const langTr =
         validAccount : "Hesap Seçmelisiniz",
         validDocDate : "Tarih Seçmelisiniz",
     },
-    set_01_001 :
+    set_01_001 : // "Tax Sugar"
     {
         pg_Docs : 
         {
@@ -5599,7 +5599,7 @@ export const langTr =
         zeroValid : "0'dan Büyük Olmalıdır"
 
     },
-    pos_01_001 :
+    pos_01_001 : // "Pos Cihaz Tanıtım",
     {
         txtCode : "Kodu",
         txtName :"Adı",
@@ -5651,7 +5651,7 @@ export const langTr =
         }
       
     },
-    pos_02_001 :
+    pos_02_001 : // "Satış Fiş Raporu",
     {
         TicketId :"Fiş I.D",
         cmbCustomer :"Cari",
@@ -5746,7 +5746,7 @@ export const langTr =
             clmTicketId : "Fiş No"
         }
     },
-    pos_02_002 :
+    pos_02_002 : // "Müşteri Puanı Raporu"
     {
         cmbCustomer :"Cari",
         btnGet :"Getir",
@@ -5804,7 +5804,7 @@ export const langTr =
         lineDelete :"Satır İptal", 
         cancel : "Vazgeç", 
     },
-    pos_03_001 : 
+    pos_03_001 : // Gün Sonu",
     {
         title : "GÜN SONU İŞLEMİ",
         start :"Başlangıç",
@@ -5865,7 +5865,7 @@ export const langTr =
         advanceMsg1 : "Lütfen Avans Tutarınızın",
         advanceMsg2 : "Olduğundan Emin Olunuz"
     },
-    tkf_01_001 :
+    tkf_01_001 : // "Alış Teklifi Listesi",
     {
         cmbCustomer :"Cari",
         btnGet :"Getir",
@@ -5895,7 +5895,7 @@ export const langTr =
             clmInputName : "Depo",
         },
     },
-    tkf_01_002 :
+    tkf_01_002 : // "Satış Teklifi Listesi",
     {
         cmbCustomer :"Cari",
         btnGet :"Getir",
@@ -5926,7 +5926,7 @@ export const langTr =
         },
 
     },
-    tkf_02_001 :
+    tkf_02_001 : // "Alış Teklifi",
     {
         txtRefRefno : "Seri-Sıra",
         cmbDepot: "Depo",
@@ -6164,7 +6164,7 @@ export const langTr =
         validDocDate : "Tarih Seçmelisiniz",
         tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz"
     },
-    tkf_02_002 :
+    tkf_02_002 : // "Satış Teklifi",
     {
         txtRefRefno : "Seri-Sıra",
         cmbDepot: "Depo",
@@ -6414,7 +6414,7 @@ export const langTr =
         tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz"
 
     },
-    proces_01_001 : 
+    proces_01_001 : // "Ürün Grubu Güncelleme"
     {
         txtItemName : "Ürün Adı",
         txtBarkod : "Barkod",
@@ -6469,7 +6469,7 @@ export const langTr =
             msgFailed: "Kayıt işleminiz başarısız !"
         },
     },
-    stk_02_006 : 
+    stk_02_006 :  // "Özel Etiket Basım"
     {
         txtBarkod: "Barkod",
         txtRef: "Referans",
@@ -6520,7 +6520,7 @@ export const langTr =
             msg: "Ürün Adı Çok Uzun. Lütfen Düzeltip Tekrar Kayıt Edin !"
         },
     },
-    pos_02_003 : 
+    pos_02_003 : // "Pos Satış Raporu"
     {
         chkRowTotal : "Satır Toplamları"
     },    

@@ -81,7 +81,7 @@ export default class userPage extends React.Component
                         mode="popup"
                         allowUpdating={true}
                         allowAdding={true}
-                        allowDeleting={true}
+                        allowDeleting={false}
                         >
                         <Popup title={this.t("UserEdit")} showTitle={true} width={700} height={525} />
                         <Form>

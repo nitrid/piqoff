@@ -50,7 +50,7 @@ export const langFr =
         logout : "Sortie",
         selectUser : "Choix utilisateur.",
     },
-    stk_01_001 :
+    stk_01_001 : // "Fiyat Gör"
     {
         btnDropmenu : "Traitement",
         txtRefRefno : "Série-Séquence",
@@ -137,7 +137,7 @@ export const langFr =
         txtDepot : "Depôt",
 
     },
-    stk_01_002 :
+    stk_01_002 : // "Tedarikçi Gör"
     {
         chkGroup : "Groupe",
         chkCustomer : "Produits du fournisseur",
@@ -162,7 +162,7 @@ export const langFr =
         },
 
     },
-    stk_01_003: 
+    stk_01_003:  // "Barkod Tanımlama"
     {
         txtBarcode: "Barre code",
         txtItem: "Cde de stock",
@@ -230,7 +230,7 @@ export const langFr =
         },
         validCode :"Doit choisir le stock",
     },
-    stk_01_004 :
+    stk_01_004 : // Ü.Grubu Gör-Değiştir",
     {
         chkAllItems : "Tous les produits",
         btnChangeGroup : "Changer de groupe de produit",
@@ -272,7 +272,7 @@ export const langFr =
             msg: "Barre code introuvable !"
         },
     },
-    stk_01_005 :
+    stk_01_005 : // Fiyat Değiştir",
     {
         btnDropmenu : "Transactions",
         txtRefRefno : "Série-Séquence",
@@ -350,7 +350,7 @@ export const langFr =
         txtDepot : "Depôt",
 
     },
-    stk_01_006 :
+    stk_01_006 : // "Barkod Ekle",
     {
         btnDropmenu : "Transactions",
         txtRefRefno : "Série séquences",
@@ -427,7 +427,7 @@ export const langFr =
         txtNewBarcodePlace : "Entrez le nouveau barre code"
 
     },
-    stk_01_007 :
+    stk_01_007 : // "Ü.Grubu Güncelle",
     {
         chkAllItems : "Tous les produits",
         chkAutoAdd : "Ajouter automatiquement",
@@ -471,7 +471,7 @@ export const langFr =
             msg: "Barre code introuvable"
         },
     },
-    stk_02_001 :
+    stk_02_001 : // "Etiket Basımı",
     {
         btnDropmenu : "Transactions",
         txtRefRefno : "Série séquences",
@@ -632,7 +632,7 @@ export const langFr =
         validDocDate : "Vous devez choisir une date",
 
     },
-    stk_02_002 :
+    stk_02_002 : //"İade Ürün Toplama",
     {
         btnBarcodeEntry :"Entrez barre code",
         btnDocument : "Lignes de transaction",
@@ -785,7 +785,7 @@ export const langFr =
         txtQuantity : "Quantité",
         chkAutoAdd : "Ajouter automatiquement",
     },
-    stk_02_003 :
+    stk_02_003 :  // "Özel Etiket Basımı",
     {
         txtRef: "Referance",
         txtPrice : "Prix",
@@ -824,7 +824,7 @@ export const langFr =
             msg: "S'il vous plaît remplir les champs obligatoires !"
         },
     },
-    stk_02_004 :
+    stk_02_004 : // "Skt Girişi",
     {
         txtBarcodePlace : "Veuillez scannez le code barre",
         btnSave : "Enregistre",
@@ -886,7 +886,7 @@ export const langFr =
             msg: "Le produit que vous souhaitez ajouter est dans le document ! Ajouter une nouvelle ligne ?"
         },
     },
-    ord_01_001 :
+    ord_01_001 : //Satış Sipariş
     {
         btnDropmenu : "Transactions",
         txtRefRefno : "Série séquences",
@@ -1103,7 +1103,7 @@ export const langFr =
             msg: "Voulez-vous vraiment réinitialiser la taxe ?"
         },
     },
-    ord_01_002 :
+    ord_01_002 : // Alış Sipariş
     {
         btnDropmenu : "Transactions",
         txtRefRefno : "Série séquences",
@@ -1333,7 +1333,7 @@ export const langFr =
             msg: "Le produit du client sélectionné n'est pas définie ! Voulez-vous continuer"
         },
     },
-    irs_01_001 :
+    irs_01_001 : // "İade İrsaliyesi"
     {
         btnDropmenu : "Transactions",
         getRebate : "Obtenir de l'entrepôt de retour",

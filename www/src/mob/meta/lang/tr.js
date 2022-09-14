@@ -50,7 +50,7 @@ export const langTr =
         logout : "Çıkış",
         selectUser : "Kullanıcı Seçim",
     },
-    stk_01_001 :
+    stk_01_001 : // "Fiyat Gör"
     {
         btnDropmenu : "İşlemler",
         txtRefRefno : "Seri-Sıra",
@@ -137,7 +137,7 @@ export const langTr =
         txtDepot : "Depo",
 
     },
-    stk_01_002 :
+    stk_01_002 : // "Tedarikçi Gör"
     {
         chkGroup : "Grup",
         chkCustomer : "Tedarikçi Ürünleri",
@@ -162,7 +162,7 @@ export const langTr =
         },
 
     },
-    stk_01_003: 
+    stk_01_003:  // "Barkod Tanımlama"
     {
         txtBarcode: "Barkod",
         txtItem: "Stok Kodu",
@@ -230,7 +230,7 @@ export const langTr =
         },
         validCode :"Stok Seçmelisiniz",
     },
-    stk_01_004 :
+    stk_01_004 : // Ü.Grubu Gör-Değiştir",
     {
         chkAllItems : "Tüm Ürünler",
         btnChangeGroup : "Ürün Grubu Değiştir",
@@ -272,7 +272,7 @@ export const langTr =
             msg: "Barkod Bulunamadı !"
         },
     },
-    stk_01_005 :
+    stk_01_005 : // Fiyat Değiştir",
     {
         btnDropmenu : "İşlemler",
         txtRefRefno : "Seri-Sıra",
@@ -350,7 +350,7 @@ export const langTr =
         txtDepot : "Depo",
 
     },
-    stk_01_006 :
+    stk_01_006 : // "Barkod Ekle",
     {
         btnDropmenu : "İşlemler",
         txtRefRefno : "Seri-Sıra",
@@ -427,7 +427,7 @@ export const langTr =
         txtNewBarcodePlace : "Yeni Barkodu Giriniz"
 
     },
-    stk_01_007 :
+    stk_01_007 : // "Ü.Grubu Güncelle",
     {
         chkAllItems : "Tüm Ürünler",
         chkAutoAdd : "Oto Ekle",
@@ -471,7 +471,7 @@ export const langTr =
             msg: "Barkod Bulunamadı !"
         },
     },
-    stk_02_001 :
+    stk_02_001 : // "Etiket Basımı",
     {
         btnDropmenu : "İşlemler",
         txtRefRefno : "Seri-Sıra",
@@ -632,7 +632,7 @@ export const langTr =
         validDocDate : "Tarih Seçmelisiniz",
 
     },
-    stk_02_002 :
+    stk_02_002 : //"İade Ürün Toplama",
     {
         btnBarcodeEntry :"Barkod Giriş",
         btnDocument : "İşlem Satırları",
@@ -785,7 +785,7 @@ export const langTr =
         txtQuantity : "Miktar",
         chkAutoAdd : "Oto Ekle",
     },
-    stk_02_003 :
+    stk_02_003 :  // "Özel Etiket Basımı",
     {
         txtRef: "Referans",
         txtPrice : "Fiyat",
@@ -824,7 +824,7 @@ export const langTr =
             msg: "Lütfen gerekli alanları doldurunuz !"
         },
     },
-    stk_02_004 :
+    stk_02_004 : // "Skt Girişi",
     {
         txtBarcodePlace : "Lütfen Barkod Okutunuz",
         btnSave : "Kaydet",
@@ -886,7 +886,7 @@ export const langTr =
             msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Yeni Satır Eklensin Mi ?"
         },
     },
-    ord_01_001 :
+    ord_01_001 : // "Satış Sipariş
     {
         btnDropmenu : "İşlemler",
         txtRefRefno : "Seri-Sıra",
@@ -1103,7 +1103,7 @@ export const langTr =
             msg: "Vergiyi Sıfırlamak istediğinize eminmisiniz !"
         },
     },
-    ord_01_002 :
+    ord_01_002 : // "Alış Sipariş",
     {
         btnDropmenu : "İşlemler",
         txtRefRefno : "Seri-Sıra",
@@ -1333,7 +1333,7 @@ export const langTr =
             msg: "Seçilen Ürün Cariye Tanımlı Değil ! Devam Etmek İstiyormusunuz"
         },
     },
-    irs_01_001 :
+    irs_01_001 : // "İade İrsaliyesi"
     {
         btnDropmenu : "İşlemler",
         getRebate : "İade Deposundan Getir",
