@@ -38,8 +38,8 @@ export class customersCls
         let tmpDt = new datatable('CUSTOMERS')
         tmpDt.selectCmd =
         {
-            query : "SELECT * FROM CUSTOMER_VW_01 WHERE ((CODE = @CODE) OR (@CODE = ''))",
-            param : ['CODE:string|25']
+            query : "SELECT * FROM CUSTOMER_VW_01 WHERE ((CODE = @CODE) OR (@CODE = '')) AND ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000'))",
+            param : ['CODE:string|25','GUID:string|50']
         }
         tmpDt.insertCmd = 
         {
@@ -144,21 +144,32 @@ export class customersCls
         //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİR ÖRN: {CODE:''}
         return new Promise(async resolve =>
         {
-            let tmpPrm = {CODE:''}
+            let tmpPrm = {CODE:'',GUID:'00000000-0000-0000-0000-000000000000'}
             if(arguments.length > 0)
             {
                 tmpPrm.CODE = typeof arguments[0].CODE == 'undefined' ? '' : arguments[0].CODE;
+                tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
             }
 
             this.ds.get('CUSTOMERS').selectCmd.value = Object.values(tmpPrm);
 
+            console.log(1)
             await this.ds.get('CUSTOMERS').refresh()
+            console.log(2)
 
             if(this.ds.get('CUSTOMERS').length > 0)
             {  
+            console.log(3)
+
                 await this.customerAdress.load({CUSTOMER:this.ds.get('CUSTOMERS')[0].GUID})
+            console.log(4)
+
                 await this.customerOffical.load({CUSTOMER:this.ds.get('CUSTOMERS')[0].GUID})
+            console.log(5)
+
                 await this.customerBank.load({CUSTOMER:this.ds.get('CUSTOMERS')[0].GUID})
+            console.log(6)
+
             }
             resolve(this.ds.get('CUSTOMERS'))
         });

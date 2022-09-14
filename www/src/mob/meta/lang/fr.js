@@ -38,8 +38,8 @@ export const langFr =
         stk_02_004: "Entrée nouveau produit",
         ord: "Commande",                
         ord_01: "documents",
-        ord_01_001: "Bon de commande",
-        ord_01_002: "Ordre d'achat",
+        ord_01_001: "Bon de Vente",
+        ord_01_002: "Bon de commande",
         irs: "Bon de livraison",
         irs_01: "documents",
         irs_01_001: "Bon de retour"

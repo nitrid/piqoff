@@ -92,7 +92,7 @@ export default class labelPrinting extends React.PureComponent
 
 
         let tmpLbl = {...this.lblObj.empty}
-        tmpLbl.REF = this.user.CODE
+        tmpLbl.REF = this.user.NAME
         this.mainLblObj.addEmpty(tmpLbl);
         
         this.txtRef.readOnly = false
@@ -122,7 +122,7 @@ export default class labelPrinting extends React.PureComponent
     {
         let tmpQuery = 
         {
-            query : "SELECT GUID,REF,REF_NO FROM LABEL_QUEUE WHERE STATUS IN("+pType+") AND REF = '" +this.txtRef.value+"' " 
+            query : "SELECT GUID,REF,REF_NO,CONVERT(NVARCHAR,CDATE,104) AS DOC_DATE_CONVERT,ISNULL((SELECT COUNT(CODE) FROM ITEM_LABEL_QUEUE_VW_01 WHERE ITEM_LABEL_QUEUE_VW_01.GUID = LABEL_QUEUE.GUID),0) AS COUNT FROM LABEL_QUEUE WHERE STATUS IN("+pType+") AND REF <> 'SPECIAL' " 
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
         let tmpRows = []
@@ -146,7 +146,7 @@ export default class labelPrinting extends React.PureComponent
     {
         let tmpQuery = 
         {
-            query : "SELECT GUID,REF,REF_NO FROM LABEL_QUEUE WHERE STATUS IN("+pType+") " 
+            query : "SELECT GUID,REF,REF_NO,CONVERT(NVARCHAR,CDATE,104) AS DOC_DATE_CONVERT,ISNULL((SELECT COUNT(CODE) FROM ITEM_LABEL_QUEUE_VW_01 WHERE ITEM_LABEL_QUEUE_VW_01.GUID = LABEL_QUEUE.GUID),0) AS COUNT FROM LABEL_QUEUE WHERE STATUS IN("+pType+") AND REF <> 'SPECIAL' " 
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
         let tmpRows = []
@@ -204,7 +204,9 @@ export default class labelPrinting extends React.PureComponent
                 "FROM ITEMS_VW_01  " +
                 "WHERE (SELECT TOP 1 LDATE FROM LABEL_QUEUE ORDER BY LDATE DESC) < (SELECT TOP 1 LDATE FROM ITEM_PRICE WHERE TYPE = 0  AND ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC) OR  (SELECT TOP 1 LDATE FROM LABEL_QUEUE ORDER BY LDATE DESC) < ITEMS_VW_01.LDATE) AS TMP ", 
             }
+            App.instance.setState({isExecute:true})
             let tmpData = await this.core.sql.execute(tmpQuery) 
+            App.instance.setState({isExecute:false})
             if(tmpData.result.recordset.length > 0)
             {
                 for (let i = 0; i < tmpData.result.recordset.length; i++) 
@@ -252,7 +254,9 @@ export default class labelPrinting extends React.PureComponent
                 param : ['DATE:date'],
                 value : [this.dtSelectChange.value]
             }
+            App.instance.setState({isExecute:true})
             let tmpData = await this.core.sql.execute(tmpQuery) 
+            App.instance.setState({isExecute:false})
             if(tmpData.result.recordset.length > 0)
             {
                 for (let i = 0; i < tmpData.result.recordset.length; i++) 
@@ -300,7 +304,9 @@ export default class labelPrinting extends React.PureComponent
                 param : ['GROUP:string|25'],
                 value : [this.cmbGroup.value]
             }
+            App.instance.setState({isExecute:true})
             let tmpData = await this.core.sql.execute(tmpQuery) 
+            App.instance.setState({isExecute:false})
             if(tmpData.result.recordset.length > 0)
             {
                 for (let i = 0; i < tmpData.result.recordset.length; i++) 
@@ -348,7 +354,9 @@ export default class labelPrinting extends React.PureComponent
                 param : ['CUSTOMER:string|50'],
                 value : [this.cmbCustomer.value]
             }
+            App.instance.setState({isExecute:true})
             let tmpData = await this.core.sql.execute(tmpQuery) 
+            App.instance.setState({isExecute:false})
             if(tmpData.result.recordset.length > 0)
             {
                 for (let i = 0; i < tmpData.result.recordset.length; i++) 
@@ -394,7 +402,9 @@ export default class labelPrinting extends React.PureComponent
                 "FROM ITEMS_VW_01  " +
                 " ) AS TMP ", 
             }
+            App.instance.setState({isExecute:true})
             let tmpData = await this.core.sql.execute(tmpQuery) 
+            App.instance.setState({isExecute:false})
             if(tmpData.result.recordset.length > 0)
             {
                 for (let i = 0; i < tmpData.result.recordset.length; i++) 
@@ -824,23 +834,6 @@ export default class labelPrinting extends React.PureComponent
                                                         icon:'more',
                                                         onClick:async()=>
                                                         {
-                                                            // Yeni deyince evrak seçtirtmiyor
-                                                            // if(typeof this.btnSave.state.disabled != 'undefined')
-                                                            // {
-                                                            //     if(this.btnSave.state.disabled == false)
-                                                            //     {
-                                                            //         let tmpConfObj =
-                                                            //         {
-                                                            //             id:'msgNotSave',showTitle:true,title:this.t("msgNotSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                            //             button:[{id:"btn01",caption:this.t("msgNotSave.btn01"),location:'after'}],
-                                                            //             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotSave.msg")}</div>)
-                                                            //         }
-                                                        
-                                                            //         await dialog(tmpConfObj);
-                                                            //         return
-                                                            //     }
-                                                            // }
-                                                           
                                                             this.getDocs(0)   
                                                         }
                                                     },
@@ -898,6 +891,8 @@ export default class labelPrinting extends React.PureComponent
                                     >
                                         <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150} defaultSortOrder="asc"/>
                                         <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={300} defaultSortOrder="asc" />
+                                        <Column dataField="COUNT" caption={this.t("pg_Docs.clmCount")} width={300} />
+                                        <Column dataField="DOC_DATE_CONVERT" caption={this.t("pg_Docs.clmDocDate")} width={300} />
                                     </NdPopGrid>
                                 </Item>
                                 {/* txtPage */}
@@ -1256,6 +1251,8 @@ export default class labelPrinting extends React.PureComponent
                     >
                         <Column dataField="REF" caption={this.t("pg_DocsCombine.clmRef")} width={150} defaultSortOrder="asc"/>
                         <Column dataField="REF_NO" caption={this.t("pg_DocsCombine.clmRefNo")} width={300} defaultSortOrder="asc" />
+                        <Column dataField="COUNT" caption={this.t("pg_Docs.clmCount")} width={300} />
+                        <Column dataField="DOC_DATE_CONVERT" caption={this.t("pg_Docs.clmDocDate")} width={300} />
                     </NdPopGrid>
                     {/* popWizard */}
                     <div>

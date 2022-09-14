@@ -50,9 +50,7 @@ export default class collectiveItemEdit extends React.PureComponent
     {
         this.editObj.clearAll()
 
-        this.txtCustomerCode.GUID ='00000000-0000-0000-0000-000000000000'
-        this.txtCustomerCode.CODE =''
-        console.log(this.editObj.dt())
+       
         await this.grdItemList.dataRefresh({source:this.editObj.dt('ITEM_EDIT')});
     }
     async _btnGetClick()
@@ -79,8 +77,9 @@ export default class collectiveItemEdit extends React.PureComponent
             tmpSrc = "((CODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (BARCODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (MULTICODE IN (" + TmpVal.substring(1,TmpVal.length) + "))) AND"
         }
 
-        await this.editObj.load({NAME:this.txtName.value.replaceAll("*", "%"),MAIN_GRP:this.cmbItemGroup.value,CUSTOMER_CODE:this.txtCustomerCode.value,QUERY:tmpSrc})
-            
+        await this.editObj.load({NAME:this.txtName.value.replaceAll("*", "%"),MAIN_GRP:this.cmbItemGroup.value,CUSTOMER_CODE:this.cmbTedarikci.value,QUERY:tmpSrc})
+        this.netMargin()
+        this.grossMargin()
        
     }
     _cellRoleRender(e)
@@ -125,6 +124,30 @@ export default class collectiveItemEdit extends React.PureComponent
         }
         
     }
+    async grossMargin()
+    {
+        for (let i = 0; i < this.editObj.dt().length; i++) 
+        {
+            let tmpExVat = this.editObj.dt()[i].PRICE_SALE / ((this.editObj.dt()[i].VAT / 100) + 1)
+            let tmpMargin = tmpExVat - this.editObj.dt()[i].CUSTOMER_PRICE;
+            let tmpMarginRate = ((tmpExVat - this.editObj.dt()[i].CUSTOMER_PRICE) / tmpExVat) * 100
+            this.editObj.dt()[i].GROSS_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2);        
+            this.editObj.dt()[i].GROSS_MARGIN_RATE = tmpMarginRate.toFixed(2);                 
+        }
+        await this.grdItemList.dataRefresh({source:this.editObj.dt()});
+    }
+    async netMargin()
+    {
+        for (let i = 0; i < this.editObj.dt().length; i++) 
+        {
+            let tmpExVat = this.editObj.dt()[i].PRICE_SALE / ((this.editObj.dt()[i].VAT / 100) + 1)
+            let tmpMargin = (tmpExVat -this.editObj.dt()[i].CUSTOMER_PRICE) / 1.12;
+            let tmpMarginRate = (((tmpExVat - this.editObj.dt()[i].CUSTOMER_PRICE) / 1.12) / tmpExVat) * 100
+            this.editObj.dt()[i].NET_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2);
+            this.editObj.dt()[i].NET_MARGIN_RATE = tmpMarginRate.toFixed(2);    
+        }
+        await this.grdItemList.dataRefresh({source:this.editObj.dt()});
+    }   
     render()
     {
         return(
@@ -218,76 +241,18 @@ export default class collectiveItemEdit extends React.PureComponent
                                         />
                                 </Item>
                                 <Item>
-                                <Label text={this.t("txtCustomerCode")} alignment="right" />
-                                <NdTextBox id="txtCustomerCode" parent={this} simple={true}  notRefresh = {true}
-                                button=
-                                {
-                                    [
-                                        {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
-                                            {
-                                                this.pg_txtCustomerCode.show()
-                                                this.pg_txtCustomerCode.onClick = (data) =>
-                                                {
-                                                    if(data.length > 0)
-                                                    {
-                                                        this.txtCustomerCode.setState({value:data[0].TITLE})
-                                                        this.txtCustomerCode.CODE = data[0].CODE
-                                                        this.txtCustomerCode.GUID = data[0].GUID
-                                                    }
-                                                }
-                                            }
-                                        },
-                                        {
-                                            id:'02',
-                                            icon:'clear',
-                                            onClick:()=>
-                                            {
-                                                this.txtCustomerCode.setState({value:''})
-                                                this.txtCustomerCode.CODE =''
-                                                this.txtCustomerCode.GUID ='00000000-0000-0000-0000-000000000000'
-                                            }
-                                        },
-                                    ]
-                                }
-                                >
-                                </NdTextBox>
-                                {/*CARI SECIMI POPUP */}
-                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
-                                visible={false}
-                                position={{of:'#root'}} 
-                                showTitle={true} 
-                                showBorders={true}
-                                width={'90%'}
-                                height={'90%'}
-                                title={this.t("pg_txtCustomerCode.title")} //
-                                data={{source:{select:{query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE GENUS IN(1,2)"},sql:this.core.sql}}}
-                                button=
-                                {
-                                    {
-                                        id:'01',
-                                        icon:'more',
-                                        onClick:()=>
-                                        {
-                                            console.log(1111)
-                                        }
-                                    }
-                                }
-                                >
-                                    <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
-                                    <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
-                                    <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
-                                    <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>
-                                    
-                                </NdPopGrid>
+                                    <Label text={this.t("txtCustomerCode")} alignment="right" />
+                                        <NdSelectBox simple={true} parent={this} id="cmbTedarikci" showClearButton={true} notRefresh={true}  searchEnabled={true} 
+                                        displayExpr="TITLE"                       
+                                        valueExpr="CODE"
+                                        data={{source: {select : {query:"SELECT CODE,TITLE FROM CUSTOMER_VW_01 WHERE TYPE IN(1,2) ORDER BY TITLE ASC"},sql : this.core.sql}}}
+                                        />
                                 </Item>
                                 
                                 {/* txtName */}
                                 <Item>
                                     <Label text={this.t("txtName")} alignment="right" />
-                                    <NdTextBox id="txtName" parent={this} simple={true} 
+                                    <NdTextBox id="txtName" parent={this} simple={true}  placeholder={this.t("namePlaceHolder")}
                                     onChange={(async()=>
                                     {
                                       
@@ -304,11 +269,11 @@ export default class collectiveItemEdit extends React.PureComponent
                                     displayExpr="NAME"                       
                                     valueExpr="CODE"
                                     value=""
+                                    showClearButton={true}
                                     searchEnabled={true}
                                     notRefresh = {true}
                                     onValueChanged={(async()=>
                                         {
-                                            console.log(this.cmbItemGroup)
                                         }).bind(this)}
                                     data={{source:{select:{query : "SELECT CODE,NAME FROM ITEM_GROUP ORDER BY NAME ASC"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbItemGroup',USERS:this.user.CODE})}
@@ -321,7 +286,6 @@ export default class collectiveItemEdit extends React.PureComponent
                                                 icon:'clear',
                                                 onClick:()=>
                                                 {
-                                                    this.txtCustomerCode.setState({cmbItemGroup:''})
                                                     this.cmbItemGroup.valueExpr =''
                                                 }
                                             },
@@ -330,7 +294,6 @@ export default class collectiveItemEdit extends React.PureComponent
                                     >
                                     </NdSelectBox>
                                 </Item>
-                                
                             </Form>
                         </div>
                     </div>
@@ -360,22 +323,53 @@ export default class collectiveItemEdit extends React.PureComponent
                             height={'100%'} 
                             width={'100%'}
                             dbApply={false}
+                            selection={{mode:"single"}}
+                            onRowUpdated={async(e)=>{
+                               this.grossMargin()
+                               this.netMargin()
+                            }}
+                            onRowClick={async(e)=>
+                            {
+                                let tmpIndexes = []
+                                for (let i = 0; i <this.editObj.dt().length; i++) 
+                                {
+                                    if(this.editObj.dt()[i].CODE == e.data.CODE)
+                                    {
+                                        tmpIndexes.push(this.grdItemList.devGrid.getRowIndexByKey(this.editObj.dt()[i]))
+                                    }
+                                }
+                                this.grdItemList.devGrid.selectRowsByIndexes(tmpIndexes)
+                            }}
+                            onCellPrepared={(e) =>
+                            {
+                                if(e.rowType === "data" && e.column.dataField === "GROSS_MARGIN")
+                                {
+                                    e.cellElement.style.color = e.data.GROSS_MARGIN_RATE < 30 ? "red" : "blue";
+                                }
+                                if(e.rowType === "data" && e.column.dataField === "NET_MARGIN")
+                                {
+                                    e.cellElement.style.color = e.data.NET_MARGIN_RATE < 30 ? "red" : "blue";
+                                }
+                            }}
                             >                            
                                 <Paging defaultPageSize={14} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
-                                <Editing mode="cell" allowUpdating={true} allowDeleting={false} confirmDelete={false}/>
-                                <Column dataField="CODE" caption={this.t("grdItemList.clmCode")} visible={true} width={150} allowEditing={false}/> 
-                                <Column dataField="NAME" caption={this.t("grdItemList.clmName")} visible={true} defaultSortOrder="asc"  /> 
-                                <Column dataField="BARCODE" caption={this.t("grdItemList.clmBarcode")} visible={true} width={150} allowEditing={false}/> 
+                                <Editing mode="batch" allowUpdating={true} allowDeleting={false} confirmDelete={false}/>
+                                <Column dataField="CODE" caption={this.t("grdItemList.clmCode")} visible={true} width={100} allowEditing={false}/> 
+                                <Column dataField="NAME" caption={this.t("grdItemList.clmName")} visible={true} width={250} defaultSortOrder="asc"  /> 
+                                <Column dataField="BARCODE" caption={this.t("grdItemList.clmBarcode")} visible={false} width={150} allowEditing={false}/> 
                                 <Column dataField="MULTICODE" caption={this.t("grdItemList.clmMulticode")} visible={true} width={150}/> 
                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdItemList.clmCustomerName")} visible={true}  allowEditing={false}/> 
                                 <Column dataField="CUSTOMER_PRICE" caption={this.t("grdItemList.clmCustomerPrice")} visible={true} width={100}/> 
-                                <Column dataField="MAIN_UNIT_NAME" caption={this.t("grdItemList.clmMainUnit")} visible={true} width={100}/> 
-                                <Column dataField="UNDER_UNIT_NAME" caption={this.t("grdItemList.clmUnderUnit")} visible={true} width={100}/> 
-                                <Column dataField="UNDER_FACTOR" caption={this.t("grdItemList.clmUnderFactor")} visible={true} width={100}/> 
-                                <Column dataField="PRICE_SALE" caption={this.t("grdItemList.clmPriceSale")} visible={true} width={100} /> 
+                                <Column dataField="MAIN_UNIT_NAME" caption={this.t("grdItemList.clmMainUnit")} visible={false} width={100} allowEditing={false}/> 
+                                <Column dataField="UNDER_UNIT_NAME" caption={this.t("grdItemList.clmUnderUnit")} visible={true} width={80} allowEditing={false}/> 
+                                <Column dataField="UNDER_FACTOR" caption={this.t("grdItemList.clmUnderFactor")} visible={true} width={80}/> 
+                                <Column dataField="PRICE_SALE" caption={this.t("grdItemList.clmPriceSale")} visible={true} width={80} /> 
+                                <Column dataField="GROSS_MARGIN" caption={this.t("grdItemList.clmGrossMargin")} visible={true} width={130} allowEditing={false}/> 
+                                <Column dataField="NET_MARGIN" caption={this.t("grdItemList.clmNetMargin")} visible={true} width={130} allowEditing={false}/> 
                                 <Column dataField="VAT" caption={this.t("grdItemList.clmVat")} visible={true} width={100} editCellRender={this._cellRoleRender}/>    
-                                <Column dataField="ORGINS" caption={this.t("grdItemList.clmOrgins")} visible={true} width={150} editCellRender={this._cellRoleRender}/>   
+                                <Column dataField="ORGINS" caption={this.t("grdItemList.clmOrgins")} visible={true} width={120} editCellRender={this._cellRoleRender}/>   
+                                <Column dataField="WEIGHING" caption={this.t("grdItemList.clmWeighing")} visible={true} width={100}/>  
                                 <Column dataField="STATUS" caption={this.t("grdItemList.clmStatus")} visible={true} width={100}/>    
                                           
                             </NdGrid>

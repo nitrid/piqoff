@@ -1031,14 +1031,18 @@ export const langTr =
         pg_Docs : 
         {
             title : "Evrak Seçimi",
-            clmRef : "SERİ",
-            clmRefNo : "SIRA",
+            clmRef : "Seri",
+            clmRefNo : "Sıra",
+            clmDocDate : "Tarih",
+            clmCount : "Ürün Sayısı"
         },
         pg_DocsCombine : 
         {
             title : "Evrak Seçimi",
-            clmRef : "SERİ",
-            clmRefNo : "SIRA",
+            clmRef : "Seri",
+            clmRefNo : "Sıra",
+            clmDocDate : "Tarih",
+            clmCount : "Ürün Sayısı"
         },
         pg_txtItemsCode : 
         {
@@ -1321,13 +1325,13 @@ export const langTr =
             txtPopItemsCode : "Stok Kodu",
             txtPopItemsName: "Stok Adı",
             txtPopItemsQuantity : "Miktar",
-            dtPopDate : "Tarih"
+            dtPopDate : "SKT Tarihİ"
         },
         grdExpDate:
         {
             clmName: "Adı",
             clmCode: "Kodu",
-            clmDate: "Tarih"
+            clmDate: "SKT Tarihİ"
         },
         msgDocValid:
         {
@@ -1509,6 +1513,8 @@ export const langTr =
     stk_04_001 : 
     {
         txtCustomerCode : "Cari",
+        codePlaceHolder : "Lütfen Aratmak İstediğiniz Ürün Kodu,Barkod veya Tedarikçi Kodunu Giriniz",
+        namePlaceHolder :"Ürün Adının Tamamını yada İçinde Geçen Bir Hece Giriniz",
         pg_txtCustomerCode : 
         {
             title : "Cari Seçimi",
@@ -1536,6 +1542,9 @@ export const langTr =
             clmUnderUnit : "Alt Birim",
             clmMainUnit : 'Ana Birim',
             clmUnderFactor : "Katsayı",
+            clmWeighing : "Tartılsın",
+            clmNetMargin : "Net Marj",
+            clmGrossMargin : "Brüt Marj",
         },
         msgSave:
         {

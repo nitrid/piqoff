@@ -349,10 +349,11 @@ export default class rebateDoc extends React.PureComponent
                     {
                         id:'msgNotQuantity',showTitle:true,title:this.t("msgNotQuantity.title"),showCloseButton:true,width:'500px',height:'200px',
                         button:[{id:"btn01",caption:this.t("msgNotQuantity.btn01"),location:'after'}],
-                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotQuantity.msg")}</div>)
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotQuantity.msg") + tmpQuantity.result.recordset[0].QUANTITY}</div>)
                     }
-        
+
                     await dialog(tmpConfObj);
+                    await this.grdRebItems.devGrid.deleteRow(pIndex)
                     return
                }
                else
@@ -725,7 +726,7 @@ export default class rebateDoc extends React.PureComponent
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_Docs.title")} 
-                                    data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 2 AND DOC_TYPE = 2 AND REBATE = 1"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,OUTPUT_NAME,DOC_DATE_CONVERT FROM DOC_VW_01 WHERE TYPE = 2 AND DOC_TYPE = 2 AND REBATE = 1"},sql:this.core.sql}}}
                                     button=
                                     {
                                         [
@@ -745,7 +746,7 @@ export default class rebateDoc extends React.PureComponent
                                         <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={300} defaultSortOrder="asc" />
                                         <Column dataField="INPUT_NAME" caption={this.t("pg_Docs.clmInputName")} width={300} defaultSortOrder="asc" />
                                         <Column dataField="OUTPUT_NAME" caption={this.t("pg_Docs.clmOutputName")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="DOC_DATE" caption={this.t("pg_Docs.clmDocDate")} width={300} defaultSortOrder="asc" />
+                                        <Column dataField="DOC_DATE_CONVERT" caption={this.t("pg_Docs.clmDocDate")} width={300} defaultSortOrder="asc" />
                                         
                                     </NdPopGrid>
                                 </Item>

@@ -32,6 +32,7 @@ import IdleTimer from 'react-idle-timer'
 import { posCls,posSaleCls,posPaymentCls,posPluCls,posDeviceCls } from "../../core/cls/pos.js";
 import { docCls} from "../../core/cls/doc.js"
 import transferCls from "../lib/transfer.js";
+import { promoCls } from "../../core/cls/promotion.js";
 
 import { itemsCls } from "../../core/cls/items.js";
 import { dataset,datatable,param,access } from "../../core/core.js";
@@ -59,6 +60,7 @@ export default class posDoc extends React.PureComponent
         this.lastPosDt = new datatable();
         this.lastPosSaleDt = new datatable();
         this.lastPosPayDt = new datatable();        
+        this.promoObj = new promoCls();
 
         this.loading = React.createRef();
 
@@ -272,7 +274,7 @@ export default class posDoc extends React.PureComponent
             }
         }
         await this.parkDt.refresh();     
-        console.log(this.parkDt)
+        
         setTimeout(() => 
         {
             this.posDevice.lcdPrint
@@ -290,7 +292,10 @@ export default class posDoc extends React.PureComponent
         {
             this.deviceEntry()
         }
-
+        
+        //PROMOSYON GETİR.
+        await this.getPromoDb()
+        //************************************************** */        
         for (let i = 0; i < this.parkDt.length; i++) 
         {            
             if(typeof this.parkDt[i].DESCRIPTION == 'undefined' || this.parkDt[i].DESCRIPTION == '')
@@ -298,11 +303,12 @@ export default class posDoc extends React.PureComponent
                 this.cheqDt.selectCmd.value = [this.parkDt[i].GUID] 
                 await this.cheqDt.refresh();  
 
-                await this.getDoc(this.parkDt[i].GUID)   
-                             
+                await this.getDoc(this.parkDt[i].GUID)                              
                 return
             }
-        }           
+        }
+
+        
     }    
     async deviceEntry()
     {
@@ -330,6 +336,9 @@ export default class posDoc extends React.PureComponent
             await this.posObj.load({GUID:pGuid})
             this.posObj.dt()[0].DEVICE = window.localStorage.getItem('device')
             this.posObj.dt()[0].DOC_DATE =  moment(new Date()).format("YYYY-MM-DD"),
+            //PROMOSYON GETİR.
+            await this.getPromoDb()
+            //************************************************** */
             await this.calcGrandTotal(false)
             resolve();
         });        
@@ -488,6 +497,10 @@ export default class posDoc extends React.PureComponent
 
                 this.calcGrandTotal(true);
                 this.setState({isBtnGetCustomer:false})
+
+                //PROMOSYON GETİR.
+                await this.getPromoDb()
+                //************************************************** */
             }
             else
             {
@@ -983,6 +996,111 @@ export default class posDoc extends React.PureComponent
 
         return
     }
+    isPromo()
+    {
+        //PROMOTION RESET
+        this.posObj.posSale.dt().where({PROMO_TYPE : {'>' : 1}}).forEach((item)=>
+        {
+            let tmpCalc = this.calcSaleTotal(item.PRICE,item.QUANTITY,0,item.LOYALTY,item.VAT_RATE)
+    
+            item.QUANTITY = tmpCalc.QUANTITY
+            item.PRICE = tmpCalc.PRICE
+            item.FAMOUNT = tmpCalc.FAMOUNT
+            item.AMOUNT = tmpCalc.AMOUNT
+            item.DISCOUNT = tmpCalc.DISCOUNT
+            item.VAT = tmpCalc.VAT
+            item.TOTAL = tmpCalc.TOTAL
+            item.PROMO_TYPE = 0
+
+            console.log(item)
+        })
+        //******************************************************************** */
+        let tmpSale = this.posObj.posSale.dt().where({PROMO_TYPE:0})
+
+        this.promoObj.dt('PROMO').forEach(promoItem => 
+        {
+            let tmpCond = this.promoObj.cond.dt().where({PROMO:promoItem.GUID})
+            let tmpApp = this.promoObj.app.dt().where({PROMO:promoItem.GUID})
+            
+            if(tmpCond.where({TYPE:0})) //STOK KOŞULU
+            {
+                tmpCond = tmpCond.where({TYPE:0})
+                if(tmpCond.sum('AMOUNT',2) > 0)
+                {
+                    // if(tmpSale.where({ITEM_GUID:{'in':tmpCond.toColumnArr('ITEM_GUID')}}).sum('TOTAL',2) >= tmpCond.sum('AMOUNT',2))
+                    // {
+    
+                    // }
+                }
+                else
+                {
+                    tmpCond.forEach(itemCond => 
+                    {
+                        if(tmpSale.where({ITEM_GUID : itemCond.ITEM_GUID,PROMO_TYPE : 0}).sum('QUANTITY') >= itemCond.QUANTITY)
+                        {
+                            let tmpCondCount = Math.floor(tmpSale.where({ITEM_GUID : itemCond.ITEM_GUID,PROMO_TYPE : 0}).sum('QUANTITY') / itemCond.QUANTITY)
+                            
+                            //İNDİRİM UYGULAMA
+                            tmpApp.where({TYPE:0}).forEach(itemApp =>
+                            {
+                                if(tmpSale.where({ITEM_GUID : itemCond.ITEM_GUID,PROMO_TYPE : 0}).sum('QUANTITY') >= itemApp.QUANTITY)
+                                {
+                                    tmpSale.where({ITEM_GUID : itemCond.ITEM_GUID,PROMO_TYPE : 0}).forEach(itemSale => 
+                                    {                                    
+                                        let tmpDisc = Number(Number(itemSale.PRICE * itemSale.QUANTITY).rateInc(itemApp.AMOUNT,2))
+                                        let tmpCalc = this.calcSaleTotal(itemSale.PRICE,itemSale.QUANTITY,tmpDisc,itemSale.LOYALTY,itemSale.VAT_RATE)
+    
+                                        itemSale.QUANTITY = tmpCalc.QUANTITY
+                                        itemSale.PRICE = tmpCalc.PRICE
+                                        itemSale.FAMOUNT = tmpCalc.FAMOUNT
+                                        itemSale.AMOUNT = tmpCalc.AMOUNT
+                                        itemSale.DISCOUNT = tmpCalc.DISCOUNT
+                                        itemSale.VAT = tmpCalc.VAT
+                                        itemSale.TOTAL = tmpCalc.TOTAL
+                                        itemSale.PROMO_TYPE = 2
+
+                                        //console.log(tmpCalc)
+                                    });
+                                }
+                            });
+                            //STOK İNDİRİMİ UYGULAMA
+                            tmpApp.where({TYPE:3}).forEach(itemApp =>
+                            {
+                                if(tmpSale.where({ITEM_GUID : itemApp.ITEM_GUID,PROMO_TYPE : 0}).sum('QUANTITY') >= itemApp.QUANTITY)
+                                {       
+                                    let tmpAppCount = Math.floor(tmpSale.where({ITEM_GUID : itemApp.ITEM_GUID,PROMO_TYPE : 0}).sum('QUANTITY') / itemApp.QUANTITY)
+    
+                                    tmpSale.where({ITEM_GUID : itemApp.ITEM_GUID,PROMO_TYPE : 0}).forEach(itemSale => 
+                                    {                   
+                                        console.log(itemSale)                 
+                                        let tmpDisc = Number(Number(itemSale.PRICE).rateInc(itemApp.AMOUNT,2)) * (tmpCondCount <= tmpAppCount ? tmpCondCount : tmpAppCount)
+                                        console.log(tmpDisc)
+                                        let tmpCalc = this.calcSaleTotal(itemSale.PRICE,itemSale.QUANTITY,tmpDisc,itemSale.LOYALTY,itemSale.VAT_RATE)
+    
+                                        itemSale.QUANTITY = tmpCalc.QUANTITY
+                                        itemSale.PRICE = tmpCalc.PRICE
+                                        itemSale.FAMOUNT = tmpCalc.FAMOUNT
+                                        itemSale.AMOUNT = tmpCalc.AMOUNT
+                                        itemSale.DISCOUNT = tmpCalc.DISCOUNT
+                                        itemSale.VAT = tmpCalc.VAT
+                                        itemSale.TOTAL = tmpCalc.TOTAL
+                                        itemSale.PROMO_TYPE = 3
+
+                                        //console.log(tmpCalc)
+                                    });
+                                }
+                            })
+                        }
+                    });
+                }
+            }
+            else if(tmpCond.where({TYPE:1})) //GENEL TUTAR KOŞULU
+            {
+
+            }
+            
+        });
+    }
     async saleAdd(pItemData)
     {
         let tmpRowData = this.isRowMerge('SALE',pItemData)     
@@ -1050,6 +1168,8 @@ export default class posDoc extends React.PureComponent
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_TOTAL = 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DELETED = false
         
+        this.isPromo()
+
         await this.calcGrandTotal();
     }
     async saleRowUpdate(pRowData,pItemData)
@@ -1075,6 +1195,8 @@ export default class posDoc extends React.PureComponent
         pRowData.VAT = tmpCalc.VAT
         pRowData.TOTAL = tmpCalc.TOTAL
         
+        this.isPromo()
+
         await this.calcGrandTotal();
     } 
     async saleClosed(pPrint,pPayRest,pPayChange)
@@ -1909,6 +2031,15 @@ export default class posDoc extends React.PureComponent
             resolve()
         });
     }
+    getPromoDb()
+    {
+        return new Promise(async resolve => 
+        {
+            this.promoObj.clearAll()
+            await this.promoObj.load({START_DATE:moment(new Date()).format("YYYY-MM-DD"),FINISH_DATE:moment(new Date()).format("YYYY-MM-DD"),CUSTOMER_GUID:this.posObj.dt()[0].CUSTOMER_GUID,DEPOT_GUID:this.posObj.dt()[0].DEPOT_GUID})
+            resolve()
+        })
+    }
     render()
     {
         return(
@@ -2006,6 +2137,9 @@ export default class posDoc extends React.PureComponent
                                                 this.posObj.dt()[0].CUSTOMER_POINT = 0
                                                 this.btnPopLoyaltyDel.props.onClick()
 
+                                                //PROMOSYON GETİR.
+                                                await this.getPromoDb()
+                                                //************************************************** */
                                                 this.calcGrandTotal(true);
                                             }
                                             return
@@ -2187,10 +2321,22 @@ export default class posDoc extends React.PureComponent
                                     {
                                         e.rowElement.style.fontWeight = "bold";    
                                     }
-                                    e.rowElement.style.fontSize = "15px";                                        
+                                    e.rowElement.style.fontSize = "15px";
+                                    if(e.rowType == "data")
+                                    {
+                                        if(e.data.PROMO_TYPE > 1)
+                                        {
+                                            e.rowElement.style.backgroundColor = "#00cec9";
+                                        }
+                                        else
+                                        {
+                                            e.rowElement.style.backgroundColor = "white";
+                                        }
+                                    }
+                                    
                                 }}
                                 onCellPrepared={(e)=>
-                                {
+                                {                                    
                                     e.cellElement.style.padding = "4px"                                    
                                     if(e.rowType == 'data' && e.column.dataField == 'AMOUNT')
                                     {
@@ -3463,7 +3609,7 @@ export default class posDoc extends React.PureComponent
                         },
                         sql:this.core.sql
                     }}}
-                    onSelection={(pData)=>
+                    onSelection={async(pData)=>
                     {
                         if(pData.length > 0)
                         {
@@ -3472,6 +3618,9 @@ export default class posDoc extends React.PureComponent
                             this.posObj.dt()[0].CUSTOMER_NAME = pData[0].TITLE
                             this.posObj.dt()[0].CUSTOMER_POINT = pData[0].CUSTOMER_POINT
 
+                            //PROMOSYON GETİR.
+                            await this.getPromoDb()
+                            //************************************************** */
                             this.calcGrandTotal(false);
                         }
                     }}>

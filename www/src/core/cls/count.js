@@ -70,6 +70,7 @@ export class itemCountCls
                     "@DEPOT = @PDEPOT, " + 
                     "@LINE_NO = @PLINE_NO, " +
                     "@ITEM = @PITEM, " +
+                    "@QUANTITY = @PQUANTITY, " +
                     "@LOCKED = @PLOCKED " ,
             param : ['PGUID:string|50','PCUSER:string|25','PREF:string|25','PREF_NO:int','PDOC_DATE:date',
                         'PDEPOT:string|50','PLINE_NO:int','PITEM:string|50','PQUANTITY:float','PLOCKED:int'],

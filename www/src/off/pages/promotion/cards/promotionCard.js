@@ -178,8 +178,17 @@ export default class promotionCard extends React.PureComponent
                                                     id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
                                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
-
-                                                this.promo.cond.dt()[0].PROMO = this.promo.dt()[0].GUID
+                                                
+                                                if(this.state.prmType == 0)
+                                                {
+                                                    this.promo.cond.dt().forEach(e => 
+                                                    {
+                                                        e.QUANTITY = this.txtPrmQuantity.value
+                                                        e.AMOUNT = this.txtPrmAmount.value
+                                                    });
+                                                }
+                                                
+                                               
                                                 this.promo.app.dt()[0].PROMO = this.promo.dt()[0].GUID
                                                 
                                                 console.log(this.promo.app)
@@ -466,8 +475,8 @@ export default class promotionCard extends React.PureComponent
                                                     onClick:()=>
                                                     {
                                                         this.pg_txtPrmItem.show()
-                                                        this.pg_txtPrmItem.onClick = (data) =>
-                                                        {                         
+                                                        this.pg_txtPrmItem.onClick = async(data) =>
+                                                        {         
                                                             let tmpArr = [...this.promo.cond.dt().toArray()]
                                                             for (let i = 0; i < tmpArr.length; i++) 
                                                             {
@@ -477,17 +486,17 @@ export default class promotionCard extends React.PureComponent
                                                             for (let i = 0; i < data.length; i++) 
                                                             {
                                                                 let tmpData = {...this.promo.cond.empty}
-
+                                                                
                                                                 tmpData.ITEM_GUID = data[i].GUID;
                                                                 tmpData.ITEM_CODE = data[i].CODE;
                                                                 tmpData.ITEM_NAME = data[i].NAME;
                                                                 tmpData.PROMO = this.promo.dt()[0].GUID
                                                                 tmpData.QUANTITY = 1;
                                                                 tmpData.AMOUNT = 0;
-
+                                                                
                                                                 this.promo.cond.addEmpty(tmpData);
                                                             }
-                                                            
+                                                            console.log(this.promo.cond.dt())
                                                             if(data.length > 0)
                                                             {
                                                                 this.txtPrmItem.value = data[0].CODE;
@@ -501,6 +510,7 @@ export default class promotionCard extends React.PureComponent
                                                     icon:'info',
                                                     onClick:()=>
                                                     {
+                                                        console.log(this.promo.cond.dt())
                                                         this.pop_PrmItemList.show()
                                                     }
                                                 }]}
@@ -557,7 +567,7 @@ export default class promotionCard extends React.PureComponent
                                                             sorting={{ mode: 'none' }}
                                                             >
                                                                 <Editing confirmDelete={false}/>
-                                                                <Scrolling mode="infinite" />
+                                                                <Scrolling mode="virtual" />
                                                                 <Column dataField="ITEM_CODE" caption={this.t("pg_Grid.clmCode")} width={100}/>
                                                                 <Column dataField="ITEM_NAME" caption={this.t("pg_Grid.clmName")} width={290}/>
                                                             </NdGrid>

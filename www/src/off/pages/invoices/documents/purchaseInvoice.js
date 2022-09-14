@@ -2192,7 +2192,7 @@ export default class purchaseInvoice extends React.PureComponent
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
-                                        <Scrolling mode="infinite" />
+                                        <Scrolling mode="virtual" />
                                         <Editing mode="cell" allowUpdating={false} allowDeleting={true} />
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdInvoicePayment.clmCreateDate")} width={150} allowEditing={false} headerFilter={{visible:true}}/>
                                         <Column dataField="AMOUNT" caption={this.t("grdInvoicePayment.clmPrice")} width={150}  headerFilter={{visible:true}}/>
@@ -2656,7 +2656,7 @@ export default class purchaseInvoice extends React.PureComponent
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
-                                        <Scrolling mode="infinite" />
+                                        <Scrolling mode="virtual" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                         <Column dataField="CODE" caption={this.t("grdMultiItem.clmCode")} width={150} allowEditing={false} />
                                         <Column dataField="MULTICODE" caption={this.t("grdMultiItem.clmMulticode")} width={150} allowEditing={false} />
@@ -2779,7 +2779,7 @@ export default class purchaseInvoice extends React.PureComponent
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
-                                        <Scrolling mode="infinite" />
+                                        <Scrolling mode="virtual" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                         <Column dataField="NAME" caption={this.t("grdUnit2.clmName")} width={120}  headerFilter={{visible:true}} allowEditing={false} />
                                         <Column dataField="UNIT_FACTOR" caption={this.t("grdUnit2.clmQuantity")} dataType={'number'} width={120} headerFilter={{visible:true}}/>
