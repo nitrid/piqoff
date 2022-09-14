@@ -1161,7 +1161,7 @@ export const prm =
         ID :"negativeQuantity",
         VALUE : 
         {
-            value : true
+            value : false
         },
         SPECIAL : "",
         PAGE : "stk_02_002",
