@@ -966,7 +966,7 @@ export const prm =
     ID :"negativeQuantity",
     VALUE : 
     {
-        value : true
+        value : false
     },
     SPECIAL : "",
     PAGE : "ftr_02_002",
@@ -1161,7 +1161,7 @@ export const prm =
         ID :"negativeQuantity",
         VALUE : 
         {
-            value : true
+            value : false
         },
         SPECIAL : "",
         PAGE : "stk_02_002",
@@ -1182,7 +1182,7 @@ export const prm =
         ID :"negativeQuantity",
         VALUE : 
         {
-            value : true
+            value : false
         },
         SPECIAL : "",
         PAGE : "stk_02_005",
@@ -1223,7 +1223,7 @@ export const prm =
         ID :"negativeQuantity",
         VALUE : 
         {
-            value : true
+            value : false
         },
         SPECIAL : "",
         PAGE : "stk_02_003",
@@ -1278,7 +1278,7 @@ export const prm =
         ID :"negativeQuantity",
         VALUE : 
         {
-            value : true
+            value : false
         },
         SPECIAL : "",
         PAGE : "irs_02_002",
