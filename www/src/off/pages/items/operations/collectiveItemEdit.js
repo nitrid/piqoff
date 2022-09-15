@@ -157,56 +157,6 @@ export default class collectiveItemEdit extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnBack" parent={this} icon="revert" type="default"
-                                        onClick={()=>
-                                        {
-                                            this._btnGetClick()
-                                        }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnNew" parent={this} icon="file" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.init(); 
-                                    }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default"
-                                    onClick={async (e)=>
-                                    {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
-                                        }
-                                        
-                                        let pResult = await dialog(tmpConfObj);
-                                        if(pResult == 'btn01')
-                                        {
-                                            let tmpConfObj1 =
-                                            {
-                                                id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                                            }
-
-                                            App.instance.setState({isExecute:true})
-                                            if(await this.editObj.save() == 0)
-                                            {                                                    
-                                                App.instance.setState({isExecute:false})
-                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                                await dialog(tmpConfObj1);
-                                            }
-                                            else
-                                            {
-                                                App.instance.setState({isExecute:false})
-                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
-                                                await dialog(tmpConfObj1);
-                                            }
-                                        }                                       
-                                    }}/>
-                                </Item>
                                 <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
@@ -256,7 +206,7 @@ export default class collectiveItemEdit extends React.PureComponent
                                 {/* txtName */}
                                 <Item>
                                     <Label text={this.t("txtName")} alignment="right" />
-                                    <NdTextBox id="txtName" parent={this} simple={true}  placeholder={this.t("namePlaceHolder")}
+                                    <NdTextBox id="txtName" parent={this} simple={true}  placeholder={this.t("namePlaceHolder")} onEnterKey={this._btnGetClick}
                                     onChange={(async()=>
                                     {
                                       
@@ -345,6 +295,27 @@ export default class collectiveItemEdit extends React.PureComponent
                                 }
                                 this.grdItemList.devGrid.selectRowsByIndexes(tmpIndexes)
                             }}
+                            onSaved={async(e)=>
+                            {
+                                let tmpConfObj1 =
+                                {
+                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                }
+                                App.instance.setState({isExecute:true})
+                                if(await this.editObj.save() == 0)
+                                {                                                    
+                                    App.instance.setState({isExecute:false})
+                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
+                                    await dialog(tmpConfObj1);
+                                }
+                                else
+                                {
+                                    App.instance.setState({isExecute:false})
+                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                    await dialog(tmpConfObj1);
+                                }
+                            }}
                             onCellPrepared={(e) =>
                             {
                                 if(e.rowType === "data" && e.column.dataField === "GROSS_MARGIN")
@@ -363,7 +334,7 @@ export default class collectiveItemEdit extends React.PureComponent
                                     let tmpMarginRate = ((tmpExVat - e.data.CUSTOMER_PRICE) / tmpExVat) * 100
                                     e.data.GROSS_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2);        
                                     e.data.GROSS_MARGIN_RATE = tmpMarginRate.toFixed(2); 
-                                    e.values[8] =  tmpMargin.toFixed(2) + "€/ %" +  tmpMarginRate.toFixed(2); 
+                                    e.values[6] =  tmpMargin.toFixed(2) + "€/ %" +  tmpMarginRate.toFixed(2); 
 
                                     // NET_MARGIN ANINDA ETKI ETSİN DİYE YAPILDI
                                     let tmpNetExVat = e.data.PRICE_SALE / ((e.data.VAT / 100) + 1)
@@ -371,7 +342,7 @@ export default class collectiveItemEdit extends React.PureComponent
                                     let tmpNetMarginRate = (((tmpNetExVat - e.data.CUSTOMER_PRICE) / 1.12) / tmpNetExVat) * 100
                                     e.data.NET_MARGIN = tmpNetMargin.toFixed(2) + "€ / %" +  tmpNetMarginRate.toFixed(2);
                                     e.data.NET_MARGIN_RATE = tmpNetMarginRate.toFixed(2);    
-                                    e.values[9] =   tmpNetMargin.toFixed(2) + "€  %" +  tmpNetMarginRate.toFixed(2);
+                                    e.values[7] =   tmpNetMargin.toFixed(2) + "€  %" +  tmpNetMarginRate.toFixed(2);
                                 }
                             }}
                             >                            
@@ -380,16 +351,16 @@ export default class collectiveItemEdit extends React.PureComponent
                                 <Editing mode="batch" allowUpdating={true} allowDeleting={false} confirmDelete={false}/>
                                 <Column dataField="CODE" caption={this.t("grdItemList.clmCode")} visible={true} width={100} allowEditing={false}/> 
                                 <Column dataField="NAME" caption={this.t("grdItemList.clmName")} visible={true} width={250} defaultSortOrder="asc"  /> 
-                                <Column dataField="BARCODE" caption={this.t("grdItemList.clmBarcode")} visible={false} width={150} allowEditing={false}/> 
+                                <Column dataField="BARCODE" caption={this.t("grdItemList.clmBarcode")} visible={true} width={150} allowEditing={false}/> 
                                 <Column dataField="MULTICODE" caption={this.t("grdItemList.clmMulticode")} visible={true} width={150}/> 
                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdItemList.clmCustomerName")} visible={true}  allowEditing={false}/> 
                                 <Column dataField="CUSTOMER_PRICE" caption={this.t("grdItemList.clmCustomerPrice")} visible={true} width={100}/> 
                                 <Column dataField="MAIN_UNIT_NAME" caption={this.t("grdItemList.clmMainUnit")} visible={false} width={100} allowEditing={false}/> 
-                                <Column dataField="UNDER_UNIT_NAME" caption={this.t("grdItemList.clmUnderUnit")} visible={true} width={80} allowEditing={false}/> 
-                                <Column dataField="UNDER_FACTOR" caption={this.t("grdItemList.clmUnderFactor")} visible={true} width={80}/> 
                                 <Column dataField="PRICE_SALE" caption={this.t("grdItemList.clmPriceSale")} visible={true} width={80} /> 
                                 <Column dataField="GROSS_MARGIN" caption={this.t("grdItemList.clmGrossMargin")} visible={true} width={130} allowEditing={false}/> 
                                 <Column dataField="NET_MARGIN" caption={this.t("grdItemList.clmNetMargin")} visible={true} width={130} allowEditing={false}/> 
+                                <Column dataField="UNDER_UNIT_NAME" caption={this.t("grdItemList.clmUnderUnit")} visible={true} width={80} allowEditing={false}/> 
+                                <Column dataField="UNDER_FACTOR" caption={this.t("grdItemList.clmUnderFactor")} visible={true} width={80}/> 
                                 <Column dataField="VAT" caption={this.t("grdItemList.clmVat")} visible={true} width={100} editCellRender={this._cellRoleRender}/>    
                                 <Column dataField="ORGINS" caption={this.t("grdItemList.clmOrgins")} visible={true} width={120} editCellRender={this._cellRoleRender}/>   
                                 <Column dataField="WEIGHING" caption={this.t("grdItemList.clmWeighing")} visible={true} width={100}/>  

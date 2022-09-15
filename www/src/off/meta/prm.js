@@ -1330,4 +1330,46 @@ export const prm =
         }
     },
     //#endregion
+    //#region Alış Anlaşması
+     //cmbDepot
+     {
+        TYPE : 2,
+        ID :"cmbDepot",
+        VALUE : 
+        {
+            value : "1A428DFC-48A9-4AC6-AF20-4D0A4D33F316"
+        },
+        SPECIAL : "",
+        PAGE : "cnt_02_001",
+        ELEMENT : "cmbDepot",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Alış Anlaşması",
+            CAPTION : "Depo"
+        }
+    },
+    //#endregion
+    //#region Satış Anlaşması
+     //cmbDepot
+     {
+        TYPE : 2,
+        ID :"cmbDepot",
+        VALUE : 
+        {
+            value : "1A428DFC-48A9-4AC6-AF20-4D0A4D33F316"
+        },
+        SPECIAL : "",
+        PAGE : "cnt_02_002",
+        ELEMENT : "cmbDepot",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Satış Anlaşması",
+            CAPTION : "Depo"
+        }
+    },
+    //#endregion
 ]

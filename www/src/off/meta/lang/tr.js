@@ -1815,6 +1815,7 @@ export const langTr =
     },
     cri_01_002: // "Adres Tanımları"
     {
+        customerPlace: "Lütfen Aratmak İçin Cari Adı veya Kodu Giriniz.",
         txtCode : "Kodu",
         txtTitle : "Ünvan",
         txtCustomerName : "Adı",
@@ -1880,6 +1881,7 @@ export const langTr =
     },
     cri_02_001: // "Cari Listesi"
     {
+        customerPlace: "Lütfen Aratmak İçin Cari Adı veya Kodu Giriniz.",
         txtCustomerName : "Cari Adı",
         cmbGenus :"Cinsi",
         menu: "Cari Tanımları",
@@ -1909,6 +1911,7 @@ export const langTr =
     },
     cri_02_002: //  "Adres Listesi"
     {
+        customerPlace: "Lütfen Aratmak İçin Cari Adı veya Kodu Giriniz.",
         txtCustomerName : "Cari Adı",
         cmbGenus :"Cinsi",
         menu: "Cari Tanımları",

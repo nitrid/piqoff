@@ -31,6 +31,7 @@ export class contractCls
             ITEM : '00000000-0000-0000-0000-000000000000',
             ITEM_CODE : '',
             ITEM_NAME : '',
+            MULTICODE : '',
             QUANTITY : 0,
             PRICE : 0,
             COST_PRICE : 0,

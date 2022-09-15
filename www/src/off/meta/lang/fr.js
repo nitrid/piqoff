@@ -1817,6 +1817,7 @@ export const langFr =
     },
     cri_01_002: // "Adres Tanımları"
     {
+        customerPlace: "Lütfen Aratmak İçin Cari Adı veya Kodu Giriniz.", // bak
         txtCode : "Code",
         txtTitle : "Titre",
         txtCustomerName : "Nom",
@@ -1882,6 +1883,7 @@ export const langFr =
     },
     cri_02_001: // "Cari Listesi"
     {
+        customerPlace: "Lütfen Aratmak İçin Cari Adı veya Kodu Giriniz.", // bak
         txtCustomerName : "Nom fournisseur",
         cmbGenus :"Genre",
         menu: "Fournisseur saisie",
@@ -1911,6 +1913,7 @@ export const langFr =
     },
     cri_02_002: //  "Adres Listesi"
     {
+        customerPlace: "Lütfen Aratmak İçin Cari Adı veya Kodu Giriniz.", // bak
         txtCustomerName : "Nom fournisseur",
         cmbGenus :"Genre",
         menu: "Fournisseur saisie",

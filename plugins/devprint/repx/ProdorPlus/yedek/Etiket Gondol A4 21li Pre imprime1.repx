@@ -22,9 +22,9 @@
           </ExpressionBindings>
           <StylePriority Ref="13" UseFont="false" UseTextAlignment="false" />
         </Item3>
-        <Item4 Ref="14" ControlType="XRLabel" Name="label5" Multiline="true" CanGrow="false" Text="BEYPAZARI EAU MIN. GAZ.GRIOTTE 6X20CL" TextAlignment="TopRight" SizeF="364.5,144.85408" LocationFloat="6.207914, 13.229167" Dpi="254" Font="Poppins, 9.75pt, style=Bold" Padding="5,5,0,0,254">
+        <Item4 Ref="14" ControlType="XRLabel" Name="label5" Multiline="true" CanGrow="false" Text="BEYPAZARI EAU MIN. GAZ.GRIOTTE 6X20CL" TextAlignment="TopRight" SizeF="364.5,144.85408" LocationFloat="6.207914, 13.229167" Dpi="254" Font="Microsoft Sans Serif, 9.75pt, style=Bold" Padding="5,5,0,0,254">
           <ExpressionBindings>
-            <Item1 Ref="15" EventName="BeforePrint" PropertyName="Text" Expression="[NAME]" />
+            <Item1 Ref="15" EventName="BeforePrint" PropertyName="Text" Expression="[DESING_NAME]" />
           </ExpressionBindings>
           <StylePriority Ref="16" UseFont="false" UseTextAlignment="false" />
         </Item4>
