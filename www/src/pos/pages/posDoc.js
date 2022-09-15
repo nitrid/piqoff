@@ -1034,11 +1034,13 @@ export default class posDoc extends React.PureComponent
                 }
                 else
                 {
+
                     tmpCond.forEach(itemCond => 
                     {
                         if(tmpSale.where({ITEM_GUID : itemCond.ITEM_GUID,PROMO_TYPE : 0}).sum('QUANTITY') >= itemCond.QUANTITY)
                         {
-                            let tmpCondCount = Math.floor(tmpSale.where({ITEM_GUID : itemCond.ITEM_GUID,PROMO_TYPE : 0}).sum('QUANTITY') / itemCond.QUANTITY)
+                            //POS_SALE TABLOSUNDAKİ ÜRÜNLERİN HANGİLERİNİN PROMOSYON KOŞULUNA UYDUĞU GETİRİLİYOR.BUNUN İÇİN KOŞULDAKİ ITEM_GUID LİSTESİ POS_SALE TABLOSUNA "IN" ŞEKLİNDE VERİLİYOR.
+                            let tmpCondCount = Math.floor(tmpSale.where({ITEM_GUID:{'in':tmpCond.where({TYPE:0}).toColumnArr('ITEM_GUID')}}).sum('QUANTITY') / itemCond.QUANTITY)
                             
                             //İNDİRİM UYGULAMA
                             tmpApp.where({TYPE:0}).forEach(itemApp =>
@@ -1072,9 +1074,7 @@ export default class posDoc extends React.PureComponent
     
                                     tmpSale.where({ITEM_GUID : itemApp.ITEM_GUID,PROMO_TYPE : 0}).forEach(itemSale => 
                                     {                   
-                                        console.log(itemSale)                 
                                         let tmpDisc = Number(Number(itemSale.PRICE).rateInc(itemApp.AMOUNT,2)) * (tmpCondCount <= tmpAppCount ? tmpCondCount : tmpAppCount)
-                                        console.log(tmpDisc)
                                         let tmpCalc = this.calcSaleTotal(itemSale.PRICE,itemSale.QUANTITY,tmpDisc,itemSale.LOYALTY,itemSale.VAT_RATE)
     
                                         itemSale.QUANTITY = tmpCalc.QUANTITY

@@ -1293,7 +1293,9 @@ export class datatable
             return r;
         },[])
         
-        let tmpDt = new datatable();
+        //let tmpDt = new datatable();
+        let tmpDt = Object.assign(Object.create(Object.getPrototypeOf(this)), this)
+        tmpDt.clear()
         tmpDt.import(tmpGrpData)
         return tmpDt
     }
@@ -1344,9 +1346,9 @@ export class datatable
                     tmpData = tmpArr
                 }
             }
-
+            
             let tmpDt = Object.assign(Object.create(Object.getPrototypeOf(this)), this)
-            tmpDt.clear()
+            tmpDt.splice(0,tmpDt.length);
             tmpDt.import(tmpData)
             
             return tmpDt;
