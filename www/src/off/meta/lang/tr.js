@@ -4701,6 +4701,12 @@ export const langTr =
             btn01: "Tamam",
             msg: "Lütfen gerekli alanları doldurunuz !"
         },
+        msgNotCustomerCount:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: " Adet Ürün Bu Tedarikçiye Tanımlı Değil !"
+        },
         msgDelete:
         {
             title: "Dikkat",
@@ -4727,6 +4733,7 @@ export const langTr =
             clmMargin :"Marj",
             clmVatExtPrice : "KDV Hariç",
             clmCostPrice : "Maliyet",
+            clmMulticode : "T. Kodu"
         },
         popItems: 
         {

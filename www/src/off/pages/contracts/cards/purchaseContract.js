@@ -702,6 +702,7 @@ export default class purchaseContract extends React.PureComponent
                                                     }
                                                     else if(data.length > 1)
                                                     {
+                                                        let tmpCounter = 0
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
                                                             if(i == 0)
@@ -715,6 +716,22 @@ export default class purchaseContract extends React.PureComponent
                                                                 await this.core.util.waitUntil(100)
                                                                 await this.addItem(data[i])
                                                             }
+
+                                                            if(data[i].MULTICODE == '')
+                                                            {
+                                                                tmpCounter = tmpCounter +1
+                                                            }
+                                                        }
+
+                                                        if(tmpCounter > 0)
+                                                        {
+                                                            let tmpConfObj =
+                                                            {
+                                                                id:'msgNotCustomerCount',showTitle:true,title:this.t("msgNotCustomerCount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                                button:[{id:"btn01",caption:this.t("msgNotCustomerCount.btn01"),location:'after'}],
+                                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{tmpCounter + this.t("msgNotCustomerCount.msg")}</div>)
+                                                            }
+                                                            await dialog(tmpConfObj);
                                                         }
                                                     }
                                                 }
@@ -777,9 +794,10 @@ export default class purchaseContract extends React.PureComponent
                                         <Pager
                                         visible={true} />
                                         <Export fileName={this.lang.t("menu.cnt_02_001")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdContracts.clmCreateDate")} width={200}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdContracts.clmItemCode")} width={150} />
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdContracts.clmItemName")} width={350} />
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdContracts.clmCreateDate")} width={150} allowEditing={false}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdContracts.clmItemCode")} width={150} allowEditing={false}/>
+                                        <Column dataField="MULTICODE" caption={this.t("grdContracts.clmMulticode")} width={150} allowEditing={false}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdContracts.clmItemName")} width={350} allowEditing={false}/>
                                         <Column dataField="PRICE" caption={this.t("grdContracts.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                         <Column dataField="QUANTITY" caption={this.t("grdContracts.clmQuantity")} dataType={'number'}/>
                                         <Column dataField="START_DATE" caption={this.t("grdContracts.clmStartDate")} dataType={'date'}
