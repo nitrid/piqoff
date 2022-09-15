@@ -153,7 +153,7 @@ export const langFr =
         logout : "Sortie",
         selectUser : "Choix utilisateur",
     },
-    stk_01_001: 
+    stk_01_001:  // "Yeni Stok Tanımlama" 
     {
         txtRef: "Référence",
         cmbItemGrp: "Famille produit",
@@ -439,7 +439,7 @@ export const langFr =
             deposit : "Consigné"
         }
     },
-    stk_01_002: 
+    stk_01_002:  //"Barkod Tanımları" 
     {
         txtBarcode: "Code barre",
         txtItem: "Référence Produit",
@@ -506,7 +506,7 @@ export const langFr =
         },
         validCode :"Veuillez Sélectionner le Produit",
     },
-    stk_01_006 :
+    stk_01_006 : // "Depo/Mağaza Tanımları"
     {
         txtCode : "Code",
         txtName :"Nom",
@@ -563,7 +563,7 @@ export const langFr =
         chkActive: "Actif",
       
     },
-    stk_02_001 :
+    stk_02_001 : // Sayım Evrakı"
     {
         txtRefRefno : "Série-Numéro Doc.",
         cmbDepot: "Dépot inventaire",
@@ -709,7 +709,7 @@ export const langFr =
             lang : "Langue Document" 
         },
     },
-    stk_02_002 :
+    stk_02_002 : //"Depo/Mağaza Arası Sevk"
     {
         txtRefRefno : "Série-Numéro Doc.",
         cmbOutDepot: "Sortie Dépot",
@@ -841,7 +841,7 @@ export const langFr =
         },
 
     },
-    stk_02_003 :
+    stk_02_003 : // "Kayıp Ürün Çıkışı"
     {
         txtRefRefno : "Série-Numéro Doc.",
         cmbOutDepot: "Sortie Dépot",
@@ -1012,7 +1012,7 @@ export const langFr =
             msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
         },
     },
-    stk_02_004 :
+    stk_02_004 : //"Kayıp Ürün Çıkışı"
     {
         txtRefRefno : "Série-Numéro Doc.",
         design : "Design" ,
@@ -1033,12 +1033,17 @@ export const langFr =
             title : "Sélection Document",
             clmRef : "Série",
             clmRefNo : "Numéro",
+            clmDocDate : "Date",
+            clmCount : "Qte. Scan"
+
         },
         pg_DocsCombine : 
         {
             title : "Sélection Document",
             clmRef : "Série",
             clmRefNo : "Numéro",
+            clmDocDate : "Date",
+            clmCount : "Qte. Scan"
         },
         pg_txtItemsCode : 
         {
@@ -1164,7 +1169,7 @@ export const langFr =
         },
 
     },
-    stk_02_005 :
+    stk_02_005 : // "İade Ürünü Toplama"
     {
         txtRefRefno : "Série-Numéro Doc.",
         cmbDepot1: "Sortie Dépot",
@@ -1295,7 +1300,7 @@ export const langFr =
             msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
         },
     },
-    stk_02_007 :
+    stk_02_007 : // "SKT Girişi", // BAK
     {
         design : "Dizayn",
         txtPage : "Sayfa",
@@ -1321,13 +1326,13 @@ export const langFr =
             txtPopItemsCode : "Stok Kodu",
             txtPopItemsName: "Stok Adı",
             txtPopItemsQuantity : "Miktar",
-            dtPopDate : "Tarih"
+            dtPopDate : "SKT Tarih"
         },
         grdExpDate:
         {
             clmName: "Adı",
             clmCode: "Kodu",
-            clmDate: "Tarih"
+            clmDate: "SKT Tarih"
         },
         msgDocValid:
         {
@@ -1392,7 +1397,7 @@ export const langFr =
         validDocDate : "Tarih Seçmelisiniz",
 
     },
-    stk_03_001 : 
+    stk_03_001 :  // "Stok Listesi" 
     {
         txtItemName : "Nom du produit",
         txtBarkod : "Code barre",
@@ -1427,7 +1432,7 @@ export const langFr =
             clmOrgin : "Menşei"  // BAK
         },
     },
-    stk_03_002 : 
+    stk_03_002 :   //"Fiyat Listesi"
     {
         cmbCustomer : "Fournisseur",
         txtItemName : "Nom du produit",
@@ -1447,7 +1452,7 @@ export const langFr =
             clmFinishDate : "Origine",
         },
     },
-    stk_03_003 : 
+    stk_03_003 : // "Barkod Listesi" 
     {
         cmbCustomer : "Fournisseur",
         txtItemName : "Nom du produit",
@@ -1463,7 +1468,7 @@ export const langFr =
             clmMainGrp : "Famille produit",
         },
     },
-    stk_03_005 : 
+    stk_03_005 : // "Multi Kod Listesi" 
     {
         txtItemName : "Nom du produit",
         txtBarkod : "Code barre",
@@ -1489,7 +1494,7 @@ export const langFr =
 
         },
     },
-    stk_03_006 : 
+    stk_03_006 : // "Depo Ürün Miktarları Listesi"
     {
         txtItemName : "Nom du produit",
         chkZeroQuantity : "Montrer les Montants 0",
@@ -1506,9 +1511,11 @@ export const langFr =
         txtTotalQuantity : "Quantité Total",
         ItemNamePlaceHolder : "Ürün Adı Giriniz.."
     },
-    stk_04_001 : 
+    stk_04_001 : //"Toplu Stok Düzenleme"
     {
         txtCustomerCode : "Fournisseur",
+        codePlaceHolder : "Lütfen Aratmak İstediğiniz Ürün Kodu,Barkod veya Tedarikçi Kodunu Giriniz",  //BAK
+        namePlaceHolder :"Ürün Adının Tamamını yada İçinde Geçen Bir Hece Giriniz",  //BAK
         pg_txtCustomerCode : 
         {
             title : "Choix Fournisseur",
@@ -1536,6 +1543,9 @@ export const langFr =
             clmUnderUnit : "Sous unité",
             clmMainUnit : "Unité Principale",
             clmUnderFactor : "Coefficient",
+            clmWeighing : "Tartılsın", // BAK
+            clmNetMargin :  "Marge Nette",
+            clmGrossMargin : "Marge Brute",
         },
         msgSave:
         {
@@ -1552,7 +1562,7 @@ export const langFr =
             msgFailed: "Enregistrement échoué !"
         },
     },
-    stk_04_002 : 
+    stk_04_002 : // "İade Operasyonları"
     {
         txtCustomerCode : "Fournisseur",
         validDepot : "Sélectionner Dépot",
@@ -1604,7 +1614,7 @@ export const langFr =
             msg : "Compte Produit non Défini.Veuillez Sélectionner un Compte"
         }
     },
-    stk_04_003 : 
+    stk_04_003 : //"Sayım Kesinleştirme"
     {
         cmbDepot : "Réserve",
         chkNotCountItems : "Mise à Zéro des Produits non Comptabilisés",
@@ -1652,7 +1662,7 @@ export const langFr =
             msg: "Quantité Dépot Mis à jour ! ! Nouvelle Création Non Effectuée",
         },
     },
-    cri_01_001:
+    cri_01_001: // "Cari Tanımları"
     {
         cmbType :"Type",
         cmbGenus :"Genre",
@@ -1805,8 +1815,9 @@ export const langFr =
         tabTitleDetail : "Information detail"
 
     },
-    cri_01_002:
+    cri_01_002: // "Adres Tanımları"
     {
+        customerPlace: "Lütfen Aratmak İçin Cari Adı veya Kodu Giriniz.", // bak
         txtCode : "Code",
         txtTitle : "Titre",
         txtCustomerName : "Nom",
@@ -1870,8 +1881,9 @@ export const langFr =
         }
 
     },
-    cri_02_001:
+    cri_02_001: // "Cari Listesi"
     {
+        customerPlace: "Lütfen Aratmak İçin Cari Adı veya Kodu Giriniz.", // bak
         txtCustomerName : "Nom fournisseur",
         cmbGenus :"Genre",
         menu: "Fournisseur saisie",
@@ -1899,8 +1911,9 @@ export const langFr =
             both : "Tous les Deux",
         },
     },
-    cri_02_002:
+    cri_02_002: //  "Adres Listesi"
     {
+        customerPlace: "Lütfen Aratmak İçin Cari Adı veya Kodu Giriniz.", // bak
         txtCustomerName : "Nom fournisseur",
         cmbGenus :"Genre",
         menu: "Fournisseur saisie",
@@ -1924,7 +1937,7 @@ export const langFr =
             both : "Tous les Deux",
         },
     },
-    ftr_01_001 :
+    ftr_01_001 : // "Alış Fatura Listesi"
     {
         txtCustomerCode : "Fournisseur",
         menu:"Facture d'achat",
@@ -1954,7 +1967,7 @@ export const langFr =
         },
 
     },
-    ftr_01_002 :
+    ftr_01_002 : // "Satış Fatura Listesi"
     {
         txtCustomerCode : "Fournisseur",
         menu:"Facture de vente",
@@ -1984,7 +1997,7 @@ export const langFr =
         },
 
     },
-    ftr_01_003 :
+    ftr_01_003 : // "İade Fatura Listesi"
     {
         txtCustomerCode : "Fournisseur",
         menu:"Facture retour",
@@ -2013,7 +2026,7 @@ export const langFr =
         },
 
     },
-    ftr_01_004 :
+    ftr_01_004 : // "Fiyat Farkı Fatura Listesi"
     {
         txtCustomerCode : "Fournisseur",
         menu:"Facture différence de prix",
@@ -2042,7 +2055,7 @@ export const langFr =
         },
 
     },
-    ftr_02_001 :
+    ftr_02_001 : //  "Alış Faturası"
     {
         txtRefRefno : "Série-Numéro Doc.",
         cmbDepot: "Réserve",
@@ -2381,7 +2394,7 @@ export const langFr =
             clmPrice2: "Nouveau Prix",     
         },
     },
-    ftr_02_002 :
+    ftr_02_002 : // "Satış Faturası"
     {
         txtRefRefno : "Série-Numéro Doc.",
         cmbDepot: "Réserve",
@@ -2673,7 +2686,7 @@ export const langFr =
             msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
         },
     },
-    ftr_02_003 :
+    ftr_02_003 : // "İade Faturası"
     {
         txtRefRefno : "Série-Numéro Doc.",
         cmbDepot: "Réserve",
@@ -2922,7 +2935,7 @@ export const langFr =
 
 
     },
-    ftr_02_004 :
+    ftr_02_004 : // "Fiyat Farkı Faturası"
     {
         txtRefRefno : "Série-Numéro Doc.",
         cmbDepot: "Réserve",
@@ -3162,7 +3175,7 @@ export const langFr =
 
 
     },
-    promo_01_001: 
+    promo_01_001: //  "Promosyon Tanımları"
     {
         txtCode: "Code",
         txtName: "Nom",
@@ -3237,7 +3250,7 @@ export const langFr =
             btnSave: "Enregistre"
         },
     },
-    irs_01_001 :
+    irs_01_001 : // "Alış İrsaliye Listesi"
     {
         cmbCustomer :"Fournisseur",
         btnGet :"Apporter",
@@ -3268,7 +3281,7 @@ export const langFr =
         },
 
     },
-    irs_01_002 :
+    irs_01_002 : //"Satış İrsaliye Listesi"
     {
         cmbCustomer :"Fournisseur",
         btnGet :"Apporter",
@@ -3299,7 +3312,7 @@ export const langFr =
         },
 
     },
-    irs_01_003 :
+    irs_01_003 : // "İade İrsaliye Listesi"
     {
         cmbCustomer :"Fournisseur",
         btnGet :"Apporter",
@@ -3329,7 +3342,7 @@ export const langFr =
         },
 
     },
-    irs_02_001 :
+    irs_02_001 : // "Alış İrsaliyesi"
     {
         txtRefRefno : "Série-Numéro Doc.",
         cmbDepot: "Réserve",
@@ -3568,7 +3581,7 @@ export const langFr =
 
 
     },
-    irs_02_002 :
+    irs_02_002 : // Satış İrsaliyesi"
     {
         txtRefRefno : "Série-Numéro Doc.",
         cmbDepot: "Réserve",
@@ -3815,7 +3828,7 @@ export const langFr =
             msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
         },
     },
-    irs_02_003 :
+    irs_02_003 : // "İade İrsaliyesi"
     {
         getRebate : "Cherche dépôt retour",
         txtRefRefno : "Série-Numéro Doc.",
@@ -4025,7 +4038,7 @@ export const langFr =
         validCustomerCode : "Le Code Produit ne peut être Vide ",
         validDocDate : "Sélectionner Date" ,
     },
-    sip_01_001 :
+    sip_01_001 : // "Alış Sipariş Listesi"
     {
         cmbCustomer :"Fournisseur",
         btnGet :"Apporter",
@@ -4055,7 +4068,7 @@ export const langFr =
             clmInputName : "Réserve",
         },
     },
-    sip_01_002 :
+    sip_01_002 : // "Satış Sipariş Listesi"
     {
         cmbCustomer :"Fournisseur",
         btnGet :"Apporter",
@@ -4086,7 +4099,7 @@ export const langFr =
         },
 
     },
-    sip_02_001 :
+    sip_02_001 : // "Alış Sipariş"
     {
         txtRefRefno : "Série-Numéro Doc.",
         cmbDepot: "Réserve",
@@ -4324,7 +4337,7 @@ export const langFr =
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter"
     },
-    sip_02_002 :
+    sip_02_002 : // "Satış Sipariş"
     {
         txtRefRefno : "Série-Numéro Doc.",
         cmbDepot: "Réserve",
@@ -4568,7 +4581,7 @@ export const langFr =
 
 
     },
-    cnt_01_001 :
+    cnt_01_001 : // "Alış Anlaşmaları Listesi"
     {
         txtCustomerCode : "Fournisseur",
         menu : "Accord d'achat",
@@ -4595,7 +4608,7 @@ export const langFr =
             clmUser : "Utilisateur"
         },
     },
-    cnt_01_002 :
+    cnt_01_002 : //  "Satış Anlaşmaları Listesi"
     {
         txtCustomerCode : "Fournisseur",
         menu :  "Accord de Vente",
@@ -4622,7 +4635,7 @@ export const langFr =
              clmUser : "Utilisateur"
         },
     },
-    cnt_02_001 :
+    cnt_02_001 : // "Alış Anlaşması"
     {
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
@@ -4765,7 +4778,7 @@ export const langFr =
             msg: "Veuillez saisir l'en-tête avant l'achèvement !"    
         },
     },
-    cnt_02_002 :
+    cnt_02_002 : // "Satış Anlaşması"
     {
         validDate : "Sélection Date.",
         cmbDepot: "Réserve",
@@ -4917,7 +4930,7 @@ export const langFr =
             msg: "Veuillez saisir les en-tête avant l'achèvement !"   
         },
     },
-    fns_01_001 :
+    fns_01_001 : // "Ödeme Listesi",
     {
         txtCustomerCode : "Fournisseur",
         menu  : "Paiement",
@@ -4946,7 +4959,7 @@ export const langFr =
         },
 
     },
-    fns_01_002 :
+    fns_01_002 : // "Tahsilat Listesi"
     {
         txtCustomerCode : "Fournisseur",
         txtTotal : "Total",
@@ -4975,7 +4988,7 @@ export const langFr =
         },
 
     },
-    fns_01_003 :
+    fns_01_003 : //  "Banka Hareketleri Listesi",
     {
         cmbBank : "Compte",
         txtAmount : "Solde Banque",
@@ -4995,7 +5008,7 @@ export const langFr =
         },
 
     },
-    fns_01_004 :
+    fns_01_004 : //  "Kasa Hareketleri Listesi"
     {
         cmbSafe : "Compte",
         txtAmount : "Solde Coffre",
@@ -5015,7 +5028,7 @@ export const langFr =
         },
 
     },
-    fns_02_001 :
+    fns_02_001 : // Ödeme
     {
         txtRefRefno : "Série-Numéro Doc.",
         menu  : "Paiement",
@@ -5152,7 +5165,7 @@ export const langFr =
         validCustomerCode : "Le Code Produit ne peut être Vide ",
         validDocDate : "Sélectionner Date" ,
     },
-    fns_02_002 :
+    fns_02_002 : // Tahsilat
     {
         txtRefRefno : "Série-Numéro Doc.",
         menu : "Encaissement",
@@ -5285,7 +5298,7 @@ export const langFr =
         validCustomerCode : "Le Code Produit ne peut être Vide ",
         validDocDate : "Sélectionner Date" ,
     },
-    fns_03_001 :
+    fns_03_001 : //  "Kasa Tanıtım"
     {
         txtCode : "Code",
         txtName :"Nom",
@@ -5340,7 +5353,7 @@ export const langFr =
         }
       
     },
-    fns_03_002 :
+    fns_03_002 : // "Banka Tanıtım"
     {
         txtCode : "Code",
         txtName :"Nom",
@@ -5395,7 +5408,7 @@ export const langFr =
         }
       
     },
-    fns_03_003 :
+    fns_03_003 : // "Hesaplar Arası Virman"
     {
         txtRefRefno : "Série-Numéro Doc.",
         cmbOutAccount:  "Compte Entrant",
@@ -5521,7 +5534,7 @@ export const langFr =
         validAccount : "Sélectionner un Compte ",
         validDocDate : "Sélectionner Date" ,
     },
-    set_01_001 :
+    set_01_001 : // "Tax Sugar"
     {
         pg_Docs : 
         {
@@ -5577,7 +5590,7 @@ export const langFr =
         zeroValid : "Ne peut pas être 0"
 
     },
-    pos_01_001 :
+    pos_01_001 : // "Pos Cihaz Tanıtım",
     {
         txtCode : "Code",
         txtName :"Nom",
@@ -5629,7 +5642,7 @@ export const langFr =
         }
       
     },
-    pos_02_001 :
+    pos_02_001 : // "Satış Fiş Raporu",
     {
         TicketId :"Ticket I.D",
         cmbCustomer :"Fournisseur",
@@ -5724,7 +5737,7 @@ export const langFr =
             clmTicketId : "Numéro de ticket"
         }
     },
-    pos_02_002 :
+    pos_02_002 : // "Müşteri Puanı Raporu"
     {
         cmbCustomer :"Fournisseur",
         btnGet :"Apporter",
@@ -5782,7 +5795,7 @@ export const langFr =
         lineDelete :"Ligne annulé", 
         cancel : "Abandonne", 
     },
-    pos_03_001 :
+    pos_03_001 : // Gün Sonu",
     {
         title : "Opérations de fin de journée",
         start :"Démarrer",
@@ -5843,7 +5856,7 @@ export const langFr =
         advanceMsg1 : "Soyez sûr que le fond de caisse est de",
         advanceMsg2 : "Etre sûr!!!"
     },
-    tkf_01_001 :
+    tkf_01_001 : // "Alış Teklifi Listesi",
     {
         cmbCustomer :"Fournisseur",
         btnGet :"Apporter",
@@ -5873,7 +5886,7 @@ export const langFr =
             clmInputName : "Réserve",
         },
     },
-    tkf_01_002 :
+    tkf_01_002 : // "Satış Teklifi Listesi",
     {
         cmbCustomer :"Fournisseur",
         btnGet :"Apporter",
@@ -5904,7 +5917,7 @@ export const langFr =
         },
 
     },
-    tkf_02_001 :
+    tkf_02_001 : // "Alış Teklifi",
     {
         txtRefRefno : "Série-Numéro Doc.",
         cmbDepot: "Réserve",
@@ -6142,7 +6155,7 @@ export const langFr =
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter"
     },
-    tkf_02_002 :
+    tkf_02_002 : // "Satış Teklifi",
     {
         txtRefRefno : "Série-Numéro Doc.",
         cmbDepot: "Réserve",
@@ -6391,7 +6404,7 @@ export const langFr =
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter"
 
     },
-    proces_01_001 : 
+    proces_01_001 : // "Ürün Grubu Güncelleme" 
     {
         txtItemName : "Nom du produit",
         txtBarkod : "Code barre",
@@ -6446,7 +6459,7 @@ export const langFr =
             msgFailed: "Enregistrement échoué !"
         },
     },
-    stk_02_006 : 
+    stk_02_006 :  // "Özel Etiket Basım"
     {
         txtBarkod: "Barre code", 
         txtRef: "Référence",
@@ -6497,7 +6510,7 @@ export const langFr =
             msg: "Nom du produit trop long. Veuillez le corriger et le réinscrire !"
         },
     },
-    pos_02_003 : 
+    pos_02_003 : // "Pos Satış Raporu"
     {
         chkRowTotal : "Totaux des lignes." 
     }

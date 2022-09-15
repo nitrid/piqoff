@@ -205,7 +205,7 @@ export default class barcodeList extends React.PureComponent
                             <Form colCount={2} id="frmKriter">
                                 <Item>
                                     <Label text={this.t("txtCustomerName")} alignment="right" />
-                                        <NdTextBox id="txtCustomerName" parent={this} simple={true} 
+                                        <NdTextBox id="txtCustomerName" parent={this} simple={true} placeholder={this.t("customerPlace")}
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
                                 </Item>
                                 <Item>

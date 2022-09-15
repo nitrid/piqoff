@@ -225,24 +225,7 @@ export const menu = (e) =>
             expanded: false,
             items: 
             [
-                {
-                    id: 'cnt_01',
-                    text : e.t('menu.cnt_01'),//'Listeler',
-                    expanded: false,
-                    items: 
-                    [
-                        {
-                            id: 'cnt_01_001',
-                            text: e.t('menu.cnt_01_001'),//'Alış Anlaşma Listesi',
-                            path: 'contracts/lists/purchaseContList'
-                        },
-                        {
-                            id: 'cnt_01_002',
-                            text: e.t('menu.cnt_01_002'),//'Satış Anlaşma Listesi',
-                            path: 'contracts/lists/salesContList'
-                        },
-                    ]
-                },
+              
                 {
                     id: 'cnt_02',
                     text : e.t('menu.cnt_02'),//'Evraklar',
@@ -262,6 +245,24 @@ export const menu = (e) =>
                     ]
                 },
                 {
+                    id: 'cnt_01',
+                    text : e.t('menu.cnt_01'),//'Listeler',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'cnt_01_001',
+                            text: e.t('menu.cnt_01_001'),//'Alış Anlaşma Listesi',
+                            path: 'contracts/lists/purchaseContList'
+                        },
+                        {
+                            id: 'cnt_01_002',
+                            text: e.t('menu.cnt_01_002'),//'Satış Anlaşma Listesi',
+                            path: 'contracts/lists/salesContList'
+                        },
+                    ]
+                },
+                {
                     id: 'cnt_03',
                     text : e.t('menu.cnt_03'),//'Raporlar',
                     expanded: false,
@@ -275,24 +276,7 @@ export const menu = (e) =>
             expanded: false,
             items: 
             [
-                {
-                    id: 'tkf_01',
-                    text : e.t('menu.tkf_01'),//'Listeler',
-                    expanded: false,
-                    items: 
-                    [
-                        {
-                            id: 'tkf_01_001',
-                            text: e.t('menu.tkf_01_001'),//'Alış tkfariş Listesi',
-                            path: 'offers/lists/purchaseOrdList'
-                        },
-                        {
-                            id: 'tkf_01_002',
-                            text: e.t('menu.tkf_01_002'),//'Satış tkfariş Listesi',
-                            path: 'offers/lists/salesOrdList'
-                        },
-                    ]
-                },
+               
                 {
                     id: 'tkf_02',
                     text : e.t('menu.tkf_02'),//'Evraklar',
@@ -314,6 +298,24 @@ export const menu = (e) =>
                     ]
                 },
                 {
+                    id: 'tkf_01',
+                    text : e.t('menu.tkf_01'),//'Listeler',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'tkf_01_001',
+                            text: e.t('menu.tkf_01_001'),//'Alış tkfariş Listesi',
+                            path: 'offers/lists/purchaseOrdList'
+                        },
+                        {
+                            id: 'tkf_01_002',
+                            text: e.t('menu.tkf_01_002'),//'Satış tkfariş Listesi',
+                            path: 'offers/lists/salesOrdList'
+                        },
+                    ]
+                },
+                {
                     id: 'tkf_03',
                     text : e.t('menu.tkf_03'),//'Raporlar',
                     expanded: false,
@@ -327,24 +329,7 @@ export const menu = (e) =>
             expanded: false,
             items: 
             [
-                {
-                    id: 'sip_01',
-                    text : e.t('menu.sip_01'),//'Listeler',
-                    expanded: false,
-                    items: 
-                    [
-                        {
-                            id: 'sip_01_001',
-                            text: e.t('menu.sip_01_001'),//'Alış Sipariş Listesi',
-                            path: 'orders/lists/purchaseOrdList'
-                        },
-                        {
-                            id: 'sip_01_002',
-                            text: e.t('menu.sip_01_002'),//'Satış Sipariş Listesi',
-                            path: 'orders/lists/salesOrdList'
-                        },
-                    ]
-                },
+               
                 {
                     id: 'sip_02',
                     text : e.t('menu.sip_02'),//'Evraklar',
@@ -366,6 +351,24 @@ export const menu = (e) =>
                     ]
                 },
                 {
+                    id: 'sip_01',
+                    text : e.t('menu.sip_01'),//'Listeler',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'sip_01_001',
+                            text: e.t('menu.sip_01_001'),//'Alış Sipariş Listesi',
+                            path: 'orders/lists/purchaseOrdList'
+                        },
+                        {
+                            id: 'sip_01_002',
+                            text: e.t('menu.sip_01_002'),//'Satış Sipariş Listesi',
+                            path: 'orders/lists/salesOrdList'
+                        },
+                    ]
+                },
+                {
                     id: 'sip_03',
                     text : e.t('menu.sip_03'),//'Raporlar',
                     expanded: false,
@@ -379,29 +382,7 @@ export const menu = (e) =>
             expanded: false,
             items: 
             [
-                {
-                    id: 'irs_01',
-                    text : e.t('menu.irs_01'),//'Listeler',
-                    expanded: false,
-                    items: 
-                    [
-                        {
-                            id: 'irs_01_001',
-                            text: e.t('menu.irs_01_001'),//'Alış İrsaliye Listesi',
-                            path: 'dispatch/lists/purchaseDisList'
-                        },
-                        {
-                            id: 'irs_01_002',
-                            text: e.t('menu.irs_01_002'),//'Satış İrsaliye Listesi',
-                            path: 'dispatch/lists/salesDisList'
-                        },
-                        {
-                            id: 'irs_01_003',
-                            text: e.t('menu.irs_01_003'),//'İade İrsaliye Listesi',
-                            path: 'dispatch/lists/rebateDisList'
-                        },
-                    ]
-                },
+               
                 {
                     id: 'irs_02',
                     text : e.t('menu.irs_02'),//'Evraklar',
@@ -431,6 +412,29 @@ export const menu = (e) =>
                     ]
                 },
                 {
+                    id: 'irs_01',
+                    text : e.t('menu.irs_01'),//'Listeler',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'irs_01_001',
+                            text: e.t('menu.irs_01_001'),//'Alış İrsaliye Listesi',
+                            path: 'dispatch/lists/purchaseDisList'
+                        },
+                        {
+                            id: 'irs_01_002',
+                            text: e.t('menu.irs_01_002'),//'Satış İrsaliye Listesi',
+                            path: 'dispatch/lists/salesDisList'
+                        },
+                        {
+                            id: 'irs_01_003',
+                            text: e.t('menu.irs_01_003'),//'İade İrsaliye Listesi',
+                            path: 'dispatch/lists/rebateDisList'
+                        },
+                    ]
+                },
+                {
                     id: 'irs_03',
                     text : e.t('menu.irs_03'),//'Raporlar',
                     expanded: false,
@@ -444,34 +448,7 @@ export const menu = (e) =>
             expanded: false,
             items: 
             [
-                {
-                    id: 'ftr_01',
-                    text : e.t('menu.ftr_01'),//'Listeler',
-                    expanded: false,
-                    items: 
-                    [
-                        {
-                            id: 'ftr_01_001',
-                            text: e.t('menu.ftr_01_001'),//'Alış Fatura Listesi',
-                            path: 'invoices/lists/purchaseInvList'
-                        },
-                        {
-                            id: 'ftr_01_002',
-                            text: e.t('menu.ftr_01_002'),//'Satış Fatura Listesi',
-                            path: 'invoices/lists/salesInvList'
-                        },
-                        {
-                            id: 'ftr_01_003',
-                            text: e.t('menu.ftr_01_003'),//'iade Fatura Listesi',
-                            path: 'invoices/lists/rebateInvList'
-                        },
-                        {
-                            id: 'ftr_01_004',
-                            text: e.t('menu.ftr_01_004'),//'Fiyat Farkı Fatura Listesi',
-                            path: 'invoices/lists/priceDiffInvList'
-                        }
-                    ]
-                },
+               
                 {
                     id: 'ftr_02',
                     text : e.t('menu.ftr_02'),//'Evraklar',
@@ -506,6 +483,34 @@ export const menu = (e) =>
                     ]
                 },
                 {
+                    id: 'ftr_01',
+                    text : e.t('menu.ftr_01'),//'Listeler',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'ftr_01_001',
+                            text: e.t('menu.ftr_01_001'),//'Alış Fatura Listesi',
+                            path: 'invoices/lists/purchaseInvList'
+                        },
+                        {
+                            id: 'ftr_01_002',
+                            text: e.t('menu.ftr_01_002'),//'Satış Fatura Listesi',
+                            path: 'invoices/lists/salesInvList'
+                        },
+                        {
+                            id: 'ftr_01_003',
+                            text: e.t('menu.ftr_01_003'),//'iade Fatura Listesi',
+                            path: 'invoices/lists/rebateInvList'
+                        },
+                        {
+                            id: 'ftr_01_004',
+                            text: e.t('menu.ftr_01_004'),//'Fiyat Farkı Fatura Listesi',
+                            path: 'invoices/lists/priceDiffInvList'
+                        }
+                    ]
+                },
+                {
                     id: 'ftr_03',
                     text : e.t('menu.ftr_03'),//'Raporlar',
                     expanded: false,
@@ -519,34 +524,7 @@ export const menu = (e) =>
             expanded: false,
             items: 
             [
-                {
-                    id: 'fns_01',
-                    text : e.t('menu.fns_01'),//'Listeler',
-                    expanded: false,
-                    items: 
-                    [
-                        {
-                            id: 'fns_01_001',
-                            text: e.t('menu.fns_01_001'),//'Ödeme Listesi',
-                            path: 'finance/lists/paymentList'
-                        },
-                        {
-                            id: 'fns_01_002',
-                            text: e.t('menu.fns_01_002'),//'Tahsilat Listesi',
-                            path: 'finance/lists/collectionList'
-                        },
-                        {
-                            id: 'fns_01_003',
-                            text: e.t('menu.fns_01_003'),//'Tahsilat Listesi',
-                            path: 'finance/lists/bankList'
-                        },
-                        {
-                            id: 'fns_01_004',
-                            text: e.t('menu.fns_01_004'),//'Tahsilat Listesi',
-                            path: 'finance/lists/safeList'
-                        },
-                    ]
-                },
+                
                 {
                     id: 'fns_02',
                     text : e.t('menu.fns_02'),//'Evraklar',
@@ -585,6 +563,34 @@ export const menu = (e) =>
                             id: 'fns_03_003',
                             text: e.t('menu.fns_03_003'),//'Tahsilat',
                             path: 'finance/documents/virement'
+                        },
+                    ]
+                },
+                {
+                    id: 'fns_01',
+                    text : e.t('menu.fns_01'),//'Listeler',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'fns_01_001',
+                            text: e.t('menu.fns_01_001'),//'Ödeme Listesi',
+                            path: 'finance/lists/paymentList'
+                        },
+                        {
+                            id: 'fns_01_002',
+                            text: e.t('menu.fns_01_002'),//'Tahsilat Listesi',
+                            path: 'finance/lists/collectionList'
+                        },
+                        {
+                            id: 'fns_01_003',
+                            text: e.t('menu.fns_01_003'),//'Tahsilat Listesi',
+                            path: 'finance/lists/bankList'
+                        },
+                        {
+                            id: 'fns_01_004',
+                            text: e.t('menu.fns_01_004'),//'Tahsilat Listesi',
+                            path: 'finance/lists/safeList'
                         },
                     ]
                 },
@@ -630,39 +636,39 @@ export const menu = (e) =>
                         }
                     ]
                 },
-                      //Raporlar
-                      {
-                        id: 'pos_02',
-                        text : e.t('menu.pos_02'),
-                        expanded: false,
-                        items: 
-                        [
-                            //Satış Fiş Raporu
-                            {
-                                id: 'pos_02_001',
-                                text: e.t('menu.pos_02_001'),
-                                path: 'pos/report/salesTicketReport'
-                            },
-                            //Müşteri Puan Raporu
-                            {
-                                id: 'pos_02_002',
-                                text: e.t('menu.pos_02_002'),
-                                path: 'pos/report/customerPointReport'
-                            },
-                            //Pos Satış Raporu
-                            {
-                                id: 'pos_02_003',
-                                text: e.t('menu.pos_02_003'),
-                                path: 'pos/report/posSalesReport'
-                            },
-                            //Pos Satış Detay Raporu
-                            {
-                                id: 'pos_02_004',
-                                text: e.t('menu.pos_02_004'),
-                                path: 'pos/report/posSalesDetailReport'
-                            },
-                        ]
-                    },
+                //Raporlar
+                {
+                    id: 'pos_02',
+                    text : e.t('menu.pos_02'),
+                    expanded: false,
+                    items: 
+                    [
+                        //Satış Fiş Raporu
+                        {
+                            id: 'pos_02_001',
+                            text: e.t('menu.pos_02_001'),
+                            path: 'pos/report/salesTicketReport'
+                        },
+                        //Müşteri Puan Raporu
+                        {
+                            id: 'pos_02_002',
+                            text: e.t('menu.pos_02_002'),
+                            path: 'pos/report/customerPointReport'
+                        },
+                        //Pos Satış Raporu
+                        {
+                            id: 'pos_02_003',
+                            text: e.t('menu.pos_02_003'),
+                            path: 'pos/report/posSalesReport'
+                        },
+                        //Pos Satış Detay Raporu
+                        {
+                            id: 'pos_02_004',
+                            text: e.t('menu.pos_02_004'),
+                            path: 'pos/report/posSalesDetailReport'
+                        },
+                    ]
+                },
             ]
         },
         //Promosyon

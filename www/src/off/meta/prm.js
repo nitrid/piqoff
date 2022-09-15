@@ -615,6 +615,22 @@ export const prm =
             CAPTION : "Ürün Grubuna Göre Min Max Yetki"
         }
     },
+    //Urun Grubuna Fiyatsız Girebilme
+    {
+        TYPE : 1,
+        ID :"ItemGrpForNotPriceSave",
+        VALUE : ['209','210'],
+        SPECIAL : "",
+        PAGE : "stk_01_001",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Stok Tanımları",
+            CAPTION : "Ürün Grubuna Göre Fiyatsız Kayıt"
+        }
+    },
     //Otomatik Min Fiyat Atama
     {
         TYPE : 1,
@@ -966,7 +982,7 @@ export const prm =
     ID :"negativeQuantity",
     VALUE : 
     {
-        value : true
+        value : false
     },
     SPECIAL : "",
     PAGE : "ftr_02_002",
@@ -1161,7 +1177,7 @@ export const prm =
         ID :"negativeQuantity",
         VALUE : 
         {
-            value : true
+            value : false
         },
         SPECIAL : "",
         PAGE : "stk_02_002",
@@ -1182,7 +1198,7 @@ export const prm =
         ID :"negativeQuantity",
         VALUE : 
         {
-            value : true
+            value : false
         },
         SPECIAL : "",
         PAGE : "stk_02_005",
@@ -1194,6 +1210,44 @@ export const prm =
             PAGE_NAME : "İade Ürün Toplama",
             CAPTION : "Eksiye Düşemeye İzin Verme"
         }
+    },
+    //cmbDepot1
+    {
+    TYPE : 2,
+    ID :"cmbDepot1",
+    VALUE : 
+    {
+        value : "1A428DFC-48A9-4AC6-AF20-4D0A4D33F316"
+    },
+    SPECIAL : "",
+    PAGE : "stk_02_005",
+    ELEMENT : "cmbDepot1",
+    APP : "OFF",
+    VIEW : 
+    {
+        TYPE : "text",
+        PAGE_NAME : "İade Ürün Toplama",
+        CAPTION : "Çıkış Depo"
+    }
+    },
+    //cmbDepot2
+    {
+    TYPE : 2,
+    ID :"cmbDepot2",
+    VALUE : 
+    {
+        value : "1A428DFC-48A9-4AC6-AF20-4D0A4D33F816"
+    },
+    SPECIAL : "",
+    PAGE : "stk_02_005",
+    ELEMENT : "cmbDepot2",
+    APP : "OFF",
+    VIEW : 
+    {
+        TYPE : "text",
+        PAGE_NAME : "İade Ürün Toplama",
+        CAPTION : "Giriş Depo"
+    }
     },
     //#endregion
 
@@ -1223,7 +1277,7 @@ export const prm =
         ID :"negativeQuantity",
         VALUE : 
         {
-            value : true
+            value : false
         },
         SPECIAL : "",
         PAGE : "stk_02_003",
@@ -1273,22 +1327,64 @@ export const prm =
     //#endregion
     //#region Satış İrsaliye
      // negativeQuantity
-     {
+    {
         TYPE : 1,
         ID :"negativeQuantity",
         VALUE : 
         {
-            value : true
+            value : false
         },
         SPECIAL : "",
         PAGE : "irs_02_002",
         ELEMENT : "",
         APP : "OFF",
         VIEW : 
+    {
+        TYPE : "checkbox",
+        PAGE_NAME : "Satış İrsaliye",
+        CAPTION : "Eksiye Düşemeye İzin Verme"
+        }
+    },
+    //#endregion
+    //#region Alış Anlaşması
+     //cmbDepot
+     {
+        TYPE : 2,
+        ID :"cmbDepot",
+        VALUE : 
         {
-            TYPE : "checkbox",
-            PAGE_NAME : "Satış İrsaliye",
-            CAPTION : "Eksiye Düşemeye İzin Verme"
+            value : "1A428DFC-48A9-4AC6-AF20-4D0A4D33F316"
+        },
+        SPECIAL : "",
+        PAGE : "cnt_02_001",
+        ELEMENT : "cmbDepot",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Alış Anlaşması",
+            CAPTION : "Depo"
+        }
+    },
+    //#endregion
+    //#region Satış Anlaşması
+     //cmbDepot
+     {
+        TYPE : 2,
+        ID :"cmbDepot",
+        VALUE : 
+        {
+            value : "1A428DFC-48A9-4AC6-AF20-4D0A4D33F316"
+        },
+        SPECIAL : "",
+        PAGE : "cnt_02_002",
+        ELEMENT : "cmbDepot",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Satış Anlaşması",
+            CAPTION : "Depo"
         }
     },
     //#endregion

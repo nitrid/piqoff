@@ -107,31 +107,58 @@ export default class purchaseContract extends React.PureComponent
         }
         this.pg_txtPopItemsCode.setSource(tmpSource)
     }
-    async addItem()
+    async addItem(pData)
     {
+       
         let tmpEmpty = {...this.contractObj.empty};
                                                     
         tmpEmpty.CUSER = this.core.auth.data.CODE,  
+        tmpEmpty.CUSER_NAME = this.core.auth.data.NAME,
         tmpEmpty.REF = this.txtRef.value
         tmpEmpty.REF_NO = this.txtRefno.value
         tmpEmpty.TYPE = 0,  
-        tmpEmpty.ITEM = this.txtPopItemsCode.GUID
-        tmpEmpty.ITEM_CODE = this.txtPopItemsCode.value
-        tmpEmpty.ITEM_NAME = this.txtPopItemsName.value
+        tmpEmpty.ITEM = pData.GUID
+        tmpEmpty.ITEM_CODE = pData.CODE
+        tmpEmpty.ITEM_NAME =pData.NAME
         tmpEmpty.CUSTOMER = this.txtCustomerCode.GUID
         tmpEmpty.CUSTOMER_CODE = this.txtCustomerCode.value
         tmpEmpty.CUSTOMER_NAME = this.txtCustomerName.value
-        tmpEmpty.QUANTITY = this.txtPopItemsQuantity.value
-        tmpEmpty.PRICE = this.txtPopItemsPrice.value
-        tmpEmpty.START_DATE = this.dtPopStartDate.value
-        tmpEmpty.FINISH_DATE = this.dtPopEndDate.value
+        tmpEmpty.QUANTITY = 1
+        tmpEmpty.START_DATE = this.startDate.value
+        tmpEmpty.FINISH_DATE = this.finishDate.value
         if(this.cmbDepot.value != '')
         {
             tmpEmpty.DEPOT = this.cmbDepot.value 
             tmpEmpty.DEPOT_NAME = this.cmbDepot.displayExpr 
         }   
+        let tmpCheckQuery = 
+        {
+            query :"SELECT MULTICODE,(SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM_GUID,CUSTOMER_GUID,@QUANTITY,GETDATE())) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
+            param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+            value : [pData.CODE,this.txtCustomerCode.GUID,1]
+        }
+        let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
+        if(tmpCheckData.result.recordset.length > 0)
+        {  
+            tmpEmpty.PRICE= tmpCheckData.result.recordset[0].PRICE
+            tmpEmpty.MULTICODE= tmpCheckData.result.recordset[0].MULTICODE
+        }
+        else
+        {
+            let tmpQuery = 
+            {
+                query :"SELECT COST_PRICE,VAT FROM ITEMS WHERE ITEMS.GUID = @GUID",
+                param : ['GUID:string|50'],
+                value : [pData.GUID]
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            if(tmpData.result.recordset.length > 0)
+            {  
+                tmpEmpty.PRICE = tmpData.result.recordset[0].COST_PRICE
+                tmpEmpty.VAT_RATE = tmpData.result.recordset[0].VAT
+            }
+        }
         
-    
         this.contractObj.addEmpty(tmpEmpty);
     }
     async multiItemAdd()
@@ -503,7 +530,7 @@ export default class purchaseContract extends React.PureComponent
                                     onValueChanged={(async()=>
                                         {
                                         }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE = 0"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE IN (0,2) AND STATUS = 1"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
@@ -630,6 +657,9 @@ export default class purchaseContract extends React.PureComponent
                                             console.log(e)
                                     }).bind(this)}
                                     >
+                                    <Validator validationGroup={"frmPurcContract"  + this.tabIndex}>
+                                        <RequiredRule message={this.t("validDocDate")} />
+                                    </Validator> 
                                     </NdDatePicker>
                                 </Item>
                                 {/* finishDate */}
@@ -641,6 +671,9 @@ export default class purchaseContract extends React.PureComponent
                                     {
                                     }).bind(this)}
                                     >
+                                    <Validator validationGroup={"frmPurcContract"  + this.tabIndex}>
+                                        <RequiredRule message={this.t("validDocDate")} />
+                                    </Validator> 
                                     </NdDatePicker>
                                 </Item>
                             </Form>
@@ -660,13 +693,49 @@ export default class purchaseContract extends React.PureComponent
                                     {
                                         if(e.validationGroup.validate().status == "valid")
                                         {
-                                            this.txtPopItemsQuantity.value = 1 
-                                            this.txtPopItemsCode.value = ''
-                                            this.txtPopItemsName.value = ''
-                                            this.txtPopItemsPrice.value = ''
-                                            this.dtPopStartDate.value = this.startDate.value
-                                            this.dtPopEndDate.value = this.finishDate.value
-                                            this.popItems.show()
+                                                this.pg_txtPopItemsCode.show()
+                                                this.pg_txtPopItemsCode.onClick = async(data) =>
+                                                {
+                                                    if(data.length == 1)
+                                                    {
+                                                        await this.addItem(data[0])
+                                                    }
+                                                    else if(data.length > 1)
+                                                    {
+                                                        let tmpCounter = 0
+                                                        for (let i = 0; i < data.length; i++) 
+                                                        {
+                                                            if(i == 0)
+                                                            {
+                                                                await this.addItem(data[i])
+                                                            }
+                                                            else
+                                                            {
+                                                                this.txtRef.readOnly = true
+                                                                this.txtRefno.readOnly = true
+                                                                await this.core.util.waitUntil(100)
+                                                                await this.addItem(data[i])
+                                                            }
+
+                                                            if(data[i].MULTICODE == '')
+                                                            {
+                                                                tmpCounter = tmpCounter +1
+                                                            }
+                                                        }
+
+                                                        if(tmpCounter > 0)
+                                                        {
+                                                            let tmpConfObj =
+                                                            {
+                                                                id:'msgNotCustomerCount',showTitle:true,title:this.t("msgNotCustomerCount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                                button:[{id:"btn01",caption:this.t("msgNotCustomerCount.btn01"),location:'after'}],
+                                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{tmpCounter + this.t("msgNotCustomerCount.msg")}</div>)
+                                                            }
+                                                            await dialog(tmpConfObj);
+                                                        }
+                                                    }
+                                                }
+                                                
                                         }
                                         else
                                         {
@@ -725,9 +794,10 @@ export default class purchaseContract extends React.PureComponent
                                         <Pager
                                         visible={true} />
                                         <Export fileName={this.lang.t("menu.cnt_02_001")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdContracts.clmCreateDate")} width={200}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdContracts.clmItemCode")} width={150} />
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdContracts.clmItemName")} width={350} />
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdContracts.clmCreateDate")} width={150} allowEditing={false}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdContracts.clmItemCode")} width={150} allowEditing={false}/>
+                                        <Column dataField="MULTICODE" caption={this.t("grdContracts.clmMulticode")} width={150} allowEditing={false}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdContracts.clmItemName")} width={350} allowEditing={false}/>
                                         <Column dataField="PRICE" caption={this.t("grdContracts.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                         <Column dataField="QUANTITY" caption={this.t("grdContracts.clmQuantity")} dataType={'number'}/>
                                         <Column dataField="START_DATE" caption={this.t("grdContracts.clmStartDate")} dataType={'date'}
@@ -777,7 +847,6 @@ export default class purchaseContract extends React.PureComponent
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                    onEnterKey={(async()=>
                                         {
-                                            
                                                 await this.pg_txtPopItemsCode.setVal(this.txtPopItemsCode.value)
                                                 this.pg_txtPopItemsCode.show()
                                                 this.pg_txtPopItemsCode.onClick = (data) =>
@@ -961,7 +1030,7 @@ export default class purchaseContract extends React.PureComponent
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
-                                        <Scrolling mode="infinite" />
+                                        <Scrolling mode="virtual" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                         <Column dataField="CODE" caption={this.t("grdMultiItem.clmCode")} width={150} allowEditing={false} />
                                         <Column dataField="MULTICODE" caption={this.t("grdMultiItem.clmMulticode")} width={150} allowEditing={false} />

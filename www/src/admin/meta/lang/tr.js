@@ -134,7 +134,8 @@ export const langTr =
             clmName : "Adı",
             clmRole : "Rol",
             clmStatus : "Durum",
-            clmPwd : "Parola"
+            clmPwd : "Parola",
+            clmCardId : "Kart ID"
         }
     },
     P0003 : 

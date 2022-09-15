@@ -4,22 +4,22 @@
     <Item1 Ref="1" ControlType="TopMarginBand" Name="TopMargin" HeightF="0" />
     <Item2 Ref="2" ControlType="DetailBand" Name="Detail" HeightF="560">
       <Controls>
-        <Item1 Ref="3" ControlType="XRLabel" Name="label5" Multiline="true" Text="BADOIT &#xD;&#xA;CITRON TOUCHE DE CITRON &#xD;&#xA;VERT&#xD;&#xA; 1LT" TextAlignment="MiddleCenter" SizeF="761.2917,229.8461" LocationFloat="28.7499981, 7.00000143" Font="Poppins Black, 35pt, style=Bold" Padding="2,2,0,0,100">
+        <Item1 Ref="3" ControlType="XRLabel" Name="label5" Multiline="true" Text="BADOIT &#xD;&#xA;CITRON TOUCHE DE CITRON &#xD;&#xA;VERT&#xD;&#xA; 1LT" TextAlignment="MiddleCenter" SizeF="761.2917,229.8461" LocationFloat="28.7499981, 7.00000143" Font="Microsoft Sans Serif, 35pt, style=Bold" Padding="2,2,0,0,100">
           <ExpressionBindings>
-            <Item1 Ref="4" EventName="BeforePrint" PropertyName="Text" Expression="[NAME]" />
+            <Item1 Ref="4" EventName="BeforePrint" PropertyName="Text" Expression="[DESING_NAME]" />
           </ExpressionBindings>
           <StylePriority Ref="5" UseFont="false" UseTextAlignment="false" />
         </Item1>
-        <Item2 Ref="6" ControlType="XRLabel" Name="label2" Multiline="true" Text="122" TextAlignment="TopRight" SizeF="371.875,189.583282" LocationFloat="91.3024139, 202.887787" Font="Poppins Black, 120pt, style=Bold" Padding="2,2,0,0,100">
+        <Item2 Ref="6" ControlType="XRLabel" Name="label2" Multiline="true" Text="122" TextAlignment="TopRight" SizeF="371.875,189.583282" LocationFloat="91.3024139, 202.887787" Font="Microsoft Sans Serif, 120pt, style=Bold" Padding="2,2,0,0,100">
           <ExpressionBindings>
             <Item1 Ref="7" EventName="BeforePrint" PropertyName="Text" Expression="[PRICE1]" />
           </ExpressionBindings>
           <StylePriority Ref="8" UseFont="false" UseTextAlignment="false" />
         </Item2>
-        <Item3 Ref="9" ControlType="XRLabel" Name="label4" Multiline="true" Text="€" TextAlignment="TopLeft" SizeF="97.91666,189.5833" LocationFloat="463.177429, 200.8878" Font="Poppins Black, 120pt, style=Bold" Padding="2,2,0,0,100">
+        <Item3 Ref="9" ControlType="XRLabel" Name="label4" Multiline="true" Text="€" TextAlignment="TopLeft" SizeF="97.91666,189.5833" LocationFloat="463.177429, 200.8878" Font="Microsoft Sans Serif, 120pt, style=Bold" Padding="2,2,0,0,100">
           <StylePriority Ref="10" UseFont="false" UseTextAlignment="false" />
         </Item3>
-        <Item4 Ref="11" ControlType="XRLabel" Name="label3" Multiline="true" Text="99" SizeF="159.375,130.2083" LocationFloat="561.094055, 222.262787" Font="Poppins Black, 80pt, style=Bold" Padding="2,2,0,0,100">
+        <Item4 Ref="11" ControlType="XRLabel" Name="label3" Multiline="true" Text="99" SizeF="159.375,130.2083" LocationFloat="561.094055, 222.262787" Font="Microsoft Sans Serif, 80pt, style=Bold" Padding="2,2,0,0,100">
           <ExpressionBindings>
             <Item1 Ref="12" EventName="BeforePrint" PropertyName="Text" Expression="[PRICE2]" />
           </ExpressionBindings>

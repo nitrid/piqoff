@@ -327,7 +327,7 @@ export default class customerAddressCard extends React.PureComponent
                                 {/* txtCode */}
                                 <Item>
                                     <Label text={this.t("txtCode")} alignment="right" />
-                                    <NdTextBox id="txtCode" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"CODE"}}  
+                                    <NdTextBox id="txtCode" parent={this} simple={true} placeholder={this.t("customerPlace")} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"CODE"}}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     button=
                                     {
@@ -357,6 +357,18 @@ export default class customerAddressCard extends React.PureComponent
                                             }
                                         ]
                                     }
+                                    onEnterKey={(async()=>
+                                    {
+                                        await this.pg_txtCode.setVal(this.txtCode.value)
+                                        this.pg_txtCode.show()
+                                        this.pg_txtCode.onClick = (data) =>
+                                        {
+                                            if(data.length > 0)
+                                            {
+                                                this.getCustomer(data[0].CODE)
+                                            }
+                                        }
+                                    }).bind(this)}
                                     onChange={(async()=>
                                     {
                                         let tmpResult = await this.checkCustomer(this.txtCode.value)

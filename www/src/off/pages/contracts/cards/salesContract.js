@@ -108,44 +108,49 @@ export default class purchaseContract extends React.PureComponent
         }
         this.pg_txtPopItemsCode.setSource(tmpSource)
     }
-    async addItem()
+    async addItem(pData)
     {
+       
         let tmpEmpty = {...this.contractObj.empty};
                                                     
         tmpEmpty.CUSER = this.core.auth.data.CODE,  
+        tmpEmpty.CUSER_NAME = this.core.auth.data.NAME,
         tmpEmpty.REF = this.txtRef.value
         tmpEmpty.REF_NO = this.txtRefno.value
         tmpEmpty.TYPE = 1,  
-        tmpEmpty.ITEM = this.txtPopItemsCode.GUID
-        tmpEmpty.ITEM_CODE = this.txtPopItemsCode.value
-        tmpEmpty.ITEM_NAME = this.txtPopItemsName.value
+        tmpEmpty.ITEM = pData.GUID
+        tmpEmpty.ITEM_CODE = pData.CODE
+        tmpEmpty.ITEM_NAME =pData.NAME
         tmpEmpty.CUSTOMER = this.txtCustomerCode.GUID
         tmpEmpty.CUSTOMER_CODE = this.txtCustomerCode.value
         tmpEmpty.CUSTOMER_NAME = this.txtCustomerName.value
-        tmpEmpty.QUANTITY = this.txtPopItemsQuantity.value
-        tmpEmpty.PRICE = this.txtPopItemsPrice.value
-        tmpEmpty.START_DATE = this.dtPopStartDate.value
-        tmpEmpty.FINISH_DATE = this.dtPopEndDate.value
-        let tmpQuery = 
-        {
-            query :"SELECT COST_PRICE,VAT FROM ITEMS WHERE ITEMS.GUID = @GUID",
-            param : ['GUID:string|50'],
-            value : [this.txtPopItemsCode.GUID]
-        }
-        let tmpData = await this.core.sql.execute(tmpQuery) 
-        if(tmpData.result.recordset.length > 0)
-        {
-            tmpEmpty.COST_PRICE = tmpData.result.recordset[0].COST_PRICE
-            tmpEmpty.PRICE_VAT_EXT = (this.txtPopItemsPrice.value / ((tmpData.result.recordset[0].VAT / 100) + 1))
-            tmpEmpty.VAT_RATE = tmpData.result.recordset[0].VAT
-        }
+        tmpEmpty.QUANTITY = 1
+        tmpEmpty.START_DATE = this.startDate.value
+        tmpEmpty.FINISH_DATE = this.finishDate.value
         if(this.cmbDepot.value != '')
         {
             tmpEmpty.DEPOT = this.cmbDepot.value 
             tmpEmpty.DEPOT_NAME = this.cmbDepot.displayExpr 
         }   
+        let tmpCheckQuery = 
+        {
+            query :"SELECT COST_PRICE,VAT,(SELECT [dbo].[FN_PRICE_SALE](@GUID,1,GETDATE(),@CUSTOMER_GUID)) AS PRICE FROM ITEMS WHERE ITEMS.GUID = @GUID",
+            param : ['GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+            value : [pData.GUID,this.txtCustomerCode.GUID,1]
+        }
+        let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
+        if(tmpCheckData.result.recordset.length > 0)
+        {  
+            tmpEmpty.PRICE= tmpCheckData.result.recordset[0].PRICE
+            tmpEmpty.COST_PRICE = tmpCheckData.result.recordset[0].COST_PRICE
+            tmpEmpty.PRICE_VAT_EXT = (tmpCheckData.result.recordset[0].PRICE / ((tmpCheckData.result.recordset[0].VAT / 100) + 1))
+            tmpEmpty.VAT_RATE = tmpCheckData.result.recordset[0].VAT
+        }
+        else
+        {
+            tmpEmpty.PRICE= 0
+        }
         
-    
         this.contractObj.addEmpty(tmpEmpty);
         this._calculateMargin()
     }
@@ -530,7 +535,7 @@ export default class purchaseContract extends React.PureComponent
                                     onValueChanged={(async()=>
                                         {
                                         }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE = 0"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE IN (0,2) AND STATUS = 1"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
@@ -691,13 +696,31 @@ export default class purchaseContract extends React.PureComponent
                                     {
                                         if(e.validationGroup.validate().status == "valid")
                                         {
-                                            this.txtPopItemsQuantity.value = 1 
-                                            this.txtPopItemsCode.value = ''
-                                            this.txtPopItemsName.value = ''
-                                            this.txtPopItemsPrice.value = ''
-                                            this.dtPopStartDate.value = this.startDate.value
-                                            this.dtPopEndDate.value = this.finishDate.value
-                                            this.popItems.show()
+                                            this.pg_txtPopItemsCode.show()
+                                            this.pg_txtPopItemsCode.onClick = async(data) =>
+                                            {
+                                                if(data.length == 1)
+                                                {
+                                                    await this.addItem(data[0])
+                                                }
+                                                else if(data.length > 1)
+                                                {
+                                                    for (let i = 0; i < data.length; i++) 
+                                                    {
+                                                        if(i == 0)
+                                                        {
+                                                            await this.addItem(data[i])
+                                                        }
+                                                        else
+                                                        {
+                                                            this.txtRef.readOnly = true
+                                                            this.txtRefno.readOnly = true
+                                                            await this.core.util.waitUntil(100)
+                                                            await this.addItem(data[i])
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         }
                                         else
                                         {
@@ -996,7 +1019,7 @@ export default class purchaseContract extends React.PureComponent
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
-                                        <Scrolling mode="infinite" />
+                                        <Scrolling mode="virtual" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                         <Column dataField="CODE" caption={this.t("grdMultiItem.clmCode")} width={150} allowEditing={false} />
                                         <Column dataField="MULTICODE" caption={this.t("grdMultiItem.clmMulticode")} width={150} allowEditing={false} />
