@@ -2082,6 +2082,8 @@ export const langFr =
         txtPayInvoıceTotal : "Total Facture",
         txtPayTotal : "Total Paiement",
         txtRemainder : "Reste",
+        txtBarcode: "Code barre",
+        txtBarcodePlace: "Barkod Okutunuz",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -2421,6 +2423,8 @@ export const langFr =
         txtPayInvoıceTotal : "Total Facture",
         txtPayTotal : "Total Encaissement",
         txtRemainder : "Reste",
+        txtBarcode: "Code barre",
+        txtBarcodePlace: "Barkod Okutunuz",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -2713,6 +2717,8 @@ export const langFr =
         txtPayInvoıceTotal : "Totale Facture",
         txtPayTotal : "Total Encaissement",
         txtRemainder : "Reste",
+        txtBarcode: "Code barre",
+        txtBarcodePlace: "Barkod Okutunuz",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -2962,6 +2968,8 @@ export const langFr =
         txtPayInvoıceTotal : "Totale Facture",
         txtPayTotal : "Total Encaissement",
         txtRemainder : "Reste",
+        txtBarcode: "Code barre",
+        txtBarcodePlace: "Barkod Okutunuz",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3355,6 +3363,8 @@ export const langFr =
         txtVat : "TVA",
         txtTotal : "Total Général",
         dtShipDate :"Date Expédition",
+        txtBarcode: "Code barre",
+        txtBarcodePlace: "Barkod Okutunuz",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3594,6 +3604,8 @@ export const langFr =
         txtVat : "TVA",
         txtTotal : "Total Général",
         dtShipDate :"Date Expédition",
+        txtBarcode: "Code barre",
+        txtBarcodePlace: "Barkod Okutunuz",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3842,6 +3854,8 @@ export const langFr =
         txtVat : "TVA",
         txtTotal : "Total Général",
         dtShipDate :"Date Expédition",
+        txtBarcode: "Code barre",
+        txtBarcodePlace: "Barkod Okutunuz",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -4112,6 +4126,8 @@ export const langFr =
         txtVat : "TVA",
         txtTotal : "Total Général",
         dtShipDate :"Date Expédition",
+        txtBarcode: "Code barre",
+        txtBarcodePlace: "Barkod Okutunuz",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -4350,6 +4366,8 @@ export const langFr =
         txtVat : "TVA",
         txtTotal : "Total Général",
         dtShipDate :"Date Expédition",
+        txtBarcode: "Code barre",
+        txtBarcodePlace: "Barkod Okutunuz",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -5930,6 +5948,8 @@ export const langFr =
         txtVat : "TVA",
         txtTotal : "Total Général",
         dtShipDate :"Date Expédition",
+        txtBarcode: "Code barre",
+        txtBarcodePlace: "Barkod Okutunuz",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -6168,6 +6188,8 @@ export const langFr =
         txtVat : "TVA",
         txtTotal : "Total Général",
         dtShipDate :"Date Expédition",
+        txtBarcode: "Code barre",
+        txtBarcodePlace: "Barkod Okutunuz",
         pg_Docs : 
         {
             title : "Sélection Document",
