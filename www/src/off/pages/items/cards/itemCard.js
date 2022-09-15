@@ -659,19 +659,31 @@ export default class itemCard extends React.PureComponent
                                     {
                                         if(e.validationGroup.validate().status == "valid")
                                         {
-                                            //FIYAT GİRMEDEN KAYIT EDİLEMEZ KONTROLÜ
-                                            if(this.itemsObj.dt('ITEM_PRICE').length == 0)
+                                            if(this.itemsObj.itemBarcode.dt()[0].BARCODE == '')
                                             {
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgPriceSave',showTitle:true,title:this.t("msgPriceSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgPriceSave.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPriceSave.msg")}</div>)
-                                                }
+                                                this.itemsObj.itemBarcode.clearAll()
+                                            }
+                                            //FIYAT GİRMEDEN KAYIT EDİLEMEZ KONTROLÜ
+                                            let tmpData = this.prmObj.filter({ID:'ItemGrpForNotPriceSave'}).getValue()
+                                            if(typeof tmpData != 'undefined' && Array.isArray(tmpData) && typeof tmpData.find(x => x == this.cmbItemGrp.value) != 'undefined')
+                                            {
                                                 
-                                                await dialog(tmpConfObj);
-
-                                                return;
+                                            }
+                                            else
+                                            {
+                                                if(this.itemsObj.dt('ITEM_PRICE').length == 0)
+                                                {
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgPriceSave',showTitle:true,title:this.t("msgPriceSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.t("msgPriceSave.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPriceSave.msg")}</div>)
+                                                    }
+                                                    
+                                                    await dialog(tmpConfObj);
+    
+                                                    return;
+                                                }
                                             }
                                             //************************************ */
                                             let tmpConfObj =

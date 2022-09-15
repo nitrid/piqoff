@@ -615,6 +615,22 @@ export const prm =
             CAPTION : "Ürün Grubuna Göre Min Max Yetki"
         }
     },
+    //Urun Grubuna Fiyatsız Girebilme
+    {
+        TYPE : 1,
+        ID :"ItemGrpForNotPriceSave",
+        VALUE : ['209','210'],
+        SPECIAL : "",
+        PAGE : "stk_01_001",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Stok Tanımları",
+            CAPTION : "Ürün Grubuna Göre Fiyatsız Kayıt"
+        }
+    },
     //Otomatik Min Fiyat Atama
     {
         TYPE : 1,
@@ -1311,7 +1327,7 @@ export const prm =
     //#endregion
     //#region Satış İrsaliye
      // negativeQuantity
-     {
+    {
         TYPE : 1,
         ID :"negativeQuantity",
         VALUE : 
@@ -1323,10 +1339,10 @@ export const prm =
         ELEMENT : "",
         APP : "OFF",
         VIEW : 
-        {
-            TYPE : "checkbox",
-            PAGE_NAME : "Satış İrsaliye",
-            CAPTION : "Eksiye Düşemeye İzin Verme"
+    {
+        TYPE : "checkbox",
+        PAGE_NAME : "Satış İrsaliye",
+        CAPTION : "Eksiye Düşemeye İzin Verme"
         }
     },
     //#endregion

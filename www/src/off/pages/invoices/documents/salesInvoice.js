@@ -499,12 +499,11 @@ export default class salesInvoice extends React.PureComponent
         this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
         let tmpQuery = 
         {
-            query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,1,GETDATE(),@CUSTOMER) AS PRICE",
-            param : ['GUID:string|50','CUSTOMER:string|50'],
-            value : [pData.GUID,this.docObj.dt()[0].INPUT]
+            query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,@QUANTITY,GETDATE(),@CUSTOMER) AS PRICE",
+            param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50'],
+            value : [pData.GUID,pQuantity,this.docObj.dt()[0].INPUT]
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
-        console.log(tmpData)
         if(tmpData.result.recordset.length > 0)
         {
             this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
