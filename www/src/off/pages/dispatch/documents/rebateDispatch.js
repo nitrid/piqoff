@@ -450,7 +450,7 @@ export default class rebateDispatch extends React.PureComponent
         {
             query :"SELECT (SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM_GUID,CUSTOMER_GUID,@QUANTITY,GETDATE())) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID ORDER BY LDATE DESC",
             param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
-            value : [pData.CODE,this.docObj.dt()[0].OUTPUT,pQuantity]
+            value : [pData.CODE,this.docObj.dt()[0].INPUT,pQuantity]
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
         if(tmpData.result.recordset.length > 0)
@@ -1162,6 +1162,22 @@ export default class rebateDispatch extends React.PureComponent
                                     onRowUpdated={async(e)=>{
                                         let rowIndex = e.component.getRowIndexByKey(e.key)
 
+                                        if(typeof e.data.QUANTITY != 'undefined')
+                                        {
+                                            let tmpQuery = 
+                                            {
+                                                query :"SELECT [dbo].[FN_CUSTOMER_PRICE](@ITEM_GUID,@CUSTOMER_GUID,@QUANTITY,GETDATE()) AS PRICE",
+                                                param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+                                                value : [e.key.ITEM,this.docObj.dt()[0].INPUT,e.data.QUANTITY]
+                                            }
+                                            let tmpData = await this.core.sql.execute(tmpQuery) 
+                                            if(tmpData.result.recordset.length > 0)
+                                            {
+                                                this.docObj.docItems.dt()[rowIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
+                                                
+                                                this._calculateTotal()
+                                            }
+                                        }
                                         if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
                                         {
                                             let tmpConfObj =

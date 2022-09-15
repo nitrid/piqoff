@@ -442,9 +442,9 @@ export default class salesOrder extends React.PureComponent
         this.docObj.docOrders.dt()[pIndex].QUANTITY = pQuantity
         let tmpQuery = 
         {
-            query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,1,GETDATE(),@CUSTOMER) AS PRICE",
-            param : ['GUID:string|50','CUSTOMER:string|50'],
-            value : [pData.GUID,this.docObj.dt()[0].INPUT]
+            query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,@QUANTITY,GETDATE(),@CUSTOMER) AS PRICE",
+            param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50'],
+            value : [pData.GUID,pQuantity,this.docObj.dt()[0].INPUT]
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
         if(tmpData.result.recordset.length > 0)
@@ -1231,6 +1231,22 @@ export default class salesOrder extends React.PureComponent
                                     onRowUpdated={async(e)=>{
                                         let rowIndex = e.component.getRowIndexByKey(e.key)
 
+                                        if(typeof e.data.QUANTITY != 'undefined')
+                                        {
+                                            let tmpQuery = 
+                                            {
+                                                query :"SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID) AS PRICE",
+                                                param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+                                                value : [e.key.ITEM,this.docObj.dt()[0].INPUT,e.data.QUANTITY]
+                                            }
+                                            let tmpData = await this.core.sql.execute(tmpQuery) 
+                                            if(tmpData.result.recordset.length > 0)
+                                            {
+                                                this.docObj.docOrders.dt()[rowIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
+                                                
+                                                this._calculateTotal()
+                                            }
+                                        }
                                         if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                         {
                                             e.key.DISCOUNT = parseFloat((((this.docObj.docOrders.dt()[rowIndex].AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(3))
@@ -1312,7 +1328,7 @@ export default class salesOrder extends React.PureComponent
                                         <Column dataField="CUSER_NAME" caption={this.t("grdSlsOrder.clmCuser")} width={120} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdSlsOrder.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdSlsOrder.clmItemName")} width={350} />
-                                        <Column dataField="PRICE" caption={this.t("grdSlsOrder.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                        <Column dataField="PRICE" caption={this.t("grdSlsOrder.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}  width={80}/>
                                         <Column dataField="QUANTITY" caption={this.t("grdSlsOrder.clmQuantity")} width={80} dataType={'number'}/>
                                         <Column dataField="AMOUNT" caption={this.t("grdSlsOrder.clmAmount")} width={80} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}}/>
                                         <Column dataField="DISCOUNT" caption={this.t("grdSlsOrder.clmDiscount")} width={80} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
