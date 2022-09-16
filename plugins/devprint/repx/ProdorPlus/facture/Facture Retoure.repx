@@ -5,17 +5,17 @@
     <Item2 Ref="3" ControlType="BottomMarginBand" Name="BottomMargin" HeightF="11.458333" />
     <Item3 Ref="4" ControlType="ReportHeaderBand" Name="ReportHeader" HeightF="197.625015">
       <Controls>
-        <Item1 Ref="5" ControlType="XRLabel" Name="label6" Multiline="true" Text="label2" SizeF="286.083435,21.3333435" LocationFloat="2.29166317, 145.999954" Font="Arial, 7.75pt" ForeColor="Black" Padding="2,2,0,0,100">
+        <Item1 Ref="5" ControlType="XRLabel" Name="label6" Multiline="true" Text="label2" TextAlignment="TopLeft" SizeF="286.083435,21.3333435" LocationFloat="2.29166317, 145.999954" Font="Arial, 7.75pt" ForeColor="Black" Padding="2,2,0,0,100">
           <ExpressionBindings>
             <Item1 Ref="6" EventName="BeforePrint" PropertyName="Text" Expression="[CONTACT]" />
           </ExpressionBindings>
-          <StylePriority Ref="7" UseFont="false" UseForeColor="false" />
+          <StylePriority Ref="7" UseFont="false" UseForeColor="false" UseTextAlignment="false" />
         </Item1>
-        <Item2 Ref="8" ControlType="XRLabel" Name="label5" Multiline="true" Text="label2" SizeF="286.083435,26.8332939" LocationFloat="2.29166317, 119.166679" Font="Arial, 7.75pt" ForeColor="Black" Padding="2,2,0,0,100">
+        <Item2 Ref="8" ControlType="XRLabel" Name="label5" Multiline="true" Text="label2" TextAlignment="TopLeft" SizeF="286.083435,26.8332939" LocationFloat="2.29166317, 119.166679" Font="Arial, 7.75pt" ForeColor="Black" Padding="2,2,0,0,100">
           <ExpressionBindings>
             <Item1 Ref="9" EventName="BeforePrint" PropertyName="Text" Expression="[ADDRESS]" />
           </ExpressionBindings>
-          <StylePriority Ref="10" UseFont="false" UseForeColor="false" />
+          <StylePriority Ref="10" UseFont="false" UseForeColor="false" UseTextAlignment="false" />
         </Item2>
         <Item3 Ref="11" ControlType="XRLine" Name="line1" SizeF="787.875,11" LocationFloat="1.41665137, 185.124985" />
         <Item4 Ref="12" ControlType="XRLabel" Name="label13" Multiline="true" Text="label13" TextAlignment="TopRight" SizeF="99.33327,22.9999924" LocationFloat="100.041595, 167.3333" Padding="2,2,0,0,100">
@@ -39,11 +39,11 @@
           </ExpressionBindings>
           <StylePriority Ref="22" UseTextAlignment="false" />
         </Item7>
-        <Item8 Ref="23" ControlType="XRLabel" Name="label2" Multiline="true" Text="label2" SizeF="286.083435,28.625" LocationFloat="0.7083257, 88.5000153" ForeColor="Black" Padding="2,2,0,0,100">
+        <Item8 Ref="23" ControlType="XRLabel" Name="label2" Multiline="true" Text="label2" TextAlignment="TopLeft" SizeF="286.083435,28.625" LocationFloat="0.7083257, 88.5000153" ForeColor="Black" Padding="2,2,0,0,100">
           <ExpressionBindings>
             <Item1 Ref="24" EventName="BeforePrint" PropertyName="Text" Expression="[INPUT_NAME]" />
           </ExpressionBindings>
-          <StylePriority Ref="25" UseForeColor="false" />
+          <StylePriority Ref="25" UseForeColor="false" UseTextAlignment="false" />
         </Item8>
         <Item9 Ref="26" ControlType="XRLabel" Name="label21" Multiline="true" Text="label21" TextAlignment="TopCenter" SizeF="232.708374,23.5" LocationFloat="535.7915, 89.1249161" Font="Arial, 9pt, style=Bold" Padding="2,2,0,0,100" Borders="All">
           <ExpressionBindings>
