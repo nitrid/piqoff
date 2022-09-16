@@ -1034,7 +1034,8 @@ export const langFr =
             clmRef : "Série",
             clmRefNo : "Numéro",
             clmDocDate : "Date",
-            clmCount : "Qte. Scan"
+            clmCount : "Qte. Scan",
+            clmPrint : "Yazdırıldı",
 
         },
         pg_DocsCombine : 
