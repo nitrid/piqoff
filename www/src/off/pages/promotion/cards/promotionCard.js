@@ -28,8 +28,6 @@ export default class promotionCard extends React.PureComponent
         super(props) 
         this.state = 
         {
-            prmType:0,
-            rstType:0,
             discPrice:0,
         }               
         this.core = App.instance.core;
@@ -85,6 +83,8 @@ export default class promotionCard extends React.PureComponent
 
         this.condDt.import(this.promo.cond.dt().groupBy('WITHAL').toArray())
         this.appDt.import(this.promo.app.dt().groupBy('WITHAL').toArray())
+
+        this.setState({discPrice : 0})
 
         await this.core.util.waitUntil(0);
         await this.lstPromo.dataRefresh();
@@ -201,15 +201,7 @@ export default class promotionCard extends React.PureComponent
         if(pItem.SECTOR == 'COND')
         {            
             this["itemList" + pItem.WITHAL] = this.promo.cond.dt().where({WITHAL:pItem.WITHAL})
-
-            if(typeof this.state["prmType" + pItem.WITHAL] == 'undefined')
-            {
-                this.state["prmType" + pItem.WITHAL] = 0
-            }
-            else
-            {
-                this.setState({["prmType" + pItem.WITHAL] : pItem.TYPE})
-            }
+            this.state["prmType" + pItem.WITHAL] = pItem.TYPE
 
             return(
                 <div className='row'>
@@ -239,9 +231,6 @@ export default class promotionCard extends React.PureComponent
                                     }
 
                                     this.setState({["prmType" + pItem.WITHAL] :e.value})
-
-
-                                    
                                 }}
                                 />
                             </Item>
@@ -422,14 +411,7 @@ export default class promotionCard extends React.PureComponent
         }
         else if(pItem.SECTOR == 'APP')
         {
-            if(typeof this.state["rstType" + pItem.WITHAL] == 'undefined')
-            {
-                this.state["rstType" + pItem.WITHAL] = 0
-            }
-            else
-            {
-                this.setState({["rstType" + pItem.WITHAL] : pItem.TYPE})
-            }
+            this.state["rstType" + pItem.WITHAL] = pItem.TYPE
             
             return(
                 <div className='row'>
@@ -703,35 +685,52 @@ export default class promotionCard extends React.PureComponent
                                                 {
                                                     if(item.TYPE == 0)
                                                     {
-                                                        this["itemList" + item.WITHAL].forEach((list)=>
+                                                        if(this["itemList" + item.WITHAL].length > 0)
                                                         {
-                                                            let tmpCond = this.promo.cond.dt().where({GUID:list.GUID}).where({ITEM_GUID:list.ITEM_GUID})
-                                                            
-                                                            if(tmpCond.length > 0)
-                                                            {                                                                
-                                                                tmpCond[0].TYPE = item.TYPE
-                                                                tmpCond[0].ITEM_CODE = list.ITEM_CODE
-                                                                tmpCond[0].ITEM_NAME = list.ITEM_NAME
-                                                                tmpCond[0].QUANTITY = item.QUANTITY
-                                                                tmpCond[0].AMOUNT = item.AMOUNT
-                                                            }
-                                                            else
+                                                            this["itemList" + item.WITHAL].forEach((list)=>
                                                             {
-                                                                console.log(1453)
-                                                                console.log(this.promo.dt()[0].GUID)
-                                                                let tmpEmpty = {...this.promo.cond.empty}
-                                                                tmpEmpty.PROMO = this.promo.dt()[0].GUID
-                                                                tmpEmpty.ITEM_GUID = list.ITEM_GUID
-                                                                tmpEmpty.ITEM_CODE = list.ITEM_CODE
-                                                                tmpEmpty.ITEM_NAME = list.ITEM_NAME
-                                                                tmpEmpty.TYPE = item.TYPE
-                                                                tmpEmpty.QUANTITY = item.QUANTITY
-                                                                tmpEmpty.AMOUNT = item.AMOUNT
-                                                                tmpEmpty.WITHAL = item.WITHAL
+                                                                let tmpCond = this.promo.cond.dt().where({GUID:list.GUID}).where({ITEM_GUID:list.ITEM_GUID})
                                                                 
-                                                                this.promo.cond.addEmpty(tmpEmpty)
-                                                            }
-                                                        })
+                                                                if(tmpCond.length > 0)
+                                                                {                                                                
+                                                                    tmpCond[0].TYPE = item.TYPE
+                                                                    tmpCond[0].ITEM_CODE = list.ITEM_CODE
+                                                                    tmpCond[0].ITEM_NAME = list.ITEM_NAME
+                                                                    tmpCond[0].QUANTITY = item.QUANTITY
+                                                                    tmpCond[0].AMOUNT = item.AMOUNT
+                                                                }
+                                                                else
+                                                                {                                                                    
+                                                                    let tmpEmpty = {...this.promo.cond.empty}
+
+                                                                    tmpEmpty.PROMO = this.promo.dt()[0].GUID
+                                                                    tmpEmpty.ITEM_GUID = list.ITEM_GUID
+                                                                    tmpEmpty.ITEM_CODE = list.ITEM_CODE
+                                                                    tmpEmpty.ITEM_NAME = list.ITEM_NAME
+                                                                    tmpEmpty.TYPE = item.TYPE
+                                                                    tmpEmpty.QUANTITY = item.QUANTITY
+                                                                    tmpEmpty.AMOUNT = item.AMOUNT
+                                                                    tmpEmpty.WITHAL = item.WITHAL
+                                                                    
+                                                                    this.promo.cond.addEmpty(tmpEmpty)
+                                                                }
+                                                            })
+                                                        }
+                                                        else
+                                                        {
+                                                            let tmpEmpty = {...this.promo.cond.empty}
+                                                                    
+                                                            tmpEmpty.PROMO = this.promo.dt()[0].GUID
+                                                            tmpEmpty.ITEM_GUID = '00000000-0000-0000-0000-000000000000'
+                                                            tmpEmpty.ITEM_CODE = ''
+                                                            tmpEmpty.ITEM_NAME = ''
+                                                            tmpEmpty.TYPE = item.TYPE
+                                                            tmpEmpty.QUANTITY = item.QUANTITY
+                                                            tmpEmpty.AMOUNT = item.AMOUNT
+                                                            tmpEmpty.WITHAL = item.WITHAL
+                                                            
+                                                            this.promo.cond.addEmpty(tmpEmpty)
+                                                        }
                                                     }
                                                     else if(item.TYPE == 1)
                                                     {
@@ -815,7 +814,7 @@ export default class promotionCard extends React.PureComponent
                                                         this.promo.app.addEmpty(tmpEmpty)
                                                     }
                                                 })
-                                                console.log(this.promo.cond.dt())
+
                                                 await this.core.util.waitUntil(0)
                                                 
                                                 if((await this.promo.save()) == 0)

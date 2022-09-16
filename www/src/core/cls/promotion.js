@@ -162,8 +162,8 @@ export class promoCls
                 tmpGuids = tmpGuids + this.ds.get('PROMO')[i].GUID + ","
             }
             
-            await this.cond.load({PROMO:tmpGuids})
-            await this.app.load({PROMO:tmpGuids})
+            await this.cond.load({PROMO:tmpGuids.substring(0,tmpGuids.length - 1)})
+            await this.app.load({PROMO:tmpGuids.substring(0,tmpGuids.length - 1)})
 
             resolve(this.ds.get('PROMO'));    
         });
@@ -290,7 +290,7 @@ export class promoCondCls
         }
     }
     load()
-    {
+    {        
         //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ.
         return new Promise(async resolve => 
         {
@@ -306,7 +306,6 @@ export class promoCondCls
                 tmpPrm.PROMO = typeof arguments[0].PROMO == 'undefined' ? '' : arguments[0].PROMO;
             }
             this.ds.get('PROMO_CONDITION').selectCmd.value = Object.values(tmpPrm)
-
             await this.ds.get('PROMO_CONDITION').refresh();
             resolve(this.ds.get('PROMO_CONDITION'));    
         });
