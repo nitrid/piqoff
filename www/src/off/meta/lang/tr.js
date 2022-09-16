@@ -1012,7 +1012,7 @@ export const langTr =
             msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
         },
     },
-    stk_02_004 : //"Kayıp Ürün Çıkışı"
+    stk_02_004 : //Etiket Bas"
     {
         txtRefRefno : "Seri-Sıra",
         design : "Dizayn",
@@ -1034,7 +1034,8 @@ export const langTr =
             clmRef : "Seri",
             clmRefNo : "Sıra",
             clmDocDate : "Tarih",
-            clmCount : "Ürün Sayısı"
+            clmCount : "Ürün Sayısı",
+            clmPrint : "Yazdırıldı",
         },
         pg_DocsCombine : 
         {
