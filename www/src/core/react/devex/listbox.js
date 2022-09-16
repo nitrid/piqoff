@@ -12,6 +12,8 @@ export default class NdListBox extends Base
         this.state.value = typeof props.value == 'undefined' ? [] : props.value;
 
         this._onOptionChanged = this._onOptionChanged.bind(this);
+        this._onItemDeleting = this._onItemDeleting.bind(this);
+        this._onItemDeleted = this._onItemDeleted.bind(this);
     }
     //#region Private
     _onOptionChanged(e) 
@@ -26,6 +28,20 @@ export default class NdListBox extends Base
             this.props.onOptionChanged(e);
         }
     } 
+    _onItemDeleting(e)
+    {
+        if(typeof this.props.onItemDeleting != 'undefined')
+        {
+            this.props.onItemDeleting(e);
+        }
+    }
+    _onItemDeleted(e)
+    {
+        if(typeof this.props.onItemDeleted != 'undefined')
+        {
+            this.props.onItemDeleted(e);
+        }
+    }
     //#endregion
     async componentDidMount()
     {
@@ -41,19 +57,19 @@ export default class NdListBox extends Base
     set value(e)
     {
         this.setState({value:e})
-    }
-    async componentDidMount()
-    {
-        if(typeof this.state.data != 'undefined')
-        {
-            await this.dataRefresh(this.state.data)                 
-        }
-    }
+    }    
     render()
     {
         return(
             <List
             dataSource={typeof this.state.data == 'undefined' ? undefined : this.state.data.store} 
+            allowItemDeleting={this.props.allowItemDeleting}
+            itemDeleteMode={this.props.itemDeleteMode}
+            itemRender={this.props.itemRender}
+            collapsibleGroups={this.props.collapsibleGroups}
+            grouped={this.props.grouped}
+            groupRender={this.props.groupRender}
+            groupTemplate={this.props.groupTemplate}
             width={this.props.width}
             height={this.props.height}
             displayExpr={this.props.displayExpr}
@@ -63,6 +79,8 @@ export default class NdListBox extends Base
             selectAllMode={this.props.selectAllMode}
             selectedItemKeys={this.state.value}
             onOptionChanged={this._onOptionChanged}
+            onItemDeleting={this._onItemDeleting}
+            onItemDeleted={this._onItemDeleted}
             >
             </List>
         )

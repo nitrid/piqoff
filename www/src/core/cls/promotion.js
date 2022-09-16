@@ -194,6 +194,8 @@ export class promoCondCls
             ITEM_NAME : '',
             QUANTITY : 0,
             AMOUNT : 0,
+            WITHAL : 0,
+            SECTOR : 'COND'
         }
 
         this._initDs();
@@ -204,8 +206,8 @@ export class promoCondCls
         let tmpDt = new datatable('PROMO_CONDITION');            
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [dbo].[PROMO_CONDITION_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND " + 
-                    "((PROMO IN (SELECT value FROM STRING_SPLIT(@PROMO,','))) OR (@PROMO = ''))",
+            query : "SELECT *,'COND' AS SECTOR FROM [dbo].[PROMO_CONDITION_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND " + 
+                    "((PROMO IN (SELECT value FROM STRING_SPLIT(@PROMO,','))) OR (@PROMO = '')) ORDER BY WITHAL ASC",
             param : ['GUID:string|50','PROMO:string|max']
         } 
         tmpDt.insertCmd = 
@@ -217,9 +219,10 @@ export class promoCondCls
                     "@TYPE = @PTYPE, " + 
                     "@ITEM_CODE = @PITEM_CODE, " + 
                     "@QUANTITY = @PQUANTITY, " + 
-                    "@AMOUNT = @PAMOUNT " , 
-            param : ['PGUID:string|50','PCUSER:string|25','PPROMO:string|50','PTYPE:int','PITEM_CODE:string|25','PQUANTITY:float','PAMOUNT:float'],
-            dataprm : ['GUID','CUSER','PROMO','TYPE','ITEM_CODE','QUANTITY','AMOUNT']
+                    "@AMOUNT = @PAMOUNT, " + 
+                    "@WITHAL = @PWITHAL " ,
+            param : ['PGUID:string|50','PCUSER:string|25','PPROMO:string|50','PTYPE:int','PITEM_CODE:string|25','PQUANTITY:float','PAMOUNT:float','PWITHAL:int'],
+            dataprm : ['GUID','CUSER','PROMO','TYPE','ITEM_CODE','QUANTITY','AMOUNT','WITHAL']
         } 
         tmpDt.updateCmd = 
         {
@@ -230,15 +233,16 @@ export class promoCondCls
                     "@TYPE = @PTYPE, " + 
                     "@ITEM_CODE = @PITEM_CODE, " + 
                     "@QUANTITY = @PQUANTITY, " + 
-                    "@AMOUNT = @PAMOUNT " ,
-            param : ['PGUID:string|50','PCUSER:string|25','PPROMO:string|50','PTYPE:int','PITEM_CODE:string|25','PQUANTITY:float','PAMOUNT:float'],
-            dataprm : ['GUID','CUSER','PROMO','TYPE','ITEM_CODE','QUANTITY','AMOUNT']
+                    "@AMOUNT = @PAMOUNT, " + 
+                    "@WITHAL = @PWITHAL " ,
+            param : ['PGUID:string|50','PCUSER:string|25','PPROMO:string|50','PTYPE:int','PITEM_CODE:string|25','PQUANTITY:float','PAMOUNT:float','PWITHAL:int'],
+            dataprm : ['GUID','CUSER','PROMO','TYPE','ITEM_CODE','QUANTITY','AMOUNT','WITHAL']
         } 
         tmpDt.deleteCmd = 
         {
             query : "EXEC [dbo].[PRD_PROMO_CONDITION_DELETE] " + 
                     "@CUSER = @PCUSER, " + 
-                    "@UPDATE = 1, " + 
+                    "@UPDATE = 0, " + 
                     "@PROMO = @PPROMO, " + 
                     "@GUID = @PGUID ", 
             param : ['PCUSER:string|25','PPROMO:string|50','PGUID:string|50'],
@@ -333,6 +337,8 @@ export class promoAppCls
             ITEM_NAME : '',
             QUANTITY : 0,
             AMOUNT : 0,
+            WITHAL : 0,
+            SECTOR : 'APP'
         }
 
         this._initDs();
@@ -343,8 +349,8 @@ export class promoAppCls
         let tmpDt = new datatable('PROMO_APPLICATION');            
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [dbo].[PROMO_APPLICATION_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND " + 
-                    "((PROMO IN (SELECT value FROM STRING_SPLIT(@PROMO,','))) OR (@PROMO = ''))",
+            query : "SELECT *,'APP' AS SECTOR FROM [dbo].[PROMO_APPLICATION_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND " + 
+                    "((PROMO IN (SELECT value FROM STRING_SPLIT(@PROMO,','))) OR (@PROMO = '')) ORDER BY WITHAL ASC",
             param : ['GUID:string|50','PROMO:string|max']
         } 
         tmpDt.insertCmd = 
@@ -356,9 +362,10 @@ export class promoAppCls
                     "@TYPE = @PTYPE, " + 
                     "@ITEM_CODE = @PITEM_CODE, " + 
                     "@QUANTITY = @PQUANTITY, " + 
-                    "@AMOUNT = @PAMOUNT " , 
-            param : ['PGUID:string|50','PCUSER:string|25','PPROMO:string|50','PTYPE:int','PITEM_CODE:string|25','PQUANTITY:float','PAMOUNT:float'],
-            dataprm : ['GUID','CUSER','PROMO','TYPE','ITEM_CODE','QUANTITY','AMOUNT']
+                    "@AMOUNT = @PAMOUNT, " + 
+                    "@WITHAL = @PWITHAL " ,
+            param : ['PGUID:string|50','PCUSER:string|25','PPROMO:string|50','PTYPE:int','PITEM_CODE:string|25','PQUANTITY:float','PAMOUNT:float','PWITHAL:int'],
+            dataprm : ['GUID','CUSER','PROMO','TYPE','ITEM_CODE','QUANTITY','AMOUNT','WITHAL']
         } 
         tmpDt.updateCmd = 
         {
@@ -369,15 +376,16 @@ export class promoAppCls
                     "@TYPE = @PTYPE, " + 
                     "@ITEM_CODE = @PITEM_CODE, " + 
                     "@QUANTITY = @PQUANTITY, " + 
-                    "@AMOUNT = @PAMOUNT " ,
-            param : ['PGUID:string|50','PCUSER:string|25','PPROMO:string|50','PTYPE:int','PITEM_CODE:string|25','PQUANTITY:float','PAMOUNT:float'],
-            dataprm : ['GUID','CUSER','PROMO','TYPE','ITEM_CODE','QUANTITY','AMOUNT']
+                    "@AMOUNT = @PAMOUNT, " + 
+                    "@WITHAL = @PWITHAL " ,
+            param : ['PGUID:string|50','PCUSER:string|25','PPROMO:string|50','PTYPE:int','PITEM_CODE:string|25','PQUANTITY:float','PAMOUNT:float','PWITHAL:int'],
+            dataprm : ['GUID','CUSER','PROMO','TYPE','ITEM_CODE','QUANTITY','AMOUNT','WITHAL']
         } 
         tmpDt.deleteCmd = 
         {
             query : "EXEC [dbo].[PRD_PROMO_APPLICATION_DELETE] " + 
                     "@CUSER = @PCUSER, " + 
-                    "@UPDATE = 1, " + 
+                    "@UPDATE = 0, " + 
                     "@PROMO = @PPROMO, " + 
                     "@GUID = @PGUID ", 
             param : ['PCUSER:string|25','PPROMO:string|50','PGUID:string|50'],

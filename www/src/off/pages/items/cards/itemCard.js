@@ -1400,7 +1400,7 @@ export default class itemCard extends React.PureComponent
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                                 <Column dataField="TYPE_NAME" caption={this.t("grdPrice.clmType")} allowEditing={false}/>
                                                 <Column dataField="DEPOT_NAME" caption={this.t("grdPrice.clmDepot")} allowEditing={false}/>
-                                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdPrice.clmCustomerName")} allowEditing={false}/>
+                                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdPrice.clmCustomerName")} visible={false} allowEditing={false}/>
                                                 <Column dataField="START_DATE" caption={this.t("grdPrice.clmStartDate")} dataType="date" 
                                                 editorOptions={{value:null}}
                                                 cellRender={(e) => 
