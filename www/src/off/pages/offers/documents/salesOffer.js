@@ -1386,7 +1386,7 @@ export default class salesOrder extends React.PureComponent
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                                        <Scrolling mode="virtual" />
+                                        <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.sip_02_002")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsOffer.clmCreateDate")} width={150} allowEditing={false}/>
@@ -1837,7 +1837,7 @@ export default class salesOrder extends React.PureComponent
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
-                                        <Scrolling mode="virtual" />
+                                        <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                         <Column dataField="CODE" caption={this.t("grdMultiItem.clmCode")} width={150} allowEditing={false} />
                                         <Column dataField="MULTICODE" caption={this.t("grdMultiItem.clmMulticode")} width={150} allowEditing={false} />

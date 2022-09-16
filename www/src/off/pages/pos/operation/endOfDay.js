@@ -513,7 +513,7 @@ export default class endOfDay extends React.PureComponent
                                       onRowRemoved={async (e)=>{
                                       }}
                                       >
-                                          <Scrolling mode="virtual" />
+                                          <Scrolling mode="standart" />
                                           <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
                                           <Column dataField="CUSER_NAME" caption={this.t("grdOpenTike.clmUser")} width={120}  headerFilter={{visible:true}}/>
                                           <Column dataField="DEVICE" caption={this.t("grdOpenTike.clmDevice")} width={100}  headerFilter={{visible:true}}/>
@@ -637,7 +637,7 @@ export default class endOfDay extends React.PureComponent
                                         await this.docObj.save()
                                       }}
                                       >
-                                          <Scrolling mode="virtual" />
+                                          <Scrolling mode="standart" />
                                           <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                           <Column dataField="CUSER_NAME" caption={this.t("grdAdvance.clmUser")} width={120}  headerFilter={{visible:true}} allowEditing={false} />
                                           <Column dataField="DOC_DATE" caption={this.t("grdAdvance.clmDate")} width={120} dataType={'date'} allowEditing={false}  headerFilter={{visible:true}}/>
