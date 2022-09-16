@@ -693,7 +693,7 @@ export default class virement extends React.PureComponent
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
-                                        <Scrolling mode="virtual" />
+                                        <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                         <Export fileName={this.lang.t("menu.fns_03_003")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdDocVirement.clmCreateDate")} width={200} allowEditing={false}/>
