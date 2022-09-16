@@ -105,7 +105,7 @@
                 <Item1 Ref="58" ControlType="XRTableCell" Name="tableCell1" Weight="0.058690563912927748" Text="Line" TextAlignment="MiddleRight" StyleName="DetailCaption1" Borders="None">
                   <StylePriority Ref="59" UseBorders="false" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="60" ControlType="XRTableCell" Name="tableCell2" Weight="0.15284777433667865" Text="Ref." StyleName="DetailCaption1" />
+                <Item2 Ref="60" ControlType="XRTableCell" Name="tableCell2" Weight="0.15284777433667865" Text="Ref.-BarreCode" StyleName="DetailCaption1" />
                 <Item3 Ref="61" ControlType="XRTableCell" Name="tableCell3" Weight="0.53673070727240613" Text="Designation Produit" StyleName="DetailCaption1" />
                 <Item4 Ref="62" ControlType="XRTableCell" Name="tableCell4" Weight="0.058910332789947215" Text="Cont." StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
                   <StylePriority Ref="63" UseFont="false" />
@@ -154,9 +154,9 @@
                   </ExpressionBindings>
                   <StylePriority Ref="83" UseBorders="false" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="84" ControlType="XRTableCell" Name="tableCell10" Weight="0.15284772617462095" StyleName="DetailData1" Font="Arial, 7pt">
+                <Item2 Ref="84" ControlType="XRTableCell" Name="tableCell10" Weight="0.15284772617462095" Multiline="true" StyleName="DetailData1" Font="Arial, 7pt">
                   <ExpressionBindings>
-                    <Item1 Ref="85" EventName="BeforePrint" PropertyName="Text" Expression="[MULTICODE]" />
+                    <Item1 Ref="85" EventName="BeforePrint" PropertyName="Text" Expression="[ITEM_CODE]   +  &#xD;&#xA; [BARCODE]" />
                   </ExpressionBindings>
                   <StylePriority Ref="86" UseFont="false" />
                 </Item2>
@@ -168,7 +168,7 @@
                 </Item3>
                 <Item4 Ref="90" ControlType="XRTableCell" Name="tableCell13" Weight="0.058910424145709961" StyleName="DetailData1">
                   <ExpressionBindings>
-                    <Item1 Ref="91" EventName="BeforePrint" PropertyName="Text" Expression="[UNIT]" />
+                    <Item1 Ref="91" EventName="BeforePrint" PropertyName="Text" Expression="[UNIT_SYMBOL]" />
                   </ExpressionBindings>
                 </Item4>
                 <Item5 Ref="92" ControlType="XRTableCell" Name="tableCell14" Weight="0.10576931702370594" TextAlignment="MiddleRight" StyleName="DetailData1">
