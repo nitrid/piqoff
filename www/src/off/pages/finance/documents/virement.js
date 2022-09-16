@@ -692,7 +692,7 @@ export default class virement extends React.PureComponent
                                         await this.docObj.save()
                                     }}
                                     >
-                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
+                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                         <Export fileName={this.lang.t("menu.fns_03_003")} enabled={true} allowExportSelectedData={true} />

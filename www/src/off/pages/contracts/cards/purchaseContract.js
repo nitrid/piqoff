@@ -788,7 +788,7 @@ export default class purchaseContract extends React.PureComponent
                                     onRowRemoved={async (e)=>{
                                     }}
                                     >
-                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
+                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                         <Paging defaultPageSize={10} />
                                         <Pager
@@ -1029,7 +1029,7 @@ export default class purchaseContract extends React.PureComponent
                                      
                                     }}
                                     >
-                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
+                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                         <Column dataField="CODE" caption={this.t("grdMultiItem.clmCode")} width={150} allowEditing={false} />

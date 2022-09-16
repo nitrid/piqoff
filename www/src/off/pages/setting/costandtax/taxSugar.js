@@ -217,7 +217,7 @@ export default class taxSugar extends React.PureComponent
                                     }}
                                     loadPanel={{enabled:true}}
                                     >
-                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
+                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Scrolling mode="standard" />
                                         <Editing mode="popup" allowUpdating={true} allowDeleting={true} confirmDelete={false}>
                                             <Popup title={this.t("popTaxSugar.title")} showTitle={true} width={700} height={400} >

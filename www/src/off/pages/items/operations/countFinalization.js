@@ -392,7 +392,7 @@ export default class countFinalization extends React.PureComponent
                                 >
                                     <Paging defaultPageSize={12} />
                                     <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
-                                    <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
+                                    <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                     <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
                                     <Column dataField="ITEM_CODE" caption={this.t("grdCountItems.clmCode")} width={150} headerFilter={{visible:true}}/>
                                     <Column dataField="ITEM_NAME" caption={this.t("grdCountItems.clmName")} width={350}  headerFilter={{visible:true}}/>
