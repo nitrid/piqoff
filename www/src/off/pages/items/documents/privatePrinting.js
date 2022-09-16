@@ -248,10 +248,10 @@ export default class privatePrinting extends React.PureComponent
                                         let tmpQuery = 
                                         {
                                             query:  "SELECT *, " +
-                                                    "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH " +
+                                                    "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE PAGE = @PAGE),'') AS PATH " +
                                                     "FROM  ITEM_LABEL_QUEUE_VW_01 WHERE GUID  = @GUID" ,
-                                            param:  ['GUID:string|50','DESIGN:string|25'],
-                                            value:  [this.labelMainObj.dt()[0].GUID,9]
+                                            param:  ['GUID:string|50','PAGE:string|25'],
+                                            value:  [this.labelMainObj.dt()[0].GUID,'02']
                                         }
 
                                         let tmpData = await this.core.sql.execute(tmpQuery) 

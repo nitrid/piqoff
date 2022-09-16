@@ -449,9 +449,9 @@ export default class priceDifferenceInvoice extends React.PureComponent
         this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
         let tmpQuery = 
         {
-            query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,1,GETDATE()) AS PRICE",
-            param : ['GUID:string|50'],
-            value : [pData.GUID]
+            query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,@QUANTITY,GETDATE(),@CUSTOMER) AS PRICE",
+            param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50'],
+            value : [pData.GUID,pQuantity,this.docObj.dt()[0].INPUT]
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
         if(tmpData.result.recordset.length > 0)
@@ -1112,6 +1112,75 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                 </Item> 
                                 {/* Boş */}
                                 <EmptyItem />
+                                 {/* BARKOD EKLEME */}
+                                 <Item>
+                                    <Label text={this.t("txtBarcode")} alignment="right" />
+                                    <NdTextBox id="txtBarcode" parent={this} simple={true}  placeholder={this.t("txtBarcodePlace")}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    onEnterKey={(async(e)=>
+                                    {
+                                        if(this.cmbDepot.value == '')
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
+                                            }
+                                            
+                                            await dialog(tmpConfObj);
+                                            this.txtBarcode.setState({value:""})
+                                            return
+                                        }
+                                        let tmpQuery = 
+                                        {   query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = @CUSTOMER AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE,  " + 
+                                            "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
+                                            " FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
+                                            param : ['CODE:string|50','CUSTOMER:string|50'],
+                                            value : [this.txtBarcode.value,this.docObj.dt()[0].OUTPUT]
+                                        }
+                                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                                        this.txtBarcode.setState({value:""})
+                                        if(tmpData.result.recordset.length > 0)
+                                        {
+                                            let tmpDocItems = {...this.docObj.docItems.empty}
+                                            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                                            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                                            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                            tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                                            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                                            tmpDocItems.REF = this.docObj.dt()[0].REF
+                                            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                                            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                                            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                            tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                                            this.txtRef.readOnly = true
+                                            this.txtRefno.readOnly = true
+                                            this.docObj.docItems.addEmpty(tmpDocItems)
+                                            await this.core.util.waitUntil(100)
+                                            
+                                            this.addItem(tmpData.result.recordset[0],(typeof this.docObj.docItems.dt()[0] == 'undefined' ? 0 : this.docObj.docItems.dt().length-1))
+                                            
+                                        }
+                                        else
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgItemNotFound',showTitle:true,title:this.t("msgItemNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
+                                            }
+                                
+                                            await dialog(tmpConfObj);
+                                        }
+                                        
+                                    }).bind(this)}
+                                    param={this.param.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
+                                    >
+                                    </NdTextBox>
+                                </Item>
                                 {/* dtDocDate */}
                                 <Item>
                                     <Label text={this.t("dtDocDate")} alignment="right" />
@@ -1128,7 +1197,6 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                         </Validator> 
                                     </NdDatePicker>
                                 </Item>
-                               
                                 {/* Boş */}
                                 <EmptyItem />
                             </Form>
@@ -1339,7 +1407,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
-                                        <Scrolling mode="virtual" />
+                                        <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.ftr_02_004")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdDiffInv.clmCreateDate")} width={200} allowEditing={false} headerFilter={{visible:true}}/>
@@ -1753,7 +1821,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
-                                        <Scrolling mode="virtual" />
+                                        <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={false} allowDeleting={true} />
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdInvoicePayment.clmCreateDate")} width={150} allowEditing={false} headerFilter={{visible:true}}/>
                                         <Column dataField="AMOUNT" caption={this.t("grdInvoicePayment.clmPrice")} width={150}  headerFilter={{visible:true}}/>
@@ -2091,7 +2159,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                     onValueChanged={(async()=>
                                         {
                                         }).bind(this)}
-                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '23'"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '17'"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     >
@@ -2120,15 +2188,15 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                             <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} 
                                             onClick={async ()=>
                                             {       
-                                                let TmpFirma = "DORACAN Distribution SARL";
-                                                let TmpBaslik = "ZAC HECKENWALD" + '\n' + "57740 LONGEVILLE-LES-ST-AVOLD" + '\n' + "Tel : 03 87 91 00 32" + '\n' + "longeville@prodorplus.fr" + '\n' 
                                                 let tmpQuery = 
                                                 {
                                                     query:  "SELECT *, " +
                                                             "CONVERT(NVARCHAR,AMOUNT) AS AMOUNTF, " +
                                                             "ISNULL((SELECT TOP 1 NAME FROM COMPANY),'') AS FIRMA, " +
                                                             "REPLACE(ISNULL((SELECT ADDRESS1 + ' | ' + ADDRESS2  + ' | ' + TEL + ' | ' + MAIL FROM COMPANY),''),'|', CHAR(13)) AS BASLIK," +
-                                                            "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH " +
+                                                            "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH, " +
+                                                            "REPLACE(ISNULL((SELECT ADRESS + ' | ' + ZIPCODE + ' ' + CITY +  '/' + COUNTRY FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER_ADRESS_VW_01.CUSTOMER = DOC_ITEMS_VW_01.INPUT AND TYPE = 0),''),'|', CHAR(13)) AS ADDRESS," +
+                                                            "ISNULL((SELECT TOP 1 PHONE1 FROM CUSTOMER_OFFICAL WHERE CUSTOMER_OFFICAL.CUSTOMER = DOC_ITEMS_VW_01.INPUT AND TYPE = 0),'') AS CONTACT " +
                                                             "FROM DOC_ITEMS_VW_01 " +
                                                             "WHERE DOC_GUID=@DOC_GUID ORDER BY LINE_NO ASC",
                                                     param:  ['DOC_GUID:string|50','DESIGN:string|25'],

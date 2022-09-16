@@ -122,7 +122,7 @@ export default class labelPrinting extends React.PureComponent
     {
         let tmpQuery = 
         {
-            query : "SELECT GUID,REF,REF_NO,CONVERT(NVARCHAR,CDATE,104) AS DOC_DATE_CONVERT,ISNULL((SELECT COUNT(CODE) FROM ITEM_LABEL_QUEUE_VW_01 WHERE ITEM_LABEL_QUEUE_VW_01.GUID = LABEL_QUEUE.GUID),0) AS COUNT FROM LABEL_QUEUE WHERE STATUS IN("+pType+") AND REF <> 'SPECIAL' " 
+            query : "SELECT GUID,CASE STATUS WHEN 1 THEN 'OK' WHEN 0 THEN 'X' END AS STATUS,REF,REF_NO,CONVERT(NVARCHAR,CDATE,104) AS DOC_DATE_CONVERT,ISNULL((SELECT COUNT(CODE) FROM ITEM_LABEL_QUEUE_VW_01 WHERE ITEM_LABEL_QUEUE_VW_01.GUID = LABEL_QUEUE.GUID),0) AS COUNT FROM LABEL_QUEUE WHERE STATUS IN("+pType+") AND REF <> 'SPECIAL' " 
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
         let tmpRows = []
@@ -146,7 +146,7 @@ export default class labelPrinting extends React.PureComponent
     {
         let tmpQuery = 
         {
-            query : "SELECT GUID,REF,REF_NO,CONVERT(NVARCHAR,CDATE,104) AS DOC_DATE_CONVERT,ISNULL((SELECT COUNT(CODE) FROM ITEM_LABEL_QUEUE_VW_01 WHERE ITEM_LABEL_QUEUE_VW_01.GUID = LABEL_QUEUE.GUID),0) AS COUNT FROM LABEL_QUEUE WHERE STATUS IN("+pType+") AND REF <> 'SPECIAL' " 
+            query : "SELECT GUID,CASE STATUS WHEN 1 THEN 'OK' WHEN 0 THEN 'X' END AS STATUS,REF,REF_NO,CONVERT(NVARCHAR,CDATE,104) AS DOC_DATE_CONVERT,ISNULL((SELECT COUNT(CODE) FROM ITEM_LABEL_QUEUE_VW_01 WHERE ITEM_LABEL_QUEUE_VW_01.GUID = LABEL_QUEUE.GUID),0) AS COUNT FROM LABEL_QUEUE WHERE STATUS IN("+pType+") AND REF <> 'SPECIAL' " 
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
         let tmpRows = []
@@ -166,7 +166,13 @@ export default class labelPrinting extends React.PureComponent
                 {
                     let lblCombineObj = new labelCls();
                     await lblCombineObj.load({GUID:data[i].GUID});
-
+                    let updateQuery = 
+                    {
+                        query:  "UPDATE LABEL_QUEUE SET STATUS = 1 WHERE GUID = @GUID",
+                        param:  ['GUID:string|50'],
+                        value:  [data[i].GUID]
+                    }
+                    await this.core.sql.execute(updateQuery) 
                     for (let i = 0; i < lblCombineObj.dt().length; i++) 
                     {
                         let tmpDocItems = {...this.lblObj.empty}
@@ -725,7 +731,6 @@ export default class labelPrinting extends React.PureComponent
                                                 value:  [this.mainLblObj.dt()[0].GUID,this.cmbDesignList.value]
                                             }
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
-
                                             this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" +  JSON.stringify(tmpData.result.recordset)+ "}",(pResult) => 
                                             {                                                
                                                 if(pResult.split('|')[0] != 'ERR')
@@ -890,9 +895,10 @@ export default class labelPrinting extends React.PureComponent
                                     }
                                     >
                                         <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150} defaultSortOrder="asc"/>
-                                        <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="COUNT" caption={this.t("pg_Docs.clmCount")} width={300} />
-                                        <Column dataField="DOC_DATE_CONVERT" caption={this.t("pg_Docs.clmDocDate")} width={300} />
+                                        <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={150} defaultSortOrder="asc" />
+                                        <Column dataField="COUNT" caption={this.t("pg_Docs.clmCount")} width={150} />
+                                        <Column dataField="DOC_DATE_CONVERT" caption={this.t("pg_Docs.clmDocDate")} width={250} />
+                                        <Column dataField="STATUS" caption={this.t("pg_Docs.clmPrint")} width={150} />
                                     </NdPopGrid>
                                 </Item>
                                 {/* txtPage */}

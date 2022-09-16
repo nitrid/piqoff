@@ -1052,7 +1052,7 @@ export default class promotionCard extends React.PureComponent
                                             }
                                         }}
                                         >           
-                                        <Scrolling mode="virtual" />                         
+                                        <Scrolling mode="standart" />                         
                                         <Column dataField="TITLE" caption={this.t("pg_Grid.clmName")} width={650} defaultSortOrder="asc" />
                                         <Column dataField="CODE" caption={this.t("pg_Grid.clmCode")} width={150} />
                                         </NdPopGrid>

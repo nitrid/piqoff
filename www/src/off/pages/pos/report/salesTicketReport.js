@@ -539,7 +539,7 @@ export default class salesOrdList extends React.PureComponent
 
                                 }}
                             >                            
-                                <Scrolling mode="virtual" />
+                                <Scrolling mode="standart" />
                                 <Export fileName={this.lang.t("menu.pos_02_001")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="DATE" caption={this.t("grdSaleTicketReport.clmDate")} visible={true} width={150}/> 
                                 <Column dataField="TIME" caption={this.t("grdSaleTicketReport.clmTime")} visible={true} width={100}/> 
@@ -951,7 +951,7 @@ export default class salesOrdList extends React.PureComponent
                                         onRowRemoved={async (e)=>{
                                         }}
                                         >
-                                            <Scrolling mode="virtual" />
+                                            <Scrolling mode="standart" />
                                             <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
                                             <Column dataField="CUSER_NAME" caption={this.t("grdOpenTike.clmUser")} width={120}  headerFilter={{visible:true}}/>
                                             <Column dataField="DEVICE" caption={this.t("grdOpenTike.clmDevice")} width={100}  headerFilter={{visible:true}}/>

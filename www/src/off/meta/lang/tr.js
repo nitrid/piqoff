@@ -1012,7 +1012,7 @@ export const langTr =
             msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
         },
     },
-    stk_02_004 : //"Kayıp Ürün Çıkışı"
+    stk_02_004 : //Etiket Bas"
     {
         txtRefRefno : "Seri-Sıra",
         design : "Dizayn",
@@ -1034,7 +1034,8 @@ export const langTr =
             clmRef : "Seri",
             clmRefNo : "Sıra",
             clmDocDate : "Tarih",
-            clmCount : "Ürün Sayısı"
+            clmCount : "Ürün Sayısı",
+            clmPrint : "Yazdırıldı",
         },
         pg_DocsCombine : 
         {
@@ -2080,6 +2081,8 @@ export const langTr =
         txtPayInvoıceTotal : "Fatura Tutarı",
         txtPayTotal : "Ödeme Toplamı",
         txtRemainder : "Kalan",
+        txtBarcode : "Barkod Ekle",
+        txtBarcodePlace: "Barkod Okutunuz",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -2433,6 +2436,8 @@ export const langTr =
         txtPayInvoıceTotal : "Fatura Tutarı",
         txtPayTotal : "Tahsilat Toplamı",
         txtRemainder : "Kalan",
+        txtBarcode : "Barkod Ekle",
+        txtBarcodePlace: "Barkod Okutunuz",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -2725,6 +2730,8 @@ export const langTr =
         txtPayInvoıceTotal : "Fatura Tutarı",
         txtPayTotal : "Tahsilat Toplamı",
         txtRemainder : "Kalan",
+        txtBarcode : "Barkod Ekle",
+        txtBarcodePlace: "Barkod Okutunuz",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -2975,6 +2982,8 @@ export const langTr =
         txtPayInvoıceTotal : "Fatura Tutarı",
         txtPayTotal : "Tahsilat Toplamı",
         txtRemainder : "Kalan",
+        txtBarcode : "Barkod Ekle",
+        txtBarcodePlace: "Barkod Okutunuz",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -3369,6 +3378,8 @@ export const langTr =
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
         dtShipDate :"Sevk Tarihi",
+        txtBarcode : "Barkod Ekle",
+        txtBarcodePlace: "Barkod Okutunuz",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -3605,6 +3616,8 @@ export const langTr =
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
         dtShipDate :"Sevk Tarihi",
+        txtBarcode : "Barkod Ekle",
+        txtBarcodePlace: "Barkod Okutunuz",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -3853,6 +3866,8 @@ export const langTr =
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
         dtShipDate :"Sevk Tarihi",
+        txtBarcode : "Barkod Ekle",
+        txtBarcodePlace: "Barkod Okutunuz",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -4123,6 +4138,8 @@ export const langTr =
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
         dtShipDate :"Sevk Tarihi",
+        txtBarcode : "Barkod Ekle",
+        txtBarcodePlace: "Barkod Okutunuz",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -4361,6 +4378,8 @@ export const langTr =
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
         dtShipDate :"Sevk Tarihi",
+        txtBarcode : "Barkod Ekle",
+        txtBarcodePlace: "Barkod Okutunuz",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -5949,6 +5968,8 @@ export const langTr =
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
         dtShipDate :"Sevk Tarihi",
+        txtBarcode : "Barkod Ekle",
+        txtBarcodePlace: "Barkod Okutunuz",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -6187,6 +6208,8 @@ export const langTr =
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
         dtShipDate :"Sevk Tarihi",
+        txtBarcode : "Barkod Ekle",
+        txtBarcodePlace: "Barkod Okutunuz",
         pg_Docs : 
         {
             title : "Evrak Seçimi",

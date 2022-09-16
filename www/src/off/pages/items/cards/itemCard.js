@@ -178,7 +178,7 @@ export default class itemCard extends React.PureComponent
         this.txtRef.value = Math.floor(Date.now() / 1000)
         this.txtCustomer.value = "";
         this.txtCustomer.displayValue = "";   
-        this.txtBarcode.readOnly = false;   
+        this.txtBarcode.readOnly = true;   
         this.imgFile.value = ""; 
         
         let tmpUnit = new unitCls();
@@ -220,7 +220,7 @@ export default class itemCard extends React.PureComponent
         this.txtRef.value = Math.floor(Date.now() / 1000)
         this.txtCustomer.value = "";
         this.txtCustomer.displayValue = "";   
-        this.txtBarcode.readOnly = false;   
+        this.txtBarcode.readOnly = true;   
         this.imgFile.value = ""; 
         await this.itemsObj.load({CODE:pCode});
         //TEDARİKÇİ FİYAT GETİR İŞLEMİ.  
@@ -659,10 +659,14 @@ export default class itemCard extends React.PureComponent
                                     {
                                         if(e.validationGroup.validate().status == "valid")
                                         {
-                                            if(this.itemsObj.itemBarcode.dt()[0].BARCODE == '')
+                                            if(typeof this.itemsObj.itemBarcode.dt()[0] != 'undefined')
                                             {
-                                                this.itemsObj.itemBarcode.clearAll()
+                                                if(this.itemsObj.itemBarcode.dt()[0].BARCODE == '')
+                                                {
+                                                    this.itemsObj.itemBarcode.clearAll()
+                                                }
                                             }
+                                           
                                             //FIYAT GİRMEDEN KAYIT EDİLEMEZ KONTROLÜ
                                             let tmpData = this.prmObj.filter({ID:'ItemGrpForNotPriceSave'}).getValue()
                                             if(typeof tmpData != 'undefined' && Array.isArray(tmpData) && typeof tmpData.find(x => x == this.cmbItemGrp.value) != 'undefined')
@@ -783,7 +787,7 @@ export default class itemCard extends React.PureComponent
                                         this.txtCustomer.displayValue = "";   
                                         this.txtBarcode.displayValue = ""; 
                                         this.txtBarcode.value = ""; 
-                                        this.txtBarcode.readOnly = false;   
+                                        this.txtBarcode.readOnly = true;   
                                         this.imgFile.value = ""; 
                                         this.itemsPriceSupply.clearAll();     
                                         this.itemsPriceLogObj.clearAll();     
@@ -2144,7 +2148,7 @@ export default class itemCard extends React.PureComponent
                                         }
                                     }}
                                     >           
-                                    <Scrolling mode="virtual" />                         
+                                    <Scrolling mode="standart" />                         
                                     <Column dataField="TITLE" caption={this.t("pg_txtPopCustomerCode.clmName")} width={650} defaultSortOrder="asc" />
                                     <Column dataField="CODE" caption={this.t("pg_txtPopCustomerCode.clmCode")} width={150} />
                                     </NdPopGrid>

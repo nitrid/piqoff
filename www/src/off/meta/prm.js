@@ -619,7 +619,7 @@ export const prm =
     {
         TYPE : 1,
         ID :"ItemGrpForNotPriceSave",
-        VALUE : ['209','210'],
+        VALUE : ['209','210','002','033'],
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "",
