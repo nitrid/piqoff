@@ -384,6 +384,7 @@ export default class itemCount extends React.PureComponent
 
         let tmpQuantity = 1
         let tmpBreak = false
+        console.log(this.countObj.dt())
         await this.msgQuantiy.show().then(async (e) =>
         {
             if(e == 'btn01')
@@ -461,7 +462,8 @@ export default class itemCount extends React.PureComponent
         this.countObj.dt()[pIndex].BARCODE = pData.BARCODE
         this.countObj.dt()[pIndex].TOTAL_COST =parseFloat(pData.COST_PRICE *tmpQuantity).toFixed(2)
         this.txtBarcode.focus()
-        await this.countObj.save()
+        console.log(this.countObj.dt())
+       // await this.countObj.save()
 
         let totalPrice= await this.countObj.dt().sum("TOTAL_COST",2)
         this.txtAmount.setState({value :totalPrice})
@@ -660,8 +662,12 @@ export default class itemCount extends React.PureComponent
                                         let pResult = await dialog(tmpConfObj);
                                         if(pResult == 'btn01')
                                         {
-                                            this.countObj.dt('DOC').removeAt(0)
-                                            await this.countObj.dt('DOC').delete();
+                                            let tmpDelete = {...this.countObj.dt('ITEM_COUNT')}
+                                            for (let i = 0; i < tmpDelete.length; i++) 
+                                            {
+                                                this.countObj.dt('ITEM_COUNT').removeAt(0)
+                                            }
+                                            await this.countObj.dt('ITEM_COUNT').delete();
                                             this.init(); 
                                         }
                                         
@@ -1254,7 +1260,7 @@ export default class itemCount extends React.PureComponent
                                 onValueChanged={(async()=>
                                     {
                                     }).bind(this)}
-                                data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '60'"},sql:this.core.sql}}}
+                                data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '03'"},sql:this.core.sql}}}
                                 param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                 access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                 >
@@ -1287,6 +1293,8 @@ export default class itemCount extends React.PureComponent
                                             let tmpQuery = 
                                             {
                                                 query:  "SELECT *, " +
+                                                        "ISNULL((SELECT TOP 1 NAME FROM COMPANY),'') AS FIRMA, " +
+                                                        "REPLACE(ISNULL((SELECT ADDRESS1 + ' | ' + ADDRESS2  + ' | ' + TEL + ' | ' + MAIL FROM COMPANY),''),'|', CHAR(13)) AS BASLIK," +
                                                         "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH " +
                                                         "FROM [dbo].[ITEM_COUNT_VW_01] " +
                                                         "WHERE REF=@REF AND REF_NO=@REF_NO ORDER BY LINE_NO ASC",
