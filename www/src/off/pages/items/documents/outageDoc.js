@@ -1157,7 +1157,7 @@ export default class outageDoc extends React.PureComponent
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                                        <Scrolling mode="standard" />
+                                        <Scrolling mode="standart"/>
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.stk_02_003")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdOutwasItems.clmCreateDate")} width={150} allowEditing={false}/>
@@ -1165,7 +1165,7 @@ export default class outageDoc extends React.PureComponent
                                         <Column dataField="ITEM_NAME" caption={this.t("grdOutwasItems.clmItemName")} width={350} />
                                         <Column dataField="QUANTITY" caption={this.t("grdOutwasItems.clmQuantity")} dataType={'number'} width={150}/>
                                         <Column dataField="COST_PRICE" caption={this.t("grdOutwasItems.clmCostPrice")} dataType={'number'} width={150} allowEditing={false}/>
-                                        <Column dataField="DESCRIPTION" caption={this.t("grdOutwasItems.clmDescription")} editCellRender={this._cellRoleRender}>
+                                        <Column dataField="DESCRIPTION" caption={this.t("grdOutwasItems.clmDescription")}>
                                         </Column>
                                     </NdGrid>
                                     <ContextMenu
@@ -1464,7 +1464,7 @@ export default class outageDoc extends React.PureComponent
                                     onValueChanged={(async()=>
                                         {
                                         }).bind(this)}
-                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '60'"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '05'"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     >
@@ -1493,6 +1493,8 @@ export default class outageDoc extends React.PureComponent
                                                 let tmpQuery = 
                                                 {
                                                     query:  "SELECT *, " +
+                                                            "ISNULL((SELECT TOP 1 NAME FROM COMPANY),'') AS FIRMA, " +
+                                                            "REPLACE(ISNULL((SELECT ADDRESS1 + ' | ' + ADDRESS2  + ' | ' + TEL + ' | ' + MAIL FROM COMPANY),''),'|', CHAR(13)) AS BASLIK," +
                                                             "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH " +
                                                             "FROM DOC_ITEMS_VW_01 " +
                                                             "WHERE ((DOC_GUID = @DOC_GUID) OR (INVOICE_GUID = @DOC_GUID)) ORDER BY LINE_NO ASC",
@@ -1500,6 +1502,7 @@ export default class outageDoc extends React.PureComponent
                                                     value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value]
                                                 }
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                console.log(JSON.stringify(tmpData.result.recordset[0]))
                                                 this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
                                                 {
                                                     if(pResult.split('|')[0] != 'ERR')

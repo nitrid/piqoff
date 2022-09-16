@@ -725,7 +725,6 @@ export default class labelPrinting extends React.PureComponent
                                                 value:  [this.mainLblObj.dt()[0].GUID,this.cmbDesignList.value]
                                             }
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
-
                                             this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" +  JSON.stringify(tmpData.result.recordset)+ "}",(pResult) => 
                                             {                                                
                                                 if(pResult.split('|')[0] != 'ERR')
