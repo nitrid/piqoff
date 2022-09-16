@@ -53,7 +53,7 @@ export default class posSalesDetailReport extends React.PureComponent
                                     query : "SELECT " +
                                     "ITEM_GRP_CODE AS CODE, " +
                                     "ITEM_GRP_NAME, " +
-                                    "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = 20),'') AS PATH, " +
+                                    "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE PAGE = 70),'') AS PATH, " +
                                     "SUM(TOTAL) AS ITEM_GROUP_TOTAL, " +
                                     "ROUND((SUM(TOTAL) / (SELECT SUM(TOTAL) FROM POS_VW_01)) * 100,2) AS TICKET_ORT, " +
                                     "(SELECT COUNT(GUID) FROM POS_VW_01 WHERE DOC_DATE >= @START AND DOC_DATE <= @END) AS TICKET_COUNT, " +
