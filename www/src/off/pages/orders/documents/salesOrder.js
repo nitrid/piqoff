@@ -1705,7 +1705,7 @@ export default class salesOrder extends React.PureComponent
                                     onValueChanged={(async()=>
                                         {
                                         }).bind(this)}
-                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '61'"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '11'"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     >
@@ -1742,6 +1742,8 @@ export default class salesOrder extends React.PureComponent
                                                             "ISNULL((SELECT TOP 1 NAME FROM COMPANY),'') AS FIRMA, " +
                                                             "REPLACE(ISNULL((SELECT ADDRESS1 + ' | ' + ADDRESS2  + ' | ' + TEL + ' | ' + MAIL FROM COMPANY),''),'|', CHAR(13)) AS BASLIK," +
                                                             "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH " +
+                                                            "REPLACE(ISNULL((SELECT ADRESS + ' | ' + ZIPCODE + ' ' + CITY +  '/' + COUNTRY FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER_ADRESS_VW_01.CUSTOMER = DOC_ORDERS_VW_01.INPUT AND TYPE = 0),''),'|', CHAR(13)) AS ADDRESS," +
+                                                            "ISNULL((SELECT TOP 1 PHONE1 FROM CUSTOMER_OFFICAL WHERE CUSTOMER_OFFICAL.CUSTOMER = DOC_ORDERS_VW_01.INPUT AND TYPE = 0),'') AS CONTACT, " +
                                                             "FROM DOC_ORDERS_VW_01 " +
                                                             "WHERE DOC_GUID=@DOC_GUID ORDER BY LINE_NO ASC",
                                                     param:  ['DOC_GUID:string|50','DESIGN:string|25'],
