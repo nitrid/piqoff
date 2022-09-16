@@ -2424,7 +2424,7 @@ export default class salesInvoice extends React.PureComponent
                                 onValueChanged={(async()=>
                                     {
                                     }).bind(this)}
-                                data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '14'"},sql:this.core.sql}}}
+                                data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '15'"},sql:this.core.sql}}}
                                 param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                 access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                 >
