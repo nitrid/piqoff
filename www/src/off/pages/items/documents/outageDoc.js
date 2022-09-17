@@ -1492,12 +1492,7 @@ export default class outageDoc extends React.PureComponent
                                             {       
                                                 let tmpQuery = 
                                                 {
-                                                    query:  "SELECT *, " +
-                                                            "ISNULL((SELECT TOP 1 NAME FROM COMPANY),'') AS FIRMA, " +
-                                                            "REPLACE(ISNULL((SELECT ADDRESS1 + ' | ' + ADDRESS2  + ' | ' + TEL + ' | ' + MAIL FROM COMPANY),''),'|', CHAR(13)) AS BASLIK," +
-                                                            "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH " +
-                                                            "FROM DOC_ITEMS_VW_01 " +
-                                                            "WHERE ((DOC_GUID = @DOC_GUID) OR (INVOICE_GUID = @DOC_GUID)) ORDER BY LINE_NO ASC",
+                                                    query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO " ,
                                                     param:  ['DOC_GUID:string|50','DESIGN:string|25'],
                                                     value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value]
                                                 }
