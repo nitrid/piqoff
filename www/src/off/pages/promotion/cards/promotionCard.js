@@ -424,7 +424,7 @@ export default class promotionCard extends React.PureComponent
                                 displayExpr="NAME"                       
                                 valueExpr="ID"
                                 value={pItem.TYPE}
-                                data={{source:[{ID:0,NAME:"İskonto"},{ID:1,NAME:"Para Puan"},{ID:2,NAME:"Hediye Çeki"},{ID:3,NAME:"Stok"}]}}  
+                                data={{source:[{ID:0,NAME:"İskonto"},{ID:1,NAME:"Para Puan"},{ID:2,NAME:"Hediye Çeki"},{ID:3,NAME:"Stok"},{ID:4,NAME:"Genel İskonto"}]}}  
                                 onValueChanged={(e) =>
                                 {
                                     if(this.appDt.where({WITHAL:pItem.WITHAL}).length > 0)
@@ -439,6 +439,7 @@ export default class promotionCard extends React.PureComponent
                             <EmptyItem/>
                             <EmptyItem/>
                             <GroupItem colSpan={3}>
+                                {/* İskonto */}
                                 <GroupItem colCount={3} visible={this.state["rstType" + pItem.WITHAL] == 0 ? true : false}>
                                     {/* txtRstDiscount */}
                                     <Item>
@@ -466,7 +467,8 @@ export default class promotionCard extends React.PureComponent
                                     <EmptyItem/>
                                     <EmptyItem/>
                                 </GroupItem>
-                                <GroupItem colCount={3} visible={this.state["rstType" + pItem.WITHAL] == 1 || this.state["rstType" + pItem.WITHAL] == 2 ? true : false}>
+                                {/* Puan - Hediye Çeki - Genel İskonto */}
+                                <GroupItem colCount={3} visible={this.state["rstType" + pItem.WITHAL] == 1 || this.state["rstType" + pItem.WITHAL] == 2 || this.state["rstType" + pItem.WITHAL] == 4 ? true : false}>
                                     {/* txtRstPointGift */}
                                     <Item>
                                         <Label text={this.t("txtRstQuantity")} alignment="right" />

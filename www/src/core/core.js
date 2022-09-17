@@ -1339,7 +1339,6 @@ export class datatable
                     {
                         tmpData.filter(x => x[tmpKey] == e).forEach(m => 
                         {
-                            console.log(m)
                             tmpArr.push(m)
                         });
                     });

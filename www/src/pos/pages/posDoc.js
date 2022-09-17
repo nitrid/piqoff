@@ -998,6 +998,58 @@ export default class posDoc extends React.PureComponent
     }
     isPromo()
     {
+        let isCond = (pGuid)=>
+        {
+            let tmpWithal = this.promoObj.cond.dt().where({PROMO : pGuid}).groupBy('WITHAL')
+            let tmpSale = this.posObj.posSale.dt().where({PROMO_TYPE : 0})
+            let tmpResult = new datatable()
+
+            tmpWithal.forEach((withal)=>
+            {
+                tmpResult.push({WITHAL : false,COUNT : 0,ITEMS : []})                
+                if(withal.TYPE == 0) //STOK KOŞULU
+                {
+                    let tmpCond = this.promoObj.cond.dt().where({PROMO : pGuid}).where({TYPE:0}).where({WITHAL:withal.WITHAL})
+
+                    if(tmpCond.length > 0 && tmpSale.where({ITEM_GUID : {'in' : tmpCond.toColumnArr('ITEM_GUID')}}).sum('QUANTITY') >= tmpCond[0].QUANTITY)
+                    {
+                        //POS_SALE TABLOSUNDAKİ ÜRÜNLERİN HANGİLERİNİN PROMOSYON KOŞULUNA UYDUĞU GETİRİLİYOR.BUNUN İÇİN KOŞULDAKİ ITEM_GUID LİSTESİ POS_SALE TABLOSUNA "IN" ŞEKLİNDE VERİLİYOR.
+                        let tmpCondCount = Math.floor(tmpSale.where({ITEM_GUID : {'in' : tmpCond.toColumnArr('ITEM_GUID')}}).sum('QUANTITY') / tmpCond[0].QUANTITY)
+                        tmpResult[tmpResult.length - 1].WITHAL = true
+                        tmpResult[tmpResult.length - 1].COUNT = tmpCondCount
+                        tmpResult[tmpResult.length - 1].ITEMS = tmpCond.toColumnArr('ITEM_GUID')
+                    }
+                }
+                else if(withal.TYPE == 1) //GENEL TUTAR KOŞULU
+                {
+                    if(tmpSale.sum('TOTAL') >= withal.AMOUNT)
+                    {
+                        tmpResult[tmpResult.length - 1].WITHAL = true
+                        tmpResult[tmpResult.length - 1].COUNT = 0
+                        tmpResult[tmpResult.length - 1].ITEMS = []
+                    }
+                }
+            });
+
+            let tmpItems = []
+            tmpResult.forEach((e)=>
+            {
+                e.ITEMS.forEach((items)=>
+                {
+                    tmpItems.push(items)
+                })
+            })
+
+            if(tmpResult.where({WITHAL:false}).length > 0)
+            {
+                return {result : false}
+            }
+            else
+            {
+                return {result : true,count : tmpResult.sum('COUNT'),items : tmpItems}
+            }
+            
+        }
         //PROMOTION RESET
         this.posObj.posSale.dt().where({PROMO_TYPE : {'>' : 1}}).forEach((item)=>
         {
@@ -1011,94 +1063,92 @@ export default class posDoc extends React.PureComponent
             item.VAT = tmpCalc.VAT
             item.TOTAL = tmpCalc.TOTAL
             item.PROMO_TYPE = 0
-
-            console.log(item)
         })
         //******************************************************************** */
-        let tmpSale = this.posObj.posSale.dt().where({PROMO_TYPE:0})
+        let tmpSale = this.posObj.posSale.dt().where({PROMO_TYPE : 0})
 
         this.promoObj.dt('PROMO').forEach(promoItem => 
         {
-            let tmpCond = this.promoObj.cond.dt().where({PROMO:promoItem.GUID})
-            let tmpApp = this.promoObj.app.dt().where({PROMO:promoItem.GUID})
+            let tmpIsCond = isCond(promoItem.GUID)
             
-            if(tmpCond.where({TYPE:0})) //STOK KOŞULU
+            if(tmpIsCond.result)
             {
-                tmpCond = tmpCond.where({TYPE:0})
-                if(tmpCond.sum('AMOUNT',2) > 0)
-                {
-                    // if(tmpSale.where({ITEM_GUID:{'in':tmpCond.toColumnArr('ITEM_GUID')}}).sum('TOTAL',2) >= tmpCond.sum('AMOUNT',2))
-                    // {
-    
-                    // }
-                }
-                else
-                {
+                let tmpWithal = this.promoObj.app.dt().where({PROMO : promoItem.GUID}).groupBy('WITHAL')
 
-                    tmpCond.forEach(itemCond => 
+                tmpWithal.forEach((withal)=>
+                {
+                    let tmpApp = this.promoObj.app.dt().where({PROMO : promoItem.GUID}).where({WITHAL : withal.WITHAL})
+                    //İNDİRİM UYGULAMA
+                    tmpApp.where({TYPE : 0}).forEach(itemApp =>
                     {
-                        if(tmpSale.where({ITEM_GUID : itemCond.ITEM_GUID,PROMO_TYPE : 0}).sum('QUANTITY') >= itemCond.QUANTITY)
+                        tmpSale.where({ITEM_GUID : {'in' : tmpIsCond.items}}).forEach(itemSale => 
                         {
-                            //POS_SALE TABLOSUNDAKİ ÜRÜNLERİN HANGİLERİNİN PROMOSYON KOŞULUNA UYDUĞU GETİRİLİYOR.BUNUN İÇİN KOŞULDAKİ ITEM_GUID LİSTESİ POS_SALE TABLOSUNA "IN" ŞEKLİNDE VERİLİYOR.
-                            let tmpCondCount = Math.floor(tmpSale.where({ITEM_GUID:{'in':tmpCond.where({TYPE:0}).toColumnArr('ITEM_GUID')}}).sum('QUANTITY') / itemCond.QUANTITY)
-                            
-                            //İNDİRİM UYGULAMA
-                            tmpApp.where({TYPE:0}).forEach(itemApp =>
-                            {
-                                if(tmpSale.where({ITEM_GUID : itemCond.ITEM_GUID,PROMO_TYPE : 0}).sum('QUANTITY') >= itemApp.QUANTITY)
-                                {
-                                    tmpSale.where({ITEM_GUID : itemCond.ITEM_GUID,PROMO_TYPE : 0}).forEach(itemSale => 
-                                    {                                    
-                                        let tmpDisc = Number(Number(itemSale.PRICE * itemSale.QUANTITY).rateInc(itemApp.AMOUNT,2))
-                                        let tmpCalc = this.calcSaleTotal(itemSale.PRICE,itemSale.QUANTITY,tmpDisc,itemSale.LOYALTY,itemSale.VAT_RATE)
-    
-                                        itemSale.QUANTITY = tmpCalc.QUANTITY
-                                        itemSale.PRICE = tmpCalc.PRICE
-                                        itemSale.FAMOUNT = tmpCalc.FAMOUNT
-                                        itemSale.AMOUNT = tmpCalc.AMOUNT
-                                        itemSale.DISCOUNT = tmpCalc.DISCOUNT
-                                        itemSale.VAT = tmpCalc.VAT
-                                        itemSale.TOTAL = tmpCalc.TOTAL
-                                        itemSale.PROMO_TYPE = 2
+                            let tmpDisc = Number(Number(itemSale.PRICE * itemSale.QUANTITY).rateInc(itemApp.AMOUNT,2))
+                            let tmpCalc = this.calcSaleTotal(itemSale.PRICE,itemSale.QUANTITY,tmpDisc,itemSale.LOYALTY,itemSale.VAT_RATE)
 
-                                        //console.log(tmpCalc)
-                                    });
-                                }
+                            itemSale.QUANTITY = tmpCalc.QUANTITY
+                            itemSale.PRICE = tmpCalc.PRICE
+                            itemSale.FAMOUNT = tmpCalc.FAMOUNT
+                            itemSale.AMOUNT = tmpCalc.AMOUNT
+                            itemSale.DISCOUNT = tmpCalc.DISCOUNT
+                            itemSale.VAT = tmpCalc.VAT
+                            itemSale.TOTAL = tmpCalc.TOTAL
+                            itemSale.PROMO_TYPE = 2
+                        });
+                    })
+                    //PARA PUAN UYGULAMA
+                    tmpApp.where({TYPE : 1}).forEach(itemApp =>
+                    {
+
+                    })
+                    //HEDİYE ÇEKİ UYGULAMA
+                    tmpApp.where({TYPE : 2}).forEach(itemApp =>
+                    {
+
+                    })
+                    //STOK İNDİRİMİ UYGULAMA
+                    tmpApp.where({TYPE : 3}).forEach(itemApp =>
+                    {
+                        if(tmpSale.where({ITEM_GUID : itemApp.ITEM_GUID}).sum('QUANTITY') >= itemApp.QUANTITY)
+                        {   
+                            let tmpAppCount = Math.floor(tmpSale.where({ITEM_GUID : itemApp.ITEM_GUID}).sum('QUANTITY') / itemApp.QUANTITY)
+
+                            tmpSale.where({ITEM_GUID : itemApp.ITEM_GUID}).forEach(itemSale => 
+                            {              
+                                let tmpDisc = (Number(Number(itemSale.PRICE).rateInc(itemApp.AMOUNT,2)) * (tmpIsCond.count <= tmpAppCount ? tmpIsCond.count : tmpAppCount)) / tmpSale.where({ITEM_GUID : itemApp.ITEM_GUID}).length
+                                let tmpCalc = this.calcSaleTotal(itemSale.PRICE,itemSale.QUANTITY,tmpDisc,itemSale.LOYALTY,itemSale.VAT_RATE)
+                                
+                                itemSale.QUANTITY = tmpCalc.QUANTITY
+                                itemSale.PRICE = tmpCalc.PRICE
+                                itemSale.FAMOUNT = tmpCalc.FAMOUNT
+                                itemSale.AMOUNT = tmpCalc.AMOUNT
+                                itemSale.DISCOUNT = tmpCalc.DISCOUNT
+                                itemSale.VAT = tmpCalc.VAT
+                                itemSale.TOTAL = tmpCalc.TOTAL
+                                itemSale.PROMO_TYPE = 3
                             });
-                            //STOK İNDİRİMİ UYGULAMA
-                            tmpApp.where({TYPE:3}).forEach(itemApp =>
-                            {
-                                if(tmpSale.where({ITEM_GUID : itemApp.ITEM_GUID,PROMO_TYPE : 0}).sum('QUANTITY') >= itemApp.QUANTITY)
-                                {       
-                                    let tmpAppCount = Math.floor(tmpSale.where({ITEM_GUID : itemApp.ITEM_GUID,PROMO_TYPE : 0}).sum('QUANTITY') / itemApp.QUANTITY)
-    
-                                    tmpSale.where({ITEM_GUID : itemApp.ITEM_GUID,PROMO_TYPE : 0}).forEach(itemSale => 
-                                    {                   
-                                        let tmpDisc = Number(Number(itemSale.PRICE).rateInc(itemApp.AMOUNT,2)) * (tmpCondCount <= tmpAppCount ? tmpCondCount : tmpAppCount)
-                                        let tmpCalc = this.calcSaleTotal(itemSale.PRICE,itemSale.QUANTITY,tmpDisc,itemSale.LOYALTY,itemSale.VAT_RATE)
-    
-                                        itemSale.QUANTITY = tmpCalc.QUANTITY
-                                        itemSale.PRICE = tmpCalc.PRICE
-                                        itemSale.FAMOUNT = tmpCalc.FAMOUNT
-                                        itemSale.AMOUNT = tmpCalc.AMOUNT
-                                        itemSale.DISCOUNT = tmpCalc.DISCOUNT
-                                        itemSale.VAT = tmpCalc.VAT
-                                        itemSale.TOTAL = tmpCalc.TOTAL
-                                        itemSale.PROMO_TYPE = 3
-
-                                        //console.log(tmpCalc)
-                                    });
-                                }
-                            })
                         }
-                    });
-                }
-            }
-            else if(tmpCond.where({TYPE:1})) //GENEL TUTAR KOŞULU
-            {
-
-            }
-            
+                    })
+                    //GENEL İNDİRİM UYGULAMA
+                    tmpApp.where({TYPE : 4}).forEach(itemApp =>
+                    {
+                        tmpSale.forEach(itemSale => 
+                        {              
+                            let tmpDisc = Number(Number(itemSale.PRICE * itemSale.QUANTITY).rateInc(itemApp.AMOUNT,2))
+                            let tmpCalc = this.calcSaleTotal(itemSale.PRICE,itemSale.QUANTITY,tmpDisc,itemSale.LOYALTY,itemSale.VAT_RATE)
+                            
+                            itemSale.QUANTITY = tmpCalc.QUANTITY
+                            itemSale.PRICE = tmpCalc.PRICE
+                            itemSale.FAMOUNT = tmpCalc.FAMOUNT
+                            itemSale.AMOUNT = tmpCalc.AMOUNT
+                            itemSale.DISCOUNT = tmpCalc.DISCOUNT
+                            itemSale.VAT = tmpCalc.VAT
+                            itemSale.TOTAL = tmpCalc.TOTAL
+                            itemSale.PROMO_TYPE = 4
+                        });
+                    })
+                })
+            }            
         });
     }
     async saleAdd(pItemData)
