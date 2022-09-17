@@ -291,6 +291,7 @@ export default class NdGrid extends Base
         
         if(typeof this.state.columns == 'undefined')
         {
+            console.log(1)
             return (
                 <DataGrid id={this.props.id} dataSource={typeof this.state.data == 'undefined' ? undefined : this.state.data.store} 
                 showBorders={this.props.showBorders} 
@@ -324,6 +325,7 @@ export default class NdGrid extends Base
         }
         else
         {
+            console.log(2)
             return (
                 <DataGrid id={this.props.id} dataSource={typeof this.state.data == 'undefined' ? undefined : this.state.data.store}
                     showBorders={this.props.showBorders} 
