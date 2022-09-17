@@ -1873,7 +1873,7 @@ export default class purchaseInvoice extends React.PureComponent
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                                        <Scrolling mode="standart" />
+                                        <Scrolling mode="virtual" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.ftr_02_001")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcInv.clmCreateDate")} width={120} allowEditing={false} allowHeaderFiltering={false}/>
@@ -2277,7 +2277,7 @@ export default class purchaseInvoice extends React.PureComponent
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                                        <Scrolling mode="standart" />
+                                        <Scrolling mode="virtual" />
                                         <Editing mode="cell" allowUpdating={false} allowDeleting={true} />
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdInvoicePayment.clmCreateDate")} width={150} allowEditing={false} headerFilter={{visible:true}}/>
                                         <Column dataField="AMOUNT" caption={this.t("grdInvoicePayment.clmPrice")} width={150}  headerFilter={{visible:true}}/>
@@ -2733,7 +2733,7 @@ export default class purchaseInvoice extends React.PureComponent
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                                        <Scrolling mode="standart" />
+                                        <Scrolling mode="virtual" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                         <Column dataField="CODE" caption={this.t("grdMultiItem.clmCode")} width={150} allowEditing={false} />
                                         <Column dataField="MULTICODE" caption={this.t("grdMultiItem.clmMulticode")} width={150} allowEditing={false} />
@@ -2856,7 +2856,7 @@ export default class purchaseInvoice extends React.PureComponent
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                                        <Scrolling mode="standart" />
+                                        <Scrolling mode="virtual" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                         <Column dataField="NAME" caption={this.t("grdUnit2.clmName")} width={120}  headerFilter={{visible:true}} allowEditing={false} />
                                         <Column dataField="UNIT_FACTOR" caption={this.t("grdUnit2.clmQuantity")} dataType={'number'} width={120} headerFilter={{visible:true}}/>
@@ -2962,7 +2962,7 @@ export default class purchaseInvoice extends React.PureComponent
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                                        <Scrolling mode="standart" />
+                                        <Scrolling mode="virtual" />
                                         <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
                                         <Column dataField="ITEM_CODE" caption={this.t("grdNewPrice.clmCode")} width={150} />
                                         <Column dataField="ITEM_NAME" caption={this.t("grdNewPrice.clmName")} width={250} />
@@ -3011,7 +3011,7 @@ export default class purchaseInvoice extends React.PureComponent
                                         }}
                                         >
                                             <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                                            <Scrolling mode="standart" />
+                                            <Scrolling mode="virtual" />
                                             <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
                                             <Column dataField="ITEM_CODE" caption={this.t("grdNewVat.clmCode")} width={150} />
                                             <Column dataField="ITEM_NAME" caption={this.t("grdNewVat.clmName")} width={250} />

@@ -213,7 +213,20 @@ export const menu = (e) =>
                 },
                 {
                     id: 'cri_03',
-                    text : e.t('menu.cri_03'),//'Raporlar',
+                    text : e.t('menu.cri_03'),//'Operasyonlar',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'cri_03_001',
+                            text: e.t('menu.cri_03_001'),//'Toplu Cari Ekleme',
+                            path: 'customers/operations/collectiveCustomer'
+                        },
+                    ]
+                },
+                {
+                    id: 'cri_04',
+                    text : e.t('menu.cri_04'),//'Raporlar',
                     expanded: false,
                 }
             ]

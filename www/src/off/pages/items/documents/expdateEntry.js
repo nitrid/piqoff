@@ -318,7 +318,7 @@ export default class labelPrinting extends React.Component
                         
                     }}
                     >
-                        <Scrolling mode="standart" />
+                        <Scrolling mode="virtual" />
                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                         <Column dataField="ITEM_NAME" caption={this.t("grdExpDate.clmName")} width={250} />
                         <Column dataField="ITEM_CODE" caption={this.t("grdExpDate.clmCode")} width={150}/>
