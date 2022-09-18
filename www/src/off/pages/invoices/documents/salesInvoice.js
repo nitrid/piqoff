@@ -1552,6 +1552,10 @@ export default class salesInvoice extends React.PureComponent
                                     height={'400'} 
                                     width={'100%'}
                                     dbApply={false}
+                                    onRowPrepared={async(e)=>
+                                        {
+
+                                        }}
                                     onRowUpdating={async(e)=>
                                     {
                                         if(this.quantityControl == true)
@@ -1662,7 +1666,7 @@ export default class salesInvoice extends React.PureComponent
                                         this._calculateTotal()
                                     }}
                                     >
-                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
+                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                                         <Scrolling mode="virtual" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.ftr_02_002")} enabled={true} allowExportSelectedData={true} />
@@ -2456,22 +2460,12 @@ export default class salesInvoice extends React.PureComponent
                                         {       
                                             let tmpQuery = 
                                             {
-                                                query:  "SELECT *, ISNULL((SELECT ADRESS FROM CUSTOMER_ADRESS WHERE CUSTOMER = INPUT AND TYPE = 0),'') AS ADRESS, " +
-                                                        "ISNULL((SELECT ZIPCODE FROM CUSTOMER_ADRESS WHERE CUSTOMER = INPUT AND TYPE = 0),'') AS ZIPCODE, " + 
-                                                        "ISNULL((SELECT CITY FROM CUSTOMER_ADRESS WHERE CUSTOMER = INPUT AND TYPE = 0),'') AS CITY, " + 
-                                                        "ISNULL((SELECT COUNTRY FROM CUSTOMER_ADRESS WHERE CUSTOMER = INPUT AND TYPE = 0),'') AS COUNTRY, " + 
-                                                        "CONVERT(NVARCHAR,AMOUNT) AS AMOUNTF, " +
-                                                        "ISNULL((SELECT TOP 1 NAME FROM COMPANY),'') AS FIRMA, " +
-                                                        "REPLACE(ISNULL((SELECT ADDRESS1 + ' | ' + ADDRESS2  + ' | ' + TEL + ' | ' + MAIL FROM COMPANY),''),'|', CHAR(13)) AS BASLIK," +
-                                                        "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH, " +
-                                                        "REPLACE(ISNULL((SELECT ADRESS + ' | ' + ZIPCODE + ' ' + CITY +  '/' + COUNTRY FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER_ADRESS_VW_01.CUSTOMER = DOC_ITEMS_VW_01.INPUT AND TYPE = 0),''),'|', CHAR(13)) AS ADDRESS," +
-                                                        "ISNULL((SELECT TOP 1 PHONE1 FROM CUSTOMER_OFFICAL WHERE CUSTOMER_OFFICAL.CUSTOMER = DOC_ITEMS_VW_01.INPUT AND TYPE = 0),'') AS CONTACT " +
-                                                        "FROM DOC_ITEMS_VW_01 " +
-                                                        "WHERE ((DOC_GUID = @DOC_GUID) OR (INVOICE_GUID = @DOC_GUID)) ORDER BY LINE_NO ASC",
+                                                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO " ,
                                                 param:  ['DOC_GUID:string|50','DESIGN:string|25'],
                                                 value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value]
                                             }
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
+                                            console.log(JSON.stringify(tmpData.result.recordset))
                                             this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
                                             {
                                                 if(pResult.split('|')[0] != 'ERR')
