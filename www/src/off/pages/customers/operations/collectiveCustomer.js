@@ -331,7 +331,8 @@ export default class collectiveCustomer extends React.PureComponent
                                             <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
                                             onClick={async ()=>
                                             {     
-                                                console.log(1)
+                                                App.instance.setState({isExecute:true})
+
                                                 let tmpCounter
                                                 if(this.txtTotal.value == '')
                                                 {
@@ -341,7 +342,6 @@ export default class collectiveCustomer extends React.PureComponent
                                                 {
                                                     tmpCounter = Number(this.txtTotal.value)
                                                 }
-                                                console.log(tmpCounter)
                                                 for (let i = 0; i < tmpCounter; i++) 
                                                 {
                                                     this.customerObj.clearAll()
@@ -362,9 +362,6 @@ export default class collectiveCustomer extends React.PureComponent
 
                                                     
                                                     let tmpCode = Number(this.txtStartRef.value) + i
-                                                    console.log(tmpCode)
-                                                    console.log(Number(this.txtStartRef.value))
-                                                    console.log(i)
                                                     tmpCode = tmpCode.toString()
                                                     if(this.chkDigit.value == true)
                                                     {
@@ -404,8 +401,10 @@ export default class collectiveCustomer extends React.PureComponent
                                                     this.customerObj.customerAdress.dt('CUSTOMER_ADRESS')[0].ZIPCODE =  this.cmbPopZipcode.value
                                                     this.customerObj.customerAdress.dt('CUSTOMER_ADRESS')[0].CIYT = this.cmbPopCity.value
                                                     this.customerObj.customerAdress.dt('CUSTOMER_ADRESS')[0].COUNTRY =  this.cmbPopCountry.value
-                                                    this.customerObj.save()
+                                                    await this.customerObj.save()
                                                 }
+                                                App.instance.setState({isExecute:false})
+
                                                 let tmpConfObj1 =
                                                 {
                                                     id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -413,6 +412,7 @@ export default class collectiveCustomer extends React.PureComponent
                                                 }
                                                 tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                 await dialog(tmpConfObj1);
+                                                this.popSettingCustomer.hide();  
                                             }}/>
                                         </div>
                                         <div className='col-6'>

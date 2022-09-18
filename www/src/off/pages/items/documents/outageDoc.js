@@ -1123,10 +1123,10 @@ export default class outageDoc extends React.PureComponent
                                 <Item>
                                     <React.Fragment>    
                                     <NdGrid parent={this} id={"grdOutwasItems"} 
-                                    showBorders={true} 
-                                    columnsAutoWidth={true} 
-                                    allowColumnReordering={true} 
-                                    allowColumnResizing={true} 
+                                    // showBorders={true} 
+                                    // columnsAutoWidth={true} 
+                                    // allowColumnReordering={true} 
+                                    // allowColumnResizing={true} 
                                     height={'400'} 
                                     width={'100%'}
                                     dbApply={false}
@@ -1157,12 +1157,12 @@ export default class outageDoc extends React.PureComponent
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                                        <Scrolling mode="standart"/>
+                                        <Scrolling mode="infinite"/>
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.stk_02_003")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdOutwasItems.clmCreateDate")} width={150} allowEditing={false}/>
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdOutwasItems.clmCreateDate")} width={200} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdOutwasItems.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdOutwasItems.clmItemName")} width={350} />
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdOutwasItems.clmItemName")} width={300} />
                                         <Column dataField="QUANTITY" caption={this.t("grdOutwasItems.clmQuantity")} dataType={'number'} width={150}/>
                                         <Column dataField="COST_PRICE" caption={this.t("grdOutwasItems.clmCostPrice")} dataType={'number'} width={150} allowEditing={false}/>
                                         <Column dataField="DESCRIPTION" caption={this.t("grdOutwasItems.clmDescription")}>

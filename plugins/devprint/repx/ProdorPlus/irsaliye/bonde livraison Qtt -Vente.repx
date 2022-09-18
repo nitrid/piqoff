@@ -48,7 +48,7 @@
         </Item6>
         <Item7 Ref="26" ControlType="XRPanel" Name="panel3" SizeF="277.083435,28.124939" LocationFloat="15.72522, 179.708328" Borders="All">
           <Controls>
-            <Item1 Ref="27" ControlType="XRLabel" Name="label47" Multiline="true" Text="Point d'achat" TextAlignment="TopLeft" SizeF="94.00027,22.9999847" LocationFloat="3.54175568, 4.12492371" Font="Arial, 10pt" Padding="2,2,0,0,100" Borders="None">
+            <Item1 Ref="27" ControlType="XRLabel" Name="label47" Multiline="true" Text="Point de vente" TextAlignment="TopLeft" SizeF="94.00027,22.9999847" LocationFloat="3.54175568, 4.12492371" Font="Arial, 10pt" Padding="2,2,0,0,100" Borders="None">
               <StylePriority Ref="28" UseFont="false" UseBorders="false" UseTextAlignment="false" />
             </Item1>
             <Item2 Ref="29" ControlType="XRLabel" Name="label46" Multiline="true" Text="label2" TextAlignment="TopLeft" SizeF="179.541473,23.0000153" LocationFloat="97.54203, 4.124939" Font="Arial, 10pt" ForeColor="Black" Padding="2,2,0,0,100" Borders="None">
@@ -78,7 +78,7 @@
           </ExpressionBindings>
           <StylePriority Ref="41" UseFont="false" UseForeColor="false" UseTextAlignment="false" />
         </Item10>
-        <Item11 Ref="42" ControlType="XRLabel" Name="label41" Multiline="true" Text="Acheté à" TextAlignment="TopRight" SizeF="71.87494,23.0000153" LocationFloat="571.916748, 160.666718" Font="Arial, 10pt" Padding="2,2,0,0,100">
+        <Item11 Ref="42" ControlType="XRLabel" Name="label41" Multiline="true" Text="Livre à" TextAlignment="TopRight" SizeF="71.87494,23.0000153" LocationFloat="571.916748, 160.666718" Font="Arial, 10pt" Padding="2,2,0,0,100">
           <StylePriority Ref="43" UseFont="false" UseTextAlignment="false" />
         </Item11>
         <Item12 Ref="44" ControlType="XRLabel" Name="label42" Multiline="true" TextAlignment="TopLeft" SizeF="117.333557,23" LocationFloat="643.7917, 160.666718" Font="Arial, 10pt" Padding="2,2,0,0,100">
@@ -152,7 +152,7 @@
           </ExpressionBindings>
           <StylePriority Ref="79" UseFont="false" UseBorders="false" UseTextAlignment="false" />
         </Item21>
-        <Item22 Ref="80" ControlType="XRLabel" Name="label9" Multiline="true" Text="BON D'ACHAT" TextAlignment="TopCenter" SizeF="189.2085,23.9583435" LocationFloat="571.916748, 90.70835" Font="Microsoft Sans Serif, 10pt, style=Bold" Padding="2,2,0,0,100" BorderColor="255,12,12,12">
+        <Item22 Ref="80" ControlType="XRLabel" Name="label9" Multiline="true" Text="BON DE LIVRAISON" TextAlignment="TopCenter" SizeF="189.2085,23.9583435" LocationFloat="571.916748, 90.70835" Font="Microsoft Sans Serif, 10pt, style=Bold" Padding="2,2,0,0,100" BorderColor="255,12,12,12">
           <StylePriority Ref="81" UseFont="false" UseBorderColor="false" UseTextAlignment="false" />
         </Item22>
         <Item23 Ref="82" ControlType="XRLabel" Name="label17" Multiline="true" Text="N°" TextAlignment="TopRight" SizeF="37.4998779,23.0000153" LocationFloat="571.916748, 114.666687" Font="Arial, 10pt" Padding="2,2,0,0,100">
@@ -165,7 +165,7 @@
                 <Item1 Ref="86" ControlType="XRTableCell" Name="tableCell1" Weight="0.0660775076661769" Text="Line" TextAlignment="MiddleRight" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold" Borders="None">
                   <StylePriority Ref="87" UseFont="false" UseBorders="false" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="88" ControlType="XRTableCell" Name="tableCell2" Weight="0.14546083058342951" Text="Reference " StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
+                <Item2 Ref="88" ControlType="XRTableCell" Name="tableCell2" Weight="0.14546083058342951" Text="Reference Fournisseur" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
                   <StylePriority Ref="89" UseFont="false" />
                 </Item2>
                 <Item3 Ref="90" ControlType="XRTableCell" Name="tableCell3" Weight="0.41303898771445563" Text="Designation Produit" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
@@ -189,10 +189,10 @@
                 <Item9 Ref="102" ControlType="XRTableCell" Name="tableCell35" Weight="0.0997934390968436" Multiline="true" Text="Prix Coli" TextAlignment="MiddleRight" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
                   <StylePriority Ref="103" UseFont="false" UseTextAlignment="false" />
                 </Item9>
-                <Item10 Ref="104" ControlType="XRTableCell" Name="tableCell8" Weight="0.1072091171300083" Text="TVA" TextAlignment="MiddleRight" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
+                <Item10 Ref="104" ControlType="XRTableCell" Name="tableCell8" Weight="0.089113515406720828" Text="TVA" TextAlignment="MiddleRight" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
                   <StylePriority Ref="105" UseFont="false" UseTextAlignment="false" />
                 </Item10>
-                <Item11 Ref="106" ControlType="XRTableCell" Name="tableCell32" Weight="0.069147836519450973" Multiline="true" Text="Taux TVA" TextAlignment="MiddleRight" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
+                <Item11 Ref="106" ControlType="XRTableCell" Name="tableCell32" Weight="0.087243438242738447" Multiline="true" Text="Taux TVA" TextAlignment="MiddleRight" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
                   <StylePriority Ref="107" UseFont="false" UseTextAlignment="false" />
                 </Item11>
                 <Item12 Ref="108" ControlType="XRTableCell" Name="tableCell39" Weight="0.095180634110651974" Multiline="true" Text="Taux Remise" TextAlignment="MiddleRight" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
@@ -266,27 +266,27 @@
                   </ExpressionBindings>
                   <StylePriority Ref="138" UseTextAlignment="false" />
                 </Item7>
-                <Item8 Ref="139" ControlType="XRTableCell" Name="tableCell16" Weight="0.10518690913970562" TextFormatString="{0:0.00€}" Text="€" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 7.5pt">
+                <Item8 Ref="139" ControlType="XRTableCell" Name="tableCell16" Weight="0.10518690913970562" TextFormatString="{0:0.00€}" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 7.5pt">
                   <ExpressionBindings>
-                    <Item1 Ref="140" EventName="BeforePrint" PropertyName="Text" Expression="[COST_PRICE]" />
+                    <Item1 Ref="140" EventName="BeforePrint" PropertyName="Text" Expression="0" />
                   </ExpressionBindings>
                   <StylePriority Ref="141" UseFont="false" UseTextAlignment="false" />
                 </Item8>
                 <Item9 Ref="142" ControlType="XRTableCell" Name="tableCell36" Weight="0.10045916795426155" TextFormatString="{0:0.00€}" Multiline="true" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 7.5pt">
                   <ExpressionBindings>
-                    <Item1 Ref="143" EventName="BeforePrint" PropertyName="Text" Expression="[COLIS_FACTOR]*[COST_PRICE]" />
+                    <Item1 Ref="143" EventName="BeforePrint" PropertyName="Text" Expression="0" />
                   </ExpressionBindings>
                   <StylePriority Ref="144" UseFont="false" UseTextAlignment="false" />
                 </Item9>
-                <Item10 Ref="145" ControlType="XRTableCell" Name="tableCell17" Weight="0.107947542271089" TextFormatString="{0:0.00€}" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 7.5pt">
+                <Item10 Ref="145" ControlType="XRTableCell" Name="tableCell17" Weight="0.089708114058721908" TextFormatString="{0:0.00€}" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 7.5pt">
                   <ExpressionBindings>
-                    <Item1 Ref="146" EventName="BeforePrint" PropertyName="Text" Expression="[VAT]" />
+                    <Item1 Ref="146" EventName="BeforePrint" PropertyName="Text" Expression="0" />
                   </ExpressionBindings>
                   <StylePriority Ref="147" UseFont="false" UseTextAlignment="false" />
                 </Item10>
-                <Item11 Ref="148" ControlType="XRTableCell" Name="tableCell31" Weight="0.069585900469129963" TextFormatString="{0:0.0}" Multiline="true" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 7.5pt">
+                <Item11 Ref="148" ControlType="XRTableCell" Name="tableCell31" Weight="0.087825328681497061" TextFormatString="{0:0.0}" Multiline="true" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 7.5pt">
                   <ExpressionBindings>
-                    <Item1 Ref="149" EventName="BeforePrint" PropertyName="Text" Expression="[VAT_RATE]" />
+                    <Item1 Ref="149" EventName="BeforePrint" PropertyName="Text" Expression="0" />
                   </ExpressionBindings>
                   <StylePriority Ref="150" UseFont="false" UseTextAlignment="false" />
                 </Item11>
@@ -298,7 +298,7 @@
                 </Item12>
                 <Item13 Ref="154" ControlType="XRTableCell" Name="tableCell18" Weight="0.1350505255597404" TextFormatString="{0:0.00€}" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 8pt">
                   <ExpressionBindings>
-                    <Item1 Ref="155" EventName="BeforePrint" PropertyName="Text" Expression="[AMOUNT]" />
+                    <Item1 Ref="155" EventName="BeforePrint" PropertyName="Text" Expression="0" />
                   </ExpressionBindings>
                   <StylePriority Ref="156" UseFont="false" UseTextAlignment="false" />
                 </Item13>

@@ -120,7 +120,7 @@ export default class barcodeList extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT * FROM CUSTOMER_VW_02 WHERE ((TITLE like '%' + @CUSTOMER_NAME + '%') OR (@CUSTOMER_NAME = '')) AND " +
+                    query : "SELECT * FROM CUSTOMER_VW_02 WHERE (((TITLE like '%' + @CUSTOMER_NAME + '%') OR (@CUSTOMER_NAME = '')) OR ((CODE like '%' + @CUSTOMER_NAME + '%') OR (@CUSTOMER_NAME = '')) ) AND " +
                             " ((GENUS = @GENUS) OR (@GENUS = -1))  ",
                     param : ['CUSTOMER_NAME:string|250','GENUS:string|25'],
                     value : [this.txtCustomerName.value,this.cmbGenus.value]

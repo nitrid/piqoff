@@ -112,24 +112,24 @@
                   <StylePriority Ref="57" UseBorders="false" UseTextAlignment="false" />
                 </Item2>
                 <Item3 Ref="58" ControlType="XRTableCell" Name="tableCell19" Weight="0.17649547539642344" Multiline="true" Text="[MULTICODE]" StyleName="DetailData1" />
-                <Item4 Ref="59" ControlType="XRTableCell" Name="tableCell11" Weight="0.48291639218956156" StyleName="DetailData1">
+                <Item4 Ref="59" ControlType="XRTableCell" Name="tableCell11" Weight="0.48829912946905324" StyleName="DetailData1">
                   <ExpressionBindings>
                     <Item1 Ref="60" EventName="BeforePrint" PropertyName="Text" Expression="[ITEM_NAME]" />
                   </ExpressionBindings>
                 </Item4>
-                <Item5 Ref="61" ControlType="XRTableCell" Name="tableCell13" Weight="0.073846718210572787" TextAlignment="MiddleCenter" StyleName="DetailData1">
+                <Item5 Ref="61" ControlType="XRTableCell" Name="tableCell13" Weight="0.072723201855309408" TextAlignment="MiddleCenter" StyleName="DetailData1">
                   <ExpressionBindings>
                     <Item1 Ref="62" EventName="BeforePrint" PropertyName="Text" Expression="[UNIT_SYMBOL]" />
                   </ExpressionBindings>
                   <StylePriority Ref="63" UseTextAlignment="false" />
                 </Item5>
-                <Item6 Ref="64" ControlType="XRTableCell" Name="tableCell14" Weight="0.10625394370936697" TextAlignment="MiddleRight" StyleName="DetailData1">
+                <Item6 Ref="64" ControlType="XRTableCell" Name="tableCell14" Weight="0.10463773280198768" TextAlignment="MiddleRight" StyleName="DetailData1">
                   <ExpressionBindings>
                     <Item1 Ref="65" EventName="BeforePrint" PropertyName="Text" Expression="[QUANTITY]" />
                   </ExpressionBindings>
                   <StylePriority Ref="66" UseTextAlignment="false" />
                 </Item6>
-                <Item7 Ref="67" ControlType="XRTableCell" Name="tableCell18" Weight="0.17374548669909315" Multiline="true" Text="tableCell18" TextAlignment="MiddleLeft" StyleName="DetailData1">
+                <Item7 Ref="67" ControlType="XRTableCell" Name="tableCell18" Weight="0.17110247668224415" Multiline="true" Text="tableCell18" TextAlignment="MiddleLeft" StyleName="DetailData1">
                   <ExpressionBindings>
                     <Item1 Ref="68" EventName="BeforePrint" PropertyName="Text" Expression="[DESCRIPTION]" />
                   </ExpressionBindings>

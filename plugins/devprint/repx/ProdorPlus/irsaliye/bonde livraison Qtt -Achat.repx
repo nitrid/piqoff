@@ -260,45 +260,45 @@
                     <Item1 Ref="135" EventName="BeforePrint" PropertyName="Text" Expression="[UNIT_SYMBOL]" />
                   </ExpressionBindings>
                 </Item6>
-                <Item7 Ref="136" ControlType="XRTableCell" Name="tableCell15" Weight="0.10422305138361805" TextAlignment="MiddleRight" StyleName="DetailData1">
+                <Item7 Ref="136" ControlType="XRTableCell" Name="tableCell15" Weight="0.10546923790286816" TextAlignment="MiddleRight" StyleName="DetailData1">
                   <ExpressionBindings>
                     <Item1 Ref="137" EventName="BeforePrint" PropertyName="Text" Expression="[QUANTITY]" />
                   </ExpressionBindings>
                   <StylePriority Ref="138" UseTextAlignment="false" />
                 </Item7>
-                <Item8 Ref="139" ControlType="XRTableCell" Name="tableCell16" Weight="0.10518690913970562" TextFormatString="{0:0.00€}" Text="€" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 7.5pt">
+                <Item8 Ref="139" ControlType="XRTableCell" Name="tableCell16" Weight="0.10394072262045551" TextFormatString="{0:0.00€}" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 7.5pt">
                   <ExpressionBindings>
-                    <Item1 Ref="140" EventName="BeforePrint" PropertyName="Text" Expression="[COST_PRICE]" />
+                    <Item1 Ref="140" EventName="BeforePrint" PropertyName="Text" Expression="0" />
                   </ExpressionBindings>
                   <StylePriority Ref="141" UseFont="false" UseTextAlignment="false" />
                 </Item8>
                 <Item9 Ref="142" ControlType="XRTableCell" Name="tableCell36" Weight="0.10045916795426155" TextFormatString="{0:0.00€}" Multiline="true" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 7.5pt">
                   <ExpressionBindings>
-                    <Item1 Ref="143" EventName="BeforePrint" PropertyName="Text" Expression="[COLIS_FACTOR]*[COST_PRICE]" />
+                    <Item1 Ref="143" EventName="BeforePrint" PropertyName="Text" Expression="0" />
                   </ExpressionBindings>
                   <StylePriority Ref="144" UseFont="false" UseTextAlignment="false" />
                 </Item9>
                 <Item10 Ref="145" ControlType="XRTableCell" Name="tableCell17" Weight="0.107947542271089" TextFormatString="{0:0.00€}" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 7.5pt">
                   <ExpressionBindings>
-                    <Item1 Ref="146" EventName="BeforePrint" PropertyName="Text" Expression="[VAT]" />
+                    <Item1 Ref="146" EventName="BeforePrint" PropertyName="Text" Expression="0" />
                   </ExpressionBindings>
                   <StylePriority Ref="147" UseFont="false" UseTextAlignment="false" />
                 </Item10>
                 <Item11 Ref="148" ControlType="XRTableCell" Name="tableCell31" Weight="0.069585900469129963" TextFormatString="{0:0.0}" Multiline="true" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 7.5pt">
                   <ExpressionBindings>
-                    <Item1 Ref="149" EventName="BeforePrint" PropertyName="Text" Expression="[VAT_RATE]" />
+                    <Item1 Ref="149" EventName="BeforePrint" PropertyName="Text" Expression="0" />
                   </ExpressionBindings>
                   <StylePriority Ref="150" UseFont="false" UseTextAlignment="false" />
                 </Item11>
                 <Item12 Ref="151" ControlType="XRTableCell" Name="tableCell40" Weight="0.095815474694470035" TextFormatString="{0:0.0%}" Multiline="true" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 7.5pt">
                   <ExpressionBindings>
-                    <Item1 Ref="152" EventName="BeforePrint" PropertyName="Text" Expression="[DISCOUNT_RATE]" />
+                    <Item1 Ref="152" EventName="BeforePrint" PropertyName="Text" Expression="0" />
                   </ExpressionBindings>
                   <StylePriority Ref="153" UseFont="false" UseTextAlignment="false" />
                 </Item12>
                 <Item13 Ref="154" ControlType="XRTableCell" Name="tableCell18" Weight="0.1350505255597404" TextFormatString="{0:0.00€}" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 8pt">
                   <ExpressionBindings>
-                    <Item1 Ref="155" EventName="BeforePrint" PropertyName="Text" Expression="[AMOUNT]" />
+                    <Item1 Ref="155" EventName="BeforePrint" PropertyName="Text" Expression="0" />
                   </ExpressionBindings>
                   <StylePriority Ref="156" UseFont="false" UseTextAlignment="false" />
                 </Item13>
