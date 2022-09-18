@@ -901,7 +901,7 @@ export default class CustomerCard extends React.PureComponent
                                                 tmpEmpty.TYPE = 0
                                                 tmpEmpty.ADRESS = this.txtPopAdress.value
                                                 tmpEmpty.ZIPCODE = this.cmbPopZipcode.value
-                                                tmpEmpty.CITY = this.cmbPopCity.value
+                                                tmpEmpty.CIYT = this.cmbPopCity.value
                                                 tmpEmpty.COUNTRY = this.cmbPopCountry.value
                                                 tmpEmpty.CUSTOMER = this.customerObj.dt()[0].GUID 
 

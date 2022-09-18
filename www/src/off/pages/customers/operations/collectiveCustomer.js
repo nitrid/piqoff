@@ -33,6 +33,8 @@ export default class collectiveCustomer extends React.PureComponent
         this.state={officalVisible:true}
         this.tabIndex = props.data.tabkey
         this.sysPrmObj = this.param.filter({TYPE:0,USERS:this.user.CODE});
+        this.btnRun = this.btnRun.bind(this)
+        
     }
     async componentDidMount()
     {
@@ -43,60 +45,6 @@ export default class collectiveCustomer extends React.PureComponent
     {
         this.customerObj.clearAll();
 
-        this.customerObj.ds.on('onAddRow',(pTblName,pData) =>
-        {
-            if(pData.stat == 'new')
-            {
-                if(this.prevCode != '')
-                {
-                    this.btnNew.setState({disabled:true});
-                    this.btnBack.setState({disabled:false});
-                }
-                else
-                {
-                    this.btnNew.setState({disabled:false});
-                    this.btnBack.setState({disabled:true});
-                }
-                
-                this.btnSave.setState({disabled:false});
-                this.btnDelete.setState({disabled:false});
-                this.btnCopy.setState({disabled:false});
-                this.btnPrint.setState({disabled:false});
-            }
-        })
-        this.customerObj.ds.on('onEdit',(pTblName,pData) =>
-        {            
-            if(pData.rowData.stat == 'edit')
-            {
-                this.btnBack.setState({disabled:false});
-                this.btnNew.setState({disabled:true});
-                this.btnSave.setState({disabled:false});
-                this.btnDelete.setState({disabled:false});
-                this.btnCopy.setState({disabled:false});
-                this.btnPrint.setState({disabled:false});
-
-                pData.rowData.CUSER = this.user.CODE
-            }                 
-        })
-        this.customerObj.ds.on('onRefresh',(pTblName) =>
-        {            
-            this.prevCode = this.customerObj.dt('CUSTOMERS').length > 0 ? this.customerObj.dt('CUSTOMERS')[0].CODE : '';
-            this.btnBack.setState({disabled:true});
-            this.btnNew.setState({disabled:false});
-            this.btnSave.setState({disabled:true});
-            this.btnDelete.setState({disabled:false});
-            this.btnCopy.setState({disabled:false});
-            this.btnPrint.setState({disabled:false});          
-        })
-        this.customerObj.ds.on('onDelete',(pTblName) =>
-        {            
-            this.btnBack.setState({disabled:false});
-            this.btnNew.setState({disabled:true});
-            this.btnSave.setState({disabled:false});
-            this.btnDelete.setState({disabled:false});
-            this.btnCopy.setState({disabled:false});
-            this.btnPrint.setState({disabled:false});
-        })
 
     }
     async checkZipcode(pCode)
@@ -135,6 +83,7 @@ export default class collectiveCustomer extends React.PureComponent
     }
     async btnRun()
     {
+        console.log(this)
         this.popSettingCustomer.show()
     }
     render()
@@ -191,11 +140,8 @@ export default class collectiveCustomer extends React.PureComponent
                                     valueExpr="ID"
                                     data={{source:[{ID:0,VALUE:this.t("cmbTypeData.individual")},{ID:1,VALUE:this.t("cmbTypeData.company")}]}}
                                     onValueChanged={(async(e)=>
-                                            {
-                                                if(typeof e != 'undefined')
-                                                {
-                                                    this.typeChange(e.value)
-                                                }
+                                        {
+                                                
                                         }).bind(this)}
                                     param={this.param.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
@@ -347,8 +293,8 @@ export default class collectiveCustomer extends React.PureComponent
                         <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnRun}></NdButton>
                         </div>
                     </div>
-                         {/* Banka POPUP */}
-                         <div>
+                    {/* Ayar PopUp */}
+                    <div>
                         <NdPopUp parent={this} id={"popSettingCustomer"} 
                         visible={false}
                         showCloseButton={true}
@@ -376,8 +322,8 @@ export default class collectiveCustomer extends React.PureComponent
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
                                 </Item>
                                <Item>
-                                    <Label text={this.t("popSettingCustomer.ckhDigit")} alignment="right" />
-                                        <NdCheckBox id="ckhDigit" parent={this} value={false} ></NdCheckBox>
+                                    <Label text={this.t("popSettingCustomer.chkDigit")} alignment="right" />
+                                        <NdCheckBox id="chkDigit" parent={this} value={false} ></NdCheckBox>
                                 </Item>
                                 <Item>
                                     <div className='row'>
@@ -385,34 +331,60 @@ export default class collectiveCustomer extends React.PureComponent
                                             <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
                                             onClick={async ()=>
                                             {     
+                                                console.log(1)
                                                 let tmpCounter
                                                 if(this.txtTotal.value == '')
                                                 {
-                                                    tmpCounter = Number(this.txtStartRef.value) - Number(this.txtFinishRef.value) 
+                                                    tmpCounter =  Number(this.txtFinishRef.value) -Number(this.txtStartRef.value) 
                                                 }
                                                 else
                                                 {
                                                     tmpCounter = Number(this.txtTotal.value)
                                                 }
-                                                for (let i = 0; i < tmpCounter.length; i++) 
+                                                console.log(tmpCounter)
+                                                for (let i = 0; i < tmpCounter; i++) 
                                                 {
                                                     this.customerObj.clearAll()
+                                                    this.customerObj.addEmpty()
+                                                    let tmpOffical = {...this.customerObj.customerOffical.empty}
+                                                    tmpOffical.CUSTOMER = this.customerObj.dt()[0].GUID 
+                                                    this.customerObj.customerOffical.addEmpty(tmpOffical)
+                                                    
+                                                    let tmpEmpty = {...this.customerObj.customerAdress.empty};
+                                                    tmpEmpty.TYPE = 0
+                                                    tmpEmpty.ADRESS = this.txtPopAdress.value
+                                                    tmpEmpty.ZIPCODE = this.cmbPopZipcode.value
+                                                    tmpEmpty.CIYT = this.cmbPopCity.value
+                                                    tmpEmpty.COUNTRY = this.cmbPopCountry.value
+                                                    tmpEmpty.CUSTOMER = this.customerObj.dt()[0].GUID 
+
+                                                    this.customerObj.customerAdress.addEmpty(tmpEmpty);    
+
+                                                    
+                                                    let tmpCode = Number(this.txtStartRef.value) + i
+                                                    console.log(tmpCode)
+                                                    console.log(Number(this.txtStartRef.value))
+                                                    console.log(i)
+                                                    tmpCode = tmpCode.toString()
                                                     if(this.chkDigit.value == true)
                                                     {
-                                                    //     for (var i = 0, len = sNumber.length; i < len; i += 1) 
-                                                    //     {
-                                                    //         output.push(+sNumber.charAt(i));
-                                                    //     }
+                                                        console.log( tmpCode.length)
+                                                        let output = []
+                                                        for (var x = 0, len = tmpCode.length; x < len; x += 1) 
+                                                        {
+                                                            output.push(+tmpCode.charAt(x));
+                                                        }
                                                 
-                                                    //     var tek=(output[0]+output[2]+output[4]+output[6]+output[8]+output[10])
-                                                    //     var cift=(output[1]+output[3]+output[5]+output[7]+output[9]+output[11])*3
-                                                    //     var say = tek+cift
-                                                    //     let sonuc = (10 - (say %= 10))
-                                                    //     if(sonuc == 10)
-                                                    //     {
-                                                    //         sonuc = 0
-                                                    //     }
-                                                    //     this.customerObj.dt()[0].CODE
+                                                        var tek=(output[0]+output[2]+output[4]+output[6]+output[8]+output[10])
+                                                        var cift=(output[1]+output[3]+output[5]+output[7]+output[9]+output[11])*3
+                                                        var say = tek+cift
+                                                        console.log(say)
+                                                        let sonuc = (10 - (say %= 10))
+                                                        if(sonuc == 10)
+                                                        {
+                                                            sonuc = 0
+                                                        }
+                                                        this.customerObj.dt()[0].CODE = tmpCode.toString() + sonuc.toString()
                                                     }
                                                     else
                                                     {
@@ -420,25 +392,34 @@ export default class collectiveCustomer extends React.PureComponent
                                                     }
                                                     this.customerObj.dt()[0].GENUS = this.cmbGenus.value
                                                     this.customerObj.dt()[0].TYPE = this.cmbType.value
-                                                    this.customerObj.dt('CUSTOMER_OFFICAL').NAME =  this.txtCustomerName.value
-                                                    this.customerObj.dt('CUSTOMER_OFFICAL').LAST_NAME =  this.txtCustomerLastname.value
-                                                    this.customerObj.dt('CUSTOMER_OFFICAL').PHONE1 =  this.txtPhone1.value
-                                                    this.customerObj.dt('CUSTOMER_OFFICAL').PHONE2 =  this.txtPhone2.value
-                                                    this.customerObj.dt('CUSTOMER_OFFICAL').PHONE1 =  this.txtPhone1.value
-                                                    this.customerObj.dt('CUSTOMER_OFFICAL').PHONE1 =  this.txtPhone1.value
-                                                    this.customerObj.dt('CUSTOMER_OFFICAL').PHONE1 =  this.txtPhone1.value
-                                                    this.customerObj.dt('CUSTOMER_OFFICAL').PHONE1 =  this.txtPhone1.value
-
-
+                                                    this.customerObj.customerOffical.dt('CUSTOMER_OFFICAL')[0].NAME =  this.txtCustomerName.value
+                                                    this.customerObj.customerOffical.dt('CUSTOMER_OFFICAL')[0].LAST_NAME =  this.txtCustomerLastname.value
+                                                    this.customerObj.customerOffical.dt('CUSTOMER_OFFICAL')[0].PHONE1 =  this.txtPhone1.value
+                                                    this.customerObj.customerOffical.dt('CUSTOMER_OFFICAL')[0].PHONE2 =  this.txtPhone2.value
+                                                    this.customerObj.customerOffical.dt('CUSTOMER_OFFICAL')[0].GSM_PHONE =  this.txtGsmPhone.value
+                                                    this.customerObj.customerOffical.dt('CUSTOMER_OFFICAL')[0].OTHER_PHONE =  this.txtOtherPhone.value
+                                                    this.customerObj.customerOffical.dt('CUSTOMER_OFFICAL')[0].EMAIL =  this.txtEmail.value
+                                                    this.customerObj.customerOffical.dt('CUSTOMER_OFFICAL')[0].WEB =  this.customerObj.value
+                                                    this.customerObj.customerAdress.dt('CUSTOMER_ADRESS').ADRESS =   this.txtPopAdress.value
+                                                    this.customerObj.customerAdress.dt('CUSTOMER_ADRESS')[0].ZIPCODE =  this.cmbPopZipcode.value
+                                                    this.customerObj.customerAdress.dt('CUSTOMER_ADRESS')[0].CIYT = this.cmbPopCity.value
+                                                    this.customerObj.customerAdress.dt('CUSTOMER_ADRESS')[0].COUNTRY =  this.cmbPopCountry.value
+                                                    this.customerObj.save()
                                                 }
-                                               
+                                                let tmpConfObj1 =
+                                                {
+                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                                }
+                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
+                                                await dialog(tmpConfObj1);
                                             }}/>
                                         </div>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
                                             onClick={()=>
                                             {
-                                                this.popBank.hide();  
+                                                this.popSettingCustomer.hide();  
                                             }}/>
                                         </div>
                                     </div>
