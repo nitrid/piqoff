@@ -2089,7 +2089,7 @@ export const langTr =
         },
         popSettingCustomer : 
         {
-            Title : "Ayarlar",
+            title : "Ayarlar",
             txtStartRef : "Başlangıç Kodu",
             txtFinishRef : "Bitiş Kodu",
             txtTotal : "Toplam Adet",
