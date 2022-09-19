@@ -29,6 +29,7 @@ import Navigation from './navigation.js'
 import Panel from './panel.js'
 import Login from './login.js'
 import NdDialog,{dialog} from '../../core/react/devex/dialog';
+import IdleTimer from 'react-idle-timer'
 
 export default class App extends React.PureComponent
 {
@@ -320,6 +321,13 @@ export default class App extends React.PureComponent
         
         return (
             <div>
+                {/* Ekranda belirli bir süre boş beklediğinde logout olması için yapıldı */}
+                <IdleTimer timeout={(180 * 60) * 1000}
+                onIdle={()=>
+                {
+                    this.core.auth.logout()
+                    window.location.reload()
+                }}/>   
                 <LoadPanel
                 shadingColor="rgba(0,0,0,0.4)"
                 position={{ of: '#root' }}
