@@ -2095,7 +2095,7 @@ export const langTr =
             txtTotal : "Toplam Adet",
             chkDigit : "EAN Digit"
         },
-        btnGet : "Kaydet"
+        btnGet : "Kaydet",
     },
     ftr_01_001 : // "Alış Fatura Listesi"
     {
@@ -4301,6 +4301,7 @@ export const langTr =
         dtShipDate :"Sevk Tarihi",
         txtBarcode : "Barkod Ekle",
         txtBarcodePlace: "Barkod Okutunuz",
+        txtQuantity : "Miktar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -4524,7 +4525,22 @@ export const langTr =
         validDepot : "Depo Seçmelisiniz",
         validCustomerCode : "Cari Kodu Boş Geçilemez",
         validDocDate : "Tarih Seçmelisiniz",
-        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz"
+        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz",
+        popUnderPrice :
+        {
+            title : "Bu Ürünün Daha Ucuz Tedarikçisi Mevcut"
+        },
+        grdUnderPrice :
+        {
+            clmCustomerName : "Cari Adı",
+            clmPrice : "Fiyat"
+        },
+        msgQuantity:
+        {
+            title: "Miktar",
+            btn01: "Ekle",
+            msg: "Miktar Giriniz"
+        },
     },
     sip_02_002 : // "Satış Sipariş"
     {
@@ -4541,6 +4557,7 @@ export const langTr =
         dtShipDate :"Sevk Tarihi",
         txtBarcode : "Barkod Ekle",
         txtBarcodePlace: "Barkod Okutunuz",
+        txtQuantity : "Miktar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -4768,10 +4785,13 @@ export const langTr =
         validDepot : "Depo Seçmelisiniz",
         validCustomerCode : "Cari Kodu Boş Geçilemez",
         validDocDate : "Tarih Seçmelisiniz",
-        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz"
-
-
-
+        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz",
+        msgQuantity:
+        {
+            title: "Miktar",
+            btn01: "Ekle",
+            msg: "Miktar Giriniz"
+        },
     },
     cnt_01_001 : // "Alış Anlaşmaları Listesi"
     {

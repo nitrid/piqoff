@@ -56,13 +56,15 @@ export const langFr =
         cri: "Fournisseur - Client",
         cri_01: "Saisie",
         cri_02: "Listes",
-        cri_03: "Rapports",
+        cri_03: "Traitements",
+        cri_04: "Rapports",
         cri_01_001: "Fournisseur-Client saisie",
         cri_01_002: "Adresse saisie",
         cri_01_003: "Catégorie saisie",
         cri_02_001: "Liste Fournisseur-Client",
         cri_02_002: "Liste adresse",
         cri_02_003: "Liste Catégorie ",
+        cri_03_001: "Toplu Cari Ekleme",
         ftr: "Facture ",
         ftr_01: "Listes",
         ftr_02: "Document",
@@ -1814,6 +1816,7 @@ export const langFr =
         },
         chkTaxSucre : "Taxe sucrée",
         tabTitleDetail : "Information detail"
+        
 
     },
     cri_01_002: // "Adres Tanımları"
@@ -1937,6 +1940,168 @@ export const langFr =
             supplier : "Fournisseur",
             both : "Tous les Deux",
         },
+    },
+    cri_03_001: // "Cari Tanımları"
+    {
+        cmbType :"Type",
+        cmbGenus :"Genre",
+        txtCode : "Code",
+        txtTitle : "Titre",
+        txtCustomerName : "Prénom",
+        txtCustomerLastname : "Nom De Famille",
+        txtPhone1 : "Téléphone 1",
+        txtPhone2 : "Téléphone 2",
+        txtGsmPhone : "Port Tel.",
+        txtOtherPhone : "Autre Tel.",
+        txtEmail : "E-Mail",
+        txtWeb : "Web",
+        tabTitleAdress : "Adresse",
+        tabTitleLegal : "Légal",
+        tabTitleOffical : "Administrateur",
+        tabCustomerBank : "Données Bancaire",
+        txtLegal :"Données Légales",
+        chkRebate :"Retour Reprise",
+        pg_txtCode : 
+        {
+            title : "Choisir Client",
+            clmCode : "Code",
+            clmTitle : "Titre",
+            clmName : "Nom",
+            clmLastName  : "Nom De Famille",
+        },
+        grdAdress : 
+        {
+            clmAdress : "Adresse",
+            clmZipcode : "Code Postale",
+            clmCity :"Ville",
+            clmCountry : "Pays",
+        },
+        grdLegal : 
+        {
+            clmSiretID : "Siret ID",
+            clmApeCode : "Code Ape",
+            clmTaxOffice : "Impôt",
+            clmTaxNo : "Numéro Impôt",
+            clmIntVatNo : "No TVA inter.",
+            clmTaxType : "Type de Taxe"
+        },
+        grdOffical : 
+        {
+            clmName :"Nom",
+            clmLastName : "Nom De Famille",
+            clmPhone1 : "Téléphone 1",
+            clmPhone2 : "Téléphone 2",
+            clmGsmPhone : "Tél. Port",
+            clmEMail : "E-Mail"
+        },
+        grdBank : 
+        {
+            clmName : "Nom Banque",
+            clmIban : "IBAN",
+            clmOffice : "Centre",
+            clmSwift : "Code Swift",
+        },
+        popAdress : 
+        {
+            title : "Adresse",
+            txtPopAdress : "Adresse",
+            cmbPopZipcode :"Code Postale",
+            cmbPopCity :"Ville",
+            cmbPopCountry :"Pays",
+        },
+        popBank : 
+        {
+            title : "Données Bancaire",
+            txtName : "Nom de Banque",
+            txtIban :"IBAN",
+            txtOffice :"Centre",
+            txtSwift :"Code Swift",
+        },
+        popOffical : 
+        {
+            title : "Administrateur",
+            txtPopName : "Nom",
+            txtPopLastName : "Nom De Famille",
+            txtPopPhone1 :"Téléphone 1",
+            txtPopPhone2 :"Téléphone  2",
+            txtPopGsmPhone : "Port Tel.",
+            txtPopOtherPhone : "Autre Tel.",
+            txtPopMail :"E-Mail"
+        },
+        msgSave:
+        {
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonne",
+            msg: "Etes-vous sur de vouloir enregistrer !"
+        },
+        msgSaveResult:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Enregistrement avec succès !",
+            msgFailed: "Enregistrement échoué !"
+        },
+        msgSaveValid:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez saisir les zones nécessaire !"
+        },
+        msgLegalNotValid:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez Saisir les Zones Légales !"
+        },
+        msgAdressNotValid:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Saisir pays de résidence !"
+        },
+        msgDelete:
+        {
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonne",
+            msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
+        },
+        cmbTypeData : 
+        {
+            individual :  "Individuel",
+            company :  "Entreprise"
+        },
+        cmbGenusData:
+        {
+            Customer : "Client",
+            supplier : "Fournisseur",
+            both : "Tous les Deux",
+        },
+        cmbTaxTypeData : 
+        {
+            individual :  "Individuel",
+            company :  "Entreprise"
+        },
+        msgCode : 
+        {
+            title: "Attention",
+            btn01: "Aller Client",
+            btn02: "OK",
+            msg : "Client déja existant!"
+        },
+        chkTaxSucre : "Taxe sucrée",
+        tabTitleDetail : "Information detail",
+        popSettingCustomer :     //bak
+        {    
+            title : "Ayarlar",    //bak
+            txtStartRef : "Başlangıç Kodu",    //bak
+            txtFinishRef : "Bitiş Kodu",    //bak
+            txtTotal : "Toplam Adet",    //bak
+            chkDigit : "EAN Digit"    //bak
+        },  
+        btnGet : "Kaydet"    //bak
+
     },
     ftr_01_001 : // "Alış Fatura Listesi"
     {
@@ -4129,6 +4294,7 @@ export const langFr =
         dtShipDate :"Date Expédition",
         txtBarcode: "Code barre",
         txtBarcodePlace: "Barkod Okutunuz",
+        txtQuantity : "Pièce", 
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -4352,7 +4518,13 @@ export const langFr =
         validDepot : "Sélectionner Dépot",
         validCustomerCode : "Le Code Produit ne peut être Vide ",
         validDocDate : "Sélectionner Date" ,
-        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter"
+        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
+        msgQuantity:
+        {
+            title: "Quantité",
+            btn01: "Ajoutez",
+            msg: "Ajoutez quantité"
+        },
     },
     sip_02_002 : // "Satış Sipariş"
     {
@@ -4369,6 +4541,7 @@ export const langFr =
         dtShipDate :"Date Expédition",
         txtBarcode: "Code barre",
         txtBarcodePlace: "Barkod Okutunuz",
+        txtQuantity : "Pièce", 
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -4595,10 +4768,13 @@ export const langFr =
         validDepot : "Sélectionner Dépot",
         validCustomerCode : "Le Code Produit ne peut être Vide ",
         validDocDate : "Sélectionner Date" ,
-        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter"
-
-
-
+        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
+        msgQuantity:
+        {
+            title: "Quantité",
+            btn01: "Ajoutez",
+            msg: "Ajoutez quantité"
+        },
     },
     cnt_01_001 : // "Alış Anlaşmaları Listesi"
     {

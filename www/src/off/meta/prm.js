@@ -68,6 +68,24 @@ export const prm =
             CAPTION : "Para Sembolü"
         }
     },
+    //Para Sembolu
+    {
+        TYPE : 0,
+        ID :"pruchasePriceAlert",
+        VALUE : 
+        {
+            value : true
+        },
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Daha Düşük Fiyatlı Tedarikçi Uyarısı"
+        }
+    },
     //#endregion
     //#region Stok Tanıtım
     //txtRef

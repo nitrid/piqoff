@@ -1071,22 +1071,32 @@ export default class salesOrder extends React.PureComponent
                                         this.txtBarcode.setState({value:""})
                                         if(tmpData.result.recordset.length > 0)
                                         {
-                                            let tmpdocOrders = {...this.docObj.docOrders.empty}
-                                            tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
-                                            tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
-                                            tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                            tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
-                                            tmpdocOrders.REF = this.docObj.dt()[0].REF
-                                            tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
-                                            tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                            tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
-                                            tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                            this.txtRef.readOnly = true
-                                            this.txtRefno.readOnly = true
-                                            this.docObj.docOrders.addEmpty(tmpdocOrders)
-                                        
-                                            this.addItem(tmpData.result.recordset[0],(typeof this.docObj.docOrders.dt()[0] == 'undefined' ? 0 : this.docObj.docOrders.dt().length-1))
-                                            
+                                            this.txtPopQuantity.value = ''
+                                            setTimeout(async () => 
+                                            {
+                                               this.txtPopQuantity.focus()
+                                            }, 700);
+                                            await this.msgQuantity.show().then(async (e) =>
+                                            {
+                                                if(e == 'btn01')
+                                                {
+                                                    let tmpdocOrders = {...this.docObj.docOrders.empty}
+                                                    tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
+                                                    tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
+                                                    tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                    tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
+                                                    tmpdocOrders.REF = this.docObj.dt()[0].REF
+                                                    tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
+                                                    tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                    tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
+                                                    tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                    this.txtRef.readOnly = true
+                                                    this.txtRefno.readOnly = true
+                                                    this.docObj.docOrders.addEmpty(tmpdocOrders)
+                                                
+                                                    this.addItem(tmpData.result.recordset[0],(typeof this.docObj.docOrders.dt()[0] == 'undefined' ? 0 : this.docObj.docOrders.dt().length-1),this.txtPopQuantity.value)
+                                                }
+                                            })
                                         }
                                         else
                                         {
@@ -1862,8 +1872,8 @@ export default class salesOrder extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div> 
-                         {/* combineItem Dialog  */}
-                         <NdDialog id={"msgCombineItem"} container={"#root"} parent={this}
+                    {/* combineItem Dialog  */}
+                    <NdDialog id={"msgCombineItem"} container={"#root"} parent={this}
                         position={{of:'#root'}} 
                         showTitle={true} 
                         title={this.t("msgCombineItem.title")} 
@@ -1891,6 +1901,37 @@ export default class salesOrder extends React.PureComponent
                             </div>
                             <div className='row'>
                         
+                            </div>
+                        
+                    </NdDialog>  
+                    {/* Miktar Dialog  */}
+                    <NdDialog id={"msgQuantity"} container={"#root"} parent={this}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        title={this.t("msgQuantity.title")} 
+                        showCloseButton={false}
+                        width={"350px"}
+                        height={"250px"}
+                        button={[{id:"btn01",caption:this.t("msgQuantity.btn01"),location:'after'}]}
+                        >
+                            <div className="row">
+                                <div className="col-12 py-2">
+                                    <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgQuantity.msg")}</div>
+                                </div>
+                                <div className="col-12 py-2">
+                                <Form>
+                                    {/* checkCustomer */}
+                                    <Item>
+                                        <Label text={this.t("txtQuantity")} alignment="right" />
+                                        <NdNumberBox id="txtPopQuantity" parent={this} simple={true}  
+                                        >
+                                    </NdNumberBox>
+                                    </Item>
+                                </Form>
+                            </div>
+                            </div>
+                            <div className='row'>
+                            
                             </div>
                         
                     </NdDialog>  

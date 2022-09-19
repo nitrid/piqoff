@@ -47,6 +47,8 @@ export default class purchaseOrder extends React.PureComponent
 
 
         this.multiItemData = new datatable
+        this.underPriceData = new datatable
+
     }
     async componentDidMount()
     {
@@ -121,6 +123,7 @@ export default class purchaseOrder extends React.PureComponent
 
         await this.grdPurcOrders.dataRefresh({source:this.docObj.docOrders.dt('DOC_ORDERS')});
         await this.grdMultiItem.dataRefresh({source:this.multiItemData});
+        await this.grdUnderPrice.dataRefresh({source:this.underPriceData});
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -505,6 +508,26 @@ export default class purchaseOrder extends React.PureComponent
             this.docObj.docOrders.dt()[pIndex].AMOUNT = 0
             this.docObj.docOrders.dt()[pIndex].TOTAL = 0
             this._calculateTotal()
+        }
+        let tmpPricePrm = this.sysParam.filter({ID:'pruchasePriceAlert',USERS:this.user.CODE}).getValue()
+        if(typeof tmpPricePrm != 'undefined' && tmpPricePrm.value == true)
+        {
+            let tmpQuery = 
+            {
+                query :"SELECT CUSTOMER_NAME,(SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM_GUID,CUSTOMER_GUID,@QUANTITY,GETDATE())) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND (SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM_GUID,CUSTOMER_GUID,@QUANTITY,GETDATE())) < @PRICE",
+                param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float','PRICE:float'],
+                value : [pData.CODE,this.docObj.dt()[0].OUTPUT,pQuantity,this.docObj.docOrders.dt()[pIndex].PRICE]
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+
+            if(tmpData.result.recordset.length > 0)
+            {
+                for (let i = 0; i < tmpData.result.recordset.length; i++) 
+                {
+                    this.underPriceData.push(tmpData.result.recordset[i])
+                }
+                this.popUnderPrice.show()
+            }
         }
     }
     async _getItems()
@@ -1140,25 +1163,37 @@ export default class purchaseOrder extends React.PureComponent
                                         }
                                         let tmpData = await this.core.sql.execute(tmpQuery) 
                                         this.txtBarcode.setState({value:""})
+                                       
                                         if(tmpData.result.recordset.length > 0)
                                         {
-                                            let tmpdocOrders = {...this.docObj.docOrders.empty}
-                                            tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
-                                            tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
-                                            tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                            tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
-                                            tmpdocOrders.REF = this.docObj.dt()[0].REF
-                                            tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
-                                            tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                            tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
-                                            tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-
-                                            this.txtRef.readOnly = true
-                                            this.txtRefno.readOnly = true
-                                            this.docObj.docOrders.addEmpty(tmpdocOrders)
-                                        
-                                            this.addItem(tmpData.result.recordset[0],(typeof this.docObj.docOrders.dt()[0] == 'undefined' ? 0 : this.docObj.docOrders.dt().length-1))
-                                            
+                                            this.txtPopQuantity.value = ''
+                                            setTimeout(async () => 
+                                            {
+                                               this.txtPopQuantity.focus()
+                                            }, 700);
+                                            await this.msgQuantity.show().then(async (e) =>
+                                            {
+                                                if(e == 'btn01')
+                                                {
+                                                    let tmpdocOrders = {...this.docObj.docOrders.empty}
+                                                    tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
+                                                    tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
+                                                    tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                    tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
+                                                    tmpdocOrders.REF = this.docObj.dt()[0].REF
+                                                    tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
+                                                    tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                    tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
+                                                    tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+        
+                                                    this.txtRef.readOnly = true
+                                                    this.txtRefno.readOnly = true
+                                                    this.docObj.docOrders.addEmpty(tmpdocOrders)
+                                                
+                                                    this.addItem(tmpData.result.recordset[0],(typeof this.docObj.docOrders.dt()[0] == 'undefined' ? 0 : this.docObj.docOrders.dt().length-1),this.txtPopQuantity.value)
+                                                }
+                                            })
+                                          
                                         }
                                         else
                                         {
@@ -1943,6 +1978,73 @@ export default class purchaseOrder extends React.PureComponent
                                 </div>
                             </div>
                         <div className='row'></div>
+                    </NdDialog>  
+                    {/*Düşük Fiyat PopUp */}
+                    <div>
+                        <NdPopUp parent={this} id={"popUnderPrice"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popUnderPrice.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'250'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item >
+                                    <NdGrid
+                                    parent={this} id={"grdUnderPrice"} 
+                                    showBorders={true} 
+                                    columnsAutoWidth={true} 
+                                    allowColumnReordering={true} 
+                                    allowColumnResizing={true} 
+                                    headerFilter={{visible:true}}
+                                    filterRow = {{visible:true}}
+                                    height={'100%'} 
+                                    width={'100%'}
+                                    dbApply={false}
+                                    >
+                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
+                                        <Scrolling mode="virtual" />
+                                        <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
+                                        <Column dataField="CUSTOMER_NAME" caption={this.t("grdUnderPrice.clmCustomerName")} width={150} allowEditing={false} />
+                                        <Column dataField="PRICE" caption={this.t("grdUnderPrice.clmPrice")} width={150} allowEditing={false} />
+                                    </NdGrid>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div>  
+                    {/* Miktar Dialog  */}
+                    <NdDialog id={"msgQuantity"} container={"#root"} parent={this}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        title={this.t("msgQuantity.title")} 
+                        showCloseButton={false}
+                        width={"350px"}
+                        height={"250px"}
+                        button={[{id:"btn01",caption:this.t("msgQuantity.btn01"),location:'after'}]}
+                        >
+                            <div className="row">
+                                <div className="col-12 py-2">
+                                    <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgQuantity.msg")}</div>
+                                </div>
+                                <div className="col-12 py-2">
+                                <Form>
+                                    {/* checkCustomer */}
+                                    <Item>
+                                        <Label text={this.t("txtQuantity")} alignment="right" />
+                                        <NdNumberBox id="txtPopQuantity" parent={this} simple={true}  
+                                        >
+                                    </NdNumberBox>
+                                    </Item>
+                                </Form>
+                            </div>
+                            </div>
+                            <div className='row'>
+                            
+                            </div>
+                        
                     </NdDialog>  
                 </ScrollView>                
             </div>

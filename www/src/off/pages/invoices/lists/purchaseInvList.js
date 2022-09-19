@@ -122,7 +122,6 @@ export default class purchaseInvList extends React.PureComponent
     }
     async _btnGetClick()
     {
-        console.log(this.dtFirst.value)
         let tmpSource =
         {
             source : 
