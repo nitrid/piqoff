@@ -36,7 +36,6 @@ export default class collectiveItemEdit extends React.PureComponent
         this.editObj = new editItemCls();
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
-       
         this._btnGetClick = this._btnGetClick.bind(this)
     }
     componentDidMount()
@@ -49,8 +48,6 @@ export default class collectiveItemEdit extends React.PureComponent
     async init()
     {
         this.editObj.clearAll()
-
-       
         await this.grdItemList.dataRefresh({source:this.editObj.dt('ITEM_EDIT')});
     }
     async _btnGetClick()
@@ -278,10 +275,11 @@ export default class collectiveItemEdit extends React.PureComponent
                             width={'100%'}
                             dbApply={false}
                             selection={{mode:"single"}}
-                            onRowUpdating={async(e)=>{
+                            onRowUpdating={async(e)=>
+                            {
                                 console.log(e)
-                               this.grossMargin()
-                               this.netMargin()
+                                this.grossMargin()
+                                this.netMargin()
                             }}
                             onRowClick={async(e)=>
                             {
@@ -302,6 +300,7 @@ export default class collectiveItemEdit extends React.PureComponent
                                     id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                 }
+                                
                                 App.instance.setState({isExecute:true})
                                 if(await this.editObj.save() == 0)
                                 {                                                    
@@ -365,7 +364,6 @@ export default class collectiveItemEdit extends React.PureComponent
                                 <Column dataField="ORGINS" caption={this.t("grdItemList.clmOrgins")} visible={true} width={120} editCellRender={this._cellRoleRender}/>   
                                 <Column dataField="WEIGHING" caption={this.t("grdItemList.clmWeighing")} visible={true} width={100}/>  
                                 <Column dataField="STATUS" caption={this.t("grdItemList.clmStatus")} visible={true} width={100}/>    
-                                          
                             </NdGrid>
                         </div>
                     </div>

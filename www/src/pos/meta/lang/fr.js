@@ -142,7 +142,11 @@ export const langFr =
     msgMinPrice : 
     {
         title : "Attention",
+
+        msg : "Le prix ne peut min prix !! ",
+
         msg : "Le prix ne peut être min prix !! ",
+
         btn01 : "OK",
     },
     msgCostPrice : 

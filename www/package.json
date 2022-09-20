@@ -52,7 +52,7 @@
     "react-simple-keyboard": "^3.4.139",
     "reactstrap": "^9.1.1",
     "remove-files-webpack-plugin": "^1.5.0",
-    "socket.io-client": "^4.5.0",
+    "socket.io-client": "^4.5.2",
     "xlsx": "^0.18.5",
     "zip-webpack-plugin": "^4.0.1"
   }
