@@ -1809,12 +1809,12 @@ export default class purchaseOrder extends React.PureComponent
                                                     value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value]
                                                 }
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                console.log(JSON.stringify(tmpData.result.recordset[0]))
                                                 this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
                                                 {
                                                     if(pResult.split('|')[0] != 'ERR')
                                                     {
-                                                        var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
+                                                        var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
+
                                                         mywindow.onload = function() 
                                                         {
                                                             mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
