@@ -385,112 +385,120 @@ export default class purchaseInvoice extends React.PureComponent
     }
     async addItem(pData,pIndex,pQuantity,pPrice,pDiscount,pDiscountPer,pVat)
     {
+        if(typeof pData.ITEM_TYPE == 'undefined')
+        {
+            pData.ITEM_TYPE = 0
+        }
         if(typeof pQuantity == 'undefined')
         {
             pQuantity = 1
         }
         
-        if(this.customerControl == true)
+        if(pData.ITEM_TYPE == 0)
         {
-            let tmpCheckQuery = 
+            if(this.customerControl == true)
             {
-                query :"SELECT MULTICODE,(SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM_GUID,CUSTOMER_GUID,@QUANTITY,GETDATE())) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
-                param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
-                value : [pData.CODE,this.docObj.dt()[0].OUTPUT,pQuantity]
-            }
-            let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
-            console.log(tmpCheckData)
-            if(tmpCheckData.result.recordset.length == 0)
-            {   
-                let tmpCustomerBtn = ''
-                if(this.customerClear == true)
+                let tmpCheckQuery = 
                 {
-                    await this.grdPurcInv.devGrid.deleteRow(pIndex)
-                    return 
+                    query :"SELECT MULTICODE,(SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM_GUID,CUSTOMER_GUID,@QUANTITY,GETDATE())) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
+                    param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+                    value : [pData.CODE,this.docObj.dt()[0].OUTPUT,pQuantity]
                 }
-               
-                await this.msgCustomerNotFound.show().then(async (e) =>
-                {
-
-                   if(e == 'btn01' && this.checkCustomer.value == true)
+                let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
+                if(tmpCheckData.result.recordset.length == 0)
+                {   
+                    let tmpCustomerBtn = ''
+                    if(this.customerClear == true)
                     {
-                        this.customerControl = false
-                        return
-                    }
-                    if(e == 'btn02')
-                    {
-                        tmpCustomerBtn = e
                         await this.grdPurcInv.devGrid.deleteRow(pIndex)
-                        if(this.checkCustomer.value == true)
-                        {
-                            this.customerClear = true
-                        }
                         return 
                     }
-                })
-                if(tmpCustomerBtn == 'btn02')
-                {
-                    return
-                }
-            }
-        }
-       
-        for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
-        {
-            if(this.docObj.docItems.dt()[i].ITEM_CODE == pData.CODE)
-            {
-                if(this.combineControl == true)
-                {
-                    let tmpCombineBtn = ''
-                    await this.msgCombineItem.show().then(async (e) =>
+                   
+                    await this.msgCustomerNotFound.show().then(async (e) =>
                     {
     
-                        if(e == 'btn01')
+                       if(e == 'btn01' && this.checkCustomer.value == true)
                         {
-                            this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + pQuantity
-                            this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100) * pQuantity)).toFixed(3))
-                            this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
-                            this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
-                            this._calculateTotal()
-                            await this.grdPurcInv.devGrid.deleteRow(pIndex)
-                            if(this.checkCombine.value == true)
-                            {
-                                this.combineControl = false
-                            }
-                            tmpCombineBtn = e
+                            this.customerControl = false
                             return
                         }
                         if(e == 'btn02')
                         {
-                            if(this.checkCombine.value == true)
+                            tmpCustomerBtn = e
+                            await this.grdPurcInv.devGrid.deleteRow(pIndex)
+                            if(this.checkCustomer.value == true)
                             {
-                                this.combineControl = false
-                                this.combineNew = true
+                                this.customerClear = true
                             }
-                            return
+                            return 
                         }
                     })
-                    if(tmpCombineBtn == 'btn01')
+                    if(tmpCustomerBtn == 'btn02')
                     {
                         return
                     }
                 }
-                else if(this.combineNew == false)
-                {
-                    this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + pQuantity
-                    this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100) * pQuantity)).toFixed(3))
-                    this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
-                    this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
-                    this._calculateTotal()
-                    await this.grdPurcInv.devGrid.deleteRow(pIndex)
-                    return
-                }
-               
-                
             }
+           
+            for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+            {
+                if(this.docObj.docItems.dt()[i].ITEM_CODE == pData.CODE)
+                {
+                    if(this.combineControl == true)
+                    {
+                        let tmpCombineBtn = ''
+                        await this.msgCombineItem.show().then(async (e) =>
+                        {
+        
+                            if(e == 'btn01')
+                            {
+                                this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + pQuantity
+                                this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100) * pQuantity)).toFixed(3))
+                                this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
+                                this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
+                                this._calculateTotal()
+                                await this.grdPurcInv.devGrid.deleteRow(pIndex)
+                                if(this.checkCombine.value == true)
+                                {
+                                    this.combineControl = false
+                                }
+                                tmpCombineBtn = e
+                                return
+                            }
+                            if(e == 'btn02')
+                            {
+                                if(this.checkCombine.value == true)
+                                {
+                                    this.combineControl = false
+                                    this.combineNew = true
+                                }
+                                return
+                            }
+                        })
+                        if(tmpCombineBtn == 'btn01')
+                        {
+                            return
+                        }
+                    }
+                    else if(this.combineNew == false)
+                    {
+                        this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + pQuantity
+                        this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100) * pQuantity)).toFixed(3))
+                        this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
+                        this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
+                        this._calculateTotal()
+                        await this.grdPurcInv.devGrid.deleteRow(pIndex)
+                        return
+                    }
+                   
+                    
+                }
+            }
+
         }
         this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
         this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID
+        this.docObj.docItems.dt()[pIndex].ITEM_TYPE = pData.ITEM_TYPE
         if(typeof pVat == 'undefined')
         {
             this.docObj.docItems.dt()[pIndex].VAT_RATE = pData.VAT
@@ -567,7 +575,7 @@ export default class purchaseInvoice extends React.PureComponent
             {
                 select:
                 {
-                    query : "SELECT GUID,CODE,NAME,VAT," + 
+                    query : "SELECT GUID,CODE,NAME,VAT,0 AS ITEM_TYPE," + 
                     "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
                     " FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) " ,
                     param : ['VAL:string|50']
@@ -963,14 +971,18 @@ export default class purchaseInvoice extends React.PureComponent
                 for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
                 {
 
-                    if(typeof this.docObj.docItems.dt()[i].OLD_VAT != 'undefined' && this.docObj.docItems.dt()[i].VAT_RATE != this.docObj.docItems.dt()[i].OLD_VAT)
+                    if(this.docObj.docItems.dt()[i].ITEM_TYPE == 0)
                     {
-                        this.newVat.push(this.docObj.docItems.dt()[i])
+                        if(typeof this.docObj.docItems.dt()[i].OLD_VAT != 'undefined' && this.docObj.docItems.dt()[i].VAT_RATE != this.docObj.docItems.dt()[i].OLD_VAT)
+                        {
+                            this.newVat.push(this.docObj.docItems.dt()[i])
+                        }
+                        if(this.docObj.docItems.dt()[i].CUSTOMER_PRICE != this.docObj.docItems.dt()[i].PRICE)
+                        {
+                            this.newPrice.push(this.docObj.docItems.dt()[i])
+                        }
                     }
-                    if(this.docObj.docItems.dt()[i].CUSTOMER_PRICE != this.docObj.docItems.dt()[i].PRICE)
-                    {
-                        this.newPrice.push(this.docObj.docItems.dt()[i])
-                    }
+                    
                 }
                 if(this.newPrice.length > 0)
                 {
@@ -1744,6 +1756,134 @@ export default class purchaseInvoice extends React.PureComponent
                                             await dialog(tmpConfObj);
                                         }
                                     }}/>
+                                    <Button icon="add" text={this.t("serviceAdd")}
+                                    validationGroup={"frmPurcInv"  + this.tabIndex}
+                                    onClick={async (e)=>
+                                    {
+                                        if(e.validationGroup.validate().status == "valid")
+                                        {
+                                            if(typeof this.docObj.docItems.dt()[0] != 'undefined')
+                                            {
+                                                if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
+                                                {
+                                                    this.pg_service.show()
+                                                    this.pg_service.onClick = async(data) =>
+                                                    {
+                                                        this.customerControl = true
+                                                        this.customerClear = false
+                                                        this.combineControl = true
+                                                        this.combineNew = false
+                                                        if(data.length == 1)
+                                                        {
+                                                            await this.addItem(data[0],this.docObj.docItems.dt().length-1)
+                                                        }
+                                                        else if(data.length > 1)
+                                                        {
+                                                            for (let i = 0; i < data.length; i++) 
+                                                            {
+                                                                if(i == 0)
+                                                                {
+                                                                    await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                                }
+                                                                else
+                                                                {
+                                                                    let tmpDocItems = {...this.docObj.docItems.empty}
+                                                                    tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                                                                    tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                                                                    tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                                    tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                                                                    tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                                                                    tmpDocItems.REF = this.docObj.dt()[0].REF
+                                                                    tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                                                                    tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                                    tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                                                                    tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                                    tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                                                                    this.txtRef.readOnly = true
+                                                                    this.txtRefno.readOnly = true
+                                                                    this.docObj.docItems.addEmpty(tmpDocItems)
+                                                                    await this.core.util.waitUntil(100)
+                                                                    await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    return
+                                                }
+                                            }
+                                           
+                                            let tmpDocItems = {...this.docObj.docItems.empty}
+                                            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                                            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                                            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                            tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                                            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                                            tmpDocItems.REF = this.docObj.dt()[0].REF
+                                            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                                            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                                            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                            tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                                            this.txtRef.readOnly = true
+                                            this.txtRefno.readOnly = true
+                                            this.docObj.docItems.addEmpty(tmpDocItems)
+                                            await this.core.util.waitUntil(100)
+                                            this.pg_service.show()
+                                            this.pg_service.onClick = async(data) =>
+                                            {
+                                                this.customerControl = true
+                                                this.customerClear = false
+                                                this.combineControl = true
+                                                this.combineNew = false
+                                                if(data.length == 1)
+                                                {
+                                                    await this.addItem(data[0],this.docObj.docItems.dt().length-1)
+                                                }
+                                                else if(data.length > 1)
+                                                {
+                                                    for (let i = 0; i < data.length; i++) 
+                                                    {
+                                                        if(i == 0)
+                                                        {
+                                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                        }
+                                                        else
+                                                        {
+                                                            let tmpDocItems = {...this.docObj.docItems.empty}
+                                                            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                                                            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                                                            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                            tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                                                            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                                                            tmpDocItems.REF = this.docObj.dt()[0].REF
+                                                            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                                                            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                                                            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                            tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                                                            this.txtRef.readOnly = true
+                                                            this.txtRefno.readOnly = true
+                                                            this.docObj.docItems.addEmpty(tmpDocItems)
+                                                            await this.core.util.waitUntil(100)
+                                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                              
+                                        }
+                                        else
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
+                                            }
+                                            
+                                            await dialog(tmpConfObj);
+                                        }
+                                    }}/>
                                     <Button icon="increaseindent" text="Toplu Ürün Ekleme"
                                     validationGroup={"frmPurcInv"  + this.tabIndex}
                                     onClick={async (e)=>
@@ -2209,6 +2349,20 @@ export default class purchaseInvoice extends React.PureComponent
                         <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={200}/>
                         <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc"/>
                         <Column dataField="MULTICODE" caption={this.t("pg_txtItemsCode.clmMulticode")} width={200}/>
+                    </NdPopGrid>
+                    {/* Hizmet Grid */}
+                    <NdPopGrid id={"pg_service"} parent={this} container={"#root"}
+                    visible={false}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    title={this.t("pg_service.title")} //
+                    data={{source:{select:{query : "SELECT *,1 AS ITEM_TYPE FROM SERVICE_ITEMS WHERE STATUS = 1"},sql:this.core.sql}}}
+                    >
+                        <Column dataField="CODE" caption={this.t("pg_service.clmCode")} width={200}/>
+                        <Column dataField="NAME" caption={this.t("pg_service.clmName")} width={300} defaultSortOrder="asc"/>
                     </NdPopGrid>
                     {/* Finans PopUp */}
                     <div>

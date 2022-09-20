@@ -45,6 +45,11 @@ export const menu = (e) =>
                             text: e.t('menu.stk_01_006'),//'Depo Tanımları',
                             path: 'items/cards/depotCard'
                         },
+                        {
+                            id: 'stk_01_007',
+                            text: e.t('menu.stk_01_007'),//'Hizmet Tanımları',
+                            path: 'items/cards/serviceItemsCard'
+                        },
                     ]
                 },
                 {

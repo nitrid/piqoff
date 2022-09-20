@@ -37,6 +37,7 @@ export const langTr =
         stk_01_004: "Birim Tanımları",
         stk_01_005: "Multi Kod Tanımları",
         stk_01_006: "Depo/Mağaza Tanımları",
+        stk_01_007: "Hizmet Tanımları",
         stk_02_001: "Sayım Evrakı",
         stk_02_002: "Depo/Mağaza Arası Sevk",
         stk_02_003: "Kayıp Ürün Çıkışı",
@@ -564,6 +565,58 @@ export const langTr =
             msg : "Girmiş olduğunuz Kasa sistem de kayıtlı !"
         },
         chkActive: "Aktif",
+      
+    },
+       stk_01_007 : // "Hizmet Tanımları"
+    {
+        txtCode : "Kodu",
+        txtName :"Adı",
+        cmbType :"Tip",
+        validCode :"Kodu Boş Geçemezsiniz !",
+      
+        pg_txtCode : 
+        {
+            title : "Hizmet Kartı Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI",
+            clmType : "TİPİ",
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgCode : 
+        {
+            title: "Dikkat",
+            btn01: "Kartı Git",
+            btn02: "Tamam",
+            msg : "Girmiş olduğunuz hizmet kodu sistem de kayıtlı !"
+        },
+        chkActive: "Aktif",
+        cmbTax : "Vergi"
       
     },
     stk_02_001 : // Sayım Evrakı"
@@ -2570,6 +2623,13 @@ export const langTr =
             clmVat: "Sistemdeki KDV",
             clmVat2: "Yeni KDV",
         },
+        serviceAdd : "Hizmet Ekle",
+        pg_service : 
+        {
+            title : "Hizmetler",
+            clmCode : "Kod",
+            clmName : "Adı"
+        }
     },
     ftr_02_002 : // "Satış Faturası"
     {
