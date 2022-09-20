@@ -762,6 +762,7 @@ export class itemMultiCodeCls
         {
             GUID:'00000000-0000-0000-0000-000000000000',
             CUSER: this.core.auth.data == null ? '' : this.core.auth.data.CODE,
+            LUSER: this.core.auth.data == null ? '' : this.core.auth.data.CODE,
             ITEM_GUID : '00000000-0000-0000-0000-000000000000',            
             ITEM_CODE : '',            
             ITEM_NAME : '',

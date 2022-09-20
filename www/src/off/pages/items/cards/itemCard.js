@@ -87,7 +87,6 @@ export default class itemCard extends React.PureComponent
         {
             this.init(); 
         }
-        console.log("2 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
     }    
     async init()
     {  
@@ -214,7 +213,6 @@ export default class itemCard extends React.PureComponent
     }
     async getItem(pCode)
     {
-        console.log("11 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
         App.instance.setState({isExecute:true})
         this.itemsObj.clearAll();
         this.txtRef.value = Math.floor(Date.now() / 1000)
@@ -263,7 +261,6 @@ export default class itemCard extends React.PureComponent
             {
                 this.txtSalePrice.value = tmpData.result.recordset[0].PRICE
                 this.txtSalePrice.setState({value:tmpData.result.recordset[0].PRICE})
-                console.log(this.txtSalePrice)
             }
             else
             {
@@ -272,7 +269,7 @@ export default class itemCard extends React.PureComponent
             }
         }
         this.prevCode = this.itemsObj.dt('ITEMS').length > 0 ? this.itemsObj.dt('ITEMS')[0].CODE : '';
-        console.log("12 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
+        this.imgFile.value = this.itemsObj.itemImage.dt()[0].IMAGE
     }
     async checkItem(pCode)
     {
@@ -455,7 +452,6 @@ export default class itemCard extends React.PureComponent
         }
         else if(e.itemData.title == this.t("tabTitleInfo"))
         {
-            console.log(this.itemsObj.dt())
             await this.grdItemInfo.dataRefresh({source:this.itemsObj.dt()});
         }
         else if(e.itemData.title == this.t("tabTitleOtherShop"))
@@ -471,7 +467,6 @@ export default class itemCard extends React.PureComponent
             {
                 this.txtSalePrice.value = tmpData.result.recordset[0].PRICE
                 this.txtSalePrice.setState({value:tmpData.result.recordset[0].PRICE})
-                console.log(this.txtSalePrice)
             }
             else
             {
@@ -629,7 +624,6 @@ export default class itemCard extends React.PureComponent
     }
     render()
     {           
-        console.log("3 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
         return (
             <React.Fragment>                
                 <ScrollView>                    
@@ -745,7 +739,6 @@ export default class itemCard extends React.PureComponent
                                             value : [this.itemsObj.dt()[0].GUID]
                                         }
                                         let tmpData = await this.core.sql.execute(tmpQuery) 
-                                        console.log(tmpData)
                                         if(tmpData.result.recordset.length > 0)
                                         {
                                             let tmpConfObj =
@@ -1586,9 +1579,9 @@ export default class itemCard extends React.PureComponent
                                                         let tmpMAxPrice = e.newData.CUSTOMER_PRICE + (e.newData.CUSTOMER_PRICE * tmpMaxData) /100
                                                         this.txtMaxSalePrice.value = Number((tmpMAxPrice).toFixed(2))
                                                         this.taxSugarValidCheck()
-                                                        this.btnSave.setState({disabled:false});
-
                                                     }
+                                                    this.btnSave.setState({disabled:false});
+
                                                     //********************************** */
                                                 }
                                             }}
@@ -2186,7 +2179,6 @@ export default class itemCard extends React.PureComponent
                                                 {
                                                     let tmpEmptyMulti = {...this.itemsObj.itemMultiCode.empty};
                                                     
-                                                    console.log(this.itemsObj.dt())
                                                     tmpEmptyMulti.CUSER = this.core.auth.data.CODE,  
                                                     tmpEmptyMulti.ITEM_GUID = this.itemsObj.dt()[0].GUID 
                                                     tmpEmptyMulti.CUSTOMER_GUID = this.txtPopCustomerCode.GUID                              
@@ -2215,6 +2207,7 @@ export default class itemCard extends React.PureComponent
                                                     let tmpMAxPrice = this.txtPopCustomerPrice.value + (this.txtPopCustomerPrice.value * tmpMaxData) /100
                                                     this.txtMaxSalePrice.value = Number((tmpMAxPrice).toFixed(2))
                                                     this.taxSugarValidCheck()
+                                                    console.log(this.itemsObj.itemMultiCode.dt())
                                                 }                              
                                                 else
                                                 {

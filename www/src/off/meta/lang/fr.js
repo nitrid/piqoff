@@ -22,6 +22,7 @@ export const langFr =
     msgInvalidUser : "Utilisateur ou mdp faux.",
     txtCardRead :"Veuillez scanner votre badge.",
     checkAll :"Tout saisir",
+    msgUserAccess : "Giriş Yetkiniz Yok", // BAK
     menu:
     {
         stk: "Produit",                
