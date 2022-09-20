@@ -22,6 +22,7 @@ export const langTr =
     msgInvalidUser : "Kullanıcı Adı veya Şifre Hatalı.",
     txtCardRead :"Lütfen Kullanıcı Kartınızı Okutunuz.",
     checkAll :"Tümünü Uygula",
+    msgUserAccess : "Giriş Yetkiniz Yok",
     menu:
     {
         stk: "Stok",                

@@ -86,8 +86,16 @@ export default class Login extends React.Component
         
         if((await this.core.auth.login(this.state.kullanici,this.state.sifre,'OFF')))
         {
-           
-            App.instance.setState({logined:true});
+            // POS KULLANICILARININ GİREMEMESİ İÇİN YAPILDI
+            if(this.core.auth.data.ROLE == 'Pos')
+            {
+                this.setState({logined:false,alert:this.lang.t("msgUserAccess")})
+                
+            }
+            else
+            {
+                App.instance.setState({logined:true});
+            }
         }
         else
         {
