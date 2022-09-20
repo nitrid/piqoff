@@ -132,6 +132,7 @@ export const langTr =
         {
             clmCode : "Kodu",
             clmName : "Adı",
+            clmLastName :"Soyadı",
             clmRole : "Rol",
             clmStatus : "Durum",
             clmPwd : "Parola",

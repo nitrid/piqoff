@@ -46,12 +46,20 @@ export default class userPage extends React.Component
                     filterRow={{visible:true}} headerFilter={{visible:true}}
                     param={this.param.filter({ELEMENT:'grdUserList',USERS:this.user.CODE})} 
                     access={this.access.filter({ELEMENT:'grdUserList',USERS:this.user.CODE})}
-                    onRowUpdating={(e)=>
+                    onRowUpdating={async (e)=>
                     {
                         if(typeof e.newData.PWD != 'undefined')
                         {
                             e.newData.PWD = btoa(e.newData.PWD)
                         }
+                    }}
+                    onRowPrepared={async (e)=>
+                    {
+                       
+                    }}
+                    onRowUpdated={async (e)=>
+                    {
+                        await this.userObj.save()
                     }}
                     onRowInserted={async (e)=>
                     {
@@ -88,6 +96,7 @@ export default class userPage extends React.Component
                         <Item itemType="group" colCount={2}>
                             <Item dataField="CODE" />
                             <Item dataField="NAME" />
+                            <Item dataField="LAST_NAME" />
                             <Item dataField="PWD"/>
                             <Item dataField="ROLE" />
                             <Item dataField="SHA" />
@@ -95,8 +104,9 @@ export default class userPage extends React.Component
                         </Item>
                         </Form>
                         </Editing>
-                        <Column dataField="CODE" caption={this.t("grdUserList.clmCode")} />
+                        <Column dataField="CODE" caption={this.t("grdUserList.clmCode")}/>
                         <Column dataField="NAME" caption={this.t("grdUserList.clmName")} />
+                        <Column dataField="LAST_NAME" caption={this.t("grdUserList.clmLastName")} />
                         <Column dataField="PWD" editorOptions={{mode:"password"}} caption={this.t("grdUserList.clmPwd")} visible={false}/>
                         <Column dataField="CARDID" caption={this.t("grdUserList.clmCardId")}/>
                         <Column dataField="ROLE" caption={this.t("grdUserList.clmRole")} >
