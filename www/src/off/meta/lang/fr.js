@@ -4321,7 +4321,7 @@ export const langFr =
         },
         pg_txtBarcode : 
         {
-            title : "Sélectionner Produit",
+            title : "Sélectionner Barre",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
             clmMulticode : "Sélection Document",
@@ -4795,6 +4795,14 @@ export const langFr =
             title: "Quantité",
             btn01: "Ajoutez",
             msg: "Ajoutez quantité"
+        },
+        pg_txtBarcode : 
+        {
+            title : "Sélectionner Barre",
+            clmCode :  "Référence Produit",
+            clmName : "Nom Produit",
+            clmMulticode : "Sélection Document",
+            clmBarcode : "Code Barre"
         },
     },
     cnt_01_001 : // "Alış Anlaşmaları Listesi"
@@ -6371,7 +6379,21 @@ export const langFr =
         validDepot : "Sélectionner Dépot",
         validCustomerCode : "Le Code Produit ne peut être Vide ",
         validDocDate : "Sélectionner Date" ,
-        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter"
+        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
+        msgQuantity:
+        {
+            title: "Quantité",
+            btn01: "Ajoutez",
+            msg: "Ajoutez quantité"
+        },
+        pg_txtBarcode : 
+        {
+            title : "Sélectionner Barre",
+            clmCode :  "Référence Produit",
+            clmName : "Nom Produit",
+            clmMulticode : "Sélection Document",
+            clmBarcode : "Code Barre"
+        },
     },
     tkf_02_002 : // "Satış Teklifi",
     {
@@ -6621,7 +6643,21 @@ export const langFr =
         validDepot : "Sélectionner Dépot",
         validCustomerCode : "Le Code Produit ne peut être Vide ",
         validDocDate : "Sélectionner Date" ,
-        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter"
+        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
+        msgQuantity:
+        {
+            title: "Quantité",
+            btn01: "Ajoutez",
+            msg: "Ajoutez quantité"
+        },
+        pg_txtBarcode : 
+        {
+            title : "Sélectionner Barre",
+            clmCode :  "Référence Produit",
+            clmName : "Nom Produit",
+            clmMulticode : "Sélection Document",
+            clmBarcode : "Code Barre"
+        },
 
     },
     proces_01_001 : // "Ürün Grubu Güncelleme" 

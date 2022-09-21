@@ -947,6 +947,8 @@ export class docOffersCls
             COST_PRICE : 0,
             MARGIN : 0,
             MULTICODE : '',
+            ITEM_BARCODE : '',
+
         }
 
         this._initDs();

@@ -4388,7 +4388,7 @@ export const langTr =
         },
         pg_txtBarcode : 
         {
-            title : "Stok Seçimi",
+            title : "Barkod Seçimi",
             clmCode :  "STOK KODU",
             clmName : "STOK ADI",
             clmMulticode : "TEDARİKÇİ KODU",
@@ -4863,6 +4863,14 @@ export const langTr =
             title: "Miktar",
             btn01: "Ekle",
             msg: "Miktar Giriniz"
+        },
+        pg_txtBarcode : 
+        {
+            title : "Barkod Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+            clmMulticode : "TEDARİKÇİ KODU",
+            clmBarcode : "BARKOD"
         },
     },
     cnt_01_001 : // "Alış Anlaşmaları Listesi"
@@ -6446,7 +6454,21 @@ export const langTr =
         validDepot : "Depo Seçmelisiniz",
         validCustomerCode : "Cari Kodu Boş Geçilemez",
         validDocDate : "Tarih Seçmelisiniz",
-        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz"
+        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz",
+        msgQuantity:
+        {
+            title: "Miktar",
+            btn01: "Ekle",
+            msg: "Miktar Giriniz"
+        },
+        pg_txtBarcode : 
+        {
+            title : "Barkod Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+            clmMulticode : "TEDARİKÇİ KODU",
+            clmBarcode : "BARKOD"
+        },
     },
     tkf_02_002 : // "Satış Teklifi",
     {
@@ -6697,8 +6719,21 @@ export const langTr =
         validDepot : "Depo Seçmelisiniz",
         validCustomerCode : "Cari Kodu Boş Geçilemez",
         validDocDate : "Tarih Seçmelisiniz",
-        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz"
-
+        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz",
+        msgQuantity:
+        {
+            title: "Miktar",
+            btn01: "Ekle",
+            msg: "Miktar Giriniz"
+        },
+        pg_txtBarcode : 
+        {
+            title : "Barkod Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+            clmMulticode : "TEDARİKÇİ KODU",
+            clmBarcode : "BARKOD"
+        },
     },
     proces_01_001 : // "Ürün Grubu Güncelleme"
     {
