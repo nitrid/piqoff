@@ -347,7 +347,9 @@ export default class NdBase extends React.PureComponent
                                         {
                                             function filterByValue(array, string) 
                                             {
-                                                return array.filter(o => Object.keys(o).some(k => o[k].toLowerCase().includes(string.toLowerCase())));
+                                                console.log(array)
+                                                console.log(string)
+                                                return array.filter(o => Object.keys(o).some(k => o[k].toString().toLowerCase().includes(string.toLowerCase())));
                                             }
                                             let tmpData = filterByValue(tmpThis.state.data.datatable.toArray(),loadOption.searchValue)
                                             // SELECTBOXDA GÖZÜKMESİ İSTENEN SATIR SAYISI İÇİN YAPILDI

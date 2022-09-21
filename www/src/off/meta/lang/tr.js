@@ -1117,7 +1117,8 @@ export const langTr =
             clmUnderUnit : "Alt Birim",
             clmUnderUnit : "Alt Birim",
             clmUnderUnitPrice : "Alt Birim Fiyatı",
-            clmDescription :"Açıklama"
+            clmDescription :"Açıklama",
+            clmOrgins : "Ülke"
         },
         msgDocValid:
         {
@@ -4897,7 +4898,8 @@ export const langTr =
             clmStartDate : "Başlangıç",
             clmFinishDate :"Bitiş",
             clmDepot : "Depo",
-            clmUser : "Kullanıcı"
+            clmUser : "Kullanıcı",
+            clmDepotName : "Depo",
         },
     },
     cnt_01_002 : //  "Satış Anlaşmaları Listesi"

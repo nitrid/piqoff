@@ -28,7 +28,8 @@ export class labelCls
             UNDER_UNIT_PRICE : 0,
             UNDER_UNIT_SYMBOL : '',
             DESCRIPTION : '',
-            LINE_NO : 0
+            LINE_NO : 0,
+            ORGINS : ''
         }
 
         this._initDs();

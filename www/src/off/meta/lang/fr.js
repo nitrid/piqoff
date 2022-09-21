@@ -1065,7 +1065,8 @@ export const langFr =
             clmUnderUnit : "Sous unité",
             clmUnderUnit : "Sous unité",
             clmUnderUnitPrice : "Prix sous Unité" ,
-            clmDescription :"Motif"
+            clmDescription :"Motif",
+            clmOrgins : "Origine",
         },
         msgDocValid:
         {
@@ -4829,7 +4830,8 @@ export const langFr =
             clmStartDate : "Début ",
             clmFinishDate :"Fin ",
             clmDepot : "Réserve",
-            clmUser : "Utilisateur"
+            clmUser : "Utilisateur",
+            clmDepotName : "Dépot ou Magasin",
         },
     },
     cnt_01_002 : //  "Satış Anlaşmaları Listesi"

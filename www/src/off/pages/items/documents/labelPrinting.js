@@ -203,6 +203,7 @@ export default class labelPrinting extends React.PureComponent
                 "NAME,   " +
                 "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
                 "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
+                "ISNULL((SELECT NAME FROM COUNTRY WHERE COUNTRY.CODE = ORGINS),'') AS ORGINS, " +
                 "MAIN_GRP AS ITEM_GRP,   " +
                 "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
                 "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE  , " +
@@ -251,6 +252,7 @@ export default class labelPrinting extends React.PureComponent
                 "NAME,   " +
                 "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
                 "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
+                "ISNULL((SELECT NAME FROM COUNTRY WHERE COUNTRY.CODE = ORGINS),'') AS ORGINS, " +
                 "MAIN_GRP AS ITEM_GRP,   " +
                 "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
                 "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE  , " +
@@ -301,6 +303,7 @@ export default class labelPrinting extends React.PureComponent
                 "NAME,   " +
                 "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
                 "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
+                "ISNULL((SELECT NAME FROM COUNTRY WHERE COUNTRY.CODE = ORGINS),'') AS ORGINS, " +
                 "MAIN_GRP AS ITEM_GRP,   " +
                 "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
                 "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE  , " +
@@ -352,6 +355,7 @@ export default class labelPrinting extends React.PureComponent
                 "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
                 "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
                 "MAIN_GRP AS ITEM_GRP,   " +
+                "ISNULL((SELECT NAME FROM COUNTRY WHERE COUNTRY.CODE = ORGINS),'') AS ORGINS, " +
                 "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
                 "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE  , " +
                 "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE " +
@@ -401,6 +405,7 @@ export default class labelPrinting extends React.PureComponent
                 "NAME,   " +
                 "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
                 "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
+                "ISNULL((SELECT NAME FROM COUNTRY WHERE COUNTRY.CODE = ORGINS),'') AS ORGINS, " +
                 "MAIN_GRP AS ITEM_GRP,   " +
                 "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
                 "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE  , " +
@@ -495,6 +500,7 @@ export default class labelPrinting extends React.PureComponent
                                "NAME,  " +
                                "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,  " +
                                 "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
+                                "ISNULL((SELECT NAME FROM COUNTRY WHERE COUNTRY.CODE = ORGINS),'') AS ORGINS, " +
                                "MAIN_GRP AS ITEM_GRP,  " +
                                "MAIN_GRP_NAME AS ITEM_GRP_NAME,  " +
                                "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE  ," +
@@ -603,6 +609,7 @@ export default class labelPrinting extends React.PureComponent
         this.lblObj.dt()[pIndex].UNDER_UNIT_SYMBOL = pData.UNDER_UNIT_SYMBOL
         this.lblObj.dt()[pIndex].PRICE = pData.PRICE
         this.lblObj.dt()[pIndex].LINE_NO = pIndex + 1
+        this.lblObj.dt()[pIndex].ORGINS =pData.ORGINS
         this.calculateCount()
     }
     async addAutoItem(pData)
@@ -730,9 +737,12 @@ export default class labelPrinting extends React.PureComponent
                                                 param:  ['GUID:string|50','DESIGN:string|25'],
                                                 value:  [this.mainLblObj.dt()[0].GUID,this.cmbDesignList.value]
                                             }
+                                            App.instance.setState({isExecute:true})
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
+                                            App.instance.setState({isExecute:false})
                                             this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" +  JSON.stringify(tmpData.result.recordset)+ "}",(pResult) => 
-                                            {                                                
+                                            {                
+                                                App.instance.setState({isExecute:true})                                
                                                 if(pResult.split('|')[0] != 'ERR')
                                                 {
                                                     var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
@@ -741,6 +751,7 @@ export default class labelPrinting extends React.PureComponent
                                                         mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
                                                     } 
                                                 }
+                                                App.instance.setState({isExecute:false})
                                             });
                                             let updateQuery = 
                                             {
@@ -916,12 +927,14 @@ export default class labelPrinting extends React.PureComponent
                                 <EmptyItem />
                                 <Item>
                                     <Label text={this.t("design")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
+                                    <NdSelectBox simple={true} parent={this} id="cmbDesignList"
                                     dt={{data:this.mainLblObj.dt('MAIN_LABEL_QUEUE'),field:"DESING"}}
                                     displayExpr="DESIGN_NAME"                       
                                     valueExpr="TAG"
-                                    value=""
                                     searchEnabled={true}
+                                    showClearButton={true}
+                                    pageSize={50}
+                                    notRefresh={true}
                                     onValueChanged={(async(e)=>
                                         {
                                            for (let i = 0; i < this.cmbDesignList.data.datatable.length; i++) 
@@ -971,6 +984,7 @@ export default class labelPrinting extends React.PureComponent
                                             "FROM ( SELECT ITEMS.GUID, " +
                                             "ITEM_BARCODE.CDATE, " +
                                             "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS.GUID ORDER BY LDATE DESC),ITEMS.CODE) AS MULTICODE,   " +
+                                            "ISNULL((SELECT NAME FROM COUNTRY WHERE COUNTRY.CODE = ITEMS.ORGINS),'') AS ORGINS, " +
                                             "ITEMS.CODE, " +
                                             "ITEMS.NAME, " +
                                             "ITEM_BARCODE.BARCODE, " +
@@ -1175,13 +1189,14 @@ export default class labelPrinting extends React.PureComponent
                                         <Scrolling mode="standard" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.stk_02_004")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="CODE" caption={this.t("grdLabelQueue.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="BARCODE" caption={this.t("grdLabelQueue.clmBarcode")} width={150} />
-                                        <Column dataField="NAME" caption={this.t("grdLabelQueue.clmItemName")} width={550} />
-                                        <Column dataField="ITEM_GRP_NAME" caption={this.t("grdLabelQueue.clmItemGrpName")}  width={200}/>
+                                        <Column dataField="CODE" caption={this.t("grdLabelQueue.clmItemCode")} width={110} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="BARCODE" caption={this.t("grdLabelQueue.clmBarcode")} width={130} allowEditing={false} />
+                                        <Column dataField="NAME" caption={this.t("grdLabelQueue.clmItemName")} width={450} />
+                                        <Column dataField="ITEM_GRP_NAME" caption={this.t("grdLabelQueue.clmItemGrpName")} allowEditing={false}  width={180}/>
+                                        <Column dataField="ORGINS" caption={this.t("grdLabelQueue.clmOrgins")} allowEditing={false}  width={180}/>
                                         <Column dataField="PRICE" caption={this.t("grdLabelQueue.clmPrice")} width={70}/>
                                         <Column dataField="UNDER_UNIT_VALUE" caption={this.t("grdLabelQueue.clmUnderUnit")} width={80}/>
-                                        <Column dataField="UNDER_UNIT_PRICE" caption={this.t("grdLabelQueue.clmUnderUnitPrice")}width={70} />
+                                        <Column dataField="UNDER_UNIT_PRICE" caption={this.t("grdLabelQueue.clmUnderUnitPrice")}width={80} />
                                         <Column dataField="DESCRIPTION" caption={this.t("grdLabelQueue.clmDescription")} />
                                     </NdGrid>
                                 </Item>
@@ -1215,6 +1230,7 @@ export default class labelPrinting extends React.PureComponent
                                         "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
                                         "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
                                         "MAIN_GRP AS ITEM_GRP,   " +
+                                        "ISNULL((SELECT NAME FROM COUNTRY WHERE COUNTRY.CODE = ITEMS_VW_01.ORGINS),'') AS ORGINS, " +
                                         "MAIN_GRP_NAME AS ITEM_GRP_NAME, " +
                                         "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID),'') AS CUSTOMER_NAME, " +
                                         "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE  , " +

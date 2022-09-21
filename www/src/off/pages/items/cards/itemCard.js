@@ -1028,6 +1028,10 @@ export default class itemCard extends React.PureComponent
                                             this.txtPopCustomerItemCode.value = "";
                                             this.txtPopCustomerPrice.value = 0;
                                             this.popCustomer.show();
+                                            setTimeout(async () => 
+                                            {
+                                               this.txtPopCustomerCode.focus()
+                                            }, 600)
                                         }
                                     }]}
                                     param={this.param.filter({ELEMENT:'txtCustomer',USERS:this.user.CODE})}
@@ -1064,6 +1068,10 @@ export default class itemCard extends React.PureComponent
                                                     this.cmbPopBarType.value = "0";
                                                     this.cmbPopBarUnit.value = this.itemsObj.dt('ITEM_UNIT').where({TYPE:0}).length > 0 ? this.itemsObj.dt('ITEM_UNIT').where({TYPE:0})[0].GUID : ''
                                                     this.popBarcode.show();
+                                                    setTimeout(async () => 
+                                                    {
+                                                        this.txtPopBarcode.focus()
+                                                    }, 600);
                                                 }
                                             }
                                         ]
@@ -1345,6 +1353,10 @@ export default class itemCard extends React.PureComponent
                                                             this.txtPopPriPrice.value = 0
 
                                                             this.popPrice.show();
+                                                            setTimeout(async () => 
+                                                            {
+                                                               this.txtPopPriPrice.focus()
+                                                            }, 600)
                                                         }}/>
                                                 </Item>
                                             </Toolbar>
@@ -1493,6 +1505,10 @@ export default class itemCard extends React.PureComponent
                                                         this.cmbPopBarType.value = "0";
                                                         this.cmbPopBarUnit.value = this.itemsObj.dt('ITEM_UNIT').where({TYPE:0}).length > 0 ? this.itemsObj.dt('ITEM_UNIT').where({TYPE:0})[0].GUID : ''
                                                         this.popBarcode.show();
+                                                        setTimeout(async () => 
+                                                        {
+                                                           this.txtPopBarcode.focus()
+                                                        }, 600);
                                                     }}/>
                                                 </Item>
                                             </Toolbar>
@@ -1532,9 +1548,14 @@ export default class itemCard extends React.PureComponent
                                                     <Button icon="add"
                                                     onClick={()=>
                                                     {
+                                                        
                                                         this.txtPopCustomerItemCode.value = "";
                                                         this.txtPopCustomerPrice.value = 0;
                                                         this.popCustomer.show();
+                                                        setTimeout(async () => 
+                                                        {
+                                                           this.txtPopCustomerCode.focus()
+                                                        }, 600);
                                                     }}/>                                                                                                            
                                                 </Item>
                                             </Toolbar>
@@ -1551,6 +1572,7 @@ export default class itemCard extends React.PureComponent
                                             width={'100%'}
                                             onRowUpdating={async(e)=>
                                             {
+                                                this.btnSave.setState({disabled:false});
                                                 if(typeof e.newData.CUSTOMER_PRICE != 'undefined')
                                                 {
                                                     let tmpSalePriceData = this.itemsObj.itemPrice.dt().where({START_DATE:new Date('1970-01-01').toISOString()}).where({FINISH_DATE:new Date('1970-01-01').toISOString()}).where({TYPE:0}).where({QUANTITY:1})
@@ -1580,7 +1602,7 @@ export default class itemCard extends React.PureComponent
                                                         this.txtMaxSalePrice.value = Number((tmpMAxPrice).toFixed(2))
                                                         this.taxSugarValidCheck()
                                                     }
-                                                    this.btnSave.setState({disabled:false});
+                                                    
 
                                                     //********************************** */
                                                 }
@@ -1971,6 +1993,37 @@ export default class itemCard extends React.PureComponent
                                     <Label text={this.t("popBarcode.txtPopBarcode")} alignment="right" />
                                     <NdTextBox id={"txtPopBarcode"} parent={this} simple={true} 
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    onEnterKey={(async()=>
+                                    {
+                                                let tmpEmpty = {...this.itemsObj.itemBarcode.empty};
+                                                let tmpEmptyStat = true
+                                                
+                                                if(typeof this.itemsObj.itemBarcode.dt().find(x => x.BARCODE == '') != 'undefined')
+                                                {
+                                                    tmpEmptyStat = false;
+                                                    tmpEmpty = this.itemsObj.itemBarcode.dt().find(x => x.BARCODE == '')
+                                                }
+                                                
+                                                tmpEmpty.BARCODE = this.txtPopBarcode.value
+                                                tmpEmpty.TYPE = this.cmbPopBarType.value
+                                                tmpEmpty.UNIT_GUID = this.cmbPopBarUnit.value
+                                                tmpEmpty.UNIT_NAME = this.cmbPopBarUnit.displayValue
+                                                tmpEmpty.ITEM_GUID = this.itemsObj.dt()[0].GUID 
+
+                                                let tmpResult = await this.checkBarcode(this.txtPopBarcode.value)
+                                                if(tmpResult == 2) //KAYIT VAR
+                                                {
+                                                    this.popBarcode.hide(); 
+                                                }
+                                                else if(tmpResult == 1) //KAYIT YOK
+                                                {
+                                                    if(tmpEmptyStat)
+                                                    {
+                                                        this.itemsObj.itemBarcode.addEmpty(tmpEmpty);    
+                                                    }
+                                                    this.popBarcode.hide(); 
+                                                }
+                                    })}
                                     onValueChanged={(e)=>
                                     {
                                         if(parseInt(e.value) == NaN || parseInt(e.value).toString() != e.value)
@@ -1990,7 +2043,8 @@ export default class itemCard extends React.PureComponent
                                         {
                                             this.cmbPopBarType.value = "2"
                                         }
-                                    }}/>
+                                    }}
+                                    />
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popBarcode.cmbPopBarUnit")} alignment="right" />
