@@ -36,6 +36,7 @@ export default class purchaseOrder extends React.PureComponent
         this._cellRoleRender = this._cellRoleRender.bind(this)
         this._calculateTotal = this._calculateTotal.bind(this)
         this._getItems = this._getItems.bind(this)
+        this._getBarcodes = this._getBarcodes.bind(this)
 
         this.frmdocOrders = undefined;
         this.docLocked = false;   
@@ -124,6 +125,7 @@ export default class purchaseOrder extends React.PureComponent
         await this.grdPurcOrders.dataRefresh({source:this.docObj.docOrders.dt('DOC_ORDERS')});
         await this.grdMultiItem.dataRefresh({source:this.multiItemData});
         await this.grdUnderPrice.dataRefresh({source:this.underPriceData});
+        this._getBarcodes()
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -152,6 +154,7 @@ export default class purchaseOrder extends React.PureComponent
             this.frmdocOrders.option('disabled',false)
         }
         this._getItems()
+        this._getBarcodes()
     }
     async checkDoc(pGuid,pRef,pRefno)
     {
@@ -528,6 +531,23 @@ export default class purchaseOrder extends React.PureComponent
             }
         }
         this.pg_txtItemsCode.setSource(tmpSource)
+    } 
+    async _getBarcodes()
+    {
+        let tmpSource =
+        {
+            source:
+            {
+                select:
+                {   query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,BARCODE,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = '"+this.docObj.dt()[0].OUTPUT+"' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE,  " + 
+                    "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
+                    " FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  ITEM_BARCODE_VW_01.BARCODE LIKE  '%' +@BARCODE",
+                    param : ['BARCODE:string|50'],
+                },
+                sql:this.core.sql
+            }
+        }
+        this.pg_txtBarcode.setSource(tmpSource)
     } 
     async multiItemAdd()
     {
@@ -1053,6 +1073,7 @@ export default class purchaseOrder extends React.PureComponent
                                                         this.txtRef.props.onChange()
                                                     }
                                                     this._getItems()
+                                                    this._getBarcodes()
                                                 }
                                             }
                                         }).bind(this)}
@@ -1081,6 +1102,8 @@ export default class purchaseOrder extends React.PureComponent
                                                                 this.txtRef.props.onChange()
                                                             }
                                                             this._getItems()
+                                                            this._getBarcodes()
+
                                                         }
                                                     }
                                                 }
@@ -1153,6 +1176,81 @@ export default class purchaseOrder extends React.PureComponent
                                     <Label text={this.t("txtBarcode")} alignment="right" />
                                     <NdTextBox id="txtBarcode" parent={this} simple={true}  placeholder={this.t("txtBarcodePlace")}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    button=
+                                    {
+                                        [
+                                            {
+                                                id:'01',
+                                                icon:'find',
+                                                onClick:async(e)=>
+                                                {
+                                                    await this.pg_txtBarcode.setVal(this.txtBarcode.value)
+                                                    this.pg_txtBarcode.show()
+                                                    this.pg_txtBarcode.onClick = async(data) =>
+                                                    {
+                                                        let tmpdocOrders = {...this.docObj.docOrders.empty}
+                                                        tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
+                                                        tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
+                                                        tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                        tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
+                                                        tmpdocOrders.REF = this.docObj.dt()[0].REF
+                                                        tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
+                                                        tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                        tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
+                                                        tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+        
+                                                        this.txtRef.readOnly = true
+                                                        this.txtRefno.readOnly = true
+                                                        this.docObj.docOrders.addEmpty(tmpdocOrders)
+        
+                                                        await this.core.util.waitUntil(100)
+                                                        if(data.length > 0)
+                                                        {
+                                                            this.customerControl = true
+                                                            this.customerClear = false
+                                                            this.combineControl = true
+                                                            this.combineNew = false
+        
+                                                            if(data.length == 1)
+                                                            {
+                                                                await this.addItem(data[0],this.docObj.docOrders.dt().length -1)
+                                                            }
+                                                            else if(data.length > 1)
+                                                            {
+                                                                for (let i = 0; i < data.length; i++) 
+                                                                {
+                                                                    if(i == 0)
+                                                                    {
+                                                                        await this.addItem(data[i],this.docObj.docOrders.dt().length -1)
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        let tmpdocOrders = {...this.docObj.docOrders.empty}
+                                                                        tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
+                                                                        tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
+                                                                        tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                                        tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
+                                                                        tmpdocOrders.REF = this.docObj.dt()[0].REF
+                                                                        tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
+                                                                        tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                                        tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
+                                                                        tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                                        
+                                                                        this.txtRef.readOnly = true
+                                                                        this.txtRefno.readOnly = true
+                                                                        this.docObj.docOrders.addEmpty(tmpdocOrders)
+        
+                                                                        await this.core.util.waitUntil(100)
+                                                                        await this.addItem(data[i],this.docObj.docOrders.dt().length-1)
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
                                     onEnterKey={(async(e)=>
                                     {
                                         if(this.cmbDepot.value == '')
@@ -1752,6 +1850,22 @@ export default class purchaseOrder extends React.PureComponent
                             <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
                             <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />
                             <Column dataField="MULTICODE" caption={this.t("pg_txtItemsCode.clmMulticode")} width={200}/>
+                        </NdPopGrid>
+                        {/* BARKOD POPUP */}
+                        <NdPopGrid id={"pg_txtBarcode"} parent={this} container={"#root"}
+                        visible={false}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        showBorders={true}
+                        width={'90%'}
+                        height={'90%'}
+                        title={this.t("pg_txtBarcode.title")} //
+                        search={true}
+                        >
+                            <Column dataField="BARCODE" caption={this.t("pg_txtBarcode.clmBarcode")} width={150} />
+                            <Column dataField="CODE" caption={this.t("pg_txtBarcode.clmCode")} width={150} />
+                            <Column dataField="NAME" caption={this.t("pg_txtBarcode.clmName")} width={300} defaultSortOrder="asc" />
+                            <Column dataField="MULTICODE" caption={this.t("pg_txtBarcode.clmMulticode")} width={200}/>
                         </NdPopGrid>
                     {/* Dizayn Seçim PopUp */}
                     <div>

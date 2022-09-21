@@ -4319,6 +4319,14 @@ export const langFr =
             clmName : "Nom Produit",
             clmMulticode : "Sélection Document"
         },
+        pg_txtBarcode : 
+        {
+            title : "Sélectionner Produit",
+            clmCode :  "Référence Produit",
+            clmName : "Nom Produit",
+            clmMulticode : "Sélection Document",
+            clmBarcode : "Code Barre"
+        },
         grdPurcOrders: 
         {
             clmItemCode: "Code",

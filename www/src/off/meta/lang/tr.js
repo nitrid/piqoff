@@ -4386,6 +4386,14 @@ export const langTr =
             clmName : "STOK ADI",
             clmMulticode : "TEDARİKÇİ KODU"
         },
+        pg_txtBarcode : 
+        {
+            title : "Stok Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+            clmMulticode : "TEDARİKÇİ KODU",
+            clmBarcode : "BARKOD"
+        },
         grdPurcOrders: 
         {
             clmItemCode: "Kodu",
