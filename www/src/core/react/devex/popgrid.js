@@ -289,7 +289,14 @@ export default class NdPopGrid extends Base
         }
         
         tmpQuery.source.select.value = []
-        tmpQuery.source.select.value.push(this["txt" + this.props.id].value.replaceAll('*','%')+'%')
+        if(tmpQuery.source.select.param[0] == "VAL:string|50")
+        {
+            tmpQuery.source.select.value.push(this["txt" + this.props.id].value.replaceAll('*','%')+'%')
+        }
+        else
+        {
+            tmpQuery.source.select.value.push(this["txt" + this.props.id].value.replaceAll('*','%'))
+        }
         await this.grid.dataRefresh(tmpQuery)
     }
     async setData(pData)

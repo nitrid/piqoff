@@ -36,6 +36,7 @@ export default class purchaseOrder extends React.PureComponent
         this._cellRoleRender = this._cellRoleRender.bind(this)
         this._calculateTotal = this._calculateTotal.bind(this)
         this._getItems = this._getItems.bind(this)
+        this._getBarcodes = this._getBarcodes.bind(this)
 
         this.frmdocOrders = undefined;
         this.docLocked = false;   
@@ -124,6 +125,7 @@ export default class purchaseOrder extends React.PureComponent
         await this.grdPurcOrders.dataRefresh({source:this.docObj.docOrders.dt('DOC_ORDERS')});
         await this.grdMultiItem.dataRefresh({source:this.multiItemData});
         await this.grdUnderPrice.dataRefresh({source:this.underPriceData});
+        this._getBarcodes()
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -152,6 +154,7 @@ export default class purchaseOrder extends React.PureComponent
             this.frmdocOrders.option('disabled',false)
         }
         this._getItems()
+        this._getBarcodes()
     }
     async checkDoc(pGuid,pRef,pRefno)
     {
@@ -220,7 +223,6 @@ export default class purchaseOrder extends React.PureComponent
 
                         this.pg_txtItemsCode.onClick = async(data) =>
                         {
-                            console.log(3)
                             this.customerControl = true
                             this.customerClear = false
                             this.combineControl = true
@@ -478,6 +480,7 @@ export default class purchaseOrder extends React.PureComponent
 
         this.docObj.docOrders.dt()[pIndex].ITEM_CODE = pData.CODE
         this.docObj.docOrders.dt()[pIndex].MULTICODE = pData.MULTICODE
+        this.docObj.docOrders.dt()[pIndex].ITEM_BARCODE = pData.BARCODE
         this.docObj.docOrders.dt()[pIndex].ITEM = pData.GUID
         this.docObj.docOrders.dt()[pIndex].VAT_RATE = pData.VAT
         this.docObj.docOrders.dt()[pIndex].ITEM_NAME = pData.NAME
@@ -509,26 +512,7 @@ export default class purchaseOrder extends React.PureComponent
             this.docObj.docOrders.dt()[pIndex].TOTAL = 0
             this._calculateTotal()
         }
-        let tmpPricePrm = this.sysParam.filter({ID:'pruchasePriceAlert',USERS:this.user.CODE}).getValue()
-        if(typeof tmpPricePrm != 'undefined' && tmpPricePrm.value == true)
-        {
-            let tmpQuery = 
-            {
-                query :"SELECT CUSTOMER_NAME,(SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM_GUID,CUSTOMER_GUID,@QUANTITY,GETDATE())) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND (SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM_GUID,CUSTOMER_GUID,@QUANTITY,GETDATE())) < @PRICE",
-                param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float','PRICE:float'],
-                value : [pData.CODE,this.docObj.dt()[0].OUTPUT,pQuantity,this.docObj.docOrders.dt()[pIndex].PRICE]
-            }
-            let tmpData = await this.core.sql.execute(tmpQuery) 
-
-            if(tmpData.result.recordset.length > 0)
-            {
-                for (let i = 0; i < tmpData.result.recordset.length; i++) 
-                {
-                    this.underPriceData.push(tmpData.result.recordset[i])
-                }
-                this.popUnderPrice.show()
-            }
-        }
+        
     }
     async _getItems()
     {
@@ -538,7 +522,7 @@ export default class purchaseOrder extends React.PureComponent
             {
                 select:
                 {
-                    query : "SELECT GUID,CODE,NAME,VAT," + 
+                    query : "SELECT GUID,CODE,NAME,VAT,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE," + 
                     "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
                     " FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) " ,
                     param : ['VAL:string|50']
@@ -547,6 +531,23 @@ export default class purchaseOrder extends React.PureComponent
             }
         }
         this.pg_txtItemsCode.setSource(tmpSource)
+    } 
+    async _getBarcodes()
+    {
+        let tmpSource =
+        {
+            source:
+            {
+                select:
+                {   query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,BARCODE,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = '"+this.docObj.dt()[0].OUTPUT+"' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE,  " + 
+                    "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
+                    " FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  ITEM_BARCODE_VW_01.BARCODE LIKE  '%' +@BARCODE",
+                    param : ['BARCODE:string|50'],
+                },
+                sql:this.core.sql
+            }
+        }
+        this.pg_txtBarcode.setSource(tmpSource)
     } 
     async multiItemAdd()
     {
@@ -714,6 +715,39 @@ export default class purchaseOrder extends React.PureComponent
                                             }
                                             await dialog(tmpConfObj);
                                             return
+                                        }
+                                        let tmpPricePrm = this.sysParam.filter({ID:'pruchasePriceAlert',USERS:this.user.CODE}).getValue()
+                                        if(typeof tmpPricePrm != 'undefined' && tmpPricePrm.value == true)
+                                        {
+                                            this.underPriceData.clear()
+                                            App.instance.setState({isExecute:true})
+                                            for (let i = 0; i < this.docObj.docOrders.dt().length; i++) 
+                                            {
+                                                let tmpQuery = 
+                                                {
+                                                    query : "SELECT ISNULL((SELECT NAME FROM ITEMS WHERE ITEMS.GUID = ITEM_MULTICODE.ITEM),'') AS ITEM_NAME,ISNULL((SELECT CODE FROM ITEMS WHERE ITEMS.GUID = ITEM_MULTICODE.ITEM),'') AS ITEM_CODDE, " +
+                                                   " ISNULL((SELECT TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = ITEM_MULTICODE.CUSTOMER),'') AS CUSTOMER_NAME,CODE AS MULTICODE,  "+
+                                                   "(SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM,CUSTOMER,@QUANTITY,GETDATE())) AS PRICE FROM ITEM_MULTICODE WHERE  DELETED = 0 AND ITEM = @ITEM_CODE AND (SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM,CUSTOMER,@QUANTITY,GETDATE())) < @PRICE " ,
+                                                    param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float','PRICE:float'],
+                                                    value : [this.docObj.docOrders.dt()[i].ITEM,this.docObj.dt()[0].OUTPUT,this.docObj.docOrders.dt()[i].QUANTITY,this.docObj.docOrders.dt()[i].PRICE]
+                                                }
+                                                let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                if(tmpData.result.recordset.length > 0)
+                                                {
+                                                    for (let i = 0; i < tmpData.result.recordset.length; i++) 
+                                                    {
+                                                        this.underPriceData.push(tmpData.result.recordset[i])
+                                                    }
+                                                }
+                                            }
+                                            App.instance.setState({isExecute:false})
+                                            if(this.underPriceData.length > 0)
+                                            {
+                                                await this.popUnderPrice.show().then(async (e) =>
+                                                {
+
+                                                })
+                                            }
                                         }
                                         if(this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1].ITEM_CODE == '')
                                         {
@@ -1039,6 +1073,7 @@ export default class purchaseOrder extends React.PureComponent
                                                         this.txtRef.props.onChange()
                                                     }
                                                     this._getItems()
+                                                    this._getBarcodes()
                                                 }
                                             }
                                         }).bind(this)}
@@ -1067,6 +1102,8 @@ export default class purchaseOrder extends React.PureComponent
                                                                 this.txtRef.props.onChange()
                                                             }
                                                             this._getItems()
+                                                            this._getBarcodes()
+
                                                         }
                                                     }
                                                 }
@@ -1117,7 +1154,7 @@ export default class purchaseOrder extends React.PureComponent
                                         <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
                                         <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
                                         <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
-                                        <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} filterType={"include"} filterValues={['Tedarikçi']}/>
+                                        <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} filterType={"include"} filterValues={['Tedarikçi','Her Ikisi']}/>
                                     </NdPopGrid>
                                 </Item> 
                                 {/* txtCustomerName */}
@@ -1139,6 +1176,108 @@ export default class purchaseOrder extends React.PureComponent
                                     <Label text={this.t("txtBarcode")} alignment="right" />
                                     <NdTextBox id="txtBarcode" parent={this} simple={true}  placeholder={this.t("txtBarcodePlace")}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    validationGroup={"frmPurcOrder" + this.tabIndex}
+                                    button=
+                                    {
+                                        [
+                                            {
+                                                id:'01',
+                                                icon:"fa-solid fa-barcode",
+                                                onClick:async(e)=>
+                                                {
+                                                    if(this.cmbDepot.value == '' || this.txtCustomerCode.value == '')
+                                                    {
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
+                                                        }
+                                                        
+                                                        await dialog(tmpConfObj);
+                                                        this.txtBarcode.setState({value:""})
+                                                        return
+                                                    }
+                                                    if(e.validationGroup.validate().status == "valid")
+                                                    {
+                                                        await this.pg_txtBarcode.setVal(this.txtBarcode.value)
+                                                        this.pg_txtBarcode.show()
+                                                        this.pg_txtBarcode.onClick = async(data) =>
+                                                        {
+                                                            let tmpdocOrders = {...this.docObj.docOrders.empty}
+                                                            tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
+                                                            tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
+                                                            tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                            tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
+                                                            tmpdocOrders.REF = this.docObj.dt()[0].REF
+                                                            tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
+                                                            tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                            tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
+                                                            tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+            
+                                                            this.txtRef.readOnly = true
+                                                            this.txtRefno.readOnly = true
+                                                            this.docObj.docOrders.addEmpty(tmpdocOrders)
+            
+                                                            await this.core.util.waitUntil(100)
+                                                            if(data.length > 0)
+                                                            {
+                                                                this.customerControl = true
+                                                                this.customerClear = false
+                                                                this.combineControl = true
+                                                                this.combineNew = false
+            
+                                                                if(data.length == 1)
+                                                                {
+                                                                    await this.addItem(data[0],this.docObj.docOrders.dt().length -1)
+                                                                }
+                                                                else if(data.length > 1)
+                                                                {
+                                                                    for (let i = 0; i < data.length; i++) 
+                                                                    {
+                                                                        if(i == 0)
+                                                                        {
+                                                                            await this.addItem(data[i],this.docObj.docOrders.dt().length -1)
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            let tmpdocOrders = {...this.docObj.docOrders.empty}
+                                                                            tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
+                                                                            tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
+                                                                            tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                                            tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
+                                                                            tmpdocOrders.REF = this.docObj.dt()[0].REF
+                                                                            tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
+                                                                            tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                                            tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
+                                                                            tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                                            
+                                                                            this.txtRef.readOnly = true
+                                                                            this.txtRefno.readOnly = true
+                                                                            this.docObj.docOrders.addEmpty(tmpdocOrders)
+            
+                                                                            await this.core.util.waitUntil(100)
+                                                                            await this.addItem(data[i],this.docObj.docOrders.dt().length-1)
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
+                                                        }
+                                                        await dialog(tmpConfObj);
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
                                     onEnterKey={(async(e)=>
                                     {
                                         if(this.cmbDepot.value == '')
@@ -1155,7 +1294,7 @@ export default class purchaseOrder extends React.PureComponent
                                             return
                                         }
                                         let tmpQuery = 
-                                        {   query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = @CUSTOMER AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE,  " + 
+                                        {   query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,BARCODE,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = @CUSTOMER AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE,  " + 
                                             "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
                                             " FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
                                             param : ['CODE:string|50','CUSTOMER:string|50'],
@@ -1173,25 +1312,23 @@ export default class purchaseOrder extends React.PureComponent
                                             }, 700);
                                             await this.msgQuantity.show().then(async (e) =>
                                             {
-                                                if(e == 'btn01')
-                                                {
-                                                    let tmpdocOrders = {...this.docObj.docOrders.empty}
-                                                    tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
-                                                    tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
-                                                    tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                    tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
-                                                    tmpdocOrders.REF = this.docObj.dt()[0].REF
-                                                    tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
-                                                    tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                    tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
-                                                    tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-        
-                                                    this.txtRef.readOnly = true
-                                                    this.txtRefno.readOnly = true
-                                                    this.docObj.docOrders.addEmpty(tmpdocOrders)
                                                 
-                                                    this.addItem(tmpData.result.recordset[0],(typeof this.docObj.docOrders.dt()[0] == 'undefined' ? 0 : this.docObj.docOrders.dt().length-1),this.txtPopQuantity.value)
-                                                }
+                                                let tmpdocOrders = {...this.docObj.docOrders.empty}
+                                                tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
+                                                tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
+                                                tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
+                                                tmpdocOrders.REF = this.docObj.dt()[0].REF
+                                                tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
+                                                tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
+                                                tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+    
+                                                this.txtRef.readOnly = true
+                                                this.txtRefno.readOnly = true
+                                                this.docObj.docOrders.addEmpty(tmpdocOrders)
+                                            
+                                                this.addItem(tmpData.result.recordset[0],(typeof this.docObj.docOrders.dt()[0] == 'undefined' ? 0 : this.docObj.docOrders.dt().length-1),this.txtPopQuantity.value)
                                             })
                                           
                                         }
@@ -1258,7 +1395,6 @@ export default class purchaseOrder extends React.PureComponent
                                                         this.customerClear = false
                                                         this.combineControl = true
                                                         this.combineNew = false
-
                                                         if(data.length > 0)
                                                         {
                                                             if(data.length == 1)
@@ -1300,25 +1436,26 @@ export default class purchaseOrder extends React.PureComponent
                                                     return
                                                 }
                                             }
-                                            let tmpdocOrders = {...this.docObj.docOrders.empty}
-                                            tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
-                                            tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
-                                            tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                            tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
-                                            tmpdocOrders.REF = this.docObj.dt()[0].REF
-                                            tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
-                                            tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                            tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
-                                            tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-
-                                            this.txtRef.readOnly = true
-                                            this.txtRefno.readOnly = true
-                                            this.docObj.docOrders.addEmpty(tmpdocOrders)
-
-                                            await this.core.util.waitUntil(100)
+                                            
                                             this.pg_txtItemsCode.show()
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
+                                                let tmpdocOrders = {...this.docObj.docOrders.empty}
+                                                tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
+                                                tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
+                                                tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
+                                                tmpdocOrders.REF = this.docObj.dt()[0].REF
+                                                tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
+                                                tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
+                                                tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+
+                                                this.txtRef.readOnly = true
+                                                this.txtRefno.readOnly = true
+                                                this.docObj.docOrders.addEmpty(tmpdocOrders)
+
+                                                await this.core.util.waitUntil(100)
                                                 if(data.length > 0)
                                                 {
                                                     this.customerControl = true
@@ -1409,10 +1546,9 @@ export default class purchaseOrder extends React.PureComponent
                                     height={'400'} 
                                     width={'100%'}
                                     dbApply={false}
+                                    filterRow={{visible:true}}
                                     onRowUpdated={async(e)=>
                                     {
-                                        let rowIndex = e.component.getRowIndexByKey(e.key)
-
                                         if(typeof e.data.QUANTITY != 'undefined')
                                         {
                                             let tmpQuery = 
@@ -1424,14 +1560,14 @@ export default class purchaseOrder extends React.PureComponent
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
                                             if(tmpData.result.recordset.length > 0)
                                             {
-                                                this.docObj.docOrders.dt()[rowIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
+                                                e.key.PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
                                                 
                                                 this._calculateTotal()
                                             }
                                         }
                                         if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                         {
-                                            e.key.DISCOUNT = parseFloat((((this.docObj.docOrders.dt()[rowIndex].AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(3))
+                                            e.key.DISCOUNT = parseFloat((((e.key.AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(3))
                                         }
 
                                         if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
@@ -1443,17 +1579,17 @@ export default class purchaseOrder extends React.PureComponent
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"msgDiscount.msg"}</div>)
                                             }
                                             dialog(tmpConfObj);
-                                            this.docObj.docOrders.dt()[rowIndex].DISCOUNT = 0 
+                                            e.key.DISCOUNT = 0 
                                             return
                                         }
 
-                                        this.docObj.docOrders.dt()[rowIndex].VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(2));
-                                        this.docObj.docOrders.dt()[rowIndex].AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(2))
-                                        this.docObj.docOrders.dt()[rowIndex].TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +this.docObj.docOrders.dt()[rowIndex].VAT).toFixed(2))
+                                        e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(2));
+                                        e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(2))
+                                        e.key.TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +e.key.VAT).toFixed(2))
                                         
-                                        if(this.docObj.docOrders.dt()[rowIndex].DISCOUNT > 0)
+                                        if(e.key.DISCOUNT > 0)
                                         {
-                                            this.docObj.docOrders.dt()[rowIndex].DISCOUNT_RATE = parseFloat(100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100).toFixed(2))
+                                            e.key.DISCOUNT_RATE = parseFloat(100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100).toFixed(2))
                                         }
                                         this._calculateTotal()
                                     }}
@@ -1466,20 +1602,20 @@ export default class purchaseOrder extends React.PureComponent
                                         <Scrolling mode="virtual" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.sip_02_001")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcOrders.clmCreateDate")} width={180} allowEditing={false}/>
-                                        <Column dataField="CUSER_NAME" caption={this.t("grdPurcOrders.clmCuser")} width={120} allowEditing={false}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdPurcOrders.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="MULTICODE" caption={this.t("grdPurcOrders.clmMulticode")} width={150}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdPurcOrders.clmItemName")} width={400} />
-                                        <Column dataField="ITEM_BARCODE" caption={this.t("grdPurcOrders.clmBarcode")} width={150} allowEditing={false}/>
-                                        <Column dataField="PRICE" caption={this.t("grdPurcOrders.clmPrice")} width={80} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdPurcOrders.clmQuantity")} width={80} dataType={'number'}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdPurcOrders.clmAmount")} width={80} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
-                                        <Column dataField="DISCOUNT" caption={this.t("grdPurcOrders.clmDiscount")} width={80} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
-                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdPurcOrders.clmDiscountRate")} width={100} dataType={'number'}/>
-                                        <Column dataField="VAT" caption={this.t("grdPurcOrders.clmVat")} width={80} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
-                                        <Column dataField="TOTAL" caption={this.t("grdPurcOrders.clmTotal")} width={150} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
-                                        <Column dataField="DESCRIPTION" caption={this.t("grdPurcOrders.clmDescription")} width={160}  headerFilter={{visible:true}}/>
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcOrders.clmCreateDate")} width={90} allowEditing={false}/>
+                                        <Column dataField="CUSER_NAME" caption={this.t("grdPurcOrders.clmCuser")} width={100} allowEditing={false}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdPurcOrders.clmItemCode")} width={110} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="MULTICODE" caption={this.t("grdPurcOrders.clmMulticode")} width={110} allowEditing={false}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdPurcOrders.clmItemName")} width={330} />
+                                        <Column dataField="ITEM_BARCODE" caption={this.t("grdPurcOrders.clmBarcode")} width={130} allowEditing={false}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdPurcOrders.clmQuantity")} width={60} dataType={'number'}/>
+                                        <Column dataField="PRICE" caption={this.t("grdPurcOrders.clmPrice")} width={75} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                        <Column dataField="AMOUNT" caption={this.t("grdPurcOrders.clmAmount")} width={100} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
+                                        <Column dataField="DISCOUNT" caption={this.t("grdPurcOrders.clmDiscount")} width={60} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdPurcOrders.clmDiscountRate")} width={60} dataType={'number'}/>
+                                        <Column dataField="VAT" caption={this.t("grdPurcOrders.clmVat")} width={75} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
+                                        <Column dataField="TOTAL" caption={this.t("grdPurcOrders.clmTotal")} width={110} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
+                                        <Column dataField="DESCRIPTION" caption={this.t("grdPurcOrders.clmDescription")} width={120}  headerFilter={{visible:true}}/>
                                     </NdGrid>
                                 </Item>
                             </Form>
@@ -1742,6 +1878,22 @@ export default class purchaseOrder extends React.PureComponent
                             <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />
                             <Column dataField="MULTICODE" caption={this.t("pg_txtItemsCode.clmMulticode")} width={200}/>
                         </NdPopGrid>
+                        {/* BARKOD POPUP */}
+                        <NdPopGrid id={"pg_txtBarcode"} parent={this} container={"#root"}
+                        visible={false}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        showBorders={true}
+                        width={'90%'}
+                        height={'90%'}
+                        title={this.t("pg_txtBarcode.title")} //
+                        search={true}
+                        >
+                            <Column dataField="BARCODE" caption={this.t("pg_txtBarcode.clmBarcode")} width={150} />
+                            <Column dataField="CODE" caption={this.t("pg_txtBarcode.clmCode")} width={150} />
+                            <Column dataField="NAME" caption={this.t("pg_txtBarcode.clmName")} width={300} defaultSortOrder="asc" />
+                            <Column dataField="MULTICODE" caption={this.t("pg_txtBarcode.clmMulticode")} width={200}/>
+                        </NdPopGrid>
                     {/* Dizayn Seçim PopUp */}
                     <div>
                         <NdPopUp parent={this} id={"popDesign"} 
@@ -1981,15 +2133,15 @@ export default class purchaseOrder extends React.PureComponent
                     </NdDialog>  
                     {/*Düşük Fiyat PopUp */}
                     <div>
-                        <NdPopUp parent={this} id={"popUnderPrice"} 
-                        visible={false}
+                        <NdDialog parent={this} id={"popUnderPrice"} 
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popUnderPrice.title")}
                         container={"#root"} 
-                        width={'500'}
-                        height={'250'}
+                        width={'1200'}
+                        height={'700'}
                         position={{of:'#root'}}
+                        button={[{id:"btn01",caption:this.lang.t("btnOk"),location:'after'}]}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item >
@@ -2001,19 +2153,22 @@ export default class purchaseOrder extends React.PureComponent
                                     allowColumnResizing={true} 
                                     headerFilter={{visible:true}}
                                     filterRow = {{visible:true}}
-                                    height={'100%'} 
+                                    height={'400'} 
                                     width={'100%'}
                                     dbApply={false}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Scrolling mode="virtual" />
                                         <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
-                                        <Column dataField="CUSTOMER_NAME" caption={this.t("grdUnderPrice.clmCustomerName")} width={150} allowEditing={false} />
-                                        <Column dataField="PRICE" caption={this.t("grdUnderPrice.clmPrice")} width={150} allowEditing={false} />
+                                        <Column dataField="ITEM_CODDE" caption={this.t("grdUnderPrice.clmCode")} width={150} allowEditing={false} />
+                                        <Column dataField="MULTICODE" caption={this.t("grdUnderPrice.clmMulticode")} width={150} allowEditing={false} />
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdUnderPrice.clmItemName")} width={350} allowEditing={false} />
+                                        <Column dataField="CUSTOMER_NAME" caption={this.t("grdUnderPrice.clmCustomerName")} width={250} allowEditing={false} />
+                                        <Column dataField="PRICE" caption={this.t("grdUnderPrice.clmPrice")} width={100} allowEditing={false} />
                                     </NdGrid>
                                 </Item>
                             </Form>
-                        </NdPopUp>
+                        </NdDialog>
                     </div>  
                     {/* Miktar Dialog  */}
                     <NdDialog id={"msgQuantity"} container={"#root"} parent={this}
@@ -2031,10 +2186,13 @@ export default class purchaseOrder extends React.PureComponent
                                 </div>
                                 <div className="col-12 py-2">
                                 <Form>
-                                    {/* checkCustomer */}
                                     <Item>
                                         <Label text={this.t("txtQuantity")} alignment="right" />
                                         <NdNumberBox id="txtPopQuantity" parent={this} simple={true}  
+                                        onEnterKey={(async(e)=>
+                                        {
+                                            this.msgQuantity._onClick()
+                                        }).bind(this)}
                                         >
                                     </NdNumberBox>
                                     </Item>

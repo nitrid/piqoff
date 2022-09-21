@@ -1065,7 +1065,8 @@ export const langFr =
             clmUnderUnit : "Sous unité",
             clmUnderUnit : "Sous unité",
             clmUnderUnitPrice : "Prix sous Unité" ,
-            clmDescription :"Motif"
+            clmDescription :"Motif",
+            clmOrgins : "Origine",
         },
         msgDocValid:
         {
@@ -4319,6 +4320,14 @@ export const langFr =
             clmName : "Nom Produit",
             clmMulticode : "Sélection Document"
         },
+        pg_txtBarcode : 
+        {
+            title : "Sélectionner Barre",
+            clmCode :  "Référence Produit",
+            clmName : "Nom Produit",
+            clmMulticode : "Sélection Document",
+            clmBarcode : "Code Barre"
+        },
         grdPurcOrders: 
         {
             clmItemCode: "Code",
@@ -4520,6 +4529,18 @@ export const langFr =
         validCustomerCode : "Le Code Produit ne peut être Vide ",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
+        popUnderPrice :
+        {
+            title : "Bu Ürünün Daha Ucuz Tedarikçisi Mevcut" // bak
+        }, // bak
+        grdUnderPrice : // bak
+        { // bak
+            clmItemName :"Ürün", // bak
+            clmCustomerName : "Cari Adı", // bak
+            clmPrice : "Fiyat", // bak
+            clmCode : "Kodu" , // bak
+            clmMulticode : "T. Kodu" // bak
+        },
         msgQuantity:
         {
             title: "Quantité",
@@ -4776,6 +4797,14 @@ export const langFr =
             btn01: "Ajoutez",
             msg: "Ajoutez quantité"
         },
+        pg_txtBarcode : 
+        {
+            title : "Sélectionner Barre",
+            clmCode :  "Référence Produit",
+            clmName : "Nom Produit",
+            clmMulticode : "Sélection Document",
+            clmBarcode : "Code Barre"
+        },
     },
     cnt_01_001 : // "Alış Anlaşmaları Listesi"
     {
@@ -4801,7 +4830,8 @@ export const langFr =
             clmStartDate : "Début ",
             clmFinishDate :"Fin ",
             clmDepot : "Réserve",
-            clmUser : "Utilisateur"
+            clmUser : "Utilisateur",
+            clmDepotName : "Dépot ou Magasin",
         },
     },
     cnt_01_002 : //  "Satış Anlaşmaları Listesi"
@@ -6351,7 +6381,21 @@ export const langFr =
         validDepot : "Sélectionner Dépot",
         validCustomerCode : "Le Code Produit ne peut être Vide ",
         validDocDate : "Sélectionner Date" ,
-        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter"
+        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
+        msgQuantity:
+        {
+            title: "Quantité",
+            btn01: "Ajoutez",
+            msg: "Ajoutez quantité"
+        },
+        pg_txtBarcode : 
+        {
+            title : "Sélectionner Barre",
+            clmCode :  "Référence Produit",
+            clmName : "Nom Produit",
+            clmMulticode : "Sélection Document",
+            clmBarcode : "Code Barre"
+        },
     },
     tkf_02_002 : // "Satış Teklifi",
     {
@@ -6601,7 +6645,21 @@ export const langFr =
         validDepot : "Sélectionner Dépot",
         validCustomerCode : "Le Code Produit ne peut être Vide ",
         validDocDate : "Sélectionner Date" ,
-        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter"
+        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
+        msgQuantity:
+        {
+            title: "Quantité",
+            btn01: "Ajoutez",
+            msg: "Ajoutez quantité"
+        },
+        pg_txtBarcode : 
+        {
+            title : "Sélectionner Barre",
+            clmCode :  "Référence Produit",
+            clmName : "Nom Produit",
+            clmMulticode : "Sélection Document",
+            clmBarcode : "Code Barre"
+        },
 
     },
     proces_01_001 : // "Ürün Grubu Güncelleme" 

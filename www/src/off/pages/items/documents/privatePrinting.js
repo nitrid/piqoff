@@ -253,8 +253,9 @@ export default class privatePrinting extends React.PureComponent
                                             param:  ['GUID:string|50','PAGE:string|25'],
                                             value:  [this.labelMainObj.dt()[0].GUID,'02']
                                         }
-
+                                        App.instance.setState({isExecute:true})
                                         let tmpData = await this.core.sql.execute(tmpQuery) 
+                                        App.instance.setState({isExecute:false})
                                         this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" +  JSON.stringify(tmpData.result.recordset)+ "}",(pResult) => 
                                         {
                                             if(pResult.split('|')[0] != 'ERR')

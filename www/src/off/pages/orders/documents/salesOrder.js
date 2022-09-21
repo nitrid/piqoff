@@ -37,6 +37,7 @@ export default class salesOrder extends React.PureComponent
         this._calculateTotal = this._calculateTotal.bind(this)
         this._calculateTotalMargin = this._calculateTotalMargin.bind(this)
         this._calculateMargin = this._calculateMargin.bind(this)
+        this._getBarcodes = this._getBarcodes.bind(this)
 
         this.frmdocOrders = undefined;
         this.docLocked = false;        
@@ -225,6 +226,23 @@ export default class salesOrder extends React.PureComponent
         }
        
     }
+    async _getBarcodes()
+    {
+        let tmpSource =
+        {
+            source:
+            {
+                select:
+                {   query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,BARCODE,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = '"+this.docObj.dt()[0].INPUT+"' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE,  " + 
+                    "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
+                    " FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  ITEM_BARCODE_VW_01.BARCODE LIKE  '%' +@BARCODE",
+                    param : ['BARCODE:string|50'],
+                },
+                sql:this.core.sql
+            }
+        }
+        this.pg_txtBarcode.setSource(tmpSource)
+    } 
     _cellRoleRender(e)
     {
         if(e.column.dataField == "ITEM_CODE")
@@ -434,6 +452,7 @@ export default class salesOrder extends React.PureComponent
         }
         this.docObj.docOrders.dt()[pIndex].ITEM_CODE = pData.CODE
         this.docObj.docOrders.dt()[pIndex].ITEM = pData.GUID
+        this.docObj.docOrders.dt()[pIndex].ITEM_BARCODE = pData.BARCODE
         this.docObj.docOrders.dt()[pIndex].VAT_RATE = pData.VAT
         this.docObj.docOrders.dt()[pIndex].ITEM_NAME = pData.NAME
         this.docObj.docOrders.dt()[pIndex].COST_PRICE = pData.COST_PRICE
@@ -948,6 +967,8 @@ export default class salesOrder extends React.PureComponent
                                                         this.txtRef.props.onChange()
                                                     }
                                                 }
+                                                this._getBarcodes()
+
                                             }
                                         }).bind(this)}
                                     button=
@@ -973,6 +994,8 @@ export default class salesOrder extends React.PureComponent
                                                                 this.txtRef.props.onChange()
                                                             }
                                                         }
+                                                        this._getBarcodes()
+
                                                     }
                                                 }
                                             },
@@ -1045,40 +1068,40 @@ export default class salesOrder extends React.PureComponent
                                     <Label text={this.t("txtBarcode")} alignment="right" />
                                     <NdTextBox id="txtBarcode" parent={this} simple={true}  placeholder={this.t("txtBarcodePlace")}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    validationGroup={"frmslsDoc" + this.tabIndex}
+s
                                     onEnterKey={(async(e)=>
                                     {
-                                        if(this.cmbDepot.value == '')
-                                        {
-                                            let tmpConfObj =
+                                            if(this.cmbDepot.value == '' || this.txtCustomerCode.value == '')
                                             {
-                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
+                                                }
+                                                
+                                                await dialog(tmpConfObj);
+                                                this.txtBarcode.setState({value:""})
+                                                return
                                             }
-                                            
-                                            await dialog(tmpConfObj);
+                                            let tmpQuery = 
+                                            {   query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,BARCODE,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = @CUSTOMER AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE,  " + 
+                                                "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
+                                                " FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
+                                                param : ['CODE:string|50','CUSTOMER:string|50'],
+                                                value : [this.txtBarcode.value,this.docObj.dt()[0].OUTPUT]
+                                            }
+                                            let tmpData = await this.core.sql.execute(tmpQuery) 
                                             this.txtBarcode.setState({value:""})
-                                            return
-                                        }
-                                        let tmpQuery = 
-                                        {   query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = @CUSTOMER AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE,  " + 
-                                            "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
-                                            " FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
-                                            param : ['CODE:string|50','CUSTOMER:string|50'],
-                                            value : [this.txtBarcode.value,this.docObj.dt()[0].OUTPUT]
-                                        }
-                                        let tmpData = await this.core.sql.execute(tmpQuery) 
-                                        this.txtBarcode.setState({value:""})
-                                        if(tmpData.result.recordset.length > 0)
-                                        {
-                                            this.txtPopQuantity.value = ''
-                                            setTimeout(async () => 
+                                            if(tmpData.result.recordset.length > 0)
                                             {
-                                               this.txtPopQuantity.focus()
-                                            }, 700);
-                                            await this.msgQuantity.show().then(async (e) =>
-                                            {
-                                                if(e == 'btn01')
+                                                this.txtPopQuantity.value = ''
+                                                setTimeout(async () => 
+                                                {
+                                                this.txtPopQuantity.focus()
+                                                }, 700);
+                                                await this.msgQuantity.show().then(async (e) =>
                                                 {
                                                     let tmpdocOrders = {...this.docObj.docOrders.empty}
                                                     tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
@@ -1095,20 +1118,19 @@ export default class salesOrder extends React.PureComponent
                                                     this.docObj.docOrders.addEmpty(tmpdocOrders)
                                                 
                                                     this.addItem(tmpData.result.recordset[0],(typeof this.docObj.docOrders.dt()[0] == 'undefined' ? 0 : this.docObj.docOrders.dt().length-1),this.txtPopQuantity.value)
-                                                }
-                                            })
-                                        }
-                                        else
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgItemNotFound',showTitle:true,title:this.t("msgItemNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
+                                                })
                                             }
-                                
-                                            await dialog(tmpConfObj);
-                                        }
+                                            else
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgItemNotFound',showTitle:true,title:this.t("msgItemNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
+                                                }
+                                    
+                                                await dialog(tmpConfObj);
+                                            }
                                         
                                     }).bind(this)}
                                     param={this.param.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
@@ -1199,23 +1221,23 @@ export default class salesOrder extends React.PureComponent
                                                 }
                                             }
                                            
-                                            let tmpdocOrders = {...this.docObj.docOrders.empty}
-                                            tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
-                                            tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
-                                            tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                            tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
-                                            tmpdocOrders.REF = this.docObj.dt()[0].REF
-                                            tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
-                                            tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                            tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
-                                            tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                            this.txtRef.readOnly = true
-                                            this.txtRefno.readOnly = true
-                                            this.docObj.docOrders.addEmpty(tmpdocOrders)
-                                            await this.core.util.waitUntil(100)
                                             this.pg_txtItemsCode.show()
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
+                                                let tmpdocOrders = {...this.docObj.docOrders.empty}
+                                                tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
+                                                tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
+                                                tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
+                                                tmpdocOrders.REF = this.docObj.dt()[0].REF
+                                                tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
+                                                tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
+                                                tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                this.txtRef.readOnly = true
+                                                this.txtRefno.readOnly = true
+                                                this.docObj.docOrders.addEmpty(tmpdocOrders)
+                                                await this.core.util.waitUntil(100)
                                                 if(data.length > 0)
                                                 {
                                                     this.combineControl = true
@@ -1682,7 +1704,7 @@ export default class salesOrder extends React.PureComponent
                         {
                             select:
                             {
-                                query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
                                 param : ['VAL:string|50']
                             },
                             sql:this.core.sql
@@ -1692,6 +1714,22 @@ export default class salesOrder extends React.PureComponent
                         <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
                         <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />
                     </NdPopGrid>
+                      {/* BARKOD POPUP */}
+                      <NdPopGrid id={"pg_txtBarcode"} parent={this} container={"#root"}
+                        visible={false}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        showBorders={true}
+                        width={'90%'}
+                        height={'90%'}
+                        title={this.t("pg_txtBarcode.title")} //
+                        search={true}
+                        >
+                            <Column dataField="BARCODE" caption={this.t("pg_txtBarcode.clmBarcode")} width={150} />
+                            <Column dataField="CODE" caption={this.t("pg_txtBarcode.clmCode")} width={150} />
+                            <Column dataField="NAME" caption={this.t("pg_txtBarcode.clmName")} width={300} defaultSortOrder="asc" />
+                            <Column dataField="MULTICODE" caption={this.t("pg_txtBarcode.clmMulticode")} width={200}/>
+                        </NdPopGrid>
                     {/* Dizayn Seçim PopUp */}
                     <div>
                         <NdPopUp parent={this} id={"popDesign"} 
@@ -1929,7 +1967,11 @@ export default class salesOrder extends React.PureComponent
                                     {/* checkCustomer */}
                                     <Item>
                                         <Label text={this.t("txtQuantity")} alignment="right" />
-                                        <NdNumberBox id="txtPopQuantity" parent={this} simple={true}  
+                                        <NdNumberBox id="txtPopQuantity" parent={this} simple={true} 
+                                         onEnterKey={(async(e)=>
+                                        {
+                                            this.msgQuantity._onClick()
+                                        }).bind(this)} 
                                         >
                                     </NdNumberBox>
                                     </Item>

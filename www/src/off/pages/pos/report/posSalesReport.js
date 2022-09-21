@@ -85,7 +85,10 @@ export default class posSalesReport extends React.PureComponent
                                     param : ['START:date','END:date'],
                                     value : [this.dtDate.startDate,this.dtDate.endDate]
                                 }
+                                App.instance.setState({isExecute:true})
                                 let tmpData = await this.core.sql.execute(tmpQuery)
+                                console.log(tmpData)
+                                App.instance.setState({isExecute:false})
                                 if(tmpData.result.recordset.length > 0)
                                 {
                                     this.pvtData.setDataSource(tmpData.result.recordset)

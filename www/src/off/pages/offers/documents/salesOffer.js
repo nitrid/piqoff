@@ -37,6 +37,7 @@ export default class salesOrder extends React.PureComponent
         this._calculateTotal = this._calculateTotal.bind(this)
         this._calculateTotalMargin = this._calculateTotalMargin.bind(this)
         this._calculateMargin = this._calculateMargin.bind(this)
+        this._getBarcodes = this._getBarcodes.bind(this)
 
         this.frmdocOffers = undefined;
         this.docLocked = false;        
@@ -583,6 +584,23 @@ export default class salesOrder extends React.PureComponent
             this.docObj.docOffers.dt()[i].DOC_DATE = this.docObj.dt()[0].DOC_DATE
         }
     }
+    async _getBarcodes()
+    {
+        let tmpSource =
+        {
+            source:
+            {
+                select:
+                {   query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,BARCODE,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = '"+this.docObj.dt()[0].INPUT+"' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE,  " + 
+                    "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
+                    " FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  ITEM_BARCODE_VW_01.BARCODE LIKE  '%' +@BARCODE",
+                    param : ['BARCODE:string|50'],
+                },
+                sql:this.core.sql
+            }
+        }
+        this.pg_txtBarcode.setSource(tmpSource)
+    } 
     render()
     {
         return(
@@ -946,6 +964,7 @@ export default class salesOrder extends React.PureComponent
                                                         this.txtRef.value = data[0].CODE;
                                                         this.txtRef.props.onChange()
                                                     }
+                                                    this._getBarcodes()
                                                 }
                                             }
                                         }).bind(this)}
@@ -972,6 +991,7 @@ export default class salesOrder extends React.PureComponent
                                                                 this.txtRef.props.onChange()
                                                             }
                                                         }
+                                                        this._getBarcodes()
                                                     }
                                                 }
                                             },
@@ -1044,6 +1064,106 @@ export default class salesOrder extends React.PureComponent
                                     <Label text={this.t("txtBarcode")} alignment="right" />
                                     <NdTextBox id="txtBarcode" parent={this} simple={true}  placeholder={this.t("txtBarcodePlace")}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    button=
+                                    {
+                                        [
+                                            {
+                                                id:'01',
+                                                icon:"fa-solid fa-barcode",
+                                                onClick:async(e)=>
+                                                {
+                                                    if(this.cmbDepot.value == '' || this.txtCustomerCode.value == '')
+                                                    {
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
+                                                        }
+                                                        
+                                                        await dialog(tmpConfObj);
+                                                        this.txtBarcode.setState({value:""})
+                                                        return
+                                                    }
+                                                    if(e.validationGroup.validate().status == "valid")
+                                                    {
+                                                        await this.pg_txtBarcode.setVal(this.txtBarcode.value)
+                                                        this.pg_txtBarcode.show()
+                                                        this.pg_txtBarcode.onClick = async(data) =>
+                                                        {
+                                                            let tmpdocOffers = {...this.docObj.docOffers.empty}
+                                                            tmpdocOffers.DOC_GUID = this.docObj.dt()[0].GUID
+                                                            tmpdocOffers.TYPE = this.docObj.dt()[0].TYPE
+                                                            tmpdocOffers.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                            tmpdocOffers.LINE_NO = this.docObj.docOffers.dt().length
+                                                            tmpdocOffers.REF = this.docObj.dt()[0].REF
+                                                            tmpdocOffers.REF_NO = this.docObj.dt()[0].REF_NO
+                                                            tmpdocOffers.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                            tmpdocOffers.INPUT = this.docObj.dt()[0].INPUT
+                                                            tmpdocOffers.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                            this.txtRef.readOnly = true
+                                                            this.txtRefno.readOnly = true
+                                                            this.docObj.docOffers.addEmpty(tmpdocOffers)
+                                                            await this.core.util.waitUntil(100)
+
+                                                            if(data.length > 0)
+                                                            {
+                                                                this.customerControl = true
+                                                                this.customerClear = false
+                                                                this.combineControl = true
+                                                                this.combineNew = false
+            
+                                                                if(data.length == 1)
+                                                                {
+                                                                    await this.addItem(data[0],this.docObj.docOffers.dt().length -1)
+                                                                }
+                                                                else if(data.length > 1)
+                                                                {
+                                                                    for (let i = 0; i < data.length; i++) 
+                                                                    {
+                                                                        if(i == 0)
+                                                                        {
+                                                                            await this.addItem(data[i],this.docObj.docOffers.dt().length -1)
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            let tmpdocOffers = {...this.docObj.docOffers.empty}
+                                                                            tmpdocOffers.DOC_GUID = this.docObj.dt()[0].GUID
+                                                                            tmpdocOffers.TYPE = this.docObj.dt()[0].TYPE
+                                                                            tmpdocOffers.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                                            tmpdocOffers.LINE_NO = this.docObj.docOffers.dt().length
+                                                                            tmpdocOffers.REF = this.docObj.dt()[0].REF
+                                                                            tmpdocOffers.REF_NO = this.docObj.dt()[0].REF_NO
+                                                                            tmpdocOffers.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                                            tmpdocOffers.INPUT = this.docObj.dt()[0].INPUT
+                                                                            tmpdocOffers.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                                            
+                                                                            this.txtRef.readOnly = true
+                                                                            this.txtRefno.readOnly = true
+                                                                            this.docObj.docOffers.addEmpty(tmpdocOffers)
+            
+                                                                            await this.core.util.waitUntil(100)
+                                                                            await this.addItem(data[i],this.docObj.docOffers.dt().length-1)
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
+                                                        }
+                                                        await dialog(tmpConfObj);
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
                                     onEnterKey={(async(e)=>
                                     {
                                         if(this.cmbDepot.value == '')
@@ -1070,22 +1190,29 @@ export default class salesOrder extends React.PureComponent
                                         this.txtBarcode.setState({value:""})
                                         if(tmpData.result.recordset.length > 0)
                                         {
-                                            let tmpdocOffers = {...this.docObj.docOffers.empty}
-                                            tmpdocOffers.DOC_GUID = this.docObj.dt()[0].GUID
-                                            tmpdocOffers.TYPE = this.docObj.dt()[0].TYPE
-                                            tmpdocOffers.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                            tmpdocOffers.LINE_NO = this.docObj.docOffers.dt().length
-                                            tmpdocOffers.REF = this.docObj.dt()[0].REF
-                                            tmpdocOffers.REF_NO = this.docObj.dt()[0].REF_NO
-                                            tmpdocOffers.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                            tmpdocOffers.INPUT = this.docObj.dt()[0].INPUT
-                                            tmpdocOffers.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                            this.txtRef.readOnly = true
-                                            this.txtRefno.readOnly = true
-                                            this.docObj.docOffers.addEmpty(tmpdocOffers)
-                                            
-                                        
-                                            this.addItem(tmpData.result.recordset[0],(typeof this.docObj.docOffers.dt()[0] == 'undefined' ? 0 : this.docObj.docOffers.dt().length-1))
+                                            this.txtPopQuantity.value = ''
+                                            setTimeout(async () => 
+                                            {
+                                               this.txtPopQuantity.focus()
+                                            }, 700);
+                                            await this.msgQuantity.show().then(async (e) =>
+                                            {
+                                                let tmpdocOffers = {...this.docObj.docOffers.empty}
+                                                tmpdocOffers.DOC_GUID = this.docObj.dt()[0].GUID
+                                                tmpdocOffers.TYPE = this.docObj.dt()[0].TYPE
+                                                tmpdocOffers.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                tmpdocOffers.LINE_NO = this.docObj.docOffers.dt().length
+                                                tmpdocOffers.REF = this.docObj.dt()[0].REF
+                                                tmpdocOffers.REF_NO = this.docObj.dt()[0].REF_NO
+                                                tmpdocOffers.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                tmpdocOffers.INPUT = this.docObj.dt()[0].INPUT
+                                                tmpdocOffers.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                this.txtRef.readOnly = true
+                                                this.txtRefno.readOnly = true
+                                                this.docObj.docOffers.addEmpty(tmpdocOffers)
+                                            });
+
+                                            this.addItem(tmpData.result.recordset[0],(typeof this.docObj.docOffers.dt()[0] == 'undefined' ? 0 : this.docObj.docOffers.dt().length-1),this.txtPopQuantity.value)
                                             
                                         }
                                         else
@@ -1683,6 +1810,23 @@ export default class salesOrder extends React.PureComponent
                         <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
                         <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />
                     </NdPopGrid>
+                     {/* BARKOD POPUP */}
+                    <NdPopGrid id={"pg_txtBarcode"} parent={this} container={"#root"}
+                    visible={false}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    title={this.t("pg_txtBarcode.title")} //
+                    search={true}
+                    >
+                        <Column dataField="BARCODE" caption={this.t("pg_txtBarcode.clmBarcode")} width={150} />
+                        <Column dataField="CODE" caption={this.t("pg_txtBarcode.clmCode")} width={150} />
+                        <Column dataField="NAME" caption={this.t("pg_txtBarcode.clmName")} width={300} defaultSortOrder="asc" />
+                        <Column dataField="MULTICODE" caption={this.t("pg_txtBarcode.clmMulticode")} width={200}/>
+                    </NdPopGrid>
+                    {/* Dizayn Seçim PopUp */}
                     {/* Dizayn Seçim PopUp */}
                     <div>
                         <NdPopUp parent={this} id={"popDesign"} 
@@ -1898,6 +2042,40 @@ export default class salesOrder extends React.PureComponent
                             </div>
                             <div className='row'>
                         
+                            </div>
+                        
+                    </NdDialog>  
+                      {/* Miktar Dialog  */}
+                      <NdDialog id={"msgQuantity"} container={"#root"} parent={this}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        title={this.t("msgQuantity.title")} 
+                        showCloseButton={false}
+                        width={"350px"}
+                        height={"250px"}
+                        button={[{id:"btn01",caption:this.t("msgQuantity.btn01"),location:'after'}]}
+                        >
+                            <div className="row">
+                                <div className="col-12 py-2">
+                                    <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgQuantity.msg")}</div>
+                                </div>
+                                <div className="col-12 py-2">
+                                <Form>
+                                    <Item>
+                                        <Label text={this.t("txtQuantity")} alignment="right" />
+                                        <NdNumberBox id="txtPopQuantity" parent={this} simple={true}  
+                                        onEnterKey={(async(e)=>
+                                        {
+                                            this.msgQuantity._onClick()
+                                        }).bind(this)}
+                                        >
+                                    </NdNumberBox>
+                                    </Item>
+                                </Form>
+                            </div>
+                            </div>
+                            <div className='row'>
+                            
                             </div>
                         
                     </NdDialog>  

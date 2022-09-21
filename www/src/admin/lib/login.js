@@ -2,6 +2,8 @@ import React from 'react';
 import App from './app.js'
 import TextBox from 'devextreme-react/text-box';
 import Button from 'devextreme-react/button';
+import NdSelectBox from '../../core/react/devex/selectbox.js';
+
 
 export default class Login extends React.Component
 {
@@ -28,12 +30,30 @@ export default class Login extends React.Component
         {
             kullanici: '',
             sifre: '',
-            alert: ''
+            alert: '',
+            Users:[]
         }  
         this.core = App.instance.core;    
-
+        
         this.onLoginClick = this.onLoginClick.bind(this)
         this.textValueChanged = this.textValueChanged.bind(this)
+    }
+    componentDidMount()
+    {
+        this.init()
+    }
+    async init()
+    {
+        let tmpData =  await this.core.auth.getUserList()
+        let tmpUsers = []
+        for (let i = 0; i < tmpData.length; i++) 
+        {
+            if(tmpData[i].ROLE == 'Administrator')
+            tmpUsers.push(tmpData[i])
+        }
+        this.setState({Users:tmpUsers})
+        this.cmbkullanici.dataRefresh({source:this.state.Users})
+
     }
     textValueChanged(e) 
     {      
@@ -83,9 +103,19 @@ export default class Login extends React.Component
                             </div>
                         </div>
                         <div className="dx-field">
-                            <div className="dx-field-label">Kullanıcı Adı</div>
+                            <div className="dx-field-label">{"txtLangSelect"}</div>
                             <div className="dx-field-value">
-                                <TextBox id="Kullanici" showClearButton={true} height='fit-content' valueChangeEvent="keyup" onValueChanged={this.textValueChanged} />
+                            <NdSelectBox simple={true} parent={this} id="cmbkullanici" height='fit-content'
+                                    displayExpr="NAME"                       
+                                    valueExpr="CODE"
+                                    value= ""
+                                    searchEnabled={true}
+                                    data={{source:this.state.Users}}
+                                    onValueChanged={(async(e)=>
+                                    {
+                                        this.setState({kullanici:e.value})
+                                    }).bind(this)}
+                                    />
                             </div>
                         </div>
                         <div className="dx-field">

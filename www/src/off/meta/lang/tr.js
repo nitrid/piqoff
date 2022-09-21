@@ -1117,7 +1117,8 @@ export const langTr =
             clmUnderUnit : "Alt Birim",
             clmUnderUnit : "Alt Birim",
             clmUnderUnitPrice : "Alt Birim Fiyatı",
-            clmDescription :"Açıklama"
+            clmDescription :"Açıklama",
+            clmOrgins : "Ülke"
         },
         msgDocValid:
         {
@@ -4386,6 +4387,14 @@ export const langTr =
             clmName : "STOK ADI",
             clmMulticode : "TEDARİKÇİ KODU"
         },
+        pg_txtBarcode : 
+        {
+            title : "Barkod Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+            clmMulticode : "TEDARİKÇİ KODU",
+            clmBarcode : "BARKOD"
+        },
         grdPurcOrders: 
         {
             clmItemCode: "Kodu",
@@ -4593,8 +4602,11 @@ export const langTr =
         },
         grdUnderPrice :
         {
+            clmItemName :"Ürün",
             clmCustomerName : "Cari Adı",
-            clmPrice : "Fiyat"
+            clmPrice : "Fiyat",
+            clmCode : "Kodu",
+            clmMulticode : "T. Kodu"
         },
         msgQuantity:
         {
@@ -4853,6 +4865,14 @@ export const langTr =
             btn01: "Ekle",
             msg: "Miktar Giriniz"
         },
+        pg_txtBarcode : 
+        {
+            title : "Barkod Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+            clmMulticode : "TEDARİKÇİ KODU",
+            clmBarcode : "BARKOD"
+        },
     },
     cnt_01_001 : // "Alış Anlaşmaları Listesi"
     {
@@ -4878,7 +4898,8 @@ export const langTr =
             clmStartDate : "Başlangıç",
             clmFinishDate :"Bitiş",
             clmDepot : "Depo",
-            clmUser : "Kullanıcı"
+            clmUser : "Kullanıcı",
+            clmDepotName : "Depo",
         },
     },
     cnt_01_002 : //  "Satış Anlaşmaları Listesi"
@@ -6435,7 +6456,21 @@ export const langTr =
         validDepot : "Depo Seçmelisiniz",
         validCustomerCode : "Cari Kodu Boş Geçilemez",
         validDocDate : "Tarih Seçmelisiniz",
-        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz"
+        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz",
+        msgQuantity:
+        {
+            title: "Miktar",
+            btn01: "Ekle",
+            msg: "Miktar Giriniz"
+        },
+        pg_txtBarcode : 
+        {
+            title : "Barkod Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+            clmMulticode : "TEDARİKÇİ KODU",
+            clmBarcode : "BARKOD"
+        },
     },
     tkf_02_002 : // "Satış Teklifi",
     {
@@ -6686,8 +6721,21 @@ export const langTr =
         validDepot : "Depo Seçmelisiniz",
         validCustomerCode : "Cari Kodu Boş Geçilemez",
         validDocDate : "Tarih Seçmelisiniz",
-        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz"
-
+        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz",
+        msgQuantity:
+        {
+            title: "Miktar",
+            btn01: "Ekle",
+            msg: "Miktar Giriniz"
+        },
+        pg_txtBarcode : 
+        {
+            title : "Barkod Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+            clmMulticode : "TEDARİKÇİ KODU",
+            clmBarcode : "BARKOD"
+        },
     },
     proces_01_001 : // "Ürün Grubu Güncelleme"
     {

@@ -171,7 +171,7 @@ export class posCls
             return;
         }
         let tmp = {}
-        if(typeof arguments.length > 0)
+        if(arguments.length > 0)
         {
             tmp = {...arguments[0]}            
         }
@@ -430,7 +430,7 @@ export class posSaleCls
             return;
         }
         let tmp = {}
-        if(typeof arguments.length > 0)
+        if(arguments.length > 0)
         {
             tmp = {...arguments[0]}            
         }
@@ -660,7 +660,7 @@ export class posPaymentCls
             return;
         }
         let tmp = {}
-        if(typeof arguments.length > 0)
+        if(arguments.length > 0)
         {
             tmp = {...arguments[0]}            
         }
@@ -859,7 +859,7 @@ export class posPluCls
             return;
         }
         let tmp = {}
-        if(typeof arguments.length > 0)
+        if(arguments.length > 0)
         {
             tmp = {...arguments[0]}            
         }
@@ -1041,7 +1041,7 @@ export class posExtraCls
             return;
         }
         let tmp = {}
-        if(typeof arguments.length > 0)
+        if(arguments.length > 0)
         {
             tmp = {...arguments[0]}            
         }
@@ -1831,5 +1831,205 @@ export class posDeviceCls
                 tmpBarcode = "";            
             }
         })
+    }
+}
+export class posPromoCls
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds = new dataset();
+        this.empty = 
+        {
+            GUID : '00000000-0000-0000-0000-000000000000',
+            CUSER : this.core.auth.data.CODE,
+            LUSER : this.core.auth.data.CODE,
+            APP_TYPE : 0,
+            APP_AMOUNT : 0,
+            PROMO_GUID : '00000000-0000-0000-0000-000000000000',
+            PROMO_CODE : '',
+            PROMO_NAME : '',
+            CUSTOMER_GUID : '00000000-0000-0000-0000-000000000000',
+            CUSTOMER_CODE : '',
+            CUSTOMER_NAME : '',
+            START_DATE : moment(new Date()).format("YYYY-MM-DD"),
+            FINISH_DATE : moment(new Date()).format("YYYY-MM-DD"),
+            POS_GUID : '00000000-0000-0000-0000-000000000000',
+            DOC_DATE : moment(new Date()).format("YYYY-MM-DD"),
+            POS_SALE_GUID : '00000000-0000-0000-0000-000000000000',
+            ITEM_CODE : '',
+            ITEM_NAME : '',
+            PRICE : 0,
+            QUANTITY : 0, 
+            AMOUNT : 0, 
+            FAMOUNT : 0,
+            DISCOUNT : 0,
+            LOYALTY : 0,
+            VAT : 0,
+            TOTAL : 0,
+            PROMO_TYPE : 0
+        }
+
+        this._initDs();
+    }
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('POS_PROMO');            
+        tmpDt.selectCmd = 
+        {
+            query : "SELECT * FROM [dbo].[POS_PROMO_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND " +
+                    "((PROMO = @PROMO) OR (@PROMO = '00000000-0000-0000-0000-000000000000')) AND ((POS = @POS) OR (@POS = '00000000-0000-0000-0000-000000000000'))",
+            param : ['GUID:string|50','PROMO:string|50','POS:string|50'],
+            local : 
+            {
+                type : "select",
+                from : "POS_PROMO_VW_01",
+            }
+        } 
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_POS_PROMO_INSERT] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@APP_TYPE = @PAPP_TYPE, " +
+                    "@APP_AMOUNT = @PAPP_AMOUNT, " +
+                    "@PROMO = @PPROMO, " +
+                    "@POS = @PPOS, " +                      
+                    "@POS_SALE = @PPOS_SALE ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PAPP_TYPE:string|25','PAPP_AMOUNT:float','PPROMO:string|50','PPOS:string|50','PPOS_SALE:string|50'],
+            dataprm : ['GUID','CUSER','APP_TYPE','APP_AMOUNT','PROMO_GUID','POS_GUID','POS_SALE_GUID'],
+            local : 
+            {
+                type : "insert",
+                into : "POS_PROMO_VW_01",
+                values : [{GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
+                LUSER_NAME : {map:'LUSER_NAME'},APP_TYPE : {map:'APP_TYPE'},APP_AMOUNT : {map:'APP_AMOUNT'},PROMO_GUID : {map:'PROMO_GUID'},POS_GUID : {map:'POS_GUID'},POS_SALE_GUID : {map:'POS_SALE_GUID'}}]
+            }
+        } 
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_POS_PROMO_UPDATE] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@APP_TYPE = @PAPP_TYPE, " +
+                    "@APP_AMOUNT = @PAPP_AMOUNT, " +
+                    "@PROMO = @PPROMO, " +
+                    "@POS = @PPOS, " +                      
+                    "@POS_SALE = @PPOS_SALE ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PAPP_TYPE:string|25','PAPP_AMOUNT:float','PPROMO:string|50','PPOS:string|50','PPOS_SALE:string|50'],
+            dataprm : ['GUID','CUSER','APP_TYPE','APP_AMOUNT','PROMO_GUID','POS_GUID','POS_SALE_GUID'],
+            local : 
+            {
+                type : "update",
+                in : "POS_PROMO_VW_01",
+                set : {GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
+                LUSER_NAME : {map:'LUSER_NAME'},APP_TYPE : {map:'APP_TYPE'},APP_AMOUNT : {map:'APP_AMOUNT'},PROMO_GUID : {map:'PROMO_GUID'},POS_GUID : {map:'POS_GUID'},POS_SALE_GUID : {map:'POS_SALE_GUID'}}
+            }
+        } 
+        tmpDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_POS_PROMO_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@UPDATE = 1, " + 
+                    "@GUID = @PGUID ", 
+            param : ['PCUSER:string|25','PGUID:string|50'],
+            dataprm : ['CUSER','GUID'],
+            local : 
+            [{
+                type : "update",
+                in : "POS_PROMO_VW_01",
+                set : {DELETED:true},
+                where : {GUID : {map:'GUID'}}
+            },
+            {
+                type : "update",
+                in : "POS_PROMO_VW_01",
+                set : {DELETED:true},
+                where : {POS_GUID : {map:'GUID'}}
+            },
+            {
+                type : "update",
+                in : "POS_PROMO_VW_01",
+                set : {DELETED:true},
+                where : {POS_GUID : {map:'GUID'}}
+            }]
+        }
+
+        this.ds.add(tmpDt);
+    }
+    //#endregion
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0]);
+        }
+
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('POS_PROMO') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {}
+        if(arguments.length > 0)
+        {
+            tmp = {...arguments[0]}            
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('POS_PROMO').push(tmp)
+    }
+    clearAll()
+    {
+        for (let i = 0; i < this.ds.length; i++) 
+        {
+            this.dt(i).clear()
+        }
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ ÖRN: {GUID:''}
+        return new Promise(async resolve => 
+        {
+            let tmpPrm = {GUID:''}
+            if(arguments.length > 0)
+            {
+                tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
+                tmpPrm.PROMO = typeof arguments[0].PROMO == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].PROMO;
+                tmpPrm.POS = typeof arguments[0].POS == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].POS;
+            }
+            
+            Object.keys(tmpPrm).forEach(key =>
+            {
+                if (tmpPrm[key] === undefined || tmpPrm[key] == '00000000-0000-0000-0000-000000000000' || tmpPrm[key] == '' || tmpPrm[key] == -1) 
+                {
+                    delete tmpPrm[key];
+                }
+            })
+
+            this.ds.get('POS_PROMO').selectCmd.local.where = Object.keys(tmpPrm).length == 0 ? undefined : tmpPrm
+            this.ds.get('POS_PROMO').selectCmd.local.where.DELETED = false
+
+            this.ds.get('POS_PROMO').selectCmd.value = Object.values(tmpPrm);
+              
+            await this.ds.get('POS_PROMO').refresh();
+
+            resolve(this.ds.get('POS_PROMO'));    
+        });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            this.ds.delete()
+            resolve(await this.ds.update()); 
+        });
     }
 }
