@@ -478,6 +478,7 @@ export default class purchaseOrder extends React.PureComponent
 
         this.docObj.docOrders.dt()[pIndex].ITEM_CODE = pData.CODE
         this.docObj.docOrders.dt()[pIndex].MULTICODE = pData.MULTICODE
+        this.docObj.docOrders.dt()[pIndex].ITEM_BARCODE = pData.BARCODE
         this.docObj.docOrders.dt()[pIndex].ITEM = pData.GUID
         this.docObj.docOrders.dt()[pIndex].VAT_RATE = pData.VAT
         this.docObj.docOrders.dt()[pIndex].ITEM_NAME = pData.NAME
@@ -509,26 +510,7 @@ export default class purchaseOrder extends React.PureComponent
             this.docObj.docOrders.dt()[pIndex].TOTAL = 0
             this._calculateTotal()
         }
-        let tmpPricePrm = this.sysParam.filter({ID:'pruchasePriceAlert',USERS:this.user.CODE}).getValue()
-        if(typeof tmpPricePrm != 'undefined' && tmpPricePrm.value == true)
-        {
-            let tmpQuery = 
-            {
-                query :"SELECT CUSTOMER_NAME,(SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM_GUID,CUSTOMER_GUID,@QUANTITY,GETDATE())) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND (SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM_GUID,CUSTOMER_GUID,@QUANTITY,GETDATE())) < @PRICE",
-                param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float','PRICE:float'],
-                value : [pData.CODE,this.docObj.dt()[0].OUTPUT,pQuantity,this.docObj.docOrders.dt()[pIndex].PRICE]
-            }
-            let tmpData = await this.core.sql.execute(tmpQuery) 
-
-            if(tmpData.result.recordset.length > 0)
-            {
-                for (let i = 0; i < tmpData.result.recordset.length; i++) 
-                {
-                    this.underPriceData.push(tmpData.result.recordset[i])
-                }
-                this.popUnderPrice.show()
-            }
-        }
+        
     }
     async _getItems()
     {
@@ -714,6 +696,37 @@ export default class purchaseOrder extends React.PureComponent
                                             }
                                             await dialog(tmpConfObj);
                                             return
+                                        }
+                                        let tmpPricePrm = this.sysParam.filter({ID:'pruchasePriceAlert',USERS:this.user.CODE}).getValue()
+                                        if(typeof tmpPricePrm != 'undefined' && tmpPricePrm.value == true)
+                                        {
+                                            this.underPriceData.clear()
+                                            App.instance.setState({isExecute:true})
+                                            for (let i = 0; i < this.docObj.docOrders.dt().length; i++) 
+                                            {
+                                                let tmpQuery = 
+                                                {
+                                                    query :"SELECT ITEM_NAME,CUSTOMER_NAME,(SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM_GUID,CUSTOMER_GUID,@QUANTITY,GETDATE())) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND (SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM_GUID,CUSTOMER_GUID,@QUANTITY,GETDATE())) < @PRICE",
+                                                    param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float','PRICE:float'],
+                                                    value : [this.docObj.docOrders.dt()[i].ITEM_CODE,this.docObj.dt()[0].OUTPUT,this.docObj.docOrders.dt()[i].QUANTITY,this.docObj.docOrders.dt()[i].PRICE]
+                                                }
+                                                let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                if(tmpData.result.recordset.length > 0)
+                                                {
+                                                    for (let i = 0; i < tmpData.result.recordset.length; i++) 
+                                                    {
+                                                        this.underPriceData.push(tmpData.result.recordset[i])
+                                                    }
+                                                }
+                                            }
+                                            App.instance.setState({isExecute:false})
+                                            if(this.underPriceData.length > 0)
+                                            {
+                                                await this.popUnderPrice.show().then(async (e) =>
+                                                {
+    
+                                                })
+                                            }
                                         }
                                         if(this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1].ITEM_CODE == '')
                                         {
@@ -1155,7 +1168,7 @@ export default class purchaseOrder extends React.PureComponent
                                             return
                                         }
                                         let tmpQuery = 
-                                        {   query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = @CUSTOMER AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE,  " + 
+                                        {   query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,BARCODE,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = @CUSTOMER AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE,  " + 
                                             "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
                                             " FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
                                             param : ['CODE:string|50','CUSTOMER:string|50'],
@@ -1173,8 +1186,7 @@ export default class purchaseOrder extends React.PureComponent
                                             }, 700);
                                             await this.msgQuantity.show().then(async (e) =>
                                             {
-                                                if(e == 'btn01')
-                                                {
+                                                
                                                     let tmpdocOrders = {...this.docObj.docOrders.empty}
                                                     tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
                                                     tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
@@ -1191,7 +1203,6 @@ export default class purchaseOrder extends React.PureComponent
                                                     this.docObj.docOrders.addEmpty(tmpdocOrders)
                                                 
                                                     this.addItem(tmpData.result.recordset[0],(typeof this.docObj.docOrders.dt()[0] == 'undefined' ? 0 : this.docObj.docOrders.dt().length-1),this.txtPopQuantity.value)
-                                                }
                                             })
                                           
                                         }
@@ -1981,15 +1992,15 @@ export default class purchaseOrder extends React.PureComponent
                     </NdDialog>  
                     {/*Düşük Fiyat PopUp */}
                     <div>
-                        <NdPopUp parent={this} id={"popUnderPrice"} 
-                        visible={false}
+                        <NdDialog parent={this} id={"popUnderPrice"} 
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popUnderPrice.title")}
                         container={"#root"} 
-                        width={'500'}
-                        height={'250'}
+                        width={'600'}
+                        height={'400'}
                         position={{of:'#root'}}
+                        button={[{id:"btn01",caption:this.lang.t("btnOk"),location:'after'}]}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item >
@@ -2008,12 +2019,13 @@ export default class purchaseOrder extends React.PureComponent
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Scrolling mode="virtual" />
                                         <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdUnderPrice.clmItemName")} width={150} allowEditing={false} />
                                         <Column dataField="CUSTOMER_NAME" caption={this.t("grdUnderPrice.clmCustomerName")} width={150} allowEditing={false} />
                                         <Column dataField="PRICE" caption={this.t("grdUnderPrice.clmPrice")} width={150} allowEditing={false} />
                                     </NdGrid>
                                 </Item>
                             </Form>
-                        </NdPopUp>
+                        </NdDialog>
                     </div>  
                     {/* Miktar Dialog  */}
                     <NdDialog id={"msgQuantity"} container={"#root"} parent={this}
@@ -2031,10 +2043,13 @@ export default class purchaseOrder extends React.PureComponent
                                 </div>
                                 <div className="col-12 py-2">
                                 <Form>
-                                    {/* checkCustomer */}
                                     <Item>
                                         <Label text={this.t("txtQuantity")} alignment="right" />
                                         <NdNumberBox id="txtPopQuantity" parent={this} simple={true}  
+                                        onEnterKey={(async(e)=>
+                                        {
+                                            this.msgQuantity._onClick()
+                                        }).bind(this)}
                                         >
                                     </NdNumberBox>
                                     </Item>

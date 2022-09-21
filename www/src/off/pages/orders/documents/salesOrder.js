@@ -434,6 +434,7 @@ export default class salesOrder extends React.PureComponent
         }
         this.docObj.docOrders.dt()[pIndex].ITEM_CODE = pData.CODE
         this.docObj.docOrders.dt()[pIndex].ITEM = pData.GUID
+        this.docObj.docOrders.dt()[pIndex].ITEM_BARCODE = pData.BARCODE
         this.docObj.docOrders.dt()[pIndex].VAT_RATE = pData.VAT
         this.docObj.docOrders.dt()[pIndex].ITEM_NAME = pData.NAME
         this.docObj.docOrders.dt()[pIndex].COST_PRICE = pData.COST_PRICE
@@ -1061,7 +1062,7 @@ export default class salesOrder extends React.PureComponent
                                             return
                                         }
                                         let tmpQuery = 
-                                        {   query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = @CUSTOMER AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE,  " + 
+                                        {   query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,BARCODE,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = @CUSTOMER AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE,  " + 
                                             "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
                                             " FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
                                             param : ['CODE:string|50','CUSTOMER:string|50'],
@@ -1078,24 +1079,21 @@ export default class salesOrder extends React.PureComponent
                                             }, 700);
                                             await this.msgQuantity.show().then(async (e) =>
                                             {
-                                                if(e == 'btn01')
-                                                {
-                                                    let tmpdocOrders = {...this.docObj.docOrders.empty}
-                                                    tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
-                                                    tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
-                                                    tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                    tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
-                                                    tmpdocOrders.REF = this.docObj.dt()[0].REF
-                                                    tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
-                                                    tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                    tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
-                                                    tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                    this.txtRef.readOnly = true
-                                                    this.txtRefno.readOnly = true
-                                                    this.docObj.docOrders.addEmpty(tmpdocOrders)
-                                                
-                                                    this.addItem(tmpData.result.recordset[0],(typeof this.docObj.docOrders.dt()[0] == 'undefined' ? 0 : this.docObj.docOrders.dt().length-1),this.txtPopQuantity.value)
-                                                }
+                                                let tmpdocOrders = {...this.docObj.docOrders.empty}
+                                                tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
+                                                tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
+                                                tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
+                                                tmpdocOrders.REF = this.docObj.dt()[0].REF
+                                                tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
+                                                tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
+                                                tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                this.txtRef.readOnly = true
+                                                this.txtRefno.readOnly = true
+                                                this.docObj.docOrders.addEmpty(tmpdocOrders)
+                                            
+                                                this.addItem(tmpData.result.recordset[0],(typeof this.docObj.docOrders.dt()[0] == 'undefined' ? 0 : this.docObj.docOrders.dt().length-1),this.txtPopQuantity.value)
                                             })
                                         }
                                         else
@@ -1929,7 +1927,11 @@ export default class salesOrder extends React.PureComponent
                                     {/* checkCustomer */}
                                     <Item>
                                         <Label text={this.t("txtQuantity")} alignment="right" />
-                                        <NdNumberBox id="txtPopQuantity" parent={this} simple={true}  
+                                        <NdNumberBox id="txtPopQuantity" parent={this} simple={true} 
+                                         onEnterKey={(async(e)=>
+                                        {
+                                            this.msgQuantity._onClick()
+                                        }).bind(this)} 
                                         >
                                     </NdNumberBox>
                                     </Item>
