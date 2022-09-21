@@ -29,7 +29,7 @@ import NdAcsDialog,{acsDialog} from "../../core/react/devex/acsdialog.js";
 import NbKeyboard from "../../core/react/bootstrap/keyboard.js";
 import IdleTimer from 'react-idle-timer'
 
-import { posCls,posSaleCls,posPaymentCls,posPluCls,posDeviceCls } from "../../core/cls/pos.js";
+import { posCls,posSaleCls,posPaymentCls,posPluCls,posDeviceCls,posPromoCls } from "../../core/cls/pos.js";
 import { docCls} from "../../core/cls/doc.js"
 import transferCls from "../lib/transfer.js";
 import { promoCls } from "../../core/cls/promotion.js";
@@ -38,6 +38,7 @@ import { itemsCls } from "../../core/cls/items.js";
 import { dataset,datatable,param,access } from "../../core/core.js";
 import {prm} from '../meta/prm.js'
 import {acs} from '../meta/acs.js'
+import { ThemeProvider } from "react-bootstrap";
 
 export default class posDoc extends React.PureComponent
 {
@@ -61,6 +62,7 @@ export default class posDoc extends React.PureComponent
         this.lastPosSaleDt = new datatable();
         this.lastPosPayDt = new datatable();        
         this.promoObj = new promoCls();
+        this.posPromoObj = new posPromoCls();
 
         this.loading = React.createRef();
 
@@ -307,8 +309,6 @@ export default class posDoc extends React.PureComponent
                 return
             }
         }
-
-        
     }    
     async deviceEntry()
     {
@@ -338,6 +338,7 @@ export default class posDoc extends React.PureComponent
             this.posObj.dt()[0].DOC_DATE =  moment(new Date()).format("YYYY-MM-DD"),
             //PROMOSYON GETİR.
             await this.getPromoDb()
+            this.promoApply()
             //************************************************** */
             await this.calcGrandTotal(false)
             resolve();
@@ -588,7 +589,7 @@ export default class posDoc extends React.PureComponent
             
             tmpPriceDt.selectCmd.value = [tmpItemsDt[0].GUID,tmpQuantity * tmpItemsDt[0].UNIT_FACTOR,this.posObj.dt()[0].CUSTOMER_GUID]
             await tmpPriceDt.refresh();  
-            console.log(tmpPriceDt)
+            
             if(tmpPriceDt.length > 0 && tmpPrice == 0)
             {
                 tmpPrice = tmpPriceDt[0].PRICE
@@ -613,7 +614,6 @@ export default class posDoc extends React.PureComponent
                 }
                 //**************************************************** */
             }
-            console.log(tmpPrice)
             //**************************************************** */
             //EĞER ÜRÜN TERAZİLİ İSE
             if(tmpItemsDt[0].WEIGHING)
@@ -940,6 +940,7 @@ export default class posDoc extends React.PureComponent
             {
                 this.grdList.devGrid.selectRowsByIndexes(0)
             }, 100);
+            
             if(typeof pSave == 'undefined' || pSave)
             {
                 let tmpClose = await this.saleClosed(true,tmpPayRest,tmpPayChange)
@@ -995,162 +996,7 @@ export default class posDoc extends React.PureComponent
         }
 
         return
-    }
-    isPromo()
-    {
-        let isCond = (pGuid)=>
-        {
-            let tmpWithal = this.promoObj.cond.dt().where({PROMO : pGuid}).groupBy('WITHAL')
-            let tmpSale = this.posObj.posSale.dt().where({PROMO_TYPE : 0})
-            let tmpResult = new datatable()
-
-            tmpWithal.forEach((withal)=>
-            {
-                tmpResult.push({WITHAL : false,COUNT : 0,ITEMS : []})                
-                if(withal.TYPE == 0) //STOK KOŞULU
-                {
-                    let tmpCond = this.promoObj.cond.dt().where({PROMO : pGuid}).where({TYPE:0}).where({WITHAL:withal.WITHAL})
-
-                    if(tmpCond.length > 0 && tmpSale.where({ITEM_GUID : {'in' : tmpCond.toColumnArr('ITEM_GUID')}}).sum('QUANTITY') >= tmpCond[0].QUANTITY)
-                    {
-                        //POS_SALE TABLOSUNDAKİ ÜRÜNLERİN HANGİLERİNİN PROMOSYON KOŞULUNA UYDUĞU GETİRİLİYOR.BUNUN İÇİN KOŞULDAKİ ITEM_GUID LİSTESİ POS_SALE TABLOSUNA "IN" ŞEKLİNDE VERİLİYOR.
-                        let tmpCondCount = Math.floor(tmpSale.where({ITEM_GUID : {'in' : tmpCond.toColumnArr('ITEM_GUID')}}).sum('QUANTITY') / tmpCond[0].QUANTITY)
-                        tmpResult[tmpResult.length - 1].WITHAL = true
-                        tmpResult[tmpResult.length - 1].COUNT = tmpCondCount
-                        tmpResult[tmpResult.length - 1].ITEMS = tmpCond.toColumnArr('ITEM_GUID')
-                    }
-                }
-                else if(withal.TYPE == 1) //GENEL TUTAR KOŞULU
-                {
-                    if(tmpSale.sum('TOTAL') >= withal.AMOUNT)
-                    {
-                        tmpResult[tmpResult.length - 1].WITHAL = true
-                        tmpResult[tmpResult.length - 1].COUNT = 0
-                        tmpResult[tmpResult.length - 1].ITEMS = []
-                    }
-                }
-            });
-
-            let tmpItems = []
-            tmpResult.forEach((e)=>
-            {
-                e.ITEMS.forEach((items)=>
-                {
-                    tmpItems.push(items)
-                })
-            })
-
-            if(tmpResult.where({WITHAL:false}).length > 0)
-            {
-                return {result : false}
-            }
-            else
-            {
-                return {result : true,count : tmpResult.sum('COUNT'),items : tmpItems}
-            }
-            
-        }
-        //PROMOTION RESET
-        this.posObj.posSale.dt().where({PROMO_TYPE : {'>' : 1}}).forEach((item)=>
-        {
-            let tmpCalc = this.calcSaleTotal(item.PRICE,item.QUANTITY,0,item.LOYALTY,item.VAT_RATE)
-    
-            item.QUANTITY = tmpCalc.QUANTITY
-            item.PRICE = tmpCalc.PRICE
-            item.FAMOUNT = tmpCalc.FAMOUNT
-            item.AMOUNT = tmpCalc.AMOUNT
-            item.DISCOUNT = tmpCalc.DISCOUNT
-            item.VAT = tmpCalc.VAT
-            item.TOTAL = tmpCalc.TOTAL
-            item.PROMO_TYPE = 0
-        })
-        //******************************************************************** */
-        let tmpSale = this.posObj.posSale.dt().where({PROMO_TYPE : 0})
-
-        this.promoObj.dt('PROMO').forEach(promoItem => 
-        {
-            let tmpIsCond = isCond(promoItem.GUID)
-            
-            if(tmpIsCond.result)
-            {
-                let tmpWithal = this.promoObj.app.dt().where({PROMO : promoItem.GUID}).groupBy('WITHAL')
-
-                tmpWithal.forEach((withal)=>
-                {
-                    let tmpApp = this.promoObj.app.dt().where({PROMO : promoItem.GUID}).where({WITHAL : withal.WITHAL})
-                    //İNDİRİM UYGULAMA
-                    tmpApp.where({TYPE : 0}).forEach(itemApp =>
-                    {
-                        tmpSale.where({ITEM_GUID : {'in' : tmpIsCond.items}}).forEach(itemSale => 
-                        {
-                            let tmpDisc = Number(Number(itemSale.PRICE * itemSale.QUANTITY).rateInc(itemApp.AMOUNT,2))
-                            let tmpCalc = this.calcSaleTotal(itemSale.PRICE,itemSale.QUANTITY,tmpDisc,itemSale.LOYALTY,itemSale.VAT_RATE)
-
-                            itemSale.QUANTITY = tmpCalc.QUANTITY
-                            itemSale.PRICE = tmpCalc.PRICE
-                            itemSale.FAMOUNT = tmpCalc.FAMOUNT
-                            itemSale.AMOUNT = tmpCalc.AMOUNT
-                            itemSale.DISCOUNT = tmpCalc.DISCOUNT
-                            itemSale.VAT = tmpCalc.VAT
-                            itemSale.TOTAL = tmpCalc.TOTAL
-                            itemSale.PROMO_TYPE = 2
-                        });
-                    })
-                    //PARA PUAN UYGULAMA
-                    tmpApp.where({TYPE : 1}).forEach(itemApp =>
-                    {
-
-                    })
-                    //HEDİYE ÇEKİ UYGULAMA
-                    tmpApp.where({TYPE : 2}).forEach(itemApp =>
-                    {
-
-                    })
-                    //STOK İNDİRİMİ UYGULAMA
-                    tmpApp.where({TYPE : 3}).forEach(itemApp =>
-                    {
-                        if(tmpSale.where({ITEM_GUID : itemApp.ITEM_GUID}).sum('QUANTITY') >= itemApp.QUANTITY)
-                        {   
-                            let tmpAppCount = Math.floor(tmpSale.where({ITEM_GUID : itemApp.ITEM_GUID}).sum('QUANTITY') / itemApp.QUANTITY)
-
-                            tmpSale.where({ITEM_GUID : itemApp.ITEM_GUID}).forEach(itemSale => 
-                            {              
-                                let tmpDisc = (Number(Number(itemSale.PRICE).rateInc(itemApp.AMOUNT,2)) * (tmpIsCond.count <= tmpAppCount ? tmpIsCond.count : tmpAppCount)) / tmpSale.where({ITEM_GUID : itemApp.ITEM_GUID}).length
-                                let tmpCalc = this.calcSaleTotal(itemSale.PRICE,itemSale.QUANTITY,tmpDisc,itemSale.LOYALTY,itemSale.VAT_RATE)
-                                
-                                itemSale.QUANTITY = tmpCalc.QUANTITY
-                                itemSale.PRICE = tmpCalc.PRICE
-                                itemSale.FAMOUNT = tmpCalc.FAMOUNT
-                                itemSale.AMOUNT = tmpCalc.AMOUNT
-                                itemSale.DISCOUNT = tmpCalc.DISCOUNT
-                                itemSale.VAT = tmpCalc.VAT
-                                itemSale.TOTAL = tmpCalc.TOTAL
-                                itemSale.PROMO_TYPE = 3
-                            });
-                        }
-                    })
-                    //GENEL İNDİRİM UYGULAMA
-                    tmpApp.where({TYPE : 4}).forEach(itemApp =>
-                    {
-                        tmpSale.forEach(itemSale => 
-                        {              
-                            let tmpDisc = Number(Number(itemSale.PRICE * itemSale.QUANTITY).rateInc(itemApp.AMOUNT,2))
-                            let tmpCalc = this.calcSaleTotal(itemSale.PRICE,itemSale.QUANTITY,tmpDisc,itemSale.LOYALTY,itemSale.VAT_RATE)
-                            
-                            itemSale.QUANTITY = tmpCalc.QUANTITY
-                            itemSale.PRICE = tmpCalc.PRICE
-                            itemSale.FAMOUNT = tmpCalc.FAMOUNT
-                            itemSale.AMOUNT = tmpCalc.AMOUNT
-                            itemSale.DISCOUNT = tmpCalc.DISCOUNT
-                            itemSale.VAT = tmpCalc.VAT
-                            itemSale.TOTAL = tmpCalc.TOTAL
-                            itemSale.PROMO_TYPE = 4
-                        });
-                    })
-                })
-            }            
-        });
-    }
+    }    
     async saleAdd(pItemData)
     {
         let tmpRowData = this.isRowMerge('SALE',pItemData)     
@@ -1218,13 +1064,36 @@ export default class posDoc extends React.PureComponent
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_TOTAL = 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DELETED = false
         
-        this.isPromo()
+        this.promoApply()
 
         await this.calcGrandTotal();
     }
     async saleRowUpdate(pRowData,pItemData)
     { 
+        //* MIKTARLI FİYAT GETİRME İŞLEMİ */
+        let tmpPriceDt = new datatable()
+        tmpPriceDt.selectCmd = 
+        {
+            query : "SELECT dbo.FN_PRICE_SALE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER) AS PRICE",
+            param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50'],
+            local : 
+            {
+                type : "select",
+                from : "ITEMS_POS_VW_01",
+                where : 
+                {
+                    GUID : pItemData.ITEM_GUID
+                },
+            }
+        }
+        /************************************************************************************ */
+        tmpPriceDt.selectCmd.value = [pRowData.ITEM_GUID,pItemData.QUANTITY,pRowData.CUSTOMER_GUID]
+        await tmpPriceDt.refresh();  
+
+        pItemData.PRICE = tmpPriceDt.length > 0 && tmpPriceDt[0].PRICE > 0 ? tmpPriceDt[0].PRICE : pItemData.PRICE
+
         let tmpCalc = this.calcSaleTotal(pItemData.PRICE,pItemData.QUANTITY,pRowData.DISCOUNT,pRowData.LOYALTY,pRowData.VAT_RATE)
+        
         if(pRowData.PROMO_TYPE == 1)
         {
             let tmpConfObj =
@@ -1245,12 +1114,12 @@ export default class posDoc extends React.PureComponent
         pRowData.VAT = tmpCalc.VAT
         pRowData.TOTAL = tmpCalc.TOTAL
         
-        this.isPromo()
+        this.promoApply()
 
         await this.calcGrandTotal();
     } 
     async saleClosed(pPrint,pPayRest,pPayChange)
-    {        
+    {               
         return new Promise(async resolve => 
         {
             await this.core.util.waitUntil()
@@ -1280,7 +1149,14 @@ export default class posDoc extends React.PureComponent
                     {
                         if(Math.floor(this.posObj.dt()[0].TOTAL) > 0)
                         {
-                            await this.customerPointSave(0,Math.floor(this.posObj.dt()[0].TOTAL))
+                            let tmpPoint = Math.floor(this.posObj.dt()[0].TOTAL)
+                            //PROMOSYONDA MÜŞTERİ PUANI VARSA EKLENİYOR.
+                            if(this.posPromoObj.dt().where({APP_TYPE:1}).length > 0)
+                            {
+                                tmpPoint += this.posPromoObj.dt().where({APP_TYPE:1})[0].APP_AMOUNT
+                            }
+                            //**************************************** */
+                            await this.customerPointSave(0,tmpPoint)
                         }
                         if(this.popCustomerUsePoint.value > 0)
                         {
@@ -1297,6 +1173,13 @@ export default class posDoc extends React.PureComponent
                 this.popCardPay.hide();
                 this.popCheqpay.hide();                
                 
+                //PROMOSYONDA HEDİYE ÇEKİ VARSA UYGULANIYOR
+                if(this.posPromoObj.dt().where({APP_TYPE:2}).length > 0)
+                {
+                    this.posObj.dt()[0].REBATE_CHEQPAY = 'Q' + new Date().toISOString().substring(2, 10).replace('-','').replace('-','') + Math.round(Number(parseFloat(this.posPromoObj.dt().where({APP_TYPE:2})[0].APP_AMOUNT).toFixed(2)) * 100).toString().padStart(5,'0') + Date.now().toString().substring(7,12);
+                    await this.cheqpaySave(this.posObj.dt()[0].REBATE_CHEQPAY,this.posPromoObj.dt().where({APP_TYPE:2})[0].APP_AMOUNT,0,1);
+                }
+                //**************************** */
                 if(pPayChange > 0)
                 {
                     if(this.posObj.posPay.dt().length > 0 && this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE == 4)
@@ -1332,6 +1215,7 @@ export default class posDoc extends React.PureComponent
                         pos : this.posObj.dt(),
                         possale : this.posObj.posSale.dt(),
                         pospay : this.posObj.posPay.dt(),
+                        pospromo : this.posPromoObj.dt(),
                         special : 
                         {
                             type: 'Fis',
@@ -1351,7 +1235,9 @@ export default class posDoc extends React.PureComponent
                         await this.posDevice.caseOpen();
                     }
                 }
-
+                //POS_PROMO TABLOSUNA KAYIT EDİLİYOR.
+                await this.posPromoObj.save()
+                //******************************** */
                 resolve(true)
             }
             else
@@ -1643,6 +1529,7 @@ export default class posDoc extends React.PureComponent
                 this.grdList.devGrid.deleteRow(this.grdList.devGrid.getRowIndexByKey(this.grdList.devGrid.getSelectedRowKeys()[0]))
             }
             await this.posObj.posSale.dt().delete()
+            this.promoApply()
             await this.calcGrandTotal()
         }
         else
@@ -2085,10 +1972,199 @@ export default class posDoc extends React.PureComponent
     {
         return new Promise(async resolve => 
         {
+            this.posPromoObj.clearAll()
             this.promoObj.clearAll()
             await this.promoObj.load({START_DATE:moment(new Date()).format("YYYY-MM-DD"),FINISH_DATE:moment(new Date()).format("YYYY-MM-DD"),CUSTOMER_GUID:this.posObj.dt()[0].CUSTOMER_GUID,DEPOT_GUID:this.posObj.dt()[0].DEPOT_GUID})
             resolve()
         })
+    }
+    promoApply()
+    {
+        let isCond = (pGuid)=>
+        {
+            let tmpWithal = this.promoObj.cond.dt().where({PROMO : pGuid}).groupBy('WITHAL')
+            let tmpSale = this.posObj.posSale.dt().where({PROMO_TYPE : 0})
+            let tmpResult = new datatable()
+
+            tmpWithal.forEach((withal)=>
+            {
+                tmpResult.push({WITHAL : false,COUNT : 0,ITEMS : []})                
+                if(withal.TYPE == 0) //STOK KOŞULU
+                {
+                    let tmpCond = this.promoObj.cond.dt().where({PROMO : pGuid}).where({TYPE:0}).where({WITHAL:withal.WITHAL})
+                    //MIKTAR KRITERLİ
+                    if(tmpCond.length > 0 && tmpCond[0].QUANTITY > 0)
+                    {
+                        if(tmpSale.where({ITEM_GUID : {'in' : tmpCond.toColumnArr('ITEM_GUID')}}).sum('QUANTITY') >= tmpCond[0].QUANTITY)
+                        {
+                            //POS_SALE TABLOSUNDAKİ ÜRÜNLERİN HANGİLERİNİN PROMOSYON KOŞULUNA UYDUĞU GETİRİLİYOR.BUNUN İÇİN KOŞULDAKİ ITEM_GUID LİSTESİ POS_SALE TABLOSUNA "IN" ŞEKLİNDE VERİLİYOR.
+                            let tmpCondCount = Math.floor(tmpSale.where({ITEM_GUID : {'in' : tmpCond.toColumnArr('ITEM_GUID')}}).sum('QUANTITY') / tmpCond[0].QUANTITY)
+                            tmpResult[tmpResult.length - 1].WITHAL = true
+                            tmpResult[tmpResult.length - 1].COUNT = tmpCondCount
+                            tmpResult[tmpResult.length - 1].ITEMS = tmpCond.toColumnArr('ITEM_GUID')
+                        }
+                    }
+                    else if(tmpCond.length > 0 && tmpCond[0].AMOUNT > 0) //STOK TOPLAM TUTAR
+                    {
+                        if(tmpSale.where({ITEM_GUID : {'in' : tmpCond.toColumnArr('ITEM_GUID')}}).sum('AMOUNT') >= tmpCond[0].AMOUNT)
+                        {
+                            //POS_SALE TABLOSUNDAKİ ÜRÜNLERİN HANGİLERİNİN PROMOSYON KOŞULUNA UYDUĞU GETİRİLİYOR.BUNUN İÇİN KOŞULDAKİ ITEM_GUID LİSTESİ POS_SALE TABLOSUNA "IN" ŞEKLİNDE VERİLİYOR.
+                            let tmpCondCount = Math.floor(tmpSale.where({ITEM_GUID : {'in' : tmpCond.toColumnArr('ITEM_GUID')}}).sum('AMOUNT') / tmpCond[0].AMOUNT)
+                            tmpResult[tmpResult.length - 1].WITHAL = true
+                            tmpResult[tmpResult.length - 1].COUNT = tmpCondCount
+                            tmpResult[tmpResult.length - 1].ITEMS = tmpCond.toColumnArr('ITEM_GUID')
+                        }
+                    }
+                }
+                else if(withal.TYPE == 1) //GENEL TUTAR KOŞULU
+                {
+                    if(tmpSale.sum('TOTAL') >= withal.AMOUNT)
+                    {
+                        tmpResult[tmpResult.length - 1].WITHAL = true
+                        tmpResult[tmpResult.length - 1].COUNT = 0
+                        tmpResult[tmpResult.length - 1].ITEMS = []
+                    }
+                }
+            });
+
+            let tmpItems = []
+            tmpResult.forEach((e)=>
+            {
+                e.ITEMS.forEach((items)=>
+                {
+                    tmpItems.push(items)
+                })
+            })
+
+            if(tmpResult.where({WITHAL:false}).length > 0)
+            {
+                return {result : false}
+            }
+            else
+            {
+                return {result : true,count : tmpResult.sum('COUNT'),items : tmpItems}
+            }
+            
+        }
+        let addPosPromo = (pType,pAmount,pPromoGuid,pPosGuid,pPosSaleGuid) => 
+        {
+            let tmpPosPromoDt = {...this.posPromoObj.empty}
+            tmpPosPromoDt.APP_TYPE = pType
+            tmpPosPromoDt.APP_AMOUNT = pAmount
+            tmpPosPromoDt.PROMO_GUID = pPromoGuid
+            tmpPosPromoDt.POS_GUID = pPosGuid
+            tmpPosPromoDt.POS_SALE_GUID = pPosSaleGuid
+
+            this.posPromoObj.addEmpty(tmpPosPromoDt)
+        }
+                
+        //PROMOTION RESET
+        this.posPromoObj.clearAll()
+        this.posObj.posSale.dt().where({PROMO_TYPE : {'>' : 1}}).forEach((item)=>
+        {
+            let tmpCalc = this.calcSaleTotal(item.PRICE,item.QUANTITY,0,item.LOYALTY,item.VAT_RATE)
+    
+            item.QUANTITY = tmpCalc.QUANTITY
+            item.PRICE = tmpCalc.PRICE
+            item.FAMOUNT = tmpCalc.FAMOUNT
+            item.AMOUNT = tmpCalc.AMOUNT
+            item.DISCOUNT = tmpCalc.DISCOUNT
+            item.VAT = tmpCalc.VAT
+            item.TOTAL = tmpCalc.TOTAL
+            item.PROMO_TYPE = 0
+        })
+        //******************************************************************** */
+        let tmpSale = this.posObj.posSale.dt().where({PROMO_TYPE : 0})
+
+        this.promoObj.dt('PROMO').forEach(promoItem => 
+        {
+            let tmpIsCond = isCond(promoItem.GUID)
+            
+            if(tmpIsCond.result)
+            {
+                let tmpWithal = this.promoObj.app.dt().where({PROMO : promoItem.GUID}).groupBy('WITHAL')
+
+                tmpWithal.forEach((withal)=>
+                {
+                    let tmpApp = this.promoObj.app.dt().where({PROMO : promoItem.GUID}).where({WITHAL : withal.WITHAL})
+                    //İNDİRİM UYGULAMA
+                    tmpApp.where({TYPE : 0}).forEach(itemApp =>
+                    {
+                        tmpSale.where({ITEM_GUID : {'in' : tmpIsCond.items}}).forEach(itemSale => 
+                        {
+                            let tmpDisc = Number(Number(itemSale.PRICE * itemSale.QUANTITY).rateInc(itemApp.AMOUNT,2))
+                            let tmpCalc = this.calcSaleTotal(itemSale.PRICE,itemSale.QUANTITY,tmpDisc,itemSale.LOYALTY,itemSale.VAT_RATE)
+
+                            itemSale.QUANTITY = tmpCalc.QUANTITY
+                            itemSale.PRICE = tmpCalc.PRICE
+                            itemSale.FAMOUNT = tmpCalc.FAMOUNT
+                            itemSale.AMOUNT = tmpCalc.AMOUNT
+                            itemSale.DISCOUNT = tmpCalc.DISCOUNT
+                            itemSale.VAT = tmpCalc.VAT
+                            itemSale.TOTAL = tmpCalc.TOTAL
+                            itemSale.PROMO_TYPE = 2
+
+                            addPosPromo(0,itemApp.AMOUNT,promoItem.GUID,this.posObj.dt()[0].GUID,itemSale.GUID)
+                        });
+                    })
+                    //PARA PUAN UYGULAMA
+                    tmpApp.where({TYPE : 1}).forEach(itemApp =>
+                    {
+                        addPosPromo(1,itemApp.AMOUNT,promoItem.GUID,this.posObj.dt()[0].GUID,'00000000-0000-0000-0000-000000000000')
+                    })
+                    //HEDİYE ÇEKİ UYGULAMA
+                    tmpApp.where({TYPE : 2}).forEach(itemApp =>
+                    {
+                        addPosPromo(2,itemApp.AMOUNT,promoItem.GUID,this.posObj.dt()[0].GUID,'00000000-0000-0000-0000-000000000000')
+                    })
+                    //STOK İNDİRİMİ UYGULAMA
+                    tmpApp.where({TYPE : 3}).forEach(itemApp =>
+                    {
+                        if(tmpSale.where({ITEM_GUID : itemApp.ITEM_GUID}).sum('QUANTITY') >= itemApp.QUANTITY)
+                        {   
+                            let tmpAppCount = Math.floor(tmpSale.where({ITEM_GUID : itemApp.ITEM_GUID}).sum('QUANTITY') / itemApp.QUANTITY)
+
+                            tmpSale.where({ITEM_GUID : itemApp.ITEM_GUID}).forEach(itemSale => 
+                            {   
+                                let tmpDisc = (Number(Number(itemSale.PRICE).rateInc(itemApp.AMOUNT,2)) * (tmpIsCond.count <= tmpAppCount ? tmpIsCond.count : tmpAppCount)) / tmpSale.where({ITEM_GUID : itemApp.ITEM_GUID}).length
+                                let tmpCalc = this.calcSaleTotal(itemSale.PRICE,itemSale.QUANTITY,tmpDisc,itemSale.LOYALTY,itemSale.VAT_RATE)
+                                
+                                itemSale.QUANTITY = tmpCalc.QUANTITY
+                                itemSale.PRICE = tmpCalc.PRICE
+                                itemSale.FAMOUNT = tmpCalc.FAMOUNT
+                                itemSale.AMOUNT = tmpCalc.AMOUNT
+                                itemSale.DISCOUNT = tmpCalc.DISCOUNT
+                                itemSale.VAT = tmpCalc.VAT
+                                itemSale.TOTAL = tmpCalc.TOTAL
+                                itemSale.PROMO_TYPE = 3
+
+                                addPosPromo(3,itemApp.AMOUNT,promoItem.GUID,this.posObj.dt()[0].GUID,itemSale.GUID)
+                            });
+                        }
+                    })
+                    //GENEL İNDİRİM UYGULAMA
+                    tmpApp.where({TYPE : 4}).forEach(itemApp =>
+                    {
+                        tmpSale.forEach(itemSale => 
+                        {              
+                            let tmpDisc = Number(Number(itemSale.PRICE * itemSale.QUANTITY).rateInc(itemApp.AMOUNT,2))
+                            let tmpCalc = this.calcSaleTotal(itemSale.PRICE,itemSale.QUANTITY,tmpDisc,itemSale.LOYALTY,itemSale.VAT_RATE)
+                            
+                            itemSale.QUANTITY = tmpCalc.QUANTITY
+                            itemSale.PRICE = tmpCalc.PRICE
+                            itemSale.FAMOUNT = tmpCalc.FAMOUNT
+                            itemSale.AMOUNT = tmpCalc.AMOUNT
+                            itemSale.DISCOUNT = tmpCalc.DISCOUNT
+                            itemSale.VAT = tmpCalc.VAT
+                            itemSale.TOTAL = tmpCalc.TOTAL
+                            itemSale.PROMO_TYPE = 4
+
+                            addPosPromo(4,itemApp.AMOUNT,promoItem.GUID,this.posObj.dt()[0].GUID,itemSale.GUID)
+                        });
+                    })
+                })
+            }            
+        });
     }
     render()
     {
