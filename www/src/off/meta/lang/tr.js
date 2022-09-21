@@ -4593,8 +4593,11 @@ export const langTr =
         },
         grdUnderPrice :
         {
+            clmItemName :"Ürün",
             clmCustomerName : "Cari Adı",
-            clmPrice : "Fiyat"
+            clmPrice : "Fiyat",
+            clmCode : "Kodu",
+            clmMulticode : "T. Kodu"
         },
         msgQuantity:
         {

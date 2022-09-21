@@ -4520,6 +4520,18 @@ export const langFr =
         validCustomerCode : "Le Code Produit ne peut être Vide ",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
+        popUnderPrice :
+        {
+            title : "Bu Ürünün Daha Ucuz Tedarikçisi Mevcut" // bak
+        }, // bak
+        grdUnderPrice : // bak
+        { // bak
+            clmItemName :"Ürün", // bak
+            clmCustomerName : "Cari Adı", // bak
+            clmPrice : "Fiyat", // bak
+            clmCode : "Kodu" , // bak
+            clmMulticode : "T. Kodu" // bak
+        },
         msgQuantity:
         {
             title: "Quantité",

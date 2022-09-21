@@ -220,7 +220,6 @@ export default class purchaseOrder extends React.PureComponent
 
                         this.pg_txtItemsCode.onClick = async(data) =>
                         {
-                            console.log(3)
                             this.customerControl = true
                             this.customerClear = false
                             this.combineControl = true
@@ -520,7 +519,7 @@ export default class purchaseOrder extends React.PureComponent
             {
                 select:
                 {
-                    query : "SELECT GUID,CODE,NAME,VAT," + 
+                    query : "SELECT GUID,CODE,NAME,VAT,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE," + 
                     "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
                     " FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) " ,
                     param : ['VAL:string|50']
@@ -706,9 +705,11 @@ export default class purchaseOrder extends React.PureComponent
                                             {
                                                 let tmpQuery = 
                                                 {
-                                                    query :"SELECT ITEM_NAME,CUSTOMER_NAME,(SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM_GUID,CUSTOMER_GUID,@QUANTITY,GETDATE())) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND (SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM_GUID,CUSTOMER_GUID,@QUANTITY,GETDATE())) < @PRICE",
+                                                    query : "SELECT ISNULL((SELECT NAME FROM ITEMS WHERE ITEMS.GUID = ITEM_MULTICODE.ITEM),'') AS ITEM_NAME,ISNULL((SELECT CODE FROM ITEMS WHERE ITEMS.GUID = ITEM_MULTICODE.ITEM),'') AS ITEM_CODDE, " +
+                                                   " ISNULL((SELECT TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = ITEM_MULTICODE.CUSTOMER),'') AS CUSTOMER_NAME,CODE AS MULTICODE,  "+
+                                                   "(SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM,CUSTOMER,@QUANTITY,GETDATE())) AS PRICE FROM ITEM_MULTICODE WHERE  DELETED = 0 AND ITEM = @ITEM_CODE AND (SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM,CUSTOMER,@QUANTITY,GETDATE())) < @PRICE " ,
                                                     param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float','PRICE:float'],
-                                                    value : [this.docObj.docOrders.dt()[i].ITEM_CODE,this.docObj.dt()[0].OUTPUT,this.docObj.docOrders.dt()[i].QUANTITY,this.docObj.docOrders.dt()[i].PRICE]
+                                                    value : [this.docObj.docOrders.dt()[i].ITEM,this.docObj.dt()[0].OUTPUT,this.docObj.docOrders.dt()[i].QUANTITY,this.docObj.docOrders.dt()[i].PRICE]
                                                 }
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
                                                 if(tmpData.result.recordset.length > 0)
@@ -724,7 +725,7 @@ export default class purchaseOrder extends React.PureComponent
                                             {
                                                 await this.popUnderPrice.show().then(async (e) =>
                                                 {
-    
+
                                                 })
                                             }
                                         }
@@ -1130,7 +1131,7 @@ export default class purchaseOrder extends React.PureComponent
                                         <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
                                         <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
                                         <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
-                                        <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} filterType={"include"} filterValues={['Tedarikçi']}/>
+                                        <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} filterType={"include"} filterValues={['Tedarikçi','Her Ikisi']}/>
                                     </NdPopGrid>
                                 </Item> 
                                 {/* txtCustomerName */}
@@ -1187,22 +1188,22 @@ export default class purchaseOrder extends React.PureComponent
                                             await this.msgQuantity.show().then(async (e) =>
                                             {
                                                 
-                                                    let tmpdocOrders = {...this.docObj.docOrders.empty}
-                                                    tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
-                                                    tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
-                                                    tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                    tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
-                                                    tmpdocOrders.REF = this.docObj.dt()[0].REF
-                                                    tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
-                                                    tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                    tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
-                                                    tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-        
-                                                    this.txtRef.readOnly = true
-                                                    this.txtRefno.readOnly = true
-                                                    this.docObj.docOrders.addEmpty(tmpdocOrders)
-                                                
-                                                    this.addItem(tmpData.result.recordset[0],(typeof this.docObj.docOrders.dt()[0] == 'undefined' ? 0 : this.docObj.docOrders.dt().length-1),this.txtPopQuantity.value)
+                                                let tmpdocOrders = {...this.docObj.docOrders.empty}
+                                                tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
+                                                tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
+                                                tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
+                                                tmpdocOrders.REF = this.docObj.dt()[0].REF
+                                                tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
+                                                tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
+                                                tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+    
+                                                this.txtRef.readOnly = true
+                                                this.txtRefno.readOnly = true
+                                                this.docObj.docOrders.addEmpty(tmpdocOrders)
+                                            
+                                                this.addItem(tmpData.result.recordset[0],(typeof this.docObj.docOrders.dt()[0] == 'undefined' ? 0 : this.docObj.docOrders.dt().length-1),this.txtPopQuantity.value)
                                             })
                                           
                                         }
@@ -1269,7 +1270,6 @@ export default class purchaseOrder extends React.PureComponent
                                                         this.customerClear = false
                                                         this.combineControl = true
                                                         this.combineNew = false
-
                                                         if(data.length > 0)
                                                         {
                                                             if(data.length == 1)
@@ -1311,25 +1311,26 @@ export default class purchaseOrder extends React.PureComponent
                                                     return
                                                 }
                                             }
-                                            let tmpdocOrders = {...this.docObj.docOrders.empty}
-                                            tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
-                                            tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
-                                            tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                            tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
-                                            tmpdocOrders.REF = this.docObj.dt()[0].REF
-                                            tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
-                                            tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                            tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
-                                            tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-
-                                            this.txtRef.readOnly = true
-                                            this.txtRefno.readOnly = true
-                                            this.docObj.docOrders.addEmpty(tmpdocOrders)
-
-                                            await this.core.util.waitUntil(100)
+                                            
                                             this.pg_txtItemsCode.show()
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
+                                                let tmpdocOrders = {...this.docObj.docOrders.empty}
+                                                tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
+                                                tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
+                                                tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
+                                                tmpdocOrders.REF = this.docObj.dt()[0].REF
+                                                tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
+                                                tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
+                                                tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+
+                                                this.txtRef.readOnly = true
+                                                this.txtRefno.readOnly = true
+                                                this.docObj.docOrders.addEmpty(tmpdocOrders)
+
+                                                await this.core.util.waitUntil(100)
                                                 if(data.length > 0)
                                                 {
                                                     this.customerControl = true
@@ -1420,10 +1421,9 @@ export default class purchaseOrder extends React.PureComponent
                                     height={'400'} 
                                     width={'100%'}
                                     dbApply={false}
+                                    filterRow={{visible:true}}
                                     onRowUpdated={async(e)=>
                                     {
-                                        let rowIndex = e.component.getRowIndexByKey(e.key)
-
                                         if(typeof e.data.QUANTITY != 'undefined')
                                         {
                                             let tmpQuery = 
@@ -1435,14 +1435,14 @@ export default class purchaseOrder extends React.PureComponent
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
                                             if(tmpData.result.recordset.length > 0)
                                             {
-                                                this.docObj.docOrders.dt()[rowIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
+                                                e.key.PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
                                                 
                                                 this._calculateTotal()
                                             }
                                         }
                                         if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                         {
-                                            e.key.DISCOUNT = parseFloat((((this.docObj.docOrders.dt()[rowIndex].AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(3))
+                                            e.key.DISCOUNT = parseFloat((((e.key.AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(3))
                                         }
 
                                         if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
@@ -1454,17 +1454,17 @@ export default class purchaseOrder extends React.PureComponent
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"msgDiscount.msg"}</div>)
                                             }
                                             dialog(tmpConfObj);
-                                            this.docObj.docOrders.dt()[rowIndex].DISCOUNT = 0 
+                                            e.key.DISCOUNT = 0 
                                             return
                                         }
 
-                                        this.docObj.docOrders.dt()[rowIndex].VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(2));
-                                        this.docObj.docOrders.dt()[rowIndex].AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(2))
-                                        this.docObj.docOrders.dt()[rowIndex].TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +this.docObj.docOrders.dt()[rowIndex].VAT).toFixed(2))
+                                        e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(2));
+                                        e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(2))
+                                        e.key.TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +e.key.VAT).toFixed(2))
                                         
-                                        if(this.docObj.docOrders.dt()[rowIndex].DISCOUNT > 0)
+                                        if(e.key.DISCOUNT > 0)
                                         {
-                                            this.docObj.docOrders.dt()[rowIndex].DISCOUNT_RATE = parseFloat(100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100).toFixed(2))
+                                            e.key.DISCOUNT_RATE = parseFloat(100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100).toFixed(2))
                                         }
                                         this._calculateTotal()
                                     }}
@@ -1477,20 +1477,20 @@ export default class purchaseOrder extends React.PureComponent
                                         <Scrolling mode="virtual" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.sip_02_001")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcOrders.clmCreateDate")} width={180} allowEditing={false}/>
-                                        <Column dataField="CUSER_NAME" caption={this.t("grdPurcOrders.clmCuser")} width={120} allowEditing={false}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdPurcOrders.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="MULTICODE" caption={this.t("grdPurcOrders.clmMulticode")} width={150}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdPurcOrders.clmItemName")} width={400} />
-                                        <Column dataField="ITEM_BARCODE" caption={this.t("grdPurcOrders.clmBarcode")} width={150} allowEditing={false}/>
-                                        <Column dataField="PRICE" caption={this.t("grdPurcOrders.clmPrice")} width={80} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdPurcOrders.clmQuantity")} width={80} dataType={'number'}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdPurcOrders.clmAmount")} width={80} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
-                                        <Column dataField="DISCOUNT" caption={this.t("grdPurcOrders.clmDiscount")} width={80} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
-                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdPurcOrders.clmDiscountRate")} width={100} dataType={'number'}/>
-                                        <Column dataField="VAT" caption={this.t("grdPurcOrders.clmVat")} width={80} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
-                                        <Column dataField="TOTAL" caption={this.t("grdPurcOrders.clmTotal")} width={150} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
-                                        <Column dataField="DESCRIPTION" caption={this.t("grdPurcOrders.clmDescription")} width={160}  headerFilter={{visible:true}}/>
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcOrders.clmCreateDate")} width={90} allowEditing={false}/>
+                                        <Column dataField="CUSER_NAME" caption={this.t("grdPurcOrders.clmCuser")} width={100} allowEditing={false}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdPurcOrders.clmItemCode")} width={110} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="MULTICODE" caption={this.t("grdPurcOrders.clmMulticode")} width={110} allowEditing={false}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdPurcOrders.clmItemName")} width={330} />
+                                        <Column dataField="ITEM_BARCODE" caption={this.t("grdPurcOrders.clmBarcode")} width={130} allowEditing={false}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdPurcOrders.clmQuantity")} width={60} dataType={'number'}/>
+                                        <Column dataField="PRICE" caption={this.t("grdPurcOrders.clmPrice")} width={75} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                        <Column dataField="AMOUNT" caption={this.t("grdPurcOrders.clmAmount")} width={100} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
+                                        <Column dataField="DISCOUNT" caption={this.t("grdPurcOrders.clmDiscount")} width={60} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdPurcOrders.clmDiscountRate")} width={60} dataType={'number'}/>
+                                        <Column dataField="VAT" caption={this.t("grdPurcOrders.clmVat")} width={75} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
+                                        <Column dataField="TOTAL" caption={this.t("grdPurcOrders.clmTotal")} width={110} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
+                                        <Column dataField="DESCRIPTION" caption={this.t("grdPurcOrders.clmDescription")} width={120}  headerFilter={{visible:true}}/>
                                     </NdGrid>
                                 </Item>
                             </Form>
@@ -1997,8 +1997,8 @@ export default class purchaseOrder extends React.PureComponent
                         showTitle={true}
                         title={this.t("popUnderPrice.title")}
                         container={"#root"} 
-                        width={'600'}
-                        height={'400'}
+                        width={'1200'}
+                        height={'700'}
                         position={{of:'#root'}}
                         button={[{id:"btn01",caption:this.lang.t("btnOk"),location:'after'}]}
                         >
@@ -2012,16 +2012,18 @@ export default class purchaseOrder extends React.PureComponent
                                     allowColumnResizing={true} 
                                     headerFilter={{visible:true}}
                                     filterRow = {{visible:true}}
-                                    height={'100%'} 
+                                    height={'400'} 
                                     width={'100%'}
                                     dbApply={false}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Scrolling mode="virtual" />
                                         <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdUnderPrice.clmItemName")} width={150} allowEditing={false} />
-                                        <Column dataField="CUSTOMER_NAME" caption={this.t("grdUnderPrice.clmCustomerName")} width={150} allowEditing={false} />
-                                        <Column dataField="PRICE" caption={this.t("grdUnderPrice.clmPrice")} width={150} allowEditing={false} />
+                                        <Column dataField="ITEM_CODDE" caption={this.t("grdUnderPrice.clmCode")} width={150} allowEditing={false} />
+                                        <Column dataField="MULTICODE" caption={this.t("grdUnderPrice.clmMulticode")} width={150} allowEditing={false} />
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdUnderPrice.clmItemName")} width={350} allowEditing={false} />
+                                        <Column dataField="CUSTOMER_NAME" caption={this.t("grdUnderPrice.clmCustomerName")} width={250} allowEditing={false} />
+                                        <Column dataField="PRICE" caption={this.t("grdUnderPrice.clmPrice")} width={100} allowEditing={false} />
                                     </NdGrid>
                                 </Item>
                             </Form>
