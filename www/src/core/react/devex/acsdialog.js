@@ -62,7 +62,7 @@ export default class NdAcsDialog extends NdBase
                 {
                     tmpQuery = 
                     {
-                        query : "SELECT TOP 1 * FROM USERS WHERE PWD = @PWD AND ROLE = 'Administrator'", 
+                        query : "SELECT TOP 1 * FROM USERS WHERE PWD = @PWD AND ROLE = 'Administrator' AND STATUS = 1", 
                         param : ['PWD:string|50'],
                         value : [tmpPass],
                         local : 
@@ -77,7 +77,7 @@ export default class NdAcsDialog extends NdBase
                 {
                     tmpQuery = 
                     {
-                        query : "SELECT TOP 1 * FROM USERS WHERE CODE = @CODE AND PWD = @PWD", 
+                        query : "SELECT TOP 1 * FROM USERS WHERE CODE = @CODE AND PWD = @PWD AND STATUS = 1", 
                         param : ['CODE:string|25','PWD:string|50'],
                         value : [tmpCode,tmpPass],
                         local : 
