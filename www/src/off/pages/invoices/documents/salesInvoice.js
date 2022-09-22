@@ -150,7 +150,10 @@ export default class salesInvoice extends React.PureComponent
     {
         this.docObj.clearAll()
         this.paymentObj.clearAll()
+        App.instance.setState({isExecute:true})
         await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:20});
+        App.instance.setState({isExecute:false})
+
         this._calculateMargin()
         this._calculateTotalMargin()
 

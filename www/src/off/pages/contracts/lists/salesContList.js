@@ -146,8 +146,10 @@ export default class salesContList extends React.PureComponent
                 sql : this.core.sql
             }
         }
-        
+        App.instance.setState({isExecute:true})
         await this.grdPurcContList.dataRefresh(tmpSource)
+        App.instance.setState({isExecute:false})
+
     }
     render()
     {

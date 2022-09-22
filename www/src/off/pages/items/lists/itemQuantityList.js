@@ -129,8 +129,9 @@ export default class QuantityList extends React.PureComponent
                     sql : this.core.sql
                 }
             }
-
+            App.instance.setState({isExecute:true})
             await this.grdListe.dataRefresh(tmpSource)
+            App.instance.setState({isExecute:false})
         }
         else
         {

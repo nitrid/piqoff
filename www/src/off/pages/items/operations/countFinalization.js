@@ -200,7 +200,9 @@ export default class countFinalization extends React.PureComponent
                     sql : this.core.sql
                 }
             }
+            App.instance.setState({isExecute:true})
             await this.grdCountItems.dataRefresh(tmpSource)
+            App.instance.setState({isExecute:false})
         }
         else if(this.chkNotCountItems.value == true)
         {
@@ -225,7 +227,9 @@ export default class countFinalization extends React.PureComponent
                     sql : this.core.sql
                 }
             }
+            App.instance.setState({isExecute:true})
             await this.grdCountItems.dataRefresh(tmpSource)
+            App.instance.setState({isExecute:false})
         }
         
         this.popCount.show()

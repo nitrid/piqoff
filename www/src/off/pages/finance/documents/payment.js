@@ -118,7 +118,9 @@ export default class payment extends React.PureComponent
     async getDoc(pGuid,pRef,pRefno)
     {
         this.docObj.clearAll()
+        App.instance.setState({isExecute:true})
         await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:200});
+        App.instance.setState({isExecute:false})
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true

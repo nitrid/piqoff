@@ -6118,6 +6118,7 @@ export const langFr =
             clmTitle: "Nom",
             clmPoint: "Points",
             clmLdate : "Dernière Date MAJ",
+            clmEur : "EURO"
         },
         popPointDetail : 
         {

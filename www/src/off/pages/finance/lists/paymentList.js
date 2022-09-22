@@ -137,8 +137,10 @@ export default class paymentList extends React.PureComponent
                 sql : this.core.sql
             }
         }
-        
+        App.instance.setState({isExecute:true})
         await this.grdPayList.dataRefresh(tmpSource)
+        App.instance.setState({isExecute:false})
+
         let tmpTotal =  this.grdPayList.data.datatable.sum("AMOUNT",2)
         this.txtTotal.setState({value:tmpTotal + ' €'});
     }

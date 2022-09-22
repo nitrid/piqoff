@@ -225,7 +225,9 @@ export default class itemList extends React.PureComponent
                 }
                
             }
+            App.instance.setState({isExecute:true})
             await this.grdListe.dataRefresh(tmpSource)
+            App.instance.setState({isExecute:false})
             let tmpDatas = this.prmObj.filter({ID:'emptyCode',USERS:this.user.CODE}).getValue()
             if(typeof tmpDatas != 'undefined' && tmpDatas.value ==  true)
             {
