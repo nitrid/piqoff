@@ -711,6 +711,14 @@ export const langFr =
             design : "Design" ,
             lang : "Langue Document" 
         },
+        pg_txtBarcode : 
+        {
+            title : "Sélectionner Barre",
+            clmCode :  "Référence Produit",
+            clmName : "Nom Produit",
+            clmMulticode : "Sélection Document",
+            clmBarcode : "Code Barre"
+        },
     },
     stk_02_002 : //"Depo/Mağaza Arası Sevk"
     {
@@ -842,7 +850,14 @@ export const langFr =
             design : "Design" ,
             lang : "Langue Document" 
         },
-
+        pg_txtBarcode : 
+        {
+            title : "Sélectionner Barre",
+            clmCode :  "Référence Produit",
+            clmName : "Nom Produit",
+            clmMulticode : "Sélection Document",
+            clmBarcode : "Code Barre"
+        },
     },
     stk_02_003 : // "Kayıp Ürün Çıkışı"
     {
@@ -1014,8 +1029,16 @@ export const langFr =
             btn01: "Tamam",
             msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
         },
+        pg_txtBarcode : 
+        {
+            title : "Sélectionner Barre",
+            clmCode :  "Référence Produit",
+            clmName : "Nom Produit",
+            clmMulticode : "Sélection Document",
+            clmBarcode : "Code Barre"
+        },
     },
-    stk_02_004 : //"Kayıp Ürün Çıkışı"
+    stk_02_004 : //"Etiket Bas"
     {
         txtRefRefno : "Série-Numéro Doc.",
         design : "Design" ,
@@ -1172,7 +1195,14 @@ export const langFr =
             design : "Design" ,
             lang : "Langue Document" 
         },
-
+        pg_txtBarcode : 
+        {
+            title : "Sélectionner Barre",
+            clmCode :  "Référence Produit",
+            clmName : "Nom Produit",
+            clmMulticode : "Sélection Document",
+            clmBarcode : "Code Barre"
+        },
     },
     stk_02_005 : // "İade Ürünü Toplama"
     {
@@ -1304,6 +1334,14 @@ export const langFr =
             btn01: "Tamam",
             msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
         },
+        pg_txtBarcode : 
+        {
+            title : "Sélectionner Barre",
+            clmCode :  "Référence Produit",
+            clmName : "Nom Produit",
+            clmMulticode : "Sélection Document",
+            clmBarcode : "Code Barre"
+        },
     },
     stk_02_007 : // "SKT Girişi", // BAK
     {
@@ -1313,6 +1351,7 @@ export const langFr =
         AddItems : "Ekle",
         txtBarcode : "Barkod Ekle",
         txtBarcodePlace: "Barkod Okutunuz",
+        txtQuantity : "Pièce", 
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -2252,6 +2291,7 @@ export const langFr =
         txtRemainder : "Reste",
         txtBarcode: "Code barre",
         txtBarcodePlace: "Barkod Okutunuz",
+        txtQuantity : "Pièce", 
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -2563,6 +2603,20 @@ export const langFr =
             clmPrice: "Ancien Prix",     
             clmPrice2: "Nouveau Prix",     
         },
+        pg_txtBarcode : 
+        {
+            title : "Sélectionner Barre",
+            clmCode :  "Référence Produit",
+            clmName : "Nom Produit",
+            clmMulticode : "Sélection Document",
+            clmBarcode : "Code Barre"
+        },
+        msgQuantity:
+        {
+            title: "Quantité",
+            btn01: "Ajoutez",
+            msg: "Ajoutez quantité"
+        },
     },
     ftr_02_002 : // "Satış Faturası"
     {
@@ -2593,6 +2647,7 @@ export const langFr =
         txtRemainder : "Reste",
         txtBarcode: "Code barre",
         txtBarcodePlace: "Barkod Okutunuz",
+        txtQuantity : "Pièce", 
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -2857,6 +2912,20 @@ export const langFr =
             btn01: "Tamam",
             msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
         },
+        pg_txtBarcode : 
+        {
+            title : "Sélectionner Barre",
+            clmCode :  "Référence Produit",
+            clmName : "Nom Produit",
+            clmMulticode : "Sélection Document",
+            clmBarcode : "Code Barre"
+        },
+        msgQuantity:
+        {
+            title: "Quantité",
+            btn01: "Ajoutez",
+            msg: "Ajoutez quantité"
+        },
     },
     ftr_02_003 : // "İade Faturası"
     {
@@ -2887,6 +2956,7 @@ export const langFr =
         txtRemainder : "Reste",
         txtBarcode: "Code barre",
         txtBarcodePlace: "Barkod Okutunuz",
+        txtQuantity : "Pièce", 
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3105,9 +3175,20 @@ export const langFr =
         validDepot : "Sélectionner Dépot",
         validCustomerCode : "Le Code Produit ne peut être Vide ",
         validDocDate : "Sélectionner Date" ,
-
-
-
+        pg_txtBarcode : 
+        {
+            title : "Sélectionner Barre",
+            clmCode :  "Référence Produit",
+            clmName : "Nom Produit",
+            clmMulticode : "Sélection Document",
+            clmBarcode : "Code Barre"
+        },
+        msgQuantity:
+        {
+            title: "Quantité",
+            btn01: "Ajoutez",
+            msg: "Ajoutez quantité"
+        },
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
     {
@@ -3138,6 +3219,7 @@ export const langFr =
         txtRemainder : "Reste",
         txtBarcode: "Code barre",
         txtBarcodePlace: "Barkod Okutunuz",
+        txtQuantity : "Pièce", 
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3347,9 +3429,20 @@ export const langFr =
         validDepot : "Sélectionner Dépot",
         validCustomerCode : "Le Code Produit ne peut être Vide ",
         validDocDate : "Sélectionner Date" ,
-
-
-
+        pg_txtBarcode : 
+        {
+            title : "Sélectionner Barre",
+            clmCode :  "Référence Produit",
+            clmName : "Nom Produit",
+            clmMulticode : "Sélection Document",
+            clmBarcode : "Code Barre"
+        },
+        msgQuantity:
+        {
+            title: "Quantité",
+            btn01: "Ajoutez",
+            msg: "Ajoutez quantité"
+        },
     },
     promo_01_001: //  "Promosyon Tanımları"
     {
@@ -3533,6 +3626,7 @@ export const langFr =
         dtShipDate :"Date Expédition",
         txtBarcode: "Code barre",
         txtBarcodePlace: "Barkod Okutunuz",
+        txtQuantity : "Pièce", 
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3754,10 +3848,21 @@ export const langFr =
         validDepot : "Sélectionner Dépot",
         validCustomerCode : "Le Code Produit ne peut être Vide ",
         validDocDate : "Sélectionner Date" ,
-        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter"
-
-
-
+        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
+        pg_txtBarcode : 
+        {
+            title : "Sélectionner Barre",
+            clmCode :  "Référence Produit",
+            clmName : "Nom Produit",
+            clmMulticode : "Sélection Document",
+            clmBarcode : "Code Barre"
+        },
+        msgQuantity:
+        {
+            title: "Quantité",
+            btn01: "Ajoutez",
+            msg: "Ajoutez quantité"
+        },
     },
     irs_02_002 : // Satış İrsaliyesi"
     {
@@ -3774,6 +3879,7 @@ export const langFr =
         dtShipDate :"Date Expédition",
         txtBarcode: "Code barre",
         txtBarcodePlace: "Barkod Okutunuz",
+        txtQuantity : "Pièce", 
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -4007,6 +4113,20 @@ export const langFr =
             btn01: "Tamam",
             msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
         },
+        msgQuantity:
+        {
+            title: "Quantité",
+            btn01: "Ajoutez",
+            msg: "Ajoutez quantité"
+        },
+        pg_txtBarcode : 
+        {
+            title : "Sélectionner Barre",
+            clmCode :  "Référence Produit",
+            clmName : "Nom Produit",
+            clmMulticode : "Sélection Document",
+            clmBarcode : "Code Barre"
+        },
     },
     irs_02_003 : // "İade İrsaliyesi"
     {
@@ -4024,6 +4144,7 @@ export const langFr =
         dtShipDate :"Date Expédition",
         txtBarcode: "Code barre",
         txtBarcodePlace: "Barkod Okutunuz",
+        txtQuantity : "Pièce", 
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -4219,6 +4340,20 @@ export const langFr =
         validDepot : "Sélectionner Dépot",
         validCustomerCode : "Le Code Produit ne peut être Vide ",
         validDocDate : "Sélectionner Date" ,
+        msgQuantity:
+        {
+            title: "Quantité",
+            btn01: "Ajoutez",
+            msg: "Ajoutez quantité"
+        },
+        pg_txtBarcode : 
+        {
+            title : "Sélectionner Barre",
+            clmCode :  "Référence Produit",
+            clmName : "Nom Produit",
+            clmMulticode : "Sélection Document",
+            clmBarcode : "Code Barre"
+        },
     },
     sip_01_001 : // "Alış Sipariş Listesi"
     {
@@ -6158,6 +6293,7 @@ export const langFr =
         dtShipDate :"Date Expédition",
         txtBarcode: "Code barre",
         txtBarcodePlace: "Barkod Okutunuz",
+        txtQuantity : "Pièce", 
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -6412,6 +6548,7 @@ export const langFr =
         dtShipDate :"Date Expédition",
         txtBarcode: "Code barre",
         txtBarcodePlace: "Barkod Okutunuz",
+        txtQuantity : "Pièce", 
         pg_Docs : 
         {
             title : "Sélection Document",

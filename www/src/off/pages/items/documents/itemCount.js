@@ -916,6 +916,85 @@ export default class itemCount extends React.PureComponent
                                     <Label text={this.t("txtBarcode")} alignment="right" />
                                     <NdTextBox id="txtBarcode" parent={this} simple={true}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    button=
+                                    {
+                                        [
+                                            {
+                                                id:'01',
+                                                icon:"fa-solid fa-barcode",
+                                                onClick:async(e)=>
+                                                {
+                                                    if(this.cmbDepot.value == '')
+                                                    {
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
+                                                        }
+                                                        
+                                                        await dialog(tmpConfObj);
+                                                        this.txtBarcode.setState({value:""})
+                                                        return
+                                                    }
+
+                                                    await this.pg_txtBarcode.setVal(this.txtBarcode.value)
+                                                    this.pg_txtBarcode.show()
+                                                    this.pg_txtBarcode.onClick = async(data) =>
+                                                    {
+                                                        let tmpDocItems = {...this.countObj.empty}
+                                                        tmpDocItems.LINE_NO = this.countObj.dt().length
+                                                        tmpDocItems.REF = this.txtRef.value
+                                                        tmpDocItems.REF_NO = this.txtRefno.value
+                                                        tmpDocItems.DEPOT = this.cmbDepot.value
+                                                        tmpDocItems.DOC_DATE = this.dtDocDate.value
+                                                        this.txtRef.readOnly = true
+                                                        this.txtRefno.readOnly = true
+                                                        this.countObj.addEmpty(tmpDocItems)
+                
+                                                        await this.core.util.waitUntil(100)
+                                                        if(data.length > 0)
+                                                        {
+                                                            this.customerControl = true
+                                                            this.customerClear = false
+                                                            this.combineControl = true
+                                                            this.combineNew = false
+        
+                                                            if(data.length == 1)
+                                                            {
+                                                                await this.addItem(data[0],this.countObj.dt().length -1)
+                                                            }
+                                                            else if(data.length > 1)
+                                                            {
+                                                                for (let i = 0; i < data.length; i++) 
+                                                                {
+                                                                    if(i == 0)
+                                                                    {
+                                                                        this.addItem(data[i],this.countObj.dt().length - 1)
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        let tmpDocItems = {...this.countObj.empty}
+                                                                        tmpDocItems.LINE_NO = this.countObj.dt().length
+                                                                        tmpDocItems.REF = this.txtRef.value
+                                                                        tmpDocItems.REF_NO = this.txtRefno.value
+                                                                        tmpDocItems.DEPOT = this.cmbDepot.value
+                                                                        tmpDocItems.DOC_DATE = this.dtDocDate.value
+                                                                        this.txtRef.readOnly = true
+                                                                        this.txtRefno.readOnly = true
+                                                                        this.countObj.addEmpty(tmpDocItems)
+        
+                                                                        await this.core.util.waitUntil(100)
+                                                                        this.addItem(data[i],this.countObj.dt().length - 1)
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
                                     onEnterKey={(async(e)=>
                                     {
                                         if(this.cmbDepot.value == '')
@@ -1053,18 +1132,19 @@ export default class itemCount extends React.PureComponent
                                                 }
                                             }
                                            
-                                            let tmpDocItems = {...this.countObj.empty}
-                                            tmpDocItems.LINE_NO = this.countObj.dt().length
-                                            tmpDocItems.REF = this.txtRef.value
-                                            tmpDocItems.REF_NO = this.txtRefno.value
-                                            tmpDocItems.DEPOT = this.cmbDepot.value
-                                            tmpDocItems.DOC_DATE = this.dtDocDate.value
-                                            this.txtRef.readOnly = true
-                                            this.txtRefno.readOnly = true
-                                            this.countObj.addEmpty(tmpDocItems)
+                                           
                                             this.pg_txtItemsCode.show()
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
+                                                let tmpDocItems = {...this.countObj.empty}
+                                                tmpDocItems.LINE_NO = this.countObj.dt().length
+                                                tmpDocItems.REF = this.txtRef.value
+                                                tmpDocItems.REF_NO = this.txtRefno.value
+                                                tmpDocItems.DEPOT = this.cmbDepot.value
+                                                tmpDocItems.DOC_DATE = this.dtDocDate.value
+                                                this.txtRef.readOnly = true
+                                                this.txtRefno.readOnly = true
+                                                this.countObj.addEmpty(tmpDocItems)
                                                 if(data.length > 0)
                                                 {
                                                     if(data.length == 1)
@@ -1400,6 +1480,35 @@ export default class itemCount extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div>   
+                     {/* BARKOD POPUP */}
+                     <NdPopGrid id={"pg_txtBarcode"} parent={this} container={"#root"}
+                    visible={false}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    title={this.t("pg_txtBarcode.title")} //
+                    search={true}
+                    data = 
+                    {{
+                        source:
+                        {
+                            select:
+                            {
+                                query : "SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS MULTICODE,  " + 
+                                "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME,ITEM_BARCODE_VW_01.BARCODE AS BARCODE " + 
+                                " FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  ITEM_BARCODE_VW_01.BARCODE LIKE '%'+@BARCODE",
+                                param : ['BARCODE:string|50']
+                            },
+                            sql:this.core.sql
+                        }
+                    }}
+                    >
+                        <Column dataField="BARCODE" caption={this.t("pg_txtBarcode.clmBarcode")} width={150} />
+                        <Column dataField="CODE" caption={this.t("pg_txtBarcode.clmCode")} width={150} />
+                        <Column dataField="NAME" caption={this.t("pg_txtBarcode.clmName")} width={300} defaultSortOrder="asc" />
+                    </NdPopGrid>
             </div>
         )
     }
