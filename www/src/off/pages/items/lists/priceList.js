@@ -133,8 +133,9 @@ export default class itemList extends React.PureComponent
             }
         }
         
-    
+        App.instance.setState({isExecute:true})
         await this.grdListe.dataRefresh(tmpSource)
+        App.instance.setState({isExecute:false})
     }
     render()
     {

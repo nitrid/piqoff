@@ -140,8 +140,9 @@ export default class rebateInvList extends React.PureComponent
                 sql : this.core.sql
             }
         }
-        
+        App.instance.setState({isExecute:true})
         await this.grdSlsIvcList.dataRefresh(tmpSource)
+        App.instance.setState({isExecute:false})
     }
     render()
     {

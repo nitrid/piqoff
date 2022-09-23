@@ -87,7 +87,6 @@ export default class posSalesReport extends React.PureComponent
                                 }
                                 App.instance.setState({isExecute:true})
                                 let tmpData = await this.core.sql.execute(tmpQuery)
-                                console.log(tmpData)
                                 App.instance.setState({isExecute:false})
                                 if(tmpData.result.recordset.length > 0)
                                 {

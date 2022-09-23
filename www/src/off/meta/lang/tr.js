@@ -6182,6 +6182,7 @@ export const langTr =
         btnGet :"Getir",
         txtCustomerCode : "Cari Kodu",
         txtCustomerName : "Cari Adı",
+        txtAmount : "Toplam Tutar",
         pg_txtCustomerCode : 
         {
             title : "Cari Seçimi",
@@ -6196,6 +6197,7 @@ export const langTr =
             clmTitle: "Adı",
             clmPoint: "Puan",
             clmLdate : "Son Güncelleme Tarihi",
+            clmEur : "EURO"
         },
         popPointDetail : 
         {

@@ -124,7 +124,9 @@ export default class rebateDispatch extends React.PureComponent
     async getDoc(pGuid,pRef,pRefno)
     {
         this.docObj.clearAll()
+        App.instance.setState({isExecute:true})
         await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:40});
+        App.instance.setState({isExecute:false})
         this._calculateMargin()
         this._calculateTotalMargin()
 

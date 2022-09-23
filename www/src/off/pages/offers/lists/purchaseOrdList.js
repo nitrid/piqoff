@@ -140,8 +140,10 @@ export default class purchaseOrdList extends React.PureComponent
                 sql : this.core.sql
             }
         }
-        
+        App.instance.setState({isExecute:true})
         await this.grdPurcOrdList.dataRefresh(tmpSource)
+        App.instance.setState({isExecute:false})
+
     }
     render()
     {
