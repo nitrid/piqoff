@@ -125,7 +125,9 @@ export default class salesOrder extends React.PureComponent
     async getDoc(pGuid,pRef,pRefno)
     {
         this.docObj.clearAll()
+        App.instance.setState({isExecute:true})
         await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:61});
+        App.instance.setState({isExecute:false})
         this._calculateMargin()
         this._calculateTotalMargin()
 
@@ -1895,7 +1897,6 @@ export default class salesOrder extends React.PureComponent
                                                     value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value]
                                                 }
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                console.log(tmpData)
                                                 this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
                                                 {
                                                     if(pResult.split('|')[0] != 'ERR')
@@ -1925,96 +1926,96 @@ export default class salesOrder extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div>  
-                         {/* Toplu Stok PopUp */}
-                         <div>
-                        <NdPopUp parent={this} id={"popMultiItem"} 
-                        visible={false}
-                        showCloseButton={true}
-                        showTitle={true}
-                        title={this.t("popMultiItem.title")}
-                        container={"#root"} 
-                        width={'900'}
-                        height={'700'}
-                        position={{of:'#root'}}
-                        >
-                            <Form colCount={2} height={'fit-content'}>
-                            <Item colSpan={2}>
-                                <Label  alignment="right" />
-                                    <NdTagBox id="tagItemCode" parent={this} simple={true} value={[]} placeholder={this.t("tagItemCodePlaceholder")}
-                                    />
-                            </Item>
-                            <EmptyItem />       
-                            <Item>
-                                <Label text={this.t("cmbMultiItemType.title")} alignment="right" />
-                                <NdSelectBox simple={true} parent={this} id="cmbMultiItemType" height='fit-content' 
-                                displayExpr="VALUE"                       
-                                valueExpr="ID"
-                                value={0}
-                                data={{source:[{ID:0,VALUE:this.t("cmbMultiItemType.customerCode")},{ID:1,VALUE:this.t("cmbMultiItemType.ItemCode")}]}}
-                                />
-                            </Item>   
-                            <EmptyItem />   
-                            <Item>
-                                <div className='row'>
-                                    <div className='col-6'>
-                                        <NdButton text={this.t("popMultiItem.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                        onClick={async (e)=>
-                                        {       
-                                           this.multiItemAdd()
-                                        }}/>
-                                    </div>
-                                    <div className='col-6'>
-                                        <NdButton text={this.t("popMultiItem.btnClear")} type="normal" stylingMode="contained" width={'100%'}
-                                        onClick={()=>
-                                        {
-                                            this.multiItemData.clear()
-                                        }}/>
-                                    </div>
-                                </div>
-                            </Item>
-                            <Item colSpan={2} >
-                            <NdGrid parent={this} id={"grdMultiItem"} 
-                                    showBorders={true} 
-                                    columnsAutoWidth={true} 
-                                    allowColumnReordering={true} 
-                                    allowColumnResizing={true} 
-                                    headerFilter={{visible:true}}
-                                    height={400} 
-                                    width={'100%'}
-                                    dbApply={false}
-                                    onRowRemoved={async (e)=>{
-                                     
-                                    }}
-                                    >
-                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                                        <Scrolling mode="virtual" />
-                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                        <Column dataField="CODE" caption={this.t("grdMultiItem.clmCode")} width={150} allowEditing={false} />
-                                        <Column dataField="MULTICODE" caption={this.t("grdMultiItem.clmMulticode")} width={150} allowEditing={false} />
-                                        <Column dataField="NAME" caption={this.t("grdMultiItem.clmName")} width={300}  headerFilter={{visible:true}} allowEditing={false} />
-                                        <Column dataField="QUANTITY" caption={this.t("grdMultiItem.clmQuantity")} dataType={'number'} width={100} headerFilter={{visible:true}}/>
-                                </NdGrid>
-                            </Item>
-                            <EmptyItem />   
-                            <Item>
-                                <div className='row'>
-                                    <div className='col-6'>
-                                       
-                                    </div>
-                                    <div className='col-6'>
-                                        <NdButton text={this.t("popMultiItem.btnSave")} type="normal" stylingMode="contained" width={'100%'}
-                                        onClick={()=>
-                                        {
-                                            this.multiItemSave()
-                                        }}/>
-                                    </div>
-                                </div>
-                            </Item>
-                            </Form>
-                        </NdPopUp>
+                    {/* Toplu Stok PopUp */}
+                    <div>
+                <NdPopUp parent={this} id={"popMultiItem"} 
+                visible={false}
+                showCloseButton={true}
+                showTitle={true}
+                title={this.t("popMultiItem.title")}
+                container={"#root"} 
+                width={'900'}
+                height={'700'}
+                position={{of:'#root'}}
+                >
+                    <Form colCount={2} height={'fit-content'}>
+                    <Item colSpan={2}>
+                        <Label  alignment="right" />
+                            <NdTagBox id="tagItemCode" parent={this} simple={true} value={[]} placeholder={this.t("tagItemCodePlaceholder")}
+                            />
+                    </Item>
+                    <EmptyItem />       
+                    <Item>
+                        <Label text={this.t("cmbMultiItemType.title")} alignment="right" />
+                        <NdSelectBox simple={true} parent={this} id="cmbMultiItemType" height='fit-content' 
+                        displayExpr="VALUE"                       
+                        valueExpr="ID"
+                        value={0}
+                        data={{source:[{ID:0,VALUE:this.t("cmbMultiItemType.customerCode")},{ID:1,VALUE:this.t("cmbMultiItemType.ItemCode")}]}}
+                        />
+                    </Item>   
+                    <EmptyItem />   
+                    <Item>
+                        <div className='row'>
+                            <div className='col-6'>
+                                <NdButton text={this.t("popMultiItem.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
+                                onClick={async (e)=>
+                                {       
+                                    this.multiItemAdd()
+                                }}/>
+                            </div>
+                            <div className='col-6'>
+                                <NdButton text={this.t("popMultiItem.btnClear")} type="normal" stylingMode="contained" width={'100%'}
+                                onClick={()=>
+                                {
+                                    this.multiItemData.clear()
+                                }}/>
+                            </div>
+                        </div>
+                    </Item>
+                    <Item colSpan={2} >
+                    <NdGrid parent={this} id={"grdMultiItem"} 
+                            showBorders={true} 
+                            columnsAutoWidth={true} 
+                            allowColumnReordering={true} 
+                            allowColumnResizing={true} 
+                            headerFilter={{visible:true}}
+                            height={400} 
+                            width={'100%'}
+                            dbApply={false}
+                            onRowRemoved={async (e)=>{
+                                
+                            }}
+                            >
+                                <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
+                                <Scrolling mode="virtual" />
+                                <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
+                                <Column dataField="CODE" caption={this.t("grdMultiItem.clmCode")} width={150} allowEditing={false} />
+                                <Column dataField="MULTICODE" caption={this.t("grdMultiItem.clmMulticode")} width={150} allowEditing={false} />
+                                <Column dataField="NAME" caption={this.t("grdMultiItem.clmName")} width={300}  headerFilter={{visible:true}} allowEditing={false} />
+                                <Column dataField="QUANTITY" caption={this.t("grdMultiItem.clmQuantity")} dataType={'number'} width={100} headerFilter={{visible:true}}/>
+                        </NdGrid>
+                    </Item>
+                    <EmptyItem />   
+                    <Item>
+                        <div className='row'>
+                            <div className='col-6'>
+                                
+                            </div>
+                            <div className='col-6'>
+                                <NdButton text={this.t("popMultiItem.btnSave")} type="normal" stylingMode="contained" width={'100%'}
+                                onClick={()=>
+                                {
+                                    this.multiItemSave()
+                                }}/>
+                            </div>
+                        </div>
+                    </Item>
+                    </Form>
+                </NdPopUp>
                     </div> 
-                       {/* combineItem Dialog  */}
-                       <NdDialog id={"msgCombineItem"} container={"#root"} parent={this}
+                    {/* combineItem Dialog  */}
+                    <NdDialog id={"msgCombineItem"} container={"#root"} parent={this}
                         position={{of:'#root'}} 
                         showTitle={true} 
                         title={this.t("msgCombineItem.title")} 

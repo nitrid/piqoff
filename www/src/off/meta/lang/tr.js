@@ -764,6 +764,14 @@ export const langTr =
             design : "Dizayn",
             lang : "Evrak Dili"
         },
+        pg_txtBarcode : 
+        {
+            title : "Barkod Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+            clmMulticode : "TEDARİKÇİ KODU",
+            clmBarcode : "BARKOD"
+        },
     },
     stk_02_002 : //"Depo/Mağaza Arası Sevk"
     {
@@ -895,7 +903,14 @@ export const langTr =
             design : "Dizayn",
             lang : "Evrak Dili"
         },
-
+        pg_txtBarcode : 
+        {
+            title : "Barkod Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+            clmMulticode : "TEDARİKÇİ KODU",
+            clmBarcode : "BARKOD"
+        },
     },
     stk_02_003 : // "Kayıp Ürün Çıkışı"
     {
@@ -1067,6 +1082,14 @@ export const langTr =
             btn01: "Tamam",
             msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
         },
+        pg_txtBarcode : 
+        {
+            title : "Barkod Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+            clmMulticode : "TEDARİKÇİ KODU",
+            clmBarcode : "BARKOD"
+        },
     },
     stk_02_004 : //Etiket Bas"
     {
@@ -1224,7 +1247,14 @@ export const langTr =
             design : "Dizayn",
             lang : "Evrak Dili"
         },
-
+        pg_txtBarcode : 
+        {
+            title : "Barkod Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+            clmMulticode : "TEDARİKÇİ KODU",
+            clmBarcode : "BARKOD"
+        },
     },
     stk_02_005 : // "İade Ürünü Toplama"
     {
@@ -1355,6 +1385,14 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
+        },
+        pg_txtBarcode : 
+        {
+            title : "Barkod Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+            clmMulticode : "TEDARİKÇİ KODU",
+            clmBarcode : "BARKOD"
         },
     },
     stk_02_007 : // "SKT Girişi",
@@ -2299,6 +2337,7 @@ export const langTr =
         txtRemainder : "Kalan",
         txtBarcode : "Barkod Ekle",
         txtBarcodePlace: "Barkod Okutunuz",
+        txtQuantity :"Miktar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -2630,7 +2669,21 @@ export const langTr =
             title : "Hizmetler",
             clmCode : "Kod",
             clmName : "Adı"
-        }
+        },
+        pg_txtBarcode : 
+        {
+            title : "Barkod Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+            clmMulticode : "TEDARİKÇİ KODU",
+            clmBarcode : "BARKOD"
+        },
+        msgQuantity:
+        {
+            title: "Miktar",
+            btn01: "Ekle",
+            msg: "Miktar Giriniz"
+        },
     },
     ftr_02_002 : // "Satış Faturası"
     {
@@ -2661,6 +2714,7 @@ export const langTr =
         txtRemainder : "Kalan",
         txtBarcode : "Barkod Ekle",
         txtBarcodePlace: "Barkod Okutunuz",
+        txtQuantity :"Miktar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -2925,6 +2979,20 @@ export const langTr =
             btn01: "Tamam",
             msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
         },
+        pg_txtBarcode : 
+        {
+            title : "Barkod Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+            clmMulticode : "TEDARİKÇİ KODU",
+            clmBarcode : "BARKOD"
+        },
+        msgQuantity:
+        {
+            title: "Miktar",
+            btn01: "Ekle",
+            msg: "Miktar Giriniz"
+        },
     },
     ftr_02_003 : // "İade Faturası"
     {
@@ -2955,6 +3023,7 @@ export const langTr =
         txtRemainder : "Kalan",
         txtBarcode : "Barkod Ekle",
         txtBarcodePlace: "Barkod Okutunuz",
+        txtQuantity :"Miktar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -3174,9 +3243,20 @@ export const langTr =
         validDepot : "Depo Seçmelisiniz",
         validCustomerCode : "Cari Kodu Boş Geçilemez",
         validDocDate : "Tarih Seçmelisiniz",
-
-
-
+        pg_txtBarcode : 
+        {
+            title : "Barkod Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+            clmMulticode : "TEDARİKÇİ KODU",
+            clmBarcode : "BARKOD"
+        },
+        msgQuantity:
+        {
+            title: "Miktar",
+            btn01: "Ekle",
+            msg: "Miktar Giriniz"
+        },
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
     {
@@ -3207,6 +3287,7 @@ export const langTr =
         txtRemainder : "Kalan",
         txtBarcode : "Barkod Ekle",
         txtBarcodePlace: "Barkod Okutunuz",
+        txtQuantity :"Miktar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -3417,9 +3498,20 @@ export const langTr =
         validDepot : "Depo Seçmelisiniz",
         validCustomerCode : "Cari Kodu Boş Geçilemez",
         validDocDate : "Tarih Seçmelisiniz",
-
-
-
+        pg_txtBarcode : 
+        {
+            title : "Barkod Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+            clmMulticode : "TEDARİKÇİ KODU",
+            clmBarcode : "BARKOD"
+        },
+        msgQuantity:
+        {
+            title: "Miktar",
+            btn01: "Ekle",
+            msg: "Miktar Giriniz"
+        },
     },
     promo_01_001: //  "Promosyon Tanımları"
     {
@@ -3603,6 +3695,7 @@ export const langTr =
         dtShipDate :"Sevk Tarihi",
         txtBarcode : "Barkod Ekle",
         txtBarcodePlace: "Barkod Okutunuz",
+        txtQuantity :"Miktar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -3824,7 +3917,21 @@ export const langTr =
         validDepot : "Depo Seçmelisiniz",
         validCustomerCode : "Cari Kodu Boş Geçilemez",
         validDocDate : "Tarih Seçmelisiniz",
-        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz"
+        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz",
+        pg_txtBarcode : 
+        {
+            title : "Barkod Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+            clmMulticode : "TEDARİKÇİ KODU",
+            clmBarcode : "BARKOD"
+        },
+        msgQuantity:
+        {
+            title: "Miktar",
+            btn01: "Ekle",
+            msg: "Miktar Giriniz"
+        },
     },
     irs_02_002 : // Satış İrsaliyesi"
     {
@@ -3841,6 +3948,7 @@ export const langTr =
         dtShipDate :"Sevk Tarihi",
         txtBarcode : "Barkod Ekle",
         txtBarcodePlace: "Barkod Okutunuz",
+        txtQuantity :"Miktar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -4074,6 +4182,20 @@ export const langTr =
             btn01: "Tamam",
             msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
         },
+        pg_txtBarcode : 
+        {
+            title : "Barkod Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+            clmMulticode : "TEDARİKÇİ KODU",
+            clmBarcode : "BARKOD"
+        },
+        msgQuantity:
+        {
+            title: "Miktar",
+            btn01: "Ekle",
+            msg: "Miktar Giriniz"
+        },
     },
     irs_02_003 : // "İade İrsaliyesi"
     {
@@ -4091,6 +4213,7 @@ export const langTr =
         dtShipDate :"Sevk Tarihi",
         txtBarcode : "Barkod Ekle",
         txtBarcodePlace: "Barkod Okutunuz",
+        txtQuantity :"Miktar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -4286,6 +4409,20 @@ export const langTr =
         validDepot : "Depo Seçmelisiniz",
         validCustomerCode : "Cari Kodu Boş Geçilemez",
         validDocDate : "Tarih Seçmelisiniz",
+        pg_txtBarcode : 
+        {
+            title : "Barkod Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+            clmMulticode : "TEDARİKÇİ KODU",
+            clmBarcode : "BARKOD"
+        },
+        msgQuantity:
+        {
+            title: "Miktar",
+            btn01: "Ekle",
+            msg: "Miktar Giriniz"
+        },
     },
     sip_01_001 : // "Alış Sipariş Listesi"
     {
@@ -6044,6 +6181,7 @@ export const langTr =
         btnGet :"Getir",
         txtCustomerCode : "Cari Kodu",
         txtCustomerName : "Cari Adı",
+        txtAmount : "Toplam Tutar",
         pg_txtCustomerCode : 
         {
             title : "Cari Seçimi",
@@ -6058,6 +6196,7 @@ export const langTr =
             clmTitle: "Adı",
             clmPoint: "Puan",
             clmLdate : "Son Güncelleme Tarihi",
+            clmEur : "EURO"
         },
         popPointDetail : 
         {
@@ -6233,6 +6372,7 @@ export const langTr =
         dtShipDate :"Sevk Tarihi",
         txtBarcode : "Barkod Ekle",
         txtBarcodePlace: "Barkod Okutunuz",
+        txtQuantity :"Miktar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -6487,6 +6627,7 @@ export const langTr =
         dtShipDate :"Sevk Tarihi",
         txtBarcode : "Barkod Ekle",
         txtBarcodePlace: "Barkod Okutunuz",
+        txtQuantity :"Miktar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",

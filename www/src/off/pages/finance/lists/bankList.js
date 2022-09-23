@@ -151,8 +151,10 @@ export default class virement extends React.PureComponent
                 sql : this.core.sql
             }
         }
-        
+        App.instance.setState({isExecute:true})
         await this.grdBankList.dataRefresh(tmpSource)
+        App.instance.setState({isExecute:false})
+
         let tmpQuery = 
         {
             query :"SELECT [dbo].[FN_BANK_AMOUNT](@BANK,GETDATE()) AS TOTAL",

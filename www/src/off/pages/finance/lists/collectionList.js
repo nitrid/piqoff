@@ -137,8 +137,10 @@ export default class collectionList extends React.PureComponent
                 sql : this.core.sql
             }
         }
-        
+        App.instance.setState({isExecute:true})
         await this.grdColList.dataRefresh(tmpSource)
+        App.instance.setState({isExecute:false})
+
         let tmpTotal =  this.grdColList.data.datatable.sum("AMOUNT",2)
         this.txtTotal.setState({value:tmpTotal + ' €'});
     }

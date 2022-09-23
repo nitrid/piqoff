@@ -151,8 +151,10 @@ export default class safeList extends React.PureComponent
                 sql : this.core.sql
             }
         }
-        
+        App.instance.setState({isExecute:true})
         await this.grdSafeList.dataRefresh(tmpSource)
+        App.instance.setState({isExecute:false})
+
         let tmpQuery = 
         {
             query :"SELECT [dbo].[FN_SAFE_AMOUNT](@SAFE,GETDATE()) AS TOTAL",

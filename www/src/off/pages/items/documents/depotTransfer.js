@@ -251,7 +251,7 @@ export default class depotTransfer extends React.PureComponent
                     {
                         e.value = v.value
                     }}
-                onChange={(async(r)=>
+                    onChange={(async(r)=>
                     {
                         if(typeof r.event.isTrusted == 'undefined')
                         {
@@ -339,6 +339,7 @@ export default class depotTransfer extends React.PureComponent
     }
     async addItem(pData,pIndex)
     {
+        console.log(pData)
         if(typeof this.quantityControl != 'undefined' && this.quantityControl ==  true)
         {
             let tmpCheckQuery = 
@@ -832,6 +833,98 @@ export default class depotTransfer extends React.PureComponent
                                     <Label text={this.t("txtBarcode")} alignment="right" />
                                     <NdTextBox id="txtBarcode" parent={this} simple={true}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    button=
+                                    {
+                                        [
+                                            {
+                                                id:'01',
+                                                icon:"fa-solid fa-barcode",
+                                                onClick:async(e)=>
+                                                {
+                                                    if(this.cmbOutDepot.value == '' || this.cmbInDepot.value == '')
+                                                    {
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
+                                                        }
+                                                        
+                                                        await dialog(tmpConfObj);
+                                                        this.txtBarcode.setState({value:""})
+                                                        return
+                                                    }
+                                                  
+                                                    await this.pg_txtBarcode.setVal(this.txtBarcode.value)
+                                                    this.pg_txtBarcode.show()
+                                                    this.pg_txtBarcode.onClick = async(data) =>
+                                                    {
+                                                        this.txtBarcode.setState({value:""})
+                                                        let tmpDocItems = {...this.docObj.docItems.empty}
+                                                        tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                                                        tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                                                        tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                        tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                                                        tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                                                        tmpDocItems.REF = this.docObj.dt()[0].REF
+                                                        tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                                                        tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                        tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                                                        tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                        tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                                                        this.txtRef.readOnly = true
+                                                        this.txtRefno.readOnly = true
+                                                        this.docObj.docItems.addEmpty(tmpDocItems)
+                                                        await this.core.util.waitUntil(100)
+
+                                                        if(data.length > 0)
+                                                        {
+                                                            this.customerControl = true
+                                                            this.customerClear = false
+                                                            this.combineControl = true
+                                                            this.combineNew = false
+        
+                                                            if(data.length == 1)
+                                                            {
+                                                                await this.addItem(data[0],this.docObj.docItems.dt().length -1)
+                                                            }
+                                                            else if(data.length > 1)
+                                                            {
+                                                                for (let i = 0; i < data.length; i++) 
+                                                                {
+                                                                    if(i == 0)
+                                                                    {
+                                                                        await this.addItem(data[i],this.docObj.docItems.dt().length -1)
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        let tmpDocItems = {...this.docObj.docItems.empty}
+                                                                        tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                                                                        tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                                                                        tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                                        tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                                                                        tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                                                                        tmpDocItems.REF = this.docObj.dt()[0].REF
+                                                                        tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                                                                        tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                                        tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                                                                        tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                                        tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                                                                        this.txtRef.readOnly = true
+                                                                        this.txtRefno.readOnly = true
+                                                                        this.docObj.docItems.addEmpty(tmpDocItems)
+        
+                                                                        await this.core.util.waitUntil(100)
+                                                                        await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
                                     onEnterKey={(async(e)=>
                                     {
                                         if(this.cmbOutDepot.value == '' || this.cmbInDepot.value == '')
@@ -849,7 +942,7 @@ export default class depotTransfer extends React.PureComponent
                                         }
                                         let tmpQuery = 
                                         {
-                                            query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE ORDER BY ITEM_BARCODE_VW_01.CDATE DESC",
+                                            query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE,ITEM_BARCODE_VW_01.BARCODE AS BARCODE FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE ORDER BY ITEM_BARCODE_VW_01.CDATE DESC",
                                             param : ['CODE:string|50'],
                                             value : [this.txtBarcode.value]
                                         }
@@ -878,6 +971,7 @@ export default class depotTransfer extends React.PureComponent
                                                 this.docObj.docItems.addEmpty(tmpDocItems)
                                             }
                                             await this.addItem(tmpData.result.recordset[0],this.docObj.docItems.dt().length - 1)
+                                            this.txtBarcode.focus()
                                         }
                                         else
                                         {
@@ -961,24 +1055,25 @@ export default class depotTransfer extends React.PureComponent
                                                 }
                                             }
                                            
-                                            let tmpDocItems = {...this.docObj.docItems.empty}
-                                            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                                            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                                            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                            tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                                            tmpDocItems.REF = this.docObj.dt()[0].REF
-                                            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                                            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                                            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                            tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                                            this.txtRef.readOnly = true
-                                            this.txtRefno.readOnly = true
-                                            this.docObj.docItems.addEmpty(tmpDocItems)
+                                           
                                             this.pg_txtItemsCode.show()
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
+                                                let tmpDocItems = {...this.docObj.docItems.empty}
+                                                tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                                                tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                                                tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                                                tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                                                tmpDocItems.REF = this.docObj.dt()[0].REF
+                                                tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                                                tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                                                tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                                                this.txtRef.readOnly = true
+                                                this.txtRefno.readOnly = true
+                                                this.docObj.docItems.addEmpty(tmpDocItems)
                                                 this.combineControl = true
                                                 this.combineNew = false
                                                 if(data.length == 1)
@@ -1286,6 +1381,33 @@ export default class depotTransfer extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div> 
+                    {/* BARKOD POPUP */}
+                    <NdPopGrid id={"pg_txtBarcode"} parent={this} container={"#root"}
+                        visible={false}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        showBorders={true}
+                        width={'90%'}
+                        height={'90%'}
+                        title={this.t("pg_txtBarcode.title")} //
+                        search={true}
+                        data = 
+                        {{
+                            source:
+                            {
+                                select:
+                                {
+                                    query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE,ITEM_BARCODE_VW_01.BARCODE AS BARCODE FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE ITEM_BARCODE_VW_01.BARCODE LIKE '%'+ @BARCODE ORDER BY ITEM_BARCODE_VW_01.CDATE DESC",
+                                    param : ['BARCODE:string|50'],
+                                },
+                                sql:this.core.sql
+                            }
+                        }}
+                        >
+                            <Column dataField="BARCODE" caption={this.t("pg_txtBarcode.clmBarcode")} width={150} />
+                            <Column dataField="CODE" caption={this.t("pg_txtBarcode.clmCode")} width={150} />
+                            <Column dataField="NAME" caption={this.t("pg_txtBarcode.clmName")} width={300} defaultSortOrder="asc" />
+                        </NdPopGrid>
                 </ScrollView>                
             </div>
         )

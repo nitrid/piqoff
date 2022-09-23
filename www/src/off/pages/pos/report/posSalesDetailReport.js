@@ -67,7 +67,9 @@ export default class posSalesDetailReport extends React.PureComponent
                                     param : ['START:date','END:date'],
                                     value : [this.dtDate.startDate,this.dtDate.endDate]
                                 }
+                                App.instance.setState({isExecute:true})
                                 let tmpData = await this.core.sql.execute(tmpQuery)
+                                App.instance.setState({isExecute:false})
                                 if(tmpData.result.recordset.length > 0)
                                 {
                                     this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" +  JSON.stringify(tmpData.result.recordset)+ "}",(pResult) => 

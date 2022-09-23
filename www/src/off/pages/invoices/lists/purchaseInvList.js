@@ -139,8 +139,10 @@ export default class purchaseInvList extends React.PureComponent
                 sql : this.core.sql
             }
         }
-        
+        App.instance.setState({isExecute:true})
         await this.grdPurcIvcList.dataRefresh(tmpSource)
+        App.instance.setState({isExecute:false})
+
     }
     render()
     {

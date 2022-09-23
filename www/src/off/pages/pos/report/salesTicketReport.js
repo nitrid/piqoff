@@ -145,7 +145,10 @@ export default class salesOrdList extends React.PureComponent
                 sql : this.core.sql
             }
         }
+        App.instance.setState({isExecute:true})
         await this.grdSaleTicketReport.dataRefresh(tmpSource)
+        App.instance.setState({isExecute:false})
+
     }
     async btnGetDetail(pGuid)
     {

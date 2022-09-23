@@ -82,8 +82,9 @@ export default class rebateOperation extends React.PureComponent
                 sql : this.core.sql
             }
         }
-        
+        App.instance.setState({isExecute:true})
         await this.grdRebateList.dataRefresh(tmpSource)
+        App.instance.setState({isExecute:false})
     }
     async _btnSave(pType)
     {

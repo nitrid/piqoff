@@ -129,7 +129,9 @@ export default class purchaseoffer extends React.PureComponent
     {
         console.log(pGuid)
         this.docObj.clearAll()
+        App.instance.setState({isExecute:true})
         await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:0,DOC_TYPE:61});
+        App.instance.setState({isExecute:false})
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
@@ -1131,7 +1133,7 @@ export default class purchaseoffer extends React.PureComponent
                                     <Label text={this.t("txtBarcode")} alignment="right" />
                                     <NdTextBox id="txtBarcode" parent={this} simple={true}  placeholder={this.t("txtBarcodePlace")}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                     button=
+                                    button=
                                     {
                                         [
                                             {

@@ -3,7 +3,7 @@ import App from '../../../lib/app.js';
 import moment from 'moment';
 
 import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { Label } from 'devextreme-react/form';
+import Form, { Label,EmptyItem } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
 import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
@@ -51,7 +51,7 @@ export default class salesOrdList extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT GUID,CODE,TITLE,dbo.FN_CUSTOMER_TOTAL_POINT(GUID,GETDATE()) AS POINT,ISNULL((SELECT TOP 1 (CONVERT(NVARCHAR, LDATE, 101) + ' ' + CONVERT(NVARCHAR, LDATE, 24))  " + 
+                    query : "SELECT GUID,CODE,TITLE,dbo.FN_CUSTOMER_TOTAL_POINT(GUID,GETDATE()) AS POINT,(dbo.FN_CUSTOMER_TOTAL_POINT(GUID,GETDATE()) / 100) AS EURO,ISNULL((SELECT TOP 1 (CONVERT(NVARCHAR, LDATE, 101) + ' ' + CONVERT(NVARCHAR, LDATE, 24))  " + 
                     " FROM CUSTOMER_POINT WHERE CUSTOMER_POINT.CUSTOMER = CUSTOMER_VW_01.GUID ORDER BY LDATE DESC),'') AS LDATE_FORMAT FROM [dbo].[CUSTOMER_VW_01] WHERE ((CODE = @CODE) OR (@CODE = '')) ",
                     param : ['CODE:string|50'],
                     value : [this.txtCustomerCode.value]
@@ -59,7 +59,16 @@ export default class salesOrdList extends React.PureComponent
                 sql : this.core.sql
             }
         }
+        App.instance.setState({isExecute:true})
         await this.grdCustomerPointReport.dataRefresh(tmpSource)
+        let tmpTotal = 0
+        for (let i = 0; i < this.grdCustomerPointReport.data.datatable.length; i++) 
+        {
+            tmpTotal = tmpTotal + this.grdCustomerPointReport.data.datatable[i].EURO
+        }
+        this.txtAmount.value = tmpTotal
+        App.instance.setState({isExecute:false})
+
     }
     async getPointDetail(pCustomer)
     {
@@ -113,7 +122,6 @@ export default class salesOrdList extends React.PureComponent
             }
         }
         await this.grdSaleTicketPays.dataRefresh(tmpPaysSource)
-
         this.popDetail.show()
     }
     render()
@@ -288,8 +296,24 @@ export default class salesOrdList extends React.PureComponent
                                 <Column dataField="CODE" caption={this.t("grdCustomerPointReport.clmCode")} visible={true} width={200}/> 
                                 <Column dataField="TITLE" caption={this.t("grdCustomerPointReport.clmTitle")} visible={true} width={300}/> 
                                 <Column dataField="POINT" caption={this.t("grdCustomerPointReport.clmPoint")} visible={true} width={200}/> 
+                                <Column dataField="EURO" caption={this.t("grdCustomerPointReport.clmEur")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}} visible={true} width={200}/> 
                                 <Column dataField="LDATE_FORMAT" caption={this.t("grdCustomerPointReport.clmLdate")} visible={true} /> 
                             </NdGrid>
+                        </div>
+                    </div>
+                      <div className="row px-2 pt-2">
+                        <div className="col-12">
+                            <Form colCount={4} parent={this} id="frmPurcoffer">
+                                {/* Ara Toplam-Stok Ekle */}
+                                <EmptyItem colSpan={3}/>
+                                <Item  >
+                                <Label text={this.t("txtAmount")} alignment="right" />
+                                    <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} 
+                                    maxLength={32}
+                                   
+                                    ></NdTextBox>
+                                </Item>
+                            </Form>
                         </div>
                     </div>
                     {/* Puan Detayı PopUp */}
