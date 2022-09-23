@@ -1773,7 +1773,9 @@ export default class salesInvoice extends React.PureComponent
                                         this.docObj.docItems.dt()[rowIndex].TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +this.docObj.docItems.dt()[rowIndex].VAT).toFixed(3))
                                        
                                         let tmpMargin = (this.docObj.docItems.dt()[rowIndex].TOTAL - this.docObj.docItems.dt()[rowIndex].VAT) - (this.docObj.docItems.dt()[rowIndex].COST_PRICE * this.docObj.docItems.dt()[rowIndex].QUANTITY)
-                                        let tmpMarginRate = (tmpMargin /(this.docObj.docItems.dt()[rowIndex].TOTAL - this.docObj.docItems.dt()[rowIndex].VAT)) * 100
+                                        let tmpMarginRate = ((tmpMargin) * 100) / this.docObj.docItems.dt()[rowIndex].QUANTITY
+                                        console.log(tmpMargin.toFixed(2))
+                                        console.log(tmpMarginRate.toFixed(2))
                                         this.docObj.docItems.dt()[rowIndex].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
                                         if(this.docObj.docItems.dt()[rowIndex].DISCOUNT > 0)
                                         {
@@ -2138,7 +2140,7 @@ export default class salesInvoice extends React.PureComponent
                         {
                             select:
                             {
-                                query : "SELECT GUID,CODE,NAME,VAT FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
                                 param : ['VAL:string|50']
                             },
                             sql:this.core.sql
