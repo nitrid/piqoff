@@ -191,6 +191,7 @@ export const langFr =
         txtTaxSugar: "Taux Sucre(100ML/GR)",
         txtTotalExtraCost : "Prix achat",
         clmtaxSugar : "Taxe Sucre",
+        priceUpdate : "Fiyat Güncelle", // bak
         pg_txtRef:
         {
             title: "Sélectionner Produit",

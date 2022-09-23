@@ -234,7 +234,7 @@ export default class itemList extends React.PureComponent
                     let TmpData = this.grdListe.data.datatable.find((item) => item.CODE === this.txtBarkod.value[i] || item.BARCODE === this.txtBarkod.value[i]);
                     if(typeof TmpData == 'undefined')
                     {
-                        this.grdListe.data.datatable.push({CODE:this.txtBarkod.value[i]})
+                        this.grdListe.data.datatable.push({CODE:this.txtBarkod.value[i],NAME:'---',BARCODE:'---',SNAME:'---',MAIN_GRP_NAME:'---',VAT:'---',PRICE_SALE:'---',CUSTOMER_PRICE:'---',MULTICODE:'---',ORGINS_NAME:'---',CUSTOMER_NAME:'---'})
                     }
                 }
                 for (let i = 0; i < this.txtMulticode.value.length; i++) 
@@ -242,7 +242,7 @@ export default class itemList extends React.PureComponent
                     let TmpMultiData = this.grdListe.data.datatable.find((item) => item.MULTICODE === this.txtMulticode.value[i]);
                     if(typeof TmpMultiData == 'undefined')
                     {
-                        this.grdListe.data.datatable.push({MULTICODE:this.txtMulticode.value[i]})
+                        this.grdListe.data.datatable.push({MULTICODE:this.txtMulticode.value[i],CODE:'---',NAME:'---',BARCODE:'---',SNAME:'---',MAIN_GRP_NAME:'---',VAT:'---',PRICE_SALE:'---',CUSTOMER_PRICE:'---',ORGINS_NAME:'---',CUSTOMER_NAME:'---'})
                     }
                 }
                 this.grdListe.dataRefresh(this.grdListe.data.datatable)
@@ -341,7 +341,7 @@ export default class itemList extends React.PureComponent
                     let TmpData = this.grdListe.data.datatable.find((item) => item.CODE === this.txtBarkod.value[i] || item.BARCODE === this.txtBarkod.value[i]);
                     if(typeof TmpData == 'undefined')
                     {
-                        this.grdListe.data.datatable.push({CODE:this.txtBarkod.value[i]})
+                        this.grdListe.data.datatable.push({CODE:this.txtBarkod.value[i],NAME:'---',BARCODE:'---',SNAME:'---',MAIN_GRP_NAME:'---',VAT:'---',PRICE_SALE:'---',CUSTOMER_PRICE:'---',MULTICODE:'---',ORGINS_NAME:'---',CUSTOMER_NAME:'---'})
                     }
                 }
                 for (let i = 0; i < this.txtMulticode.value.length; i++) 
@@ -349,7 +349,7 @@ export default class itemList extends React.PureComponent
                     let TmpMultiData = this.grdListe.data.datatable.find((item) => item.MULTICODE === this.txtMulticode.value[i]);
                     if(typeof TmpMultiData == 'undefined')
                     {
-                        this.grdListe.data.datatable.push({MULTICODE:this.txtMulticode.value[i]})
+                        this.grdListe.data.datatable.push({MULTICODE:this.txtMulticode.value[i],CODE:'---',NAME:'---',BARCODE:'---',SNAME:'---',MAIN_GRP_NAME:'---',VAT:'---',PRICE_SALE:'---',CUSTOMER_PRICE:'---',ORGINS_NAME:'---',CUSTOMER_NAME:'---'})
                     }
                 }
                 this.grdListe.dataRefresh(this.grdListe.data.datatable)
@@ -510,6 +510,10 @@ export default class itemList extends React.PureComponent
                                 else if(e.rowType == 'data' && e.data.STATUS == true)
                                 {
                                     e.rowElement.style.color ="Black"
+                                }
+                                if(e.rowType == 'data' && e.data.NAME == '---')
+                                {
+                                    e.rowElement.style.color ="red"
                                 }
                             }}
                             onRowDblClick={async(e)=>

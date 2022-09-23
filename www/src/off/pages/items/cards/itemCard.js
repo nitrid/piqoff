@@ -1552,6 +1552,13 @@ export default class itemCard extends React.PureComponent
                                         <div className='col-8'>
                                             <Toolbar>
                                                 <Item location="after">
+                                                        <Button icon="return" text={this.t("priceUpdate")}
+                                                        onClick={()=>
+                                                        {
+                                                            this.txtCostPrice.value = this.grdCustomer.getSelectedData()[0].PRICE
+                                                        }}/>                                                                                                            
+                                                    </Item>
+                                                <Item location="after">
                                                     <Button icon="add"
                                                     onClick={()=>
                                                     {
@@ -1577,9 +1584,9 @@ export default class itemCard extends React.PureComponent
                                             allowColumnResizing={true} 
                                             height={'100%'} 
                                             width={'100%'}
+                                            selection={{mode:"single"}} 
                                             onRowUpdating={async(e)=>
                                             {
-                                                this.btnSave.setState({disabled:false});
                                                 if(typeof e.newData.CUSTOMER_PRICE != 'undefined')
                                                 {
                                                     let tmpSalePriceData = this.itemsObj.itemPrice.dt().where({START_DATE:new Date('1970-01-01').toISOString()}).where({FINISH_DATE:new Date('1970-01-01').toISOString()}).where({TYPE:0}).where({QUANTITY:1})

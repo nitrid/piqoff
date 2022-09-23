@@ -192,6 +192,7 @@ export const langTr =
         txtTaxSugar: "Şeker Oranı(100ML/GR)",
         txtTotalExtraCost : "Ek Maliyetler",
         clmtaxSugar : "Şeker Vergisi",
+        priceUpdate : "Fiyat Güncelle",
         pg_txtRef:
         {
             title: "Stok Seçimi",
