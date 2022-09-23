@@ -277,12 +277,6 @@ export default class collectiveItemEdit extends React.PureComponent
                             width={'100%'}
                             dbApply={false}
                             selection={{mode:"single"}}
-                            onRowUpdating={async(e)=>
-                            {
-                                console.log(e)
-                                this.grossMargin()
-                                this.netMargin()
-                            }}
                             onRowClick={async(e)=>
                             {
                                 let tmpIndexes = []
