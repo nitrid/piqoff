@@ -331,7 +331,7 @@ export default class collectiveItemEdit extends React.PureComponent
                                     //GROSS_MARGIN ANINDA ETKI ETSİN DİYE YAPILDI
                                     let tmpExVat = e.data.PRICE_SALE / ((e.data.VAT / 100) + 1)
                                     let tmpMargin = tmpExVat - e.data.CUSTOMER_PRICE;
-                                    let tmpMarginRate = ((tmpExVat - e.data.CUSTOMER_PRICE)) * 100
+                                    let tmpMarginRate =  (tmpMargin /  e.data.CUSTOMER_PRICE) * 100   //((tmpExVat - e.data.CUSTOMER_PRICE)/tmpExVat) * 100
                                     e.data.GROSS_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2);        
                                     e.data.GROSS_MARGIN_RATE = tmpMarginRate.toFixed(2); 
                                     e.values[7] =  tmpMargin.toFixed(2) + "€/ %" +  tmpMarginRate.toFixed(2); 
@@ -339,7 +339,7 @@ export default class collectiveItemEdit extends React.PureComponent
                                     // NET_MARGIN ANINDA ETKI ETSİN DİYE YAPILDI
                                     let tmpNetExVat = e.data.PRICE_SALE / ((e.data.VAT / 100) + 1)
                                     let tmpNetMargin = (tmpNetExVat -e.data.CUSTOMER_PRICE) / 1.12;
-                                    let tmpNetMarginRate = (((tmpNetExVat - e.data.CUSTOMER_PRICE) / 1.12)) * 100
+                                    let tmpNetMarginRate =(tmpNetMargin / e.data.CUSTOMER_PRICE) * 100
                                     e.data.NET_MARGIN = tmpNetMargin.toFixed(2) + "€ / %" +  tmpNetMarginRate.toFixed(2);
                                     e.data.NET_MARGIN_RATE = tmpNetMarginRate.toFixed(2);    
                                     e.values[8] =   tmpNetMargin.toFixed(2) + "€  %" +  tmpNetMarginRate.toFixed(2);

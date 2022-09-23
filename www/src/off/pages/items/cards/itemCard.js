@@ -500,7 +500,7 @@ export default class itemCard extends React.PureComponent
         {
             let tmpExVat = this.itemsObj.itemPrice.dt()[i].PRICE / ((this.itemsObj.dt("ITEMS")[0].VAT / 100) + 1)
             let tmpMargin = tmpExVat - this.txtCostPrice.value;
-            let tmpMarginRate = ((tmpExVat - this.txtCostPrice.value)) * 100
+            let tmpMarginRate = ((tmpMargin / this.txtCostPrice.value)) * 100
             this.itemsObj.itemPrice.dt()[i].VAT_EXT = tmpExVat
             this.itemsObj.itemPrice.dt()[i].GROSS_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2);                 
             this.itemsObj.itemPrice.dt()[i].GROSS_MARGIN_RATE = tmpMarginRate.toFixed(2);     
@@ -513,7 +513,7 @@ export default class itemCard extends React.PureComponent
         {
             let tmpExVat = this.itemsObj.itemPrice.dt()[i].PRICE / ((this.itemsObj.dt("ITEMS")[0].VAT / 100) + 1)
             let tmpMargin = (tmpExVat - this.txtCostPrice.value) / 1.12;
-            let tmpMarginRate = (((tmpExVat - this.txtCostPrice.value) / 1.12)) * 100
+            let tmpMarginRate = (((tmpMargin / this.txtCostPrice.value) )) * 100
             this.itemsObj.itemPrice.dt()[i].NET_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2); 
             this.itemsObj.itemPrice.dt()[i].NET_MARGIN_RATE = tmpMarginRate.toFixed(2);    
         }
