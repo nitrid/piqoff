@@ -16,7 +16,7 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Scrolling,Button as grdbutton} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
@@ -72,6 +72,8 @@ export default class itemCard extends React.PureComponent
         this.tabIndex = props.data.tabkey
         this._onItemRendered = this._onItemRendered.bind(this)
         this.taxSugarCalculate = this.taxSugarCalculate.bind(this)
+        this._cellRoleRender = this._cellRoleRender.bind(this)
+
 
         this.extraCostData = new datatable
     }    
@@ -626,6 +628,42 @@ export default class itemCard extends React.PureComponent
 
         this.netMargin()
         this.grossMargin()
+    }
+    _cellRoleRender(e)
+    {
+        if(e.column.name == "CUSTOMER_PRICE_DATE")
+        {
+            return (
+                <NdTextBox id={"txtGrdDate"+e.rowIndex} parent={this} simple={true} readOnly={true}
+                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                value={e.value}
+                button=
+                {
+                    [
+                        {
+                            id:'01',
+                            icon:'revert',
+                            onClick:()  =>
+                            {
+                                this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[e.rowIndex].CUSTOMER_PRICE_DATE = moment(new Date()).format("DD/MM/YYYY HH:mm:ss")
+                                this.txtCostPrice.value = e.data.CUSTOMER_PRICE
+                                // Min ve Max Fiyat 
+                                let tmpMinData = this.prmObj.filter({ID:'ItemMinPricePercent'}).getValue()
+                                let tmpMinPrice = e.data.CUSTOMER_PRICE + (e.data.CUSTOMER_PRICE * tmpMinData) /100
+                                this.txtMinSalePrice.value = Number((tmpMinPrice).toFixed(2))
+                                let tmpMaxData = this.prmObj.filter({ID:'ItemMaxPricePercent'}).getValue()
+                                let tmpMAxPrice = e.data.CUSTOMER_PRICE + (e.data.CUSTOMER_PRICE * tmpMaxData) /100
+                                this.txtMaxSalePrice.value = Number((tmpMAxPrice).toFixed(2))
+                                this.taxSugarValidCheck()
+                                console.log(this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE'))
+                            }
+                        },
+                    ]
+                }
+                >  
+                </NdTextBox>
+            )
+        }
     }
     render()
     {           
@@ -1587,6 +1625,7 @@ export default class itemCard extends React.PureComponent
                                             selection={{mode:"single"}} 
                                             onRowUpdating={async(e)=>
                                             {
+                                                this.btnSave.setState({disabled:false});
                                                 if(typeof e.newData.CUSTOMER_PRICE != 'undefined')
                                                 {
                                                     let tmpSalePriceData = this.itemsObj.itemPrice.dt().where({START_DATE:new Date('1970-01-01').toISOString()}).where({FINISH_DATE:new Date('1970-01-01').toISOString()}).where({TYPE:0}).where({QUANTITY:1})
@@ -1624,7 +1663,7 @@ export default class itemCard extends React.PureComponent
                                                 <Column dataField="CUSTOMER_CODE" caption={this.t("grdCustomer.clmCode")} allowEditing={false}/>
                                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdCustomer.clmName")} allowEditing={false}/>
                                                 <Column dataField="LUSER_NAME" caption={this.t("grdCustomer.clmPriceUserName")} allowEditing={false}/>
-                                                <Column dataField="CUSTOMER_PRICE_DATE" caption={this.t("grdCustomer.clmPriceDate")} allowEditing={false}  />
+                                                <Column dataField="CUSTOMER_PRICE_DATE" caption={this.t("grdCustomer.clmPriceDate")} editCellRender={this._cellRoleRender}/>
                                                 <Column dataField="CUSTOMER_PRICE" caption={this.t("grdCustomer.clmPrice")} dataType="number" format={'€#,##0.000'}/>
                                                 <Column dataField="MULTICODE" caption={this.t("grdCustomer.clmMulticode")} />
                                             </NdGrid>
