@@ -196,7 +196,7 @@ export default class labelPrinting extends React.PureComponent
                 "CASE WHEN UNDER_UNIT_VALUE =0  " +
                 "THEN 0 " +
                 "ELSE " +
-                "ROUND((PRICE * UNDER_UNIT_VALUE),2) " +
+                "ROUND((PRICE / UNDER_UNIT_VALUE),2) " +
                 "END AS UNDER_UNIT_PRICE " +
                 "FROM  (  SELECT GUID,   " +
                 "CDATE, " +
@@ -245,7 +245,7 @@ export default class labelPrinting extends React.PureComponent
                 "CASE WHEN UNDER_UNIT_VALUE =0  " +
                 "THEN 0 " +
                 "ELSE " +
-                "ROUND((PRICE * UNDER_UNIT_VALUE),2) " +
+                "ROUND((PRICE / UNDER_UNIT_VALUE),2) " +
                 "END AS UNDER_UNIT_PRICE " +
                 "FROM  (  SELECT GUID,   " +
                 "CDATE, " +
@@ -297,7 +297,7 @@ export default class labelPrinting extends React.PureComponent
                 "CASE WHEN UNDER_UNIT_VALUE =0  " +
                 "THEN 0 " +
                 "ELSE " +
-                "ROUND((PRICE * UNDER_UNIT_VALUE),2) " +
+                "ROUND((PRICE / UNDER_UNIT_VALUE),2) " +
                 "END AS UNDER_UNIT_PRICE " +
                 "FROM  (  SELECT GUID,   " +
                 "CDATE, " +
@@ -305,10 +305,12 @@ export default class labelPrinting extends React.PureComponent
                 "NAME,   " +
                 "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
                 "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
+                "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID),'') AS CUSTOMER_NAME, " +
                 "ISNULL((SELECT NAME FROM COUNTRY WHERE COUNTRY.CODE = ORGINS),'') AS ORGINS, " +
                 "MAIN_GRP AS ITEM_GRP,   " +
                 "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
                 "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE  , " +
+                "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE TYPE = 1 AND ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_SYMBOL, " +
                 "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE " +
                 "FROM ITEMS_VW_01  " +
                 "WHERE @DATE < (SELECT TOP 1 LDATE FROM ITEM_PRICE WHERE TYPE = 0  AND ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC)) AS TMP ", 
@@ -348,7 +350,7 @@ export default class labelPrinting extends React.PureComponent
                 "CASE WHEN UNDER_UNIT_VALUE =0  " +
                 "THEN 0 " +
                 "ELSE " +
-                "ROUND((PRICE * UNDER_UNIT_VALUE),2) " +
+                "ROUND((PRICE / UNDER_UNIT_VALUE),2) " +
                 "END AS UNDER_UNIT_PRICE " +
                 "FROM  (  SELECT GUID,   " +
                 "CDATE, " +
@@ -399,7 +401,7 @@ export default class labelPrinting extends React.PureComponent
                 "CASE WHEN UNDER_UNIT_VALUE =0  " +
                 "THEN 0 " +
                 "ELSE " +
-                "ROUND((PRICE * UNDER_UNIT_VALUE),2) " +
+                "ROUND((PRICE / UNDER_UNIT_VALUE),2) " +
                 "END AS UNDER_UNIT_PRICE " +
                 "FROM  (  SELECT GUID,   " +
                 "CDATE, " +
@@ -450,7 +452,7 @@ export default class labelPrinting extends React.PureComponent
                 "CASE WHEN UNDER_UNIT_VALUE =0  " +
                 "THEN 0 " +
                 "ELSE " +
-                "ROUND((PRICE * UNDER_UNIT_VALUE),2) " +
+                "ROUND((PRICE / UNDER_UNIT_VALUE),2) " +
                 "END AS UNDER_UNIT_PRICE " +
                 "FROM  (  SELECT GUID,   " +
                 "CDATE, " +
@@ -546,7 +548,7 @@ export default class labelPrinting extends React.PureComponent
                                "CASE WHEN UNDER_UNIT_VALUE =0 " +
                                "THEN 0 " +
                                "ELSE " +
-                               "ROUND((PRICE * UNDER_UNIT_VALUE),2) " +
+                               "ROUND((PRICE / UNDER_UNIT_VALUE),2) " +
                                "END AS UNDER_UNIT_PRICE " +
                                "FROM (  SELECT GUID,  " +
                                "CODE,  " +
@@ -1279,7 +1281,7 @@ export default class labelPrinting extends React.PureComponent
                                     onRowUpdated={async(e)=>{
                                         if(typeof e.data.PRICE != 'undefined' || typeof e.data.UNDER_UNIT_VALUE != 'undefined')
                                         {
-                                            e.key.UNDER_UNIT_PRICE = parseFloat(((e.key.PRICE * (e.key.UNDER_UNIT_VALUE *100)) / 100).toFixed(3))
+                                            e.key.UNDER_UNIT_PRICE = parseFloat(((Number(e.key.PRICE) / Number(e.key.UNDER_UNIT_VALUE )) ).toFixed(3))
                                         }
                                         if(this.lblObj.dt()[this.lblObj.dt().length - 1].CODE == '')
                                         {
