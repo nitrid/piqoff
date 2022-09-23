@@ -406,8 +406,6 @@ export default class rebateDispatch extends React.PureComponent
                             this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
                             this._calculateTotal()
                             await this.grdRebtDispatch.devGrid.deleteRow(pIndex)
-                            console.log(this.grdSlsInv)
-                            console.log(this.docObj.docItems.dt())
                             if(this.checkCombine.value == true)
                             {
                                 this.combineControl = false
@@ -450,6 +448,7 @@ export default class rebateDispatch extends React.PureComponent
         this.docObj.docItems.dt()[pIndex].COST_PRICE = pData.COST_PRICE
         this.docObj.docItems.dt()[pIndex].DISCOUNT = 0
         this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
+        this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
         let tmpQuery = 
         {
             query :"SELECT (SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM_GUID,CUSTOMER_GUID,@QUANTITY,GETDATE())) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID ORDER BY LDATE DESC",
