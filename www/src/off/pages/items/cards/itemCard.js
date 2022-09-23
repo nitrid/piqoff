@@ -1584,6 +1584,7 @@ export default class itemCard extends React.PureComponent
                                             allowColumnResizing={true} 
                                             height={'100%'} 
                                             width={'100%'}
+                                            dbApply={false}
                                             selection={{mode:"single"}} 
                                             onRowUpdating={async(e)=>
                                             {
