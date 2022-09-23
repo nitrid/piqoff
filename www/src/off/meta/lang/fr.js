@@ -1048,6 +1048,7 @@ export const langFr =
         txtLineCount : "Lecture Ligne" ,
         chkLastChange : "Dernière Modification Après Impression" ,
         chkSelectChange :"Dernière Modification Après Date Sélectionnée" ,
+        chkSelectPriceChange :"Seçilen  tarihten satış fiyatı değişenler", // BAK
         btnLabelCombine : "Regrouper Les Etiquette ",
         chkGroup : "Groupe" ,
         chkCustomer : "Produits Fournisseur",

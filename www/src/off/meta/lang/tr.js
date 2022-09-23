@@ -1101,6 +1101,7 @@ export const langTr =
         txtLineCount : "Okutulan Satır",
         chkLastChange : "Son yazdırma tarihinden itibaren değişenler",
         chkSelectChange : "Seçilen tarihten itibaren değişenler",
+        chkSelectPriceChange :"Seçilen  tarihten satış fiyatı değişenler",
         btnLabelCombine : "Etiket Birleştirme",
         chkGroup : "Grup",
         chkCustomer : "Tedarikçi Ürünleri",

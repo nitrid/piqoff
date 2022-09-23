@@ -98,6 +98,7 @@ export default class labelPrinting extends React.PureComponent
         this.txtRef.readOnly = false
         this.txtRefno.readOnly = false
         this.dtSelectChange.value =  moment(new Date()).format("YYYY-MM-DD HH:mm"),
+        this.dtSelectPriceChange.value =  moment(new Date()).format("YYYY-MM-DD HH:mm"),
         this.txtRef.readOnly = true
         this.calculateCount()
         
@@ -265,6 +266,57 @@ export default class labelPrinting extends React.PureComponent
             App.instance.setState({isExecute:true})
             let tmpData = await this.core.sql.execute(tmpQuery) 
             console.log(tmpData)
+            App.instance.setState({isExecute:false})
+            if(tmpData.result.recordset.length > 0)
+            {
+                for (let i = 0; i < tmpData.result.recordset.length; i++) 
+                {
+                    this.addAutoItem(tmpData.result.recordset[i])
+                }
+                await this.grdLabelQueue.devGrid.deleteRow(0)
+                this.popWizard.hide()
+                
+            }
+            else
+            {
+                let tmpConfObj =
+                {
+                    id:'msgItemNotFound',showTitle:true,title:this.t("msgItemNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
+                }
+    
+                await dialog(tmpConfObj);
+            }
+        }
+        else if(this.chkSelectPriceChange.value == true)
+        {
+            let tmpQuery = 
+            {
+                query :"SELECT  *, " + 
+                "CASE WHEN UNDER_UNIT_VALUE =0  " +
+                "THEN 0 " +
+                "ELSE " +
+                "ROUND((PRICE * UNDER_UNIT_VALUE),2) " +
+                "END AS UNDER_UNIT_PRICE " +
+                "FROM  (  SELECT GUID,   " +
+                "CDATE, " +
+                "CODE,   " +
+                "NAME,   " +
+                "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
+                "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
+                "ISNULL((SELECT NAME FROM COUNTRY WHERE COUNTRY.CODE = ORGINS),'') AS ORGINS, " +
+                "MAIN_GRP AS ITEM_GRP,   " +
+                "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
+                "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE  , " +
+                "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE " +
+                "FROM ITEMS_VW_01  " +
+                "WHERE @DATE < (SELECT TOP 1 LDATE FROM ITEM_PRICE WHERE TYPE = 0  AND ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC)) AS TMP ", 
+                param : ['DATE:datetime'],
+                value : [this.dtSelectPriceChange.value]
+            }
+            App.instance.setState({isExecute:true})
+            let tmpData = await this.core.sql.execute(tmpQuery) 
             App.instance.setState({isExecute:false})
             if(tmpData.result.recordset.length > 0)
             {
@@ -1355,6 +1407,7 @@ export default class labelPrinting extends React.PureComponent
                                     onValueChanged={(async()=>
                                     {
                                         this.chkSelectChange.setState({value:false});
+                                        this.chkSelectPriceChange.setState({value:false});
                                         this.chkGroup.setState({value:false});
                                         this.chkCustomer.setState({value:false});
                                         this.chkAllItems.setState({value:false});
@@ -1369,6 +1422,7 @@ export default class labelPrinting extends React.PureComponent
                                     onValueChanged={(async()=>
                                         {
                                             this.chkLastChange.setState({value:false});
+                                            this.chkSelectPriceChange.setState({value:false});
                                             this.chkGroup.setState({value:false});
                                             this.chkCustomer.setState({value:false});
                                             this.chkAllItems.setState({value:false});
@@ -1380,6 +1434,24 @@ export default class labelPrinting extends React.PureComponent
                                 <NdDatePicker simple={true}  parent={this} id={"dtSelectChange"} type={'datetime'}/>
                                 </Item>
                                 <Item>
+                                    <NdCheckBox id="chkSelectPriceChange" parent={this} defaultValue={false} 
+                                    param={this.param.filter({ELEMENT:'chkSelectPriceChange',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'chkSelectPriceChange',USERS:this.user.CODE})}
+                                    onValueChanged={(async()=>
+                                        {
+                                            this.chkLastChange.setState({value:false});
+                                            this.chkSelectChange.setState({value:false});
+                                            this.chkGroup.setState({value:false});
+                                            this.chkCustomer.setState({value:false});
+                                            this.chkAllItems.setState({value:false});
+                                        }).bind(this)}
+                                    />
+                                    <Label text={this.t("chkSelectPriceChange")} alignment="right" />
+                                </Item>
+                                <Item>
+                                <NdDatePicker simple={true}  parent={this} id={"dtSelectPriceChange"} type={'datetime'}/>
+                                </Item>
+                                <Item>
                                     <NdCheckBox id="chkGroup" parent={this} defaultValue={false} 
                                     param={this.param.filter({ELEMENT:'chkGroup',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'chkGroup',USERS:this.user.CODE})}
@@ -1387,6 +1459,7 @@ export default class labelPrinting extends React.PureComponent
                                     {
                                         this.chkLastChange.setState({value:false});
                                         this.chkSelectChange.setState({value:false});
+                                        this.chkSelectPriceChange.setState({value:false});
                                         this.chkCustomer.setState({value:false});
                                         this.chkAllItems.setState({value:false});
                                     }).bind(this)}
@@ -1415,6 +1488,7 @@ export default class labelPrinting extends React.PureComponent
                                     {
                                         this.chkLastChange.setState({value:false});
                                         this.chkSelectChange.setState({value:false});
+                                        this.chkSelectPriceChange.setState({value:false});
                                         this.chkGroup.setState({value:false});
                                         this.chkAllItems.setState({value:false});
                                     }).bind(this)}

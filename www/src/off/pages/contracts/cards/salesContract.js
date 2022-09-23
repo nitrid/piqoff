@@ -281,7 +281,7 @@ export default class purchaseContract extends React.PureComponent
         for(let  i= 0; i < this.contractObj.dt().length; i++)
         {
             let tmpMargin = (this.contractObj.dt()[i].PRICE_VAT_EXT) - (this.contractObj.dt()[i].COST_PRICE )
-            let tmpMarginRate = (tmpMargin /(this.contractObj.dt()[i].PRICE_VAT_EXT)) * 100
+            let tmpMarginRate = (tmpMargin ) * 100
             this.contractObj.dt()[i].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
             console.log(tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2))
             console.log( tmpMarginRate.toFixed(2))

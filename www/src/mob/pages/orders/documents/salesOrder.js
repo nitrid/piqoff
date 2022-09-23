@@ -924,7 +924,7 @@ export default class salesOrder extends React.Component
                         this.docObj.docOrders.dt()[rowIndex].TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +this.docObj.docOrders.dt()[rowIndex].VAT).toFixed(2))
 
                         let tmpMargin = (this.docObj.docOrders.dt()[rowIndex].TOTAL - this.docObj.docOrders.dt()[rowIndex].VAT) - (this.docObj.docOrders.dt()[rowIndex].COST_PRICE * this.docObj.docOrders.dt()[rowIndex].QUANTITY)
-                        let tmpMarginRate = (tmpMargin /(this.docObj.docOrders.dt()[rowIndex].TOTAL - this.docObj.docOrders.dt()[rowIndex].VAT)) * 100
+                        let tmpMarginRate = (tmpMargin) * 100
                         this.docObj.docOrders.dt()[rowIndex].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
                         if(this.docObj.docOrders.dt()[rowIndex].DISCOUNT > 0)
                         {
