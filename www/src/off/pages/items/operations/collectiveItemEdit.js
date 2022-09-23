@@ -295,15 +295,20 @@ export default class collectiveItemEdit extends React.PureComponent
                                 }
                                 this.grdItemList.devGrid.selectRowsByIndexes(tmpIndexes)
                             }}
+                            onSaving={async(e)=>
+                            {
+                                App.instance.setState({isExecute:true})
+                            }}
                             onSaved={async(e)=>
                             {
+                                App.instance.setState({isExecute:true})
                                 let tmpConfObj1 =
                                 {
                                     id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                 }
                                 
-                                App.instance.setState({isExecute:true})
+                                
                                 if(await this.editObj.save() == 0)
                                 {                                                    
                                     App.instance.setState({isExecute:false})
