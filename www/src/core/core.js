@@ -146,7 +146,7 @@ export class sql
                     }
                     else
                     {
-                        //BURADA HATA SAYFASINA YÖNLENDİRME ÇALIŞACAK.
+                        //BURADA HATA SAYFASINA YÖNLENDİRME ÇALIŞACAK. /edit r.k İNŞALLAH :)
                         console.log(data.auth_err);
                         resolve([]);
                     }

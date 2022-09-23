@@ -97,7 +97,7 @@ export default class labelPrinting extends React.PureComponent
         
         this.txtRef.readOnly = false
         this.txtRefno.readOnly = false
-        this.dtSelectChange.value =  moment(new Date()).format("YYYY-MM-DD"),
+        this.dtSelectChange.value =  moment(new Date()).format("YYYY-MM-DD HH:mm"),
         this.txtRef.readOnly = true
         this.calculateCount()
         
@@ -259,11 +259,12 @@ export default class labelPrinting extends React.PureComponent
                 "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE " +
                 "FROM ITEMS_VW_01  " +
                 "WHERE @DATE < (SELECT TOP 1 LDATE FROM ITEM_PRICE WHERE TYPE = 0  AND ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC) OR @DATE < ITEMS_VW_01.LDATE) AS TMP ", 
-                param : ['DATE:date'],
+                param : ['DATE:datetime'],
                 value : [this.dtSelectChange.value]
             }
             App.instance.setState({isExecute:true})
             let tmpData = await this.core.sql.execute(tmpQuery) 
+            console.log(tmpData)
             App.instance.setState({isExecute:false})
             if(tmpData.result.recordset.length > 0)
             {
