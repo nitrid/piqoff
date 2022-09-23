@@ -645,19 +645,6 @@ export default class endOfDay extends React.PureComponent
                                           <Column dataField="AMOUNT" caption={this.t("grdAdvance.clmAmount")} width={100} />
                                   </NdGrid>
                              </Item>
-                             <Item>
-                              <div className='row'>
-                                        <div className='col-6'>
-                                        </div>
-                                        <div className='col-6'>
-                                            <NdButton text={this.t("btnPopOk")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                              this.popAdvance.hide()
-                                            }}/>
-                                        </div>
-                                    </div>
-                              </Item>
                           </Form>
                       </NdPopUp>
                     </div>  

@@ -51,6 +51,8 @@ export default class Login extends React.Component
             if(tmpData[i].ROLE == 'Administrator')
             tmpUsers.push(tmpData[i])
         }
+        console.log(tmpData)
+        console.log(tmpUsers)
         this.setState({Users:tmpUsers})
         this.cmbkullanici.dataRefresh({source:this.state.Users})
 
@@ -103,7 +105,7 @@ export default class Login extends React.Component
                             </div>
                         </div>
                         <div className="dx-field">
-                            <div className="dx-field-label">{"txtLangSelect"}</div>
+                            <div className="dx-field-label">{"Kullanıcı"}</div>
                             <div className="dx-field-value">
                             <NdSelectBox simple={true} parent={this} id="cmbkullanici" height='fit-content'
                                     displayExpr="NAME"                       
