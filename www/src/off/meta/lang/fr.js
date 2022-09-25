@@ -22,7 +22,7 @@ export const langFr =
     msgInvalidUser : "Utilisateur ou mdp faux.",
     txtCardRead :"Veuillez scanner votre badge.",
     checkAll :"Tout saisir",
-    msgUserAccess : "Giriş Yetkiniz Yok", // BAK
+    msgUserAccess : "Vous n'êtes pas autorisé",
     menu:
     {
         stk: "Produit",                
@@ -32,7 +32,7 @@ export const langFr =
         stk_04: "Traitements",
         stk_05: "Rapports",
         stk_01_001: "Saisie nouveau Produit",
-        stk_01_002: "Saisie code barre",
+        stk_01_002: "Ajouter code barre",
         stk_01_003: "Saisie prix",
         stk_01_004: "Saisie unité",
         stk_01_005: "Saisie multi code barre",
@@ -65,7 +65,7 @@ export const langFr =
         cri_02_001: "Liste Fournisseur-Client",
         cri_02_002: "Liste adresse",
         cri_02_003: "Liste Catégorie ",
-        cri_03_001: "Toplu Cari Ekleme",
+        cri_03_001: "Ajouter Multi Client",
         ftr: "Facture ",
         ftr_01: "Listes",
         ftr_02: "Document",
@@ -74,36 +74,36 @@ export const langFr =
         ftr_01_002: "Liste facture de vente",
         ftr_01_003: "Liste facture retour",
         ftr_01_004:"Liste facture différence de prix",
-        ftr_02_001: "Facture d'achat",
-        ftr_02_002: "Facture de vente",
-        ftr_02_003: "Facture retour",
-        ftr_02_004: "Facture différence de prix",
-        ftr_02_005: "Vente interne",
+        ftr_02_001: "Saisie Facture d'achat",
+        ftr_02_002: "Saisie Facture de vente",
+        ftr_02_003: "Saisie Facture retour",
+        ftr_02_004: "Saisie Facture différence de prix",
+        ftr_02_005: "Saisie Vente interne",
         irs: "Bon de livraison",
         irs_01: "Listes",
         irs_02: "Document",
         irs_03: "Rapports",
-        irs_01_001: "Bon de livraison d'achat",
-        irs_01_002: "Bon de livraison de vente",
-        irs_01_003: "Bon de livraison de retour",
-        irs_02_001: "Bon de livraison d'achat",
-        irs_02_002:"Bon de livraison de vente",
-        irs_02_003: "Bon de livraison de retour",
+        irs_01_001: "Saisie Bon de livraison d'achat",
+        irs_01_002: "Saisie Bon de livraison de vente",
+        irs_01_003: "Saisie Bon de livraison de retour",
+        irs_02_001: "Saisie Bon de livraison d'achat",
+        irs_02_002: "Saisie Bon de livraison de vente",
+        irs_02_003: "Saisie Bon de livraison de retour",
         sip: "Commande",
         sip_01: "Listes",
         sip_02: "Document",
         sip_03: "Rapports",
-        sip_01_001: "Liste d'achat de commande ",
-        sip_01_002: "Liste d'achat de vente ",
-        sip_02_001: "Liste d'achat  ",
-        sip_02_002: "Liste de vente  ",
+        sip_01_001: "Liste de Commande Achat ",
+        sip_01_002: "Liste de Commande Vente ",
+        sip_02_001: "Saisie Commande Achat",
+        sip_02_002: "Saisie Commande Vente  ",
         cnt : "Accords commerciaux ",
         cnt_01 : "Listes",
         cnt_01_001: "Liste accord d'achat ",
         cnt_01_002 : "Liste accord de vente ",
         cnt_02 : "Document",
-        cnt_02_001 : "Accord d'achat",
-        cnt_02_002 : "Accord de vente",
+        cnt_02_001 : "Saisie Accord d'achat",
+        cnt_02_002 : "Saisie Accord de vente",
         cnt_03 : "Rapports",
         fns : "Finance",
         fns_01 : "Listes",
@@ -123,10 +123,10 @@ export const langFr =
         pos_01 : "Saisie",
         pos_01_001 : "Identifier Caisse",
         pos_02 : "Rapports",
-        pos_02_001 : "Rapport ticket de vente",
+        pos_02_001 : "Recharche ticket de Vente",
         pos_02_002 : "Rapport point fidelité client",
-        pos_02_003 : "Rapport vente Pos",
-        pos_02_004 : "Rapport de Vente",
+        pos_02_003 : "Rapport de Vente",
+        pos_02_004 : "Rapport de Mouvement Ticket",
         pos_03 :"Traitements", 
         pos_03_001 : "Opérations de fin de journée",
         promo: "Promotion",
@@ -146,14 +146,14 @@ export const langFr =
         tkf_02: "Document",
         tkf_03: "Rapports",
         tkf_01_001: "Liste achat accord négocié",
-        tkf_01_002: "Liste accord de vente",
-        tkf_02_001: "Proposition d'achat",
-        tkf_02_002: "Proposition de vente",
+        tkf_01_002: "Liste accord de Vente",
+        tkf_02_001: "Saisie Proposition d'Achat",
+        tkf_02_002: "Saisie Proposition de Vente",
     },
     login:
     {
-        login:"Entrée",
-        logout : "Sortie",
+        login:"Valide",
+        logout : "Annuler",
         selectUser : "Choix utilisateur",
     },
     stk_01_001:  // "Yeni Stok Tanımlama" 
@@ -163,15 +163,15 @@ export const langFr =
         txtCustomer: "Fournisseur",
         cmbItemGenus: "Type de produit",
         txtBarcode: "Code barre",
-        cmbTax: "Taxe",
+        cmbTax: "Classe de Taxetion",
         cmbMainUnit: "Unité principale",
         cmbOrigin: "Origine",
-        cmbUnderUnit: "Sous unité",
+        cmbUnderUnit: "Contenu du produit",
         txtItemName: "Nom du produit",
         txtShortName: "Désignation Courte",
-        chkActive: "Actif",
-        chkCaseWeighed: "Pesée en caisse ",
-        chkLineMerged: "Détacher les Lignes de Vente",
+        chkActive: "Produit Actif",
+        chkCaseWeighed: "Pesée Produit en caisse? ",
+        chkLineMerged: "Détacher les Lignes a la Caisse",
         chkTicketRest: "Ticket Rest.",
         txtCostPrice: "Prix de Revient",
         txtSalePrice : "Prix Vente",
@@ -179,19 +179,19 @@ export const langFr =
         txtMaxSalePrice: "Prix Vente Max.",
         txtLastBuyPrice: "Dernier Prix Achat",
         txtLastSalePrice: "Dernier Prix Vente",
-        tabTitlePrice: "Prix ",
-        tabTitleUnit: "Unité",
+        tabTitlePrice: "Prix Vente ",
+        tabTitleUnit: "Unités",
         tabTitleBarcode: "Code barre",
         tabTitleCustomer: "Fournisseur",
-        tabExtraCost: "Prix de Revient",
+        tabExtraCost: "Charge Supplément",
         tabTitleCustomerPrice: "Historique Prix Fournisseur",
         tabTitleSalesContract: "Accord de Vente",
         tabTitleInfo: "Information",
-        tabTitleOtherShop :"Autre information sur le magasin.", // bak
+        tabTitleOtherShop :"Autre information sur les Magasin.",
         txtTaxSugar: "Taux Sucre(100ML/GR)",
         txtTotalExtraCost : "Prix achat",
         clmtaxSugar : "Taxe Sucre",
-        priceUpdate : "Fiyat Güncelle", // bak
+        priceUpdate : "Ajour Prix", 
         pg_txtRef:
         {
             title: "Sélectionner Produit",
@@ -211,7 +211,7 @@ export const langFr =
             dtPopPriStartDate: "Date Début",
             dtPopPriEndDate: "Date Fin", 
             txtPopPriQuantity: "Quantité",
-            txtPopPriPrice: "Prix "
+            txtPopPriPrice: "Prix de Vente "
         },
         popUnit:
         {
@@ -237,8 +237,8 @@ export const langFr =
             title: "Nouveau fournisseur",
             txtPopCustomerCode: "Code",
             txtPopCustomerName: "Nom", 
-            txtPopCustomerItemCode: "Référence Produit",
-            txtPopCustomerPrice: "Prix "
+            txtPopCustomerItemCode: "Référence Fournisseur",
+            txtPopCustomerPrice: "Prix d'Achat "
         },
         grdPrice: 
         {
@@ -765,9 +765,9 @@ export const langFr =
         },
         msgNotQuantity: // BAK
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
+            title: "Attention",
+            btn01: "Ok",
+            msg: "Le montant de l'entrepôt est fermé à moins ! Montant maximum pouvant être ajouté :"
         },
         msgDblDepot:
         {
@@ -1026,9 +1026,9 @@ export const langFr =
         },
         msgNotQuantity: // BAK
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
+            title: "Attention",
+            btn01: "Ok",
+            msg: "Le montant de l'entrepôt est fermé à moins ! Montant maximum pouvant être ajouté :"
         },
         pg_txtBarcode : 
         {
@@ -1048,8 +1048,8 @@ export const langFr =
         txtLineCount : "Lecture Ligne" ,
         chkLastChange : "Dernière Modification Après Impression" ,
         chkSelectChange :"Dernière Modification Après Date Sélectionnée" ,
-        chkSelectPriceChange :"Seçilen  tarihten satış fiyatı değişenler", // BAK
-        btnLabelCombine : "Regrouper Les Etiquette ",
+        chkSelectPriceChange :"Modification de Prix Vente Après Date Sélectionnée", // BAK
+        btnLabelCombine : "Regrouper Les Etiquette Saisir",
         chkGroup : "Groupe" ,
         chkCustomer : "Produits Fournisseur",
         chkAllItems : "Produits",
@@ -1063,7 +1063,7 @@ export const langFr =
             clmRefNo : "Numéro",
             clmDocDate : "Date",
             clmCount : "Qte. Scan",
-            clmPrint : "Yazdırıldı",
+            clmPrint : "Imprimé",
 
         },
         pg_DocsCombine : 
@@ -1087,9 +1087,9 @@ export const langFr =
             clmItemName: "Nom",
             clmItemGrpName : "Famille produit",
             clmPrice: "Prix ",
-            clmUnderUnit : "Sous unité",
-            clmUnderUnit : "Sous unité",
-            clmUnderUnitPrice : "Prix sous Unité" ,
+            clmUnderUnit : "Contenu du produit",
+            clmUnderUnit : "Contenu du produit",
+            clmUnderUnitPrice : "Prix Cotenu Unité" ,
             clmDescription :"Motif",
             clmOrgins : "Origine",
         },
@@ -1332,9 +1332,9 @@ export const langFr =
         },
         msgNotQuantity: // BAK
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
+            title: "Attention",
+            btn01: "Ok",
+            msg: "Le montant de l'entrepôt est fermé à moins ! Montant maximum pouvant être ajouté :"
         },
         pg_txtBarcode : 
         {
@@ -1348,11 +1348,11 @@ export const langFr =
     stk_02_007 : // "SKT Girişi", // BAK
     {
         design : "Dizayn",
-        txtPage : "Sayfa",
-        txtFreeLabel : "Boş Alan",
-        AddItems : "Ekle",
-        txtBarcode : "Barkod Ekle",
-        txtBarcodePlace: "Barkod Okutunuz",
+        txtPage : "Page",
+        txtFreeLabel : "Champ Vide",
+        AddItems : "Ajoute",
+        txtBarcode : "Ajoute Code Barre",
+        txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
         pg_Docs : 
         {
@@ -1383,53 +1383,53 @@ export const langFr =
         msgDocValid:
         {
             title: "Dikkat",
-            btn01: "Tamam",
+            btn01: "Ok",
             msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
         },
         msgNotSave:
         {
             title: "Dikkat",
-            btn01: "Tamam",
+            btn01: "Ok",
             msg: "Evrakta Değişiklik Yapılmış! Lütfen Kayıt Edin Yada Değişiklikleri Geri Alın"
         },
         msgAddItems:
         {
             title: "Dikkat",
-            btn01: "Tamam",
+            btn01: "Ok",
             btn02: "Vazgeç",
             msg: "Seçmiş olduğunuz kritere uygun ürünler eklenecektir.Onaylıyormusunuz ?"
         },
         msgSave:
         {
             title: "Dikkat",
-            btn01: "Tamam",
+            btn01: "Ok",
             btn02: "Vazgeç",
             msg: "Kayıt etmek istediğinize eminmisiniz !"
         },
         msgSaveResult:
         {
             title: "Dikkat",
-            btn01: "Tamam",
+            btn01: "Ok",
             msgSuccess: "Kayıt işleminiz başarılı !",
             msgFailed: "Kayıt işleminiz başarısız !"
         },
         msgSaveValid:
         {
             title: "Dikkat",
-            btn01: "Tamam",
+            btn01: "Ok",
             msg: "Lütfen gerekli alanları doldurunuz !"
         },
         msgDelete:
         {
             title: "Dikkat",
-            btn01: "Tamam",
+            btn01: "Ok",
             btn02: "Vazgeç",
             msg: "Kaydı silmek istediğinize eminmisiniz ?"
         },
         msgItemNotFound:
         {
             title: "Dikkat",
-            btn01: "Tamam",
+            btn01: "Ok",
             msg: "Stok Bulunmadı !!"
         },
         msgCombineItem:
@@ -1586,7 +1586,7 @@ export const langFr =
             clmVat : "Taxe",
             clmOrgins : "Origine",
             clmStatus : "Actif",
-            clmUnderUnit : "Sous unité",
+            clmUnderUnit : "Contenu du produit",
             clmMainUnit : "Unité Principale",
             clmUnderFactor : "Coefficient",
             clmWeighing : "Tartılsın", // BAK
@@ -2292,7 +2292,7 @@ export const langFr =
         txtPayTotal : "Total Paiement",
         txtRemainder : "Reste",
         txtBarcode: "Code barre",
-        txtBarcodePlace: "Barkod Okutunuz",
+        txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
         pg_Docs : 
         {
@@ -2648,7 +2648,7 @@ export const langFr =
         txtPayTotal : "Total Encaissement",
         txtRemainder : "Reste",
         txtBarcode: "Code barre",
-        txtBarcodePlace: "Barkod Okutunuz",
+        txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
         pg_Docs : 
         {
@@ -2911,7 +2911,7 @@ export const langFr =
         msgNotQuantity: // BAK
         {
             title: "Dikkat",
-            btn01: "Tamam",
+            btn01: "Ok",
             msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
         },
         pg_txtBarcode : 
@@ -2957,7 +2957,7 @@ export const langFr =
         txtPayTotal : "Total Encaissement",
         txtRemainder : "Reste",
         txtBarcode: "Code barre",
-        txtBarcodePlace: "Barkod Okutunuz",
+        txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
         pg_Docs : 
         {
@@ -3220,7 +3220,7 @@ export const langFr =
         txtPayTotal : "Total Encaissement",
         txtRemainder : "Reste",
         txtBarcode: "Code barre",
-        txtBarcodePlace: "Barkod Okutunuz",
+        txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
         pg_Docs : 
         {
@@ -3627,7 +3627,7 @@ export const langFr =
         txtTotal : "Total Général",
         dtShipDate :"Date Expédition",
         txtBarcode: "Code barre",
-        txtBarcodePlace: "Barkod Okutunuz",
+        txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
         pg_Docs : 
         {
@@ -3880,7 +3880,7 @@ export const langFr =
         txtTotal : "Total Général",
         dtShipDate :"Date Expédition",
         txtBarcode: "Code barre",
-        txtBarcodePlace: "Barkod Okutunuz",
+        txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
         pg_Docs : 
         {
@@ -4112,7 +4112,7 @@ export const langFr =
         msgNotQuantity: // BAK
         {
             title: "Dikkat",
-            btn01: "Tamam",
+            btn01: "Ok",
             msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
         },
         msgQuantity:
@@ -4145,7 +4145,7 @@ export const langFr =
         txtTotal : "Total Général",
         dtShipDate :"Date Expédition",
         txtBarcode: "Code barre",
-        txtBarcodePlace: "Barkod Okutunuz",
+        txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
         pg_Docs : 
         {
@@ -4432,7 +4432,7 @@ export const langFr =
         txtTotal : "Total Général",
         dtShipDate :"Date Expédition",
         txtBarcode: "Code barre",
-        txtBarcodePlace: "Barkod Okutunuz",
+        txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
         pg_Docs : 
         {
@@ -4699,7 +4699,7 @@ export const langFr =
         txtTotal : "Total Général",
         dtShipDate :"Date Expédition",
         txtBarcode: "Code barre",
-        txtBarcodePlace: "Barkod Okutunuz",
+        txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
         pg_Docs : 
         {
@@ -6295,7 +6295,7 @@ export const langFr =
         txtTotal : "Total Général",
         dtShipDate :"Date Expédition",
         txtBarcode: "Code barre",
-        txtBarcodePlace: "Barkod Okutunuz",
+        txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
         pg_Docs : 
         {
@@ -6550,7 +6550,7 @@ export const langFr =
         txtTotal : "Total Général",
         dtShipDate :"Date Expédition",
         txtBarcode: "Code barre",
-        txtBarcodePlace: "Barkod Okutunuz",
+        txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
         pg_Docs : 
         {
