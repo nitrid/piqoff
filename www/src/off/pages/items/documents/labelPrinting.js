@@ -795,6 +795,7 @@ export default class labelPrinting extends React.PureComponent
                                             App.instance.setState({isExecute:true})
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
                                             App.instance.setState({isExecute:false})
+                                            console.log(JSON.stringify(tmpData.result.recordset))
                                             this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" +  JSON.stringify(tmpData.result.recordset)+ "}",(pResult) => 
                                             {                
                                                 App.instance.setState({isExecute:true})                                

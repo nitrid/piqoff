@@ -6,67 +6,64 @@
       <HierarchyPrintOptions Ref="4" Indent="50.8" />
       <MultiColumn Ref="5" ColumnCount="3" ColumnWidth="620" ColumnSpacing="60" Layout="AcrossThenDown" Mode="UseColumnWidth" />
       <Controls>
-        <Item1 Ref="6" ControlType="XRLabel" Name="label3" Multiline="true" Text="€" TextAlignment="BottomLeft" SizeF="21.1666565,34.4376526" LocationFloat="486.146454, 308.45813" Dpi="254" Font="Arial, 7pt" Padding="5,5,0,0,254">
+        <Item1 Ref="6" ControlType="XRLabel" Name="label1" Multiline="true" Text="|" TextAlignment="BottomLeft" SizeF="21.166687,49.541748" LocationFloat="271.041656, 293.354034" Dpi="254" Font="Arial, 9.75pt, style=Bold" Padding="5,5,0,0,254">
           <StylePriority Ref="7" UseFont="false" UseTextAlignment="false" />
         </Item1>
-        <Item2 Ref="8" ControlType="XRLabel" Name="label7" Multiline="true" CanGrow="false" Text="3.5€/kg" AnchorVertical="Bottom" TextAlignment="BottomLeft" SizeF="134.344238,32.5207825" LocationFloat="507.3131, 310.375" Dpi="254" Font="Arial, 7pt" Padding="5,5,0,0,254">
+        <Item2 Ref="8" ControlType="XRLabel" Name="label2" AutoWidth="true" CanGrow="false" Text="label2" AnchorVertical="Bottom" TextAlignment="TopRight" WordWrap="false" SizeF="253.333954,32.5207825" LocationFloat="15.0000029, 310.375" Dpi="254" Font="Arial, 7pt" Padding="5,5,0,0,254">
           <ExpressionBindings>
-            <Item1 Ref="9" EventName="BeforePrint" PropertyName="Text" Expression="[UNDER_UNIT_PRICE2]" />
+            <Item1 Ref="9" EventName="BeforePrint" PropertyName="Text" Expression="[CUSTOMER_NAME]" />
           </ExpressionBindings>
           <StylePriority Ref="10" UseFont="false" UseTextAlignment="false" />
         </Item2>
-        <Item3 Ref="11" ControlType="XRBarCode" Name="barCode1" Module="3" SizeF="316.8339,68.791626" LocationFloat="0, 177.4861" Dpi="254" Font="Arial, 5pt, style=Bold" Padding="0,0,17,0,254">
-          <Symbology Ref="12" Name="EAN13" />
-          <ExpressionBindings>
-            <Item1 Ref="13" EventName="BeforePrint" PropertyName="Text" Expression="[BARCODE]" />
-          </ExpressionBindings>
-          <StylePriority Ref="14" UseFont="false" UsePadding="false" UseTextAlignment="false" />
+        <Item3 Ref="11" ControlType="XRLabel" Name="label3" Multiline="true" Text="€" TextAlignment="BottomLeft" SizeF="21.1666565,34.4376526" LocationFloat="436.697479, 308.45813" Dpi="254" Font="Arial, 7pt" Padding="5,5,0,0,254">
+          <StylePriority Ref="12" UseFont="false" UseTextAlignment="false" />
         </Item3>
-        <Item4 Ref="15" ControlType="XRLabel" Name="label5" Multiline="true" CanGrow="false" Text="BEYPAZARI EAU MIN. GAZ.GRIOTTE 6X20CL" TextAlignment="TopLeft" SizeF="530.2709,150" LocationFloat="15.0000134, 9" Dpi="254" Font="Microsoft Sans Serif, 9.75pt, style=Bold" Padding="0,0,0,0,254">
+        <Item4 Ref="13" ControlType="XRLabel" Name="label7" Multiline="true" CanGrow="false" Text="3.5€/kg" AnchorVertical="Bottom" TextAlignment="BottomLeft" SizeF="134.344238,32.5207825" LocationFloat="457.864136, 310.375" Dpi="254" Font="Arial, 7pt" Padding="5,5,0,0,254">
           <ExpressionBindings>
-            <Item1 Ref="16" EventName="BeforePrint" PropertyName="Text" Expression="[DESING_NAME]" />
+            <Item1 Ref="14" EventName="BeforePrint" PropertyName="Text" Expression="[UNDER_UNIT_PRICE2]" />
           </ExpressionBindings>
-          <StylePriority Ref="17" UseFont="false" UsePadding="false" UseTextAlignment="false" />
+          <StylePriority Ref="15" UseFont="false" UseTextAlignment="false" />
         </Item4>
-        <Item5 Ref="18" ControlType="XRLabel" Name="label4" Multiline="true" Text="9" TextAlignment="TopRight" SizeF="182.853729,107.018265" LocationFloat="295.6672, 195.247574" Dpi="254" Font="Arial, 22pt, style=Bold" Padding="5,5,0,0,254">
+        <Item5 Ref="16" ControlType="XRLabel" Name="label8" Multiline="true" CanGrow="false" AnchorVertical="Bottom" TextAlignment="BottomLeft" SizeF="144.489136,27.9151611" LocationFloat="292.208344, 314.980621" Dpi="254" Font="Arial, 7pt" Padding="5,5,0,0,254">
           <ExpressionBindings>
-            <Item1 Ref="19" EventName="BeforePrint" PropertyName="Text" Expression="[PRICE1]" />
+            <Item1 Ref="17" EventName="BeforePrint" PropertyName="Text" Expression="[MULTICODE]" />
           </ExpressionBindings>
-          <StylePriority Ref="20" UseFont="false" UseTextAlignment="false" />
+          <StylePriority Ref="18" UseFont="false" UseTextAlignment="false" />
         </Item5>
-        <Item6 Ref="21" ControlType="XRLabel" Name="label6" Multiline="true" Text="€" TextAlignment="TopLeft" SizeF="36.7921448,102.453278" LocationFloat="478.520935, 195.247574" Dpi="254" Font="Arial, 22pt, style=Bold" Padding="5,5,0,0,254">
-          <StylePriority Ref="22" UseFont="false" UseTextAlignment="false" />
-        </Item6>
-        <Item7 Ref="23" ControlType="XRLabel" Name="label9" Multiline="true" Text="99" TextAlignment="TopLeft" SizeF="76.89526,102.453293" LocationFloat="515.3131, 195.247574" Dpi="254" Font="Arial, 14pt, style=Bold" Padding="5,5,0,0,254">
+        <Item6 Ref="19" ControlType="XRBarCode" Name="barCode1" Module="3" SizeF="316.8339,68.791626" LocationFloat="0, 200.000031" Dpi="254" Font="Arial, 5pt, style=Bold" Padding="0,0,17,0,254">
+          <Symbology Ref="20" Name="EAN13" />
           <ExpressionBindings>
-            <Item1 Ref="24" EventName="BeforePrint" PropertyName="Text" Expression="[PRICE2]" />
+            <Item1 Ref="21" EventName="BeforePrint" PropertyName="Text" Expression="[BARCODE]" />
           </ExpressionBindings>
-          <StylePriority Ref="25" UseFont="false" UseTextAlignment="false" />
+          <StylePriority Ref="22" UseFont="false" UsePadding="false" UseTextAlignment="false" />
+        </Item6>
+        <Item7 Ref="23" ControlType="XRLabel" Name="label5" Multiline="true" CanGrow="false" Text="BEYPAZARI EAU MIN. GAZ.GRIOTTE 6X20CL" TextAlignment="TopLeft" SizeF="530.2709,150" LocationFloat="15.0000134, 9" Dpi="254" Font="Microsoft Sans Serif, 9.75pt, style=Bold" Padding="0,0,0,0,254">
+          <ExpressionBindings>
+            <Item1 Ref="24" EventName="BeforePrint" PropertyName="Text" Expression="[DESING_NAME]" />
+          </ExpressionBindings>
+          <StylePriority Ref="25" UseFont="false" UsePadding="false" UseTextAlignment="false" />
         </Item7>
-        <Item8 Ref="26" ControlType="XRPanel" Name="panel2" SizeF="658.555,361.0972" LocationFloat="0, 0" Dpi="254" BorderColor="255,79,129,189" Borders="All" BorderWidth="2">
-          <Controls>
-            <Item1 Ref="27" ControlType="XRLabel" Name="label8" Multiline="true" CanGrow="false" AnchorVertical="Bottom" TextAlignment="BottomLeft" SizeF="167.176636,38.91516" LocationFloat="180.657227, 308.45813" Dpi="254" Font="Arial, 7pt" Padding="5,5,0,0,254" Borders="None">
-              <ExpressionBindings>
-                <Item1 Ref="28" EventName="BeforePrint" PropertyName="Text" Expression="[MULTICODE]" />
-              </ExpressionBindings>
-              <StylePriority Ref="29" UseFont="false" UseBorders="false" UseTextAlignment="false" />
-            </Item1>
-            <Item2 Ref="30" ControlType="XRLabel" Name="label2" AutoWidth="true" CanGrow="false" Text="label2" AnchorVertical="Bottom" TextAlignment="TopCenter" WordWrap="false" SizeF="253.333954,32.5207825" LocationFloat="15.0000134, 263.145874" Dpi="254" Font="Arial, 7pt" Padding="5,5,0,0,254" Borders="None">
-              <ExpressionBindings>
-                <Item1 Ref="31" EventName="BeforePrint" PropertyName="Text" Expression="[CUSTOMER_NAME]" />
-              </ExpressionBindings>
-              <StylePriority Ref="32" UseFont="false" UseBorders="false" UseTextAlignment="false" />
-            </Item2>
-            <Item3 Ref="33" ControlType="XRBarCode" Name="barCode2" Module="7" AutoModule="true" SizeF="308.8339,63.104126" LocationFloat="14.9999723, 279.791656" Dpi="254" Font="Arial, 5pt, style=Bold" Padding="0,0,17,0,254" Borders="None">
-              <Symbology Ref="34" Name="Code128" />
-              <ExpressionBindings>
-                <Item1 Ref="35" EventName="BeforePrint" PropertyName="Text" Expression="[MULTICODE]" />
-              </ExpressionBindings>
-              <StylePriority Ref="36" UseFont="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
-            </Item3>
-          </Controls>
-          <StylePriority Ref="37" UseBorderColor="false" UseBorders="false" UseBorderWidth="false" />
+        <Item8 Ref="26" ControlType="XRLabel" Name="label4" Multiline="true" Text="9" TextAlignment="TopRight" SizeF="182.853729,107.018265" LocationFloat="295.6672, 195.247574" Dpi="254" Font="Arial, 22pt, style=Bold" Padding="5,5,0,0,254">
+          <ExpressionBindings>
+            <Item1 Ref="27" EventName="BeforePrint" PropertyName="Text" Expression="[PRICE1]" />
+          </ExpressionBindings>
+          <StylePriority Ref="28" UseFont="false" UseTextAlignment="false" />
         </Item8>
+        <Item9 Ref="29" ControlType="XRLabel" Name="label6" Multiline="true" Text="€" TextAlignment="TopLeft" SizeF="36.7921448,102.453278" LocationFloat="478.520935, 195.247574" Dpi="254" Font="Arial, 22pt, style=Bold" Padding="5,5,0,0,254">
+          <StylePriority Ref="30" UseFont="false" UseTextAlignment="false" />
+        </Item9>
+        <Item10 Ref="31" ControlType="XRLabel" Name="label9" Multiline="true" Text="99" TextAlignment="TopLeft" SizeF="76.89526,102.453293" LocationFloat="515.3131, 195.247574" Dpi="254" Font="Arial, 14pt, style=Bold" Padding="5,5,0,0,254">
+          <ExpressionBindings>
+            <Item1 Ref="32" EventName="BeforePrint" PropertyName="Text" Expression="[PRICE2]" />
+          </ExpressionBindings>
+          <StylePriority Ref="33" UseFont="false" UseTextAlignment="false" />
+        </Item10>
+        <Item11 Ref="34" ControlType="XRPanel" Name="panel1" SizeF="317.332764,118.180557" LocationFloat="302.667236, 177.4861" Dpi="254" BackColor="Yellow">
+          <StylePriority Ref="35" UseBackColor="false" />
+        </Item11>
+        <Item12 Ref="36" ControlType="XRPanel" Name="panel2" SizeF="658.555,361.0972" LocationFloat="0, 0" Dpi="254" BorderColor="255,79,129,189" Borders="All" BorderWidth="2">
+          <StylePriority Ref="37" UseBorderColor="false" UseBorders="false" UseBorderWidth="false" />
+        </Item12>
       </Controls>
       <StylePriority Ref="38" UsePadding="false" />
     </Item2>
