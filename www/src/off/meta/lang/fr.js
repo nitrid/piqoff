@@ -163,7 +163,7 @@ export const langFr =
         txtCustomer: "Fournisseur",
         cmbItemGenus: "Type de produit",
         txtBarcode: "Code barre",
-        cmbTax: "Classe de Taxetion",
+        cmbTax: "Classe de Taxation",
         cmbMainUnit: "Unité principale",
         cmbOrigin: "Origine",
         cmbUnderUnit: "Contenu du produit",

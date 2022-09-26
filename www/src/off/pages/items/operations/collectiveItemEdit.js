@@ -338,7 +338,7 @@ export default class collectiveItemEdit extends React.PureComponent
 
                                     // NET_MARGIN ANINDA ETKI ETSİN DİYE YAPILDI
                                     let tmpNetExVat = e.data.PRICE_SALE / ((e.data.VAT / 100) + 1)
-                                    let tmpNetMargin = (tmpNetExVat -e.data.CUSTOMER_PRICE) / 1.08;
+                                    let tmpNetMargin = (tmpNetExVat -e.data.CUSTOMER_PRICE) / 1.25;
                                     let tmpNetMarginRate =(tmpNetMargin / e.data.CUSTOMER_PRICE) * 100
                                     e.data.NET_MARGIN = tmpNetMargin.toFixed(2) + "€ / %" +  tmpNetMarginRate.toFixed(2);
                                     e.data.NET_MARGIN_RATE = tmpNetMarginRate.toFixed(2);    
