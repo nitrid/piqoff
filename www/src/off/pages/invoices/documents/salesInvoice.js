@@ -239,7 +239,6 @@ export default class salesInvoice extends React.PureComponent
 
         for (let  i= 0; i < this.docObj.docItems.dt().length; i++) 
         {
-            console.log(this.docObj.docItems.dt()[i])
             tmpTotalCost += this.docObj.docItems.dt()[i].COST_PRICE * this.docObj.docItems.dt()[i].QUANTITY
         }
         let tmpMargin = ((this.docObj.dt()[0].TOTAL - this.docObj.dt()[0].VAT) - tmpTotalCost)

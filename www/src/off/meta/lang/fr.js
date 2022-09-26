@@ -127,6 +127,7 @@ export const langFr =
         pos_02_002 : "Rapport point fidelité client",
         pos_02_003 : "Rapport de Vente",
         pos_02_004 : "Rapport de Mouvement Ticket",
+        pos_02_005 : "Değişmiş Fişler Raporu", // BAK
         pos_03 :"Traitements", 
         pos_03_001 : "Opérations de fin de journée",
         promo: "Promotion",
@@ -6098,7 +6099,8 @@ export const langFr =
             clmUser : "Utilisateur",
             clmDevice : "Appareil",
             clmDate : "Date",
-            clmTicketId : "Numéro de ticket"
+            clmTicketId : "Numéro de ticket",
+            clmDescription :"Motif",
         }
     },
     pos_02_002 : // "Müşteri Puanı Raporu"
@@ -6162,6 +6164,7 @@ export const langFr =
     },
     pos_03_001 : // Gün Sonu",
     {
+        TicketId :"Ticket I.D",
         title : "Opérations de fin de journée",
         start :"Démarrer",
         advance : "Fonde De Caisse",
@@ -6193,7 +6196,8 @@ export const langFr =
             clmUser : "Utilisateur",
             clmDevice : "Utilisateur",
             clmDate : "Date",
-            clmTicketId : "Numéro ticket"
+            clmTicketId : "Numéro ticket",
+            clmDescription :"Motif",
         },
         popAdvance : 
         {
@@ -6219,7 +6223,24 @@ export const langFr =
             msg: "Le fond de caisse est déjà saisie. Il faut modifier ceci à partir du tableau."
         },
         advanceMsg1 : "Soyez sûr que le fond de caisse est de",
-        advanceMsg2 : "Etre sûr!!!"
+        advanceMsg2 : "Etre sûr!!!",
+        grdSaleTicketItems :
+        {
+            clmBarcode : "Code barre",
+            clmName : "Nom produit ",
+            clmQuantity : "Quantité",
+            clmPrice : "Prix",
+            clmTotal : "Montant"
+        },
+        grdSaleTicketPays : 
+        {
+            clmPayName : "Type de paiement", 
+            clmTotal : "Montant",
+        },
+        popDetail : 
+        {
+            title : "Detaille ticket"
+        },
     },
     tkf_01_001 : // "Alış Teklifi Listesi",
     {
