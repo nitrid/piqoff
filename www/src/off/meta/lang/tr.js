@@ -455,6 +455,7 @@ export const langTr =
         MainUnit :"Bu Barkod Ana Birime Tanımlanacaktır",
         SubUnit : "Bu Barkod Alt Birime Tanımlanacaktır",
         txtUnitTypeName :"Açıklama",
+        barcodePlace : "Seçilen Stok için Eklemek İstediğiniz Barkodu Giriniz..",
         pg_txtItem:
         {
             title: "Ürün Seçim",

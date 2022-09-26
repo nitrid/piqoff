@@ -454,6 +454,7 @@ export const langFr =
         MainUnit : "Code barre saisie à l'unité principale" , 
         SubUnit : "Code barre saisie au contenu principal",
         txtUnitTypeName :"Motif",
+        barcodePlace : "Seçilen Stok için Eklemek İstediğiniz Barkodu Giriniz..", // Bak
         pg_txtItem:
         {
             title: "Sélection Produit",

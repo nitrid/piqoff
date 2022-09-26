@@ -292,7 +292,7 @@ export default class barcodeCard extends React.PureComponent
                                  {/* txtBarcode */}
                                  <Item>                                    
                                     <Label text={this.t("txtBarcode")} alignment="right" />
-                                    <NdTextBox id="txtBarcode" parent={this} simple={true} dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"BARCODE"}}  validationGroup={"frmBarcode"  + this.tabIndex}
+                                    <NdTextBox id="txtBarcode" parent={this} simple={true} dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"BARCODE"}}  placeholder={this.t("barcodePlace")} validationGroup={"frmBarcode"  + this.tabIndex}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     button=
                                     {
