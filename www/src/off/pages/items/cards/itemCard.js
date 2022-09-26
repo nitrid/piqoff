@@ -512,7 +512,7 @@ export default class itemCard extends React.PureComponent
         for (let i = 0; i < this.itemsObj.itemPrice.dt().length; i++) 
         {
             let tmpExVat = this.itemsObj.itemPrice.dt()[i].PRICE / ((this.itemsObj.dt("ITEMS")[0].VAT / 100) + 1)
-            let tmpMargin = (tmpExVat - this.txtCostPrice.value) / 1.20;
+            let tmpMargin = (tmpExVat - this.txtCostPrice.value) / 1.15;
             let tmpMarginRate = (((tmpMargin / this.txtCostPrice.value) )) * 100
             this.itemsObj.itemPrice.dt()[i].NET_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2); 
             this.itemsObj.itemPrice.dt()[i].NET_MARGIN_RATE = tmpMarginRate.toFixed(2);    
