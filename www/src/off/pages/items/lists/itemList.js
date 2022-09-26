@@ -504,7 +504,6 @@ export default class itemList extends React.PureComponent
                             }}
                             onRowPrepared={(e) =>
                             {
-                                console.log(e)
                                 if(e.rowType == 'data' && e.data.STATUS == false)
                                 {
                                     e.rowElement.style.color ="Silver"
