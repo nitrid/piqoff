@@ -334,7 +334,7 @@ export default class collectiveItemEdit extends React.PureComponent
                                     let tmpMarginRate =  (tmpMargin /  e.data.CUSTOMER_PRICE) * 100   //((tmpExVat - e.data.CUSTOMER_PRICE)/tmpExVat) * 100
                                     e.data.GROSS_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2);        
                                     e.data.GROSS_MARGIN_RATE = tmpMarginRate.toFixed(2); 
-                                    e.values[7] =  tmpMargin.toFixed(2) + "€/ %" +  tmpMarginRate.toFixed(2); 
+                                    e.values[8] =  tmpMargin.toFixed(2) + "€/ %" +  tmpMarginRate.toFixed(2); 
 
                                     // NET_MARGIN ANINDA ETKI ETSİN DİYE YAPILDI
                                     let tmpNetExVat = e.data.PRICE_SALE / ((e.data.VAT / 100) + 1)
@@ -342,7 +342,7 @@ export default class collectiveItemEdit extends React.PureComponent
                                     let tmpNetMarginRate =(tmpNetMargin / e.data.CUSTOMER_PRICE) * 100
                                     e.data.NET_MARGIN = tmpNetMargin.toFixed(2) + "€ / %" +  tmpNetMarginRate.toFixed(2);
                                     e.data.NET_MARGIN_RATE = tmpNetMarginRate.toFixed(2);    
-                                    e.values[8] =   tmpNetMargin.toFixed(2) + "€  %" +  tmpNetMarginRate.toFixed(2);
+                                    e.values[9] =   tmpNetMargin.toFixed(2) + "€  %" +  tmpNetMarginRate.toFixed(2);
                                 }
                             }}
                             >                            
@@ -357,12 +357,12 @@ export default class collectiveItemEdit extends React.PureComponent
                                 <Column dataField="CUSTOMER_PRICE" caption={this.t("grdItemList.clmCustomerPrice")} visible={true} width={75}/> 
                                 <Column dataField="MAIN_UNIT_NAME" caption={this.t("grdItemList.clmMainUnit")} visible={false} width={100} allowEditing={false}/> 
                                 <Column dataField="PRICE_SALE" caption={this.t("grdItemList.clmPriceSale")} visible={true} width={75} /> 
+                                <Column dataField="ORGINS" caption={this.t("grdItemList.clmOrgins")} visible={true} width={130} editCellRender={this._cellRoleRender}/>   
                                 <Column dataField="GROSS_MARGIN" caption={this.t("grdItemList.clmGrossMargin")} visible={true} width={75} allowEditing={false}/> 
                                 <Column dataField="NET_MARGIN" caption={this.t("grdItemList.clmNetMargin")} visible={true} width={75} allowEditing={false}/> 
                                 <Column dataField="UNDER_UNIT_NAME" caption={this.t("grdItemList.clmUnderUnit")} visible={true} width={70} allowEditing={false}/> 
                                 <Column dataField="UNDER_FACTOR" caption={this.t("grdItemList.clmUnderFactor")} visible={true} width={70}/> 
                                 <Column dataField="VAT" caption={this.t("grdItemList.clmVat")} visible={true} width={110} editCellRender={this._cellRoleRender}/>    
-                                <Column dataField="ORGINS" caption={this.t("grdItemList.clmOrgins")} visible={true} width={130} editCellRender={this._cellRoleRender}/>   
                                 <Column dataField="WEIGHING" caption={this.t("grdItemList.clmWeighing")} visible={true} width={70}/>  
                                 <Column dataField="STATUS" caption={this.t("grdItemList.clmStatus")} visible={true} width={50}/>    
                             </NdGrid>

@@ -320,6 +320,7 @@ export default class labelPrinting extends React.PureComponent
             App.instance.setState({isExecute:true})
             let tmpData = await this.core.sql.execute(tmpQuery) 
             App.instance.setState({isExecute:false})
+            console.log(tmpData)
             if(tmpData.result.recordset.length > 0)
             {
                 for (let i = 0; i < tmpData.result.recordset.length; i++) 

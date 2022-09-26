@@ -184,7 +184,7 @@ export const langFr =
         txtItemName: "Nom du produit",
         txtShortName: "Désignation Courte",
         chkActive: "Produit Actif",
-        chkCaseWeighed: "Pesée Produit en caisse? ",
+        chkCaseWeighed: "Peser Produit en caisse? ",
         chkLineMerged: "Détacher les Lignes a la Caisse",
         chkTicketRest: "Ticket Rest.",
         txtCostPrice: "Prix de Revient",
@@ -197,11 +197,11 @@ export const langFr =
         tabTitleUnit: "Unités",
         tabTitleBarcode: "Code barre",
         tabTitleCustomer: "Fournisseur",
-        tabExtraCost: "Charge Supplément",
+        tabExtraCost: "Charge Supplément.",
         tabTitleCustomerPrice: "Historique Prix Fournisseur",
         tabTitleSalesContract: "Accord de Vente",
         tabTitleInfo: "Information",
-        tabTitleOtherShop :"Autre information sur les Magasin.",
+        tabTitleOtherShop :"Autre information sur les Magasins",
         txtTaxSugar: "Taux Sucre(100ML/GR)",
         txtTotalExtraCost : "Prix achat",
         clmtaxSugar : "Taxe Sucre",
@@ -453,7 +453,7 @@ export const langFr =
         cmbItemGenusData :
         {
             item : "Article",
-            service : "Sevice",
+            service : "Service",
             deposit : "Consigné"
         }
     },
@@ -468,6 +468,7 @@ export const langFr =
         MainUnit : "Code barre saisie à l'unité principale" , 
         SubUnit : "Code barre saisie au contenu principal",
         txtUnitTypeName :"Motif",
+        barcodePlace : "Seçilen Stok için Eklemek İstediğiniz Barkodu Giriniz..", // Bak
         pg_txtItem:
         {
             title: "Sélection Produit",
@@ -1115,7 +1116,7 @@ export const langFr =
         chkLastChange : "Dernière Modification Après Impression" ,
         chkSelectChange :"Dernière Modification Après Date Sélectionnée" ,
         chkSelectPriceChange :"Modification de Prix Vente Après Date Sélectionnée", // BAK
-        btnLabelCombine : "Regrouper Les Etiquette Saisir",
+        btnLabelCombine : "Regrouper Les Etiquettes Saisies",
         chkGroup : "Groupe" ,
         chkCustomer : "Produits Fournisseur",
         chkAllItems : "Produits",
@@ -1538,8 +1539,8 @@ export const langFr =
             clmStatus : "Etat",
             clmNetMargin : "Marge Nette",
             clmMargin : "Marge Brute",
-            clmCustomerPrice : "T. Fiyatı",  // BAK
-            clmOrgin : "Menşei"  // BAK
+            clmCustomerPrice : "Prix Fournisseur",  // BAK
+            clmOrgin : "Orgine"  // BAK
         },
     },
     stk_03_002 :   //"Fiyat Listesi"
