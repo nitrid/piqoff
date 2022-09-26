@@ -23,6 +23,18 @@ export const langTr =
     txtCardRead :"Lütfen Kullanıcı Kartınızı Okutunuz.",
     checkAll :"Tümünü Uygula",
     msgUserAccess : "Giriş Yetkiniz Yok",
+    popPassword : 
+    {
+        title: "Kullanıcı Şifrenizi Giriniz",
+        Password : "Şifre",
+        btnApprove : "Onayla"
+    },
+    msgPasswordWrong:
+    {
+        title: "Başarısız",
+        btn01: "Tamam",
+        msg: "Şifreniz Hatalı !"
+    },
     menu:
     {
         stk: "Stok",                
@@ -569,7 +581,7 @@ export const langTr =
         chkActive: "Aktif",
       
     },
-       stk_01_007 : // "Hizmet Tanımları"
+    stk_01_007 : // "Hizmet Tanımları"
     {
         txtCode : "Kodu",
         txtName :"Adı",
@@ -3075,7 +3087,6 @@ export const langTr =
             clmMargin :"Marj",
             clmDescription :"Açıklama",
             clmCuser :"Kullanıcı",
-
         },
         grdInvoicePayment: 
         {
@@ -3336,7 +3347,6 @@ export const langTr =
             clmInvDate : "Fatura Tarihi",
             clmDescription :"Açıklama",
             clmCuser :"Kullanıcı",
-
         },
         grdInvoicePayment: 
         {
@@ -4808,7 +4818,6 @@ export const langTr =
             clmMargin :"Marj",
             clmDescription :"Açıklama",
             clmCuser :"Kullanıcı",
-
         },
         popDiscount : 
         {
@@ -6239,7 +6248,7 @@ export const langTr =
         lineDelete :"Satır İptal", 
         cancel : "Vazgeç", 
     },
-    pos_02_005 : // "Satış Fiş Raporu",
+    pos_02_005 : // "Degismis Fisler Raporu",
     {
         TicketId :"Fiş I.D",
         cmbCustomer :"Cari",
@@ -6337,7 +6346,7 @@ export const langTr =
             clmDescription :"Açıklama",
         }
     },
-    pos_03_001 : // Gün Sonu",
+    pos_03_001 : // "Gün Sonu",
     {
         TicketId :"Fiş I.D",
         title : "GÜN SONU İŞLEMİ",

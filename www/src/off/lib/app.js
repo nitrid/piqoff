@@ -22,6 +22,12 @@ import TextBox from 'devextreme-react/text-box';
 import Button from 'devextreme-react/button';
 import SelectBox from 'devextreme-react/select-box';
 import { LoadPanel } from 'devextreme-react/load-panel';
+import NdPopGrid from '../../core/react/devex/popgrid.js';
+import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Export} from '../../core/react/devex/grid.js';
+import NdPopUp from '../../core/react/devex/popup.js';
+import Form, { Label,Item } from 'devextreme-react/form';
+import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../core/react/devex/textbox.js'
+import NdButton from '../../core/react/devex/button.js';
 
 import HTMLReactParser from 'html-react-parser';
 
@@ -46,6 +52,9 @@ export default class App extends React.PureComponent
         i18n.changeLanguage(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'))
         this.lang = i18n;  
         moment.locale(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'));
+
+        this.UserChange = this.UserChange.bind(this)
+
                 
         this.style =
         {
@@ -63,20 +72,7 @@ export default class App extends React.PureComponent
                 height: 'fit-content',
             }
         }
-        this.state = 
-        {
-            opened : true,
-            logined : false,
-            connected : false,
-            splash : 
-            {
-                type : 0,
-                headers :this.lang.t("loading"),
-                title :  this.lang.t('serverConnection'),
-            },
-            vtadi : '',
-            isExecute:false
-        }
+
         this.toolbarItems = 
         [
             {
@@ -86,6 +82,16 @@ export default class App extends React.PureComponent
                 {
                     icon : 'menu',
                     onClick : () => this.setState({opened: !this.state.opened})
+                }
+            },
+            {
+                widget : 'dxButton',
+                location : 'after',
+                options : 
+                {
+                    text:"",
+                    icon : 'refresh',
+                    onClick : () => window.location.reload()
                 }
             },
             {
@@ -109,11 +115,11 @@ export default class App extends React.PureComponent
             },
             {
                 widget : 'dxButton',
-                location : 'after',
+                icon : 'card',
                 options : 
                 {
                     icon : 'refresh',
-                    onClick : () => window.location.reload()
+                    onClick :this.UserChange
                 }
             },
             {
@@ -130,6 +136,26 @@ export default class App extends React.PureComponent
                 }
             }
         ];
+
+        this.state = 
+        {
+            opened : true,
+            logined : false,
+            connected : false,
+            splash : 
+            {
+                type : 0,
+                headers :this.lang.t("loading"),
+                title :  this.lang.t('serverConnection'),
+            },
+            vtadi : '',
+            isExecute:false,
+            user : "",
+            toolbarItems : this.toolbarItems,
+            changeUser : "",
+            changePass : ""
+        }
+        
         
         this.core = new core(io(window.location.origin,{timeout:100000,transports : ['websocket']}));
         this.textValueChanged = this.textValueChanged.bind(this)
@@ -173,11 +199,14 @@ export default class App extends React.PureComponent
                 }
                 App.instance.setState({splash:tmpSplash});
             }
+            console.log(this.core.auth.data)
             //SUNUCUYA BAĞLANDIKDAN SONRA AUTH ILE LOGIN DENETLENIYOR
             if((await this.core.auth.login(window.sessionStorage.getItem('auth'),'OFF')))
             {
                 App.instance.setState({logined:true,connected:true});
-               
+                await this.core.util.waitUntil()
+                this.setUser()
+
             }
             else
             {
@@ -253,6 +282,82 @@ export default class App extends React.PureComponent
             }
             App.instance.setState({logined:false,connected:false,splash:tmpSplash});
         }
+    }
+    async UserChange()
+    {
+        let tmpData = await this.core.auth.getUserList()
+        await this.pg_users.setData(tmpData)
+        this.pg_users.show()
+        this.pg_users.onClick = (data) =>
+        {
+            this.state.changeUser = data[0].CODE,
+            this.popPassword.show()
+        }
+    }
+    setUser()
+    {
+        this.setState({toolbarItems:[
+            {
+                widget : 'dxButton',
+                location : 'before',
+                options : 
+                {
+                    icon : 'menu',
+                    onClick : () => this.setState({opened: !this.state.opened})
+                }
+            },
+            {
+                widget : 'dxButton',
+                location : 'after',
+                options : 
+                {
+                    text:this.core.auth.data.NAME,
+                    icon : 'card',
+                    onClick : this.UserChange
+                }
+            },
+            {
+                widget : 'dxSelectBox',
+                location : 'after',
+                options : 
+                {
+                    width: 80,
+                    items: [{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"tr",text:"TR"}],
+                    valueExpr: 'id',
+                    displayExpr: 'text',
+                    value: localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'),
+                    onValueChanged: (args) => 
+                    {
+                        localStorage.setItem('lang',args.value)
+                        i18n.changeLanguage(args.value)
+                        locale(args.value)
+                        window.location.reload()
+                    }
+                }
+            },
+            {
+                widget : 'dxButton',
+                location : 'after',
+                options : 
+                {
+                    icon : 'refresh',
+                    onClick : () => window.location.reload()
+                }
+            },
+            {
+                widget : 'dxButton',
+                location : 'after',
+                options : 
+                {
+                    icon : 'fa-solid fa-arrow-right-to-bracket',
+                    onClick : () => 
+                    {                                                        
+                        this.core.auth.logout()
+                        window.location.reload()
+                    }
+                }
+            }
+        ]})
     }
     render() 
     {
@@ -337,7 +442,7 @@ export default class App extends React.PureComponent
                 showPane={true}
                 />
                 <div className="top-bar">
-                    <Toolbar className="main-toolbar" items={this.toolbarItems }/>
+                    <Toolbar className="main-toolbar" items={this.state.toolbarItems}/>
                 </div>
                 <div>
                     <Drawer className="main-drawer" opened={opened} openedStateMode={'shrink'} position={'left'} 
@@ -345,7 +450,83 @@ export default class App extends React.PureComponent
                         <Panel />
                     </Drawer>
                 </div>
+                <NdPopGrid id={"pg_users"} parent={this} container={"#root"}
+              visible={false}
+              position={{of:'#root'}} 
+              showTitle={true} 
+              showBorders={true}
+              width={'50%'}
+              height={'90%'}
+              title="Kullanıcı Listesi"
+              >
+                  <Column dataField="CODE" caption="CODE" width={150} defaultSortOrder="asc"/>
+                  <Column dataField="NAME" caption="NAME" width={150} defaultSortOrder="asc" />                            
+              </NdPopGrid>
+                <div>
+                        <NdPopUp parent={this} id={"popPassword"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.lang.t("popPassword.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'200'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.lang.t("popPassword.Password")} alignment="right" />
+                                    <NdTextBox id="txtPassword" mode="password" parent={this} simple={true}
+                                            maxLength={32}
+
+                                    ></NdTextBox>
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("popPassword.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
+                                            onClick={async ()=>
+                                            {       
+                                                if((await this.core.auth.login(this.state.changeUser,this.txtPassword.value,'OFF')))
+                                                {
+                                                    // POS KULLANICILARININ GİREMEMESİ İÇİN YAPILDI
+                                                    if(this.core.auth.data.ROLE == 'Pos')
+                                                    {
+                                                        this.setState({logined:false,alert:this.lang.t("msgUserAccess")})
+                                                    }
+                                                    else
+                                                    {
+                                                        App.instance.setState({logined:true});
+                                                        window.location.reload()
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgPasswordWrong',showTitle:true,title:this.lang.t("msgPasswordWrong.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.lang.t("msgPasswordWrong.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPasswordWrong.msg")}</div>)
+                                                    }
+                                        
+                                                    await dialog(tmpConfObj);
+                                                }
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popPassword.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div> 
             </div>
+             
         );
     }
 }
