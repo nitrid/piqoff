@@ -75,12 +75,13 @@ export default class salesOrdList extends React.PureComponent
         console.log(this.grdOpenTike)
         if(this.grdOpenTike.data.datatable.length > 0)
         {
-            console.log(1321)
           this.popOpenTike.show()
         }
     }
     async _btnGetClick()
     {
+        console.log(this.dtFirst.value)
+        console.log(this.dtLast.value)
         let tmpSource =
         {
             source : 
@@ -88,74 +89,29 @@ export default class salesOrdList extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query :  "SELECT "  +
-                    " MAX(ITEM_CODE) AS ITEM_CODE,  "  +
-                    " MAX(ITEM_NAME) AS ITEM_NAME,  "  +
-                    " MAX(TIME) AS TIME,  "  +
-                    " MAX(DATE) AS DATE,  "  +
-                    " MAX(DEVICE) AS DEVICE,  "  +
-                    " MAX(USERS) AS USERS, "  +
-                    " SUBSTRING(CONVERT(NVARCHAR(50),SALE_POS_GUID),20,25) AS POS_ID, "  +
-                    " SALE_POS_GUID AS POS_GUID, " +
-                    " MAX(SALE_TYPE) AS SALE_TYPE,  "  +
-                    " COUNT(PAYMENT_TYPE) AS PAY_COUNT,  "  +
-                    " MAX(CUSTOMER) AS CUSTOMER,  "  +
-                    " MAX(DISCOUNT) AS DISCOUNT,  "  +
-                    " MAX(LOYALTY) AS LOYALTY,  "  +
-                    " MAX(HT) AS HT,  "  +
-                    " MAX(TVA) AS TVA,  "  +
-                    " MAX(TTC) AS TTC,  "  +
-                    " MAX(CUSTOMER_NAME) AS CUSTOMER_NAME,  "  +
-                    " MAX(PAYMENT_TYPE) AS PAYMENT_TYPE,  "  +
-                    " MAX(PAYMENT) AS PAYMENT  "  +
-                    " FROM (  "  +
-                    " SELECT  "  +
-                    "SALE.POS_GUID AS SALE_POS_GUID, "  +
-                    "PAYMENT.POS_GUID AS PAYMENT_POS_GUID, "  +
-                    " MAX(SALE.ITEM_CODE) AS ITEM_CODE,  "  +
-                    " MAX(SALE.ITEM_NAME) AS ITEM_NAME,  "  +
-                    " CONVERT(NVARCHAR,MAX(SALE.CDATE),101) AS DATE,   "  +
-                    " CONVERT(NVARCHAR,MAX(SALE.CDATE),108) AS TIME,   "  +
-                    " MAX(SALE.DEVICE) AS DEVICE,  "  +
-                    " ISNULL((SELECT NAME FROM USERS WHERE CODE = MAX(SALE.LUSER)),'') AS USERS,  "  +
-                    " SALE.TYPE AS SALE_TYPE,  "  +
-                    " PAYMENT.TYPE AS PAYMENT_TYPE,  "  +
-                    " PAYMENT.PAY_TYPE_NAME AS PAY_TYPE_NAME, "  +
-                    " MAX(SALE.CUSTOMER_CODE) AS CUSTOMER,  "  +
-                    " MAX(SALE.GRAND_DISCOUNT) DISCOUNT,  "  +
-                    " MAX(SALE.GRAND_LOYALTY) LOYALTY,  "  +
-                    " MAX(SALE.GRAND_AMOUNT) HT, "  +
-                    " MAX(SALE.GRAND_VAT) TVA, "  +
-                    " MAX(SALE.GRAND_TOTAL) TTC,  "  +
-                    " MAX(SALE.CUSTOMER_NAME) AS CUSTOMER_NAME,  "  +
-                    " (SELECT SUM(AMOUNT) FROM [POS_PAYMENT_VW_01] AS PAY WHERE PAY.POS_GUID = SALE.POS_GUID ) AS PAYMENT   "  +
-                    " FROM [dbo].[POS_SALE_VW_01] AS SALE  "  +
-                    " INNER JOIN [dbo].[POS_PAYMENT_VW_01] AS PAYMENT ON  "  +
-                    " PAYMENT.POS_GUID = SALE.POS_GUID AND PAYMENT.STATUS = 1  "  +
-                    " WHERE SALE.DOC_DATE >= @FIRST_DATE AND SALE.DOC_DATE <= @LAST_DATE AND   "  +
-                    " ((SALE.CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND  "  +
-                    " ((SALE.DEVICE = @DEVICE) OR (@DEVICE = '')) AND  "  +
-                    " ((PAYMENT.PAY_TYPE = @PAY_TYPE) OR (@PAY_TYPE = -1)) AND "  +
-                    " ((ITEM_CODE = @ITEM_CODE OR SALE.INPUT =  @ITEM_CODE) OR (@ITEM_CODE = '')) AND  ((SUBSTRING(CONVERT(NVARCHAR(50),SALE.POS_GUID),20,25) = @TICKET_ID) OR (@TICKET_ID = '')) AND "  +
-                    " ((SALE.LUSER = @LUSER) OR (@LUSER = '')) AND SALE.STATUS = 1  "  +
-                    " GROUP BY SALE.TYPE,PAYMENT.TYPE,PAYMENT.PAY_TYPE_NAME,PAYMENT.POS_GUID,SALE.POS_GUID) AS TMP  "  +
-                    " GROUP BY SALE_POS_GUID,PAYMENT_POS_GUID HAVING COUNT(PAYMENT_TYPE) >= @PAY_COUNT AND  ((MAX(TTC) >= @FIRST_AMOUNT) OR (@FIRST_AMOUNT = 0)) AND ((MAX(TTC) <= @LAST_AMOUNT) OR (@LAST_AMOUNT = 0)) ",
-                    param : ['FIRST_DATE:date','LAST_DATE:date','CUSTOMER_CODE:string|50','DEVICE:string|25','PAY_TYPE:int','ITEM_CODE:string|50','TICKET_ID:string|50','LUSER:string|50','PAY_COUNT:string|50','FIRST_AMOUNT:float','LAST_AMOUNT:float'],
-                    value : [this.dtFirst.value,this.dtLast.value,this.txtCustomerCode.value,this.cmbDevice.value,this.cmbPayType.value,this.txtItem.value,this.txtTicketno.value,this.cmbUser.value,this.ckhDoublePay.value ? 2 : 1,this.numFirstTicketAmount.value,this.numLastTicketAmount.value]
+                    query : "SELECT POS_GUID,LUSER_NAME, SUBSTRING(CONVERT(NVARCHAR(50),POS_GUID),20,25) AS TICKET_ID,CONVERT(NVARCHAR,(SELECT TOP 1 DOC_DATE FROM POS WHERE POS.GUID = POS_EXTRA_VW_01.POS_GUID),104) AS DATE,DESCRIPTION FROM POS_EXTRA_VW_01 WHERE (SELECT TOP 1 DOC_DATE FROM POS WHERE POS.GUID = POS_EXTRA_VW_01.POS_GUID) >=@FIRST_DATE AND (SELECT TOP 1 DOC_DATE FROM POS WHERE POS.GUID = POS_EXTRA_VW_01.POS_GUID) <= @LAST_DATE AND TAG = @TAG" ,
+                    param : ['FIRST_DATE:date','LAST_DATE:date','TAG:string|50'],
+                    value : [this.dtFirst.value,this.dtLast.value,this.cmbType.value]
                 },
                 sql : this.core.sql
             }
         }
+        console.log(tmpSource)
         App.instance.setState({isExecute:true})
         await this.grdSaleTicketReport.dataRefresh(tmpSource)
         App.instance.setState({isExecute:false})
-
     }
     async btnGetDetail(pGuid)
     {
         this.lastPosSaleDt.selectCmd = 
         {
-            query :  "SELECT * FROM POS_SALE_VW_01  WHERE POS_GUID = @POS_GUID ",
+            query :  "SELECT ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM_BARCODE.GUID = POS_SALE.BARCODE),'') AS BARCODE,  " +
+            "ISNULL((SELECT TOP 1 NAME FROM ITEMS WHERE ITEMS.GUID = POS_SALE.ITEM),'') AS ITEM_NAME,  " +
+            "QUANTITY AS QUANTITY,  " +
+            "PRICE AS PRICE,  " +
+            "TOTAL AS TOTAL,  " +
+            "DELETED AS DELETED  " +
+            "FROM POS_SALE WHERE POS = @POS_GUID ",
             param : ['POS_GUID:string|50'],
             value : [pGuid]
         }
@@ -264,249 +220,18 @@ export default class salesOrdList extends React.PureComponent
                                     >
                                     </NdDatePicker>
                                 </Item>
+                                {/* cmbType */}
                                 <Item>
-                                <Label text={this.t("txtCustomerCode")} alignment="right" />
-                                <NdTextBox id="txtCustomerCode" parent={this} simple={true}  
-                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                button=
-                                {
-                                    [
-                                        {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
-                                            {
-                                                this.pg_txtCustomerCode.show()
-                                                this.pg_txtCustomerCode.onClick = (data) =>
-                                                {
-                                                    if(data.length > 0)
-                                                    {
-                                                        this.txtCustomerCode.setState({value:data[0].CODE})
-                                                    }
-                                                }
-                                            }
-                                        },
-                                    ]
-                                }
-                                onEnterKey={(async()=>
-                                    {
-                                        await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
-                                        this.pg_txtCustomerCode.show()
-                                        this.pg_txtCustomerCode.onClick = (data) =>
-                                        {
-                                            if(data.length > 0)
-                                            {
-                                                this.txtCustomerCode.setState({value:data[0].CODE})
-                                                this.txtCustomerName.setState({value:data[0].TITLE})
-                                                this._btnGetClick()
-                                            }
-                                        }
-                                    }).bind(this)}
-                                >
-                                </NdTextBox>
-                                {/*CARI SECIMI POPUP */}
-                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
-                                visible={false}
-                                position={{of:'#root'}} 
-                                showTitle={true} 
-                                showBorders={true}
-                                width={'90%'}
-                                height={'90%'}
-                                title={this.t("pg_txtCustomerCode.title")} //
-                                search={true}
-                                data = 
-                                {{
-                                    source:
-                                    {
-                                        select:
-                                        {
-                                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
-                                            param : ['VAL:string|50']
-                                        },
-                                        sql:this.core.sql
-                                    }
-                                }}
-                                button=
-                                {
-                                    {
-                                        id:'01',
-                                        icon:'more',
-                                        onClick:()=>
-                                        {
-                                            console.log(1111)
-                                        }
-                                    }
-                                }
-                                >
-                                    <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
-                                    <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
-                                    <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
-                                    <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>
-                                    
-                                </NdPopGrid>
-                                </Item> 
-                                {/* cmbDevice */}
-                                <Item>
-                                    <Label text={this.t("cmbDevice")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbDevice"
-                                    displayExpr="DISPLAY"                       
-                                    valueExpr="CODE"
-                                    showClearButton={true}
-                                    notRefresh={true}
-                                    data={{source:{select:{query:"SELECT CODE + '-' + NAME AS DISPLAY,CODE,NAME FROM POS_DEVICE_VW_01 ORDER BY CODE ASC"},sql:this.core.sql}}}
-                                    param={this.param.filter({ELEMENT:'cmbDevice',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'cmbDevice',USERS:this.user.CODE})}
-                                    />
-                                </Item>
-                                {/* numFirstTicketAmount */}
-                                <Item>
-                                    <Label text={this.t("numFirstTicketAmount")} alignment="right" />
-                                    <NdNumberBox id="numFirstTicketAmount" title={this.t("numFirstTicketAmount")} parent={this} simple={true} tabIndex={this.tabIndex} style={{borderTopLeftRadius:'0px',borderBottomLeftRadius:'0px'}} 
-                                        param={this.param.filter({ELEMENT:'numFirstTicketAmount',USERS:this.user.CODE})}
-                                        access={this.access.filter({ELEMENT:'numFirstTicketAmount',USERS:this.user.CODE})}
-                                        onChange={(e)=>
-                                            {
-                                                if(this.numFirstTicketAmount.value == null)
-                                                {
-                                                    this.numFirstTicketAmount.value = 0
-                                                }
-                                            }}
-                                            onValueChanged={(e)=>
-                                            {
-                                                if(e.value != null)
-                                                {
-                                                    this.numLastTicketAmount.value = e.value
-                                                }
-                                            }}>
-                                    </NdNumberBox>
-                                </Item>
-                                {/* numLastTicketAmount */}
-                                <Item>
-                                    <Label text={this.t("numLastTicketAmount")} alignment="right" />
-                                    <NdNumberBox id="numLastTicketAmount" title={this.t("numLastTicketAmount")} parent={this} simple={true} tabIndex={this.tabIndex} style={{borderTopLeftRadius:'0px',borderBottomLeftRadius:'0px'}} 
-                                        param={this.param.filter({ELEMENT:'numLastTicketAmount',USERS:this.user.CODE})}
-                                        access={this.access.filter({ELEMENT:'numLastTicketAmount',USERS:this.user.CODE})}
-                                        onChange={(e)=>
-                                            {
-                                                if(this.numLastTicketAmount.value == null)
-                                                {
-                                                    this.numLastTicketAmount.value = this.numFirstTicketAmount.value
-                                                }
-                                            }}>
-                                    </NdNumberBox>
-                                </Item>
-                               {/* cmbPayType */}
-                               <Item>
-                                    <Label text={this.t("cmbPayType.title")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbPayType"
+                                    <Label text={this.t("cmbType")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbType"
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
-                                    value={-1}
-                                    data={{source:[{ID:-1,VALUE:this.t("cmbPayType.all")},{ID:0,VALUE:this.t("cmbPayType.esc")},{ID:1,VALUE:this.t("cmbPayType.cb")},{ID:2,VALUE:this.t("cmbPayType.check")},
-                                    {ID:3,VALUE:this.t("cmbPayType.ticket")},{ID:4,VALUE:this.t("cmbPayType.bonD")},{ID:5,VALUE:this.t("cmbPayType.avoir")},{ID:6,VALUE:this.t("cmbPayType.virment")},
-                                    {ID:7,VALUE:this.t("cmbPayType.prlv")}]}}
-                                    param={this.param.filter({ELEMENT:'cmbPayType',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'cmbPayType',USERS:this.user.CODE})}
-                                    />
-                                </Item>
-                                 {/* cmbUser */}
-                               <Item>
-                                    <Label text={this.t("cmbUser")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbUser"
-                                    displayExpr="NAME"                       
-                                    valueExpr="CODE"
                                     showClearButton={true}
-                                    data={{source:{select:{query:"SELECT CODE,NAME FROM USERS"},sql:this.core.sql}}}
-                                    param={this.param.filter({ELEMENT:'cmbUser',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'cmbUser',USERS:this.user.CODE})}
+                                    notRefresh={true}
+                                    data={{source:[{ID:"PARK DESC",VALUE:this.t("cmbTypeData.parkDesc")},{ID:"FULL DELETE",VALUE:this.t("cmbTypeData.fullDelete")},{ID:"ROW DELETE",VALUE:this.t("cmbTypeData.rowDelete")},{ID:"PRICE DESC",VALUE:this.t("cmbTypeData.priceChange")}]}}
+                                    param={this.param.filter({ELEMENT:'PARK DESC',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'PARK DESC',USERS:this.user.CODE})}
                                     />
-                                </Item>
-                                    {/* txtTicketno */}
-                                    <Item>
-                                        <Label text={this.t("txtTicketno")} alignment="right" />
-                                        <NdTextBox id="txtTicketno" title={this.t("txtTicketno")} parent={this} simple={true} 
-                                            param={this.param.filter({ELEMENT:'txtTicketno',USERS:this.user.CODE})}
-                                            access={this.access.filter({ELEMENT:'txtTicketno',USERS:this.user.CODE})}
-                                            onValueChanged={(e)=>
-                                            {
-                                            
-                                            }}>
-                                        </NdTextBox>
-                                    </Item>
-                                       {/* txtItem */}
-                                       <Item>                                    
-                                    <Label text={this.t("txtItem")} alignment="right" />
-                                    <NdTextBox id="txtItem" parent={this} simple={true} tabIndex={this.tabIndex}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    showClearButton = {true}
-                                    button=
-                                    {
-                                        [
-                                            {
-                                                id:'01',
-                                                icon:'more',
-                                                onClick:()=>
-                                                {
-                                                    this.pg_txtItem.show()
-                                                    this.pg_txtItem.onClick = (data) =>
-                                                    {
-                                                        this.txtItem.setState({value:data[0].CODE})
-                                                    }
-                                                }
-                                            },
-                                        ]
-                                    }
-                                    param={this.param.filter({ELEMENT:'txtItem',USERS:this.user.CODE})} 
-                                    access={this.access.filter({ELEMENT:'txtItem',USERS:this.user.CODE})}     
-                                    selectAll={true}                           
-                                    >     
-                                    </NdTextBox>      
-                                    {/* STOK SEÇİM POPUP */}
-                                    <NdPopGrid id={"pg_txtItem"} parent={this} container={"#root"} 
-                                    visible={false}
-                                    position={{of:'#root'}} 
-                                    showTitle={true} 
-                                    showBorders={true}
-                                    width={'90%'}
-                                    height={'90%'}
-                                    title={this.t("pg_txtItem.title")} 
-                                    search={true}
-                                    selection={{mode:"single"}} 
-                                    data = 
-                                    {{
-                                        source:
-                                        {
-                                            select:
-                                            {
-                                                query : "SELECT GUID,CODE,NAME FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
-                                                param : ['VAL:string|50']
-                                            },
-                                            sql:this.core.sql
-                                        }
-                                    }}
-                                    button=
-                                    {
-                                        [
-                                            {
-                                                id:'tst',
-                                                icon:'more',
-                                                onClick:()=>
-                                                {
-                                                }
-                                            }
-                                        ]
-                                    }
-                                    >
-                                        <Column dataField="CODE" caption={this.t("pg_txtItem.clmCode")} width={150} />
-                                        <Column dataField="NAME" caption={this.t("pg_txtItem.clmName")} width={650} defaultSortOrder="asc" />
-                                    </NdPopGrid>
-                                </Item>
-                                {/* ckhDoublePay */}
-                                <Item>
-                                    <Label text={this.t("ckhDoublePay")} alignment="right" />
-                                    <NdCheckBox id="ckhDoublePay" parent={this} defaultValue={false}
-                                    param={this.param.filter({ELEMENT:'ckhDoublePay',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'ckhDoublePay',USERS:this.user.CODE})}/>
                                 </Item>
                             </Form>
                         </div>
@@ -533,6 +258,7 @@ export default class salesOrdList extends React.PureComponent
                             headerFilter={{visible:true}}
                             sorting={{ mode: 'single' }}
                             height={600}
+                            width={"100%"}
                             columnAutoWidth={true}
                             allowColumnReordering={true}
                             allowColumnResizing={true}
@@ -546,16 +272,9 @@ export default class salesOrdList extends React.PureComponent
                                 <Scrolling mode="virtual" />
                                 <Export fileName={this.lang.t("menu.pos_02_001")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="DATE" caption={this.t("grdSaleTicketReport.clmDate")} visible={true} width={150}/> 
-                                <Column dataField="TIME" caption={this.t("grdSaleTicketReport.clmTime")} visible={true} width={100}/> 
-                                <Column dataField="USERS" caption={this.t("grdSaleTicketReport.slmUser")} visible={true} width={100}/> 
-                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdSaleTicketReport.clmCustomer")} visible={true} width={300}/> 
-                                <Column dataField="DISCOUNT" caption={this.t("grdSaleTicketReport.clmDiscount")} visible={true} width={100} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
-                                <Column dataField="LOYALYT" caption={this.t("grdSaleTicketReport.clmLoyalyt")} visible={true} width={100} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
-                                <Column dataField="HT" caption={this.t("grdSaleTicketReport.clmHT")} visible={true} width={100} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
-                                <Column dataField="TVA" caption={this.t("grdSaleTicketReport.clmVTA")} visible={true} width={100} format={{ style: "currency", currency: "EUR",precision: 2}}/>  
-                                <Column dataField="TTC" caption={this.t("grdSaleTicketReport.clmTTC")} visible={true} width={100} format={{ style: "currency", currency: "EUR",precision: 2}}/>  
-                                <Column dataField="POS_ID" caption={this.t("grdSaleTicketReport.clmTicketID")} visible={true} /> 
-
+                                <Column dataField="LUSER_NAME" caption={this.t("grdSaleTicketReport.clmUser")} visible={true} width={150}/> 
+                                <Column dataField="TICKET_ID" caption={this.t("grdSaleTicketReport.clmTicketId")} visible={true} width={200}/> 
+                                <Column dataField="DESCRIPTION" caption={this.t("grdSaleTicketReport.clmDescription")} visible={true} width={400}/> 
                             </NdGrid>
                         </div>
                     </div>
@@ -579,7 +298,7 @@ export default class salesOrdList extends React.PureComponent
                           <div className="col-1 pe-0"></div>
                             <div className="col-7 pe-0">
                             <NdGrid id="grdSaleTicketItems" parent={this} 
-                                selection={{mode:"multiple"}} 
+                                selection={{mode:"single"}} 
                                 showBorders={true}
                                 filterRow={{visible:true}} 
                                 headerFilter={{visible:true}}
@@ -600,13 +319,24 @@ export default class salesOrdList extends React.PureComponent
                             </div>
                             <div className="col-3 ps-0">
                             <NdGrid id="grdSaleTicketPays" parent={this} 
-                                selection={{mode:"multiple"}} 
+                                selection={{mode:"single"}} 
                                 showBorders={true}
                                 filterRow={{visible:true}} 
                                 headerFilter={{visible:true}}
                                 columnAutoWidth={true}
                                 allowColumnReordering={true}
                                 allowColumnResizing={true}
+                                onRowPrepared={(e) =>
+                                {
+                                    if(e.rowType == 'data' && e.data.DELETED == false)
+                                    {
+                                        e.rowElement.style.color ="green"
+                                    }
+                                    else if(e.rowType == 'data' && e.data.DELETED == true)
+                                    {
+                                        e.rowElement.style.color ="blue"
+                                    }
+                                }}
                                 onRowClick={async(e)=>
                                     {
                                         if(this.lastPosPayDt.length > 0)

@@ -56,7 +56,7 @@ export default class barcodeCard extends React.PureComponent
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT BARCODE FROM ITEM_BARCODE_vw_01 WHERE BARCODE = @CODE",
+                    query :"SELECT BARCODE,ITEM_GUID,ITEM_NAME,ITEM_CODE FROM ITEM_BARCODE_vw_01 WHERE BARCODE = @CODE",
                     param : ['CODE:string|50'],
                     value : [pCode]
                 }
@@ -72,7 +72,14 @@ export default class barcodeCard extends React.PureComponent
                     }
                     
                     await dialog(tmpConfObj);
-                    this.getBarcode(tmpData.result.recordset[0].BARCODE)
+                    let tmpEmpty = {...this.itemBarcodeObj.empty};
+                    tmpEmpty.BARCODE = ""
+                    tmpEmpty.ITEM_GUID = tmpData.result.recordset[0].ITEM_GUID
+                    tmpEmpty.ITEM_NAME = tmpData.result.recordset[0].ITEM_NAME
+                    tmpEmpty.ITEM_CODE = tmpData.result.recordset[0].ITEM_CODE
+                    tmpEmpty.UNIT_GUID = ''
+                    this.itemBarcodeObj.addEmpty(tmpEmpty);  
+                    this._getUnit( tmpData.result.recordset[0].ITEM_GUID)
                     resolve(2) //KAYIT VAR
                 }
                 else
@@ -238,7 +245,6 @@ export default class barcodeCard extends React.PureComponent
                                                             tmpEmpty.ITEM_NAME = data[0].NAME
                                                             tmpEmpty.ITEM_CODE = data[0].CODE
                                                             tmpEmpty.UNIT_GUID = ''
-                                                            console.log(tmpEmpty)
                                                             this.itemBarcodeObj.addEmpty(tmpEmpty);  
                                                             this._getUnit(data[0].GUID)
                                                         }
@@ -292,7 +298,7 @@ export default class barcodeCard extends React.PureComponent
                                  {/* txtBarcode */}
                                  <Item>                                    
                                     <Label text={this.t("txtBarcode")} alignment="right" />
-                                    <NdTextBox id="txtBarcode" parent={this} simple={true} dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"BARCODE"}}  validationGroup={"frmBarcode"  + this.tabIndex}
+                                    <NdTextBox id="txtBarcode" parent={this} simple={true} dt={{data:this.itemBarcodeObj.dt('ITEM_BARCODE'),field:"BARCODE"}}  placeholder={this.t("barcodePlace")} validationGroup={"frmBarcode"  + this.tabIndex}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     button=
                                     {
@@ -338,6 +344,9 @@ export default class barcodeCard extends React.PureComponent
                                     param={this.param.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})} 
                                     access={this.access.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}                                
                                     >     
+                                     <Validator validationGroup={"frmBarcode"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validCode")} />
+                                    </Validator>   
                                     </NdTextBox>      
                                     {/* BARCODE SEÇİM POPUP */}
                                     <NdPopGrid id={"pg_txtBarcode"} parent={this} container={"#root"} 

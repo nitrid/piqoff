@@ -16,7 +16,7 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdTagBox from '../../../../core/react/devex/tagbox.js';
@@ -37,7 +37,11 @@ export default class endOfDay extends React.PureComponent
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.docObj = new docCls()
+        this.btnGetDetail = this.btnGetDetail.bind(this)
         this.message = ''
+        this.lastPosSaleDt = new datatable();
+        this.lastPosPayDt = new datatable();
+        this.state={ticketId :""}
 
         this.finishButtonClick = this.finishButtonClick.bind(this)
         ReactWizard.defaultProps = {
@@ -114,7 +118,8 @@ export default class endOfDay extends React.PureComponent
               groupBy : this.groupList,
               select : 
               {
-                  query : "SELECT *,CONVERT(NVARCHAR,DOC_DATE,104) AS DATE,SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,25) AS TICKET_ID FROM POS_VW_01 WHERE STATUS = 0 ORDER BY DOC_DATE"
+                  query : "SELECT *,CONVERT(NVARCHAR,DOC_DATE,104) AS DATE,SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,25) AS TICKET_ID," + 
+                  "ISNULL((SELECT TOP 1 DESCRIPTION FROM POS_EXTRA WHERE POS_EXTRA.POS_GUID =POS_VW_01.GUID AND TAG = 'PARK DESC' ),'') AS DESCRIPTION FROM POS_VW_01 WHERE STATUS = 0 ORDER BY DOC_DATE "
               },
               sql : this.core.sql
           }
@@ -133,6 +138,65 @@ export default class endOfDay extends React.PureComponent
 
       await this.grdAdvance.dataRefresh({source:this.docObj.docCustomer.dt('DOC_CUSTOMER')});
       
+    }
+    async btnGetDetail(pGuid)
+    {
+        this.lastPosSaleDt.selectCmd = 
+        {
+            query :  "SELECT * FROM POS_SALE_VW_01  WHERE POS_GUID = @POS_GUID ",
+            param : ['POS_GUID:string|50'],
+            value : [pGuid]
+        }
+        
+        await this.lastPosSaleDt.refresh()
+        await this.grdSaleTicketItems.dataRefresh({source:this.lastPosSaleDt});
+        
+        this.lastPosPayDt.selectCmd = 
+        {
+            query :  "SELECT (AMOUNT-CHANGE) AS LINE_TOTAL,* FROM POS_PAYMENT_VW_01  WHERE POS_GUID = @POS_GUID ",
+            param : ['POS_GUID:string|50'],
+            value : [pGuid]
+        }
+        this.lastPosPayDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_POS_PAYMENT_INSERT] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@POS = @PPOS, " +
+                    "@TYPE = @PTYPE, " +
+                    "@LINE_NO = @PLINE_NO, " +
+                    "@AMOUNT = @PAMOUNT, " + 
+                    "@CHANGE = @PCHANGE ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
+            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE']
+        } 
+        this.lastPosPayDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_POS_PAYMENT_UPDATE] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@POS = @PPOS, " +
+                    "@TYPE = @PTYPE, " +
+                    "@LINE_NO = @PLINE_NO, " +
+                    "@AMOUNT = @PAMOUNT, " + 
+                    "@CHANGE = @PCHANGE ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
+            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE']
+        } 
+        this.lastPosPayDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_POS_PAYMENT_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@UPDATE = 1, " +
+                    "@GUID = @PGUID, " + 
+                    "@POS_GUID = @PPOS_GUID ", 
+            param : ['PCUSER:string|25','PGUID:string|50','PPOS_GUID:string|50'],
+            dataprm : ['CUSER','GUID','POS_GUID']
+        }
+        await this.lastPosPayDt.refresh()
+        await this.grdSaleTicketPays.dataRefresh({source:this.lastPosPayDt});
+
+        this.popDetail.show()
     }
     async finishButtonClick()
     {
@@ -484,6 +548,21 @@ export default class endOfDay extends React.PureComponent
                                 <h2>{this.t("advanceMsg2")}</h2>
                               </div>
                             </div>
+                            <div>
+                              <Form colCount={3}>
+                                <EmptyItem/>
+                                <Item>
+                                <NdButton text={this.t("addAdvance")}
+                                onClick={async ()=>
+                                  {       
+                                    this.dtAdvanceDate.value = moment(new Date()).add(1,'days').format("YYYY-MM-DD")
+                                    this.docObj.load({DOC_DATE:this.dtAdvanceDate.value,DOC_TYPE:201})
+                                    this.popAdvance.show()
+                                  }}
+                                />
+                                </Item>
+                              </Form>
+                            </div>
                           </div>
                         </NdPopUp>
                   </div> 
@@ -495,7 +574,7 @@ export default class endOfDay extends React.PureComponent
                       showTitle={true}
                       title={this.t("popOpenTike.title")}
                       container={"#root"} 
-                      width={'700'}
+                      width={'900'}
                       height={'500'}
                       position={{of:'#root'}}
                       >
@@ -510,15 +589,21 @@ export default class endOfDay extends React.PureComponent
                                       height={350} 
                                       width={'100%'}
                                       dbApply={false}
+                                      onRowDblClick={async(e)=>
+                                      {
+                                        this.btnGetDetail(e.data.GUID)
+                                        this.setState({ticketId:e.data.TICKET_ID})
+                                      }}
                                       onRowRemoved={async (e)=>{
                                       }}
                                       >
                                           <Scrolling mode="virtual" />
                                           <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
-                                          <Column dataField="CUSER_NAME" caption={this.t("grdOpenTike.clmUser")} width={120}  headerFilter={{visible:true}}/>
-                                          <Column dataField="DEVICE" caption={this.t("grdOpenTike.clmDevice")} width={100}  headerFilter={{visible:true}}/>
-                                          <Column dataField="DATE" caption={this.t("grdOpenTike.clmDate")} width={150} allowEditing={false} />
-                                          <Column dataField="TICKET_ID" caption={this.t("grdOpenTike.clmTicketId")} width={150}  headerFilter={{visible:true}}/>
+                                          <Column dataField="CUSER_NAME" caption={this.t("grdOpenTike.clmUser")} width={110}  headerFilter={{visible:true}}/>
+                                          <Column dataField="DEVICE" caption={this.t("grdOpenTike.clmDevice")} width={80}  headerFilter={{visible:true}}/>
+                                          <Column dataField="DATE" caption={this.t("grdOpenTike.clmDate")} width={100} allowEditing={false} />
+                                          <Column dataField="TICKET_ID" caption={this.t("grdOpenTike.clmTicketId")} width={180}  headerFilter={{visible:true}}/>
+                                          <Column dataField="DESCRIPTION" caption={this.t("grdOpenTike.clmDescription")} width={250}  headerFilter={{visible:true}}/>
                                   </NdGrid>
                              </Item>
                           </Form>
@@ -648,6 +733,81 @@ export default class endOfDay extends React.PureComponent
                           </Form>
                       </NdPopUp>
                     </div>  
+                    {/* Detay Popup */}
+                    <NdPopUp parent={this} id={"popDetail"} 
+                        visible={false}                        
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popDetail.title")}
+                        container={"#root"} 
+                        width={'100%'}
+                        height={'100%'}
+                        position={{of:'#root'}}
+                        >
+                           <div className="row">
+                         <div className="col-1 pe-0"></div>
+                            <div className="col-7 pe-0">
+                            {this.t("TicketId")} : {this.state.ticketId}
+                            </div>
+                         </div>
+                          <div className="row">
+                          <div className="col-1 pe-0"></div>
+                            <div className="col-7 pe-0">
+                            <NdGrid id="grdSaleTicketItems" parent={this} 
+                                selection={{mode:"multiple"}} 
+                                showBorders={true}
+                                filterRow={{visible:true}} 
+                                headerFilter={{visible:true}}
+                                columnAutoWidth={true}
+                                allowColumnReordering={true}
+                                allowColumnResizing={true}
+                               
+                                >                            
+                                    <Paging defaultPageSize={20} />
+                                    <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
+                                    <Export fileName={this.lang.t("menu.pos_02_001")} enabled={true} allowExportSelectedData={true} />
+                                    <Column dataField="BARCODE" caption={this.t("grdSaleTicketItems.clmBarcode")} visible={true} width={150}/> 
+                                    <Column dataField="ITEM_NAME" caption={this.t("grdSaleTicketItems.clmName")} visible={true} width={250}/> 
+                                    <Column dataField="QUANTITY" caption={this.t("grdSaleTicketItems.clmQuantity")} visible={true} width={100}/> 
+                                    <Column dataField="PRICE" caption={this.t("grdSaleTicketItems.clmPrice")} visible={true} width={150} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
+                                    <Column dataField="TOTAL" caption={this.t("grdSaleTicketItems.clmTotal")} visible={true} width={150} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
+                            </NdGrid>
+                            </div>
+                            <div className="col-3 ps-0">
+                            <NdGrid id="grdSaleTicketPays" parent={this} 
+                                selection={{mode:"multiple"}} 
+                                showBorders={true}
+                                filterRow={{visible:true}} 
+                                headerFilter={{visible:true}}
+                                columnAutoWidth={true}
+                                allowColumnReordering={true}
+                                allowColumnResizing={true}
+                                onRowClick={async(e)=>
+                                    {
+                                        if(this.lastPosPayDt.length > 0)
+                                        {
+                                            this.rbtnTotalPayType.value = 0
+                                            this.lastPayRest.value = this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT') < 0 ? 0 : Number(this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT'))
+                                            this.txtPopLastTotal.value = this.lastPosSaleDt[0].GRAND_TOTAL;
+                                            this.popLastTotal.show()
+    
+                                            //HER EKLEME İŞLEMİNDEN SONRA İLK SATIR SEÇİLİYOR.
+                                            setTimeout(() => 
+                                            {
+                                                this.grdLastTotalPay.devGrid.selectRowsByIndexes(0)
+                                            }, 100);
+                                        }
+                                    }}
+                                >                            
+                                    <Paging defaultPageSize={20} />
+                                    <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
+                                    <Export fileName={this.lang.t("menu.pos_02_001")} enabled={true} allowExportSelectedData={true} />
+                                    <Column dataField="PAY_TYPE_NAME" caption={this.t("grdSaleTicketPays.clmPayName")} visible={true} width={155}/> 
+                                    <Column dataField="LINE_TOTAL" caption={this.t("grdSaleTicketPays.clmTotal")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}  width={150}/> 
+                            </NdGrid>
+                            </div>
+                            </div>
+                    </NdPopUp>
             </div>
         )
     }

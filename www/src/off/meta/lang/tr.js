@@ -128,6 +128,7 @@ export const langTr =
         pos_02_002 : "Müşteri Puanı Raporu",
         pos_02_003 : "Pos Satış Raporu",
         pos_02_004 : "Pos Satış Detay Raporu",
+        pos_02_005 : "Değişmiş Fişler Raporu",
         pos_03 :"Operasyonlar",
         pos_03_001 : "Gün Sonu",
         promo: "Promosyon",
@@ -455,6 +456,7 @@ export const langTr =
         MainUnit :"Bu Barkod Ana Birime Tanımlanacaktır",
         SubUnit : "Bu Barkod Alt Birime Tanımlanacaktır",
         txtUnitTypeName :"Açıklama",
+        barcodePlace : "Seçilen Stok için Eklemek İstediğiniz Barkodu Giriniz..",
         pg_txtItem:
         {
             title: "Ürün Seçim",
@@ -6174,7 +6176,8 @@ export const langTr =
             clmUser : "Kullanıcı",
             clmDevice : "Cihaz",
             clmDate : "Tarih",
-            clmTicketId : "Fiş No"
+            clmTicketId : "Fiş No",
+            clmDescription :"Açıklama",
         }
     },
     pos_02_002 : // "Müşteri Puanı Raporu"
@@ -6237,8 +6240,107 @@ export const langTr =
         lineDelete :"Satır İptal", 
         cancel : "Vazgeç", 
     },
+    pos_02_005 : // "Satış Fiş Raporu",
+    {
+        TicketId :"Fiş I.D",
+        cmbCustomer :"Cari",
+        btnGet :"Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        txtCustomerCode : "Cari",
+        cmbDevice :"Cihaz",
+        txtTicketno : "Fiş I.D",
+        numFirstTicketAmount : "Alt Tutar",
+        numLastTicketAmount : "Üst Tutar",
+        cmbUser :"Kulanıcı",
+        txtItem :"Ürün Kodu",
+        ckhDoublePay : "Birden Fazla Ödeme",
+        cmbType :"Açıklama Tipi",
+        cmbTypeData : 
+        {
+            parkDesc : "Parka Alınan",
+            fullDelete : "Satış İptali",
+            rowDelete : "Satır İptali",
+            priceChange : "Fiyat Değişikliği",
+        },
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        grdSaleTicketReport: 
+        {
+            clmUser: "Kullaıcı",
+            clmDate: "Tarih",
+            clmTicketId: "Fiş I.D",
+            clmDescription: "Açıklama",
+        },
+        pg_txtItem:
+        {
+            title: "Ürün Seçim",
+            clmCode: "KODU",
+            clmName: "ADI", 
+        },
+        grdSaleTicketItems :
+        {
+            clmBarcode : "Barkod",
+            clmName : "Ürün Adı",
+            clmQuantity : "Miktar",
+            clmPrice : "Fiyat",
+            clmTotal : "Tutar"
+        },
+        grdSaleTicketPays : 
+        {
+            clmPayName : "Ödeme Tipi", 
+            clmTotal : "Tutar",
+        },
+        popDetail : 
+        {
+            title : "Fiş Detayı"
+        },
+        cmbPayType : 
+        {
+            title : "Ödeme Tipi",
+            esc:"Nakit",
+            cb : "K. Kartı",
+            check : "Çek",
+            ticket : "T. Rest",
+            bonD : "İade Fişi",
+            avoir : "İade",
+            virment : "Havale",
+            prlv :"Oto. Ödeme",
+            all :"Tümü",
+        },
+        payChangeNote : "Fiş üzerinde yapılan değişiklikler istisnai olarak yapılmalı ve hataların düzeltilmesine izin verilmelidir!",
+        payChangeNote2 : "Değişikliklerin geçmişi kaydedilir!",
+        txtPayChangeDescPlace : "Lütfen Açıklama Giriniz",
+        txtPayChangeDesc :"Ödeme tipi hatalı girilmiştir.Düzeltmesi yapıldı.",
+        popLastTotal : 
+        {
+            title : "Tahsilat"
+        },
+        trDeatil: "T.R Detay",
+        lineDelete :"Satır İptal",
+        cancel : "Vazgeç",
+        popOpenTike :
+        {
+            title : "Tamamlanmamış Fişler"
+        },
+        grdOpenTike: 
+        {
+            clmUser : "Kullanıcı",
+            clmDevice : "Cihaz",
+            clmDate : "Tarih",
+            clmTicketId : "Fiş No",
+            clmDescription :"Açıklama",
+        }
+    },
     pos_03_001 : // Gün Sonu",
     {
+        TicketId :"Fiş I.D",
         title : "GÜN SONU İŞLEMİ",
         start :"Başlangıç",
         advance : "Avans",
@@ -6270,7 +6372,8 @@ export const langTr =
             clmUser : "Kullanıcı",
             clmDevice : "Cihaz",
             clmDate : "Tarih",
-            clmTicketId : "Fiş No"
+            clmTicketId : "Fiş No",
+            clmDescription :"Açıklama",
         },
         popAdvance : 
         {
@@ -6296,7 +6399,24 @@ export const langTr =
             msg: "Bu kasaya avans girilmiş ! Lütfen Grid Üzerinden düzenleyiniz..."
         },
         advanceMsg1 : "Lütfen Avans Tutarınızın",
-        advanceMsg2 : "Olduğundan Emin Olunuz"
+        advanceMsg2 : "Olduğundan Emin Olunuz",
+        grdSaleTicketItems :
+        {
+            clmBarcode : "Barkod",
+            clmName : "Ürün Adı",
+            clmQuantity : "Miktar",
+            clmPrice : "Fiyat",
+            clmTotal : "Tutar"
+        },
+        grdSaleTicketPays : 
+        {
+            clmPayName : "Ödeme Tipi", 
+            clmTotal : "Tutar",
+        },
+        popDetail : 
+        {
+            title : "Fiş Detayı"
+        },
     },
     tkf_01_001 : // "Alış Teklifi Listesi",
     {
