@@ -1635,7 +1635,7 @@ export default class salesInvoice extends React.PureComponent
                                             await dialog(tmpConfObj);
                                         }
                                     }}/>
-                                     <Button icon="increaseindent" text="Toplu Ürün Ekleme"
+                                     <Button icon="increaseindent" text={this.lang.t("collectiveItemAdd")}
                                     validationGroup={"frmSalesInv"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {

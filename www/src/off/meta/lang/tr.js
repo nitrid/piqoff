@@ -23,6 +23,7 @@ export const langTr =
     txtCardRead :"Lütfen Kullanıcı Kartınızı Okutunuz.",
     checkAll :"Tümünü Uygula",
     msgUserAccess : "Giriş Yetkiniz Yok",
+    collectiveItemAdd: "Toplu Ürün Ekleme",
     popPassword : 
     {
         title: "Kullanıcı Şifrenizi Giriniz",
@@ -206,6 +207,10 @@ export const langTr =
         txtTotalExtraCost : "Ek Maliyetler",
         clmtaxSugar : "Şeker Vergisi",
         priceUpdate : "Fiyat Güncelle",
+        underUnitPrice : "Alt Birim Fiyatı",
+        minBuyPrice : "Minimum Alış Fiyatı",
+        maxBuyPrice : "Maximum Alış Fiyatı",
+        sellPriceAdd : "Satış Fiyatı Ekle",
         pg_txtRef:
         {
             title: "Stok Seçimi",

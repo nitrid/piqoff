@@ -1419,7 +1419,7 @@ export default class itemCard extends React.PureComponent
                                             <Toolbar>
                                                 <Item location="after">
                                                         <Button icon="add"
-                                                        text={'Satış Fiyat Ekle'}
+                                                        text={this.t("sellPriceAdd")}
                                                         onClick={()=>
                                                         {                                                        
                                                             this.dtPopPriStartDate.value = "1970-01-01"
@@ -1519,7 +1519,7 @@ export default class itemCard extends React.PureComponent
                                 <Item title={this.t("tabTitleUnit")}>
                                     <div className='row px-2 py-2'>
                                         <div className='col-2'>
-                                            <NdTextBox id="txtUnderUnitFiyat" parent={this} title={"Alt Birim Fiyatı"} titleAlign={"top"}/>
+                                            <NdTextBox id="txtUnderUnitFiyat" parent={this} title={this.t("underUnitPrice")} titleAlign={"top"}/>
                                         </div>
                                         <div className='col-10'>
                                             <Toolbar>
@@ -1555,7 +1555,7 @@ export default class itemCard extends React.PureComponent
                                             >
                                                 <Paging defaultPageSize={5} />
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                                <Column dataField="TYPE_NAME" caption={this.t("grdUnit.clmType")} allowEditing={false}/>
+                                                <Column dataField="TYPE_NAME" caption={this.t("grdUnit.clmType")} width={250} allowEditing={false}/>
                                                 <Column dataField="NAME" caption={this.t("grdUnit.clmName")} allowEditing={false}/>
                                                 <Column dataField="FACTOR" caption={this.t("grdUnit.clmFactor")}/>
                                                 <Column dataField="WEIGHT" caption={this.t("grdUnit.clmWeight")}/>
@@ -1612,10 +1612,10 @@ export default class itemCard extends React.PureComponent
                                 <Item title={this.t("tabTitleCustomer")}>
                                     <div className='row px-2 py-2'>
                                         <div className='col-2'>
-                                            <NdTextBox id="txtMinAlisFiyat" parent={this} title={"Min. Alış Fiyatı"} titleAlign={"top"}/>
+                                            <NdTextBox id="txtMinAlisFiyat" parent={this} title={this.t("minBuyPrice")} titleAlign={"top"}/>
                                         </div>
                                         <div className='col-2'>
-                                            <NdTextBox id="txtMaxAlisFiyat" parent={this} title={"Max. Alış Fiyatı"} titleAlign={"top"}/>
+                                            <NdTextBox id="txtMaxAlisFiyat" parent={this} title={this.t("maxBuyPrice")} titleAlign={"top"}/>
                                         </div>
                                         <div className='col-8'>
                                             <Toolbar>
