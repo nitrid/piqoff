@@ -328,7 +328,8 @@ export const langFr =
             clmMulticode: "Code Fournisseur",
             clmCustomer: "Fournisseur",
             clmCustomerPrice: "Prix Achat",
-            clmShop: "Magasin"
+            clmShop: "Magasin",
+            clmDate: "Güncelleme Tarihi" //BAK
         },
         msgRef:
         {
@@ -1531,7 +1532,7 @@ export const langFr =
             clmMulticode : "Code Fournisseur",
             clmUnit : "Unité",
             clmBarcode : "Code barre",
-            clmCostPrice : "Prix achat",
+            clmCostPrice : "Prix de Revient",
             clmPriceSale : "Prix Vente",
             clmVat : "Taxe",
             clmMinPrice : "Prix Min",
@@ -6386,7 +6387,8 @@ export const langFr =
         },
         popAdvance : 
         {
-            title : "Fonde De Caisse"
+            title : "Avans",   // BAK
+            msg :"Lütfen Avans Tutarınızı Giriniz.."   // BAK
         },
         txtPopAdvance :"Total",
         btnPopAdd : "Valide",
@@ -6425,6 +6427,13 @@ export const langFr =
         popDetail : 
         {
             title : "Detaille ticket"
+        },
+        msgZeroQuantity: //bak
+        { //bak
+            title: "Dikkat", //bak
+            btn01: "İptal", //bak
+            btn02: "Devam", //bak
+            msg: "Girmiş olduğunuz tutar 0€ ! Devam etmek istediğinizden eminmisiniz.." //bak
         },
     },
     tkf_01_001 : // "Alış Teklifi Listesi",

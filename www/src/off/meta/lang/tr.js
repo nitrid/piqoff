@@ -328,7 +328,8 @@ export const langTr =
             clmMulticode: "T. Kodu",
             clmCustomer: "Tedarikçi",
             clmCustomerPrice: "T. Fiyatı",
-            clmShop: "Şube"
+            clmShop: "Şube",
+            clmDate: "Güncelleme Tarihi"
         },
         msgRef:
         {
@@ -6386,7 +6387,8 @@ export const langTr =
         },
         popAdvance : 
         {
-            title : "Avans Girişi"
+            title : "Avans",
+            msg :"Lütfen Avans Tutarınızı Giriniz.."
         },
         txtPopAdvance :"Tutar",
         btnPopAdd : "Ekle",
@@ -6425,6 +6427,13 @@ export const langTr =
         popDetail : 
         {
             title : "Fiş Detayı"
+        },
+        msgZeroQuantity:
+        {
+            title: "Dikkat",
+            btn01: "İptal",
+            btn02: "Devam",
+            msg: "Girmiş olduğunuz tutar 0€ ! Devam etmek istediğinizden eminmisiniz.."
         },
     },
     tkf_01_001 : // "Alış Teklifi Listesi",
