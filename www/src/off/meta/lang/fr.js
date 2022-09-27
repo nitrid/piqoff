@@ -1545,8 +1545,8 @@ export const langFr =
             clmStatus : "Etat",
             clmNetMargin : "Marge Nette",
             clmMargin : "Marge Brute",
-            clmCustomerPrice : "Prix Fournisseur",  // BAK
-            clmOrgin : "Orgine"  // BAK
+            clmCustomerPrice : "Prix Fournisseur",
+            clmOrgin : "Origine" 
         },
     },
     stk_03_002 :   //"Fiyat Listesi"
