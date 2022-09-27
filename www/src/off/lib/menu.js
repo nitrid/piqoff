@@ -1,6 +1,5 @@
 export const menu = (e) => 
 {
-    console.log(e)
     return [
         //Stok
         {

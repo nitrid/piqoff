@@ -57,7 +57,6 @@ export default class Navigation extends React.PureComponent
                 tmpMenuData[x]
                 if(tmpMenu[i].id == tmpMenuData[x].id)
                 {
-                    console.log(tmpMenuData[x])
                     if(typeof tmpMenuData[x].visible != 'undefined')
                     {
                         tmpMenu[i].visible = tmpMenuData[x].visible

@@ -112,9 +112,11 @@ export default class labelPrinting extends React.PureComponent
     
         this.lblObj.clearAll()
         this.mainLblObj.clearAll()
-        
+
+        App.instance.setState({isExecute:true})
         await this.lblObj.load({GUID:pGuid});
         this.mainLblObj.load({GUID:pGuid});
+        App.instance.setState({isExecute:false})
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
@@ -320,6 +322,7 @@ export default class labelPrinting extends React.PureComponent
             App.instance.setState({isExecute:true})
             let tmpData = await this.core.sql.execute(tmpQuery) 
             App.instance.setState({isExecute:false})
+            console.log(tmpData)
             if(tmpData.result.recordset.length > 0)
             {
                 for (let i = 0; i < tmpData.result.recordset.length; i++) 
@@ -1275,6 +1278,7 @@ export default class labelPrinting extends React.PureComponent
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
+                                    filterRow={{visible:true}} 
                                     height={'600'} 
                                     width={'100%'}
                                     dbApply={false}

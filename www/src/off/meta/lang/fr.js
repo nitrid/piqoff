@@ -23,6 +23,18 @@ export const langFr =
     txtCardRead :"Veuillez scanner votre badge.",
     checkAll :"Tout saisir",
     msgUserAccess : "Vous n'êtes pas autorisé",
+    popPassword : 
+    {
+        title: "Kullanıcı Şifrenizi Giriniz",  // bak
+        Password : "Şifre",  // bak
+        btnApprove : "Onayla"  // bak
+    },
+    msgPasswordWrong:
+    {
+        title: "Echec",
+        btn01: "OK",
+        msg: "Mot de Passe Erroné"
+    },
     menu:
     {
         stk: "Produit",                
@@ -37,6 +49,7 @@ export const langFr =
         stk_01_004: "Saisie unité",
         stk_01_005: "Saisie multi code barre",
         stk_01_006: "Saisie dépot/magasin",
+        stk_01_007: "Hizmet Tanımları",  // BAK
         stk_02_001: "Document inventaire",
         stk_02_002: "Transfert interne dépot/magasin",
         stk_02_003: "Sortie perte",
@@ -171,7 +184,7 @@ export const langFr =
         txtItemName: "Nom du produit",
         txtShortName: "Désignation Courte",
         chkActive: "Produit Actif",
-        chkCaseWeighed: "Pesée Produit en caisse? ",
+        chkCaseWeighed: "Peser Produit en caisse? ",
         chkLineMerged: "Détacher les Lignes a la Caisse",
         chkTicketRest: "Ticket Rest.",
         txtCostPrice: "Prix de Revient",
@@ -184,11 +197,11 @@ export const langFr =
         tabTitleUnit: "Unités",
         tabTitleBarcode: "Code barre",
         tabTitleCustomer: "Fournisseur",
-        tabExtraCost: "Charge Supplément",
+        tabExtraCost: "Charge Supplément.",
         tabTitleCustomerPrice: "Historique Prix Fournisseur",
         tabTitleSalesContract: "Accord de Vente",
         tabTitleInfo: "Information",
-        tabTitleOtherShop :"Autre information sur les Magasin.",
+        tabTitleOtherShop :"Autre information sur les Magasins",
         txtTaxSugar: "Taux Sucre(100ML/GR)",
         txtTotalExtraCost : "Prix achat",
         clmtaxSugar : "Taxe Sucre",
@@ -315,7 +328,8 @@ export const langFr =
             clmMulticode: "Code Fournisseur",
             clmCustomer: "Fournisseur",
             clmCustomerPrice: "Prix Achat",
-            clmShop: "Magasin"
+            clmShop: "Magasin",
+            clmDate: "Güncelleme Tarihi" //BAK
         },
         msgRef:
         {
@@ -440,7 +454,7 @@ export const langFr =
         cmbItemGenusData :
         {
             item : "Article",
-            service : "Sevice",
+            service : "Service",
             deposit : "Consigné"
         }
     },
@@ -567,6 +581,58 @@ export const langFr =
             msg : "Coffre Saisie déjà enregistré dans notre base ! " ,
         },
         chkActive: "Actif",
+      
+    },
+    stk_01_007 : // "Hizmet Tanımları" // YENİ EKLENDİ KOMPLE BAK
+    {
+        txtCode : "Kodu",
+        txtName :"Adı",
+        cmbType :"Tip",
+        validCode :"Kodu Boş Geçemezsiniz !",
+      
+        pg_txtCode : 
+        {
+            title : "Hizmet Kartı Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI",
+            clmType : "TİPİ",
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgCode : 
+        {
+            title: "Dikkat",
+            btn01: "Kartı Git",
+            btn02: "Tamam",
+            msg : "Girmiş olduğunuz hizmet kodu sistem de kayıtlı !"
+        },
+        chkActive: "Aktif",
+        cmbTax : "Vergi"
       
     },
     stk_02_001 : // Sayım Evrakı"
@@ -1051,7 +1117,7 @@ export const langFr =
         chkLastChange : "Dernière Modification Après Impression" ,
         chkSelectChange :"Dernière Modification Après Date Sélectionnée" ,
         chkSelectPriceChange :"Modification de Prix Vente Après Date Sélectionnée", // BAK
-        btnLabelCombine : "Regrouper Les Etiquette Saisir",
+        btnLabelCombine : "Regrouper Les Etiquettes Saisies",
         chkGroup : "Groupe" ,
         chkCustomer : "Produits Fournisseur",
         chkAllItems : "Produits",
@@ -1066,7 +1132,6 @@ export const langFr =
             clmDocDate : "Date",
             clmCount : "Qte. Scan",
             clmPrint : "Imprimé",
-
         },
         pg_DocsCombine : 
         {
@@ -1443,7 +1508,6 @@ export const langFr =
         },
         validDepot : "Depo Seçmelisiniz",
         validDocDate : "Tarih Seçmelisiniz",
-
     },
     stk_03_001 :  // "Stok Listesi" 
     {
@@ -1468,7 +1532,7 @@ export const langFr =
             clmMulticode : "Code Fournisseur",
             clmUnit : "Unité",
             clmBarcode : "Code barre",
-            clmCostPrice : "Prix achat",
+            clmCostPrice : "Prix de Revient",
             clmPriceSale : "Prix Vente",
             clmVat : "Taxe",
             clmMinPrice : "Prix Min",
@@ -1476,8 +1540,8 @@ export const langFr =
             clmStatus : "Etat",
             clmNetMargin : "Marge Nette",
             clmMargin : "Marge Brute",
-            clmCustomerPrice : "T. Fiyatı",  // BAK
-            clmOrgin : "Menşei"  // BAK
+            clmCustomerPrice : "Prix Fournisseur",  // BAK
+            clmOrgin : "Orgine"  // BAK
         },
     },
     stk_03_002 :   //"Fiyat Listesi"
@@ -1861,8 +1925,6 @@ export const langFr =
         },
         chkTaxSucre : "Taxe sucrée",
         tabTitleDetail : "Information detail"
-        
-
     },
     cri_01_002: // "Adres Tanımları"
     {
@@ -1986,7 +2048,7 @@ export const langFr =
             both : "Tous les Deux",
         },
     },
-    cri_03_001: // "Cari Tanımları"
+    cri_03_001: // "Toplu Cari Tanimlari"
     {
         cmbType :"Type",
         cmbGenus :"Genre",
@@ -2135,8 +2197,6 @@ export const langFr =
             btn02: "OK",
             msg : "Client déja existant!"
         },
-        chkTaxSucre : "Taxe sucrée",
-        tabTitleDetail : "Information detail",
         popSettingCustomer :     //bak
         {    
             title : "Ayarlar",    //bak
@@ -2146,7 +2206,6 @@ export const langFr =
             chkDigit : "EAN Digit"    //bak
         },  
         btnGet : "Kaydet"    //bak
-
     },
     ftr_01_001 : // "Alış Fatura Listesi"
     {
@@ -2620,6 +2679,27 @@ export const langFr =
             title: "Quantité",
             btn01: "Ajoutez",
             msg: "Ajoutez quantité"
+        },
+        msgNewVat : 
+        {
+            title: "Dikkat",  // bak
+            btn01: "Hiç Birini Güncelleme",  // bak
+            btn02: "Seçilen Oranlari Güncelle",  // bak
+            msg: "Fatura ile Sistemde Farkli KDV oranlari mevcut.. "  // bak
+        },  
+        grdNewVat: 
+        {
+            clmCode: "Kodu",    // bak
+            clmName: "Adi",    // bak
+            clmVat: "Sistemdeki KDV",    // bak
+            clmVat2: "Yeni KDV",    // bak
+        },
+        serviceAdd : "Hizmet Ekle",  // bak
+        pg_service : 
+        {
+            title : "Hizmetler",   // bak
+            clmCode : "Kod",   // bak
+            clmName : "Adi"   // bak
         },
     },
     ftr_02_002 : // "Satış Faturası"
@@ -5054,6 +5134,12 @@ export const langFr =
             btn01: "OK",
             msg: "Veuillez saisir les zones nécessaire !"
         },
+        msgNotCustomerCount:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: " Adet Ürün Bu Tedarikçiye Tanimli Degil !"
+        },
         msgDelete:
         {
             title: "Attention",
@@ -5080,6 +5166,7 @@ export const langFr =
             clmMargin :"Marje", // BAK
             clmVatExtPrice : "TVA mise appart", // BAK
             clmCostPrice : "Coût", // BAK
+            clmMulticode : "T. Kodu" // bak
         },
         popItems: 
         {
@@ -6109,6 +6196,7 @@ export const langFr =
         btnGet :"Apporter",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom fournisseur",
+        txtAmount : "Toplam Tutar", // BAK
         pg_txtCustomerCode : 
         {
             title : "Choix Fournisseur",
@@ -6162,6 +6250,104 @@ export const langFr =
         lineDelete :"Ligne annulé", 
         cancel : "Abandonne", 
     },
+    pos_02_005 : // "Degismis Fisler Raporu", YENI EKLENDI KOMPLE BAK
+    {
+        TicketId :"Fis I.D",
+        cmbCustomer :"Cari",
+        btnGet :"Getir",
+        dtFirst : "Ilk Tarih",
+        dtLast : "Son Tarih",
+        txtCustomerCode : "Cari",
+        cmbDevice :"Cihaz",
+        txtTicketno : "Fis I.D",
+        numFirstTicketAmount : "Alt Tutar",
+        numLastTicketAmount : "Üst Tutar",
+        cmbUser :"Kulanici",
+        txtItem :"Ürün Kodu",
+        ckhDoublePay : "Birden Fazla Ödeme",
+        cmbType :"Açiklama Tipi",
+        cmbTypeData : 
+        {
+            parkDesc : "Parka Alinan",
+            fullDelete : "Satis Iptali",
+            rowDelete : "Satir Iptali",
+            priceChange : "Fiyat Degisikligi",
+        },
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARI KODU",
+            clmTitle : "CARI ADI",
+            clmTypeName : "TIPI",
+            clmGenusName : "CINSI"
+        },
+        grdSaleTicketReport: 
+        {
+            clmUser: "Kullaici",
+            clmDate: "Tarih",
+            clmTicketId: "Fis I.D",
+            clmDescription: "Açiklama",
+        },
+        pg_txtItem:
+        {
+            title: "Ürün Seçim",
+            clmCode: "KODU",
+            clmName: "ADI", 
+        },
+        grdSaleTicketItems :
+        {
+            clmBarcode : "Barkod",
+            clmName : "Ürün Adi",
+            clmQuantity : "Miktar",
+            clmPrice : "Fiyat",
+            clmTotal : "Tutar"
+        },
+        grdSaleTicketPays : 
+        {
+            clmPayName : "Ödeme Tipi", 
+            clmTotal : "Tutar",
+        },
+        popDetail : 
+        {
+            title : "Fis Detayi"
+        },
+        cmbPayType : 
+        {
+            title : "Ödeme Tipi",
+            esc:"Nakit",
+            cb : "K. Karti",
+            check : "Çek",
+            ticket : "T. Rest",
+            bonD : "Iade Fisi",
+            avoir : "Iade",
+            virment : "Havale",
+            prlv :"Oto. Ödeme",
+            all :"Tümü",
+        },
+        payChangeNote : "Fis üzerinde yapilan degisiklikler istisnai olarak yapilmali ve hatalarin düzeltilmesine izin verilmelidir!",
+        payChangeNote2 : "Degisikliklerin geçmisi kaydedilir!",
+        txtPayChangeDescPlace : "Lütfen Açiklama Giriniz",
+        txtPayChangeDesc :"Ödeme tipi hatali girilmistir.Düzeltmesi yapildi.",
+        popLastTotal : 
+        {
+            title : "Tahsilat"
+        },
+        trDeatil: "T.R Detay",
+        lineDelete :"Satir Iptal",
+        cancel : "Vazgeç",
+        popOpenTike :
+        {
+            title : "Tamamlanmamis Fisler"
+        },
+        grdOpenTike: 
+        {
+            clmUser : "Kullanici",
+            clmDevice : "Cihaz",
+            clmDate : "Tarih",
+            clmTicketId : "Fis No",
+            clmDescription :"Açiklama",
+        }
+    },
     pos_03_001 : // Gün Sonu",
     {
         TicketId :"Ticket I.D",
@@ -6201,7 +6387,8 @@ export const langFr =
         },
         popAdvance : 
         {
-            title : "Fonde De Caisse"
+            title : "Avans",   // BAK
+            msg :"Lütfen Avans Tutarınızı Giriniz.."   // BAK
         },
         txtPopAdvance :"Total",
         btnPopAdd : "Valide",
@@ -6240,6 +6427,13 @@ export const langFr =
         popDetail : 
         {
             title : "Detaille ticket"
+        },
+        msgZeroQuantity: //bak
+        { //bak
+            title: "Dikkat", //bak
+            btn01: "İptal", //bak
+            btn02: "Devam", //bak
+            msg: "Girmiş olduğunuz tutar 0€ ! Devam etmek istediğinizden eminmisiniz.." //bak
         },
     },
     tkf_01_001 : // "Alış Teklifi Listesi",

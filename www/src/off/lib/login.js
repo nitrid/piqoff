@@ -60,6 +60,8 @@ export default class Login extends React.Component
         this.cardIdRead = this.cardIdRead.bind(this)
         this.getUserList = this.getUserList.bind(this)
         this.textValueChanged = this.textValueChanged.bind(this)
+        this.setUser = this.setUser.bind(this)
+
     }
     async componentDidMount()
     {
@@ -90,11 +92,11 @@ export default class Login extends React.Component
             if(this.core.auth.data.ROLE == 'Pos')
             {
                 this.setState({logined:false,alert:this.lang.t("msgUserAccess")})
-                
             }
             else
             {
                 App.instance.setState({logined:true});
+                this.setUser()
             }
         }
         else
@@ -116,6 +118,71 @@ export default class Login extends React.Component
     closePage()
     {
         window.close()
+    }
+    setUser()
+    {
+        App.instance.setState({toolbarItems:[
+            {
+                widget : 'dxButton',
+                location : 'before',
+                options : 
+                {
+                    icon : 'menu',
+                    onClick : () => this.setState({opened: !this.state.opened})
+                }
+            },
+            {
+                widget : 'dxButton',
+                location : 'after',
+                options : 
+                {
+                    text:this.core.auth.data.NAME,
+                    icon : 'card',
+                    onClick : App.instance.UserChange
+                }
+            },
+            {
+                widget : 'dxSelectBox',
+                location : 'after',
+                options : 
+                {
+                    width: 80,
+                    items: [{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"tr",text:"TR"}],
+                    valueExpr: 'id',
+                    displayExpr: 'text',
+                    value: localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'),
+                    onValueChanged: (args) => 
+                    {
+                        localStorage.setItem('lang',args.value)
+                        i18n.changeLanguage(args.value)
+                        locale(args.value)
+                        window.location.reload()
+                    }
+                }
+            },
+            {
+                widget : 'dxButton',
+                location : 'after',
+                options : 
+                {
+                    icon : 'refresh',
+                    onClick : () => window.location.reload()
+                }
+            },
+            {
+                widget : 'dxButton',
+                location : 'after',
+                options : 
+                {
+                    icon : 'fa-solid fa-arrow-right-to-bracket',
+                    onClick : () => 
+                    {                                                        
+                        this.core.auth.logout()
+                        window.location.reload()
+                    }
+                }
+            }
+        ]})
     }
     async cardIdRead()
     {
