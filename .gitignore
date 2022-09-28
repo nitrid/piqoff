@@ -8,3 +8,4 @@ www/public/
 www/node_modules/
 daemon/
 www/log
+log/

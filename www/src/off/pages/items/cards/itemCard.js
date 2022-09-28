@@ -52,6 +52,7 @@ export default class itemCard extends React.PureComponent
         this.otherShopObj.selectCmd =
         {
             query :"SELECT  " +
+            "(CONVERT(NVARCHAR, OTHER_SHOP.UPDATE_DATE, 104) + ' ' + CONVERT(NVARCHAR, OTHER_SHOP.UPDATE_DATE, 24)) AS DATE, " + 
             "OTHER_SHOP.CODE, " +
             "OTHER_SHOP.NAME, " +
             "MAX(OTHER_SHOP.BARCODE) AS BARCODE, " +
@@ -64,7 +65,7 @@ export default class itemCard extends React.PureComponent
             "INNER JOIN OTHER_SHOP_ITEMS AS OTHER_SHOP " +
             "ON BARCODE.BARCODE = OTHER_SHOP.BARCODE " +
             "WHERE BARCODE.ITEM_GUID = @ITEM_GUID " +
-            "GROUP BY OTHER_SHOP.CODE,OTHER_SHOP.NAME, OTHER_SHOP.MULTICODE, OTHER_SHOP.SALE_PRICE, OTHER_SHOP.CUSTOMER_PRICE, OTHER_SHOP.CUSTOMER,OTHER_SHOP.SHOP " ,
+            "GROUP BY OTHER_SHOP.CODE,OTHER_SHOP.NAME, OTHER_SHOP.MULTICODE, OTHER_SHOP.SALE_PRICE, OTHER_SHOP.CUSTOMER_PRICE, OTHER_SHOP.CUSTOMER,OTHER_SHOP.SHOP,OTHER_SHOP.UPDATE_DATE " ,
             param : ['ITEM_GUID:string|50']
         }
         
@@ -547,7 +548,7 @@ export default class itemCard extends React.PureComponent
     async taxSugarValidCheck()
     {
         let tmpData = this.prmObj.filter({ID:'taxSugarGroupValidation'}).getValue()
-        if((typeof tmpData != 'undefined' && Array.isArray(tmpData) && typeof tmpData.find(x => x == this.cmbItemGrp.value) != 'undefined'))
+        if((typeof this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0] != 'undefined') && (typeof tmpData != 'undefined' && Array.isArray(tmpData) && typeof tmpData.find(x => x == this.cmbItemGrp.value) != 'undefined'))
         {
             
             for (let i = 0; i < this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE').length; i++) 
@@ -556,7 +557,7 @@ export default class itemCard extends React.PureComponent
                 {
                     query :"SELECT TAX_SUCRE FROM CUSTOMERS WHERE CODE = @CODE ",
                     param : ['CODE:string|50'],
-                    value : [this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[i].CUSTOMER_CODE]
+                    value : [this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_CODE]
                 }
                 let tmpData = await this.core.sql.execute(tmpQuery) 
                 if(tmpData.result.recordset.length > 0)
@@ -576,30 +577,52 @@ export default class itemCard extends React.PureComponent
         {
             this.setState({isTaxSugar:false})
             this.txtTaxSugar.readOnly = true
-            this.txtTaxSugar.setState({value:0})
         }
     }
     async taxSugarCalculate()
     {
-        let tmpQuery = 
+        if(typeof this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0] != 'undefined')
         {
-            query :"SELECT RATE,PRICE FROM TAX_SUGAR_TABLE_VW_01 WHERE MIN_VALUE <= @VALUE AND MAX_VALUE >= @VALUE AND TYPE =0 ",
-            param : ['VALUE:float'],
-            value : [this.txtTaxSugar.value]
-        }
-        let tmpData = await this.core.sql.execute(tmpQuery) 
-        if(tmpData.result.recordset.length > 0)
-        {
-            let tmpUnit = this.txtUnderUnit.value / 100
-            let tmpTaxSucre = tmpUnit * tmpData.result.recordset[0].PRICE
-            this.taxSugarPrice = Number(tmpTaxSucre.toFixed(3))
-            if(this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE').length > 0)
+            let tmpCheckQuery = 
             {
-                let tmpCost = this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_PRICE + tmpTaxSucre
-                this.txtCostPrice.setState({value:tmpCost})
+                query :"SELECT TAX_SUCRE FROM CUSTOMERS WHERE CODE = @CODE ",
+                param : ['CODE:string|50'],
+                value : [this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_CODE]
             }
-            this.extraCostCalculate()
+            let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
+            if(tmpCheckData.result.recordset.length > 0)
+            {
+                if(tmpCheckData.result.recordset[0].TAX_SUCRE == 1)
+                {
+                    let tmpQuery = 
+                    {
+                        query :"SELECT RATE,PRICE FROM TAX_SUGAR_TABLE_VW_01 WHERE MIN_VALUE <= @VALUE AND MAX_VALUE >= @VALUE AND TYPE =0 ",
+                        param : ['VALUE:float'],
+                        value : [this.txtTaxSugar.value]
+                    }
+                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                    if(tmpData.result.recordset.length > 0)
+                    {
+                        let tmpUnit = this.txtUnderUnit.value / 100
+                        let tmpTaxSucre = tmpUnit * tmpData.result.recordset[0].PRICE
+                        this.taxSugarPrice = Number(tmpTaxSucre.toFixed(3))
+                        if(this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE').length > 0)
+                        {
+                            let tmpCost = this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_PRICE + tmpTaxSucre
+                            this.txtCostPrice.setState({value:tmpCost})
+                            this.txtCostPrice.value= tmpCost.toFixed(2)
+                        }
+                        this.extraCostCalculate()
+                    }
+                }
+                else
+                {
+                    this.taxSugarPrice = 0
+                    this.extraCostCalculate()
+                }
+            }
         }
+       
     }
     extraCostCalculate()
     {
@@ -643,10 +666,18 @@ export default class itemCard extends React.PureComponent
                         {
                             id:'01',
                             icon:'revert',
-                            onClick:()  =>
+                            onClick:async()  =>
                             {
                                 this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[e.rowIndex].CUSTOMER_PRICE_DATE = moment(new Date()).format("DD/MM/YYYY HH:mm:ss")
                                 this.txtCostPrice.value = e.data.CUSTOMER_PRICE
+                                console.log(e)
+                                let tmpQuery = 
+                                {
+                                    query : "UPDATE ITEM_PRICE SET CHANGE_DATE = GETDATE() WHERE GUID =@PRICE_GUID ",
+                                    param : ['PRICE_GUID:string|50'],
+                                    value : [e.data.CUSTOMER_PRICE_GUID]
+                                }
+                                let tmpData = await this.core.sql.execute(tmpQuery) 
                                 // Min ve Max Fiyat 
                                 let tmpMinData = this.prmObj.filter({ID:'ItemMinPricePercent'}).getValue()
                                 let tmpMinPrice = e.data.CUSTOMER_PRICE + (e.data.CUSTOMER_PRICE * tmpMinData) /100
@@ -655,7 +686,6 @@ export default class itemCard extends React.PureComponent
                                 let tmpMAxPrice = e.data.CUSTOMER_PRICE + (e.data.CUSTOMER_PRICE * tmpMaxData) /100
                                 this.txtMaxSalePrice.value = Number((tmpMAxPrice).toFixed(2))
                                 this.taxSugarValidCheck()
-                                console.log(this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE'))
                             }
                         },
                     ]
@@ -1059,9 +1089,9 @@ export default class itemCard extends React.PureComponent
                                     <Label text={this.t("txtCustomer")} alignment="right" />
                                     <NdTextBox id="txtCustomer" parent={this} simple={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    dt={{data:this.itemsObj.dt('ITEM_MULTICODE'),field:"CUSTOMER_CODE",display:"CUSTOMER_NAME"}}
+                                    dt={{data:this.itemsObj.dt('ITEM_MULTICODE'),field:"CUSTOMER_NAME",display:"CUSTOMER_NAME"}}
                                     readOnly={true}
-                                    displayValue={""}
+                                    //displayValue={""}
                                     button={[
                                     {
                                         id:'001',
@@ -1389,7 +1419,7 @@ export default class itemCard extends React.PureComponent
                                             <Toolbar>
                                                 <Item location="after">
                                                         <Button icon="add"
-                                                        text={'Satış Fiyat Ekle'}
+                                                        text={this.t("sellPriceAdd")}
                                                         onClick={()=>
                                                         {                                                        
                                                             this.dtPopPriStartDate.value = "1970-01-01"
@@ -1489,7 +1519,7 @@ export default class itemCard extends React.PureComponent
                                 <Item title={this.t("tabTitleUnit")}>
                                     <div className='row px-2 py-2'>
                                         <div className='col-2'>
-                                            <NdTextBox id="txtUnderUnitFiyat" parent={this} title={"Alt Birim Fiyatı"} titleAlign={"top"}/>
+                                            <NdTextBox id="txtUnderUnitFiyat" parent={this} title={this.t("underUnitPrice")} titleAlign={"top"}/>
                                         </div>
                                         <div className='col-10'>
                                             <Toolbar>
@@ -1525,7 +1555,7 @@ export default class itemCard extends React.PureComponent
                                             >
                                                 <Paging defaultPageSize={5} />
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                                <Column dataField="TYPE_NAME" caption={this.t("grdUnit.clmType")} allowEditing={false}/>
+                                                <Column dataField="TYPE_NAME" caption={this.t("grdUnit.clmType")} width={250} allowEditing={false}/>
                                                 <Column dataField="NAME" caption={this.t("grdUnit.clmName")} allowEditing={false}/>
                                                 <Column dataField="FACTOR" caption={this.t("grdUnit.clmFactor")}/>
                                                 <Column dataField="WEIGHT" caption={this.t("grdUnit.clmWeight")}/>
@@ -1582,20 +1612,13 @@ export default class itemCard extends React.PureComponent
                                 <Item title={this.t("tabTitleCustomer")}>
                                     <div className='row px-2 py-2'>
                                         <div className='col-2'>
-                                            <NdTextBox id="txtMinAlisFiyat" parent={this} title={"Min. Alış Fiyatı"} titleAlign={"top"}/>
+                                            <NdTextBox id="txtMinAlisFiyat" parent={this} title={this.t("minBuyPrice")} titleAlign={"top"}/>
                                         </div>
                                         <div className='col-2'>
-                                            <NdTextBox id="txtMaxAlisFiyat" parent={this} title={"Max. Alış Fiyatı"} titleAlign={"top"}/>
+                                            <NdTextBox id="txtMaxAlisFiyat" parent={this} title={this.t("maxBuyPrice")} titleAlign={"top"}/>
                                         </div>
                                         <div className='col-8'>
                                             <Toolbar>
-                                                <Item location="after">
-                                                        <Button icon="return" text={this.t("priceUpdate")}
-                                                        onClick={()=>
-                                                        {
-                                                            this.txtCostPrice.value = this.grdCustomer.getSelectedData()[0].PRICE
-                                                        }}/>                                                                                                            
-                                                    </Item>
                                                 <Item location="after">
                                                     <Button icon="add"
                                                     onClick={()=>
@@ -1805,6 +1828,7 @@ export default class itemCard extends React.PureComponent
                                             >
                                                 <Paging defaultPageSize={5} />
                                                 <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
+                                                <Column dataField="DATE" caption={this.t("grdOtherShop.clmDate")} />
                                                 <Column dataField="CUSTOMER_PRICE" caption={this.t("grdOtherShop.clmCustomerPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                                 <Column dataField="SALE_PRICE" caption={this.t("grdOtherShop.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                                 <Column dataField="MULTICODE" caption={this.t("grdOtherShop.clmMulticode")} />
@@ -2253,8 +2277,12 @@ export default class itemCard extends React.PureComponent
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popCustomer.txtPopCustomerName")} alignment="right" />
-                                    <NdTextBox id={"txtPopCustomerName"} parent={this} simple={true} editable={true} 
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
+                                    <NdTextBox id={"txtPopCustomerName"} parent={this} simple={true} readOnly={true}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} >
+                                    <Validator validationGroup={"frmItemCustomer" + this.tabIndex}>
+                                            <RequiredRule message="Tedarikci Kodu Giriniz !" />
+                                    </Validator> 
+                                    </NdTextBox>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popCustomer.txtPopCustomerItemCode")} alignment="right" />
@@ -2284,7 +2312,6 @@ export default class itemCard extends React.PureComponent
                                                 {
                                                     let tmpEmptyMulti = {...this.itemsObj.itemMultiCode.empty};
                                                     
-                                                    console.log(this.itemsObj.dt())
                                                     tmpEmptyMulti.CUSER = this.core.auth.data.CODE,  
                                                     tmpEmptyMulti.ITEM_GUID = this.itemsObj.dt()[0].GUID 
                                                     tmpEmptyMulti.CUSTOMER_GUID = this.txtPopCustomerCode.GUID                              

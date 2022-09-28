@@ -48,6 +48,8 @@ export default class promotionCard extends React.PureComponent
     }
     async init()
     {
+        this.clearItemList();
+        
         this.condDt.clear();
         this.appDt.clear();
 
@@ -57,7 +59,7 @@ export default class promotionCard extends React.PureComponent
         this.condDt.push({...this.promo.cond.empty})        
         this.appDt.push({...this.promo.app.empty})  
 
-        await this.lstPromo.dataRefresh({source:[{id:0,text:'Koşul',items:this.condDt},{id:1,text:'Uygulama',items:this.appDt}]});
+        await this.lstPromo.dataRefresh({source:[{id:0,text:'Koşul',items:this.condDt},{id:1,text:'Uygulama',items:this.appDt}]});        
 
         this.promo.ds.on('onRefresh',async(pTblName)  =>
         {            
@@ -66,6 +68,8 @@ export default class promotionCard extends React.PureComponent
     }
     async getPromotion(pCode)
     {
+        this.clearItemList();
+
         this.condDt.clear();
         this.appDt.clear();
 
@@ -88,6 +92,13 @@ export default class promotionCard extends React.PureComponent
 
         await this.core.util.waitUntil(0);
         await this.lstPromo.dataRefresh();
+    }
+    clearItemList()
+    {
+        for (let i = 0; i < 100; i++) 
+        {
+            delete this["itemList" + i]
+        }
     }
     async checkPromotion(pCode)
     {
@@ -200,7 +211,11 @@ export default class promotionCard extends React.PureComponent
     {               
         if(pItem.SECTOR == 'COND')
         {            
-            this["itemList" + pItem.WITHAL] = this.promo.cond.dt().where({WITHAL:pItem.WITHAL})
+            if(typeof this["itemList" + pItem.WITHAL] == 'undefined' || this["itemList" + pItem.WITHAL].length == 0)
+            {
+                this["itemList" + pItem.WITHAL] = this.promo.cond.dt().where({WITHAL:pItem.WITHAL})
+            }
+
             this.state["prmType" + pItem.WITHAL] = pItem.TYPE
 
             return(
@@ -214,7 +229,7 @@ export default class promotionCard extends React.PureComponent
                                 displayExpr="NAME"                       
                                 valueExpr="ID"
                                 value={pItem.TYPE}
-                                data={{source:[{ID:0,NAME:"Stok"},{ID:1,NAME:"Genel Tutar"}]}}
+                                data={{source:[{ID:0,NAME:"Ürün"},{ID:1,NAME:"Genel Tutar"}]}}
                                 onValueChanged={(e)=>
                                 {
                                     if(e.previousValue == 0 && this.promo.cond.dt().where({WITHAL:pItem.WITHAL}).length > 1)
@@ -424,7 +439,7 @@ export default class promotionCard extends React.PureComponent
                                 displayExpr="NAME"                       
                                 valueExpr="ID"
                                 value={pItem.TYPE}
-                                data={{source:[{ID:0,NAME:"İskonto"},{ID:1,NAME:"Para Puan"},{ID:2,NAME:"Hediye Çeki"},{ID:3,NAME:"Stok"},{ID:4,NAME:"Genel İskonto"}]}}  
+                                data={{source:[{ID:0,NAME:"İskonto"},{ID:1,NAME:"Para Puan"},{ID:2,NAME:"Hediye Çeki"},{ID:3,NAME:"Ürün"},{ID:4,NAME:"Genel İskonto"}]}}  
                                 onValueChanged={(e) =>
                                 {
                                     if(this.appDt.where({WITHAL:pItem.WITHAL}).length > 0)
@@ -899,174 +914,174 @@ export default class promotionCard extends React.PureComponent
                             <Form colCount={3} id={"frmPromo"  + this.tabIndex}>
                                 <GroupItem colSpan={3}>
                                     <GroupItem colCount={3}>
-                                    {/* txtCode */}
-                                    <Item>                                    
-                                        <Label text={this.t("txtCode")} alignment="right" />
-                                        <NdTextBox id="txtCode" parent={this} simple={true} tabIndex={this.tabIndex} 
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        dt={{data:this.promo.dt(),field:"CODE"}}
-                                        button=
-                                        {
-                                            [
-                                                {
-                                                    id:'01',
-                                                    icon:'more',
-                                                    onClick:()=>
+                                        {/* txtCode */}
+                                        <Item>                                    
+                                            <Label text={this.t("txtCode")} alignment="right" />
+                                            <NdTextBox id="txtCode" parent={this} simple={true} tabIndex={this.tabIndex} 
+                                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                            dt={{data:this.promo.dt(),field:"CODE"}}
+                                            button=
+                                            {
+                                                [
                                                     {
-                                                        this.pg_txtCode.show()
-                                                        this.pg_txtCode.onClick = (data) =>
+                                                        id:'01',
+                                                        icon:'more',
+                                                        onClick:()=>
                                                         {
-                                                            if(data.length > 0)
+                                                            this.pg_txtCode.show()
+                                                            this.pg_txtCode.onClick = (data) =>
                                                             {
-                                                                this.getPromotion(data[0].CODE)
+                                                                if(data.length > 0)
+                                                                {
+                                                                    this.getPromotion(data[0].CODE)
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    {
+                                                        id:'02',
+                                                        icon:'arrowdown',
+                                                        onClick:()=>
+                                                        {
+                                                            this.txtCode.value = Math.floor(Date.now() / 1000)
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                            onChange={(async()=>
+                                            {
+                                                let tmpResult = await this.checkPromotion(this.txtCode.value)
+                                                if(tmpResult == 3)
+                                                {
+                                                    this.txtCode.value = "";
+                                                }
+                                            }).bind(this)} 
+                                            param={this.param.filter({ELEMENT:'txtCode',USERS:this.user.CODE})} 
+                                            >     
+                                                <Validator validationGroup={"frmPromo"  + this.tabIndex}>
+                                                    <RequiredRule />
+                                                </Validator>  
+                                            </NdTextBox>  
+                                            {/* PROMOSYON SEÇİM POPUP */}
+                                            <NdPopGrid id={"pg_txtCode"} parent={this} container={"#root"} 
+                                            visible={false}
+                                            position={{of:'#root'}} 
+                                            showTitle={true} 
+                                            showBorders={true}
+                                            width={'90%'}
+                                            height={'90%'}
+                                            title={this.t("pg_Grid.title")} 
+                                            data={{source:{select:{query : "SELECT CODE,NAME FROM PROMO_VW_01 GROUP BY CODE,NAME"},sql:this.core.sql}}}
+                                            >
+                                                <Column dataField="CODE" caption={this.t("pg_Grid.clmCode")} width={150} />
+                                                <Column dataField="NAME" caption={this.t("pg_Grid.clmName")} width={650} defaultSortOrder="asc" />
+                                            </NdPopGrid>    
+                                        </Item>
+                                        {/* txtName */}
+                                        <Item colSpan={2}>                                    
+                                            <Label text={this.t("txtName")} alignment="right" />
+                                            <NdTextBox id="txtName" parent={this} simple={true} 
+                                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                            dt={{data:this.promo.dt(),field:"NAME"}}
+                                            />     
+                                        </Item>
+                                        {/* dtStartDate */}
+                                        <Item>
+                                            <Label text={this.t("dtStartDate")} alignment="right" />
+                                            <NdDatePicker simple={true}  parent={this} id={"dtStartDate"} 
+                                            dt={{data:this.promo.dt(),field:"START_DATE"}}
+                                            />
+                                        </Item>
+                                        {/* dtFinishDate */}
+                                        <Item>
+                                            <Label text={this.t("dtFinishDate")} alignment="right" />
+                                            <NdDatePicker simple={true}  parent={this} id={"dtFinishDate"} 
+                                            dt={{data:this.promo.dt(),field:"FINISH_DATE"}}
+                                            />
+                                        </Item>
+                                        {/* cmbDepot */}
+                                        <Item>
+                                            <Label text={this.t("cmbDepot")} alignment="right" />
+                                            <NdSelectBox simple={true} parent={this} id="cmbDepot"
+                                            dt={{data:this.promo.dt(),field:"DEPOT_GUID",display:"DEPOT_NAME"}}
+                                            displayExpr="DEPOT_NAME"                       
+                                            valueExpr="DEPOT_GUID"
+                                            data={{source:{select:{query : "SELECT GUID AS DEPOT_GUID,NAME AS DEPOT_NAME FROM DEPOT_VW_01 ORDER BY CODE ASC"},sql:this.core.sql}}}
+                                            onValueChanged={(e)=>
+                                            {
+                                            }}
+                                            />
+                                        </Item>
+                                        {/* txtCustomerCode */}
+                                        <Item>                                    
+                                            <Label text={this.t("txtCustomerCode")} alignment="right" />
+                                            <NdTextBox id="txtCustomerCode" parent={this} simple={true} 
+                                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                            dt={{data:this.promo.dt(),field:"CUSTOMER_CODE"}}
+                                            button=
+                                            {
+                                                [
+                                                    {
+                                                        id:'01',
+                                                        icon:'more',
+                                                        onClick:()=>
+                                                        {
+                                                            this.pg_txtCustomerCode.show()
+                                                            this.pg_txtCustomerCode.onClick = (data) =>
+                                                            {
+                                                                if(data.length > 0)
+                                                                {
+                                                                    this.promo.dt()[0].CUSTOMER_GUID = data[0].GUID
+                                                                    this.txtCustomerCode.value = data[0].CODE;
+                                                                    this.txtCustomerName.value = data[0].TITLE;
+                                                                }
                                                             }
                                                         }
                                                     }
-                                                },
-                                                {
-                                                    id:'02',
-                                                    icon:'arrowdown',
-                                                    onClick:()=>
-                                                    {
-                                                        this.txtCode.value = Math.floor(Date.now() / 1000)
-                                                    }
-                                                }
-                                            ]
-                                        }
-                                        onChange={(async()=>
-                                        {
-                                            let tmpResult = await this.checkPromotion(this.txtCode.value)
-                                            if(tmpResult == 3)
-                                            {
-                                                this.txtCode.value = "";
+                                                ]
                                             }
-                                        }).bind(this)} 
-                                        param={this.param.filter({ELEMENT:'txtCode',USERS:this.user.CODE})} 
-                                        >     
-                                            <Validator validationGroup={"frmPromo"  + this.tabIndex}>
-                                                <RequiredRule />
-                                            </Validator>  
-                                        </NdTextBox>  
-                                        {/* PROMOSYON SEÇİM POPUP */}
-                                        <NdPopGrid id={"pg_txtCode"} parent={this} container={"#root"} 
-                                        visible={false}
-                                        position={{of:'#root'}} 
-                                        showTitle={true} 
-                                        showBorders={true}
-                                        width={'90%'}
-                                        height={'90%'}
-                                        title={this.t("pg_Grid.title")} 
-                                        data={{source:{select:{query : "SELECT CODE,NAME FROM PROMO_VW_01 GROUP BY CODE,NAME"},sql:this.core.sql}}}
-                                        >
+                                            onChange={(async()=>
+                                            {
+                                                
+                                            }).bind(this)} 
+                                            >     
+                                            </NdTextBox>      
+                                            <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={".dx-multiview-wrapper"} 
+                                            position={{of:'#page'}} 
+                                            showTitle={true} 
+                                            showBorders={true}
+                                            width={'90%'}
+                                            height={'90%'}
+                                            title={this.t("pg_Grid.title")} 
+                                            columnAutoWidth={true}
+                                            allowColumnResizing={true}
+                                            search={true}
+                                            data = 
+                                            {{
+                                                source:
+                                                {
+                                                    select:
+                                                    {
+                                                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                                                        param : ['VAL:string|50']
+                                                    },
+                                                    sql:this.core.sql
+                                                }
+                                            }}
+                                            >           
+                                            <Scrolling mode="virtual" />                         
+                                            <Column dataField="TITLE" caption={this.t("pg_Grid.clmName")} width={650} defaultSortOrder="asc" />
                                             <Column dataField="CODE" caption={this.t("pg_Grid.clmCode")} width={150} />
-                                            <Column dataField="NAME" caption={this.t("pg_Grid.clmName")} width={650} defaultSortOrder="asc" />
-                                        </NdPopGrid>    
-                                    </Item>
-                                    {/* txtName */}
-                                    <Item colSpan={2}>                                    
-                                        <Label text={this.t("txtName")} alignment="right" />
-                                        <NdTextBox id="txtName" parent={this} simple={true} 
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        dt={{data:this.promo.dt(),field:"NAME"}}
-                                        />     
-                                    </Item>
-                                    {/* dtStartDate */}
-                                    <Item>
-                                        <Label text={this.t("dtStartDate")} alignment="right" />
-                                        <NdDatePicker simple={true}  parent={this} id={"dtStartDate"} 
-                                        dt={{data:this.promo.dt(),field:"START_DATE"}}
-                                        />
-                                    </Item>
-                                    {/* dtFinishDate */}
-                                    <Item>
-                                        <Label text={this.t("dtFinishDate")} alignment="right" />
-                                        <NdDatePicker simple={true}  parent={this} id={"dtFinishDate"} 
-                                        dt={{data:this.promo.dt(),field:"FINISH_DATE"}}
-                                        />
-                                    </Item>
-                                    {/* cmbDepot */}
-                                    <Item>
-                                        <Label text={this.t("cmbDepot")} alignment="right" />
-                                        <NdSelectBox simple={true} parent={this} id="cmbDepot"
-                                        dt={{data:this.promo.dt(),field:"DEPOT_GUID",display:"DEPOT_NAME"}}
-                                        displayExpr="DEPOT_NAME"                       
-                                        valueExpr="DEPOT_GUID"
-                                        data={{source:{select:{query : "SELECT GUID AS DEPOT_GUID,NAME AS DEPOT_NAME FROM DEPOT_VW_01 ORDER BY CODE ASC"},sql:this.core.sql}}}
-                                        onValueChanged={(e)=>
-                                        {
-                                        }}
-                                        />
-                                    </Item>
-                                    {/* txtCustomerCode */}
-                                    <Item>                                    
-                                        <Label text={this.t("txtCustomerCode")} alignment="right" />
-                                        <NdTextBox id="txtCustomerCode" parent={this} simple={true} 
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        dt={{data:this.promo.dt(),field:"CUSTOMER_CODE"}}
-                                        button=
-                                        {
-                                            [
-                                                {
-                                                    id:'01',
-                                                    icon:'more',
-                                                    onClick:()=>
-                                                    {
-                                                        this.pg_txtCustomerCode.show()
-                                                        this.pg_txtCustomerCode.onClick = (data) =>
-                                                        {
-                                                            if(data.length > 0)
-                                                            {
-                                                                this.promo.dt()[0].CUSTOMER_GUID = data[0].GUID
-                                                                this.txtCustomerCode.value = data[0].CODE;
-                                                                this.txtCustomerName.value = data[0].TITLE;
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            ]
-                                        }
-                                        onChange={(async()=>
-                                        {
-                                            
-                                        }).bind(this)} 
-                                        >     
-                                        </NdTextBox>      
-                                        <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={".dx-multiview-wrapper"} 
-                                        position={{of:'#page'}} 
-                                        showTitle={true} 
-                                        showBorders={true}
-                                        width={'90%'}
-                                        height={'90%'}
-                                        title={this.t("pg_Grid.title")} 
-                                        columnAutoWidth={true}
-                                        allowColumnResizing={true}
-                                        search={true}
-                                        data = 
-                                        {{
-                                            source:
-                                            {
-                                                select:
-                                                {
-                                                    query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
-                                                    param : ['VAL:string|50']
-                                                },
-                                                sql:this.core.sql
-                                            }
-                                        }}
-                                        >           
-                                        <Scrolling mode="virtual" />                         
-                                        <Column dataField="TITLE" caption={this.t("pg_Grid.clmName")} width={650} defaultSortOrder="asc" />
-                                        <Column dataField="CODE" caption={this.t("pg_Grid.clmCode")} width={150} />
-                                        </NdPopGrid>
-                                    </Item>
-                                    {/* txtCustomerName */}
-                                    <Item colSpan={2}>                                    
-                                        <Label text={this.t("txtCustomerName")} alignment="right" />
-                                        <NdTextBox id="txtCustomerName" parent={this} simple={true} readOnly={true}
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        dt={{data:this.promo.dt(),field:"CUSTOMER_NAME"}}
-                                        />     
-                                    </Item>
+                                            </NdPopGrid>
+                                        </Item>
+                                        {/* txtCustomerName */}
+                                        <Item colSpan={2}>                                    
+                                            <Label text={this.t("txtCustomerName")} alignment="right" />
+                                            <NdTextBox id="txtCustomerName" parent={this} simple={true} readOnly={true}
+                                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                            dt={{data:this.promo.dt(),field:"CUSTOMER_NAME"}}
+                                            />     
+                                        </Item>
                                     </GroupItem>
                                 </GroupItem>
                                 <GroupItem colSpan={3}>

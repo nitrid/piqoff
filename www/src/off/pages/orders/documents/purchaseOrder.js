@@ -1513,7 +1513,7 @@ export default class purchaseOrder extends React.PureComponent
                                             await dialog(tmpConfObj);
                                         }
                                     }}/>
-                                    <Button icon="increaseindent" text="Toplu Ürün Ekleme"
+                                    <Button icon="increaseindent" text={this.lang.t("collectiveItemAdd")}
                                     validationGroup={"frmPurcOrder"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {

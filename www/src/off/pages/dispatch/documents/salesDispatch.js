@@ -1442,7 +1442,7 @@ export default class salesDispatch extends React.PureComponent
                                             await dialog(tmpConfObj);
                                         }
                                     }}/>
-                                     <Button icon="increaseindent" text="Toplu Ürün Ekleme"
+                                     <Button icon="increaseindent" text={this.lang.t("collectiveItemAdd")}
                                     validationGroup={"frmSalesDis"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {

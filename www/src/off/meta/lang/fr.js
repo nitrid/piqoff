@@ -23,6 +23,7 @@ export const langFr =
     txtCardRead :"Veuillez scanner votre badge.",
     checkAll :"Tout saisir",
     msgUserAccess : "Vous n'êtes pas autorisé",
+    collectiveItemAdd: "Ajoute Multi Produit",
     popPassword : 
     {
         title: "Kullanıcı Şifrenizi Giriniz",  // bak
@@ -197,8 +198,8 @@ export const langFr =
         txtSalePrice : "Prix Vente",
         txtMinSalePrice: "Prix Vente Min.",
         txtMaxSalePrice: "Prix Vente Max.",
-        txtLastBuyPrice: "Dernier Prix Achat",
-        txtLastSalePrice: "Dernier Prix Vente",
+        txtLastBuyPrice: "Der. Prix Achat",
+        txtLastSalePrice: "Der. Prix Vente",
         tabTitlePrice: "Prix Vente ",
         tabTitleUnit: "Unités",
         tabTitleBarcode: "Code barre",
@@ -209,9 +210,13 @@ export const langFr =
         tabTitleInfo: "Information",
         tabTitleOtherShop :"Autre information sur les Magasins",
         txtTaxSugar: "Taux Sucre(100ML/GR)",
-        txtTotalExtraCost : "Prix achat",
+        txtTotalExtraCost : "Charge Supp.",
         clmtaxSugar : "Taxe Sucre",
         priceUpdate : "Ajour Prix", 
+        underUnitPrice : "Prix Sous Unité", 
+        minBuyPrice : "Prix Achat Min.",
+        maxBuyPrice : "Prix Achat Max.",
+        sellPriceAdd : "Ajout Prix Vente",
         pg_txtRef:
         {
             title: "Sélectionner Produit",
@@ -327,14 +332,15 @@ export const langFr =
         },
         grdOtherShop: 
         {
-            clmCode: "Réferance P.",
+            clmCode: "Réferance Fournisseur",
             clmName: "Nom de Produit",
             clmBarcode: "Code Barre",
             clmPrice: "Prix Vente",
             clmMulticode: "Code Fournisseur",
             clmCustomer: "Fournisseur",
             clmCustomerPrice: "Prix Achat",
-            clmShop: "Magasin"
+            clmShop: "Magasin",
+            clmDate: "Dernier Date Achat" //BAK
         },
         msgRef:
         {
@@ -374,7 +380,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Enregistrement avec succès !",
+            msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !"
         },
         msgSaveValid:
@@ -513,7 +519,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Enregistrement avec succès !",
+            msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !",
         },
         msgSaveValid:
@@ -964,7 +970,7 @@ export const langFr =
             clmQuantity : "Quantité",
             clmCreateDate: "Date d'Enregistrement",
             clmDescription :"Motif",
-            clmCostPrice : "Prix" ,
+            clmCostPrice : "Prix de Revient" ,
         },
         pg_dispatchGrid : 
         {
@@ -1016,7 +1022,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Enregistrement avec succès !",
+            msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !"
         },
         msgSaveValid:
@@ -1195,7 +1201,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Enregistrement avec succès !",
+            msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !"
         },
         msgSaveValid:
@@ -1332,7 +1338,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Enregistrement avec succès !",
+            msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !"
         },
         msgSaveValid:
@@ -1537,7 +1543,7 @@ export const langFr =
             clmMulticode : "Code Fournisseur",
             clmUnit : "Unité",
             clmBarcode : "Code barre",
-            clmCostPrice : "Prix achat",
+            clmCostPrice : "Prix de Revient",
             clmPriceSale : "Prix Vente",
             clmVat : "Taxe",
             clmMinPrice : "Prix Min",
@@ -1545,8 +1551,8 @@ export const langFr =
             clmStatus : "Etat",
             clmNetMargin : "Marge Nette",
             clmMargin : "Marge Brute",
-            clmCustomerPrice : "Prix Fournisseur",  // BAK
-            clmOrgin : "Orgine"  // BAK
+            clmCustomerPrice : "Prix Fournisseur",
+            clmOrgin : "Origine" 
         },
     },
     stk_03_002 :   //"Fiyat Listesi"
@@ -1877,7 +1883,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Enregistrement avec succès !",
+            msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !"
         },
         msgSaveValid:
@@ -1972,7 +1978,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Enregistrement avec succès !",
+            msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !"
         },
         msgSaveValid:
@@ -2151,7 +2157,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Enregistrement avec succès !",
+            msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !"
         },
         msgSaveValid:
@@ -2833,7 +2839,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Enregistrement avec succès !",
+            msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !"
         },
         msgSaveValid:
@@ -3142,7 +3148,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Enregistrement avec succès !",
+            msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !"
         },
         msgSaveValid:
@@ -3396,7 +3402,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Enregistrement avec succès !",
+            msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !"
         },
         msgSaveValid:
@@ -3578,7 +3584,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Enregistrement avec succès !",
+            msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !"
         },
         msgSaveValid:
@@ -3784,7 +3790,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Enregistrement avec succès !",
+            msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !"
         },
         msgSaveValid:
@@ -4036,7 +4042,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Enregistrement avec succès !",
+            msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !"
         },
         msgSaveValid:
@@ -4309,7 +4315,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Enregistrement avec succès !",
+            msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !"
         },
         msgSaveValid:
@@ -4605,7 +4611,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Enregistrement avec succès !",
+            msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !"
         },
         msgSaveValid:
@@ -4855,7 +4861,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Enregistrement avec succès !",
+            msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !"
         },
         msgSaveValid:
@@ -5130,7 +5136,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Enregistrement avec succès !",
+            msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !"
         },
         msgSaveValid:
@@ -5214,11 +5220,11 @@ export const langFr =
         },    
         grdMultiItem :     
         {    
-            clmCode : "Referance",    
+            clmCode : "Réferance",    
             clmMulticode : "Code Fournisseur",    
             clmName : "Nom Produit",    
             clmQuantity : "Quantité",    
-            clmPrice : "Prix"    
+            clmPrice : "Prix Achat"    
         },    
         msgMultiData:    
         {    
@@ -5283,7 +5289,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Enregistrement avec succès !",
+            msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !"
         },
         msgSaveValid:
@@ -5370,7 +5376,7 @@ export const langFr =
             clmMulticode : "Code Fournisseur",   
             clmName : "Nom Produit",   
             clmQuantity : "Quantité",   
-            clmPrice : "Prix"   
+            clmPrice : "Prix Achat"   
         },   
         msgMultiData:   
         {   
@@ -5549,7 +5555,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Enregistrement avec succès !",
+            msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !"
         },
         msgSaveValid:
@@ -5682,7 +5688,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Enregistrement avec succès !",
+            msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !"
         },
         msgSaveValid:
@@ -5785,7 +5791,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Enregistrement avec succès !",
+            msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !"
         },
         msgSaveValid:
@@ -5840,7 +5846,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Enregistrement avec succès !",
+            msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !"
         },
         msgSaveValid:
@@ -5913,7 +5919,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Enregistrement avec succès !",
+            msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !"
         },
         msgSaveValid:
@@ -6034,7 +6040,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Enregistrement avec succès !",
+            msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !"
         },
         msgSaveValid:
@@ -6074,7 +6080,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Enregistrement avec succès !",
+            msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !"
         },
         msgSaveValid:
@@ -6201,7 +6207,7 @@ export const langFr =
         btnGet :"Apporter",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom fournisseur",
-        txtAmount : "Toplam Tutar", // BAK
+        txtAmount : "Total Points", // BAK
         pg_txtCustomerCode : 
         {
             title : "Choix Fournisseur",
@@ -6392,7 +6398,8 @@ export const langFr =
         },
         popAdvance : 
         {
-            title : "Fonde De Caisse"
+            title : "Avans",   // BAK
+            msg :"Lütfen Avans Tutarınızı Giriniz.."   // BAK
         },
         txtPopAdvance :"Total",
         btnPopAdd : "Valide",
@@ -6431,6 +6438,13 @@ export const langFr =
         popDetail : 
         {
             title : "Detaille ticket"
+        },
+        msgZeroQuantity: //bak
+        { //bak
+            title: "Dikkat", //bak
+            btn01: "İptal", //bak
+            btn02: "Devam", //bak
+            msg: "Girmiş olduğunuz tutar 0€ ! Devam etmek istediğinizden eminmisiniz.." //bak
         },
     },
     tkf_01_001 : // "Alış Teklifi Listesi",
@@ -6586,7 +6600,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Enregistrement avec succès !",
+            msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !"
         },
         msgSaveValid:
@@ -6832,7 +6846,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Enregistrement avec succès !",
+            msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !"
         },
         msgSaveValid:
@@ -7066,7 +7080,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Enregistrement avec succès !",
+            msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !"
         },
     },
@@ -7099,7 +7113,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Enregistrement avec succès !",
+            msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !"
         },
         msgSaveValid:

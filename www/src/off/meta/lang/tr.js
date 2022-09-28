@@ -23,6 +23,7 @@ export const langTr =
     txtCardRead :"Lütfen Kullanıcı Kartınızı Okutunuz.",
     checkAll :"Tümünü Uygula",
     msgUserAccess : "Giriş Yetkiniz Yok",
+    collectiveItemAdd: "Toplu Ürün Ekleme",
     popPassword : 
     {
         title: "Kullanıcı Şifrenizi Giriniz",
@@ -212,6 +213,10 @@ export const langTr =
         txtTotalExtraCost : "Ek Maliyetler",
         clmtaxSugar : "Şeker Vergisi",
         priceUpdate : "Fiyat Güncelle",
+        underUnitPrice : "Alt Birim Fiyatı",
+        minBuyPrice : "Minimum Alış Fiyatı",
+        maxBuyPrice : "Maximum Alış Fiyatı",
+        sellPriceAdd : "Satış Fiyatı Ekle",
         pg_txtRef:
         {
             title: "Stok Seçimi",
@@ -334,7 +339,8 @@ export const langTr =
             clmMulticode: "T. Kodu",
             clmCustomer: "Tedarikçi",
             clmCustomerPrice: "T. Fiyatı",
-            clmShop: "Şube"
+            clmShop: "Şube",
+            clmDate: "Güncelleme Tarihi"
         },
         msgRef:
         {
@@ -6392,7 +6398,8 @@ export const langTr =
         },
         popAdvance : 
         {
-            title : "Avans Girişi"
+            title : "Avans",
+            msg :"Lütfen Avans Tutarınızı Giriniz.."
         },
         txtPopAdvance :"Tutar",
         btnPopAdd : "Ekle",
@@ -6431,6 +6438,13 @@ export const langTr =
         popDetail : 
         {
             title : "Fiş Detayı"
+        },
+        msgZeroQuantity:
+        {
+            title: "Dikkat",
+            btn01: "İptal",
+            btn02: "Devam",
+            msg: "Girmiş olduğunuz tutar 0€ ! Devam etmek istediğinizden eminmisiniz.."
         },
     },
     tkf_01_001 : // "Alış Teklifi Listesi",

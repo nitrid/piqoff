@@ -57,13 +57,13 @@ export default class posSalesDetailReport extends React.PureComponent
                                     "SUM(TOTAL) AS ITEM_GROUP_TOTAL, " +
                                     "ROUND((SUM(TOTAL) / (SELECT SUM(TOTAL) FROM POS_VW_01)) * 100,2) AS TICKET_ORT, " +
                                     "(SELECT COUNT(GUID) FROM POS_VW_01 WHERE DOC_DATE >= @START AND DOC_DATE <= @END) AS TICKET_COUNT, " +
-                                    "(SELECT SUM(TOTAL) FROM POS_VW_01 WHERE DOC_DATE >= @START AND DOC_DATE <= @END) AS TICKET_TOTAL, " +
+                                    "(SELECT SUM(TOTAL) FROM POS_VW_01 WHERE DOC_DATE >= @START AND DOC_DATE <= @END AND TYPE =0 AND STATUS = 1) - (SELECT SUM(TOTAL) FROM POS_VW_01 WHERE DOC_DATE >= @START AND DOC_DATE <= @END AND TYPE <>0 AND STATUS = 1) AS TICKET_TOTAL, " +
                                     "(SELECT COUNT(CUSTOMER_GUID) FROM POS_VW_01 WHERE CUSTOMER_GUID <> '00000000-0000-0000-0000-000000000000' AND DOC_DATE >= @START AND DOC_DATE <= @END) AS CUSTOMER_CARD, " +
                                     "(SELECT COUNT(GUID) FROM POS_VW_01 WHERE TYPE = 1 AND DOC_DATE >= @START AND DOC_DATE <= @END) AS RETURN_COUNT, " +
                                     "(SELECT SUM(TOTAL) FROM POS_VW_01 WHERE TYPE = 1 AND DOC_DATE >= @START AND DOC_DATE <= @END) AS RETURN_TOTAL, " +
                                     "(SELECT COUNT(DISCOUNT) FROM POS_VW_01 WHERE TYPE = 0 AND DISCOUNT > 0 AND DOC_DATE >= @START AND DOC_DATE <= @END) AS DISCOUNT_COUNT, " +
                                     "(SELECT SUM(DISCOUNT) FROM POS_VW_01 WHERE TYPE = 0 AND DOC_DATE >= @START AND DOC_DATE <= @END) AS DISCOUNT_TOTAL " +
-                                    "FROM POS_SALE_VW_01 WHERE DOC_DATE >= @START AND DOC_DATE <= @END GROUP BY ITEM_GRP_CODE,ITEM_GRP_NAME ORDER BY SUM(TOTAL) ASC ",
+                                    "FROM POS_SALE_VW_01 WHERE DOC_DATE >= @START AND DOC_DATE <= @END  GROUP BY ITEM_GRP_CODE,ITEM_GRP_NAME ORDER BY SUM(TOTAL) ASC ",
                                     param : ['START:date','END:date'],
                                     value : [this.dtDate.startDate,this.dtDate.endDate]
                                 }
