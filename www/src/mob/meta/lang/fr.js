@@ -20,6 +20,12 @@ export const langFr =
     msgInvalidUser : "Utilisateur ou mdp faux.",
     txtCardRead :"Veuillez scanner votre badge.",
     checkAll :"Tout saisir",
+    msgAnotherUserAlert: 
+    {
+        title : "Attention",
+        msg : "Connectez-vous à partir d'un autre appareil avec vos informations d'utilisateur.",
+        btn01 : "OK"
+    },
     menu:
     {
         stk: "Stock",                

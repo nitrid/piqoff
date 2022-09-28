@@ -98,6 +98,11 @@ export const menu = (e) =>
                             text: e.t('menu.ord_01_002'),//'Satış Sipariş',
                             path: 'orders/documents/purchaseOrder'
                         },
+                        {
+                            id: 'ord_01_003',
+                            text: e.t('menu.ord_01_003'),//'Satış Sipariş',
+                            path: 'orders/documents/collectiveOrder'
+                        },
                     ]
                 },
             ]

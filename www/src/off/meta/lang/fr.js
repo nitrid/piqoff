@@ -35,6 +35,12 @@ export const langFr =
         btn01: "OK",
         msg: "Mot de Passe Erroné"
     },
+    msgAnotherUserAlert: 
+    {
+        title : "Attention",
+        msg : "Connectez-vous à partir d'un autre appareil avec vos informations d'utilisateur.",
+        btn01 : "OK"
+    },
     menu:
     {
         stk: "Produit",                

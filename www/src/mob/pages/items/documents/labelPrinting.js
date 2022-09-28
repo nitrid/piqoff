@@ -65,7 +65,7 @@ export default class labelPrinting extends React.Component
         this.mainLblObj.clearAll()
 
         let tmpLbl = {...this.lblObj.empty}
-        tmpLbl.REF = this.user.CODE
+        tmpLbl.REF = this.user.NAME
         this.mainLblObj.addEmpty(tmpLbl);
         
         this.txtSer.readOnly = false

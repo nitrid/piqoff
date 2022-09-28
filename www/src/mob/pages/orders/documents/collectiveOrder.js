@@ -49,7 +49,6 @@ export default class salesOrder extends React.Component
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
 
         this.docObj = new docCls();
-        this.itemCustomerObj = new datatable  
 
         this.dropmenuMainItems = [this.t("btnNew"),this.t("btnSave")]
         this.dropmenuDocItems = [this.t("btnSave")]
@@ -72,15 +71,14 @@ export default class salesOrder extends React.Component
         let tmpDoc = {...this.docObj.empty}
         tmpDoc.TYPE = 0
         tmpDoc.DOC_TYPE = 60
+        tmpDoc.OUTPUT = '00000000-0000-0000-0000-000000000000'
         this.docObj.addEmpty(tmpDoc);
 
-        this.txtCustomerCode.readOnly = false;
         this.txtRef.readOnly = false
         this.txtRefno.readOnly = false
         this.txtRef.readOnly = true
+        this.txtRef.value = this.user.NAME
         await this.grdSlsOrder.dataRefresh({source:this.docObj.docOrders.dt('DOC_ORDERS')});
-        await this.grdChkCustomer.dataRefresh({source:this.itemCustomerObj});
-
     }
     async dropmenuClick(e)
     {
@@ -148,17 +146,6 @@ export default class salesOrder extends React.Component
                 let pResult = await dialog(tmpConfObj);
                 return
             }
-            else if(this.docObj.dt()[0].OUTPUT_CODE == "")
-            {
-                let tmpConfObj = 
-                {
-                    id:'msgCustomerSelect',showTitle:true,title:this.t("msgCustomerSelect.title"),showCloseButton:true,width:'350px',height:'200px',
-                    button:[{id:"btn01",caption:this.t("msgCustomerSelect.btn01"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerSelect.msg")}</div>)
-                }
-                let pResult = await dialog(tmpConfObj);
-                return
-            }
             this.setState({tbMain:"hidden"})
             this.setState({tbBarcode:"visible"})
             this.setState({tbDocument:"hidden"})
@@ -222,57 +209,7 @@ export default class salesOrder extends React.Component
     }
     async setBarcode()
     {
-        this.itemCustomerObj.clear()
         this.txtQuantity.value = 1
-        let tmpCheckQuery = 
-        {
-            query :"SELECT MULTICODE,CUSTOMER_PRICE AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
-            param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50'],
-            value : [this.barcode.code,this.docObj.dt()[0].OUTPUT]
-        }
-        let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
-        if(tmpCheckData.result.recordset.length == 0)
-        {
-            let tmpConfObj = 
-            {
-                id:'msgCustomerNotFound',showTitle:true,title:this.t("msgCustomerNotFound.title"),showCloseButton:true,width:'350px',height:'200px',
-                button:[{id:"btn01",caption:this.t("msgCustomerNotFound.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCustomerNotFound.btn02"),location:'after'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerNotFound.msg")}</div>)
-            }
-            let pResult = await dialog(tmpConfObj);
-            if(pResult == 'btn02')
-            {                
-                this.barcodeReset()   
-                return
-            }
-        }
-        
-        if(tmpCheckData.result.recordset.length > 0)
-        {
-            this.txtPrice.value = parseFloat((tmpCheckData.result.recordset[0].PRICE).toFixed(2))
-            this.txtVat.value = parseFloat((tmpCheckData.result.recordset[0].PRICE * (this.barcode.vat / 100)).toFixed(2))
-            //this.txtDiscount.value = 0
-            this.txtAmount.value = parseFloat((Number(this.txtPrice.value) + Number(this.txtVat.value)).toFixed(2))
-            let tmpQuery2 =
-            {
-                query :"SELECT CUSTOMER_PRICE AS PRICE,SUBSTRING(CUSTOMER_NAME, 1,10) AS CUSTOMER,CUSTOMER_PRICE_DATE AS PRICE_DATE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE",
-                param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50'],
-                value : [this.barcode.code,this.docObj.dt()[0].OUTPUT]
-            }
-            let tmpData2 = await this.core.sql.execute(tmpQuery2) 
-            if(tmpData2.result.recordset.length > 1)
-            {
-                for (let i = 0; i < tmpData2.result.recordset.length; i++) 
-                {
-                    this.itemCustomerObj.push(tmpData2.result.recordset[i])
-                }
-                this.setState({grid:"visible"})
-            }
-            else
-            {
-                this.setState({grid:"hidden"})
-            }
-        }
         if(this.chkAutoAdd.value == true)
         {
             setTimeout(async () => 
@@ -377,7 +314,7 @@ export default class salesOrder extends React.Component
         tmpDocItems.REF = this.docObj.dt()[0].REF
         tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
         tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-        tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+        tmpDocItems.OUTPUT = '00000000-0000-0000-0000-000000000000'
         tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
         tmpDocItems.QUANTITY = pQuantity
         tmpDocItems.VAT_RATE = this.barcode.vat
@@ -548,125 +485,6 @@ export default class salesOrder extends React.Component
                                 >
                                 </NdSelectBox>
                             </Item>
-                            {/* txtCustomerCode */}
-                            <Item>
-                                <Label text={this.t("txtCustomerCode")} alignment="right" />
-                                <div className="row">
-                                    <div className="col-12">
-                                        <NdTextBox id="txtCustomerCode" parent={this} simple={true}
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        dt={{data:this.docObj.dt('DOC'),field:"OUTPUT_CODE"}}
-                                        onEnterKey={(async()=>
-                                            {
-                                                await this.pg_CustomerSelect.setVal(this.txtCustomerCode.value)
-                                                this.pg_CustomerSelect.show()
-                                                this.pg_CustomerSelect.onClick = (data) =>
-                                                {
-                                                    if(data.length > 0)
-                                                    {
-                                                        this.docObj.dt()[0].OUTPUT = data[0].GUID
-                                                        this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
-                                                        this.docObj.dt()[0].OUTPUT_NAME = data[0].TITLE
-                                                        let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
-                                                        if(typeof tmpData != 'undefined' && tmpData.value ==  true)
-                                                        {
-                                                            this.txtRef.value=data[0].CODE;
-                                                            this.txtRef.props.onChange()
-                                                        }
-                                                    }
-                                                }
-                                            }).bind(this)}
-                                        button=
-                                        {
-                                            [
-                                                {
-                                                    id:'01',
-                                                    icon:'more',
-                                                    onClick:async()=>
-                                                    {
-                                                        console.log(111111)
-                                                        this.pg_CustomerSelect.show()
-                                                        this.pg_CustomerSelect.onClick = (data) =>
-                                                        {
-                                                            if(data.length > 0)
-                                                            {
-                                                                console.log(this.docObj.dt())
-                                                                this.docObj.dt()[0].OUTPUT = data[0].GUID
-                                                                this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
-                                                                this.docObj.dt()[0].OUTPUT_NAME = data[0].TITLE
-                                                                let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
-                                                                console.log(this.txtCustomerCode)
-                                                                if(typeof tmpData != 'undefined' && tmpData.value ==  true)
-                                                                {
-                                                                    this.txtRef.value=data[0].CODE;
-                                                                    this.txtRef.props.onChange()
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                },
-                                                {
-                                                    id:'02',
-                                                    icon:'arrowdown',
-                                                    onClick:()=>
-                                                    {
-                                                        
-                                                    }
-                                                }
-                                            ]
-                                        }
-                                        onChange={(async()=>
-                                        {
-                                            
-                                        }).bind(this)}
-                                        param={this.param.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
-                                        access={this.access.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
-                                        >
-                                        </NdTextBox>
-                                    </div>
-                                </div>
-                                {/*CARİ SEÇİM */}
-                                <NdPopGrid id={"pg_CustomerSelect"} parent={this} container={"#root"}
-                                visible={false}
-                                position={{of:'#root'}} 
-                                showTitle={true} 
-                                showBorders={true}
-                                width={'90%'}
-                                height={'90%'}
-                                selection={{mode:"single"}}
-                                title={this.t("pg_CustomerSelect.title")} 
-                                search={true}
-                                data = 
-                                {{
-                                    source:
-                                    {
-                                        select:
-                                        {
-                                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
-                                            param : ['VAL:string|50']
-                                        },
-                                        sql:this.core.sql
-                                    }
-                                }}
-                                >
-                                    <Column dataField="CODE" caption={this.t("pg_CustomerSelect.clmCode")} width={150} />
-                                    <Column dataField="TITLE" caption={this.t("pg_CustomerSelect.clmTitle")} width={200} defaultSortOrder="asc" />
-                                    <Column dataField="TYPE_NAME" caption={this.t("pg_CustomerSelect.clmTypeName")} width={100} />
-                                    <Column dataField="GENUS_NAME" caption={this.t("pg_CustomerSelect.clmGenusName")} width={100} />
-                                </NdPopGrid>
-                            </Item> 
-                            {/* txtCustomerName */}
-                            <Item>
-                                <Label text={this.t("txtCustomerName")} alignment="right" />
-                                <NdTextBox id="txtCustomerName" parent={this} simple={true}  
-                                readOnly={true}
-                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                dt={{data:this.docObj.dt('DOC'),field:"OUTPUT_NAME"}} 
-                                param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
-                                access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
-                                >
-                                </NdTextBox>
-                            </Item> 
                             {/* txtDate */}
                             <Item>
                                 <Label text={this.t("txtDate")} alignment="right" />
@@ -896,27 +714,6 @@ export default class salesOrder extends React.Component
                                 </div>
                             </Item>
                         </Form>
-                        <div style={{visibility:this.state.grid}}>
-                            <Form>
-                                <Item>
-                                    <NdGrid parent={this} id={"grdChkCustomer"} 
-                                    showBorders={true} 
-                                    columnsAutoWidth={true} 
-                                    allowColumnReordering={true} 
-                                    allowColumnResizing={true} 
-                                    height={'100%'} 
-                                    width={'100%'}
-                                    dbApply={false}
-                                    >
-                                        <Paging defaultPageSize={5} />
-                                        <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
-                                        <Column dataField="CUSTOMER" caption={this.t("grdChkCustomer.clmCustomer")} width={80}/>
-                                        <Column dataField="PRICE" caption={this.t("grdChkCustomer.clmPrice")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}} width={70}/>
-                                        <Column dataField="PRICE_DATE" caption={this.t("grdChkCustomer.clmDate")} width={100} />
-                                    </NdGrid>
-                                </Item>
-                            </Form>           
-                        </div>
                     </div>
                     <div className="row px-2 pt-2" style={{visibility:this.state.tbDocument,position:"absolute"}}>
                         <Form colCount={1} >
@@ -1277,7 +1074,6 @@ export default class salesOrder extends React.Component
                                     </div>
                                     <div className="col-12 py-2">
                                     <Form>
-                                        {/* checkCustomer */}
                                         <Item>
                                             <Label text={this.t("txtQuantity")} alignment="right" />
                                             <NdNumberBox id="txtPopQuantity" parent={this} simple={true}  

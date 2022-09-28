@@ -35,6 +35,12 @@ export const langTr =
         btn01: "Tamam",
         msg: "Şifreniz Hatalı !"
     },
+    msgAnotherUserAlert: 
+    {
+        title : "Dikkat",
+        msg : "Sizin kullanıcı bilgileriniz ile başka bir cihazdan giriş yapıldı",
+        btn01 : "Tamam"
+    },
     menu:
     {
         stk: "Stok",                
