@@ -214,7 +214,7 @@ export default class promotionCard extends React.PureComponent
                                 displayExpr="NAME"                       
                                 valueExpr="ID"
                                 value={pItem.TYPE}
-                                data={{source:[{ID:0,NAME:"Stok"},{ID:1,NAME:"Genel Tutar"}]}}
+                                data={{source:[{ID:0,NAME:"Ürün"},{ID:1,NAME:"Genel Tutar"}]}}
                                 onValueChanged={(e)=>
                                 {
                                     if(e.previousValue == 0 && this.promo.cond.dt().where({WITHAL:pItem.WITHAL}).length > 1)
@@ -424,7 +424,7 @@ export default class promotionCard extends React.PureComponent
                                 displayExpr="NAME"                       
                                 valueExpr="ID"
                                 value={pItem.TYPE}
-                                data={{source:[{ID:0,NAME:"İskonto"},{ID:1,NAME:"Para Puan"},{ID:2,NAME:"Hediye Çeki"},{ID:3,NAME:"Stok"},{ID:4,NAME:"Genel İskonto"}]}}  
+                                data={{source:[{ID:0,NAME:"İskonto"},{ID:1,NAME:"Para Puan"},{ID:2,NAME:"Hediye Çeki"},{ID:3,NAME:"Ürün"},{ID:4,NAME:"Genel İskonto"}]}}  
                                 onValueChanged={(e) =>
                                 {
                                     if(this.appDt.where({WITHAL:pItem.WITHAL}).length > 0)

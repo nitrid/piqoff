@@ -330,16 +330,16 @@ export default class collectiveItemEdit extends React.PureComponent
                                 {
                                     //GROSS_MARGIN ANINDA ETKI ETSİN DİYE YAPILDI
                                     let tmpExVat = e.data.PRICE_SALE / ((e.data.VAT / 100) + 1)
-                                    let tmpMargin = tmpExVat - e.data.CUSTOMER_PRICE;
-                                    let tmpMarginRate =  (tmpMargin /  e.data.CUSTOMER_PRICE) * 100   //((tmpExVat - e.data.CUSTOMER_PRICE)/tmpExVat) * 100
-                                    e.data.GROSS_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2);        
+                                    let tmpMargin = e.data.CUSTOMER_PRICE == 0 || tmpExVat == 0 ? 0 : tmpExVat - e.data.CUSTOMER_PRICE;
+                                    let tmpMarginRate = tmpMargin == 0 ? 0 : (tmpMargin /  e.data.CUSTOMER_PRICE) * 100   //((tmpExVat - e.data.CUSTOMER_PRICE)/tmpExVat) * 100
+                                    e.data.GROSS_MARGIN =  tmpMarginRate.toFixed(2) + "% / €" + tmpMargin.toFixed(2);        
                                     e.data.GROSS_MARGIN_RATE = tmpMarginRate.toFixed(2); 
-                                    e.values[8] =  tmpMargin.toFixed(2) + "€/ %" +  tmpMarginRate.toFixed(2); 
+                                    e.values[8] = tmpMarginRate.toFixed(2) + "% / €" + tmpMargin.toFixed(2); 
 
                                     // NET_MARGIN ANINDA ETKI ETSİN DİYE YAPILDI
                                     let tmpNetExVat = e.data.PRICE_SALE / ((e.data.VAT / 100) + 1)
-                                    let tmpNetMargin = (tmpNetExVat -e.data.CUSTOMER_PRICE) / 1.15;
-                                    let tmpNetMarginRate =(tmpNetMargin / e.data.CUSTOMER_PRICE) * 100
+                                    let tmpNetMargin = tmpNetExVat == 0 || e.data.CUSTOMER_PRICE == 0 ? 0 : (tmpNetExVat - e.data.CUSTOMER_PRICE) / 1.15;
+                                    let tmpNetMarginRate = tmpNetMargin == 0 ? 0 : (tmpNetMargin / e.data.CUSTOMER_PRICE) * 100
                                     e.data.NET_MARGIN = tmpNetMargin.toFixed(2) + "€ / %" +  tmpNetMarginRate.toFixed(2);
                                     e.data.NET_MARGIN_RATE = tmpNetMarginRate.toFixed(2);    
                                     e.values[9] =   tmpNetMargin.toFixed(2) + "€  %" +  tmpNetMarginRate.toFixed(2);
