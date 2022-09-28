@@ -178,7 +178,7 @@ export default class posDoc extends React.PureComponent
             {
                 if(this.posObj.dt("POS_SALE")[i].GUID != '00000000-0000-0000-0000-000000000000')
                 {
-                    let tmpCtrl = await this.core.local.select({from:"POS_SALE_VW_01",where:{POS_GUID:this.posObj.dt("POS_SALE")[i].POS_GUID}})
+                    let tmpCtrl = await this.core.local.select({from:"POS_SALE_VW_01",where:{GUID:this.posObj.dt("POS_SALE")[i].GUID}})
                 
                     if(tmpCtrl.result.length > 0)
                     {
@@ -196,7 +196,7 @@ export default class posDoc extends React.PureComponent
             }
             for (let i = 0; i < this.posObj.dt("POS_PAYMENT").length; i++) 
             {
-                let tmpCtrl = await this.core.local.select({from:"POS_PAYMENT_VW_01",where:{POS_GUID:this.posObj.dt("POS_PAYMENT")[i].POS_GUID}})
+                let tmpCtrl = await this.core.local.select({from:"POS_PAYMENT_VW_01",where:{GUID:this.posObj.dt("POS_PAYMENT")[i].GUID}})
                 if(tmpCtrl.result.length > 0)
                 {
                     Object.setPrototypeOf(this.posObj.dt("POS_PAYMENT")[i],{stat:'edit'})
@@ -208,7 +208,7 @@ export default class posDoc extends React.PureComponent
             }
             for (let i = 0; i < this.posObj.dt("POS_EXTRA").length; i++) 
             {
-                let tmpCtrl = await this.core.local.select({from:"POS_EXTRA_VW_01",where:{POS_GUID:this.posObj.dt("POS_EXTRA")[i].POS_GUID}})
+                let tmpCtrl = await this.core.local.select({from:"POS_EXTRA_VW_01",where:{GUID:this.posObj.dt("POS_EXTRA")[i].GUID}})
                 if(tmpCtrl.result.length > 0)
                 {
                     Object.setPrototypeOf(this.posObj.dt("POS_EXTRA")[i],{stat:'edit'})
