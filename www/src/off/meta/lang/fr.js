@@ -3562,6 +3562,7 @@ export const langFr =
         pg_Grid:
         {
             title:  "Choix",
+            clmBarcode: "BARKODU", //BAK
             clmCode: "Code",
             clmName: "Nom", 
             clmGrpName: "Groupe", //BAK

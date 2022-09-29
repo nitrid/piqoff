@@ -3562,6 +3562,7 @@ export const langTr =
         pg_Grid:
         {
             title: "Seçim",
+            clmBarcode: "BARKODU",
             clmCode: "KODU",
             clmName: "ADI", 
             clmGrpName: "GRUP", 
