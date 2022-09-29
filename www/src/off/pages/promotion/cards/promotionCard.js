@@ -336,9 +336,9 @@ export default class promotionCard extends React.PureComponent
                                             {
                                                 select:
                                                 {
-                                                    query : "SELECT GUID,CODE,NAME,VAT,MAIN_GRP_NAME,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS BARCODE " + 
-                                                            "FROM ITEMS_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) OR " + 
-                                                            "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') LIKE @VAL) AND STATUS = 1",
+                                                    query : "SELECT MAX(ITEM_GUID) AS GUID,MAX(BARCODE) AS BARCODE,ITEM_CODE AS CODE,ITEM_NAME AS NAME,MAIN_GRP_NAME AS MAIN_GRP_NAME FROM ITEM_BARCODE_VW_01 " +
+                                                            "WHERE (UPPER(ITEM_CODE) LIKE UPPER(@VAL) OR UPPER(ITEM_NAME) LIKE UPPER(@VAL) OR BARCODE LIKE @VAL) AND STATUS = 1 " + 
+                                                            "GROUP BY ITEM_CODE,ITEM_NAME,MAIN_GRP_NAME",
                                                     param : ['VAL:string|50']
                                                 },
                                                 sql:this.core.sql
@@ -563,9 +563,9 @@ export default class promotionCard extends React.PureComponent
                                             {
                                                 select:
                                                 {
-                                                    query : "SELECT GUID,CODE,NAME,VAT,MAIN_GRP_NAME,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS BARCODE " + 
-                                                            "FROM ITEMS_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) OR " + 
-                                                            "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') LIKE @VAL) AND STATUS = 1",
+                                                    query : "SELECT MAX(ITEM_GUID) AS GUID,MAX(BARCODE) AS BARCODE,ITEM_CODE AS CODE,ITEM_NAME AS NAME,MAIN_GRP_NAME AS MAIN_GRP_NAME FROM ITEM_BARCODE_VW_01 " +
+                                                            "WHERE (UPPER(ITEM_CODE) LIKE UPPER(@VAL) OR UPPER(ITEM_NAME) LIKE UPPER(@VAL) OR BARCODE LIKE @VAL) AND STATUS = 1 " + 
+                                                            "GROUP BY ITEM_CODE,ITEM_NAME,MAIN_GRP_NAME",
                                                     param : ['VAL:string|50']
                                                 },
                                                 sql:this.core.sql
