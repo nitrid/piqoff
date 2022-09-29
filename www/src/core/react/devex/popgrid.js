@@ -242,18 +242,19 @@ export default class NdPopGrid extends Base
             await this.grid.dataRefresh(this.state.data)
         }
         else
-        {
+        {                    
             if(this["txt" + this.props.id].value == '')
             {
+                this.grid.devGrid.clearFilter()
                 await this.grid.dataRefresh({source:[]})
                 this["txt" + this.props.id].setState({value:''})
             }
            
             this["pop_" + this.props.id].show();
             setTimeout(() => 
-                {
-                    this["txt" + this.props.id].focus()
-                }, 700);
+            {
+                this["txt" + this.props.id].focus()
+            }, 700);
             
         }
        

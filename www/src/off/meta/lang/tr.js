@@ -3613,6 +3613,12 @@ export const langTr =
             txtDiscAmount : "Tutar",
             btnSave: "Kaydet"
         },
+        msgDiscRate:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Girdiğiniz indirim 0 dan küçük, 100 den büyük olamaz !",
+        },
     },
     irs_01_001 : // "Alış İrsaliye Listesi"
     {
