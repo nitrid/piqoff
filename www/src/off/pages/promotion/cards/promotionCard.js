@@ -276,7 +276,7 @@ export default class promotionCard extends React.PureComponent
                                                         this.promo.cond.dt().removeAt(item)
                                                     })
 
-                                                    this["itemList" + pItem.WITHAL] = []
+                                                    //this["itemList" + pItem.WITHAL] = []
 
                                                     for (let i = 0; i < data.length; i++) 
                                                     {
