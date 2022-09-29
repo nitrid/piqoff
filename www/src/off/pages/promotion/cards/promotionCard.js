@@ -344,6 +344,7 @@ export default class promotionCard extends React.PureComponent
                                                 sql:this.core.sql
                                             }
                                         }}>
+                                            <Column dataField="BARCODE" caption={this.t("pg_Grid.clmBarcode")} width={150} />
                                             <Column dataField="CODE" caption={this.t("pg_Grid.clmCode")} width={150} />
                                             <Column dataField="NAME" caption={this.t("pg_Grid.clmName")} width={650} defaultSortOrder="asc" />
                                             <Column dataField="MAIN_GRP_NAME" caption={this.t("pg_Grid.clmGrpName")} width={150}/>
