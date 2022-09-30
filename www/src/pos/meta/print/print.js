@@ -142,7 +142,8 @@ export function print()
                         font: "b",
                         style: "b",
                         align: "lt",
-                        data: "Remise ".space(54) + (parseFloat(tmpRemise).toFixed(2) + "EUR").space(10,"s")
+                        size : [1,1],
+                        data: "Remise ".space(53) + "-" + (parseFloat(tmpRemise).toFixed(2) + "EUR").space(10,"s")
                     })
                 });
                 //SATIR DETAYI
