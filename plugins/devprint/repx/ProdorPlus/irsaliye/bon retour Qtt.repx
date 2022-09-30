@@ -311,7 +311,7 @@
     </Item5>
     <Item6 Ref="158" ControlType="ReportFooterBand" Name="ReportFooter" PrintAtBottom="true" HeightF="26.2575779" KeepTogether="true">
       <Controls>
-        <Item1 Ref="159" ControlType="XRLabel" Name="label12" Multiline="true" Text="Total de Pois de BL :" TextAlignment="TopRight" SizeF="180.669983,23.00003" LocationFloat="460.131927, 0" Font="Arial, 10pt" Padding="2,2,0,0,100">
+        <Item1 Ref="159" ControlType="XRLabel" Name="label12" Multiline="true" Text="Total de Pois de Bon Retour :" TextAlignment="TopRight" SizeF="207.672241,23.00003" LocationFloat="433.129578, 0" Font="Arial, 10pt" Padding="2,2,0,0,100">
           <StylePriority Ref="160" UseFont="false" UseTextAlignment="false" />
         </Item1>
         <Item2 Ref="161" ControlType="XRLabel" Name="label13" TextFormatString="{0:0.00KG}" Multiline="true" CanGrow="false" TextAlignment="TopRight" SizeF="142.485641,23" LocationFloat="642.7916, 0" Font="Arial, 10pt" Padding="2,2,0,0,100">
