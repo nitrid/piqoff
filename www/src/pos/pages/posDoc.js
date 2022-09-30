@@ -60,7 +60,9 @@ export default class posDoc extends React.PureComponent
         this.cheqDt = new datatable();
         this.lastPosDt = new datatable();
         this.lastPosSaleDt = new datatable();
-        this.lastPosPayDt = new datatable();        
+        this.lastPosPayDt = new datatable();
+        this.lastPosPromoDt = new datatable();  
+
         this.promoObj = new promoCls();
         this.posPromoObj = new posPromoCls();
 
@@ -4415,6 +4417,7 @@ export default class posDoc extends React.PureComponent
                                                     pos : tmpLastPos,
                                                     possale : this.lastPosSaleDt,
                                                     pospay : this.lastPosPayDt,
+                                                    pospromo : this.lastPosPromoDt,
                                                     special : 
                                                     {
                                                         type : 'Repas',
@@ -4446,6 +4449,7 @@ export default class posDoc extends React.PureComponent
                                                 pos : tmpLastPos,
                                                 possale : this.lastPosSaleDt,
                                                 pospay : this.lastPosPayDt,
+                                                pospromo : this.lastPosPromoDt,
                                                 special : 
                                                 {
                                                     type : 'Fatura',
@@ -4476,6 +4480,7 @@ export default class posDoc extends React.PureComponent
                                                 pos : tmpLastPos,
                                                 possale : this.lastPosSaleDt,
                                                 pospay : this.lastPosPayDt,
+                                                pospromo : this.lastPosPromoDt,
                                                 special : 
                                                 {
                                                     type : 'Fis',
@@ -4600,6 +4605,16 @@ export default class posDoc extends React.PureComponent
                                         
                                         await this.lastPosSaleDt.refresh()
                                         await this.grdLastSale.dataRefresh({source:this.lastPosSaleDt});
+
+                                        this.lastPosPromoDt.selectCmd = 
+                                        {
+                                            query : "SELECT * FROM [dbo].[POS_PROMO_VW_01] WHERE POS = @POS",
+                                            param : ['POS:string|50'],
+                                            value:  [e.selectedRowKeys[0].GUID]
+                                        } 
+                                        
+                                        await this.lastPosPromoDt.refresh()
+                                        await this.lastPosPromoDt.dataRefresh({source:this.lastPosPromoDt});
 
                                         this.lastPosPayDt.selectCmd = 
                                         {
