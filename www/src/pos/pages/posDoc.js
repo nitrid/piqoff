@@ -1924,6 +1924,25 @@ export default class posDoc extends React.PureComponent
             import("../meta/print/" + prmPrint).then(async(e)=>
             {
                 let tmpPrint = e.print(pData)
+
+                let tmpArr = [];
+                for (let i = 0; i < tmpPrint.length; i++) 
+                {
+                    let tmpObj = pData[i]
+                    if(typeof tmpPrint[i] == 'function')
+                    {
+                        tmpObj = tmpPrint[i]()
+                    }
+                    if(Array.isArray(tmpObj))
+                    {
+                        tmpArr.push(...tmpObj)
+                    }
+                    else if(typeof tmpObj == 'object')
+                    {
+                        tmpArr.push(tmpObj)
+                    }
+                }
+                console.log(tmpArr)
                 await this.posDevice.escPrinter(tmpPrint)
                 resolve()
             })
