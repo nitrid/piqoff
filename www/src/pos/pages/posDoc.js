@@ -4614,7 +4614,6 @@ export default class posDoc extends React.PureComponent
                                         } 
                                         
                                         await this.lastPosPromoDt.refresh()
-                                        await this.lastPosPromoDt.dataRefresh({source:this.lastPosPromoDt});
 
                                         this.lastPosPayDt.selectCmd = 
                                         {
