@@ -6141,6 +6141,7 @@ export const langTr =
             clmTime: "Saat",
             slmUser: "Kullanıcı",
             clmCustomer : "Cari",
+            clmCardId : "Kard Id",
             clmDiscount : "İndirim",
             clmLoyalyt: "Loyalyt",
             clmHT : "Ara Toplam",

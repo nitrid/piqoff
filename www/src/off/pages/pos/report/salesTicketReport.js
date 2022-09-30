@@ -103,7 +103,7 @@ export default class salesOrdList extends React.PureComponent
                     " MAX(HT) AS HT,  "  +
                     " MAX(TVA) AS TVA,  "  +
                     " MAX(TTC) AS TTC,  "  +
-                    " MAX(CUSTOMER_NAME + ' - ' + CUSTOMER) AS CUSTOMER_NAME,  "  +
+                    " MAX(CUSTOMER_NAME) AS CUSTOMER_NAME,  "  +
                     " MAX(PAYMENT_TYPE) AS PAYMENT_TYPE,  "  +
                     " MAX(PAYMENT) AS PAYMENT  "  +
                     " FROM (  "  +
@@ -125,7 +125,7 @@ export default class salesOrdList extends React.PureComponent
                     " MAX(SALE.GRAND_AMOUNT) HT, "  +
                     " MAX(SALE.GRAND_VAT) TVA, "  +
                     " MAX(SALE.GRAND_TOTAL) TTC,  "  +
-                    " MAX(SALE.CUSTOMER_NAME + ' - ' + SALE.CUSTOMER_CODE) AS CUSTOMER_NAME,  "  +
+                    " MAX(SALE.CUSTOMER_NAME) AS CUSTOMER_NAME,  "  +
                     " (SELECT SUM(AMOUNT) FROM [POS_PAYMENT_VW_01] AS PAY WHERE PAY.POS_GUID = SALE.POS_GUID ) AS PAYMENT   "  +
                     " FROM [dbo].[POS_SALE_VW_01] AS SALE  "  +
                     " INNER JOIN [dbo].[POS_PAYMENT_VW_01] AS PAYMENT ON  "  +
@@ -547,6 +547,7 @@ export default class salesOrdList extends React.PureComponent
                                 <Column dataField="TIME" caption={this.t("grdSaleTicketReport.clmTime")} visible={true} width={100}/> 
                                 <Column dataField="USERS" caption={this.t("grdSaleTicketReport.slmUser")} visible={true} width={100}/> 
                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdSaleTicketReport.clmCustomer")} visible={true} width={300}/> 
+                                <Column dataField="CUSTOMER" caption={this.t("grdSaleTicketReport.clmCardId")} visible={true} width={100}/> 
                                 <Column dataField="DISCOUNT" caption={this.t("grdSaleTicketReport.clmDiscount")} visible={true} width={100} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
                                 <Column dataField="LOYALYT" caption={this.t("grdSaleTicketReport.clmLoyalyt")} visible={true} width={100} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
                                 <Column dataField="HT" caption={this.t("grdSaleTicketReport.clmHT")} visible={true} width={100} format={{ style: "currency", currency: "EUR",precision: 2}}/> 

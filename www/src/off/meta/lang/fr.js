@@ -6141,6 +6141,7 @@ export const langFr =
             clmTime: "Heure",
             slmUser: "Utilisateur",
             clmCustomer : "Fournisseur",
+            clmCardId : "Numero de Card", //BAK
             clmDiscount : "Remise",
             clmLoyalyt: "Fidelité",
             clmHT : "Total",
