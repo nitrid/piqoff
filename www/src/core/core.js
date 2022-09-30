@@ -1344,6 +1344,18 @@ export class datatable
                     });
                     tmpData = tmpArr
                 }
+                else if(tmpOp == 'NIN' || tmpOp == 'nin')
+                {
+                    let tmpArr = []
+                    tmpData.forEach(e => 
+                    {
+                        if(tmpValue.filter(x => x == e[tmpKey]).length == 0)
+                        {
+                            tmpArr.push(e)
+                        }
+                    });
+                    tmpData = tmpArr
+                }
             }
             
             let tmpDt = Object.assign(Object.create(Object.getPrototypeOf(this)), this)
