@@ -1930,6 +1930,26 @@ export default class posDoc extends React.PureComponent
             import("../meta/print/" + prmPrint).then(async(e)=>
             {
                 let tmpPrint = e.print(pData)
+
+                // let tmpArr = [];
+                // for (let i = 0; i < tmpPrint.length; i++) 
+                // {
+                //     let tmpObj = tmpPrint[i]
+                //     if(typeof tmpPrint[i] == 'function')
+                //     {
+                //         tmpObj = tmpPrint[i]()
+                //     }
+                //     if(Array.isArray(tmpObj))
+                //     {
+                //         tmpArr.push(...tmpObj)
+                //     }
+                //     else if(typeof tmpObj == 'object')
+                //     {
+                //         tmpArr.push(tmpObj)
+                //     }
+                // }
+                // console.log(tmpArr)
+                
                 await this.posDevice.escPrinter(tmpPrint)
                 resolve()
             })
@@ -4608,8 +4628,8 @@ export default class posDoc extends React.PureComponent
 
                                         this.lastPosPromoDt.selectCmd = 
                                         {
-                                            query : "SELECT * FROM [dbo].[POS_PROMO_VW_01] WHERE POS = @POS",
-                                            param : ['POS:string|50'],
+                                            query : "SELECT * FROM [dbo].[POS_PROMO_VW_01] WHERE POS_GUID = @POS_GUID",
+                                            param : ['POS_GUID:string|50'],
                                             value:  [e.selectedRowKeys[0].GUID]
                                         } 
                                         
