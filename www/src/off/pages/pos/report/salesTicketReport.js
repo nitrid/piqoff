@@ -547,7 +547,7 @@ export default class salesOrdList extends React.PureComponent
                                 <Column dataField="TIME" caption={this.t("grdSaleTicketReport.clmTime")} visible={true} width={100}/> 
                                 <Column dataField="USERS" caption={this.t("grdSaleTicketReport.slmUser")} visible={true} width={100}/> 
                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdSaleTicketReport.clmCustomer")} visible={true} width={300}/> 
-                                <Column dataField="CUSTOMER" caption={this.t("grdSaleTicketReport.clmCardId")} visible={true} width={100}/> 
+                                <Column dataField="CUSTOMER" caption={this.t("grdSaleTicketReport.clmCardId")} visible={true} width={150}/> 
                                 <Column dataField="DISCOUNT" caption={this.t("grdSaleTicketReport.clmDiscount")} visible={true} width={100} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
                                 <Column dataField="LOYALYT" caption={this.t("grdSaleTicketReport.clmLoyalyt")} visible={true} width={100} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
                                 <Column dataField="HT" caption={this.t("grdSaleTicketReport.clmHT")} visible={true} width={100} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
