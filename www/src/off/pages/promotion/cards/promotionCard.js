@@ -49,7 +49,7 @@ export default class promotionCard extends React.PureComponent
     async init()
     {
         this.clearItemList();
-        
+
         this.condDt.clear();
         this.appDt.clear();
 
@@ -260,12 +260,14 @@ export default class promotionCard extends React.PureComponent
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         value={pItem.ITEM_CODE}
                                         displayValue={pItem.ITEM_NAME}
+                                        placeholder={"Açıklama girilecek"}
                                         button={[
                                         {
                                             id:'01',
                                             icon:'more',
                                             onClick:()=>
                                             {
+                                                this["pg_txtPrmItem" + pItem.WITHAL]["txtpg_txtPrmItem" + pItem.WITHAL].value = ""
                                                 this["pg_txtPrmItem" + pItem.WITHAL].show()
                                                 this["pg_txtPrmItem" + pItem.WITHAL].onClick = async(data) =>
                                                 {         
@@ -274,7 +276,7 @@ export default class promotionCard extends React.PureComponent
                                                         this.promo.cond.dt().removeAt(item)
                                                     })
 
-                                                    this["itemList" + pItem.WITHAL] = []
+                                                    //this["itemList" + pItem.WITHAL] = []
 
                                                     for (let i = 0; i < data.length; i++) 
                                                     {
@@ -334,12 +336,15 @@ export default class promotionCard extends React.PureComponent
                                             {
                                                 select:
                                                 {
-                                                    query : "SELECT GUID,CODE,NAME,VAT,MAIN_GRP_NAME FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                                    query : "SELECT MAX(ITEM_GUID) AS GUID,MAX(BARCODE) AS BARCODE,ITEM_CODE AS CODE,ITEM_NAME AS NAME,MAIN_GRP_NAME AS MAIN_GRP_NAME FROM ITEM_BARCODE_VW_01 " +
+                                                            "WHERE (UPPER(ITEM_CODE) LIKE UPPER(@VAL) OR UPPER(ITEM_NAME) LIKE UPPER(@VAL) OR BARCODE LIKE @VAL) AND STATUS = 1 " + 
+                                                            "GROUP BY ITEM_CODE,ITEM_NAME,MAIN_GRP_NAME",
                                                     param : ['VAL:string|50']
                                                 },
                                                 sql:this.core.sql
                                             }
                                         }}>
+                                            <Column dataField="BARCODE" caption={this.t("pg_Grid.clmBarcode")} width={150} />
                                             <Column dataField="CODE" caption={this.t("pg_Grid.clmCode")} width={150} />
                                             <Column dataField="NAME" caption={this.t("pg_Grid.clmName")} width={650} defaultSortOrder="asc" />
                                             <Column dataField="MAIN_GRP_NAME" caption={this.t("pg_Grid.clmGrpName")} width={150}/>
@@ -383,6 +388,7 @@ export default class promotionCard extends React.PureComponent
                                         <NdTextBox id={"txtPrmQuantity" + pItem.WITHAL} parent={this} simple={true} value={pItem.QUANTITY}
                                         onValueChanged={(e)=>
                                         {
+                                            this["txtPrmAmount" + pItem.WITHAL].value = 0
                                             if(this.condDt.where({WITHAL:pItem.WITHAL}).length > 0)
                                             {
                                                 this.condDt.where({WITHAL:pItem.WITHAL})[0].QUANTITY = e.value
@@ -395,6 +401,7 @@ export default class promotionCard extends React.PureComponent
                                         <NdTextBox id={"txtPrmAmount" + pItem.WITHAL} parent={this} simple={true} value={pItem.AMOUNT}
                                         onValueChanged={(e)=>
                                         {
+                                            this["txtPrmQuantity" + pItem.WITHAL].value = 0
                                             if(this.condDt.where({WITHAL:pItem.WITHAL}).length > 0)
                                             {
                                                 this.condDt.where({WITHAL:pItem.WITHAL})[0].AMOUNT = e.value
@@ -499,6 +506,7 @@ export default class promotionCard extends React.PureComponent
                                     <EmptyItem/>
                                     <EmptyItem/>
                                 </GroupItem>
+                                {/* Ürün İskonto */}
                                 <GroupItem colCount={3} visible={this.state["rstType" + pItem.WITHAL] == 3 ? true : false}>
                                     {/* txtRstItem */}                                
                                     <Item>
@@ -507,6 +515,7 @@ export default class promotionCard extends React.PureComponent
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         value={pItem.ITEM_CODE}
                                         displayValue={pItem.ITEM_NAME}
+                                        placeholder={"Açıklama girilecek"}
                                         button=
                                         {[
                                             {
@@ -514,6 +523,7 @@ export default class promotionCard extends React.PureComponent
                                                 icon:'more',
                                                 onClick:()=>
                                                 {
+                                                    this["pg_txtRstItem" + pItem.WITHAL]["txtpg_txtRstItem" + pItem.WITHAL].value = ""
                                                     this["pg_txtRstItem" + pItem.WITHAL].show()
                                                     this["pg_txtRstItem" + pItem.WITHAL].onClick = (data) =>
                                                     {
@@ -553,12 +563,15 @@ export default class promotionCard extends React.PureComponent
                                             {
                                                 select:
                                                 {
-                                                    query : "SELECT GUID,CODE,NAME,VAT,MAIN_GRP_NAME FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                                    query : "SELECT MAX(ITEM_GUID) AS GUID,MAX(BARCODE) AS BARCODE,ITEM_CODE AS CODE,ITEM_NAME AS NAME,MAIN_GRP_NAME AS MAIN_GRP_NAME FROM ITEM_BARCODE_VW_01 " +
+                                                            "WHERE (UPPER(ITEM_CODE) LIKE UPPER(@VAL) OR UPPER(ITEM_NAME) LIKE UPPER(@VAL) OR BARCODE LIKE @VAL) AND STATUS = 1 " + 
+                                                            "GROUP BY ITEM_CODE,ITEM_NAME,MAIN_GRP_NAME",
                                                     param : ['VAL:string|50']
                                                 },
                                                 sql:this.core.sql
                                             }
                                         }}>
+                                            <Column dataField="BARCODE" caption={this.t("pg_Grid.clmBarcode")} width={150} />
                                             <Column dataField="CODE" caption={this.t("pg_Grid.clmCode")} width={150} />
                                             <Column dataField="NAME" caption={this.t("pg_Grid.clmName")} width={650} defaultSortOrder="asc" />
                                             <Column dataField="MAIN_GRP_NAME" caption={this.t("pg_Grid.clmGrpName")} width={150}/>
@@ -622,17 +635,49 @@ export default class promotionCard extends React.PureComponent
                                         <Item>
                                             <Label text={this.t("popDiscount.txtDiscRate")} alignment="right" />
                                             <NdTextBox id={"txtDiscRate" + pItem.WITHAL} parent={this} simple={true} 
-                                            onValueChanged={(e)=>
-                                            { 
-                                                this["txtDiscAmount" + pItem.WITHAL].value = Number(this.state.discPrice - Number(this.state.discPrice).rateInc(e.value,2)).toFixed(2)
+                                            onValueChanged={async(e)=>
+                                            {
+                                                if(e.value >= 0 && e.value <= 100)
+                                                {
+                                                    this["txtDiscAmount" + pItem.WITHAL].value = Number(this.state.discPrice - Number(this.state.discPrice).rateInc(e.value,2)).toFixed(2)
+                                                }
+                                                else
+                                                {
+                                                    this["txtDiscAmount" + pItem.WITHAL].value = 0;
+                                                    this["txtDiscRate" + pItem.WITHAL].value = 0;
+
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgDiscRate',showTitle:true,title:this.t("msgDiscRate.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.t("msgDiscRate.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscRate.msg")}</div>)
+                                                    }
+                                                    await dialog(tmpConfObj);
+                                                }                                                
                                             }}/>
                                         </Item>
                                         <Item>
                                             <Label text={this.t("popDiscount.txtDiscAmount")} alignment="right" />
                                             <NdTextBox id={"txtDiscAmount" + pItem.WITHAL} parent={this} simple={true}
-                                            onValueChanged={(e)=>
+                                            onValueChanged={async(e)=>
                                             { 
-                                                this["txtDiscRate" + pItem.WITHAL].value = Number(100 - Number(this.state.discPrice).rate2Num(e.value,2)).toFixed(2)
+                                                if(Number(100 - Number(this.state.discPrice).rate2Num(e.value,2)) >= 0 && Number(100 - Number(this.state.discPrice).rate2Num(e.value,2)) <= 100)
+                                                {
+                                                    this["txtDiscRate" + pItem.WITHAL].value = Number(100 - Number(this.state.discPrice).rate2Num(e.value,2)).toFixed(2)
+                                                }
+                                                else
+                                                {
+                                                    this["txtDiscAmount" + pItem.WITHAL].value = 0;
+                                                    this["txtDiscRate" + pItem.WITHAL].value = 0;
+
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgDiscRate',showTitle:true,title:this.t("msgDiscRate.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.t("msgDiscRate.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscRate.msg")}</div>)
+                                                    }
+                                                    await dialog(tmpConfObj);
+                                                }
                                             }}/>
                                         </Item>
                                         <Item>
@@ -920,6 +965,7 @@ export default class promotionCard extends React.PureComponent
                                             <NdTextBox id="txtCode" parent={this} simple={true} tabIndex={this.tabIndex} 
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             dt={{data:this.promo.dt(),field:"CODE"}}
+                                            placeholder={"Açıklama girilecek"}
                                             button=
                                             {
                                                 [
@@ -982,6 +1028,7 @@ export default class promotionCard extends React.PureComponent
                                             <Label text={this.t("txtName")} alignment="right" />
                                             <NdTextBox id="txtName" parent={this} simple={true} 
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                            placeholder={"Açıklama girilecek"}
                                             dt={{data:this.promo.dt(),field:"NAME"}}
                                             />     
                                         </Item>
@@ -1006,7 +1053,7 @@ export default class promotionCard extends React.PureComponent
                                             dt={{data:this.promo.dt(),field:"DEPOT_GUID",display:"DEPOT_NAME"}}
                                             displayExpr="DEPOT_NAME"                       
                                             valueExpr="DEPOT_GUID"
-                                            data={{source:{select:{query : "SELECT GUID AS DEPOT_GUID,NAME AS DEPOT_NAME FROM DEPOT_VW_01 ORDER BY CODE ASC"},sql:this.core.sql}}}
+                                            data={{source:{select:{query : "SELECT '00000000-0000-0000-0000-000000000000' AS DEPOT_GUID, 'ALL DEPOT' AS DEPOT_NAME UNION ALL SELECT GUID AS DEPOT_GUID,NAME AS DEPOT_NAME FROM DEPOT_VW_01"},sql:this.core.sql}}}
                                             onValueChanged={(e)=>
                                             {
                                             }}
@@ -1018,6 +1065,7 @@ export default class promotionCard extends React.PureComponent
                                             <NdTextBox id="txtCustomerCode" parent={this} simple={true} 
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             dt={{data:this.promo.dt(),field:"CUSTOMER_CODE"}}
+                                            placeholder={"Açıklama girilecek"}
                                             button=
                                             {
                                                 [

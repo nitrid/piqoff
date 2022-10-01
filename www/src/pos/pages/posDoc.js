@@ -60,7 +60,9 @@ export default class posDoc extends React.PureComponent
         this.cheqDt = new datatable();
         this.lastPosDt = new datatable();
         this.lastPosSaleDt = new datatable();
-        this.lastPosPayDt = new datatable();        
+        this.lastPosPayDt = new datatable();
+        this.lastPosPromoDt = new datatable();  
+
         this.promoObj = new promoCls();
         this.posPromoObj = new posPromoCls();
 
@@ -1071,26 +1073,30 @@ export default class posDoc extends React.PureComponent
     async saleRowUpdate(pRowData,pItemData)
     { 
         //* MIKTARLI FİYAT GETİRME İŞLEMİ */
-        let tmpPriceDt = new datatable()
-        tmpPriceDt.selectCmd = 
+        if(pRowData.QUANTITY != pItemData.QUANTITY)
         {
-            query : "SELECT dbo.FN_PRICE_SALE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER) AS PRICE",
-            param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50'],
-            local : 
+            let tmpPriceDt = new datatable()
+            tmpPriceDt.selectCmd = 
             {
-                type : "select",
-                from : "ITEMS_POS_VW_01",
-                where : 
+                query : "SELECT dbo.FN_PRICE_SALE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER) AS PRICE",
+                param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50'],
+                local : 
                 {
-                    GUID : pItemData.ITEM_GUID
-                },
-            }
+                    type : "select",
+                    from : "ITEMS_POS_VW_01",
+                    where : 
+                    {
+                        GUID : pItemData.ITEM_GUID
+                    },
+                }
+            }        
+            tmpPriceDt.selectCmd.value = [pRowData.ITEM_GUID,pItemData.QUANTITY,pRowData.CUSTOMER_GUID]
+            await tmpPriceDt.refresh();  
+    
+            pItemData.PRICE = tmpPriceDt.length > 0 && tmpPriceDt[0].PRICE > 0 ? tmpPriceDt[0].PRICE : pItemData.PRICE
+            /************************************************************************************ */
         }
-        /************************************************************************************ */
-        tmpPriceDt.selectCmd.value = [pRowData.ITEM_GUID,pItemData.QUANTITY,pRowData.CUSTOMER_GUID]
-        await tmpPriceDt.refresh();  
-
-        pItemData.PRICE = tmpPriceDt.length > 0 && tmpPriceDt[0].PRICE > 0 ? tmpPriceDt[0].PRICE : pItemData.PRICE
+        
 
         let tmpCalc = this.calcSaleTotal(pItemData.PRICE,pItemData.QUANTITY,pRowData.DISCOUNT,pRowData.LOYALTY,pRowData.VAT_RATE)
         
@@ -1924,6 +1930,26 @@ export default class posDoc extends React.PureComponent
             import("../meta/print/" + prmPrint).then(async(e)=>
             {
                 let tmpPrint = e.print(pData)
+
+                // let tmpArr = [];
+                // for (let i = 0; i < tmpPrint.length; i++) 
+                // {
+                //     let tmpObj = tmpPrint[i]
+                //     if(typeof tmpPrint[i] == 'function')
+                //     {
+                //         tmpObj = tmpPrint[i]()
+                //     }
+                //     if(Array.isArray(tmpObj))
+                //     {
+                //         tmpArr.push(...tmpObj)
+                //     }
+                //     else if(typeof tmpObj == 'object')
+                //     {
+                //         tmpArr.push(tmpObj)
+                //     }
+                // }
+                // console.log(tmpArr)
+                
                 await this.posDevice.escPrinter(tmpPrint)
                 resolve()
             })
@@ -4411,6 +4437,7 @@ export default class posDoc extends React.PureComponent
                                                     pos : tmpLastPos,
                                                     possale : this.lastPosSaleDt,
                                                     pospay : this.lastPosPayDt,
+                                                    pospromo : this.lastPosPromoDt,
                                                     special : 
                                                     {
                                                         type : 'Repas',
@@ -4442,6 +4469,7 @@ export default class posDoc extends React.PureComponent
                                                 pos : tmpLastPos,
                                                 possale : this.lastPosSaleDt,
                                                 pospay : this.lastPosPayDt,
+                                                pospromo : this.lastPosPromoDt,
                                                 special : 
                                                 {
                                                     type : 'Fatura',
@@ -4472,6 +4500,7 @@ export default class posDoc extends React.PureComponent
                                                 pos : tmpLastPos,
                                                 possale : this.lastPosSaleDt,
                                                 pospay : this.lastPosPayDt,
+                                                pospromo : this.lastPosPromoDt,
                                                 special : 
                                                 {
                                                     type : 'Fis',
@@ -4596,6 +4625,15 @@ export default class posDoc extends React.PureComponent
                                         
                                         await this.lastPosSaleDt.refresh()
                                         await this.grdLastSale.dataRefresh({source:this.lastPosSaleDt});
+
+                                        this.lastPosPromoDt.selectCmd = 
+                                        {
+                                            query : "SELECT * FROM [dbo].[POS_PROMO_VW_01] WHERE POS_GUID = @POS_GUID",
+                                            param : ['POS_GUID:string|50'],
+                                            value:  [e.selectedRowKeys[0].GUID]
+                                        } 
+                                        
+                                        await this.lastPosPromoDt.refresh()
 
                                         this.lastPosPayDt.selectCmd = 
                                         {

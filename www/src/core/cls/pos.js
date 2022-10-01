@@ -1879,8 +1879,8 @@ export class posPromoCls
         tmpDt.selectCmd = 
         {
             query : "SELECT * FROM [dbo].[POS_PROMO_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND " +
-                    "((PROMO = @PROMO) OR (@PROMO = '00000000-0000-0000-0000-000000000000')) AND ((POS = @POS) OR (@POS = '00000000-0000-0000-0000-000000000000'))",
-            param : ['GUID:string|50','PROMO:string|50','POS:string|50'],
+                    "((PROMO = @PROMO) OR (@PROMO = '00000000-0000-0000-0000-000000000000')) AND ((POS_GUID = @POS_GUID) OR (@POS_GUID = '00000000-0000-0000-0000-000000000000'))",
+            param : ['GUID:string|50','PROMO:string|50','POS_GUID:string|50'],
             local : 
             {
                 type : "select",

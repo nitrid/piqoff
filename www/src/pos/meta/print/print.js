@@ -101,31 +101,77 @@ export function print()
             }
             else
             {
-                for (let i = 0; i < data.possale.length; i++) 
+                //PROMOSYON SATIR GRUPLAMASI
+                data.pospromo.groupBy('PROMO_GUID').forEach(proGrp => 
+                {
+                    let tmpRemise = 0
+                    data.pospromo.where({PROMO_GUID:proGrp.PROMO_GUID}).forEach(proItem =>
+                    {
+                        let tmpProSale = data.possale.where({GUID:proItem.POS_SALE_GUID})                        
+
+                        if(tmpProSale.length > 0)
+                        {
+                            tmpRemise += tmpProSale[0].DISCOUNT
+                            let tmpQt = ""            
+                    
+                            if(Number.isInteger(parseFloat(tmpProSale[0].QUANTITY)))
+                            {
+                                tmpQt = parseInt(tmpProSale[0].QUANTITY / tmpProSale[0].UNIT_FACTOR) + " " + tmpProSale[0].UNIT_SHORT;
+                            }
+                            else
+                            {
+                                tmpQt = parseFloat(parseFloat(tmpProSale[0].QUANTITY / tmpProSale[0].UNIT_FACTOR).toFixed(3)) + " " + tmpProSale[0].UNIT_SHORT;
+                            }
+                                                
+                            tmpArr.push( 
+                            {
+                                font: "b",
+                                style: tmpProSale[0].GUID == "00000000-0000-0000-0000-000000000000" ? "b" : undefined, //SUBTOTAL
+                                align: tmpProSale[0].GUID == "00000000-0000-0000-0000-000000000000" ? "rt" : "lt", //SUBTOTAL
+                                data: tmpProSale[0].VAT_TYPE + " " +
+                                    (tmpProSale[0].GUID == "00000000-0000-0000-0000-000000000000" ? tmpProSale[0].ITEM_SNAME.space(30,'s') : (tmpProSale[0].TICKET_REST ? "*" + tmpProSale[0].ITEM_SNAME : tmpProSale[0].ITEM_SNAME).toString().space(34)) + " " +
+                                    (tmpProSale[0].GUID == "00000000-0000-0000-0000-000000000000" ? "" : tmpQt).space(8,'s') + " " + //SUBTOTAL
+                                    (tmpProSale[0].GUID == "00000000-0000-0000-0000-000000000000" ? "" : parseFloat(tmpProSale[0].PRICE * tmpProSale[0].UNIT_FACTOR).toFixed(2)).space(7,"s") + " " + //SUBTOTAL
+                                    (parseFloat(tmpProSale[0].AMOUNT).toFixed(2) + "EUR").space(10,"s")
+                            })
+                        }
+                    })
+
+                    tmpArr.push( 
+                    {
+                        font: "b",
+                        style: "b",
+                        align: "lt",
+                        size : [1,0],
+                        data: "            Remise ".space(20) + ("  -" + parseFloat(tmpRemise).toFixed(2) + "EUR").space(10,"s")
+                    })
+                });
+                //SATIR DETAYI
+                data.possale.where({GUID:{'NIN':data.pospromo.toColumnArr('POS_SALE_GUID')}}).forEach(tmpSaleItem =>
                 {
                     let tmpQt = ""            
                     
-                    if(Number.isInteger(parseFloat(data.possale[i].QUANTITY)))
+                    if(Number.isInteger(parseFloat(tmpSaleItem.QUANTITY)))
                     {
-                        tmpQt = parseInt(data.possale[i].QUANTITY / data.possale[i].UNIT_FACTOR) + " " + data.possale[i].UNIT_SHORT;
+                        tmpQt = parseInt(tmpSaleItem.QUANTITY / tmpSaleItem.UNIT_FACTOR) + " " + tmpSaleItem.UNIT_SHORT;
                     }
                     else
                     {
-                        tmpQt = parseFloat(parseFloat(data.possale[i].QUANTITY / data.possale[i].UNIT_FACTOR).toFixed(3)) + " " + data.possale[i].UNIT_SHORT;
+                        tmpQt = parseFloat(parseFloat(tmpSaleItem.QUANTITY / tmpSaleItem.UNIT_FACTOR).toFixed(3)) + " " + tmpSaleItem.UNIT_SHORT;
                     }
                                         
                     tmpArr.push( 
                     {
                         font: "b",
-                        style: data.possale[i].GUID == "00000000-0000-0000-0000-000000000000" ? "b" : undefined, //SUBTOTAL
-                        align: data.possale[i].GUID == "00000000-0000-0000-0000-000000000000" ? "rt" : "lt", //SUBTOTAL
-                        data: data.possale[i].VAT_TYPE + " " +
-                            (data.possale[i].GUID == "00000000-0000-0000-0000-000000000000" ? data.possale[i].ITEM_SNAME.space(30,'s') : (data.possale[i].TICKET_REST ? "*" + data.possale[i].ITEM_SNAME : data.possale[i].ITEM_SNAME).toString().space(34)) + " " +
-                            (data.possale[i].GUID == "00000000-0000-0000-0000-000000000000" ? "" : tmpQt).space(8,'s') + " " + //SUBTOTAL
-                            (data.possale[i].GUID == "00000000-0000-0000-0000-000000000000" ? "" : parseFloat(data.possale[i].PRICE * data.possale[i].UNIT_FACTOR).toFixed(2)).space(7,"s") + " " + //SUBTOTAL
-                            (parseFloat(data.possale[i].AMOUNT).toFixed(2) + "EUR").space(10,"s")
-                    })
-                }
+                        style: tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "b" : undefined, //SUBTOTAL
+                        align: tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "rt" : "lt", //SUBTOTAL
+                        data: tmpSaleItem.VAT_TYPE + " " +
+                            (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? tmpSaleItem.ITEM_SNAME.space(30,'s') : (tmpSaleItem.TICKET_REST ? "*" + tmpSaleItem.ITEM_SNAME : tmpSaleItem.ITEM_SNAME).toString().space(34)) + " " +
+                            (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "" : tmpQt).space(8,'s') + " " + //SUBTOTAL
+                            (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "" : parseFloat(tmpSaleItem.PRICE * tmpSaleItem.UNIT_FACTOR).toFixed(2)).space(7,"s") + " " + //SUBTOTAL
+                            (parseFloat(tmpSaleItem.AMOUNT).toFixed(2) + "EUR").space(10,"s")
+                    }) 
+                }) 
             } 
             return tmpArr.length > 0 ? tmpArr : undefined
         },

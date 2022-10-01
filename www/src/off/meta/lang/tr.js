@@ -3584,6 +3584,7 @@ export const langTr =
         pg_Grid:
         {
             title: "Seçim",
+            clmBarcode: "BARKODU",
             clmCode: "KODU",
             clmName: "ADI", 
             clmGrpName: "GRUP", 
@@ -3634,6 +3635,12 @@ export const langTr =
             txtDiscRate : "Yüzde",
             txtDiscAmount : "Tutar",
             btnSave: "Kaydet"
+        },
+        msgDiscRate:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Girdiğiniz indirim 0 dan küçük, 100 den büyük olamaz !",
         },
     },
     irs_01_001 : // "Alış İrsaliye Listesi"
@@ -6200,6 +6207,7 @@ export const langTr =
             clmTime: "Saat",
             slmUser: "Kullanıcı",
             clmCustomer : "Cari",
+            clmCardId : "Kard Id",
             clmDiscount : "İndirim",
             clmLoyalyt: "Loyalyt",
             clmHT : "Ara Toplam",

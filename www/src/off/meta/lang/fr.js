@@ -3562,6 +3562,7 @@ export const langFr =
         pg_Grid:
         {
             title:  "Choix",
+            clmBarcode: "BARKODU", //BAK
             clmCode: "Code",
             clmName: "Nom", 
             clmGrpName: "Groupe", //BAK
@@ -3612,6 +3613,12 @@ export const langFr =
             txtDiscRate : "Pourcentage",
             txtDiscAmount : "Montant",
             btnSave: "Enregistre"
+        },
+        msgDiscRate: //BAK
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Girdiğiniz indirim 0 dan küçük, 100 den büyük olamaz !",
         },
     },
     irs_01_001 : // "Alış İrsaliye Listesi"
@@ -6134,6 +6141,7 @@ export const langFr =
             clmTime: "Heure",
             slmUser: "Utilisateur",
             clmCustomer : "Fournisseur",
+            clmCardId : "Numero de Card", //BAK
             clmDiscount : "Remise",
             clmLoyalyt: "Fidelité",
             clmHT : "Total",
