@@ -657,6 +657,7 @@ export const langTr =
         pg_Docs : 
         {
             title : "Evrak Seçimi",
+            clmDate : "TARIH",
             clmRef : "SERİ",
             clmRefNo : "SIRA",
             clmDocDate : "TARIH",
@@ -810,6 +811,7 @@ export const langTr =
         pg_Docs : 
         {
             title : "Evrak Seçimi",
+            clmDate : "TARIH",
             clmRef : "SERİ",
             clmRefNo : "SIRA",
             clmDocDate : "TARIH",
@@ -951,6 +953,7 @@ export const langTr =
         pg_Docs : 
         {
             title : "Evrak Seçimi",
+            clmDate : "TARIH",
             clmRef : "SERİ",
             clmRefNo : "SIRA",
             clmDocDate : "TARIH",
@@ -1138,6 +1141,7 @@ export const langTr =
         pg_Docs : 
         {
             title : "Evrak Seçimi",
+            clmDate : "TARIH",
             clmRef : "Seri",
             clmRefNo : "Sıra",
             clmDocDate : "Tarih",
@@ -1295,6 +1299,7 @@ export const langTr =
         pg_Docs : 
         {
             title : "Evrak Seçimi",
+            clmDate : "TARIH",
             clmRef : "SERİ",
             clmRefNo : "SIRA",
             clmDocDate : "TARIH",
@@ -1434,6 +1439,7 @@ export const langTr =
         pg_Docs : 
         {
             title : "Evrak Seçimi",
+            clmDate : "TARIH",
             clmRef : "SERİ",
             clmRefNo : "SIRA",
         },
@@ -2370,6 +2376,7 @@ export const langTr =
         pg_Docs : 
         {
             title : "Evrak Seçimi",
+            clmDate : "TARIH",
             clmRef : "SERİ",
             clmRefNo : "SIRA",
             clmOutputName : "CARİ ADI",
@@ -2758,6 +2765,7 @@ export const langTr =
         pg_Docs : 
         {
             title : "Evrak Seçimi",
+            clmDate : "TARIH",
             clmRef : "SERİ",
             clmRefNo : "SIRA",
             clmInputName : "CARİ ADI",
@@ -3077,6 +3085,7 @@ export const langTr =
         pg_Docs : 
         {
             title : "Evrak Seçimi",
+            clmDate : "TARIH",
             clmRef : "SERİ",
             clmRefNo : "SIRA",
             clmInputName : "CARİ ADI",
@@ -3340,6 +3349,7 @@ export const langTr =
         pg_Docs : 
         {
             title : "Evrak Seçimi",
+            clmDate : "TARIH",
             clmRef : "SERİ",
             clmRefNo : "SIRA",
             clmInputName : "CARİ ADI",
@@ -3755,6 +3765,7 @@ export const langTr =
         pg_Docs : 
         {
             title : "Evrak Seçimi",
+            clmDate : "TARIH",
             clmRef : "SERİ",
             clmRefNo : "SIRA",
             clmOutputName : "CARİ ADI",
@@ -4025,6 +4036,7 @@ export const langTr =
         pg_Docs : 
         {
             title : "Evrak Seçimi",
+            clmDate : "TARIH",
             clmRef : "SERİ",
             clmRefNo : "SIRA",
             clmInputName : "CARİ ADI",
@@ -4306,6 +4318,7 @@ export const langTr =
         pg_Docs : 
         {
             title : "Evrak Seçimi",
+            clmDate : "TARIH",
             clmRef : "SERİ",
             clmRefNo : "SIRA",
             clmInputName : "CARİ ADI",
@@ -4594,6 +4607,7 @@ export const langTr =
         pg_Docs : 
         {
             title : "Evrak Seçimi",
+            clmDate : "TARIH",
             clmRef : "SERİ",
             clmRefNo : "SIRA",
             clmOutputName : "CARİ ADI",
@@ -4878,6 +4892,7 @@ export const langTr =
         pg_Docs : 
         {
             title : "Evrak Seçimi",
+            clmDate : "TARIH",
             clmRef : "SERİ",
             clmRefNo : "SIRA",
             clmInputName : "CARİ ADI",
@@ -5196,6 +5211,7 @@ export const langTr =
         pg_Docs : 
         {
             title : "Evrak Seçimi",
+            clmDate : "TARIH",
             clmRef : "SERİ",
             clmRefNo : "SIRA",
             clmOutputName : "CARİ ADI",
@@ -5348,6 +5364,7 @@ export const langTr =
         pg_Docs : 
         {
             title : "Evrak Seçimi",
+            clmDate : "TARIH",
             clmRef : "SERİ",
             clmRefNo : "SIRA",
             clmOutputName : "CARİ ADI",
@@ -5615,6 +5632,7 @@ export const langTr =
         pg_Docs : 
         {
             title : "Evrak Seçimi",
+            clmDate : "TARIH",
             clmRef : "SERİ",
             clmRefNo : "SIRA",
             clmInputName : "CARİ ADI",
@@ -5748,6 +5766,7 @@ export const langTr =
         pg_Docs : 
         {
             title : "Evrak Seçimi",
+            clmDate : "TARIH",
             clmRef : "SERİ",
             clmRefNo : "SIRA",
             clmOutputName : "CARİ ADI",
@@ -5987,6 +6006,7 @@ export const langTr =
         pg_Docs : 
         {
             title : "Evrak Seçimi",
+            clmDate : "TARIH",
             clmRef : "SERİ",
             clmRefNo : "SIRA",
            clmDate : "TARİH"
@@ -6099,6 +6119,7 @@ export const langTr =
         pg_Docs : 
         {
             title : "Evrak Seçimi",
+            clmDate : "TARIH",
             clmRef : "SERİ",
             clmRefNo : "SIRA",
             clmDocDate : "TARIH",
@@ -6625,6 +6646,7 @@ export const langTr =
         pg_Docs : 
         {
             title : "Evrak Seçimi",
+            clmDate : "TARIH",
             clmRef : "SERİ",
             clmRefNo : "SIRA",
             clmOutputName : "CARİ ADI",
@@ -6880,6 +6902,7 @@ export const langTr =
         pg_Docs : 
         {
             title : "Evrak Seçimi",
+            clmDate : "TARIH",
             clmRef : "SERİ",
             clmRefNo : "SIRA",
             clmInputName : "CARİ ADI",
