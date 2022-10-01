@@ -791,8 +791,7 @@ export default class purchaseContract extends React.PureComponent
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                         <Paging defaultPageSize={10} />
-                                        <Pager
-                                        visible={true} />
+                                        <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                         <Export fileName={this.lang.t("menu.cnt_02_001")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdContracts.clmCreateDate")} width={150} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdContracts.clmItemCode")} width={150} allowEditing={false}/>

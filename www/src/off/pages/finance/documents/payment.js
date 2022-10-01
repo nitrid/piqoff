@@ -16,7 +16,7 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
@@ -780,6 +780,8 @@ export default class payment extends React.PureComponent
                                         await this.docObj.save()
                                     }}
                                     >
+                                        <Paging defaultPageSize={10} />
+                                        <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} />

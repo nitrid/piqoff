@@ -744,7 +744,7 @@ export default class salesOrder extends React.Component
 
                                 if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                 {
-                                    e.key.DISCOUNT = parseFloat((((this.docObj.docOrders.dt()[rowIndex].AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(2))
+                                    e.key.DISCOUNT = parseFloat((((e.key.AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(2))
                                 }
 
                                 if(e.key.COST_PRICE > e.key.PRICE )
@@ -791,24 +791,24 @@ export default class salesOrder extends React.Component
                                     }
                                 
                                     dialog(tmpConfObj);
-                                    this.docObj.docOrders.dt()[rowIndex].DISCOUNT = 0 
+                                    e.key.DISCOUNT = 0 
                                     return
                                 }
-                                if(this.docObj.docOrders.dt()[rowIndex].VAT > 0)
+                                if(e.key.VAT > 0)
                                 {
-                                    this.docObj.docOrders.dt()[rowIndex].VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(2));
+                                    e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(2));
                                 }
-                                this.docObj.docOrders.dt()[rowIndex].AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(2))
-                                this.docObj.docOrders.dt()[rowIndex].TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +this.docObj.docOrders.dt()[rowIndex].VAT).toFixed(2))
+                                e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(2))
+                                e.key.TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +e.key.VAT).toFixed(2))
 
-                                let tmpMargin = (this.docObj.docOrders.dt()[rowIndex].TOTAL - this.docObj.docOrders.dt()[rowIndex].VAT) - (this.docObj.docOrders.dt()[rowIndex].COST_PRICE * this.docObj.docOrders.dt()[rowIndex].QUANTITY)
-                                let tmpMarginRate = (tmpMargin /(this.docObj.docOrders.dt()[rowIndex].TOTAL - this.docObj.docOrders.dt()[rowIndex].VAT)) * 100
-                                this.docObj.docOrders.dt()[rowIndex].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
-                                if(this.docObj.docOrders.dt()[rowIndex].DISCOUNT > 0)
+                                let tmpMargin = (e.key.TOTAL - e.key.VAT) - (e.key.COST_PRICE * e.key.QUANTITY)
+                                let tmpMarginRate = (tmpMargin /(e.key.TOTAL - e.key.VAT)) * 100
+                                e.key.MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+                                if(e.key.DISCOUNT > 0)
                                 {
-                                    this.docObj.docOrders.dt()[rowIndex].DISCOUNT_RATE = parseFloat((100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100)).toFixed(2))
+                                    e.key.DISCOUNT_RATE = parseFloat((100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100)).toFixed(2))
                                 }
-                                console.log(this.docObj.docOrders.dt()[rowIndex].MARGIN)
+                                console.log(e.key.MARGIN)
                                 this._calculateTotal()
                                 
                             }}

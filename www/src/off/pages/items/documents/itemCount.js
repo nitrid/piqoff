@@ -1213,8 +1213,8 @@ export default class itemCount extends React.PureComponent
 
                                     }}
                                     >
-                                        <Paging defaultPageSize={15} />
-                                         <Pager visible={true} allowedPageSizes={[5,10,50,500,1000]} showPageSizeSelector={true} />
+                                        <Paging defaultPageSize={10} />
+                                        <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Scrolling mode="standard" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>

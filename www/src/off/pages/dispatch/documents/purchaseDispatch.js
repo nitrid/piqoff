@@ -16,7 +16,7 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdTagBox from '../../../../core/react/devex/tagbox.js';
@@ -1602,14 +1602,14 @@ export default class purchaseDispatch extends React.PureComponent
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
                                             if(tmpData.result.recordset.length > 0)
                                             {
-                                                this.docObj.docItems.dt()[rowIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
+                                                e.key.PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
                                                 
                                                 this._calculateTotal()
                                             }
                                         }
                                         if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                         {
-                                            e.key.DISCOUNT = parseFloat((((this.docObj.docItems.dt()[rowIndex].AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(3))
+                                            e.key.DISCOUNT = parseFloat((((e.key.AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(3))
                                         }
                                         if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
                                         {
@@ -1621,16 +1621,16 @@ export default class purchaseDispatch extends React.PureComponent
                                             }
                                         
                                             dialog(tmpConfObj);
-                                            this.docObj.docItems.dt()[rowIndex].DISCOUNT = 0 
+                                            e.key.DISCOUNT = 0 
                                             return
                                         }
 
-                                        this.docObj.docItems.dt()[rowIndex].VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(2));
-                                        this.docObj.docItems.dt()[rowIndex].AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(2))
-                                        this.docObj.docItems.dt()[rowIndex].TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +this.docObj.docItems.dt()[rowIndex].VAT).toFixed(2))
-                                        if(this.docObj.docItems.dt()[rowIndex].DISCOUNT > 0)
+                                        e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(2));
+                                        e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(2))
+                                        e.key.TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +e.key.VAT).toFixed(2))
+                                        if(e.key.DISCOUNT > 0)
                                         {
-                                            this.docObj.docItems.dt()[rowIndex].DISCOUNT_RATE = parseFloat(100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100).toFixed(2))
+                                            e.key.DISCOUNT_RATE = parseFloat(100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100).toFixed(2))
                                         }
                                         this._calculateTotal()
                                     }}
@@ -1639,6 +1639,8 @@ export default class purchaseDispatch extends React.PureComponent
                                         await this.docObj.save()
                                     }}
                                     >
+                                        <Paging defaultPageSize={10} />
+                                        <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>

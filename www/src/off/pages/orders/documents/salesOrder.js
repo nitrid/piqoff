@@ -16,7 +16,7 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdTagBox from '../../../../core/react/devex/tagbox.js';
@@ -1506,7 +1506,6 @@ export default class salesOrder extends React.PureComponent
                                     width={'100%'}
                                     dbApply={false}
                                     onRowUpdated={async(e)=>{
-                                        let rowIndex = e.component.getRowIndexByKey(e.key)
 
                                         if(typeof e.data.QUANTITY != 'undefined')
                                         {
@@ -1519,14 +1518,14 @@ export default class salesOrder extends React.PureComponent
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
                                             if(tmpData.result.recordset.length > 0)
                                             {
-                                                this.docObj.docOrders.dt()[rowIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
+                                                e.key.PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
                                                 
                                                 this._calculateTotal()
                                             }
                                         }
                                         if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                         {
-                                            e.key.DISCOUNT = parseFloat((((this.docObj.docOrders.dt()[rowIndex].AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(3))
+                                            e.key.DISCOUNT = parseFloat((((e.key.AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(3))
                                         }
 
                                         if(e.key.COST_PRICE > e.key.PRICE )
@@ -1573,22 +1572,21 @@ export default class salesOrder extends React.PureComponent
                                             }
                                         
                                             dialog(tmpConfObj);
-                                            this.docObj.docOrders.dt()[rowIndex].DISCOUNT = 0 
+                                            e.key.DISCOUNT = 0 
                                             return
                                         }
 
-                                        this.docObj.docOrders.dt()[rowIndex].VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(3));
-                                        this.docObj.docOrders.dt()[rowIndex].AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3))
-                                        this.docObj.docOrders.dt()[rowIndex].TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +this.docObj.docOrders.dt()[rowIndex].VAT).toFixed(3))
+                                        e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(3));
+                                        e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3))
+                                        e.key.TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +e.key.VAT).toFixed(3))
 
-                                        let tmpMargin = (this.docObj.docOrders.dt()[rowIndex].TOTAL - this.docObj.docOrders.dt()[rowIndex].VAT) - (this.docObj.docOrders.dt()[rowIndex].COST_PRICE * this.docObj.docOrders.dt()[rowIndex].QUANTITY)
-                                        let tmpMarginRate = (tmpMargin /(this.docObj.docOrders.dt()[rowIndex].TOTAL - this.docObj.docOrders.dt()[rowIndex].VAT)) * 100
-                                        this.docObj.docOrders.dt()[rowIndex].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
-                                        if(this.docObj.docOrders.dt()[rowIndex].DISCOUNT > 0)
+                                        let tmpMargin = (e.key.TOTAL - e.key.VAT) - (e.key.COST_PRICE * e.key.QUANTITY)
+                                        let tmpMarginRate = (tmpMargin /(e.key.TOTAL - e.key.VAT)) * 100
+                                        e.key.MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+                                        if(e.key.DISCOUNT > 0)
                                         {
-                                            this.docObj.docOrders.dt()[rowIndex].DISCOUNT_RATE = parseFloat((100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100)).toFixed(3))
+                                            e.key.DISCOUNT_RATE = parseFloat((100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100)).toFixed(3))
                                         }
-                                        console.log(this.docObj.docOrders.dt()[rowIndex].MARGIN)
                                         this._calculateTotal()
                                        
                                     }}
@@ -1597,6 +1595,8 @@ export default class salesOrder extends React.PureComponent
                                         await this.docObj.save()
                                     }}
                                     >
+                                        <Paging defaultPageSize={10} />
+                                        <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>

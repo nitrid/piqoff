@@ -529,7 +529,7 @@ export default class itemList extends React.PureComponent
                             }}
                             >                                    
                                 <Paging defaultPageSize={50} />
-                                <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
+                                <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                 <Export fileName={this.lang.t("menu.stk_03_001")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true}/> 
                                 <Column dataField="NAME" caption={this.t("grdListe.clmName")} visible={true} defaultSortOrder="asc" /> 

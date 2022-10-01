@@ -979,20 +979,20 @@ export default class rebateDispatch extends React.PureComponent
                                         }
                                     
                                         dialog(tmpConfObj);
-                                        this.docObj.docItems.dt()[rowIndex].DISCOUNT = 0 
+                                        e.key.DISCOUNT = 0 
                                         return
                                     }
-                                    if(this.docObj.docItems.dt()[rowIndex].VAT > 0)
+                                    if(e.key.VAT > 0)
                                     {
-                                        this.docObj.docItems.dt()[rowIndex].VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(3));
+                                        e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(3));
                                     }
-                                    this.docObj.docItems.dt()[rowIndex].AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3))
-                                    this.docObj.docItems.dt()[rowIndex].TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +this.docObj.docItems.dt()[rowIndex].VAT).toFixed(3))
+                                    e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3))
+                                    e.key.TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +e.key.VAT).toFixed(3))
 
                                     
-                                    if(this.docObj.docItems.dt()[rowIndex].DISCOUNT > 0)
+                                    if(e.key.DISCOUNT > 0)
                                     {
-                                        this.docObj.docItems.dt()[rowIndex].DISCOUNT_RATE = parseFloat((100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100)).toFixed(3))
+                                        e.key.DISCOUNT_RATE = parseFloat((100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100)).toFixed(3))
                                     }
                                     this._calculateTotal()
                                     

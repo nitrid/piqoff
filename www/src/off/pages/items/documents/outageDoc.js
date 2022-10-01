@@ -16,7 +16,7 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
@@ -1240,7 +1240,7 @@ export default class outageDoc extends React.PureComponent
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotQuantity.msg") + e.oldData.DEPOT_QUANTITY}</div>)
                                                 }
                                                 await dialog(tmpConfObj);
-                                                this.docObj.docItems.dt()[rowIndex].QUANTITY = e.oldData.DEPOT_QUANTITY
+                                                e.key.QUANTITY = e.oldData.DEPOT_QUANTITY
                                             }
                                         }
                                     }}
@@ -1251,6 +1251,8 @@ export default class outageDoc extends React.PureComponent
                                         this._calculateTotal()
                                     }}
                                     >
+                                        <Paging defaultPageSize={10} />
+                                        <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Scrolling mode="standart"/>
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
