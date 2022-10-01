@@ -19,7 +19,7 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Pager,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdTagBox from '../../../../core/react/devex/tagbox.js';
@@ -1481,7 +1481,7 @@ export default class purchaseInvoice extends React.PureComponent
                                         {
                                             this.docObj.docCustomer.dt()[0].INPUT = this.cmbDepot.value
                                             this.checkRow()
-                                            if(this.txtCustomerCode.value != '')
+                                            if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                             {
                                                 this.frmDocItems.option('disabled',false)
                                             }
@@ -1521,6 +1521,10 @@ export default class purchaseInvoice extends React.PureComponent
                                                         this.txtRef.value = data[0].CODE
                                                         this.txtRef.props.onValueChanged()
                                                     }
+                                                    if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                    {
+                                                        this.frmDocItems.option('disabled',false)
+                                                    }
                                                     this._getItems()
                                                     this._getBarcodes()
                                                 }
@@ -1549,7 +1553,7 @@ export default class purchaseInvoice extends React.PureComponent
                                                                 this.txtRef.value = data[0].CODE
                                                                 this.txtRef.props.onValueChanged()
                                                             }
-                                                            if(this.cmbDepot.value != '')
+                                                            if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                                             {
                                                                 this.frmDocItems.option('disabled',false)
                                                             }

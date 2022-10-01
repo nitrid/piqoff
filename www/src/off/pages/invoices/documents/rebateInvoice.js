@@ -1015,6 +1015,10 @@ export default class rebateInvoice extends React.PureComponent
                                         {
                                             this.checkRow()
                                             this.docObj.docCustomer.dt()[0].OUTPUT = this.cmbDepot.value
+                                            if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                            {
+                                                this.frmRebateInv.option('disabled',false)
+                                            }
                                         }).bind(this)}
                                     data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
@@ -1051,7 +1055,10 @@ export default class rebateInvoice extends React.PureComponent
                                                         this.txtRef.value = data[0].CODE
                                                         this.txtRef.props.onValueChanged()
                                                     }
-                                                    
+                                                    if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                    {
+                                                        this.frmRebateInv.option('disabled',false)
+                                                    }
                                                 }
                                                 this._getBarcodes()
                                             }
@@ -1079,6 +1086,10 @@ export default class rebateInvoice extends React.PureComponent
                                                                 this.txtRef.value = data[0].CODE
                                                                 this.txtRef.props.onValueChanged()
                                                             } 
+                                                            if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                            {
+                                                                this.frmRebateInv.option('disabled',false)
+                                                            }
                                                         }
                                                         this._getBarcodes()
                                                     }

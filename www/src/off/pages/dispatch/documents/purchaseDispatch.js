@@ -1073,6 +1073,10 @@ export default class purchaseDispatch extends React.PureComponent
                                     onValueChanged={(async()=>
                                         {
                                             this.checkRow()
+                                            if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                            {
+                                                this.frmDocItems.option('disabled',false)
+                                            }
                                         }).bind(this)}
                                     data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE IN(0,2)"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
@@ -1108,6 +1112,10 @@ export default class purchaseDispatch extends React.PureComponent
                                                         this.txtRef.value = data[0].CODE;
                                                         this.txtRef.props.onChange()
                                                     }
+                                                    if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                    {
+                                                        this.frmDocItems.option('disabled',false)
+                                                    }
                                                     this._getItems()
                                                     this._getBarcodes()
                                                 }
@@ -1134,6 +1142,10 @@ export default class purchaseDispatch extends React.PureComponent
                                                             {
                                                                 this.txtRef.value = data[0].CODE;
                                                                 this.txtRef.props.onChange()
+                                                            }
+                                                            if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                            {
+                                                                this.frmDocItems.option('disabled',false)
                                                             }
                                                             this._getItems()
                                                             this._getBarcodes()
