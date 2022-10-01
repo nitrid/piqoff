@@ -811,8 +811,8 @@ export default class salesOrder extends React.PureComponent
                                                     button:[{id:"btn01",caption:this.t("msgLocked.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgLocked.msg")}</div>)
                                                 }
-
                                                 await dialog(tmpConfObj);
+                                                this.frmdocOrders.option('disabled',true)
                                             }
                                             else
                                             {

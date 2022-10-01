@@ -813,6 +813,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                                 }
 
                                                 await dialog(tmpConfObj);
+                                                this.frmDocItems.option('disabled',true)
                                             }
                                             else
                                             {

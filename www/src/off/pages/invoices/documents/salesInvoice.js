@@ -1054,6 +1054,7 @@ export default class salesInvoice extends React.PureComponent
                                                 }
 
                                                 await dialog(tmpConfObj);
+                                                this.frmSalesInv.option('disabled',true)
                                             }
                                             else
                                             {

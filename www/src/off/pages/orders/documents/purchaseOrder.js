@@ -918,6 +918,7 @@ export default class purchaseOrder extends React.PureComponent
                                                 }
 
                                                 await dialog(tmpConfObj);
+                                                this.frmdocOrders.option('disabled',true)
                                             }
                                             else
                                             {
