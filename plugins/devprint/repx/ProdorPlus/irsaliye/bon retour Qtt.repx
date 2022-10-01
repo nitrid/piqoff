@@ -162,13 +162,13 @@
           <Rows>
             <Item1 Ref="85" ControlType="XRTableRow" Name="tableRow1" Weight="1">
               <Cells>
-                <Item1 Ref="86" ControlType="XRTableCell" Name="tableCell1" Weight="0.0660775076661769" Text="Line" TextAlignment="MiddleRight" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold" Borders="None">
+                <Item1 Ref="86" ControlType="XRTableCell" Name="tableCell1" Weight="0.078141216582036654" Text="Ligne" TextAlignment="MiddleRight" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold" Borders="None">
                   <StylePriority Ref="87" UseFont="false" UseBorders="false" UseTextAlignment="false" />
                 </Item1>
                 <Item2 Ref="88" ControlType="XRTableCell" Name="tableCell2" Weight="0.14546083058342951" Text="Reference Fournisseur" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
                   <StylePriority Ref="89" UseFont="false" />
                 </Item2>
-                <Item3 Ref="90" ControlType="XRTableCell" Name="tableCell3" Weight="0.41303898771445563" Text="Designation Produit" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
+                <Item3 Ref="90" ControlType="XRTableCell" Name="tableCell3" Weight="0.40097527879859579" Text="Designation Produit" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
                   <StylePriority Ref="91" UseFont="false" />
                 </Item3>
                 <Item4 Ref="92" ControlType="XRTableCell" Name="tableCell33" Weight="0.084337500155996267" Multiline="true" Text="Qtt. Colis" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
@@ -198,7 +198,7 @@
                 <Item12 Ref="108" ControlType="XRTableCell" Name="tableCell39" Weight="0.095180634110651974" Multiline="true" Text="Taux Remise" TextAlignment="MiddleRight" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
                   <StylePriority Ref="109" UseFont="false" UseTextAlignment="false" />
                 </Item12>
-                <Item13 Ref="110" ControlType="XRTableCell" Name="tableCell9" Weight="0.13415558254774285" Text="Totale Line HT" TextAlignment="MiddleRight" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
+                <Item13 Ref="110" ControlType="XRTableCell" Name="tableCell9" Weight="0.13415558254774285" Text="Totale Ligne HT" TextAlignment="MiddleRight" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
                   <StylePriority Ref="111" UseFont="false" UseTextAlignment="false" />
                 </Item13>
               </Cells>
@@ -227,19 +227,19 @@
           <Rows>
             <Item1 Ref="120" ControlType="XRTableRow" Name="tableRow2" Weight="11.5">
               <Cells>
-                <Item1 Ref="121" ControlType="XRTableCell" Name="tableCell10" Weight="0.058690552965424386" TextAlignment="MiddleRight" StyleName="DetailData1" Borders="None">
+                <Item1 Ref="121" ControlType="XRTableCell" Name="tableCell10" Weight="0.0708501679082304" TextAlignment="MiddleRight" StyleName="DetailData1" Borders="None">
                   <ExpressionBindings>
                     <Item1 Ref="122" EventName="BeforePrint" PropertyName="Text" Expression="[DataSource.CurrentRowIndex]+1" />
                   </ExpressionBindings>
                   <StylePriority Ref="123" UseBorders="false" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="124" ControlType="XRTableCell" Name="tableCell11" Weight="0.15284772617462095" CanGrow="false" Multiline="true" StyleName="DetailData1" Font="Arial, 7pt">
+                <Item2 Ref="124" ControlType="XRTableCell" Name="tableCell11" Weight="0.15284773004005967" CanGrow="false" Multiline="true" StyleName="DetailData1" Font="Arial, 7pt">
                   <ExpressionBindings>
                     <Item1 Ref="125" EventName="BeforePrint" PropertyName="Text" Expression="[MULTICODE]" />
                   </ExpressionBindings>
                   <StylePriority Ref="126" UseFont="false" />
                 </Item2>
-                <Item3 Ref="127" ControlType="XRTableCell" Name="tableCell12" Weight="0.41720557155677845" StyleName="DetailData1" Font="Arial, 7pt">
+                <Item3 Ref="127" ControlType="XRTableCell" Name="tableCell12" Weight="0.40504595274853356" StyleName="DetailData1" Font="Arial, 7pt">
                   <ExpressionBindings>
                     <Item1 Ref="128" EventName="BeforePrint" PropertyName="Text" Expression="[ITEM_NAME] + [BARCODE]" />
                   </ExpressionBindings>

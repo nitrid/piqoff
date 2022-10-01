@@ -143,7 +143,7 @@ export const langFr =
         pos_01 : "Saisie",
         pos_01_001 : "Identifier Caisse",
         pos_02 : "Rapports",
-        pos_02_001 : "Recharche ticket de Vente",
+        pos_02_001 : "Recherche ticket de Vente",
         pos_02_002 : "Rapport point fidelité client",
         pos_02_003 : "Rapport de Vente",
         pos_02_004 : "Rapport de Mouvement Ticket",
@@ -5240,7 +5240,7 @@ export const langFr =
         },    
         cmbMultiItemType :     
         {    
-            title : "Type De Recharche",    
+            title : "Type De Recherche",    
             customerCode : "En Fonction du Code Fournisseur ",    
             ItemCode : "Référence Produit"    
         },    
@@ -6400,7 +6400,7 @@ export const langFr =
         cash : "Espece ",
         debitCard : "CB",
         check : "Cheque",
-        ticketRest : "T. Resturant",
+        ticketRest : "T. Restaurant",
         previous: "Précédent",
         finish : "Terminez",
         next : "Suivant",
@@ -6430,8 +6430,8 @@ export const langFr =
         },
         popAdvance : 
         {
-            title : "Avans",   // BAK
-            msg :"Lütfen Avans Tutarınızı Giriniz.."   // BAK
+            title : "Fond De Caisse",   // BAK
+            msg :"Veuillez entrer le montant du fond de caisse …"   // BAK
         },
         txtPopAdvance :"Total",
         btnPopAdd : "Valide",
@@ -6445,7 +6445,7 @@ export const langFr =
         btnPopOk : "OK",
         dtAdvanceDate : "date",
         cmbPopSafe :"Caisse",
-        addAdvance : "Fonde De Caisse",
+        addAdvance : "Fond De Caisse",
         msgDoubleAdvence:
         {
             title: "Attention",

@@ -1,180 +1,180 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<XtraReportsLayoutSerializer SerializerVersion="19.2.3.0" Ref="1" ControlType="DevExpress.XtraReports.UI.XtraReport, DevExpress.XtraReports.v19.2, Version=19.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Name="Report11" DataSourceSchema="[{&quot;GUID&quot;:&quot;165D2BA9-F2A7-4E78-8961-611C235DCABD&quot;,&quot;MGUID&quot;:&quot;3ED53531-18F3-4697-9FEB-482661B3685A&quot;,&quot;CUSER&quot;:&quot;ADMIN&quot;,&quot;CDATE&quot;:&quot;2021-10-05T22:06:52.270Z&quot;,&quot;LUSER&quot;:&quot;ADMIN&quot;,&quot;LDATE&quot;:&quot;2021-10-05T22:06:52.270Z&quot;,&quot;TYPE&quot;:1,&quot;DOC_TYPE&quot;:1,&quot;REF&quot;:&quot;IF&quot;,&quot;REF_NO&quot;:1633464368889,&quot;DOC_DATE&quot;:&quot;2021-10-05T00:00:00.000Z&quot;,&quot;CUSTOMER&quot;:&quot;0000.000019&quot;,&quot;CUSTOMER_NAME&quot;:&quot;DEMKA GmbH&quot;,&quot;DEPOT&quot;:&quot;1&quot;,&quot;DEPOT_NAME&quot;:&quot;MERKEZ&quot;,&quot;ITEM_CODE&quot;:&quot;0350&quot;,&quot;ITEM_NAME&quot;:&quot;ETI ADICTO BROWNI CARAMEL 200G&quot;,&quot;UNIT&quot;:&quot;U&quot;,&quot;LINE_NO&quot;:0,&quot;QUANTITY&quot;:5,&quot;PRICE&quot;:1.2,&quot;DISCOUNT&quot;:0,&quot;VATRATE&quot;:5.5,&quot;VAT&quot;:0.33,&quot;AMOUNT&quot;:6,&quot;TOTAL_AMOUNT&quot;:17.16,&quot;TOTAL_DISCOUNT&quot;:0,&quot;TOTAL_VAT&quot;:1.80675,&quot;TOTAL&quot;:18.96675,&quot;LINE_DESCRIPTION&quot;:&quot;DENEME1&quot;,&quot;DESCRIPTION&quot;:&quot;&quot;,&quot;AMOUNTF&quot;:&quot;6.00&quot;,&quot;FIRMA&quot;:&quot;HUDO Distribution SARL&quot;,&quot;BASLIK&quot;:&quot;7 ALLEE DU MIDI\n54270 ESSEY LES NANCY\nTel : 03 83 93 33 07\nnancy@prodorplus.fr\nwww.prodorplus.fr&quot;,&quot;ADRESS&quot;:&quot;Franz-Grashof-Str. 25-29 &quot;,&quot;ZIPCODE&quot;:&quot;68199&quot;,&quot;CITY&quot;:&quot;MANNHEIM&quot;,&quot;COUNTRY&quot;:&quot;DE&quot;,&quot;PATH&quot;:&quot;D:\\Piqpos\\devprint\\repx\\ProdorPlus\\iade fiyat fark tarih pert\\Retoure Fournisseure.repx&quot;,&quot;COST_PRICE&quot;:1.2,&quot;CUSTOMER_ITEM_CODE&quot;:&quot;&quot;},{&quot;GUID&quot;:&quot;A7449EE5-2C8F-4960-BABF-EB358B60288B&quot;,&quot;MGUID&quot;:&quot;3ED53531-18F3-4697-9FEB-482661B3685A&quot;,&quot;CUSER&quot;:&quot;ADMIN&quot;,&quot;CDATE&quot;:&quot;2021-10-05T22:06:56.973Z&quot;,&quot;LUSER&quot;:&quot;ADMIN&quot;,&quot;LDATE&quot;:&quot;2021-10-05T22:06:56.973Z&quot;,&quot;TYPE&quot;:1,&quot;DOC_TYPE&quot;:1,&quot;REF&quot;:&quot;IF&quot;,&quot;REF_NO&quot;:1633464368889,&quot;DOC_DATE&quot;:&quot;2021-10-05T00:00:00.000Z&quot;,&quot;CUSTOMER&quot;:&quot;0000.000019&quot;,&quot;CUSTOMER_NAME&quot;:&quot;DEMKA GmbH&quot;,&quot;DEPOT&quot;:&quot;1&quot;,&quot;DEPOT_NAME&quot;:&quot;MERKEZ&quot;,&quot;ITEM_CODE&quot;:&quot;1566OZ-AY&quot;,&quot;ITEM_NAME&quot;:&quot;ETI ADICTO GOLD BROWNIE 36G&quot;,&quot;UNIT&quot;:&quot;U&quot;,&quot;LINE_NO&quot;:1,&quot;QUANTITY&quot;:1,&quot;PRICE&quot;:0.35,&quot;DISCOUNT&quot;:0,&quot;VATRATE&quot;:5.5,&quot;VAT&quot;:0.01925,&quot;AMOUNT&quot;:0.35,&quot;TOTAL_AMOUNT&quot;:17.16,&quot;TOTAL_DISCOUNT&quot;:0,&quot;TOTAL_VAT&quot;:1.80675,&quot;TOTAL&quot;:18.96675,&quot;LINE_DESCRIPTION&quot;:&quot;DENEME1&quot;,&quot;DESCRIPTION&quot;:&quot;&quot;,&quot;AMOUNTF&quot;:&quot;0.35&quot;,&quot;FIRMA&quot;:&quot;HUDO Distribution SARL&quot;,&quot;BASLIK&quot;:&quot;7 ALLEE DU MIDI\n54270 ESSEY LES NANCY\nTel : 03 83 93 33 07\nnancy@prodorplus.fr\nwww.prodorplus.fr&quot;,&quot;ADRESS&quot;:&quot;Franz-Grashof-Str. 25-29 &quot;,&quot;ZIPCODE&quot;:&quot;68199&quot;,&quot;CITY&quot;:&quot;MANNHEIM&quot;,&quot;COUNTRY&quot;:&quot;DE&quot;,&quot;PATH&quot;:&quot;D:\\Piqpos\\devprint\\repx\\ProdorPlus\\iade fiyat fark tarih pert\\Retoure Fournisseure.repx&quot;,&quot;COST_PRICE&quot;:0.35,&quot;CUSTOMER_ITEM_CODE&quot;:&quot;&quot;},{&quot;GUID&quot;:&quot;ECB6D404-498B-4A4C-BF6F-7839E21C3EA5&quot;,&quot;MGUID&quot;:&quot;3ED53531-18F3-4697-9FEB-482661B3685A&quot;,&quot;CUSER&quot;:&quot;ADMIN&quot;,&quot;CDATE&quot;:&quot;2021-10-05T22:07:01.150Z&quot;,&quot;LUSER&quot;:&quot;ADMIN&quot;,&quot;LDATE&quot;:&quot;2021-10-05T22:07:01.150Z&quot;,&quot;TYPE&quot;:1,&quot;DOC_TYPE&quot;:1,&quot;REF&quot;:&quot;IF&quot;,&quot;REF_NO&quot;:1633464368889,&quot;DOC_DATE&quot;:&quot;2021-10-05T00:00:00.000Z&quot;,&quot;CUSTOMER&quot;:&quot;0000.000019&quot;,&quot;CUSTOMER_NAME&quot;:&quot;DEMKA GmbH&quot;,&quot;DEPOT&quot;:&quot;1&quot;,&quot;DEPOT_NAME&quot;:&quot;MERKEZ&quot;,&quot;ITEM_CODE&quot;:&quot;02251OZA&quot;,&quot;ITEM_NAME&quot;:&quot;ETI ADICTO INTENSE 35GR&quot;,&quot;UNIT&quot;:&quot;U&quot;,&quot;LINE_NO&quot;:2,&quot;QUANTITY&quot;:1,&quot;PRICE&quot;:0.35,&quot;DISCOUNT&quot;:0,&quot;VATRATE&quot;:5.5,&quot;VAT&quot;:0.01925,&quot;AMOUNT&quot;:0.35,&quot;TOTAL_AMOUNT&quot;:17.16,&quot;TOTAL_DISCOUNT&quot;:0,&quot;TOTAL_VAT&quot;:1.80675,&quot;TOTAL&quot;:18.96675,&quot;LINE_DESCRIPTION&quot;:&quot;DENEME1&quot;,&quot;DESCRIPTION&quot;:&quot;&quot;,&quot;AMOUNTF&quot;:&quot;0.35&quot;,&quot;FIRMA&quot;:&quot;HUDO Distribution SARL&quot;,&quot;BASLIK&quot;:&quot;7 ALLEE DU MIDI\n54270 ESSEY LES NANCY\nTel : 03 83 93 33 07\nnancy@prodorplus.fr\nwww.prodorplus.fr&quot;,&quot;ADRESS&quot;:&quot;Franz-Grashof-Str. 25-29 &quot;,&quot;ZIPCODE&quot;:&quot;68199&quot;,&quot;CITY&quot;:&quot;MANNHEIM&quot;,&quot;COUNTRY&quot;:&quot;DE&quot;,&quot;PATH&quot;:&quot;D:\\Piqpos\\devprint\\repx\\ProdorPlus\\iade fiyat fark tarih pert\\Retoure Fournisseure.repx&quot;,&quot;COST_PRICE&quot;:0.35,&quot;CUSTOMER_ITEM_CODE&quot;:&quot;&quot;},{&quot;GUID&quot;:&quot;43483B65-63F9-40C9-8877-AB1B3EDE592D&quot;,&quot;MGUID&quot;:&quot;3ED53531-18F3-4697-9FEB-482661B3685A&quot;,&quot;CUSER&quot;:&quot;ADMIN&quot;,&quot;CDATE&quot;:&quot;2021-10-05T22:07:13.870Z&quot;,&quot;LUSER&quot;:&quot;ADMIN&quot;,&quot;LDATE&quot;:&quot;2021-10-05T22:07:13.870Z&quot;,&quot;TYPE&quot;:1,&quot;DOC_TYPE&quot;:1,&quot;REF&quot;:&quot;IF&quot;,&quot;REF_NO&quot;:1633464368889,&quot;DOC_DATE&quot;:&quot;2021-10-05T00:00:00.000Z&quot;,&quot;CUSTOMER&quot;:&quot;0000.000019&quot;,&quot;CUSTOMER_NAME&quot;:&quot;DEMKA GmbH&quot;,&quot;DEPOT&quot;:&quot;1&quot;,&quot;DEPOT_NAME&quot;:&quot;MERKEZ&quot;,&quot;ITEM_CODE&quot;:&quot;1553OZ-AY&quot;,&quot;ITEM_NAME&quot;:&quot;ETI BENIMO BISCUIT CHOCOLAT 80GR&quot;,&quot;UNIT&quot;:&quot;U&quot;,&quot;LINE_NO&quot;:3,&quot;QUANTITY&quot;:1,&quot;PRICE&quot;:0.49,&quot;DISCOUNT&quot;:0,&quot;VATRATE&quot;:5.5,&quot;VAT&quot;:0.026949999999999998,&quot;AMOUNT&quot;:0.49,&quot;TOTAL_AMOUNT&quot;:17.16,&quot;TOTAL_DISCOUNT&quot;:0,&quot;TOTAL_VAT&quot;:1.80675,&quot;TOTAL&quot;:18.96675,&quot;LINE_DESCRIPTION&quot;:&quot;ALIKEMAL&quot;,&quot;DESCRIPTION&quot;:&quot;&quot;,&quot;AMOUNTF&quot;:&quot;0.49&quot;,&quot;FIRMA&quot;:&quot;HUDO Distribution SARL&quot;,&quot;BASLIK&quot;:&quot;7 ALLEE DU MIDI\n54270 ESSEY LES NANCY\nTel : 03 83 93 33 07\nnancy@prodorplus.fr\nwww.prodorplus.fr&quot;,&quot;ADRESS&quot;:&quot;Franz-Grashof-Str. 25-29 &quot;,&quot;ZIPCODE&quot;:&quot;68199&quot;,&quot;CITY&quot;:&quot;MANNHEIM&quot;,&quot;COUNTRY&quot;:&quot;DE&quot;,&quot;PATH&quot;:&quot;D:\\Piqpos\\devprint\\repx\\ProdorPlus\\iade fiyat fark tarih pert\\Retoure Fournisseure.repx&quot;,&quot;COST_PRICE&quot;:0.49,&quot;CUSTOMER_ITEM_CODE&quot;:&quot;&quot;},{&quot;GUID&quot;:&quot;50889263-F747-4757-9AA5-29BDF4303E2A&quot;,&quot;MGUID&quot;:&quot;3ED53531-18F3-4697-9FEB-482661B3685A&quot;,&quot;CUSER&quot;:&quot;ADMIN&quot;,&quot;CDATE&quot;:&quot;2021-10-05T22:07:17.870Z&quot;,&quot;LUSER&quot;:&quot;ADMIN&quot;,&quot;LDATE&quot;:&quot;2021-10-05T22:07:17.870Z&quot;,&quot;TYPE&quot;:1,&quot;DOC_TYPE&quot;:1,&quot;REF&quot;:&quot;IF&quot;,&quot;REF_NO&quot;:1633464368889,&quot;DOC_DATE&quot;:&quot;2021-10-05T00:00:00.000Z&quot;,&quot;CUSTOMER&quot;:&quot;0000.000019&quot;,&quot;CUSTOMER_NAME&quot;:&quot;DEMKA GmbH&quot;,&quot;DEPOT&quot;:&quot;1&quot;,&quot;DEPOT_NAME&quot;:&quot;MERKEZ&quot;,&quot;ITEM_CODE&quot;:&quot;0350&quot;,&quot;ITEM_NAME&quot;:&quot;ETI ADICTO BROWNI CARAMEL 200G&quot;,&quot;UNIT&quot;:&quot;U&quot;,&quot;LINE_NO&quot;:4,&quot;QUANTITY&quot;:1,&quot;PRICE&quot;:1.2,&quot;DISCOUNT&quot;:0,&quot;VATRATE&quot;:5.5,&quot;VAT&quot;:0.066,&quot;AMOUNT&quot;:1.2,&quot;TOTAL_AMOUNT&quot;:17.16,&quot;TOTAL_DISCOUNT&quot;:0,&quot;TOTAL_VAT&quot;:1.80675,&quot;TOTAL&quot;:18.96675,&quot;LINE_DESCRIPTION&quot;:&quot;ALIKEMAL&quot;,&quot;DESCRIPTION&quot;:&quot;&quot;,&quot;AMOUNTF&quot;:&quot;1.20&quot;,&quot;FIRMA&quot;:&quot;HUDO Distribution SARL&quot;,&quot;BASLIK&quot;:&quot;7 ALLEE DU MIDI\n54270 ESSEY LES NANCY\nTel : 03 83 93 33 07\nnancy@prodorplus.fr\nwww.prodorplus.fr&quot;,&quot;ADRESS&quot;:&quot;Franz-Grashof-Str. 25-29 &quot;,&quot;ZIPCODE&quot;:&quot;68199&quot;,&quot;CITY&quot;:&quot;MANNHEIM&quot;,&quot;COUNTRY&quot;:&quot;DE&quot;,&quot;PATH&quot;:&quot;D:\\Piqpos\\devprint\\repx\\ProdorPlus\\iade fiyat fark tarih pert\\Retoure Fournisseure.repx&quot;,&quot;COST_PRICE&quot;:1.2,&quot;CUSTOMER_ITEM_CODE&quot;:&quot;&quot;},{&quot;GUID&quot;:&quot;609BE2F9-53AB-4762-A94C-44B11664410F&quot;,&quot;MGUID&quot;:&quot;3ED53531-18F3-4697-9FEB-482661B3685A&quot;,&quot;CUSER&quot;:&quot;ADMIN&quot;,&quot;CDATE&quot;:&quot;2021-10-05T22:07:21.653Z&quot;,&quot;LUSER&quot;:&quot;ADMIN&quot;,&quot;LDATE&quot;:&quot;2021-10-05T22:07:21.653Z&quot;,&quot;TYPE&quot;:1,&quot;DOC_TYPE&quot;:1,&quot;REF&quot;:&quot;IF&quot;,&quot;REF_NO&quot;:1633464368889,&quot;DOC_DATE&quot;:&quot;2021-10-05T00:00:00.000Z&quot;,&quot;CUSTOMER&quot;:&quot;0000.000019&quot;,&quot;CUSTOMER_NAME&quot;:&quot;DEMKA GmbH&quot;,&quot;DEPOT&quot;:&quot;1&quot;,&quot;DEPOT_NAME&quot;:&quot;MERKEZ&quot;,&quot;ITEM_CODE&quot;:&quot;1842OZ-AY&quot;,&quot;ITEM_NAME&quot;:&quot;ETI BISCUIT CACAO 125G&quot;,&quot;UNIT&quot;:&quot;U&quot;,&quot;LINE_NO&quot;:5,&quot;QUANTITY&quot;:1,&quot;PRICE&quot;:0.55,&quot;DISCOUNT&quot;:0,&quot;VATRATE&quot;:5.5,&quot;VAT&quot;:0.030250000000000003,&quot;AMOUNT&quot;:0.55,&quot;TOTAL_AMOUNT&quot;:17.16,&quot;TOTAL_DISCOUNT&quot;:0,&quot;TOTAL_VAT&quot;:1.80675,&quot;TOTAL&quot;:18.96675,&quot;LINE_DESCRIPTION&quot;:&quot;ALIKEMAL&quot;,&quot;DESCRIPTION&quot;:&quot;&quot;,&quot;AMOUNTF&quot;:&quot;0.55&quot;,&quot;FIRMA&quot;:&quot;HUDO Distribution SARL&quot;,&quot;BASLIK&quot;:&quot;7 ALLEE DU MIDI\n54270 ESSEY LES NANCY\nTel : 03 83 93 33 07\nnancy@prodorplus.fr\nwww.prodorplus.fr&quot;,&quot;ADRESS&quot;:&quot;Franz-Grashof-Str. 25-29 &quot;,&quot;ZIPCODE&quot;:&quot;68199&quot;,&quot;CITY&quot;:&quot;MANNHEIM&quot;,&quot;COUNTRY&quot;:&quot;DE&quot;,&quot;PATH&quot;:&quot;D:\\Piqpos\\devprint\\repx\\ProdorPlus\\iade fiyat fark tarih pert\\Retoure Fournisseure.repx&quot;,&quot;COST_PRICE&quot;:0.55,&quot;CUSTOMER_ITEM_CODE&quot;:&quot;&quot;},{&quot;GUID&quot;:&quot;DEFAA5B0-5913-45D7-8C91-BCFF002D9CB4&quot;,&quot;MGUID&quot;:&quot;3ED53531-18F3-4697-9FEB-482661B3685A&quot;,&quot;CUSER&quot;:&quot;ADMIN&quot;,&quot;CDATE&quot;:&quot;2021-10-05T22:07:35.557Z&quot;,&quot;LUSER&quot;:&quot;ADMIN&quot;,&quot;LDATE&quot;:&quot;2021-10-05T22:07:35.557Z&quot;,&quot;TYPE&quot;:1,&quot;DOC_TYPE&quot;:1,&quot;REF&quot;:&quot;IF&quot;,&quot;REF_NO&quot;:1633464368889,&quot;DOC_DATE&quot;:&quot;2021-10-05T00:00:00.000Z&quot;,&quot;CUSTOMER&quot;:&quot;0000.000019&quot;,&quot;CUSTOMER_NAME&quot;:&quot;DEMKA GmbH&quot;,&quot;DEPOT&quot;:&quot;1&quot;,&quot;DEPOT_NAME&quot;:&quot;MERKEZ&quot;,&quot;ITEM_CODE&quot;:&quot;1597OZA&quot;,&quot;ITEM_NAME&quot;:&quot;ETI BURCAK AVOINE/CREME DE LAIT 4X100G&quot;,&quot;UNIT&quot;:&quot;U&quot;,&quot;LINE_NO&quot;:6,&quot;QUANTITY&quot;:5,&quot;PRICE&quot;:1.35,&quot;DISCOUNT&quot;:0,&quot;VATRATE&quot;:5.5,&quot;VAT&quot;:0.37125,&quot;AMOUNT&quot;:6.75,&quot;TOTAL_AMOUNT&quot;:17.16,&quot;TOTAL_DISCOUNT&quot;:0,&quot;TOTAL_VAT&quot;:1.80675,&quot;TOTAL&quot;:18.96675,&quot;LINE_DESCRIPTION&quot;:&quot;MAHO&quot;,&quot;DESCRIPTION&quot;:&quot;&quot;,&quot;AMOUNTF&quot;:&quot;6.75&quot;,&quot;FIRMA&quot;:&quot;HUDO Distribution SARL&quot;,&quot;BASLIK&quot;:&quot;7 ALLEE DU MIDI\n54270 ESSEY LES NANCY\nTel : 03 83 93 33 07\nnancy@prodorplus.fr\nwww.prodorplus.fr&quot;,&quot;ADRESS&quot;:&quot;Franz-Grashof-Str. 25-29 &quot;,&quot;ZIPCODE&quot;:&quot;68199&quot;,&quot;CITY&quot;:&quot;MANNHEIM&quot;,&quot;COUNTRY&quot;:&quot;DE&quot;,&quot;PATH&quot;:&quot;D:\\Piqpos\\devprint\\repx\\ProdorPlus\\iade fiyat fark tarih pert\\Retoure Fournisseure.repx&quot;,&quot;COST_PRICE&quot;:1.35,&quot;CUSTOMER_ITEM_CODE&quot;:&quot;&quot;},{&quot;GUID&quot;:&quot;1809709C-5AD3-46B2-9E4E-CD71E5B1C7A9&quot;,&quot;MGUID&quot;:&quot;3ED53531-18F3-4697-9FEB-482661B3685A&quot;,&quot;CUSER&quot;:&quot;ADMIN&quot;,&quot;CDATE&quot;:&quot;2021-10-05T22:07:41.240Z&quot;,&quot;LUSER&quot;:&quot;ADMIN&quot;,&quot;LDATE&quot;:&quot;2021-10-05T22:07:41.240Z&quot;,&quot;TYPE&quot;:1,&quot;DOC_TYPE&quot;:1,&quot;REF&quot;:&quot;IF&quot;,&quot;REF_NO&quot;:1633464368889,&quot;DOC_DATE&quot;:&quot;2021-10-05T00:00:00.000Z&quot;,&quot;CUSTOMER&quot;:&quot;0000.000019&quot;,&quot;CUSTOMER_NAME&quot;:&quot;DEMKA GmbH&quot;,&quot;DEPOT&quot;:&quot;1&quot;,&quot;DEPOT_NAME&quot;:&quot;MERKEZ&quot;,&quot;ITEM_CODE&quot;:&quot;1570OZ-AY&quot;,&quot;ITEM_NAME&quot;:&quot;ETI BURCAK BISCUITS AVOINE 125G&quot;,&quot;UNIT&quot;:&quot;U&quot;,&quot;LINE_NO&quot;:7,&quot;QUANTITY&quot;:3,&quot;PRICE&quot;:0.49,&quot;DISCOUNT&quot;:0,&quot;VATRATE&quot;:5.5,&quot;VAT&quot;:0.08085,&quot;AMOUNT&quot;:1.47,&quot;TOTAL_AMOUNT&quot;:17.16,&quot;TOTAL_DISCOUNT&quot;:0,&quot;TOTAL_VAT&quot;:1.80675,&quot;TOTAL&quot;:18.96675,&quot;LINE_DESCRIPTION&quot;:&quot;MAHO&quot;,&quot;DESCRIPTION&quot;:&quot;&quot;,&quot;AMOUNTF&quot;:&quot;1.47&quot;,&quot;FIRMA&quot;:&quot;HUDO Distribution SARL&quot;,&quot;BASLIK&quot;:&quot;7 ALLEE DU MIDI\n54270 ESSEY LES NANCY\nTel : 03 83 93 33 07\nnancy@prodorplus.fr\nwww.prodorplus.fr&quot;,&quot;ADRESS&quot;:&quot;Franz-Grashof-Str. 25-29 &quot;,&quot;ZIPCODE&quot;:&quot;68199&quot;,&quot;CITY&quot;:&quot;MANNHEIM&quot;,&quot;COUNTRY&quot;:&quot;DE&quot;,&quot;PATH&quot;:&quot;D:\\Piqpos\\devprint\\repx\\ProdorPlus\\iade fiyat fark tarih pert\\Retoure Fournisseure.repx&quot;,&quot;COST_PRICE&quot;:0.49,&quot;CUSTOMER_ITEM_CODE&quot;:&quot;&quot;}]" Margins="30, 30, 12, 37" PageWidth="850" PageHeight="1100" Version="19.2" DataMember="DATA" DataSource="#Ref-0" Font="Arial, 9.75pt">
+<XtraReportsLayoutSerializer SerializerVersion="19.2.3.0" Ref="0" ControlType="DevExpress.XtraReports.UI.XtraReport, DevExpress.XtraReports.v19.2, Version=19.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Name="Report11" DataSourceSchema="[{&quot;GUID&quot;:&quot;165D2BA9-F2A7-4E78-8961-611C235DCABD&quot;,&quot;MGUID&quot;:&quot;3ED53531-18F3-4697-9FEB-482661B3685A&quot;,&quot;CUSER&quot;:&quot;ADMIN&quot;,&quot;CDATE&quot;:&quot;2021-10-05T22:06:52.270Z&quot;,&quot;LUSER&quot;:&quot;ADMIN&quot;,&quot;LDATE&quot;:&quot;2021-10-05T22:06:52.270Z&quot;,&quot;TYPE&quot;:1,&quot;DOC_TYPE&quot;:1,&quot;REF&quot;:&quot;IF&quot;,&quot;REF_NO&quot;:1633464368889,&quot;DOC_DATE&quot;:&quot;2021-10-05T00:00:00.000Z&quot;,&quot;CUSTOMER&quot;:&quot;0000.000019&quot;,&quot;CUSTOMER_NAME&quot;:&quot;DEMKA GmbH&quot;,&quot;DEPOT&quot;:&quot;1&quot;,&quot;DEPOT_NAME&quot;:&quot;MERKEZ&quot;,&quot;ITEM_CODE&quot;:&quot;0350&quot;,&quot;ITEM_NAME&quot;:&quot;ETI ADICTO BROWNI CARAMEL 200G&quot;,&quot;UNIT&quot;:&quot;U&quot;,&quot;LINE_NO&quot;:0,&quot;QUANTITY&quot;:5,&quot;PRICE&quot;:1.2,&quot;DISCOUNT&quot;:0,&quot;VATRATE&quot;:5.5,&quot;VAT&quot;:0.33,&quot;AMOUNT&quot;:6,&quot;TOTAL_AMOUNT&quot;:17.16,&quot;TOTAL_DISCOUNT&quot;:0,&quot;TOTAL_VAT&quot;:1.80675,&quot;TOTAL&quot;:18.96675,&quot;LINE_DESCRIPTION&quot;:&quot;DENEME1&quot;,&quot;DESCRIPTION&quot;:&quot;&quot;,&quot;AMOUNTF&quot;:&quot;6.00&quot;,&quot;FIRMA&quot;:&quot;HUDO Distribution SARL&quot;,&quot;BASLIK&quot;:&quot;7 ALLEE DU MIDI\n54270 ESSEY LES NANCY\nTel : 03 83 93 33 07\nnancy@prodorplus.fr\nwww.prodorplus.fr&quot;,&quot;ADRESS&quot;:&quot;Franz-Grashof-Str. 25-29 &quot;,&quot;ZIPCODE&quot;:&quot;68199&quot;,&quot;CITY&quot;:&quot;MANNHEIM&quot;,&quot;COUNTRY&quot;:&quot;DE&quot;,&quot;PATH&quot;:&quot;D:\\Piqpos\\devprint\\repx\\ProdorPlus\\iade fiyat fark tarih pert\\Retoure Fournisseure.repx&quot;,&quot;COST_PRICE&quot;:1.2,&quot;CUSTOMER_ITEM_CODE&quot;:&quot;&quot;},{&quot;GUID&quot;:&quot;A7449EE5-2C8F-4960-BABF-EB358B60288B&quot;,&quot;MGUID&quot;:&quot;3ED53531-18F3-4697-9FEB-482661B3685A&quot;,&quot;CUSER&quot;:&quot;ADMIN&quot;,&quot;CDATE&quot;:&quot;2021-10-05T22:06:56.973Z&quot;,&quot;LUSER&quot;:&quot;ADMIN&quot;,&quot;LDATE&quot;:&quot;2021-10-05T22:06:56.973Z&quot;,&quot;TYPE&quot;:1,&quot;DOC_TYPE&quot;:1,&quot;REF&quot;:&quot;IF&quot;,&quot;REF_NO&quot;:1633464368889,&quot;DOC_DATE&quot;:&quot;2021-10-05T00:00:00.000Z&quot;,&quot;CUSTOMER&quot;:&quot;0000.000019&quot;,&quot;CUSTOMER_NAME&quot;:&quot;DEMKA GmbH&quot;,&quot;DEPOT&quot;:&quot;1&quot;,&quot;DEPOT_NAME&quot;:&quot;MERKEZ&quot;,&quot;ITEM_CODE&quot;:&quot;1566OZ-AY&quot;,&quot;ITEM_NAME&quot;:&quot;ETI ADICTO GOLD BROWNIE 36G&quot;,&quot;UNIT&quot;:&quot;U&quot;,&quot;LINE_NO&quot;:1,&quot;QUANTITY&quot;:1,&quot;PRICE&quot;:0.35,&quot;DISCOUNT&quot;:0,&quot;VATRATE&quot;:5.5,&quot;VAT&quot;:0.01925,&quot;AMOUNT&quot;:0.35,&quot;TOTAL_AMOUNT&quot;:17.16,&quot;TOTAL_DISCOUNT&quot;:0,&quot;TOTAL_VAT&quot;:1.80675,&quot;TOTAL&quot;:18.96675,&quot;LINE_DESCRIPTION&quot;:&quot;DENEME1&quot;,&quot;DESCRIPTION&quot;:&quot;&quot;,&quot;AMOUNTF&quot;:&quot;0.35&quot;,&quot;FIRMA&quot;:&quot;HUDO Distribution SARL&quot;,&quot;BASLIK&quot;:&quot;7 ALLEE DU MIDI\n54270 ESSEY LES NANCY\nTel : 03 83 93 33 07\nnancy@prodorplus.fr\nwww.prodorplus.fr&quot;,&quot;ADRESS&quot;:&quot;Franz-Grashof-Str. 25-29 &quot;,&quot;ZIPCODE&quot;:&quot;68199&quot;,&quot;CITY&quot;:&quot;MANNHEIM&quot;,&quot;COUNTRY&quot;:&quot;DE&quot;,&quot;PATH&quot;:&quot;D:\\Piqpos\\devprint\\repx\\ProdorPlus\\iade fiyat fark tarih pert\\Retoure Fournisseure.repx&quot;,&quot;COST_PRICE&quot;:0.35,&quot;CUSTOMER_ITEM_CODE&quot;:&quot;&quot;},{&quot;GUID&quot;:&quot;ECB6D404-498B-4A4C-BF6F-7839E21C3EA5&quot;,&quot;MGUID&quot;:&quot;3ED53531-18F3-4697-9FEB-482661B3685A&quot;,&quot;CUSER&quot;:&quot;ADMIN&quot;,&quot;CDATE&quot;:&quot;2021-10-05T22:07:01.150Z&quot;,&quot;LUSER&quot;:&quot;ADMIN&quot;,&quot;LDATE&quot;:&quot;2021-10-05T22:07:01.150Z&quot;,&quot;TYPE&quot;:1,&quot;DOC_TYPE&quot;:1,&quot;REF&quot;:&quot;IF&quot;,&quot;REF_NO&quot;:1633464368889,&quot;DOC_DATE&quot;:&quot;2021-10-05T00:00:00.000Z&quot;,&quot;CUSTOMER&quot;:&quot;0000.000019&quot;,&quot;CUSTOMER_NAME&quot;:&quot;DEMKA GmbH&quot;,&quot;DEPOT&quot;:&quot;1&quot;,&quot;DEPOT_NAME&quot;:&quot;MERKEZ&quot;,&quot;ITEM_CODE&quot;:&quot;02251OZA&quot;,&quot;ITEM_NAME&quot;:&quot;ETI ADICTO INTENSE 35GR&quot;,&quot;UNIT&quot;:&quot;U&quot;,&quot;LINE_NO&quot;:2,&quot;QUANTITY&quot;:1,&quot;PRICE&quot;:0.35,&quot;DISCOUNT&quot;:0,&quot;VATRATE&quot;:5.5,&quot;VAT&quot;:0.01925,&quot;AMOUNT&quot;:0.35,&quot;TOTAL_AMOUNT&quot;:17.16,&quot;TOTAL_DISCOUNT&quot;:0,&quot;TOTAL_VAT&quot;:1.80675,&quot;TOTAL&quot;:18.96675,&quot;LINE_DESCRIPTION&quot;:&quot;DENEME1&quot;,&quot;DESCRIPTION&quot;:&quot;&quot;,&quot;AMOUNTF&quot;:&quot;0.35&quot;,&quot;FIRMA&quot;:&quot;HUDO Distribution SARL&quot;,&quot;BASLIK&quot;:&quot;7 ALLEE DU MIDI\n54270 ESSEY LES NANCY\nTel : 03 83 93 33 07\nnancy@prodorplus.fr\nwww.prodorplus.fr&quot;,&quot;ADRESS&quot;:&quot;Franz-Grashof-Str. 25-29 &quot;,&quot;ZIPCODE&quot;:&quot;68199&quot;,&quot;CITY&quot;:&quot;MANNHEIM&quot;,&quot;COUNTRY&quot;:&quot;DE&quot;,&quot;PATH&quot;:&quot;D:\\Piqpos\\devprint\\repx\\ProdorPlus\\iade fiyat fark tarih pert\\Retoure Fournisseure.repx&quot;,&quot;COST_PRICE&quot;:0.35,&quot;CUSTOMER_ITEM_CODE&quot;:&quot;&quot;},{&quot;GUID&quot;:&quot;43483B65-63F9-40C9-8877-AB1B3EDE592D&quot;,&quot;MGUID&quot;:&quot;3ED53531-18F3-4697-9FEB-482661B3685A&quot;,&quot;CUSER&quot;:&quot;ADMIN&quot;,&quot;CDATE&quot;:&quot;2021-10-05T22:07:13.870Z&quot;,&quot;LUSER&quot;:&quot;ADMIN&quot;,&quot;LDATE&quot;:&quot;2021-10-05T22:07:13.870Z&quot;,&quot;TYPE&quot;:1,&quot;DOC_TYPE&quot;:1,&quot;REF&quot;:&quot;IF&quot;,&quot;REF_NO&quot;:1633464368889,&quot;DOC_DATE&quot;:&quot;2021-10-05T00:00:00.000Z&quot;,&quot;CUSTOMER&quot;:&quot;0000.000019&quot;,&quot;CUSTOMER_NAME&quot;:&quot;DEMKA GmbH&quot;,&quot;DEPOT&quot;:&quot;1&quot;,&quot;DEPOT_NAME&quot;:&quot;MERKEZ&quot;,&quot;ITEM_CODE&quot;:&quot;1553OZ-AY&quot;,&quot;ITEM_NAME&quot;:&quot;ETI BENIMO BISCUIT CHOCOLAT 80GR&quot;,&quot;UNIT&quot;:&quot;U&quot;,&quot;LINE_NO&quot;:3,&quot;QUANTITY&quot;:1,&quot;PRICE&quot;:0.49,&quot;DISCOUNT&quot;:0,&quot;VATRATE&quot;:5.5,&quot;VAT&quot;:0.026949999999999998,&quot;AMOUNT&quot;:0.49,&quot;TOTAL_AMOUNT&quot;:17.16,&quot;TOTAL_DISCOUNT&quot;:0,&quot;TOTAL_VAT&quot;:1.80675,&quot;TOTAL&quot;:18.96675,&quot;LINE_DESCRIPTION&quot;:&quot;ALIKEMAL&quot;,&quot;DESCRIPTION&quot;:&quot;&quot;,&quot;AMOUNTF&quot;:&quot;0.49&quot;,&quot;FIRMA&quot;:&quot;HUDO Distribution SARL&quot;,&quot;BASLIK&quot;:&quot;7 ALLEE DU MIDI\n54270 ESSEY LES NANCY\nTel : 03 83 93 33 07\nnancy@prodorplus.fr\nwww.prodorplus.fr&quot;,&quot;ADRESS&quot;:&quot;Franz-Grashof-Str. 25-29 &quot;,&quot;ZIPCODE&quot;:&quot;68199&quot;,&quot;CITY&quot;:&quot;MANNHEIM&quot;,&quot;COUNTRY&quot;:&quot;DE&quot;,&quot;PATH&quot;:&quot;D:\\Piqpos\\devprint\\repx\\ProdorPlus\\iade fiyat fark tarih pert\\Retoure Fournisseure.repx&quot;,&quot;COST_PRICE&quot;:0.49,&quot;CUSTOMER_ITEM_CODE&quot;:&quot;&quot;},{&quot;GUID&quot;:&quot;50889263-F747-4757-9AA5-29BDF4303E2A&quot;,&quot;MGUID&quot;:&quot;3ED53531-18F3-4697-9FEB-482661B3685A&quot;,&quot;CUSER&quot;:&quot;ADMIN&quot;,&quot;CDATE&quot;:&quot;2021-10-05T22:07:17.870Z&quot;,&quot;LUSER&quot;:&quot;ADMIN&quot;,&quot;LDATE&quot;:&quot;2021-10-05T22:07:17.870Z&quot;,&quot;TYPE&quot;:1,&quot;DOC_TYPE&quot;:1,&quot;REF&quot;:&quot;IF&quot;,&quot;REF_NO&quot;:1633464368889,&quot;DOC_DATE&quot;:&quot;2021-10-05T00:00:00.000Z&quot;,&quot;CUSTOMER&quot;:&quot;0000.000019&quot;,&quot;CUSTOMER_NAME&quot;:&quot;DEMKA GmbH&quot;,&quot;DEPOT&quot;:&quot;1&quot;,&quot;DEPOT_NAME&quot;:&quot;MERKEZ&quot;,&quot;ITEM_CODE&quot;:&quot;0350&quot;,&quot;ITEM_NAME&quot;:&quot;ETI ADICTO BROWNI CARAMEL 200G&quot;,&quot;UNIT&quot;:&quot;U&quot;,&quot;LINE_NO&quot;:4,&quot;QUANTITY&quot;:1,&quot;PRICE&quot;:1.2,&quot;DISCOUNT&quot;:0,&quot;VATRATE&quot;:5.5,&quot;VAT&quot;:0.066,&quot;AMOUNT&quot;:1.2,&quot;TOTAL_AMOUNT&quot;:17.16,&quot;TOTAL_DISCOUNT&quot;:0,&quot;TOTAL_VAT&quot;:1.80675,&quot;TOTAL&quot;:18.96675,&quot;LINE_DESCRIPTION&quot;:&quot;ALIKEMAL&quot;,&quot;DESCRIPTION&quot;:&quot;&quot;,&quot;AMOUNTF&quot;:&quot;1.20&quot;,&quot;FIRMA&quot;:&quot;HUDO Distribution SARL&quot;,&quot;BASLIK&quot;:&quot;7 ALLEE DU MIDI\n54270 ESSEY LES NANCY\nTel : 03 83 93 33 07\nnancy@prodorplus.fr\nwww.prodorplus.fr&quot;,&quot;ADRESS&quot;:&quot;Franz-Grashof-Str. 25-29 &quot;,&quot;ZIPCODE&quot;:&quot;68199&quot;,&quot;CITY&quot;:&quot;MANNHEIM&quot;,&quot;COUNTRY&quot;:&quot;DE&quot;,&quot;PATH&quot;:&quot;D:\\Piqpos\\devprint\\repx\\ProdorPlus\\iade fiyat fark tarih pert\\Retoure Fournisseure.repx&quot;,&quot;COST_PRICE&quot;:1.2,&quot;CUSTOMER_ITEM_CODE&quot;:&quot;&quot;},{&quot;GUID&quot;:&quot;609BE2F9-53AB-4762-A94C-44B11664410F&quot;,&quot;MGUID&quot;:&quot;3ED53531-18F3-4697-9FEB-482661B3685A&quot;,&quot;CUSER&quot;:&quot;ADMIN&quot;,&quot;CDATE&quot;:&quot;2021-10-05T22:07:21.653Z&quot;,&quot;LUSER&quot;:&quot;ADMIN&quot;,&quot;LDATE&quot;:&quot;2021-10-05T22:07:21.653Z&quot;,&quot;TYPE&quot;:1,&quot;DOC_TYPE&quot;:1,&quot;REF&quot;:&quot;IF&quot;,&quot;REF_NO&quot;:1633464368889,&quot;DOC_DATE&quot;:&quot;2021-10-05T00:00:00.000Z&quot;,&quot;CUSTOMER&quot;:&quot;0000.000019&quot;,&quot;CUSTOMER_NAME&quot;:&quot;DEMKA GmbH&quot;,&quot;DEPOT&quot;:&quot;1&quot;,&quot;DEPOT_NAME&quot;:&quot;MERKEZ&quot;,&quot;ITEM_CODE&quot;:&quot;1842OZ-AY&quot;,&quot;ITEM_NAME&quot;:&quot;ETI BISCUIT CACAO 125G&quot;,&quot;UNIT&quot;:&quot;U&quot;,&quot;LINE_NO&quot;:5,&quot;QUANTITY&quot;:1,&quot;PRICE&quot;:0.55,&quot;DISCOUNT&quot;:0,&quot;VATRATE&quot;:5.5,&quot;VAT&quot;:0.030250000000000003,&quot;AMOUNT&quot;:0.55,&quot;TOTAL_AMOUNT&quot;:17.16,&quot;TOTAL_DISCOUNT&quot;:0,&quot;TOTAL_VAT&quot;:1.80675,&quot;TOTAL&quot;:18.96675,&quot;LINE_DESCRIPTION&quot;:&quot;ALIKEMAL&quot;,&quot;DESCRIPTION&quot;:&quot;&quot;,&quot;AMOUNTF&quot;:&quot;0.55&quot;,&quot;FIRMA&quot;:&quot;HUDO Distribution SARL&quot;,&quot;BASLIK&quot;:&quot;7 ALLEE DU MIDI\n54270 ESSEY LES NANCY\nTel : 03 83 93 33 07\nnancy@prodorplus.fr\nwww.prodorplus.fr&quot;,&quot;ADRESS&quot;:&quot;Franz-Grashof-Str. 25-29 &quot;,&quot;ZIPCODE&quot;:&quot;68199&quot;,&quot;CITY&quot;:&quot;MANNHEIM&quot;,&quot;COUNTRY&quot;:&quot;DE&quot;,&quot;PATH&quot;:&quot;D:\\Piqpos\\devprint\\repx\\ProdorPlus\\iade fiyat fark tarih pert\\Retoure Fournisseure.repx&quot;,&quot;COST_PRICE&quot;:0.55,&quot;CUSTOMER_ITEM_CODE&quot;:&quot;&quot;},{&quot;GUID&quot;:&quot;DEFAA5B0-5913-45D7-8C91-BCFF002D9CB4&quot;,&quot;MGUID&quot;:&quot;3ED53531-18F3-4697-9FEB-482661B3685A&quot;,&quot;CUSER&quot;:&quot;ADMIN&quot;,&quot;CDATE&quot;:&quot;2021-10-05T22:07:35.557Z&quot;,&quot;LUSER&quot;:&quot;ADMIN&quot;,&quot;LDATE&quot;:&quot;2021-10-05T22:07:35.557Z&quot;,&quot;TYPE&quot;:1,&quot;DOC_TYPE&quot;:1,&quot;REF&quot;:&quot;IF&quot;,&quot;REF_NO&quot;:1633464368889,&quot;DOC_DATE&quot;:&quot;2021-10-05T00:00:00.000Z&quot;,&quot;CUSTOMER&quot;:&quot;0000.000019&quot;,&quot;CUSTOMER_NAME&quot;:&quot;DEMKA GmbH&quot;,&quot;DEPOT&quot;:&quot;1&quot;,&quot;DEPOT_NAME&quot;:&quot;MERKEZ&quot;,&quot;ITEM_CODE&quot;:&quot;1597OZA&quot;,&quot;ITEM_NAME&quot;:&quot;ETI BURCAK AVOINE/CREME DE LAIT 4X100G&quot;,&quot;UNIT&quot;:&quot;U&quot;,&quot;LINE_NO&quot;:6,&quot;QUANTITY&quot;:5,&quot;PRICE&quot;:1.35,&quot;DISCOUNT&quot;:0,&quot;VATRATE&quot;:5.5,&quot;VAT&quot;:0.37125,&quot;AMOUNT&quot;:6.75,&quot;TOTAL_AMOUNT&quot;:17.16,&quot;TOTAL_DISCOUNT&quot;:0,&quot;TOTAL_VAT&quot;:1.80675,&quot;TOTAL&quot;:18.96675,&quot;LINE_DESCRIPTION&quot;:&quot;MAHO&quot;,&quot;DESCRIPTION&quot;:&quot;&quot;,&quot;AMOUNTF&quot;:&quot;6.75&quot;,&quot;FIRMA&quot;:&quot;HUDO Distribution SARL&quot;,&quot;BASLIK&quot;:&quot;7 ALLEE DU MIDI\n54270 ESSEY LES NANCY\nTel : 03 83 93 33 07\nnancy@prodorplus.fr\nwww.prodorplus.fr&quot;,&quot;ADRESS&quot;:&quot;Franz-Grashof-Str. 25-29 &quot;,&quot;ZIPCODE&quot;:&quot;68199&quot;,&quot;CITY&quot;:&quot;MANNHEIM&quot;,&quot;COUNTRY&quot;:&quot;DE&quot;,&quot;PATH&quot;:&quot;D:\\Piqpos\\devprint\\repx\\ProdorPlus\\iade fiyat fark tarih pert\\Retoure Fournisseure.repx&quot;,&quot;COST_PRICE&quot;:1.35,&quot;CUSTOMER_ITEM_CODE&quot;:&quot;&quot;},{&quot;GUID&quot;:&quot;1809709C-5AD3-46B2-9E4E-CD71E5B1C7A9&quot;,&quot;MGUID&quot;:&quot;3ED53531-18F3-4697-9FEB-482661B3685A&quot;,&quot;CUSER&quot;:&quot;ADMIN&quot;,&quot;CDATE&quot;:&quot;2021-10-05T22:07:41.240Z&quot;,&quot;LUSER&quot;:&quot;ADMIN&quot;,&quot;LDATE&quot;:&quot;2021-10-05T22:07:41.240Z&quot;,&quot;TYPE&quot;:1,&quot;DOC_TYPE&quot;:1,&quot;REF&quot;:&quot;IF&quot;,&quot;REF_NO&quot;:1633464368889,&quot;DOC_DATE&quot;:&quot;2021-10-05T00:00:00.000Z&quot;,&quot;CUSTOMER&quot;:&quot;0000.000019&quot;,&quot;CUSTOMER_NAME&quot;:&quot;DEMKA GmbH&quot;,&quot;DEPOT&quot;:&quot;1&quot;,&quot;DEPOT_NAME&quot;:&quot;MERKEZ&quot;,&quot;ITEM_CODE&quot;:&quot;1570OZ-AY&quot;,&quot;ITEM_NAME&quot;:&quot;ETI BURCAK BISCUITS AVOINE 125G&quot;,&quot;UNIT&quot;:&quot;U&quot;,&quot;LINE_NO&quot;:7,&quot;QUANTITY&quot;:3,&quot;PRICE&quot;:0.49,&quot;DISCOUNT&quot;:0,&quot;VATRATE&quot;:5.5,&quot;VAT&quot;:0.08085,&quot;AMOUNT&quot;:1.47,&quot;TOTAL_AMOUNT&quot;:17.16,&quot;TOTAL_DISCOUNT&quot;:0,&quot;TOTAL_VAT&quot;:1.80675,&quot;TOTAL&quot;:18.96675,&quot;LINE_DESCRIPTION&quot;:&quot;MAHO&quot;,&quot;DESCRIPTION&quot;:&quot;&quot;,&quot;AMOUNTF&quot;:&quot;1.47&quot;,&quot;FIRMA&quot;:&quot;HUDO Distribution SARL&quot;,&quot;BASLIK&quot;:&quot;7 ALLEE DU MIDI\n54270 ESSEY LES NANCY\nTel : 03 83 93 33 07\nnancy@prodorplus.fr\nwww.prodorplus.fr&quot;,&quot;ADRESS&quot;:&quot;Franz-Grashof-Str. 25-29 &quot;,&quot;ZIPCODE&quot;:&quot;68199&quot;,&quot;CITY&quot;:&quot;MANNHEIM&quot;,&quot;COUNTRY&quot;:&quot;DE&quot;,&quot;PATH&quot;:&quot;D:\\Piqpos\\devprint\\repx\\ProdorPlus\\iade fiyat fark tarih pert\\Retoure Fournisseure.repx&quot;,&quot;COST_PRICE&quot;:0.49,&quot;CUSTOMER_ITEM_CODE&quot;:&quot;&quot;}]" Margins="30, 30, 12, 37" PageWidth="850" PageHeight="1100" Version="19.2" DataMember="DATA" Font="Arial, 9.75pt">
   <CalculatedFields>
-    <Item1 Ref="2" Name="TTC" Expression="[TOTAL_AMOUNT] + [TOTAL_VAT]" />
+    <Item1 Ref="1" Name="TTC" Expression="[TOTAL_AMOUNT] + [TOTAL_VAT]" />
   </CalculatedFields>
   <Bands>
-    <Item1 Ref="3" ControlType="TopMarginBand" Name="TopMargin" HeightF="11.9166689" Font="Arial, 7.5pt">
-      <StylePriority Ref="4" UseFont="false" />
+    <Item1 Ref="2" ControlType="TopMarginBand" Name="TopMargin" HeightF="11.9166689" Font="Arial, 7.5pt">
+      <StylePriority Ref="3" UseFont="false" />
     </Item1>
-    <Item2 Ref="5" ControlType="BottomMarginBand" Name="BottomMargin" HeightF="37.4167137">
+    <Item2 Ref="4" ControlType="BottomMarginBand" Name="BottomMargin" HeightF="37.4167137">
       <Controls>
-        <Item1 Ref="6" ControlType="XRLine" Name="line3" SizeF="789.2916,11" LocationFloat="1.58945713E-05, 0" />
-        <Item2 Ref="7" ControlType="XRPageInfo" Name="pageInfo2" TextFormatString="Page {0} / {1}" TextAlignment="TopCenter" SizeF="789.291565,15.625" LocationFloat="0, 14.8333607" StyleName="PageInfo">
-          <StylePriority Ref="8" UseTextAlignment="false" />
+        <Item1 Ref="5" ControlType="XRLine" Name="line3" SizeF="789.2916,11" LocationFloat="1.58945713E-05, 0" />
+        <Item2 Ref="6" ControlType="XRPageInfo" Name="pageInfo2" TextFormatString="Page {0} / {1}" TextAlignment="TopCenter" SizeF="789.291565,15.625" LocationFloat="0, 14.8333607" StyleName="PageInfo">
+          <StylePriority Ref="7" UseTextAlignment="false" />
         </Item2>
       </Controls>
     </Item2>
-    <Item3 Ref="9" ControlType="ReportHeaderBand" Name="ReportHeader" HeightF="164.833252">
+    <Item3 Ref="8" ControlType="ReportHeaderBand" Name="ReportHeader" HeightF="164.833252">
       <Controls>
-        <Item1 Ref="10" ControlType="XRLabel" Name="label7" Multiline="true" Text="label2" SizeF="286.083435,25.4999962" LocationFloat="10.0000067, 46.95835" Font="Arial, 9.75pt, style=Bold" Padding="2,2,0,0,100">
+        <Item1 Ref="9" ControlType="XRLabel" Name="label7" Multiline="true" Text="label2" SizeF="286.083435,25.4999962" LocationFloat="10.0000067, 46.95835" Font="Arial, 9.75pt, style=Bold" Padding="2,2,0,0,100">
           <ExpressionBindings>
-            <Item1 Ref="11" EventName="BeforePrint" PropertyName="Text" Expression="[OUTPUT_NAME]" />
+            <Item1 Ref="10" EventName="BeforePrint" PropertyName="Text" Expression="[OUTPUT_NAME]" />
           </ExpressionBindings>
-          <StylePriority Ref="12" UseFont="false" />
+          <StylePriority Ref="11" UseFont="false" />
         </Item1>
-        <Item2 Ref="13" ControlType="XRLabel" Name="label6" Multiline="true" Text="label2" SizeF="286.083435,21.3333435" LocationFloat="9.99999, 99.29161" Font="Arial, 7.75pt" Padding="2,2,0,0,100">
+        <Item2 Ref="12" ControlType="XRLabel" Name="label6" Multiline="true" Text="label2" SizeF="286.083435,21.3333435" LocationFloat="9.99999, 99.29161" Font="Arial, 7.75pt" Padding="2,2,0,0,100">
           <ExpressionBindings>
-            <Item1 Ref="14" EventName="BeforePrint" PropertyName="Text" Expression="[CONTACT]" />
+            <Item1 Ref="13" EventName="BeforePrint" PropertyName="Text" Expression="[CONTACT]" />
           </ExpressionBindings>
-          <StylePriority Ref="15" UseFont="false" />
+          <StylePriority Ref="14" UseFont="false" />
         </Item2>
-        <Item3 Ref="16" ControlType="XRLabel" Name="label1" Multiline="true" Text="label2" SizeF="286.083435,26.8332939" LocationFloat="10.0000067, 72.45833" Font="Arial, 7.75pt" Padding="2,2,0,0,100">
+        <Item3 Ref="15" ControlType="XRLabel" Name="label1" Multiline="true" Text="label2" SizeF="286.083435,26.8332939" LocationFloat="10.0000067, 72.45833" Font="Arial, 7.75pt" Padding="2,2,0,0,100">
           <ExpressionBindings>
-            <Item1 Ref="17" EventName="BeforePrint" PropertyName="Text" Expression="[ADDRESS]" />
+            <Item1 Ref="16" EventName="BeforePrint" PropertyName="Text" Expression="[ADDRESS]" />
           </ExpressionBindings>
-          <StylePriority Ref="18" UseFont="false" />
+          <StylePriority Ref="17" UseFont="false" />
         </Item3>
-        <Item4 Ref="19" ControlType="XRLine" Name="line4" SizeF="788.249939,11" LocationFloat="1.74999237, 123.624954" />
-        <Item5 Ref="20" ControlType="XRLabel" Name="label2" Multiline="true" Text="REF" TextAlignment="TopRight" SizeF="69.79175,23" LocationFloat="559.416748, 44.7082977" Padding="2,2,0,0,100">
+        <Item4 Ref="18" ControlType="XRLine" Name="line4" SizeF="788.249939,11" LocationFloat="1.74999237, 123.624954" />
+        <Item5 Ref="19" ControlType="XRLabel" Name="label2" Multiline="true" Text="REF" TextAlignment="TopRight" SizeF="69.79175,23" LocationFloat="559.416748, 44.7082977" Padding="2,2,0,0,100">
           <ExpressionBindings>
-            <Item1 Ref="21" EventName="BeforePrint" PropertyName="Text" Expression="[REF]" />
+            <Item1 Ref="20" EventName="BeforePrint" PropertyName="Text" Expression="[REF]" />
           </ExpressionBindings>
-          <StylePriority Ref="22" UseTextAlignment="false" />
+          <StylePriority Ref="21" UseTextAlignment="false" />
         </Item5>
-        <Item6 Ref="23" ControlType="XRLabel" Name="label14" Multiline="true" Text="label14" TextAlignment="TopLeft" SizeF="136.208313,23" LocationFloat="643.791748, 44.62494" Padding="2,2,0,0,100">
+        <Item6 Ref="22" ControlType="XRLabel" Name="label14" Multiline="true" Text="label14" TextAlignment="TopLeft" SizeF="136.208313,23" LocationFloat="643.791748, 44.62494" Padding="2,2,0,0,100">
           <ExpressionBindings>
-            <Item1 Ref="24" EventName="BeforePrint" PropertyName="Text" Expression="[REF_NO]" />
+            <Item1 Ref="23" EventName="BeforePrint" PropertyName="Text" Expression="[REF_NO]" />
           </ExpressionBindings>
-          <StylePriority Ref="25" UseTextAlignment="false" />
+          <StylePriority Ref="24" UseTextAlignment="false" />
         </Item6>
-        <Item7 Ref="26" ControlType="XRLabel" Name="label18" Multiline="true" Text="FACTURE ACHAT" TextAlignment="TopCenter" SizeF="257.333466,46.95835" LocationFloat="229.041458, 0" Font="Arial Black, 16pt, style=Bold" Padding="2,2,0,0,100" BorderColor="255,12,12,12">
-          <StylePriority Ref="27" UseFont="false" UseBorderColor="false" UseTextAlignment="false" />
+        <Item7 Ref="25" ControlType="XRLabel" Name="label18" Multiline="true" Text="FACTURE ACHAT" TextAlignment="TopCenter" SizeF="257.333466,46.95835" LocationFloat="229.041458, 0" Font="Arial Black, 16pt, style=Bold" Padding="2,2,0,0,100" BorderColor="255,12,12,12">
+          <StylePriority Ref="26" UseFont="false" UseBorderColor="false" UseTextAlignment="false" />
         </Item7>
-        <Item8 Ref="28" ControlType="XRLabel" Name="label17" Multiline="true" Text="-" TextAlignment="TopCenter" SizeF="14.5833359,23.9583359" LocationFloat="629.2085, 71.49994" Padding="2,2,0,0,100">
-          <StylePriority Ref="29" UseTextAlignment="false" />
+        <Item8 Ref="27" ControlType="XRLabel" Name="label17" Multiline="true" Text="-" TextAlignment="TopCenter" SizeF="14.5833359,23.9583359" LocationFloat="629.2085, 71.49994" Padding="2,2,0,0,100">
+          <StylePriority Ref="28" UseTextAlignment="false" />
         </Item8>
-        <Item9 Ref="30" ControlType="XRLabel" Name="label13" TextFormatString="{0:dd/MM/yyyy}" Multiline="true" Text="label11" SizeF="136.208252,23" LocationFloat="643.7918, 72.45828" Padding="2,2,0,0,100">
+        <Item9 Ref="29" ControlType="XRLabel" Name="label13" TextFormatString="{0:dd/MM/yyyy}" Multiline="true" Text="label11" SizeF="136.208252,23" LocationFloat="643.7918, 72.45828" Padding="2,2,0,0,100">
           <ExpressionBindings>
-            <Item1 Ref="31" EventName="BeforePrint" PropertyName="Text" Expression="[CDATE]" />
+            <Item1 Ref="30" EventName="BeforePrint" PropertyName="Text" Expression="[CDATE]" />
           </ExpressionBindings>
         </Item9>
-        <Item10 Ref="32" ControlType="XRLabel" Name="label4" Multiline="true" Text="-" TextAlignment="TopCenter" SizeF="14.583252,20.8333282" LocationFloat="629.2085, 46.79161" Padding="2,2,0,0,100">
-          <StylePriority Ref="33" UseTextAlignment="false" />
+        <Item10 Ref="31" ControlType="XRLabel" Name="label4" Multiline="true" Text="-" TextAlignment="TopCenter" SizeF="14.583252,20.8333282" LocationFloat="629.2085, 46.79161" Padding="2,2,0,0,100">
+          <StylePriority Ref="32" UseTextAlignment="false" />
         </Item10>
-        <Item11 Ref="34" ControlType="XRLabel" Name="label5" Multiline="true" Text="REF:" TextAlignment="TopRight" SizeF="43.41681,22.9999924" LocationFloat="516, 44.7082977" Padding="2,2,0,0,100">
-          <StylePriority Ref="35" UseTextAlignment="false" />
+        <Item11 Ref="33" ControlType="XRLabel" Name="label5" Multiline="true" Text="REF:" TextAlignment="TopRight" SizeF="43.41681,22.9999924" LocationFloat="516, 44.7082977" Padding="2,2,0,0,100">
+          <StylePriority Ref="34" UseTextAlignment="false" />
         </Item11>
-        <Item12 Ref="36" ControlType="XRLabel" Name="label22" Multiline="true" Text="DATE " TextAlignment="TopRight" SizeF="83.333374,23" LocationFloat="545.8751, 72.45828" Padding="2,2,0,0,100">
-          <StylePriority Ref="37" UseTextAlignment="false" />
+        <Item12 Ref="35" ControlType="XRLabel" Name="label22" Multiline="true" Text="DATE " TextAlignment="TopRight" SizeF="83.333374,23" LocationFloat="545.8751, 72.45828" Padding="2,2,0,0,100">
+          <StylePriority Ref="36" UseTextAlignment="false" />
         </Item12>
-        <Item13 Ref="38" ControlType="XRLabel" Name="label25" Multiline="true" Text="REF CLIENT" TextAlignment="TopRight" SizeF="83.333374,23" LocationFloat="545.8751, 95.45827" Padding="2,2,0,0,100">
-          <StylePriority Ref="39" UseTextAlignment="false" />
+        <Item13 Ref="37" ControlType="XRLabel" Name="label25" Multiline="true" Text="REF CLIENT" TextAlignment="TopRight" SizeF="83.333374,23" LocationFloat="545.8751, 95.45827" Padding="2,2,0,0,100">
+          <StylePriority Ref="38" UseTextAlignment="false" />
         </Item13>
-        <Item14 Ref="40" ControlType="XRLabel" Name="label26" TextFormatString="{0:dd/MM/yyyy}" Multiline="true" SizeF="136.208252,23" LocationFloat="643.7918, 97.6249542" Padding="2,2,0,0,100">
+        <Item14 Ref="39" ControlType="XRLabel" Name="label26" TextFormatString="{0:dd/MM/yyyy}" Multiline="true" SizeF="136.208252,23" LocationFloat="643.7918, 97.6249542" Padding="2,2,0,0,100">
           <ExpressionBindings>
-            <Item1 Ref="41" EventName="BeforePrint" PropertyName="Text" Expression="[REF]" />
+            <Item1 Ref="40" EventName="BeforePrint" PropertyName="Text" Expression="[REF]" />
           </ExpressionBindings>
         </Item14>
-        <Item15 Ref="42" ControlType="XRLabel" Name="label27" Multiline="true" Text="-" TextAlignment="TopCenter" SizeF="14.5833359,23.9583359" LocationFloat="629.2085, 94.49994" Padding="2,2,0,0,100">
-          <StylePriority Ref="43" UseTextAlignment="false" />
+        <Item15 Ref="41" ControlType="XRLabel" Name="label27" Multiline="true" Text="-" TextAlignment="TopCenter" SizeF="14.5833359,23.9583359" LocationFloat="629.2085, 94.49994" Padding="2,2,0,0,100">
+          <StylePriority Ref="42" UseTextAlignment="false" />
         </Item15>
-        <Item16 Ref="44" ControlType="XRTable" Name="table1" SizeF="788.583252,28" LocationFloat="1.74999237, 135.124954">
+        <Item16 Ref="43" ControlType="XRTable" Name="table1" SizeF="788.583252,28" LocationFloat="1.74999237, 135.124954">
           <Rows>
-            <Item1 Ref="45" ControlType="XRTableRow" Name="tableRow1" Weight="1">
+            <Item1 Ref="44" ControlType="XRTableRow" Name="tableRow1" Weight="1">
               <Cells>
-                <Item1 Ref="46" ControlType="XRTableCell" Name="tableCell1" Weight="0.058690563912927748" Text="Line" TextAlignment="MiddleRight" StyleName="DetailCaption1" Borders="None">
-                  <StylePriority Ref="47" UseBorders="false" UseTextAlignment="false" />
+                <Item1 Ref="45" ControlType="XRTableCell" Name="tableCell1" Weight="0.058690563912927748" Text="Ligne" TextAlignment="MiddleRight" StyleName="DetailCaption1" Borders="None">
+                  <StylePriority Ref="46" UseBorders="false" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="48" ControlType="XRTableCell" Name="tableCell2" Weight="0.15284777433667865" Text="Ref." StyleName="DetailCaption1" />
-                <Item3 Ref="49" ControlType="XRTableCell" Name="tableCell3" Weight="0.53403849358115207" Text="Designation Produit" StyleName="DetailCaption1" />
-                <Item4 Ref="50" ControlType="XRTableCell" Name="tableCell4" Weight="0.061602546481201323" Text="Cont." StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
-                  <StylePriority Ref="51" UseFont="false" />
+                <Item2 Ref="47" ControlType="XRTableCell" Name="tableCell2" Weight="0.15284777433667865" Text="Ref." StyleName="DetailCaption1" />
+                <Item3 Ref="48" ControlType="XRTableCell" Name="tableCell3" Weight="0.53403849358115207" Text="Designation Produit" StyleName="DetailCaption1" />
+                <Item4 Ref="49" ControlType="XRTableCell" Name="tableCell4" Weight="0.061602546481201323" Text="Cont." StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
+                  <StylePriority Ref="50" UseFont="false" />
                 </Item4>
-                <Item5 Ref="52" ControlType="XRTableCell" Name="tableCell5" Weight="0.10307729319356679" Text="Qte." TextAlignment="MiddleRight" StyleName="DetailCaption1">
-                  <StylePriority Ref="53" UseTextAlignment="false" />
+                <Item5 Ref="51" ControlType="XRTableCell" Name="tableCell5" Weight="0.10307729319356679" Text="Qte." TextAlignment="MiddleRight" StyleName="DetailCaption1">
+                  <StylePriority Ref="52" UseTextAlignment="false" />
                 </Item5>
-                <Item6 Ref="54" ControlType="XRTableCell" Name="tableCell6" Weight="0.0956889421648328" Text="Prix" TextAlignment="MiddleRight" StyleName="DetailCaption1" Font="Arial, 8pt, style=Bold">
-                  <StylePriority Ref="55" UseFont="false" UseTextAlignment="false" />
+                <Item6 Ref="53" ControlType="XRTableCell" Name="tableCell6" Weight="0.0956889421648328" Text="Prix" TextAlignment="MiddleRight" StyleName="DetailCaption1" Font="Arial, 8pt, style=Bold">
+                  <StylePriority Ref="54" UseFont="false" UseTextAlignment="false" />
                 </Item6>
-                <Item7 Ref="56" ControlType="XRTableCell" Name="tableCell7" Weight="0.0833975904837483" Text="TVA" TextAlignment="MiddleRight" StyleName="DetailCaption1">
-                  <StylePriority Ref="57" UseTextAlignment="false" />
+                <Item7 Ref="55" ControlType="XRTableCell" Name="tableCell7" Weight="0.0833975904837483" Text="TVA" TextAlignment="MiddleRight" StyleName="DetailCaption1">
+                  <StylePriority Ref="56" UseTextAlignment="false" />
                 </Item7>
-                <Item8 Ref="58" ControlType="XRTableCell" Name="tableCell8" Weight="0.12386175342077217" Text="Totale Line" TextAlignment="MiddleRight" StyleName="DetailCaption1">
-                  <StylePriority Ref="59" UseTextAlignment="false" />
+                <Item8 Ref="57" ControlType="XRTableCell" Name="tableCell8" Weight="0.12386175342077217" Text="Totale Ligne" TextAlignment="MiddleRight" StyleName="DetailCaption1">
+                  <StylePriority Ref="58" UseTextAlignment="false" />
                 </Item8>
               </Cells>
             </Item1>
           </Rows>
         </Item16>
-        <Item17 Ref="60" ControlType="XRLine" Name="line1" SizeF="788.249939,11" LocationFloat="1.74999237, 128.624954" />
+        <Item17 Ref="59" ControlType="XRLine" Name="line1" SizeF="788.249939,11" LocationFloat="1.74999237, 128.624954" />
       </Controls>
     </Item3>
-    <Item4 Ref="61" ControlType="GroupHeaderBand" Name="GroupHeader1" GroupUnion="WithFirstDetail" HeightF="14.083354">
+    <Item4 Ref="60" ControlType="GroupHeaderBand" Name="GroupHeader1" GroupUnion="WithFirstDetail" HeightF="14.083354">
       <GroupFields>
-        <Item1 Ref="62" FieldName="DESCRIPTION" />
+        <Item1 Ref="61" FieldName="DESCRIPTION" />
       </GroupFields>
       <Controls>
-        <Item1 Ref="63" ControlType="XRLabel" Name="label8" Multiline="true" Text="label22" TextAlignment="TopCenter" SizeF="789.999939,13.0000114" LocationFloat="0, 0" Font="Arial, 8pt, style=Bold" Padding="2,2,0,0,100" Borders="Top" BorderDashStyle="Dot">
+        <Item1 Ref="62" ControlType="XRLabel" Name="label8" Multiline="true" Text="label22" TextAlignment="TopCenter" SizeF="789.999939,13.0000114" LocationFloat="0, 0" Font="Arial, 8pt, style=Bold" Padding="2,2,0,0,100" Borders="Top" BorderDashStyle="Dot">
           <ExpressionBindings>
-            <Item1 Ref="64" EventName="BeforePrint" PropertyName="Text" Expression="[DESCRIPTION]" />
+            <Item1 Ref="63" EventName="BeforePrint" PropertyName="Text" Expression="[DESCRIPTION]" />
           </ExpressionBindings>
-          <StylePriority Ref="65" UseFont="false" UseBorders="false" UseBorderDashStyle="false" UseTextAlignment="false" />
+          <StylePriority Ref="64" UseFont="false" UseBorders="false" UseBorderDashStyle="false" UseTextAlignment="false" />
         </Item1>
       </Controls>
     </Item4>
-    <Item5 Ref="66" ControlType="DetailBand" Name="Detail" HeightF="25">
+    <Item5 Ref="65" ControlType="DetailBand" Name="Detail" HeightF="25">
       <Controls>
-        <Item1 Ref="67" ControlType="XRTable" Name="table2" SizeF="786.833252,25" LocationFloat="0, 0" OddStyleName="DetailData3_Odd">
+        <Item1 Ref="66" ControlType="XRTable" Name="table2" SizeF="786.833252,25" LocationFloat="0, 0" OddStyleName="DetailData3_Odd">
           <Rows>
-            <Item1 Ref="68" ControlType="XRTableRow" Name="tableRow2" Weight="11.5">
+            <Item1 Ref="67" ControlType="XRTableRow" Name="tableRow2" Weight="11.5">
               <Cells>
-                <Item1 Ref="69" ControlType="XRTableCell" Name="tableCell9" Weight="0.058690552965424386" TextAlignment="MiddleRight" StyleName="DetailData1" Borders="None">
+                <Item1 Ref="68" ControlType="XRTableCell" Name="tableCell9" Weight="0.058690552965424386" TextAlignment="MiddleRight" StyleName="DetailData1" Borders="None">
                   <ExpressionBindings>
-                    <Item1 Ref="70" EventName="BeforePrint" PropertyName="Text" Expression="[DataSource.CurrentRowIndex]+1" />
+                    <Item1 Ref="69" EventName="BeforePrint" PropertyName="Text" Expression="[DataSource.CurrentRowIndex]+1" />
                   </ExpressionBindings>
-                  <StylePriority Ref="71" UseBorders="false" UseTextAlignment="false" />
+                  <StylePriority Ref="70" UseBorders="false" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="72" ControlType="XRTableCell" Name="tableCell10" Weight="0.15284772617462095" StyleName="DetailData1" Font="Arial, 7pt">
+                <Item2 Ref="71" ControlType="XRTableCell" Name="tableCell10" Weight="0.15284772617462095" StyleName="DetailData1" Font="Arial, 7pt">
                   <ExpressionBindings>
-                    <Item1 Ref="73" EventName="BeforePrint" PropertyName="Text" Expression="[MULTICODE]" />
+                    <Item1 Ref="72" EventName="BeforePrint" PropertyName="Text" Expression="[MULTICODE]" />
                   </ExpressionBindings>
-                  <StylePriority Ref="74" UseFont="false" />
+                  <StylePriority Ref="73" UseFont="false" />
                 </Item2>
-                <Item3 Ref="75" ControlType="XRTableCell" Name="tableCell11" Weight="0.53673076853916735" StyleName="DetailData1" Font="Arial, 7pt">
+                <Item3 Ref="74" ControlType="XRTableCell" Name="tableCell11" Weight="0.53673076853916735" StyleName="DetailData1" Font="Arial, 7pt">
                   <ExpressionBindings>
-                    <Item1 Ref="76" EventName="BeforePrint" PropertyName="Text" Expression="[ITEM_NAME]" />
+                    <Item1 Ref="75" EventName="BeforePrint" PropertyName="Text" Expression="[ITEM_NAME]" />
                   </ExpressionBindings>
-                  <StylePriority Ref="77" UseFont="false" />
+                  <StylePriority Ref="76" UseFont="false" />
                 </Item3>
-                <Item4 Ref="78" ControlType="XRTableCell" Name="tableCell13" Weight="0.058910424145709961" StyleName="DetailData1">
+                <Item4 Ref="77" ControlType="XRTableCell" Name="tableCell13" Weight="0.058910424145709961" StyleName="DetailData1">
                   <ExpressionBindings>
-                    <Item1 Ref="79" EventName="BeforePrint" PropertyName="Text" Expression="[UNIT_SYMBOL]" />
+                    <Item1 Ref="78" EventName="BeforePrint" PropertyName="Text" Expression="[UNIT_SYMBOL]" />
                   </ExpressionBindings>
                 </Item4>
-                <Item5 Ref="80" ControlType="XRTableCell" Name="tableCell14" Weight="0.10576931702370594" TextFormatString="{0:#,#}" TextAlignment="MiddleRight" StyleName="DetailData1">
+                <Item5 Ref="79" ControlType="XRTableCell" Name="tableCell14" Weight="0.10576931702370594" TextFormatString="{0:#,#}" TextAlignment="MiddleRight" StyleName="DetailData1">
                   <ExpressionBindings>
-                    <Item1 Ref="81" EventName="BeforePrint" PropertyName="Text" Expression="[QUANTITY]" />
+                    <Item1 Ref="80" EventName="BeforePrint" PropertyName="Text" Expression="[QUANTITY]" />
                   </ExpressionBindings>
-                  <StylePriority Ref="82" UseTextAlignment="false" />
+                  <StylePriority Ref="81" UseTextAlignment="false" />
                 </Item5>
-                <Item6 Ref="83" ControlType="XRTableCell" Name="tableCell15" Weight="0.095688940506912873" TextFormatString="{0:#,#0.00}€" Text="€" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 7.5pt">
+                <Item6 Ref="82" ControlType="XRTableCell" Name="tableCell15" Weight="0.095688940506912873" TextFormatString="{0:#,#0.00}€" Text="€" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 7.5pt">
                   <ExpressionBindings>
-                    <Item1 Ref="84" EventName="BeforePrint" PropertyName="Text" Expression="[PRICE]" />
+                    <Item1 Ref="83" EventName="BeforePrint" PropertyName="Text" Expression="[PRICE]" />
                   </ExpressionBindings>
-                  <StylePriority Ref="85" UseFont="false" UseTextAlignment="false" />
+                  <StylePriority Ref="84" UseFont="false" UseTextAlignment="false" />
                 </Item6>
-                <Item7 Ref="86" ControlType="XRTableCell" Name="tableCell16" Weight="0.08339768005460213" TextFormatString="{0:#,#0.00}€" Text="€" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 7.5pt">
+                <Item7 Ref="85" ControlType="XRTableCell" Name="tableCell16" Weight="0.08339768005460213" TextFormatString="{0:#,#0.00}€" Text="€" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 7.5pt">
                   <ExpressionBindings>
-                    <Item1 Ref="87" EventName="BeforePrint" PropertyName="Text" Expression="[VAT]" />
+                    <Item1 Ref="86" EventName="BeforePrint" PropertyName="Text" Expression="[VAT]" />
                   </ExpressionBindings>
-                  <StylePriority Ref="88" UseFont="false" UseTextAlignment="false" />
+                  <StylePriority Ref="87" UseFont="false" UseTextAlignment="false" />
                 </Item7>
-                <Item8 Ref="89" ControlType="XRTableCell" Name="tableCell17" Weight="0.11847722073782305" TextFormatString="{0:#,#.00}€" Text="€" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 8pt">
+                <Item8 Ref="88" ControlType="XRTableCell" Name="tableCell17" Weight="0.11847722073782305" TextFormatString="{0:#,#.00}€" Text="€" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 8pt">
                   <ExpressionBindings>
-                    <Item1 Ref="90" EventName="BeforePrint" PropertyName="Text" Expression="[AMOUNT]" />
+                    <Item1 Ref="89" EventName="BeforePrint" PropertyName="Text" Expression="[AMOUNT]" />
                   </ExpressionBindings>
-                  <StylePriority Ref="91" UseFont="false" UseTextAlignment="false" />
+                  <StylePriority Ref="90" UseFont="false" UseTextAlignment="false" />
                 </Item8>
               </Cells>
             </Item1>
@@ -182,52 +182,49 @@
         </Item1>
       </Controls>
     </Item5>
-    <Item6 Ref="92" ControlType="ReportFooterBand" Name="ReportFooter" PrintAtBottom="true" HeightF="84.8333359" KeepTogether="true">
+    <Item6 Ref="91" ControlType="ReportFooterBand" Name="ReportFooter" PrintAtBottom="true" HeightF="84.8333359" KeepTogether="true">
       <Controls>
-        <Item1 Ref="93" ControlType="XRLabel" Name="label28" TextFormatString="{0:dd/MM/yyyy}" Multiline="true" Text="label11" SizeF="230.208313,23" LocationFloat="0, 15.0000257" Padding="2,2,0,0,100">
+        <Item1 Ref="92" ControlType="XRLabel" Name="label28" TextFormatString="{0:dd/MM/yyyy}" Multiline="true" Text="label11" SizeF="230.208313,23" LocationFloat="0, 15.0000257" Padding="2,2,0,0,100">
           <ExpressionBindings>
-            <Item1 Ref="94" EventName="BeforePrint" PropertyName="Text" Expression="[DOC_DATE]" />
+            <Item1 Ref="93" EventName="BeforePrint" PropertyName="Text" Expression="[DOC_DATE]" />
           </ExpressionBindings>
         </Item1>
-        <Item2 Ref="95" ControlType="XRLabel" Name="label20" Multiline="true" Text="TTC:" TextAlignment="TopRight" SizeF="56.25,17.2916718" LocationFloat="633.041565, 50.3749542" Padding="2,2,0,0,100">
-          <StylePriority Ref="96" UseTextAlignment="false" />
+        <Item2 Ref="94" ControlType="XRLabel" Name="label20" Multiline="true" Text="TTC:" TextAlignment="TopRight" SizeF="56.25,17.2916718" LocationFloat="633.041565, 50.3749542" Padding="2,2,0,0,100">
+          <StylePriority Ref="95" UseTextAlignment="false" />
         </Item2>
-        <Item3 Ref="97" ControlType="XRLabel" Name="label19" Multiline="true" Text="TVA:" TextAlignment="TopRight" SizeF="56.25,17.2916718" LocationFloat="633.875, 31.3749638" Padding="2,2,0,0,100">
-          <StylePriority Ref="98" UseTextAlignment="false" />
+        <Item3 Ref="96" ControlType="XRLabel" Name="label19" Multiline="true" Text="TVA:" TextAlignment="TopRight" SizeF="56.25,17.2916718" LocationFloat="633.875, 31.3749638" Padding="2,2,0,0,100">
+          <StylePriority Ref="97" UseTextAlignment="false" />
         </Item3>
-        <Item4 Ref="99" ControlType="XRLabel" Name="label16" Multiline="true" Text="HT:" TextAlignment="TopRight" SizeF="56.25,17.2916718" LocationFloat="633.875, 14.0833216" Padding="2,2,0,0,100">
-          <StylePriority Ref="100" UseTextAlignment="false" />
+        <Item4 Ref="98" ControlType="XRLabel" Name="label16" Multiline="true" Text="HT:" TextAlignment="TopRight" SizeF="56.25,17.2916718" LocationFloat="633.875, 14.0833216" Padding="2,2,0,0,100">
+          <StylePriority Ref="99" UseTextAlignment="false" />
         </Item4>
-        <Item5 Ref="101" ControlType="XRLabel" Name="label12" TextFormatString="{0:0.00€}" Multiline="true" Text="€" TextAlignment="TopRight" SizeF="100,18.9999237" LocationFloat="688.583252, 31.3749638" Font="Arial, 8pt, style=Underline" Padding="2,2,0,0,100">
+        <Item5 Ref="100" ControlType="XRLabel" Name="label12" TextFormatString="{0:0.00€}" Multiline="true" Text="€" TextAlignment="TopRight" SizeF="100,18.9999237" LocationFloat="688.583252, 31.3749638" Font="Arial, 8pt, style=Underline" Padding="2,2,0,0,100">
           <ExpressionBindings>
-            <Item1 Ref="102" EventName="BeforePrint" PropertyName="Text" Expression="SUM([VAT])" />
+            <Item1 Ref="101" EventName="BeforePrint" PropertyName="Text" Expression="SUM([VAT])" />
           </ExpressionBindings>
-          <StylePriority Ref="103" UseFont="false" />
+          <StylePriority Ref="102" UseFont="false" />
         </Item5>
-        <Item6 Ref="104" ControlType="XRLabel" Name="label15" TextFormatString="{0:0.00€}" Multiline="true" Text="€" TextAlignment="TopRight" SizeF="100,17.3749924" LocationFloat="688.5833, 14.0000343" Font="Arial, 8pt, style=Underline" Padding="2,2,0,0,100">
+        <Item6 Ref="103" ControlType="XRLabel" Name="label15" TextFormatString="{0:0.00€}" Multiline="true" Text="€" TextAlignment="TopRight" SizeF="100,17.3749924" LocationFloat="688.5833, 14.0000343" Font="Arial, 8pt, style=Underline" Padding="2,2,0,0,100">
           <ExpressionBindings>
-            <Item1 Ref="105" EventName="BeforePrint" PropertyName="Text" Expression="SUM([AMOUNT])" />
+            <Item1 Ref="104" EventName="BeforePrint" PropertyName="Text" Expression="SUM([AMOUNT])" />
           </ExpressionBindings>
-          <StylePriority Ref="106" UseFont="false" />
+          <StylePriority Ref="105" UseFont="false" />
         </Item6>
-        <Item7 Ref="107" ControlType="XRLabel" Name="label24" TextFormatString="{0:0.00€}" Multiline="true" Text="€" TextAlignment="TopRight" SizeF="100,18.9999237" LocationFloat="689.2916, 50.3749542" Font="Arial, 8pt, style=Underline" Padding="2,2,0,0,100">
+        <Item7 Ref="106" ControlType="XRLabel" Name="label24" TextFormatString="{0:0.00€}" Multiline="true" Text="€" TextAlignment="TopRight" SizeF="100,18.9999237" LocationFloat="689.2916, 50.3749542" Font="Arial, 8pt, style=Underline" Padding="2,2,0,0,100">
           <ExpressionBindings>
-            <Item1 Ref="108" EventName="BeforePrint" PropertyName="Text" Expression="SUM([TOTAL])" />
+            <Item1 Ref="107" EventName="BeforePrint" PropertyName="Text" Expression="SUM([TOTAL])" />
           </ExpressionBindings>
-          <StylePriority Ref="109" UseFont="false" />
+          <StylePriority Ref="108" UseFont="false" />
         </Item7>
-        <Item8 Ref="110" ControlType="XRLine" Name="line2" SizeF="789.2916,11" LocationFloat="0, 3.99999619" />
+        <Item8 Ref="109" ControlType="XRLine" Name="line2" SizeF="789.2916,11" LocationFloat="0, 3.99999619" />
       </Controls>
     </Item6>
   </Bands>
   <StyleSheet>
-    <Item1 Ref="111" Name="Title" BorderStyle="Inset" Font="Arial, 14.25pt" ForeColor="255,75,75,75" BackColor="Transparent" BorderColor="Black" Sides="None" StringFormat="Near;Near;0;None;Character;Default" BorderWidthSerializable="1" />
-    <Item2 Ref="112" Name="DetailCaption1" BorderStyle="Inset" Padding="6,6,0,0,100" Font="Arial, 8.25pt, style=Bold" ForeColor="White" BackColor="255,75,75,75" BorderColor="White" Sides="None" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" BorderWidthSerializable="2" />
-    <Item3 Ref="113" Name="DetailData1" BorderStyle="Inset" Padding="6,6,0,0,100" Font="Arial, 8.25pt" ForeColor="Black" BorderColor="Transparent" Sides="Left" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" BorderWidthSerializable="2" />
-    <Item4 Ref="114" Name="DetailData3_Odd" BorderStyle="Inset" Padding="6,6,0,0,100" Font="Arial, 8.25pt" ForeColor="Black" BackColor="255,231,231,231" BorderColor="Transparent" Sides="None" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" BorderWidthSerializable="1" />
-    <Item5 Ref="115" Name="PageInfo" BorderStyle="Inset" Padding="2,2,0,0,100" Font="Arial, 8.25pt, style=Bold" ForeColor="255,75,75,75" StringFormat="Near;Near;0;None;Character;Default" />
+    <Item1 Ref="110" Name="Title" BorderStyle="Inset" Font="Arial, 14.25pt" ForeColor="255,75,75,75" BackColor="Transparent" BorderColor="Black" Sides="None" StringFormat="Near;Near;0;None;Character;Default" BorderWidthSerializable="1" />
+    <Item2 Ref="111" Name="DetailCaption1" BorderStyle="Inset" Padding="6,6,0,0,100" Font="Arial, 8.25pt, style=Bold" ForeColor="White" BackColor="255,75,75,75" BorderColor="White" Sides="None" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" BorderWidthSerializable="2" />
+    <Item3 Ref="112" Name="DetailData1" BorderStyle="Inset" Padding="6,6,0,0,100" Font="Arial, 8.25pt" ForeColor="Black" BorderColor="Transparent" Sides="Left" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" BorderWidthSerializable="2" />
+    <Item4 Ref="113" Name="DetailData3_Odd" BorderStyle="Inset" Padding="6,6,0,0,100" Font="Arial, 8.25pt" ForeColor="Black" BackColor="255,231,231,231" BorderColor="Transparent" Sides="None" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" BorderWidthSerializable="1" />
+    <Item5 Ref="114" Name="PageInfo" BorderStyle="Inset" Padding="2,2,0,0,100" Font="Arial, 8.25pt, style=Bold" ForeColor="255,75,75,75" StringFormat="Near;Near;0;None;Character;Default" />
   </StyleSheet>
-  <ObjectStorage>
-    <Item1 ObjectType="DevExpress.XtraReports.Serialization.ObjectStorageInfo, DevExpress.XtraReports.v19.2" Ref="0" Content="~Xtra#NULL" Type="System.Data.DataTable" />
-  </ObjectStorage>
 </XtraReportsLayoutSerializer>
