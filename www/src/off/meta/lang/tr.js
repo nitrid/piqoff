@@ -1294,7 +1294,7 @@ export const langTr =
         cmbDepot1: "Çıkış Deposu",
         cmbDepot2: "İade Deposu",
         dtDocDate : "Tarih",
-        getRebate :"İade Deposudan Getir",
+        getRebate :"Seçili Depodan İade getir",
         txtBarcode : "Barkod Ekle",
         pg_Docs : 
         {
@@ -3800,7 +3800,9 @@ export const langTr =
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
             clmDescription :"Açıklama",
+            clmOrder : "Sipariş No",
             clmCuser :"Kullanıcı",
+            clmMulticode : "T.Kodu",
         },
         popDiscount : 
         {
@@ -4070,7 +4072,9 @@ export const langTr =
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
             clmDescription :"Açıklama",
+            clmOrder : "Sipariş No",
             clmCuser :"Kullanıcı",
+            clmBarcode : "Barkod",
         },
         popDiscount : 
         {
@@ -4361,6 +4365,8 @@ export const langTr =
             clmMargin :"Marj",
             clmDescription :"Açıklama",
             clmCuser :"Kullanıcı",
+            clmMulticode : "T. Kodu",
+            clmBarcode : "Barkod"
         },
         popDiscount : 
         {
@@ -4653,6 +4659,7 @@ export const langTr =
             clmBarcode :"Barkodu",
             clmDescription :"Açıklama",
             clmCuser :"Kullanıcı",
+            clmOffer : "Teklif No",
         },
         popDiscount : 
         {
@@ -4927,6 +4934,8 @@ export const langTr =
             clmMargin :"Marj",
             clmDescription :"Açıklama",
             clmCuser :"Kullanıcı",
+            clmOffer : "Teklif No",
+            clmBarcode : "Barkodu",
         },
         popDiscount : 
         {
@@ -6937,7 +6946,7 @@ export const langTr =
             clmMargin :"Marj",
             clmDescription :"Açıklama",
             clmCuser :"Kullanıcı",
-
+            clmBarcode :"Barkodu",
         },
         popDiscount : 
         {

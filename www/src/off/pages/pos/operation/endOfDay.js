@@ -656,19 +656,33 @@ export default class endOfDay extends React.PureComponent
                                             }
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
                                             let tmpSafe = tmpData.result.recordset[0].GUID
-                                              if(this.docObj.dt().length == 0)
-                                              {
-                                                this.docObj.addEmpty()
-                                                this.docObj.dt()[0].TYPE = 2
-                                                this.docObj.dt()[0].DOC_TYPE = 201
-                                                this.docObj.dt()[0].REF = 'POS'
-                                                this.docObj.dt()[0].REF_NO = Math.floor(Date.now() / 1000)
-                                                this.docObj.dt()[0].DOC_DATE = this.dtDocDate.value
-                                                this.docObj.dt()[0].INPUT = tmpSafe
-                                                this.docObj.dt()[0].OUTPUT = this.prmObj.filter({ID:'SafeCenter',TYPE:1}).getValue()
-                                                this.docObj.dt()[0].AMOUNT = this.txtPopAdvance.value
-                                                this.docObj.dt()[0].TOTAL = this.txtPopAdvance.value
-                                              }
+                                            let tmpAmountQuery = 
+                                            {
+                                                query : "SELECT ROUND((SUM(AMOUNT) - ISNULL((SELECT SUM(AMOUNT) FROM DOC_CUSTOMER_VW_01 AS DOCOUT WHERE DOCOUT.OUTPUT = DOCIN.INPUT AND TYPE = 2 AND DOC_TYPE = 201 AND PAY_TYPE = 20),0)),2) AS AMOUNT FROM DOC_CUSTOMER_VW_01 AS DOCIN " + 
+                                                "WHERE INPUT_CODE = @INPUT_CODE  AND TYPE = 2 AND DOC_TYPE = 201 AND PAY_TYPE = 20 GROUP BY INPUT", 
+                                                param : ['INPUT_CODE:string|50'],
+                                                value : [this.cmbSafe.value]
+                                            }
+                                            let tmpAmountData = await this.core.sql.execute(tmpAmountQuery) 
+                                            let tmpOutAmount = 0
+                                            if(tmpAmountData.result.recordset.length > 0)
+                                            {
+                                              tmpOutAmount = tmpData.result.recordset[0].GUID
+                                            }
+                                            
+                                            if(this.docObj.dt().length == 0)
+                                            {
+                                              this.docObj.addEmpty()
+                                              this.docObj.dt()[0].TYPE = 2
+                                              this.docObj.dt()[0].DOC_TYPE = 201
+                                              this.docObj.dt()[0].REF = 'POS'
+                                              this.docObj.dt()[0].REF_NO = Math.floor(Date.now() / 1000)
+                                              this.docObj.dt()[0].DOC_DATE = this.dtDocDate.value
+                                              this.docObj.dt()[0].INPUT = tmpSafe
+                                              this.docObj.dt()[0].OUTPUT = this.prmObj.filter({ID:'SafeCenter',TYPE:1}).getValue()
+                                              this.docObj.dt()[0].AMOUNT = this.txtPopAdvance.value
+                                              this.docObj.dt()[0].TOTAL = this.txtPopAdvance.value
+                                            }
                                               
                                               this.docObj.docCustomer.addEmpty()
                                               this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].TYPE = 2
@@ -695,7 +709,7 @@ export default class endOfDay extends React.PureComponent
                                               this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT_NAME =  this.cmbSafe.displayValue
                                               this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].OUTPUT = tmpSafe
                                               this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].PAY_TYPE = 20
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].AMOUNT = this.Advance
+                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].AMOUNT = tmpOutAmount
                                               this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DESCRIPTION = ''
                                               
                                               await this.docObj.save()

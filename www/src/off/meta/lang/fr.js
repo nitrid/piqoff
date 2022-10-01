@@ -1294,7 +1294,7 @@ export const langFr =
         cmbDepot1: "Sortie Dépot",
         cmbDepot2: "Retour Dépot",
         dtDocDate : "Date",
-        getRebate :"Chercher dépot retour",
+        getRebate :"Seçili Depodan İade getir", // BAK
         txtBarcode : "Ajouter Code Barre",
         pg_Docs : 
         {
@@ -3778,6 +3778,7 @@ export const langFr =
             clmMargin :"Marge",
             clmDescription :"Motif",
             clmCuser :"Utilisateur",
+            clmOrder : "Sipariş No", // BAK
         },
         popDiscount : 
         {
@@ -4031,6 +4032,7 @@ export const langFr =
             clmMargin :"Marge",
             clmDescription :"Motif",
             clmCuser :"Utilisateur",
+            clmOrder : "Sipariş No", // BAK
         },
         popDiscount : 
         {
@@ -4853,6 +4855,7 @@ export const langFr =
             clmMargin :"Marge",
             clmDescription : "Motif",
             clmCuser :"Utilisateur",
+            clmOffer : "Teklif No" // BAK
         },
         popDiscount : 
         {
@@ -6504,6 +6507,7 @@ export const langFr =
             clmAmount : "Montant" ,
             clmTotal : "Total",
             clmInputName : "Réserve",
+            clmOffer : "Teklif No"
         },
     },
     tkf_01_002 : // "Satış Teklifi Listesi",
