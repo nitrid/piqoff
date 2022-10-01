@@ -131,7 +131,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
         this.txtRefno.readOnly = false
         this.docLocked = false
         
-        this.frmDocItems.option('disabled',false)
+        this.frmDocItems.option('disabled',true)
         await this.grdDiffInv.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
         await this.grdInvoicePayment.dataRefresh({source:this.paymentObj.docCustomer.dt()});
     }

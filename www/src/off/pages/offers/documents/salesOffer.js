@@ -118,7 +118,7 @@ export default class salesOrder extends React.PureComponent
         this.txtRefno.readOnly = false
         this.docLocked = false
         
-        this.frmdocOffers.option('disabled',false)
+        this.frmdocOffers.option('disabled',true)
         await this.grdSlsOffer.dataRefresh({source:this.docObj.docOffers.dt('DOC_OFFERS')});
         await this.grdMultiItem.dataRefresh({source:this.multiItemData});
     }

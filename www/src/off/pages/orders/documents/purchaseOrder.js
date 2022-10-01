@@ -122,7 +122,7 @@ export default class purchaseOrder extends React.PureComponent
         this.txtRef.readOnly = false
         this.txtRefno.readOnly = false
         this.docLocked = false
-        this.frmdocOrders.option('disabled',false)
+        this.frmdocOrders.option('disabled',true)
 
         await this.grdPurcOrders.dataRefresh({source:this.docObj.docOrders.dt('DOC_ORDERS')});
         await this.grdMultiItem.dataRefresh({source:this.multiItemData});

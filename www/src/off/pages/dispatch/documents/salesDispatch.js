@@ -122,7 +122,7 @@ export default class salesDispatch extends React.PureComponent
         this.txtRefno.readOnly = false
         this.docLocked = false
         
-        this.frmDocItems.option('disabled',false)
+        this.frmDocItems.option('disabled',true)
         await this.grdSlsDispatch.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
         await this.grdMultiItem.dataRefresh({source:this.multiItemData});
     }

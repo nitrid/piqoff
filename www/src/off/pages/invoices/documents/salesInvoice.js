@@ -140,7 +140,7 @@ export default class salesInvoice extends React.PureComponent
         this.txtRefno.readOnly = false
         this.docLocked = false
         
-        this.frmSalesInv.option('disabled',false)
+        this.frmSalesInv.option('disabled',true)
         await this.grdSlsInv.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
         await this.grdInvoicePayment.dataRefresh({source:this.paymentObj.docCustomer.dt()});
         await this.grdMultiItem.dataRefresh({source:this.multiItemData});

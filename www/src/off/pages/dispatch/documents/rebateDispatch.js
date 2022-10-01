@@ -118,7 +118,7 @@ export default class rebateDispatch extends React.PureComponent
         this.txtRefno.readOnly = false
         this.docLocked = false
         
-        this.frmDocItems.option('disabled',false)
+        this.frmDocItems.option('disabled',true)
         await this.grdRebtDispatch.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
     }
     async getDoc(pGuid,pRef,pRefno)

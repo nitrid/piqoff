@@ -131,7 +131,7 @@ export default class rebateInvoice extends React.PureComponent
         this.txtRefno.readOnly = false
         this.docLocked = false
         
-        this.frmRebateInv.option('disabled',false)
+        this.frmRebateInv.option('disabled',true)
         await this.grdRebtInv.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
         await this.grdInvoicePayment.dataRefresh({source:this.paymentObj.docCustomer.dt()});
     }
