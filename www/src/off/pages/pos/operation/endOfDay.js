@@ -588,7 +588,7 @@ export default class endOfDay extends React.PureComponent
                                       onRowRemoved={async (e)=>{
                                       }}
                                       >
-                                          <Scrolling mode="virtual" />
+                                          <Scrolling mode="infinite" />
                                           <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
                                           <Column dataField="CUSER_NAME" caption={this.t("grdOpenTike.clmUser")} width={110}  headerFilter={{visible:true}}/>
                                           <Column dataField="DEVICE" caption={this.t("grdOpenTike.clmDevice")} width={80}  headerFilter={{visible:true}}/>

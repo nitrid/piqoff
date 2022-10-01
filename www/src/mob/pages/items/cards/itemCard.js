@@ -1801,7 +1801,7 @@ export default class itemCard extends React.PureComponent
                                         }
                                     }}
                                     >           
-                                    <Scrolling mode="virtual" />                         
+                                    <Scrolling mode="infinite" />                         
                                     <Column dataField="TITLE" caption={this.t("pg_txtPopCustomerCode.clmName")} width={650} defaultSortOrder="asc" />
                                     <Column dataField="CODE" caption={this.t("pg_txtPopCustomerCode.clmCode")} width={150} />
                                     </NdPopGrid>
