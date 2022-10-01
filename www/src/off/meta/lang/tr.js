@@ -674,7 +674,7 @@ export const langTr =
         {
             clmItemCode: "Kodu",
             clmItemName: "Adı",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmCreateDate: "Kayıt Tarihi",
             clmDescription :"Açıklama",
             clmCostPrice :"Birim Maliyet",
@@ -826,7 +826,7 @@ export const langTr =
         {
             clmItemCode: "Kodu",
             clmItemName: "Adı",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmCreateDate: "Kayıt Tarihi",
             clmDescription :"Açıklama"
         },
@@ -967,7 +967,7 @@ export const langTr =
         {
             clmItemCode: "Kodu",
             clmItemName: "Adı",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmCreateDate: "Kayıt Tarihi",
             clmDescription :"Açıklama",
             clmCostPrice : "Maliyet",
@@ -978,7 +978,7 @@ export const langTr =
             clmReferans : "Seri - Sıra",
             clmCode : "Kodu",
             clmName : "Adı",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmCuStomer : "Cari",
         },
         popPassword : 
@@ -1311,7 +1311,7 @@ export const langTr =
         {
             clmItemCode: "Kodu",
             clmItemName: "Adı",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmCreateDate: "Kayıt Tarihi",
             clmDescription :"Açıklama"
         },
@@ -1569,7 +1569,7 @@ export const langTr =
             clmMainGrp : "Ürün Grubu",
             clmPrice : "Fiyat",
             clmCustomer : "Cari",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmChange : "Değişim Tarihi",
             clmStartDate : "Vergi",
             clmFinishDate : "Orgin",
@@ -1628,7 +1628,7 @@ export const langTr =
         {
             clmCode: "Kodu",
             clmName : "Adı",           
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmBarcode : "Barkodu"
         },
         txtTotalQuantity : "Toplam Miktar",
@@ -1706,7 +1706,7 @@ export const langTr =
         {
             clmCode: "Kodu",
             clmName : "Adı",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmCustomer : "Cari",
             clmPrice : "Fiyat"
         },
@@ -2396,7 +2396,7 @@ export const langTr =
             clmReferans : "Seri - Sıra",
             clmCode : "Kodu",
             clmName : "Adı",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmPrice : "Fiyat",
             clmTotal : "Tutar"
         },
@@ -2405,7 +2405,7 @@ export const langTr =
             clmItemCode: "Kodu",
             clmItemName: "Adı",
             clmPrice: "Fiyat",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmDiscount : "İndirim",
             clmDiscountRate : "İndirim %",
             clmVat : "KDV",
@@ -2633,7 +2633,7 @@ export const langTr =
             clmCode : "Ürün Kodu",
             clmMulticode : "Tedarikçi Kodu",
             clmName : "Ürün Adı",
-            clmQuantity : "Miktar"
+            clmQuantity : "Adet"
         },
         msgMultiData:
         {
@@ -2652,7 +2652,7 @@ export const langTr =
         grdUnit2 : 
         {
             clmName : "ADI",
-            clmQuantity : "Miktar"
+            clmQuantity : "Adet"
         },
         popUnit2 : 
         {
@@ -2719,7 +2719,7 @@ export const langTr =
             clmReferans : "Seri - Sıra",
             clmCode : "Kodu",
             clmName : "Adı",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmTotal : "Tutar",
             clmPrice : "Fiyat",
         },
@@ -2783,7 +2783,7 @@ export const langTr =
             clmReferans : "Seri - Sıra",
             clmCode : "Kodu",
             clmName : "Adı",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmPrice : "Fiyat",
             clmTotal : "Tutar"
         },
@@ -2792,7 +2792,7 @@ export const langTr =
             clmItemCode: "Kodu",
             clmItemName: "Adı",
             clmPrice: "Fiyat",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmDiscount : "İndirim",
             clmDiscountRate : "İndirim %",
             clmVat : "KDV",
@@ -2998,7 +2998,7 @@ export const langTr =
             clmCode : "Ürün Kodu",
             clmMulticode : "Tedarikçi Kodu",
             clmName : "Ürün Adı",
-            clmQuantity : "Miktar"
+            clmQuantity : "Adet"
         },
         msgMultiData:
         {
@@ -3039,7 +3039,7 @@ export const langTr =
             clmReferans : "Seri - Sıra",
             clmCode : "Kodu",
             clmName : "Adı",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmTotal : "Tutar",
             clmPrice : "Fiyat",
         },
@@ -3102,7 +3102,7 @@ export const langTr =
             clmReferans : "Seri - Sıra",
             clmCode : "Kodu",
             clmName : "Adı",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmPrice : "Fiyat",
             clmTotal : "Tutar"
         },
@@ -3111,7 +3111,7 @@ export const langTr =
             clmItemCode: "Kodu",
             clmItemName: "Adı",
             clmPrice: "Fiyat",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmDiscount : "İndirim",
             clmDiscountRate : "İndirim %",
             clmVat : "KDV",
@@ -3371,7 +3371,7 @@ export const langTr =
             clmItemCode: "Kodu",
             clmItemName: "Adı",
             clmPrice: "Fiyat",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmDiscount : "İndirim",
             clmDiscountRate : "İndirim %",
             clmVat : "KDV",
@@ -3780,7 +3780,7 @@ export const langTr =
             clmItemCode: "Kodu",
             clmItemName: "Adı",
             clmPrice: "Fiyat",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmDiscount : "İndirim",
             clmDiscountRate : "İndirim %",
             clmVat : "KDV",
@@ -3959,7 +3959,7 @@ export const langTr =
             clmCode : "Ürün Kodu",
             clmMulticode : "Tedarikçi Kodu",
             clmName : "Ürün Adı",
-            clmQuantity : "Miktar"
+            clmQuantity : "Adet"
         },
         msgMultiData:
         {
@@ -3994,9 +3994,15 @@ export const langTr =
             clmReferans : "Seri - Sıra",
             clmCode : "Kodu",
             clmName : "Adı",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmTotal : "Tutar",
             clmPrice : "Fiyat",
+        },
+        msgCustomerSelect:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Cari Seçiniz !"
         },
     },
     irs_02_002 : // Satış İrsaliyesi"
@@ -4043,7 +4049,7 @@ export const langTr =
             clmItemCode: "Kodu",
             clmItemName: "Adı",
             clmPrice: "Fiyat",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmDiscount : "İndirim",
             clmDiscountRate : "İndirim %",
             clmVat : "KDV",
@@ -4228,7 +4234,7 @@ export const langTr =
             clmCode : "Ürün Kodu",
             clmMulticode : "Tedarikçi Kodu",
             clmName : "Ürün Adı",
-            clmQuantity : "Miktar"
+            clmQuantity : "Adet"
         },
         msgMultiData:
         {
@@ -4269,9 +4275,15 @@ export const langTr =
             clmReferans : "Seri - Sıra",
             clmCode : "Kodu",
             clmName : "Adı",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmTotal : "Tutar",
             clmPrice : "Fiyat",
+        },
+        msgCustomerSelect:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Cari Seçiniz !"
         },
     },
     irs_02_003 : // "İade İrsaliyesi"
@@ -4326,7 +4338,7 @@ export const langTr =
             clmItemCode: "Kodu",
             clmItemName: "Adı",
             clmPrice: "Fiyat",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmDiscount : "İndirim",
             clmDiscountRate : "İndirim %",
             clmVat : "KDV",
@@ -4615,7 +4627,7 @@ export const langTr =
             clmItemCode: "Kodu",
             clmItemName: "Adı",
             clmPrice: "Fiyat",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmDiscount : "İndirim",
             clmDiscountRate : "İndirim %",
             clmVat : "KDV",
@@ -4796,7 +4808,7 @@ export const langTr =
             clmCode : "Ürün Kodu",
             clmMulticode : "Tedarikçi Kodu",
             clmName : "Ürün Adı",
-            clmQuantity : "Miktar"
+            clmQuantity : "Adet"
         },
         msgMultiData:
         {
@@ -4835,9 +4847,15 @@ export const langTr =
             clmReferans : "Seri - Sıra",
             clmCode : "Kodu",
             clmName : "Adı",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmTotal : "Tutar",
             clmPrice : "Fiyat",
+        },
+        msgCustomerSelect:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Cari Seçiniz !"
         },
     },
     sip_02_002 : // "Satış Sipariş"
@@ -4884,7 +4902,7 @@ export const langTr =
             clmItemCode: "Kodu",
             clmItemName: "Adı",
             clmPrice: "Fiyat",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmDiscount : "İndirim",
             clmDiscountRate : "İndirim %",
             clmVat : "KDV",
@@ -5069,7 +5087,7 @@ export const langTr =
             clmCode : "Ürün Kodu",
             clmMulticode : "Tedarikçi Kodu",
             clmName : "Ürün Adı",
-            clmQuantity : "Miktar"
+            clmQuantity : "Adet"
         },
         msgMultiData:
         {
@@ -5104,9 +5122,15 @@ export const langTr =
             clmReferans : "Seri - Sıra",
             clmCode : "Kodu",
             clmName : "Adı",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmTotal : "Tutar",
             clmPrice : "Fiyat",
+        },
+        msgCustomerSelect:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Cari Seçiniz !"
         },
     },
     cnt_01_001 : // "Alış Anlaşmaları Listesi"
@@ -5242,7 +5266,7 @@ export const langTr =
             clmItemCode: "Kodu",
             clmItemName: "Adı",
             clmPrice: "Fiyat",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmStartDate : "Başlangıç",
             clmFinishDate : "Bitiş",
             clmCreateDate: "Kayıt Tarihi",
@@ -5296,7 +5320,7 @@ export const langTr =
             clmCode : "Ürün Kodu",
             clmMulticode : "Tedarikçi Kodu",
             clmName : "Ürün Adı",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmPrice : "Fiyat"
         },
         msgMultiData:
@@ -5389,7 +5413,7 @@ export const langTr =
             clmItemCode: "Kodu",
             clmItemName: "Adı",
             clmPrice: "Fiyat",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmStartDate : "Başlangıç",
             clmFinishDate : "Bitiş",
             clmCreateDate: "Kayıt Tarihi",
@@ -5448,7 +5472,7 @@ export const langTr =
             clmCode : "Ürün Kodu",
             clmMulticode : "Tedarikçi Kodu",
             clmName : "Ürün Adı",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmPrice : "Fiyat"
         },
         msgMultiData:
@@ -6225,7 +6249,7 @@ export const langTr =
         {
             clmBarcode : "Barkod",
             clmName : "Ürün Adı",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmPrice : "Fiyat",
             clmTotal : "Tutar"
         },
@@ -6313,7 +6337,7 @@ export const langTr =
         {
             clmBarcode : "Barkod",
             clmName : "Ürün Adı",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmPrice : "Fiyat",
             clmTotal : "Tutar"
         },
@@ -6383,7 +6407,7 @@ export const langTr =
         {
             clmBarcode : "Barkod",
             clmName : "Ürün Adı",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmPrice : "Fiyat",
             clmTotal : "Tutar"
         },
@@ -6500,7 +6524,7 @@ export const langTr =
         {
             clmBarcode : "Barkod",
             clmName : "Ürün Adı",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmPrice : "Fiyat",
             clmTotal : "Tutar"
         },
@@ -6626,7 +6650,7 @@ export const langTr =
             clmItemCode: "Kodu",
             clmItemName: "Adı",
             clmPrice: "Fiyat",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmDiscount : "İndirim",
             clmDiscountRate : "İndirim %",
             clmVat : "KDV",
@@ -6807,7 +6831,7 @@ export const langTr =
             clmCode : "Ürün Kodu",
             clmMulticode : "Tedarikçi Kodu",
             clmName : "Ürün Adı",
-            clmQuantity : "Miktar"
+            clmQuantity : "Adet"
         },
         msgMultiData:
         {
@@ -6880,7 +6904,7 @@ export const langTr =
             clmItemCode: "Kodu",
             clmItemName: "Adı",
             clmPrice: "Fiyat",
-            clmQuantity : "Miktar",
+            clmQuantity : "Adet",
             clmDiscount : "İndirim",
             clmDiscountRate : "İndirim %",
             clmVat : "KDV",
@@ -7066,7 +7090,7 @@ export const langTr =
             clmCode : "Ürün Kodu",
             clmMulticode : "Tedarikçi Kodu",
             clmName : "Ürün Adı",
-            clmQuantity : "Miktar"
+            clmQuantity : "Adet"
         },
         msgMultiData:
         {

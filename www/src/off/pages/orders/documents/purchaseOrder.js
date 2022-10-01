@@ -1683,7 +1683,7 @@ export default class purchaseOrder extends React.PureComponent
                                         <Scrolling mode="virtual" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.sip_02_001")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcOrders.clmCreateDate")} width={90} allowEditing={false}/>
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcOrders.clmCreateDate")} width={100} allowEditing={false}/>
                                         <Column dataField="CUSER_NAME" caption={this.t("grdPurcOrders.clmCuser")} width={100} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdPurcOrders.clmItemCode")} width={110} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="MULTICODE" caption={this.t("grdPurcOrders.clmMulticode")} width={110} allowEditing={false}/>
