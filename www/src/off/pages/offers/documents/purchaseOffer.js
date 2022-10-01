@@ -762,6 +762,21 @@ export default class purchaseoffer extends React.PureComponent
                                     onClick={async()=>
                                     {
                                         
+                                        for (let i = 0; i < this.docObj.docOffers.dt().length; i++) 
+                                        {
+                                          if(this.docObj.docOffers.dt()[i].ORDER_GUID == '00000000-0000-0000-0000-000000000000')   
+                                          {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgdocNotDelete',showTitle:true,title:this.t("msgdocNotDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgdocNotDelete.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgdocNotDelete.msg")}</div>)
+                                            }
+                                        
+                                            await dialog(tmpConfObj);
+                                            return
+                                          }
+                                        }
                                         let tmpConfObj =
                                         {
                                             id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -1498,10 +1513,47 @@ export default class purchaseoffer extends React.PureComponent
                                     height={'400'} 
                                     width={'100%'}
                                     dbApply={false}
+                                onRowPrepared={(e) =>
+                                    {
+                                        if(e.rowType == 'data' && e.data.ORDER_GUID  != '00000000-0000-0000-0000-000000000000')
+                                        {
+                                            e.rowElement.style.color ="Silver"
+                                        }
+                                    }}
+                                    onRowUpdating={async (e)=>
+                                    {
+                                        if(e.key.ORDER_GUID != '00000000-0000-0000-0000-000000000000')
+                                        {
+                                            e.cancel = true
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgRowNotUpdate',showTitle:true,title:this.t("msgRowNotUpdate.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgRowNotUpdate.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgRowNotUpdate.msg")}</div>)
+                                            }
+                                        
+                                            dialog(tmpConfObj);
+                                            e.component.cancelEditData()
+                                        }
+                                    }}
+                                    onRowRemoving={async (e)=>
+                                        {
+                                            if(e.key.ORDER_GUID != '00000000-0000-0000-0000-000000000000')
+                                            {
+                                                e.cancel = true
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgRowNotDelete',showTitle:true,title:this.t("msgRowNotDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgRowNotDelete.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgRowNotDelete.msg")}</div>)
+                                                }
+                                            
+                                                dialog(tmpConfObj);
+                                                e.component.cancelEditData()
+                                            }
+                                        }}
                                     onRowUpdated={async(e)=>
                                     {
-                                        console.log(e)
-                                        let rowIndex = e.component.getRowIndexByKey(e.key)
 
                                         if(typeof e.data.QUANTITY != 'undefined')
                                         {
@@ -1522,7 +1574,7 @@ export default class purchaseoffer extends React.PureComponent
 
                                         if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                         {
-                                            e.key.DISCOUNT = parseFloat((((e.key.AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(3))
+                                            e.key.DISCOUNT = parseFloat((((e.key.AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(2))
                                         }
                                         if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
                                         {
@@ -1549,7 +1601,6 @@ export default class purchaseoffer extends React.PureComponent
                                     }}
                                     onRowRemoved={async (e)=>{
                                         this._calculateTotal()
-                                        await this.docObj.save()
                                     }}
                                     >
                                         <Paging defaultPageSize={10} />

@@ -6891,6 +6891,24 @@ export const langTr =
             clmMulticode : "TEDARİKÇİ KODU",
             clmBarcode : "BARKOD"
         },
+        msgRowNotUpdate:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Bu Satır Siparişe Çevirilmiştir Değişiklik Yapamazsınız!"
+        },
+        msgRowNotDelete :
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Bu Satır Siparişe Çevirilmiştir Silme İşlemi Yapamazsınız !"
+        },
+        msgdocNotDelete : 
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrakınızda siparişe çevirilmiş satır var.. Bu evrak silinemez !"
+        }
     },
     tkf_02_002 : // "Satış Teklifi",
     {
