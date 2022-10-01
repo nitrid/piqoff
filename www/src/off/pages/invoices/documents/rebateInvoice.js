@@ -824,6 +824,7 @@ export default class rebateInvoice extends React.PureComponent
                                                 }
 
                                                 await dialog(tmpConfObj);
+                                                this.frmRebateInv.option('disabled',true)
                                             }
                                             else
                                             {

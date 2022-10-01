@@ -875,6 +875,7 @@ export default class purchaseDispatch extends React.PureComponent
                                                 }
 
                                                 await dialog(tmpConfObj);
+                                                this.frmDocItems.option('disabled',true)
                                             }
                                             else
                                             {

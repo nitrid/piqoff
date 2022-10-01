@@ -734,6 +734,7 @@ export default class salesOrder extends React.PureComponent
                                                 }
 
                                                 await dialog(tmpConfObj);
+                                                this.frmdocOffers.option('disabled',true)
                                             }
                                             else
                                             {

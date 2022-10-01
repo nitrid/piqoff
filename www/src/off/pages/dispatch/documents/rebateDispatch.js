@@ -671,6 +671,7 @@ export default class rebateDispatch extends React.PureComponent
                                                 }
 
                                                 await dialog(tmpConfObj);
+                                                this.frmDocItems.option('disabled',true)
                                             }
                                             else
                                             {
