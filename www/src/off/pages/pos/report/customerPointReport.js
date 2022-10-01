@@ -360,7 +360,7 @@ export default class salesOrdList extends React.PureComponent
                                         this.setState({ticketId:e.data.POS_ID})
                                     }}
                                     >                            
-                                        <Scrolling mode="infinite" />
+                                        <Scrolling mode="standart" />
                                         <Export fileName={this.lang.t("menu.pos_02_001")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="F_DATE" caption={this.t("grdPointDetail.clmDate")} visible={true} width={250}/> 
                                         <Column dataField="POS_ID" caption={this.t("grdPointDetail.clmPosId")} visible={true} width={200}/> 

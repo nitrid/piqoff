@@ -362,7 +362,7 @@ export default class labelPrinting extends React.Component
                        this.expObj.save()
                     }}
                     >
-                        <Scrolling mode="infinite" />
+                        <Scrolling mode="standart" />
                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                         <Column dataField="ITEM_NAME" caption={this.t("grdExpDate.clmName")} width={250} />
                         <Column dataField="EXP_DATE" caption={this.t("grdExpDate.clmDate")} width={250} />

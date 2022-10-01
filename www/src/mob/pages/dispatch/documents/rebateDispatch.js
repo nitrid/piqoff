@@ -1006,7 +1006,7 @@ export default class rebateDispatch extends React.PureComponent
                                 }}
                                 >
                                     <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
-                                    <Scrolling mode="infinite" />
+                                    <Scrolling mode="standart" />
                                     <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                     <Export fileName={this.lang.t("menu.irs_02_003")} enabled={true} allowExportSelectedData={true} />
                                     <Column dataField="ITEM_NAME" caption={this.t("grdRebtDispatch.clmItemName")} width={300} />

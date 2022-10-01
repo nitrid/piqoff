@@ -1252,7 +1252,7 @@ export default class outageDoc extends React.PureComponent
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                                        <Scrolling mode="infinite"/>
+                                        <Scrolling mode="standart"/>
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.stk_02_003")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdOutwasItems.clmCreateDate")} width={200} allowEditing={false}/>

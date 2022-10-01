@@ -1024,7 +1024,7 @@ export default class salesOrder extends React.Component
                             }}
                             >
                                 <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
-                                <Scrolling mode="infinite" />
+                                <Scrolling mode="standart" />
                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                 <Export fileName={this.lang.t("menu.sip_02_002")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="ITEM_NAME" caption={this.t("grdSlsOrder.clmItemName")} width={350} />

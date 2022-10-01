@@ -374,7 +374,7 @@ export default class promotionCard extends React.PureComponent
                                                     sorting={{ mode: 'none' }}
                                                     >
                                                         <Editing confirmDelete={false}/>
-                                                        <Scrolling mode="infinite" />
+                                                        <Scrolling mode="standart" />
                                                         <Column dataField="ITEM_CODE" caption={this.t("pg_Grid.clmCode")} width={100}/>
                                                         <Column dataField="ITEM_NAME" caption={this.t("pg_Grid.clmName")} width={290}/>
                                                     </NdGrid>
@@ -1117,7 +1117,7 @@ export default class promotionCard extends React.PureComponent
                                                 }
                                             }}
                                             >           
-                                            <Scrolling mode="infinite" />                         
+                                            <Scrolling mode="standart" />                         
                                             <Column dataField="TITLE" caption={this.t("pg_Grid.clmName")} width={650} defaultSortOrder="asc" />
                                             <Column dataField="CODE" caption={this.t("pg_Grid.clmCode")} width={150} />
                                             </NdPopGrid>
