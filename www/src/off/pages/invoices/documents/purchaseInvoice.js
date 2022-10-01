@@ -549,7 +549,7 @@ export default class purchaseInvoice extends React.PureComponent
             this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((pPrice).toFixed(3))
             if(typeof pDiscountPer != 'undefined')
             {
-                this.docObj.docItems.dt()[pIndex].DISCOUNT = typeof pDiscountPer == 'undefined' ? 0 : (this.docObj.docItems.dt()[pIndex].PRICE * pDiscountPer / 100) * pQuantity
+                this.docObj.docItems.dt()[pIndex].DISCOUNT = typeof pDiscountPer == 'undefined' ? 0 : ((this.docObj.docItems.dt()[pIndex].PRICE * pDiscountPer / 100) * pQuantity).toFixed(2)
                 this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = typeof pDiscountPer == 'undefined' ? 0 : pDiscountPer
             }
             else
