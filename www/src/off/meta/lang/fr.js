@@ -657,6 +657,7 @@ export const langFr =
         pg_Docs : 
         {
             title : "Sélection Document",
+            clmDate : "Date",
             clmRef : "Série",
             clmRefNo : "Numéro",
             clmDocDate : "Date",
@@ -810,6 +811,7 @@ export const langFr =
         pg_Docs : 
         {
             title : "Sélection Document",
+            clmDate : "Date",
             clmRef : "Série",
             clmRefNo : "Numéro",
             clmDocDate : "Date",
@@ -951,6 +953,7 @@ export const langFr =
         pg_Docs : 
         {
             title : "Sélection Document",
+            clmDate : "Date",
             clmRef : "Série",
             clmRefNo : "Numéro",
             clmDocDate : "Date",
@@ -1138,6 +1141,7 @@ export const langFr =
         pg_Docs : 
         {
             title : "Sélection Document",
+            clmDate : "Date",
             clmRef : "Série",
             clmRefNo : "Numéro",
             clmDocDate : "Date",
@@ -1295,6 +1299,7 @@ export const langFr =
         pg_Docs : 
         {
             title : "Sélection Document",
+            clmDate : "Date",
             clmRef : "Série",
             clmRefNo : "Numéro",
             clmDocDate : "Date",
@@ -1435,6 +1440,7 @@ export const langFr =
         pg_Docs : 
         {
             title : "Evrak Seçimi",
+            clmDate : "Date",
             clmRef : "SERİ",
             clmRefNo : "SIRA",
         },
@@ -2369,6 +2375,7 @@ export const langFr =
         pg_Docs : 
         {
             title : "Sélection Document",
+            clmDate : "Date",
             clmRef : "Série",
             clmRefNo : "Numéro",
             clmOutputName : "Nom Fournisseur",
@@ -2746,6 +2753,7 @@ export const langFr =
         pg_Docs : 
         {
             title : "Sélection Document",
+            clmDate : "Date",
             clmRef : "Série",
             clmRefNo : "Numéro",
             clmInputName : "Nom Fournisseur",
@@ -3055,6 +3063,7 @@ export const langFr =
         pg_Docs : 
         {
             title : "Sélection Document",
+            clmDate : "Date",
             clmRef : "Série",
             clmRefNo : "Numéro",
             clmInputName : "Nom Fournisseur",
@@ -3318,6 +3327,7 @@ export const langFr =
         pg_Docs : 
         {
             title : "Sélection Document",
+            clmDate : "Date",
             clmRef : "Série",
             clmRefNo : "Numéro",
             clmInputName : "Nom Fournisseur",
@@ -3732,6 +3742,7 @@ export const langFr =
         pg_Docs : 
         {
             title : "Sélection Document",
+            clmDate : "Date",
             clmRef : "Série",
             clmRefNo : "Numéro",
             clmOutputName : "Nom Fournisseur",
@@ -3985,6 +3996,7 @@ export const langFr =
         pg_Docs : 
         {
             title : "Sélection Document",
+            clmDate : "Date",
             clmRef : "Série",
             clmRefNo : "Numéro",
             clmInputName : "Nom Fournisseur",
@@ -4250,6 +4262,7 @@ export const langFr =
         pg_Docs : 
         {
             title : "Sélection Document",
+            clmDate : "Date",
             clmRef : "Série",
             clmRefNo : "Numéro",
             clmInputName : "Nom Fournisseur",
@@ -4537,6 +4550,7 @@ export const langFr =
         pg_Docs : 
         {
             title : "Sélection Document",
+            clmDate : "Date",
             clmRef : "Série",
             clmRefNo : "Numéro",
             clmOutputName : "Nom Fournisseur",
@@ -4804,6 +4818,7 @@ export const langFr =
         pg_Docs : 
         {
             title : "Sélection Document",
+            clmDate : "Date",
             clmRef : "Série",
             clmRefNo : "Numéro",
             clmInputName : "Nom Fournisseur",
@@ -5106,6 +5121,7 @@ export const langFr =
         pg_Docs : 
         {
             title : "Sélection Documents",
+            clmDate : "Date",
             clmRef : "Serie",
             clmRefNo : "Numéro",
             clmOutputName : "Nom Fournisseur",
@@ -5258,6 +5274,7 @@ export const langFr =
         pg_Docs :      
         {     
             title : "Sélection Documents",     
+            clmDate : "Date",
             clmRef : "Serie",     
             clmRefNo : "Numéro",     
             clmOutputName : "Nom Fournisseur",     
@@ -5525,6 +5542,7 @@ export const langFr =
         pg_Docs : 
         {
             title : "Sélection Document",
+            clmDate : "Date",
             clmRef : "Série",
             clmRefNo : "Numéro",
             clmInputName : "Nom Fournisseur",
@@ -5658,6 +5676,7 @@ export const langFr =
         pg_Docs : 
         {
             title : "Sélection Document",
+            clmDate : "Date",
             clmRef : "Série",
             clmRefNo : "Numéro",
             clmOutputName : "Nom Fournisseur",
@@ -5897,6 +5916,7 @@ export const langFr =
         pg_Docs : 
         {
             title : "Sélection Document",
+            clmDate : "Date",
             clmRef : "Série",
             clmRefNo : "Numéro",
            clmDate : "Date"
@@ -6009,6 +6029,7 @@ export const langFr =
         pg_Docs : 
         {
             title : "Sélection Document",
+            clmDate : "Date",
             clmRef : "Série",
             clmRefNo : "Numéro",
             clmDocDate : "Date",
@@ -6535,6 +6556,7 @@ export const langFr =
         pg_Docs : 
         {
             title : "Sélection Document",
+            clmDate : "Date",
             clmRef : "Série",
             clmRefNo : "Numéro",
             clmOutputName : "Nom Fournisseur",
@@ -6790,6 +6812,7 @@ export const langFr =
         pg_Docs : 
         {
             title : "Sélection Document",
+            clmDate : "Date",
             clmRef : "Série",
             clmRefNo : "Numéro",
             clmInputName : "Nom Fournisseur",
