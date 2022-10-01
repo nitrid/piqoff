@@ -55,7 +55,7 @@ export default class purchaseInvoice extends React.PureComponent
         this.combineControl = true
         this.combineNew = false
 
-        this.rightItems = [{ text: this.t("getDispatch"), },{ text: this.t("getPayment"), }]
+        this.rightItems = [{ text: this.t("getDispatch")},{ text: this.t("getOrders")},{ text: this.t("getPayment")}]
         this.multiItemData = new datatable
         this.unitDetailData = new datatable
         this.newPrice = new datatable
@@ -108,7 +108,7 @@ export default class purchaseInvoice extends React.PureComponent
         {            
             this.btnBack.setState({disabled:true});
             this.btnNew.setState({disabled:false});
-            this.btnSave.setState({disabled:true});
+            this.btnSave.setState({disabled:false});
             this.btnDelete.setState({disabled:false});
             this.btnPrint.setState({disabled:false});          
         })
@@ -616,6 +616,10 @@ export default class purchaseInvoice extends React.PureComponent
             {   
                 await this.pg_dispatchGrid.setData(tmpData.result.recordset)
             }
+            else
+            {
+                await this.pg_dispatchGrid.setData([])
+            }
     
             this.pg_dispatchGrid.show()
             this.pg_dispatchGrid.onClick = async(data) =>
@@ -652,12 +656,92 @@ export default class purchaseInvoice extends React.PureComponent
                     tmpDocItems.VAT_RATE = data[i].VAT_RATE
                     tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
                     tmpDocItems.CONNECT_REF = data[i].CONNECT_REF
-    
+                    tmpDocItems.ORDER_GUID = data[i].ORDER_GUID
+                    tmpDocItems.OLD_VAT = data[i].VAT_RATE
+                    tmpDocItems.VAT_RATE = data[i].VAT_RATE
+                    tmpDocItems.DEPOT_QUANTITY = data[i].DEPOT_QUANTITY
+                    tmpDocItems.CUSTOMER_PRICE = data[i].CUSTOMER_PRICE
+
                     await this.docObj.docItems.addEmpty(tmpDocItems,false)
                     await this.core.util.waitUntil(100)
                     this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].stat = 'edit'
                 }
+              
                 this.docObj.docItems.dt().emit('onRefresh')
+                this._calculateTotal()
+            }
+        }
+
+    }
+    async _getOrders()
+    {
+        if(this.docObj.dt()[0].OUTPUT == '' || this.docObj.dt()[0].OUTPUT == '00000000-0000-0000-0000-000000000000')
+        {
+            let tmpConfObj =
+            {
+                id:'msgCustomerSelect',showTitle:true,title:this.t("msgCustomerSelect.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgCustomerSelect.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerSelect.msg")}</div>)
+            }
+
+            await dialog(tmpConfObj);
+            return
+        }
+        else
+        {
+            let tmpQuery = 
+            {
+                query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ORDERS_VW_01 WHERE OUTPUT = @OUTPUT AND SHIPMENT_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 0 AND DOC_TYPE IN(60)",
+                param : ['OUTPUT:string|50'],
+                value : [this.docObj.dt()[0].OUTPUT]
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            if(tmpData.result.recordset.length > 0)
+            {   
+                await this.pg_ordersGrid.setData(tmpData.result.recordset)
+            }
+            else
+            {
+                await this.pg_ordersGrid.setData([])
+            }
+    
+            this.pg_ordersGrid.show()
+            this.pg_ordersGrid.onClick = async(data) =>
+            {
+                for (let i = 0; i < data.length; i++) 
+                {
+                    let tmpDocItems = {...this.docObj.docItems.empty}
+                    tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                    tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                    tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                    tmpDocItems.LINE_NO = data[i].LINE_NO
+                    tmpDocItems.REF = this.docObj.dt()[0].REF
+                    tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                    tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                    tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                    tmpDocItems.INPUT_CODE = this.docObj.dt()[0].INPUT_CODE
+                    tmpDocItems.INPUT_NAME = this.docObj.dt()[0].INPUT_NAME
+                    tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                    tmpDocItems.OUTPUT_CODE = this.docObj.dt()[0].OUTPUT_CODE
+                    tmpDocItems.OUTPUT_NAME = this.docObj.dt()[0].OUTPUT_NAME
+                    tmpDocItems.ITEM = data[i].ITEM
+                    tmpDocItems.ITEM_CODE = data[i].ITEM_CODE
+                    tmpDocItems.ITEM_NAME = data[i].ITEM_NAME
+                    tmpDocItems.PRICE = data[i].PRICE
+                    tmpDocItems.QUANTITY = data[i].QUANTITY
+                    tmpDocItems.VAT = data[i].VAT
+                    tmpDocItems.AMOUNT = data[i].AMOUNT
+                    tmpDocItems.TOTAL = data[i].TOTAL
+                    tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
+                    tmpDocItems.VAT_RATE = data[i].VAT_RATE
+                    tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
+                    tmpDocItems.ORDER_GUID = data[i].GUID
+                    tmpDocItems.VAT_RATE = data[i].VAT_RATE
+                    tmpDocItems.OLD_VAT = data[i].VAT_RATE
+
+                    await this.docObj.docItems.addEmpty(tmpDocItems)
+                    await this.core.util.waitUntil(100)
+                }
                 this._calculateTotal()
             }
         }
@@ -973,7 +1057,6 @@ export default class purchaseInvoice extends React.PureComponent
     } 
     async saveDoc()
     {
-       
         let tmpConfObj =
         {
             id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -2172,6 +2255,10 @@ export default class purchaseInvoice extends React.PureComponent
                                             await this._getPayment()
                                             this.popPayment.show()
                                         }
+                                        else if(e.itemData.text == this.t("getOrders"))
+                                        {
+                                            this._getOrders()
+                                        }
                                     }).bind(this)} />
                                 </React.Fragment>     
                                 </Item>
@@ -2454,10 +2541,10 @@ export default class purchaseInvoice extends React.PureComponent
                     >
                         <Column dataField="REFERANS" caption={this.t("pg_dispatchGrid.clmReferans")} width={200} defaultSortOrder="asc"/>
                         <Column dataField="ITEM_CODE" caption={this.t("pg_dispatchGrid.clmCode")} width={200}/>
-                        <Column dataField="ITEM_NAME" caption={this.t("pg_dispatchGrid.clmName")} width={300} />
-                        <Column dataField="QUANTITY" caption={this.t("pg_dispatchGrid.clmQuantity")} width={300} />
-                        <Column dataField="PRICE" caption={this.t("pg_dispatchGrid.clmPrice")} width={300} />
-                        <Column dataField="TOTAL" caption={this.t("pg_dispatchGrid.clmTotal")} width={300} />
+                        <Column dataField="ITEM_NAME" caption={this.t("pg_dispatchGrid.clmName")} width={450} />
+                        <Column dataField="QUANTITY" caption={this.t("pg_dispatchGrid.clmQuantity")} width={200} />
+                        <Column dataField="PRICE" caption={this.t("pg_dispatchGrid.clmPrice")} width={200} />
+                        <Column dataField="TOTAL" caption={this.t("pg_dispatchGrid.clmTotal")} width={200} />
                     </NdPopGrid>
                     {/* Stok Grid */}
                     <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={"#root"}
@@ -3360,6 +3447,24 @@ export default class purchaseInvoice extends React.PureComponent
                         <Column dataField="CODE" caption={this.t("pg_txtBarcode.clmCode")} width={150} />
                         <Column dataField="NAME" caption={this.t("pg_txtBarcode.clmName")} width={300} defaultSortOrder="asc" />
                         <Column dataField="MULTICODE" caption={this.t("pg_txtBarcode.clmMulticode")} width={200}/>
+                    </NdPopGrid>
+                      {/* Sipariş Grid */}
+                    <NdPopGrid id={"pg_ordersGrid"} parent={this} container={"#root"}
+                    visible={false}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    selection={{mode:"multiple"}}
+                    title={this.t("pg_ordersGrid.title")} //
+                    >
+                        <Column dataField="REFERANS" caption={this.t("pg_ordersGrid.clmReferans")} width={200} defaultSortOrder="asc"/>
+                        <Column dataField="ITEM_CODE" caption={this.t("pg_ordersGrid.clmCode")} width={200}/>
+                        <Column dataField="ITEM_NAME" caption={this.t("pg_ordersGrid.clmName")} width={300} />
+                        <Column dataField="QUANTITY" caption={this.t("pg_ordersGrid.clmQuantity")} width={300} />
+                        <Column dataField="PRICE" caption={this.t("pg_ordersGrid.clmPrice")} width={300} />
+                        <Column dataField="TOTAL" caption={this.t("pg_ordersGrid.clmTotal")} width={300} />
                     </NdPopGrid>
                 </ScrollView>     
             </div>
