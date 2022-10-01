@@ -1688,7 +1688,6 @@ export default class purchaseOrder extends React.PureComponent
                                     }}
                                     onRowRemoved={async (e)=>{
                                         this._calculateTotal()
-                                        await this.docObj.save()
                                     }}
                                     >
                                         <Paging defaultPageSize={10} />
@@ -1701,7 +1700,7 @@ export default class purchaseOrder extends React.PureComponent
                                         <Column dataField="CUSER_NAME" caption={this.t("grdPurcOrders.clmCuser")} width={100} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdPurcOrders.clmItemCode")} width={110} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="MULTICODE" caption={this.t("grdPurcOrders.clmMulticode")} width={110} allowEditing={false}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdPurcOrders.clmItemName")} width={330} />
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdPurcOrders.clmItemName")} width={230} />
                                         <Column dataField="ITEM_BARCODE" caption={this.t("grdPurcOrders.clmBarcode")} width={130} allowEditing={false}/>
                                         <Column dataField="QUANTITY" caption={this.t("grdPurcOrders.clmQuantity")} width={60} dataType={'number'}/>
                                         <Column dataField="PRICE" caption={this.t("grdPurcOrders.clmPrice")} width={75} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
@@ -1710,7 +1709,8 @@ export default class purchaseOrder extends React.PureComponent
                                         <Column dataField="DISCOUNT_RATE" caption={this.t("grdPurcOrders.clmDiscountRate")} width={60} dataType={'number'}/>
                                         <Column dataField="VAT" caption={this.t("grdPurcOrders.clmVat")} width={75} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
                                         <Column dataField="TOTAL" caption={this.t("grdPurcOrders.clmTotal")} width={110} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
-                                        <Column dataField="DESCRIPTION" caption={this.t("grdPurcOrders.clmDescription")} width={120}  headerFilter={{visible:true}}/>
+                                        <Column dataField="OFFER_REF" caption={this.t("grdPurcOrders.clmOffer")} width={120}  headerFilter={{visible:true}} allowEditing={false}/>
+                                        <Column dataField="DESCRIPTION" caption={this.t("grdPurcOrders.clmDescription")} width={100}  headerFilter={{visible:true}}/>
                                     </NdGrid>
                                     <ContextMenu
                                     dataSource={this.rightItems}
