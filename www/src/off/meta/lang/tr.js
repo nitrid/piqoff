@@ -2366,6 +2366,7 @@ export const langTr =
         txtBarcode : "Barkod Ekle",
         txtBarcodePlace: "Barkod Okutunuz",
         txtQuantity :"Miktar",
+        getOrders : "Sipariş Getir",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -2712,6 +2713,16 @@ export const langTr =
             btn01: "Ekle",
             msg: "Miktar Giriniz"
         },
+        pg_ordersGrid : 
+        {
+            title : "Sipariş Seçimi",
+            clmReferans : "Seri - Sıra",
+            clmCode : "Kodu",
+            clmName : "Adı",
+            clmQuantity : "Miktar",
+            clmTotal : "Tutar",
+            clmPrice : "Fiyat",
+        },
     },
     ftr_02_002 : // "Satış Faturası"
     {
@@ -2743,6 +2754,7 @@ export const langTr =
         txtBarcode : "Barkod Ekle",
         txtBarcodePlace: "Barkod Okutunuz",
         txtQuantity :"Miktar",
+        getOrders : "Sipariş Getir",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -3020,6 +3032,16 @@ export const langTr =
             title: "Miktar",
             btn01: "Ekle",
             msg: "Miktar Giriniz"
+        },
+        pg_ordersGrid : 
+        {
+            title : "Sipariş Seçimi",
+            clmReferans : "Seri - Sıra",
+            clmCode : "Kodu",
+            clmName : "Adı",
+            clmQuantity : "Miktar",
+            clmTotal : "Tutar",
+            clmPrice : "Fiyat",
         },
     },
     ftr_02_003 : // "İade Faturası"
@@ -3729,6 +3751,7 @@ export const langTr =
         txtBarcode : "Barkod Ekle",
         txtBarcodePlace: "Barkod Okutunuz",
         txtQuantity :"Miktar",
+        getOrders : "Sipariş Getir",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -3965,6 +3988,16 @@ export const langTr =
             btn01: "Ekle",
             msg: "Miktar Giriniz"
         },
+        pg_ordersGrid : 
+        {
+            title : "Sipariş Seçimi",
+            clmReferans : "Seri - Sıra",
+            clmCode : "Kodu",
+            clmName : "Adı",
+            clmQuantity : "Miktar",
+            clmTotal : "Tutar",
+            clmPrice : "Fiyat",
+        },
     },
     irs_02_002 : // Satış İrsaliyesi"
     {
@@ -3982,6 +4015,7 @@ export const langTr =
         txtBarcode : "Barkod Ekle",
         txtBarcodePlace: "Barkod Okutunuz",
         txtQuantity :"Miktar",
+        getOrders : "Sipariş Getir",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -4228,6 +4262,16 @@ export const langTr =
             title: "Miktar",
             btn01: "Ekle",
             msg: "Miktar Giriniz"
+        },
+        pg_ordersGrid : 
+        {
+            title : "Sipariş Seçimi",
+            clmReferans : "Seri - Sıra",
+            clmCode : "Kodu",
+            clmName : "Adı",
+            clmQuantity : "Miktar",
+            clmTotal : "Tutar",
+            clmPrice : "Fiyat",
         },
     },
     irs_02_003 : // "İade İrsaliyesi"
@@ -4534,6 +4578,7 @@ export const langTr =
         txtBarcode : "Barkod Ekle",
         txtBarcodePlace: "Barkod Okutunuz",
         txtQuantity : "Miktar",
+        getOffers : "Teklif Getir",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -4784,6 +4829,16 @@ export const langTr =
             btn01: "Ekle",
             msg: "Miktar Giriniz"
         },
+        pg_offersGrid : 
+        {
+            title : "Teklif Seçimi",
+            clmReferans : "Seri - Sıra",
+            clmCode : "Kodu",
+            clmName : "Adı",
+            clmQuantity : "Miktar",
+            clmTotal : "Tutar",
+            clmPrice : "Fiyat",
+        },
     },
     sip_02_002 : // "Satış Sipariş"
     {
@@ -4801,6 +4856,7 @@ export const langTr =
         txtBarcode : "Barkod Ekle",
         txtBarcodePlace: "Barkod Okutunuz",
         txtQuantity : "Miktar",
+        getOffers : "Teklif Getir",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -5041,6 +5097,16 @@ export const langTr =
             clmName : "STOK ADI",
             clmMulticode : "TEDARİKÇİ KODU",
             clmBarcode : "BARKOD"
+        },
+        pg_offersGrid : 
+        {
+            title : "Teklif Seçimi",
+            clmReferans : "Seri - Sıra",
+            clmCode : "Kodu",
+            clmName : "Adı",
+            clmQuantity : "Miktar",
+            clmTotal : "Tutar",
+            clmPrice : "Fiyat",
         },
     },
     cnt_01_001 : // "Alış Anlaşmaları Listesi"
@@ -6665,7 +6731,7 @@ export const langTr =
         {
             title: "Dikkat",
             btn01: "Tamam",
-            msg: "Faturaya Çevirilmiş Evrak Kilidi Açılamaz"
+            msg: "Siparişe Çevirilmiş Evrak Kilidi Açılamaz"
         },
         msgGetLocked:
         {
@@ -6912,7 +6978,7 @@ export const langTr =
         {
             title: "Dikkat",
             btn01: "Tamam",
-            msg: "Faturaya Çevirilmiş Evrak Kilidi Açılamaz"
+            msg: "Siparişe Çevirilmiş Evrak Kilidi Açılamaz"
         },
         msgGetLocked:
         {

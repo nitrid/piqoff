@@ -6,6 +6,7 @@ import moment from 'moment';
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
+import ContextMenu from 'devextreme-react/context-menu';
 import TabPanel from 'devextreme-react/tab-panel';
 import { Button } from 'devextreme-react/button';
 
@@ -49,6 +50,7 @@ export default class purchaseOrder extends React.PureComponent
 
         this.multiItemData = new datatable
         this.underPriceData = new datatable
+        this.rightItems = [{ text: this.t("getOffers")}]
 
     }
     async componentDidMount()
@@ -679,6 +681,80 @@ export default class purchaseOrder extends React.PureComponent
             this.docObj.docOrders.dt()[i].OUTPUT = this.docObj.dt()[0].OUTPUT
             this.docObj.docOrders.dt()[i].DOC_DATE = this.docObj.dt()[0].DOC_DATE
         }
+    }
+    async _getOffers()
+    {
+        if(this.docObj.dt()[0].OUTPUT == '' || this.docObj.dt()[0].OUTPUT == '00000000-0000-0000-0000-000000000000')
+        {
+            let tmpConfObj =
+            {
+                id:'msgCustomerSelect',showTitle:true,title:this.t("msgCustomerSelect.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgCustomerSelect.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerSelect.msg")}</div>)
+            }
+
+            await dialog(tmpConfObj);
+            return
+        }
+        else
+        {
+            let tmpQuery = 
+            {
+                query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_OFFERS_VW_01 WHERE OUTPUT = @OUTPUT AND ORDER_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 0 AND DOC_TYPE IN(61)",
+                param : ['OUTPUT:string|50'],
+                value : [this.docObj.dt()[0].OUTPUT]
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            if(tmpData.result.recordset.length > 0)
+            {   
+                await this.pg_offersGrid.setData(tmpData.result.recordset)
+            }
+            else
+            {
+                await this.pg_offersGrid.setData([])
+            }
+    
+            this.pg_offersGrid.show()
+            this.pg_offersGrid.onClick = async(data) =>
+            {
+                for (let i = 0; i < data.length; i++) 
+                {
+                    let tmpDocItems = {...this.docObj.docOrders.empty}
+                    tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                    tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                    tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                    tmpDocItems.LINE_NO = data[i].LINE_NO
+                    tmpDocItems.REF = this.docObj.dt()[0].REF
+                    tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                    tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                    tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                    tmpDocItems.INPUT_CODE = this.docObj.dt()[0].INPUT_CODE
+                    tmpDocItems.INPUT_NAME = this.docObj.dt()[0].INPUT_NAME
+                    tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                    tmpDocItems.OUTPUT_CODE = this.docObj.dt()[0].OUTPUT_CODE
+                    tmpDocItems.OUTPUT_NAME = this.docObj.dt()[0].OUTPUT_NAME
+                    tmpDocItems.ITEM = data[i].ITEM
+                    tmpDocItems.ITEM_CODE = data[i].ITEM_CODE
+                    tmpDocItems.ITEM_NAME = data[i].ITEM_NAME
+                    tmpDocItems.PRICE = data[i].PRICE
+                    tmpDocItems.QUANTITY = data[i].QUANTITY
+                    tmpDocItems.VAT = data[i].VAT
+                    tmpDocItems.AMOUNT = data[i].AMOUNT
+                    tmpDocItems.TOTAL = data[i].TOTAL
+                    tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
+                    tmpDocItems.VAT_RATE = data[i].VAT_RATE
+                    tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
+                    tmpDocItems.MULTICODE = data[i].MULTICODE
+                    tmpDocItems.ITEM_BARCODE = data[i].ITEM_BARCODE
+                    tmpDocItems.OFFER_GUID = data[i].GUID
+
+                    await this.docObj.docOrders.addEmpty(tmpDocItems)
+                    await this.core.util.waitUntil(100)
+                }
+                this._calculateTotal()
+            }
+        }
+
     }
     render()
     {
@@ -1524,7 +1600,7 @@ export default class purchaseOrder extends React.PureComponent
 
                                             if( typeof this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1] != 'undefined' && this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1].ITEM_CODE == '')
                                             {
-                                                await this.grdPurcInv.devGrid.deleteRow(this.docObj.docOrders.dt().length - 1)
+                                                await this.grdPurcOrders.devGrid.deleteRow(this.docObj.docOrders.dt().length - 1)
                                             }
                                         }
                                         else
@@ -1540,6 +1616,7 @@ export default class purchaseOrder extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item>
+                                 <React.Fragment>
                                     <NdGrid parent={this} id={"grdPurcOrders"} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 
@@ -1619,6 +1696,18 @@ export default class purchaseOrder extends React.PureComponent
                                         <Column dataField="TOTAL" caption={this.t("grdPurcOrders.clmTotal")} width={110} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
                                         <Column dataField="DESCRIPTION" caption={this.t("grdPurcOrders.clmDescription")} width={120}  headerFilter={{visible:true}}/>
                                     </NdGrid>
+                                    <ContextMenu
+                                    dataSource={this.rightItems}
+                                    width={200}
+                                    target="#grdPurcOrders"
+                                    onItemClick={(async(e)=>
+                                    {
+                                        if(e.itemData.text == this.t("getOffers"))
+                                        {
+                                            this._getOffers()
+                                        }
+                                    }).bind(this)} />
+                                 </React.Fragment>
                                 </Item>
                             </Form>
                         </div>
@@ -2206,6 +2295,24 @@ export default class purchaseOrder extends React.PureComponent
                             </div>
                         
                     </NdDialog>  
+                    {/* Teklif Grid */}
+                    <NdPopGrid id={"pg_offersGrid"} parent={this} container={"#root"}
+                    visible={false}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    selection={{mode:"multiple"}}
+                    title={this.t("pg_offersGrid.title")} //
+                    >
+                        <Column dataField="REFERANS" caption={this.t("pg_offersGrid.clmReferans")} width={200} defaultSortOrder="asc"/>
+                        <Column dataField="ITEM_CODE" caption={this.t("pg_offersGrid.clmCode")} width={200}/>
+                        <Column dataField="ITEM_NAME" caption={this.t("pg_offersGrid.clmName")} width={300} />
+                        <Column dataField="QUANTITY" caption={this.t("pg_offersGrid.clmQuantity")} width={300} />
+                        <Column dataField="PRICE" caption={this.t("pg_offersGrid.clmPrice")} width={300} />
+                        <Column dataField="TOTAL" caption={this.t("pg_offersGrid.clmTotal")} width={300} />
+                    </NdPopGrid>
                 </ScrollView>                
             </div>
         )
