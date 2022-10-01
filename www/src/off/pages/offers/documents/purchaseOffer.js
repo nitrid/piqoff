@@ -1542,20 +1542,20 @@ export default class purchaseoffer extends React.PureComponent
                                         <Scrolling mode="virtual" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.sip_02_001")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcoffers.clmCreateDate")} width={180} allowEditing={false}/>
-                                        <Column dataField="CUSER_NAME" caption={this.t("grdPurcoffers.clmCuser")} width={120} allowEditing={false}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdPurcoffers.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="MULTICODE" caption={this.t("grdPurcoffers.clmMulticode")} width={150}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdPurcoffers.clmItemName")} width={350} />
-                                        <Column dataField="ITEM_BARCODE" caption={this.t("grdPurcoffers.clmBarcode")} width={150} allowEditing={false}/>
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcoffers.clmCreateDate")} width={90} allowEditing={false}/>
+                                        <Column dataField="CUSER_NAME" caption={this.t("grdPurcoffers.clmCuser")} width={90} allowEditing={false}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdPurcoffers.clmItemCode")} width={110} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="MULTICODE" caption={this.t("grdPurcoffers.clmMulticode")} width={110}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdPurcoffers.clmItemName")} width={300} />
+                                        <Column dataField="ITEM_BARCODE" caption={this.t("grdPurcoffers.clmBarcode")} width={130} allowEditing={false}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdPurcoffers.clmQuantity")} width={60} dataType={'number'}/>
                                         <Column dataField="PRICE" caption={this.t("grdPurcoffers.clmPrice")} width={80} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdPurcoffers.clmQuantity")} width={80} dataType={'number'}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdPurcoffers.clmAmount")} width={80} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
-                                        <Column dataField="DISCOUNT" caption={this.t("grdPurcoffers.clmDiscount")} width={80} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
-                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdPurcoffers.clmDiscountRate")} width={100} dataType={'number'}/>
-                                        <Column dataField="VAT" caption={this.t("grdPurcoffers.clmVat")} width={80} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
-                                        <Column dataField="TOTAL" caption={this.t("grdPurcoffers.clmTotal")} width={150} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
-                                        <Column dataField="DESCRIPTION" caption={this.t("grdPurcoffers.clmDescription")} width={160}  headerFilter={{visible:true}}/>
+                                        <Column dataField="AMOUNT" caption={this.t("grdPurcoffers.clmAmount")} width={100} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
+                                        <Column dataField="DISCOUNT" caption={this.t("grdPurcoffers.clmDiscount")} width={60} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdPurcoffers.clmDiscountRate")} width={60} dataType={'number'}/>
+                                        <Column dataField="VAT" caption={this.t("grdPurcoffers.clmVat")} width={75} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
+                                        <Column dataField="TOTAL" caption={this.t("grdPurcoffers.clmTotal")} width={110} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
+                                        <Column dataField="DESCRIPTION" caption={this.t("grdPurcoffers.clmDescription")} width={120}  headerFilter={{visible:true}}/>
                                     </NdGrid>
                                 </Item>
                             </Form>
