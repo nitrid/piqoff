@@ -667,7 +667,7 @@ export default class endOfDay extends React.PureComponent
                                             let tmpOutAmount = 0
                                             if(tmpAmountData.result.recordset.length > 0)
                                             {
-                                              tmpOutAmount = tmpData.result.recordset[0].GUID
+                                              tmpOutAmount = tmpAmountData.result.recordset[0].AMOUNT
                                             }
                                             
                                             if(this.docObj.dt().length == 0)
