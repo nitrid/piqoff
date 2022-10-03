@@ -691,19 +691,19 @@ export class dataset
                     tmpQuerys.push(e)    
                 });
             }
-            
-            for (let i = 0; i < this.length; i++) 
-            {
-                let tmp = this.get(i);
-                tmp.forEach(e => 
-                {
-                    Object.setPrototypeOf(e,{stat:''})   
-                });
-            }
 
             let tmpResult = await this.sql.execute(tmpQuerys)
             if(typeof tmpResult.result.err == 'undefined')
-            {                            
+            {         
+                for (let i = 0; i < this.length; i++) 
+                {
+                    let tmp = this.get(i);
+                    tmp.forEach(e => 
+                    {
+                        Object.setPrototypeOf(e,{stat:''})   
+                    });
+                }
+
                 resolve(0)
             }
             else
@@ -1083,16 +1083,15 @@ export class datatable
             else
             {
                 tmpQuerys = this.toCommands(arguments[0]);
-            }
-            
-            for (let i = 0; i < this.length; i++) 
-            {
-                Object.setPrototypeOf(this[i],{stat:''})
-            }
+            }                        
 
             let tmpResult = await this.sql.execute(tmpQuerys)
             if(typeof tmpResult.result.err == 'undefined')
-            {                
+            {     
+                for (let i = 0; i < this.length; i++) 
+                {
+                    Object.setPrototypeOf(this[i],{stat:''})
+                }           
                 resolve(0)
             }
             else
