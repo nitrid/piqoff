@@ -2372,6 +2372,7 @@ export const langFr =
         txtBarcode: "Code barre",
         txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
+        getOrders : "Sipariş Getir", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -2719,6 +2720,16 @@ export const langFr =
             clmCode : "Kod",   // bak
             clmName : "Adi"   // bak
         },
+        pg_ordersGrid : 
+        {  
+            title : "Sipariş Seçimi",  //bak
+            clmReferans : "Seri - Sıra",  //bak
+            clmCode : "Kodu",  //bak
+            clmName : "Adı",  //bak
+            clmQuantity : "Adet",  //bak
+            clmTotal : "Tutar",  //bak
+            clmPrice : "Fiyat",  //bak
+        },
     },
     ftr_02_002 : // "Satış Faturası"
     {
@@ -2750,6 +2761,7 @@ export const langFr =
         txtBarcode: "Code barre",
         txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
+        getOrders : "Sipariş Getir", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3028,6 +3040,16 @@ export const langFr =
             title: "Quantité",
             btn01: "Ajoutez",
             msg: "Ajoutez quantité"
+        },
+        pg_ordersGrid : 
+        {
+            title : "Sipariş Seçimi",  // BAK
+            clmReferans : "Seri - Sıra",  // BAK
+            clmCode : "Kodu",  // BAK
+            clmName : "Adı",  // BAK
+            clmQuantity : "Adet",  // BAK
+            clmTotal : "Tutar",  // BAK
+            clmPrice : "Fiyat",  // BAK
         },
     },
     ftr_02_003 : // "İade Faturası"
@@ -3739,6 +3761,7 @@ export const langFr =
         txtBarcode: "Code barre",
         txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
+        getOrders : "Sipariş Getir", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3977,6 +4000,40 @@ export const langFr =
             btn01: "Ajoutez",
             msg: "Ajoutez quantité"
         },
+        pg_ordersGrid : 
+        {
+            title : "Sipariş Seçimi",   // BAK
+            clmReferans : "Seri - Sıra",   // BAK
+            clmCode : "Kodu",   // BAK
+            clmName : "Adı",   // BAK
+            clmQuantity : "Adet",   // BAK
+            clmTotal : "Tutar",   // BAK
+            clmPrice : "Fiyat",   // BAK
+        },
+        msgCustomerSelect:
+        {
+            title: "Dikkat",     // BAK
+            btn01: "Tamam",   // BAK
+            msg: "Lütfen Cari Seçiniz !"   // BAK
+        },
+        msgRowNotUpdate:
+        {
+            title: "Dikkat",  // BAK
+            btn01: "Tamam",  // BAK
+            msg: "Bu Satır  Faturaya Çevirilmiştir Değişiklik Yapamazsınız!"  // BAK
+        },
+        msgRowNotDelete :
+        {
+            title: "Dikkat",  //BAK
+            btn01: "Tamam",  //BAK
+            msg: "Bu Satır  Faturaya Çevirilmiştir Silme İşlemi Yapamazsınız !"  //BAK
+        },
+        msgdocNotDelete : 
+        {
+            title: "Dikkat", // BAK
+            btn01: "Tamam", // BAK
+            msg: "Evrakınızda  Faturaya çevirilmiş satır var.. Bu evrak silinemez !"  // BAK
+        }
     },
     irs_02_002 : // Satış İrsaliyesi"
     {
@@ -3994,6 +4051,7 @@ export const langFr =
         txtBarcode: "Code barre",
         txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
+        getOrders : "Sipariş Getir", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -4243,6 +4301,40 @@ export const langFr =
             clmMulticode : "Sélection Document",
             clmBarcode : "Code Barre"
         },
+        pg_ordersGrid : 
+        {
+            title : "Sipariş Seçimi",   // BAK
+            clmReferans : "Seri - Sıra",   // BAK
+            clmCode : "Kodu",   // BAK
+            clmName : "Adı",   // BAK
+            clmQuantity : "Adet",   // BAK
+            clmTotal : "Tutar",   // BAK
+            clmPrice : "Fiyat",   // BAK
+        },
+        msgCustomerSelect:
+        {
+            title: "Dikkat",  //BAK
+            btn01: "Tamam",  //BAK
+            msg: "Lütfen Cari Seçiniz !"  //BAK
+        },
+        msgRowNotUpdate:
+        {
+            title: "Dikkat",  // BAK
+            btn01: "Tamam",  // BAK
+            msg: "Bu Satır  Faturaya Çevirilmiştir Değişiklik Yapamazsınız!"  // BAK
+        },
+        msgRowNotDelete :
+        {
+            title: "Dikkat",  //BAK
+            btn01: "Tamam",  //BAK
+            msg: "Bu Satır  Faturaya Çevirilmiştir Silme İşlemi Yapamazsınız !"  //BAK
+        },
+        msgdocNotDelete : 
+        {
+            title: "Dikkat", // BAK
+            btn01: "Tamam", // BAK
+            msg: "Evrakınızda  Faturaya çevirilmiş satır var.. Bu evrak silinemez !"  // BAK
+        }
     },
     irs_02_003 : // "İade İrsaliyesi"
     {
@@ -4471,6 +4563,24 @@ export const langFr =
             clmMulticode : "Sélection Document",
             clmBarcode : "Code Barre"
         },
+        msgRowNotUpdate:
+        {
+            title: "Dikkat",  // BAK
+            btn01: "Tamam",  // BAK
+            msg: "Bu Satır  Faturaya Çevirilmiştir Değişiklik Yapamazsınız!"  // BAK
+        },
+        msgRowNotDelete :
+        {
+            title: "Dikkat",  //BAK
+            btn01: "Tamam",  //BAK
+            msg: "Bu Satır  Faturaya Çevirilmiştir Silme İşlemi Yapamazsınız !"  //BAK
+        },
+        msgdocNotDelete : 
+        {
+            title: "Dikkat", // BAK
+            btn01: "Tamam", // BAK
+            msg: "Evrakınızda  Faturaya çevirilmiş satır var.. Bu evrak silinemez !"  // BAK
+        }
     },
     sip_01_001 : // "Alış Sipariş Listesi"
     {
@@ -4531,6 +4641,7 @@ export const langFr =
             clmTotal : "Total",
             clmOutputName :"Réserve",
         },
+        
 
     },
     sip_02_001 : // "Alış Sipariş"
@@ -4549,6 +4660,7 @@ export const langFr =
         txtBarcode: "Code barre",
         txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
+        getOffers : "Teklif Getir", // bak
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -4800,6 +4912,40 @@ export const langFr =
             btn01: "Ajoutez",
             msg: "Ajoutez quantité"
         },
+        pg_offersGrid : 
+        {
+            title : "Teklif Seçimi",  // bak
+            clmReferans : "Seri - Sıra",  // bak
+            clmCode : "Kodu",  // bak
+            clmName : "Adı",  // bak
+            clmQuantity : "Adet",  // bak
+            clmTotal : "Tutar",  // bak
+            clmPrice : "Fiyat",  // bak
+        },
+        msgCustomerSelect:
+        {
+            title: "Dikkat",  //bak
+            btn01: "Tamam",  //bak
+            msg: "Lütfen Cari Seçiniz !"  //bak
+        },
+        msgRowNotUpdate:
+        {
+            title: "Dikkat",  //BAK
+            btn01: "Tamam",  //BAK
+            msg: "Bu Satır İrsaliye veya Faturaya Çevirilmiştir Değişiklik Yapamazsınız!"  //BAK
+        },
+        msgRowNotDelete :
+        {
+            title: "Dikkat",  // BAK
+            btn01: "Tamam",  // BAK
+            msg: "Bu Satır İrsaliye veya Faturaya Çevirilmiştir Silme İşlemi Yapamazsınız !"  // BAK
+        },
+        msgdocNotDelete : 
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            msg: "Evrakınızda İrsaliye veya Faturaya çevirilmiş satır var.. Bu evrak silinemez !"   // BAK
+        }
     },
     sip_02_002 : // "Satış Sipariş"
     {
@@ -4817,6 +4963,7 @@ export const langFr =
         txtBarcode: "Code barre",
         txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
+        getOffers : "Teklif Getir", // bak
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -5060,6 +5207,40 @@ export const langFr =
             clmMulticode : "Sélection Document",
             clmBarcode : "Code Barre"
         },
+        pg_offersGrid : 
+        {
+            title : "Teklif Seçimi",  //bak
+            clmReferans : "Seri - Sıra",  //bak
+            clmCode : "Kodu",  //bak
+            clmName : "Adı",  //bak
+            clmQuantity : "Adet",  //bak
+            clmTotal : "Tutar",  //bak
+            clmPrice : "Fiyat",  //bak
+        },
+        msgCustomerSelect:
+        {
+            title: "Dikkat",  //bak
+            btn01: "Tamam",  //bak
+            msg: "Lütfen Cari Seçiniz !"  //bak
+        },
+        msgRowNotUpdate:
+        {
+            title: "Dikkat",  //BAK
+            btn01: "Tamam",  //BAK
+            msg: "Bu Satır İrsaliye veya Faturaya Çevirilmiştir Değişiklik Yapamazsınız!"  //BAK
+        },
+        msgRowNotDelete :
+        {
+            title: "Dikkat",  // BAK
+            btn01: "Tamam",  // BAK
+            msg: "Bu Satır İrsaliye veya Faturaya Çevirilmiştir Silme İşlemi Yapamazsınız !"  // BAK
+        },
+        msgdocNotDelete : 
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            msg: "Evrakınızda İrsaliye veya Faturaya çevirilmiş satır var.. Bu evrak silinemez !"   // BAK
+        }
     },
     cnt_01_001 : // "Alış Anlaşmaları Listesi"
     {
@@ -6796,6 +6977,24 @@ export const langFr =
             clmMulticode : "Sélection Document",
             clmBarcode : "Code Barre"
         },
+        msgRowNotUpdate:
+        {
+            title: "Dikkat",    // bak
+            btn01: "Tamam",    // bak
+            msg: "Bu Satır Siparişe Çevirilmiştir Değişiklik Yapamazsınız!"    // bak
+        },  
+        msgRowNotDelete :
+        {
+            title: "Dikkat",  //bak
+            btn01: "Tamam",  //bak
+            msg: "Bu Satır Siparişe Çevirilmiştir Silme İşlemi Yapamazsınız !"  //bak
+        },
+        msgdocNotDelete : 
+        {
+            title: "Dikkat",   //bak
+            btn01: "Tamam",   //bak
+            msg: "Evrakınızda siparişe çevirilmiş satır var.. Bu evrak silinemez !"   //bak
+        }
     },
     tkf_02_002 : // "Satış Teklifi",
     {
@@ -7062,6 +7261,24 @@ export const langFr =
             clmMulticode : "Sélection Document",
             clmBarcode : "Code Barre"
         },
+        msgRowNotUpdate:
+        {
+            title: "Dikkat",    // bak
+            btn01: "Tamam",    // bak
+            msg: "Bu Satır Siparişe Çevirilmiştir Değişiklik Yapamazsınız!"    // bak
+        },  
+        msgRowNotDelete :
+        {
+            title: "Dikkat",  //bak
+            btn01: "Tamam",  //bak
+            msg: "Bu Satır Siparişe Çevirilmiştir Silme İşlemi Yapamazsınız !"  //bak
+        },
+        msgdocNotDelete : 
+        {
+            title: "Dikkat",   //bak
+            btn01: "Tamam",   //bak
+            msg: "Evrakınızda siparişe çevirilmiş satır var.. Bu evrak silinemez !"   //bak
+        }
 
     },
     proces_01_001 : // "Ürün Grubu Güncelleme" 

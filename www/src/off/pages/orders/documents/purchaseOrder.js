@@ -879,6 +879,21 @@ export default class purchaseOrder extends React.PureComponent
                                     <NdButton id="btnDelete" parent={this} icon="trash" type="default"
                                     onClick={async()=>
                                     {
+                                        for (let i = 0; i < this.docObj.docOrders.dt().length; i++) 
+                                        {
+                                            if(this.docObj.docOrders.dt()[i].SHIPMENT_GUID != '00000000-0000-0000-0000-000000000000')   
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgdocNotDelete',showTitle:true,title:this.t("msgdocNotDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgdocNotDelete.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgdocNotDelete.msg")}</div>)
+                                                }
+                                            
+                                                await dialog(tmpConfObj);
+                                                return
+                                            }
+                                        }
                                         let tmpConfObj =
                                         {
                                             id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -1640,6 +1655,45 @@ export default class purchaseOrder extends React.PureComponent
                                     width={'100%'}
                                     dbApply={false}
                                     filterRow={{visible:true}}
+                                    onRowPrepared={(e) =>
+                                    {
+                                        if(e.rowType == 'data' && e.data.SHIPMENT_GUID  != '00000000-0000-0000-0000-000000000000')
+                                        {
+                                            e.rowElement.style.color ="Silver"
+                                        }
+                                    }}
+                                    onRowUpdating={async (e)=>
+                                    {
+                                        if(e.key.SHIPMENT_GUID != '00000000-0000-0000-0000-000000000000')
+                                        {
+                                            e.cancel = true
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgRowNotUpdate',showTitle:true,title:this.t("msgRowNotUpdate.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgRowNotUpdate.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgRowNotUpdate.msg")}</div>)
+                                            }
+                                        
+                                            dialog(tmpConfObj);
+                                            e.component.cancelEditData()
+                                        }
+                                    }}
+                                    onRowRemoving={async (e)=>
+                                    {
+                                        if(e.key.SHIPMENT_GUID != '00000000-0000-0000-0000-000000000000')
+                                        {
+                                            e.cancel = true
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgRowNotDelete',showTitle:true,title:this.t("msgRowNotDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgRowNotDelete.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgRowNotDelete.msg")}</div>)
+                                            }
+                                        
+                                            dialog(tmpConfObj);
+                                            e.component.cancelEditData()
+                                        }
+                                    }}
                                     onRowUpdated={async(e)=>
                                     {
                                         if(typeof e.data.QUANTITY != 'undefined')

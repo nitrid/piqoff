@@ -4017,6 +4017,24 @@ export const langTr =
             btn01: "Tamam",
             msg: "Lütfen Cari Seçiniz !"
         },
+        msgRowNotUpdate:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Bu Satır  Faturaya Çevirilmiştir Değişiklik Yapamazsınız!"
+        },
+        msgRowNotDelete :
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Bu Satır  Faturaya Çevirilmiştir Silme İşlemi Yapamazsınız !"
+        },
+        msgdocNotDelete : 
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrakınızda  Faturaya çevirilmiş satır var.. Bu evrak silinemez !"
+        }
     },
     irs_02_002 : // Satış İrsaliyesi"
     {
@@ -4301,6 +4319,24 @@ export const langTr =
             btn01: "Tamam",
             msg: "Lütfen Cari Seçiniz !"
         },
+        msgRowNotUpdate:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Bu Satır  Faturaya Çevirilmiştir Değişiklik Yapamazsınız!"
+        },
+        msgRowNotDelete :
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Bu Satır  Faturaya Çevirilmiştir Silme İşlemi Yapamazsınız !"
+        },
+        msgdocNotDelete : 
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrakınızda  Faturaya çevirilmiş satır var.. Bu evrak silinemez !"
+        }
     },
     irs_02_003 : // "İade İrsaliyesi"
     {
@@ -4531,6 +4567,24 @@ export const langTr =
             btn01: "Ekle",
             msg: "Miktar Giriniz"
         },
+        msgRowNotUpdate:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Bu Satır  Faturaya Çevirilmiştir Değişiklik Yapamazsınız!"
+        },
+        msgRowNotDelete :
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Bu Satır  Faturaya Çevirilmiştir Silme İşlemi Yapamazsınız !"
+        },
+        msgdocNotDelete : 
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrakınızda  Faturaya çevirilmiş satır var.. Bu evrak silinemez !"
+        }
     },
     sip_01_001 : // "Alış Sipariş Listesi"
     {
@@ -4878,6 +4932,24 @@ export const langTr =
             btn01: "Tamam",
             msg: "Lütfen Cari Seçiniz !"
         },
+        msgRowNotUpdate:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Bu Satır İrsaliye veya Faturaya Çevirilmiştir Değişiklik Yapamazsınız!"
+        },
+        msgRowNotDelete :
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Bu Satır İrsaliye veya Faturaya Çevirilmiştir Silme İşlemi Yapamazsınız !"
+        },
+        msgdocNotDelete : 
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrakınızda İrsaliye veya Faturaya çevirilmiş satır var.. Bu evrak silinemez !"
+        }
     },
     sip_02_002 : // "Satış Sipariş"
     {
@@ -5156,6 +5228,24 @@ export const langTr =
             btn01: "Tamam",
             msg: "Lütfen Cari Seçiniz !"
         },
+        msgRowNotUpdate:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Bu Satır İrsaliye veya Faturaya Çevirilmiştir Değişiklik Yapamazsınız!"
+        },
+        msgRowNotDelete :
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Bu Satır İrsaliye veya Faturaya Çevirilmiştir Silme İşlemi Yapamazsınız !"
+        },
+        msgdocNotDelete : 
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrakınızda İrsaliye veya Faturaya çevirilmiş satır var.. Bu evrak silinemez !"
+        }
     },
     cnt_01_001 : // "Alış Anlaşmaları Listesi"
     {
@@ -7176,6 +7266,24 @@ export const langTr =
             clmMulticode : "TEDARİKÇİ KODU",
             clmBarcode : "BARKOD"
         },
+        msgRowNotUpdate:
+        {
+            title: "Dikkat",   
+            btn01: "Tamam",   
+            msg: "Bu Satır Siparişe Çevirilmiştir Değişiklik Yapamazsınız!"   
+        },  
+        msgRowNotDelete :
+        {
+            title: "Dikkat",  
+            btn01: "Tamam",  
+            msg: "Bu Satır Siparişe Çevirilmiştir Silme İşlemi Yapamazsınız !"  
+        },
+        msgdocNotDelete : 
+        {
+            title: "Dikkat",   
+            btn01: "Tamam",   
+            msg: "Evrakınızda siparişe çevirilmiş satır var.. Bu evrak silinemez !"   
+        }
     },
     proces_01_001 : // "Ürün Grubu Güncelleme"
     {

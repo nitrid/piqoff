@@ -764,7 +764,7 @@ export default class purchaseoffer extends React.PureComponent
                                         
                                         for (let i = 0; i < this.docObj.docOffers.dt().length; i++) 
                                         {
-                                          if(this.docObj.docOffers.dt()[i].ORDER_GUID == '00000000-0000-0000-0000-000000000000')   
+                                          if(this.docObj.docOffers.dt()[i].ORDER_GUID != '00000000-0000-0000-0000-000000000000')   
                                           {
                                             let tmpConfObj =
                                             {
@@ -1513,7 +1513,7 @@ export default class purchaseoffer extends React.PureComponent
                                     height={'400'} 
                                     width={'100%'}
                                     dbApply={false}
-                                onRowPrepared={(e) =>
+                                    onRowPrepared={(e) =>
                                     {
                                         if(e.rowType == 'data' && e.data.ORDER_GUID  != '00000000-0000-0000-0000-000000000000')
                                         {
