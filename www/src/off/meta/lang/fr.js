@@ -108,7 +108,7 @@ export const langFr =
         irs_01_003: "Saisie Bon de livraison de retour",
         irs_02_001: "Saisie Bon de livraison d'achat",
         irs_02_002: "Saisie Bon de livraison de vente",
-        irs_02_003: "Saisie Bon de livraison de retour",
+        irs_02_003: "Saisie Bon de Retour de livraison",
         sip: "Commande",
         sip_01: "Listes",
         sip_02: "Document",
