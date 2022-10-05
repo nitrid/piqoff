@@ -4710,6 +4710,7 @@ export const langFr =
             clmBarcode :"Code Barre",
             clmDescription :"Motif",
             clmCuser :"Utilisateur",
+            clmVatRate : "TVA %"
         },
         popDiscount : 
         {
@@ -5002,7 +5003,9 @@ export const langFr =
             clmMargin :"Marge",
             clmDescription : "Motif",
             clmCuser :"Utilisateur",
-            clmOffer : "Teklif No" // BAK
+            clmOffer : "Teklif No", // BAK
+            clmBarcode : "Code Barre",
+            clmVatRate : "TVA %"
         },
         popDiscount : 
         {
@@ -6785,6 +6788,7 @@ export const langFr =
             clmBarcode :"Code Barre",
             clmDescription : "Motif",
             clmCuser :"Utilisateur",
+            clmVatRate : "TVA %"
         },
         popDiscount : 
         {
@@ -7056,6 +7060,7 @@ export const langFr =
             clmMargin :"Marge",
             clmDescription : "Motif",
             clmCuser :"Utilisateur",
+            clmVatRate : "TVA %"
         },
         popDiscount : 
         {

@@ -4714,6 +4714,7 @@ export const langTr =
             clmDescription :"Açıklama",
             clmCuser :"Kullanıcı",
             clmOffer : "Teklif No",
+            clmVatRate : "KDV %"
         },
         popDiscount : 
         {
@@ -5008,6 +5009,7 @@ export const langTr =
             clmCuser :"Kullanıcı",
             clmOffer : "Teklif No",
             clmBarcode : "Barkodu",
+            clmVatRate : "KDV %"
         },
         popDiscount : 
         {
@@ -6789,6 +6791,7 @@ export const langTr =
             clmBarcode :"Barkodu",
             clmDescription :"Açıklama",
             clmCuser :"Kullanıcı",
+            clmVatRate : "KDV %"
         },
         popDiscount : 
         {
@@ -7061,6 +7064,7 @@ export const langTr =
             clmDescription :"Açıklama",
             clmCuser :"Kullanıcı",
             clmBarcode :"Barkodu",
+            clmVatRate : "KDV %"
         },
         popDiscount : 
         {

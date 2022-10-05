@@ -435,7 +435,7 @@ export default class App extends React.PureComponent
                     window.location.reload()
                 }}/>   
                 <LoadPanel
-                shadingColor="rgba(0,0,0,0.4)"
+                shadingColor="rgba(0,0,0,0)"
                 position={{ of: '#root' }}
                 visible={this.state.isExecute}
                 showIndicator={true}
@@ -477,9 +477,8 @@ export default class App extends React.PureComponent
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
                                     <Label text={this.lang.t("popPassword.Password")} alignment="right" />
-                                    <NdTextBox id="txtPassword" mode="password" mode="password" parent={this} simple={true}
+                                    <NdTextBox id="txtPassword" mode="password" parent={this} simple={true}
                                             maxLength={32}
-
                                     ></NdTextBox>
                                 </Item>
                                 <Item>

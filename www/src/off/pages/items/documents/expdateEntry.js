@@ -89,7 +89,6 @@ export default class labelPrinting extends React.Component
     }
     async addItem(pData,pIndex)
     {
-        console.log(pData)
         if(pData.CODE  == '')
         {
             return

@@ -16,6 +16,11 @@
     background-color:#ffffff;
     border-right: 1px solid #bdc3c7;
 }
+.dx-datagrid .dx-row > td {
+    padding: 4px;
+    font-size: smaller;
+    -webkit-text-stroke: thin;
+  }
 .main-drawer
 {
     padding-top: 46px;

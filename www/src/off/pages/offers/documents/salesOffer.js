@@ -71,7 +71,6 @@ export default class salesOrder extends React.PureComponent
                 this.btnBack.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
-                this.btnCopy.setState({disabled:false});
                 this.btnPrint.setState({disabled:false});
             }
         })
@@ -83,7 +82,6 @@ export default class salesOrder extends React.PureComponent
                 this.btnNew.setState({disabled:false});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
-                this.btnCopy.setState({disabled:false});
                 this.btnPrint.setState({disabled:false});
 
                 pData.rowData.CUSER = this.user.CODE
@@ -95,7 +93,6 @@ export default class salesOrder extends React.PureComponent
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:true});
             this.btnDelete.setState({disabled:false});
-            this.btnCopy.setState({disabled:false});
             this.btnPrint.setState({disabled:false});          
         })
         this.docObj.ds.on('onDelete',(pTblName) =>
@@ -104,7 +101,6 @@ export default class salesOrder extends React.PureComponent
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:false});
             this.btnDelete.setState({disabled:false});
-            this.btnCopy.setState({disabled:false});
             this.btnPrint.setState({disabled:false});
         })
 
@@ -376,6 +372,7 @@ export default class salesOrder extends React.PureComponent
     }
     async addItem(pData,pIndex,pQuantity)
     {
+        App.instance.setState({isExecute:true})
         if(typeof pQuantity == 'undefined')
         {
             pQuantity = 1
@@ -387,15 +384,16 @@ export default class salesOrder extends React.PureComponent
                 if(this.combineControl == true)
                 {
                     let tmpCombineBtn = ''
+                    App.instance.setState({isExecute:false})
                     await this.msgCombineItem.show().then(async (e) =>
                     {
     
                         if(e == 'btn01')
                         {
                             this.docObj.docOffers.dt()[i].QUANTITY = this.docObj.docOffers.dt()[i].QUANTITY + pQuantity
-                            this.docObj.docOffers.dt()[i].VAT = parseFloat((this.docObj.docOffers.dt()[i].VAT + (this.docObj.docOffers.dt()[i].PRICE * (this.docObj.docOffers.dt()[i].VAT_RATE / 100)) * pQuantity).toFixed(3))
-                            this.docObj.docOffers.dt()[i].AMOUNT = parseFloat((this.docObj.docOffers.dt()[i].QUANTITY * this.docObj.docOffers.dt()[i].PRICE).toFixed(3))
-                            this.docObj.docOffers.dt()[i].TOTAL = parseFloat((((this.docObj.docOffers.dt()[i].QUANTITY * this.docObj.docOffers.dt()[i].PRICE) - this.docObj.docOffers.dt()[i].DISCOUNT) + this.docObj.docOffers.dt()[i].VAT).toFixed(3))
+                            this.docObj.docOffers.dt()[i].VAT = parseFloat((this.docObj.docOffers.dt()[i].VAT + (this.docObj.docOffers.dt()[i].PRICE * (this.docObj.docOffers.dt()[i].VAT_RATE / 100)) * pQuantity).toFixed(9))
+                            this.docObj.docOffers.dt()[i].AMOUNT = parseFloat((this.docObj.docOffers.dt()[i].QUANTITY * this.docObj.docOffers.dt()[i].PRICE).toFixed(9))
+                            this.docObj.docOffers.dt()[i].TOTAL = parseFloat((((this.docObj.docOffers.dt()[i].QUANTITY * this.docObj.docOffers.dt()[i].PRICE) - this.docObj.docOffers.dt()[i].DISCOUNT) + this.docObj.docOffers.dt()[i].VAT).toFixed(9))
                             this._calculateTotal()
                             await this.grdSlsOffer.devGrid.deleteRow(pIndex)
                             if(this.checkCombine.value == true)
@@ -423,9 +421,9 @@ export default class salesOrder extends React.PureComponent
                 else if(this.combineNew == false)
                 {
                     this.docObj.docOffers.dt()[i].QUANTITY = this.docObj.docOffers.dt()[i].QUANTITY + pQuantity
-                    this.docObj.docOffers.dt()[i].VAT = parseFloat((this.docObj.docOffers.dt()[i].VAT + (this.docObj.docOffers.dt()[i].PRICE * (this.docObj.docOffers.dt()[i].VAT_RATE / 100)) * pQuantity).toFixed(3))
-                    this.docObj.docOffers.dt()[i].AMOUNT = parseFloat((this.docObj.docOffers.dt()[i].QUANTITY * this.docObj.docOffers.dt()[i].PRICE).toFixed(3))
-                    this.docObj.docOffers.dt()[i].TOTAL = parseFloat((((this.docObj.docOffers.dt()[i].QUANTITY * this.docObj.docOffers.dt()[i].PRICE) - this.docObj.docOffers.dt()[i].DISCOUNT) + this.docObj.docOffers.dt()[i].VAT).toFixed(3))
+                    this.docObj.docOffers.dt()[i].VAT = parseFloat((this.docObj.docOffers.dt()[i].VAT + (this.docObj.docOffers.dt()[i].PRICE * (this.docObj.docOffers.dt()[i].VAT_RATE / 100)) * pQuantity).toFixed(9))
+                    this.docObj.docOffers.dt()[i].AMOUNT = parseFloat((this.docObj.docOffers.dt()[i].QUANTITY * this.docObj.docOffers.dt()[i].PRICE).toFixed(9))
+                    this.docObj.docOffers.dt()[i].TOTAL = parseFloat((((this.docObj.docOffers.dt()[i].QUANTITY * this.docObj.docOffers.dt()[i].PRICE) - this.docObj.docOffers.dt()[i].DISCOUNT) + this.docObj.docOffers.dt()[i].VAT).toFixed(9))
                     this._calculateTotal()
                     await this.grdSlsOffer.devGrid.deleteRow(pIndex)
                     return
@@ -454,12 +452,13 @@ export default class salesOrder extends React.PureComponent
             let tmpMargin = tmpData.result.recordset[0].PRICE - this.docObj.docOffers.dt()[pIndex].COST_PRICE
             let tmpMarginRate = ((tmpData.result.recordset[0].PRICE - this.docObj.docOffers.dt()[pIndex].COST_PRICE) - tmpData.result.recordset[0].PRICE) * 100
             this.docObj.docOffers.dt()[pIndex].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
-            this.docObj.docOffers.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
-            this.docObj.docOffers.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100) * pQuantity).toFixed(3))
-            this.docObj.docOffers.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE * pQuantity).toFixed(3))
-            this.docObj.docOffers.dt()[pIndex].TOTAL = parseFloat(((tmpData.result.recordset[0].PRICE * pQuantity)+ this.docObj.docOffers.dt()[pIndex].VAT).toFixed(3))
+            this.docObj.docOffers.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(9))
+            this.docObj.docOffers.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100) * pQuantity).toFixed(9))
+            this.docObj.docOffers.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE * pQuantity).toFixed(9))
+            this.docObj.docOffers.dt()[pIndex].TOTAL = parseFloat(((tmpData.result.recordset[0].PRICE * pQuantity)+ this.docObj.docOffers.dt()[pIndex].VAT).toFixed(9))
             this._calculateTotal()
         }
+        App.instance.setState({isExecute:false})
     }
     async multiItemAdd()
     {
@@ -787,13 +786,6 @@ export default class salesOrder extends React.PureComponent
 
                                             await dialog(tmpConfObj);
                                         }
-                                        
-                                    }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnCopy" parent={this} icon="copy" type="default"
-                                    onClick={()=>
-                                    {
                                         
                                     }}/>
                                 </Item>
@@ -1464,6 +1456,7 @@ export default class salesOrder extends React.PureComponent
                                     height={'400'} 
                                     width={'100%'}
                                     dbApply={false}
+                                    filterRow={{visible:true}}
                                     onRowPrepared={(e) =>
                                     {
                                         if(e.rowType == 'data' && e.data.ORDER_GUID  != '00000000-0000-0000-0000-000000000000')
@@ -1518,7 +1511,7 @@ export default class salesOrder extends React.PureComponent
                                             console.log(tmpData)
                                             if(tmpData.result.recordset.length > 0)
                                             {
-                                                e.key.PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
+                                                e.key.PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(9))
                                                 
                                                 this._calculateTotal()
                                             }
@@ -1576,16 +1569,16 @@ export default class salesOrder extends React.PureComponent
                                             return
                                         }
 
-                                        e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(3));
-                                        e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3))
-                                        e.key.TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +e.key.VAT).toFixed(3))
+                                        e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(9));
+                                        e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(9))
+                                        e.key.TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +e.key.VAT).toFixed(9))
 
                                         let tmpMargin = (e.key.TOTAL - e.key.VAT) - (e.key.COST_PRICE * e.key.QUANTITY)
                                         let tmpMarginRate = (tmpMargin /(e.key.TOTAL - e.key.VAT)) * 100
                                         e.key.MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
                                         if(e.key.DISCOUNT > 0)
                                         {
-                                            e.key.DISCOUNT_RATE = parseFloat((100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100)).toFixed(3))
+                                            e.key.DISCOUNT_RATE = parseFloat((100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100)).toFixed(9))
                                         }
                                         console.log(e.key.MARGIN)
                                         this._calculateTotal()
@@ -1601,18 +1594,19 @@ export default class salesOrder extends React.PureComponent
                                         <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.sip_02_002")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsOffer.clmCreateDate")} width={100} allowEditing={false}/>
-                                        <Column dataField="CUSER_NAME" caption={this.t("grdSlsOffer.clmCuser")} width={100} allowEditing={false}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdSlsOffer.clmItemCode")} width={110} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdSlsOffer.clmItemName")} width={330} />
-                                        <Column dataField="ITEM_BARCODE" caption={this.t("grdSlsOffer.clmBarcode")} width={130} allowEditing={false}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdSlsOffer.clmQuantity")}  width={60} dataType={'number'}/>
-                                        <Column dataField="PRICE" caption={this.t("grdSlsOffer.clmPrice")}  width={75} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdSlsOffer.clmAmount")}  width={100} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsOffer.clmCreateDate")} width={80} allowEditing={false}/>
+                                        <Column dataField="CUSER_NAME" caption={this.t("grdSlsOffer.clmCuser")} width={90} allowEditing={false}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdSlsOffer.clmItemCode")} width={105} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdSlsOffer.clmItemName")} width={230} />
+                                        <Column dataField="ITEM_BARCODE" caption={this.t("grdSlsOffer.clmBarcode")} width={110} allowEditing={false}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdSlsOffer.clmQuantity")}  width={50} dataType={'number'}/>
+                                        <Column dataField="PRICE" caption={this.t("grdSlsOffer.clmPrice")}  width={70} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                        <Column dataField="AMOUNT" caption={this.t("grdSlsOffer.clmAmount")}  width={90} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}}/>
                                         <Column dataField="DISCOUNT" caption={this.t("grdSlsOffer.clmDiscount")}  width={60} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
                                         <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsOffer.clmDiscountRate")} width={60} dataType={'number'} />
                                         <Column dataField="MARGIN" caption={this.t("grdSlsOffer.clmMargin")} width={80} allowEditing={false}/>
                                         <Column dataField="VAT" caption={this.t("grdSlsOffer.clmVat")} width={75} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                        <Column dataField="VAT_RATE" caption={this.t("grdSlsOffer.clmVatRate")} width={50} allowEditing={false}/>
                                         <Column dataField="TOTAL" caption={this.t("grdSlsOffer.clmTotal")} width={110} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
                                         <Column dataField="DESCRIPTION" caption={this.t("grdSlsOffer.clmDescription")} width={100}  headerFilter={{visible:true}}/>
                                     </NdGrid>
@@ -1648,7 +1642,7 @@ export default class salesOrder extends React.PureComponent
                                                 {
                                                     if(this.docObj.dt()[0].DISCOUNT > 0 )
                                                     {
-                                                        this.txtDiscountPercent.value  = parseFloat((100 - (((this.docObj.dt()[0].AMOUNT - this.docObj.dt()[0].DISCOUNT) / this.docObj.dt()[0].AMOUNT) * 100)).toFixed(3))
+                                                        this.txtDiscountPercent.value  = parseFloat((100 - (((this.docObj.dt()[0].AMOUNT - this.docObj.dt()[0].DISCOUNT) / this.docObj.dt()[0].AMOUNT) * 100)).toFixed(9))
                                                         this.txtDiscountPrice.value = this.docObj.dt()[0].DISCOUNT
                                                     }
                                                     this.popDiscount.show()
@@ -1743,7 +1737,7 @@ export default class salesOrder extends React.PureComponent
                                                         this.txtDiscountPrice.value = 0;
                                                         return
                                                     }
-                                                    this.txtDiscountPrice.value =  parseFloat((this.docObj.dt()[0].AMOUNT * this.txtDiscountPercent.value / 100).toFixed(3))
+                                                    this.txtDiscountPrice.value =  parseFloat((this.docObj.dt()[0].AMOUNT * this.txtDiscountPercent.value / 100).toFixed(9))
                                             }).bind(this)}
                                     ></NdNumberBox>
                                 </Item>
@@ -1767,7 +1761,7 @@ export default class salesOrder extends React.PureComponent
                                                 this.txtDiscountPrice.value = 0;
                                                 return
                                             }
-                                            this.txtDiscountPercent.value = parseFloat((100 - (((this.docObj.dt()[0].AMOUNT - this.txtDiscountPrice.value) / this.docObj.dt()[0].AMOUNT) * 100)).toFixed(3))
+                                            this.txtDiscountPercent.value = parseFloat((100 - (((this.docObj.dt()[0].AMOUNT - this.txtDiscountPrice.value) / this.docObj.dt()[0].AMOUNT) * 100)).toFixed(9))
                                     }).bind(this)}
                                 ></NdNumberBox>
                                 </Item>
@@ -1780,12 +1774,12 @@ export default class salesOrder extends React.PureComponent
                                                 for (let i = 0; i < this.docObj.docOffers.dt().length; i++) 
                                                 {
                                                     this.docObj.docOffers.dt()[i].DISCOUNT_RATE = this.txtDiscountPercent.value
-                                                    this.docObj.docOffers.dt()[i].DISCOUNT =  parseFloat((((this.docObj.docOffers.dt()[i].PRICE * this.docObj.docOffers.dt()[i].QUANTITY) * this.txtDiscountPercent.value) / 100).toFixed(3))
+                                                    this.docObj.docOffers.dt()[i].DISCOUNT =  parseFloat((((this.docObj.docOffers.dt()[i].PRICE * this.docObj.docOffers.dt()[i].QUANTITY) * this.txtDiscountPercent.value) / 100).toFixed(9))
                                                     if(this.docObj.docOffers.dt()[i].VAT > 0)
                                                     {
-                                                        this.docObj.docOffers.dt()[i].VAT = parseFloat(((this.docObj.docOffers.dt()[i].PRICE * this.docObj.docOffers.dt()[i].QUANTITY) * (this.docObj.docOffers.dt()[i].VAT_RATE / 100)).toFixed(3))
+                                                        this.docObj.docOffers.dt()[i].VAT = parseFloat(((this.docObj.docOffers.dt()[i].PRICE * this.docObj.docOffers.dt()[i].QUANTITY) * (this.docObj.docOffers.dt()[i].VAT_RATE / 100)).toFixed(9))
                                                     }
-                                                    this.docObj.docOffers.dt()[i].TOTAL = parseFloat(((this.docObj.docOffers.dt()[i].PRICE * this.docObj.docOffers.dt()[i].QUANTITY) + this.docObj.docOffers.dt()[i].VAT - this.docObj.docOffers.dt()[i].DISCOUNT).toFixed(3))
+                                                    this.docObj.docOffers.dt()[i].TOTAL = parseFloat(((this.docObj.docOffers.dt()[i].PRICE * this.docObj.docOffers.dt()[i].QUANTITY) + this.docObj.docOffers.dt()[i].VAT - this.docObj.docOffers.dt()[i].DISCOUNT).toFixed(9))
                                                 }
                                                 this._calculateMargin()
                                                 this._calculateTotal()
@@ -1976,32 +1970,26 @@ export default class salesOrder extends React.PureComponent
                                             
                                                 let tmpQuery = 
                                                 {
-                                                    query:  "SELECT *, " +
-                                                            "CONVERT(NVARCHAR,AMOUNT) AS AMOUNTF, " +
-                                                            "ISNULL((SELECT TOP 1 NAME FROM COMPANY),'') AS FIRMA, " +
-                                                            "REPLACE(ISNULL((SELECT ADDRESS1 + ' | ' + ADDRESS2  + ' | ' + TEL + ' | ' + MAIL FROM COMPANY),''),'|', CHAR(13)) AS BASLIK," +
-                                                            "REPLACE(ISNULL((SELECT ADRESS + ' | ' + ZIPCODE + ' ' + CITY +  '/' + COUNTRY FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER_ADRESS_VW_01.CUSTOMER = DOC_OFFERS_VW_01.INPUT AND TYPE = 0),''),'|', CHAR(13)) AS ADDRESS," +
-                                                            "ISNULL((SELECT TOP 1 PHONE1 FROM CUSTOMER_OFFICAL WHERE CUSTOMER_OFFICAL.CUSTOMER = DOC_OFFERS_VW_01.INPUT AND TYPE = 0),'') AS CONTACT, " +
-                                                            "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH " +
-                                                            "FROM DOC_OFFERS_VW_01 " +
-                                                            "WHERE DOC_GUID=@DOC_GUID ORDER BY LINE_NO ASC",
+                                                    query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO " ,
                                                     param:  ['DOC_GUID:string|50','DESIGN:string|25'],
                                                     value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value]
                                                 }
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                console.log(JSON.stringify(tmpData.result.recordset)) // BAK
+
                                                 this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
                                                 {
-                                                    if(pResult.split('|')[0] != 'ERR')
-                                                    {
-                                                        var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
+                                                    var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
 
-                                                        mywindow.onload = function() 
-                                                        {
-                                                            mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
-                                                        } 
-                                                        // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                                                        // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");  
-                                                    }
+                                                    mywindow.onload = function() 
+                                                    {
+                                                        mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                                                    } 
+                                                    // if(pResult.split('|')[0] != 'ERR')
+                                                    // {
+                                                    //     let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
+                                                    //     mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
+                                                    // }
                                                 });
                                                 this.popDesign.hide();  
                                             }}/>

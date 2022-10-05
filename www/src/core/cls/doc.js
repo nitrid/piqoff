@@ -758,6 +758,7 @@ export class docOrdersCls
             MARGIN : 0,
             MULTICODE : '',
             ITEM_BARCODE : '',
+            OFFER_REF : '',
         }
 
         this._initDs();

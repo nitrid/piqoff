@@ -631,10 +631,12 @@ export default class labelPrinting extends React.PureComponent
     }
     async addItem(pData,pIndex)
     {
+        App.instance.setState({isExecute:true})
         for (let i = 0; i < this.lblObj.dt().length; i++) 
         {
             if(this.lblObj.dt()[i].CODE == pData.CODE)
             {
+                App.instance.setState({isExecute:false})
                 let tmpConfObj = 
                 {
                     id:'msgCombineItem',showTitle:true,title:this.t("msgCombineItem.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -669,9 +671,11 @@ export default class labelPrinting extends React.PureComponent
         this.lblObj.dt()[pIndex].LINE_NO = pIndex + 1
         this.lblObj.dt()[pIndex].ORGINS =pData.ORGINS
         this.calculateCount()
+        App.instance.setState({isExecute:false})
     }
     async addAutoItem(pData)
     {
+        App.instance.setState({isExecute:true})
         let tmpDocItems = {...this.lblObj.empty}
         tmpDocItems.REF = this.mainLblObj.dt()[0].REF
         tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
@@ -689,6 +693,7 @@ export default class labelPrinting extends React.PureComponent
         tmpDocItems.LINE_NO = this.lblObj.dt().length + 1
         this.lblObj.addEmpty(tmpDocItems)
         this.calculateCount()
+        App.instance.setState({isExecute:false})
     }
     calculateCount()
     {

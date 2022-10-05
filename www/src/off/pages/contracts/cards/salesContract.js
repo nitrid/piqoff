@@ -460,6 +460,7 @@ export default class purchaseContract extends React.PureComponent
                                                                 {
                                                                     await this.contractObj.load({REF:data[0].REF,REF_NO:data[0].REF_NO,TYPE:1});
                                                                     this.txtCustomerCode.GUID = this.contractObj.dt()[0].CUSTOMER
+                                                                    this._getItems()
                                                                 }
                                                             }
                                                                    
@@ -763,7 +764,7 @@ export default class purchaseContract extends React.PureComponent
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
                                     filterRow={{visible:true}}
-                                    height={'500'} 
+                                    height={'650'} 
                                     width={'100%'}
                                     dbApply={false}
                                     onRowUpdated={async(e)=>
@@ -950,6 +951,7 @@ export default class purchaseContract extends React.PureComponent
                     title={this.t("pg_txtPopItemsCode.title")} //
                     search={true}
                     >           
+                    <Paging defaultPageSize={24} />
                     <Column dataField="CODE" caption={this.t("pg_txtPopItemsCode.clmCode")} width={150} />
                     <Column dataField="NAME" caption={this.t("pg_txtPopItemsCode.clmName")} width={300} defaultSortOrder="asc" />
                     </NdPopGrid>

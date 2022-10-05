@@ -436,6 +436,7 @@ export default class outageDoc extends React.PureComponent
     }
     async addItem(pData,pIndex)
     {
+        App.instance.setState({isExecute:true})
         if(typeof this.quantityControl != 'undefined' && this.quantityControl ==  true)
         {
             let tmpCheckQuery = 
@@ -447,8 +448,10 @@ export default class outageDoc extends React.PureComponent
             let tmpQuantity = await this.core.sql.execute(tmpCheckQuery) 
             if(tmpQuantity.result.recordset.length > 0)
             {
+                
                if(tmpQuantity.result.recordset[0].QUANTITY < 1)
                {
+                    App.instance.setState({isExecute:false})
                     let tmpConfObj =
                     {
                         id:'msgNotQuantity',showTitle:true,title:this.t("msgNotQuantity.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -473,6 +476,7 @@ export default class outageDoc extends React.PureComponent
                 if(this.combineControl == true)
                 {
                     let tmpCombineBtn = ''
+                    App.instance.setState({isExecute:false})
                     await this.msgCombineItem.show().then(async (e) =>
                     {
     
@@ -510,8 +514,6 @@ export default class outageDoc extends React.PureComponent
                     await this.grdOutwasItems.devGrid.deleteRow(pIndex)
                     return
                 }
-               
-                
             }
         }
         this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
@@ -523,6 +525,7 @@ export default class outageDoc extends React.PureComponent
         this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
         this.docObj.docItems.dt()[pIndex].COST_PRICE = pData.COST_PRICE
         this._calculateTotal()
+        App.instance.setState({isExecute:false})
     }
     async checkRow()
     {

@@ -384,6 +384,7 @@ export default class rebateDispatch extends React.PureComponent
     }
     async addItem(pData,pIndex,pQuantity)
     {
+        App.instance.setState({isExecute:true})
         if(typeof pQuantity == 'undefined')
         {
             pQuantity = 1
@@ -396,6 +397,7 @@ export default class rebateDispatch extends React.PureComponent
                 if(this.combineControl == true)
                 {
                     let tmpCombineBtn = ''
+                    App.instance.setState({isExecute:false})
                     await this.msgCombineItem.show().then(async (e) =>
                     {
                         if(e == 'btn01')
@@ -467,6 +469,7 @@ export default class rebateDispatch extends React.PureComponent
             this.docObj.docItems.dt()[pIndex].TOTAL = parseFloat((tmpData.result.recordset[0].PRICE + this.docObj.docItems.dt()[pIndex].VAT).toFixed(3))
             this._calculateTotal()
         }
+        App.instance.setState({isExecute:false})
     }
     async _getRebate()
     {
@@ -1395,7 +1398,7 @@ export default class rebateDispatch extends React.PureComponent
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
-                                    height={'400'} 
+                                    height={'500'} 
                                     width={'100%'}
                                     dbApply={false}
                                     onRowPrepared={(e) =>

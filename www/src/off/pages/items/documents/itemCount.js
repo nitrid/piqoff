@@ -381,10 +381,8 @@ export default class itemCount extends React.PureComponent
     }
     async addItem(pData,pIndex)
     {
-
         let tmpQuantity = 1
         let tmpBreak = false
-        console.log(this.countObj.dt())
         await this.msgQuantiy.show().then(async (e) =>
         {
             if(e == 'btn01')

@@ -506,6 +506,7 @@ export default class salesDispatch extends React.PureComponent
     }
     async addItem(pData,pIndex,pQuantity)
     {
+        App.instance.setState({isExecute:true})
         if(typeof pQuantity == 'undefined')
         {
             pQuantity = 1
@@ -523,6 +524,7 @@ export default class salesDispatch extends React.PureComponent
             {
                if(tmpQuantity.result.recordset[0].QUANTITY < pQuantity)
                {
+                    App.instance.setState({isExecute:false})
                     let tmpConfObj =
                     {
                         id:'msgNotQuantity',showTitle:true,title:this.t("msgNotQuantity.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -548,6 +550,7 @@ export default class salesDispatch extends React.PureComponent
                 if(this.combineControl == true)
                 {
                     let tmpCombineBtn = ''
+                    App.instance.setState({isExecute:false})
                     await this.msgCombineItem.show().then(async (e) =>
                     {
                         if(e == 'btn01')
@@ -621,6 +624,7 @@ export default class salesDispatch extends React.PureComponent
             this.docObj.docItems.dt()[pIndex].TOTAL =  parseFloat(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT).toFixed(2))
             this._calculateTotal()
         }
+        App.instance.setState({isExecute:false})
     }
     async checkRow()
     {
@@ -684,6 +688,7 @@ export default class salesDispatch extends React.PureComponent
             this.pg_ordersGrid.show()
             this.pg_ordersGrid.onClick = async(data) =>
             {
+                App.instance.setState({isExecute:true})
                 for (let i = 0; i < data.length; i++) 
                 {
                     let tmpDocItems = {...this.docObj.docItems.empty}
@@ -717,6 +722,7 @@ export default class salesDispatch extends React.PureComponent
                     await this.core.util.waitUntil(100)
                 }
                 this._calculateTotal()
+                App.instance.setState({isExecute:false})
             }
         }
 
@@ -1592,7 +1598,7 @@ export default class salesDispatch extends React.PureComponent
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
-                                    height={'400'} 
+                                    height={'500'} 
                                     width={'100%'}
                                     dbApply={false}
                                     onRowPrepared={(e) =>
@@ -2121,7 +2127,7 @@ export default class salesDispatch extends React.PureComponent
                                                     value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value]
                                                 }
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                console.log(tmpData)
+                                                console.log(JSON.stringify(tmpData.result.recordset)) // BAK
                                                 this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
                                                 {
                                                     var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
@@ -2333,12 +2339,13 @@ export default class salesDispatch extends React.PureComponent
                     selection={{mode:"multiple"}}
                     title={this.t("pg_ordersGrid.title")} //
                     >
+                        <Paging defaultPageSize={24} />
                         <Column dataField="REFERANS" caption={this.t("pg_ordersGrid.clmReferans")} width={200} defaultSortOrder="asc"/>
                         <Column dataField="ITEM_CODE" caption={this.t("pg_ordersGrid.clmCode")} width={200}/>
-                        <Column dataField="ITEM_NAME" caption={this.t("pg_ordersGrid.clmName")} width={300} />
-                        <Column dataField="QUANTITY" caption={this.t("pg_ordersGrid.clmQuantity")} width={300} />
-                        <Column dataField="PRICE" caption={this.t("pg_ordersGrid.clmPrice")} width={300} />
-                        <Column dataField="TOTAL" caption={this.t("pg_ordersGrid.clmTotal")} width={300} />
+                        <Column dataField="ITEM_NAME" caption={this.t("pg_ordersGrid.clmName")} width={500} />
+                        <Column dataField="QUANTITY" caption={this.t("pg_ordersGrid.clmQuantity")} width={200} />
+                        <Column dataField="PRICE" caption={this.t("pg_ordersGrid.clmPrice")} width={200}  format={{ style: "currency", currency: "EUR",precision: 2}} />
+                        <Column dataField="TOTAL" caption={this.t("pg_ordersGrid.clmTotal")} width={300}  format={{ style: "currency", currency: "EUR",precision: 2}}/>
                     </NdPopGrid>
                 </ScrollView>                
             </div>
