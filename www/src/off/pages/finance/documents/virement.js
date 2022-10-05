@@ -384,6 +384,7 @@ export default class virement extends React.PureComponent
                                         else
                                         {
                                             this.popPassword.show()
+                                            this.txtPassword.value = ''
                                         }
                                         
                                     }}/>

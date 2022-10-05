@@ -292,6 +292,7 @@ export default class App extends React.PureComponent
         {
             this.state.changeUser = data[0].CODE,
             this.popPassword.show()
+                                            this.txtPassword.value = ''
         }
     }
     setUser()
@@ -476,7 +477,7 @@ export default class App extends React.PureComponent
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
                                     <Label text={this.lang.t("popPassword.Password")} alignment="right" />
-                                    <NdTextBox id="txtPassword" mode="password" parent={this} simple={true}
+                                    <NdTextBox id="txtPassword" mode="password" mode="password" parent={this} simple={true}
                                             maxLength={32}
 
                                     ></NdTextBox>

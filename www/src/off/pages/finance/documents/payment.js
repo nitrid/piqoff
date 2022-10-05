@@ -378,6 +378,7 @@ export default class payment extends React.PureComponent
                                         else
                                         {
                                             this.popPassword.show()
+                                            this.txtPassword.value = ''
                                         }
                                         
                                     }}/>

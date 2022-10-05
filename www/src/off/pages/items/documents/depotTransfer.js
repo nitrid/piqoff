@@ -581,6 +581,7 @@ export default class depotTransfer extends React.PureComponent
                                         else if(this.docObj.dt()[0].LOCKED == 1)
                                         {
                                             this.popPassword.show()
+                                            this.txtPassword.value = ''
                                         }
                                         
                                     }}/>
@@ -1332,7 +1333,7 @@ export default class depotTransfer extends React.PureComponent
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
                                     <Label text={this.t("popPassword.Password")} alignment="right" />
-                                    <NdTextBox id="txtPassword" parent={this} simple={true}
+                                    <NdTextBox id="txtPassword" mode="password" parent={this} simple={true}
                                             maxLength={32}
 
                                     ></NdTextBox>
@@ -1343,7 +1344,15 @@ export default class depotTransfer extends React.PureComponent
                                             <NdButton text={this.t("popPassword.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
                                             onClick={async ()=>
                                             {       
-                                                if(this.txtPassword.value == '1234')
+                                                let tmpPass = btoa(this.txtPassword.value);
+                                                let tmpQuery = 
+                                                {
+                                                    query : "SELECT TOP 1 * FROM USERS WHERE PWD = @PWD AND ROLE = 'Administrator' AND STATUS = 1", 
+                                                    param : ['PWD:string|50'],
+                                                    value : [tmpPass],
+                                                }
+                                                let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                if(tmpData.result.recordset.length > 0)
                                                 {
                                                     this.docObj.dt()[0].LOCKED = 0
                                                     this.frmTrnsfItems.option('disabled',false)
