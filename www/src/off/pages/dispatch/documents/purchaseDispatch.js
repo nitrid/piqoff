@@ -2332,7 +2332,7 @@ export default class purchaseDispatch extends React.PureComponent
                     selection={{mode:"multiple"}}
                     title={this.t("pg_ordersGrid.title")} //
                     >
-                        <Paging defaultPageSize={24} />
+                        <Paging defaultPageSize={22} />
                         <Column dataField="REFERANS" caption={this.t("pg_ordersGrid.clmReferans")} width={200} defaultSortOrder="asc"/>
                         <Column dataField="ITEM_CODE" caption={this.t("pg_ordersGrid.clmCode")} width={200}/>
                         <Column dataField="ITEM_NAME" caption={this.t("pg_ordersGrid.clmName")} width={500} />

@@ -2386,7 +2386,7 @@ export default class purchaseOrder extends React.PureComponent
                     selection={{mode:"multiple"}}
                     title={this.t("pg_offersGrid.title")} //
                     >
-                        <Paging defaultPageSize={24} />
+                        <Paging defaultPageSize={22} />
                         <Column dataField="REFERANS" caption={this.t("pg_offersGrid.clmReferans")} width={200} defaultSortOrder="asc"/>
                         <Column dataField="ITEM_CODE" caption={this.t("pg_offersGrid.clmCode")} width={200}/>
                         <Column dataField="ITEM_NAME" caption={this.t("pg_offersGrid.clmName")} width={500} />

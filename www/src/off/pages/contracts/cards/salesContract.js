@@ -951,7 +951,7 @@ export default class purchaseContract extends React.PureComponent
                     title={this.t("pg_txtPopItemsCode.title")} //
                     search={true}
                     >           
-                    <Paging defaultPageSize={24} />
+                    <Paging defaultPageSize={22} />
                     <Column dataField="CODE" caption={this.t("pg_txtPopItemsCode.clmCode")} width={150} />
                     <Column dataField="NAME" caption={this.t("pg_txtPopItemsCode.clmName")} width={300} defaultSortOrder="asc" />
                     </NdPopGrid>
