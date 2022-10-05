@@ -6478,6 +6478,12 @@ export const langFr =
             btn02: "Devam", //bak
             msg: "Girmiş olduğunuz tutar 0€ ! Devam etmek istediğinizden eminmisiniz.." //bak
         },
+        msgBigAmount:
+        {
+            title: "Dikkat",   //BAK
+            btn01: "Tamam",   //BAK
+            msg: "600€ dan yüksek avans giremezsiniz ! "   //BAK
+        },
     },
     tkf_01_001 : // "Alış Teklifi Listesi",
     {

@@ -648,6 +648,21 @@ export default class endOfDay extends React.PureComponent
                                                 return
                                               }
                                             }
+                                            else if(this.txtPopAdvance.value > 600)
+                                            {
+                                              let tmpConfObj =
+                                              {
+                                                id:'msgBigAmount',showTitle:true,title:this.t("msgBigAmount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgBigAmount.btn01"),location:'before'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBigAmount.msg")}</div>)
+                                              }
+                                              
+                                              let pResult = await dialog(tmpConfObj);
+                                              if(pResult == 'btn01')
+                                              {
+                                                return
+                                              }
+                                            }
                                             let tmpQuery = 
                                             {
                                                 query : "SELECT GUID FROM SAFE_VW_01 WHERE CODE = @INPUT_CODE",

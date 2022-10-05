@@ -6574,6 +6574,12 @@ export const langTr =
             btn02: "Devam",
             msg: "Girmiş olduğunuz tutar 0€ ! Devam etmek istediğinizden eminmisiniz.."
         },
+        msgBigAmount:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "600€ dan yüksek avans giremezsiniz ! "
+        },
     },
     tkf_01_001 : // "Alış Teklifi Listesi",
     {
