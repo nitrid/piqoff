@@ -1496,8 +1496,12 @@ export default class posDoc extends React.PureComponent
             }
         });
     }
-    descSave(pTag,pDesc,pLineNo)
+    descSave(pTag,pDesc,pLineGuid,pData)
     {
+        if(typeof pData == 'undefined')
+        {
+            pData = ''
+        }
         return new Promise(async resolve => 
         {
             let tmpDt = this.posObj.posExtra.dt().where({TAG:pTag})
@@ -1513,8 +1517,10 @@ export default class posDoc extends React.PureComponent
                 this.posObj.posExtra.addEmpty()
                 this.posObj.posExtra.dt()[this.posObj.posExtra.dt().length - 1].TAG = pTag
                 this.posObj.posExtra.dt()[this.posObj.posExtra.dt().length - 1].POS_GUID = this.posObj.dt()[this.posObj.dt().length - 1].GUID
-                this.posObj.posExtra.dt()[this.posObj.posExtra.dt().length - 1].LINE_NO = pLineNo
+                this.posObj.posExtra.dt()[this.posObj.posExtra.dt().length - 1].LINE_GUID = pLineGuid
                 this.posObj.posExtra.dt()[this.posObj.posExtra.dt().length - 1].DESCRIPTION = pDesc
+                this.posObj.posExtra.dt()[this.posObj.posExtra.dt().length - 1].DATA = pData
+
             }
             await this.posObj.save()
             resolve()
@@ -5132,7 +5138,7 @@ export default class posDoc extends React.PureComponent
                             let tmpResult = await this.popNumber.show('Fiyat',this.grdList.devGrid.getSelectedRowKeys()[0].PRICE)                                            
                             if(typeof tmpResult != 'undefined' && tmpResult != '')
                             {
-                                await this.descSave("PRICE DESC",e,this.grdList.devGrid.getSelectedRowKeys()[0].LINE_NO)                                
+                                await this.descSave("PRICE DESC",e,this.grdList.devGrid.getSelectedRowKeys()[0].GUID,this.grdList.devGrid.getSelectedRowKeys()[0].PRICE)                                
                                 if((await this.priceCheck(this.grdList.devGrid.getSelectedRowKeys()[0],tmpResult)))
                                 {
                                     let tmpData = {QUANTITY:this.grdList.devGrid.getSelectedRowKeys()[0].QUANTITY,PRICE:Number(tmpResult)}
@@ -5150,7 +5156,7 @@ export default class posDoc extends React.PureComponent
                     {
                         if(typeof e != 'undefined')
                         {
-                            await this.descSave("PARK DESC",e,0)
+                            await this.descSave("PARK DESC",e,'00000000-0000-0000-0000-000000000000')
                         }
                         this.init()
                     }}></NbPopDescboard>
@@ -5163,7 +5169,7 @@ export default class posDoc extends React.PureComponent
                     {
                         if(typeof e != 'undefined')
                         {
-                            await this.descSave("FULL DELETE",e,0)
+                            await this.descSave("FULL DELETE",e,'00000000-0000-0000-0000-000000000000')
                         }
                         this.delete()
                     }}></NbPopDescboard>
@@ -5176,7 +5182,7 @@ export default class posDoc extends React.PureComponent
                     {
                         if(typeof e != 'undefined')
                         {
-                            await this.descSave("ROW DELETE",e,this.grdList.devGrid.getSelectedRowKeys()[0].LINE_NO)
+                            await this.descSave("ROW DELETE",e,this.grdList.devGrid.getSelectedRowKeys()[0].GUID)
                         }
                         this.rowDelete()
                     }}></NbPopDescboard>
@@ -5222,7 +5228,7 @@ export default class posDoc extends React.PureComponent
                             }
 
                             this.posObj.dt()[0].TYPE = 1;
-                            await this.descSave("REBATE",e,0); 
+                            await this.descSave("REBATE",e,'00000000-0000-0000-0000-000000000000'); 
                         }                
 
                         await this.calcGrandTotal();
