@@ -774,7 +774,19 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                     <NdButton id="btnDelete" parent={this} icon="trash" type="default"
                                     onClick={async()=>
                                     {
-                                        
+                                        if(this.docObj.dt()[0].LOCKED != 0)
+                                        {
+                                            this.docLocked = true
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgGetLocked',showTitle:true,title:this.t("msgGetLocked.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgGetLocked.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgGetLocked.msg")}</div>)
+                                            }
+                                
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
                                         let tmpConfObj =
                                         {
                                             id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
