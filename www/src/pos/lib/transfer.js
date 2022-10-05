@@ -475,7 +475,8 @@ export default class transferCls
                     CUSER_NAME : {dataType: "string"},
                     TAG : {dataType: "string"},
                     POS_GUID : {dataType: "string"},
-                    LINE_NO : {dataType: "number"},
+                    LINE_GUID : {dataType: "string"},
+                    DATA : {dataType: "string"},
                     DESCRIPTION : {dataType: "string"},
                 }
             },
@@ -857,26 +858,28 @@ export default class transferCls
                     insert : 
                     {
                         query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
-                                "@GUID = @PGUID, " +
-                                "@CUSER = @PCUSER, " + 
-                                "@TAG = @PTAG, " +
-                                "@POS_GUID = @PPOS_GUID, " +
-                                "@LINE_NO = @PLINE_NO, " +
-                                "@DESCRIPTION = @PDESCRIPTION ", 
-                        param : ['PGUID:string|50','PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_NO:int','PDESCRIPTION:string|max'],
-                        dataprm : ['GUID','CUSER','TAG','POS_GUID','LINE_NO','DESCRIPTION'],
+                        "@GUID = @PGUID, " +
+                        "@CUSER = @PCUSER, " + 
+                        "@TAG = @PTAG, " +
+                        "@POS_GUID = @PPOS_GUID, " +
+                        "@LINE_GUID = @PLINE_GUID, " +
+                        "@DATA =@PDATA, " +
+                        "@DESCRIPTION = @PDESCRIPTION ", 
+                        param : ['PGUID:string|50','PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|50','PDESCRIPTION:string|max'],
+                        dataprm : ['GUID','CUSER','TAG','POS_GUID','LINE_GUID','DATA','DESCRIPTION'],
                     },
                     update : 
                     {
                         query : "EXEC [dbo].[PRD_POS_EXTRA_UPDATE] " + 
-                                "@GUID = @PGUID, " +
-                                "@CUSER = @PCUSER, " + 
-                                "@TAG = @PTAG, " +
-                                "@POS_GUID = @PPOS_GUID, " +
-                                "@LINE_NO = @PLINE_NO, " +
-                                "@DESCRIPTION = @PDESCRIPTION ",  
-                        param : ['PGUID:string|50','PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_NO:int','PDESCRIPTION:string|max'],
-                        dataprm : ['GUID','CUSER','TAG','POS_GUID','LINE_NO','DESCRIPTION'],
+                        "@GUID = @PGUID, " +
+                        "@CUSER = @PCUSER, " + 
+                        "@TAG = @PTAG, " +
+                        "@POS_GUID = @PPOS_GUID, " +
+                        "@LINE_GUID = @PLINE_GUID, " +
+                        "@DATA =@PDATA, " +
+                        "@DESCRIPTION = @PDESCRIPTION ", 
+                        param : ['PGUID:string|50','PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|50','PDESCRIPTION:string|max'],
+                        dataprm : ['GUID','CUSER','TAG','POS_GUID','LINE_GUID','DATA','DESCRIPTION'],
                     },
                     control :
                     {

@@ -813,7 +813,21 @@ export default class salesDispatch extends React.PureComponent
                                     <NdButton id="btnDelete" parent={this} icon="trash" type="default"
                                     onClick={async()=>
                                     {
-                                        
+                                        for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+                                        {
+                                            if(this.docObj.docItems.dt()[i].INVOICE_GUID != '00000000-0000-0000-0000-000000000000')   
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgdocNotDelete',showTitle:true,title:this.t("msgdocNotDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgdocNotDelete.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgdocNotDelete.msg")}</div>)
+                                                }
+                                            
+                                                await dialog(tmpConfObj);
+                                                return
+                                            }
+                                        }
                                         let tmpConfObj =
                                         {
                                             id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -1567,11 +1581,31 @@ export default class salesDispatch extends React.PureComponent
                                     height={'400'} 
                                     width={'100%'}
                                     dbApply={false}
-                                    onRowUpdating={async(e)=>
+                                    onRowPrepared={(e) =>
                                     {
+                                        if(e.rowType == 'data' && e.data.INVOICE_GUID  != '00000000-0000-0000-0000-000000000000')
+                                        {
+                                            e.rowElement.style.color ="Silver"
+                                        }
+                                    }}
+                                    onRowUpdating={async (e)=>
+                                    {
+                                        if(e.key.INVOICE_GUID != '00000000-0000-0000-0000-000000000000')
+                                        {
+                                            e.cancel = true
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgRowNotUpdate',showTitle:true,title:this.t("msgRowNotUpdate.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgRowNotUpdate.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgRowNotUpdate.msg")}</div>)
+                                            }
+                                        
+                                            dialog(tmpConfObj);
+                                            e.component.cancelEditData()
+                                            return
+                                        }
                                         if(this.quantityControl == true)
                                         {
-                                            let rowIndex = e.component.getRowIndexByKey(e.key)
                                             if(typeof e.newData.QUANTITY != 'undefined' && e.key.DEPOT_QUANTITY < e.newData.QUANTITY)
                                             {
                                                 let tmpConfObj =
@@ -1584,6 +1618,23 @@ export default class salesDispatch extends React.PureComponent
                                                 e.key.QUANTITY = e.oldData.DEPOT_QUANTITY
                                             }
                                         }
+                                    }}
+                                    onRowRemoving={async (e)=>
+                                    {
+                                        if(e.key.INVOICE_GUID != '00000000-0000-0000-0000-000000000000')
+                                        {
+                                            e.cancel = true
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgRowNotDelete',showTitle:true,title:this.t("msgRowNotDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgRowNotDelete.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgRowNotDelete.msg")}</div>)
+                                            }
+                                        
+                                            dialog(tmpConfObj);
+                                            e.component.cancelEditData()
+                                        }
+                                       
                                     }}
                                     onRowUpdated={async(e)=>{
                                         let rowIndex = e.component.getRowIndexByKey(e.key)

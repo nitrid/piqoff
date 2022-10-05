@@ -928,7 +928,8 @@ export class posExtraCls
             LUSER : this.core.auth.data.CODE,
             TAG : '',
             POS_GUID : '00000000-0000-0000-0000-000000000000',
-            LINE_NO : 0,
+            LINE_GUID : '00000000-0000-0000-0000-000000000000',
+            DATA : '',
             DESCRIPTION : ''
         }
 
@@ -955,10 +956,11 @@ export class posExtraCls
                     "@CUSER = @PCUSER, " + 
                     "@TAG = @PTAG, " +
                     "@POS_GUID = @PPOS_GUID, " +
-                    "@LINE_NO = @PLINE_NO, " +
+                    "@LINE_GUID = @PLINE_GUID, " +
+                    "@DATA =@PDATA, " +
                     "@DESCRIPTION = @PDESCRIPTION ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_NO:int','PDESCRIPTION:string|max'],
-            dataprm : ['GUID','CUSER','TAG','POS_GUID','LINE_NO','DESCRIPTION'],
+            param : ['PGUID:string|50','PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|50','PDESCRIPTION:string|max'],
+            dataprm : ['GUID','CUSER','TAG','POS_GUID','LINE_GUID','DATA','DESCRIPTION'],
             local : 
             {
                 type : "insert",
@@ -970,7 +972,8 @@ export class posExtraCls
                         CUSER : {map:'CUSER'},
                         TAG : {map:'TAG'},
                         POS_GUID : {map:'POS_GUID'},
-                        LINE_NO : {map:'LINE_NO'},
+                        LINE_GUID : {map:'LINE_GUID'},
+                        DATA : {map:'DATA'},
                         DESCRIPTION : {map:'DESCRIPTION'}
                     }
                 ]
@@ -983,10 +986,11 @@ export class posExtraCls
                     "@CUSER = @PCUSER, " + 
                     "@TAG = @PTAG, " +
                     "@POS_GUID = @PPOS_GUID, " +
-                    "@LINE_NO = @PLINE_NO, " +
-                    "@DESCRIPTION = @PDESCRIPTION ",  
-            param : ['PGUID:string|50','PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_NO:int','PDESCRIPTION:string|max'],
-            dataprm : ['GUID','CUSER','TAG','POS_GUID','LINE_NO','DESCRIPTION'],
+                    "@LINE_GUID = @PLINE_GUID, " +
+                    "@DATA =@PDATA, " +
+                    "@DESCRIPTION = @PDESCRIPTION ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|50','PDESCRIPTION:string|max'],
+            dataprm : ['GUID','CUSER','TAG','POS_GUID','LINE_GUID','DATA','DESCRIPTION'],
             local : 
             {
                 type : "update",
@@ -996,7 +1000,8 @@ export class posExtraCls
                     CUSER : {map:'CUSER'},
                     TAG : {map:'TAG'},
                     POS_GUID : {map:'POS_GUID'},
-                    LINE_NO : {map:'LINE_NO'},
+                    LINE_GUID : {map:'LINE_GUID'},
+                    DATA : {map:'DATA'},
                     DESCRIPTION : {map:'DESCRIPTION'}
                 },
                 where : {GUID : {map:'GUID'}}
