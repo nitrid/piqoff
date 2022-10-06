@@ -6529,7 +6529,9 @@ export const langFr =
             clmName : "Ürün Adi",
             clmQuantity : "Miktar",
             clmPrice : "Fiyat",
-            clmTotal : "Tutar"
+            clmTotal : "Tutar",
+            clmLastData : "İlk Fiyat",
+            clmDescription : "Açıklama",
         },
         grdSaleTicketPays : 
         {

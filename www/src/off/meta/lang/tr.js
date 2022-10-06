@@ -6533,7 +6533,9 @@ export const langTr =
             clmName : "Ürün Adı",
             clmQuantity : "Adet",
             clmPrice : "Fiyat",
-            clmTotal : "Tutar"
+            clmTotal : "Tutar",
+            clmLastData : "İlk Fiyat",
+            clmDescription : "Açıklama",
         },
         grdSaleTicketPays : 
         {

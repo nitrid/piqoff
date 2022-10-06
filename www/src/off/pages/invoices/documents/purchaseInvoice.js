@@ -1176,6 +1176,41 @@ export default class purchaseInvoice extends React.PureComponent
             this.docObj.docItems.dt()[i].SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
         }
     }
+    async getDocs(pType)
+    {
+        let tmpQuery 
+        if(pType == 0)
+        {
+            tmpQuery = 
+            {
+                query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT FROM DOC_VW_01 WHERE TYPE = 0 AND DOC_TYPE = 20 AND REBATE = 0 AND DOC_DATE > GETDATE()-30 ORDER BY DOC_DATE DESC"
+            }
+        }
+        else
+        {
+            tmpQuery = 
+            {
+                query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT FROM DOC_VW_01 WHERE TYPE = 0 AND DOC_TYPE = 20 AND REBATE = 0 ORDER BY DOC_DATE DESC"
+            }
+        }
+
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        let tmpRows = []
+        if(tmpData.result.recordset.length > 0)
+        {
+            tmpRows = tmpData.result.recordset
+        }
+        await this.pg_Docs.setData(tmpRows)
+     
+        this.pg_Docs.show()
+        this.pg_Docs.onClick = (data) =>
+        {
+            if(data.length > 0)
+            {
+                this.getDoc(data[0].GUID,data[0].REF,data[0].REF_NO)
+            }
+        }
+    }
     render()
     {
         return(
@@ -1416,15 +1451,7 @@ export default class purchaseInvoice extends React.PureComponent
                                                         icon:'more',
                                                         onClick:()=>
                                                         {
-                                                            this.pg_Docs.show()
-                                                            this.pg_Docs.onClick = (data) =>
-                                                            {
-                                                                if(data.length > 0)
-                                                                {
-                                                                    this.getDoc(data[0].GUID,data[0].REF,data[0].REF_NO)
-                                                                }
-                                                            }
-                                                                   
+                                                           this.getDocs(0)
                                                         }
                                                     },
                                                     {
@@ -1464,7 +1491,6 @@ export default class purchaseInvoice extends React.PureComponent
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_Docs.title")} 
-                                    data={{source:{select:{query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT FROM DOC_VW_01 WHERE TYPE = 0 AND DOC_TYPE = 20 ORDER BY DOC_DATE DESC"},sql:this.core.sql}}}
                                     button=
                                     {
                                         [
@@ -1473,7 +1499,7 @@ export default class purchaseInvoice extends React.PureComponent
                                                 icon:'more',
                                                 onClick:()=>
                                                 {
-                                                   
+                                                   this.getDocs(1)
                                                 }
                                             }
                                         ]
