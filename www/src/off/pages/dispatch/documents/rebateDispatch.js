@@ -1398,7 +1398,7 @@ export default class rebateDispatch extends React.PureComponent
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
-                                    height={'500'} 
+                                    height={'450'} 
                                     width={'100%'}
                                     dbApply={false}
                                     onRowPrepared={(e) =>
@@ -1818,11 +1818,12 @@ export default class rebateDispatch extends React.PureComponent
                         }
                     }}
                     >
+                        <Paging defaultPageSize={22}/>
                         <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
                         <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />
                     </NdPopGrid>
-                                           {/* Dizayn Seçim PopUp */}
-                                           <div>
+                        {/* Dizayn Seçim PopUp */}
+                        <div>
                         <NdPopUp parent={this} id={"popDesign"} 
                         visible={false}
                         showCloseButton={true}
@@ -1880,7 +1881,7 @@ export default class rebateDispatch extends React.PureComponent
                                                     value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value]
                                                 }
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                console.log(tmpData)
+                                                console.log(JSON.stringify(tmpData.result.recordset)) // BAK
                                                 this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
                                                 {
                                                     var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      

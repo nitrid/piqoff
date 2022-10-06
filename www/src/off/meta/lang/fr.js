@@ -3802,6 +3802,7 @@ export const langFr =
             clmDescription :"Motif",
             clmCuser :"Utilisateur",
             clmOrder : "Sipariş No", // BAK
+            clmVatRate : "TVA %"
         },
         popDiscount : 
         {
@@ -4091,6 +4092,7 @@ export const langFr =
             clmDescription :"Motif",
             clmCuser :"Utilisateur",
             clmOrder : "Sipariş No", // BAK
+            clmVatRate : "TVA %"
         },
         popDiscount : 
         {

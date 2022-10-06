@@ -2052,9 +2052,10 @@ export default class purchaseOrder extends React.PureComponent
                         title={this.t("pg_txtItemsCode.title")} //
                         search={true}
                         >
+                            <Paging defaultPageSize={22} />
                             <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
-                            <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />
                             <Column dataField="MULTICODE" caption={this.t("pg_txtItemsCode.clmMulticode")} width={200}/>
+                            <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />
                         </NdPopGrid>
                         {/* BARKOD POPUP */}
                         <NdPopGrid id={"pg_txtBarcode"} parent={this} container={"#root"}

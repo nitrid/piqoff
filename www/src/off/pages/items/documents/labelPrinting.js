@@ -1318,7 +1318,7 @@ export default class labelPrinting extends React.PureComponent
                                         <Column dataField="BARCODE" caption={this.t("grdLabelQueue.clmBarcode")} width={130} allowEditing={false} />
                                         <Column dataField="NAME" caption={this.t("grdLabelQueue.clmItemName")} width={450} />
                                         <Column dataField="ITEM_GRP_NAME" caption={this.t("grdLabelQueue.clmItemGrpName")} allowEditing={false}  width={180}/>
-                                        <Column dataField="ORGINS" caption={this.t("grdLabelQueue.clmOrgins")} allowEditing={false}  width={180}/>
+                                        <Column dataField="ORGINS" caption={this.t("grdLabelQueue.clmOrgins")}   width={180}/>
                                         <Column dataField="PRICE" caption={this.t("grdLabelQueue.clmPrice")} width={70}/>
                                         <Column dataField="UNDER_UNIT_VALUE" caption={this.t("grdLabelQueue.clmUnderUnit")} width={80}/>
                                         <Column dataField="UNDER_UNIT_PRICE" caption={this.t("grdLabelQueue.clmUnderUnitPrice")}width={80} />

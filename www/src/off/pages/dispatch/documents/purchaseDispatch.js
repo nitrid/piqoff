@@ -1628,9 +1628,10 @@ export default class purchaseDispatch extends React.PureComponent
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
-                                    height={'500'} 
+                                    height={'450'} 
                                     width={'100%'}
                                     dbApply={false}
+                                    filterRow={{visible:true}}
                                     onRowPrepared={(e) =>
                                     {
                                         if(e.rowType == 'data' && e.data.INVOICE_GUID  != '00000000-0000-0000-0000-000000000000')
@@ -1727,19 +1728,20 @@ export default class purchaseDispatch extends React.PureComponent
                                         <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.irs_02_001")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcDispatch.clmCreateDate")} width={100} allowEditing={false}/>
-                                        <Column dataField="CUSER_NAME" caption={this.t("grdPurcDispatch.clmCuser")} width={100} allowEditing={false}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdPurcDispatch.clmItemCode")} width={110} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="MULTICODE" caption={this.t("grdPurcDispatch.clmMulticode")} width={110} allowEditing={false}/>
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcDispatch.clmCreateDate")} width={80} allowEditing={false}/>
+                                        <Column dataField="CUSER_NAME" caption={this.t("grdPurcDispatch.clmCuser")} width={90} allowEditing={false}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdPurcDispatch.clmItemCode")} width={105} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="MULTICODE" caption={this.t("grdPurcDispatch.clmMulticode")} width={105} allowEditing={false}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdPurcDispatch.clmItemName")} width={330} />
-                                        <Column dataField="QUANTITY" caption={this.t("grdPurcDispatch.clmQuantity")} width={60} dataType={'number'}/>
-                                        <Column dataField="PRICE" caption={this.t("grdPurcDispatch.clmPrice")} width={75} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdPurcDispatch.clmAmount")} width={100} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdPurcDispatch.clmQuantity")} width={50} dataType={'number'}/>
+                                        <Column dataField="PRICE" caption={this.t("grdPurcDispatch.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                        <Column dataField="AMOUNT" caption={this.t("grdPurcDispatch.clmAmount")} width={90} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
                                         <Column dataField="DISCOUNT" caption={this.t("grdPurcDispatch.clmDiscount")} width={60} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                         <Column dataField="DISCOUNT_RATE" caption={this.t("grdPurcDispatch.clmDiscountRate")} width={60} dataType={'number'}/>
                                         <Column dataField="VAT" caption={this.t("grdPurcDispatch.clmVat")} width={75} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
+                                        <Column dataField="VAT_RATE" caption={this.t("grdPurcDispatch.clmVatRate")} width={50} allowEditing={false}/>
                                         <Column dataField="TOTAL" caption={this.t("grdPurcDispatch.clmTotal")} width={110} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
-                                        <Column dataField="ORDER_REF" caption={this.t("grdPurcDispatch.clmOrder")} width={120}  headerFilter={{visible:true}} allowEditing={false}/>
+                                        <Column dataField="ORDER_REF" caption={this.t("grdPurcDispatch.clmOrder")} width={110}  headerFilter={{visible:true}} allowEditing={false}/>
                                         <Column dataField="DESCRIPTION" caption={this.t("grdPurcDispatch.clmDescription")} width={100}  headerFilter={{visible:true}}/>
                                     </NdGrid>
                                     <ContextMenu
@@ -2025,9 +2027,10 @@ export default class purchaseDispatch extends React.PureComponent
                     title={this.t("pg_txtItemsCode.title")} //
                     search={true}
                     >
+                        <Paging defaultPageSize={22} />
                         <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
+                        <Column dataField="MULTICODE" caption={this.t("pg_txtItemsCode.clmMulticode")} width={150}/>
                         <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />
-                        <Column dataField="MULTICODE" caption={this.t("pg_txtItemsCode.clmMulticode")} width={200}/>
                     </NdPopGrid>
                     {/* Dizayn Seçim PopUp */}
                     <div>

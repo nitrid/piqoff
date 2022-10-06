@@ -3803,6 +3803,7 @@ export const langTr =
             clmOrder : "Sipariş No",
             clmCuser :"Kullanıcı",
             clmMulticode : "T.Kodu",
+            clmVatRate : "KDV %"
         },
         popDiscount : 
         {
@@ -4093,6 +4094,7 @@ export const langTr =
             clmOrder : "Sipariş No",
             clmCuser :"Kullanıcı",
             clmBarcode : "Barkod",
+            clmVatRate : "KDV %"
         },
         popDiscount : 
         {
