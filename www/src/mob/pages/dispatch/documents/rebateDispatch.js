@@ -56,6 +56,7 @@ export default class rebateDispatch extends React.PureComponent
         this._getRebate = this._getRebate.bind(this)
         this.pageChange = this.pageChange.bind(this)
         this.setBarcode = this.setBarcode.bind(this)
+        this.dropmenuClick = this.dropmenuClick.bind(this)
 
 
 
@@ -212,7 +213,7 @@ export default class rebateDispatch extends React.PureComponent
                 button:[{id:"btn01",caption:this.t("msgBarcodeCheck.btn01"),location:'after'}],
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcodeCheck.msg")}</div>)
             }
-            let pResult = await dialog(tmpConfObj);
+            await dialog(tmpConfObj);
             return
         }
         for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
@@ -256,7 +257,7 @@ export default class rebateDispatch extends React.PureComponent
         tmpDocItems.QUANTITY = pQuantity
         tmpDocItems.VAT_RATE = this.barcode.vat
         tmpDocItems.PRICE = this.txtPrice.value
-        tmpDocItems.VAT = (this.txtVat.value * pQuantity).toFixed(2)
+        tmpDocItems.VAT = ((this.txtPrice.value * (this.barcode.vat / 100)) * pQuantity).toFixed(2)
         tmpDocItems.AMOUNT = (this.txtPrice.value * pQuantity).toFixed(2)
         tmpDocItems.TOTAL = parseFloat(((this.txtPrice.value * pQuantity) + (this.txtVat.value * pQuantity))).toFixed(2)
         this.docObj.docItems.addEmpty(tmpDocItems)
@@ -431,6 +432,13 @@ export default class rebateDispatch extends React.PureComponent
             this.txtQuantity.focus()
         }
         this.setState({tbBarcode:"visible"})
+    }
+    async dropmenuClick(e)
+    {
+        if(e.itemData == this.t("btnNew"))
+        {
+            this.init()
+        }
     }
     render()
     {
@@ -688,7 +696,7 @@ export default class rebateDispatch extends React.PureComponent
                                 <NdTextBox id="txtCustomerName" parent={this} simple={true}  
                                 readOnly={true}
                                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                dt={{data:this.docObj.dt('DOC'),field:"OUTPUT_NAME"}} 
+                                dt={{data:this.docObj.dt('DOC'),field:"INPUT_NAME"}} 
                                 param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                 access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                 >

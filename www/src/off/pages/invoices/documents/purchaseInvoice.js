@@ -969,7 +969,6 @@ export default class purchaseInvoice extends React.PureComponent
                 value : [pdata[i].CODE]
             }
             let tmpData = await this.core.sql.execute(tmpQuery) 
-            console.log(tmpData)
 
             if(tmpData.result.recordset.length > 0)
             {               
@@ -1086,11 +1085,12 @@ export default class purchaseInvoice extends React.PureComponent
                     {
                         if(typeof this.docObj.docItems.dt()[i].OLD_VAT != 'undefined' && this.docObj.docItems.dt()[i].VAT_RATE != this.docObj.docItems.dt()[i].OLD_VAT)
                         {
-                            this.newVat.push(this.docObj.docItems.dt()[i])
+                            console.log(this.docObj.docItems.dt()[i].ITEM_CODE)
+                            this.newVat.push({...this.docObj.docItems.dt()[i]})
                         }
                         if(this.docObj.docItems.dt()[i].CUSTOMER_PRICE != this.docObj.docItems.dt()[i].PRICE)
                         {
-                            this.newPrice.push(this.docObj.docItems.dt()[i])
+                            this.newPrice.push({...this.docObj.docItems.dt()[i]})
                         }
                     }
                     
@@ -3367,8 +3367,8 @@ export default class purchaseInvoice extends React.PureComponent
                         showTitle={true} 
                         title={this.t("msgNewPrice.title")} 
                         showCloseButton={false}
-                        width={"800px"}
-                        height={"600PX"}
+                        width={"1000px"}
+                        height={"800PX"}
                         button={[{id:"btn01",caption:this.t("msgNewPrice.btn01"),location:'before'},{id:"btn02",caption:this.t("msgNewPrice.btn02"),location:'after'}]}
                         >
                             <div className="row">
@@ -3386,7 +3386,7 @@ export default class purchaseInvoice extends React.PureComponent
                                     allowColumnResizing={true} 
                                     headerFilter={{visible:true}}
                                     filterRow = {{visible:true}}
-                                    height={400} 
+                                    height={600} 
                                     width={'100%'}
                                     dbApply={false}
                                     selection={{mode:"multiple"}}
@@ -3410,7 +3410,7 @@ export default class purchaseInvoice extends React.PureComponent
                             </div>
                         
                     </NdDialog>  
-                         {/* Yeni KDV Dialog  */}
+                        {/* Yeni KDV Dialog  */}
                     <NdDialog id={"msgNewVat"} container={"#root"} parent={this}
                         position={{of:'#root'}} 
                         showTitle={true} 

@@ -4401,6 +4401,8 @@ export const langFr =
             clmMargin :"Marge",
             clmDescription :"Motif",
             clmCuser :"Utilisateur",
+            clmMulticode : "Sélection Document",
+            clmBarcode : "Code Barre"
         },
         popDiscount : 
         {

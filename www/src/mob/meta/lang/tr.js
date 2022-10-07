@@ -1808,6 +1808,12 @@ export const langTr =
             btn02: "Vazgeç",
             msg: "Seçilen Ürün Cariye Tanımlı Değil ! Devam Etmek İstiyormusunuz"
         },
+        msgQuantity:
+        {
+            title: "Miktar Giriş",
+            btn01: "Ekle",
+            msg: "Miktar Giriniz !"
+        },
 
     },
 }

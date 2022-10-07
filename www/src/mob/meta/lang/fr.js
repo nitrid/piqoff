@@ -1577,6 +1577,12 @@ export const langFr =
             btn02: "Abandonne",
             msg: "Le produit du client sélectionné n'est pas définie ! Voulez-vous continuer ?"
         },
+        msgQuantity:
+        {
+            title: "Miktar Giriş",   // BAK
+            btn01: "Ekle",   // BAK
+            msg: "Miktar Giriniz !"   // BAK
+        },
 
     },
 }
