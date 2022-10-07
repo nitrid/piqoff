@@ -967,7 +967,6 @@ export default class rebateDispatch extends React.PureComponent
                                 width={'100%'}
                                 dbApply={false}
                                 onRowUpdated={async(e)=>{
-                                    let rowIndex = e.component.getRowIndexByKey(e.key)
 
                                     if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
                                     {
