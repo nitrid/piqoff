@@ -1508,7 +1508,7 @@ export default class posDoc extends React.PureComponent
             //LOCAL DB İÇİN YAPILDI
             this.posObj.dt()[0].DESCRIPTION = pDesc
 
-            if(tmpDt.length > 0)
+            if(tmpDt.length > 0 && pTag == 'PARK DESC')
             {
                 tmpDt[0].DESCRIPTION = pDesc
             }
