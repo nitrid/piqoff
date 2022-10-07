@@ -683,6 +683,7 @@ export class dataset
         return new Promise(async resolve => 
         {
             let tmpQuerys = [];
+
             for (let i = 0; i < this.length; i++) 
             {
                 let tmp = this.get(i).toCommands();
@@ -691,18 +692,23 @@ export class dataset
                     tmpQuerys.push(e)    
                 });
             }
-
+            console.log(tmpQuerys)
             let tmpResult = await this.sql.execute(tmpQuerys)
             if(typeof tmpResult.result.err == 'undefined')
-            {         
-                for (let i = 0; i < this.length; i++) 
+            {             
+                tmpQuerys.forEach(x =>
                 {
-                    let tmp = this.get(i);
-                    tmp.forEach(e => 
-                    {
-                        Object.setPrototypeOf(e,{stat:''})   
-                    });
-                }
+                    Object.setPrototypeOf(x.rowData,{stat:'',pending:false})
+                })        
+
+                // for (let i = 0; i < this.length; i++) 
+                // {
+                //     let tmp = this.get(i);
+                //     tmp.forEach(e => 
+                //     {      
+                //         Object.setPrototypeOf(e,{stat:''})   
+                //     });
+                // }
 
                 resolve(0)
             }
@@ -946,7 +952,7 @@ export class datatable
 
         for (let i = 0; i < this.length; i++) 
         {
-            if(typeof this[i].stat != 'undefined' && typeof tmpStat.find(x => x == this[i].stat))
+            if((typeof this[i].pending == 'undefined' || this[i].pending == false) && typeof this[i].stat != 'undefined' && typeof tmpStat.find(x => x == this[i].stat))
             {
                 let tmpQuery = undefined;
 
@@ -1062,6 +1068,7 @@ export class datatable
                 }
                 if(typeof tmpQuery != 'undefined' && typeof tmpQuery.value != 'undefined' && tmpQuery.value.length > 0)
                 {       
+                    Object.setPrototypeOf(this[i],{pending:true})                    
                     tmpQuery.rowData = this[i]
                     tmpQueryList.push(tmpQuery)
                 }
@@ -1088,10 +1095,14 @@ export class datatable
             let tmpResult = await this.sql.execute(tmpQuerys)
             if(typeof tmpResult.result.err == 'undefined')
             {     
-                for (let i = 0; i < this.length; i++) 
+                tmpQuerys.forEach(x =>
                 {
-                    Object.setPrototypeOf(this[i],{stat:''})
-                }           
+                    Object.setPrototypeOf(x.rowData,{stat:'',pending:false})
+                })
+                // for (let i = 0; i < this.length; i++) 
+                // {
+                //     Object.setPrototypeOf(this[i],{stat:''})
+                // }
                 resolve(0)
             }
             else
