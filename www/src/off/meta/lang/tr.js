@@ -2375,6 +2375,7 @@ export const langTr =
         getOrders : "Sipariş Getir",
         popExcel : {title:"Excel Dosyanızın Satır Başlıkları Doğru Olmalıdır"},
         excelAdd : "Excelden Kayıt",
+        shemaSave : "Şemayı Kaydet",
         pg_Docs : 
         {
             title : "Evrak Seçimi",

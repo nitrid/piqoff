@@ -143,7 +143,7 @@ export default class purchaseInvoice extends React.PureComponent
         this.txtRefno.readOnly = false
         this.docLocked = false
         
-        this.frmDocItems.option('disabled',false) // true ya cevrilecek unutma
+        this.frmDocItems.option('disabled',true)
         await this.grdPurcInv.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
         await this.grdInvoicePayment.dataRefresh({source:this.paymentObj.docCustomer.dt()});
         await this.grdMultiItem.dataRefresh({source:this.multiItemData});
@@ -957,7 +957,11 @@ export default class purchaseInvoice extends React.PureComponent
     }
     async excelAdd(pdata)
     {
-        let tmpShema = this.prmObj.filter({ID:'excelFormat',USERS:this.user.CODE}).getValue().value
+        let tmpShema = this.prmObj.filter({ID:'excelFormat',USERS:this.user.CODE}).getValue()
+        if(typeof tmpShema == 'string')
+        {
+            tmpShema = JSON.parse(tmpShema)
+        }
         let tmpMissCodes = []
         let tmpCounter = 0
         for (let i = 0; i < pdata.length; i++) 
@@ -971,7 +975,6 @@ export default class purchaseInvoice extends React.PureComponent
                 value : [pdata[i][tmpShema.CODE]]
             }
             let tmpData = await this.core.sql.execute(tmpQuery) 
-
             if(tmpData.result.recordset.length > 0)
             {               
                 let tmpDocItems = {...this.docObj.docItems.empty}
@@ -2173,8 +2176,12 @@ export default class purchaseInvoice extends React.PureComponent
                                     {
                                         let tmpShema = this.prmObj.filter({ID:'excelFormat',USERS:this.user.CODE}).getValue()
 
-                                        console.log(tmpShema)
-                                        tmpShema = JSON.parse(tmpShema)
+                                        console.log(typeof tmpShema)
+                                        if(typeof tmpShema == 'string')
+                                        {
+                                            tmpShema = JSON.parse(tmpShema)
+                                        }
+                                    
                                         this.txtPopExcelCode.value = tmpShema.CODE
                                         this.txtPopExcelQty.value = tmpShema.QTY
                                         this.txtPopExcelPrice.value = tmpShema.PRICE
@@ -3599,64 +3606,39 @@ export default class purchaseInvoice extends React.PureComponent
                                         </Validator>  
                                     </NdTextBox>
                                 </Item>
-                                    <Item>
-                                        <div className='col-4'></div>
-                                        <div className='col-4'>
-                                            <NdButton id="btnShemaSave" parent={this} text={this.t('shemaSave')} type="default"
-                                                onClick={async()=>
-                                                {
-                                                    let shemaJson={CODE:this.txtPopExcelCode.value,QTY:this.txtPopExcelQty.value,PRICE:this.txtPopExcelPrice.value,DISC:this.txtPopExcelDisc.value,DISC_PER:this.txtPopExcelDiscRate.value,TVA:this.txtPopExcelVat.value}
-                                                    console.log(this.prmObj)
-                                                    this.prmObj.add({ID:'excelFormat',VALUE:{value:shemaJson},USERS:this.user.CODE,APP:'OFF',TYPE:1,PAGE:'ftr_02_001'})
-                                                    await this.prmObj.save()
-                                                    // let tmpPrm = new param()
-                                                    // await tmpPrm.load({USER:this.user.CODE,APP:'OFF',ID:'excelFormat'})
-                                                    // console.log(tmpPrm.dt())
-                                                    // if(tmpPrm.length > 0)
-                                                    // {
-                                                    //     tmpPrm.dt()[0].VALUE = JSON.stringify(shemaJson)
-                                                    //     tmpPrm.save()
-                                                    // }
-                                                    // else
-                                                    // {
-                                                    //     let tmpEmpty = {...tmpPrm.empty};
-                                                    //     tmpEmpty.TYPE = 1
-                                                    //     tmpEmpty.ID = "excelFormat"
-                                                    //     tmpEmpty.VALUE = JSON.stringify(shemaJson)
-                                                    //     tmpEmpty.USERS = this.user.CODE;
-                                                    //     tmpEmpty.APP = 'OFF'
-                                                    //     tmpEmpty.PAGE = 'ftr_02_001'
-
-                                        
-                                                    //     tmpPrm.addEmpty(tmpEmpty);
-                                                    //     tmpPrm.save()
-                                                    // }
-                                                }}/>
-                                        </div>
-                                    </Item>
-                                <Item>
-                                <input type="file" name="upload" id="upload" text={"Excel Aktarım"} onChange={(e)=>
-                                    {
-                                        e.preventDefault();
-                                        if (e.target.files) 
-                                        {
-                                            const reader = new FileReader();
-                                            reader.onload = (e) => 
-                                            {
-                                                console.log(this)
-                                                const data = e.target.result;
-                                                const workbook = xlsx.read(data, { type: "array" });
-                                                const sheetName = workbook.SheetNames[0];
-                                                const worksheet = workbook.Sheets[sheetName];
-                                                const json = xlsx.utils.sheet_to_json(worksheet);
-                                                this.popExcel.hide()
-                                                this.excelAdd(json)
-                                            };
-                                            reader.readAsArrayBuffer(e.target.files[0]);
-                                        }
-                                    }}/>    
-                                </Item>
                             </Form>
+                            <Form colCount={2}>
+                                    <Item>
+                                    <input type="file" name="upload" id="upload" text={"Excel Aktarım"} onChange={(e)=>
+                                        {
+                                            e.preventDefault();
+                                            if (e.target.files) 
+                                            {
+                                                const reader = new FileReader();
+                                                reader.onload = (e) => 
+                                                {
+                                                    const data = e.target.result;
+                                                    const workbook = xlsx.read(data, { type: "array" });
+                                                    const sheetName = workbook.SheetNames[0];
+                                                    const worksheet = workbook.Sheets[sheetName];
+                                                    const json = xlsx.utils.sheet_to_json(worksheet);
+                                                    this.popExcel.hide()
+                                                    this.excelAdd(json)
+                                                };
+                                                reader.readAsArrayBuffer(e.target.files[0]);
+                                            }
+                                        }}/>    
+                                    </Item>
+                                    <Item>
+                                        <NdButton id="btnShemaSave" parent={this} text={this.t('shemaSave')} type="default"
+                                            onClick={async()=>
+                                            {
+                                                let shemaJson={CODE:this.txtPopExcelCode.value,QTY:this.txtPopExcelQty.value,PRICE:this.txtPopExcelPrice.value,DISC:this.txtPopExcelDisc.value,DISC_PER:this.txtPopExcelDiscRate.value,TVA:this.txtPopExcelVat.value}
+                                                this.prmObj.add({ID:'excelFormat',VALUE:shemaJson,USERS:this.user.CODE,APP:'OFF',TYPE:1,PAGE:'ftr_02_001'})
+                                                await this.prmObj.save()
+                                            }}/>
+                                    </Item>
+                                </Form>
                         </NdPopUp>
                     </div>  
                 </ScrollView>     
