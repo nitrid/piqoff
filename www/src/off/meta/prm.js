@@ -1111,6 +1111,25 @@ export const prm =
             CAPTION : "Cari Adı"
         }
     },
+    // txtCustomerName
+    {
+        TYPE : 1,
+        ID :"excelFormat",
+        VALUE : 
+        {
+            value : {CODE:'CODE',QTY:'QTY',PRICE:'PRICE',DISC:'DISC',DISC_PER:'DISC_PER',TVA:'TVA'}
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_001",
+        ELEMENT : "txtCustomerName",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Alış Faturası",
+            CAPTION : "Cari Adı"
+        }
+    },
        //#endregion
     
     //#region Promosyon

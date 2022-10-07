@@ -2373,6 +2373,8 @@ export const langTr =
         txtBarcodePlace: "Barkod Okutunuz",
         txtQuantity :"Miktar",
         getOrders : "Sipariş Getir",
+        popExcel : {title:"Excel Dosyanızın Satır Başlıkları Doğru Olmalıdır"},
+        excelAdd : "Excelden Kayıt",
         pg_Docs : 
         {
             title : "Evrak Seçimi",

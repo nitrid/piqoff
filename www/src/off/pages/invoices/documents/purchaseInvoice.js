@@ -12,6 +12,8 @@ import TabPanel from 'devextreme-react/tab-panel';
 import { Button } from 'devextreme-react/button';
 import FileUploader from 'devextreme-react/file-uploader';
 import * as xlsx from 'xlsx'
+import {param} from '../../../../core/core'
+
 
 import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
@@ -141,7 +143,7 @@ export default class purchaseInvoice extends React.PureComponent
         this.txtRefno.readOnly = false
         this.docLocked = false
         
-        this.frmDocItems.option('disabled',true)
+        this.frmDocItems.option('disabled',false) // true ya cevrilecek unutma
         await this.grdPurcInv.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
         await this.grdInvoicePayment.dataRefresh({source:this.paymentObj.docCustomer.dt()});
         await this.grdMultiItem.dataRefresh({source:this.multiItemData});
@@ -229,7 +231,6 @@ export default class purchaseInvoice extends React.PureComponent
     }
     async _calculateTotal()
     {
-        console.log(this.docObj.docItems.dt().sum("VAT",2))
         this.docObj.dt()[0].AMOUNT = this.docObj.docItems.dt().sum("AMOUNT",2)
         this.docObj.dt()[0].DISCOUNT = this.docObj.docItems.dt().sum("DISCOUNT",2)
         this.docObj.dt()[0].VAT = this.docObj.docItems.dt().sum("VAT",2)
@@ -956,17 +957,18 @@ export default class purchaseInvoice extends React.PureComponent
     }
     async excelAdd(pdata)
     {
+        let tmpShema = this.prmObj.filter({ID:'excelFormat',USERS:this.user.CODE}).getValue().value
         let tmpMissCodes = []
         let tmpCounter = 0
         for (let i = 0; i < pdata.length; i++) 
         {
             let tmpQuery = 
-            {
+            { 
                 query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY," + 
                 "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
                 " FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') = @VALUE AND STATUS = 1 " ,
                 param : ['VALUE:string|50'],
-                value : [pdata[i].CODE]
+                value : [pdata[i][tmpShema.CODE]]
             }
             let tmpData = await this.core.sql.execute(tmpQuery) 
 
@@ -988,12 +990,12 @@ export default class purchaseInvoice extends React.PureComponent
                 this.txtRefno.readOnly = true
                 this.docObj.docItems.addEmpty(tmpDocItems)
                 await this.core.util.waitUntil(100)
-                await this.addItem(tmpData.result.recordset[0],this.docObj.docItems.dt().length-1,pdata[i].QTY,pdata[i].PRICE,pdata[i].DISC,pdata[i].DISC_PER,pdata[i].TVA)
+                await this.addItem(tmpData.result.recordset[0],this.docObj.docItems.dt().length-1,pdata[i][tmpShema.QTY],pdata[i][tmpShema.PRICE],pdata[i][tmpShema.DISC],pdata[i][tmpShema.DISC_PER],pdata[i][tmpShema.TVA])
                 tmpCounter = tmpCounter + 1
             }
             else
             {
-                tmpMissCodes.push("'" +pdata[i].CODE + "'")
+                tmpMissCodes.push("'"+pdata[i].CODE+"'")
             }
         }
         if(tmpMissCodes.length > 0)
@@ -1085,7 +1087,6 @@ export default class purchaseInvoice extends React.PureComponent
                     {
                         if(typeof this.docObj.docItems.dt()[i].OLD_VAT != 'undefined' && this.docObj.docItems.dt()[i].VAT_RATE != this.docObj.docItems.dt()[i].OLD_VAT)
                         {
-                            console.log(this.docObj.docItems.dt()[i].ITEM_CODE)
                             this.newVat.push({...this.docObj.docItems.dt()[i]})
                         }
                         if(this.docObj.docItems.dt()[i].CUSTOMER_PRICE != this.docObj.docItems.dt()[i].PRICE)
@@ -1130,7 +1131,6 @@ export default class purchaseInvoice extends React.PureComponent
                         {
                             for (let i = 0; i < this.grdNewVat.getSelectedData().length; i++) 
                             {
-                                console.log(this.grdNewVat.getSelectedData()[i])
                                 let tmpQuery = 
                                 {
                                     query :"UPDATE ITEMS SET VAT = @VAT WHERE GUID = @GUID",
@@ -1647,7 +1647,6 @@ export default class purchaseInvoice extends React.PureComponent
                                             icon:'more',
                                             onClick:()=>
                                             {
-                                                console.log(1111)
                                             }
                                         }
                                     }
@@ -2143,7 +2142,7 @@ export default class purchaseInvoice extends React.PureComponent
                                             await dialog(tmpConfObj);
                                         }
                                     }}/>
-                                    <Button icon="increaseindent" text={this.lang.t("collectiveItemAdd")}
+                                    <Button icon="add" text={this.lang.t("collectiveItemAdd")}
                                     validationGroup={"frmPurcInv"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
@@ -2168,25 +2167,24 @@ export default class purchaseInvoice extends React.PureComponent
                                             await dialog(tmpConfObj);
                                         }
                                     }}/>  
-                                     <input type="file" name="upload" id="upload" text={"Excel Aktarım"} onChange={(e)=>
+                                     <Button icon="xlsxfile" text={this .t("excelAdd")}
+                                    validationGroup={"frmPurcInv"  + this.tabIndex}
+                                    onClick={async (e)=>
                                     {
-                                        e.preventDefault();
-                                        if (e.target.files) 
-                                        {
-                                            const reader = new FileReader();
-                                            reader.onload = (e) => 
-                                            {
-                                                console.log(this)
-                                                const data = e.target.result;
-                                                const workbook = xlsx.read(data, { type: "array" });
-                                                const sheetName = workbook.SheetNames[0];
-                                                const worksheet = workbook.Sheets[sheetName];
-                                                const json = xlsx.utils.sheet_to_json(worksheet);
-                                                this.excelAdd(json)
-                                            };
-                                            reader.readAsArrayBuffer(e.target.files[0]);
-                                        }
-                                    }}/>                                  
+                                        let tmpShema = this.prmObj.filter({ID:'excelFormat',USERS:this.user.CODE}).getValue()
+
+                                        console.log(tmpShema)
+                                        tmpShema = JSON.parse(tmpShema)
+                                        this.txtPopExcelCode.value = tmpShema.CODE
+                                        this.txtPopExcelQty.value = tmpShema.QTY
+                                        this.txtPopExcelPrice.value = tmpShema.PRICE
+                                        this.txtPopExcelVat.value = tmpShema.TVA
+                                        this.txtPopExcelDisc.value = tmpShema.DISC
+                                        this.txtPopExcelDiscRate.value = tmpShema.DISC_PER
+
+                                        this.popExcel.show()
+                                    }}/>  
+                              
                                 </Item>
                                 <Item>
                                  <React.Fragment>
@@ -3528,6 +3526,139 @@ export default class purchaseInvoice extends React.PureComponent
                         <Column dataField="PRICE" caption={this.t("pg_ordersGrid.clmPrice")} width={200} format={{ style: "currency", currency: "EUR",precision: 2}} />
                         <Column dataField="TOTAL" caption={this.t("pg_ordersGrid.clmTotal")} width={200} format={{ style: "currency", currency: "EUR",precision: 2}} />
                     </NdPopGrid>
+                    {/* Excel PopUp */}
+                    <div>
+                        <NdPopUp parent={this} id={"popExcel"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popExcel.title")}
+                        container={"#root"} 
+                        width={'600'}
+                        height={'450'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("grdPurcInv.clmItemCode")} alignment="right" />
+                                    <NdTextBox id="txtPopExcelCode" parent={this} simple={true}  notRefresh = {true}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    >
+                                        <Validator validationGroup={"frmInvExcel"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validExcel")} />
+                                        </Validator>  
+                                    </NdTextBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("grdPurcInv.clmQuantity")} alignment="right" />
+                                    <NdTextBox id="txtPopExcelQty" parent={this} simple={true}  notRefresh = {true}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    >
+                                        <Validator validationGroup={"frmInvExcel"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validExcel")} />
+                                        </Validator>  
+                                    </NdTextBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("grdPurcInv.clmPrice")} alignment="right" />
+                                    <NdTextBox id="txtPopExcelPrice" parent={this} simple={true}  notRefresh = {true}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    >
+                                        <Validator validationGroup={"frmInvExcel"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validExcel")} />
+                                        </Validator>  
+                                    </NdTextBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("grdPurcInv.clmDiscount")} alignment="right" />
+                                    <NdTextBox id="txtPopExcelDisc" parent={this} simple={true}  notRefresh = {true}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    >
+                                        <Validator validationGroup={"frmInvExcel"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validExcel")} />
+                                        </Validator>  
+                                    </NdTextBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("grdPurcInv.clmDiscountRate")} alignment="right" />
+                                    <NdTextBox id="txtPopExcelDiscRate" parent={this} simple={true}  notRefresh = {true}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    >
+                                        <Validator validationGroup={"frmInvExcel"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validExcel")} />
+                                        </Validator>  
+                                    </NdTextBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("grdPurcInv.clmVat")} alignment="right" />
+                                    <NdTextBox id="txtPopExcelVat" parent={this} simple={true}  notRefresh = {true}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    >
+                                        <Validator validationGroup={"frmInvExcel"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validExcel")} />
+                                        </Validator>  
+                                    </NdTextBox>
+                                </Item>
+                                    <Item>
+                                        <div className='col-4'></div>
+                                        <div className='col-4'>
+                                            <NdButton id="btnShemaSave" parent={this} text={this.t('shemaSave')} type="default"
+                                                onClick={async()=>
+                                                {
+                                                    let shemaJson={CODE:this.txtPopExcelCode.value,QTY:this.txtPopExcelQty.value,PRICE:this.txtPopExcelPrice.value,DISC:this.txtPopExcelDisc.value,DISC_PER:this.txtPopExcelDiscRate.value,TVA:this.txtPopExcelVat.value}
+                                                    console.log(this.prmObj)
+                                                    this.prmObj.add({ID:'excelFormat',VALUE:{value:shemaJson},USERS:this.user.CODE,APP:'OFF',TYPE:1,PAGE:'ftr_02_001'})
+                                                    await this.prmObj.save()
+                                                    // let tmpPrm = new param()
+                                                    // await tmpPrm.load({USER:this.user.CODE,APP:'OFF',ID:'excelFormat'})
+                                                    // console.log(tmpPrm.dt())
+                                                    // if(tmpPrm.length > 0)
+                                                    // {
+                                                    //     tmpPrm.dt()[0].VALUE = JSON.stringify(shemaJson)
+                                                    //     tmpPrm.save()
+                                                    // }
+                                                    // else
+                                                    // {
+                                                    //     let tmpEmpty = {...tmpPrm.empty};
+                                                    //     tmpEmpty.TYPE = 1
+                                                    //     tmpEmpty.ID = "excelFormat"
+                                                    //     tmpEmpty.VALUE = JSON.stringify(shemaJson)
+                                                    //     tmpEmpty.USERS = this.user.CODE;
+                                                    //     tmpEmpty.APP = 'OFF'
+                                                    //     tmpEmpty.PAGE = 'ftr_02_001'
+
+                                        
+                                                    //     tmpPrm.addEmpty(tmpEmpty);
+                                                    //     tmpPrm.save()
+                                                    // }
+                                                }}/>
+                                        </div>
+                                    </Item>
+                                <Item>
+                                <input type="file" name="upload" id="upload" text={"Excel Aktarım"} onChange={(e)=>
+                                    {
+                                        e.preventDefault();
+                                        if (e.target.files) 
+                                        {
+                                            const reader = new FileReader();
+                                            reader.onload = (e) => 
+                                            {
+                                                console.log(this)
+                                                const data = e.target.result;
+                                                const workbook = xlsx.read(data, { type: "array" });
+                                                const sheetName = workbook.SheetNames[0];
+                                                const worksheet = workbook.Sheets[sheetName];
+                                                const json = xlsx.utils.sheet_to_json(worksheet);
+                                                this.popExcel.hide()
+                                                this.excelAdd(json)
+                                            };
+                                            reader.readAsArrayBuffer(e.target.files[0]);
+                                        }
+                                    }}/>    
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div>  
                 </ScrollView>     
             </div>
         )

@@ -2373,6 +2373,8 @@ export const langFr =
         txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
         getOrders : "Sipariş Getir", // BAK
+        popExcel : {title:"Excel Dosyanızın Satır Başlıkları Doğru Olmalıdır"}, //BAK
+        excelAdd : "Excelden Kayıt",//BAK
         pg_Docs : 
         {
             title : "Sélection Document",

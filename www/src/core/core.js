@@ -1406,6 +1406,7 @@ export class param extends datatable
         {            
             this.meta = arguments[0]
         }
+
     }
     add()
     {
@@ -1440,10 +1441,12 @@ export class param extends datatable
             {
                 this.selectCmd = 
                 {
-                    query : "SELECT * FROM PARAM WHERE ((APP = @APP) OR (@APP = ''))" ,
-                    param : ['APP:string|50'],
+                    query : "SELECT * FROM PARAM WHERE ((APP = @APP) OR (@APP = '')) AND ((USERS = @USERS) OR (@USERS = '')) AND ((ID = @ID) OR (@ID = '')) " ,
+                    param : ['APP:string|50','USERS:string|50','ID:string|50'],
                     value : [
                                 typeof arguments[0].APP == 'undefined' ? '' : arguments[0].APP,
+                                typeof arguments[0].USERS == 'undefined' ? '' : arguments[0].USERS,
+                                typeof arguments[0].ID == 'undefined' ? '' : arguments[0].ID,
                             ]
                 } 
                 await this.refresh();
@@ -1580,6 +1583,7 @@ export class param extends datatable
             }
         }
     }
+
 }
 export class access extends datatable
 {
