@@ -2770,6 +2770,8 @@ export const langTr =
         txtBarcodePlace: "Barkod Okutunuz",
         txtQuantity :"Miktar",
         getOrders : "Sipariş Getir",
+        tabTitleSubtotal : "Fatura Toplamı",
+        tabTitlePayments : "Ödeme Bilgileri",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -3090,6 +3092,8 @@ export const langTr =
         txtBarcode : "Barkod Ekle",
         txtBarcodePlace: "Barkod Okutunuz",
         txtQuantity :"Miktar",
+        tabTitleSubtotal : "Fatura Toplamı",
+        tabTitlePayments : "Ödeme Bilgileri",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -3354,6 +3358,8 @@ export const langTr =
         txtBarcode : "Barkod Ekle",
         txtBarcodePlace: "Barkod Okutunuz",
         txtQuantity :"Miktar",
+        tabTitleSubtotal : "Fatura Toplamı",
+        tabTitlePayments : "Ödeme Bilgileri",
         pg_Docs : 
         {
             title : "Evrak Seçimi",

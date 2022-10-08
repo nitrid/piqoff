@@ -422,21 +422,6 @@ export default class purchaseInvoice extends React.PureComponent
         }
         else if(e.itemData.title == this.t("tabTitlePayments"))
         {
-            // let tmpQuery = 
-            // {
-            //     query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
-            //     param : ['CODE:string|50'],
-            //     value : [r.component._changedValue]
-            // }
-            // let tmpData = await this.core.sql.execute(tmpQuery) 
-            // if(tmpData.result.recordset.length > 0)
-            // {   
-            //     this.customerControl = true
-            //     this.customerClear = false
-            //     this.combineControl = true
-            //     this.combineNew = false
-            //     await this.addItem(tmpData.result.recordset[0],e.rowIndex)
-            // }
             this._getPayment(this.docObj.dt()[0].GUID)
         }
     }
