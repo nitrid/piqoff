@@ -692,13 +692,16 @@ export class dataset
                     tmpQuerys.push(e)    
                 });
             }
-            console.log(tmpQuerys)
+            
             let tmpResult = await this.sql.execute(tmpQuerys)
             if(typeof tmpResult.result.err == 'undefined')
             {             
                 tmpQuerys.forEach(x =>
                 {
-                    Object.setPrototypeOf(x.rowData,{stat:'',pending:false})
+                    if(x.rowData.stat == 'editing' || x.rowData.stat == 'newing')
+                    {
+                        Object.setPrototypeOf(x.rowData,{stat:''})
+                    }
                 })        
 
                 // for (let i = 0; i < this.length; i++) 
@@ -715,6 +718,13 @@ export class dataset
             else
             {
                 console.log(tmpResult.result.err)
+                tmpQuerys.forEach(x =>
+                {
+                    if(x.rowData.stat == 'editing' || x.rowData.stat == 'newing')
+                    {
+                        Object.setPrototypeOf(x.rowData,{stat:''})
+                    }
+                })  
                 resolve(1)
             } 
         });
@@ -952,13 +962,14 @@ export class datatable
 
         for (let i = 0; i < this.length; i++) 
         {
-            if((typeof this[i].pending == 'undefined' || this[i].pending == false) && typeof this[i].stat != 'undefined' && typeof tmpStat.find(x => x == this[i].stat))
+            if(typeof this[i].stat != 'undefined' && typeof tmpStat.find(x => x == this[i].stat))
             {
                 let tmpQuery = undefined;
 
                 if(this[i].stat == 'new')
                 {
                     tmpQuery = JSON.parse(JSON.stringify(this.insertCmd))
+                    Object.setPrototypeOf(this[i],{stat:'newing'})
                     //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 28.02.2022
                     if(core.instance.offline && typeof tmpQuery.local != 'undefined' && typeof tmpQuery.local.values != 'undefined' && tmpQuery.local.values.length > 0)
                     {                        
@@ -988,6 +999,7 @@ export class datatable
                 else if(this[i].stat == 'edit')
                 {
                     tmpQuery = JSON.parse(JSON.stringify(this.updateCmd))
+                    Object.setPrototypeOf(this[i],{stat:'editing'})
                     //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 28.02.2022
                     if(core.instance.offline && typeof tmpQuery.local != 'undefined' && typeof tmpQuery.local.set != 'undefined')
                     {
@@ -1068,7 +1080,6 @@ export class datatable
                 }
                 if(typeof tmpQuery != 'undefined' && typeof tmpQuery.value != 'undefined' && tmpQuery.value.length > 0)
                 {       
-                    Object.setPrototypeOf(this[i],{pending:true})                    
                     tmpQuery.rowData = this[i]
                     tmpQueryList.push(tmpQuery)
                 }
@@ -1097,7 +1108,10 @@ export class datatable
             {     
                 tmpQuerys.forEach(x =>
                 {
-                    Object.setPrototypeOf(x.rowData,{stat:'',pending:false})
+                    if(x.rowData.stat == 'editing' || x.rowData.stat == 'newing')
+                    {
+                        Object.setPrototypeOf(x.rowData,{stat:''})
+                    }
                 })
                 // for (let i = 0; i < this.length; i++) 
                 // {
@@ -1108,6 +1122,17 @@ export class datatable
             else
             {
                 console.log(tmpResult.result.err)
+                tmpQuerys.forEach(x =>
+                {
+                    if(x.rowData.stat == 'newing')
+                    {
+                        Object.setPrototypeOf(x.rowData,{stat:'new'})
+                    }
+                    else if(x.rowData.stat == 'editing')
+                    {
+                        Object.setPrototypeOf(x.rowData,{stat:'edit'})
+                    }
+                })
                 resolve(1)
             } 
         });
