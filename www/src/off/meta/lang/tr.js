@@ -2376,6 +2376,11 @@ export const langTr =
         popExcel : {title:"Excel Dosyanızın Satır Başlıkları Doğru Olmalıdır"},
         excelAdd : "Excelden Kayıt",
         shemaSave : "Şemayı Kaydet",
+        tabTitleSubtotal : "Fatura Toplamı",
+        tabTitlePayments : "Ödeme Bilgileri",
+        txtDiffrentTotal : "Toplam Fark",
+        txtDiffrentNegative : "Fiyatı Düşenlerin Farkı",
+        txtDiffrentPositive : "Fiyatı Yükselenlerin Farkı",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
