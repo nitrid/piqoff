@@ -1117,7 +1117,7 @@ export const prm =
         ID :"excelFormat",
         VALUE : 
         {
-            value : {CODE:'CODE',QTY:'QTY',PRICE:'PRICE',DISC:'DISC',DISC_PER:'DISC_PER',TVA:'TVA'}
+            CODE:'CODE',QTY:'QTY',PRICE:'PRICE',DISC:'DISC',DISC_PER:'DISC_PER',TVA:'TVA'
         },
         SPECIAL : "",
         PAGE : "ftr_02_001",

@@ -2375,6 +2375,7 @@ export const langFr =
         getOrders : "Sipariş Getir", // BAK
         popExcel : {title:"Excel Dosyanızın Satır Başlıkları Doğru Olmalıdır"}, //BAK
         excelAdd : "Excelden Kayıt",//BAK
+        shemaSave : "Şemayı Kaydet", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
