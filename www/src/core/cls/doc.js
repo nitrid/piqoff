@@ -433,7 +433,9 @@ export class docCustomerCls
             PAY_TYPE_NAME : '',
             AMOUNT : 0,
             DESCRIPTION : '',
-            INVOICE_GUID : '00000000-0000-0000-0000-000000000000'
+            INVOICE_GUID : '00000000-0000-0000-0000-000000000000',
+            INVOICE_REF : ''
+
         }
 
         this._initDs();

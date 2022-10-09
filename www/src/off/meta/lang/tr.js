@@ -5750,6 +5750,7 @@ export const langTr =
         btnCash : "Nakit",
         btnCheck : "Çek",
         btnBank : "Havale",
+        invoiceSelect : "Fatura Seçimi",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -5758,6 +5759,15 @@ export const langTr =
             clmRefNo : "SIRA",
             clmInputName : "CARİ ADI",
             clmInputCode  : "CARİ KODU",
+        },
+        pg_invoices : 
+        {
+            title : "Fatura Seçimi",
+            clmReferans : "REFERANS",
+            clmOutputName : "CARİ ADI",
+            clmDate : "TARIH",
+            clmTotal : "TOPLAM",
+            clmRemaining  : "KALAN",
         },
         pg_txtCustomerCode : 
         {
@@ -5772,7 +5782,8 @@ export const langTr =
             clmCreateDate: "Kayıt Tarihi",
             clmAmount : "Tutar",
             clmOutputName : "Kasa/Banka",
-            clmDescription : "Açıklama"
+            clmDescription : "Açıklama",
+            clmInvoice : "Ödenen Fatura"
         },
         msgDocValid:
         {
