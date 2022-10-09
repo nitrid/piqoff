@@ -260,7 +260,7 @@ export default class purchaseInvoice extends React.PureComponent
         console.log(tmpDiffPovitive)
         this.txtDiffrentPositive.value = parseFloat(tmpDiffPovitive).toFixed(2)
         this.txtDiffrentNegative.value = parseFloat(tmpDiffNegative).toFixed(2)
-        this.txtDiffrentTotal.value = parseFloat(tmpDiffNegative) + parseFloat(tmpDiffPovitive)
+        this.txtDiffrentTotal.value = (parseFloat(tmpDiffNegative) + parseFloat(tmpDiffPovitive)).toFixed(2)
     }
     _cellRoleRender(e)
     {
@@ -423,6 +423,9 @@ export default class purchaseInvoice extends React.PureComponent
         else if(e.itemData.title == this.t("tabTitlePayments"))
         {
             this._getPayment(this.docObj.dt()[0].GUID)
+        }
+        else if(e.itemData.title == this.t("tabTitleOldInvoices"))
+        {
         }
     }
     async addItem(pData,pIndex,pQuantity,pPrice,pDiscount,pDiscountPer,pVat)
@@ -796,7 +799,7 @@ export default class purchaseInvoice extends React.PureComponent
         await this.paymentObj.load({PAYMENT_DOC_GUID:this.docObj.dt()[0].GUID});
         if(this.paymentObj.dt().length > 0)
         {
-            let tmpRemainder = (this.docObj.dt()[0].TOTAL - this.paymentObj.dt()[0].TOTAL).toFixed(3)
+            let tmpRemainder = (this.docObj.dt()[0].TOTAL - this.paymentObj.dt()[0].TOTAL).toFixed(2)
             this.txtRemainder.setState({value:tmpRemainder});
             this.txtMainRemainder.setState({value:tmpRemainder});
             
@@ -820,6 +823,7 @@ export default class purchaseInvoice extends React.PureComponent
             }
 
             await dialog(tmpConfObj);
+            this.popPayment.show()
             return
         }
         if(this.paymentObj.dt().length == 0)
@@ -843,7 +847,7 @@ export default class purchaseInvoice extends React.PureComponent
             tmpPay.INPUT = this.docObj.dt()[0].OUTPUT
             this.paymentObj.addEmpty(tmpPay);
         }
-        let tmpPayment = {...this.paymentObj.docCustomer.empty}
+            let tmpPayment = {...this.paymentObj.docCustomer.empty}
             tmpPayment.DOC_GUID = this.paymentObj.dt()[0].GUID
             tmpPayment.TYPE = this.paymentObj.dt()[0].TYPE
             tmpPayment.REF = this.paymentObj.dt()[0].REF
@@ -858,7 +862,7 @@ export default class purchaseInvoice extends React.PureComponent
                 tmpPayment.OUTPUT = this.cmbCashSafe.value
                 tmpPayment.OUTPUT_NAME = this.cmbCashSafe.displayValue
                 tmpPayment.PAY_TYPE = 0
-                tmpPayment.AMOUNT = this.numCash.value
+                tmpPayment.AMOUNT = pAmount
                 tmpPayment.DESCRIPTION = this.cashDescription.value
             }
             else if (pType == 1)
@@ -866,7 +870,7 @@ export default class purchaseInvoice extends React.PureComponent
                 tmpPayment.OUTPUT = this.cmbCheckSafe.value
                 tmpPayment.OUTPUT_NAME = this.cmbCheckSafe.displayValue
                 tmpPayment.PAY_TYPE = 1
-                tmpPayment.AMOUNT = this.numcheck.value
+                tmpPayment.AMOUNT = pAmount
                 tmpPayment.DESCRIPTION = this.checkDescription.value
 
                 let tmpCheck = {...this.paymentObj.checkCls.empty}
@@ -875,19 +879,20 @@ export default class purchaseInvoice extends React.PureComponent
                 tmpCheck.DOC_DATE =  this.paymentObj.dt()[0].DOC_DATE
                 tmpCheck.CHECK_DATE =  this.paymentObj.dt()[0].DOC_DATE
                 tmpCheck.CUSTOMER =   this.paymentObj.dt()[0].OUTPUT
-                tmpCheck.AMOUNT =  this.numcheck.value
+                tmpCheck.AMOUNT = pAmount
                 tmpCheck.SAFE =  this.cmbCheckSafe.value
                 this.paymentObj.checkCls.addEmpty(tmpCheck)
             }
-            else if (pType == 1)
+            else if (pType == 2)
             {
                 tmpPayment.OUTPUT = this.cmbBank.value
                 tmpPayment.OUTPUT_NAME = this.cmbBank.displayValue
                 tmpPayment.PAY_TYPE = 2
-                tmpPayment.AMOUNT = this.numBank.value
+                tmpPayment.AMOUNT = pAmount
                 tmpPayment.DESCRIPTION = this.bankDescription.value
             }
 
+            console.log(tmpPayment)
             await this.paymentObj.docCustomer.addEmpty(tmpPayment)
             this.paymentObj.dt()[0].AMOUNT = this.paymentObj.docCustomer.dt().sum("AMOUNT",2)
             this.paymentObj.dt()[0].TOTAL = this.paymentObj.docCustomer.dt().sum("AMOUNT",2)
@@ -2482,7 +2487,7 @@ export default class purchaseInvoice extends React.PureComponent
                                             <EmptyItem colSpan={3}/>
                                             <Item>
                                             <Label text={this.t("txtPayTotal")} alignment="right" />
-                                                <NdTextBox id="txtPayTotal" parent={this} simple={true} readOnly={true} dt={{data:this.paymentObj.dt('DOC'),field:"TOTAL"}}
+                                                <NdTextBox id="txtPayTotal" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} readOnly={true} dt={{data:this.paymentObj.dt('DOC'),field:"TOTAL"}}
                                                 maxLength={32}
                                                 ></NdTextBox>
                                             </Item>
@@ -2490,7 +2495,7 @@ export default class purchaseInvoice extends React.PureComponent
                                             <EmptyItem colSpan={3}/>
                                             <Item>
                                             <Label text={this.t("txtRemainder")} alignment="right" />
-                                                <NdTextBox id="txtRemainder" parent={this} simple={true} readOnly={true}
+                                                <NdTextBox id="txtRemainder" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} readOnly={true}
                                                 maxLength={32}
                                                 ></NdTextBox>
                                             </Item>
@@ -3031,7 +3036,7 @@ export default class purchaseInvoice extends React.PureComponent
                                         {
 
                                         }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM BANK_VW_01 WHERE TYPE = 1"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT * FROM BANK_VW_01 WHERE TYPE = 0"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbBank',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbBank',USERS:this.user.CODE})}
                                     >
