@@ -2499,6 +2499,20 @@ export default class purchaseInvoice extends React.PureComponent
                                                 maxLength={32}
                                                 ></NdTextBox>
                                             </Item>
+                                            {/* Kalan */}
+                                            <EmptyItem colSpan={3}/>
+                                            <Item>
+                                            <div className='row'>
+                                                <div className='col-12'>
+                                                    <NdButton text={this.t("getPayment")} type="normal" stylingMode="contained" width={'100%'} 
+                                                    onClick={async (e)=>
+                                                    {       
+                                                        await this._getPayment()
+                                                        this.popPayment.show()
+                                                    }}/>
+                                                </div>
+                                            </div>
+                                            </Item>
                                         </Form>
                                     </div>
                                 </div>
