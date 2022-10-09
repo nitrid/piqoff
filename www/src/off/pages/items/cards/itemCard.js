@@ -1480,7 +1480,7 @@ export default class itemCard extends React.PureComponent
                                                 }
                                             }}
                                             >
-                                                <Paging defaultPageSize={5} />
+                                                <Paging defaultPageSize={10} />
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                                 <Column dataField="TYPE_NAME" caption={this.t("grdPrice.clmType")} allowEditing={false}/>
                                                 <Column dataField="DEPOT_NAME" caption={this.t("grdPrice.clmDepot")} allowEditing={false}/>

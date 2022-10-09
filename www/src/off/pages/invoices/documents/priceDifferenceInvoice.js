@@ -629,7 +629,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                 tmpPayment.INPUT = this.cmbCashSafe.value
                 tmpPayment.INPUT_NAME = this.cmbCashSafe.displayValue
                 tmpPayment.PAY_TYPE = 0
-                tmpPayment.AMOUNT = this.numCash.value
+                tmpPayment.AMOUNT = pAmount
                 tmpPayment.DESCRIPTION = this.cashDescription.value
             }
             else if (pType == 1)
@@ -646,7 +646,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                 tmpCheck.DOC_DATE =  this.paymentObj.dt()[0].DOC_DATE
                 tmpCheck.CHECK_DATE =  this.paymentObj.dt()[0].DOC_DATE
                 tmpCheck.CUSTOMER =   this.paymentObj.dt()[0].OUTPUT
-                tmpCheck.AMOUNT =  this.numcheck.value
+                tmpCheck.AMOUNT =  pAmount
                 tmpCheck.SAFE =  this.cmbCheckSafe.value
                 this.paymentObj.checkCls.addEmpty(tmpCheck)
             }
@@ -655,7 +655,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                 tmpPayment.INPUT = this.cmbBank.value
                 tmpPayment.INPUT_NAME = this.cmbBank.displayValue
                 tmpPayment.PAY_TYPE = 2
-                tmpPayment.AMOUNT = this.numBank.value
+                tmpPayment.AMOUNT = pAmount
                 tmpPayment.DESCRIPTION = this.bankDescription.value
             }
 
@@ -2286,7 +2286,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                         {
 
                                         }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM BANK_VW_01 WHERE TYPE = 1"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT * FROM BANK_VW_01 WHERE TYPE = 0"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbBank',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbBank',USERS:this.user.CODE})}
                                     >
