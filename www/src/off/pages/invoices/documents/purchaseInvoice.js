@@ -187,7 +187,7 @@ export default class purchaseInvoice extends React.PureComponent
         }
         let tmpQuery = 
         {
-            query :"SELECT ROUND(SUM(AMOUNT),2) AS TOTAL FROM DOC_ITEMS_VW_01 WHERE INVOICE_GUID IN (SELECT  GUID FROM DOC_ITEMS_VW_01 AS DITEM WHERE ((DITEM.DOC_GUID = @INVOICE_GUID) OR(DITEM.INVOICE_GUID = @INVOICE_GUID)) AND DOC_TYPE <> 21) AND DOC_TYPE=21 ",
+            query :"SELECT ISNULL(ROUND(SUM(AMOUNT),2),0) AS TOTAL FROM DOC_ITEMS_VW_01 WHERE INVOICE_GUID IN (SELECT  GUID FROM DOC_ITEMS_VW_01 AS DITEM WHERE ((DITEM.DOC_GUID = @INVOICE_GUID) OR(DITEM.INVOICE_GUID = @INVOICE_GUID)) AND DOC_TYPE <> 21) AND DOC_TYPE=21 ",
             param : ['INVOICE_GUID:string|50'],
             value : [this.docObj.dt()[0].GUID]
         }
@@ -2393,7 +2393,39 @@ export default class purchaseInvoice extends React.PureComponent
                                             <Label text={this.t("txtDiffrentPositive")} alignment="right" />
                                                 <NdTextBox id="txtDiffrentPositive" parent={this} simple={true} readOnly={true} 
                                                 maxLength={32}
-                                            
+                                                button=
+                                                {
+                                                    [
+                                                        {
+                                                            id:'01',
+                                                            icon:'print',
+                                                            onClick:async ()  =>
+                                                            {
+                                                                let tmpQuery = 
+                                                                {
+                                                                    query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = 40),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID) WHERE DIFF_PRICE > 0 ORDER BY LINE_NO " ,
+                                                                    param:  ['DOC_GUID:string|50','DESIGN:string|25'],
+                                                                    value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value]
+                                                                }
+                                                                let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                                this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                                {
+                                                                    if(pResult.split('|')[0] != 'ERR')
+                                                                    {
+                                                                        var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
+                
+                                                                        mywindow.onload = function() 
+                                                                        {
+                                                                            mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                                                                        } 
+                                                                        // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
+                                                                        // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");  
+                                                                    }
+                                                                });
+                                                            }
+                                                        },
+                                                    ]
+                                                }
                                                 ></NdTextBox>
                                             </Item>
                                             <Item  >
@@ -2524,7 +2556,7 @@ export default class purchaseInvoice extends React.PureComponent
                                             <EmptyItem colSpan={3}/>
                                             <Item>
                                             <Label text={this.t("txtbalance")} alignment="right" />
-                                                <NdTextBox id="txtbalance" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} readOnly={true}
+                                                <NdTextBox id="txtbalance" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC_CUSTOMER'),field:"OUTPUT_BALANCE"}}
                                                 maxLength={32}
                                                 ></NdTextBox>
                                             </Item>
