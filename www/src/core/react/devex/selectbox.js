@@ -15,6 +15,7 @@ export default class NdSelectBox extends Base
         this._onInitialized = this._onInitialized.bind(this);
         this._onValueChanged = this._onValueChanged.bind(this);
         this._onChange = this._onChange.bind(this);
+        this.setData = this.setData.bind(this);
     }
     //#region Private
     _onInitialized(e) 
@@ -145,6 +146,10 @@ export default class NdSelectBox extends Base
         {
             await this.dataRefresh(this.state.data)                         
         }
+    }
+    async setData(pData)
+    {
+        await this.dataRefresh({source:pData})
     }
     render()
     {

@@ -2363,10 +2363,10 @@ export const langTr =
         cash : "Tutar",
         description :"Açıklama",
         checkReference : "Referans",
-        btnCash : "Nakit",
+        btnCash : "Ödeme Ekle",
         btnCheck : "Çek",
         btnBank : "Havale",
-        cmbCashSafe : "Nakit Kasası",
+        cmbCashSafe : "Kasa Seçimi",
         cmbCheckSafe : "Çek Kasası",
         cmbBank : "Banka Seçimi",
         txtPayInvoıceTotal : "Fatura Tutarı",
@@ -2387,6 +2387,7 @@ export const langTr =
         txtDiffrentPositive : "Fiyatı Yükselenlerin Farkı",
         txtDiffrentInv : "Kesilen Fiyat farkı Faturası",
         txtbalance : "Cari Toplam Bakiyesi",
+        getRemainder : "Kalan Tutarı Getir",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -2744,6 +2745,15 @@ export const langTr =
             clmTotal : "Tutar",
             clmPrice : "Fiyat",
         },
+        cmbPayType : {
+            title : "Ödeme Tipi",
+            cash : "Nakit",
+            check : "Çek",
+            bankTransfer : "Hesaba Havale",
+            otoTransfer : "Otomatik Ödeme",
+            foodTicket : "Yemek Çeki",
+            bill : "Senet",
+        },
     },
     ftr_02_002 : // "Satış Faturası"
     {
@@ -2763,10 +2773,10 @@ export const langTr =
         cash : "Tutar",
         description :"Açıklama",
         checkReference : "Referans",
-        btnCash : "Nakit",
+        btnCash : "Tahsilat Ekle",
         btnCheck : "Çek",
         btnBank : "Havale",
-        cmbCashSafe : "Nakit Kasası",
+        cmbCashSafe : "Kasa Seçimi",
         cmbCheckSafe : "Çek Kasası",
         cmbBank : "Banka Seçimi",
         txtPayInvoıceTotal : "Fatura Tutarı",
@@ -2779,6 +2789,7 @@ export const langTr =
         tabTitleSubtotal : "Fatura Toplamı",
         tabTitlePayments : "Evrak Ödeme Bilgileri",
         tabTitleOldInvoices : "Geçmiş Fatura Bilgileri",
+        getRemainder : "Kalan Tutarı Getir",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -3068,6 +3079,15 @@ export const langTr =
             clmTotal : "Tutar",
             clmPrice : "Fiyat",
         },
+        cmbPayType : {
+            title : "Ödeme Tipi",
+            cash : "Nakit",
+            check : "Çek",
+            bankTransfer : "Hesaba Havale",
+            otoTransfer : "Otomatik Ödeme",
+            foodTicket : "Yemek Çeki",
+            bill : "Senet",
+        },
     },
     ftr_02_003 : // "İade Faturası"
     {
@@ -3087,10 +3107,10 @@ export const langTr =
         cash : "Tutar",
         description :"Açıklama",
         checkReference : "Referans",
-        btnCash : "Nakit",
+        btnCash : "Tahsilat Ekle",
         btnCheck : "Çek",
         btnBank : "Havale",
-        cmbCashSafe : "Nakit Kasası",
+        cmbCashSafe : "Kasa Seçimi",
         cmbCheckSafe : "Çek Kasası",
         cmbBank : "Banka Seçimi",
         txtPayInvoıceTotal : "Fatura Tutarı",
@@ -3102,6 +3122,7 @@ export const langTr =
         tabTitleSubtotal : "Fatura Toplamı",
         tabTitlePayments : "Evrak Ödeme Bilgileri",
         tabTitleOldInvoices : "Geçmiş Fatura Bilgileri",
+        getRemainder : "Kalan Tutarı Getir",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -3335,6 +3356,15 @@ export const langTr =
             btn01: "Ekle",
             msg: "Miktar Giriniz"
         },
+        cmbPayType : {
+            title : "Ödeme Tipi",
+            cash : "Nakit",
+            check : "Çek",
+            bankTransfer : "Hesaba Havale",
+            otoTransfer : "Otomatik Ödeme",
+            foodTicket : "Yemek Çeki",
+            bill : "Senet",
+        },
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
     {
@@ -3354,10 +3384,10 @@ export const langTr =
         cash : "Tutar",
         description :"Açıklama",
         checkReference : "Referans",
-        btnCash : "Nakit",
+        btnCash : "Tahsilat Ekle",
         btnCheck : "Çek",
         btnBank : "Havale",
-        cmbCashSafe : "Nakit Kasası",
+        cmbCashSafe : "Kasa Seçimi",
         cmbCheckSafe : "Çek Kasası",
         cmbBank : "Banka Seçimi",
         txtPayInvoıceTotal : "Fatura Tutarı",
@@ -3369,6 +3399,7 @@ export const langTr =
         tabTitleSubtotal : "Fatura Toplamı",
         tabTitlePayments : "Evrak Ödeme Bilgileri",
         tabTitleOldInvoices : "Geçmiş Fatura Bilgileri",
+        getRemainder : "Kalan Tutarı Getir",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -3592,6 +3623,15 @@ export const langTr =
             title: "Miktar",
             btn01: "Ekle",
             msg: "Miktar Giriniz"
+        },
+        cmbPayType : {
+            title : "Ödeme Tipi",
+            cash : "Nakit",
+            check : "Çek",
+            bankTransfer : "Hesaba Havale",
+            otoTransfer : "Otomatik Ödeme",
+            foodTicket : "Yemek Çeki",
+            bill : "Senet",
         },
     },
     promo_01_001: //  "Promosyon Tanımları"
@@ -5736,7 +5776,7 @@ export const langTr =
         txtRefRefno : "Seri-Sıra",
         menu  : "Ödeme",
         cmbDepot: "Depo",
-        cmbCashSafe : "Nakit Kasası",
+        cmbCashSafe : "Kasa Seçimi",
         cmbCheckSafe : "Çek Kasası",
         cmbBank : "Banka Seçimi",
         txtCustomerCode : "Cari Kodu",
@@ -5752,14 +5792,18 @@ export const langTr =
         cash : "Tutar",
         description :"Açıklama",
         checkReference : "Referans",
-        btnCash : "Nakit",
-        btnCheck : "Çek",
-        btnBank : "Havale",
-        btnCreditCard : "Kredi Kartı",
-        btnAutoAdd : "Otomatik Ödeme",
-        btnFoodTicket : "Yemek Çeki",
-        btnBill : "Senet",
+        btnAddPay : "Ödeme Girişi",
         invoiceSelect : "Fatura Seçimi",
+        btnCash : "Ödeme Girişi",
+        cmbPayType : {
+            title : "Ödeme Tipi",
+            cash : "Nakit",
+            check : "Çek",
+            bankTransfer : "Hesaba Havale",
+            otoTransfer : "Otomatik Ödeme",
+            foodTicket : "Yemek Çeki",
+            bill : "Senet",
+        },
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -5889,7 +5933,7 @@ export const langTr =
         txtRefRefno : "Seri-Sıra",
         menu : "Tahsilat",
         cmbDepot: "Depo",
-        cmbCashSafe : "Nakit Kasası",
+        cmbCashSafe : "Kasa Seçimi",
         cmbCheckSafe : "Çek Kasası",
         cmbBank : "Banka Seçimi",
         txtCustomerCode : "Cari Kodu",
@@ -5901,9 +5945,17 @@ export const langTr =
         cash : "Tutar",
         description :"Açıklama",
         checkReference : "Referans",
-        btnCash : "Nakit",
-        btnCheck : "Çek",
-        btnBank : "Havale",
+        btnCash : "Tahsilat Girişi",
+        invoiceSelect : "Fatura Seçimi",
+        cmbPayType : {
+            title : "Ödeme Tipi",
+            cash : "Nakit",
+            check : "Çek",
+            bankTransfer : "Hesaba Havale",
+            otoTransfer : "Otomatik Ödeme",
+            foodTicket : "Yemek Çeki",
+            bill : "Senet",
+        },
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -5912,6 +5964,15 @@ export const langTr =
             clmRefNo : "SIRA",
             clmOutputName : "CARİ ADI",
             clmOutputCode  : "CARİ KODU",
+        },
+        pg_invoices : 
+        {
+            title : "Fatura Seçimi",
+            clmReferans : "REFERANS",
+            clmInputName : "CARİ ADI",
+            clmDate : "TARIH",
+            clmTotal : "TOPLAM",
+            clmRemaining  : "KALAN",
         },
         pg_txtCustomerCode : 
         {
