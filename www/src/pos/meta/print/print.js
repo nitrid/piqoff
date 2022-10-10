@@ -142,7 +142,6 @@ export function print()
                         font: "b",
                         style: "b",
                         align: "lt",
-                        size : [1,0],
                         data: "            Remise ".space(20) + ("  -" + parseFloat(tmpRemise).toFixed(2) + "EUR").space(10,"s")
                     })
                 });
