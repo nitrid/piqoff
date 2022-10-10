@@ -154,6 +154,7 @@ export default class purchaseInvoice extends React.PureComponent
         this.txtDiffrentPositive.value = 0
         this.txtDiffrentNegative.value = 0
         this.txtDiffrentTotal.value = 0
+        this.txtDiffrentInv.value =0
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -183,6 +184,21 @@ export default class purchaseInvoice extends React.PureComponent
         {
             this.docLocked = false
             this.frmDocItems.option('disabled',false)
+        }
+        let tmpQuery = 
+        {
+            query :"SELECT ROUND(SUM(AMOUNT),2) AS TOTAL FROM DOC_ITEMS_VW_01 WHERE INVOICE_GUID IN (SELECT  GUID FROM DOC_ITEMS_VW_01 AS DITEM WHERE ((DITEM.DOC_GUID = @INVOICE_GUID) OR(DITEM.INVOICE_GUID = @INVOICE_GUID)) AND DOC_TYPE <> 21) AND DOC_TYPE=21 ",
+            param : ['INVOICE_GUID:string|50'],
+            value : [this.docObj.dt()[0].GUID]
+        }
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        if(tmpData.result.recordset.length > 0)
+        {   
+            this.txtDiffrentInv.value = '-' +tmpData.result.recordset[0].TOTAL
+        }
+        else
+        {
+            this.txtDiffrentInv.value =0
         }
         this._getItems()
         this._getBarcodes()
@@ -2468,7 +2484,13 @@ export default class purchaseInvoice extends React.PureComponent
                                                 ></NdTextBox>
                                             </Item>
                                             {/* KDV */}
-                                            <EmptyItem colSpan={3}/>
+                                            <EmptyItem colSpan={2}/>
+                                            <Item  >
+                                            <Label text={this.t("txtDiffrentInv")} alignment="right" />
+                                                <NdTextBox id="txtDiffrentInv" parent={this} simple={true} readOnly={true}
+                                                maxLength={32}
+                                                ></NdTextBox>
+                                            </Item>
                                             <Item>
                                             <Label text={this.t("txtTotal")} alignment="right" />
                                                 <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}}
@@ -2500,6 +2522,13 @@ export default class purchaseInvoice extends React.PureComponent
                                                 ></NdTextBox>
                                             </Item>
                                             {/* Kalan */}
+                                            <EmptyItem colSpan={3}/>
+                                            <Item>
+                                            <Label text={this.t("txtbalance")} alignment="right" />
+                                                <NdTextBox id="txtbalance" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} readOnly={true}
+                                                maxLength={32}
+                                                ></NdTextBox>
+                                            </Item>
                                             <EmptyItem colSpan={3}/>
                                             <Item>
                                             <div className='row'>
@@ -3061,17 +3090,28 @@ export default class purchaseInvoice extends React.PureComponent
                                 </Item>
                                 <Item>
                                     <Label text={this.t("cash")} alignment="right" />
-                                    <div className="col-4 pe-0">
-                                        <NdNumberBox id="numBank" parent={this} simple={true}
-                                        maxLength={32}                                        
-                                        param={this.param.filter({ELEMENT:'numBank',USERS:this.user.CODE})}
-                                        access={this.access.filter({ELEMENT:'numBank',USERS:this.user.CODE})}
-                                        >
-                                        <Validator validationGroup={"frmPurcInvBank"  + this.tabIndex}>
-                                            <RequiredRule message={this.t("ValidCash")} />
-                                        </Validator>  
-                                        </NdNumberBox>
+                                    <div className='row'>
+                                        <div className="col-4 pe-0">
+                                            <NdNumberBox id="numBank" parent={this} simple={true}
+                                            maxLength={32}                                        
+                                            param={this.param.filter({ELEMENT:'numBank',USERS:this.user.CODE})}
+                                            access={this.access.filter({ELEMENT:'numBank',USERS:this.user.CODE})}
+                                            >
+                                            <Validator validationGroup={"frmPurcInvBank"  + this.tabIndex}>
+                                                <RequiredRule message={this.t("ValidCash")} />
+                                            </Validator>  
+                                            </NdNumberBox>
+                                        </div>
+                                        <div className="col-6 pe-0">
+                                            <Button icon="revert" text="Kalan Tutarı Getir"
+                                            onClick={async (e)=>
+                                            {
+                                                this.numBank.value = this.txtRemainder.value
+                                            }}/>
+                                        </div>
                                     </div>
+                                   
+                                   
                                 </Item>
                                 <Item>
                                     <Label text={this.t("description")} alignment="right" />

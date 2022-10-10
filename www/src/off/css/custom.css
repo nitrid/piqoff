@@ -21,6 +21,10 @@
     font-size: smaller;
     -webkit-text-stroke: thin;
   }
+  .dx-pivotgrid table {
+    padding: 4px;
+    font-size: unset;
+  }
 .main-drawer
 {
     padding-top: 46px;

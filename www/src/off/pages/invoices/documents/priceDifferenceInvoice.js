@@ -504,7 +504,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT * FROM DOC_ITEMS_VW_01 WHERE (((DOC_GUID = @DOC_GUID) OR (INVOICE_GUID = @DOC_GUID)) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000'))  ",
+                    query :"SELECT * FROM DOC_ITEMS_VW_01 WHERE (((DOC_GUID = @DOC_GUID) OR (INVOICE_GUID = @DOC_GUID)) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000')) AND ISNULL((SELECT TOP 1 INVOICE_GUID FROM DOC_ITEMS_VW_01 AS DIF WHERE DIF.INVOICE_GUID = DOC_ITEMS_VW_01.GUID AND DIF.DOC_TYPE =21),'00000000-0000-0000-0000-000000000000') = '00000000-0000-0000-0000-000000000000' ",
                     param : ['DOC_GUID:string|50'],
                     value : [data[i].GUID]
                 }
@@ -521,13 +521,11 @@ export default class priceDifferenceInvoice extends React.PureComponent
                 {
                     let tmpQuery = 
                     {
-                        query :"SELECT [dbo].[FN_CUSTOMER_PRICE](@ITEM,@CUSTOMER,@QUANTITY,GETDATE()) AS PRICE  ",
+                        query :"SELECT [dbo].[FN_CUSTOMER_PRICE](@ITEM,@CUSTOMER,@QUANTITY,GETDATE()) AS PRICE",
                         param : ['ITEM:string|50','CUSTOMER:string|50','QUANTITY:float'],
                         value : [tmpItems[i][x].ITEM,tmpItems[i][x].OUTPUT,tmpItems[i][x].QUANTITY]
                     }
                     let tmpData = await this.core.sql.execute(tmpQuery) 
-                    console.log(tmpData)
-                    console.log( tmpData.result.recordset[0].PRICE)
                     if(tmpData.result.recordset[0].PRICE < tmpItems[i][x].PRICE && tmpData.result.recordset[0].PRICE != 0)
                     {
                         let tmpDocItems = {...this.docObj.docItems.empty}
@@ -546,12 +544,14 @@ export default class priceDifferenceInvoice extends React.PureComponent
                         tmpDocItems.ITEM_CODE = tmpItems[i][x].ITEM_CODE
                         tmpDocItems.ITEM_NAME = tmpItems[i][x].ITEM_NAME
                         tmpDocItems.QUANTITY = tmpItems[i][x].QUANTITY
+                        tmpDocItems.DISCOUNT_RATE = tmpItems[i][x].DISCOUNT_RATE
+                        tmpDocItems.DISCOUNT = (((tmpItems[i][x].PRICE - tmpData.result.recordset[0].PRICE) * tmpItems[i][x].DISCOUNT_RATE / 100) * tmpItems[i][x].QUANTITY)
                         tmpDocItems.PRICE = (tmpItems[i][x].PRICE - tmpData.result.recordset[0].PRICE)
                         tmpDocItems.AMOUNT = (tmpItems[i][x].PRICE - tmpData.result.recordset[0].PRICE) * tmpItems[i][x].QUANTITY
                         tmpDocItems.VAT = parseFloat((tmpDocItems.AMOUNT * (tmpItems[i][x].VAT_RATE / 100)).toFixed(3))
                         tmpDocItems.TOTAL = ((tmpItems[i][x].PRICE - tmpData.result.recordset[0].PRICE) * tmpItems[i][x].QUANTITY) + tmpDocItems.VAT
-                        tmpDocItems.INVOICE_GUID = tmpItems[i][x].DOC_GUID
-                        console.log(tmpDocItems)
+                        tmpDocItems.INVOICE_GUID = tmpItems[i][x].GUID
+                        tmpDocItems.CONNECT_REF = tmpItems[i][x].REF + '-' +tmpItems[i][x].REF_NO
                         this.docObj.docItems.addEmpty(tmpDocItems)
                         await this.core.util.waitUntil(100)
                         this.txtRef.readOnly = true
@@ -1600,18 +1600,20 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                         <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.ftr_02_004")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdDiffInv.clmCreateDate")} width={200} allowEditing={false} headerFilter={{visible:true}}/>
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdDiffInv.clmCreateDate")} width={90} allowEditing={false} headerFilter={{visible:true}}/>
                                         <Column dataField="CUSER_NAME" caption={this.t("grdDiffInv.clmCuser")} width={120} allowEditing={false}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdDiffInv.clmItemCode")} width={150} editCellRender={this._cellRoleRender} headerFilter={{visible:true}}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdDiffInv.clmItemName")} width={400} headerFilter={{visible:true}}/>
-                                        <Column dataField="PRICE" caption={this.t("grdDiffInv.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} headerFilter={{visible:true}}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdDiffInv.clmQuantity")} dataType={'number'} headerFilter={{visible:true}}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdDiffInv.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
-                                        <Column dataField="VAT" caption={this.t("grdDiffInv.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
-                                        <Column dataField="TOTAL" caption={this.t("grdDiffInv.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdDiffInv.clmItemCode")} width={100} editCellRender={this._cellRoleRender} headerFilter={{visible:true}}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdDiffInv.clmItemName")} width={250} headerFilter={{visible:true}}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdDiffInv.clmQuantity")} dataType={'number'} headerFilter={{visible:true}} width={90}/>
+                                        <Column dataField="PRICE" caption={this.t("grdDiffInv.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={80} headerFilter={{visible:true}}/>
+                                        <Column dataField="DISCOUNT" caption={this.t("grdDiffInv.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} width={80} allowHeaderFiltering={false}/>
+                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdDiffInv.clmDiscountRate")} dataType={'number'} width={80} allowHeaderFiltering={false}/>
+                                        <Column dataField="AMOUNT" caption={this.t("grdDiffInv.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 3}} width={90} allowEditing={false} headerFilter={{visible:true}}/>
+                                        <Column dataField="VAT" caption={this.t("grdDiffInv.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} width={90} allowEditing={false} headerFilter={{visible:true}}/>
+                                        <Column dataField="TOTAL" caption={this.t("grdDiffInv.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} width={90} allowEditing={false} headerFilter={{visible:true}}/>
                                         <Column dataField="DESCRIPTION" caption={this.t("grdDiffInv.clmDescription")} width={160}  headerFilter={{visible:true}}/>
-                                        <Column dataField="CONNECT_REF" caption={this.t("grdDiffInv.clmInvNo")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
-                                        <Column dataField="CONNECT_DOC_DATE" caption={this.t("grdDiffInv.clmInvDate")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
+                                        <Column dataField="CONNECT_REF" caption={this.t("grdDiffInv.clmInvNo")}  width={120} allowEditing={false} headerFilter={{visible:true}}/>
+                                        <Column dataField="CONNECT_DOC_DATE" caption={this.t("grdDiffInv.clmInvDate")} width={120} allowEditing={false} headerFilter={{visible:true}}/>
 
                                     </NdGrid>
                                     <ContextMenu

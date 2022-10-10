@@ -951,7 +951,103 @@ export default class payment extends React.PureComponent
                                         }
                                     }}/>
                                 </Item>
-                                <EmptyItem colSpan={7}/>
+                                <Item location="after">
+                                    <Button icon="add" text={this.t("btnCreditCard")} width={200}
+                                    validationGroup={"frmPayment"  + this.tabIndex}
+                                    onClick={async (e)=>
+                                    {
+                                        if(e.validationGroup.validate().status == "valid")
+                                        {
+                                            this.numBank.setState({value:0});
+                                            this.bankDescription.setState({value:''});
+                                            this.popBank.show()
+                                        }
+                                        else
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
+                                            }
+                                            
+                                            await dialog(tmpConfObj);
+                                        }
+                                    }}/>
+                                </Item>
+                                <Item location="after" colSpan={2}>
+                                    <Button icon="add" text={this.t("btnAutoAdd")} width={200}
+                                    validationGroup={"frmPayment"  + this.tabIndex}
+                                    onClick={async (e)=>
+                                    {
+                                        if(e.validationGroup.validate().status == "valid")
+                                        {
+                                            this.numBank.setState({value:0});
+                                            this.bankDescription.setState({value:''});
+                                            this.popBank.show()
+                                        }
+                                        else
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
+                                            }
+                                            
+                                            await dialog(tmpConfObj);
+                                        }
+                                    }}/>
+                                </Item>
+                                <Item location="after" colSpan={2}>
+                                    <Button icon="add" text={this.t("btnFoodTicket")} width={200}
+                                    validationGroup={"frmPayment"  + this.tabIndex}
+                                    onClick={async (e)=>
+                                    {
+                                        if(e.validationGroup.validate().status == "valid")
+                                        {
+                                            this.numBank.setState({value:0});
+                                            this.bankDescription.setState({value:''});
+                                            this.popBank.show()
+                                        }
+                                        else
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
+                                            }
+                                            
+                                            await dialog(tmpConfObj);
+                                        }
+                                    }}/>
+                                </Item>
+                                <Item location="after">
+                                    <Button icon="add" text={this.t("btnBill")} width={200}
+                                    validationGroup={"frmPayment"  + this.tabIndex}
+                                    onClick={async (e)=>
+                                    {
+                                        if(e.validationGroup.validate().status == "valid")
+                                        {
+                                            this.numBank.setState({value:0});
+                                            this.bankDescription.setState({value:''});
+                                            this.popBank.show()
+                                        }
+                                        else
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
+                                            }
+                                            
+                                            await dialog(tmpConfObj);
+                                        }
+                                    }}/>
+                                </Item>
+                                <EmptyItem colSpan={1}/>
                                  <Item colSpan={10}>
                                  <React.Fragment>
                                     <NdGrid parent={this} id={"grdDocPayments"} 

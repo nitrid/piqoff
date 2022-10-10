@@ -232,6 +232,19 @@ export const menu = (e) =>
                     id: 'cri_04',
                     text : e.t('menu.cri_04'),//'Raporlar',
                     expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'cri_04_001',
+                            text: e.t('menu.cri_04_001'),//'Cari Ekstre Raporu',
+                            path: 'customers/operations/collectiveCustomer'
+                        },
+                        {
+                            id: 'cri_04_002',
+                            text: e.t('menu.fns_04_002'),//'Cari Bakiye Bakiye Raporu',
+                            path: 'finance/lists/collectionList'
+                        },
+                    ]
                 }
             ]
         },
@@ -615,6 +628,19 @@ export const menu = (e) =>
                     id: 'fns_04',
                     text : e.t('menu.fns_04'),//'Raporlar',
                     expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'fns_04_001',
+                            text: e.t('menu.fns_04_001'),//'Banka Ekstre Raporu',
+                            path: 'finance/lists/paymentList'
+                        },
+                        {
+                            id: 'fns_04_002',
+                            text: e.t('menu.fns_04_002'),//'Cari Bakiye Bakiye Raporu',
+                            path: 'finance/lists/collectionList'
+                        },
+                    ]
                 }
             ]
         },
