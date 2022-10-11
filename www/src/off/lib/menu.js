@@ -541,6 +541,19 @@ export const menu = (e) =>
                     ]
                 },
                 {
+                    id: 'ftr_04',
+                    text : e.t('menu.ftr_04'),//'Listeler',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'ftr_04_001',
+                            text: e.t('menu.ftr_04_001'),//'proforma fiyat farkı',
+                            path: 'invoices/proforma/priceDifferenceProInvoice'
+                        },
+                    ]
+                },
+                {
                     id: 'ftr_03',
                     text : e.t('menu.ftr_03'),//'Raporlar',
                     expanded: false,

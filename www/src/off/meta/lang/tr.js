@@ -90,6 +90,7 @@ export const langTr =
         ftr: "Fatura",
         ftr_01: "Listeler",
         ftr_02: "Evraklar",
+        ftr_04: "Proforma",
         ftr_03: "Raporlar",
         ftr_01_001: "Alış Fatura Listesi",
         ftr_01_002: "Satış Fatura Listesi",
@@ -100,6 +101,7 @@ export const langTr =
         ftr_02_003: "İade Faturası",
         ftr_02_004: "Fiyat Farkı Faturası",
         ftr_02_005: "Şubeler Arası Satış",
+        ftr_04_001: "Fiyat Farkı Proforma Faturası",
         irs: "İrsaliye",
         irs_01: "Listeler",
         irs_02: "Evraklar",
@@ -3370,6 +3372,278 @@ export const langTr =
         },
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
+    {
+        txtRefRefno : "Seri-Sıra",
+        cmbDepot: "Depo",
+        txtCustomerCode : "Cari Kodu",
+        txtCustomerName : "Cari Adı",
+        dtDocDate : "Tarih",
+        txtAmount : "Tutar",
+        txtDiscount : "İndirim",
+        txtMargin : "Marj",
+        txtVat : "Kdv",
+        txtTotal : "Genel Toplam",
+        dtShipDate :"Sevk Tarihi",
+        getContract : "Alış Faturası Seç",
+        getPayment : "Tahsilat Girişi",
+        cash : "Tutar",
+        description :"Açıklama",
+        checkReference : "Referans",
+        btnCash : "Tahsilat Ekle",
+        btnCheck : "Çek",
+        btnBank : "Havale",
+        cmbCashSafe : "Kasa Seçimi",
+        cmbCheckSafe : "Çek Kasası",
+        cmbBank : "Banka Seçimi",
+        txtPayInvoıceTotal : "Fatura Tutarı",
+        txtPayTotal : "Tahsilat Toplamı",
+        txtRemainder : "Kalan",
+        txtBarcode : "Barkod Ekle",
+        txtBarcodePlace: "Barkod Okutunuz",
+        txtQuantity :"Miktar",
+        tabTitleSubtotal : "Fatura Toplamı",
+        tabTitlePayments : "Evrak Ödeme Bilgileri",
+        tabTitleOldInvoices : "Geçmiş Fatura Bilgileri",
+        getRemainder : "Kalan Tutarı Getir",
+        pg_Docs : 
+        {
+            title : "Evrak Seçimi",
+            clmDate : "TARIH",
+            clmRef : "SERİ",
+            clmRefNo : "SIRA",
+            clmInputName : "CARİ ADI",
+            clmInputCode  : "CARİ KODU",
+        },
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        pg_txtItemsCode : 
+        {
+            title : "Stok Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+        },
+        pg_contractGrid : 
+        {
+            title : "Fatura Seçimi",
+            clmReferans : "Seri - Sıra",
+            clmDocDate : "Evrak Tarihi",
+            clmTotal : "Tutar"
+        },
+        grdDiffInv: 
+        {
+            clmItemCode: "Kodu",
+            clmItemName: "Adı",
+            clmPrice: "Fiyat",
+            clmQuantity : "Adet",
+            clmDiscount : "İndirim",
+            clmDiscountRate : "İndirim %",
+            clmVat : "KDV",
+            clmAmount : "Tutar",
+            clmTotal : "G. Toplam",
+            clmCreateDate: "Kayıt Tarihi",
+            clmInvNo : "Fatura No",
+            clmInvDate : "Fatura Tarihi",
+            clmDescription :"Açıklama",
+            clmCuser :"Kullanıcı",
+            clmMulticode : "T. Kodu",
+            clmCustomerPrice : "T. Fiyatı",
+            clmPurcPrice : "Fatura Fiyatı",
+            clmVatRate : "KDV %"
+        },
+        grdInvoicePayment: 
+        {
+            clmInputName: "Kasa",
+            clmTypeName: "Tipi",
+            clmPrice: "Fiyat",
+            clmCreateDate: "Kayıt Tarihi",
+
+        },
+        popPayment:
+        {
+            title: "Tahsilatlar",
+        },
+        popDiscount : 
+        {
+            title: "Evrak İndirimi",
+            Percent : "Yüzde",
+            Price : "Tutar"
+        },
+        popPassword : 
+        {
+            title: "Evrakı Açmak İçin Yönetici Şifresini Girmelisiniz",
+            Password : "Şifre",
+            btnApprove : "Onayla"
+        },
+        msgDocValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgVatDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Vergiyi Sıfırlamak istediğinize eminmisiniz !"
+        },
+        msgMoreAmount:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Kalan Tutardan Fazla Tahsilat Girilemez !"
+        },
+        msgDiscountPrice:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Tutardan Büyük İndirim Yapılamaz !"
+        },
+        msgDiscountPercent:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Tutardan Büyük İndirim Yapılamaz !"
+        },
+        msgLocked:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kayıt Edildi Ve Kilitlendi !"
+        },
+        msgPasswordSucces:
+        {
+            title: "Başarılı",
+            btn01: "Tamam",
+            msg: "Evrakın Kilidi Açıldı !",
+        },
+        msgPasswordWrong:
+        {
+            title: "Başarısız",
+            btn01: "Tamam",
+            msg: "Şifreniz Hatalı !"
+        },
+        msgGetLocked:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
+        },
+        msgDocLocked:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kilidi Açılmadan İşlem Yapılamaz !"
+        },
+        msgDiscount:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "İndirim Tutardan Yüksek Olamaz !"
+        },
+        msgItemNotFound:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Stok Bulunmadı !!"
+        },
+        msgNotCustomer:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Cari Bulunmadı !!"
+        },
+        msgCombineItem:
+        {
+            title: "Dikkat",
+            btn01: "Birleştir",
+            btn02: "Yeni Ekle",
+            msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Satırlar Birleştirilsin mi ?"
+        },
+        popCash : 
+        {
+            title: "Nakit Girişi",
+            btnApprove : "Ekle"
+        },
+        popCheck : 
+        {
+            title: "Çek Girişi",
+            btnApprove : "Ekle"
+        },
+        popBank : 
+        {
+            title: "Havale Girişi",
+            btnApprove : "Ekle"
+        },
+        popDesign : 
+        {
+            title: "Dizayn seçimi",
+            design : "Dizayn",
+            lang : "Evrak Dili"
+        },
+        validRef :"Seri Boş Geçilemez",
+        validRefNo : "Sıra Boş Geçilemez",
+        validDepot : "Depo Seçmelisiniz",
+        validCustomerCode : "Cari Kodu Boş Geçilemez",
+        validDocDate : "Tarih Seçmelisiniz",
+        pg_txtBarcode : 
+        {
+            title : "Barkod Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+            clmMulticode : "TEDARİKÇİ KODU",
+            clmBarcode : "BARKOD"
+        },
+        msgQuantity:
+        {
+            title: "Miktar",
+            btn01: "Ekle",
+            msg: "Miktar Giriniz"
+        },
+        cmbPayType : {
+            title : "Ödeme Tipi",
+            cash : "Nakit",
+            check : "Çek",
+            bankTransfer : "Hesaba Havale",
+            otoTransfer : "Otomatik Ödeme",
+            foodTicket : "Yemek Çeki",
+            bill : "Senet",
+        },
+    },
+    ftr_04_001 : // "Proforma Fiyat Farkı Faturası"
     {
         txtRefRefno : "Seri-Sıra",
         cmbDepot: "Depo",
