@@ -1767,8 +1767,8 @@ export default class purchaseDispatch extends React.PureComponent
                                         <Column dataField="VAT" caption={this.t("grdPurcDispatch.clmVat")} width={75} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
                                         <Column dataField="VAT_RATE" caption={this.t("grdPurcDispatch.clmVatRate")} width={50} allowEditing={false}/>
                                         <Column dataField="TOTAL" caption={this.t("grdPurcDispatch.clmTotal")} width={110} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
-                                        <Column dataField="ORDER_REF" caption={this.t("grdPurcDispatch.clmOrder")} width={110}  headerFilter={{visible:true}} allowEditing={false}/>
-                                        <Column dataField="DESCRIPTION" caption={this.t("grdPurcDispatch.clmDescription")} width={100}  headerFilter={{visible:true}}/>
+                                        <Column dataField="ORDER_REF" caption={this.t("grdPurcDispatch.clmOrder")} width={110}  allowEditing={false}/>
+                                        <Column dataField="DESCRIPTION" caption={this.t("grdPurcDispatch.clmDescription")} width={100} />
                                     </NdGrid>
                                     <ContextMenu
                                     dataSource={this.rightItems}

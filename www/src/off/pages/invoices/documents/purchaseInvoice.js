@@ -2338,22 +2338,22 @@ export default class purchaseInvoice extends React.PureComponent
                                         <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.ftr_02_001")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcInv.clmCreateDate")} width={120} allowEditing={false} allowHeaderFiltering={false}/>
-                                        <Column dataField="CUSER_NAME" caption={this.t("grdPurcInv.clmCuser")} width={120} allowEditing={false}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdPurcInv.clmItemCode")} width={140} editCellRender={this._cellRoleRender} allowHeaderFiltering={false}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdPurcInv.clmItemName")} width={400} allowHeaderFiltering={false}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdPurcInv.clmQuantity")} dataType={'number'} width={80} allowHeaderFiltering={false}/>
-                                        <Column dataField="PRICE" caption={this.t("grdPurcInv.clmPrice")} dataType={'number'} format={'€#,##0.000'} width={80} allowHeaderFiltering={false}/>
-                                        <Column dataField="CUSTOMER_PRICE" caption={this.t("grdPurcInv.clmCustomerPrice")} dataType={'number'} format={'€#,##0.000'} width={80} allowHeaderFiltering={false} allowEditing={false}/>
-                                        <Column dataField="DIFF_PRICE" caption={this.t("grdPurcInv.clmDiffPrice")} dataType={'number'} format={'€#,##0.000'} width={80} allowHeaderFiltering={false} allowEditing={false}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdPurcInv.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={100} allowHeaderFiltering={false}/>
-                                        <Column dataField="DISCOUNT" caption={this.t("grdPurcInv.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} width={80} allowHeaderFiltering={false}/>
-                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdPurcInv.clmDiscountRate")} dataType={'number'} width={80} allowHeaderFiltering={false}/>
-                                        <Column dataField="VAT" caption={this.t("grdPurcInv.clmVat")} format={'€#,##0.000'}allowEditing={false} width={80} allowHeaderFiltering={false}/>
-                                        <Column dataField="VAT_RATE" caption={this.t("grdPurcInv.clmVat")} format={'%#,##'} allowEditing={false} width={80} allowHeaderFiltering={false}/>
-                                        <Column dataField="TOTAL" caption={this.t("grdPurcInv.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={80} allowHeaderFiltering={false}/>
-                                        <Column dataField="DESCRIPTION" caption={this.t("grdPurcInv.clmDescription")} width={160}  headerFilter={{visible:true}}/>
-                                        <Column dataField="CONNECT_REF" caption={this.t("grdPurcInv.clmDispatch")}  width={150} allowEditing={false}/>
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcInv.clmCreateDate")} width={80} allowEditing={false} allowHeaderFiltering={false}/>
+                                        <Column dataField="CUSER_NAME" caption={this.t("grdPurcInv.clmCuser")} width={90} allowEditing={false}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdPurcInv.clmItemCode")} width={100} editCellRender={this._cellRoleRender} allowHeaderFiltering={false}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdPurcInv.clmItemName")} width={260} allowHeaderFiltering={false}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdPurcInv.clmQuantity")} dataType={'number'} width={50} allowHeaderFiltering={false}/>
+                                        <Column dataField="PRICE" caption={this.t("grdPurcInv.clmPrice")} dataType={'number'} format={'€#,##0.000'} width={70} allowHeaderFiltering={false}/>
+                                        <Column dataField="CUSTOMER_PRICE" caption={this.t("grdPurcInv.clmCustomerPrice")} dataType={'number'} format={'€#,##0.000'} width={70} allowHeaderFiltering={false} allowEditing={false}/>
+                                        <Column dataField="DIFF_PRICE" caption={this.t("grdPurcInv.clmDiffPrice")} dataType={'number'} format={'€#,##0.000'} width={70} allowHeaderFiltering={false} allowEditing={false}/>
+                                        <Column dataField="AMOUNT" caption={this.t("grdPurcInv.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
+                                        <Column dataField="DISCOUNT" caption={this.t("grdPurcInv.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} width={60} allowHeaderFiltering={false}/>
+                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdPurcInv.clmDiscountRate")} dataType={'number'} width={60} allowHeaderFiltering={false}/>
+                                        <Column dataField="VAT" caption={this.t("grdPurcInv.clmVat")} format={'€#,##0.000'}allowEditing={false} width={75} allowHeaderFiltering={false}/>
+                                        <Column dataField="VAT_RATE" caption={this.t("grdPurcInv.clmVat")} format={'%#,##'} allowEditing={false} width={50} allowHeaderFiltering={false}/>
+                                        <Column dataField="TOTAL" caption={this.t("grdPurcInv.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={110} allowHeaderFiltering={false}/>
+                                        <Column dataField="CONNECT_REF" caption={this.t("grdPurcInv.clmDispatch")}  width={110} allowEditing={false}/>
+                                        <Column dataField="DESCRIPTION" caption={this.t("grdPurcInv.clmDescription")} width={100}  headerFilter={{visible:true}}/>
                                     </NdGrid>
                                     <ContextMenu
                                     dataSource={this.rightItems}
@@ -2408,6 +2408,7 @@ export default class purchaseInvoice extends React.PureComponent
                                                                     value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value]
                                                                 }
                                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                                console.log(JSON.stringify(tmpData.result.recordset))
                                                                 this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
                                                                 {
                                                                     if(pResult.split('|')[0] != 'ERR')
