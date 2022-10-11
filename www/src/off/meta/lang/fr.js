@@ -3600,6 +3600,9 @@ export const langFr =
         cmbRstItemType: "Type",
         txtRstItemQuantity:  "Valeur",
         txtRstItemAmount: "Évaluer", //BAK
+        txtCodePlace: "Lütfen Promosyon Kodunu Giriniz", //BAK
+        txtNamePlace: "Lütfen Promosyon Adı Giriniz", //BAK
+        txtCustomerCodePlace: "İsterseniz Müşteri Seçebilirsiniz", //BAK
         pg_Grid:
         {
             title:  "Choix",
@@ -3662,6 +3665,33 @@ export const langFr =
             btn01: "Tamam",
             msg: "Girdiğiniz indirim 0 dan küçük, 100 den büyük olamaz !",
         },
+    },
+    promo_02_001: //  "Promosyon Listesi"
+    {
+        txtCode: "Kodu", //BAK
+        txtName: "Adı", //BAK
+        txtCodePlace: "Promosyon kodunu ya da ürün barkodunu giriniz", //BAK
+        txtNamePlace: "Promosyon kodunu ya da ürün adını giriniz", //BAK
+        btnGet: "Getir",//BAK
+        grdListe: //BAK
+        {
+            clmCode: "KODU",
+            clmName: "ADI", 
+            clmStartDate: "İLK TARİH", 
+            clmFinishDate : "SON TARİH",
+            clmCondTypeName : "KOŞUL TİP",
+            clmCondItemCode : "KOŞUL KODU",
+            clmCondItemName : "KOŞUL ADI",
+            clmCondBarcode : "KOŞUL BARKODU",
+            clmCondQuantity : "KOŞUL MİKTAR",
+            clmCondAmount : "KOŞUL TUTAR",
+            clmAppTypeName : "UYGULAMA TİP",
+            clmAppItemCode : "UYGULAMA KODU",
+            clmAppItemName : "UYGULAMA ADI",
+            clmAppBarcode : "UYGULAMA BARKODU",
+            clmAppQuantity : "UYGULAMA MİKTAR",
+            clmAppAmount : "UYGULAMA TUTAR",
+        }
     },
     irs_01_001 : // "Alış İrsaliye Listesi"
     {
