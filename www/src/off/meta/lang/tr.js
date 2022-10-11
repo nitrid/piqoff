@@ -3720,6 +3720,16 @@ export const langTr =
             btn01: "Tamam",
             msg: "Girdiğiniz indirim 0 dan küçük, 100 den büyük olamaz !",
         },
+        cmbType:
+        {
+            item: "Ürün",
+            generalAmount: "Genel Tutar",
+            discountRate: "İskonto Oran",
+            moneyPoint: "Para Puan",
+            giftCheck: "Hediye Çeki",
+            generalDiscount: "Genel İskonto",
+            discountAmount: "İskonto Tutar",
+        }
     },
     promo_02_001: //  "Promosyon Listesi"
     {
