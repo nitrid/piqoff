@@ -3172,6 +3172,9 @@ export const langTr =
             clmMargin :"Marj",
             clmDescription :"Açıklama",
             clmCuser :"Kullanıcı",
+            clmMulticode : "T. Kodu",
+            clmBarcode : "Barkod",
+            clmVatRate :"KDV %"
         },
         grdInvoicePayment: 
         {
@@ -3446,6 +3449,10 @@ export const langTr =
             clmInvDate : "Fatura Tarihi",
             clmDescription :"Açıklama",
             clmCuser :"Kullanıcı",
+            clmMulticode : "T. Kodu",
+            clmCustomerPrice : "T. Fiyatı",
+            clmPurcPrice : "Fatura Fiyatı",
+            clmVatRate : "KDV %"
         },
         grdInvoicePayment: 
         {
@@ -4048,7 +4055,7 @@ export const langTr =
             design : "Dizayn",
             lang : "Evrak Dili"
         },
-                msgMissItemCode:
+        msgMissItemCode:
         {
             title: "Dikkat",
             btn01: "Tamam",
