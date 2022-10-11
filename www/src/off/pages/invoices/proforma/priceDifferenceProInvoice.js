@@ -1415,7 +1415,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                     }}
                                     onRowUpdated={async(e)=>{
                                        
-                                        if( typeof e.data.CUSTOMER_PRICE != 'undefined' || e.data.CUSTOMER_PRICE)
+                                        if( typeof e.data.CUSTOMER_PRICE != 'undefined' || typeof e.data.PURC_PRICE != 'undefined')
                                         {
                                             e.key.PRICE = Number(e.key.PURC_PRICE - e.key.CUSTOMER_PRICE).toFixed(3)
                                         }
