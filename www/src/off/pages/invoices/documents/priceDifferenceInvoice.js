@@ -466,7 +466,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
         this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
         let tmpQuery = 
         {
-            query :"SELECT dbo.FN_CUSTOMER_PRICE(@GUID,@CUSTOMER,GETDATE(),@QUANTITY) AS PRICE",
+            query :"SELECT dbo.FN_CUSTOMER_PRICE(@GUID,@CUSTOMER,@QUANTITY,GETDATE()) AS PRICE",
             param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50'],
             value : [pData.GUID,pQuantity,this.docObj.dt()[0].INPUT]
         }
