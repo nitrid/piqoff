@@ -222,6 +222,7 @@ export const langTr =
         minBuyPrice : "Minimum Alış Fiyatı",
         maxBuyPrice : "Maximum Alış Fiyatı",
         sellPriceAdd : "Satış Fiyatı Ekle",
+        clmInvoiceCost : "Son Fatura Ödenen Hizmet Bedeli",
         pg_txtRef:
         {
             title: "Stok Seçimi",

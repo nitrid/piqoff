@@ -624,17 +624,57 @@ export default class itemCard extends React.PureComponent
         }
        
     }
-    extraCostCalculate()
+    async extraCostCalculate()
     {
+        this.extraCostData.clear()
         if(this.txtTaxSugar.value > 0)
         {
-            if(this.extraCostData.where({TYPE_NAME:this.t("clmtaxSugar")}).length > 0)
+            this.extraCostData.push({TYPE_NAME:this.t("clmtaxSugar"),PRICE:this.taxSugarPrice,CUSTOMER:this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_NAME,CUSTOMER_PRICE:this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_PRICE})
+        }
+        if(this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value)
+        {
+            let tmpQuery = 
             {
-                this.extraCostData.where({TYPE_NAME:this.t("clmtaxSugar")})[0].PRICE = this.taxSugarPrice
+                query : "SELECT TOP 1 DOC_GUID FROM DOC_ITEMS_VW_01 WHERE ITEM = @ITEM AND ISNULL((SELECT ITEM_TYPE FROM DOC_ITEMS WHERE DOC_ITEMS.DOC_GUID = DOC_ITEMS_VW_01.DOC_GUID AND ITEM_TYPE = 1),0) = 1 ORDER BY DOC_DATE DESC",
+                param : ['ITEM:string|50'],
+                value : [this.itemsObj.dt()[0].GUID]
             }
-            else
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            if(tmpData.result.recordset.length >0)
             {
-                this.extraCostData.push({TYPE_NAME:this.t("clmtaxSugar"),PRICE:this.taxSugarPrice,CUSTOMER:this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_NAME,CUSTOMER_PRICE:this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_PRICE})
+                let tmpItemQuery = 
+                {
+                    query : "SELECT * FROM DOC_ITEMS_VW_01 WHERE DOC_GUID = @DOC_GUID OR INVOICE_GUID = @DOC_GUID",
+                    param : ['DOC_GUID:string|50'],
+                    value : [tmpData.result.recordset[0].DOC_GUID]
+                }
+                let tmpItemData = await this.core.sql.execute(tmpItemQuery)
+                if(tmpItemData.result.recordset.length >0)
+                {
+                    let tmpServices = []
+                    for (let i = 0; i < tmpItemData.result.recordset.length; i++) 
+                    {
+                        console.log(tmpItemData.result.recordset[i].ITEM_TYPE)
+                        if(tmpItemData.result.recordset[i].ITEM_TYPE == 1)
+                        {
+                            tmpServices.push(tmpItemData.result.recordset[i])
+                        }
+                    }
+                    for (let x = 0; x < tmpServices.length; x++) 
+                    {
+                        let tmpQuantity = 0
+                        for (let i = 0; i < tmpItemData.result.recordset.length; i++) 
+                        {
+                            tmpQuantity = tmpQuantity + tmpItemData.result.recordset[i].QUANTITY
+                        }
+                        let tmpTotal = Number(tmpServices[x].TOTAL / tmpQuantity).toFixed(2)
+                        this.extraCostData.push({TYPE_NAME:this.t("clmInvoiceCost"),PRICE:tmpTotal,CUSTOMER:tmpServices[x].OUTPUT_NAME,CUSTOMER_PRICE:this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_PRICE})
+                        console.log(this.txtCostPrice.value)
+                        console.log(tmpTotal)
+                        this.txtCostPrice.value = parseFloat(Number(this.txtCostPrice.value + Number(tmpTotal)).toFixed(3))
+                    }
+                }
+
             }
         }
 

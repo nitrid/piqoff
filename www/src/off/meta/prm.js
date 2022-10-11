@@ -86,6 +86,24 @@ export const prm =
             CAPTION : "Daha Düşük Fiyatlı Tedarikçi Uyarısı"
         }
     },
+    //Faturadaki Hizmetten maliyet ekle
+    {
+        TYPE : 0,
+        ID :"costForInvoıces",
+        VALUE : 
+        {
+            value : true
+        },
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "aturadaki Hizmetten maliyet ekle"
+        }
+    },
     //#endregion
     //#region Stok Tanıtım
     //txtRef
