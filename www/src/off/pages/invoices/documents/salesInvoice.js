@@ -1824,7 +1824,7 @@ export default class salesInvoice extends React.PureComponent
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
-                                    headerFilter={{visible:true}}
+                                    filterRow={{visible:true}}
                                     height={'400'} 
                                     width={'100%'}
                                     dbApply={false}
@@ -1950,20 +1950,21 @@ export default class salesInvoice extends React.PureComponent
                                         <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.ftr_02_002")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsInv.clmCreateDate")} width={100} allowEditing={false} headerFilter={{visible:true}}/>
-                                        <Column dataField="CUSER_NAME" caption={this.t("grdSlsInv.clmCuser")} width={100} allowEditing={false}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdSlsInv.clmItemCode")} width={80} editCellRender={this._cellRoleRender} headerFilter={{visible:true}}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdSlsInv.clmItemName")} width={300} headerFilter={{visible:true}}/>
-                                        <Column dataField="PRICE" caption={this.t("grdSlsInv.clmPrice")} dataType={'number'} width={80} format={{ style: "currency", currency: "EUR",precision: 3}} headerFilter={{visible:true}}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdSlsInv.clmQuantity")} dataType={'number'} width={80} headerFilter={{visible:true}}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdSlsInv.clmAmount")} width={80} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
-                                        <Column dataField="DISCOUNT" caption={this.t("grdSlsInv.clmDiscount")} dataType={'number'} width={90} format={{ style: "currency", currency: "EUR",precision: 3}} headerFilter={{visible:true}}/>
-                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsInv.clmDiscountRate")} width={100} dataType={'number'} headerFilter={{visible:true}}/>
-                                        <Column dataField="MARGIN" caption={this.t("grdSlsInv.clmMargin")} width={100} allowEditing={false} headerFilter={{visible:true}}/>
-                                        <Column dataField="VAT" caption={this.t("grdSlsInv.clmVat")} width={80} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
-                                        <Column dataField="TOTAL" caption={this.t("grdSlsInv.clmTotal")} width={150} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} headerFilter={{visible:true}}/>
-                                        <Column dataField="DESCRIPTION" caption={this.t("grdSlsInv.clmDescription")} width={120}  headerFilter={{visible:true}}/>
-                                        <Column dataField="CONNECT_REF" caption={this.t("grdSlsInv.clmDispatch")} width={100} allowEditing={false} headerFilter={{visible:true}}/>
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsInv.clmCreateDate")} width={80} allowEditing={false}/>
+                                        <Column dataField="CUSER_NAME" caption={this.t("grdSlsInv.clmCuser")} width={90} allowEditing={false}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdSlsInv.clmItemCode")} width={100} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdSlsInv.clmItemName")} width={330}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdSlsInv.clmQuantity")} dataType={'number'} width={50}/>
+                                        <Column dataField="PRICE" caption={this.t("grdSlsInv.clmPrice")} dataType={'number'} width={75} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                        <Column dataField="AMOUNT" caption={this.t("grdSlsInv.clmAmount")} width={90} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                        <Column dataField="DISCOUNT" caption={this.t("grdSlsInv.clmDiscount")} dataType={'number'} width={60} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsInv.clmDiscountRate")} width={60} dataType={'number'}/>
+                                        <Column dataField="MARGIN" caption={this.t("grdSlsInv.clmMargin")} width={80} allowEditing={false}/>
+                                        <Column dataField="VAT" caption={this.t("grdSlsInv.clmVat")} width={75} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                        <Column dataField="VAT_RATE" caption={this.t("grdSlsInv.clmVatRate")} width={50} allowEditing={false}/>
+                                        <Column dataField="TOTAL" caption={this.t("grdSlsInv.clmTotal")} width={110} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                        <Column dataField="CONNECT_REF" caption={this.t("grdSlsInv.clmDispatch")} width={110} allowEditing={false}/>
+                                        <Column dataField="DESCRIPTION" caption={this.t("grdSlsInv.clmDescription")} width={100} />
                                     </NdGrid>
                                     <ContextMenu
                                     dataSource={this.rightItems}

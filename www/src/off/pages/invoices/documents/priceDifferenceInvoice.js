@@ -1534,33 +1534,23 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
-                                    headerFilter={{visible:true}}
+                                    filterRow={{visible:true}}
                                     height={'400'} 
                                     width={'100%'}
                                     dbApply={false}
+                                    onRowPrepared={(e) =>
+                                    {
+                                        if(e.rowType == 'data')
+                                        {
+                                            e.data.PURC_PRICE =  Number(e.data.PRICE + e.key.CUSTOMER_PRICE).toFixed(3)
+                                        }
+                                    }}
                                     onRowUpdated={async(e)=>{
                                        
-                                        let tmpData = this.acsobj.filter({ID:'underMinCostPrice',USERS:this.user.CODE}).getValue()
-                                        if(typeof tmpData != 'undefined' && tmpData ==  true)
+                                        if( typeof e.data.CUSTOMER_PRICE != 'undefined' || e.data.CUSTOMER_PRICE)
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgUnderPrice1',showTitle:true,title:this.t("msgUnderPrice1.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgUnderPrice1.btn01"),location:'before'},{id:"btn02",caption:this.t("msgUnderPrice1.btn02"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgUnderPrice1.msg")}</div>)
-                                            }
-                                            
-                                            let pResult = await dialog(tmpConfObj);
-                                            if(pResult == 'btn01')
-                                            {
-                                                
-                                            }
-                                            else if(pResult == 'btn02')
-                                            {
-                                                return
-                                            }
+                                            e.key.PRICE = Number(e.key.PURC_PRICE - e.key.CUSTOMER_PRICE).toFixed(3)
                                         }
-                                       
                                         if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
                                         {
                                             let tmpConfObj =
@@ -1569,7 +1559,6 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                                 button:[{id:"btn01",caption:this.t("msgDiscount.btn01"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"msgDiscount.msg"}</div>)
                                             }
-                                        
                                             dialog(tmpConfObj);
                                             e.key.DISCOUNT = 0 
                                             return
@@ -1600,20 +1589,24 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                         <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.ftr_02_004")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdDiffInv.clmCreateDate")} width={90} allowEditing={false} headerFilter={{visible:true}}/>
-                                        <Column dataField="CUSER_NAME" caption={this.t("grdDiffInv.clmCuser")} width={120} allowEditing={false}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdDiffInv.clmItemCode")} width={100} editCellRender={this._cellRoleRender} headerFilter={{visible:true}}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdDiffInv.clmItemName")} width={250} headerFilter={{visible:true}}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdDiffInv.clmQuantity")} dataType={'number'} headerFilter={{visible:true}} width={90}/>
-                                        <Column dataField="PRICE" caption={this.t("grdDiffInv.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={80} headerFilter={{visible:true}}/>
-                                        <Column dataField="DISCOUNT" caption={this.t("grdDiffInv.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} width={80} allowHeaderFiltering={false}/>
-                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdDiffInv.clmDiscountRate")} dataType={'number'} width={80} allowHeaderFiltering={false}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdDiffInv.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 3}} width={90} allowEditing={false} headerFilter={{visible:true}}/>
-                                        <Column dataField="VAT" caption={this.t("grdDiffInv.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} width={90} allowEditing={false} headerFilter={{visible:true}}/>
-                                        <Column dataField="TOTAL" caption={this.t("grdDiffInv.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} width={90} allowEditing={false} headerFilter={{visible:true}}/>
-                                        <Column dataField="DESCRIPTION" caption={this.t("grdDiffInv.clmDescription")} width={160}  headerFilter={{visible:true}}/>
-                                        <Column dataField="CONNECT_REF" caption={this.t("grdDiffInv.clmInvNo")}  width={120} allowEditing={false} headerFilter={{visible:true}}/>
-                                        <Column dataField="CONNECT_DOC_DATE" caption={this.t("grdDiffInv.clmInvDate")} width={120} allowEditing={false} headerFilter={{visible:true}}/>
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdDiffInv.clmCreateDate")} width={80} allowEditing={false}/>
+                                        <Column dataField="CUSER_NAME" caption={this.t("grdDiffInv.clmCuser")} width={90} allowEditing={false}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdDiffInv.clmItemCode")} width={90} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="MULTICODE" caption={this.t("grdDiffInv.clmCustomerCode")} width={90} />
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdDiffInv.clmItemName")} width={200}/>
+                                        <Column dataField="CUSTOMER_PRICE" caption={this.t("grdDiffInv.clmCustomerPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={70}/>
+                                        <Column dataField="PURC_PRICE" caption={this.t("f. fiyat")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={70}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdDiffInv.clmQuantity")} dataType={'number'} width={50}/>
+                                        <Column dataField="PRICE" caption={this.t("grdDiffInv.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={70}/>
+                                        <Column dataField="DISCOUNT" caption={this.t("grdDiffInv.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} width={60} allowHeaderFiltering={false}/>
+                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdDiffInv.clmDiscountRate")} dataType={'number'} width={60} allowHeaderFiltering={false}/>
+                                        <Column dataField="AMOUNT" caption={this.t("grdDiffInv.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 3}} width={90} allowEditing={false}/>
+                                        <Column dataField="VAT" caption={this.t("grdDiffInv.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} width={75} allowEditing={false}/>
+                                        <Column dataField="VAT_RATE" caption={this.t("grdRebtInv.clmVatRate")} width={50} allowEditing={false}/>
+                                        <Column dataField="TOTAL" caption={this.t("grdDiffInv.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} width={100} allowEditing={false}/>
+                                        <Column dataField="CONNECT_REF" caption={this.t("grdDiffInv.clmInvNo")}  width={80} allowEditing={false}/>
+                                        <Column dataField="CONNECT_DOC_DATE" caption={this.t("grdDiffInv.clmInvDate")} width={80} allowEditing={false}/>
+                                        <Column dataField="DESCRIPTION" caption={this.t("grdDiffInv.clmDescription")} width={80} />
 
                                     </NdGrid>
                                     <ContextMenu
@@ -2325,7 +2318,6 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                                 }
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
                                                 console.log(JSON.stringify(tmpData.result.recordset[0]))
-
                                                 this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
                                                 {
                                                     if(pResult.split('|')[0] != 'ERR')
