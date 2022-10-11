@@ -975,7 +975,7 @@ export default class promotionCard extends React.PureComponent
                                             <NdTextBox id="txtCode" parent={this} simple={true} tabIndex={this.tabIndex} 
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             dt={{data:this.promo.dt(),field:"CODE"}}
-                                            placeholder={"Açıklama girilecek"}
+                                            placeholder={this.t("txtCodePlace")}
                                             button=
                                             {
                                                 [
@@ -1038,7 +1038,7 @@ export default class promotionCard extends React.PureComponent
                                             <Label text={this.t("txtName")} alignment="right" />
                                             <NdTextBox id="txtName" parent={this} simple={true} 
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                            placeholder={"Açıklama girilecek"}
+                                            placeholder={this.t("txtNamePlace")}
                                             dt={{data:this.promo.dt(),field:"NAME"}}
                                             />     
                                         </Item>
@@ -1075,7 +1075,7 @@ export default class promotionCard extends React.PureComponent
                                             <NdTextBox id="txtCustomerCode" parent={this} simple={true} 
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             dt={{data:this.promo.dt(),field:"CUSTOMER_CODE"}}
-                                            placeholder={"Açıklama girilecek"}
+                                            placeholder={this.t("txtCustomerCodePlace")}
                                             button=
                                             {
                                                 [

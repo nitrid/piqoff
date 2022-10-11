@@ -3636,7 +3636,7 @@ export const langTr =
     },
     promo_01_001: //  "Promosyon Tanımları"
     {
-        txtCode: "Kodu",
+        txtCode: "Kodu",        
         txtName: "Adı",
         dtStartDate: "Baş.Tarih",
         dtFinishDate: "Bit.Tarih",
@@ -3654,7 +3654,10 @@ export const langTr =
         txtRstItem : "Stok",
         cmbRstItemType: "Tip",
         txtRstItemQuantity: "Miktar",
-        txtRstItemAmount: "Değer",        
+        txtRstItemAmount: "Değer",
+        txtCodePlace: "Lütfen Promosyon Kodunu Giriniz",
+        txtNamePlace: "Lütfen Promosyon Adı Giriniz",
+        txtCustomerCodePlace: "İsterseniz Müşteri Seçebilirsiniz",
         pg_Grid:
         {
             title: "Seçim",
@@ -3722,8 +3725,8 @@ export const langTr =
     {
         txtCode: "Kodu",
         txtName: "Adı",
-        txtCodePlace: "Kodu",
-        txtNamePlace: "Adı",
+        txtCodePlace: "Promosyon kodunu ya da ürün barkodunu giriniz", 
+        txtNamePlace: "Promosyon kodunu ya da ürün adını giriniz", 
         btnGet: "Getir",
         grdListe:
         {
