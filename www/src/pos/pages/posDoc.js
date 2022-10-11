@@ -303,7 +303,7 @@ export default class posDoc extends React.PureComponent
         for (let i = 0; i < this.parkDt.length; i++) 
         {            
             if(typeof this.parkDt[i].DESCRIPTION == 'undefined' || this.parkDt[i].DESCRIPTION == '')
-            {
+            {                
                 this.cheqDt.selectCmd.value = [this.parkDt[i].GUID] 
                 await this.cheqDt.refresh();  
 
@@ -342,6 +342,9 @@ export default class posDoc extends React.PureComponent
             await this.getPromoDb()
             this.promoApply()
             //************************************************** */
+            this.cheqDt.selectCmd.value = [pGuid] 
+            await this.cheqDt.refresh(); 
+            
             await this.calcGrandTotal(false)
             resolve();
         });        
