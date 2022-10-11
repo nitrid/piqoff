@@ -473,7 +473,7 @@ export class itemPriceCls
                     "((TYPE = @TYPE) OR (@TYPE = -1)) AND " + 
                     "((DEPOT = @DEPOT) OR (@DEPOT = '00000000-0000-0000-0000-000000000000')) AND " +
                     "((START_DATE >= @START_DATE) OR (CONVERT(NVARCHAR(10),@START_DATE,112) = '19700101')) AND " +
-                    "((FINISH_DATE <= @FINISH_DATE) OR (CONVERT(NVARCHAR(10),@FINISH_DATE,112) = '19700101')) AND " + 
+                    "((FINISH_DATE <= @FINISH_DATE) OR (CONVERT(NVARCHAR(10),@FINISH_DATE,112) = '19700101')) AND (FINISH_DATE > GETDATE()-200 OR FINISH_DATE = '19700101') AND" + 
                     "((QUANTITY = @QUANTITY) OR (@QUANTITY = -1)) AND " +
                     "((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND " + 
                     "((CUSTOMER_GUID = @CUSTOMER_GUID) OR (@CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000')) ORDER BY CDATE DESC",

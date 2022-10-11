@@ -439,6 +439,7 @@ export default class itemCard extends React.PureComponent
         else if(e.itemData.title == this.t("tabTitleCustomer"))
         {
             await this.grdCustomer.dataRefresh({source:this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')});
+            await this.grdOtherShop.dataRefresh({source:this.otherShopObj});
         }
         else if(e.itemData.title == this.t("tabTitleCustomerPrice"))
         {
@@ -608,9 +609,7 @@ export default class itemCard extends React.PureComponent
                         this.taxSugarPrice = Number(tmpTaxSucre.toFixed(3))
                         if(this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE').length > 0)
                         {
-                            let tmpCost = this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_PRICE + tmpTaxSucre
-                            this.txtCostPrice.setState({value:tmpCost})
-                            this.txtCostPrice.value= tmpCost.toFixed(2)
+                          
                         }
                         this.extraCostCalculate()
                     }
@@ -629,22 +628,30 @@ export default class itemCard extends React.PureComponent
         this.extraCostData.clear()
         if(this.txtTaxSugar.value > 0)
         {
-            this.extraCostData.push({TYPE_NAME:this.t("clmtaxSugar"),PRICE:this.taxSugarPrice,CUSTOMER:this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_NAME,CUSTOMER_PRICE:this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_PRICE})
+            if(this.extraCostData.where({TYPE_NAME:this.t("clmtaxSugar")}).length > 0)
+            {
+                this.extraCostData.where({TYPE_NAME:this.t("clmtaxSugar")})[0].PRICE = this.taxSugarPrice
+            }
+            else
+            {
+                this.extraCostData.push({TYPE_NAME:this.t("clmtaxSugar"),PRICE:this.taxSugarPrice,CUSTOMER:this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_NAME,CUSTOMER_PRICE:this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_PRICE})
+            }
         }
         if(this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value)
         {
             let tmpQuery = 
             {
-                query : "SELECT TOP 1 DOC_GUID FROM DOC_ITEMS_VW_01 WHERE ITEM = @ITEM AND ISNULL((SELECT ITEM_TYPE FROM DOC_ITEMS WHERE DOC_ITEMS.DOC_GUID = DOC_ITEMS_VW_01.DOC_GUID AND ITEM_TYPE = 1),0) = 1 ORDER BY DOC_DATE DESC",
+                query : "SELECT TOP 1 DOC_GUID FROM DOC_ITEMS_VW_01 WHERE ITEM = @ITEM AND ISNULL((SELECT TOP 1 ITEM_TYPE FROM DOC_ITEMS WHERE ((DOC_ITEMS.DOC_GUID = DOC_ITEMS_VW_01.DOC_GUID) OR (DOC_ITEMS.DOC_GUID = DOC_ITEMS_VW_01.INVOICE_GUID)) AND ITEM_TYPE = 1),0) = 1 ORDER BY DOC_DATE DESC",
                 param : ['ITEM:string|50'],
                 value : [this.itemsObj.dt()[0].GUID]
             }
             let tmpData = await this.core.sql.execute(tmpQuery) 
             if(tmpData.result.recordset.length >0)
             {
+                console.log(tmpData.result.recordset[0].DOC_GUID)
                 let tmpItemQuery = 
                 {
-                    query : "SELECT * FROM DOC_ITEMS_VW_01 WHERE DOC_GUID = @DOC_GUID OR INVOICE_GUID = @DOC_GUID",
+                    query : "SELECT * FROM DOC_ITEMS_VW_01 WHERE (DOC_GUID = @DOC_GUID OR INVOICE_GUID = @DOC_GUID) OR DOC_GUID IN (SELECT INVOICE_GUID FROM DOC_ITEMS_VW_01 WHERE DOC_GUID = @DOC_GUID)",
                     param : ['DOC_GUID:string|50'],
                     value : [tmpData.result.recordset[0].DOC_GUID]
                 }
@@ -654,7 +661,6 @@ export default class itemCard extends React.PureComponent
                     let tmpServices = []
                     for (let i = 0; i < tmpItemData.result.recordset.length; i++) 
                     {
-                        console.log(tmpItemData.result.recordset[i].ITEM_TYPE)
                         if(tmpItemData.result.recordset[i].ITEM_TYPE == 1)
                         {
                             tmpServices.push(tmpItemData.result.recordset[i])
@@ -665,13 +671,22 @@ export default class itemCard extends React.PureComponent
                         let tmpQuantity = 0
                         for (let i = 0; i < tmpItemData.result.recordset.length; i++) 
                         {
-                            tmpQuantity = tmpQuantity + tmpItemData.result.recordset[i].QUANTITY
+                            if(tmpItemData.result.recordset[i].ITEM_TYPE == 0)
+                            {
+                                tmpQuantity = tmpQuantity + tmpItemData.result.recordset[i].QUANTITY
+                            }
                         }
-                        let tmpTotal = Number(tmpServices[x].TOTAL / tmpQuantity).toFixed(2)
-                        this.extraCostData.push({TYPE_NAME:this.t("clmInvoiceCost"),PRICE:tmpTotal,CUSTOMER:tmpServices[x].OUTPUT_NAME,CUSTOMER_PRICE:this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_PRICE})
-                        console.log(this.txtCostPrice.value)
-                        console.log(tmpTotal)
-                        this.txtCostPrice.value = parseFloat(Number(this.txtCostPrice.value + Number(tmpTotal)).toFixed(3))
+                        let tmpTotal = parseFloat(Number(tmpServices[x].AMOUNT / tmpQuantity).toFixed(2))
+                        if(this.extraCostData.where({DESCRIPTION:tmpServices[x].ITEM_NAME}).length > 0)
+                        {
+                            this.extraCostData.where({DESCRIPTION:tmpServices[x].ITEM_NAME})[0].PRICE = tmpTotal
+                            this.extraCostData.where({DESCRIPTION:tmpServices[x].ITEM_NAME})[0].CUSTOMER = tmpServices[x].OUTPUT_NAME
+                        }
+                        else
+                        {
+                            this.extraCostData.push({TYPE_NAME:this.t("clmInvoiceCost"),DESCRIPTION:tmpServices[x].ITEM_NAME,PRICE:tmpTotal,CUSTOMER:tmpServices[x].OUTPUT_NAME,CUSTOMER_PRICE:this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_PRICE})
+                        }
+
                     }
                 }
 
@@ -683,6 +698,7 @@ export default class itemCard extends React.PureComponent
         {
             let tmpTotal = parseFloat((this.extraCostData.sum("PRICE",3)))
             this.txtTotalExtraCost.setState({value:tmpTotal})
+            this.txtCostPrice.value = this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_PRICE + parseFloat((this.extraCostData.sum("PRICE",3)))
         }
         else
         {
@@ -1520,7 +1536,7 @@ export default class itemCard extends React.PureComponent
                                                 }
                                             }}
                                             >
-                                                <Paging defaultPageSize={10} />
+                                                <Paging defaultPageSize={6} />
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                                 <Column dataField="TYPE_NAME" caption={this.t("grdPrice.clmType")} allowEditing={false}/>
                                                 <Column dataField="DEPOT_NAME" caption={this.t("grdPrice.clmDepot")} allowEditing={false}/>
@@ -1733,6 +1749,28 @@ export default class itemCard extends React.PureComponent
                                             </NdGrid>
                                         </div>
                                     </div>
+                                    <div className='row px-2 py-2'>
+                                        <div className='col-12'>
+                                            <NdGrid parent={this} id={"grdOtherShop"} 
+                                            showBorders={true} 
+                                            columnsAutoWidth={true} 
+                                            allowColumnReordering={true} 
+                                            allowColumnResizing={true} 
+                                            height={'100%'} 
+                                            width={'100%'}
+                                            >
+                                                <Paging defaultPageSize={5} />
+                                                <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
+                                                <Column dataField="NAME" caption={this.t("grdOtherShop.clmName")}  width={247}/>
+                                                <Column dataField="CUSTOMER" caption={this.t("grdOtherShop.clmCustomer")} width={247} />
+                                                <Column dataField="SHOP" caption={this.t("grdOtherShop.clmShop")}  width={247}/>
+                                                <Column dataField="DATE" caption={this.t("grdOtherShop.clmDate")}  width={247}/>
+                                                <Column dataField="CUSTOMER_PRICE" caption={this.t("grdOtherShop.clmCustomerPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}} width={247}/>
+                                                <Column dataField="SALE_PRICE" caption={this.t("grdOtherShop.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}  width={247}/>
+                                                <Column dataField="MULTICODE" caption={this.t("grdOtherShop.clmMulticode")} />
+                                            </NdGrid>
+                                        </div>
+                                    </div>
                                 </Item>
                                 <Item title={this.t("tabTitleCustomerPrice")}>
                                     <div className='row px-2 py-2'>
@@ -1814,6 +1852,7 @@ export default class itemCard extends React.PureComponent
                                                 <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
                                                 <Column dataField="CUSTOMER" caption={this.t("grdExtraCost.clmCustomer")} />
                                                 <Column dataField="TYPE_NAME" caption={this.t("grdExtraCost.clmTypeName")} />
+                                                <Column dataField="DESCRIPTION" caption={this.t("grdExtraCost.clmDescription")} />
                                                 <Column dataField="CUSTOMER_PRICE" caption={this.t("grdExtraCost.clmCustomerPrice")} format={"#,##0.000 €"}/>
                                                 <Column dataField="PRICE" caption={this.t("grdExtraCost.clmPrice")} format={"#,##0.000 €"}/>
                                             </NdGrid>

@@ -2292,6 +2292,7 @@ export default class salesInvoice extends React.PureComponent
                         title={this.t("pg_dispatchGrid.title")} //
                         >
                             <Column dataField="REFERANS" caption={this.t("pg_dispatchGrid.clmReferans")} width={200} defaultSortOrder="asc"/>
+                            <Column dataField="DOC_DATE" caption={this.t("pg_dispatchGrid.clmDate")}   dataType="date" width={200} />
                             <Column dataField="ITEM_CODE" caption={this.t("pg_dispatchGrid.clmCode")} width={200}/>
                             <Column dataField="ITEM_NAME" caption={this.t("pg_dispatchGrid.clmName")} width={300} />
                             <Column dataField="QUANTITY" caption={this.t("pg_dispatchGrid.clmQuantity")} width={300} />

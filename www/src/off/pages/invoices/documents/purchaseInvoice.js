@@ -557,6 +557,13 @@ export default class purchaseInvoice extends React.PureComponent
             }
 
         }
+        else
+        {
+            if(this.docObj.docItems.dt()[i].ITEM_CODE == pData.CODE)
+            {
+                return
+            }
+        }
         this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
         this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID
         this.docObj.docItems.dt()[pIndex].ITEM_TYPE = pData.ITEM_TYPE
