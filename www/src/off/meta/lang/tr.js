@@ -3605,6 +3605,7 @@ export const langTr =
         txtCustomerName: "Cari Adı",
         cmbPrmType: "Promosyon Tipi",
         txtPrmItem: "Stok",
+        btnPrmItem: "Seçim", 
         txtPrmItemGrp: "Grup",
         txtPrmQuantity: "Miktar",
         txtPrmAmount: "Tutar",
@@ -3621,6 +3622,7 @@ export const langTr =
             clmCode: "KODU",
             clmName: "ADI", 
             clmGrpName: "GRUP", 
+            clmPrice : "FIYAT",
         },
         msgRef:
         {
@@ -3675,6 +3677,33 @@ export const langTr =
             btn01: "Tamam",
             msg: "Girdiğiniz indirim 0 dan küçük, 100 den büyük olamaz !",
         },
+    },
+    promo_02_001: //  "Promosyon Listesi"
+    {
+        txtCode: "Kodu",
+        txtName: "Adı",
+        txtCodePlace: "Kodu",
+        txtNamePlace: "Adı",
+        btnGet: "Getir",
+        grdListe:
+        {
+            clmCode: "KODU",
+            clmName: "ADI", 
+            clmStartDate: "İLK TARİH", 
+            clmFinishDate : "SON TARİH",
+            clmCondTypeName : "KOŞUL TİP",
+            clmCondItemCode : "KOŞUL KODU",
+            clmCondItemName : "KOŞUL ADI",
+            clmCondBarcode : "KOŞUL BARKODU",
+            clmCondQuantity : "KOŞUL MİKTAR",
+            clmCondAmount : "KOŞUL TUTAR",
+            clmAppTypeName : "UYGULAMA TİP",
+            clmAppItemCode : "UYGULAMA KODU",
+            clmAppItemName : "UYGULAMA ADI",
+            clmAppBarcode : "UYGULAMA BARKODU",
+            clmAppQuantity : "UYGULAMA MİKTAR",
+            clmAppAmount : "UYGULAMA TUTAR",
+        }
     },
     irs_01_001 : // "Alış İrsaliye Listesi"
     {

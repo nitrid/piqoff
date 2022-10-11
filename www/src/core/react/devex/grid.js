@@ -1,10 +1,10 @@
 import React from 'react';
-import DataGrid,{Column,ColumnChooser,ColumnFixing,Pager,Paging,Scrolling,Selection,Editing,FilterRow,SearchPanel,HeaderFilter,Popup,KeyboardNavigation,Form,Lookup,Export,Button} from 'devextreme-react/data-grid';
+import DataGrid,{Column,ColumnChooser,ColumnFixing,Pager,Paging,Scrolling,Selection,Editing,FilterRow,SearchPanel,HeaderFilter,Popup,KeyboardNavigation,Form,Lookup,Export,Button,GroupPanel} from 'devextreme-react/data-grid';
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import { exportDataGrid } from 'devextreme/excel_exporter';
 import Base from './base.js';
 
-export {Column,ColumnChooser,ColumnFixing,Pager,Paging,Scrolling,Selection,Editing,FilterRow,SearchPanel,HeaderFilter,Popup,Toolbar,Item,KeyboardNavigation,Form,Lookup,Export,Button}
+export {Column,ColumnChooser,ColumnFixing,Pager,Paging,Scrolling,Selection,Editing,FilterRow,SearchPanel,HeaderFilter,Popup,Toolbar,Item,KeyboardNavigation,Form,Lookup,Export,Button,GroupPanel}
 export default class NdGrid extends Base
 {
     constructor(props)

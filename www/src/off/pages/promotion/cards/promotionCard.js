@@ -45,6 +45,11 @@ export default class promotionCard extends React.PureComponent
     {
         await this.core.util.waitUntil(0)
         this.init();
+        if(typeof this.pagePrm != 'undefined')
+        {
+            console.log(this.pagePrm.CODE)
+            await this.getPromotion(this.pagePrm.CODE);
+        }
     }
     async init()
     {
@@ -214,6 +219,10 @@ export default class promotionCard extends React.PureComponent
             if(typeof this["itemList" + pItem.WITHAL] == 'undefined' || this["itemList" + pItem.WITHAL].length == 0)
             {
                 this["itemList" + pItem.WITHAL] = this.promo.cond.dt().where({WITHAL:pItem.WITHAL})
+                this["itemList" + pItem.WITHAL].forEach(async x =>
+                {
+                    x.PRICE = await this.getPrice(x.ITEM_GUID)
+                })
             }
 
             this.state["prmType" + pItem.WITHAL] = pItem.TYPE
@@ -256,70 +265,12 @@ export default class promotionCard extends React.PureComponent
                                     {/* txtPrmItem */}
                                     <Item>
                                         <Label text={this.t("txtPrmItem")} alignment="right" />
-                                        <NdTextBox id={"txtPrmItem" + pItem.WITHAL} parent={this} simple={true} readOnly={true}
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        value={pItem.ITEM_CODE}
-                                        displayValue={pItem.ITEM_NAME}
-                                        placeholder={"Açıklama girilecek"}
-                                        button={[
+                                        <NdButton text={this.t("btnPrmItem")} type="default" width="100%" 
+                                        onClick={()=>
                                         {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
-                                            {
-                                                this["pg_txtPrmItem" + pItem.WITHAL]["txtpg_txtPrmItem" + pItem.WITHAL].value = ""
-                                                this["pg_txtPrmItem" + pItem.WITHAL].show()
-                                                this["pg_txtPrmItem" + pItem.WITHAL].onClick = async(data) =>
-                                                {         
-                                                    this.promo.cond.dt().where({WITHAL:pItem.WITHAL}).forEach((item)=>
-                                                    {
-                                                        this.promo.cond.dt().removeAt(item)
-                                                    })
-
-                                                    //this["itemList" + pItem.WITHAL] = []
-
-                                                    for (let i = 0; i < data.length; i++) 
-                                                    {
-                                                        let tmpData = {...this.promo.cond.empty}
-                                                        
-                                                        tmpData.GUID = datatable.uuidv4();
-                                                        tmpData.ITEM_GUID = data[i].GUID;
-                                                        tmpData.ITEM_CODE = data[i].CODE;
-                                                        tmpData.ITEM_NAME = data[i].NAME;
-                                                        tmpData.PROMO = this.promo.dt()[0].GUID
-                                                        tmpData.QUANTITY = 1;
-                                                        tmpData.AMOUNT = 0;
-                                                        tmpData.WITHAL = pItem.WITHAL
-
-                                                        this["itemList" + pItem.WITHAL].push(tmpData);
-                                                    }
-
-                                                    if(data.length > 0)
-                                                    {
-                                                        this["txtPrmItem" + pItem.WITHAL].value = data[0].CODE;
-                                                        this["txtPrmItem" + pItem.WITHAL].displayValue = data[0].NAME
-
-                                                        if(this.condDt.where({WITHAL:pItem.WITHAL}).length > 0)
-                                                        {
-                                                            this.condDt.where({WITHAL:pItem.WITHAL})[0].ITEM_GUID = data[0].GUID
-                                                            this.condDt.where({WITHAL:pItem.WITHAL})[0].ITEM_CODE = data[0].CODE
-                                                            this.condDt.where({WITHAL:pItem.WITHAL})[0].ITEM_NAME = data[0].NAME
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        },
-                                        {
-                                            id:'02',
-                                            icon:'info',
-                                            onClick:async()=>
-                                            {
-                                                this["grdPopItemList" + pItem.WITHAL].dataRefresh({source:this["itemList" + pItem.WITHAL]})
-                                                this["pop_PrmItemList" + pItem.WITHAL].show()
-                                            }
-                                        }]}
-                                        >     
-                                        </NdTextBox>
+                                            this["grdPopItemList" + pItem.WITHAL].dataRefresh({source:this["itemList" + pItem.WITHAL]})
+                                            this["pop_PrmItemList" + pItem.WITHAL].show()
+                                        }}></NdButton> 
                                         {/* SEÇİM POPUP */}
                                         <NdPopGrid id={"pg_txtPrmItem" + pItem.WITHAL} parent={this} container={"#root"} 
                                         visible={false}
@@ -336,9 +287,10 @@ export default class promotionCard extends React.PureComponent
                                             {
                                                 select:
                                                 {
-                                                    query : "SELECT MAX(ITEM_GUID) AS GUID,MAX(BARCODE) AS BARCODE,ITEM_CODE AS CODE,ITEM_NAME AS NAME,MAIN_GRP_NAME AS MAIN_GRP_NAME FROM ITEM_BARCODE_VW_01 " +
-                                                            "WHERE (UPPER(ITEM_CODE) LIKE UPPER(@VAL) OR UPPER(ITEM_NAME) LIKE UPPER(@VAL) OR BARCODE LIKE @VAL) AND STATUS = 1 " + 
-                                                            "GROUP BY ITEM_CODE,ITEM_NAME,MAIN_GRP_NAME",
+                                                    query : "SELECT MAX(ITEM_GUID) AS GUID,MAX(BARCODE) AS BARCODE,ITEM_CODE AS CODE,ITEM_NAME AS NAME,MAIN_GRP_NAME AS MAIN_GRP_NAME, " + 
+                                                            "ISNULL((SELECT dbo.FN_PRICE_SALE(ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')),0) AS PRICE " + 
+                                                            "FROM ITEM_BARCODE_VW_01 WHERE (UPPER(ITEM_CODE) LIKE UPPER(@VAL) OR UPPER(ITEM_NAME) LIKE UPPER(@VAL) OR BARCODE LIKE @VAL) AND STATUS = 1 " + 
+                                                            "GROUP BY ITEM_CODE,ITEM_NAME,MAIN_GRP_NAME,ITEM_GUID",
                                                     param : ['VAL:string|50']
                                                 },
                                                 sql:this.core.sql
@@ -348,6 +300,7 @@ export default class promotionCard extends React.PureComponent
                                             <Column dataField="CODE" caption={this.t("pg_Grid.clmCode")} width={150} />
                                             <Column dataField="NAME" caption={this.t("pg_Grid.clmName")} width={650} defaultSortOrder="asc" />
                                             <Column dataField="MAIN_GRP_NAME" caption={this.t("pg_Grid.clmGrpName")} width={150}/>
+                                            <Column dataField="PRICE" caption={this.t("pg_Grid.clmPrice")} width={100}/>
                                         </NdPopGrid>
                                         {/* SEÇİM LİSTE POPUP */}
                                         <NdPopUp parent={this} id={"pop_PrmItemList" + pItem.WITHAL} container={"#root"}
@@ -356,8 +309,57 @@ export default class promotionCard extends React.PureComponent
                                         showTitle={true}
                                         title={this.t("pg_Grid.title")}
                                         width={'70%'}
-                                        height={'50%'}
+                                        height={'90%'}
                                         >
+                                            <div className="row pb-1">
+                                                <div className='col-12'>
+                                                <NdButton text={this.t("btnPrmItem")} type="default" width="100%" 
+                                                onClick={()=>
+                                                {
+                                                    this["pg_txtPrmItem" + pItem.WITHAL]["txtpg_txtPrmItem" + pItem.WITHAL].value = ""
+                                                    this["pg_txtPrmItem" + pItem.WITHAL].show()
+                                                    this["pg_txtPrmItem" + pItem.WITHAL].onClick = async(data) =>
+                                                    {         
+                                                        this.promo.cond.dt().where({WITHAL:pItem.WITHAL}).forEach((item)=>
+                                                        {
+                                                            this.promo.cond.dt().removeAt(item)
+                                                        })
+
+                                                        //this["itemList" + pItem.WITHAL] = []
+
+                                                        for (let i = 0; i < data.length; i++) 
+                                                        {
+                                                            let tmpData = {...this.promo.cond.empty}
+                                                            
+                                                            tmpData.GUID = datatable.uuidv4();
+                                                            tmpData.ITEM_GUID = data[i].GUID;
+                                                            tmpData.ITEM_CODE = data[i].CODE;
+                                                            tmpData.ITEM_NAME = data[i].NAME;
+                                                            tmpData.PRICE = data[i].PRICE;
+                                                            tmpData.PROMO = this.promo.dt()[0].GUID
+                                                            tmpData.QUANTITY = 1;
+                                                            tmpData.AMOUNT = 0;
+                                                            tmpData.WITHAL = pItem.WITHAL
+
+                                                            this["itemList" + pItem.WITHAL].push(tmpData);
+                                                        }
+
+                                                        if(data.length > 0)
+                                                        {
+                                                            //this["txtPrmItem" + pItem.WITHAL].value = data[0].CODE;
+                                                            //this["txtPrmItem" + pItem.WITHAL].displayValue = data[0].NAME
+
+                                                            if(this.condDt.where({WITHAL:pItem.WITHAL}).length > 0)
+                                                            {
+                                                                this.condDt.where({WITHAL:pItem.WITHAL})[0].ITEM_GUID = data[0].GUID
+                                                                this.condDt.where({WITHAL:pItem.WITHAL})[0].ITEM_CODE = data[0].CODE
+                                                                this.condDt.where({WITHAL:pItem.WITHAL})[0].ITEM_NAME = data[0].NAME
+                                                            }
+                                                        }
+                                                    }
+                                                }}></NdButton> 
+                                                </div>
+                                            </div>
                                             {/* grdPopGridList */}
                                             <div className="row">
                                                 <div className="col-12">
@@ -373,10 +375,11 @@ export default class promotionCard extends React.PureComponent
                                                     loadPanel={{enabled:false}}
                                                     sorting={{ mode: 'none' }}
                                                     >
-                                                        <Editing confirmDelete={false}/>
+                                                        <Editing mode="cell" allowUpdating={false} allowDeleting={true} />
                                                         <Scrolling mode="standart" />
                                                         <Column dataField="ITEM_CODE" caption={this.t("pg_Grid.clmCode")} width={100}/>
                                                         <Column dataField="ITEM_NAME" caption={this.t("pg_Grid.clmName")} width={290}/>
+                                                        <Column dataField="PRICE" caption={this.t("pg_Grid.clmPrice")} width={100}/>
                                                     </NdGrid>
                                                 </div>
                                             </div>
@@ -446,7 +449,7 @@ export default class promotionCard extends React.PureComponent
                                 displayExpr="NAME"                       
                                 valueExpr="ID"
                                 value={pItem.TYPE}
-                                data={{source:[{ID:0,NAME:"İskonto"},{ID:1,NAME:"Para Puan"},{ID:2,NAME:"Hediye Çeki"},{ID:3,NAME:"Ürün"},{ID:4,NAME:"Genel İskonto"}]}}  
+                                data={{source:[{ID:0,NAME:"İskonto Oran"},{ID:1,NAME:"Para Puan"},{ID:2,NAME:"Hediye Çeki"},{ID:3,NAME:"Ürün"},{ID:4,NAME:"Genel İskonto"},{ID:5,NAME:"İskonto Tutar"}]}}  
                                 onValueChanged={(e) =>
                                 {
                                     if(this.appDt.where({WITHAL:pItem.WITHAL}).length > 0)
@@ -461,8 +464,8 @@ export default class promotionCard extends React.PureComponent
                             <EmptyItem/>
                             <EmptyItem/>
                             <GroupItem colSpan={3}>
-                                {/* İskonto */}
-                                <GroupItem colCount={3} visible={this.state["rstType" + pItem.WITHAL] == 0 ? true : false}>
+                                {/* İskonto Oran */}
+                                <GroupItem colCount={3} visible={this.state["rstType" + pItem.WITHAL] == 0 || this.state["rstType" + pItem.WITHAL] == 5 ? true : false}>
                                     {/* txtRstDiscount */}
                                     <Item>
                                         <Label text={this.t("txtRstQuantity")} alignment="right" />
@@ -687,13 +690,20 @@ export default class promotionCard extends React.PureComponent
                                                 if(this.state["rstType" + pItem.WITHAL] == 0)
                                                 {
                                                     this["txtRstQuantity" + pItem.WITHAL].value = this["txtDiscRate" + pItem.WITHAL].value
-                                                }
+                                                    this.appDt.where({WITHAL:pItem.WITHAL})[0].AMOUNT = this["txtDiscRate" + pItem.WITHAL].value
+                                                }                                                
                                                 else if(this.state["rstType" + pItem.WITHAL] == 3)
                                                 {
                                                     this["txtRstItemAmount" + pItem.WITHAL].value = this["txtDiscRate" + pItem.WITHAL].value
+                                                    this.appDt.where({WITHAL:pItem.WITHAL})[0].AMOUNT = this["txtDiscRate" + pItem.WITHAL].value
+                                                }
+                                                else if(this.state["rstType" + pItem.WITHAL] == 5)
+                                                {
+                                                    this["txtRstQuantity" + pItem.WITHAL].value = this["txtDiscAmount" + pItem.WITHAL].value
+                                                    this.appDt.where({WITHAL:pItem.WITHAL})[0].AMOUNT = this["txtDiscAmount" + pItem.WITHAL].value
                                                 }
 
-                                                this.appDt.where({WITHAL:pItem.WITHAL})[0].AMOUNT = this["txtDiscRate" + pItem.WITHAL].value
+                                                
                                                 this["popDiscount" + pItem.WITHAL].hide()
                                             }}/>
                                         </Item>

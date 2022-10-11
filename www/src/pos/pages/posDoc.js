@@ -2017,7 +2017,7 @@ export default class posDoc extends React.PureComponent
             let tmpWithal = this.promoObj.cond.dt().where({PROMO : pGuid}).groupBy('WITHAL')
             let tmpSale = this.posObj.posSale.dt().where({PROMO_TYPE : 0})
             let tmpResult = new datatable()
-
+            
             tmpWithal.forEach((withal)=>
             {
                 tmpResult.push({WITHAL : false,COUNT : 0,ITEMS : []})                
@@ -2107,7 +2107,7 @@ export default class posDoc extends React.PureComponent
         })
         //******************************************************************** */
         let tmpSale = this.posObj.posSale.dt().where({PROMO_TYPE : 0})
-
+        
         this.promoObj.dt('PROMO').forEach(promoItem => 
         {
             let tmpIsCond = isCond(promoItem.GUID)
@@ -2119,10 +2119,10 @@ export default class posDoc extends React.PureComponent
                 tmpWithal.forEach((withal)=>
                 {
                     let tmpApp = this.promoObj.app.dt().where({PROMO : promoItem.GUID}).where({WITHAL : withal.WITHAL})
-                    //İNDİRİM UYGULAMA
+                    //İNDİRİM ORAN UYGULAMA
                     tmpApp.where({TYPE : 0}).forEach(itemApp =>
                     {
-                        tmpSale.where({ITEM_GUID : {'in' : tmpIsCond.items}}).forEach(itemSale => 
+                        tmpSale.where({ITEM_GUID : {'in' : tmpIsCond.items}}).where({PROMO_TYPE : 0}).forEach(itemSale => 
                         {
                             let tmpDisc = Number(Number(itemSale.PRICE * itemSale.QUANTITY).rateInc(itemApp.AMOUNT,2))
                             let tmpCalc = this.calcSaleTotal(itemSale.PRICE,itemSale.QUANTITY,tmpDisc,itemSale.LOYALTY,itemSale.VAT_RATE)
@@ -2156,7 +2156,7 @@ export default class posDoc extends React.PureComponent
                         {   
                             let tmpAppCount = Math.floor(tmpSale.where({ITEM_GUID : itemApp.ITEM_GUID}).sum('QUANTITY') / itemApp.QUANTITY)
 
-                            tmpSale.where({ITEM_GUID : itemApp.ITEM_GUID}).forEach(itemSale => 
+                            tmpSale.where({ITEM_GUID : itemApp.ITEM_GUID}).where({PROMO_TYPE : 0}).forEach(itemSale => 
                             {   
                                 let tmpDisc = (Number(Number(itemSale.PRICE).rateInc(itemApp.AMOUNT,2)) * (tmpIsCond.count <= tmpAppCount ? tmpIsCond.count : tmpAppCount)) / tmpSale.where({ITEM_GUID : itemApp.ITEM_GUID}).length
                                 let tmpCalc = this.calcSaleTotal(itemSale.PRICE,itemSale.QUANTITY,tmpDisc,itemSale.LOYALTY,itemSale.VAT_RATE)
@@ -2177,7 +2177,7 @@ export default class posDoc extends React.PureComponent
                     //GENEL İNDİRİM UYGULAMA
                     tmpApp.where({TYPE : 4}).forEach(itemApp =>
                     {
-                        tmpSale.forEach(itemSale => 
+                        tmpSale.where({PROMO_TYPE : 0}).forEach(itemSale => 
                         {              
                             let tmpDisc = Number(Number(itemSale.PRICE * itemSale.QUANTITY).rateInc(itemApp.AMOUNT,2))
                             let tmpCalc = this.calcSaleTotal(itemSale.PRICE,itemSale.QUANTITY,tmpDisc,itemSale.LOYALTY,itemSale.VAT_RATE)
@@ -2192,6 +2192,26 @@ export default class posDoc extends React.PureComponent
                             itemSale.PROMO_TYPE = 4
 
                             addPosPromo(4,itemApp.AMOUNT,promoItem.GUID,this.posObj.dt()[0].GUID,itemSale.GUID)
+                        });
+                    })
+                    //İNDİRİM TUTAR UYGULAMA
+                    tmpApp.where({TYPE : 5}).forEach(itemApp =>
+                    {
+                        tmpSale.where({ITEM_GUID : {'in' : tmpIsCond.items}}).where({PROMO_TYPE : 0}).forEach(itemSale => 
+                        {
+                            let tmpDisc = Number(Number(itemSale.PRICE - itemApp.AMOUNT) * itemSale.QUANTITY)
+                            let tmpCalc = this.calcSaleTotal(itemSale.PRICE,itemSale.QUANTITY,tmpDisc,itemSale.LOYALTY,itemSale.VAT_RATE)
+
+                            itemSale.QUANTITY = tmpCalc.QUANTITY
+                            itemSale.PRICE = tmpCalc.PRICE
+                            itemSale.FAMOUNT = tmpCalc.FAMOUNT
+                            itemSale.AMOUNT = tmpCalc.AMOUNT
+                            itemSale.DISCOUNT = tmpCalc.DISCOUNT
+                            itemSale.VAT = tmpCalc.VAT
+                            itemSale.TOTAL = tmpCalc.TOTAL
+                            itemSale.PROMO_TYPE = 5
+
+                            addPosPromo(0,itemApp.AMOUNT,promoItem.GUID,this.posObj.dt()[0].GUID,itemSale.GUID)
                         });
                     })
                 })

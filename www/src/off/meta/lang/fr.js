@@ -3590,6 +3590,7 @@ export const langFr =
         txtCustomerName: "Nom fournisseur",
         cmbPrmType: "Type de Promotion",
         txtPrmItem:  "Produit",
+        btnPrmItem: "Seçim", //BAK
         txtPrmItemGrp: "Groupe" ,
         txtPrmQuantity: "Quantité",
         txtPrmAmount: "Montant" ,
@@ -3606,6 +3607,7 @@ export const langFr =
             clmCode: "Code",
             clmName: "Nom", 
             clmGrpName: "Groupe", //BAK
+            clmPrice : "PRICE", //BAK
         },
         msgRef:
         {
