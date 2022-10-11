@@ -238,7 +238,7 @@ export default class promotionCard extends React.PureComponent
                                 displayExpr="NAME"                       
                                 valueExpr="ID"
                                 value={pItem.TYPE}
-                                data={{source:[{ID:0,NAME:"Ürün"},{ID:1,NAME:"Genel Tutar"}]}}
+                                data={{source:[{ID:0,NAME:this.t("cmbType.item")},{ID:1,NAME:this.t("cmbType.generalAmount")}]}}
                                 onValueChanged={(e)=>
                                 {
                                     if(e.previousValue == 0 && this.promo.cond.dt().where({WITHAL:pItem.WITHAL}).length > 1)
@@ -449,7 +449,7 @@ export default class promotionCard extends React.PureComponent
                                 displayExpr="NAME"                       
                                 valueExpr="ID"
                                 value={pItem.TYPE}
-                                data={{source:[{ID:0,NAME:"İskonto Oran"},{ID:1,NAME:"Para Puan"},{ID:2,NAME:"Hediye Çeki"},{ID:3,NAME:"Ürün"},{ID:4,NAME:"Genel İskonto"},{ID:5,NAME:"İskonto Tutar"}]}}  
+                                data={{source:[{ID:0,NAME:this.t("cmbType.discountRate")},{ID:1,NAME:this.t("cmbType.moneyPoint")},{ID:2,NAME:this.t("cmbType.giftCheck")},{ID:3,NAME:this.t("cmbType.item")},{ID:4,NAME:this.t("cmbType.generalDiscount")},{ID:5,NAME:this.t("cmbType.discountAmount")}]}}  
                                 onValueChanged={(e) =>
                                 {
                                     if(this.appDt.where({WITHAL:pItem.WITHAL}).length > 0)
