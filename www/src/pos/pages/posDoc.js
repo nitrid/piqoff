@@ -1217,6 +1217,10 @@ export default class posDoc extends React.PureComponent
                     }
                 } 
                 
+                //POS_PROMO TABLOSUNA KAYIT EDİLİYOR.
+                await this.posPromoObj.save()
+                //******************************** */
+                
                 if(typeof pPrint == 'undefined' || pPrint)
                 {
                     let tmpData = 
@@ -1244,9 +1248,7 @@ export default class posDoc extends React.PureComponent
                         await this.posDevice.caseOpen();
                     }
                 }
-                //POS_PROMO TABLOSUNA KAYIT EDİLİYOR.
-                await this.posPromoObj.save()
-                //******************************** */
+                
                 resolve(true)
             }
             else

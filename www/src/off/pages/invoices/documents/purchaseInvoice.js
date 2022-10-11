@@ -111,7 +111,7 @@ export default class purchaseInvoice extends React.PureComponent
         {            
             this.btnBack.setState({disabled:true});
             this.btnNew.setState({disabled:false});
-            this.btnSave.setState({disabled:false});
+            this.btnSave.setState({disabled:true});
             this.btnDelete.setState({disabled:false});
             this.btnPrint.setState({disabled:false});          
         })
@@ -264,11 +264,11 @@ export default class purchaseInvoice extends React.PureComponent
         let tmpDiffNegative = 0
         for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
         {
-            if(this.docObj.docItems.dt()[i].DIFF_PRICE > 0)
+            if(this.docObj.docItems.dt()[i].DIFF_PRICE > 0 && this.docObj.docItems.dt()[i].ITEM_TYPE == 0)
             {
                 tmpDiffPovitive = tmpDiffPovitive +  (this.docObj.docItems.dt()[i].DIFF_PRICE * this.docObj.docItems.dt()[i].QUANTITY)
             }
-            if(this.docObj.docItems.dt()[i].DIFF_PRICE < 0)
+            if(this.docObj.docItems.dt()[i].DIFF_PRICE < 0 && this.docObj.docItems.dt()[i].ITEM_TYPE == 0)
             {
                 tmpDiffNegative = tmpDiffNegative + (this.docObj.docItems.dt()[i].DIFF_PRICE * this.docObj.docItems.dt()[i].QUANTITY)
             }
@@ -728,9 +728,13 @@ export default class purchaseInvoice extends React.PureComponent
                 this.docObj.docItems.dt().emit('onRefresh')
                 this._calculateTotal()
                 App.instance.setState({isExecute:false})
-
+                setTimeout(() => {
+                    this.btnSave.setState({disabled:false});
+                    }, 500);
             }
         }
+       
+
 
     }
     async _getOrders()
@@ -2261,10 +2265,17 @@ export default class purchaseInvoice extends React.PureComponent
                                     width={'100%'}
                                     dbApply={false}
                                     filterRow={{visible:true}}
+                                    onRowPrepared={(e) =>
+                                    {
+                                        if(e.rowType == 'data' && e.data.ITEM_TYPE == 1)
+                                        {
+                                            e.rowElement.style.color ="#feaa2b"
+                                        }
+                                    }}
                                     onCellPrepared={(e) =>
                                     {
                                         
-                                        if(e.rowType === "data" && e.column.dataField === "DIFF_PRICE" )
+                                        if(e.rowType === "data" && e.column.dataField === "DIFF_PRICE" && e.data.ITEM_TYPE == 0)
                                         {
                                             if(e.data.PRICE > e.data.CUSTOMER_PRICE)
                                             {
@@ -3146,6 +3157,7 @@ export default class purchaseInvoice extends React.PureComponent
                                                     value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value]
                                                 }
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                console.log(JSON.stringify(tmpData.result.recordset))
                                                 this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
                                                 {
                                                     if(pResult.split('|')[0] != 'ERR')

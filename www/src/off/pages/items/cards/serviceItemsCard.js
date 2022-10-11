@@ -329,7 +329,7 @@ export default class DepotCard extends React.PureComponent
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_txtCode.title")} //
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM SERVICE_ITEMS_VW_01"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT CODE,NAME FROM SERVICE_ITEMS"},sql:this.core.sql}}}
                                     button=
                                     {
                                         {

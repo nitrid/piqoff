@@ -3677,6 +3677,12 @@ export const langTr =
         tabTitlePayments : "Evrak Ödeme Bilgileri",
         tabTitleOldInvoices : "Geçmiş Fatura Bilgileri",
         getRemainder : "Kalan Tutarı Getir",
+        msgDiscount:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: " Tutar 0 dan düşük olamaz !"
+        },
         pg_Docs : 
         {
             title : "Evrak Seçimi",

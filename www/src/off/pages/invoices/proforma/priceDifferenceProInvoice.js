@@ -72,7 +72,6 @@ export default class priceDifferenceInvoice extends React.PureComponent
                 this.btnBack.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
-                this.btnCopy.setState({disabled:false});
                 this.btnPrint.setState({disabled:false});
             }
         })
@@ -84,7 +83,6 @@ export default class priceDifferenceInvoice extends React.PureComponent
                 this.btnNew.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
-                this.btnCopy.setState({disabled:false});
                 this.btnPrint.setState({disabled:false});
 
                 pData.rowData.CUSER = this.user.CODE
@@ -96,7 +94,6 @@ export default class priceDifferenceInvoice extends React.PureComponent
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:false});
             this.btnDelete.setState({disabled:false});
-            this.btnCopy.setState({disabled:false});
             this.btnPrint.setState({disabled:false});          
         })
         this.docObj.ds.on('onDelete',(pTblName) =>
@@ -105,7 +102,6 @@ export default class priceDifferenceInvoice extends React.PureComponent
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:false});
             this.btnDelete.setState({disabled:false});
-            this.btnCopy.setState({disabled:false});
             this.btnPrint.setState({disabled:false});
         })
 
@@ -509,7 +505,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                         value : [tmpItems[i][x].ITEM,tmpItems[i][x].OUTPUT,tmpItems[i][x].QUANTITY]
                     }
                     let tmpData = await this.core.sql.execute(tmpQuery) 
-                    if(tmpData.result.recordset[0].PRICE < tmpItems[i][x].PRICE && tmpData.result.recordset[0].PRICE != 0)
+                    if(tmpData.result.recordset[0].PRICE < tmpItems[i][x].PRICE && tmpData.result.recordset[0].PRICE != 0 &&  tmpItems[i][x].ITEM_TYPE == 0)
                     {
                         let tmpDocItems = {...this.docObj.docItems.empty}
                         tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
@@ -764,13 +760,6 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                             this.popPassword.show()
                                             this.txtPassword.value = ''
                                         }
-                                        
-                                    }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnCopy" parent={this} icon="copy" type="default"
-                                    onClick={()=>
-                                    {
                                         
                                     }}/>
                                 </Item>
@@ -1419,11 +1408,11 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                         {
                                             e.key.PRICE = Number(e.key.PURC_PRICE - e.key.CUSTOMER_PRICE).toFixed(3)
                                         }
-                                        if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
+                                        if(e.key.DISCOUNT >= (e.key.PRICE * e.key.QUANTITY))
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgDiscount',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgDiscount',showTitle:true,title:this.t("msgDiscount.title"),showCloseButton:true,width:'500px',height:'200px',
                                                 button:[{id:"btn01",caption:this.t("msgDiscount.btn01"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"msgDiscount.msg"}</div>)
                                             }
@@ -1822,7 +1811,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                     onValueChanged={(async()=>
                                         {
                                         }).bind(this)}
-                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '17'"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '101'"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     >
@@ -1858,7 +1847,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                                     value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value]
                                                 }
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                console.log(JSON.stringify(tmpData.result.recordset[0]))
+                                                console.log(JSON.stringify(tmpData.result.recordset))
                                                 this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
                                                 {
                                                     if(pResult.split('|')[0] != 'ERR')

@@ -527,7 +527,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                         value : [tmpItems[i][x].ITEM,tmpItems[i][x].OUTPUT,tmpItems[i][x].QUANTITY]
                     }
                     let tmpData = await this.core.sql.execute(tmpQuery) 
-                    if(tmpData.result.recordset[0].PRICE < tmpItems[i][x].PRICE && tmpData.result.recordset[0].PRICE != 0)
+                    if(tmpData.result.recordset[0].PRICE < tmpItems[i][x].PRICE && tmpData.result.recordset[0].PRICE != 0 &&  tmpItems[i][x].ITEM_TYPE == 0)
                     {
                         let tmpDocItems = {...this.docObj.docItems.empty}
                         tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
