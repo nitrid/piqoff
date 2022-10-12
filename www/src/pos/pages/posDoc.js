@@ -2009,7 +2009,7 @@ export default class posDoc extends React.PureComponent
     {
         return new Promise(async resolve => 
         {
-            //this.posPromoObj.clearAll()
+            this.posPromoObj.clearAll()
             this.promoObj.clearAll()
             await this.promoObj.load({START_DATE:moment(new Date()).format("YYYY-MM-DD"),FINISH_DATE:moment(new Date()).format("YYYY-MM-DD"),CUSTOMER_GUID:this.posObj.dt()[0].CUSTOMER_GUID,DEPOT_GUID:this.posObj.dt()[0].DEPOT_GUID})
             resolve()
