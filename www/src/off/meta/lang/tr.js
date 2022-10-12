@@ -3460,6 +3460,7 @@ export const langTr =
         tabTitleOldInvoices : "Geçmiş Fatura Bilgileri",
         getRemainder : "Kalan Tutarı Getir",
         txtbalance : "Cari Toplam Bakiyesi",
+        getProforma : "Proforma Getir",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -3702,6 +3703,16 @@ export const langTr =
             otoTransfer : "Otomatik Ödeme",
             foodTicket : "Yemek Çeki",
             bill : "Senet",
+        },
+        pg_proformaGrid : 
+        {
+            title : "Proforma Seçimi",
+            clmReferans : "Seri - Sira",
+            clmCode : "Kodu",
+            clmName : "Adi",
+            clmQuantity : "Adet",
+            clmPrice : "Fiyat",
+            clmTotal : "Tutar"
         },
     },
     ftr_04_001 : // "Proforma Fiyat Farkı Faturası"
@@ -3981,6 +3992,24 @@ export const langTr =
             foodTicket : "Yemek Çeki",
             bill : "Senet",
         },
+        msgRowNotUpdate:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Bu Satır  Faturaya Çevirilmiştir Değişiklik Yapamazsınız!"
+        },
+        msgRowNotDelete :
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Bu Satır  Faturaya Çevirilmiştir Silme İşlemi Yapamazsınız !"
+        },
+        msgdocNotDelete : 
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrakınızda  Faturaya çevirilmiş satır var.. Bu evrak silinemez !"
+        }
     },
     promo_01_001: //  "Promosyon Tanımları"
     {
