@@ -2132,6 +2132,26 @@ export default class salesInvoice extends React.PureComponent
                                                 maxLength={32}
                                                 ></NdTextBox>
                                             </Item>
+                                            <EmptyItem colSpan={3}/>
+                                            <Item>
+                                            <Label text={this.t("txtbalance")} alignment="right" />
+                                                <NdTextBox id="txtbalance" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC_CUSTOMER'),field:"INPUT_BALANCE"}}
+                                                maxLength={32}
+                                                ></NdTextBox>
+                                            </Item>
+                                            <EmptyItem colSpan={3}/>
+                                            <Item>
+                                            <div className='row'>
+                                                <div className='col-12'>
+                                                    <NdButton text={this.t("getPayment")} type="normal" stylingMode="contained" width={'100%'} 
+                                                    onClick={async (e)=>
+                                                    {       
+                                                        await this._getPayment()
+                                                        this.popPayment.show()
+                                                    }}/>
+                                                </div>
+                                            </div>
+                                            </Item>
                                         </Form>
                                     </div>
                                 </div>
@@ -2431,26 +2451,7 @@ export default class salesInvoice extends React.PureComponent
                                     maxLength={32}
                                     ></NdTextBox>
                                 </Item>
-                                <EmptyItem colSpan={3}/>
-                                <Item>
-                                <Label text={this.t("txtbalance")} alignment="right" />
-                                    <NdTextBox id="txtbalance" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC_CUSTOMER'),field:"OUTPUT_BALANCE"}}
-                                    maxLength={32}
-                                    ></NdTextBox>
-                                </Item>
-                                <EmptyItem colSpan={3}/>
-                                <Item>
-                                <div className='row'>
-                                    <div className='col-12'>
-                                        <NdButton text={this.t("getPayment")} type="normal" stylingMode="contained" width={'100%'} 
-                                        onClick={async (e)=>
-                                        {       
-                                            await this._getPayment()
-                                            this.popPayment.show()
-                                        }}/>
-                                    </div>
-                                </div>
-                                </Item>
+                                
                             </Form>
                         </div>
                     </div>

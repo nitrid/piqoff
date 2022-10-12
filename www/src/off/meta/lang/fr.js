@@ -2796,6 +2796,7 @@ export const langFr =
         tabTitlePayments : "Documenter les informations de paiement",  // BAK
         tabTitleOldInvoices : "Informations de facturation passées",  // BAK
         getRemainder : "Apportez le montant restant",  // BAK
+        txtbalance : "Solde total actuel",   // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3151,6 +3152,7 @@ export const langFr =
         tabTitlePayments : "Documenter les informations de paiement",  // BAK
         tabTitleOldInvoices : "Informations de facturation passées",  // BAK
         getRemainder : "Apportez le montant restant",  // BAK
+        txtbalance : "Solde total actuel",   // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3437,6 +3439,7 @@ export const langFr =
         tabTitlePayments : "Documenter les informations de paiement",  // BAK
         tabTitleOldInvoices : "Informations de facturation passées",  // BAK
         getRemainder : "Apportez le montant restant",  // BAK
+        txtbalance : "Solde total actuel",   // BAK
         pg_Docs : 
         {
             title : "Sélection Document",

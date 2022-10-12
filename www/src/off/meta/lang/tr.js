@@ -2800,6 +2800,7 @@ export const langTr =
         tabTitlePayments : "Evrak Ödeme Bilgileri",
         tabTitleOldInvoices : "Geçmiş Fatura Bilgileri",
         getRemainder : "Kalan Tutarı Getir",
+        txtbalance : "Cari Toplam Bakiyesi",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -3155,6 +3156,7 @@ export const langTr =
         tabTitlePayments : "Evrak Ödeme Bilgileri",
         tabTitleOldInvoices : "Geçmiş Fatura Bilgileri",
         getRemainder : "Kalan Tutarı Getir",
+        txtbalance : "Cari Toplam Bakiyesi",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -3406,6 +3408,22 @@ export const langTr =
             foodTicket : "Yemek Çeki",
             bill : "Senet",
         },
+        popDetail:
+        {
+            title: "Evrak İçeriği",
+            count: "Toplam Satır",
+            quantity: "Toplam Miktar",
+            quantity2: "2. Birim Toplamı "
+        },
+        popUnit2 : 
+        {
+            title : "Birim Detayları"
+        },
+        grdUnit2 : 
+        {
+            clmName : "ADI",
+            clmQuantity : "Adet"
+        },
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
     {
@@ -3441,6 +3459,7 @@ export const langTr =
         tabTitlePayments : "Evrak Ödeme Bilgileri",
         tabTitleOldInvoices : "Geçmiş Fatura Bilgileri",
         getRemainder : "Kalan Tutarı Getir",
+        txtbalance : "Cari Toplam Bakiyesi",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
