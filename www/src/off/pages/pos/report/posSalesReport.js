@@ -92,6 +92,10 @@ export default class posSalesReport extends React.PureComponent
                                 {
                                     this.pvtData.setDataSource(tmpData.result.recordset)
                                 }
+                                else
+                                {
+                                    this.pvtData.setDataSource([])
+                                }
                             }}/>
                         </div>
                     </div>

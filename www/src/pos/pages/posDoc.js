@@ -296,7 +296,6 @@ export default class posDoc extends React.PureComponent
         {
             this.deviceEntry()
         }
-        
         //PROMOSYON GETİR.
         await this.getPromoDb()
         //************************************************** */        
@@ -1115,6 +1114,7 @@ export default class posDoc extends React.PureComponent
             await dialog(tmpConfObj);
             return
         }
+        console.log(pRowData)
         pRowData.LDATE = moment(new Date()).utcOffset(0, true)
         pRowData.QUANTITY = tmpCalc.QUANTITY
         pRowData.PRICE = tmpCalc.PRICE
@@ -1135,6 +1135,10 @@ export default class posDoc extends React.PureComponent
             await this.core.util.waitUntil()
             if(pPayRest == 0 && this.posObj.dt().length > 0 && this.posObj.dt()[0].AMOUNT > 0) //FIYATSIZ VE MİKTAR SIFIR ÜRÜNLER İÇİN KONTROL EKLENDİ. BU ŞEKİLDE SATIŞIN KAPANMASI ENGELLENDİ.
             {
+                //POS_PROMO TABLOSUNA KAYIT EDİLİYOR.
+                await this.posPromoObj.save()
+                //******************************** */
+
                 this.posDevice.lcdPrint
                 ({
                     blink : 0,
@@ -1217,10 +1221,6 @@ export default class posDoc extends React.PureComponent
                         }
                     }
                 } 
-                
-                //POS_PROMO TABLOSUNA KAYIT EDİLİYOR.
-                await this.posPromoObj.save()
-                //******************************** */
                 
                 if(typeof pPrint == 'undefined' || pPrint)
                 {
@@ -2535,8 +2535,8 @@ export default class posDoc extends React.PureComponent
                                     if(e.column.dataField == "QUANTITY")
                                     {
                                         if(this.prmObj.filter({ID:'QuantityEdit',TYPE:0}).getValue() == true)
-                                        {                                            
-                                            let tmpResult = await this.popNumber.show('Miktar',Number(e.value) / Number(e.key.UNIT_FACTOR))
+                                        {                                
+                                            let tmpResult = await this.popNumber.show('Miktar',Number(e.value) / Number(e.data.UNIT_FACTOR))
                                             if(typeof tmpResult != 'undefined' && tmpResult != '')
                                             {
                                                 if(this.prmObj.filter({ID:'QuantityCheckZero',TYPE:0}).getValue() == true && tmpResult == 0)
@@ -2550,8 +2550,8 @@ export default class posDoc extends React.PureComponent
                                                     await dialog(tmpConfObj);
                                                     return
                                                 }
-                                                let tmpData = {QUANTITY:Number(tmpResult) * Number(e.key.UNIT_FACTOR),PRICE:e.key.PRICE}
-                                                this.saleRowUpdate(e.key,tmpData)
+                                                let tmpData = {QUANTITY:Number(tmpResult) * Number(e.data.UNIT_FACTOR),PRICE:e.data.PRICE}
+                                                this.saleRowUpdate(e.data,tmpData)
                                             }
                                         }
                                     }
@@ -4573,8 +4573,13 @@ export default class posDoc extends React.PureComponent
                                 <NdSelectBox simple={true} parent={this} id="cmbPopLastSalePayType" displayExpr={'NAME'} valueExpr={'ID'} value={-1}
                                 data={{source:[{ID:-1,NAME:"Tümü"},{ID:0,NAME:"Espece"},{ID:1,NAME:"Carte Bancaire TPE"},{ID:2,NAME:"Cheque"},{ID:3,NAME:"CHEQue"},{ID:4,NAME:"Bon D'Avoir"}]}}/>
                             </div>
+                            {/* cmbPopLastSalePayType */} 
+                            <div className="col-2">
+                                <NdSelectBox simple={true} parent={this} id="cmbPopLastSalePayType" displayExpr={'NAME'} valueExpr={'ID'} value={-1}
+                                data={{source:[{ID:-1,NAME:"Tümü"},{ID:0,NAME:"Espece"},{ID:1,NAME:"Carte Bancaire TPE"},{ID:2,NAME:"Cheque"},{ID:3,NAME:"CHEQue"},{ID:4,NAME:"Bon D'Avoir"}]}}/>
+                            </div>
                             {/* txtPopLastRef */} 
-                            <div className="col-4">
+                            <div className="col-2">
                                 <NdTextBox id="txtPopLastRef" parent={this} simple={true} placeholder={this.lang.t("txtPopLastRefPholder")}
                                 onKeyUp={(e)=>
                                 {

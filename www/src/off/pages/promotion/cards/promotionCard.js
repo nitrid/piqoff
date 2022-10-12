@@ -94,7 +94,7 @@ export default class promotionCard extends React.PureComponent
         this.appDt.import(this.promo.app.dt().groupBy('WITHAL').toArray())
 
         this.setState({discPrice : 0})
-
+        
         await this.core.util.waitUntil(0);
         await this.lstPromo.dataRefresh();
     }
@@ -157,7 +157,7 @@ export default class promotionCard extends React.PureComponent
             {
                 resolve(0)
             }
-
+            
             let tmpQuery = 
             {
                 query : "SELECT dbo.FN_PRICE_SALE(@GUID,1,GETDATE(),@CUSTOMER) AS PRICE",
@@ -456,7 +456,6 @@ export default class promotionCard extends React.PureComponent
                                     {
                                         this.appDt.where({WITHAL:pItem.WITHAL})[0].TYPE = e.value
                                     }
-
                                     this.setState({["rstType" + pItem.WITHAL]:e.value,discPrice:0})
                                 }}                                  
                                 />
