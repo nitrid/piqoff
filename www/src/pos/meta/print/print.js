@@ -388,11 +388,15 @@ export function print()
                 tmpArr.push({font:"b",style:"b",align:"lt",data:" ".space(64)});
                 tmpArr.push({font:"b",style:"b",align:"ct",data:"Avoir valable 3 mois apres edition..."});
             }
-            else
-            {
-                tmpArr.push({font:"b",style:"b",align:"ct",data:"Merci de votre fidelite a tres bientot ..."});    
-            }
             return tmpArr.length > 0 ? tmpArr : undefined
         },
+        ()=>{return {font:"a",align:"ct",data:"Conservez moi comme preuve d'acat pour les"}},
+        ()=>{return {font:"a",align:"ct",data:"garanties, echanges, ou remboursement sous un mois."}},
+        ()=>{return {font:"a",align:"ct",data:"Ne sont ni repris ni echanges les produits suivants :"}},
+        ()=>{return {font:"a",align:"ct",data:"Produits Frais, Viandes, Fromage"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data:"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data:"AUCUN REMBOUSEMENT ESECES NE SERA EFFECUE"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data:"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"}},
+        ()=>{return {font:"b",style:"b",align:"ct",data:"Avoir valable 3 mois apres edition..."}},
     ]
 }
