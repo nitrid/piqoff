@@ -1217,6 +1217,7 @@ export default class posDoc extends React.PureComponent
                         }
                     }
                 } 
+                console.log(this.posPromoObj)
                 //POS_PROMO TABLOSUNA KAYIT EDİLİYOR.
                 await this.posPromoObj.save()
                 //******************************** */
@@ -1941,24 +1942,24 @@ export default class posDoc extends React.PureComponent
             {
                 let tmpPrint = e.print(pData)
 
-                let tmpArr = [];
-                for (let i = 0; i < tmpPrint.length; i++) 
-                {
-                    let tmpObj = tmpPrint[i]
-                    if(typeof tmpPrint[i] == 'function')
-                    {
-                        tmpObj = tmpPrint[i]()
-                    }
-                    if(Array.isArray(tmpObj))
-                    {
-                        tmpArr.push(...tmpObj)
-                    }
-                    else if(typeof tmpObj == 'object')
-                    {
-                        tmpArr.push(tmpObj)
-                    }
-                }
-                console.log(tmpArr)
+                // let tmpArr = [];
+                // for (let i = 0; i < tmpPrint.length; i++) 
+                // {
+                //     let tmpObj = tmpPrint[i]
+                //     if(typeof tmpPrint[i] == 'function')
+                //     {
+                //         tmpObj = tmpPrint[i]()
+                //     }
+                //     if(Array.isArray(tmpObj))
+                //     {
+                //         tmpArr.push(...tmpObj)
+                //     }
+                //     else if(typeof tmpObj == 'object')
+                //     {
+                //         tmpArr.push(tmpObj)
+                //     }
+                // }
+                // console.log(tmpArr)
                 
                 await this.posDevice.escPrinter(tmpPrint)
                 resolve()
@@ -2008,7 +2009,7 @@ export default class posDoc extends React.PureComponent
     {
         return new Promise(async resolve => 
         {
-            this.posPromoObj.clearAll()
+            //this.posPromoObj.clearAll()
             this.promoObj.clearAll()
             await this.promoObj.load({START_DATE:moment(new Date()).format("YYYY-MM-DD"),FINISH_DATE:moment(new Date()).format("YYYY-MM-DD"),CUSTOMER_GUID:this.posObj.dt()[0].CUSTOMER_GUID,DEPOT_GUID:this.posObj.dt()[0].DEPOT_GUID})
             resolve()
