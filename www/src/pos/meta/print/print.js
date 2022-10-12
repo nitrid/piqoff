@@ -391,7 +391,7 @@ export function print()
             return tmpArr.length > 0 ? tmpArr : undefined
         },
         ()=>{return {font:"b",align:"ct",data:"Conservez moi comme preuve d'acat pour les"}},
-        ()=>{return {font:"b",align:"ct",data:"garanties, echanges, ou remboursement sous un mois."}},
+        ()=>{return {font:"b",align:"ct",data:"garanties, echanges, ou remboursement sous un mois"}},
         ()=>{return {font:"b",align:"ct",data:"Ne sont ni repris ni echanges les produits suivants :"}},
         ()=>{return {font:"b",align:"ct",data:"Produits Frais, Viandes, Fromage"}},
         ()=>{return {font:"b",style:"b",align:"ct",data:"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"}},
