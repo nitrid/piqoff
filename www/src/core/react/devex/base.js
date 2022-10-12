@@ -278,9 +278,9 @@ export default class NdBase extends React.PureComponent
                 {
                     source : typeof tmpThis.data == 'undefined' || typeof tmpThis.data.source == 'undefined' ? undefined : tmpThis.data.source,
                     datatable : typeof tmpThis.data == 'undefined' || typeof tmpThis.data.datatable == 'undefined' ? undefined : tmpThis.data.datatable,
-                    
                     store : new CustomStore(
                     {
+                        key: typeof e != 'undefined' && typeof e.key != 'undefined' ? e.key : undefined,
                         load: (loadOption) =>
                         {      
                             return new Promise(async resolve => 
@@ -494,7 +494,6 @@ export default class NdBase extends React.PureComponent
                             return x
                         },
                     }),
-                   
                 }
             });
         });
