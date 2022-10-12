@@ -2551,6 +2551,12 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
         },
+        msgPayNotDeleted:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ödemesi Yapılmış Evrak Silinemez!"
+        },
         msgDocLocked:
         {
             title: "Dikkat",
@@ -2950,6 +2956,12 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
         },
+        msgPayNotDeleted:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ödemesi Yapılmış Evrak Silinemez!"
+        },
         msgDocLocked:
         {
             title: "Dikkat",
@@ -3091,6 +3103,22 @@ export const langTr =
             otoTransfer : "Otomatik Ödeme",
             foodTicket : "Yemek Çeki",
             bill : "Senet",
+        },
+        popDetail:
+        {
+            title: "Evrak İçeriği",
+            count: "Toplam Satır",
+            quantity: "Toplam Miktar",
+            quantity2: "2. Birim Toplamı "
+        },
+        popUnit2 : 
+        {
+            title : "Birim Detayları"
+        },
+        grdUnit2 : 
+        {
+            clmName : "ADI",
+            clmQuantity : "Adet"
         },
     },
     ftr_02_003 : // "İade Faturası"
@@ -3285,6 +3313,12 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
+        },
+        msgPayNotDeleted:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ödemesi Yapılmış Evrak Silinemez!" 
         },
         msgDocLocked:
         {
@@ -3563,6 +3597,12 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
+        },
+        msgPayNotDeleted:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ödemesi Yapılmış Evrak Silinemez!" 
         },
         msgDocLocked:
         {

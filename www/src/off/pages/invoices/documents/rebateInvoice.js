@@ -837,6 +837,18 @@ export default class rebateInvoice extends React.PureComponent
                                     <NdButton id="btnDelete" parent={this} icon="trash" type="default"
                                     onClick={async()=>
                                     {
+                                        if(this.paymentObj.dt().length > 0)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgPayNotDeleted',showTitle:true,title:this.t("msgPayNotDeleted.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgPayNotDeleted.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPayNotDeleted.msg")}</div>)
+                                            }
+                                
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
                                         if(this.docObj.dt()[0].LOCKED != 0)
                                         {
                                             this.docLocked = true

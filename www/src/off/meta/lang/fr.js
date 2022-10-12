@@ -2547,6 +2547,12 @@ export const langFr =
             btn01: "OK",
             msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
         },
+        msgPayNotDeleted:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Ödemesi Yapılmış Evrak Silinemez!" // BAK
+        },
         msgDoclocked:
         {
             title: "Attention",
@@ -2946,6 +2952,12 @@ export const langFr =
             btn01: "OK",
             msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
         },
+        msgPayNotDeleted:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Ödemesi Yapılmış Evrak Silinemez!" // BAK
+        },
         msgDoclocked:
         {
             title: "Attention",
@@ -3087,6 +3099,22 @@ export const langFr =
             otoTransfer : "Otomatik Ödeme",   // BAK
             foodTicket : "Yemek Çeki",   // BAK
             bill : "Senet",   // BAK
+        },
+        popDetail:
+        {
+            title: "Contenu Document",
+            count:  "Quantité Ligne",
+            quantity: "Quantité Total",
+            quantity2: "Total 2eme Unit "
+        },
+        popUnit2 : 
+        {
+            title : "Details des Contenus"
+        },
+        grdUnit2 : 
+        {
+            clmName : "Nom",
+            clmQuantity : "Quantité"
         },
     },
     ftr_02_003 : // "İade Faturası"
@@ -3281,6 +3309,12 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+        },
+        msgPayNotDeleted:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Ödemesi Yapılmış Evrak Silinemez!" // BAK
         },
         msgDoclocked:
         {
@@ -3559,6 +3593,12 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+        },
+        msgPayNotDeleted:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Ödemesi Yapılmış Evrak Silinemez!" // BAK
         },
         msgDoclocked:
         {
