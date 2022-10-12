@@ -236,6 +236,7 @@ export class docItemsCls
             DESCRIPTION : '',
             INVOICE_GUID : '00000000-0000-0000-0000-000000000000',
             ORDER_GUID : '00000000-0000-0000-0000-000000000000',
+            PROFORMA_GUID : '00000000-0000-0000-0000-000000000000',
             VAT_RATE : 0 ,
             OLD_VAT : 0,
             DISCOUNT_RATE : 0,
@@ -285,10 +286,11 @@ export class docItemsCls
                     "@TOTAL = @PTOTAL, " +
                     "@DESCRIPTION  = @PDESCRIPTION, " +
                     "@INVOICE_GUID  = @PINVOICE_GUID, " +
-                    "@ORDER_GUID  = @PORDER_GUID ",
+                    "@ORDER_GUID  = @PORDER_GUID, " +
+                    "@PROFORMA_GUID  = @PPROFORMA_GUID " ,
             param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|250','PITEM_TYPE:int','PLINE_NO:int','PQUANTITY:float','PPRICE:float','PDISCOUNT:float','PVAT:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PINVOICE_GUID:string|50','PORDER_GUID:string|50'],
-            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','ITEM_TYPE','LINE_NO','QUANTITY','PRICE','DISCOUNT','VAT','AMOUNT','TOTAL','DESCRIPTION','INVOICE_GUID','ORDER_GUID']
+                        'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|250','PITEM_TYPE:int','PLINE_NO:int','PQUANTITY:float','PPRICE:float','PDISCOUNT:float','PVAT:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PINVOICE_GUID:string|50','PORDER_GUID:string|50','PPROFORMA_GUID:string|50'],
+            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','ITEM_TYPE','LINE_NO','QUANTITY','PRICE','DISCOUNT','VAT','AMOUNT','TOTAL','DESCRIPTION','INVOICE_GUID','ORDER_GUID','PROFORMA_GUID']
         }
         tmpDt.updateCmd = 
         {
@@ -317,10 +319,11 @@ export class docItemsCls
                     "@TOTAL = @PTOTAL, " +
                     "@DESCRIPTION  = @PDESCRIPTION, " +
                     "@INVOICE_GUID  = @PINVOICE_GUID, " +
-                    "@ORDER_GUID  = @PORDER_GUID ",
-                    param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
-                    'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|250','PITEM_TYPE:int','PLINE_NO:int','PQUANTITY:float','PPRICE:float','PDISCOUNT:float','PVAT:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PINVOICE_GUID:string|50','PORDER_GUID:string|50'],
-        dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','ITEM_TYPE','LINE_NO','QUANTITY','PRICE','DISCOUNT','VAT','AMOUNT','TOTAL','DESCRIPTION','INVOICE_GUID','ORDER_GUID']
+                    "@ORDER_GUID  = @PORDER_GUID, " +
+                    "@PROFORMA_GUID  = @PPROFORMA_GUID " ,
+            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
+                        'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|250','PITEM_TYPE:int','PLINE_NO:int','PQUANTITY:float','PPRICE:float','PDISCOUNT:float','PVAT:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PINVOICE_GUID:string|50','PORDER_GUID:string|50','PPROFORMA_GUID:string|50'],
+            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','ITEM_TYPE','LINE_NO','QUANTITY','PRICE','DISCOUNT','VAT','AMOUNT','TOTAL','DESCRIPTION','INVOICE_GUID','ORDER_GUID','PROFORMA_GUID']
         }
         tmpDt.deleteCmd = 
         {

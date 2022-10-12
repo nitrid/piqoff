@@ -244,7 +244,7 @@ export default class posDoc extends React.PureComponent
         await this.posDevice.load({CODE:this.posObj.dt()[this.posObj.dt().length - 1].DEVICE})        
         this.posDevice.scanner();
 
-        await this.grdList.dataRefresh({source:this.posObj.posSale.dt(),key:"NO"});
+        await this.grdList.dataRefresh({source:this.posObj.posSale.dt()});
         await this.grdPay.dataRefresh({source:this.posObj.posPay.dt()});
         await this.grdLastPos.dataRefresh({source:this.lastPosDt});
 
@@ -1114,7 +1114,7 @@ export default class posDoc extends React.PureComponent
             await dialog(tmpConfObj);
             return
         }
-        console.log(pRowData)
+
         pRowData.LDATE = moment(new Date()).utcOffset(0, true)
         pRowData.QUANTITY = tmpCalc.QUANTITY
         pRowData.PRICE = tmpCalc.PRICE
@@ -1135,10 +1135,6 @@ export default class posDoc extends React.PureComponent
             await this.core.util.waitUntil()
             if(pPayRest == 0 && this.posObj.dt().length > 0 && this.posObj.dt()[0].AMOUNT > 0) //FIYATSIZ VE MİKTAR SIFIR ÜRÜNLER İÇİN KONTROL EKLENDİ. BU ŞEKİLDE SATIŞIN KAPANMASI ENGELLENDİ.
             {
-                //POS_PROMO TABLOSUNA KAYIT EDİLİYOR.
-                await this.posPromoObj.save()
-                //******************************** */
-
                 this.posDevice.lcdPrint
                 ({
                     blink : 0,
@@ -1221,7 +1217,10 @@ export default class posDoc extends React.PureComponent
                         }
                     }
                 } 
-                
+                console.log(this.posPromoObj)
+                //POS_PROMO TABLOSUNA KAYIT EDİLİYOR.
+                await this.posPromoObj.save()
+                //******************************** */
                 if(typeof pPrint == 'undefined' || pPrint)
                 {
                     let tmpData = 
@@ -2010,7 +2009,7 @@ export default class posDoc extends React.PureComponent
     {
         return new Promise(async resolve => 
         {
-            this.posPromoObj.clearAll()
+            //this.posPromoObj.clearAll()
             this.promoObj.clearAll()
             await this.promoObj.load({START_DATE:moment(new Date()).format("YYYY-MM-DD"),FINISH_DATE:moment(new Date()).format("YYYY-MM-DD"),CUSTOMER_GUID:this.posObj.dt()[0].CUSTOMER_GUID,DEPOT_GUID:this.posObj.dt()[0].DEPOT_GUID})
             resolve()
@@ -2499,9 +2498,6 @@ export default class posDoc extends React.PureComponent
                                 selection={{mode:"single"}}
                                 loadPanel={{enabled:false}}
                                 sorting={{ mode: 'none' }}
-                                focusedRowEnabled={true}
-                                focusedRowKey={0}
-                                autoNavigateToFocusedRow={true}
                                 onRowPrepared={(e)=>
                                 {
                                     if(e.rowType == "header")
@@ -2988,7 +2984,7 @@ export default class posDoc extends React.PureComponent
                                                         if(tmpRowIndex > 0)
                                                         {
                                                             this.grdList.devGrid.selectRowsByIndexes(tmpRowIndex - 1)
-                                                            this.grdList.devGrid.option('focusedRowIndex',tmpRowIndex - 1)
+                                                            this.grdList.devGrid.navigateToRow(this.grdList.devGrid.getSelectedRowKeys()[0])
                                                         }
                                                     }
                                                 }}>
@@ -3008,7 +3004,7 @@ export default class posDoc extends React.PureComponent
                                                         if(tmpRowIndex < (this.grdList.devGrid.totalCount() - 1))
                                                         {
                                                             this.grdList.devGrid.selectRowsByIndexes(tmpRowIndex + 1)
-                                                            this.grdList.devGrid.option('focusedRowIndex',tmpRowIndex + 1)
+                                                            this.grdList.devGrid.navigateToRow(this.grdList.devGrid.getSelectedRowKeys()[0])
                                                         }
                                                     }
                                                 }}>
