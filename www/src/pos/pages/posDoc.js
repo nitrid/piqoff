@@ -244,7 +244,7 @@ export default class posDoc extends React.PureComponent
         await this.posDevice.load({CODE:this.posObj.dt()[this.posObj.dt().length - 1].DEVICE})        
         this.posDevice.scanner();
 
-        await this.grdList.dataRefresh({source:this.posObj.posSale.dt()});
+        await this.grdList.dataRefresh({source:this.posObj.posSale.dt(),key:"NO"});
         await this.grdPay.dataRefresh({source:this.posObj.posPay.dt()});
         await this.grdLastPos.dataRefresh({source:this.lastPosDt});
 
@@ -944,6 +944,7 @@ export default class posDoc extends React.PureComponent
             setTimeout(() => 
             {
                 this.grdList.devGrid.selectRowsByIndexes(0)
+                this.grdList.devGrid.option('focusedRowIndex',0)
             }, 100);
             
             if(typeof pSave == 'undefined' || pSave)
@@ -2498,6 +2499,9 @@ export default class posDoc extends React.PureComponent
                                 selection={{mode:"single"}}
                                 loadPanel={{enabled:false}}
                                 sorting={{ mode: 'none' }}
+                                focusedRowEnabled={true}
+                                focusedRowKey={0}
+                                autoNavigateToFocusedRow={true}
                                 onRowPrepared={(e)=>
                                 {
                                     if(e.rowType == "header")
@@ -2984,6 +2988,7 @@ export default class posDoc extends React.PureComponent
                                                         if(tmpRowIndex > 0)
                                                         {
                                                             this.grdList.devGrid.selectRowsByIndexes(tmpRowIndex - 1)
+                                                            this.grdList.devGrid.option('focusedRowIndex',tmpRowIndex - 1)
                                                         }
                                                     }
                                                 }}>
@@ -3003,6 +3008,7 @@ export default class posDoc extends React.PureComponent
                                                         if(tmpRowIndex < (this.grdList.devGrid.totalCount() - 1))
                                                         {
                                                             this.grdList.devGrid.selectRowsByIndexes(tmpRowIndex + 1)
+                                                            this.grdList.devGrid.option('focusedRowIndex',tmpRowIndex + 1)
                                                         }
                                                     }
                                                 }}>
@@ -4798,6 +4804,7 @@ export default class posDoc extends React.PureComponent
                                         setTimeout(() => 
                                         {
                                             this.grdLastTotalPay.devGrid.selectRowsByIndexes(0)
+                                            this.grdList.devGrid.option('focusedRowIndex',0)
                                         }, 100);
                                     }
                                 }}
@@ -4963,6 +4970,7 @@ export default class posDoc extends React.PureComponent
                                                         setTimeout(() => 
                                                         {
                                                             this.grdLastTotalPay.devGrid.selectRowsByIndexes(0)
+                                                            this.grdList.devGrid.option('focusedRowIndex',0)
                                                         }, 100);
                                                     }
                                                 }}>
@@ -5057,6 +5065,7 @@ export default class posDoc extends React.PureComponent
                                                     setTimeout(() => 
                                                     {
                                                         this.grdLastTotalPay.devGrid.selectRowsByIndexes(0)
+                                                        this.grdList.devGrid.option('focusedRowIndex',0)
                                                     }, 100);
                                                 }}>
                                                     <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />

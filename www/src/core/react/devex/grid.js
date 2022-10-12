@@ -44,6 +44,8 @@ export default class NdGrid extends Base
         this._onEditorPreparing = this._onEditorPreparing.bind(this);
         this._onRowPrepared = this._onRowPrepared.bind(this);
         this._onKeyDown = this._onKeyDown.bind(this); 
+        this._onFocusedRowChanged = this._onFocusedRowChanged.bind(this)
+        this._onFocusedRowChanging = this._onFocusedRowChanging.bind(this)
     }
     //#region Private
     _onInitialized(e) 
@@ -211,6 +213,20 @@ export default class NdGrid extends Base
             this.props.onRowPrepared(e);
         }  
     }
+    _onFocusedRowChanged(e)
+    {
+        if(typeof this.props.onFocusedRowChanged != 'undefined')
+        {
+            this.props.onFocusedRowChanged(e);
+        }
+    }
+    _onFocusedRowChanging(e)
+    {
+        if(typeof this.props.onFocusedRowChanging != 'undefined')
+        {
+            this.props.onFocusedRowChanging(e);
+        }
+    }
     //#endregion
     componentDidUpdate()
     {
@@ -304,12 +320,16 @@ export default class NdGrid extends Base
                 loadPanel={this.props.loadPanel}
                 height={this.props.height} 
                 width={this.props.width}
+                focusedRowEnabled={this.props.focusedRowEnabled}
+                focusedRowKey={this.props.focusedRowKey}
+                autoNavigateToFocusedRow={this.props.autoNavigateToFocusedRow}
                 onInitialized={this._onInitialized} onSelectionChanged={this._onSelectionChanged} 
                 onInitNewRow={this._onInitNewRow} onEditingStart={this._onEditingStart} onRowInserting={this._onRowInserting} onRowInserted={this._onRowInserted}
                 onRowUpdating={this._onRowUpdating} onRowUpdated={this._onRowUpdated} onContentReady={this._onContentReady} onRowRemoving={this._onRowRemoving} onRowRemoved={this._onRowRemoved}
                 onSaving={this._onSaving} onSaved={this._onSaved} onEditCanceling={this._onEditCanceling} onEditCanceled={this._onEditCanceled}
                 onCellPrepared={this._onCellPrepared} onRowDblClick={this._onRowDblClick} onKeyDown = {this._onKeyDown}
                 onCellClick={this._onCellClick} onCellDblClick={this._onCellDblClick} onRowClick={this._onRowClick}
+                onFocusedRowChanged={this._onFocusedRowChanged} onFocusedRowChanging={this._onFocusedRowChanging}
                 filterRow={this.state.filterRow}
                 headerFilter={this.state.headerFilter}
                 selection={this.state.selection}
@@ -334,12 +354,16 @@ export default class NdGrid extends Base
                     height={this.props.height} 
                     width={this.props.width}
                     loadPanel={this.props.loadPanel}
+                    focusedRowEnabled={this.props.focusedRowEnabled}
+                    focusedRowKey={this.props.focusedRowKey}
+                    autoNavigateToFocusedRow={this.props.autoNavigateToFocusedRow}
                     onInitialized={this._onInitialized} onSelectionChanged={this._onSelectionChanged} 
                     onInitNewRow={this._onInitNewRow} onEditingStart={this._onEditingStart} onRowInserting={this._onRowInserting} onRowInserted={this._onRowInserted}
                     onRowUpdating={this._onRowUpdating} onRowUpdated={this._onRowUpdated} onContentReady={this._onContentReady} onRowRemoving={this._onRowRemoving} onRowRemoved={this._onRowRemoved}
                     onSaving={this._onSaving} onSaved={this._onSaved} onEditCanceling={this._onEditCanceling} onEditCanceled={this._onEditCanceled}
                     onCellPrepared={this._onCellPrepared} onRowDblClick={this._onRowDblClick} onKeyDown = {this._onKeyDown}
                     onCellClick={this._onCellClick} onCellDblClick={this._onCellDblClick} onRowClick={this._onRowClick}
+                    onFocusedRowChanged={this._onFocusedRowChanged} onFocusedRowChanging={this._onFocusedRowChanging}
                     columns={this.state.columns}
                     filterRow={this.state.filterRow}
                     headerFilter={this.state.headerFilter}
