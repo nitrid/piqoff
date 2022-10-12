@@ -104,7 +104,7 @@ export default class salesInvoice extends React.PureComponent
         {            
             this.btnBack.setState({disabled:true});
             this.btnNew.setState({disabled:false});
-            this.btnSave.setState({disabled:false});
+            this.btnSave.setState({disabled:true});
             this.btnDelete.setState({disabled:false});
             this.btnPrint.setState({disabled:false});          
         })
@@ -686,6 +686,10 @@ export default class salesInvoice extends React.PureComponent
     }
     async _getPayment()
     {
+        if(typeof this.txtRemainder == 'undefined')
+        {
+            return
+        }
         await this.paymentObj.load({PAYMENT_DOC_GUID:this.docObj.dt()[0].GUID});
         if(this.paymentObj.dt().length > 0)
         {
@@ -2027,7 +2031,13 @@ export default class salesInvoice extends React.PureComponent
                                     <div className="col-12">
                                         <Form colCount={4} parent={this} id={"frmSlsInv"  + this.tabIndex}>
                                             {/* Ara Toplam */}
-                                            <EmptyItem colSpan={3}/>
+                                            <EmptyItem colSpan={2}/>
+                                            <Item>
+                                            <Label text={this.t("txtMargin")} alignment="right" />
+                                                <NdTextBox id="txtMargin" parent={this} simple={true} readOnly={true}
+                                                maxLength={32}
+                                                ></NdTextBox>
+                                            </Item>
                                             <Item  >
                                             <Label text={this.t("txtAmount")} alignment="right" />
                                                 <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}
