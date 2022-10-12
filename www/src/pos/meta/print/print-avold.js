@@ -394,5 +394,14 @@ export function print()
             }
             return tmpArr.length > 0 ? tmpArr : undefined
         },
+        ()=>{return {font:"b",align:"ct",data:"Conservez moi comme preuve d'acat pour les"}},
+        ()=>{return {font:"b",align:"ct",data:"garanties, echanges, ou remboursement sous 1 mois"}},
+        ()=>{return {font:"b",align:"ct",data:"Ne sont ni repris ni echanges les produits suivants :"}},
+        ()=>{return {font:"b",align:"ct",data:"Produits Frais, Viandes, Fromages."}},
+        ()=>{return {font:"b",style:"b",align:"ct",data:"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"}},
+        ()=>{return {font:"b",style:"b",align:"ct",data:"AUCUN REMBOUSEMENT ESECES NE SERA EFFECUE"}},
+        ()=>{return {font:"b",style:"b",align:"ct",data:"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"}},
+        ()=>{return {font:"b",style:"b",align:"ct",data:"Merci de votre fidelite a tres bientot ..."}},
+        ()=>{return {font:"b",style:"b",align:"ct",data:" "}},
     ]
 }
