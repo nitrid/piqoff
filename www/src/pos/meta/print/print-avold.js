@@ -387,19 +387,16 @@ export function print()
                 tmpArr.push({align:"ct",barcode:data.pos[0].REBATE_CHEQPAY,options:{width: 1,height:90}});
                 tmpArr.push({font:"b",style:"b",align:"lt",data:" ".space(64)});
                 tmpArr.push({font:"b",style:"b",align:"ct",data:"Avoir valable 3 mois apres edition..."});
-            }
-            else
-            {
-                tmpArr.push({font:"b",style:"b",align:"ct",data:"Merci de votre fidelite a tres bientot ..."});    
+            
             }
             return tmpArr.length > 0 ? tmpArr : undefined
         },
-        ()=>{return {font:"b",align:"ct",data:"Conservez moi comme preuve d'acat pour les"}},
+        ()=>{return {font:"b",align:"ct",data:"Conservez moi comme preuve d'achat pour les"}},
         ()=>{return {font:"b",align:"ct",data:"garanties, echanges, ou remboursement sous 1 mois"}},
         ()=>{return {font:"b",align:"ct",data:"Ne sont ni repris ni echanges les produits suivants :"}},
         ()=>{return {font:"b",align:"ct",data:"Produits Frais, Viandes, Fromages."}},
         ()=>{return {font:"b",style:"b",align:"ct",data:"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"}},
-        ()=>{return {font:"b",style:"b",align:"ct",data:"AUCUN REMBOUSEMENT ESECES NE SERA EFFECUE"}},
+        ()=>{return {font:"b",style:"b",align:"ct",data:"AUCUN REMBOURSEMENT ESPECES NE SERA EFFECTUE"}},
         ()=>{return {font:"b",style:"b",align:"ct",data:"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"}},
         ()=>{return {font:"b",style:"b",align:"ct",data:"Merci de votre fidelite a tres bientot ..."}},
         ()=>{return {font:"b",style:"b",align:"ct",data:" "}},
