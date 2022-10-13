@@ -376,14 +376,14 @@ export function print()
             let tmpArr = [];
             if(data.pos[0].REBATE_CHEQPAY != '' && data.pospay.where({PAY_TYPE:4}).length > 0 && data.pos[0].TYPE == 1)
             {
-                tmpArr.push({font:"b",style:"b",align:"ct",size : [1,0],data:"Oluşan Bon d'avoir : " + decimal(parseFloat(data.pos[0].REBATE_CHEQPAY.substring(8,12) / 100).toFixed(2)) + "EUR"});
+                tmpArr.push({font:"b",style:"b",align:"ct",size : [1,0],data:"Bon d'avoir : " + decimal(parseFloat(data.pos[0].REBATE_CHEQPAY.substring(8,12) / 100).toFixed(2)) + "EUR"});
                 tmpArr.push({align:"ct",barcode:data.pos[0].REBATE_CHEQPAY,options:{width: 1,height:90}});
                 tmpArr.push({font:"b",style:"b",align:"lt",data:" ".space(64)});
                 tmpArr.push({font:"b",style:"b",align:"ct",data:"Avoir valable 3 mois apres edition..."});
             }
             else if(data.pos[0].REBATE_CHEQPAY != '' && data.pospay.where({PAY_TYPE:4}).length > 0 && data.pos[0].TYPE == 0 && data.pospay.where({CHANGE:{'>':0}}).length > 0)
             {
-                tmpArr.push({font:"b",style:"b",align:"ct",size : [1,0],data:"Kalan Bon d'avoir : " + decimal(parseFloat(data.pos[0].REBATE_CHEQPAY.substring(8,12) / 100).toFixed(2)) + "EUR"});
+                tmpArr.push({font:"b",style:"b",align:"ct",size : [1,0],data:"Reste Bon d'avoir : " + decimal(parseFloat(data.pos[0].REBATE_CHEQPAY.substring(8,12) / 100).toFixed(2)) + "EUR"});
                 tmpArr.push({align:"ct",barcode:data.pos[0].REBATE_CHEQPAY,options:{width: 1,height:90}});
                 tmpArr.push({font:"b",style:"b",align:"lt",data:" ".space(64)});
                 tmpArr.push({font:"b",style:"b",align:"ct",data:"Avoir valable 3 mois apres edition..."});
