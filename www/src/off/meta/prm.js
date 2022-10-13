@@ -1033,6 +1033,123 @@ export const prm =
     },
     //#endregion
 
+    //#region Şubeler ArasıSatış Faturası
+    //txtRef
+    {
+        TYPE : 2,
+        ID :"txtRef",
+        VALUE : 
+        {
+            value : "0"
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_005",
+        ELEMENT : "txtRef",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Şubeler Arası Satış Faturası",
+            CAPTION : "Seri"
+        }
+    },
+    //txtRefno
+    {
+        TYPE : 2,
+        ID :"txtRefno",
+        VALUE : 
+        {
+            value : "0"
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_005",
+        ELEMENT : "txtRefno",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "number",
+            PAGE_NAME : "Şubeler Arası Satış Faturası",
+            CAPTION : "Sıra"
+        }
+    },
+    //cmbDepot
+    {
+        TYPE : 2,
+        ID :"cmbDepot",
+        VALUE : 
+        {
+            value : ""
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_005",
+        ELEMENT : "cmbDepot",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Şubeler Arası Satış Faturası",
+            CAPTION : "Depo"
+        }
+    },
+    //txtCustomerCode
+    {
+        TYPE : 2,
+        ID :"txtCustomerCode",
+        VALUE : 
+        {
+            value : ""
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_005",
+        ELEMENT : "txtCustomerCode",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Şubeler Arası Satış Faturası",
+            CAPTION : "Cari Kodu"
+        }
+    },
+    // txtCustomerName
+    {
+        TYPE : 2,
+        ID :"txtCustomerName",
+        VALUE : 
+        {
+            value : ""
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_005",
+        ELEMENT : "txtCustomerName",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Şubeler Arası Satış Faturası",
+            CAPTION : "Cari Adı"
+        }
+    },
+    // negativeQuantity
+    {
+    TYPE : 1,
+    ID :"negativeQuantity",
+    VALUE : 
+    {
+        value : false
+    },
+    SPECIAL : "",
+    PAGE : "ftr_02_005",
+    ELEMENT : "",
+    APP : "OFF",
+    VIEW : 
+    {
+        TYPE : "checkbox",
+        PAGE_NAME : "Şubeler Arası Satış Faturası",
+        CAPTION : "Eksiye Düşemeye İzin Verme"
+    }
+    },
+    //#endregion
+
     //#region Alış Faturası
     //txtRef
     {
@@ -1401,6 +1518,28 @@ export const prm =
         }
     },
     //#endregion
+    //#region Şube Satış İrsaliye
+     // negativeQuantity
+     {
+        TYPE : 1,
+        ID :"negativeQuantity",
+        VALUE : 
+        {
+            value : false
+        },
+        SPECIAL : "",
+        PAGE : "irs_02_004",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+    {
+        TYPE : "checkbox",
+        PAGE_NAME : "Şube Satış İrsaliye",
+        CAPTION : "Eksiye Düşemeye İzin Verme"
+        }
+    },
+    //#endregion
+    
     //#region Alış Anlaşması
      //cmbDepot
      {

@@ -434,11 +434,11 @@ export const menu = (e) =>
                             text: e.t('menu.irs_02_003'),//'İade İrsaliyesi',
                             path: 'dispatch/documents/rebateDispatch'
                         },
-                        // {
-                        //     id: 'irs_02_004',
-                        //     text: e.t('menu.irs_02_004'),//'Şubeler Arası Sevk',
-                        //     path: 'customers/cards/customerCard'
-                        // }
+                        {
+                            id: 'irs_02_004',
+                            text: e.t('menu.irs_02_004'),//'Şubeler Arası Sevk',
+                            path: 'dispatch/documents/branchSaleDispatch'
+                        }
                     ]
                 },
                 {
@@ -505,11 +505,11 @@ export const menu = (e) =>
                             text: e.t('menu.ftr_02_004'),//'Fiyat Farkı Faturası',
                             path: 'invoices/documents/priceDifferenceInvoice'
                         },
-                        // {
-                        //     id: 'ftr_02_005',
-                        //     text: e.t('menu.ftr_02_005'),//'Şubeler Arası Satış',
-                        //     path: 'customers/cards/customerCard'
-                        // }
+                        {
+                            id: 'ftr_02_005',
+                            text: e.t('menu.ftr_02_005'),//'Şubeler Arası Satış',
+                            path: 'invoices/documents/branchSaleInvoice'
+                        }
                     ]
                 },
                 {
