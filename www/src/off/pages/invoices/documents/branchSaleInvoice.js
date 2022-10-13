@@ -250,6 +250,7 @@ export default class branchSaleInvoice extends React.PureComponent
     {
         for(let  i= 0; i < this.docObj.docItems.dt().length; i++)
         {
+            console.log(this.docObj.docItems.dt()[i])
             let tmpMargin = (this.docObj.docItems.dt()[i].TOTAL - this.docObj.docItems.dt()[i].VAT) - (this.docObj.docItems.dt()[i].COST_PRICE * this.docObj.docItems.dt()[i].QUANTITY)
             let tmpMarginRate = (tmpMargin /(this.docObj.docItems.dt()[i].TOTAL - this.docObj.docItems.dt()[i].VAT)) * 100
             this.docObj.docItems.dt()[i].MARGIN = tmpMargin.toFixed(3) + "€ / %" +  tmpMarginRate.toFixed(3)
@@ -1887,22 +1888,6 @@ export default class branchSaleInvoice extends React.PureComponent
                                         let rowIndex = e.component.getRowIndexByKey(e.key)
                                         console.log(rowIndex)
 
-                                        if(typeof e.data.QUANTITY != 'undefined')
-                                        {
-                                            let tmpQuery = 
-                                            {
-                                                query :"SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID) AS PRICE",
-                                                param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
-                                                value : [e.key.ITEM,this.docObj.dt()[0].INPUT,e.data.QUANTITY]
-                                            }
-                                            let tmpData = await this.core.sql.execute(tmpQuery) 
-                                            if(tmpData.result.recordset.length > 0)
-                                            {
-                                                e.key.PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
-                                                
-                                                this._calculateTotal()
-                                            }
-                                        }
                                         if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                         {
                                             e.key.DISCOUNT = parseFloat((((e.key.AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(2))
@@ -1960,6 +1945,7 @@ export default class branchSaleInvoice extends React.PureComponent
                                         e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3))
                                         e.key.TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +e.key.VAT).toFixed(3))
                                        
+                                        console.log(e.key)
                                         let tmpMargin = (e.key.TOTAL - e.key.VAT) - (e.key.COST_PRICE * e.key.QUANTITY)
                                         let tmpMarginRate = ((tmpMargin) * 100) / e.key.QUANTITY
                                         console.log(tmpMargin.toFixed(2))
