@@ -6,11 +6,14 @@ import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
+import NdGrid,{Column,Editing,ColumnChooser,ColumnFixing,Paging,Pager,Scrolling} from '../../../../core/react/devex/grid.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdPivot,{FieldChooser,Export} from '../../../../core/react/devex/pivot.js';
 import NdButton from '../../../../core/react/devex/button.js';
+import NdPopUp from '../../../../core/react/devex/popup.js';
+
 
 export default class posSalesReport extends React.PureComponent
 {
@@ -24,6 +27,28 @@ export default class posSalesReport extends React.PureComponent
     {
         await this.core.util.waitUntil(0)
         this.chkRowTotal.value = true
+        this.init()
+    }
+    async init()
+    {
+        let tmpSource =
+        {
+            source : 
+            {
+                groupBy : this.groupList,
+                select : 
+                {
+                    query : "SELECT *,CONVERT(NVARCHAR,DOC_DATE,104) AS DATE,SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,25) AS TICKET_ID," + 
+                    "ISNULL((SELECT TOP 1 DESCRIPTION FROM POS_EXTRA WHERE POS_EXTRA.POS_GUID =POS_VW_01.GUID AND TAG = 'PARK DESC' ),'') AS DESCRIPTION FROM POS_VW_01 WHERE STATUS = 0 ORDER BY DOC_DATE "
+                },
+                sql : this.core.sql
+            }
+        }
+        await this.grdOpenTike.dataRefresh(tmpSource)
+        if(this.grdOpenTike.data.datatable.length > 0)
+        {
+          this.popOpenTike.show()
+        }
     }
     render()
     {
@@ -237,6 +262,47 @@ export default class posSalesReport extends React.PureComponent
                             </NdPivot>
                         </div>
                     </div>
+                        {/* Açık Fişler PopUp */}
+                        <NdPopUp parent={this} id={"popOpenTike"} 
+                            visible={false}
+                            showCloseButton={true}
+                            showTitle={true}
+                            title={this.lang.t("popOpenTike.title")}
+                            container={"#root"} 
+                            width={'900'}
+                            height={'500'}
+                            position={{of:'#root'}}
+                            >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                <NdGrid parent={this} id={"grdOpenTike"} 
+                                        showBorders={true} 
+                                        columnsAutoWidth={true} 
+                                        allowColumnReordering={true} 
+                                        allowColumnResizing={true} 
+                                        headerFilter={{visible:true}}
+                                        height={350} 
+                                        width={'100%'}
+                                        dbApply={false}
+                                        onRowDblClick={async(e)=>
+                                        {
+                                            this.btnGetDetail(e.data.GUID)
+                                            this.setState({ticketId:e.data.TICKET_ID})
+                                        }}
+                                        onRowRemoved={async (e)=>{
+                                        }}
+                                        >
+                                            <Scrolling mode="standart" />
+                                            <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
+                                            <Column dataField="CUSER_NAME" caption={this.lang.t("grdOpenTike.clmUser")} width={110}  headerFilter={{visible:true}}/>
+                                            <Column dataField="DEVICE" caption={this.lang.t("grdOpenTike.clmDevice")} width={80}  headerFilter={{visible:true}}/>
+                                            <Column dataField="DATE" caption={this.lang.t("grdOpenTike.clmDate")} width={100} allowEditing={false} />
+                                            <Column dataField="TICKET_ID" caption={this.lang.t("grdOpenTike.clmTicketId")} width={180}  headerFilter={{visible:true}}/>
+                                            <Column dataField="DESCRIPTION" caption={this.lang.t("grdOpenTike.clmDescription")} width={250}  headerFilter={{visible:true}}/>
+                                    </NdGrid>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
                 </ScrollView>
             </div>
         )

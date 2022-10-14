@@ -29,6 +29,11 @@
 {
     height:fit-content;
 }
+.dx-datagrid .dx-row > td {
+    padding: 4px;
+    font-size: smaller;
+    -webkit-text-stroke: thin;
+  }
 .dx-tab-content .dx-icon.dx-icon-close {
     display: inline-block;
     opacity: 0.6;

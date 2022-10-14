@@ -42,6 +42,18 @@ export const langTr =
         msg : "Sizin kullanıcı bilgileriniz ile başka bir cihazdan giriş yapıldı",
         btn01 : "Tamam"
     },
+    popOpenTike :
+    {
+        title : "Tamamlanmamış Fişler"
+    },
+    grdOpenTike: 
+    {
+        clmUser : "Kullanıcı",
+        clmDevice : "Cihaz",
+        clmDate : "Tarih",
+        clmTicketId : "Fiş No",
+        clmDescription :"Açıklama",
+    },
     menu:
     {
         stk: "Stok",                

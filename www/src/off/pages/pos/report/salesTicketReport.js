@@ -70,10 +70,8 @@ export default class salesOrdList extends React.PureComponent
             }
         }
         await this.grdOpenTike.dataRefresh(tmpSource)
-        console.log(this.grdOpenTike)
         if(this.grdOpenTike.data.datatable.length > 0)
         {
-            console.log(1321)
           this.popOpenTike.show()
         }
     }
@@ -928,8 +926,8 @@ export default class salesOrdList extends React.PureComponent
                                 </div>
                             </div>
                         </NdPopUp>
-                        {/* Açık Fişler PopUp */}
                         <div>
+                             {/* Açık Fişler PopUp */}
                             <NdPopUp parent={this} id={"popOpenTike"} 
                             visible={false}
                             showCloseButton={true}

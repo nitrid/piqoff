@@ -42,6 +42,18 @@ export const langFr =
         msg : "Connectez-vous à partir d'un autre appareil avec vos informations d'utilisateur.",
         btn01 : "OK"
     },
+    popOpenTike :
+    {
+        title : "Reçus incomplet" 
+    },
+    grdOpenTike: 
+    {
+        clmUser : "Utilisateur",
+        clmDevice : "Appareil",
+        clmDate : "Date",
+        clmTicketId : "Numéro de ticket",
+        clmDescription :"Motif",
+    },
     menu:
     {
         stk: "Produit",                
