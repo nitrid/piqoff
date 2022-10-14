@@ -96,6 +96,7 @@ export const langTr =
         ftr_01_002: "Satış Fatura Listesi",
         ftr_01_003: "İade Fatura Listesi",
         ftr_01_004: "Fiyat Farkı Fatura Listesi",
+        ftr_01_005: "Şubeler Arası Satış Fatura Listesi",
         ftr_02_001: "Alış Faturası",
         ftr_02_002: "Satış Faturası",
         ftr_02_003: "İade Faturası",
@@ -109,6 +110,7 @@ export const langTr =
         irs_01_001: "Alış İrsaliye Listesi",
         irs_01_002: "Satış İrsaliye Listesi",
         irs_01_003: "İade İrsaliye Listesi",
+        irs_01_004: "Şubeler Arası Satış İrsaliye Listesi",
         irs_02_001: "Alış İrsaliyesi",
         irs_02_002: "Satış İrsaliyesi",
         irs_02_003: "İade İrsaliyesi",
@@ -1935,6 +1937,7 @@ export const langTr =
             Customer : "Müşteri",
             supplier : "Tedarikçi",
             both : "Her İkisi",
+            branch : "Şube"
         },
         cmbTaxTypeData : 
         {
@@ -2045,6 +2048,7 @@ export const langTr =
             Customer : "Müşteri",
             supplier : "Tedarikçi",
             both : "Her İkisi",
+            branch : "Şube"
         },
     },
     cri_02_002: //  "Adres Listesi"
@@ -2071,6 +2075,8 @@ export const langTr =
             Customer : "Müşteri",
             supplier : "Tedarikçi",
             both : "Her İkisi",
+            branch : "Şube"
+
         },
     },
     cri_03_001: // "Toplu Cari Tanımları"
@@ -2209,6 +2215,7 @@ export const langTr =
             Customer : "Müşteri",
             supplier : "Tedarikçi",
             both : "Her İkisi",
+            branch : "Şube"
         },
         cmbTaxTypeData : 
         {
@@ -2347,6 +2354,36 @@ export const langTr =
             clmVat : "KDV",
             clmAmount : "Tutar",
             clmTotal : "Toplam",
+        },
+
+    },
+    ftr_01_005 : // "Şube Satış Fatura Listesi"
+    {
+        txtCustomerCode : "Cari",
+        menu:"Şubeler Arası Satış Faturası",
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        btnGet :"Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        grdSlsIvcList: 
+        {
+            clmRef: "Seri",
+            clmRefNo: "Sıra",
+            clmPrice: "Fiyat",
+            clmInputCode : "Cari Kodu",
+            clmInputName : "Cari Adı",
+            clmDate: "Tarih",
+            clmVat : "KDV",
+            clmAmount : "Tutar",
+            clmTotal : "Toplam",
+            clmOutputName :"Depo",
         },
 
     },
@@ -4584,6 +4621,37 @@ export const langTr =
             clmVat : "KDV",
             clmAmount : "Tutar",
             clmTotal : "Toplam",
+        },
+
+    },
+    irs_01_004 : //"Satış İrsaliye Listesi"
+    {
+        cmbCustomer :"Cari",
+        btnGet :"Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        txtCustomerCode : "Cari",
+        menu:"Şube Satış İrsaliyesi",
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        grdSlsDisList: 
+        {
+            clmRef: "Seri",
+            clmRefNo: "Sıra",
+            clmPrice: "Fiyat",
+            clmInputCode : "Cari Kodu",
+            clmInputName : "Cari Adı",
+            clmDate: "Tarih",
+            clmVat : "KDV",
+            clmAmount : "Tutar",
+            clmTotal : "Toplam",
+            clmOutputName :"Depo",
         },
 
     },

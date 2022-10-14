@@ -1935,6 +1935,7 @@ export const langFr =
             Customer : "Client",
             supplier : "Fournisseur",
             both : "Tous les Deux",
+            branch : "Şube" // BAK
         },
         cmbTaxTypeData : 
         {
@@ -2045,6 +2046,7 @@ export const langFr =
             Customer : "Client",
             supplier : "Fournisseur",
             both : "Tous les Deux",
+            branch : "Şube" // BAK
         },
     },
     cri_02_002: //  "Adres Listesi"
@@ -2071,6 +2073,7 @@ export const langFr =
             Customer : "Client",
             supplier : "Fournisseur",
             both : "Tous les Deux",
+            branch : "Şube" // BAK
         },
     },
     cri_03_001: // "Toplu Cari Tanimlari"
@@ -2209,6 +2212,7 @@ export const langFr =
             Customer : "Client",
             supplier : "Fournisseur",
             both : "Tous les Deux",
+            branch : "Şube" // BAK
         },
         cmbTaxTypeData : 
         {
