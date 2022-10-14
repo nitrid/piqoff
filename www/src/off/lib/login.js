@@ -339,6 +339,7 @@ export default class Login extends React.Component
                         showBorders={true}
                         width={'50%'}
                         height={'90%'}
+                        selection={{mode:"single"}}
                         title="Kullanıcı Listesi"
                         >
                             <Column dataField="CODE" caption="CODE" width={150} defaultSortOrder="asc"/>
