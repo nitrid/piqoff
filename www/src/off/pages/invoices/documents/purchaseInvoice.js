@@ -1345,7 +1345,8 @@ export default class purchaseInvoice extends React.PureComponent
                                     <NdButton id="btnDelete" parent={this} icon="trash" type="default"
                                     onClick={async()=>
                                     {
-                                        if(this.paymentObj.dt().length > 0)
+                                        console.log(this.paymentObj.dt())
+                                        if(this.paymentObj.docCustomer.dt().length > 0)
                                         {
                                             let tmpConfObj =
                                             {

@@ -1076,7 +1076,7 @@ export default class branchSaleInvoice extends React.PureComponent
                                     <NdButton id="btnDelete" parent={this} icon="trash" type="default"
                                     onClick={async()=>
                                     {
-                                        if(this.paymentObj.dt().length > 0)
+                                        if(this.paymentObj.docCustomer.dt().length > 0)
                                         {
                                             let tmpConfObj =
                                             {
