@@ -438,7 +438,7 @@ export const menu = (e) =>
                             id: 'irs_02_004',
                             text: e.t('menu.irs_02_004'),//'Şubeler Arası Sevk',
                             path: 'dispatch/documents/branchSaleDispatch'
-                        }
+                        },
                     ]
                 },
                 {
@@ -462,6 +462,11 @@ export const menu = (e) =>
                             text: e.t('menu.irs_01_003'),//'İade İrsaliye Listesi',
                             path: 'dispatch/lists/rebateDisList'
                         },
+                        {
+                            id: 'irs_01_004',
+                            text: e.t('menu.irs_01_004'),//'Şubeler Arası Sevk',
+                            path: 'dispatch/lists/bransSaleDisLİst'
+                        }
                     ]
                 },
                 {
@@ -537,12 +542,17 @@ export const menu = (e) =>
                             id: 'ftr_01_004',
                             text: e.t('menu.ftr_01_004'),//'Fiyat Farkı Fatura Listesi',
                             path: 'invoices/lists/priceDiffInvList'
+                        },
+                        {
+                            id: 'ftr_01_005',
+                            text: e.t('menu.ftr_01_005'),//'ŞubeS atış  Fatura Listesi',
+                            path: 'invoices/lists/brancSaleInvList'
                         }
                     ]
                 },
                 {
                     id: 'ftr_04',
-                    text : e.t('menu.ftr_04'),//'Listeler',
+                    text : e.t('menu.ftr_04'),//'Proforma',
                     expanded: false,
                     items: 
                     [
