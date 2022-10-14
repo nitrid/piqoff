@@ -898,7 +898,7 @@ export default class CustomerCard extends React.PureComponent
                                                 let tmpEmpty = {...this.customerObj.customerAdress.empty};
                                                
                                                 
-                                                tmpEmpty.TYPE = 0
+                                                tmpEmpty.TYPE = this.customerObj.customerAdress.dt().length
                                                 tmpEmpty.ADRESS = this.txtPopAdress.value
                                                 tmpEmpty.ZIPCODE = this.cmbPopZipcode.value
                                                 tmpEmpty.CIYT = this.cmbPopCity.value
