@@ -1934,6 +1934,7 @@ export const langTr =
             Customer : "Müşteri",
             supplier : "Tedarikçi",
             both : "Her İkisi",
+            branch : "Şube"
         },
         cmbTaxTypeData : 
         {
@@ -2044,6 +2045,7 @@ export const langTr =
             Customer : "Müşteri",
             supplier : "Tedarikçi",
             both : "Her İkisi",
+            branch : "Şube"
         },
     },
     cri_02_002: //  "Adres Listesi"
@@ -2070,6 +2072,8 @@ export const langTr =
             Customer : "Müşteri",
             supplier : "Tedarikçi",
             both : "Her İkisi",
+            branch : "Şube"
+
         },
     },
     cri_03_001: // "Toplu Cari Tanımları"
@@ -2208,6 +2212,7 @@ export const langTr =
             Customer : "Müşteri",
             supplier : "Tedarikçi",
             both : "Her İkisi",
+            branch : "Şube"
         },
         cmbTaxTypeData : 
         {
