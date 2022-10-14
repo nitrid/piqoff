@@ -4429,9 +4429,9 @@ export const langTr =
         cmbRstItemType: "Tip",
         txtRstItemQuantity: "Miktar",
         txtRstItemAmount: "Değer",
-        txtCodePlace: "Lütfen Promosyon Kodunu Giriniz",
-        txtNamePlace: "Lütfen Promosyon Adı Giriniz",
-        txtCustomerCodePlace: "İsterseniz Müşteri Seçebilirsiniz",
+        txtCodePlace: "Lütfen Tanimlamak istediginiz Promosyon Kodunu Giriniz",
+        txtNamePlace: "Lütfen Tanimlamak istediginiz Promosyon Adıni Giriniz",
+        txtCustomerCodePlace: "Promosyon Taninlamak istediginiz Müşteriyi Seçebilirsiniz",
         pg_Grid:
         {
             title: "Seçim",

@@ -194,7 +194,9 @@ export default class DepotCard extends React.PureComponent
                                                 }
                                                 
                                                 if((await this.depotObj.save()) == 0)
-                                                {                                                    
+                                                {                                      
+                                                    this.btnNew.setState({disabled:false});
+                                                    this.btnSave.setState({disabled:true});              
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
                                                 }
