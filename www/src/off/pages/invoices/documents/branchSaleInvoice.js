@@ -250,7 +250,6 @@ export default class branchSaleInvoice extends React.PureComponent
     {
         for(let  i= 0; i < this.docObj.docItems.dt().length; i++)
         {
-            console.log(this.docObj.docItems.dt()[i])
             let tmpMargin = (this.docObj.docItems.dt()[i].TOTAL - this.docObj.docItems.dt()[i].VAT) - (this.docObj.docItems.dt()[i].COST_PRICE * this.docObj.docItems.dt()[i].QUANTITY)
             let tmpMarginRate = (tmpMargin /(this.docObj.docItems.dt()[i].TOTAL - this.docObj.docItems.dt()[i].VAT)) * 100
             this.docObj.docItems.dt()[i].MARGIN = tmpMargin.toFixed(3) + "€ / %" +  tmpMarginRate.toFixed(3)
@@ -512,6 +511,7 @@ export default class branchSaleInvoice extends React.PureComponent
         this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID
         this.docObj.docItems.dt()[pIndex].VAT_RATE = pData.VAT
         this.docObj.docItems.dt()[pIndex].ITEM_NAME = pData.NAME
+        this.docObj.docItems.dt()[pIndex].COST_PRICE = pData.COST_PRICE
         this.docObj.docItems.dt()[pIndex].DISCOUNT = 0
         this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
         this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
