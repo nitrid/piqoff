@@ -280,7 +280,6 @@ export default class NdBase extends React.PureComponent
                     datatable : typeof tmpThis.data == 'undefined' || typeof tmpThis.data.datatable == 'undefined' ? undefined : tmpThis.data.datatable,
                     store : new CustomStore(
                     {
-                        key: typeof e != 'undefined' && typeof e.key != 'undefined' ? e.key : undefined,
                         load: (loadOption) =>
                         {      
                             return new Promise(async resolve => 

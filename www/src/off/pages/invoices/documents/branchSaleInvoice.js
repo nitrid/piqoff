@@ -28,7 +28,7 @@ import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
 
-export default class salesInvoice extends React.PureComponent
+export default class branchSaleInvoice extends React.PureComponent
 {
     constructor(props)
     {
@@ -123,7 +123,7 @@ export default class salesInvoice extends React.PureComponent
 
         let tmpDoc = {...this.docObj.empty}
         tmpDoc.TYPE = 1
-        tmpDoc.DOC_TYPE = 20
+        tmpDoc.DOC_TYPE = 22
         this.docObj.addEmpty(tmpDoc);
 
         let tmpDocCustomer = {...this.docObj.docCustomer.empty}
@@ -150,7 +150,7 @@ export default class salesInvoice extends React.PureComponent
         this.docObj.clearAll()
         this.paymentObj.clearAll()
         App.instance.setState({isExecute:true})
-        await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:20});
+        await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:22});
         App.instance.setState({isExecute:false})
 
         this._calculateMargin()
@@ -234,6 +234,7 @@ export default class salesInvoice extends React.PureComponent
     }
     async _calculateTotalMargin()
     {
+        console.log(111)
         let tmpTotalCost = 0
 
         for (let  i= 0; i < this.docObj.docItems.dt().length; i++) 
@@ -243,15 +244,16 @@ export default class salesInvoice extends React.PureComponent
         let tmpMargin = ((this.docObj.dt()[0].TOTAL - this.docObj.dt()[0].VAT) - tmpTotalCost)
         let tmpMarginRate = (tmpMargin / (this.docObj.dt()[0].TOTAL - this.docObj.dt()[0].VAT)) * 100
         this.docObj.dt()[0].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
-        this.txtMargin.setState({value:this.docObj.dt()[0].MARGIN})
+        this.txtMargin.value = this.docObj.dt()[0].MARGIN
     }
     async _calculateMargin()
     {
         for(let  i= 0; i < this.docObj.docItems.dt().length; i++)
         {
+            console.log(this.docObj.docItems.dt()[i])
             let tmpMargin = (this.docObj.docItems.dt()[i].TOTAL - this.docObj.docItems.dt()[i].VAT) - (this.docObj.docItems.dt()[i].COST_PRICE * this.docObj.docItems.dt()[i].QUANTITY)
             let tmpMarginRate = (tmpMargin /(this.docObj.docItems.dt()[i].TOTAL - this.docObj.docItems.dt()[i].VAT)) * 100
-            this.docObj.docItems.dt()[i].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+            this.docObj.docItems.dt()[i].MARGIN = tmpMargin.toFixed(3) + "€ / %" +  tmpMarginRate.toFixed(3)
         }
        
     }
@@ -515,9 +517,9 @@ export default class salesInvoice extends React.PureComponent
         this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
         let tmpQuery = 
         {
-            query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,@QUANTITY,GETDATE(),@CUSTOMER) AS PRICE",
-            param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50'],
-            value : [pData.GUID,pQuantity,this.docObj.dt()[0].INPUT]
+            query :"SELECT COST_PRICE AS PRICE FROM ITEMS_VW_01 WHERE GUID = @GUID",
+            param : ['GUID:string|50'],
+            value : [pData.GUID]
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
         if(tmpData.result.recordset.length > 0)
@@ -548,7 +550,7 @@ export default class salesInvoice extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND INVOICE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND REBATE = 0 AND DOC_TYPE IN(40)",
+                query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND INVOICE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND REBATE = 0 AND DOC_TYPE IN(42)",
                 param : ['INPUT:string|50'],
                 value : [this.docObj.dt()[0].INPUT]
             }
@@ -948,14 +950,14 @@ export default class salesInvoice extends React.PureComponent
         {
             tmpQuery = 
             {
-                query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 20 AND REBATE = 0 AND DOC_DATE > GETDATE()-30 ORDER BY DOC_DATE DESC"
+                query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 22 AND REBATE = 0 AND DOC_DATE > GETDATE()-30 ORDER BY DOC_DATE DESC"
             }
         }
         else
         {
             tmpQuery = 
             {
-                query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 20 AND REBATE = 0 ORDER BY DOC_DATE DESC"
+                query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 22 AND REBATE = 0 ORDER BY DOC_DATE DESC"
             }
         }
 
@@ -1232,7 +1234,7 @@ export default class salesInvoice extends React.PureComponent
                                                 this.docObj.docCustomer.dt()[0].REF = this.txtRef.value
                                                 let tmpQuery = 
                                                 {
-                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 20 AND REF = @REF ",
+                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 22 AND REF = @REF ",
                                                     param : ['REF:string|25'],
                                                     value : [this.txtRef.value]
                                                 }
@@ -1886,22 +1888,6 @@ export default class salesInvoice extends React.PureComponent
                                         let rowIndex = e.component.getRowIndexByKey(e.key)
                                         console.log(rowIndex)
 
-                                        if(typeof e.data.QUANTITY != 'undefined')
-                                        {
-                                            let tmpQuery = 
-                                            {
-                                                query :"SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID) AS PRICE",
-                                                param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
-                                                value : [e.key.ITEM,this.docObj.dt()[0].INPUT,e.data.QUANTITY]
-                                            }
-                                            let tmpData = await this.core.sql.execute(tmpQuery) 
-                                            if(tmpData.result.recordset.length > 0)
-                                            {
-                                                e.key.PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
-                                                
-                                                this._calculateTotal()
-                                            }
-                                        }
                                         if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                         {
                                             e.key.DISCOUNT = parseFloat((((e.key.AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(2))
@@ -1959,6 +1945,7 @@ export default class salesInvoice extends React.PureComponent
                                         e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3))
                                         e.key.TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +e.key.VAT).toFixed(3))
                                        
+                                        console.log(e.key)
                                         let tmpMargin = (e.key.TOTAL - e.key.VAT) - (e.key.COST_PRICE * e.key.QUANTITY)
                                         let tmpMarginRate = ((tmpMargin) * 100) / e.key.QUANTITY
                                         console.log(tmpMargin.toFixed(2))
@@ -2701,7 +2688,7 @@ export default class salesInvoice extends React.PureComponent
                                 onValueChanged={(async()=>
                                     {
                                     }).bind(this)}
-                                data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '15'"},sql:this.core.sql}}}
+                                data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '22'"},sql:this.core.sql}}}
                                 param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                 access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                 >
