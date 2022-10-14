@@ -1136,7 +1136,7 @@ export default class branchSaleDispatch extends React.PureComponent
                                         {
                                             await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
                                             this.pg_txtCustomerCode.show()
-                                            this.pg_txtCustomerCode.onClick = (data) =>
+                                            this.pg_txtCustomerCode.onClick = async(data) =>
                                             {
                                                 if(data.length > 0)
                                                 {
@@ -1153,6 +1153,29 @@ export default class branchSaleDispatch extends React.PureComponent
                                                     {
                                                         this.frmDocItems.option('disabled',false)
                                                     }
+                                                     let tmpQuery = 
+                                                    {
+                                                        query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
+                                                        param : ['CUSTOMER:string|50'],
+                                                        value : [ data[0].GUID]
+                                                    }
+                                                    let tmpAdressData = await this.core.sql.execute(tmpQuery) 
+                                                    if(tmpAdressData.result.recordset.length > 1)
+                                                    {   
+                                                        await this.pg_adress.setData(tmpAdressData.result.recordset)
+                                                        this.pg_adress.show()
+                                                        this.pg_adress.onClick = async(pdata) =>
+                                                        {
+                                                            if(pdata.length > 0)
+                                                            {
+                                                                this.docObj.dt()[0].ADDRESS = pdata[0].TYPE
+                                                            }
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        await this.pg_adress.setData([])
+                                                    }
                                                 }
                                                 this._getBarcodes()
                                             }
@@ -1166,7 +1189,7 @@ export default class branchSaleDispatch extends React.PureComponent
                                                 onClick:()=>
                                                 {
                                                     this.pg_txtCustomerCode.show()
-                                                    this.pg_txtCustomerCode.onClick = (data) =>
+                                                    this.pg_txtCustomerCode.onClick = async(data) =>
                                                     {
                                                         if(data.length > 0)
                                                         {
@@ -1182,6 +1205,29 @@ export default class branchSaleDispatch extends React.PureComponent
                                                             if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                                             {
                                                                 this.frmDocItems.option('disabled',false)
+                                                            }
+                                                             let tmpQuery = 
+                                                    {
+                                                        query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
+                                                        param : ['CUSTOMER:string|50'],
+                                                        value : [ data[0].GUID]
+                                                    }
+                                                    let tmpAdressData = await this.core.sql.execute(tmpQuery) 
+                                                            if(tmpAdressData.result.recordset.length > 1)
+                                                            {   
+                                                                await this.pg_adress.setData(tmpAdressData.result.recordset)
+                                                                this.pg_adress.show()
+                                                                this.pg_adress.onClick = async(pdata) =>
+                                                                {
+                                                                    if(pdata.length > 0)
+                                                                    {
+                                                                        this.docObj.dt()[0].ADDRESS = pdata[0].TYPE
+                                                                    }
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                await this.pg_adress.setData([])
                                                             }
                                                         }
                                                         this._getBarcodes()
@@ -2375,6 +2421,21 @@ export default class branchSaleDispatch extends React.PureComponent
                         <Column dataField="PRICE" caption={this.t("pg_ordersGrid.clmPrice")} width={200}  format={{ style: "currency", currency: "EUR",precision: 2}} />
                         <Column dataField="TOTAL" caption={this.t("pg_ordersGrid.clmTotal")} width={300}  format={{ style: "currency", currency: "EUR",precision: 2}}/>
                     </NdPopGrid>
+                     {/* Adres Seçim POPUP */}
+                     <NdPopGrid id={"pg_adress"} parent={this} container={"#root"}
+                        visible={false}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        showBorders={true}
+                        width={'90%'}
+                        height={'90%'}
+                        title={this.t("pg_adress.title")} //
+                        >
+                            <Column dataField="ADRESS" caption={this.t("pg_adress.clmAdress")} width={250} />
+                            <Column dataField="CITY" caption={this.t("pg_adress.clmCiyt")} width={150} />
+                            <Column dataField="ZIPCODE" caption={this.t("pg_adress.clmZipcode")} width={300} defaultSortOrder="asc" />
+                            <Column dataField="COUNTRY" caption={this.t("pg_adress.clmCountry")} width={200}/>
+                        </NdPopGrid>
                 </ScrollView>                
             </div>
         )

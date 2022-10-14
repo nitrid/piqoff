@@ -2769,6 +2769,14 @@ export const langFr =
             foodTicket : "Bon alimentaire",   // BAK
             bill : "Facture",   // BAK
         },
+        pg_adress : 
+        {
+            title : "Adres Seçimi",   // BAK
+            clmAdress : "ADRES",   // BAK
+            clmCiyt : "ŞEHİR",   // BAK
+            clmZipcode : "POSTA  KODU",   // BAK
+            clmCountry : "ÜLKE",   // BAK
+        },
     },
     ftr_02_002 : // "Satış Faturası"
     {
@@ -3127,6 +3135,14 @@ export const langFr =
             clmName : "Nom",
             clmQuantity : "Quantité"
         },
+        pg_adress : 
+        {
+            title : "Adres Seçimi",   // BAK
+            clmAdress : "ADRES",   // BAK
+            clmCiyt : "ŞEHİR",   // BAK
+            clmZipcode : "POSTA  KODU",   // BAK
+            clmCountry : "ÜLKE",   // BAK
+        },
     },
     ftr_02_003 : // "İade Faturası"
     {
@@ -3430,6 +3446,14 @@ export const langFr =
             clmName : "Nom",
             clmQuantity : "Quantité"
         },
+        pg_adress : 
+        {
+            title : "Adres Seçimi",   // BAK
+            clmAdress : "ADRES",   // BAK
+            clmCiyt : "ŞEHİR",   // BAK
+            clmZipcode : "POSTA  KODU",   // BAK
+            clmCountry : "ÜLKE",   // BAK
+        },
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
     {
@@ -3719,6 +3743,14 @@ export const langFr =
             clmQuantity : "Adet",   // BAK
             clmPrice : "Fiyat",   // BAK
             clmTotal : "Tutar"   // BAK
+        },
+        pg_adress : 
+        {
+            title : "Adres Seçimi",   // BAK
+            clmAdress : "ADRES",   // BAK
+            clmCiyt : "ŞEHİR",   // BAK
+            clmZipcode : "POSTA  KODU",   // BAK
+            clmCountry : "ÜLKE",   // BAK
         },
     },
     ftr_02_005 : // "Şube Satış Faturası"
@@ -4078,6 +4110,14 @@ export const langFr =
             clmName : "Nom",
             clmQuantity : "Quantité"
         },
+        pg_adress : 
+        {
+            title : "Adres Seçimi",   // BAK
+            clmAdress : "ADRES",   // BAK
+            clmCiyt : "ŞEHİR",   // BAK
+            clmZipcode : "POSTA  KODU",   // BAK
+            clmCountry : "ÜLKE",   // BAK
+        },
     },
     ftr_04_001 : // "Proforma Fiyat Farkı Faturası"
     {
@@ -4373,7 +4413,15 @@ export const langFr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Evrakınızda  Faturaya çevirilmiş satır var.. Bu evrak silinemez !"
-        }
+        },
+        pg_adress : 
+        {
+            title : "Adres Seçimi",   // BAK
+            clmAdress : "ADRES",   // BAK
+            clmCiyt : "ŞEHİR",   // BAK
+            clmZipcode : "POSTA  KODU",   // BAK
+            clmCountry : "ÜLKE",   // BAK
+        },
     },
     promo_01_001: //  "Promosyon Tanımları"
     {
@@ -4881,7 +4929,15 @@ export const langFr =
             title: "Attention", // BAK
             btn01: "OK", // BAK
             msg: "Une ligne de votre document a été convertie en facture. Ce document ne peut pas être supprimé !"  // BAK
-        }
+        },
+        pg_adress : 
+        {
+            title : "Adres Seçimi",   // BAK
+            clmAdress : "ADRES",   // BAK
+            clmCiyt : "ŞEHİR",   // BAK
+            clmZipcode : "POSTA  KODU",   // BAK
+            clmCountry : "ÜLKE",   // BAK
+        },
     },
     irs_02_002 : // Satış İrsaliyesi"
     {
@@ -5184,7 +5240,15 @@ export const langFr =
             title: "Attention", // BAK
             btn01: "OK", // BAK
             msg: "Une ligne a été convertie en facture dans votre document. Ce document ne peut pas être supprimé.!"  // BAK
-        }
+        },
+        pg_adress : 
+        {
+            title : "Adres Seçimi",   // BAK
+            clmAdress : "ADRES",   // BAK
+            clmCiyt : "ŞEHİR",   // BAK
+            clmZipcode : "POSTA  KODU",   // BAK
+            clmCountry : "ÜLKE",   // BAK
+        },
     },
     irs_02_003 : // "İade İrsaliyesi"
     {
@@ -5432,7 +5496,15 @@ export const langFr =
             title: "Attention", // BAK
             btn01: "OK", // BAK
             msg: "Une ligne a été convertie en facture dans votre document. Ce document ne peut pas être supprimé !"  // BAK
-        }
+        },
+        pg_adress : 
+        {
+            title : "Adres Seçimi",   // BAK
+            clmAdress : "ADRES",   // BAK
+            clmCiyt : "ŞEHİR",   // BAK
+            clmZipcode : "POSTA  KODU",   // BAK
+            clmCountry : "ÜLKE",   // BAK
+        },
     },
     irs_02_004 : // Şube Satış İrsaliyesi"
     {
@@ -5735,7 +5807,15 @@ export const langFr =
             title: "Attention", // BAK
             btn01: "OK", // BAK
             msg: "Une ligne a été convertie en facture dans votre document. Ce document ne peut pas être supprimé.!"  // BAK
-        }
+        },
+        pg_adress : 
+        {
+            title : "Adres Seçimi",   // BAK
+            clmAdress : "ADRES",   // BAK
+            clmCiyt : "ŞEHİR",   // BAK
+            clmZipcode : "POSTA  KODU",   // BAK
+            clmCountry : "ÜLKE",   // BAK
+        },
     },
     sip_01_001 : // "Alış Sipariş Listesi"
     {
@@ -6101,7 +6181,15 @@ export const langFr =
             title: "Attention",   // BAK
             btn01: "OK",   // BAK
             msg: "Votre document comporte une ligne qui a été convertie en bordereau d'expédition ou en facture. Ce document ne peut pas être supprimé !"   // BAK
-        }
+        },
+        pg_adress : 
+        {
+            title : "Adres Seçimi",   // BAK
+            clmAdress : "ADRES",   // BAK
+            clmCiyt : "ŞEHİR",   // BAK
+            clmZipcode : "POSTA  KODU",   // BAK
+            clmCountry : "ÜLKE",   // BAK
+        },
     },
     sip_02_002 : // "Satış Sipariş"
     {
@@ -6398,7 +6486,15 @@ export const langFr =
             title: "Attention",   // BAK
             btn01: "OK",   // BAK
             msg: "Votre document comporte une ligne qui a été convertie en bordereau d'expédition ou en facture. Ce document ne peut pas être supprimé !"   // BAK
-        }
+        },
+        pg_adress : 
+        {
+            title : "Adres Seçimi",   // BAK
+            clmAdress : "ADRES",   // BAK
+            clmCiyt : "ŞEHİR",   // BAK
+            clmZipcode : "POSTA  KODU",   // BAK
+            clmCountry : "ÜLKE",   // BAK
+        },
     },
     cnt_01_001 : // "Alış Anlaşmaları Listesi"
     {

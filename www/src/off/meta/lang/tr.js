@@ -2801,6 +2801,14 @@ export const langTr =
             otoTransfer : "Otomatik Ödeme",
             foodTicket : "Yemek Çeki",
             bill : "Senet",
+        },  
+        pg_adress : 
+        {
+            title : "Adres Seçimi",
+            clmAdress : "ADRES",
+            clmCiyt : "ŞEHİR",
+            clmZipcode : "POSTA  KODU",
+            clmCountry : "ÜLKE",
         },
     },
     ftr_02_002 : // "Satış Faturası"
@@ -3160,6 +3168,14 @@ export const langTr =
             clmName : "ADI",
             clmQuantity : "Adet"
         },
+        pg_adress : 
+        {
+            title : "Adres Seçimi",
+            clmAdress : "ADRES",
+            clmCiyt : "ŞEHİR",
+            clmZipcode : "POSTA  KODU",
+            clmCountry : "ÜLKE",
+        },
     },
     ftr_02_003 : // "İade Faturası"
     {
@@ -3463,6 +3479,14 @@ export const langTr =
             clmName : "ADI",
             clmQuantity : "Adet"
         },
+        pg_adress : 
+        {
+            title : "Adres Seçimi",
+            clmAdress : "ADRES",
+            clmCiyt : "ŞEHİR",
+            clmZipcode : "POSTA  KODU",
+            clmCountry : "ÜLKE",
+        },
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
     {
@@ -3752,6 +3776,14 @@ export const langTr =
             clmQuantity : "Adet",
             clmPrice : "Fiyat",
             clmTotal : "Tutar"
+        },
+        pg_adress : 
+        {
+            title : "Adres Seçimi",
+            clmAdress : "ADRES",
+            clmCiyt : "ŞEHİR",
+            clmZipcode : "POSTA  KODU",
+            clmCountry : "ÜLKE",
         },
     },
     ftr_02_005 : // "Şube Satış Faturası"
@@ -4110,6 +4142,14 @@ export const langTr =
         {
             clmName : "ADI",
             clmQuantity : "Adet"
+        },
+        pg_adress : 
+        {
+            title : "Adres Seçimi",
+            clmAdress : "ADRES",
+            clmCiyt : "ŞEHİR",
+            clmZipcode : "POSTA  KODU",
+            clmCountry : "ÜLKE",
         },
     },
     ftr_04_001 : // "Proforma Fiyat Farkı Faturası"
@@ -4945,7 +4985,15 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Evrakınızda  Faturaya çevirilmiş satır var.. Bu evrak silinemez !"
-        }
+        },
+        pg_adress : 
+        {
+            title : "Adres Seçimi",
+            clmAdress : "ADRES",
+            clmCiyt : "ŞEHİR",
+            clmZipcode : "POSTA  KODU",
+            clmCountry : "ÜLKE",
+        },
     },
     irs_02_002 : // Satış İrsaliyesi"
     {
@@ -5248,7 +5296,15 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Evrakınızda  Faturaya çevirilmiş satır var.. Bu evrak silinemez !"
-        }
+        },
+        pg_adress : 
+        {
+            title : "Adres Seçimi",
+            clmAdress : "ADRES",
+            clmCiyt : "ŞEHİR",
+            clmZipcode : "POSTA  KODU",
+            clmCountry : "ÜLKE",
+        },
     },
     irs_02_003 : // "İade İrsaliyesi"
     {
@@ -5496,7 +5552,15 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Evrakınızda  Faturaya çevirilmiş satır var.. Bu evrak silinemez !"
-        }
+        },
+        pg_adress : 
+        {
+            title : "Adres Seçimi",
+            clmAdress : "ADRES",
+            clmCiyt : "ŞEHİR",
+            clmZipcode : "POSTA  KODU",
+            clmCountry : "ÜLKE",
+        },
     },
     irs_02_004 : // Şube Satış İrsaliyesi"
     {
@@ -5799,7 +5863,15 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Evrakınızda  Faturaya çevirilmiş satır var.. Bu evrak silinemez !"
-        }
+        },
+        pg_adress : 
+        {
+            title : "Adres Seçimi",
+            clmAdress : "ADRES",
+            clmCiyt : "ŞEHİR",
+            clmZipcode : "POSTA  KODU",
+            clmCountry : "ÜLKE",
+        },
     },
     sip_01_001 : // "Alış Sipariş Listesi"
     {
@@ -6165,7 +6237,15 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Evrakınızda İrsaliye veya Faturaya çevirilmiş satır var.. Bu evrak silinemez !"
-        }
+        },
+        pg_adress : 
+        {
+            title : "Adres Seçimi",
+            clmAdress : "ADRES",
+            clmCiyt : "ŞEHİR",
+            clmZipcode : "POSTA  KODU",
+            clmCountry : "ÜLKE",
+        },
     },
     sip_02_002 : // "Satış Sipariş"
     {
@@ -6462,7 +6542,15 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Evrakınızda İrsaliye veya Faturaya çevirilmiş satır var.. Bu evrak silinemez !"
-        }
+        },
+        pg_adress : 
+        {
+            title : "Adres Seçimi",
+            clmAdress : "ADRES",
+            clmCiyt : "ŞEHİR",
+            clmZipcode : "POSTA  KODU",
+            clmCountry : "ÜLKE",
+        },
     },
     cnt_01_001 : // "Alış Anlaşmaları Listesi"
     {
