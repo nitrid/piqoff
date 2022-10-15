@@ -34,10 +34,12 @@ export default class salesOrder extends React.Component
             grp:"",
             guid: "00000000-0000-0000-0000-000000000000",
         }
+        this.grp = ''
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.barcodeScan = this.barcodeScan.bind(this)
+        this.save = ''
     }
     async componentDidMount()
     {
@@ -46,6 +48,7 @@ export default class salesOrder extends React.Component
     }
     async init()
     {
+        this.popitemGrpSelect.show()
     }
     async barcodeScan()
     {
@@ -115,30 +118,38 @@ export default class salesOrder extends React.Component
             value : [this.cmbItemGrp.value,this.barcode.guid]
         }
         await this.core.sql.execute(tmpQuery) 
+        this.save = this.t("Succes")
         this.setState({tbBarcode:"visible"})
     }
     render()
     {
         return(
         <ScrollView>
-            <div className="row px-2 pt-2">
+            <div className="row px-1 pt-1">
                 <Form colCount={2}>
-                    <Item>
+                    {/* <Item>
                         <div className="row">
-                            <div className="col-4 px-2 pt-2">
+                            <div className="col-4">
                             </div>
-                            <div className="col-4 px-2 pt-2">
+                            <div className="col-4">
                             </div>
-                            <div className="col-4 px-2 pt-2">
+                            <div className="col-4">
                                 
-                                <NdCheckBox id="chkAutoAdd" text={this.t("chkAutoAdd")} parent={this} defaultValue={false} 
+                                <NdCheckBox id="chkAutoAdd" text={this.t("chkAutoAdd")} parent={this} defaultValue={true} 
                                 param={this.param.filter({ELEMENT:'chkAutoAdd',USERS:this.user.CODE})}
                                 access={this.access.filter({ELEMENT:'chkAutoAdd',USERS:this.user.CODE})}/>
                             </div>
                         </div>
+                    </Item> */}
+                     <Item> 
+                        <div>
+                            <h5 className='text-danger'>
+                                {this.t("thisGrp")} : {this.grp}
+                            </h5>
+                        </div>
                     </Item>
                     <Item>
-                    <div className="col-12 px-2 pt-2">
+                    <div className="col-12">
                             <NdTextBox id="txtBarcode" parent={this} placeholder={this.t("txtBarcodePlace")}
                             button=
                             {
@@ -162,10 +173,8 @@ export default class salesOrder extends React.Component
                                                     guid:data[0].GUID
                                                 }
                                                 this.txtBarcode.value = ""
-                                                if(this.chkAutoAdd.value == true)
-                                                {
+                                                
                                                     this.updateGroup()
-                                                }
                                                 this.setState({tbBarcode:"visible"})
                                             }
                                         }
@@ -203,10 +212,8 @@ export default class salesOrder extends React.Component
                                         this.barcode.grp = tmpData.result.recordset[0].GRP 
                                         this.barcode.guid = tmpData.result.recordset[0].GUID 
                                         this.txtBarcode.value = ""
-                                        if(this.chkAutoAdd.value == true)
-                                        {
-                                            this.updateGroup()
-                                        }
+                                      
+                                        this.updateGroup()
                                         this.setState({tbBarcode:"visible"})
                                     }
                                     else
@@ -229,58 +236,21 @@ export default class salesOrder extends React.Component
                                         this.txtBarcode.value = ""
                                         this.setState({tbBarcode:"visible"})
                                     }
-                                    
                                 }).bind(this)}></NdTextBox>
                         </div>
                     </Item>
                     <Item> 
                         <div>
-                            <h4 className="text-center">
+                            <h5 className="text-center">
                                 {this.barcode.name}
-                            </h4>
+                            </h5>
                         </div>
                     </Item>
-                {/* cmbItemGrp */}
-                <Item>
-                        <Label text={this.t("cmbItemGrp")} alignment="right" />
-                        <NdSelectBox simple={true} parent={this} id="cmbItemGrp" tabIndex={this.tabIndex}
-                        displayExpr="NAME"                       
-                        valueExpr="CODE"
-                        value=""
-                        searchEnabled={true} 
-                        showClearButton={true}
-                        pageSize ={50}
-                        notRefresh={true}
-                        param={this.param.filter({ELEMENT:'cmbItemGrp',USERS:this.user.CODE})}
-                        access={this.access.filter({ELEMENT:'cmbItemGrp',USERS:this.user.CODE})}
-                        data={{source:{select:{query : "SELECT CODE,NAME FROM ITEM_GROUP ORDER BY NAME ASC"},sql:this.core.sql}}}
-                        onValueChanged={(e)=>
-                        {
-
-                        }}
-                        />
-                    </Item>
-                    <Item>
-                        <div className="row">
-                            <NdButton text={this.t("btnUpdate")} type="default" width="100%" onClick={async()=>
-                            {
-                                if(this.barcode.code != '')
-                                {
-                                this.updateGroup()
-                                
-                                }
-                                else
-                                {
-                                    let tmpConfObj = 
-                                    {
-                                        id:'msgItemNotSelect',showTitle:true,title:this.t("msgItemNotSelect.title"),showCloseButton:true,width:'350px',height:'200px',
-                                        button:[{id:"btn01",caption:this.t("msgItemNotSelect.btn01"),location:'after'}],
-                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotSelect.msg")}</div>)
-                                    }
-                                    await dialog(tmpConfObj);
-                                    return
-                                }
-                            }}></NdButton>
+                    <Item> 
+                        <div>
+                            <h5 className="text-center text-success">
+                                {this.save}
+                            </h5>
                         </div>
                     </Item>
                 </Form>
@@ -326,6 +296,50 @@ export default class salesOrder extends React.Component
                         <Column dataField="CODE" caption={this.t("popItemCode.clmCode")} width={100} />
                         <Column dataField="NAME" caption={this.t("popItemCode.clmName")} defaultSortOrder="asc" />
                 </NdPopGrid>
+                   {/* Ürün :Grubu Seçimi */}
+                   <NdPopUp parent={this} id={"popitemGrpSelect"} 
+                visible={false}                        
+                showTitle={true}
+                title={this.t("popitemGrpSelect.title")}
+                container={"#root"} 
+                width={'100%'}
+                height={'200'}
+                position={{of:'#root'}}
+                >
+                    <Form colCount={1} height={'fit-content'} id={"frmPrice" + this.tabIndex}>
+                    {/* cmbItemGrp */}
+                    <Item>
+                        <Label text={this.t("cmbItemGrp")} alignment="right" />
+                        <NdSelectBox simple={true} parent={this} id="cmbItemGrp" tabIndex={this.tabIndex}
+                        displayExpr="NAME"                       
+                        valueExpr="CODE"
+                        value=""
+                        searchEnabled={true} 
+                        showClearButton={true}
+                        pageSize ={50}
+                        notRefresh={true}
+                        param={this.param.filter({ELEMENT:'cmbItemGrp',USERS:this.user.CODE})}
+                        access={this.access.filter({ELEMENT:'cmbItemGrp',USERS:this.user.CODE})}
+                        data={{source:{select:{query : "SELECT CODE,NAME FROM ITEM_GROUP ORDER BY NAME ASC"},sql:this.core.sql}}}
+                        onValueChanged={(e)=>
+                        {
+                            this.grp = this.cmbItemGrp.displayValue
+                            this.setState({tbBarcode:"visible"})
+                        }}
+                        />
+                    </Item>
+                        <Item>
+                        <div className="row">
+                            <div className="col-12 px-4 pt-4">
+                            <NdButton text={this.t("btnApprove")} type="default" width="100%" validationGroup={"frmBarcode" + this.tabIndex} onClick={async(e)=>
+                            {
+                               this.popitemGrpSelect.hide()
+                            }}></NdButton>
+                            </div>
+                        </div>
+                    </Item>
+                    </Form>
+                </NdPopUp>
             </div>
         </ScrollView>
         )

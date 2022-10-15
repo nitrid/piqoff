@@ -347,22 +347,22 @@ export default class labelPrinting extends React.Component
     {
         return(
             <ScrollView>
-            <div className="row px-2 pt-2">
-                <div className="row px-2 pt-2" style={{visibility:this.state.tbMain,position:"absolute"}}>
+            <div className="row px-1 pt-1">
+                <div className="row" style={{visibility:this.state.tbMain,position:"absolute"}}>
                     <Form colCount={1}>
-                        <Item>
+                        {/* <Item>
                             <div className="row">
                                 <div className="col-8"></div>
                                 <div className="col-4">
                                     <DropDownButton text={this.t("btnDropmenu")} icon="menu" items={this.dropmenuMainItems}  onItemClick={this.dropmenuClick}/>
                                 </div>
                             </div>
-                        </Item>
+                        </Item> */}
                         {/* txtSer-Refno */}
                         <Item>
                             <Label text={this.t("txtRefRefno")} alignment="right" />
                             <div className="row">
-                                <div className="col-5 pe-0">
+                                <div className="col-4 pe-0">
                                     <NdTextBox id="txtSer" parent={this} simple={true} dt={{data:this.mainLblObj.dt('MAIN_LABEL_QUEUE'),field:"REF"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     readOnly={true}
@@ -389,7 +389,7 @@ export default class labelPrinting extends React.Component
                                         </Validator>  
                                     </NdTextBox>
                                 </div>
-                                <div className="col-7 ps-0">
+                                <div className="col-8 ps-0">
                                     <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.mainLblObj.dt('MAIN_LABEL_QUEUE'),field:"REF_NO"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     readOnly={true}
@@ -410,6 +410,14 @@ export default class labelPrinting extends React.Component
                                                 onClick:()=>
                                                 {
                                                     this.txtRefno.value = Math.floor(Date.now() / 1000)
+                                                }
+                                            },
+                                            {
+                                                id:'03',
+                                                icon:'revert',
+                                                onClick:()=>
+                                                {
+                                                    this.init()
                                                 }
                                             }
                                         ]
@@ -458,8 +466,9 @@ export default class labelPrinting extends React.Component
                                 
                             }
                             >
-                                <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={100} defaultSortOrder="asc"/>
-                                <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={50} defaultSortOrder="asc" />
+                                <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150} defaultSortOrder="asc"/>
+                                <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={100} defaultSortOrder="asc" />
+                                <Column dataField="" caption="" width={10} defaultSortOrder="asc" />
                             </NdPopGrid>
                         </Item>
                         {/* design */}
@@ -535,26 +544,24 @@ export default class labelPrinting extends React.Component
                         </Item>
                     </Form>
                 </div>
-                <div className="row px-2 pt-2" style={{visibility:this.state.tbBarcode,position:"absolute"}}>
+                <div className="row" style={{visibility:this.state.tbBarcode,position:"absolute"}}>
                     <Form colCount={1} >
                         <Item>
-                        <div className="row">
-                            <div className="col-4 px-2 pt-2">
+                        <div className="row"style={{height:"25px"}}>
+                            <div className="col-4">
                                 <NdButton icon="arrowleft" type="default" width="100%" onClick={()=>this.pageChange("Main")}></NdButton>
                             </div>
-                            <div className="col-4 px-2 pt-2">
+                            <div className="col-4">
                                 <NdButton icon="detailslayout" type="default" width="100%" onClick={()=>this.pageChange("Document")}></NdButton>
                             </div>
-                            <div className="col-4 px-2 pt-2">
+                            <div className="col-4">
                                 
-                                <NdCheckBox id="chkAutoAdd" text={this.t("chkAutoAdd")} parent={this} defaultValue={false} 
-                                param={this.param.filter({ELEMENT:'chkAutoAdd',USERS:this.user.CODE})}
-                                access={this.access.filter({ELEMENT:'chkAutoAdd',USERS:this.user.CODE})}/>
+                                <NdCheckBox id="chkAutoAdd" text={this.t("chkAutoAdd")} parent={this} value={true} defaultValue={true} />
                             </div>
                         </div>
                         </Item>
                         <Item>
-                        <div className="col-12 px-2 pt-2">
+                        <div className="col-12 py-1 pt-1">
                             <NdTextBox id="txtBarcode" parent={this} placeholder={this.t("txtBarcodePlace")}
                                 button=
                                 {
@@ -661,9 +668,9 @@ export default class labelPrinting extends React.Component
                         </Item>
                         <Item> 
                             <div>
-                                <h4 className="text-center">
+                                <h5 className="text-center">
                                     {this.barcode.name}
-                                </h4>
+                                </h5>
                             </div>
                         </Item>
                         {/* txtPage */}
@@ -713,25 +720,25 @@ export default class labelPrinting extends React.Component
                         </Item> 
                         <Item>
                             <div className="row">
-                                <div className="col-12 px-4 pt-4">
+                                <div className="col-12">
                                     <NdButton text={this.t("btnItemAdd")} type="default" width="100%" onClick={()=>this.addItem()}></NdButton>
                                 </div>
                             </div>
                         </Item>
                     </Form>
                 </div>
-                <div className="row px-2 pt-2" style={{visibility:this.state.tbDocument,position:"absolute"}}>
+                <div className="row" style={{visibility:this.state.tbDocument,position:"absolute"}}>
                     <Form colCount={1} >
                     <Item>
                         <div className="row">
-                            <div className="col-4 px-2 pt-2">
-                                <NdButton icon="arrowleft" type="default" width="100%" onClick={()=>this.pageChange("Barcode")}></NdButton>
-                            </div>
-                            <div className="col-4 px-2 pt-2">
-                                {/* <NdButton icon="plus" type="default" width="100%" onClick={()=>this.pageChange("Barcode")}></NdButton> */}
+                            <div className="col-4">
+                                <NdButton icon="arrowleft" type="default" width="100%" onClick={()=>this.pageChange("Main")}></NdButton>
                             </div>
                             <div className="col-4">
-                                    <DropDownButton text={this.t("btnDropmenu")} icon="menu" items={this.dropmenuDocItems}  onItemClick={this.dropmenuClick}/>
+                                <NdButton icon="plus" type="default" width="100%" onClick={()=>this.pageChange("Barcode")}></NdButton>
+                            </div>
+                            <div className="col-4">
+                                  
                             </div>
                         </div>
                     </Item>
@@ -744,18 +751,23 @@ export default class labelPrinting extends React.Component
                         height={'400'} 
                         width={'100%'}
                         dbApply={false}
+                        onContentReady={async(e)=>{
+                            e.component.columnOption("command:edit", 'visibleIndex', -1)
+                        }}
                         onRowUpdated={async(e)=>{
                             
                         }}
                         onRowRemoved={async (e)=>{
-                        
+                            let Data = {data:this.lblObj.dt().toArray()}
+                            this.mainLblObj.dt()[0].DATA = JSON.stringify(Data)
+                            await this.mainLblObj.save()
                         }}
                         >
                             <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                             <Scrolling mode="standart" />
                             <Editing mode="cell" allowUpdating={false} allowDeleting={true} confirmDelete={false}/>
-                            <Column dataField="BARCODE" caption={this.t("grdLblPrinting.clmBarcode")} width={130} />
-                            <Column dataField="NAME" caption={this.t("grdLblPrinting.clmItemName")}  width={200}/>
+                            <Column dataField="BARCODE" caption={this.t("grdLblPrinting.clmBarcode")} width={110} />
+                            <Column dataField="NAME" caption={this.t("grdLblPrinting.clmItemName")}  width={250}/>
                             <Column dataField="PRICE" caption={this.t("grdLblPrinting.clmPrice")} width={60} />
                         </NdGrid>
                     </Item>

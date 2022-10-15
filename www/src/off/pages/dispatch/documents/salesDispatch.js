@@ -1817,9 +1817,10 @@ export default class salesDispatch extends React.PureComponent
                                     }}
                                     onRowRemoved={async (e)=>{
                                         this._calculateTotal()
-                                        await this.docObj.save()
                                     }}
                                     >
+                                        <Paging defaultPageSize={10} />
+                                        <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>

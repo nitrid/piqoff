@@ -52,6 +52,7 @@ export default class salesOrder extends React.Component
     }
     async init()
     {
+       this.txtBarcode.focus()
         await this.grdPrice.dataRefresh({source:this.itemsPriceObj.dt('ITEM_PRICE')});
     }
     async barcodeScan()
@@ -110,10 +111,10 @@ export default class salesOrder extends React.Component
     {
         return(
             <ScrollView>
-            <div className="row px-2 pt-2">
+            <div className="row px-1 pt-1">
                 <Form colCount={2}>
                     <Item>
-                    <div className="col-12 px-2 pt-2">
+                    <div className="col-12">
                             <NdTextBox id="txtBarcode" parent={this} placeholder={this.t("txtBarcodePlace")}
                             button=
                             {
@@ -205,19 +206,19 @@ export default class salesOrder extends React.Component
                     </Item>
                     <Item> 
                         <div>
-                            <h4 className="text-center">
+                            <h5 className="text-center">
                                 {this.barcode.name}
-                            </h4>
+                            </h5>
                         </div>
                     </Item>
                     <Item> 
                         <div>
-                            <h4 className="text-center">
+                            <h5 className="text-center">
                                 {this.barcode.price} €
-                            </h4>
+                            </h5>
                         </div>
                     </Item>
-                    <Item>
+                    {/* <Item>
                         <div className="row">
                             <div className="col-12 px-4 pt-4">
                             <NdButton text={this.t("btnAddPrice")} type="default" width="100%" onClick={async()=>
@@ -239,7 +240,7 @@ export default class salesOrder extends React.Component
                             }}></NdButton>
                             </div>
                         </div>
-                    </Item>
+                    </Item> */}
                     <Item>
                         <NdGrid parent={this} id={"grdPrice"} 
                         showBorders={true} 
@@ -404,11 +405,11 @@ export default class salesOrder extends React.Component
                                     onClick={async (e)=>
                                     {
                                           //FİYAT GİRERKEN MALİYET FİYAT KONTROLÜ
-                                          if(this.prmObj.filter({ID:'SalePriceCostCtrl'}).getValue() && this.this.barcode.costPrice.value >= this.txtPopPriPrice.value)
+                                          if(this.prmObj.filter({ID:'SalePriceCostCtrl'}).getValue() && this.barcode.costPrice >= this.txtPopPriPrice.value)
                                           {
                                               let tmpConfObj =
                                               {
-                                                  id:'msgCostPriceValid',showTitle:true,title:this.t("msgCostPriceValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                  id:'msgCostPriceValid',showTitle:true,title:this.t("msgCostPriceValid.title"),showCloseButton:true,width:'350px',height:'200px',
                                                   button:[{id:"btn01",caption:this.t("msgCostPriceValid.btn01"),location:'after'}],
                                                   content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCostPriceValid.msg")}</div>)
                                               }

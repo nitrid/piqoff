@@ -34,7 +34,7 @@ export const langTr =
         stk_01_002: "Tedarikçi Gör",
         stk_01_003: "Barkod Tanımlama",
         stk_01_004: "Ü.Grubu Gör-Değiştir",
-        stk_01_005: "Fiyat Değiştir",
+        stk_01_005: "Fiyat Güncelle",
         stk_01_006: "Barkod Ekle",
         stk_01_007: "Ü.Grubu Güncelle",
         stk_02: "Evraklar",
@@ -83,8 +83,8 @@ export const langTr =
         numPrice :"Fiyat",
         btnAddPrice: "Fiyat Ekle",
         btnChangePrice: "Fiyat Değiştir",
-        txtNewBarcode : "Eklenecek Barkod",
-        txtOldBarcode : "Raf Barkodu",
+        txtNewBarcode : "Yeni Barkod",
+        txtOldBarcode : "Geçerli Barkodu",
         btnAddBarcode : "Barkod Ekle",
         popBarcodeAdd : 
         {
@@ -387,7 +387,12 @@ export const langTr =
             msg: "Barkod Bulunamadı !"
         },
         txtDepot : "Depo",
-
+        msgCostPriceValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen alış fiyatından yüksek fiyat giriniz !"
+        },
     },
     stk_01_006 : // "Barkod Ekle",
     {
@@ -476,8 +481,10 @@ export const langTr =
         btnItemEntry : "Stok Girişi",
         txtBarcodeEnter: "Barkod Girişi",
         cmbItemGrp: "Ürün Grubu",
-        thisGrp :"Mevcut Grup",
+        thisGrp :"Seçilen Grup",
         btnUpdate :"Güncelle",
+        btnApprove : "Onayla",
+        Succes : "Güncelleme Başarılı",
         popItemCode : 
         {
             title : "Stok Seçimi",
@@ -508,6 +515,10 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Barkod Bulunamadı !"
+        },
+        popitemGrpSelect:
+        {
+            title: "Dikkat",
         },
     },
     stk_02_001 : // "Etiket Basımı",

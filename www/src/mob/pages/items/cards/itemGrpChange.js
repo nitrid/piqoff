@@ -111,10 +111,10 @@ export default class salesOrder extends React.Component
     {
         return(
         <ScrollView>
-            <div className="row px-2 pt-2">
+            <div className="row px-1 pt-1">
                 <Form colCount={2}>
                     <Item>
-                    <div className="col-12 px-2 pt-2">
+                    <div className="col-12">
                             <NdTextBox id="txtBarcode" parent={this} placeholder={this.t("txtBarcodePlace")}
                             button=
                             {
@@ -204,16 +204,16 @@ export default class salesOrder extends React.Component
                     </Item>
                     <Item> 
                         <div>
-                            <h4 className="text-center">
+                            <h5 className="text-center">
                                 {this.barcode.name}
-                            </h4>
+                            </h5>
                         </div>
                     </Item>
                     <Item> 
                         <div>
-                            <h4 className='text-primary'>
+                            <h5 className='text-primary'>
                             {this.t("thisGrp")} : {this.barcode.grp}
-                            </h4>
+                            </h5>
                         </div>
                     </Item>
                 {/* cmbItemGrp */}
@@ -237,7 +237,7 @@ export default class salesOrder extends React.Component
                         />
                     </Item>
                     <Item>
-                        <div className="row">
+                        <div className="row py-1">
                             <NdButton text={this.t("btnChangeGroup")} type="default" width="100%" onClick={async()=>
                             {
                                 if(this.barcode.code != '')
