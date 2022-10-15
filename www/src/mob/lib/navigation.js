@@ -19,17 +19,15 @@ export default class Navigation extends React.PureComponent
         {
             div :
             {
-                height:'100%'
+                height:'100%',
             },
             treeview :
             {
-                padding:'8px',
+                padding:'3px',
                 fontSize:'20px'
             }
         }
         this.menu = menu(App.instance.lang);        
-        console.log(this.menu)
-        
         this.state = 
         {
             loading: true,
@@ -68,7 +66,7 @@ export default class Navigation extends React.PureComponent
         const {currentItem,loading} = this.state;
         if(loading)
         {
-            return <div style={{width:300}}>...</div>
+            return <div style={{width:250}}>...</div>
         }
         else
         {
@@ -76,7 +74,7 @@ export default class Navigation extends React.PureComponent
                 <div style={this.style.div}>
                     <TreeView id="Menu" style={this.style.treeview}
                     items = {this.menu}
-                    width = {300}
+                    width = {250}
                     height = {'100%'}
                     onItemClick = {this.selectItem}
                     searchMode={this.state.value}

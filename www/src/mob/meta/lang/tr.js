@@ -83,6 +83,13 @@ export const langTr =
         numPrice :"Fiyat",
         btnAddPrice: "Fiyat Ekle",
         btnChangePrice: "Fiyat Değiştir",
+        txtNewBarcode : "Eklenecek Barkod",
+        txtOldBarcode : "Raf Barkodu",
+        btnAddBarcode : "Barkod Ekle",
+        popBarcodeAdd : 
+        {
+            title : "Barkod Ekle"
+        },
         popItemCode : 
         {
             title : "Stok Seçimi",
@@ -97,11 +104,28 @@ export const langTr =
             txtPopPriQuantity : "Miktar",
             txtPopPriPrice : "Fiyat"
         },
-        grdPrice :
+        grdPurcPrice :
         {
             title : "Fiyat Değiştir",
             clmQuantity :  "Miktar",
-            clmPrice : "Fiyat",
+            clmPrice : "Alış Fiyat",
+            clmStartDate : " Tarihi",
+            clmCustomer : "Cari"
+        },
+        grdOtherShop :
+        {
+            title : "Fiyat Değiştir",
+            clmQuantity :  "Miktar",
+            clmPrice : "Şube Satış  Fiyat",
+            clmStartDate : " Tarihi",
+            clmShop : "Şube"
+        },
+        grdSalePrice :
+        {
+            title : "Fiyat Değiştir",
+            clmQuantity :  "Miktar",
+            clmPrice : "Satış Fiyat",
+            clmStartDate : "Bitiş Tarihi"
         },
         grdChkCustomer :
         {
@@ -138,7 +162,8 @@ export const langTr =
         msgBarcodeNotFound:
         {
             title: "Dikkat",
-            btn01: "Tamam",
+            btn01: "Yeni Ekle",
+            btn02: "Tamam",
             msg: "Barkod Bulunamadı !"
         },
         txtDepot : "Depo",
@@ -315,6 +340,13 @@ export const langTr =
             title : "Fiyat Değiştir",
             clmQuantity :  "Miktar",
             clmPrice : "Fiyat",
+        },
+        grdSalePrice :
+        {
+            title : "Fiyat Değiştir",
+            clmQuantity :  "Miktar",
+            clmPrice : "Satış Fiyat",
+            clmStartDate : "Bitiş Tarihi"
         },
         grdChkCustomer :
         {

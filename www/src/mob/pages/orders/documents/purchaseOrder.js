@@ -423,7 +423,7 @@ export default class salesOrder extends React.Component
                                 <Label text={this.t("txtRefRefno")} alignment="right" />
                                 <div className="row">
                                     <div className="col-5 pe-0">
-                                        <NdTextBox id="txtRef" style={{height:"14px"}} parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
+                                        <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         readOnly={true}
                                         maxLength={32}

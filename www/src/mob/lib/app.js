@@ -344,12 +344,12 @@ export default class App extends React.PureComponent
                 showPane={true}
                 />
                 <div className="top-bar">
-                    <Toolbar className="main-toolbar" height={56} items={this.toolbarItems}/>
+                    <Toolbar className="main-toolbar" height={45} items={this.toolbarItems}/>
                 </div>
-                <div className="py-2">
-                    <Drawer className="main-drawer" opened={opened} openedStateMode={'shrink'} position={'left'} 
+                <div>
+                    <Drawer className="main-drawer"  opened={opened} openedStateMode={'shrink'} position={'left'} 
                         revealMode={'slide'} component={Navigation} >
-                        <Panel />
+                        <Panel width={250}/>
                     </Drawer>
                 </div>
             </div>

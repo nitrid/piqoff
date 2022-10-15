@@ -35,7 +35,8 @@ export default class salesOrder extends React.Component
             price:0,
             barcode: "",
             code:"",
-            guid:"00000000-0000-0000-0000-000000000000"
+            guid:"00000000-0000-0000-0000-000000000000",
+            costPrice: 0
         }
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
@@ -63,7 +64,7 @@ export default class salesOrder extends React.Component
                 {
                     let tmpQuery = 
                     {
-                        query : "SELECT ITEM_CODE AS CODE,ITEM_NAME AS NAME,ITEM_GUID AS GUID,BARCODE,[dbo].[FN_PRICE_SALE](ITEM_GUID,1,GETDATE()) AS PRICE FROM ITEM_BARCODE_VW_01  WHERE BARCODE = @BARCODE OR ITEM_CODE = @BARCODE ",
+                        query : "SELECT ITEM_CODE AS CODE,ITEM_NAME AS NAME,ITEM_GUID AS GUID,BARCODE,[dbo].[FN_PRICE_SALE](ITEM_GUID,1,GETDATE()) AS PRICE,COST_PRICE FROM ITEM_BARCODE_VW_01  WHERE BARCODE = @BARCODE OR ITEM_CODE = @BARCODE ",
                         param : ['BARCODE:string|50'],
                         value : [result.text]
                     }
@@ -75,9 +76,10 @@ export default class salesOrder extends React.Component
                             code:tmpData.result.recordset[0].CODE,
                             barcode:tmpData.result.recordset[0].BARCODE,
                             price:tmpData.result.recordset[0].PRICE,
-                            guid:tmpData.result.recordset[0].GUID
+                            guid:tmpData.result.recordset[0].GUID,
+                            costPrice : tmpData.result.recordset[0].COST_PRICE
                         }
-                        await this.itemsPriceObj.load({ITEM_GUID:tmpData.result.recordset[0].GUID});
+                        await this.itemsPriceObj.load({ITEM_GUID:tmpData.result.recordset[0].GUID,TYPE:0});
                         this.setState({tbBarcode:"visible"})
                     }
                     else
@@ -132,9 +134,10 @@ export default class salesOrder extends React.Component
                                                     code:data[0].CODE,
                                                     barcode:data[0].BARCODE,
                                                     price:data[0].PRICE,
-                                                    guid:data[0].GUID
+                                                    guid:data[0].COST_PRICE,
+                                                    costPrice:data[0].COST_PRICE
                                                 }
-                                                await this.itemsPriceObj.load({ITEM_GUID:data[0].GUID});
+                                                await this.itemsPriceObj.load({ITEM_GUID:data[0].GUID,TYPE:0});
                                                 this.txtBarcode.value = ""
                                                 this.setState({tbBarcode:"visible"})
                                             }
@@ -159,7 +162,7 @@ export default class salesOrder extends React.Component
                                     }
                                     let tmpQuery = 
                                     {
-                                        query : "SELECT ITEM_CODE AS CODE,ITEM_NAME AS NAME,ITEM_GUID AS GUID,BARCODE,[dbo].[FN_PRICE_SALE](ITEM_GUID,1,GETDATE()) AS PRICE FROM ITEM_BARCODE_VW_01  WHERE BARCODE = @BARCODE OR ITEM_CODE = @BARCODE ",
+                                        query : "SELECT ITEM_CODE AS CODE,ITEM_NAME AS NAME,ITEM_GUID AS GUID,BARCODE,[dbo].[FN_PRICE_SALE](ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000') AS PRICE,COST_PRICE FROM ITEM_BARCODE_VW_01  WHERE BARCODE = @BARCODE OR ITEM_CODE = @BARCODE ",
                                         param : ['BARCODE:string|50'],
                                         value : [e.component._changedValue]
                                     }
@@ -171,7 +174,8 @@ export default class salesOrder extends React.Component
                                         this.barcode.code = tmpData.result.recordset[0].CODE 
                                         this.barcode.price = tmpData.result.recordset[0].PRICE 
                                         this.barcode.guid = tmpData.result.recordset[0].GUID 
-                                        await this.itemsPriceObj.load({ITEM_GUID:tmpData.result.recordset[0].GUID});
+                                        this.barcode.costPrice = tmpData.result.recordset[0].COST_PRICE 
+                                        await this.itemsPriceObj.load({ITEM_GUID:tmpData.result.recordset[0].GUID,TYPE:0});
                                         this.txtBarcode.value = ""
                                         this.setState({tbBarcode:"visible"})
                                     }
@@ -248,8 +252,19 @@ export default class salesOrder extends React.Component
                         >
                             <Paging defaultPageSize={5} />
                             <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                            <Column dataField="QUANTITY" caption={this.t("grdPrice.clmQuantity")}/>
-                            <Column dataField="PRICE" caption={this.t("grdPrice.clmPrice")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                            <Column dataField="FINISH_DATE" caption={this.t("grdSalePrice.clmStartDate")} dataType="date" 
+                                    editorOptions={{value:null}}
+                                    cellRender={(e) => 
+                                    {
+                                        if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
+                                        {
+                                            return e.text
+                                        }
+                                        
+                                        return
+                                    }}/>
+                                <Column dataField="QUANTITY" caption={this.t("grdSalePrice.clmQuantity")} width={50}/>
+                                <Column dataField="PRICE" caption={this.t("grdSalePrice.clmPrice")} dataType="number" width={100} format={{ style: "currency", currency: "EUR",precision: 2}}/>
                         </NdGrid>
                     </Item>
                     <Item>
@@ -316,6 +331,7 @@ export default class salesOrder extends React.Component
                                         "FROM  (  SELECT GUID,   " +
                                         "CODE,   " +
                                         "NAME,   " +
+                                        "COST_PRICE,   " +
                                         "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
                                         "MAIN_GRP AS ITEM_GRP,   " +
                                         "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
@@ -387,6 +403,18 @@ export default class salesOrder extends React.Component
                                     <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmPrice" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
+                                          //FİYAT GİRERKEN MALİYET FİYAT KONTROLÜ
+                                          if(this.prmObj.filter({ID:'SalePriceCostCtrl'}).getValue() && this.this.barcode.costPrice.value >= this.txtPopPriPrice.value)
+                                          {
+                                              let tmpConfObj =
+                                              {
+                                                  id:'msgCostPriceValid',showTitle:true,title:this.t("msgCostPriceValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                  button:[{id:"btn01",caption:this.t("msgCostPriceValid.btn01"),location:'after'}],
+                                                  content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCostPriceValid.msg")}</div>)
+                                              }
+                                              await dialog(tmpConfObj);
+                                              return;
+                                          }
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             let tmpPriceObj = {...this.itemsPriceObj.empty}

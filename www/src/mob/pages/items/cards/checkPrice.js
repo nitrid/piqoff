@@ -1,6 +1,6 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import {itemPriceCls} from '../../../../core/cls/items.js'
+import {itemPriceCls,itemBarcodeCls} from '../../../../core/cls/items.js'
 import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
@@ -44,8 +44,32 @@ export default class salesOrder extends React.Component
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
-        this.itemsPriceObj = new itemPriceCls();   
+        this.itemsPriceObj = new itemPriceCls();
+        this.itemsPurcPriceObj = new itemPriceCls();   
+
         this.barcodeScan = this.barcodeScan.bind(this)
+        this.otherShopObj = new datatable()
+        this.barcodeObj = new itemBarcodeCls()
+        this.otherShopObj.selectCmd =
+        {
+            query :"SELECT  " +
+            "(CONVERT(NVARCHAR, OTHER_SHOP.UPDATE_DATE, 104) + ' ' + CONVERT(NVARCHAR, OTHER_SHOP.UPDATE_DATE, 24)) AS DATE, " + 
+            "OTHER_SHOP.CODE, " +
+            "OTHER_SHOP.NAME, " +
+            "MAX(OTHER_SHOP.BARCODE) AS BARCODE, " +
+            "OTHER_SHOP.MULTICODE, " +
+            "OTHER_SHOP.SALE_PRICE, " +
+            "OTHER_SHOP.CUSTOMER, " +
+            "OTHER_SHOP.CUSTOMER_PRICE, " +
+            "1 AS QUANTITY, " +
+            "OTHER_SHOP.SHOP " +
+            "FROM ITEM_BARCODE_VW_01 AS BARCODE " +
+            "INNER JOIN OTHER_SHOP_ITEMS AS OTHER_SHOP " +
+            "ON BARCODE.BARCODE = OTHER_SHOP.BARCODE " +
+            "WHERE BARCODE.ITEM_GUID = @ITEM_GUID " +
+            "GROUP BY OTHER_SHOP.CODE,OTHER_SHOP.NAME, OTHER_SHOP.MULTICODE, OTHER_SHOP.SALE_PRICE, OTHER_SHOP.CUSTOMER_PRICE, OTHER_SHOP.CUSTOMER,OTHER_SHOP.SHOP,OTHER_SHOP.UPDATE_DATE " ,
+            param : ['ITEM_GUID:string|50']
+        }
 
     }
     async componentDidMount()
@@ -55,7 +79,9 @@ export default class salesOrder extends React.Component
     }
     async init()
     {
-       
+       this.txtBarcode.focus()
+       this.otherShopObj.clear()
+       await this.grdOtherShop.dataRefresh({source:this.otherShopObj});
     }
     async barcodeScan()
     {
@@ -81,17 +107,22 @@ export default class salesOrder extends React.Component
                             price:tmpData.result.recordset[0].PRICE,
                             guid:tmpData.result.recordset[0].GUID
                         }
-                        await this.itemsPriceObj.load({ITEM_GUID:tmpData.result.recordset[0].GUID});
-                        if(this.itemsPriceObj.dt().length > 1)
+                        await this.itemsPriceObj.load({ITEM_GUID:tmpData.result.recordset[0].GUID,TYPE:0});
+                        if(this.itemsPriceObj.dt().length > 0)
                         {
                             await this.setState({Grid:"visible"}) 
-                            await this.grdPrice.dataRefresh({source:this.itemsPriceObj.dt('ITEM_PRICE')});
+                            await this.grdSalePrice.dataRefresh({source:this.itemsPriceObj.dt('ITEM_PRICE')});
                         }
-                        else
+                        await this.itemsPurcPriceObj.load({ITEM_GUID:tmpData.result.recordset[0].GUID,TYPE:1});
+                        if(this.itemsPurcPriceObj.dt().length > 0)
                         {
-                            this.setState({Grid:"hidden"}) 
+                            await this.setState({Grid:"visible"}) 
+                            await this.grdPurcPrice.dataRefresh({source:this.itemsPurcPriceObj.dt('ITEM_PRICE')});
                         }
                         this.setState({tbBarcode:"visible"})
+
+                        this.otherShopObj.selectCmd.value = [tmpData.result.recordset[0].GUID]
+                        await this.otherShopObj.refresh();
                     }
                     else
                     {
@@ -99,7 +130,7 @@ export default class salesOrder extends React.Component
                         let tmpConfObj = 
                         {
                             id:'msgBarcodeNotFound',showTitle:true,title:this.t("msgBarcodeNotFound.title"),showCloseButton:true,width:'350px',height:'200px',
-                            button:[{id:"btn01",caption:this.t("msgBarcodeNotFound.btn01"),location:'after'}],
+                            button:[{id:"btn02",caption:this.t("msgBarcodeNotFound.btn02"),location:'after'}],
                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcodeNotFound.msg")}</div>)
                         }
                         await dialog(tmpConfObj);
@@ -116,6 +147,35 @@ export default class salesOrder extends React.Component
               orientation : "portrait"
             }
         );
+    }
+    async notBarcode()
+    {
+        let tmpConfObj = 
+        {
+            id:'msgBarcodeNotFound',showTitle:true,title:this.t("msgBarcodeNotFound.title"),showCloseButton:true,width:'350px',height:'200px',
+            button:[{id:"btn01",caption:this.t("msgBarcodeNotFound.btn01"),location:'before'},{id:"btn02",caption:this.t("msgBarcodeNotFound.btn02"),location:'after'}],
+            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcodeNotFound.msg")}</div>)
+        }
+        let pResult = await dialog(tmpConfObj);
+
+        if(pResult == 'btn01')
+        {
+           this.popBarcodeAdd.show()
+           this.txtNewBarcode.value = this.txtBarcode.value
+        }     
+        else
+        {
+            this.txtBarcode.value = ""
+            this.barcode = 
+            {
+                name:"",
+                price:0,
+                barcode: "",
+                code:"",
+                guid:"00000000-0000-0000-0000-000000000000"
+            }
+        }     
+       
     }
     render()
     {
@@ -147,18 +207,21 @@ export default class salesOrder extends React.Component
                                                     price:data[0].PRICE,
                                                     guid:data[0].GUID
                                                 }
-                                                await this.itemsPriceObj.load({TYPE:0,ITEM_GUID:data[0].GUID});
-                                                this.txtBarcode.value = ""
-                                                if(this.itemsPriceObj.dt().length > 1)
+                                                await this.itemsPriceObj.load({ITEM_GUID:tmpData.result.recordset[0].GUID,TYPE:0});
+                                                if(this.itemsPriceObj.dt().length > 0)
                                                 {
                                                     await this.setState({Grid:"visible"}) 
-                                                    await this.grdPrice.dataRefresh({source:this.itemsPriceObj.dt('ITEM_PRICE')});
+                                                    await this.grdSalePrice.dataRefresh({source:this.itemsPriceObj.dt('ITEM_PRICE')});
                                                 }
-                                                else
+                                                await this.itemsPurcPriceObj.load({ITEM_GUID:tmpData.result.recordset[0].GUID,TYPE:1});
+                                                if(this.itemsPurcPriceObj.dt().length > 0)
                                                 {
-                                                    this.setState({Grid:"hidden"}) 
+                                                    await this.setState({Grid:"visible"}) 
+                                                    await this.grdPurcPrice.dataRefresh({source:this.itemsPurcPriceObj.dt('ITEM_PRICE')});
                                                 }
                                                 this.setState({tbBarcode:"visible"})
+                                                this.otherShopObj.selectCmd.value = [data[0].GUID]
+                                                await this.otherShopObj.refresh();
                                             }
                                         }
                                     }
@@ -195,36 +258,26 @@ export default class salesOrder extends React.Component
                                         this.barcode.guid = tmpData.result.recordset[0].GUID 
                                         await this.itemsPriceObj.load({ITEM_GUID:tmpData.result.recordset[0].GUID});
                                         this.txtBarcode.value = ""
-                                        if(this.itemsPriceObj.dt().length > 1)
+                                        await this.itemsPriceObj.load({ITEM_GUID:tmpData.result.recordset[0].GUID,TYPE:0});
+                                        if(this.itemsPriceObj.dt().length > 0)
                                         {
                                             await this.setState({Grid:"visible"}) 
-                                            await this.grdPrice.dataRefresh({source:this.itemsPriceObj.dt('ITEM_PRICE')});
+                                            await this.grdSalePrice.dataRefresh({source:this.itemsPriceObj.dt('ITEM_PRICE')});
                                         }
-                                        else
+                                        await this.itemsPurcPriceObj.load({ITEM_GUID:tmpData.result.recordset[0].GUID,TYPE:1});
+                                        if(this.itemsPurcPriceObj.dt().length > 0)
                                         {
-                                            this.setState({Grid:"hidden"}) 
+                                            await this.setState({Grid:"visible"}) 
+                                            await this.grdPurcPrice.dataRefresh({source:this.itemsPurcPriceObj.dt('ITEM_PRICE')});
                                         }
                                         this.setState({tbBarcode:"visible"})
+                                        this.otherShopObj.selectCmd.value = [ tmpData.result.recordset[0].GUID]
+                                        await this.otherShopObj.refresh();
                                     }
                                     else
                                     {
                                         document.getElementById("Sound").play(); 
-                                        let tmpConfObj = 
-                                        {
-                                            id:'msgBarcodeNotFound',showTitle:true,title:this.t("msgBarcodeNotFound.title"),showCloseButton:true,width:'350px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgBarcodeNotFound.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcodeNotFound.msg")}</div>)
-                                        }
-                                        await dialog(tmpConfObj);
-                                        this.txtBarcode.value = ""
-                                        this.barcode = 
-                                        {
-                                            name:"",
-                                            price:0,
-                                            barcode: "",
-                                            code:"",
-                                            guid:"00000000-0000-0000-0000-000000000000"
-                                        }
+                                        this.notBarcode()
                                     }
                                     
                                 }).bind(this)}></NdTextBox>
@@ -232,23 +285,55 @@ export default class salesOrder extends React.Component
                     </Item>
                     <Item> 
                         <div>
-                            <h4 className="text-center">
+                            <h5 className="text-center">
                                 {this.barcode.name}
-                            </h4>
+                            </h5>
                         </div>
                     </Item>
                     <Item> 
                         <div>
-                            <h4 className="text-center">
+                            <h5 className="text-center">
                                 {this.barcode.price} €
-                            </h4>
+                            </h5>
                         </div>
                     </Item>
                 </Form>
                 <div style={{visibility:this.state.Grid}}>
+                <div className="p-2">
                     <Form>
                         <Item>
-                                <NdGrid parent={this} id={"grdPrice"} 
+                            <NdGrid parent={this} id={"grdSalePrice"} 
+                            showBorders={true} 
+                            columnsAutoWidth={true} 
+                            allowColumnReordering={true} 
+                            allowColumnResizing={true} 
+                            height={'100%'} 
+                            width={'100%'}
+                            dbApply={false}
+                            >
+                                <Paging defaultPageSize={5} />
+                                <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
+                                <Column dataField="FINISH_DATE" caption={this.t("grdSalePrice.clmStartDate")} dataType="date" 
+                                    editorOptions={{value:null}}
+                                    cellRender={(e) => 
+                                    {
+                                        if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
+                                        {
+                                            return e.text
+                                        }
+                                        
+                                        return
+                                    }}/>
+                                <Column dataField="QUANTITY" caption={this.t("grdSalePrice.clmQuantity")} width={50}/>
+                                <Column dataField="PRICE" caption={this.t("grdSalePrice.clmPrice")} dataType="number" width={100} format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                            </NdGrid>
+                        </Item>
+                    </Form>    
+                    </div>   
+                    <div className="p-2">
+                        <Form>
+                            <Item>
+                                <NdGrid parent={this} id={"grdOtherShop"} 
                                 showBorders={true} 
                                 columnsAutoWidth={true} 
                                 allowColumnReordering={true} 
@@ -259,11 +344,45 @@ export default class salesOrder extends React.Component
                                 >
                                     <Paging defaultPageSize={5} />
                                     <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
-                                    <Column dataField="QUANTITY" caption={this.t("grdPrice.clmQuantity")}/>
-                                    <Column dataField="PRICE" caption={this.t("grdPrice.clmPrice")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                    <Column dataField="SHOP" caption={this.t("grdOtherShop.clmShop")}/>
+                                    <Column dataField="QUANTITY" caption={this.t("grdOtherShop.clmQuantity")} width={50}/>
+                                    <Column dataField="SALE_PRICE" caption={this.t("grdOtherShop.clmPrice")} dataType="number"  width={100} format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                 </NdGrid>
                             </Item>
-                    </Form>           
+                        </Form>   
+                     </div>      
+                    <div className="p-2">
+                        <Form>
+                            <Item>
+                                <NdGrid parent={this} id={"grdPurcPrice"} 
+                                showBorders={true} 
+                                columnsAutoWidth={true} 
+                                allowColumnReordering={true} 
+                                allowColumnResizing={true} 
+                                height={'100%'} 
+                                width={'100%'}
+                                dbApply={false}
+                                >
+                                    <Paging defaultPageSize={5} />
+                                    <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
+                                    <Column dataField="CUSTOMER_NAME" caption={this.t("grdPurcPrice.clmCustomer")}/>
+                                    <Column dataField="LDATE" caption={this.t("grdPurcPrice.clmStartDate")} dataType="date"  width={75}
+                                        editorOptions={{value:null}}
+                                        cellRender={(e) => 
+                                        {
+                                            if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
+                                            {
+                                                return e.text
+                                            }
+                                            
+                                            return
+                                        }}/>
+                                    <Column dataField="QUANTITY" caption={this.t("grdPurcPrice.clmQuantity")} width={50}/>
+                                    <Column dataField="PRICE" caption={this.t("grdPurcPrice.clmPrice")} dataType="number"  width={100} format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                </NdGrid>
+                            </Item>
+                        </Form>   
+                     </div>           
                     </div>
                 {/* Stok Seçim */}
                 <NdPopGrid id={"popItemCode"} parent={this} container={"#root"}
@@ -307,6 +426,116 @@ export default class salesOrder extends React.Component
                         <Column dataField="CODE" caption={this.t("popItemCode.clmCode")} width={100} />
                         <Column dataField="NAME" caption={this.t("popItemCode.clmName")} defaultSortOrder="asc" />
                 </NdPopGrid>
+                {/* Barkod Ekle POPUP */}
+                <NdPopUp parent={this} id={"popBarcodeAdd"} 
+                visible={false}                        
+                showCloseButton={true}
+                showTitle={true}
+                title={this.t("popBarcodeAdd.title")}
+                container={"#root"} 
+                width={'90%'}
+                height={'400'}
+                position={{of:'#root'}}
+                >
+                    <Form colCount={1} height={'fit-content'} id={"frmPrice" + this.tabIndex}>
+                        <Item>
+                            <Label text={this.t("txtNewBarcode")} alignment="right" />
+                            <NdTextBox id="txtNewBarcode" parent={this} simple={true} validationGroup={"frmBarcode"  + this.tabIndex}
+                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}             
+                            >   
+                            <Validator validationGroup={"frmBarcode"  + this.tabIndex}>
+                                    <RequiredRule message={this.t("validCode")} />
+                            </Validator>    
+                            </NdTextBox>     
+                        </Item> 
+                        <Item>
+                            <Label text={this.t("txtOldBarcode")} alignment="right" />
+                            <NdTextBox id="txtOldBarcode" parent={this} simple={true} validationGroup={"frmBarcode"  + this.tabIndex}
+                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}    
+                            onEnterKey={(async(e)=>
+                                {
+                                    if(e.component._changedValue == "")
+                                    {
+                                        return
+                                    }
+                                    let tmpQuery = 
+                                    {
+                                        query : "SELECT ITEM_CODE AS CODE,ITEM_NAME AS NAME,ITEM_GUID AS GUID,BARCODE,[dbo].[FN_PRICE_SALE](ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000') AS PRICE FROM ITEM_BARCODE_VW_01  WHERE BARCODE = @BARCODE OR ITEM_CODE = @BARCODE ",
+                                        param : ['BARCODE:string|50'],
+                                        value : [e.component._changedValue]
+                                    }
+                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                    if(tmpData.result.recordset.length >0)
+                                    {
+                                        this.barcode.name = tmpData.result.recordset[0].NAME
+                                        this.barcode.barcode = tmpData.result.recordset[0].BARCODE 
+                                        this.barcode.code = tmpData.result.recordset[0].CODE 
+                                        this.barcode.price = tmpData.result.recordset[0].PRICE 
+                                        this.barcode.guid = tmpData.result.recordset[0].GUID 
+                                        await this.itemsPriceObj.load({ITEM_GUID:tmpData.result.recordset[0].GUID});
+                                        this.txtBarcode.value = ""
+                                        await this.itemsPriceObj.load({ITEM_GUID:tmpData.result.recordset[0].GUID,TYPE:0});
+                                        if(this.itemsPriceObj.dt().length > 0)
+                                        {
+                                            await this.setState({Grid:"visible"}) 
+                                            await this.grdSalePrice.dataRefresh({source:this.itemsPriceObj.dt('ITEM_PRICE')});
+                                        }
+                                        await this.itemsPurcPriceObj.load({ITEM_GUID:tmpData.result.recordset[0].GUID,TYPE:1});
+                                        if(this.itemsPurcPriceObj.dt().length > 0)
+                                        {
+                                            await this.setState({Grid:"visible"}) 
+                                            await this.grdPurcPrice.dataRefresh({source:this.itemsPurcPriceObj.dt('ITEM_PRICE')});
+                                        }
+                                        this.setState({tbBarcode:"visible"})
+                                        this.otherShopObj.selectCmd.value = [ tmpData.result.recordset[0].GUID]
+                                        await this.otherShopObj.refresh();
+                                    }
+                                    else
+                                    {
+                                        document.getElementById("Sound").play(); 
+                                        let tmpConfObj = 
+                                        {
+                                            id:'msgBarcodeNotFound',showTitle:true,title:this.t("msgBarcodeNotFound.title"),showCloseButton:true,width:'350px',height:'200px',
+                                            button:[{id:"btn01",caption:this.t("msgBarcodeNotFound.btn01"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcodeNotFound.msg")}</div>)
+                                        }
+                                        await dialog(tmpConfObj);
+                                    }
+                                    
+                                }).bind(this)}         
+                            >   
+                            <Validator validationGroup={"frmBarcode"  + this.tabIndex}>
+                                    <RequiredRule message={this.t("validCode")} />
+                            </Validator>    
+                            </NdTextBox>     
+                        </Item>
+                            <Item> 
+                            <div>
+                                <h5 className="text-center">
+                                    {this.barcode.name}
+                                </h5>
+                            </div>
+                        </Item>
+                        <Item>
+                        <div className="row">
+                            <div className="col-12 px-4 pt-4">
+                            <NdButton text={this.t("btnAddBarcode")} type="default" width="100%" validationGroup={"frmBarcode" + this.tabIndex} onClick={async(e)=>
+                            {
+                                if(e.validationGroup.validate().status == "valid")
+                                {
+                                    let tmpBarcodeObj = {...this.barcodeObj.empty}
+                                    tmpBarcodeObj.ITEM_GUID = this.barcode.guid
+                                    tmpBarcodeObj.BARCODE = this.txtNewBarcode.value
+                                    this.barcodeObj.addEmpty(tmpBarcodeObj); 
+                                    this.barcodeObj.save()
+                                    this.popBarcodeAdd.hide()
+                                }
+                            }}></NdButton>
+                            </div>
+                        </div>
+                    </Item>
+                    </Form>
+                </NdPopUp>
             </div>
         </ScrollView>
 

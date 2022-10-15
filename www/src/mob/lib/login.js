@@ -29,7 +29,7 @@ export default class Login extends React.Component
                 position: 'inherit',
                 margin:'auto',
                 top: '30%',
-                width: '250px',
+                width: '350px',
                 height: 'fit-content',
                 backgroundColor : '#f8f9fa',  
             }
@@ -95,6 +95,8 @@ export default class Login extends React.Component
         {
             this.setState({kullanici: data[0].CODE});
             this.Kullanici.setState({value:data[0].CODE})
+            this.Sifre.focus()
+
         }
     }
     closePage()
@@ -170,7 +172,7 @@ export default class Login extends React.Component
     {
         return (
             <div style={this.style.body}>
-                <div className="p-5"></div>
+                <div className="p-2"></div>
                 <div className="card" style={this.style.login_box}>
                    <div className="card-header">Login</div>
                    <div className="card-body">
@@ -301,7 +303,7 @@ export default class Login extends React.Component
                         showTitle={true}
                         container={"#root"} 
                         width={'350'}
-                        height={'400'}
+                        height={'300'}
                         position={{of:'#root'}}
                         >
                             <Form colCount={1} height={'fit-content'}>

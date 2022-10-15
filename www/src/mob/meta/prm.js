@@ -78,6 +78,25 @@ export const prm =
         }
     },
     //#endregion
-    
+
+    //#region Fiyat Değiştir
+     //Satış Fiyatı Maliyet Kontrolü
+     {
+        TYPE : 1,
+        ID :"SalePriceCostCtrl",
+        VALUE : true,
+        SPECIAL : "",
+        PAGE : "stk_01_005",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Fiyat Değiştir",
+            CAPTION : "Satış Fiyatı Maliyet Kontrolü"
+        }
+    },
+    //#endregion
+
 
 ]

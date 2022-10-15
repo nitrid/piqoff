@@ -13,7 +13,7 @@
 }
 .dx-device-mobile .dx-toolbar
 {
-    padding: 10px;
+    padding: 3px;
 }
 .dx-drawer-panel-content
 {
@@ -114,3 +114,21 @@
 .row {
     --bs-gutter-x: 0.5rem;
 }
+.dx-layout-manager.dx-layout-manager-one-col .dx-box-item:not(:first-child) .dx-single-column-item-content > .dx-field-item {
+    padding-top: 5px;
+}
+/* .dx-texteditor-input {
+    padding: 2px;   
+}
+.dx-texteditor-buttons-container > .dx-button.dx-button-has-icon:not(.dx-button-has-text) > .dx-button-content {
+    padding: 2px;
+}
+.dx-placeholder::before {
+    padding: 2px;
+}
+.dx-device-mobile .dx-field {
+    margin: 4 4 4px;
+}
+.dx-field-label {
+    padding: 4px 4px 4px 0;
+} */
