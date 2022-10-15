@@ -116,10 +116,10 @@ export default class salesOrder extends React.Component
     {
         return(
             <ScrollView>
-            <div className="row px-2 pt-2">
+            <div className="row px-1 pt-1">
                 <Form colCount={1}>
                     <Item>
-                    <div className="col-12 px-2 pt-2">
+                    <div className="col-12">
                             <NdTextBox id="txtBarcode" parent={this} placeholder={this.t("txtBarcodePlace")}
                             button=
                             {

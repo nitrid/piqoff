@@ -160,8 +160,22 @@ export default class salesOrder extends React.Component
 
         if(pResult == 'btn01')
         {
+            this.barcode = 
+            {
+                name:"",
+                price:0,
+                barcode: "",
+                code:"",
+                guid:"00000000-0000-0000-0000-000000000000"
+            }
            this.popBarcodeAdd.show()
            this.txtNewBarcode.value = this.txtBarcode.value
+           this.txtOldBarcode.readOnly = false
+           this.txtOldBarcode.value = ''
+           this.setState({tbBarcode:"visible"})
+           setTimeout(() => {
+            this.txtOldBarcode.focus()
+           }, 500);
         }     
         else
         {
@@ -181,10 +195,10 @@ export default class salesOrder extends React.Component
     {
         return(
         <ScrollView>
-            <div className="row px-2 pt-2">
+            <div className="row px-1 pt-1">
                 <Form colCount={2}>
                     <Item>
-                    <div className="col-12 px-2 pt-2">
+                    <div className="col-12">
                             <NdTextBox id="txtBarcode" parent={this} placeholder={this.t("txtBarcodePlace")}
                             button=
                             {
@@ -284,22 +298,19 @@ export default class salesOrder extends React.Component
                         </div>
                     </Item>
                     <Item> 
-                        <div>
+                        
                             <h5 className="text-center">
                                 {this.barcode.name}
                             </h5>
-                        </div>
                     </Item>
                     <Item> 
-                        <div>
                             <h5 className="text-center">
                                 {this.barcode.price} €
                             </h5>
-                        </div>
                     </Item>
                 </Form>
                 <div style={{visibility:this.state.Grid}}>
-                <div className="p-2">
+                <div className="p-1">
                     <Form>
                         <Item>
                             <NdGrid parent={this} id={"grdSalePrice"} 
@@ -330,7 +341,7 @@ export default class salesOrder extends React.Component
                         </Item>
                     </Form>    
                     </div>   
-                    <div className="p-2">
+                    <div className="p-1">
                         <Form>
                             <Item>
                                 <NdGrid parent={this} id={"grdOtherShop"} 
@@ -351,7 +362,7 @@ export default class salesOrder extends React.Component
                             </Item>
                         </Form>   
                      </div>      
-                    <div className="p-2">
+                    <div className="p-1">
                         <Form>
                             <Item>
                                 <NdGrid parent={this} id={"grdPurcPrice"} 
@@ -434,13 +445,14 @@ export default class salesOrder extends React.Component
                 title={this.t("popBarcodeAdd.title")}
                 container={"#root"} 
                 width={'90%'}
-                height={'400'}
+                height={'300'}
                 position={{of:'#root'}}
                 >
                     <Form colCount={1} height={'fit-content'} id={"frmPrice" + this.tabIndex}>
                         <Item>
                             <Label text={this.t("txtNewBarcode")} alignment="right" />
                             <NdTextBox id="txtNewBarcode" parent={this} simple={true} validationGroup={"frmBarcode"  + this.tabIndex}
+                            readOnly={true}
                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}             
                             >   
                             <Validator validationGroup={"frmBarcode"  + this.tabIndex}>
@@ -451,6 +463,7 @@ export default class salesOrder extends React.Component
                         <Item>
                             <Label text={this.t("txtOldBarcode")} alignment="right" />
                             <NdTextBox id="txtOldBarcode" parent={this} simple={true} validationGroup={"frmBarcode"  + this.tabIndex}
+                            readOnly={false}
                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}    
                             onEnterKey={(async(e)=>
                                 {
@@ -467,6 +480,7 @@ export default class salesOrder extends React.Component
                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                     if(tmpData.result.recordset.length >0)
                                     {
+                                        this.txtOldBarcode.readOnly = true
                                         this.barcode.name = tmpData.result.recordset[0].NAME
                                         this.barcode.barcode = tmpData.result.recordset[0].BARCODE 
                                         this.barcode.code = tmpData.result.recordset[0].CODE 
@@ -492,11 +506,12 @@ export default class salesOrder extends React.Component
                                     }
                                     else
                                     {
+                                        this.txtOldBarcode.readOnly = false
                                         document.getElementById("Sound").play(); 
                                         let tmpConfObj = 
                                         {
                                             id:'msgBarcodeNotFound',showTitle:true,title:this.t("msgBarcodeNotFound.title"),showCloseButton:true,width:'350px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgBarcodeNotFound.btn01"),location:'after'}],
+                                            button:[{id:"btn02",caption:this.t("msgBarcodeNotFound.btn02"),location:'after'}],
                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcodeNotFound.msg")}</div>)
                                         }
                                         await dialog(tmpConfObj);
@@ -521,11 +536,29 @@ export default class salesOrder extends React.Component
                             <div className="col-12 px-4 pt-4">
                             <NdButton text={this.t("btnAddBarcode")} type="default" width="100%" validationGroup={"frmBarcode" + this.tabIndex} onClick={async(e)=>
                             {
+                                if(this.barcode.name == '')
+                                {
+                                    return
+                                }
                                 if(e.validationGroup.validate().status == "valid")
                                 {
+                                    let BarType = 0
+                                    if(this.txtNewBarcode.value.length == 8)
+                                    {                                            
+                                        BarType = "0"
+                                    }
+                                    else if(this.txtNewBarcode.value.length == 13)
+                                    {
+                                        BarType = "1"
+                                    }
+                                    else
+                                    {
+                                        BarType = "2"
+                                    }
                                     let tmpBarcodeObj = {...this.barcodeObj.empty}
                                     tmpBarcodeObj.ITEM_GUID = this.barcode.guid
                                     tmpBarcodeObj.BARCODE = this.txtNewBarcode.value
+                                    tmpBarcodeObj.TYPE = BarType
                                     this.barcodeObj.addEmpty(tmpBarcodeObj); 
                                     this.barcodeObj.save()
                                     this.popBarcodeAdd.hide()
