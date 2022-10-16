@@ -37,6 +37,7 @@ export default class barcodeCard extends React.PureComponent
     {
         await this.core.util.waitUntil(0)
         this.init(); 
+        document.getElementById("Sound").play();
     }  
     async init()
     {

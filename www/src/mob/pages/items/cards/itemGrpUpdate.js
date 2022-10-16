@@ -113,9 +113,9 @@ export default class salesOrder extends React.Component
     {
         let tmpQuery = 
         {
-            query : "UPDATE ITEMS_GRP SET MAIN = @MAIN WHERE ITEM = @ITEM",
-            param : ['MAIN:string|25','ITEM:string|50'],
-            value : [this.cmbItemGrp.value,this.barcode.guid]
+            query : "UPDATE ITEMS_GRP SET MAIN = @MAIN,LUSER = @LUSER,LDATE=GETDATE() WHERE ITEM = @ITEM",
+            param : ['MAIN:string|25','ITEM:string|50','ITEM:string|50'],
+            value : [this.cmbItemGrp.value,this.barcode.guid,this.user.CODE]
         }
         await this.core.sql.execute(tmpQuery) 
         this.save = this.t("Succes")

@@ -730,7 +730,7 @@ export default class labelPrinting extends React.Component
                 <div className="row" style={{visibility:this.state.tbDocument,position:"absolute"}}>
                     <Form colCount={1} >
                     <Item>
-                        <div className="row">
+                        <div className="row" style={{height:"25px"}}>
                             <div className="col-4">
                                 <NdButton icon="arrowleft" type="default" width="100%" onClick={()=>this.pageChange("Main")}></NdButton>
                             </div>

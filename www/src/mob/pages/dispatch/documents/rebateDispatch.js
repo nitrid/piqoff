@@ -17,7 +17,7 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
@@ -445,17 +445,9 @@ export default class rebateDispatch extends React.PureComponent
         return(
             <ScrollView>
             <div>
-                 <div className="row px-2 pt-2">
-                    <div className="row px-2 pt-2" style={{visibility:this.state.tbMain,position:"absolute"}}>
+                 <div className="row px-1 pt-1">
+                    <div className="row px-1 pt-1" style={{visibility:this.state.tbMain,position:"absolute"}}>
                         <Form colCount={1}>
-                            <Item>
-                                <div className="row">
-                                    <div className="col-8"></div>
-                                    <div className="col-4">
-                                        <DropDownButton text={this.t("btnDropmenu")} icon="menu" items={this.dropmenuMainItems}  onItemClick={this.dropmenuClick}/>
-                                    </div>
-                                </div>
-                            </Item>
                             {/* txtRef-Refno */}
                             <Item>
                                 <Label text={this.t("txtRefRefno")} alignment="right" />
@@ -705,7 +697,7 @@ export default class rebateDispatch extends React.PureComponent
                            {/* dtDocDate */}
                            <Item>
                                 <Label text={this.t("dtDocDate")} alignment="right" />
-                                <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
+                                <NdDatePicker simple={true}  parent={this} id={"dtDocDate"} pickerType={"rollers"}
                                 dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
                                 onValueChanged={(async()=>
                                     {
@@ -719,7 +711,7 @@ export default class rebateDispatch extends React.PureComponent
                             {/* dtShipDate */}
                             <Item>
                                 <Label text={this.t("dtShipDate")} alignment="right" />
-                                <NdDatePicker simple={true}  parent={this} id={"dtShipDate"}
+                                <NdDatePicker simple={true}  parent={this} id={"dtShipDate"} pickerType={"rollers"}
                                 dt={{data:this.docObj.dt('DOC'),field:"SHIPMENT_DATE"}}
                                 onValueChanged={(async()=>
                                 {
@@ -732,36 +724,36 @@ export default class rebateDispatch extends React.PureComponent
                             </Item>
                             <Item>
                                 <div className="row">
-                                    <div className="col-6 px-4 pt-4">
+                                    <div className="col-6 px-2 pt-2">
                                         <NdButton text={this.t("btnBarcodeEntry")} type="default" width="100%" onClick={()=>this.pageChange("Barcode")}></NdButton>
                                     </div>
-                                    <div className="col-6 px-4 pt-4">
+                                    <div className="col-6 px-2 pt-2">
                                         <NdButton text={this.t("btnDocument")} type="default" width="100%" onClick={()=>this.pageChange("Document")}></NdButton>
                                     </div>
                                 </div>
                             </Item>
                         </Form>
                     </div>
-                    <div className="row px-2 pt-2" style={{visibility:this.state.tbBarcode,position:"absolute"}}>
+                    <div className="row px-1 pt-1" style={{visibility:this.state.tbBarcode,position:"absolute"}}>
                         <Form colCount={1}>
                             <Item>
-                            <div className="row">
-                                <div className="col-4 px-2 pt-2">
+                            <div className="row" style={{height:"25px"}}>
+                                <div className="col-4 px-1 pt-1">
                                     <NdButton icon="arrowleft" type="default" width="100%" onClick={()=>this.pageChange("Main")}></NdButton>
                                 </div>
-                                <div className="col-4 px-2 pt-2">
+                                <div className="col-4 px-1 pt-1">
                                     <NdButton icon="detailslayout" type="default" width="100%" onClick={()=>this.pageChange("Document")}></NdButton>
                                 </div>
-                                <div className="col-4 px-2 pt-2">
+                                <div className="col-4 px-1 pt-1">
                                     
-                                    <NdCheckBox id="chkAutoAdd" text={this.t("chkAutoAdd")} parent={this} defaultValue={false} 
+                                    <NdCheckBox id="chkAutoAdd" text={this.t("chkAutoAdd")} parent={this} defaultValue={true} value={true} 
                                     param={this.param.filter({ELEMENT:'chkAutoAdd',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'chkAutoAdd',USERS:this.user.CODE})}/>
                                 </div>
                             </div>
                             </Item>
                             <Item>
-                            <div className="col-12 px-1 pt-1">
+                            <div className="col-12 px-2 pt-2">
                                     <NdTextBox id="txtBarcode" parent={this} placeholder={this.t("txtBarcodePlace")}
                                     button=
                                     {
@@ -944,14 +936,14 @@ export default class rebateDispatch extends React.PureComponent
                             </Item>
                         </Form>
                     </div>
-                    <div className="row px-2 pt-2" style={{visibility:this.state.tbDocument,position:"absolute"}}>
+                    <div className="row px-1 pt-1" style={{visibility:this.state.tbDocument,position:"absolute"}}>
                         <Form colCount={1} >
                         <Item>
-                            <div className="row">
-                                <div className="col-4 px-2 pt-2">
+                            <div className="row" style={{height:"25px"}}>
+                                <div className="col-4 px-1 pt-1">
                                     <NdButton icon="arrowleft" type="default" width="100%" onClick={()=>this.pageChange("Main")}></NdButton>
                                 </div>
-                                <div className="col-4 px-2 pt-2">
+                                <div className="col-4 px-1 pt-1">
                                     <NdButton icon="plus" type="default" width="100%" onClick={()=>this.pageChange("Barcode")}></NdButton>
                                 </div>
                                 <div className="col-4">
@@ -960,6 +952,7 @@ export default class rebateDispatch extends React.PureComponent
                             </div>
                         </Item>
                         </Form>
+                        <div className='col-12 px-2 pt-2'>
                         <Form colCount={1} onInitialized={(e)=>
                             {
                                 this.frmDocItems = e.component
@@ -971,7 +964,7 @@ export default class rebateDispatch extends React.PureComponent
                                 columnsAutoWidth={true} 
                                 allowColumnReordering={true} 
                                 allowColumnResizing={true} 
-                                height={'300'} 
+                                height={'350'} 
                                 width={'100%'}
                                 dbApply={false}
                                 onRowUpdated={async(e)=>{
@@ -1014,12 +1007,13 @@ export default class rebateDispatch extends React.PureComponent
                                 >
                                     <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                                     <Scrolling mode="standart" />
+                                    <Paging defaultPageSize={10} />
+                                    <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                     <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                    <Export fileName={this.lang.t("menu.irs_02_003")} enabled={true} allowExportSelectedData={true} />
-                                    <Column dataField="ITEM_NAME" caption={this.t("grdRebtDispatch.clmItemName")} width={300} />
+                                    <Column dataField="ITEM_NAME" caption={this.t("grdRebtDispatch.clmItemName")} width={150} />
+                                    <Column dataField="QUANTITY" caption={this.t("grdRebtDispatch.clmQuantity")} dataType={'number'} width={40}/>
+                                    <Column dataField="PRICE" caption={this.t("grdRebtDispatch.clmPrice")} dataType={'number'} width={50} format={{ style: "currency", currency: "EUR",precision: 3}}/>
                                     <Column dataField="ITEM_CODE" caption={this.t("grdRebtDispatch.clmItemCode")} width={150} />
-                                    <Column dataField="PRICE" caption={this.t("grdRebtDispatch.clmPrice")} dataType={'number'} width={80} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                    <Column dataField="QUANTITY" caption={this.t("grdRebtDispatch.clmQuantity")} dataType={'number'} width={80}/>
                                     <Column dataField="AMOUNT" caption={this.t("grdRebtDispatch.clmAmount")} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}} width={80}/>
                                     <Column dataField="VAT" caption={this.t("grdRebtDispatch.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} width={80} allowEditing={false}/>
                                     <Column dataField="TOTAL" caption={this.t("grdRebtDispatch.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} width={100} allowEditing={false}/>
@@ -1035,6 +1029,7 @@ export default class rebateDispatch extends React.PureComponent
                             </React.Fragment> 
                             </Item>
                         </Form>
+                        </div>
                         <div className="row px-1 pt-1">
                                 <div className="col-12">
                                     <Form colCount={4} parent={this} id="frmslsDoc">

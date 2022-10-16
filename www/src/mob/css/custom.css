@@ -30,7 +30,7 @@
     height:fit-content;
 }
 .dx-datagrid .dx-row > td {
-    padding: 4px;
+    padding: 5px;
     font-size: smaller;
     -webkit-text-stroke: thin;
   }
@@ -116,6 +116,10 @@
 }
 .dx-layout-manager.dx-layout-manager-one-col .dx-box-item:not(:first-child) .dx-single-column-item-content > .dx-field-item {
     padding-top: 5px;
+}
+.dx-popup-content {
+    -webkit-user-drag: none;
+    padding: 3px;
 }
 /* .dx-texteditor-input {
     padding: 2px;   

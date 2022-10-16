@@ -809,7 +809,7 @@ export const langTr =
         msgCombineItem:
         {
             title: "Dikkat",
-            btn01: "Üstüne Ekle",
+            btn01: "Birleştir",
             btn02: "Değiştir",
             msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Satırlar Birleştirilsin mi ?"
         },
@@ -931,7 +931,7 @@ export const langTr =
         msgCombineItem:
         {
             title: "Dikkat",
-            btn01: "Vazgeç",
+            btn01: "Birleştir",
             btn02: "Yeni Ekle",
             msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Yeni Satır Eklensin Mi ?"
         },
@@ -1110,7 +1110,7 @@ export const langTr =
         msgCombineItem:
         {
             title: "Dikkat",
-            btn01: "Vazgeç",
+            btn01: "Birleştir",
             btn02: "Yeni Ekle",
             msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Yeni Satır Eklensin Mi ?"
         },
@@ -1187,6 +1187,10 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Lütfen Cari Seçiniz.."
+        },
+        popUnderPrice:
+        {
+            title: "Tedarikçi Fiyatları",
         },
         msgDepotSelect:
         {
@@ -1333,7 +1337,7 @@ export const langTr =
         msgCombineItem:
         {
             title: "Dikkat",
-            btn01: "Vazgeç",
+            btn01: "Birleştir",
             btn02: "Yeni Ekle",
             msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Yeni Satır Eklensin Mi ?"
         },
@@ -1563,7 +1567,7 @@ export const langTr =
         msgCombineItem:
         {
             title: "Dikkat",
-            btn01: "Vazgeç",
+            btn01: "Birleştir",
             btn02: "Yeni Ekle",
             msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Yeni Satır Eklensin Mi ?"
         },

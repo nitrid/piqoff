@@ -49,7 +49,7 @@ export default class NdNumberBox extends Base
     {
         if(typeof this.props.selectAll == 'undefined' || this.props.selectAll == true)
         {
-            this.dev.element().getElementsByTagName('input')[0].select()
+            this.dev.element().getElementsByTagName('input')[1].select()
         }
         if(typeof this.props.onFocusIn != 'undefined')
         {

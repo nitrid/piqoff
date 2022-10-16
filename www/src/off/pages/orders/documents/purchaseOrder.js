@@ -1489,6 +1489,7 @@ export default class purchaseOrder extends React.PureComponent
                                         }
                                         let tmpData = await this.core.sql.execute(tmpQuery) 
                                         this.txtBarcode.setState({value:""})
+                                        console.log(tmpData)
                                        
                                         if(tmpData.result.recordset.length > 0)
                                         {

@@ -150,6 +150,8 @@ export default class salesOrder extends React.Component
     }
     async notBarcode()
     {
+        document.getElementById("Sound").play();
+        console.log(111111)
         let tmpConfObj = 
         {
             id:'msgBarcodeNotFound',showTitle:true,title:this.t("msgBarcodeNotFound.title"),showCloseButton:true,width:'350px',height:'200px',

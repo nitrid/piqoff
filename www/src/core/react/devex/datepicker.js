@@ -14,6 +14,7 @@ export default class NdDatePicker extends Base
         this.state.title = typeof props.title == 'undefined' ? '' : props.title
         this.state.titleAlign = typeof props.titleAlign == 'undefined' ? 'left' : props.titleAlign
         this.state.showClearButton = typeof props.showClearButton == 'undefined' ? false : props.showClearButton
+        this.state.pickerType = typeof props.pickerType == 'undefined' ? 'calendar' : props.pickerType
         this.state.type = typeof props.type == 'undefined' ? 'date' : props.type
         this.state.editorOptions = typeof props.editorOptions == 'undefined' ? undefined : props.editorOptions
         
@@ -40,6 +41,7 @@ export default class NdDatePicker extends Base
     {
         return (
             <DateBox id={this.props.id} showClearButton={this.state.showClearButton} 
+            pickerType={this.state.pickerType} 
             height='fit-content' 
             valueChangeEvent="keyup" 
             value={moment(this.state.value).format("YYYY-MM-DD") == '1970-01-01' ? null : moment(this.state.value)} 

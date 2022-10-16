@@ -78,7 +78,6 @@ export default class rebateDoc extends React.Component
         this.txtRefno.readOnly = true
         this.docLocked = false
         
-        this.frmDocItems.option('disabled',false)
         await this.grdRebItems.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
         this.txtRef.props.onChange()
     }
@@ -89,25 +88,6 @@ export default class rebateDoc extends React.Component
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
-        
-        if(this.docObj.dt()[0].LOCKED != 0)
-        {
-            this.docLocked = true
-            let tmpConfObj =
-            {
-                id:'msgGetLocked',showTitle:true,title:this.t("msgGetLocked.title"),showCloseButton:true,width:'500px',height:'200px',
-                button:[{id:"btn01",caption:this.t("msgGetLocked.btn01"),location:'after'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgGetLocked.msg")}</div>)
-            }
-
-            await dialog(tmpConfObj);
-            this.frmDocItems.option('disabled',true)
-        }
-        else
-        {
-            this.docLocked = false
-            this.frmDocItems.option('disabled',false)
-        }
     }
     async dropmenuClick(e)
     {
@@ -365,6 +345,7 @@ export default class rebateDoc extends React.Component
                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcodeNotFound.msg")}</div>)
                         }
                         await dialog(tmpConfObj);
+                        document.getElementById("Sound").play(); 
                         this.barcodeReset()
                     }
                 }
@@ -383,17 +364,17 @@ export default class rebateDoc extends React.Component
     {
         return(
         <ScrollView>
-        <div className="row px-2 pt-2">
-            <div className="row px-2 pt-2" style={{visibility:this.state.tbMain,position:"absolute"}}>
+        <div className="row px-1 pt-1">
+            <div className="row px-1 pt-1" style={{visibility:this.state.tbMain,position:"absolute"}}>
                 <Form colCount={1}>
-                    <Item>
+                    {/* <Item>
                         <div className="row">
                             <div className="col-8"></div>
                             <div className="col-4">
                                 <DropDownButton text={this.t("btnDropmenu")} icon="menu" items={this.dropmenuMainItems}  onItemClick={this.dropmenuClick}/>
                             </div>
                         </div>
-                    </Item>
+                    </Item> */}
                    {/* txtRef-Refno */}
                    <Item>
                         <Label text={this.t("txtRefRefno")} alignment="right" />
@@ -425,7 +406,7 @@ export default class rebateDoc extends React.Component
                                     </Validator>  
                                 </NdTextBox>
                             </div>
-                            <div className="col-5 ps-0">
+                            <div className="col-8 ps-0">
                                 <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
                                 readOnly={true}
                                 button=
@@ -453,6 +434,14 @@ export default class rebateDoc extends React.Component
                                             onClick:()=>
                                             {
                                                 this.txtRefno.value = Math.floor(Date.now() / 1000)
+                                            }
+                                        },
+                                        {
+                                            id:'03',
+                                            icon:'revert',
+                                            onClick:()=>
+                                            {
+                                                this.init()
                                             }
                                         }
                                     ]
@@ -562,33 +551,33 @@ export default class rebateDoc extends React.Component
                     </Item>
                     <Item>
                         <div className="row">
-                            <div className="col-6 px-4 pt-4">
+                            <div className="col-6 px-2 pt-2">
                                 <NdButton text={this.t("btnBarcodeEntry")} type="default" width="100%" onClick={()=>this.pageChange("Barcode")}></NdButton>
                             </div>
-                            <div className="col-6 px-4 pt-4">
+                            <div className="col-6 px-2 pt-2">
                                 <NdButton text={this.t("btnDocument")} type="default" width="100%" onClick={()=>this.pageChange("Document")}></NdButton>
                             </div>
                         </div>
                     </Item>
                 </Form>
             </div>
-            <div className="row px-2 pt-2" style={{visibility:this.state.tbBarcode,position:"absolute"}}>
+            <div className="row px-1 pt-1" style={{visibility:this.state.tbBarcode,position:"absolute"}}>
                 <Form colCount={1}>
                     <Item>
-                    <div className="row">
-                        <div className="col-4 px-2 pt-2">
+                    <div className="row" style={{height:"25px"}}>
+                        <div className="col-4">
                             <NdButton icon="arrowleft" type="default" width="100%" onClick={()=>this.pageChange("Main")}></NdButton>
                         </div>
-                        <div className="col-4 px-2 pt-2">
+                        <div className="col-4">
                             <NdButton icon="detailslayout" type="default" width="100%" onClick={()=>this.pageChange("Document")}></NdButton>
                         </div>
-                        <div className="col-4 px-2 pt-2">
+                        <div className="col-4">
                             
                         </div>
                     </div>
                     </Item>
                     <Item>
-                    <div className="col-12 px-2 pt-2">
+                    <div className="col-12 px-1 pt-1">
                             <NdTextBox id="txtBarcode" parent={this} placeholder={this.t("txtBarcodePlace")}
                             button=
                             {
@@ -680,6 +669,7 @@ export default class rebateDoc extends React.Component
                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcodeNotFound.msg")}</div>)
                                         }
                                         await dialog(tmpConfObj);
+                                        document.getElementById("Sound").play(); 
                                         this.barcodeReset()
                                     }
                                     
@@ -713,26 +703,21 @@ export default class rebateDoc extends React.Component
                     </Item>
                 </Form>
             </div>
-            <div className="row px-2 pt-2" style={{visibility:this.state.tbDocument,position:"absolute"}}>
+            <div className="row px-1 pt-1" style={{visibility:this.state.tbDocument,position:"absolute"}}>
                 <Form>
                 <Item>
-                    <div className="row">
-                        <div className="col-4 px-2 pt-2">
+                    <div className="row" style={{height:"25px"}}>
+                        <div className="col-4">
                             <NdButton icon="arrowleft" type="default" width="100%" onClick={()=>this.pageChange("Main")}></NdButton>
                         </div>
-                        <div className="col-4 px-2 pt-2">
+                        <div className="col-4">
                             <NdButton icon="plus" type="default" width="100%" onClick={()=>this.pageChange("Barcode")}></NdButton>
                         </div>
                         <div className="col-4">
-                                <DropDownButton text={this.t("btnDropmenu")} icon="menu" items={this.dropmenuDocItems}  onItemClick={this.dropmenuClick}/>
+                                {/* <DropDownButton text={this.t("btnDropmenu")} icon="menu" items={this.dropmenuDocItems}  onItemClick={this.dropmenuClick}/> */}
                         </div>
                     </div>
                 </Item>
-                </Form>
-                <Form colCount={1} onInitialized={(e)=>
-                {
-                    this.frmDocItems = e.component
-                }}>
                 <Item>
                     <NdGrid parent={this} id={"grdRebItems"} 
                     showBorders={true} 
@@ -743,18 +728,19 @@ export default class rebateDoc extends React.Component
                     width={'100%'}
                     dbApply={false}
                     loadPanel={{enabled:true}}
-                    onRowUpdated={async(e)=>{
-                        
+                    onContentReady={async(e)=>{
+                        e.component.columnOption("command:edit", 'visibleIndex', -1)
                     }}
-                    onRowRemoved={(e)=>{
-
+                    onRowUpdated={async(e)=>{
+                        await this.docObj.save()
+                    }}
+                    onRowRemoved={async(e)=>{
+                        await this.docObj.save()
                     }}
                     >
                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                         <Scrolling mode="standard" />
                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                        <Export fileName={this.lang.t("menu.stk_02_005")} enabled={true} allowExportSelectedData={true} />
-                        <Column dataField="CDATE_FORMAT" caption={this.t("grdRebItems.clmCreateDate")} width={150} allowEditing={false}/>
                         <Column dataField="ITEM_CODE" caption={this.t("grdRebItems.clmItemCode")} width={150} allowEditing={false}/>
                         <Column dataField="ITEM_NAME" caption={this.t("grdRebItems.clmItemName")} width={350} allowEditing={false}/>
                         <Column dataField="QUANTITY" caption={this.t("grdRebItems.clmQuantity")} dataType={'number'} width={150}/>
