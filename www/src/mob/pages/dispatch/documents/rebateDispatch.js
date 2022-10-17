@@ -218,8 +218,12 @@ export default class rebateDispatch extends React.PureComponent
         }
         for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
         {
-            if(this.docObj.docItems.dt()[i].CODE == this.barcode.code)
+            console.log(this.docObj.docItems.dt()[i].CODE)
+            console.log(this.barcode.code)
+            if(this.docObj.docItems.dt()[i].ITEM_CODE == this.barcode.code)
             {
+                console.log(12331)
+                document.getElementById("Sound2").play(); 
                 let tmpConfObj = 
                 {
                     id:'msgCombineItem',showTitle:true,title:this.t("msgCombineItem.title"),showCloseButton:true,width:'350px',height:'200px',
@@ -229,6 +233,11 @@ export default class rebateDispatch extends React.PureComponent
                 let pResult = await dialog(tmpConfObj);
                 if(pResult == 'btn01')
                 {                   
+                    this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + pQuantity
+                    this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100)) * pQuantity).toFixed(3))
+                    this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
+                    this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
+                    this._calculateTotal()
                     this.barcodeReset()
                     return
                 }
@@ -392,6 +401,8 @@ export default class rebateDispatch extends React.PureComponent
         let tmpData = await this.core.sql.execute(tmpQuery) 
         if(tmpData.result.recordset.length == 0)
         {
+            document.getElementById("Sound3").play(); 
+            
             let tmpConfObj = 
             {
                 id:'msgCustomerNotFound',showTitle:true,title:this.t("msgCustomerNotFound.title"),showCloseButton:true,width:'350px',height:'200px',
@@ -431,6 +442,7 @@ export default class rebateDispatch extends React.PureComponent
         {
             this.txtQuantity.focus()
         }
+        console.log(122)
         this.setState({tbBarcode:"visible"})
     }
     async dropmenuClick(e)
@@ -647,6 +659,7 @@ export default class rebateDispatch extends React.PureComponent
                                     position={{of:'#root'}} 
                                     showTitle={true} 
                                     showBorders={true}
+                                    selection={{mode:"single"}}
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_txtCustomerCode.title")} //
@@ -657,7 +670,7 @@ export default class rebateDispatch extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) ",
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
@@ -1274,6 +1287,11 @@ export default class rebateDispatch extends React.PureComponent
                                         <Item>
                                             <Label text={this.t("txtQuantity")} alignment="right" />
                                             <NdNumberBox id="txtPopQuantity" parent={this} simple={true}  
+                                            onEnterKey={(async()=>
+                                            {
+                                                this.addItem(this.txtPopQuantity.value)
+                                                this.msgQuantity.hide()
+                                            }).bind(this)}  
                                             >
                                         </NdNumberBox>
                                         </Item>

@@ -488,7 +488,7 @@ export default class salesOrder extends React.Component
                             {/* txtDate */}
                             <Item>
                                 <Label text={this.t("txtDate")} alignment="right" />
-                                <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
+                                <NdDatePicker simple={true}  parent={this} id={"dtDocDate"} pickerType={"rollers"}
                                 dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
                                 onValueChanged={(async()=>
                                     {

@@ -40,8 +40,9 @@ export const langTr =
         stk_02: "Evraklar",
         stk_02_001: "Etiket Basımı",
         stk_02_002: "İade Ürün Toplama",
-        stk_02_003: "Özel Etiket Basımı",
+        stk_02_003: "Sayım Evrakı",
         stk_02_004: "Skt Girişi",
+        stk_02_005 : "Depolar Arası Sevk",
         ord: "Sipariş",                
         ord_01: "Evraklar",
         ord_01_001: "Satış Sipariş",
@@ -49,7 +50,10 @@ export const langTr =
         ord_01_003: "Toplu Siparis",
         irs: "İrsaliyeler",
         irs_01: "Evraklar",
-        irs_01_001: "İade İrsaliyesi"
+        irs_01_001: "İade İrsaliyesi",
+        irs_01_002 : "Alış İrsaliyesi",
+        irs_01_003 : "Satış İrsaliyesi",
+        irs_01_004 : "Şube Satış İrsaliyesi"
     },
     login:
     {
@@ -1860,6 +1864,12 @@ export const langTr =
             title: "Miktar Giriş",
             btn01: "Ekle",
             msg: "Miktar Giriniz !"
+        },
+        msgBarcodeNotFound:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Barkod Bulunamadı !"
         },
 
     },

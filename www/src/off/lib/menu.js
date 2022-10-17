@@ -402,6 +402,19 @@ export const menu = (e) =>
                     id: 'sip_03',
                     text : e.t('menu.sip_03'),//'Raporlar',
                     expanded: false,
+                },
+                {
+                    id: 'sip_04',
+                    text : e.t('menu.sip_04'),//'Raporlar',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'sip_04_001',
+                            text: e.t('menu.sip_04_001'),//'Alış Sipariş Listesi',
+                            path: 'orders/lists/purchaseOrdList'
+                        },
+                    ]
                 }
             ]
         },

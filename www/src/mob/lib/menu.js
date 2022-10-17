@@ -68,9 +68,19 @@ export const menu = (e) =>
                             path: 'items/documents/rebateDoc'
                         },
                         {
+                            id: 'stk_02_003',
+                            text: e.t('menu.stk_02_003'),//'Sayım ',
+                            path: 'items/documents/'
+                        },
+                        {
                             id: 'stk_02_004',
                             text: e.t('menu.stk_02_004'),// Skt Giriş',
                             path: 'items/documents/expdateEntry'
+                        },
+                        {
+                            id: 'stk_02_005',
+                            text: e.t('menu.stk_02_005'),//'Depolar Arası Sevk ',
+                            path: 'items/documents/'
                         },
                     ]
                 },
@@ -124,6 +134,22 @@ export const menu = (e) =>
                             text: e.t('menu.irs_01_001'),//'İade İrsaliyesi',
                             path: 'dispatch/documents/rebateDispatch'
                         },
+                        {
+                            id: 'irs_01_002',
+                            text: e.t('menu.irs_01_002'),//'Alış İrsaliyesi',
+                            path: 'dispatch/documents/rebateDispatch'
+                        },
+                        {
+                            id: 'irs_01_003',
+                            text: e.t('menu.irs_01_003'),//'Satış İrsaliyesi',
+                            path: 'dispatch/documents/rebateDispatch'
+                        },
+                        {
+                            id: 'irs_01_004',
+                            text: e.t('menu.irs_01_004'),//'Şube satış İrsaliyesi',
+                            path: 'dispatch/documents/rebateDispatch'
+                        },
+
                     ]
                 },
             ]
