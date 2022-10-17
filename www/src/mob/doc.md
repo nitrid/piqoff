@@ -22,6 +22,7 @@ DOC_TYPE
 -- 60 - 79 ARASI SİPARİŞLER
 60 - SİPARİŞ
 61- TEKLİF
+70 - Toplu Siparis
 
 -- 200 DEN BÜYÜK ÖDEMELER
 200 - ÖDEME

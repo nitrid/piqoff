@@ -840,6 +840,7 @@ export default class rebateDispatch extends React.PureComponent
                                             }
                                             else
                                             {
+                                                document.getElementById("Sound").play(); 
                                                 let tmpConfObj = 
                                                 {
                                                     id:'msgBarcodeNotFound',showTitle:true,title:this.t("msgBarcodeNotFound.title"),showCloseButton:true,width:'350px',height:'200px',

@@ -76,7 +76,6 @@ export default class salesOrder extends React.Component
         this.txtCustomerCode.readOnly = false;
         this.txtRef.readOnly = false
         this.txtRefno.readOnly = false
-        this.txtRef.readOnly = true
         await this.grdSlsOrder.dataRefresh({source:this.docObj.docOrders.dt('DOC_ORDERS')});
         await this.grdChkCustomer.dataRefresh({source:this.itemCustomerObj});
 
@@ -198,6 +197,7 @@ export default class salesOrder extends React.Component
                     }
                     else
                     {
+                        document.getElementById("Sound").play(); 
                         let tmpConfObj = 
                         {
                             id:'msgBarcodeNotFound',showTitle:true,title:this.t("msgBarcodeNotFound.title"),showCloseButton:true,width:'350px',height:'200px',
@@ -206,7 +206,6 @@ export default class salesOrder extends React.Component
                         }
                         await dialog(tmpConfObj);
                         this.txtBarcode.value = ""
-                        document.getElementById("Sound").play(); 
                     }
                 }
             }.bind(this),
@@ -233,6 +232,7 @@ export default class salesOrder extends React.Component
         let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
         if(tmpCheckData.result.recordset.length == 0)
         {
+            document.getElementById("Sound3").play(); 
             let tmpConfObj = 
             {
                 id:'msgCustomerNotFound',showTitle:true,title:this.t("msgCustomerNotFound.title"),showCloseButton:true,width:'350px',height:'200px',
@@ -328,13 +328,14 @@ export default class salesOrder extends React.Component
                 button:[{id:"btn01",caption:this.t("msgBarcodeCheck.btn01"),location:'after'}],
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcodeCheck.msg")}</div>)
             }
-            let pResult = await dialog(tmpConfObj);
+            await dialog(tmpConfObj);
             return
         }
         for (let i = 0; i < this.docObj.docOrders.dt().length; i++) 
         {
             if(this.docObj.docOrders.dt()[i].ITEM_CODE == this.barcode.code)
             {
+                document.getElementById("Sound2").play(); 
                 let tmpConfObj = 
                 {
                     id:'msgCombineItem',showTitle:true,title:this.t("msgCombineItem.title"),showCloseButton:true,width:'350px',height:'200px',
@@ -797,6 +798,7 @@ export default class salesOrder extends React.Component
                                             }
                                             else
                                             {
+                                                document.getElementById("Sound").play(); 
                                                 let tmpConfObj = 
                                                 {
                                                     id:'msgBarcodeNotFound',showTitle:true,title:this.t("msgBarcodeNotFound.title"),showCloseButton:true,width:'350px',height:'200px',
@@ -805,7 +807,6 @@ export default class salesOrder extends React.Component
                                                 }
                                                 await dialog(tmpConfObj);
                                                 this.txtBarcode.value = ""
-                                                document.getElementById("Sound").play(); 
 
                                             }
                                         }

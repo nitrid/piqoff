@@ -186,6 +186,7 @@ export default class collectiveOffer extends React.Component
                     }
                     else
                     {
+                        document.getElementById("Sound").play(); 
                         let tmpConfObj = 
                         {
                             id:'msgBarcodeNotFound',showTitle:true,title:this.t("msgBarcodeNotFound.title"),showCloseButton:true,width:'350px',height:'200px',
@@ -274,6 +275,7 @@ export default class collectiveOffer extends React.Component
         {
             if(this.docObj.docOffers.dt()[i].ITEM_CODE == this.barcode.code)
             {
+                document.getElementById("Sound2").play(); 
                 let tmpConfObj = 
                 {
                     id:'msgCombineItem',showTitle:true,title:this.t("msgCombineItem.title"),showCloseButton:true,width:'350px',height:'200px',
@@ -283,14 +285,11 @@ export default class collectiveOffer extends React.Component
                 let pResult = await dialog(tmpConfObj);
                 if(pResult == 'btn01')
                 {                   
-                    this.barcode = 
-                    {
-                        name:"",
-                        vat:0,
-                        barcode: "",
-                        code:"",
-                        guid : "00000000-0000-0000-0000-000000000000",
-                    }
+                    this.docObj.docOrders.dt()[i].QUANTITY = this.docObj.docOrders.dt()[i].QUANTITY + pQuantity
+                    this.docObj.docOrders.dt()[i].VAT = parseFloat((this.docObj.docOrders.dt()[i].VAT + (this.docObj.docOrders.dt()[i].PRICE * (this.docObj.docOrders.dt()[i].VAT_RATE / 100)) * pQuantity).toFixed(3))
+                    this.docObj.docOrders.dt()[i].AMOUNT = parseFloat((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE).toFixed(3))
+                    this.docObj.docOrders.dt()[i].TOTAL = parseFloat((((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE) - this.docObj.docOrders.dt()[i].DISCOUNT) + this.docObj.docOrders.dt()[i].VAT).toFixed(3))
+                    this._calculateTotal()
                     this.barcodeReset()
                     return
                 }
@@ -619,6 +618,7 @@ export default class collectiveOffer extends React.Component
                                             }
                                             else
                                             {
+                                                document.getElementById("Sound").play(); 
                                                 let tmpConfObj = 
                                                 {
                                                     id:'msgBarcodeNotFound',showTitle:true,title:this.t("msgBarcodeNotFound.title"),showCloseButton:true,width:'350px',height:'200px',

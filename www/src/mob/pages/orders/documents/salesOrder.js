@@ -197,6 +197,7 @@ export default class salesOrder extends React.Component
                     }
                     else
                     {
+                        document.getElementById("Sound").play(); 
                         let tmpConfObj = 
                         {
                             id:'msgBarcodeNotFound',showTitle:true,title:this.t("msgBarcodeNotFound.title"),showCloseButton:true,width:'350px',height:'200px',
@@ -205,7 +206,6 @@ export default class salesOrder extends React.Component
                         }
                         await dialog(tmpConfObj);
                         this.txtBarcode.value = ""
-                        document.getElementById("Sound").play(); 
                     }
                 }
             }.bind(this),
@@ -294,9 +294,9 @@ export default class salesOrder extends React.Component
         }
         for (let i = 0; i < this.docObj.docOrders.dt().length; i++) 
         {
-            console.log(this.barcode.code)
             if(this.docObj.docOrders.dt()[i].ITEM_CODE == this.barcode.code)
             {
+                document.getElementById("Sound2").play(); 
                 let tmpConfObj = 
                 {
                     id:'msgCombineItem',showTitle:true,title:this.t("msgCombineItem.title"),showCloseButton:true,width:'350px',height:'200px',
@@ -744,6 +744,7 @@ export default class salesOrder extends React.Component
                                     }
                                     else
                                     {
+                                        document.getElementById("Sound").play(); 
                                         let tmpConfObj = 
                                         {
                                             id:'msgBarcodeNotFound',showTitle:true,title:this.t("msgBarcodeNotFound.title"),showCloseButton:true,width:'350px',height:'200px',
@@ -752,7 +753,6 @@ export default class salesOrder extends React.Component
                                         }
                                         await dialog(tmpConfObj);
                                         this.txtBarcode.value = ""
-                                        document.getElementById("Sound").play(); 
                                     }
                                     
                                 }).bind(this)}></NdTextBox>

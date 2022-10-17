@@ -16,7 +16,7 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
@@ -70,14 +70,14 @@ export default class salesOrder extends React.Component
 
         let tmpDoc = {...this.docObj.empty}
         tmpDoc.TYPE = 0
-        tmpDoc.DOC_TYPE = 60
+        tmpDoc.DOC_TYPE = 70
         tmpDoc.OUTPUT = '00000000-0000-0000-0000-000000000000'
         this.docObj.addEmpty(tmpDoc);
 
         this.txtRef.readOnly = false
         this.txtRefno.readOnly = false
-        this.txtRef.readOnly = true
         this.txtRef.value = this.user.NAME
+        this.txtRef.props.onChange()
         await this.grdSlsOrder.dataRefresh({source:this.docObj.docOrders.dt('DOC_ORDERS')});
     }
     async dropmenuClick(e)
@@ -120,7 +120,7 @@ export default class salesOrder extends React.Component
     async getDoc(pGuid,pRef,pRefno)
     {
         this.docObj.clearAll()
-        await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:0,DOC_TYPE:60});
+        await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:0,DOC_TYPE:70});
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
@@ -344,22 +344,14 @@ export default class salesOrder extends React.Component
         return(
             <ScrollView>
             <div>
-                 <div className="row px-2 pt-2">
-                    <div className="row px-2 pt-2" style={{visibility:this.state.tbMain,position:"absolute"}}>
+                 <div className="row px-1 pt-1">
+                    <div className="row px-1 pt-1" style={{visibility:this.state.tbMain,position:"absolute"}}>
                         <Form colCount={1}>
-                            <Item>
-                                <div className="row">
-                                    <div className="col-8"></div>
-                                    <div className="col-4">
-                                        <DropDownButton text={this.t("btnDropmenu")} icon="menu" items={this.dropmenuMainItems}  onItemClick={this.dropmenuClick}/>
-                                    </div>
-                                </div>
-                            </Item>
                             {/* txtRef-Refno */}
                             <Item>
                                 <Label text={this.t("txtRefRefno")} alignment="right" />
                                 <div className="row">
-                                    <div className="col-5 pe-0">
+                                    <div className="col-4 pe-0">
                                         <NdTextBox id="txtRef" style={{height:"14px"}} parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         readOnly={true}
@@ -368,7 +360,7 @@ export default class salesOrder extends React.Component
                                         {
                                             let tmpQuery = 
                                             {
-                                                query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 0 AND DOC_TYPE = 60 AND REF = @REF ",
+                                                query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 0 AND DOC_TYPE = 70 AND REF = @REF ",
                                                 param : ['REF:string|25'],
                                                 value : [this.txtRef.value]
                                             }
@@ -386,7 +378,7 @@ export default class salesOrder extends React.Component
                                             </Validator>  
                                         </NdTextBox>
                                     </div>
-                                    <div className="col-7 ps-0">
+                                    <div className="col-8 ps-0">
                                         <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         readOnly={true}
@@ -414,6 +406,14 @@ export default class salesOrder extends React.Component
                                                     onClick:()=>
                                                     {
                                                         this.txtRefno.value = Math.floor(Date.now() / 1000)
+                                                    }
+                                                },
+                                                {
+                                                    id:'03',
+                                                    icon:'revert',
+                                                    onClick:()=>
+                                                    {
+                                                        this.init()
                                                     }
                                                 }
                                             ]
@@ -445,7 +445,7 @@ export default class salesOrder extends React.Component
                                 height={'90%'}
                                 selection={{mode:"single"}}
                                 title={this.t("pg_Docs.title")} 
-                                data={{source:{select:{query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME FROM DOC_VW_01 WHERE TYPE = 0 AND DOC_TYPE = 60 AND REBATE = 0"},sql:this.core.sql}}}
+                                data={{source:{select:{query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME FROM DOC_VW_01 WHERE TYPE = 0 AND DOC_TYPE = 70 AND REBATE = 0"},sql:this.core.sql}}}
                                 button=
                                 {
                                     [
@@ -460,8 +460,8 @@ export default class salesOrder extends React.Component
                                     ]
                                 }
                                 >
-                                <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150} defaultSortOrder="asc"/>
-                                <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={300} defaultSortOrder="asc" />
+                                <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={120} defaultSortOrder="asc"/>
+                                <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={100} defaultSortOrder="asc" />
                                 <Column dataField="OUTPUT_NAME" caption={this.t("pg_Docs.clmOutputName")} width={300} defaultSortOrder="asc" />
                                 <Column dataField="OUTPUT_CODE" caption={this.t("pg_Docs.clmOutputCode")} width={300} defaultSortOrder="asc" />
                                 </NdPopGrid>
@@ -501,36 +501,36 @@ export default class salesOrder extends React.Component
                             </Item>
                             <Item>
                                 <div className="row">
-                                    <div className="col-6 px-4 pt-4">
+                                    <div className="col-6 px-2 pt-2">
                                         <NdButton text={this.t("btnBarcodeEntry")} type="default" width="100%" onClick={()=>this.pageChange("Barcode")}></NdButton>
                                     </div>
-                                    <div className="col-6 px-4 pt-4">
+                                    <div className="col-6 px-2 pt-2">
                                         <NdButton text={this.t("btnDocument")} type="default" width="100%" onClick={()=>this.pageChange("Document")}></NdButton>
                                     </div>
                                 </div>
                             </Item>
                         </Form>
                     </div>
-                    <div className="row px-2 pt-2" style={{visibility:this.state.tbBarcode,position:"absolute"}}>
+                    <div className="row px-1 pt-1" style={{visibility:this.state.tbBarcode,position:"absolute"}}>
                         <Form colCount={1}>
                             <Item>
-                            <div className="row">
-                                <div className="col-4 px-2 pt-2">
+                            <div className="row" style={{height:"25px"}}>
+                                <div className="col-4 px-1 pt-1">
                                     <NdButton icon="arrowleft" type="default" width="100%" onClick={()=>this.pageChange("Main")}></NdButton>
                                 </div>
-                                <div className="col-4 px-2 pt-2">
+                                <div className="col-4 px-1 pt-1">
                                     <NdButton icon="detailslayout" type="default" width="100%" onClick={()=>this.pageChange("Document")}></NdButton>
                                 </div>
-                                <div className="col-4 px-2 pt-2">
+                                <div className="col-4 px-1 pt-1">
                                     
-                                    <NdCheckBox id="chkAutoAdd" text={this.t("chkAutoAdd")} parent={this} defaultValue={false} 
+                                    <NdCheckBox id="chkAutoAdd" text={this.t("chkAutoAdd")} parent={this} defaultValue={true}  value={true}
                                     param={this.param.filter({ELEMENT:'chkAutoAdd',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'chkAutoAdd',USERS:this.user.CODE})}/>
                                 </div>
                             </div>
                             </Item>
                             <Item>
-                                <div className="col-12 px-1 pt-1">
+                                <div className="col-12 px-2 pt-2">
                                     <NdTextBox id="txtBarcode" parent={this} placeholder={this.t("txtBarcodePlace")}
                                     button={[
                                         {
@@ -634,9 +634,9 @@ export default class salesOrder extends React.Component
                             </Item>
                             <Item> 
                                 <div>
-                                    <h4 className="text-center">
+                                    <h5 className="text-center">
                                         {this.barcode.name}
-                                    </h4>
+                                    </h5>
                                 </div>
                             </Item>
                             {/* txtQuantity */}
@@ -715,22 +715,22 @@ export default class salesOrder extends React.Component
                             </Item>
                         </Form>
                     </div>
-                    <div className="row px-2 pt-2" style={{visibility:this.state.tbDocument,position:"absolute"}}>
+                    <div className="row px-1 pt-1" style={{visibility:this.state.tbDocument,position:"absolute"}}>
                         <Form colCount={1} >
                         <Item>
-                            <div className="row">
-                                <div className="col-4 px-2 pt-2">
+                            <div className="row" style={{height:"25px"}}>
+                                <div className="col-4 px-1 pt-1">
                                     <NdButton icon="arrowleft" type="default" width="100%" onClick={()=>this.pageChange("Main")}></NdButton>
                                 </div>
-                                <div className="col-4 px-2 pt-2">
+                                <div className="col-4 px-1 pt-1">
                                     <NdButton icon="plus" type="default" width="100%" onClick={()=>this.pageChange("Barcode")}></NdButton>
                                 </div>
                                 <div className="col-4">
-                                        <DropDownButton text={this.t("btnDropmenu")} icon="menu" items={this.dropmenuDocItems}  onItemClick={this.dropmenuClick}/>
                                 </div>
                             </div>
                         </Item>
                         <Item>
+                        <div className='col-12 px-2 pt-2'>
                             <NdGrid parent={this} id={"grdSlsOrder"} 
                             showBorders={true} 
                             columnsAutoWidth={true} 
@@ -740,7 +740,6 @@ export default class salesOrder extends React.Component
                             width={'100%'}
                             dbApply={false}
                             onRowUpdated={async(e)=>{
-                                let rowIndex = e.component.getRowIndexByKey(e.key)
 
                                 if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                 {
@@ -822,8 +821,9 @@ export default class salesOrder extends React.Component
                             >
                                 <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                                 <Scrolling mode="standart" />
+                                <Paging defaultPageSize={10} />
+                                <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                <Export fileName={this.lang.t("menu.sip_02_002")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="ITEM_NAME" caption={this.t("grdSlsOrder.clmItemName")} width={350} />
                                 <Column dataField="QUANTITY" caption={this.t("grdSlsOrder.clmQuantity")} dataType={'number'} width={80}/>
                                 <Column dataField="PRICE" caption={this.t("grdSlsOrder.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={80}/>
@@ -833,6 +833,7 @@ export default class salesOrder extends React.Component
                                 <Column dataField="VAT" caption={this.t("grdSlsOrder.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} width={80}/>
                                 <Column dataField="TOTAL" caption={this.t("grdSlsOrder.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} width={100}/>
                             </NdGrid>
+                        </div>
                         </Item>
                         </Form>
                         <div className="row px-1 pt-1">
@@ -1077,6 +1078,11 @@ export default class salesOrder extends React.Component
                                         <Item>
                                             <Label text={this.t("txtQuantity")} alignment="right" />
                                             <NdNumberBox id="txtPopQuantity" parent={this} simple={true}  
+                                            onEnterKey={(async()=>
+                                                {
+                                                    this.addItem(this.txtPopQuantity.value)
+                                                    this.msgQuantity.hide()
+                                                }).bind(this)} 
                                             >
                                         </NdNumberBox>
                                         </Item>
