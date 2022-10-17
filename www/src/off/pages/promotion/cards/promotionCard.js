@@ -481,8 +481,16 @@ export default class promotionCard extends React.PureComponent
                                                         let tmpPrice = await this.getPrice(this.condDt[0].ITEM_GUID)
                                                         this.setState({discPrice:tmpPrice})
                                                     }
-                                                    this["txtDiscRate" + pItem.WITHAL].value = this["txtRstQuantity" + pItem.WITHAL].value
-                                                    this["txtDiscAmount" + pItem.WITHAL].value = Number(this.state.discPrice - Number(this.state.discPrice).rateInc(this["txtRstQuantity" + pItem.WITHAL].value,2)).toFixed(2)
+                                                    if(this.state["rstType" + pItem.WITHAL] == 0)
+                                                    {
+                                                        this["txtDiscRate" + pItem.WITHAL].value = this["txtRstQuantity" + pItem.WITHAL].value
+                                                        this["txtDiscAmount" + pItem.WITHAL].value = Number(this.state.discPrice - Number(this.state.discPrice).rateInc(this["txtRstQuantity" + pItem.WITHAL].value,2)).toFixed(2)
+                                                    }
+                                                    else if(this.state["rstType" + pItem.WITHAL] == 5)
+                                                    {
+                                                        this["txtDiscRate" + pItem.WITHAL].value = Number(100 - Number(this.state.discPrice).rate2Num(this["txtRstQuantity" + pItem.WITHAL].value,2)).toFixed(2)
+                                                        this["txtDiscAmount" + pItem.WITHAL].value = this["txtRstQuantity" + pItem.WITHAL].value
+                                                    }                                                    
                                                     this["popDiscount" + pItem.WITHAL].show()
                                                 }
                                             }
