@@ -4531,6 +4531,21 @@ export const langFr =
             giftCheck: "Hediye Çeki",
             generalDiscount: "Genel İskonto",
             discountAmount: "İskonto Tutar",
+        },
+        msgHelp: //BAK
+        {
+            title: "Yardım",
+            btn01: "Tamam",
+            condItemQuantity: "Buraya yaz...",
+            condItemAmount: "Buraya yaz...",
+            condGeneralAmount: "Buraya yaz...",
+            appDiscRate: "Buraya yaz...",
+            appDiscAmount: "Buraya yaz...",
+            appPoint: "Buraya yaz...",
+            appGiftCheck: "Buraya yaz...",
+            appGeneralAmount: "Buraya yaz...",
+            appItemQuantity: "Buraya yaz...",
+            appItemAmount: "Buraya yaz...",
         }
     },
     promo_02_001: //  "Promosyon Listesi"
@@ -5497,7 +5512,7 @@ export const langFr =
             title: "Attention",  // BAK
             btn01: "OK",  // BAK
             msg: "Cette ligne a été convertie en facture, vous ne pouvez apporter aucune modification !"
-},
+        },
         msgRowNotDelete :
         {
             title: "Attention",  //BAK
@@ -5517,6 +5532,13 @@ export const langFr =
             clmCiyt : "ŞEHİR",   // BAK
             clmZipcode : "POSTA  KODU",   // BAK
             clmCountry : "ÜLKE",   // BAK
+        },
+        msgCustomerNotFound:
+        {
+            title: "Attention",
+            btn01: "Continue",
+            btn02: "Abandonne",
+            msg: "Le Produit Sélectionné n'a pas de Fournisseur Enregistré ! Voulez-vous Continuer "
         },
     },
     irs_02_004 : // Şube Satış İrsaliyesi"

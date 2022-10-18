@@ -62,7 +62,7 @@ export default class labelPrinting extends React.Component
     {
         this.expObj.clearAll()
         this.barcodeReset()
-        this.dtlastDate.value = moment(new Date()).format("DD/MM/YYYY HH:mm:ss")
+        this.dtlastDate.value = moment(new Date()).format("YYYY-MM-DD")
         await this.grdExpDate.dataRefresh({source:this.expObj.dt('ITEM_EXPDATE')});
         this.setState({tbBarcode:"visible"})
     }
@@ -216,7 +216,7 @@ export default class labelPrinting extends React.Component
             guid : "00000000-0000-0000-0000-000000000000",
         }
         this.txtPopQuantity.value = 1
-        this.dtlastDate.value = moment(new Date()).format("DD/MM/YYYY HH:mm:ss")
+        this.dtlastDate.value = moment(new Date()).format("YYYY-MM-DD")
         this.txtBarcode.focus()
     }
     render()
@@ -332,7 +332,7 @@ export default class labelPrinting extends React.Component
                 </Item>
                 <Item>
                     <Label text={this.t("dtlastDate")} alignment="right" />
-                    <NdDatePicker simple={true}  parent={this} id={"dtlastDate"}
+                    <NdDatePicker simple={true}  parent={this} id={"dtlastDate"} pickerType={"rollers"}
                     onValueChanged={(async()=>
                         {
                     }).bind(this)}

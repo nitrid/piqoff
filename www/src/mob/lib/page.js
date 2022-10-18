@@ -6,15 +6,19 @@ import {prm} from '../meta/prm.js'
 import {acs} from '../meta/acs.js'
 import { dialog } from '../../core/react/devex/dialog.js';
 
-export default class Page extends React.PureComponent
+export default class Page extends React.Component
 {
   constructor(props)
   {
     super(props)
     
     this.core = App.instance.core;
-
-    this.page = React.lazy(() => import("../pages/" + props.data.path).then(async (obj)=>
+    this.openPage(props.data)
+  }
+  openPage(pData)
+  {
+    this.data = pData
+    this.page = React.lazy(() => import("../pages/" + pData.path).then(async (obj)=>
     {
       //SAYFA YÜKLENMEDEN ÖNCE PARAMETRE, DİL, YETKİLENDİRME DEĞERLERİ GETİRİLİP CLASS PROTOTYPE A SET EDİLİYOR.
       let tmpPrm = new param(prm);
@@ -23,13 +27,13 @@ export default class Page extends React.PureComponent
       let tmpAcs = new access(acs);
       await tmpAcs.load({APP:'MOB'})
       
-      obj.default.prototype.param = tmpPrm.filter({PAGE:props.data.id});
+      obj.default.prototype.param = tmpPrm.filter({PAGE:pData.id});
       obj.default.prototype.sysParam = tmpPrm.filter({TYPE:0});
-      obj.default.prototype.access = tmpAcs.filter({PAGE:props.data.id});
+      obj.default.prototype.access = tmpAcs.filter({PAGE:pData.id});
       obj.default.prototype.user = this.core.auth.data;
       obj.default.prototype.lang = App.instance.lang;
-      obj.default.prototype.t = App.instance.lang.getFixedT(null,null,this.props.data.id)
-      obj.default.prototype.pagePrm = this.props.data.pagePrm;
+      obj.default.prototype.t = App.instance.lang.getFixedT(null,null,pData.id)
+      obj.default.prototype.pagePrm = pData.pagePrm;
 
       obj.default.prototype.init = (function()
       {
@@ -59,32 +63,25 @@ export default class Page extends React.PureComponent
               }
           } 
       }
-      App.instance.panel.onClose = async () =>
-      {
-        
-          let tmpConfObj =
-          {
-              id:'msgClose',showTitle:true,title:("Dikkat"),showCloseButton:true,width:'350px',height:'200px',
-              button:[{id:"btn01",caption:("Evet"),location:'before'},{id:"btn02",caption:("Hayır"),location:'after'}],
-              content:(<div style={{textAlign:"center",fontSize:"20px"}}>{("Sayfayı Kapatmak İstediğinize Emin Misiniz?")}</div>)
-          }
-          
-          let pResult = await dialog(tmpConfObj);
-          if(pResult == 'btn01')
-          {
-              App.instance.panel.closePage()
-          }
-      }
-      //***********************************************/      
       return obj;
     }))    
+  }
+  shouldComponentUpdate(nextProps) 
+  {
+    if(nextProps.data != this.data)
+    {
+      this.openPage(nextProps.data)
+      return true
+    }
+    
+    return false
   }
   render()
   {
     return(
       <React.Fragment>
         <React.Suspense fallback={<div style={{position: 'relative',margin:'auto',top: '40%',left:'50%'}}><LoadIndicator height={40} width={40} /></div>}>          
-          <this.page data={this.props.data}/>
+          <this.page/>
         </React.Suspense>
       </React.Fragment>
     )

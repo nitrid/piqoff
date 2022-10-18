@@ -396,7 +396,23 @@ export default class promotionCard extends React.PureComponent
                                             {
                                                 this.condDt.where({WITHAL:pItem.WITHAL})[0].QUANTITY = e.value
                                             }
-                                        }}/>     
+                                        }}
+                                        button={
+                                        [
+                                            {
+                                                id:'01',
+                                                icon:'help',
+                                                onClick:async()=>
+                                                {
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgHelp.condItemQuantity")}</div>)
+                                                    }
+                                                    await dialog(tmpConfObj);
+                                                }
+                                            }
+                                        ]}/>     
                                     </Item>
                                     {/* txtPrmAmount */}  
                                     <Item>                                                                    
@@ -409,7 +425,23 @@ export default class promotionCard extends React.PureComponent
                                             {
                                                 this.condDt.where({WITHAL:pItem.WITHAL})[0].AMOUNT = e.value
                                             }
-                                        }}/>     
+                                        }}
+                                        button={
+                                        [
+                                            {
+                                                id:'01',
+                                                icon:'help',
+                                                onClick:async()=>
+                                                {
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgHelp.condItemAmount")}</div>)
+                                                    }
+                                                    await dialog(tmpConfObj);
+                                                }
+                                            }
+                                        ]}/>     
                                     </Item>
                                 </GroupItem>
                                 <GroupItem colCount={3} visible={this.state["prmType" + pItem.WITHAL] == 1 ? true : false}>
@@ -423,7 +455,23 @@ export default class promotionCard extends React.PureComponent
                                             {
                                                 this.condDt.where({WITHAL:pItem.WITHAL})[0].AMOUNT = e.value
                                             }
-                                        }}/>     
+                                        }}
+                                        button={
+                                        [
+                                            {
+                                                id:'01',
+                                                icon:'help',
+                                                onClick:async()=>
+                                                {
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgHelp.condGeneralAmount")}</div>)
+                                                    }
+                                                    await dialog(tmpConfObj);
+                                                }
+                                            }
+                                        ]}/>     
                                     </Item> 
                                     <EmptyItem /> 
                                     <EmptyItem /> 
@@ -493,6 +541,32 @@ export default class promotionCard extends React.PureComponent
                                                     }                                                    
                                                     this["popDiscount" + pItem.WITHAL].show()
                                                 }
+                                            },
+                                            {
+                                                id:'02',
+                                                icon:'help',
+                                                onClick:async()=>
+                                                {
+                                                    let tmpConfObj = {}
+                                                    if(this.state["rstType" + pItem.WITHAL] == 0)
+                                                    {
+                                                        tmpConfObj =
+                                                        {
+                                                            id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgHelp.appDiscRate")}</div>)
+                                                        }
+                                                    }
+                                                    else if(this.state["rstType" + pItem.WITHAL] == 5)
+                                                    {
+                                                        tmpConfObj =
+                                                        {
+                                                            id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgHelp.appDiscAmount")}</div>)
+                                                        }
+                                                    }
+
+                                                    await dialog(tmpConfObj);
+                                                }
                                             }
                                         ]}/>
                                     </Item>
@@ -511,7 +585,43 @@ export default class promotionCard extends React.PureComponent
                                             {
                                                 this.appDt.where({WITHAL:pItem.WITHAL})[0].AMOUNT = e.value
                                             }
-                                        }}/>
+                                        }}
+                                        button={
+                                        [
+                                            {
+                                                id:'01',
+                                                icon:'help',
+                                                onClick:async()=>
+                                                {
+                                                    let tmpConfObj = {}
+                                                    if(this.state["rstType" + pItem.WITHAL] == 1)
+                                                    {
+                                                        tmpConfObj =
+                                                        {
+                                                            id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgHelp.appPoint")}</div>)
+                                                        }
+                                                    }
+                                                    else if(this.state["rstType" + pItem.WITHAL] == 2)
+                                                    {
+                                                        tmpConfObj =
+                                                        {
+                                                            id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgHelp.appGiftCheck")}</div>)
+                                                        }
+                                                    }
+                                                    else if(this.state["rstType" + pItem.WITHAL] == 4)
+                                                    {
+                                                        tmpConfObj =
+                                                        {
+                                                            id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgHelp.appGeneralAmount")}</div>)
+                                                        }
+                                                    }
+                                                    await dialog(tmpConfObj);
+                                                }
+                                            }
+                                        ]}/>
                                     </Item>
                                     <EmptyItem/>
                                     <EmptyItem/>
@@ -597,7 +707,23 @@ export default class promotionCard extends React.PureComponent
                                             {
                                                 this.appDt.where({WITHAL:pItem.WITHAL})[0].QUANTITY = e.value
                                             }
-                                        }}/>     
+                                        }}
+                                        button={
+                                        [
+                                            {
+                                                id:'01',
+                                                icon:'help',
+                                                onClick:async()=>
+                                                {
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgHelp.appItemQuantity")}</div>)
+                                                    }
+                                                    await dialog(tmpConfObj);
+                                                }
+                                            }
+                                        ]}/>     
                                     </Item> 
                                     {/* txtRstItemAmount */}  
                                     <Item>                                                                    
@@ -618,6 +744,19 @@ export default class promotionCard extends React.PureComponent
                                                     this["txtDiscRate" + pItem.WITHAL].value = this["txtRstItemAmount" + pItem.WITHAL].value
                                                     this["txtDiscAmount" + pItem.WITHAL].value = Number(this.state.discPrice - Number(this.state.discPrice).rateInc(this["txtRstItemAmount" + pItem.WITHAL].value,2)).toFixed(2)
                                                     this["popDiscount" + pItem.WITHAL].show()
+                                                }
+                                            },
+                                            {
+                                                id:'02',
+                                                icon:'help',
+                                                onClick:async()=>
+                                                {
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgHelp.appItemAmount")}</div>)
+                                                    }
+                                                    await dialog(tmpConfObj);
                                                 }
                                             }
                                         ]}/>     

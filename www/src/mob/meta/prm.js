@@ -38,7 +38,47 @@ export const prm =
     //#endregion
 
 
+     //#region Depo Sevk
+     // negativeQuantity
+     {
+        TYPE : 1,
+        ID :"negativeQuantity",
+        VALUE : 
+        {
+            value : false
+        },
+        SPECIAL : "",
+        PAGE : "stk_02_002",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Depolar Arası Transfer",
+            CAPTION : "Eksiye Düşemeye İzin Verme"
+        }
+    },
+    //#endregion
     //#region İade Ürün Toplama
+     // negativeQuantity
+     {
+        TYPE : 1,
+        ID :"negativeQuantity",
+        VALUE : 
+        {
+            value : false
+        },
+        SPECIAL : "",
+        PAGE : "stk_02_005",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "İade Ürün Toplama",
+            CAPTION : "Eksiye Düşemeye İzin Verme"
+        }
+    },
     // cmbDepot1
     {
         TYPE : 2,

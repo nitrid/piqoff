@@ -84,7 +84,7 @@ export default class labelPrinting extends React.Component
         this.btnNew.setState({disabled:false});
 
         this.txtPopQuantity.value = 1;
-        this.dtPopDate.value = moment(new Date()).format("DD/MM/YYYY HH:mm:ss")
+        this.dtPopDate.value = moment(new Date()).format("YYYY-MM-DD")
         await this.grdExpDate.dataRefresh({source:this.expObj.dt('ITEM_EXPDATE')});
     }
     async addItem(pData,pIndex)

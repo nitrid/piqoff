@@ -398,7 +398,7 @@ export default class rebateDispatch extends React.PureComponent
             {
                 query :"SELECT MULTICODE,(SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM_GUID,CUSTOMER_GUID,@QUANTITY,GETDATE())) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
                 param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
-                value : [pData.CODE,this.docObj.dt()[0].OUTPUT,pQuantity]
+                value : [pData.CODE,this.docObj.dt()[0].INPUT,pQuantity]
             }
             let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
             if(tmpCheckData.result.recordset.length == 0)
@@ -2123,6 +2123,38 @@ export default class rebateDispatch extends React.PureComponent
                             <Column dataField="ZIPCODE" caption={this.t("pg_adress.clmZipcode")} width={300} defaultSortOrder="asc" />
                             <Column dataField="COUNTRY" caption={this.t("pg_adress.clmCountry")} width={200}/>
                         </NdPopGrid>
+                            {/* notCustomer Dialog  */}
+                    <NdDialog id={"msgCustomerNotFound"} container={"#root"} parent={this}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        title={this.t("msgCustomerNotFound.title")} 
+                        showCloseButton={false}
+                        width={"500px"}
+                        height={"250px"}
+                        button={[{id:"btn01",caption:this.t("msgCustomerNotFound.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCustomerNotFound.btn02"),location:'after'}]}
+                        >
+                            <div className="row">
+                                <div className="col-12 py-2">
+                                    <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerNotFound.msg")}</div>
+                                </div>
+                                <div className="col-12 py-2">
+                                <Form>
+                                    {/* checkCustomer */}
+                                    <Item>
+                                        <Label text={this.lang.t("checkAll")} alignment="right" />
+                                        <NdCheckBox id="checkCustomer" parent={this} simple={true}  
+                                        value ={false}
+                                        >
+                                        </NdCheckBox>
+                                    </Item>
+                                </Form>
+                            </div>
+                            </div>
+                            <div className='row'>
+                        
+                            </div>
+                        
+                    </NdDialog>  
                 </ScrollView>                
             </div>
         )

@@ -4558,6 +4558,21 @@ export const langTr =
             giftCheck: "Hediye Çeki",
             generalDiscount: "Genel İskonto",
             discountAmount: "İskonto Tutar",
+        },
+        msgHelp:
+        {
+            title: "Yardım",
+            btn01: "Tamam",
+            condItemQuantity: "Buraya yaz...",
+            condItemAmount: "Buraya yaz...",
+            condGeneralAmount: "Buraya yaz...",
+            appDiscRate: "Buraya yaz...",
+            appDiscAmount: "Buraya yaz...",
+            appPoint: "Buraya yaz...",
+            appGiftCheck: "Buraya yaz...",
+            appGeneralAmount: "Buraya yaz...",
+            appItemQuantity: "Buraya yaz...",
+            appItemAmount: "Buraya yaz...",
         }
     },
     promo_02_001: //  "Promosyon Listesi"
@@ -5575,6 +5590,13 @@ export const langTr =
             clmCiyt : "ŞEHİR",
             clmZipcode : "POSTA  KODU",
             clmCountry : "ÜLKE",
+        },
+        msgCustomerNotFound:
+        {
+            title: "Dikkat",
+            btn01: "Devam Et",
+            btn02: "Vazgeç",
+            msg: "Seçilen Ürün Cariye Tanımlı Değil ! Devam Etmek İstiyormusunuz"
         },
     },
     irs_02_004 : // Şube Satış İrsaliyesi"

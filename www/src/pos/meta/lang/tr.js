@@ -565,4 +565,11 @@ export const langTr =
         msg : "Lütfen geçerli bir tutar giriniz.",
         btn01 : "Tamam"
     },
+    msgPrintAlert: 
+    {
+        title : "Uyarı",
+        msg : "Fişi Yazdırmak İstermisiniz ?",
+        btn01 : "Tamam",
+        btn02 : "İptal"
+    },
 }
