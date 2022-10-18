@@ -768,6 +768,22 @@ export const prm =
             PAGE_NAME : "Pos",
             CAPTION : "Ekran Zaman Aşımı"
         }
+    },
+    //Fiş Çıktısı Sorulsun
+    {
+        TYPE : 0,
+        ID :"PrintAlert",
+        VALUE : true,
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Fiş Çıktısı Sorulsun"
+        }
     }
     //#endregion
 ]
