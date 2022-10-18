@@ -773,7 +773,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"PrintAlert",
-        VALUE : true,
+        VALUE : false,
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",
