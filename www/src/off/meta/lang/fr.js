@@ -5511,7 +5511,7 @@ export const langFr =
             title: "Attention",  // BAK
             btn01: "OK",  // BAK
             msg: "Cette ligne a été convertie en facture, vous ne pouvez apporter aucune modification !"
-},
+        },
         msgRowNotDelete :
         {
             title: "Attention",  //BAK
@@ -5531,6 +5531,13 @@ export const langFr =
             clmCiyt : "ŞEHİR",   // BAK
             clmZipcode : "POSTA  KODU",   // BAK
             clmCountry : "ÜLKE",   // BAK
+        },
+        msgCustomerNotFound:
+        {
+            title: "Attention",
+            btn01: "Continue",
+            btn02: "Abandonne",
+            msg: "Le Produit Sélectionné n'a pas de Fournisseur Enregistré ! Voulez-vous Continuer "
         },
     },
     irs_02_004 : // Şube Satış İrsaliyesi"
