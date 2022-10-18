@@ -26,9 +26,9 @@ import { LoadPanel } from 'devextreme-react/load-panel';
 import HTMLReactParser from 'html-react-parser';
 
 import Navigation from './navigation.js'
-import Panel from './panel.js'
 import Login from './login.js'
 import NdDialog,{dialog} from '../../core/react/devex/dialog';
+import Page from './page';
 
 export default class App extends React.PureComponent
 {
@@ -74,7 +74,8 @@ export default class App extends React.PureComponent
                 title : 'Sunucu ile bağlantı kuruluyor.',
             },
             vtadi : '',
-            isExecute:false
+            isExecute:false,
+            page:{id: 'main_01_001',text: 'main',path: 'main'}
         }
         this.toolbarItems = 
         [
@@ -227,9 +228,7 @@ export default class App extends React.PureComponent
     {
         if(typeof data.path != 'undefined')
         {
-            Panel.instance.addPage(data);
-            this.panel = Panel.instance
-            this.setState({opened: !this.state.opened})
+            this.setState({opened: !this.state.opened,page:data})
         }
     }
     textValueChanged(e) 
@@ -335,21 +334,15 @@ export default class App extends React.PureComponent
         
         return (
             <div>
-                <LoadPanel
-                shadingColor="rgba(0,0,0,0.4)"
-                position={{ of: '#root' }}
-                visible={this.state.isExecute}
-                showIndicator={true}
-                shading={true}
-                showPane={true}
-                />
+                <LoadPanel shadingColor="rgba(0,0,0,0.4)" position={{ of: '#root' }} visible={this.state.isExecute} showIndicator={true} shading={true} showPane={true}/>
                 <div className="top-bar">
                     <Toolbar className="main-toolbar" height={45} items={this.toolbarItems}/>
                 </div>
                 <div>
-                    <Drawer className="main-drawer"  opened={opened} openedStateMode={'shrink'} position={'left'} 
-                        revealMode={'slide'} component={Navigation} >
-                        <Panel width={250}/>
+                    <Drawer className="main-drawer"  opened={opened} openedStateMode={'shrink'} position={'left'} revealMode={'slide'} component={Navigation} >
+                        <div>
+                            <Page data={this.state.page}/>
+                        </div>
                     </Drawer>
                 </div>
             </div>
