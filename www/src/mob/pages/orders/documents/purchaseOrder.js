@@ -815,9 +815,9 @@ export default class salesOrder extends React.Component
                             </Item>
                             <Item> 
                                 <div>
-                                    <h4 className="text-center">
+                                    <h5 className="text-center">
                                         {this.barcode.name}
-                                    </h4>
+                                    </h5>
                                 </div>
                             </Item>
                             {/* txtQuantity */}

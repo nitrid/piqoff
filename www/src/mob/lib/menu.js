@@ -137,17 +137,17 @@ export const menu = (e) =>
                         {
                             id: 'irs_01_002',
                             text: e.t('menu.irs_01_002'),//'Alış İrsaliyesi',
-                            path: 'dispatch/documents/rebateDispatch'
+                            path: 'dispatch/documents/purchaseDispatch'
                         },
                         {
                             id: 'irs_01_003',
                             text: e.t('menu.irs_01_003'),//'Satış İrsaliyesi',
-                            path: 'dispatch/documents/rebateDispatch'
+                            path: 'dispatch/documents/salesDispatch'
                         },
                         {
                             id: 'irs_01_004',
                             text: e.t('menu.irs_01_004'),//'Şube satış İrsaliyesi',
-                            path: 'dispatch/documents/rebateDispatch'
+                            path: 'dispatch/documents/branchSaleDispatch'
                         },
 
                     ]

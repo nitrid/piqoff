@@ -83,9 +83,9 @@ export default class rebateDispatch extends React.PureComponent
 
 
         let tmpDoc = {...this.docObj.empty}
-        tmpDoc.TYPE = 1
+        tmpDoc.TYPE = 0
         tmpDoc.DOC_TYPE = 40
-        tmpDoc.REBATE = 1
+        tmpDoc.REBATE = 0
         this.docObj.addEmpty(tmpDoc);
 
         this.txtRef.readOnly = false
@@ -98,7 +98,7 @@ export default class rebateDispatch extends React.PureComponent
     async getDoc(pGuid,pRef,pRefno)
     {
         this.docObj.clearAll()
-        await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:40});
+        await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:0,DOC_TYPE:40});
         this._calculateMargin()
         this._calculateTotalMargin()
 
@@ -218,8 +218,6 @@ export default class rebateDispatch extends React.PureComponent
         }
         for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
         {
-            console.log(this.docObj.docItems.dt()[i].CODE)
-            console.log(this.barcode.code)
             if(this.docObj.docItems.dt()[i].ITEM_CODE == this.barcode.code)
             {
                 console.log(12331)
@@ -251,7 +249,6 @@ export default class rebateDispatch extends React.PureComponent
         let tmpDocItems = {...this.docObj.docItems.empty}
         tmpDocItems.REF = this.docObj.dt()[0].REF
         tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-        tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
         tmpDocItems.ITEM_NAME = this.barcode.name
         tmpDocItems.ITEM_CODE = this.barcode.code
         tmpDocItems.ITEM = this.barcode.guid
@@ -261,8 +258,8 @@ export default class rebateDispatch extends React.PureComponent
         tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
         tmpDocItems.REF = this.docObj.dt()[0].REF
         tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-        tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
         tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+        tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
         tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
         tmpDocItems.QUANTITY = pQuantity
         tmpDocItems.VAT_RATE = this.barcode.vat
@@ -281,7 +278,7 @@ export default class rebateDispatch extends React.PureComponent
         {
             query : "SELECT *,[dbo].[FN_DEPOT_QUANTITY]([ITEM_GUID],@DEPOT,GETDATE()) AS QUANTITY FROM ITEM_MULTICODE_VW_01 WHERE [dbo].[FN_DEPOT_QUANTITY]([ITEM_GUID],@DEPOT,GETDATE()) > 0 AND CUSTOMER_GUID = @CUSTOMER",
             param : ['DEPOT:string|50','CUSTOMER:string|50'],
-            value : [this.docObj.dt()[0].OUTPUT,this.docObj.dt()[0].INPUT]
+            value : [this.docObj.dt()[0].INPUT,this.docObj.dt()[0].OUTPUT]
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
         if(tmpData.result.recordset.length > 0)
@@ -301,8 +298,8 @@ export default class rebateDispatch extends React.PureComponent
                 tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
                 tmpDocItems.REF = this.docObj.dt()[0].REF
                 tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
                 tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
                 tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
                 tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
                 tmpDocItems.ITEM = data[i].ITEM_GUID
@@ -363,7 +360,7 @@ export default class rebateDispatch extends React.PureComponent
                 let pResult = await dialog(tmpConfObj);
                 return
             }
-            else if(this.docObj.dt()[0].INPUT_CODE == "")
+            else if(this.docObj.dt()[0].OUTPUT_CODE == "")
             {
                 let tmpConfObj = 
                 {
@@ -393,12 +390,13 @@ export default class rebateDispatch extends React.PureComponent
     }
     async setBarcode()
     {
+        console.log(11111)
         this.txtQuantity.value = 1
         let tmpQuery = 
         {
             query :"SELECT MULTICODE,CUSTOMER_PRICE AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
             param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50'],
-            value : [this.barcode.code,this.docObj.dt()[0].INPUT]
+            value : [this.barcode.code,this.docObj.dt()[0].OUTPUT]
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
         if(tmpData.result.recordset.length == 0)
@@ -424,7 +422,7 @@ export default class rebateDispatch extends React.PureComponent
             this.txtVat.value = parseFloat((tmpData.result.recordset[0].PRICE * (this.barcode.vat / 100)).toFixed(2))
             this.txtAmount.value = parseFloat((Number(this.txtPrice.value) + Number(this.txtVat.value)).toFixed(2))
         }
-        this.setState({tbBarcode:"hidden"})
+        this.setState({tbBarcode:"hiddem"})
         this.setState({tbBarcode:"visible"})
         if(this.chkAutoAdd.value == true)
         {
@@ -446,6 +444,7 @@ export default class rebateDispatch extends React.PureComponent
         {
             this.txtQuantity.focus()
         }
+        
     }
     async dropmenuClick(e)
     {
@@ -475,7 +474,7 @@ export default class rebateDispatch extends React.PureComponent
                                         {
                                             let tmpQuery = 
                                             {
-                                                query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 40 AND REF = @REF ",
+                                                query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 0 AND DOC_TYPE = 40 AND REF = @REF ",
                                                 param : ['REF:string|25'],
                                                 value : [this.txtRef.value]
                                             }
@@ -560,7 +559,7 @@ export default class rebateDispatch extends React.PureComponent
                                 height={'90%'}
                                 selection={{mode:"single"}}
                                 title={this.t("pg_Docs.title")} 
-                                data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 40 AND REBATE = 1"},sql:this.core.sql}}}
+                                data={{source:{select:{query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME FROM DOC_VW_01 WHERE TYPE = 0 AND DOC_TYPE = 40 AND REBATE = 0"},sql:this.core.sql}}}
                                 button=
                                 {
                                     [
@@ -577,15 +576,15 @@ export default class rebateDispatch extends React.PureComponent
                                 >
                                 <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150} defaultSortOrder="asc"/>
                                 <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={100} defaultSortOrder="asc" />
-                                <Column dataField="INPUT_NAME" caption={this.t("pg_Docs.clmInputName")} width={300} defaultSortOrder="asc" />
-                                <Column dataField="INPUT_CODE" caption={this.t("pg_Docs.clmInputCode")} width={300} defaultSortOrder="asc" />
+                                <Column dataField="OUTPUT_NAME" caption={this.t("pg_Docs.clmInputName")} width={300} defaultSortOrder="asc" />
+                                <Column dataField="OUTPUT_CODE" caption={this.t("pg_Docs.clmInputCode")} width={300} defaultSortOrder="asc" />
                                 </NdPopGrid>
                             </Item>
                             {/* cmbDepot */}
                             <Item>
                                     <Label text={this.t("cmbDepot")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbDepot" notRefresh = {true}
-                                    dt={{data:this.docObj.dt('DOC'),field:"OUTPUT"}}  
+                                    dt={{data:this.docObj.dt('DOC'),field:"INPUT"}}  
                                     displayExpr="NAME"                       
                                     valueExpr="GUID"
                                     value=""
@@ -593,7 +592,7 @@ export default class rebateDispatch extends React.PureComponent
                                     onValueChanged={(async()=>
                                         {
                                         }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE = 1"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
@@ -607,7 +606,7 @@ export default class rebateDispatch extends React.PureComponent
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
                                     <NdTextBox id="txtCustomerCode" parent={this} simple={true} 
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    dt={{data:this.docObj.dt('DOC'),field:"INPUT_CODE"}} 
+                                    dt={{data:this.docObj.dt('DOC'),field:"OUTPUT_CODE"}} 
                                     onEnterKey={(async()=>
                                         {
                                             await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
@@ -616,9 +615,9 @@ export default class rebateDispatch extends React.PureComponent
                                             {
                                                 if(data.length > 0)
                                                 {
-                                                    this.docObj.dt()[0].INPUT = data[0].GUID
-                                                    this.docObj.dt()[0].INPUT_CODE = data[0].CODE
-                                                    this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
+                                                    this.docObj.dt()[0].OUTPUT = data[0].GUID
+                                                    this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
+                                                    this.docObj.dt()[0].OUTPUT_NAME = data[0].TITLE
                                                     let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                     if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                     {
@@ -641,9 +640,9 @@ export default class rebateDispatch extends React.PureComponent
                                                     {
                                                         if(data.length > 0)
                                                         {
-                                                            this.docObj.dt()[0].INPUT = data[0].GUID
-                                                            this.docObj.dt()[0].INPUT_CODE = data[0].CODE
-                                                            this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
+                                                            this.docObj.dt()[0].OUTPUT = data[0].GUID
+                                                            this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
+                                                            this.docObj.dt()[0].OUTPUT_NAME = data[0].TITLE
                                                             let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
@@ -711,7 +710,7 @@ export default class rebateDispatch extends React.PureComponent
                                 <NdTextBox id="txtCustomerName" parent={this} simple={true}  
                                 readOnly={true}
                                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                dt={{data:this.docObj.dt('DOC'),field:"INPUT_NAME"}} 
+                                dt={{data:this.docObj.dt('DOC'),field:"OUTPUT_NAME"}} 
                                 param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                 access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                 >
@@ -858,7 +857,9 @@ export default class rebateDispatch extends React.PureComponent
                                                 this.barcode.code = tmpData.result.recordset[0].CODE 
                                                 this.barcode.guid = tmpData.result.recordset[0].GUID 
                                                 this.barcode.vat = tmpData.result.recordset[0].VAT 
+                                                console.log(this.barcode)
                                                 this.setBarcode()
+                                                this.setState({tbBarcode:"visible"})
                                                 
                                             }
                                             else
@@ -879,9 +880,9 @@ export default class rebateDispatch extends React.PureComponent
                             </Item>
                             <Item> 
                                 <div>
-                                    <h4 className="text-center">
+                                    <h5 className="text-center">
                                         {this.barcode.name}
-                                    </h4>
+                                    </h5>
                                 </div>
                             </Item>
                             {/* txtQuantity */}
@@ -1155,14 +1156,14 @@ export default class rebateDispatch extends React.PureComponent
                         data = 
                         {{
                             source:
-                        {
-                            select:
                             {
-                                query : "SELECT GUID,CODE,NAME,VAT FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
-                                param : ['VAL:string|50']
-                            },
-                            sql:this.core.sql
-                        }
+                                select:
+                                {
+                                    query : "SELECT GUID,CODE,NAME,VAT FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                    param : ['VAL:string|50']
+                                },
+                                sql:this.core.sql
+                            }
                         }}
                         >
                             <Column dataField="CODE" caption={this.t("popItemCode.clmCode")} width={100} />
