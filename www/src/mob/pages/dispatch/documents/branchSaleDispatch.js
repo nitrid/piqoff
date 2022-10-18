@@ -25,7 +25,7 @@ import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
 
-export default class rebateDispatch extends React.PureComponent
+export default class salesDispartch extends React.PureComponent
 {
     constructor(props)
     {
@@ -52,7 +52,6 @@ export default class rebateDispatch extends React.PureComponent
         this.dropmenuDocItems = [this.t("btnSave")]
 
         this._calculateTotal = this._calculateTotal.bind(this)
-        this._getRebate = this._getRebate.bind(this)
         this.pageChange = this.pageChange.bind(this)
         this.setBarcode = this.setBarcode.bind(this)
         this.dropmenuClick = this.dropmenuClick.bind(this)
@@ -64,7 +63,6 @@ export default class rebateDispatch extends React.PureComponent
         this.combineControl = true
         this.combineNew = false        
 
-        this.rightItems = [{ text: this.t("getRebate"), }]
     }
     async componentDidMount()
     {
@@ -83,8 +81,8 @@ export default class rebateDispatch extends React.PureComponent
 
         let tmpDoc = {...this.docObj.empty}
         tmpDoc.TYPE = 1
-        tmpDoc.DOC_TYPE = 40
-        tmpDoc.REBATE = 1
+        tmpDoc.DOC_TYPE = 42
+        tmpDoc.REBATE = 0
         this.docObj.addEmpty(tmpDoc);
 
         this.txtRef.readOnly = false
@@ -97,7 +95,7 @@ export default class rebateDispatch extends React.PureComponent
     async getDoc(pGuid,pRef,pRefno)
     {
         this.docObj.clearAll()
-        await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:40});
+        await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:42});
         this._calculateMargin()
         this._calculateTotalMargin()
 
@@ -217,11 +215,8 @@ export default class rebateDispatch extends React.PureComponent
         }
         for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
         {
-            console.log(this.docObj.docItems.dt()[i].CODE)
-            console.log(this.barcode.code)
             if(this.docObj.docItems.dt()[i].ITEM_CODE == this.barcode.code)
             {
-                console.log(12331)
                 document.getElementById("Sound2").play(); 
                 let tmpConfObj = 
                 {
@@ -250,7 +245,6 @@ export default class rebateDispatch extends React.PureComponent
         let tmpDocItems = {...this.docObj.docItems.empty}
         tmpDocItems.REF = this.docObj.dt()[0].REF
         tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-        tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
         tmpDocItems.ITEM_NAME = this.barcode.name
         tmpDocItems.ITEM_CODE = this.barcode.code
         tmpDocItems.ITEM = this.barcode.guid
@@ -273,51 +267,6 @@ export default class rebateDispatch extends React.PureComponent
         this.barcodeReset()
         this._calculateTotal()
         await this.docObj.save()
-    }
-    async _getRebate()
-    {
-        let tmpQuery = 
-        {
-            query : "SELECT *,[dbo].[FN_DEPOT_QUANTITY]([ITEM_GUID],@DEPOT,GETDATE()) AS QUANTITY FROM ITEM_MULTICODE_VW_01 WHERE [dbo].[FN_DEPOT_QUANTITY]([ITEM_GUID],@DEPOT,GETDATE()) > 0 AND CUSTOMER_GUID = @CUSTOMER",
-            param : ['DEPOT:string|50','CUSTOMER:string|50'],
-            value : [this.docObj.dt()[0].OUTPUT,this.docObj.dt()[0].INPUT]
-        }
-        let tmpData = await this.core.sql.execute(tmpQuery) 
-        if(tmpData.result.recordset.length > 0)
-        {   
-            await this.pg_RebateGrid.setData(tmpData.result.recordset)
-        }
-        this.pg_RebateGrid.show()
-        this.pg_RebateGrid.onClick = async(data) =>
-        {
-            for (let i = 0; i < data.length; i++) 
-            {
-                let tmpDocItems = {...this.docObj.docItems.empty}
-                tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                tmpDocItems.REF = this.docObj.dt()[0].REF
-                tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                tmpDocItems.ITEM = data[i].ITEM_GUID
-                tmpDocItems.ITEM_CODE = data[i].ITEM_CODE
-                tmpDocItems.ITEM_NAME = data[i].ITEM_NAME
-                tmpDocItems.PRICE = data[i].CUSTOMER_PRICE
-                tmpDocItems.QUANTITY = data[i].QUANTITY
-                tmpDocItems.AMOUNT = parseFloat((data[i].CUSTOMER_PRICE * data[i].QUANTITY).toFixed(3))
-                tmpDocItems.TOTAL = parseFloat((data[i].CUSTOMER_PRICE * data[i].QUANTITY).toFixed(3))
-
-                await this.docObj.docItems.addEmpty(tmpDocItems)
-                await this.core.util.waitUntil(100)
-            }
-            this.docObj.docItems.dt().emit('onRefresh')
-            this._calculateTotal()
-        }
     }
     barcodeReset()
     {
@@ -395,28 +344,11 @@ export default class rebateDispatch extends React.PureComponent
         this.txtQuantity.value = 1
         let tmpQuery = 
         {
-            query :"SELECT MULTICODE,CUSTOMER_PRICE AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
-            param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50'],
-            value : [this.barcode.code,this.docObj.dt()[0].INPUT]
+            query :"SELECT COST_PRICE AS PRICE FROM ITEMS_VW_01 WHERE GUID = @GUID",
+            param : ['GUID:string|50'],
+            value : [this.barcode.guid]
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
-        if(tmpData.result.recordset.length == 0)
-        {
-            document.getElementById("Sound3").play(); 
-            
-            let tmpConfObj = 
-            {
-                id:'msgCustomerNotFound',showTitle:true,title:this.t("msgCustomerNotFound.title"),showCloseButton:true,width:'350px',height:'200px',
-                button:[{id:"btn01",caption:this.t("msgCustomerNotFound.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCustomerNotFound.btn02"),location:'after'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerNotFound.msg")}</div>)
-            }
-            let pResult = await dialog(tmpConfObj);
-            if(pResult == 'btn02')
-            {                
-                this.barcodeReset()   
-                return
-            }
-        }
         if(tmpData.result.recordset.length > 0)
         {
             this.txtPrice.value = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(2))
@@ -474,7 +406,7 @@ export default class rebateDispatch extends React.PureComponent
                                         {
                                             let tmpQuery = 
                                             {
-                                                query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 40 AND REF = @REF ",
+                                                query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 42 AND REF = @REF ",
                                                 param : ['REF:string|25'],
                                                 value : [this.txtRef.value]
                                             }
@@ -559,7 +491,7 @@ export default class rebateDispatch extends React.PureComponent
                                 height={'90%'}
                                 selection={{mode:"single"}}
                                 title={this.t("pg_Docs.title")} 
-                                data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 40 AND REBATE = 1"},sql:this.core.sql}}}
+                                data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 42 AND REBATE = 0"},sql:this.core.sql}}}
                                 button=
                                 {
                                     [
@@ -592,11 +524,11 @@ export default class rebateDispatch extends React.PureComponent
                                     onValueChanged={(async()=>
                                         {
                                         }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE = 1"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmRebateDis"}>
+                                        <Validator validationGroup={"frmSalesDis"}>
                                             <RequiredRule message={this.t("validDepot")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -658,7 +590,7 @@ export default class rebateDispatch extends React.PureComponent
                                     param={this.param.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmRebateDis"}>
+                                        <Validator validationGroup={"frmSalesDis"}>
                                             <RequiredRule message={this.t("validCustomerCode")} />
                                         </Validator>  
                                     </NdTextBox>
@@ -679,7 +611,7 @@ export default class rebateDispatch extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) ",
+                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE ((UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)))  AND GENUS = 3",
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
@@ -725,7 +657,7 @@ export default class rebateDispatch extends React.PureComponent
                                     {
                                 }).bind(this)}
                                 >
-                                    <Validator validationGroup={"frmRebateDis"}>
+                                    <Validator validationGroup={"frmSalesDis"}>
                                         <RequiredRule message={this.t("validDocDate")} />
                                     </Validator> 
                                 </NdDatePicker>
@@ -739,7 +671,7 @@ export default class rebateDispatch extends React.PureComponent
                                 {
                                 }).bind(this)}
                                 >
-                                    <Validator validationGroup={"frmRebateDis"}>
+                                    <Validator validationGroup={"frmSalesDis"}>
                                         <RequiredRule message={this.t("validDocDate")} />
                                     </Validator> 
                                 </NdDatePicker>
@@ -1047,7 +979,7 @@ export default class rebateDispatch extends React.PureComponent
                                 target="#grdRebtDispatch"
                                 onItemClick={(async(e)=>
                                 {
-                                    this._getRebate()
+                                    
                                 }).bind(this)} />
                             </React.Fragment> 
                             </Item>

@@ -5590,6 +5590,13 @@ export const langTr =
             clmZipcode : "POSTA  KODU",
             clmCountry : "ÜLKE",
         },
+        msgCustomerNotFound:
+        {
+            title: "Dikkat",
+            btn01: "Devam Et",
+            btn02: "Vazgeç",
+            msg: "Seçilen Ürün Cariye Tanımlı Değil ! Devam Etmek İstiyormusunuz"
+        },
     },
     irs_02_004 : // Şube Satış İrsaliyesi"
     {

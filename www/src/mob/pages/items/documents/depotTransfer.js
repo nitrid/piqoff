@@ -25,7 +25,7 @@ import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
 import { triggerHandler } from 'devextreme/events';
 
-export default class rebateDoc extends React.Component
+export default class depotTransfer extends React.Component
 {
     constructor()
     {
@@ -54,6 +54,7 @@ export default class rebateDoc extends React.Component
         this.pageChange = this.pageChange.bind(this)
         this.dropmenuClick = this.dropmenuClick.bind(this)
         this.barcodeScan = this.barcodeScan.bind(this)
+        this.quantityControl = this.prmObj.filter({ID:'negativeQuantity',USERS:this.user.CODE}).getValue().value
 
     }
     async componentDidMount()
@@ -71,7 +72,7 @@ export default class rebateDoc extends React.Component
         tmpDoc.REF = this.user.CODE
         tmpDoc.TYPE = 2
         tmpDoc.DOC_TYPE = 2
-        tmpDoc.REBATE = 1
+        tmpDoc.REBATE = 0
         this.docObj.addEmpty(tmpDoc);
 
         this.txtRef.readOnly = true
@@ -230,7 +231,7 @@ export default class rebateDoc extends React.Component
     }
     async addItem(pQuantity)
     {
-        if(pQuantity > 99)
+        if(pQuantity > 999)
         {
             let tmpConfObj = 
             {
@@ -247,6 +248,37 @@ export default class rebateDoc extends React.Component
             {
                 this.txtQuantity.focus()
                 return
+            }
+        }
+        if(typeof this.quantityControl != 'undefined' && this.quantityControl ==  true)
+        {
+            let tmpCheckQuery = 
+            {
+                query :"SELECT [dbo].[FN_DEPOT_QUANTITY](@GUID,@DEPOT,GETDATE()) AS QUANTITY ",
+                param : ['GUID:string|50','DEPOT:string|50'],
+                value : [this.barcode.guid,this.docObj.dt()[0].OUTPUT]
+            }
+            let tmpQuantity = await this.core.sql.execute(tmpCheckQuery) 
+            if(tmpQuantity.result.recordset.length > 0)
+            {
+               if(tmpQuantity.result.recordset[0].QUANTITY < pQuantity)
+               {
+                    App.instance.setState({isExecute:false})
+                    let tmpConfObj =
+                    {
+                        id:'msgNotQuantity',showTitle:true,title:this.t("msgNotQuantity.title"),showCloseButton:true,width:'500px',height:'200px',
+                        button:[{id:"btn01",caption:this.t("msgNotQuantity.btn01"),location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotQuantity.msg") + tmpQuantity.result.recordset[0].QUANTITY}</div>)
+                    }
+        
+                    await dialog(tmpConfObj);
+                    await this.grdSlsDispatch.devGrid.deleteRow(pIndex)
+                    return
+               }
+               else
+               {
+                    this.docObj.docItems.dt()[pIndex].DEPOT_QUANTITY = tmpQuantity.result.recordset[0].QUANTITY
+               }
             }
         }
         if(this.txtBarcode.value == "")
@@ -306,6 +338,37 @@ export default class rebateDoc extends React.Component
         tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
         tmpDocItems.QUANTITY = pQuantity
         this.docObj.docItems.addEmpty(tmpDocItems)
+        if(typeof this.quantityControl != 'undefined' && this.quantityControl ==  true)
+        {
+            let tmpCheckQuery = 
+            {
+                query :"SELECT [dbo].[FN_DEPOT_QUANTITY](@GUID,@DEPOT,GETDATE()) AS QUANTITY ",
+                param : ['GUID:string|50','DEPOT:string|50'],
+                value : [this.barcode.guid,this.docObj.dt()[0].OUTPUT]
+            }
+            let tmpQuantity = await this.core.sql.execute(tmpCheckQuery) 
+            if(tmpQuantity.result.recordset.length > 0)
+            {
+               if(tmpQuantity.result.recordset[0].QUANTITY < pQuantity)
+               {
+                    App.instance.setState({isExecute:false})
+                    let tmpConfObj =
+                    {
+                        id:'msgNotQuantity',showTitle:true,title:this.t("msgNotQuantity.title"),showCloseButton:true,width:'500px',height:'200px',
+                        button:[{id:"btn01",caption:this.t("msgNotQuantity.btn01"),location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotQuantity.msg") + tmpQuantity.result.recordset[0].QUANTITY}</div>)
+                    }
+        
+                    await dialog(tmpConfObj);
+                    await this.grdSlsDispatch.devGrid.deleteRow(pIndex)
+                    return
+               }
+               else
+               {
+                    tmpDocItems.DEPOT_QUANTITY = tmpQuantity.result.recordset[0].QUANTITY
+               }
+            }
+        }
         this.barcodeReset()
         await this.docObj.save()
     }
@@ -359,6 +422,15 @@ export default class rebateDoc extends React.Component
               orientation : "portrait"
             }
         );
+    }
+    async checkRow()
+    {
+        for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+        {
+            this.docObj.docItems.dt()[i].INPUT = this.docObj.dt()[0].INPUT
+            this.docObj.docItems.dt()[i].OUTPUT = this.docObj.dt()[0].OUTPUT
+            this.docObj.docItems.dt()[i].DOC_DATE = this.docObj.dt()[0].DOC_DATE
+        }
     }
     render()
     {
@@ -473,7 +545,7 @@ export default class rebateDoc extends React.Component
                         height={'90%'}
                         title={this.t("pg_Docs.title")} 
                         selection={{mode:"single"}}
-                        data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 2 AND DOC_TYPE = 2 AND REBATE = 1"},sql:this.core.sql}}}
+                        data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 2 AND DOC_TYPE = 2 AND REBATE = 0"},sql:this.core.sql}}}
                         button=
                         {
                             [
@@ -516,10 +588,24 @@ export default class rebateDoc extends React.Component
                         valueExpr="GUID"
                         value=""
                         searchEnabled={true}
-                        onValueChanged={(async()=>
+                        onValueChanged={(async(e)=>
                             {
+                                if(this.cmbDepot2.value == e.value)
+                                {
+                                    let tmpConfObj =
+                                    {
+                                        id:'msgDblDepot',showTitle:true,title:this.t("msgDblDepot.title"),showCloseButton:true,width:'500px',height:'200px',
+                                        button:[{id:"btn01",caption:this.t("msgDblDepot.btn01"),location:'after'}],
+                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDblDepot.msg")}</div>)
+                                    }
+                                
+                                    await dialog(tmpConfObj);
+                                    this.cmbDepot1.setState({value:''});
+                                    return
+                                }
+                                this.checkRow()
                             }).bind(this)}
-                        data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE = 0"},sql:this.core.sql}}}
+                        data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}}}
                         param={this.param.filter({ELEMENT:'cmbDepot1',USERS:this.user.CODE})}
                         access={this.access.filter({ELEMENT:'cmbDepot1',USERS:this.user.CODE})}
                         >
@@ -537,12 +623,27 @@ export default class rebateDoc extends React.Component
                         valueExpr="GUID"
                         value=""
                         searchEnabled={true}
-                        onValueChanged={(async()=>
+                        onValueChanged={(async(e)=>
                             {
+                                if(this.cmbDepot1.value == e.value)
+                                {
+                                    let tmpConfObj =
+                                    {
+                                        id:'msgDblDepot',showTitle:true,title:this.t("msgDblDepot.title"),showCloseButton:true,width:'500px',height:'200px',
+                                        button:[{id:"btn01",caption:this.t("msgDblDepot.btn01"),location:'after'}],
+                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDblDepot.msg")}</div>)
+                                    }
+                                
+                                    await dialog(tmpConfObj);
+                                    this.cmbDepot2.setState({value:''});
+                                    return
+                                }
+                                this.checkRow()
                             }).bind(this)}
-                        data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE = 1"},sql:this.core.sql}}}
+                        data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}}}
                         param={this.param.filter({ELEMENT:'cmbDepot2',USERS:this.user.CODE})}
                         access={this.access.filter({ELEMENT:'cmbDepot2',USERS:this.user.CODE})}
+                        
                         >
                             <Validator validationGroup={"frmRbtDoc"}>
                                 <RequiredRule message={this.t("validDepot")} />
