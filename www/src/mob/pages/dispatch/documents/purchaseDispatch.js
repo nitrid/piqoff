@@ -48,7 +48,6 @@ export default class rebateDispatch extends React.PureComponent
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.docObj = new docCls();
-        this.tabIndex = props.data.tabkey
         this.dropmenuMainItems = [this.t("btnNew"),this.t("btnSave")]
         this.dropmenuDocItems = [this.t("btnSave")]
 
@@ -596,7 +595,7 @@ export default class rebateDispatch extends React.PureComponent
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmRebateDis"  + this.tabIndex}>
+                                        <Validator validationGroup={"frmPurcDis"}>
                                             <RequiredRule message={this.t("validDepot")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -658,7 +657,7 @@ export default class rebateDispatch extends React.PureComponent
                                     param={this.param.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmRebateDis"  + this.tabIndex}>
+                                        <Validator validationGroup={"frmPurcDis"}>
                                             <RequiredRule message={this.t("validCustomerCode")} />
                                         </Validator>  
                                     </NdTextBox>
@@ -725,7 +724,7 @@ export default class rebateDispatch extends React.PureComponent
                                     {
                                 }).bind(this)}
                                 >
-                                    <Validator validationGroup={"frmRebateDis"  + this.tabIndex}>
+                                    <Validator validationGroup={"frmPurcDis"}>
                                         <RequiredRule message={this.t("validDocDate")} />
                                     </Validator> 
                                 </NdDatePicker>
@@ -739,7 +738,7 @@ export default class rebateDispatch extends React.PureComponent
                                 {
                                 }).bind(this)}
                                 >
-                                    <Validator validationGroup={"frmRebateDis"  + this.tabIndex}>
+                                    <Validator validationGroup={"frmPurcDis"}>
                                         <RequiredRule message={this.t("validDocDate")} />
                                     </Validator> 
                                 </NdDatePicker>

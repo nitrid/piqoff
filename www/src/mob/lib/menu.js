@@ -80,7 +80,7 @@ export const menu = (e) =>
                         {
                             id: 'stk_02_005',
                             text: e.t('menu.stk_02_005'),//'Depolar Arası Sevk ',
-                            path: 'items/documents/'
+                            path: 'items/documents/depotTransfer'
                         },
                     ]
                 },
