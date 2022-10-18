@@ -1959,7 +1959,7 @@ export default class posDoc extends React.PureComponent
                 //         tmpArr.push(tmpObj)
                 //     }
                 // }
-                // console.log(tmpArr)
+                // console.log(JSON.stringify(tmpArr))
                 
                 await this.posDevice.escPrinter(tmpPrint)
                 resolve()
