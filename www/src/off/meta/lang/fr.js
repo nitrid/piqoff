@@ -4530,6 +4530,21 @@ export const langFr =
             giftCheck: "Hediye Çeki",
             generalDiscount: "Genel İskonto",
             discountAmount: "İskonto Tutar",
+        },
+        msgHelp: //BAK
+        {
+            title: "Yardım",
+            btn01: "Tamam",
+            condItemQuantity: "Buraya yaz...",
+            condItemAmount: "Buraya yaz...",
+            condGeneralAmount: "Buraya yaz...",
+            appDiscRate: "Buraya yaz...",
+            appDiscAmount: "Buraya yaz...",
+            appPoint: "Buraya yaz...",
+            appGiftCheck: "Buraya yaz...",
+            appGeneralAmount: "Buraya yaz...",
+            appItemQuantity: "Buraya yaz...",
+            appItemAmount: "Buraya yaz...",
         }
     },
     promo_02_001: //  "Promosyon Listesi"

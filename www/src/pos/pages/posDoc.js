@@ -226,7 +226,7 @@ export default class posDoc extends React.PureComponent
         })
     }
     async init()
-    {             
+    {     
         setInterval(()=>
         {
             this.lblTime.value = moment(new Date(),"HH:mm:ss").format("HH:mm:ss")
@@ -3334,6 +3334,7 @@ export default class posDoc extends React.PureComponent
                                             }
                                             this.dtPopLastSaleStartDate.value = moment(new Date()).format("YYYY-MM-DD")
                                             this.dtPopLastSaleFinishDate.value = moment(new Date()).format("YYYY-MM-DD")
+                                            this.cmbPopLastSaleUser.value = this.core.auth.data.CODE
                                             this.popLastSaleList.show();
                                         }}>
                                             <i className="text-white fa-solid fa-print" style={{fontSize: "24px"}} />
@@ -4569,10 +4570,10 @@ export default class posDoc extends React.PureComponent
                                 <NdSelectBox simple={true} parent={this} id="cmbPopLastSalePayType" displayExpr={'NAME'} valueExpr={'ID'} value={-1}
                                 data={{source:[{ID:-1,NAME:"Tümü"},{ID:0,NAME:"Espece"},{ID:1,NAME:"Carte Bancaire TPE"},{ID:2,NAME:"Cheque"},{ID:3,NAME:"CHEQue"},{ID:4,NAME:"Bon D'Avoir"}]}}/>
                             </div>
-                            {/* cmbPopLastSalePayType */} 
+                            {/* cmbPopLastSaleUser */} 
                             <div className="col-2">
-                                <NdSelectBox simple={true} parent={this} id="cmbPopLastSalePayType" displayExpr={'NAME'} valueExpr={'ID'} value={-1}
-                                data={{source:[{ID:-1,NAME:"Tümü"},{ID:0,NAME:"Espece"},{ID:1,NAME:"Carte Bancaire TPE"},{ID:2,NAME:"Cheque"},{ID:3,NAME:"CHEQue"},{ID:4,NAME:"Bon D'Avoir"}]}}/>
+                                <NdSelectBox simple={true} parent={this} id="cmbPopLastSaleUser" displayExpr={'NAME'} valueExpr={'CODE'}
+                                data={{source:{select:{query : "SELECT '' AS CODE,'ALL' AS NAME UNION ALL SELECT CODE,NAME FROM USERS"},sql:this.core.sql}}}/>
                             </div>
                             {/* txtPopLastRef */} 
                             <div className="col-2">
@@ -4598,9 +4599,11 @@ export default class posDoc extends React.PureComponent
                                             query:  "SELECT *, " +
                                                     "SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,36) AS REF " + 
                                                     "FROM POS_VW_01 WHERE DOC_DATE >= @START_DATE AND DOC_DATE <= @FINISH_DATE AND " +
-                                                    "((ISNULL((SELECT TOP 1 1 FROM POS_PAYMENT AS PAY WHERE PAY.POS = POS_VW_01.GUID AND TYPE = @TYPE AND DELETED = 0),0) = 1) OR (@TYPE = -1)) AND STATUS = 1 ORDER BY LDATE DESC",
-                                            param:  ["START_DATE:date","FINISH_DATE:date","TYPE:int"],
-                                            value:  [this.dtPopLastSaleStartDate.value,this.dtPopLastSaleFinishDate.value,this.cmbPopLastSalePayType.value]
+                                                    "((ISNULL((SELECT TOP 1 1 FROM POS_PAYMENT AS PAY WHERE PAY.POS = POS_VW_01.GUID AND TYPE = @TYPE AND DELETED = 0),0) = 1) OR (@TYPE = -1)) AND " + 
+                                                    "((LUSER = @USER) OR (@USER = '')) AND " +
+                                                    "STATUS = 1 ORDER BY LDATE DESC",
+                                            param:  ["START_DATE:date","FINISH_DATE:date","TYPE:int","USER:string|25"],
+                                            value:  [this.dtPopLastSaleStartDate.value,this.dtPopLastSaleFinishDate.value,this.cmbPopLastSalePayType.value,this.cmbPopLastSaleUser.value]
                                         }
                                     }
                                     else
