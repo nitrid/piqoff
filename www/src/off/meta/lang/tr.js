@@ -4572,6 +4572,11 @@ export const langTr =
             appGeneralAmount: "Buraya yaz...",
             appItemQuantity: "Buraya yaz...",
             appItemAmount: "Buraya yaz...",
+        },
+        validation:
+        {
+            txtPrmQuantityValid: "Miktar'ı boş geçemezsiniz !",
+            txtRstItemQuantityValid: "Miktar sıfırdan küçük olamaz !",
         }
     },
     promo_02_001: //  "Promosyon Listesi"

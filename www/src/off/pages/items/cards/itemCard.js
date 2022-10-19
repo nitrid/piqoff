@@ -1631,7 +1631,7 @@ export default class itemCard extends React.PureComponent
                                                     <Button icon="add"
                                                     onClick={async ()=>
                                                     {
-                                                        await this.cmbPopBarUnit.dataRefresh({source : this.itemsObj.dt('ITEM_UNIT').where({TYPE:0})})
+                                                        await this.cmbPopBarUnit.dataRefresh({source : this.itemsObj.dt('ITEM_UNIT').where({TYPE:{'in':[0,2]}})})
                                                         this.txtPopBarcode.value = "";
                                                         this.cmbPopBarType.value = "0";
                                                         this.cmbPopBarUnit.value = this.itemsObj.dt('ITEM_UNIT').where({TYPE:0}).length > 0 ? this.itemsObj.dt('ITEM_UNIT').where({TYPE:0})[0].GUID : ''
@@ -2202,10 +2202,7 @@ export default class itemCard extends React.PureComponent
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popBarcode.cmbPopBarUnit")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbPopBarUnit"
-                                    displayExpr="NAME"                       
-                                    valueExpr="GUID"
-                                    />
+                                    <NdSelectBox simple={true} parent={this} id="cmbPopBarUnit" displayExpr="NAME" valueExpr="GUID"/>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popBarcode.cmbPopBarType")} alignment="right" />

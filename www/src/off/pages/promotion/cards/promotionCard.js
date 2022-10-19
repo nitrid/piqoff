@@ -214,6 +214,7 @@ export default class promotionCard extends React.PureComponent
     }
     itemTemplate(pItem)
     {               
+        console.log(pItem)
         if(pItem.SECTOR == 'COND')
         {            
             if(typeof this["itemList" + pItem.WITHAL] == 'undefined' || this["itemList" + pItem.WITHAL].length == 0)
@@ -412,7 +413,11 @@ export default class promotionCard extends React.PureComponent
                                                     await dialog(tmpConfObj);
                                                 }
                                             }
-                                        ]}/>     
+                                        ]}>
+                                            <Validator validationGroup={"frmPromo"  + this.tabIndex}>
+                                                <RequiredRule message={this.t("validation.txtPrmQuantityValid")} />
+                                            </Validator> 
+                                        </NdTextBox>     
                                     </Item>
                                     {/* txtPrmAmount */}  
                                     <Item>                                                                    
@@ -723,7 +728,11 @@ export default class promotionCard extends React.PureComponent
                                                     await dialog(tmpConfObj);
                                                 }
                                             }
-                                        ]}/>     
+                                        ]}>
+                                            <Validator validationGroup={"frmPromo"  + this.tabIndex}>
+                                                <RangeRule min={0.001} message={this.t("validation.txtRstItemQuantityValid")} />
+                                            </Validator> 
+                                        </NdTextBox>     
                                     </Item> 
                                     {/* txtRstItemAmount */}  
                                     <Item>                                                                    

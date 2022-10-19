@@ -2533,7 +2533,6 @@ export default class posDoc extends React.PureComponent
                                             e.rowElement.style.backgroundColor = "white";
                                         }
                                     }
-                                    
                                 }}
                                 onCellPrepared={(e)=>
                                 {                                    

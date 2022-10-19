@@ -192,7 +192,7 @@ export class promoCondCls
             ITEM_GUID : '00000000-0000-0000-0000-000000000000',
             ITEM_CODE : '',
             ITEM_NAME : '',
-            QUANTITY : 0,
+            QUANTITY : '',
             AMOUNT : 0,
             WITHAL : 0,
             SECTOR : 'COND'

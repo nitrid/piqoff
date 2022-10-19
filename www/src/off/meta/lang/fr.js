@@ -4545,6 +4545,11 @@ export const langFr =
             appGeneralAmount: "Buraya yaz...",
             appItemQuantity: "Buraya yaz...",
             appItemAmount: "Buraya yaz...",
+        },
+        validation: //BAK
+        {
+            txtPrmQuantityValid: "Miktar'ı boş geçemezsiniz !",
+            txtRstItemQuantityValid: "Miktar sıfırdan küçük olamaz !",
         }
     },
     promo_02_001: //  "Promosyon Listesi"
