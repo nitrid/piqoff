@@ -640,7 +640,7 @@ export default class promotionCard extends React.PureComponent
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         value={pItem.ITEM_CODE}
                                         displayValue={pItem.ITEM_NAME}
-                                        placeholder={"Açıklama girilecek"}
+                                        placeholder={this.t("txtRstItemPlace")}
                                         button=
                                         {[
                                             {

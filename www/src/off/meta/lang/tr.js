@@ -174,7 +174,7 @@ export const langTr =
         pos_03_001 : "Gün Sonu",
         promo: "Promosyon",
         promo_01: "Tanımlar",
-        promo_01_001: "Promosyon Tanımları",
+        promo_01_001: "Promosyon Tanımlama",
         promo_02: "Listeler",
         promo_02_001: "Promosyon Listesi",
         promo_03: "Raporlar",
@@ -2090,7 +2090,6 @@ export const langTr =
             supplier : "Tedarikçi",
             both : "Her İkisi",
             branch : "Şube"
-
         },
     },
     cri_03_001: // "Toplu Cari Tanımları"
@@ -4460,7 +4459,15 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Evrakınızda  Faturaya çevirilmiş satır var.. Bu evrak silinemez !"
-        }
+        },
+        pg_adress : 
+        {
+            title : "Adres Seçimi",
+            clmAdress : "ADRES",
+            clmCiyt : "ŞEHİR",
+            clmZipcode : "POSTA  KODU",
+            clmCountry : "ÜLKE",
+        },
     },
     promo_01_001: //  "Promosyon Tanımları"
     {
@@ -4471,11 +4478,11 @@ export const langTr =
         cmbDepot: "Depo",
         txtCustomerCode: "Cari Kodu",
         txtCustomerName: "Cari Adı",
-        cmbPrmType: "Promosyon Tipi",
+        cmbPrmType: "Promosyon Türü",
         txtPrmItem: "Stok",
-        btnPrmItem: "Seçim", 
+        btnPrmItem: "ürü Seçimi", 
         txtPrmItemGrp: "Grup",
-        txtPrmQuantity: "Miktar",
+        txtPrmQuantity: "Adet",
         txtPrmAmount: "Tutar",
         cmbRstType: "Tipi",
         txtRstQuantity: "Değer",
@@ -4486,14 +4493,15 @@ export const langTr =
         txtCodePlace: "Lütfen Tanimlamak istediginiz Promosyon Kodunu Giriniz",
         txtNamePlace: "Lütfen Tanimlamak istediginiz Promosyon Adıni Giriniz",
         txtCustomerCodePlace: "Promosyon Taninlamak istediginiz Müşteriyi Seçebilirsiniz",
+        txtRstItemPlace: "Lütfen Promosyon Uygulanacak ürünü Seçiniz",
         pg_Grid:
         {
             title: "Seçim",
-            clmBarcode: "BARKODU",
-            clmCode: "KODU",
-            clmName: "ADI", 
-            clmGrpName: "GRUP", 
-            clmPrice : "FIYAT",
+            clmBarcode: "Barcodu",
+            clmCode: "Kodu",
+            clmName: "Adi", 
+            clmGrpName: "Grubu", 
+            clmPrice : "Fiyat",
         },
         msgRef:
         {
@@ -4532,14 +4540,14 @@ export const langTr =
         pop_PrmItemList:
         {
             title: "Seçilmiş Stoklar",
-            clmCode: "KODU",
-            clmName: "ADI", 
+            clmCode: "Kodu",
+            clmName: "Adi", 
         },
         popDiscount:
         {
             title: "İndirim",
             txtDiscRate : "Yüzde",
-            txtDiscAmount : "Tutar",
+            txtDiscAmount : "Fiyat",
             btnSave: "Kaydet"
         },
         msgDiscRate:
@@ -4698,7 +4706,7 @@ export const langTr =
         },
 
     },
-    irs_01_004 : //"Satış İrsaliye Listesi"
+    irs_01_004 : //" Şube Satış İrsaliye Listesi"
     {
         cmbCustomer :"Cari",
         btnGet :"Getir",
@@ -4727,7 +4735,6 @@ export const langTr =
             clmTotal : "Toplam",
             clmOutputName :"Depo",
         },
-
     },
     irs_02_001 : // "Alış İrsaliyesi"
     {

@@ -135,7 +135,7 @@ export default class salesOrder extends React.Component
                                                     code:data[0].CODE,
                                                     barcode:data[0].BARCODE,
                                                     price:data[0].PRICE,
-                                                    guid:data[0].COST_PRICE,
+                                                    guid:data[0].GUID,
                                                     costPrice:data[0].COST_PRICE
                                                 }
                                                 await this.itemsPriceObj.load({ITEM_GUID:data[0].GUID,TYPE:0});

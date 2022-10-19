@@ -1232,19 +1232,19 @@ export default class itemCount extends React.PureComponent
                             </Form>
                         </div>
                         <div className="row px-2 pt-2">
-                        <div className="col-12">
-                            <Form colCount={4} parent={this} id="frmslsDoc">
-                                <EmptyItem colSpan={3}/>
-                                {/*  Toplam Maliyet */}
-                                <Item>
-                                <Label text={this.t("txtAmount")} alignment="right" />
-                                    <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} 
-                                    maxLength={32}
-                                    ></NdTextBox>
-                                </Item>
-                            </Form>
+                            <div className="col-12">
+                                <Form colCount={4} parent={this} id="frmslsDoc">
+                                    <EmptyItem colSpan={3}/>
+                                    {/*  Toplam Maliyet */}
+                                    <Item>
+                                    <Label text={this.t("txtAmount")} alignment="right" />
+                                        <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} 
+                                        maxLength={32}
+                                        ></NdTextBox>
+                                    </Item>
+                                </Form>
+                            </div>
                         </div>
-                    </div>
                     </div>
                     <NdPopGrid id={"pg_txtItemsCode"}  parent={this} container={"#root"}
                     visible={false}

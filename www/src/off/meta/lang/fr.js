@@ -108,6 +108,7 @@ export const langFr =
         ftr_01_002: "Liste facture de vente",
         ftr_01_003: "Liste facture retour",
         ftr_01_004:"Liste facture différence de prix",
+        ftr_01_005: "Şubeler Arası Satış Fatura Listesi", // BAK
         ftr_02_001: "Saisie Facture d'achat",
         ftr_02_002: "Saisie Facture de vente",
         ftr_02_003: "Saisie Facture retour",
@@ -121,6 +122,7 @@ export const langFr =
         irs_01_001: "Saisie Bon de livraison d'achat",
         irs_01_002: "Saisie Bon de livraison de vente",
         irs_01_003: "Saisie Bon de livraison de retour",
+        irs_01_004: "Şubeler Arası Satış İrsaliye Listesi", // BAK
         irs_02_001: "Saisie Bon de livraison d'achat",
         irs_02_002: "Saisie Bon de livraison de vente",
         irs_02_003: "Saisie Bon de Retour de livraison",
@@ -129,10 +131,12 @@ export const langFr =
         sip_01: "Listes",
         sip_02: "Document",
         sip_03: "Rapports",
+        sip_04 : "Operasyonlar", // BAK
         sip_01_001: "Liste de Commande Achat ",
         sip_01_002: "Liste de Commande Vente ",
         sip_02_001: "Saisie Commande Achat",
         sip_02_002: "Saisie Commande Vente  ",
+        sip_04_001 : "Toplu Sipariş Ayrıştırma", // BAK
         cnt : "Accords commerciaux ",
         cnt_01 : "Listes",
         cnt_01_001: "Liste accord d'achat ",
@@ -2366,6 +2370,36 @@ export const langFr =
         },
 
     },
+    ftr_01_005 : // "Şube Satış Fatura Listesi" YENI EKLENDI KOMPLE BAK
+    {
+        txtCustomerCode : "Cari",
+        menu:"Şubeler Arası Satış Faturası",
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        btnGet :"Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        grdSlsIvcList: 
+        {
+            clmRef: "Seri",
+            clmRefNo: "Sıra",
+            clmPrice: "Fiyat",
+            clmInputCode : "Cari Kodu",
+            clmInputName : "Cari Adı",
+            clmDate: "Tarih",
+            clmVat : "KDV",
+            clmAmount : "Tutar",
+            clmTotal : "Toplam",
+            clmOutputName :"Depo",
+        },
+
+    },
     ftr_02_001 : //  "Alış Faturası"
     {
         txtRefRefno : "Série-Numéro Doc.",
@@ -4131,7 +4165,7 @@ export const langFr =
             clmCountry : "ÜLKE",   // BAK
         },
     },
-    ftr_04_001 : // "Proforma Fiyat Farkı Faturası"
+    ftr_04_001 : // "Proforma Fiyat Farkı Faturası" YENI EKLEN DI KOPMLE BAK
     {
         txtRefRefno : "Seri-Sıra",
         cmbDepot: "Depo",
@@ -4429,7 +4463,7 @@ export const langFr =
         pg_adress : 
         {
             title : "Adres Seçimi",   // BAK
-            clmAdress : "ADRES",   // BAK
+            clmAdress : "Adresse",   // BAK
             clmCiyt : "ŞEHİR",   // BAK
             clmZipcode : "POSTA  KODU",   // BAK
             clmCountry : "ÜLKE",   // BAK
@@ -4459,6 +4493,7 @@ export const langFr =
         txtCodePlace: "Veuillez entrer le code promotionnel", //BAK
         txtNamePlace: "Veuillez saisir le nom de la promotion", //BAK
         txtCustomerCodePlace: "Vous pouvez choisir le client si vous voulez", //BAK
+        txtRstItemPlace: "Lütfen Promosyon Uygulanacak ürünü Seçiniz", //BAK
         pg_Grid:
         {
             title:  "Choix",
@@ -4670,6 +4705,36 @@ export const langFr =
             clmTotal : "Total",
         },
 
+    },
+    irs_01_004 : //" Şube Satış İrsaliye Listesi" YENI EKLENDI KOMPLE BAK
+    {
+        cmbCustomer :"Cari",
+        btnGet :"Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        txtCustomerCode : "Cari",
+        menu:"Şube Satış İrsaliyesi",
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        grdSlsDisList: 
+        {
+            clmRef: "Seri",
+            clmRefNo: "Sıra",
+            clmPrice: "Fiyat",
+            clmInputCode : "Cari Kodu",
+            clmInputName : "Cari Adı",
+            clmDate: "Tarih",
+            clmVat : "KDV",
+            clmAmount : "Tutar",
+            clmTotal : "Toplam",
+            clmOutputName :"Depo",
+        },
     },
     irs_02_001 : // "Alış İrsaliyesi"
     {

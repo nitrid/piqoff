@@ -839,23 +839,52 @@ export const langTr =
         txtQuantity : "Miktar",
         chkAutoAdd : "Oto Ekle",
     },
-    stk_02_003 :  // "Özel Etiket Basımı",
+    stk_02_003 : //"Depolar Arası Sevk",
     {
-        txtRef: "Referans",
-        txtPrice : "Fiyat",
-        txtDescription : "Açıklama",
-        txtItemName : "Ürün Adı",
-        txtQuantity : "Adet",
-        valPrice : "Fiyat 0 dan Küçük Olamaz",
-        valCode : "Lütfen Stok Girin",
-        valName : "Ürün Adı Boş Olamaz",
-        btnSave: "Kaydet",
-        btnPrint: "Yazdır",
-        pg_txtRef:
+        btnBarcodeEntry :"Barkod Giriş",
+        btnDocument : "İşlem Satırları",
+        btnNew : "Yeni Evrak",
+        btnSave : "Kaydet",
+        btnDropmenu : "İşlemler",
+        txtRefRefno : "Seri-Sıra",
+        cmbDepot: "Depo",
+        dtDocDate : "Tarih",
+        txtBarcode : "Barkod Ekle",
+        pg_Docs : 
         {
-            title: "Stok Seçimi",
-            clmCode: "KODU",
-            clmName: "ADI", 
+            title : "Evrak Seçimi",
+            clmRef : "SERİ",
+            clmRefNo : "SIRA",
+            clmDocDate : "TARIH",
+            clmDepotName : "DEPO"
+        },
+        pg_txtItemsCode : 
+        {
+            title : "Stok Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+        },
+        grdItemCount: 
+        {
+            clmItemCode: "Kodu",
+            clmItemName: "Adı",
+            clmQuantity : "Miktar",
+            clmCreateDate: "Kayıt Tarihi",
+            clmDescription :"Açıklama"
+        },
+     
+        msgBigQuantity:
+        {
+            title: "Dikkat",
+            btn01: "Ekle",
+            btn02: "Vazgeç",
+            msg: "Miktar Eklemek İstediğinize Emin Misiniz?"
+        },
+        msgBarcodeNotFound:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Barkod Bulunamadı !"
         },
         msgSave:
         {
@@ -877,6 +906,83 @@ export const langTr =
             btn01: "Tamam",
             msg: "Lütfen gerekli alanları doldurunuz !"
         },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgLocked:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kayıt Edildi Ve Kilitlendi !"
+        },
+        msgPasswordSucces:
+        {
+            title: "Başarılı",
+            btn01: "Tamam",
+            msg: "Evrakın Kilidi Açıldı !",
+        },
+        msgPasswordWrong:
+        {
+            title: "Başarısız",
+            btn01: "Tamam",
+            msg: "Şifreniz Hatalı !"
+        },
+        msgGetLocked:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
+        },
+        msgDoclocked:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kilidi Açılmadan Kayıt Edilemez !"
+        },
+        msgItemNotFound:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Stok Bulunmadı !!"
+        },
+        msgCombineItem:
+        {
+            title: "Dikkat",
+            btn01: "Birleştir",
+            btn02: "Değiştir",
+            msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Satırlar Birleştirilsin mi ?"
+        },
+        msgDblDepot:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Giriş Ve Çıkış Depoları Aynı Olamaz !"
+        },
+        validRef :"Seri Boş Geçilemez",
+        validRefNo : "Sıra Boş Geçilemez",
+        validDepot : "Depo Seçmelisiniz",
+        validCustomerCode : "Cari Kodu Boş Geçilemez",
+        validDocDate : "Tarih Seçmelisiniz",
+        btnItemAdd: "Ekle",
+        msgDepotSelect:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Depo Seçiniz.."
+        },
+        popItemCode : 
+        {
+            title : "Stok Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+        },
+        txtBarcodePlace : "Lütfen Barkod Okutunuz",
+        txtQuantity : "Miktar",
+        chkAutoAdd : "Oto Ekle",
     },
     stk_02_004 : // "Skt Girişi",
     {

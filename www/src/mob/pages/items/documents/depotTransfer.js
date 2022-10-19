@@ -220,6 +220,7 @@ export default class depotTransfer extends React.Component
         
         this.barcode = 
         {
+            guid:"00000000-0000-0000-0000-000000000000",
             name:"",
             barcode: "",
             code:""
@@ -354,7 +355,7 @@ export default class depotTransfer extends React.Component
                     App.instance.setState({isExecute:false})
                     let tmpConfObj =
                     {
-                        id:'msgNotQuantity',showTitle:true,title:this.t("msgNotQuantity.title"),showCloseButton:true,width:'500px',height:'200px',
+                        id:'msgNotQuantity',showTitle:true,title:this.t("msgNotQuantity.title"),showCloseButton:true,width:'350px',height:'200px',
                         button:[{id:"btn01",caption:this.t("msgNotQuantity.btn01"),location:'after'}],
                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotQuantity.msg") + tmpQuantity.result.recordset[0].QUANTITY}</div>)
                     }
