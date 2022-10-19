@@ -2090,7 +2090,6 @@ export const langTr =
             supplier : "Tedarikçi",
             both : "Her İkisi",
             branch : "Şube"
-
         },
     },
     cri_03_001: // "Toplu Cari Tanımları"
@@ -4460,7 +4459,15 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Evrakınızda  Faturaya çevirilmiş satır var.. Bu evrak silinemez !"
-        }
+        },
+        pg_adress : 
+        {
+            title : "Adres Seçimi",
+            clmAdress : "ADRES",
+            clmCiyt : "ŞEHİR",
+            clmZipcode : "POSTA  KODU",
+            clmCountry : "ÜLKE",
+        },
     },
     promo_01_001: //  "Promosyon Tanımları"
     {
@@ -4694,7 +4701,7 @@ export const langTr =
         },
 
     },
-    irs_01_004 : //"Satış İrsaliye Listesi"
+    irs_01_004 : //" Şube Satış İrsaliye Listesi"
     {
         cmbCustomer :"Cari",
         btnGet :"Getir",
@@ -4723,7 +4730,6 @@ export const langTr =
             clmTotal : "Toplam",
             clmOutputName :"Depo",
         },
-
     },
     irs_02_001 : // "Alış İrsaliyesi"
     {
