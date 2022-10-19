@@ -305,7 +305,7 @@ export default class promotionCard extends React.PureComponent
                                         {/* SEÇİM LİSTE POPUP */}
                                         <NdPopUp parent={this} id={"pop_PrmItemList" + pItem.WITHAL} container={"#root"}
                                         position={{of:'#root'}}
-                                        showCloseButton={true}
+                                        showCloseButton={false}
                                         showTitle={true}
                                         title={this.t("pg_Grid.title")}
                                         width={'70%'}
@@ -313,7 +313,7 @@ export default class promotionCard extends React.PureComponent
                                         >
                                             <div className="row pb-1">
                                                 <div className='col-12'>
-                                                <NdButton text={this.t("btnPrmItem")} type="default" width="100%" 
+                                                <NdButton text={this.t("pg_Grid.btnItem")} type="default" width="100%" 
                                                 onClick={()=>
                                                 {
                                                     this["pg_txtPrmItem" + pItem.WITHAL]["txtpg_txtPrmItem" + pItem.WITHAL].value = ""
@@ -361,7 +361,7 @@ export default class promotionCard extends React.PureComponent
                                                 </div>
                                             </div>
                                             {/* grdPopGridList */}
-                                            <div className="row">
+                                            <div className="row pb-1" style={{height:"85%"}}>
                                                 <div className="col-12">
                                                     <NdGrid parent={this} id={"grdPopItemList" + pItem.WITHAL} 
                                                     showBorders={true} 
@@ -375,12 +375,41 @@ export default class promotionCard extends React.PureComponent
                                                     loadPanel={{enabled:false}}
                                                     sorting={{ mode: 'none' }}
                                                     >
-                                                        <Editing mode="cell" allowUpdating={false} allowDeleting={true} />
+                                                        <Editing mode="cell" allowUpdating={false} allowDeleting={true}/>
                                                         <Scrolling mode="standart" />
                                                         <Column dataField="ITEM_CODE" caption={this.t("pg_Grid.clmCode")} width={100}/>
                                                         <Column dataField="ITEM_NAME" caption={this.t("pg_Grid.clmName")} width={290}/>
                                                         <Column dataField="PRICE" caption={this.t("pg_Grid.clmPrice")} width={100}/>
                                                     </NdGrid>
+                                                </div>
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-6">
+                                                <NdButton type="danger" width="100%" icon={"trash"}
+                                                onClick={async()=>
+                                                {
+                                                    let tmpConfObj1 =
+                                                    {
+                                                        id:'msgDeleteAll',showTitle:true,title:this.t("msgDeleteAll.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.t("msgDeleteAll.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDeleteAll.btn02"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgDeleteAll.msg")}</div>)
+                                                    }
+                                                    if((await dialog(tmpConfObj1)) == 'btn01')
+                                                    {
+                                                        this["itemList" + pItem.WITHAL].removeAll()
+                                                    }
+                                                }}>
+                                                    <i className="text-white fa-solid fa-xmark" style={{fontSize: "24px"}} />
+                                                </NdButton>
+                                                </div>
+                                                <div className="col-6">
+                                                    <NdButton type="success" width="100%" icon={"todo"}
+                                                    onClick={()=>
+                                                    {
+                                                        this["pop_PrmItemList" + pItem.WITHAL].hide()
+                                                    }}>
+                                                        <i className="text-white fa-solid fa-xmark" style={{fontSize: "24px"}} />
+                                                    </NdButton>
                                                 </div>
                                             </div>
                                         </NdPopUp>
@@ -406,13 +435,17 @@ export default class promotionCard extends React.PureComponent
                                                 {
                                                     let tmpConfObj =
                                                     {
-                                                        id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'550px',height:'300px',
                                                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgHelp.condItemQuantity")}</div>)
                                                     }
                                                     await dialog(tmpConfObj);
                                                 }
                                             }
-                                        ]}/>     
+                                        ]}>
+                                            <Validator validationGroup={"frmPromo"  + this.tabIndex}>
+                                                <RequiredRule message={this.t("validation.txtPrmQuantityValid")} />
+                                            </Validator> 
+                                        </NdTextBox>     
                                     </Item>
                                     {/* txtPrmAmount */}  
                                     <Item>                                                                    
@@ -435,7 +468,7 @@ export default class promotionCard extends React.PureComponent
                                                 {
                                                     let tmpConfObj =
                                                     {
-                                                        id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'550px',height:'300px',
                                                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgHelp.condItemAmount")}</div>)
                                                     }
                                                     await dialog(tmpConfObj);
@@ -465,7 +498,7 @@ export default class promotionCard extends React.PureComponent
                                                 {
                                                     let tmpConfObj =
                                                     {
-                                                        id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'550px',height:'300px',
                                                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgHelp.condGeneralAmount")}</div>)
                                                     }
                                                     await dialog(tmpConfObj);
@@ -552,7 +585,7 @@ export default class promotionCard extends React.PureComponent
                                                     {
                                                         tmpConfObj =
                                                         {
-                                                            id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'550px',height:'300px',
                                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgHelp.appDiscRate")}</div>)
                                                         }
                                                     }
@@ -560,7 +593,7 @@ export default class promotionCard extends React.PureComponent
                                                     {
                                                         tmpConfObj =
                                                         {
-                                                            id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'550px',height:'300px',
                                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgHelp.appDiscAmount")}</div>)
                                                         }
                                                     }
@@ -598,7 +631,7 @@ export default class promotionCard extends React.PureComponent
                                                     {
                                                         tmpConfObj =
                                                         {
-                                                            id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'550px',height:'300px',
                                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgHelp.appPoint")}</div>)
                                                         }
                                                     }
@@ -606,7 +639,7 @@ export default class promotionCard extends React.PureComponent
                                                     {
                                                         tmpConfObj =
                                                         {
-                                                            id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'550px',height:'300px',
                                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgHelp.appGiftCheck")}</div>)
                                                         }
                                                     }
@@ -614,7 +647,7 @@ export default class promotionCard extends React.PureComponent
                                                     {
                                                         tmpConfObj =
                                                         {
-                                                            id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'550px',height:'300px',
                                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgHelp.appGeneralAmount")}</div>)
                                                         }
                                                     }
@@ -717,13 +750,17 @@ export default class promotionCard extends React.PureComponent
                                                 {
                                                     let tmpConfObj =
                                                     {
-                                                        id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'550px',height:'300px',
                                                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgHelp.appItemQuantity")}</div>)
                                                     }
                                                     await dialog(tmpConfObj);
                                                 }
                                             }
-                                        ]}/>     
+                                        ]}>
+                                            <Validator validationGroup={"frmPromo"  + this.tabIndex}>
+                                                <RangeRule min={0.001} message={this.t("validation.txtRstItemQuantityValid")} />
+                                            </Validator> 
+                                        </NdTextBox>     
                                     </Item> 
                                     {/* txtRstItemAmount */}  
                                     <Item>                                                                    
@@ -753,7 +790,7 @@ export default class promotionCard extends React.PureComponent
                                                 {
                                                     let tmpConfObj =
                                                     {
-                                                        id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        id:'msgSave',showTitle:true,title:this.t("msgHelp.title"),showCloseButton:true,width:'550px',height:'300px',
                                                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgHelp.appItemAmount")}</div>)
                                                     }
                                                     await dialog(tmpConfObj);
@@ -934,21 +971,21 @@ export default class promotionCard extends React.PureComponent
                                                                 }
                                                             })
                                                         }
-                                                        else
-                                                        {
-                                                            let tmpEmpty = {...this.promo.cond.empty}
+                                                        // else
+                                                        // {
+                                                        //     let tmpEmpty = {...this.promo.cond.empty}
                                                                     
-                                                            tmpEmpty.PROMO = this.promo.dt()[0].GUID
-                                                            tmpEmpty.ITEM_GUID = '00000000-0000-0000-0000-000000000000'
-                                                            tmpEmpty.ITEM_CODE = ''
-                                                            tmpEmpty.ITEM_NAME = ''
-                                                            tmpEmpty.TYPE = item.TYPE
-                                                            tmpEmpty.QUANTITY = item.QUANTITY
-                                                            tmpEmpty.AMOUNT = item.AMOUNT
-                                                            tmpEmpty.WITHAL = item.WITHAL
+                                                        //     tmpEmpty.PROMO = this.promo.dt()[0].GUID
+                                                        //     tmpEmpty.ITEM_GUID = '00000000-0000-0000-0000-000000000000'
+                                                        //     tmpEmpty.ITEM_CODE = ''
+                                                        //     tmpEmpty.ITEM_NAME = ''
+                                                        //     tmpEmpty.TYPE = item.TYPE
+                                                        //     tmpEmpty.QUANTITY = item.QUANTITY
+                                                        //     tmpEmpty.AMOUNT = item.AMOUNT
+                                                        //     tmpEmpty.WITHAL = item.WITHAL
                                                             
-                                                            this.promo.cond.addEmpty(tmpEmpty)
-                                                        }
+                                                        //     this.promo.cond.addEmpty(tmpEmpty)
+                                                        // }
                                                     }
                                                     else if(item.TYPE == 1)
                                                     {

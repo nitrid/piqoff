@@ -102,19 +102,19 @@ export const langFr =
         ftr: "Facture ",
         ftr_01: "Listes",
         ftr_02: "Document",
-        ftr_04: "Proforma", // BAK
+        ftr_04: "Proformat", // BAK
         ftr_03: "Rapports",
         ftr_01_001: "Liste facture d'achat",
         ftr_01_002: "Liste facture de vente",
         ftr_01_003: "Liste facture retour",
         ftr_01_004:"Liste facture différence de prix",
-        ftr_01_005: "Şubeler Arası Satış Fatura Listesi", // BAK
+        ftr_01_005: "Liste des factures de vente inter-succursales", // BAK
         ftr_02_001: "Saisie Facture d'achat",
         ftr_02_002: "Saisie Facture de vente",
         ftr_02_003: "Saisie Facture retour",
         ftr_02_004: "Saisie Facture différence de prix",
         ftr_02_005: "Saisie Vente interne",
-        ftr_04_001: "Fiyat Farkı Proforma Faturası", // BAK
+        ftr_04_001: "Différence de prix Facture pro forma", // BAK
         irs: "Bon de livraison",
         irs_01: "Listes",
         irs_02: "Document",
@@ -122,21 +122,21 @@ export const langFr =
         irs_01_001: "Saisie Bon de livraison d'achat",
         irs_01_002: "Saisie Bon de livraison de vente",
         irs_01_003: "Saisie Bon de livraison de retour",
-        irs_01_004: "Şubeler Arası Satış İrsaliye Listesi", // BAK
+        irs_01_004: "Liste des bordereaux de vente inter-succursales", // BAK
         irs_02_001: "Saisie Bon de livraison d'achat",
         irs_02_002: "Saisie Bon de livraison de vente",
         irs_02_003: "Saisie Bon de Retour de livraison",
-        irs_02_004: "Şube Satış İrsaliye", // BAK
+        irs_02_004: "Feuille de route des ventes de la succursale", // BAK
         sip: "Commande",
         sip_01: "Listes",
         sip_02: "Document",
         sip_03: "Rapports",
-        sip_04 : "Operasyonlar", // BAK
+        sip_04 : "Opérations", // BAK
         sip_01_001: "Liste de Commande Achat ",
         sip_01_002: "Liste de Commande Vente ",
         sip_02_001: "Saisie Commande Achat",
         sip_02_002: "Saisie Commande Vente  ",
-        sip_04_001 : "Toplu Sipariş Ayrıştırma", // BAK
+        sip_04_001 : "Séparation des commandes en gros", // BAK
         cnt : "Accords commerciaux ",
         cnt_01 : "Listes",
         cnt_01_001: "Liste accord d'achat ",
@@ -239,7 +239,7 @@ export const langFr =
         minBuyPrice : "Prix Achat Min.",
         maxBuyPrice : "Prix Achat Max.",
         sellPriceAdd : "Ajout Prix Vente",
-        clmInvoiceCost : "Hizmet Bedeli", // BAK
+        clmInvoiceCost : "Frais de service", // BAK
         pg_txtRef:
         {
             title: "Sélectionner Produit",
@@ -1951,7 +1951,7 @@ export const langFr =
             Customer : "Client",
             supplier : "Fournisseur",
             both : "Tous les Deux",
-            branch : "Şube" // BAK
+            branch : "Magasin" // BAK
         },
         cmbTaxTypeData : 
         {
@@ -2062,7 +2062,7 @@ export const langFr =
             Customer : "Client",
             supplier : "Fournisseur",
             both : "Tous les Deux",
-            branch : "Şube" // BAK
+            branch : "Magasin" // BAK
         },
     },
     cri_02_002: //  "Adres Listesi"
@@ -2089,7 +2089,7 @@ export const langFr =
             Customer : "Client",
             supplier : "Fournisseur",
             both : "Tous les Deux",
-            branch : "Şube" // BAK
+            branch : "Magasin" // BAK
         },
     },
     cri_03_001: // "Toplu Cari Tanimlari"
@@ -2228,7 +2228,7 @@ export const langFr =
             Customer : "Client",
             supplier : "Fournisseur",
             both : "Tous les Deux",
-            branch : "Şube" // BAK
+            branch : "Magasin" // BAK
         },
         cmbTaxTypeData : 
         {
@@ -2777,7 +2777,7 @@ export const langFr =
         },
         msgNewVat : 
         {
-            title: "Attentiob",  // bak
+            title: "Attention",  // bak
             btn01: "Mettre à jour Aucun",  // bak
             btn02: "Mettre à jour les cotes sélectionnées",  // bak
             msg: "Il existe différents taux de TVA dans le système avec la facture. "  // bak
@@ -2817,11 +2817,11 @@ export const langFr =
         },
         pg_adress : 
         {
-            title : "Adres Seçimi",   // BAK
-            clmAdress : "ADRES",   // BAK
-            clmCiyt : "ŞEHİR",   // BAK
-            clmZipcode : "POSTA  KODU",   // BAK
-            clmCountry : "ÜLKE",   // BAK
+            title : "Sélection d'adresse",   // BAK
+            clmAdress : "Adresse",   // BAK
+            clmCiyt : "Ville",   // BAK
+            clmZipcode : "Code postal",   // BAK
+            clmCountry : "Pays",   // BAK
         },
     },
     ftr_02_002 : // "Satış Faturası"
@@ -3021,7 +3021,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Ödemesi Yapılmış Evrak Silinemez!" // BAK
+            msg: "Le document payé ne peut pas être supprimé !" // BAK
         },
         msgDoclocked:
         {
@@ -3183,11 +3183,11 @@ export const langFr =
         },
         pg_adress : 
         {
-            title : "Adres Seçimi",   // BAK
-            clmAdress : "ADRES",   // BAK
-            clmCiyt : "ŞEHİR",   // BAK
-            clmZipcode : "POSTA  KODU",   // BAK
-            clmCountry : "ÜLKE",   // BAK
+            title : "Sélection d'adresse",   // BAK
+            clmAdress : "Adresse",   // BAK
+            clmCiyt : "Ville",   // BAK
+            clmZipcode : "Code postale",   // BAK
+            clmCountry : "Pays",   // BAK
         },
     },
     ftr_02_003 : // "İade Faturası"
@@ -3388,7 +3388,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Ödemesi Yapılmış Evrak Silinemez!" // BAK
+            msg: "Le document payant ne peut pas être supprimé !" // BAK
         },
         msgDoclocked:
         {
@@ -3494,11 +3494,11 @@ export const langFr =
         },
         pg_adress : 
         {
-            title : "Adres Seçimi",   // BAK
-            clmAdress : "ADRES",   // BAK
-            clmCiyt : "ŞEHİR",   // BAK
-            clmZipcode : "POSTA  KODU",   // BAK
-            clmCountry : "ÜLKE",   // BAK
+            title : "Sélection d'adresse",   // BAK
+            clmAdress : "Adresse",   // BAK
+            clmCiyt : "Ville",   // BAK
+            clmZipcode : "Code postale",   // BAK
+            clmCountry : "Pays",   // BAK
         },
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
@@ -3536,7 +3536,7 @@ export const langFr =
         tabTitleOldInvoices : "Informations de facturation passées",  // BAK
         getRemainder : "Apportez le montant restant",  // BAK
         txtbalance : "Solde total actuel",   // BAK
-        getProforma : "Proforma Getir", // BAK
+        getProforma : "Amenez Pro format ", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3698,7 +3698,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Ödemesi Yapılmış Evrak Silinemez!" // BAK
+            msg: "Le document payant ne peut pas être supprimé !" // BAK
         },
         msgDoclocked:
         {
@@ -3782,21 +3782,21 @@ export const langFr =
         },
         pg_proformaGrid : 
         {
-            title : "Proforma Seçimi",   // BAK
-            clmReferans : "Seri - Sira",   // BAK
-            clmCode : "Kodu",   // BAK
-            clmName : "Adi",   // BAK
-            clmQuantity : "Adet",   // BAK
-            clmPrice : "Fiyat",   // BAK
-            clmTotal : "Tutar"   // BAK
+            title : "Sélection pro forma",   // BAK
+            clmReferans : "Série - Séquence",   // BAK
+            clmCode : "Code",   // BAK
+            clmName : "Nom",   // BAK
+            clmQuantity : "Quantité",   // BAK
+            clmPrice : "Prix",   // BAK
+            clmTotal : "Montant"   // BAK
         },
         pg_adress : 
         {
-            title : "Adres Seçimi",   // BAK
-            clmAdress : "ADRES",   // BAK
-            clmCiyt : "ŞEHİR",   // BAK
-            clmZipcode : "POSTA  KODU",   // BAK
-            clmCountry : "ÜLKE",   // BAK
+            title : "Sélection d'adresse",   // BAK
+            clmAdress : "Adresse",   // BAK
+            clmCiyt : "Ville",   // BAK
+            clmZipcode : "Code postal",   // BAK
+            clmCountry : "Pays",   // BAK
         },
     },
     ftr_02_005 : // "Şube Satış Faturası"
@@ -3996,7 +3996,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Ödemesi Yapılmış Evrak Silinemez!" // BAK
+            msg: "Le document payant ne peut pas être supprimé !" // BAK
         },
         msgDoclocked:
         {
@@ -4158,11 +4158,11 @@ export const langFr =
         },
         pg_adress : 
         {
-            title : "Adres Seçimi",   // BAK
-            clmAdress : "ADRES",   // BAK
-            clmCiyt : "ŞEHİR",   // BAK
-            clmZipcode : "POSTA  KODU",   // BAK
-            clmCountry : "ÜLKE",   // BAK
+            title : "Choix d'adresse",   // BAK
+            clmAdress : "Adresse",   // BAK
+            clmCiyt : "Ville",   // BAK
+            clmZipcode : "ode postale",   // BAK
+            clmCountry : "Pays",   // BAK
         },
     },
     ftr_04_001 : // "Proforma Fiyat Farkı Faturası" YENI EKLEN DI KOPMLE BAK
@@ -4462,11 +4462,11 @@ export const langFr =
         },
         pg_adress : 
         {
-            title : "Adres Seçimi",   // BAK
+            title : "Choix d'adresse",   // BAK
             clmAdress : "Adresse",   // BAK
-            clmCiyt : "ŞEHİR",   // BAK
-            clmZipcode : "POSTA  KODU",   // BAK
-            clmCountry : "ÜLKE",   // BAK
+            clmCiyt : "Ville",   // BAK
+            clmZipcode : "Code postal",   // BAK
+            clmCountry : "Pays",   // BAK
         },
     },
     promo_01_001: //  "Promosyon Tanımları"
@@ -4493,7 +4493,7 @@ export const langFr =
         txtCodePlace: "Veuillez entrer le code promotionnel", //BAK
         txtNamePlace: "Veuillez saisir le nom de la promotion", //BAK
         txtCustomerCodePlace: "Vous pouvez choisir le client si vous voulez", //BAK
-        txtRstItemPlace: "Lütfen Promosyon Uygulanacak ürünü Seçiniz", //BAK
+        txtRstItemPlace: "Veuillez sélectionner le produit à promouvoir", //BAK
         pg_Grid:
         {
             title:  "Choix",
@@ -4554,33 +4554,45 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Girdiğiniz indirim 0 dan küçük, 100 den büyük olamaz !",
+            msg: "La remise que vous avez saisie ne peut être inférieure à 0 ou supérieure à 100 !",
         },
         cmbType: //BAK
         {
-            item: "Ürün",
-            generalAmount: "Genel Tutar",
-            discountRate: "İskonto Oran",
-            moneyPoint: "Para Puan",
-            giftCheck: "Hediye Çeki",
-            generalDiscount: "Genel İskonto",
-            discountAmount: "İskonto Tutar",
+            item: "Produit",
+            generalAmount: "Montant général",
+            discountRate: "Taux de remise",
+            moneyPoint: "Points d'argent",
+            giftCheck: "Cadeau certifié",
+            generalDiscount: "Remise générale",
+            discountAmount: "Montant de la remise",
         },
         msgHelp: //BAK
         {
-            title: "Yardım",
-            btn01: "Tamam",
-            condItemQuantity: "Buraya yaz...",
-            condItemAmount: "Buraya yaz...",
-            condGeneralAmount: "Buraya yaz...",
-            appDiscRate: "Buraya yaz...",
-            appDiscAmount: "Buraya yaz...",
-            appPoint: "Buraya yaz...",
-            appGiftCheck: "Buraya yaz...",
-            appGeneralAmount: "Buraya yaz...",
-            appItemQuantity: "Buraya yaz...",
-            appItemAmount: "Buraya yaz...",
-        }
+            title: "Aider",
+            btn01: "OK",
+            condItemQuantity: "Écrivez ici...",
+            condItemAmount: "Écrivez ici...",
+            condGeneralAmount: "Écrivez ici...",
+            appDiscRate: "Écrivez ici...",
+            appDiscAmount: "Écrivez ici...",
+            appPoint: "Écrivez ici...",
+            appGiftCheck: "Écrivez ici...",
+            appGeneralAmount: "Écrivez ici...",
+            appItemQuantity: "Écrivez ici...",
+            appItemAmount: "Écrivez ici...",
+        },
+        validation: 
+        {
+            txtPrmQuantityValid: "Vous ne pouvez pas ignorer le montant",
+            txtRstItemQuantityValid: "le montant ne peut pas être inférieur à zéro",
+        },
+        msgDeleteAll: //BAK
+        {
+            title: "Dikkat",
+            btn01: "Evet",
+            btn02: "Hayır",
+            msg: "Tümünü silmek istediğinize eminmisiniz ?",
+        },
     },
     promo_02_001: //  "Promosyon Listesi"
     {
@@ -4591,22 +4603,22 @@ export const langFr =
         btnGet: "Ramène",//BAK
         grdListe: //BAK
         {
-            clmCode: "KODU",
-            clmName: "ADI", 
-            clmStartDate: "İLK TARİH", 
-            clmFinishDate : "SON TARİH",
-            clmCondTypeName : "KOŞUL TİP",
-            clmCondItemCode : "KOŞUL KODU",
-            clmCondItemName : "KOŞUL ADI",
-            clmCondBarcode : "KOŞUL BARKODU",
-            clmCondQuantity : "KOŞUL MİKTAR",
-            clmCondAmount : "KOŞUL TUTAR",
-            clmAppTypeName : "UYGULAMA TİP",
-            clmAppItemCode : "UYGULAMA KODU",
-            clmAppItemName : "UYGULAMA ADI",
-            clmAppBarcode : "UYGULAMA BARKODU",
-            clmAppQuantity : "UYGULAMA MİKTAR",
-            clmAppAmount : "UYGULAMA TUTAR",
+            clmCode: "Code",
+            clmName: "Nom", 
+            clmStartDate: "Première Date", 
+            clmFinishDate : "Dernière Date",
+            clmCondTypeName : "Type de condition",
+            clmCondItemCode : "Code de condition",
+            clmCondItemName : "Nom de condition",
+            clmCondBarcode : "Condition de barre code",
+            clmCondQuantity : "Condition de quantité",
+            clmCondAmount : "CONDITION MONTANT",
+            clmAppTypeName : "Application de type",
+            clmAppItemCode : "Application de Code",
+            clmAppItemName : "Application de Nom",
+            clmAppBarcode : "Application de barre code",
+            clmAppQuantity : "Application de quantité",
+            clmAppAmount : "Application de montant",
         }
     },
     irs_01_001 : // "Alış İrsaliye Listesi"
@@ -4703,32 +4715,32 @@ export const langFr =
     },
     irs_01_004 : //" Şube Satış İrsaliye Listesi" YENI EKLENDI KOMPLE BAK
     {
-        cmbCustomer :"Cari",
-        btnGet :"Getir",
-        dtFirst : "İlk Tarih",
-        dtLast : "Son Tarih",
-        txtCustomerCode : "Cari",
-        menu:"Şube Satış İrsaliyesi",
+        cmbCustomer :"Courant",
+        btnGet :"Ramène",
+        dtFirst : "Première Date",
+        dtLast : "Dernière Date",
+        txtCustomerCode : "Courantari",
+        menu:"Feuille de route des ventes de la succursale",
         pg_txtCustomerCode : 
         {
-            title : "Cari Seçimi",
-            clmCode :  "CARİ KODU",
-            clmTitle : "CARİ ADI",
-            clmTypeName : "TİPİ",
-            clmGenusName : "CİNSİ"
+            title : "Sélection actuelle",
+            clmCode :  "Code actuel",
+            clmTitle : "Nom actuelle",
+            clmTypeName : "Type",
+            clmGenusName : "Type"
         },
         grdSlsDisList: 
         {
-            clmRef: "Seri",
-            clmRefNo: "Sıra",
-            clmPrice: "Fiyat",
-            clmInputCode : "Cari Kodu",
-            clmInputName : "Cari Adı",
-            clmDate: "Tarih",
-            clmVat : "KDV",
-            clmAmount : "Tutar",
-            clmTotal : "Toplam",
-            clmOutputName :"Depo",
+            clmRef: "Serie",
+            clmRefNo: "Séquence",
+            clmPrice: "Prix",
+            clmInputCode : "Code actuel",
+            clmInputName : "Nom actuel",
+            clmDate: "Date",
+            clmVat : "TVA",
+            clmAmount : "Montant",
+            clmTotal : "Total",
+            clmOutputName :"Depôt",
         },
     },
     irs_02_001 : // "Alış İrsaliyesi"
@@ -5024,11 +5036,11 @@ export const langFr =
         },
         pg_adress : 
         {
-            title : "Adres Seçimi",   // BAK
-            clmAdress : "ADRES",   // BAK
-            clmCiyt : "ŞEHİR",   // BAK
-            clmZipcode : "POSTA  KODU",   // BAK
-            clmCountry : "ÜLKE",   // BAK
+            title : "Sélection d'adresse",   // BAK
+            clmAdress : "Adresse",   // BAK
+            clmCiyt : "Ville",   // BAK
+            clmZipcode : "Code postal",   // BAK
+            clmCountry : "Pays",   // BAK
         },
     },
     irs_02_002 : // Satış İrsaliyesi"
@@ -5335,11 +5347,11 @@ export const langFr =
         },
         pg_adress : 
         {
-            title : "Adres Seçimi",   // BAK
-            clmAdress : "ADRES",   // BAK
-            clmCiyt : "ŞEHİR",   // BAK
-            clmZipcode : "POSTA  KODU",   // BAK
-            clmCountry : "ÜLKE",   // BAK
+            title : "Choix d'adresse",   // BAK
+            clmAdress : "Adresse",   // BAK
+            clmCiyt : "Ville",   // BAK
+            clmZipcode : "Code postal",   // BAK
+            clmCountry : "Pays",   // BAK
         },
     },
     irs_02_003 : // "İade İrsaliyesi"
@@ -5591,11 +5603,11 @@ export const langFr =
         },
         pg_adress : 
         {
-            title : "Adres Seçimi",   // BAK
-            clmAdress : "ADRES",   // BAK
-            clmCiyt : "ŞEHİR",   // BAK
-            clmZipcode : "POSTA  KODU",   // BAK
-            clmCountry : "ÜLKE",   // BAK
+            title : "Sélection d'adresse",   // BAK
+            clmAdress : "Adresse",   // BAK
+            clmCiyt : "Ville",   // BAK
+            clmZipcode : "Code postal",   // BAK
+            clmCountry : "Pays",   // BAK
         },
         msgCustomerNotFound:
         {
@@ -5909,11 +5921,11 @@ export const langFr =
         },
         pg_adress : 
         {
-            title : "Adres Seçimi",   // BAK
-            clmAdress : "ADRES",   // BAK
-            clmCiyt : "ŞEHİR",   // BAK
-            clmZipcode : "POSTA  KODU",   // BAK
-            clmCountry : "ÜLKE",   // BAK
+            title : "Sélection d'adresse",   // BAK
+            clmAdress : "Adresse",   // BAK
+            clmCiyt : "Ville",   // BAK
+            clmZipcode : "Code postal",   // BAK
+            clmCountry : "Pays",   // BAK
         },
     },
     sip_01_001 : // "Alış Sipariş Listesi"
@@ -6283,11 +6295,11 @@ export const langFr =
         },
         pg_adress : 
         {
-            title : "Adres Seçimi",   // BAK
-            clmAdress : "ADRES",   // BAK
-            clmCiyt : "ŞEHİR",   // BAK
-            clmZipcode : "POSTA  KODU",   // BAK
-            clmCountry : "ÜLKE",   // BAK
+            title : "Sélection d'adresse",   // BAK
+            clmAdress : "Adresse",   // BAK
+            clmCiyt : "Ville",   // BAK
+            clmZipcode : "Code postal",   // BAK
+            clmCountry : "Pays",   // BAK
         },
     },
     sip_02_002 : // "Satış Sipariş"
@@ -6588,11 +6600,11 @@ export const langFr =
         },
         pg_adress : 
         {
-            title : "Adres Seçimi",   // BAK
-            clmAdress : "ADRES",   // BAK
-            clmCiyt : "ŞEHİR",   // BAK
-            clmZipcode : "POSTA  KODU",   // BAK
-            clmCountry : "ÜLKE",   // BAK
+            title : "Sélection d'adresse",   // BAK
+            clmAdress : "Adresse",   // BAK
+            clmCiyt : "Ville",   // BAK
+            clmZipcode : "Code postal",   // BAK
+            clmCountry : "Pays",   // BAK
         },
     },
     cnt_01_001 : // "Alış Anlaşmaları Listesi"
@@ -7735,7 +7747,7 @@ export const langFr =
             clmTime: "Heure",
             slmUser: "Utilisateur",
             clmCustomer : "Fournisseur",
-            clmCardId : "Numero de Card", //BAK
+            clmCardId : "Numero de Carte", //BAK
             clmDiscount : "Remise",
             clmLoyalyt: "Fidelité",
             clmHT : "Total",
