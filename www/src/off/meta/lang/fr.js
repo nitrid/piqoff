@@ -4585,7 +4585,14 @@ export const langFr =
         {
             txtPrmQuantityValid: "Vous ne pouvez pas ignorer le montant",
             txtRstItemQuantityValid: "le montant ne peut pas être inférieur à zéro",
-        }
+        },
+        msgDeleteAll:
+        {
+            title: "Dikkat",
+            btn01: "Evet",
+            btn02: "Hayır",
+            msg: "Tümünü silmek istediğinize eminmisiniz ?",
+        },
     },
     promo_02_001: //  "Promosyon Listesi"
     {

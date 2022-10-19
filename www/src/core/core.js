@@ -898,6 +898,15 @@ export class datatable
             this.emit('onDelete');
         }
     }
+    removeAll()
+    {               
+        this.forEach(x =>
+        {
+            this._deleteList.push(x);
+        })
+        this.splice(0,this.length); 
+        this.emit('onDeleteAll')
+    }
     clear()
     {
         this.splice(0,this.length);

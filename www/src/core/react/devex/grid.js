@@ -234,6 +234,10 @@ export default class NdGrid extends Base
                 {
                     this.devGrid.refresh()
                 });
+                this.data.datatable.on('onDeleteAll',() =>
+                {
+                    this.devGrid.refresh()
+                });
             }
         }, 100);
     }

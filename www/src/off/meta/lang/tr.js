@@ -4585,7 +4585,7 @@ export const langTr =
         {
             txtPrmQuantityValid: "Miktar'ı boş geçemezsiniz !",
             txtRstItemQuantityValid: "Miktar sıfırdan küçük olamaz !",
-        }
+        },        
     },
     promo_02_001: //  "Promosyon Listesi"
     {
