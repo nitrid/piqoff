@@ -4502,6 +4502,7 @@ export const langFr =
             clmName: "Nom", 
             clmGrpName: "Groupe", //BAK
             clmPrice : "Prix", //BAK
+            btnItem: "Promosyon Ürün Seçimi", //BAK
         },
         msgRef:
         {
