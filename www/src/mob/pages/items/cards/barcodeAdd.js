@@ -116,7 +116,7 @@ export default class salesOrder extends React.Component
     {
         let tmpQuery = 
         {
-            query : "SELECT ITEM_CODE AS CODE,ITEM_NAME AS NAME,ITEM_GUID AS GUID,BARCODE,[dbo].[FN_PRICE_SALE](ITEM_GUID,1,GETDATE()) AS PRICE FROM ITEM_BARCODE_VW_01  WHERE BARCODE = @BARCODE OR ITEM_CODE = @BARCODE ",
+            query : "SELECT ITEM_CODE AS CODE,ITEM_NAME AS NAME,ITEM_GUID AS GUID,BARCODE,[dbo].[FN_PRICE_SALE](ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000') AS PRICE FROM ITEM_BARCODE_VW_01  WHERE BARCODE = @BARCODE OR ITEM_CODE = @BARCODE ",
             param : ['BARCODE:string|50'],
             value : [this.txtNewBarcode.value]
         }
@@ -368,7 +368,7 @@ export default class salesOrder extends React.Component
                                             "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
                                             "MAIN_GRP AS ITEM_GRP,   " +
                                             "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
-                                            "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE())) AS PRICE  , " +
+                                            "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE  , " +
                                             "ISNULL((SELECT TOP 1 GUID FROM ITEM_UNIT WHERE ITEM = ITEMS_VW_01.GUID AND TYPE = 0),'') AS UNIT " +
                                             "FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID),'00000000-0000-0000-0000-000000000000') <> '') AS TMP " +
                                             "WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) " ,

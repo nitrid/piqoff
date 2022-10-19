@@ -70,7 +70,7 @@ export const menu = (e) =>
                         {
                             id: 'stk_02_003',
                             text: e.t('menu.stk_02_003'),//'Sayım ',
-                            path: 'items/documents/'
+                            path: 'items/documents/itemCount'
                         },
                         {
                             id: 'stk_02_004',

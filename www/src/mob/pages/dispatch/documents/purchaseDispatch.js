@@ -270,6 +270,7 @@ export default class rebateDispatch extends React.PureComponent
         this.barcodeReset()
         this._calculateTotal()
         await this.docObj.save()
+        this.txtPopQuantity.value = 1
     }
     async _getRebate()
     {

@@ -220,6 +220,7 @@ export default class depotTransfer extends React.Component
         
         this.barcode = 
         {
+            guid:"00000000-0000-0000-0000-000000000000",
             name:"",
             barcode: "",
             code:""

@@ -267,6 +267,7 @@ export default class salesDispartch extends React.PureComponent
         this.barcodeReset()
         this._calculateTotal()
         await this.docObj.save()
+        this.txtPopQuantity.value = 1
     }
     barcodeReset()
     {

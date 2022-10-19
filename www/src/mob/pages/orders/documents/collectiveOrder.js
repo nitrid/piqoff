@@ -326,6 +326,7 @@ export default class salesOrder extends React.Component
         this.barcodeReset()
         this._calculateTotal()
         await this.docObj.save()
+        this.txtPopQuantity.value = 1
     }
     calculateItemPrice()
     {
