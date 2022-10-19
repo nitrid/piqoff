@@ -4480,7 +4480,7 @@ export const langTr =
         txtCustomerName: "Cari Adı",
         cmbPrmType: "Promosyon Türü",
         txtPrmItem: "Stok",
-        btnPrmItem: "Promosyon Ürün Seçimi", 
+        btnPrmItem: "Promosyon Ürün Seçimi / Ürün listesi", 
         txtPrmItemGrp: "Grup",
         txtPrmQuantity: "Adet",
         txtPrmAmount: "Tutar",
@@ -4502,7 +4502,7 @@ export const langTr =
             clmName: "Adi", 
             clmGrpName: "Grubu", 
             clmPrice : "Fiyat",
-            btnItem: "Promosyon Ürün Seçimi"
+            btnItem: "Promosyon Uygulanacak Ürün yada Ürünleri Seç"
         },
         msgRef:
         {
