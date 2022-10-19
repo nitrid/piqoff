@@ -4586,7 +4586,7 @@ export const langFr =
             txtPrmQuantityValid: "Vous ne pouvez pas ignorer le montant",
             txtRstItemQuantityValid: "le montant ne peut pas être inférieur à zéro",
         },
-        msgDeleteAll:
+        msgDeleteAll: //BAK
         {
             title: "Dikkat",
             btn01: "Evet",

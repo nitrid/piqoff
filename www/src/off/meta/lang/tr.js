@@ -4502,6 +4502,7 @@ export const langTr =
             clmName: "Adi", 
             clmGrpName: "Grubu", 
             clmPrice : "Fiyat",
+            btnItem: "Promosyon Ürün Seçimi"
         },
         msgRef:
         {
@@ -4585,7 +4586,14 @@ export const langTr =
         {
             txtPrmQuantityValid: "Miktar'ı boş geçemezsiniz !",
             txtRstItemQuantityValid: "Miktar sıfırdan küçük olamaz !",
-        },        
+        },
+        msgDeleteAll:
+        {
+            title: "Dikkat",
+            btn01: "Evet",
+            btn02: "Hayır",
+            msg: "Tümünü silmek istediğinize eminmisiniz ?",
+        },
     },
     promo_02_001: //  "Promosyon Listesi"
     {
