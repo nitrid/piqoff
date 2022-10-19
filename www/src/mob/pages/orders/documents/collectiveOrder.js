@@ -737,80 +737,13 @@ export default class salesOrder extends React.Component
                             columnsAutoWidth={true} 
                             allowColumnReordering={true} 
                             allowColumnResizing={true} 
-                            height={'250'} 
+                            height={'350'} 
                             width={'100%'}
                             dbApply={false}
                             onRowUpdated={async(e)=>{
 
-                                if(typeof e.data.DISCOUNT_RATE != 'undefined')
-                                {
-                                    e.key.DISCOUNT = parseFloat((((e.key.AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(2))
-                                }
-
-                                if(e.key.COST_PRICE > e.key.PRICE )
-                                {
-                                    let tmpData = this.acsobj.filter({ID:'underMinCostPrice',USERS:this.user.CODE}).getValue()
-                                    if(typeof tmpData != 'undefined' && tmpData ==  true)
-                                    {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgUnderPrice1',showTitle:true,title:this.t("msgUnderPrice1.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgUnderPrice1.btn01"),location:'before'},{id:"btn02",caption:this.t("msgUnderPrice1.btn02"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgUnderPrice1.msg")}</div>)
-                                        }
-                                        
-                                        let pResult = await dialog(tmpConfObj);
-                                        if(pResult == 'btn01')
-                                        {
-                                            
-                                        }
-                                        else if(pResult == 'btn02')
-                                        {
-                                            return
-                                        }
-                                    }
-                                    else
-                                    {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgUnderPrice2',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgUnderPrice2.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"msgUnderPrice2.msg"}</div>)
-                                        }
-                                        dialog(tmpConfObj);
-                                        return
-                                    }
-                                }
-                                if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
-                                {
-                                    let tmpConfObj =
-                                    {
-                                        id:'msgDiscount',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
-                                        button:[{id:"btn01",caption:this.t("msgDiscount.btn01"),location:'after'}],
-                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscount.msg")}</div>)
-                                    }
-                                
-                                    dialog(tmpConfObj);
-                                    e.key.DISCOUNT = 0 
-                                    return
-                                }
-                                if(e.key.VAT > 0)
-                                {
-                                    e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(2));
-                                }
-                                e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(2))
-                                e.key.TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +e.key.VAT).toFixed(2))
-
-                                let tmpMargin = (e.key.TOTAL - e.key.VAT) - (e.key.COST_PRICE * e.key.QUANTITY)
-                                let tmpMarginRate = (tmpMargin /(e.key.TOTAL - e.key.VAT)) * 100
-                                e.key.MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
-                                if(e.key.DISCOUNT > 0)
-                                {
-                                    e.key.DISCOUNT_RATE = parseFloat((100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100)).toFixed(2))
-                                }
-                                console.log(e.key.MARGIN)
+                                await this.docObj.save()
                                 this._calculateTotal()
-                                
                             }}
                             onContentReady={async(e)=>{
                                 e.component.columnOption("command:edit", 'visibleIndex', -1)
@@ -825,104 +758,13 @@ export default class salesOrder extends React.Component
                                 <Paging defaultPageSize={10} />
                                 <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                <Column dataField="ITEM_NAME" caption={this.t("grdSlsOrder.clmItemName")} width={350} />
+                                <Column dataField="ITEM_NAME" caption={this.t("grdSlsOrder.clmItemName")} width={200} />
                                 <Column dataField="QUANTITY" caption={this.t("grdSlsOrder.clmQuantity")} dataType={'number'} width={80}/>
                                 <Column dataField="PRICE" caption={this.t("grdSlsOrder.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={80}/>
-                                <Column dataField="AMOUNT" caption={this.t("grdSlsOrder.clmAmount")} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}} width={80}/>
-                                <Column dataField="DISCOUNT" caption={this.t("grdSlsOrder.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={80}/>
-                                <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsOrder.clmDiscountRate")} dataType={'number'} width={80}/>
-                                <Column dataField="VAT" caption={this.t("grdSlsOrder.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} width={80}/>
-                                <Column dataField="TOTAL" caption={this.t("grdSlsOrder.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} width={100}/>
                             </NdGrid>
                         </div>
                         </Item>
                         </Form>
-                        <div className="row px-1 pt-1">
-                                <div className="col-12">
-                                    <Form colCount={4} parent={this} id="frmslsDoc">
-                                        {/* Ara Toplam */}
-                                        <Item  >
-                                        <Label text={this.t("txtAmount")} alignment="right" />
-                                            <NdTextBox id="txtGrandAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}
-                                            maxLength={32}
-                                        
-                                            ></NdTextBox>
-                                        </Item>
-                                        {/* İndirim */}
-                                        <Item>
-                                        <Label text={this.t("txtDiscount")} alignment="right" />
-                                            <NdTextBox id="txtGrandDiscount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"DISCOUNT"}}
-                                            maxLength={32}
-                                            button=
-                                            {
-                                                [
-                                                    {
-                                                        id:'01',
-                                                        icon:'more',
-                                                        onClick:()  =>
-                                                        {
-                                                            if(this.docObj.dt()[0].DISCOUNT > 0 )
-                                                            {
-                                                                this.txtDiscountPercent.value  = parseFloat((100 - (((this.docObj.dt()[0].AMOUNT - this.docObj.dt()[0].DISCOUNT) / this.docObj.dt()[0].AMOUNT) * 100)).toFixed(2))
-                                                                this.txtDiscountPrice.value = this.docObj.dt()[0].DISCOUNT
-                                                            }
-                                                            this.popDiscount.show()
-                                                        }
-                                                    },
-                                                ]
-                                            }
-                                            ></NdTextBox>
-                                        </Item>
-                                        {/* KDV */}
-                                        <Item>
-                                        <Label text={this.t("txtVat")} alignment="right" />
-                                            <NdTextBox id="txtGrandVat" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"VAT"}}
-                                            maxLength={32}
-                                            button=
-                                            {
-                                                [
-                                                    {
-                                                        id:'01',
-                                                        icon:'clear',
-                                                        onClick:async ()  =>
-                                                        {
-                                                            
-                                                            let tmpConfObj =
-                                                            {
-                                                                id:'msgVatDelete',showTitle:true,title:this.t("msgVatDelete.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                                button:[{id:"btn01",caption:this.t("msgVatDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
-                                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgVatDelete.msg")}</div>)
-                                                            }
-                                                            
-                                                            let pResult = await dialog(tmpConfObj);
-                                                            if(pResult == 'btn01')
-                                                            {
-                                                                for (let i = 0; i < this.docObj.docOrders.dt().length; i++) 
-                                                                {
-                                                                    this.docObj.docOrders.dt()[i].VAT = 0  
-                                                                    this.docObj.docOrders.dt()[i].VAT_RATE = 0
-                                                                    this.docObj.docOrders.dt()[i].TOTAL = (this.docObj.docOrders.dt()[i].PRICE * this.docObj.docOrders.dt()[i].QUANTITY) - this.docObj.docOrders.dt()[i].DISCOUNT
-                                                                    this._calculateTotal()
-                                                                }
-                                                            }
-                                                        }
-                                                    },
-                                                ]
-                                            }
-                                            ></NdTextBox>
-                                        </Item>
-                                        {/* KDV */}
-                                        <Item>
-                                        <Label text={this.t("txtGrandTotal")} alignment="right" />
-                                            <NdTextBox id="txtGrandTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}}
-                                            maxLength={32}
-                                            //param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
-                                            //access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
-                                            ></NdTextBox>
-                                        </Item>
-                                    </Form>
-                                </div>
-                            </div>
                     </div>
                     {/* Stok Seçim */}
                     <NdPopGrid id={"popItemCode"} parent={this} container={"#root"}
