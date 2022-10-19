@@ -4429,7 +4429,7 @@ export const langFr =
         pg_adress : 
         {
             title : "Adres Seçimi",   // BAK
-            clmAdress : "ADRES",   // BAK
+            clmAdress : "Adresse",   // BAK
             clmCiyt : "ŞEHİR",   // BAK
             clmZipcode : "POSTA  KODU",   // BAK
             clmCountry : "ÜLKE",   // BAK
@@ -4459,6 +4459,7 @@ export const langFr =
         txtCodePlace: "Veuillez entrer le code promotionnel", //BAK
         txtNamePlace: "Veuillez saisir le nom de la promotion", //BAK
         txtCustomerCodePlace: "Vous pouvez choisir le client si vous voulez", //BAK
+        txtRstItemPlace: "Lütfen Promosyon Uygulanacak ürünü Seçiniz", //BAK
         pg_Grid:
         {
             title:  "Choix",

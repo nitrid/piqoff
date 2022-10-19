@@ -1217,7 +1217,6 @@ export default class posDoc extends React.PureComponent
                         }
                     }
                 } 
-                console.log(this.posPromoObj)
                 //POS_PROMO TABLOSUNA KAYIT EDİLİYOR.
                 await this.posPromoObj.save()
                 //******************************** */
@@ -1241,7 +1240,25 @@ export default class posDoc extends React.PureComponent
                             customerGrowPoint:this.popCustomerGrowPoint.value
                         }
                     }
-                    await this.print(tmpData)
+
+                    if(this.prmObj.filter({ID:'PrintAlert',TYPE:0}).getValue() == true)
+                    {
+                        let tmpConfObj =
+                        {
+                            id:'msgPrintAlert',showTitle:true,title:this.lang.t("msgPrintAlert.title"),showCloseButton:true,width:'500px',height:'250px',
+                            button:[{id:"btn01",caption:this.lang.t("msgPrintAlert.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgPrintAlert.btn02"),location:'after'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPrintAlert.msg")}</div>)
+                        }
+                        
+                        if((await dialog(tmpConfObj)) == 'btn01')
+                        {
+                            await this.print(tmpData)
+                        }
+                    }
+                    else
+                    {
+                        await this.print(tmpData)
+                    }
                     //TICKET REST. ALDIĞINDA KASA AÇMA İŞLEMİ 
                     if(this.posObj.posPay.dt().where({PAY_TYPE:3}).length > 0)
                     {
@@ -4600,8 +4617,7 @@ export default class posDoc extends React.PureComponent
                                                     "SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,36) AS REF " + 
                                                     "FROM POS_VW_01 WHERE DOC_DATE >= @START_DATE AND DOC_DATE <= @FINISH_DATE AND " +
                                                     "((ISNULL((SELECT TOP 1 1 FROM POS_PAYMENT AS PAY WHERE PAY.POS = POS_VW_01.GUID AND TYPE = @TYPE AND DELETED = 0),0) = 1) OR (@TYPE = -1)) AND " + 
-                                                    "((LUSER = @USER) OR (@USER = '')) AND " +
-                                                    "STATUS = 1 ORDER BY LDATE DESC",
+                                                    "((LUSER = @USER) OR (@USER = '')) AND STATUS = 1 ORDER BY LDATE DESC",
                                             param:  ["START_DATE:date","FINISH_DATE:date","TYPE:int","USER:string|25"],
                                             value:  [this.dtPopLastSaleStartDate.value,this.dtPopLastSaleFinishDate.value,this.cmbPopLastSalePayType.value,this.cmbPopLastSaleUser.value]
                                         }

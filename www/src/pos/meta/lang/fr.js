@@ -569,4 +569,11 @@ export const langFr =
         msg : "Veuillez entrer un montant valide.",
         btn01 : "OK"
     },
+    msgPrintAlert: //Bak
+    {
+        title : "Uyarı",
+        msg : "Fişi Yazdırmak İstermisiniz ?",
+        btn01 : "Tamam",
+        btn02 : "İptal"
+    },
 }
