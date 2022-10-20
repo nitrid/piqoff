@@ -896,7 +896,7 @@ export default class purchaseContract extends React.PureComponent
                                 <Item>
                                     <Label text={this.t("popItems.txtPopItemsPrice")} alignment="right" />
                                     <NdTextBox id={"txtPopItemsPrice"} parent={this} simple={true} >
-                                        <Validator validationGroup={ this.tabIndex}>
+                                    <Validator validationGroup={"frmPurcContItems"  + this.tabIndex}>
                                                 <RequiredRule message={this.t("validItemPrice")} />
                                         </Validator>
                                     </NdTextBox>

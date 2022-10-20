@@ -303,7 +303,6 @@ export default class NdPopGrid extends Base
     async setData(pData)
     {
         await this.grid.dataRefresh({source:pData})
-        console.log(pData)
     }
     render()
     {

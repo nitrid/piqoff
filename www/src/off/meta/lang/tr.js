@@ -4480,7 +4480,7 @@ export const langTr =
         txtCustomerName: "Cari Adı",
         cmbPrmType: "Promosyon Türü",
         txtPrmItem: "Stok",
-        btnPrmItem: "ürü Seçimi", 
+        btnPrmItem: "Promosyon Ürün Seçimi / Ürün listesi", 
         txtPrmItemGrp: "Grup",
         txtPrmQuantity: "Adet",
         txtPrmAmount: "Tutar",
@@ -4502,6 +4502,7 @@ export const langTr =
             clmName: "Adi", 
             clmGrpName: "Grubu", 
             clmPrice : "Fiyat",
+            btnItem: "Promosyon Uygulanacak Ürün yada Ürünleri Seç"
         },
         msgRef:
         {
@@ -4568,24 +4569,31 @@ export const langTr =
         },
         msgHelp:
         {
-            title: "Yardım",
+            title: "Açıklama",
             btn01: "Tamam",
-            condItemQuantity: "Buraya yaz...",
-            condItemAmount: "Buraya yaz...",
-            condGeneralAmount: "Buraya yaz...",
-            appDiscRate: "Buraya yaz...",
-            appDiscAmount: "Buraya yaz...",
-            appPoint: "Buraya yaz...",
-            appGiftCheck: "Buraya yaz...",
-            appGeneralAmount: "Buraya yaz...",
-            appItemQuantity: "Buraya yaz...",
-            appItemAmount: "Buraya yaz...",
+            condItemQuantity: "Promosyon tanımlamak istediğiniz ürün yada ürünler için promosyonun geçerli olacağı ürün adetini belirleyiniz. Örnğ: Değeri 5 yaptığınızda promosyon 5. üründen sonra geçerli olacaktır.",
+            condItemAmount: "Promosyon tanımlamak istediğiniz ürün yada ürünler için promosyonun hangi toplam tutardan itibaren geçerli olacağını belirleyiniz. Örnğ: Tutarı 10€ yaptığınızda promosyon seçilen ürünlerin toplam tutarı 10€ olduktan sonra geçerli olacaktır.",
+            condGeneralAmount: "Toplam ticket tutarına hangi tutardan sonra promosyon Uygulamak ıstediğinizi belirleyiniz. Örnğ: Tutarı 10€ yaptığınızda ticket toplam tutarı 10€ olduktan sonra geçerli olacaktır.",
+            appDiscRate: "Koşul oluştuğunda uygulayacağı iskonto oranını belirleyiniz. Örnğ: Koşul oluştuğunda %10 indirim uygulasın.",
+            appDiscAmount: "Koşul oluştuğunda tutarsal olarak yapmak istediğiniz indirim uygulanacak fiyatı belirleyiniz. Örnğ: Koşul oluştuğunda koşulda seçili ürünlere 0,99€ fiyat uygulasın.",
+            appPoint: "Koşul oluştuğunda müşteriye vermek istediğiniz puan tutarını belirleyiniz. Örnğ: Koşul oluştuğunda müşterinin kartına 100 puan eklesin.",
+            appGiftCheck: "Koşul oluştuğunda müşteriye vermek istediğiniz hediye çeki tutarını belirleyiniz. Örnğ: Koşul oluştuğunda müşteriye 100€ luk hediye çeki uluştursun.",
+            appGeneralAmount: "Koşul oluştuğunda uygulanacak rakamsal toplam indirim tutarını belirleyiniz. Örnğ: Koşul oluştuğunda müşteriye tike tutarına 10€ luk indirim yapsın.",
+            appItemQuantity: "Koşul oluştuğunda seçeceğiniz ürün yada ürünler için geçerli olacağı ürün adetini belirleyiniz. Örnğ: Değeri 5 yaptığınızda sectiğiniz ürün yada ürünleri 5 adete kadar belirlediğiniz % lik indirimi yada fiyatı uygulasın.",
+            appItemAmount: "Koşul oluştuğunda seçeceğiniz ürün yada ürünler için geçerli olacağı fiyatı belirleyiniz. Örnğ: Fiyatı 1€ yada %10 yaptığınızda sectiğiniz ürün yada ürünleri 1€ dan yada %10 luk indirim uygulasın.",
         },
         validation:
         {
             txtPrmQuantityValid: "Miktar'ı boş geçemezsiniz !",
             txtRstItemQuantityValid: "Miktar sıfırdan küçük olamaz !",
-        }
+        },
+        msgDeleteAll:
+        {
+            title: "Dikkat",
+            btn01: "Evet",
+            btn02: "Hayır",
+            msg: "Tümünü silmek istediğinize eminmisiniz ?",
+        },
     },
     promo_02_001: //  "Promosyon Listesi"
     {
@@ -4596,22 +4604,22 @@ export const langTr =
         btnGet: "Getir",
         grdListe:
         {
-            clmCode: "KODU",
-            clmName: "ADI", 
-            clmStartDate: "İLK TARİH", 
-            clmFinishDate : "SON TARİH",
-            clmCondTypeName : "KOŞUL TİP",
-            clmCondItemCode : "KOŞUL KODU",
-            clmCondItemName : "KOŞUL ADI",
-            clmCondBarcode : "KOŞUL BARKODU",
-            clmCondQuantity : "KOŞUL MİKTAR",
-            clmCondAmount : "KOŞUL TUTAR",
-            clmAppTypeName : "UYGULAMA TİP",
-            clmAppItemCode : "UYGULAMA KODU",
-            clmAppItemName : "UYGULAMA ADI",
-            clmAppBarcode : "UYGULAMA BARKODU",
-            clmAppQuantity : "UYGULAMA MİKTAR",
-            clmAppAmount : "UYGULAMA TUTAR",
+            clmCode: "Kodu",
+            clmName: "Adı", 
+            clmStartDate: "İlk Tarih", 
+            clmFinishDate : "Son Tarih",
+            clmCondTypeName : "Koşul Tipi",
+            clmCondItemCode : "Koşul Kodu",
+            clmCondItemName : "Koşul Adı",
+            clmCondBarcode : "Koşul Barkodu",
+            clmCondQuantity : "Koşul Miktar",
+            clmCondAmount : "Koşul Tutar",
+            clmAppTypeName : "Uygulama Tipi",
+            clmAppItemCode : "Uygulama Kodu",
+            clmAppItemName : "Uygulama Adı",
+            clmAppBarcode : "Uygulama Barkodu",
+            clmAppQuantity : "Uygulama Miktarı",
+            clmAppAmount : "Uygulama Tutarı",
         }
     },
     irs_01_001 : // "Alış İrsaliye Listesi"
@@ -6599,6 +6607,57 @@ export const langTr =
             clmZipcode : "POSTA  KODU",
             clmCountry : "ÜLKE",
         },
+    },
+    sip_04_001 : // "Sipariş Ayrıştırma" 
+    {
+        txtCustomerCode : "Cari",
+        validDepot : "Lütfen Depo Seçiniz",
+        ItemNamePlaceHolder :"Ürün Adının Tamamını yada İçinde Geçen Bir Hece Giriniz",
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        cmbDepot : 'Depo',
+        btnGet : 'Getir',
+        btnOrder : 'Sipariş Oluştur',
+        grdOrderList : 
+        {
+            clmCode: "Kodu",
+            clmName : "Adı",
+            clmQuantity : "Adet",
+            clmCustomer : "Cari",
+            clmPrice : "Fiyat"
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Onayla",
+            btn02: "Vazgeç",
+            msg: "Seçili Satırları İade Etmek İstediğinize Eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: " İade Evraklarınız Oluşturuldu..!",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgDublicateItem : 
+        {
+            title: " Dikkat",
+            btn01 : "Tamam",
+            msg : "Ürünü Birden Fazla Cari İçin Seçilmiş Lütfen Kontol Ediniz"
+        },
+        msgCustomerFound : 
+        {
+            title: " Dikkat",
+            btn01 : "Tamam",
+            msg : "Carisi Tanımlanmamış Ürünler Seçilemez. Lütfen Cari Tanımlayın"
+        }
     },
     cnt_01_001 : // "Alış Anlaşmaları Listesi"
     {
