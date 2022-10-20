@@ -576,4 +576,10 @@ export const langFr =
         btn01 : "Tamam",
         btn02 : "İptal"
     },
+    msgRePrint: //Bak
+    {
+        title : "Uyarı",
+        msg : "Fiş yazdırma sınırına ulaştınız !",
+        btn01 : "Tamam",
+    },
 }

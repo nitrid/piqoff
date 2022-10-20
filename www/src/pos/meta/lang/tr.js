@@ -568,8 +568,14 @@ export const langTr =
     msgPrintAlert: 
     {
         title : "Uyarı",
-        msg : "Fişi Yazdırmak İstermisiniz ?",
+        msg : "Fişi yazdırmak istermisiniz ?",
         btn01 : "Tamam",
         btn02 : "İptal"
+    },
+    msgRePrint: 
+    {
+        title : "Uyarı",
+        msg : "Fiş yazdırma sınırına ulaştınız !",
+        btn01 : "Tamam",
     },
 }
