@@ -383,7 +383,7 @@ export default class salesOrder extends React.Component
                         </Item>
                         <Item>
                             <Label text={this.t("popPrice.txtPopPriQuantity")} alignment="right" />
-                            <NdNumberBox id={"txtPopPriQuantity"} parent={this} simple={true} value="1">
+                            <NdNumberBox id={"txtPopPriQuantity"} parent={this} simple={true} value={1}>
                                 <Validator validationGroup={"frmPrice" + this.tabIndex}>
                                     <RequiredRule message="Miktar'ı boş geçemezsiniz !" />
                                     <RangeRule min={0.001} message={"Fiyat sıfırdan küçük olamaz !"} />

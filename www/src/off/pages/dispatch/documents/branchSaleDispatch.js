@@ -533,7 +533,7 @@ export default class branchSaleDispatch extends React.PureComponent
                     }
         
                     await dialog(tmpConfObj);
-                    await this.grdSlsDispatch.devGrid.deleteRow(pIndex)
+                    await this.grdSlsDispatch.devGrid.deleteRow(0)
                     return
                }
                else
@@ -560,7 +560,7 @@ export default class branchSaleDispatch extends React.PureComponent
                             this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
                             this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
                             this._calculateTotal()
-                            await this.grdSlsDispatch.devGrid.deleteRow(pIndex)
+                            await this.grdSlsDispatch.devGrid.deleteRow(0)
                             console.log(this.grdSlsInv)
                             console.log(this.docObj.docItems.dt())
                             if(this.checkCombine.value == true)
@@ -593,7 +593,7 @@ export default class branchSaleDispatch extends React.PureComponent
                     this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
                     this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
                     this._calculateTotal()
-                    await this.grdSlsDispatch.devGrid.deleteRow(pIndex)
+                    await this.grdSlsDispatch.devGrid.deleteRow(0)
                     return
                 }
             }
@@ -1807,13 +1807,13 @@ export default class branchSaleDispatch extends React.PureComponent
                                         <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.irs_02_002")} enabled={true} allowExportSelectedData={true} />
+                                        <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} defaultSortOrder="desc"/>
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsDispatch.clmCreateDate")} width={80} allowEditing={false}/>
                                         <Column dataField="CUSER_NAME" caption={this.t("grdSlsDispatch.clmCuser")} width={90} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdSlsDispatch.clmItemCode")} width={105} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdSlsDispatch.clmItemName")} width={260} />
                                         <Column dataField="ITEM_BARCODE" caption={this.t("grdSlsDispatch.clmBarcode")} width={115} allowEditing={false}/>
                                         <Column dataField="QUANTITY" caption={this.t("grdSlsDispatch.clmQuantity")} width={50} dataType={'number'}/>
-                                        <Column dataField="LINE_NO" caption={this.t("grdSlsDispatch.clmQuantity")} visible={false} width={50} dataType={'number'} defaultSortOrder="desc"/>
                                         <Column dataField="PRICE" caption={this.t("grdSlsDispatch.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
                                         <Column dataField="AMOUNT" caption={this.t("grdSlsDispatch.clmAmount")} width={90} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}}/>
                                         <Column dataField="DISCOUNT" caption={this.t("grdSlsDispatch.clmDiscount")} width={60} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>

@@ -416,7 +416,7 @@ export default class salesOrder extends React.PureComponent
                             this.docObj.docOrders.dt()[i].AMOUNT = parseFloat((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE).toFixed(9))
                             this.docObj.docOrders.dt()[i].TOTAL = parseFloat((((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE) - this.docObj.docOrders.dt()[i].DISCOUNT) + this.docObj.docOrders.dt()[i].VAT).toFixed(9))
                             this._calculateTotal()
-                            await this.grdSlsOrder.devGrid.deleteRow(pIndex)
+                            await this.grdSlsOrder.devGrid.deleteRow(0)
                             if(this.checkCombine.value == true)
                             {
                                 this.combineControl = false
@@ -446,7 +446,7 @@ export default class salesOrder extends React.PureComponent
                     this.docObj.docOrders.dt()[i].AMOUNT = parseFloat((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE).toFixed(9))
                     this.docObj.docOrders.dt()[i].TOTAL = parseFloat((((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE) - this.docObj.docOrders.dt()[i].DISCOUNT) + this.docObj.docOrders.dt()[i].VAT).toFixed(9))
                     this._calculateTotal()
-                    await this.grdSlsOrder.devGrid.deleteRow(pIndex)
+                    await this.grdSlsOrder.devGrid.deleteRow(0)
                     return
                 }
                
@@ -1749,6 +1749,7 @@ export default class salesOrder extends React.PureComponent
                                         <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.sip_02_002")} enabled={true} allowExportSelectedData={true} />
+                                        <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} defaultSortOrder="desc"/>
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsOrder.clmCreateDate")} width={80} allowEditing={false}/>
                                         <Column dataField="CUSER_NAME" caption={this.t("grdSlsOrder.clmCuser")} width={90} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdSlsOrder.clmItemCode")} width={105} editCellRender={this._cellRoleRender}/>

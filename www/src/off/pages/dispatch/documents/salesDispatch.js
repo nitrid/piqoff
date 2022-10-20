@@ -533,7 +533,7 @@ export default class salesDispatch extends React.PureComponent
                     }
         
                     await dialog(tmpConfObj);
-                    await this.grdSlsDispatch.devGrid.deleteRow(pIndex)
+                    await this.grdSlsDispatch.devGrid.deleteRow(0)
                     return
                }
                else
@@ -560,7 +560,7 @@ export default class salesDispatch extends React.PureComponent
                             this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
                             this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
                             this._calculateTotal()
-                            await this.grdSlsDispatch.devGrid.deleteRow(pIndex)
+                            await this.grdSlsDispatch.devGrid.deleteRow(0)
                             console.log(this.grdSlsInv)
                             console.log(this.docObj.docItems.dt())
                             if(this.checkCombine.value == true)
@@ -593,7 +593,7 @@ export default class salesDispatch extends React.PureComponent
                     this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
                     this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
                     this._calculateTotal()
-                    await this.grdSlsDispatch.devGrid.deleteRow(pIndex)
+                    await this.grdSlsDispatch.devGrid.deleteRow(0)
                     return
                 }
             }
@@ -1825,6 +1825,7 @@ export default class salesDispatch extends React.PureComponent
                                         <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.irs_02_002")} enabled={true} allowExportSelectedData={true} />
+                                        <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} defaultSortOrder="desc"/>
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsDispatch.clmCreateDate")} width={80} allowEditing={false}/>
                                         <Column dataField="CUSER_NAME" caption={this.t("grdSlsDispatch.clmCuser")} width={90} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdSlsDispatch.clmItemCode")} width={105} editCellRender={this._cellRoleRender}/>

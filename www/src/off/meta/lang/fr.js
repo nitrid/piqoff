@@ -4502,6 +4502,7 @@ export const langFr =
             clmName: "Nom", 
             clmGrpName: "Groupe", //BAK
             clmPrice : "Prix", //BAK
+            btnItem: "Promosyon Ürün Seçimi", //BAK
         },
         msgRef:
         {
@@ -6606,6 +6607,57 @@ export const langFr =
             clmZipcode : "Code postal",   // BAK
             clmCountry : "Pays",   // BAK
         },
+    },
+    sip_04_001 : // "Sipariş Ayrıştırma" // YENI EKLENDI KOMPLE BAK
+    {
+        txtCustomerCode : "Cari",
+        validDepot : "Lütfen Depo Seçiniz",
+        ItemNamePlaceHolder :"Ürün Adının Tamamını yada İçinde Geçen Bir Hece Giriniz",
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        cmbDepot : 'Depo',
+        btnGet : 'Getir',
+        btnOrder : 'Sipariş Oluştur',
+        grdOrderList : 
+        {
+            clmCode: "Kodu",
+            clmName : "Adı",
+            clmQuantity : "Adet",
+            clmCustomer : "Cari",
+            clmPrice : "Fiyat"
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Onayla",
+            btn02: "Vazgeç",
+            msg: "Seçili Satırları İade Etmek İstediğinize Eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: " İade Evraklarınız Oluşturuldu..!",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgDublicateItem : 
+        {
+            title: " Dikkat",
+            btn01 : "Tamam",
+            msg : "Ürünü Birden Fazla Cari İçin Seçilmiş Lütfen Kontol Ediniz"
+        },
+        msgCustomerFound : 
+        {
+            title: " Dikkat",
+            btn01 : "Tamam",
+            msg : "Carisi Tanımlanmamış Ürünler Seçilemez. Lütfen Cari Tanımlayın"
+        }
     },
     cnt_01_001 : // "Alış Anlaşmaları Listesi"
     {

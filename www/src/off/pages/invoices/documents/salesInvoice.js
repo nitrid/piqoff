@@ -442,7 +442,7 @@ export default class salesInvoice extends React.PureComponent
                     }
         
                     await dialog(tmpConfObj);
-                    await this.grdSlsInv.devGrid.deleteRow(pIndex)
+                    await this.grdSlsInv.devGrid.deleteRow(0)
                     return
                }
                else
@@ -468,7 +468,7 @@ export default class salesInvoice extends React.PureComponent
                             this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
                             this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
                             this._calculateTotal()
-                            await this.grdSlsInv.devGrid.deleteRow(pIndex)
+                            await this.grdSlsInv.devGrid.deleteRow(0)
                             console.log(this.grdSlsInv)
                             console.log(this.docObj.docItems.dt())
                             if(this.checkCombine.value == true)
@@ -501,7 +501,7 @@ export default class salesInvoice extends React.PureComponent
                     this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
                     this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
                     this._calculateTotal()
-                    await this.grdSlsInv.devGrid.deleteRow(pIndex)
+                    await this.grdSlsInv.devGrid.deleteRow(0)
                     return
                 }
             }
@@ -2030,6 +2030,7 @@ export default class salesInvoice extends React.PureComponent
                                         <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.ftr_02_002")} enabled={true} allowExportSelectedData={true} />
+                                        <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} defaultSortOrder="desc"/>
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsInv.clmCreateDate")} width={80} allowEditing={false}/>
                                         <Column dataField="CUSER_NAME" caption={this.t("grdSlsInv.clmCuser")} width={90} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdSlsInv.clmItemCode")} width={100} editCellRender={this._cellRoleRender}/>

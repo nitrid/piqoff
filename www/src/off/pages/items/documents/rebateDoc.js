@@ -355,7 +355,7 @@ export default class rebateDoc extends React.PureComponent
                     }
 
                     await dialog(tmpConfObj);
-                    await this.grdRebItems.devGrid.deleteRow(pIndex)
+                    await this.grdRebItems.devGrid.deleteRow(0)
                     return
                }
                else
@@ -379,7 +379,7 @@ export default class rebateDoc extends React.PureComponent
                         {
                             this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + 1
                             this._calculateTotal()
-                            await this.grdRebItems.devGrid.deleteRow(pIndex)
+                            await this.grdRebItems.devGrid.deleteRow(0)
                             if(this.checkCombine.value == true)
                             {
                                 this.combineControl = false
@@ -406,7 +406,7 @@ export default class rebateDoc extends React.PureComponent
                 {
                     this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + 1
                     this._calculateTotal()
-                    await this.grdRebItems.devGrid.deleteRow(pIndex)
+                    await this.grdRebItems.devGrid.deleteRow(0)
                     return
                 }
             }
@@ -1151,6 +1151,7 @@ export default class rebateDoc extends React.PureComponent
                                         <Scrolling mode="standard" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.stk_02_005")} enabled={true} allowExportSelectedData={true} />
+                                        <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} defaultSortOrder="desc"/>
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdRebItems.clmCreateDate")} width={150} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdRebItems.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdRebItems.clmItemName")} width={350} />

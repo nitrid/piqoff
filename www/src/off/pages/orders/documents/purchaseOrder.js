@@ -394,7 +394,7 @@ export default class purchaseOrder extends React.PureComponent
 
                 if(this.customerClear == true)
                 {
-                    await this.grdPurcOrders.devGrid.deleteRow(pIndex)
+                    await this.grdPurcOrders.devGrid.deleteRow(0)
                     return 
                 }
                 App.instance.setState({isExecute:false})
@@ -409,7 +409,7 @@ export default class purchaseOrder extends React.PureComponent
                     if(e == 'btn02')
                     {
                         tmpCustomerBtn = e
-                        await this.grdPurcOrders.devGrid.deleteRow(pIndex)
+                        await this.grdPurcOrders.devGrid.deleteRow(0)
                         if(this.checkCustomer.value == true)
                         {
                             this.customerClear = true
@@ -441,7 +441,7 @@ export default class purchaseOrder extends React.PureComponent
                             this.docObj.docOrders.dt()[i].AMOUNT = parseFloat((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE).toFixed(9))
                             this.docObj.docOrders.dt()[i].TOTAL = parseFloat((((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE) - this.docObj.docOrders.dt()[i].DISCOUNT) + this.docObj.docOrders.dt()[i].VAT).toFixed(9))
                             this._calculateTotal()
-                            await this.grdPurcOrders.devGrid.deleteRow(pIndex)
+                            await this.grdPurcOrders.devGrid.deleteRow(0)
                             if(this.checkCombine.value == true)
                             {
                                 this.combineControl = false
@@ -474,7 +474,7 @@ export default class purchaseOrder extends React.PureComponent
                     this.docObj.docOrders.dt()[i].TOTAL = parseFloat((((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE) - this.docObj.docOrders.dt()[i].DISCOUNT) + this.docObj.docOrders.dt()[i].VAT).toFixed(9))
                     this._calculateTotal()
                     
-                    await this.grdPurcOrders.devGrid.deleteRow(pIndex)
+                    await this.grdPurcOrders.devGrid.deleteRow(0)
                     return
                 }
             }
@@ -1831,6 +1831,7 @@ export default class purchaseOrder extends React.PureComponent
                                         <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.sip_02_001")} enabled={true} allowExportSelectedData={true} />
+                                        <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} defaultSortOrder="desc"/>
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcOrders.clmCreateDate")} width={80} allowEditing={false}/>
                                         <Column dataField="CUSER_NAME" caption={this.t("grdPurcOrders.clmCuser")} width={90} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdPurcOrders.clmItemCode")} width={105} editCellRender={this._cellRoleRender}/>

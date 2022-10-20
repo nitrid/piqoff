@@ -646,7 +646,7 @@ export default class labelPrinting extends React.PureComponent
                 let pResult = await dialog(tmpConfObj);
                 if(pResult == 'btn01')
                 {
-                    await this.grdLabelQueue.devGrid.deleteRow(pIndex)
+                    await this.grdLabelQueue.devGrid.deleteRow(0)
                     return
                 }
                 else

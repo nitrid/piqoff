@@ -446,6 +446,7 @@ export default class purchaseInvoice extends React.PureComponent
     }
     async addItem(pData,pIndex,pQuantity,pPrice,pDiscount,pDiscountPer,pVat)
     {
+        console.log(pIndex)
         App.instance.setState({isExecute:true})
         if(typeof pData.ITEM_TYPE == 'undefined')
         {
@@ -472,7 +473,7 @@ export default class purchaseInvoice extends React.PureComponent
                     let tmpCustomerBtn = ''
                     if(this.customerClear == true)
                     {
-                        await this.grdPurcInv.devGrid.deleteRow(pIndex)
+                        await this.grdPurcInv.devGrid.deleteRow(0)
                         return 
                     }
                     App.instance.setState({isExecute:false})
@@ -487,7 +488,7 @@ export default class purchaseInvoice extends React.PureComponent
                         if(e == 'btn02')
                         {
                             tmpCustomerBtn = e
-                            await this.grdPurcInv.devGrid.deleteRow(pIndex)
+                            await this.grdPurcInv.devGrid.deleteRow(0)
                             if(this.checkCustomer.value == true)
                             {
                                 this.customerClear = true
@@ -520,7 +521,7 @@ export default class purchaseInvoice extends React.PureComponent
                                 this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
                                 this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
                                 this._calculateTotal()
-                                await this.grdPurcInv.devGrid.deleteRow(pIndex)
+                                await this.grdPurcInv.devGrid.deleteRow(0)
                                 if(this.checkCombine.value == true)
                                 {
                                     this.combineControl = false
@@ -550,7 +551,7 @@ export default class purchaseInvoice extends React.PureComponent
                         this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
                         this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
                         this._calculateTotal()
-                        await this.grdPurcInv.devGrid.deleteRow(pIndex)
+                        await this.grdPurcInv.devGrid.deleteRow(0)
                         return
                     }
                 }
@@ -2414,6 +2415,7 @@ export default class purchaseInvoice extends React.PureComponent
                                         <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.ftr_02_001")} enabled={true} allowExportSelectedData={true} />
+                                        <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} defaultSortOrder="desc"/>
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcInv.clmCreateDate")} width={80} allowEditing={false} allowHeaderFiltering={false}/>
                                         <Column dataField="CUSER_NAME" caption={this.t("grdPurcInv.clmCuser")} width={90} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdPurcInv.clmItemCode")} width={100} editCellRender={this._cellRoleRender} allowHeaderFiltering={false}/>

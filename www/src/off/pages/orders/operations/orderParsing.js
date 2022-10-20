@@ -382,13 +382,11 @@ export default class rebateOperation extends React.PureComponent
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            {/* <NdButton text={this.t("btnInvoice")} type="default" width="100%" onClick={()=>{this._btnSave(1)}}></NdButton> */}
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnDispatch")} type="default" width="100%" onClick={()=>{this._btnSave(0)}}></NdButton>
+                            <NdButton text={this.t("btnOrder")} type="default" width="100%" onClick={()=>{this._btnSave(0)}}></NdButton>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -405,13 +403,11 @@ export default class rebateOperation extends React.PureComponent
                             >                            
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
-
                                 <Column dataField="ITEM_CODE" caption={this.t("grdOrderList.clmCode")} visible={true} width={200}/> 
                                 <Column dataField="ITEM_NAME" caption={this.t("grdOrderList.clmName")} visible={true} width={300}/> 
                                 <Column dataField="QUANTITY" caption={this.t("grdOrderList.clmQuantity")} visible={true}/> 
                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdOrderList.clmCustomer")} visible={true}/> 
                                 <Column dataField="CUSTOMER_PRICE" caption={this.t("grdOrderList.clmPrice")} visible={true}/> 
-                                          
                             </NdGrid>
                         </div>
                     </div>
