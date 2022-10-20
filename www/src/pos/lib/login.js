@@ -188,17 +188,17 @@ export default class Login extends React.Component
                             <div className="dx-field">
                                 <div className="dx-field-label">{this.lang.t("txtUser")}</div>
                                 <div className="dx-field-value">
-                                    <NdTextBox id="Kullanici" parent={this} simple={true} showClearButton={true} height='fit-content' valueChangeEvent="keyup" onValueChanging={(e)=>{this.keyboard.setInput(e)}}  
-                                    onFocusIn={()=>{this.keyboard.inputName = "Kullanici"}} placeholder={this.lang.t("txtUser")}
+                                    <NdTextBox id="Kullanici" parent={this} simple={true} showClearButton={true} height='fit-content' valueChangeEvent="keyup" onValueChanging={(e)=>{this.keyboard.setInput(e)}}       //LANGBAK
+                                    onFocusIn={()=>{this.keyboard.inputName = "Kullanici"}} placeholder={this.lang.t("txtUser")}     //LANGBAK
                                     />
                                 </div>
                             </div>
                             <div className="dx-field">
                                 <div className="dx-field-label">{this.lang.t("txtPass")}</div>
                                 <div className="dx-field-value">
-                                    <NdTextBox id="Sifre" parent={this} mode="password" showClearButton={true} height='fit-content' valueChangeEvent="keyup" onValueChanging={(e)=>{this.keyboard.setInput(e)}} 
+                                    <NdTextBox id="Sifre" parent={this} mode="password" showClearButton={true} height='fit-content' valueChangeEvent="keyup" onValueChanging={(e)=>{this.keyboard.setInput(e)}}     //LANGBAK
                                     onEnterKey={this.onLoginClick}
-                                    onFocusIn={()=>{this.keyboard.inputName = "Sifre"}} placeholder={this.lang.t("txtPass")}
+                                    onFocusIn={()=>{this.keyboard.inputName = "Sifre"}} placeholder={this.lang.t("txtPass")}     //LANGBAK
                                     />
                                 </div>
                             </div>
@@ -264,7 +264,7 @@ export default class Login extends React.Component
                                 showBorders={true}
                                 width={'50%'}
                                 height={'90%'}
-                                title="Kullanıcı Listesi"
+                                title="Kullanıcı Listesi"      //LANGBAK
                                 >
                                     <Column dataField="CODE" caption="CODE" width={150} defaultSortOrder="asc"/>
                                     <Column dataField="NAME" caption="NAME" width={150} defaultSortOrder="asc" />                            

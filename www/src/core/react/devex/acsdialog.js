@@ -21,7 +21,7 @@ export default class NdAcsDialog extends NdBase
     {
         let tmpQuery = ""
         this[this.props.id].show();        
-        this[this.props.id].setTitle(pType == 0 ? "Yetkili şifresini giriniz !" : "Şifrenizi giriniz !")
+        this[this.props.id].setTitle(pType == 0 ? "Yetkili şifresini giriniz !" : "Şifrenizi giriniz !") // LANGBAK
         
         return new Promise(async resolve => 
         {
@@ -44,9 +44,9 @@ export default class NdAcsDialog extends NdBase
                     {
                         let tmpConfObj =
                         {
-                            id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                            button:[{id:"btn01",caption:"Tamam",location:'before'}],
-                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Geçersiz şifre !"}</div>)
+                            id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',   // LANGBAK
+                            button:[{id:"btn01",caption:"Tamam",location:'before'}],   // LANGBAK
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Geçersiz şifre !"}</div>)   // LANGBAK
                         }
                         await dialog(tmpConfObj);
                         this[this.props.id].hide()
@@ -99,9 +99,9 @@ export default class NdAcsDialog extends NdBase
                 {
                     let tmpConfObj =
                     {
-                        id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',
-                        button:[{id:"btn01",caption:"Tamam",location:'before'}],
-                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Geçersiz şifre !"}</div>)
+                        id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',   // LANGBAK
+                        button:[{id:"btn01",caption:"Tamam",location:'before'}],   // LANGBAK
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Geçersiz şifre !"}</div>)   // LANGBAK
                     }
                     await dialog(tmpConfObj);
                     this[this.props.id].hide()

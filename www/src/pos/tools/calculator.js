@@ -31,7 +31,7 @@ export default class NbCalculator extends NbBase
                 visible={false}                        
                 showCloseButton={true}
                 showTitle={true}
-                title={"Hesap Makinesi"}
+                title={"Hesap Makinesi"}   // LANGBAK
                 container={"#root"} 
                 width={'600'}
                 height={'585'}
