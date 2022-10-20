@@ -875,9 +875,7 @@ export default class outageDoc extends React.PureComponent
                                         <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150}/>
                                         <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={300} />
                                         <Column dataField="DOC_DATE_CONVERT" caption={this.t("pg_Docs.clmDate")} width={300} />
-                                        <Column dataField="OUTPUT_NAME" caption={this.t("pg_Docs.clmOutputName")} width={300} />
-                                        <Column dataField="DOC_DATE_CONVERT" caption={this.t("pg_Docs.clmDocDate")} width={300} />
-                                        
+                                        <Column dataField="OUTPUT_NAME" caption={this.t("pg_Docs.clmOutputName")} width={300} />                                        
                                     </NdPopGrid>
                                 </Item>
                                  {/* Boş */}
@@ -1261,6 +1259,7 @@ export default class outageDoc extends React.PureComponent
                                         <Scrolling mode="standart"/>
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.stk_02_003")} enabled={true} allowExportSelectedData={true} />
+                                        <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} defaultSortOrder="desc"/>
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdOutwasItems.clmCreateDate")} width={200} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdOutwasItems.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdOutwasItems.clmItemName")} width={300} />

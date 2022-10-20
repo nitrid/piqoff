@@ -130,15 +130,6 @@ export default class endOfDay extends React.PureComponent
       {
         this.popOpenTike.show()
       }
-      // let tmpQuery = 
-      // {
-      //     query : "SELECT   " +
-      //     param : [],
-      //     value : [this.dtDocDate.value,this.cmbSafe.value]
-      // }
-
-      await this.grdAdvance.dataRefresh({source:this.docObj.docCustomer.dt('DOC_CUSTOMER')});
-      
     }
     async btnGetDetail(pGuid)
     {
@@ -410,7 +401,7 @@ export default class endOfDay extends React.PureComponent
           <EmptyItem/>
           <Item>
               <Label text={this.t("txtCash")} alignment="right" />
-              <NdNumberBox id="txtCash" parent={this} simple={true} value=''
+              <NdNumberBox id="txtCash" parent={this} simple={true} 
               param={this.param.filter({ELEMENT:'txtCash',USERS:this.user.CODE})}
               access={this.access.filter({ELEMENT:'txtCash',USERS:this.user.CODE})}
               >
@@ -426,7 +417,7 @@ export default class endOfDay extends React.PureComponent
           <EmptyItem/>
           <Item>
               <Label text={this.t("txtCreditCard")} alignment="right" />
-              <NdNumberBox id="txtCreditCard" parent={this} simple={true}  value=''
+              <NdNumberBox id="txtCreditCard" parent={this} simple={true}  
               param={this.param.filter({ELEMENT:'txtCreditCard',USERS:this.user.CODE})}
               access={this.access.filter({ELEMENT:'txtCreditCard',USERS:this.user.CODE})}
               >
@@ -458,7 +449,7 @@ export default class endOfDay extends React.PureComponent
           <EmptyItem/>
           <Item>
               <Label text={this.t("txtRestorant")} alignment="right" />
-              <NdNumberBox id="txtRestorant" parent={this} simple={true}  value=''
+              <NdNumberBox id="txtRestorant" parent={this} simple={true}
               param={this.param.filter({ELEMENT:'txtRestorant',USERS:this.user.CODE})}
               access={this.access.filter({ELEMENT:'txtRestorant',USERS:this.user.CODE})}
               >
