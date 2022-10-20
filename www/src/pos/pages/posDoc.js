@@ -4544,7 +4544,20 @@ export default class posDoc extends React.PureComponent
                                         {
                                             let tmpLastPos = new datatable();
                                             tmpLastPos.import(this.grdLastPos.devGrid.getSelectedRowKeys())
-                                            
+                                            console.log(tmpLastPos[0])
+                                            if(tmpLastPos.length > 0)
+                                            {
+                                                let tmpQuery = 
+                                                {
+                                                    query : "SELECT COUNT(TAG) AS PRINT_COUNT FROM POS_EXTRA WHERE POS_GUID = @POS_GUID AND TAG = @TAG", 
+                                                    param : ['POS_GUID:string|50','TAG:string|25'],
+                                                    value : [tmpLastPos[0].GUID,"ROW DELETE"]
+                                                }
+                                                let tmpPrintCount = (await this.core.sql.execute(tmpQuery)).result.recordset[0].PRINT_COUNT
+
+                                                console.log(tmpPrintCount)
+                                            }
+
                                             let tmpData = 
                                             {
                                                 pos : tmpLastPos,
