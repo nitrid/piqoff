@@ -327,12 +327,12 @@ export default class NbPluButtonGrp extends NbBase
                     {
                         id:'msgRef',
                         showTitle:true,
-                        title:"Dikkat",
+                        title:"Dikkat",   // LANGBAK
                         showCloseButton:true,
                         width:'500px',
                         height:'200px',
-                        button:[{id:"btn01",caption:"Düzenle",location:'before'},{id:"btn02",caption:"Sil",location:'after'}],
-                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Buton üzerinde ne yapmak istiyorsunuz ?"}</div>)
+                        button:[{id:"btn01",caption:"Düzenle",location:'before'},{id:"btn02",caption:"Sil",location:'after'}],   // LANGBAK
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Buton üzerinde ne yapmak istiyorsunuz ?"}</div>)   // LANGBAK
                     }
                     let pResult = await dialog(tmpConfObj);
                     if(typeof pResult == 'undefined')
@@ -365,12 +365,12 @@ export default class NbPluButtonGrp extends NbBase
                     {
                         id:'msgRef',
                         showTitle:true,
-                        title:"Dikkat",
+                        title:"Dikkat",   // LANGBAK
                         showCloseButton:true,
                         width:'500px',
                         height:'200px',
-                        button:[{id:"btn01",caption:"Düzenle",location:'before'},{id:"btn02",caption:"Sil",location:'after'}],
-                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Buton üzerinde ne yapmak istiyorsunuz ?"}</div>)
+                        button:[{id:"btn01",caption:"Düzenle",location:'before'},{id:"btn02",caption:"Sil",location:'after'}],   // LANGBAK
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Buton üzerinde ne yapmak istiyorsunuz ?"}</div>)   // LANGBAK
                     }
                     
                     let pResult = await dialog(tmpConfObj);
@@ -394,7 +394,7 @@ export default class NbPluButtonGrp extends NbBase
                     }
                 }
 
-                this["popSelect" + this.props.id].setTitle("Stok Seçim")
+                this["popSelect" + this.props.id].setTitle("Stok Seçim")   // LANGBAK
                 this["popSelect" + this.props.id].data = 
                 {
                     source:
@@ -418,12 +418,12 @@ export default class NbPluButtonGrp extends NbBase
                     {
                         id:'msgRef',
                         showTitle:true,
-                        title:"Dikkat",
+                        title:"Dikkat",   // LANGBAK
                         showCloseButton:true,
                         width:'500px',
                         height:'200px',
-                        button:[{id:"btn01",caption:"Düzenle",location:'before'},{id:"btn02",caption:"Sil",location:'after'}],
-                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Buton üzerinde ne yapmak istiyorsunuz ?"}</div>)
+                        button:[{id:"btn01",caption:"Düzenle",location:'before'},{id:"btn02",caption:"Sil",location:'after'}],   // LANGBAK
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Buton üzerinde ne yapmak istiyorsunuz ?"}</div>)   // LANGBAK
                     }
                     
                     let pResult = await dialog(tmpConfObj);
@@ -446,7 +446,7 @@ export default class NbPluButtonGrp extends NbBase
                         return;                        
                     }
                 }
-                this["popSelect" + this.props.id].setTitle("Ürün Grubu Seçim")
+                this["popSelect" + this.props.id].setTitle("Ürün Grubu Seçim")   // LANGBAK
                 this["popSelect" + this.props.id].data = 
                 {
                     source:
@@ -592,7 +592,7 @@ export default class NbPluButtonGrp extends NbBase
                     visible={false}                        
                     showCloseButton={true}
                     showTitle={true}
-                    title={"Plu Adı"}
+                    title={"Plu Adı"}   // LANGBAK
                     container={"#root"} 
                     width={"700"}
                     height={"460"}
