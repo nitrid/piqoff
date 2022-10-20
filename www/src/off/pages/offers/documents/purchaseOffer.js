@@ -385,7 +385,7 @@ export default class purchaseoffer extends React.PureComponent
                 let tmpCustomerBtn = ''
                 if(this.customerClear == true)
                 {
-                    await this.grdPurcoffers.devGrid.deleteRow(pIndex)
+                    await this.grdPurcoffers.devGrid.deleteRow(0)
                     return 
                 }
                 App.instance.setState({isExecute:false})
@@ -401,7 +401,7 @@ export default class purchaseoffer extends React.PureComponent
                     if(e == 'btn02')
                     {
                         tmpCustomerBtn = e
-                        await this.grdPurcoffers.devGrid.deleteRow(pIndex)
+                        await this.grdPurcoffers.devGrid.deleteRow(0)
                         if(this.checkCustomer.value == true)
                         {
                             this.customerClear = true
@@ -434,7 +434,7 @@ export default class purchaseoffer extends React.PureComponent
                             this.docObj.docOffers.dt()[i].AMOUNT = parseFloat((this.docObj.docOffers.dt()[i].QUANTITY * this.docObj.docOffers.dt()[i].PRICE).toFixed(9))
                             this.docObj.docOffers.dt()[i].TOTAL = parseFloat((((this.docObj.docOffers.dt()[i].QUANTITY * this.docObj.docOffers.dt()[i].PRICE) - this.docObj.docOffers.dt()[i].DISCOUNT) + this.docObj.docOffers.dt()[i].VAT).toFixed(9))
                             this._calculateTotal()
-                            await this.grdPurcoffers.devGrid.deleteRow(pIndex)
+                            await this.grdPurcoffers.devGrid.deleteRow(0)
                             if(this.checkCombine.value == true)
                             {
                                 this.combineControl = false
@@ -464,7 +464,7 @@ export default class purchaseoffer extends React.PureComponent
                     this.docObj.docOffers.dt()[i].AMOUNT = parseFloat((this.docObj.docOffers.dt()[i].QUANTITY * this.docObj.docOffers.dt()[i].PRICE).toFixed(9))
                     this.docObj.docOffers.dt()[i].TOTAL = parseFloat((((this.docObj.docOffers.dt()[i].QUANTITY * this.docObj.docOffers.dt()[i].PRICE) - this.docObj.docOffers.dt()[i].DISCOUNT) + this.docObj.docOffers.dt()[i].VAT).toFixed(9))
                     this._calculateTotal()
-                    await this.grdPurcoffers.devGrid.deleteRow(pIndex)
+                    await this.grdPurcoffers.devGrid.deleteRow(0)
                     return
                 }
                

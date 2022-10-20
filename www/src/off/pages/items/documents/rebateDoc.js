@@ -355,7 +355,7 @@ export default class rebateDoc extends React.PureComponent
                     }
 
                     await dialog(tmpConfObj);
-                    await this.grdRebItems.devGrid.deleteRow(pIndex)
+                    await this.grdRebItems.devGrid.deleteRow(0)
                     return
                }
                else
@@ -379,7 +379,7 @@ export default class rebateDoc extends React.PureComponent
                         {
                             this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + 1
                             this._calculateTotal()
-                            await this.grdRebItems.devGrid.deleteRow(pIndex)
+                            await this.grdRebItems.devGrid.deleteRow(0)
                             if(this.checkCombine.value == true)
                             {
                                 this.combineControl = false
@@ -406,7 +406,7 @@ export default class rebateDoc extends React.PureComponent
                 {
                     this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + 1
                     this._calculateTotal()
-                    await this.grdRebItems.devGrid.deleteRow(pIndex)
+                    await this.grdRebItems.devGrid.deleteRow(0)
                     return
                 }
             }

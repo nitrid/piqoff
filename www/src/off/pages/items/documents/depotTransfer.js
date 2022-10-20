@@ -362,7 +362,7 @@ export default class depotTransfer extends React.PureComponent
                     }
         
                     await dialog(tmpConfObj);
-                    await this.grdTrnsfItems.devGrid.deleteRow(pIndex)
+                    await this.grdTrnsfItems.devGrid.deleteRow(0)
                     return
                }
                else
@@ -386,7 +386,7 @@ export default class depotTransfer extends React.PureComponent
                         {
                             this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + 1
                             this._calculateTotal()
-                            await this.grdTrnsfItems.devGrid.deleteRow(pIndex)
+                            await this.grdTrnsfItems.devGrid.deleteRow(0)
                             if(this.checkCombine.value == true)
                             {
                                 this.combineControl = false
@@ -413,7 +413,7 @@ export default class depotTransfer extends React.PureComponent
                 {
                     this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + 1
                     this._calculateTotal()
-                    await this.grdTrnsfItems.devGrid.deleteRow(pIndex)
+                    await this.grdTrnsfItems.devGrid.deleteRow(0)
                     return
                 }
                

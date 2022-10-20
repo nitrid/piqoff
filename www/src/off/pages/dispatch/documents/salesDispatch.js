@@ -533,7 +533,7 @@ export default class salesDispatch extends React.PureComponent
                     }
         
                     await dialog(tmpConfObj);
-                    await this.grdSlsDispatch.devGrid.deleteRow(pIndex)
+                    await this.grdSlsDispatch.devGrid.deleteRow(0)
                     return
                }
                else
@@ -560,7 +560,7 @@ export default class salesDispatch extends React.PureComponent
                             this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
                             this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
                             this._calculateTotal()
-                            await this.grdSlsDispatch.devGrid.deleteRow(pIndex)
+                            await this.grdSlsDispatch.devGrid.deleteRow(0)
                             console.log(this.grdSlsInv)
                             console.log(this.docObj.docItems.dt())
                             if(this.checkCombine.value == true)
@@ -593,7 +593,7 @@ export default class salesDispatch extends React.PureComponent
                     this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
                     this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
                     this._calculateTotal()
-                    await this.grdSlsDispatch.devGrid.deleteRow(pIndex)
+                    await this.grdSlsDispatch.devGrid.deleteRow(0)
                     return
                 }
             }
