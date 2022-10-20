@@ -1638,7 +1638,7 @@ export class servicesItemCls
             CODE : '',
             NAME : '',
             VAT : 0,
-            STATUS : 1,
+            STATUS : true,
         }
 
         this._initDs();
