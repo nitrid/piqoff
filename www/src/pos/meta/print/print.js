@@ -66,7 +66,12 @@ export function print()
         ()=>
         {
             let tmpArr = []
-            if(data.pospay.where({TYPE:0}).length > 0 && data.pos[0].TYPE == 1)
+            if(data.pos[0].TYPE == 0)
+            {
+                tmpArr.push({font:"b",style:"b",size : [1,1],align:"ct",data:"TICKET DE VENTE"})
+                tmpArr.push({font:"b",style:"b",align:"ct",data: " ".space(64)})
+            }
+            else if(data.pospay.where({TYPE:0}).length > 0 && data.pos[0].TYPE == 1)
             {
                 tmpArr.push({font:"b",style:"b",size : [1,1],align:"ct",data:"REMBOURSEMENT"})
                 tmpArr.push({font:"b",style:"b",align:"ct",data: " ".space(64)})
