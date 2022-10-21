@@ -398,6 +398,7 @@ export function print()
         ()=>{return {font:"b",style:"b",align:"ct",data:"AUCUN REMBOURSEMENT ESPECES NE SERA EFFECTUE"}},
         ()=>{return {font:"b",style:"b",align:"ct",data:"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"}},
         ()=>{return {font:"b",style:"b",align:"ct",data:"Merci de votre fidelite a tres bientot ..."}},
+        ()=>{return {font:"b",style:"b",align:"ct",data:data.pos[0].CERTIFICATE}},
         ()=>{return {font:"b",style:"b",align:"ct",data:"Nombre d'impression " + data.special.reprint}},
         ()=>{return {font:"b",style:"b",align:"ct",data:" "}},
     ]
