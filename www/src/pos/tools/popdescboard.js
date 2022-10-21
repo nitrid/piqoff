@@ -132,7 +132,7 @@ export default class NbPopDescboard extends NbBase
         }
         this[this.props.id].hide()
 
-        if(typeof this.awaitClick != undefined)
+        if(typeof this.awaitClick != 'undefined')
         {
             this.awaitClick(true)
         }
