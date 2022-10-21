@@ -25,6 +25,8 @@ import Pos from '../pages/posDoc.js'
 import transferCls from './transfer.js'
 import NdDialog,{dialog} from '../../core/react/devex/dialog';
 
+import * as appInfo from '../../../package.json'
+
 export default class App extends React.Component
 {
     static instance = null;
@@ -113,6 +115,7 @@ export default class App extends React.Component
         
         this.core = new core(io(tmpHost,{timeout:100000,transports : ['websocket']}));
         this.transfer = new transferCls()
+        this.core.appInfo = appInfo
 
         this.textValueChanged = this.textValueChanged.bind(this)
         

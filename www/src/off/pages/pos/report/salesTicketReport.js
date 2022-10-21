@@ -635,7 +635,7 @@ export default class salesOrdList extends React.PureComponent
                         visible={false}                        
                         showCloseButton={true}
                         showTitle={true}
-                        title={this.lang.t("popLastTotal.title")}
+                        title={this.t("popLastTotal.title")}
                         container={"#root"} 
                         width={"600"}
                         height={"700"}

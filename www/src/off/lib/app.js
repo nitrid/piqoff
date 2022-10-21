@@ -37,6 +37,7 @@ import Login from './login.js'
 import NdDialog,{dialog} from '../../core/react/devex/dialog';
 import IdleTimer from 'react-idle-timer'
 
+import * as appInfo from '../../../package.json'
 export default class App extends React.PureComponent
 {
     static instance = null;
@@ -52,9 +53,8 @@ export default class App extends React.PureComponent
         i18n.changeLanguage(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'))
         this.lang = i18n;  
         moment.locale(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'));
-
+        
         this.UserChange = this.UserChange.bind(this)
-
                 
         this.style =
         {
@@ -155,11 +155,11 @@ export default class App extends React.PureComponent
             changeUser : "",
             changePass : ""
         }
-        
-        
+                
         this.core = new core(io(window.location.origin,{timeout:100000,transports : ['websocket']}));
         this.textValueChanged = this.textValueChanged.bind(this)
         this.onDbClick = this.onDbClick.bind(this)
+        this.core.appInfo = appInfo
 
         if(!App.instance)
         {

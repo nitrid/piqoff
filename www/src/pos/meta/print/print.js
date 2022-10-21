@@ -5,7 +5,7 @@ import moment from "moment";
 //data.special.type = 'Fatura'
 //data.special.safe = 'Kasa Kodu'
 //data.special.ticketCount = 'Günlük Ticket Sayısı'
-//data.special.reprint = 'true' Tekrar yazdırma
+//data.special.reprint = 1 Tekrar yazdırma sayısı
 //data.special.repas = 'TxtRepasMiktar'
 //data.special.customerUsePoint = 'Müşteri Kullanılan Puanı'
 //data.special.customerPoint = 'Müşteri Puanı'
@@ -50,14 +50,14 @@ export function print()
             return tmpArr.length > 0 ? tmpArr : undefined
         },
         ()=>{return {font:"b",align:"lt",data:(moment(new Date()).locale('fr').format('dddd') + " " + moment(new Date()).format("DD.MM.YYYY")).space(59) + (moment(new Date()).format("LTS")).space(5)}},
-        ()=>{return {font:"b",align:"lt",data:("Caissier: " + data.pos[0].CUSER).space(34,'e') + ("Caisse: " + data.special.safe).space(30,'s')}},
+        ()=>{return {font:"b",align:"lt",data:("Caissier: " + data.pos[0].CUSER).space(34,'e') + ("Caisse: " + data.pos[0].DEVICE).space(30,'s')}},
         //FIS NO BARKODU
         ()=>{return {align:"ct",barcode:data.pos[0].GUID.substring(19,36),options:{width: 1,height:40,position:'OFF'}}},
         ()=>{return {font:"a",style:"b",align:"ct",data:"****** Numero de Ticket De Caisse ******"}},
         ()=>{return {font:"b",align:"lt",data:" ".space(64)}},
         ()=>
         {
-            if(data.special.type == 'Fatura' || data.special.reprint)
+            if(data.special.type == 'Fatura' || data.special.reprint > 1)
             {
                 return {font:"b",style:"b",align:"ct",data: "DUPLICATA"}
             }   
@@ -398,6 +398,7 @@ export function print()
         ()=>{return {font:"b",style:"b",align:"ct",data:"AUCUN REMBOURSEMENT ESPECES NE SERA EFFECTUE"}},
         ()=>{return {font:"b",style:"b",align:"ct",data:"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"}},
         ()=>{return {font:"b",style:"b",align:"ct",data:"Merci de votre fidelite a tres bientot ..."}},
+        ()=>{return {font:"b",style:"b",align:"ct",data:"Nombre d'impression " + data.special.reprint}},
         ()=>{return {font:"b",style:"b",align:"ct",data:" "}},
     ]
 }
