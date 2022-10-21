@@ -1222,6 +1222,22 @@ export default class posDoc extends React.PureComponent
                 //******************************** */
                 if(typeof pPrint == 'undefined' || pPrint)
                 {
+                    //POS_EXTRA TABLOSUNA YAZDIRMA BİLDİRİMİ GÖNDERİLİYOR
+                    let tmpInsertQuery = 
+                    {
+                        query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
+                                "@CUSER = @PCUSER, " + 
+                                "@TAG = @PTAG, " +
+                                "@POS_GUID = @PPOS_GUID, " +
+                                "@LINE_GUID = @PLINE_GUID, " +
+                                "@DATA =@PDATA, " +
+                                "@DESCRIPTION = @PDESCRIPTION ", 
+                        param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|50','PDESCRIPTION:string|max'],
+                        value : [tmpLastPos[0].CUSER,"REPRINT",tmpLastPos[0].GUID,"00000000-0000-0000-0000-000000000000","",""]
+                    }
+
+                    await this.core.sql.execute(tmpInsertQuery)
+                    //***************************************************/
                     let tmpData = 
                     {
                         pos : this.posObj.dt(),
@@ -4625,7 +4641,7 @@ export default class posDoc extends React.PureComponent
                                                             {
                                                                 type : 'Fis',
                                                                 ticketCount : 0,
-                                                                reprint : tmpPrintCount + 1,
+                                                                reprint : tmpPrintCount,
                                                                 repas : 0,
                                                                 customerUsePoint : Math.floor(tmpLastPos[0].LOYALTY * 100),
                                                                 customerPoint : (tmpLastPos[0].CUSTOMER_POINT + Math.floor(tmpLastPos[0].LOYALTY * 100)) - Math.floor(tmpLastPos[0].TOTAL),
