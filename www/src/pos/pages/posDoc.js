@@ -1233,7 +1233,7 @@ export default class posDoc extends React.PureComponent
                                 "@DATA =@PDATA, " +
                                 "@DESCRIPTION = @PDESCRIPTION ", 
                         param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|50','PDESCRIPTION:string|max'],
-                        value : [tmpLastPos[0].CUSER,"REPRINT",tmpLastPos[0].GUID,"00000000-0000-0000-0000-000000000000","",""]
+                        value : [this.posObj.dt()[0].CUSER,"REPRINT",this.posObj.dt()[0].GUID,"00000000-0000-0000-0000-000000000000","",""]
                     }
 
                     await this.core.sql.execute(tmpInsertQuery)
@@ -1247,7 +1247,6 @@ export default class posDoc extends React.PureComponent
                         special : 
                         {
                             type: 'Fis',
-                            safe: this.posObj.dt()[this.posObj.dt().length - 1].DEVICE,
                             ticketCount:0,
                             reprint: 1,
                             repas: 0,
