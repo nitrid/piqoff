@@ -28,7 +28,7 @@ export function print()
         ()=>{return {font:"a",style:"b",align:"ct",data:""}},
         // ÜST BİLGİ
         ()=>{return {font:"a",style:"b",align:"ct",data:"ZAC HECKENWALD"}},
-        ()=>{return {font:"a",style:"b",align:"ct",data:"57740 LONGEVILLE-LES-ST-AVOLD"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data:"57740 LONGEVILLE-LES-ST-AVOLD FRANCE"}},
         ()=>{return {font:"a",style:"b",align:"ct",data:"Tel : 03 87 91 00 32"}},
         ()=>{return {font:"a",style:"b",align:"ct",data:"longeville@prodorplus.fr"}},
         ()=>{return {font:"a",style:"b",align:"ct",data:"www.prodorplus.fr"}},
