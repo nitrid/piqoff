@@ -4625,7 +4625,7 @@ export default class posDoc extends React.PureComponent
                                                             {
                                                                 type : 'Fis',
                                                                 ticketCount : 0,
-                                                                reprint : tmpPrintCount,
+                                                                reprint : tmpPrintCount + 1,
                                                                 repas : 0,
                                                                 customerUsePoint : Math.floor(tmpLastPos[0].LOYALTY * 100),
                                                                 customerPoint : (tmpLastPos[0].CUSTOMER_POINT + Math.floor(tmpLastPos[0].LOYALTY * 100)) - Math.floor(tmpLastPos[0].TOTAL),
