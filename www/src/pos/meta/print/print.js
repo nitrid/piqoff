@@ -28,10 +28,12 @@ export function print()
         ()=>{return {font:"a",style:"b",align:"ct",data:""}},
         // ÜST BİLGİ
         ()=>{return {font:"a",style:"b",align:"ct",data:"7 ALLEE DU MIDI"}},
-        ()=>{return {font:"a",style:"b",align:"ct",data:"54270 ESSEY LES NANCY"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data:"54270 ESSEY LES NANCY FRANCE"}},
         ()=>{return {font:"a",style:"b",align:"ct",data:"Tel : 03 83 93 33 07"}},
         ()=>{return {font:"a",style:"b",align:"ct",data:"nancy@prodorplus.fr"}},
         ()=>{return {font:"a",style:"b",align:"ct",data:"www.prodorplus.fr"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data:"Siret 88 533 969 700 017 - APE 4722Z"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data:"Nr. TVA FR23885339697"}},
         ()=>
         {       
             let tmpArr = []
