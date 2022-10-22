@@ -2040,6 +2040,21 @@ export default class purchaseInvoice extends React.PureComponent
                                     >
                                     </NdTextBox>
                                 </Item>
+                                {/* Vade Tarih */}
+                                <Item>
+                                    <Label text={this.t("dtExpDate")} alignment="right" />
+                                    <NdDatePicker simple={true}  parent={this} id={"dtExpDate"}
+                                    dt={{data:this.docObj.docCustomer.dt('DOC_CUSTOMER'),field:"EXPIRY_DATE"}}
+                                    onValueChanged={(async()=>
+                                    {
+                                        
+                                    }).bind(this)}
+                                    >
+                                        <Validator validationGroup={"frmPurcInv"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validDocDate")} />
+                                        </Validator> 
+                                    </NdDatePicker>
+                                </Item>
                             </Form>
                         </div>
                     </div>                    
@@ -2653,7 +2668,13 @@ export default class purchaseInvoice extends React.PureComponent
                                     <div className="col-12">
                                         <Form colCount={4} parent={this} id={"frmPurcInv"  + this.tabIndex}>
                                             {/* Ödeme Toplam */}
-                                            <EmptyItem colSpan={3}/>
+                                            <EmptyItem colSpan={2}/>
+                                            <Item>
+                                            <Label text={this.t("txtExpFee")} alignment="right" />
+                                                <NdNumberBox id="txtExpFee" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} dt={{data:this.docObj.docCustomer.dt('DOC_CUSTOMER'),field:"EXPIRY_FEE"}}
+                                                maxLength={32}
+                                                ></NdNumberBox>
+                                            </Item>
                                             <Item>
                                             <Label text={this.t("txtPayTotal")} alignment="right" />
                                                 <NdTextBox id="txtPayTotal" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} readOnly={true} dt={{data:this.paymentObj.dt('DOC'),field:"TOTAL"}}

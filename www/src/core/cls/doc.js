@@ -448,8 +448,9 @@ export class docCustomerCls
             AMOUNT : 0,
             DESCRIPTION : '',
             INVOICE_GUID : '00000000-0000-0000-0000-000000000000',
-            INVOICE_REF : ''
-
+            INVOICE_REF : '',
+            EXPIRY_DATE :  moment(new Date()).format("YYYY-MM-DD"),
+            EXPIRY_FEE : 0
         }
 
         this._initDs();
@@ -481,10 +482,12 @@ export class docCustomerCls
                     "@PAY_TYPE = @PPAY_TYPE, " +
                     "@AMOUNT = @PAMOUNT, "+
                     "@DESCRIPTION  = @PDESCRIPTION, " +
-                    "@INVOICE_GUID = @PINVOICE_GUID ",
+                    "@INVOICE_GUID = @PINVOICE_GUID, "+
+                    "@EXPIRY_DATE = @PEXPIRY_DATE, "+
+                    "@EXPIRY_FEE = @PEXPIRY_FEE ",
             param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PPAY_TYPE:int','PAMOUNT:float','PDESCRIPTION:string|100','PINVOICE_GUID:string|50'],
-            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','PAY_TYPE','AMOUNT','DESCRIPTION','INVOICE_GUID']
+                        'POUTPUT:string|50','PPAY_TYPE:int','PAMOUNT:float','PDESCRIPTION:string|100','PINVOICE_GUID:string|50','PEXPIRY_DATE:date','PEXPIRY_FEE:float'],
+            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','PAY_TYPE','AMOUNT','DESCRIPTION','INVOICE_GUID','EXPIRY_DATE','EXPIRY_FEE']
         }
         tmpDt.updateCmd = 
         {
@@ -503,10 +506,12 @@ export class docCustomerCls
                     "@PAY_TYPE = @PPAY_TYPE, " +
                     "@AMOUNT = @PAMOUNT, "+
                     "@DESCRIPTION  = @PDESCRIPTION, " +
-                    "@INVOICE_GUID = @PINVOICE_GUID ",
+                    "@INVOICE_GUID = @PINVOICE_GUID, "+
+                    "@EXPIRY_DATE = @PEXPIRY_DATE, "+
+                    "@EXPIRY_FEE = @PEXPIRY_FEE ",
             param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PPAY_TYPE:int','PAMOUNT:float','PDESCRIPTION:string|100','PINVOICE_GUID:string|50'],
-            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','PAY_TYPE','AMOUNT','DESCRIPTION','INVOICE_GUID']
+                        'POUTPUT:string|50','PPAY_TYPE:int','PAMOUNT:float','PDESCRIPTION:string|100','PINVOICE_GUID:string|50','PEXPIRY_DATE:date','PEXPIRY_FEE:float'],
+            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','PAY_TYPE','AMOUNT','DESCRIPTION','INVOICE_GUID','EXPIRY_DATE','EXPIRY_FEE']
         }
         tmpDt.deleteCmd = 
         {

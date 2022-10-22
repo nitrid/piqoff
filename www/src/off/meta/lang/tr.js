@@ -2486,6 +2486,8 @@ export const langTr =
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
+        txtExpFee : "Gecikme Cezası",
+        dtExpDate : "Vade Tarihi", 
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -2917,6 +2919,8 @@ export const langTr =
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
+        txtExpFee : "Gecikme Cezası",
+        dtExpDate : "Vade Tarihi", 
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -3296,6 +3300,8 @@ export const langTr =
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
+        txtExpFee : "Gecikme Cezası",
+        dtExpDate : "Vade Tarihi", 
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -3622,6 +3628,8 @@ export const langTr =
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
+        txtExpFee : "Gecikme Cezası",
+        dtExpDate : "Vade Tarihi", 
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -3934,6 +3942,8 @@ export const langTr =
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
+        txtExpFee : "Gecikme Cezası",
+        dtExpDate : "Vade Tarihi", 
         pg_Docs : 
         {
             title : "Evrak Seçimi",
