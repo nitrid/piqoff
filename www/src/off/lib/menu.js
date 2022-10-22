@@ -826,6 +826,19 @@ export const menu = (e) =>
             items: 
             [
                 {
+                    id: 'set_02',
+                    text : e.t('menu.set_02'),//'Sistem Ayarları',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'set_02_001',
+                            text: e.t('menu.set_02_001'),//'FirmaBilgileri',
+                            path: 'setting/officialSettings/companyCard'
+                        }
+                    ]
+                },
+                {
                     id: 'set_01',
                     text : e.t('menu.set_01'),//'Maliyet ve Ek Vergi',
                     expanded: false,
