@@ -118,10 +118,7 @@ export default class CustomerCard extends React.PureComponent
                                     <NdButton id="btnBack" parent={this} icon="revert" type="default"
                                         onClick={()=>
                                         {
-                                            if(this.prevCode != '')
-                                            {
-                                               this.init()
-                                            }
+                                            this.init()
                                         }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -151,7 +148,6 @@ export default class CustomerCard extends React.PureComponent
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
                                                     this.btnSave.setState({disabled:true});
-                                                    this.btnNew.setState({disabled:false});
                                                 }
                                                 else
                                                 {
