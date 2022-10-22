@@ -1,6 +1,6 @@
 export const langFr = 
 {
-    popGrid: {btnSelection:"Seç",btnSearch:"Listele"},
+    popGrid: {btnSelection:"Choix",btnSearch:"Listes"},
     btnSave: "Enregistrez",
     btnCancel: "Abandonner",
     btnPrint :"Ecrire",
