@@ -8,6 +8,9 @@ export const langFr =
     btnPrint :"Imprime",
     btnOk: "OK",
     msgWarning: "Attention",
+    msgSqlService1: "Sql sunucuya bağlanılamıyor.", //BAK
+    msgSqlService2: "Veritabanı yok. Oluşturmak istermisiniz.", //BAK
+    msgSqlService3: "Vt kurulumu başarılı.Lütfen config dosyasını kontrol edip sunucuyu restart ediniz.", //BAK
     btnYes : "Oui",
     btnGet: "Validé",
     btnNo : "Non",
@@ -109,7 +112,7 @@ export const langFr =
         ftr_01_002: "Liste facture de vente",
         ftr_01_003: "Liste facture retour",
         ftr_01_004:"Liste facture différence de prix",
-        ftr_01_005: "Liste des factures de vente inter-succursales", // BAK
+        ftr_01_005: "Liste des factures de vente interne", // BAK
         ftr_02_001: "Saisie Facture d'achat",
         ftr_02_002: "Saisie Facture de vente",
         ftr_02_003: "Saisie Facture retour",
@@ -123,11 +126,11 @@ export const langFr =
         irs_01_001: "Saisie Bon de livraison d'achat",
         irs_01_002: "Saisie Bon de livraison de vente",
         irs_01_003: "Saisie Bon de livraison de retour",
-        irs_01_004: "Liste des bordereaux de vente inter-succursales", // BAK
+        irs_01_004: "Liste des bordereaux de vente interne", // BAK
         irs_02_001: "Saisie Bon de livraison d'achat",
         irs_02_002: "Saisie Bon de livraison de vente",
         irs_02_003: "Saisie Bon de Retour de livraison",
-        irs_02_004: "Feuille de route des ventes de la succursale", // BAK
+        irs_02_004: "Saisie Bon de livraison interne", // BAK
         sip: "Commande",
         sip_01: "Listes",
         sip_02: "Document",
@@ -182,8 +185,6 @@ export const langFr =
         set : "Coût Suplement",
         set_01 : "Coût et taxe annexe",
         set_01_001 : "Taxe sucre",
-        set_02 : "Genel Ayarlar", // BAK
-        set_02_001 : "Firma Bilgileri", // BAK
         proces : "Saisie groupée",
         proces_01 : "Traitement Produit",
         proces_01_001 : "MAJ groupe produit",
@@ -827,6 +828,12 @@ export const langFr =
             clmMulticode : "Sélection Document",
             clmBarcode : "Code Barre"
         },
+        msgCode : //BAK
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
+        },
     },
     stk_02_002 : //"Depo/Mağaza Arası Sevk"
     {
@@ -1146,6 +1153,12 @@ export const langFr =
             clmName : "Nom Produit",
             clmMulticode : "Sélection Document",
             clmBarcode : "Code Barre"
+        },
+        msgCode : //BAK
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
         },
     },
     stk_02_004 : //"Etiket Bas"
@@ -1649,6 +1662,12 @@ export const langFr =
             clmStatus : "Etat",
 
         },
+        msgCode : //BAK
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
+        },
     },
     stk_03_006 : // "Depo Ürün Miktarları Listesi"
     {
@@ -1969,7 +1988,11 @@ export const langFr =
             msg : "Client déja existant!"
         },
         chkTaxSucre : "Taxe sucrée",
-        tabTitleDetail : "Information detail"
+        tabTitleDetail : "Information detail",
+        validation : //BAK
+        {
+            frmCustomers: "Kodu boş geçemezsiniz !",
+        }
     },
     cri_01_002: // "Adres Tanımları"
     {
@@ -2034,8 +2057,11 @@ export const langFr =
             btn01: "Aller Client",
             btn02: "OK",
             msg : "Client déja existant !"
+        },
+        validation : //BAK
+        {
+            frmCustomerAddress: "Kodu boş geçemezsiniz !",
         }
-
     },
     cri_02_001: // "Cari Listesi"
     {
@@ -2446,9 +2472,6 @@ export const langFr =
         txtDiffrentInv : "Facture de différence de prix déduite",   // BAK
         txtbalance : "Solde total actuel",   // BAK
         getRemainder : "Apportez le montant restant",    // BAK
-        txtUnitFactor : "Birim Katsayısı", // BAK
-        txtUnitQuantity : "Birim Miktarı", // BAK
-        txtTotalQuantity : "Toplam Miktar", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -2747,11 +2770,6 @@ export const langFr =
         {
             title : "Details des Contenus"
         },
-        msgUnit:
-        {
-            title: "Birim Seçimi",
-            btn01: "Onayla",
-        },
         validRef :"Saisir numéro de serie",
         validRefNo : "Saisir numéro de référence",
         validDepot : "Sélectionner Dépot",
@@ -2833,6 +2851,12 @@ export const langFr =
             clmCiyt : "Ville",   // BAK
             clmZipcode : "Code postal",   // BAK
             clmCountry : "Pays",   // BAK
+        },
+        msgCode : //BAK
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
         },
     },
     ftr_02_002 : // "Satış Faturası"
@@ -3208,6 +3232,12 @@ export const langFr =
             clmZipcode : "Code postale",   // BAK
             clmCountry : "Pays",   // BAK
         },
+        msgCode : //BAK
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
+        },
     },
     ftr_02_003 : // "İade Faturası"
     {
@@ -3519,6 +3549,12 @@ export const langFr =
             clmZipcode : "Code postale",   // BAK
             clmCountry : "Pays",   // BAK
         },
+        msgCode : //BAK
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
+        },
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
     {
@@ -3816,6 +3852,12 @@ export const langFr =
             clmCiyt : "Ville",   // BAK
             clmZipcode : "Code postal",   // BAK
             clmCountry : "Pays",   // BAK
+        },
+        msgCode : //BAK
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
         },
     },
     ftr_02_005 : // "Şube Satış Faturası"
@@ -4183,6 +4225,12 @@ export const langFr =
             clmZipcode : "ode postale",   // BAK
             clmCountry : "Pays",   // BAK
         },
+        msgCode : //BAK
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
+        },
     },
     ftr_04_001 : // "Proforma Fiyat Farkı Faturası" YENI EKLEN DI KOPMLE BAK
     {
@@ -4487,6 +4535,12 @@ export const langFr =
             clmZipcode : "Code postal",   // BAK
             clmCountry : "Pays",   // BAK
         },
+        msgCode : //BAK
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
+        },
     },
     promo_01_001: //  "Promosyon Tanımları"
     {
@@ -4521,7 +4575,7 @@ export const langFr =
             clmName: "Nom", 
             clmGrpName: "Groupe", //BAK
             clmPrice : "Prix", //BAK
-            btnItem: "Promosyon Ürün Seçimi", //BAK
+            btnItem: "Sélection de produits promotionnels", //BAK
         },
         msgRef:
         {
@@ -4585,6 +4639,8 @@ export const langFr =
             giftCheck: "Cadeau certifié",
             generalDiscount: "Remise générale",
             discountAmount: "Montant de la remise",
+            promoType01: "Koşul",//BAK
+            promoType02: "Uygulama",//BAK
         },
         msgHelp: //BAK
         {
@@ -4740,7 +4796,7 @@ export const langFr =
         dtFirst : "Première Date",
         dtLast : "Dernière Date",
         txtCustomerCode : "Courantari",
-        menu:"Feuille de route des ventes de la succursale",
+        menu:"Saisie Bon de livraison interne",
         pg_txtCustomerCode : 
         {
             title : "Sélection actuelle",
@@ -5062,6 +5118,12 @@ export const langFr =
             clmZipcode : "Code postal",   // BAK
             clmCountry : "Pays",   // BAK
         },
+        msgCode : //BAK
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
+        },
     },
     irs_02_002 : // Satış İrsaliyesi"
     {
@@ -5373,6 +5435,12 @@ export const langFr =
             clmZipcode : "Code postal",   // BAK
             clmCountry : "Pays",   // BAK
         },
+        msgCode : //BAK
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
+        },
     },
     irs_02_003 : // "İade İrsaliyesi"
     {
@@ -5635,6 +5703,12 @@ export const langFr =
             btn01: "Continue",
             btn02: "Abandonne",
             msg: "Le Produit Sélectionné n'a pas de Fournisseur Enregistré ! Voulez-vous Continuer "
+        },
+        msgCode : //BAK
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
         },
     },
     irs_02_004 : // Şube Satış İrsaliyesi"
@@ -5946,6 +6020,12 @@ export const langFr =
             clmCiyt : "Ville",   // BAK
             clmZipcode : "Code postal",   // BAK
             clmCountry : "Pays",   // BAK
+        },
+        msgCode : //BAK
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
         },
     },
     sip_01_001 : // "Alış Sipariş Listesi"
@@ -6321,6 +6401,12 @@ export const langFr =
             clmZipcode : "Code postal",   // BAK
             clmCountry : "Pays",   // BAK
         },
+        msgCode : //BAK
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
+        },
     },
     sip_02_002 : // "Satış Sipariş"
     {
@@ -6625,6 +6711,12 @@ export const langFr =
             clmCiyt : "Ville",   // BAK
             clmZipcode : "Code postal",   // BAK
             clmCountry : "Pays",   // BAK
+        },
+        msgCode : //BAK
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
         },
     },
     sip_04_001 : // "Sipariş Ayrıştırma" // YENI EKLENDI KOMPLE BAK
@@ -7734,10 +7826,16 @@ export const langFr =
             msg: "Veuillez saisir les zones nécessaire !"
         },
         validValue :"Ne peut être Vide",
-        zeroValid : "Ne peut pas être 0"
-
+        zeroValid : "Ne peut pas être 0",
+        btnAdd: "Yeni Değer Ekle", //BAK
+        validation:  //BAK
+        {
+            clmMinValue: "Oran sıfırdan küçük olamaz !",
+            clmMaxvalue: "Oran sıfırdan küçük olamaz !",
+            clmPrice: "Fiyat sıfırdan küçük olamaz !",
+        },
     },
-    set_02_001 : // "Firma Bilgileri" YENI EKLENDI KOMPLE BAK
+    set_02_001 : // "Firma Bilgileri"
     {
         txtTitle : "Firma Adı",
         txtCustomerName : "Yetkili Adı",
@@ -7993,7 +8091,7 @@ export const langFr =
         lineDelete :"Ligne annulé", 
         cancel : "Abandonne", 
     },
-    pos_02_005 : // "Degismis Fisler Raporu", YENI EKLENDI KOMPLE BAK
+    pos_02_005 : // "Degismis Fisler Raporu BAK
     {
         TicketId :"Fiche I.D",
         cmbCustomer :"Courant",
@@ -8093,7 +8191,7 @@ export const langFr =
             clmDescription :"Explication",
         }
     },
-    pos_03_001 : // Gün Sonu",
+    pos_03_001 : // "B"
     {
         TicketId :"Ticket I.D",
         title : "Opérations de fin de journée",
@@ -8521,7 +8619,13 @@ export const langFr =
             title: "Attention",   //bak
             btn01: "OK",   //bak
             msg: "Il y a une ligne dans votre document qui a été convertie en commande. Ce document ne peut pas être supprimé !"   //bak
-        }
+        },
+        msgCode : //BAK
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
+        },
     },
     tkf_02_002 : // "Satış Teklifi",
     {
@@ -8806,8 +8910,13 @@ export const langFr =
             title: "Attention",   //bak
             btn01: "OK",   //bak
             msg: "Une ligne a été convertie en commande dans votre document. Ce document ne peut pas être supprimé !"   //bak
-        }
-
+        },
+        msgCode : //BAK
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
+        },
     },
     proces_01_001 : // "Ürün Grubu Güncelleme" 
     {
@@ -8823,6 +8932,7 @@ export const langFr =
         barkodPlaceHolder :"Veuillez Entrer Le ou Les Codes Produits ou Codes Barres",
         ItemNamePlaceHolder :"Veuillez Entrer le Nom Complet ou une Syllabe",
         btnOk : "Mettre à jour",
+        toolMenu01: "Stok Tanımları", //BAK 
         grdListe : 
         {
             clmCode: "Référence Produit",

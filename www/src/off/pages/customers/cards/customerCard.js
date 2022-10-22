@@ -525,8 +525,7 @@ export default class CustomerCard extends React.PureComponent
                                     access={this.access.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
                                     >
                                         <Validator validationGroup={"frmCustomers"  + this.tabIndex}>
-                                            <RequiredRule message="Kodu boş geçemezsiniz !"    // LANGBAK
-                                            />
+                                            <RequiredRule message={this.t("validation.frmCustomers")}/>
                                         </Validator>  
                                     </NdTextBox>
                                     {/*CARI SECIMI POPUP */}

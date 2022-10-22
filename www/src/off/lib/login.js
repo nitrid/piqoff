@@ -70,11 +70,11 @@ export default class Login extends React.Component
     }
     textValueChanged(e) 
     {      
-        if(e.element.id == 'Kullanici')   // LANGBAK
+        if(e.element.id == 'Kullanici')
         {
             this.setState({kullanici: e.value});
         } 
-        else if(e.element.id == 'Sifre')   // LANGBAK
+        else if(e.element.id == 'Sifre')
         {
             this.setState({sifre: e.value});
         }
@@ -262,17 +262,17 @@ export default class Login extends React.Component
                         <div className="dx-field">
                             <div className="dx-field-label">{this.lang.t("txtUser")}</div>
                             <div className="dx-field-value">
-                                <NdTextBox id="Kullanici" parent={this} simple={true} showClearButton={true} height='fit-content' valueChangeEvent="keyup" onValueChanged={this.textValueChanged}     // LANGBAK
-                                onFocusIn={()=>{this.keyboard.textobj = "Kullanici"}} placeholder={this.lang.t("txtUser")}   // LANGBAK
+                                <NdTextBox id="Kullanici" parent={this} simple={true} showClearButton={true} height='fit-content' valueChangeEvent="keyup" onValueChanged={this.textValueChanged} 
+                                onFocusIn={()=>{this.keyboard.textobj = "Kullanici"}} placeholder={this.lang.t("txtUser")}
                                 />
                             </div>
                         </div>
                         <div className="dx-field">
                             <div className="dx-field-label">{this.lang.t("txtPass")}</div>
                             <div className="dx-field-value">
-                                <NdTextBox id="Sifre" parent={this} mode="password" showClearButton={true} height='fit-content' valueChangeEvent="keyup" onValueChanged={this.textValueChanged}    // LANGBAK
+                                <NdTextBox id="Sifre" parent={this} mode="password" showClearButton={true} height='fit-content' valueChangeEvent="keyup" onValueChanged={this.textValueChanged}
                                 onEnterKey={this.onLoginClick}
-                                onFocusIn={()=>{this.keyboard.textobj="Sifre"}} placeholder={this.lang.t("txtPass")}   // LANGBAK
+                                onFocusIn={()=>{this.keyboard.textobj="Sifre"}} placeholder={this.lang.t("txtPass")}
                                 />
                             </div>
                         </div>
@@ -384,7 +384,7 @@ export default class Login extends React.Component
                 </div>
                 <div className="p-2"></div>
                 <div className="card" style={this.style.keyboardBox}>
-                <NbKeyboard id={"keyboard"} parent={this}  textobj="Kullanici"   // LANGBAK
+                <NbKeyboard id={"keyboard"} parent={this}  textobj="Kullanici"
                 />
                 </div>
             </div>

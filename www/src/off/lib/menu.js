@@ -376,8 +376,6 @@ export const menu = (e) =>
                             text: e.t('menu.sip_02_002'),//'Satış Sipariş',
                             path: 'orders/documents/salesOrder'
                         },
-    
-            
                     ]
                 },
                 {

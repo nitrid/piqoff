@@ -152,12 +152,12 @@ export default class rebateDoc extends React.PureComponent
                     {
                         id: 'msgCode',
                         showTitle:true,
-                        title:"Dikkat",   // LANGBAK
+                        title:this.t("msgCode.title"),
                         showCloseButton:true,
                         width:'500px',
                         height:'200px',
-                        button:[{id:"btn01",caption:"Evrağa Git",location:'before'}],   // LANGBAK
-                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Evrak Bulundu"}</div>)   // LANGBAK
+                        button:[{id:"btn01",caption:this.t("msgCode.btn01"),location:'before'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCode.msg")}</div>)
                     }
     
                     let pResult = await dialog(tmpConfObj);

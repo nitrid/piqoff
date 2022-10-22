@@ -9,6 +9,9 @@ export const langTr =
     btnOk: "Tamam",
     btnGet: "Getir",
     msgWarning: "Dikkat",
+    msgSqlService1: "Sql sunucuya bağlanılamıyor.", //BAK
+    msgSqlService2: "Veritabanı yok. Oluşturmak istermisiniz.", //BAK
+    msgSqlService3: "Vt kurulumu başarılı.Lütfen config dosyasını kontrol edip sunucuyu restart ediniz.", //BAK
     btnYes : "Evet",
     btnNo : "Hayır",
     msgClose : "Sayfayı Kapatmak İstediğinize Eminmisiniz ?",
@@ -827,6 +830,12 @@ export const langTr =
             clmMulticode : "TEDARİKÇİ KODU",
             clmBarcode : "BARKOD"
         },
+        msgCode :
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
+        },
     },
     stk_02_002 : //"Depo/Mağaza Arası Sevk"
     {
@@ -1147,6 +1156,12 @@ export const langTr =
             clmMulticode : "TEDARİKÇİ KODU",
             clmBarcode : "BARKOD"
         },
+        msgCode :
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
+        },
     },
     stk_02_004 : //Etiket Bas"
     {
@@ -1453,6 +1468,12 @@ export const langTr =
             clmName : "STOK ADI",
             clmMulticode : "TEDARİKÇİ KODU",
             clmBarcode : "BARKOD"
+        },
+        msgCode :
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
         },
     },
     stk_02_007 : // "SKT Girişi",
@@ -1969,7 +1990,11 @@ export const langTr =
             msg : "Girmiş olduğunuz Cari sistem de kayıtlı !"
         },
         chkTaxSucre : "Tax Sugar",
-        tabTitleDetail : "Detay Bilgileri"
+        tabTitleDetail : "Detay Bilgileri",
+        validation :
+        {
+            frmCustomers: "Kodu boş geçemezsiniz !",
+        }
     },
     cri_01_002: // "Adres Tanımları"
     {
@@ -2034,8 +2059,11 @@ export const langTr =
             btn01: "Cariye Git",
             btn02: "Tamam",
             msg : "Girmiş olduğunuz Cari sistem de kayıtlı !"
+        },
+        validation : //BAK
+        {
+            frmCustomerAddress: "Kodu boş geçemezsiniz !",
         }
-
     },
     cri_02_001: // "Cari Listesi"
     {
@@ -2834,6 +2862,12 @@ export const langTr =
             clmZipcode : "POSTA  KODU",
             clmCountry : "ÜLKE",
         },
+        msgCode : 
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
+        },
     },
     ftr_02_002 : // "Satış Faturası"
     {
@@ -3208,6 +3242,12 @@ export const langTr =
             clmZipcode : "POSTA  KODU",
             clmCountry : "ÜLKE",
         },
+        msgCode :
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
+        },
     },
     ftr_02_003 : // "İade Faturası"
     {
@@ -3527,6 +3567,12 @@ export const langTr =
             clmZipcode : "POSTA  KODU",
             clmCountry : "ÜLKE",
         },
+        msgCode : 
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
+        },
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
     {
@@ -3832,6 +3878,12 @@ export const langTr =
             clmCiyt : "ŞEHİR",
             clmZipcode : "POSTA  KODU",
             clmCountry : "ÜLKE",
+        },
+        msgCode : 
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
         },
     },
     ftr_02_005 : // "Şube Satış Faturası"
@@ -4207,6 +4259,12 @@ export const langTr =
             clmZipcode : "POSTA  KODU",
             clmCountry : "ÜLKE",
         },
+        msgCode : 
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
+        },
     },
     ftr_04_001 : // "Proforma Fiyat Farkı Faturası"
     {
@@ -4511,6 +4569,12 @@ export const langTr =
             clmZipcode : "POSTA  KODU",
             clmCountry : "ÜLKE",
         },
+        msgCode :
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
+        },
     },
     promo_01_001: //  "Promosyon Tanımları"
     {
@@ -4609,6 +4673,8 @@ export const langTr =
             giftCheck: "Hediye Çeki",
             generalDiscount: "Genel İskonto",
             discountAmount: "İskonto Tutar",
+            promoType01: "Koşul",
+            promoType02: "Uygulama",
         },
         msgHelp:
         {
@@ -5094,6 +5160,12 @@ export const langTr =
             clmZipcode : "POSTA  KODU",
             clmCountry : "ÜLKE",
         },
+        msgCode : 
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
+        },
     },
     irs_02_002 : // Satış İrsaliyesi"
     {
@@ -5413,6 +5485,12 @@ export const langTr =
             clmZipcode : "POSTA  KODU",
             clmCountry : "ÜLKE",
         },
+        msgCode : 
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
+        },
     },
     irs_02_003 : // "İade İrsaliyesi"
     {
@@ -5684,6 +5762,12 @@ export const langTr =
             btn02: "Vazgeç",
             msg: "Seçilen Ürün Cariye Tanımlı Değil ! Devam Etmek İstiyormusunuz"
         },
+        msgCode : 
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
+        },
     },
     irs_02_004 : // Şube Satış İrsaliyesi"
     {
@@ -5849,7 +5933,7 @@ export const langTr =
         },
         msgDiscount:
         {
-            title: "Dikkat",
+            title: "Uyarı",
             btn01: "Tamam",
             msg: "İndirim Tutardan Yüksek Olamaz !"
         },
@@ -5874,7 +5958,7 @@ export const langTr =
         },
         msgUnderPrice2:
         {
-            title: "Dikkat",
+            title: "Uyarı",
             btn01: "Tamam",
             msg: "Maliyet Fiyatından Daha Düşük Satılamaz !!"
         },
@@ -6002,6 +6086,12 @@ export const langTr =
             clmCiyt : "ŞEHİR",
             clmZipcode : "POSTA  KODU",
             clmCountry : "ÜLKE",
+        },
+        msgCode : 
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
         },
     },
     sip_01_001 : // "Alış Sipariş Listesi"
@@ -6385,6 +6475,12 @@ export const langTr =
             clmZipcode : "POSTA  KODU",
             clmCountry : "ÜLKE",
         },
+        msgCode :
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
+        },
     },
     sip_02_002 : // "Satış Sipariş"
     {
@@ -6697,6 +6793,12 @@ export const langTr =
             clmCiyt : "ŞEHİR",
             clmZipcode : "POSTA  KODU",
             clmCountry : "ÜLKE",
+        },
+        msgCode :
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
         },
     },
     sip_04_001 : // "Sipariş Ayrıştırma" 
@@ -7806,8 +7908,14 @@ export const langTr =
             msg: "Lütfen gerekli alanları doldurunuz !"
         },
         validValue :"Boş Geçilemez",
-        zeroValid : "0'dan Büyük Olmalıdır"
-
+        zeroValid : "0'dan Büyük Olmalıdır",
+        btnAdd: "Yeni Değer Ekle",
+        validation:
+        {
+            clmMinValue: "Oran sıfırdan küçük olamaz !",
+            clmMaxvalue: "Oran sıfırdan küçük olamaz !",
+            clmPrice: "Fiyat sıfırdan küçük olamaz !",
+        },
     },
     set_02_001 : // "Firma Bilgileri"
     {
@@ -8601,7 +8709,13 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Evrakınızda siparişe çevirilmiş satır var.. Bu evrak silinemez !"
-        }
+        },
+        msgCode :
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
+        },
     },
     tkf_02_002 : // "Satış Teklifi",
     {
@@ -8895,7 +9009,13 @@ export const langTr =
             title: "Dikkat",   
             btn01: "Tamam",   
             msg: "Evrakınızda siparişe çevirilmiş satır var.. Bu evrak silinemez !"   
-        }
+        },
+        msgCode :
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
+        },
     },
     proces_01_001 : // "Ürün Grubu Güncelleme"
     {
@@ -8911,6 +9031,7 @@ export const langTr =
         barkodPlaceHolder :"Aratmak İstediğiniz Bir yada Birden Fazla Ürün Kodu yada Barkod Giriniz",
         ItemNamePlaceHolder :"Ürün Adının Tamamını yada İçinde Geçen Bir Hece Giriniz",
         btnOk : "Güncelle",
+        toolMenu01: "Stok Tanımları",
         grdListe : 
         {
             clmCode: "Ürün Kodu",

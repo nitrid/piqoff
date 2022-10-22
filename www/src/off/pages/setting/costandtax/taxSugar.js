@@ -191,7 +191,7 @@ export default class taxSugar extends React.PureComponent
                                 this.frmTrnsfItems = e.component
                             }}>
                                 <Item location="after">
-                                    <Button icon="add" text="Yeni Değer Ekle"   // LANGBAK
+                                    <Button icon="add" text={this.t("btnAdd")}
                                     onClick={async (e)=>
                                     {
                                         this.minValue.value = 0
@@ -234,11 +234,14 @@ export default class taxSugar extends React.PureComponent
                                         <Column dataField="CUSER_NAME" caption={this.t("grdTaxSugar.clmCreateDate")} width={200} allowEditing={false}/>
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdTaxSugar.clmCreateDate")} width={200} allowEditing={false}/>
                                         <Column dataField="MIN_VALUE" caption={this.t("grdTaxSugar.clmMinValue")} width={300} dataType={'number'}  format={"#,##0.00 '(100ML/GR)'"}>
-                                        <RangeRule min={0.01} message={"Oran sıfırdan küçük olamaz !"} /><RequiredRule/></Column>    // LANGBAK
+                                            <RangeRule min={0.01} message={this.t("validation.clmMinValue")} /><RequiredRule/>
+                                        </Column>
                                         <Column dataField="MAX_VALUE" caption={this.t("grdTaxSugar.clmMaxvalue")} width={300} dataType={'number'} format={"#,##0.00 '(100ML/GR)'"}>
-                                        <RangeRule min={0.01} message={"Oran sıfırdan küçük olamaz !"} /><RequiredRule/></Column>    // LANGBAK
+                                            <RangeRule min={0.01} message={this.t("validation.clmMaxvalue")} /><RequiredRule/>
+                                        </Column>
                                         <Column dataField="PRICE" caption={this.t("grdTaxSugar.clmPrice")} dataType={'number'} width={300}  format={"#,##0.00 €'(100ML/GR)'"}>
-                                        <RangeRule min={0.01} message={"Fiyat sıfırdan küçük olamaz !"} /><RequiredRule/></Column>    // LANGBAK
+                                            <RangeRule min={0.01} message={this.t("validation.clmPrice")} /><RequiredRule/>
+                                        </Column>
                                     </NdGrid>
                                 </Item>
                             </Form>
