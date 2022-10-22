@@ -2444,6 +2444,9 @@ export const langTr =
         txtDiffrentInv : "Kesilen Fiyat farkı Faturası",
         txtbalance : "Cari Toplam Bakiyesi",
         getRemainder : "Kalan Tutarı Getir",
+        txtUnitFactor : "Birim Katsayısı",
+        txtUnitQuantity : "Birim Miktarı",
+        txtTotalQuantity : "Toplam Miktar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -2741,6 +2744,11 @@ export const langTr =
         popUnit2 : 
         {
             title : "Birim Detayları"
+        },
+        msgUnit:
+        {
+            title: "Birim Seçimi",
+            btn01: "Onayla",
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
