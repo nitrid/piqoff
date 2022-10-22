@@ -16,12 +16,13 @@ export default class NdAcsDialog extends NdBase
         this.state.title = this.props.title;
         this.core = this.props.parent.core;
         this.user = this.props.parent.user;
+        console.log(this)
     }
     show(pType)
     {
         let tmpQuery = ""
         this[this.props.id].show();        
-        this[this.props.id].setTitle(pType == 0 ? "Yetkili şifresini giriniz !" : "Şifrenizi giriniz !") // LANGBAK
+        this[this.props.id].setTitle(pType == 0 ? this.lang.t("acsDialog.title1") : this.lang.t("acsDialog.title2"))
         
         return new Promise(async resolve => 
         {
@@ -44,9 +45,9 @@ export default class NdAcsDialog extends NdBase
                     {
                         let tmpConfObj =
                         {
-                            id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',   // LANGBAK
-                            button:[{id:"btn01",caption:"Tamam",location:'before'}],   // LANGBAK
-                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Geçersiz şifre !"}</div>)   // LANGBAK
+                            id:'msgAlert',showTitle:true,title:this.lang.t("acsDialog.msgAlert.title"),showCloseButton:true,width:'500px',height:'200px',
+                            button:[{id:"btn01",caption:this.lang.t("acsDialog.msgAlert.btn01"),location:'before'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("acsDialog.msgAlert.msg")}</div>)
                         }
                         await dialog(tmpConfObj);
                         this[this.props.id].hide()
@@ -99,9 +100,9 @@ export default class NdAcsDialog extends NdBase
                 {
                     let tmpConfObj =
                     {
-                        id:'msgAlert',showTitle:true,title:"Dikkat",showCloseButton:true,width:'500px',height:'200px',   // LANGBAK
-                        button:[{id:"btn01",caption:"Tamam",location:'before'}],   // LANGBAK
-                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Geçersiz şifre !"}</div>)   // LANGBAK
+                        id:'msgAlert',showTitle:true,title:this.lang.t("acsDialog.msgAlert.title"),showCloseButton:true,width:'500px',height:'200px',
+                        button:[{id:"btn01",caption:this.lang.t("acsDialog.msgAlert.btn01"),location:'before'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("acsDialog.msgAlert.msg")}</div>)
                     }
                     await dialog(tmpConfObj);
                     this[this.props.id].hide()
