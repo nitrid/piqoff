@@ -384,6 +384,7 @@ export const langTr =
     popParkList :
     {
         title :"Park daki İşlemler",
+        btnParkAll : "Tüm Parktakiler"
     },
     popBarcodeList :
     {

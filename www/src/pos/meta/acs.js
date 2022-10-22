@@ -50,6 +50,22 @@ export const acs =
             CAPTION : "Kasa Aç"
         }
     },
+    //btnPopParkListAll
+    {
+        TYPE : 2,
+        ID :"btnPopParkListAll",
+        VALUE : {dialog:{type:0}},
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "btnPopParkListAll",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Pos",
+            CAPTION : "Parktaki Tüm Liste"
+        }
+    },
     //btnDiscount
     {
         TYPE : 2,

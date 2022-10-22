@@ -384,6 +384,7 @@ export const langFr =
     popParkList :
     {
         title :"Saisie en attente",
+        btnParkAll : "Tüm Parktakiler" //BAK
     },
     popBarcodeList :
     {

@@ -267,7 +267,7 @@ export default class posDoc extends React.PureComponent
         {
             query : "SELECT GUID,LUSER_NAME,LDATE,TOTAL, " + 
                     "ISNULL((SELECT TOP 1 DESCRIPTION FROM POS_EXTRA WHERE POS_GUID = POS_VW_01.GUID AND TAG = 'PARK DESC'),'') AS DESCRIPTION " +
-                    "FROM POS_VW_01 WHERE STATUS = 0 AND LUSER = @LUSER ORDER BY LDATE DESC",
+                    "FROM POS_VW_01 WHERE STATUS = 0 AND (LUSER = @LUSER OR (@LUSER = '')) ORDER BY LDATE DESC",
             param : ["LUSER:string|25"],
             value : [this.core.auth.data.CODE],
             local : 
@@ -3241,6 +3241,7 @@ export default class posDoc extends React.PureComponent
                                         <NbButton id={"btnParkList"} parent={this} className="form-group btn btn-warning btn-block my-1" style={{height:"70px",width:"100%"}}
                                         onClick={async ()=>
                                         {
+                                            this.parkDt.selectCmd.value[0] = this.core.auth.data.CODE;
                                             await this.parkDt.refresh();
                                             await this.grdPopParkList.dataRefresh({source:this.parkDt});
                                             this.popParkList.show();
@@ -3952,9 +3953,22 @@ export default class posDoc extends React.PureComponent
                     title={this.lang.t("popParkList.title")}
                     container={"#root"} 
                     width={"900"}
-                    height={"580"}
+                    height={"650"}
                     position={{of:"#root"}}
                     >
+                        {/* btnPopParkListAll */}
+                        <div className="row py-1">
+                            <div className="col-12">
+                                <NbButton id={"btnPopParkListAll"} parent={this} className="form-group btn btn-primary btn-block" 
+                                style={{height:"45px",width:"100%",fontSize:"16px"}}
+                                access={this.acsObj.filter({ELEMENT:'btnPopParkListAll',USERS:this.user.CODE})}
+                                onClick={async ()=>
+                                {
+                                    this.parkDt.selectCmd.value[0] = '';
+                                    await this.parkDt.refresh();
+                                }}>{this.lang.t("popParkList.btnParkAll")} </NbButton> 
+                            </div>
+                        </div>
                         {/* grdPopParkList */}
                         <div className="row py-1">
                             <div className="col-12">
