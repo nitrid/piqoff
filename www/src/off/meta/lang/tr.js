@@ -4319,6 +4319,9 @@ export const langTr =
         tabTitlePayments : "Evrak Ödeme Bilgileri",
         tabTitleOldInvoices : "Geçmiş Fatura Bilgileri",
         getRemainder : "Kalan Tutarı Getir",
+        txtUnitFactor : "Birim Katsayısı",
+        txtUnitQuantity : "Birim Miktarı",
+        txtTotalQuantity : "Toplam Miktar",
         msgDiscount:
         {
             title: "Dikkat",
@@ -4533,6 +4536,11 @@ export const langTr =
             title: "Dizayn seçimi",
             design : "Dizayn",
             lang : "Evrak Dili"
+        },
+        msgUnit:
+        {
+            title: "Birim Seçimi",
+            btn01: "Onayla",
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
