@@ -6162,7 +6162,6 @@ export const langTr =
             clmTotal : "Toplam",
             clmOutputName :"Depo",
         },
-
     },
     sip_02_001 : // "Alış Sipariş"
     {

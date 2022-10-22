@@ -185,6 +185,8 @@ export const langFr =
         set : "Coût Suplement",
         set_01 : "Coût et taxe annexe",
         set_01_001 : "Taxe sucre",
+        set_02 : "Genel Ayarlar",   // BAK
+        set_02_001 : "Firma Bilgileri",   // BAK
         proces : "Saisie groupée",
         proces_01 : "Traitement Produit",
         proces_01_001 : "MAJ groupe produit",
@@ -2481,6 +2483,9 @@ export const langFr =
         txtDiffrentInv : "Facture de différence de prix déduite",   // BAK
         txtbalance : "Solde total actuel",   // BAK
         getRemainder : "Apportez le montant restant",    // BAK
+        txtUnitFactor : "Birim Katsayısı",  // BAK
+        txtUnitQuantity : "Birim Miktarı",  // BAK
+        txtTotalQuantity : "Toplam Miktar",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -2778,6 +2783,11 @@ export const langFr =
         popUnit2 : 
         {
             title : "Details des Contenus"
+        },
+        msgUnit:
+        {
+            title: "Birim Seçimi",  // BAK
+            btn01: "Onayla",  // BAK
         },
         validRef :"Saisir numéro de serie",
         validRefNo : "Saisir numéro de référence",
@@ -3283,6 +3293,9 @@ export const langFr =
         tabTitleOldInvoices : "Informations de facturation passées",  // BAK
         getRemainder : "Apportez le montant restant",  // BAK
         txtbalance : "Solde total actuel",   // BAK
+        txtUnitFactor : "Birim Katsayısı",  // BAK
+        txtUnitQuantity : "Birim Miktarı",  // BAK
+        txtTotalQuantity : "Toplam Miktar",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3506,6 +3519,11 @@ export const langFr =
             design : "Design" ,
             lang : "Langue Document" 
         },
+        msgUnit:
+        {
+            title: "Birim Seçimi",
+            btn01: "Onayla",
+        }, // BAK
         validRef :"Saisir numéro de serie",
         validRefNo : "Saisir numéro de référence",
         validDepot : "Sélectionner Dépot",
@@ -3601,6 +3619,9 @@ export const langFr =
         getRemainder : "Apportez le montant restant",  // BAK
         txtbalance : "Solde total actuel",   // BAK
         getProforma : "Amenez Pro format ", // BAK
+        txtUnitFactor : "Birim Katsayısı",  // BAK
+        txtUnitQuantity : "Birim Miktarı",  // BAK
+        txtTotalQuantity : "Toplam Miktar",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3816,6 +3837,11 @@ export const langFr =
             design : "Design" ,
             lang : "Langue Document" 
         },
+        msgUnit:
+        {
+            title: "Birim Seçimi",
+            btn01: "Onayla",
+        }, // BAK
         validRef :"Saisir numéro de serie",
         validRefNo : "Saisir numéro de référence",
         validDepot : "Sélectionner Dépot",
@@ -3905,6 +3931,9 @@ export const langFr =
         tabTitleOldInvoices : "Informations de facturation passées",  // BAK
         getRemainder : "Apportez le montant restant",  // BAK
         txtbalance : "Solde total actuel",   // BAK
+        txtUnitFactor : "Birim Katsayısı",  // BAK
+        txtUnitQuantity : "Birim Miktarı",  // BAK
+        txtTotalQuantity : "Toplam Miktar",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -4165,6 +4194,11 @@ export const langFr =
             btn02: "Inclure Les Nouvelles Saisies à la Liste",
             msg: "Produits Présents dans la Liste! "
         },
+        msgUnit:
+        {
+            title: "Birim Seçimi",
+            btn01: "Onayla",
+        }, // BAK
         validRef :"Saisir numéro de serie",
         validRefNo : "Saisir numéro de référence",
         validDepot : "Sélectionner Dépot",
@@ -4845,6 +4879,9 @@ export const langFr =
         txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
         getOrders : "Apporter la commande", // BAK
+        txtUnitFactor : "Birim Katsayısı",  // BAK
+        txtUnitQuantity : "Birim Miktarı",  // BAK
+        txtTotalQuantity : "Toplam Miktar",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -5065,6 +5102,11 @@ export const langFr =
             btn02: "Inclure Les Nouvelles Saisies à la Liste",
             msg: "Produits Présents dans la Liste! "
         },
+        msgUnit:
+        {
+            title: "Birim Seçimi",
+            btn01: "Onayla",
+        }, // BAK
         validRef :"Saisir numéro de serie",
         validRefNo : "Saisir numéro de référence",
         validDepot : "Sélectionner Dépot",
@@ -5151,6 +5193,9 @@ export const langFr =
         txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
         getOrders : "Sélection Commande", // BAK
+        txtUnitFactor : "Birim Katsayısı",  // BAK
+        txtUnitQuantity : "Birim Miktarı",  // BAK
+        txtTotalQuantity : "Toplam Miktar",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -5376,6 +5421,11 @@ export const langFr =
             btn02: "Inclure Les Nouvelles Saisies à la Liste",
             msg: "Produits Présents dans la Liste! "
         },
+        msgUnit:
+        {
+            title: "Birim Seçimi",
+            btn01: "Onayla",
+        }, // BAK
         validRef :"Saisir numéro de serie",
         validRefNo : "Saisir numéro de référence",
         validDepot : "Sélectionner Dépot",
@@ -5468,6 +5518,9 @@ export const langFr =
         txtBarcode: "Code barre",
         txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
+        txtUnitFactor : "Birim Katsayısı",  // BAK
+        txtUnitQuantity : "Birim Miktarı",  // BAK
+        txtTotalQuantity : "Toplam Miktar",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -5661,6 +5714,11 @@ export const langFr =
             design : "Design" ,
             lang : "Langue Document" 
         },
+        msgUnit:
+        {
+            title: "Birim Seçimi",
+            btn01: "Onayla",
+        }, // BAK
         validRef :"Saisir numéro de serie",
         validRefNo : "Saisir numéro de référence",
         validDepot : "Sélectionner Dépot",
@@ -5737,6 +5795,9 @@ export const langFr =
         txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
         getOrders : "Sélection Commande", // BAK
+        txtUnitFactor : "Birim Katsayısı",  // BAK
+        txtUnitQuantity : "Birim Miktarı",  // BAK
+        txtTotalQuantity : "Toplam Miktar",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -5962,6 +6023,11 @@ export const langFr =
             btn02: "Inclure Les Nouvelles Saisies à la Liste",
             msg: "Produits Présents dans la Liste! "
         },
+        msgUnit:
+        {
+            title: "Birim Seçimi",
+            btn01: "Onayla",
+        },
         validRef :"Saisir numéro de serie",
         validRefNo : "Saisir numéro de référence",
         validDepot : "Sélectionner Dépot",
@@ -6096,8 +6162,6 @@ export const langFr =
             clmTotal : "Total",
             clmOutputName :"Réserve",
         },
-        
-
     },
     sip_02_001 : // "Alış Sipariş"
     {
@@ -6116,6 +6180,9 @@ export const langFr =
         txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
         getOffers : "Obtenir l'offre", // bak
+        txtUnitFactor : "Birim Katsayısı",  // BAK
+        txtUnitQuantity : "Birim Miktarı",  // BAK
+        txtTotalQuantity : "Toplam Miktar",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -6165,6 +6232,7 @@ export const langFr =
             clmBarcode :"Code Barre",
             clmDescription :"Motif",
             clmCuser :"Utilisateur",
+            clmOffer : "Teklif No", // BAK
             clmVatRate : "TVA %"
         },
         popDiscount : 
@@ -6344,6 +6412,11 @@ export const langFr =
             btn02: "Inclure Les Nouvelles Saisies à la Liste",
             msg: "Produits Présents dans la Liste! "
         },
+        msgUnit:
+        {
+            title: "Birim Seçimi",
+            btn01: "Onayla",
+        }, // BAK
         validRef :"Saisir numéro de serie",
         validRefNo : "Saisir numéro de référence",
         validDepot : "Sélectionner Dépot",
@@ -6434,6 +6507,9 @@ export const langFr =
         txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
         getOffers : "Obtenir l'offre", // bak
+        txtUnitFactor : "Birim Katsayısı",  // BAK
+        txtUnitQuantity : "Birim Miktarı",  // BAK
+        txtTotalQuantity : "Toplam Miktar",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -6659,6 +6735,11 @@ export const langFr =
             btn02: "Inclure Les Nouvelles Saisies à la Liste",
             msg: "Produits Présents dans la Liste! "
         },
+        msgUnit:
+        {
+            title: "Birim Seçimi",
+            btn01: "Onayla",
+        }, // BAK
         validRef :"Saisir numéro de serie",
         validRefNo : "Saisir numéro de référence",
         validDepot : "Sélectionner Dépot",
@@ -8371,6 +8452,9 @@ export const langFr =
         txtBarcode: "Code barre",
         txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
+        txtUnitFactor : "Birim Katsayısı",  // BAK
+        txtUnitQuantity : "Birim Miktarı",  // BAK
+        txtTotalQuantity : "Toplam Miktar",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -8591,6 +8675,11 @@ export const langFr =
             btn02: "Inclure Les Nouvelles Saisies à la Liste",
             msg: "Produits Présents dans la Liste! "
         },
+        msgUnit:
+        {
+            title: "Birim Seçimi",
+            btn01: "Onayla",
+        }, // BAK
         validRef :"Saisir numéro de serie",
         validRefNo : "Saisir numéro de référence",
         validDepot : "Sélectionner Dépot",
@@ -8652,6 +8741,9 @@ export const langFr =
         txtBarcode: "Code barre",
         txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
+        txtUnitFactor : "Birim Katsayısı",  // BAK
+        txtUnitQuantity : "Birim Miktarı",  // BAK
+        txtTotalQuantity : "Toplam Miktar",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -8690,6 +8782,7 @@ export const langFr =
             clmMargin :"Marge",
             clmDescription : "Motif",
             clmCuser :"Utilisateur",
+            clmBarcode :"Code Barre",
             clmVatRate : "TVA %"
         },
         popDiscount : 
@@ -8882,6 +8975,11 @@ export const langFr =
             quantity: "Quantité Total",
             quantity2: "2.Total de l'unité "
         },
+        msgUnit:
+        {
+            title: "Birim Seçimi",
+            btn01: "Onayla",
+        }, // BAK
         validRef :"Saisir numéro de serie",
         validRefNo : "Saisir numéro de référence",
         validDepot : "Sélectionner Dépot",

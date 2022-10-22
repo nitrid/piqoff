@@ -189,7 +189,7 @@ export default class itemCard extends React.PureComponent
         
         let tmpMainUnitObj = {...this.itemsObj.itemUnit.empty}
         tmpMainUnitObj.TYPE = 0
-        tmpMainUnitObj.TYPE_NAME = 'Ana Birim'   // LANGBAK
+        tmpMainUnitObj.TYPE_NAME = this.t("mainUnitName")   
         tmpMainUnitObj.ITEM_GUID = this.itemsObj.dt()[0].GUID 
         
         if(tmpUnit.dt(0).length > 0)
@@ -199,7 +199,7 @@ export default class itemCard extends React.PureComponent
         
         let tmpUnderUnitObj = {...this.itemsObj.itemUnit.empty}
         tmpUnderUnitObj.TYPE = 1,
-        tmpUnderUnitObj.TYPE_NAME = 'Alt Birim'   // LANGBAK
+        tmpUnderUnitObj.TYPE_NAME = this.t("underUnitName")   
         tmpUnderUnitObj.ID  = this.cmbUnderUnit.value
         tmpUnderUnitObj.ITEM_GUID = this.itemsObj.dt()[0].GUID    
         tmpUnderUnitObj.FACTOR = 0
@@ -935,7 +935,7 @@ export default class itemCard extends React.PureComponent
                                         
                                         let tmpMainUnitObj = {...this.itemsObj.itemUnit.empty}
                                         tmpMainUnitObj.TYPE = 0
-                                        tmpMainUnitObj.TYPE_NAME = 'Ana Birim'   // LANGBAK
+                                        tmpMainUnitObj.TYPE_NAME = this.t("mainUnitName")   
                                         tmpMainUnitObj.ITEM_GUID = this.itemsObj.dt()[0].GUID 
                                         
                                         if(tmpUnit.dt(0).length > 0)
@@ -945,7 +945,7 @@ export default class itemCard extends React.PureComponent
                                         
                                         let tmpUnderUnitObj = {...this.itemsObj.itemUnit.empty}
                                         tmpUnderUnitObj.TYPE = 1,
-                                        tmpUnderUnitObj.TYPE_NAME = 'Alt Birim'   // LANGBAK
+                                        tmpUnderUnitObj.TYPE_NAME =this.t("underUnitName")   
                                         tmpUnderUnitObj.ID  = this.cmbUnderUnit.value
                                         tmpUnderUnitObj.ITEM_GUID = this.itemsObj.dt()[0].GUID    
                                         tmpUnderUnitObj.FACTOR = 0
@@ -1951,7 +1951,7 @@ export default class itemCard extends React.PureComponent
                                     <Label text={this.t("popPrice.txtPopPriQuantity")} alignment="right" />
                                     <NdNumberBox id={"txtPopPriQuantity"} parent={this} simple={true}>
                                         <Validator validationGroup={"frmPrice" + this.tabIndex}>
-                                            <RequiredRule message={this.t("validQuantity")}  // LANGBAK
+                                            <RequiredRule message={this.t("validQuantity")}  
                                              />
                                         </Validator>
                                     </NdNumberBox>
@@ -1960,9 +1960,9 @@ export default class itemCard extends React.PureComponent
                                     <Label text={this.t("popPrice.txtPopPriPrice")} alignment="right" />
                                     <NdNumberBox id={"txtPopPriPrice"} parent={this} simple={true}>
                                         <Validator validationGroup={"frmPrice" + this.tabIndex}>
-                                            <RequiredRule message="Fiyat'ı boş geçemezsiniz !"   // LANGBAK
+                                            <RequiredRule message={this.t("validPrice")}
                                              />
-                                            <RangeRule min={0.001} message={"Fiyat sıfırdan küçük olamaz !"}   // LANGBAK
+                                            <RangeRule min={0.001} message={this.t("validPriceFloat")}
                                              />
                                         </Validator> 
                                     </NdNumberBox>
@@ -2362,7 +2362,7 @@ export default class itemCard extends React.PureComponent
                                     <NdTextBox id={"txtPopCustomerName"} parent={this} simple={true} readOnly={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} >
                                     <Validator validationGroup={"frmItemCustomer" + this.tabIndex}>
-                                            <RequiredRule message="Tedarikci Kodu Giriniz !"   // LANGBAK
+                                            <RequiredRule message={this.t("validCustomerCode")}
                                              />
                                     </Validator> 
                                     </NdTextBox>
@@ -2372,7 +2372,7 @@ export default class itemCard extends React.PureComponent
                                     <NdTextBox id={"txtPopCustomerItemCode"} parent={this} simple={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} >
                                     <Validator validationGroup={"frmItemCustomer" + this.tabIndex}>
-                                            <RequiredRule message="Tedarikci Kodu Giriniz !"   // LANGBAK
+                                            <RequiredRule message={this.t("validCustomerCode")}
                                              />
                                     </Validator> 
                                     </NdTextBox>
@@ -2381,9 +2381,9 @@ export default class itemCard extends React.PureComponent
                                     <Label text={this.t("popCustomer.txtPopCustomerPrice")} alignment="right" />
                                     <NdNumberBox id={"txtPopCustomerPrice"} parent={this} simple={true} >
                                     <Validator validationGroup={"frmItemCustomer" + this.tabIndex}>
-                                            <RequiredRule message="Fiyat'ı boş geçemezsiniz !"   // LANGBAK
+                                            <RequiredRule message={this.t("validPrice")}   
                                              />
-                                            <RangeRule min={0.001} message={"Fiyat sıfırdan küçük olamaz !"}   // LANGBAK
+                                            <RangeRule min={0.001} message={this.t("validPriceFloat")}   
                                              />
                                         </Validator> 
                                     </NdNumberBox>
