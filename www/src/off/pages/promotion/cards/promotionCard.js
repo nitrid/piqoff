@@ -64,7 +64,7 @@ export default class promotionCard extends React.PureComponent
         this.condDt.push({...this.promo.cond.empty})        
         this.appDt.push({...this.promo.app.empty})  
 
-        await this.lstPromo.dataRefresh({source:[{id:0,text:'Koşul',items:this.condDt},{id:1,text:'Uygulama',items:this.appDt}]});        
+        await this.lstPromo.dataRefresh({source:[{id:0,text:'Koşul',items:this.condDt},{id:1,text:'Uygulama',items:this.appDt}]});    // LANGBAK       
 
         this.promo.ds.on('onRefresh',async(pTblName)  =>
         {            

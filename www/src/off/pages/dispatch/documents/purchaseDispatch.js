@@ -176,12 +176,12 @@ export default class purchaseDispatch extends React.PureComponent
                     {
                         id: 'msgCode',
                         showTitle:true,
-                        title:"Dikkat",
+                        title:"Dikkat",   // LANGBAK
                         showCloseButton:true,
                         width:'500px',
                         height:'200px',
-                        button:[{id:"btn01",caption:"Evrağa Git",location:'before'}],
-                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Evrak Bulundu"}</div>)
+                        button:[{id:"btn01",caption:"Evrağa Git",location:'before'}],   // LANGBAK
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Evrak Bulundu"}</div>)   // LANGBAK
                     }
     
                     let pResult = await dialog(tmpConfObj);
@@ -1279,7 +1279,8 @@ export default class purchaseDispatch extends React.PureComponent
                                         <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
                                         <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
                                         <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
-                                        <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} filterType={"include"} filterValues={['Tedarikçi']}/>
+                                        <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} filterType={"include"} filterValues={['Tedarikçi']}   // LANGBAK
+                                        />
                                         
                                     </NdPopGrid>
                                 </Item> 

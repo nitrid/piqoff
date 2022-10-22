@@ -174,7 +174,7 @@ export default class App extends React.PureComponent
                 {
                     type : 0,
                     headers : 'Warning',
-                    title: 'Sql sunucuya bağlanılamıyor.',
+                    title: 'Sql sunucuya bağlanılamıyor.',   // LANGBAK
                 }
                 App.instance.setState({logined:false,connected:false,splash:tmpSplash});
             }
@@ -183,7 +183,7 @@ export default class App extends React.PureComponent
                 let tmpSplash = 
                 {
                     type : 1,
-                    headers : 'Veritabanı yok. Oluşturmak istermisiniz.',
+                    headers : 'Veritabanı yok. Oluşturmak istermisiniz.',   // LANGBAK
                     title: '',
                 }
 
@@ -267,8 +267,8 @@ export default class App extends React.PureComponent
             let tmpSplash = 
             {
                 type : 1,
-                headers : 'Veritabanı yok. Oluşturmak istermisiniz.',
-                title: 'Vt kurulumu başarılı.Lütfen config dosyasını kontrol edip sunucuyu restart ediniz.',
+                headers : 'Veritabanı yok. Oluşturmak istermisiniz.',   // LANGBAK
+                title: 'Vt kurulumu başarılı.Lütfen config dosyasını kontrol edip sunucuyu restart ediniz.',   // LANGBAK
             }
             App.instance.setState({logined:false,connected:false,splash:tmpSplash});
         }
@@ -277,7 +277,7 @@ export default class App extends React.PureComponent
             let tmpSplash = 
             {
                 type : 1,
-                headers : 'Veritabanı yok. Oluşturmak istermisiniz.',
+                headers : 'Veritabanı yok. Oluşturmak istermisiniz.',   // LANGBAK
                 title: tmpResult.msg,
             }
             App.instance.setState({logined:false,connected:false,splash:tmpSplash});

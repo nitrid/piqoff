@@ -171,12 +171,12 @@ export default class branchSaleDispatch extends React.PureComponent
                     {
                         id: 'msgCode',
                         showTitle:true,
-                        title:"Dikkat",
+                        title:"Dikkat",   // LANGBAK
                         showCloseButton:true,
                         width:'500px',
                         height:'200px',
-                        button:[{id:"btn01",caption:"Evrağa Git",location:'before'}],
-                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Evrak Bulundu"}</div>)
+                        button:[{id:"btn01",caption:"Evrağa Git",location:'before'}],   // LANGBAK
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Evrak Bulundu"}</div>)   // LANGBAK
                     }
     
                     let pResult = await dialog(tmpConfObj);
