@@ -1025,17 +1025,7 @@ export default class purchaseDispatch extends React.PureComponent
                                             maxLength={32}
                                             onChange={(async(e)=>
                                             {
-                                                let tmpQuery = 
-                                                {
-                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 0 AND DOC_TYPE = 40 AND REF = @REF ",
-                                                    param : ['REF:string|25'],
-                                                    value : [this.txtRef.value]
-                                                }
-                                                let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                if(tmpData.result.recordset.length > 0)
-                                                {
-                                                    this.txtRefno.value = tmpData.result.recordset[0].REF_NO
-                                                }
+                                               
                                             }).bind(this)}
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
@@ -1082,6 +1072,7 @@ export default class purchaseDispatch extends React.PureComponent
                                             >
                                             <Validator validationGroup={"frmPurcDispatch"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRefNo")} />
+                                                    <RangeRule min={1} message={this.t("validRefNo")}/>
                                                 </Validator> 
                                             </NdTextBox>
                                         </div>
@@ -1167,7 +1158,6 @@ export default class purchaseDispatch extends React.PureComponent
                                                     if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                     {
                                                         this.txtRef.value = data[0].CODE;
-                                                        this.txtRef.props.onChange()
                                                     }
                                                     if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                                     {

@@ -2860,6 +2860,9 @@ export const langFr =
         tabTitleOldInvoices : "Informations de facturation passées",  // BAK
         getRemainder : "Apportez le montant restant",  // BAK
         txtbalance : "Solde total actuel",   // BAK
+        txtUnitFactor : "Birim Katsayısı",  // BAK
+        txtUnitQuantity : "Birim Miktarı",  // BAK
+        txtTotalQuantity : "Toplam Miktar",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3120,6 +3123,11 @@ export const langFr =
             btn02: "Inclure Les Nouvelles Saisies à la Liste",
             msg: "Produits Présents dans la Liste! "
         },
+        msgUnit:
+        {
+            title: "Birim Seçimi",
+            btn01: "Onayla",
+        }, // BAK
         validRef :"Saisir numéro de serie",
         validRefNo : "Saisir numéro de référence",
         validDepot : "Sélectionner Dépot",
