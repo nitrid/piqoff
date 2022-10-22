@@ -246,6 +246,15 @@ export const langTr =
         maxBuyPrice : "Maximum Alış Fiyatı",
         sellPriceAdd : "Satış Fiyatı Ekle",
         clmInvoiceCost : "Hizmet Bedeli",
+        validOrigin : "Menşei boş geçemezsiniz !",
+        validTaxSucre : "Lütfen şeker oranını doğru giriniz !",
+        validName : "Adı boş geçemezsiniz !",
+        validQuantity : "Miktar'ı boş geçemezsiniz !" ,
+        validPrice :"Fiyatı boş geçemezsiniz !",
+        validPriceFloat : "Fiyat 0'dan yüksek olmalıdır !",
+        validCustomerCode :"Tedarikci Kodu Giriniz !",
+        mainUnitName :"Ana Birim",
+        underUnitName : "Alt Birim",
         pg_txtRef:
         {
             title: "Stok Seçimi",
@@ -6161,7 +6170,6 @@ export const langTr =
             clmTotal : "Toplam",
             clmOutputName :"Depo",
         },
-
     },
     sip_02_001 : // "Alış Sipariş"
     {
