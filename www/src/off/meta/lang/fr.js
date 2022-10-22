@@ -109,7 +109,7 @@ export const langFr =
         ftr_01_002: "Liste facture de vente",
         ftr_01_003: "Liste facture retour",
         ftr_01_004:"Liste facture différence de prix",
-        ftr_01_005: "Liste des factures de vente inter-succursales", // BAK
+        ftr_01_005: "Liste des factures de vente interne", // BAK
         ftr_02_001: "Saisie Facture d'achat",
         ftr_02_002: "Saisie Facture de vente",
         ftr_02_003: "Saisie Facture retour",
@@ -123,11 +123,11 @@ export const langFr =
         irs_01_001: "Saisie Bon de livraison d'achat",
         irs_01_002: "Saisie Bon de livraison de vente",
         irs_01_003: "Saisie Bon de livraison de retour",
-        irs_01_004: "Liste des bordereaux de vente inter-succursales", // BAK
+        irs_01_004: "Liste des bordereaux de vente interne", // BAK
         irs_02_001: "Saisie Bon de livraison d'achat",
         irs_02_002: "Saisie Bon de livraison de vente",
         irs_02_003: "Saisie Bon de Retour de livraison",
-        irs_02_004: "Feuille de route des ventes de la succursale", // BAK
+        irs_02_004: "Saisie Bon de livraison interne", // BAK
         sip: "Commande",
         sip_01: "Listes",
         sip_02: "Document",
@@ -4730,7 +4730,7 @@ export const langFr =
         dtFirst : "Première Date",
         dtLast : "Dernière Date",
         txtCustomerCode : "Courantari",
-        menu:"Feuille de route des ventes de la succursale",
+        menu:"Saisie Bon de livraison interne",
         pg_txtCustomerCode : 
         {
             title : "Sélection actuelle",
