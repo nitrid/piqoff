@@ -175,11 +175,11 @@ export default class salesDispatch extends React.PureComponent
                     {
                         id: 'msgCode',
                         showTitle:true,
-                        title:"Dikkat",
+                        title:"Dikkat",   // LANGBAK
                         showCloseButton:true,
                         width:'500px',
                         height:'200px',
-                        button:[{id:"btn01",caption:"Evrağa Git",location:'before'}],
+                        button:[{id:"btn01",caption:"Evrağa Git",location:'before'}],   // LANGBAK
                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Evrak Bulundu"}</div>)   // LANGBAK
                     }
     
@@ -1787,7 +1787,7 @@ export default class salesDispatch extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgUnderPrice2',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgUnderPrice2',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',   // LANGBAK
                                                     button:[{id:"btn01",caption:this.t("msgUnderPrice2.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"msgUnderPrice2.msg"}</div>)
                                                 }
