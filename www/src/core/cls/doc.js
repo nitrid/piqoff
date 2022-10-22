@@ -32,6 +32,7 @@ export class docCls
             LOCKED : 0,
             MARGIN : '',
             PAYMENT_DOC_GUID : '00000000-0000-0000-0000-000000000000',
+            CERTIFICATE : this.core.appInfo.name + " version : " + this.core.appInfo.version
         }
 
         this.docItems = new docItemsCls();
@@ -72,10 +73,11 @@ export class docCls
                     "@TOTAL  = @PTOTAL, " +
                     "@DESCRIPTION  = @PDESCRIPTION, " +
                     "@ADDRESS  = @PADDRESS, " +
-                    "@LOCKED  = @PLOCKED ",
+                    "@LOCKED  = @PLOCKED, " +
+                    "@CERTIFICATE = @PCERTIFICATE ",
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PAMOUNT:float','PDISCOUNT:float','PVAT:float','PTOTAL:float','PDESCRIPTION:string|100','PADDRESS:int','PLOCKED:int'],
-            dataprm : ['GUID','CUSER','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','AMOUNT','DISCOUNT','VAT','TOTAL','DESCRIPTION','ADDRESS','LOCKED']
+                        'POUTPUT:string|50','PAMOUNT:float','PDISCOUNT:float','PVAT:float','PTOTAL:float','PDESCRIPTION:string|100','PADDRESS:int','PLOCKED:int','PCERTIFICATE:string|250'],
+            dataprm : ['GUID','CUSER','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','AMOUNT','DISCOUNT','VAT','TOTAL','DESCRIPTION','ADDRESS','LOCKED','CERTIFICATE']
         }
         tmpDt.updateCmd = 
         {
