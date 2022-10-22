@@ -2446,6 +2446,9 @@ export const langFr =
         txtDiffrentInv : "Facture de différence de prix déduite",   // BAK
         txtbalance : "Solde total actuel",   // BAK
         getRemainder : "Apportez le montant restant",    // BAK
+        txtUnitFactor : "Birim Katsayısı", // BAK
+        txtUnitQuantity : "Birim Miktarı", // BAK
+        txtTotalQuantity : "Toplam Miktar", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -2743,6 +2746,11 @@ export const langFr =
         popUnit2 : 
         {
             title : "Details des Contenus"
+        },
+        msgUnit:
+        {
+            title: "Birim Seçimi",
+            btn01: "Onayla",
         },
         validRef :"Saisir numéro de serie",
         validRefNo : "Saisir numéro de référence",
