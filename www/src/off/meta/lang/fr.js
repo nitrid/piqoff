@@ -2486,6 +2486,8 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  // BAK
         txtUnitQuantity : "Quantité Unitaire",  // BAK
         txtTotalQuantity : "Quantité totale",  // BAK
+        txtExpFee : "Gecikme Cezası", // BAK
+        dtExpDate : "Vade Tarihi", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -2917,6 +2919,8 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire ",  // BAK
         txtUnitQuantity : "Quantité Unitaire",  // BAK
         txtTotalQuantity : "Quantité totale",  // BAK
+        txtExpFee : "Gecikme Cezası", // BAK
+        dtExpDate : "Vade Tarihi", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3296,6 +3300,8 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  // BAK
         txtUnitQuantity : "Quantité unitaire",  // BAK
         txtTotalQuantity : "Quantité totale",  // BAK
+        txtExpFee : "Gecikme Cezası", // BAK
+        dtExpDate : "Vade Tarihi", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3622,6 +3628,8 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  // BAK
         txtUnitQuantity : "Quantité unitaire",  // BAK
         txtTotalQuantity : "Quantité totale",  // BAK
+        txtExpFee : "Gecikme Cezası", // BAK
+        dtExpDate : "Vade Tarihi", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3934,6 +3942,8 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  // BAK
         txtUnitQuantity : "Quantité unitaire",  // BAK
         txtTotalQuantity : "Quantité unitaire",  // BAK
+        txtExpFee : "Gecikme Cezası", // BAK
+        dtExpDate : "Vade Tarihi", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
