@@ -397,7 +397,7 @@ export default class rebateInvoice extends React.PureComponent
                 value={e.value}
                 onChange={(r)=>
                 {
-                    e.data.QUANTITY = r.component._changedValue
+                    this.grdRebtInv.devGrid.cellValue(e.rowIndex,"QUANTITY",r.component._changedValue)
                 }}
                 button=
                 {
@@ -421,13 +421,12 @@ export default class rebateInvoice extends React.PureComponent
                                     this.txtUnitFactor.value = e.data.UNIT_FACTOR
                                     this.txtTotalQuantity.value =  e.data.QUANTITY
                                     this.txtUnitQuantity.value = e.data.QUANTITY / e.data.UNIT_FACTOR
-
                                 }
                                 await this.msgUnit.show().then(async () =>
                                 {
-                                    e.data.QUANTITY = this.txtTotalQuantity.value
-                                    e.data.UNIT = this.cmbUnit.value
-                                    e.data.UNIT_FACTOR =this.txtUnitFactor.value 
+                                    this.grdRebtInv.devGrid.cellValue(e.rowIndex,"QUANTITY",this.txtTotalQuantity.value)
+                                    this.grdRebtInv.devGrid.cellValue(e.rowIndex,"UNIT",this.cmbUnit.value)
+                                    this.grdRebtInv.devGrid.cellValue(e.rowIndex,"UNIT_FACTOR",this.txtUnitFactor.value )
                                 });  
                             }
                         },

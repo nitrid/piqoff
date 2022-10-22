@@ -411,8 +411,7 @@ export default class salesInvoice extends React.PureComponent
                 value={e.value}
                 onChange={(r)=>
                 {
-                    console.log(e)
-                    e.key.QUANTITY = r.component._changedValue
+                    this.grdSlsInv.devGrid.cellValue(e.rowIndex,"QUANTITY",r.component._changedValue)
                 }}
                 button=
                 {
@@ -440,9 +439,9 @@ export default class salesInvoice extends React.PureComponent
                                 }
                                 await this.msgUnit.show().then(async () =>
                                 {
-                                    e.data.QUANTITY = this.txtTotalQuantity.value
-                                    e.data.UNIT = this.cmbUnit.value
-                                    e.data.UNIT_FACTOR =this.txtUnitFactor.value 
+                                    this.grdSlsInv.devGrid.cellValue(e.rowIndex,"QUANTITY",this.txtTotalQuantity.value)
+                                    this.grdSlsInv.devGrid.cellValue(e.rowIndex,"UNIT",this.cmbUnit.value)
+                                    this.grdSlsInv.devGrid.cellValue(e.rowIndex,"UNIT_FACTOR",this.txtUnitFactor.value )
                                 });  
                             }
                         },
@@ -521,8 +520,6 @@ export default class salesInvoice extends React.PureComponent
                             this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
                             this._calculateTotal()
                             await this.grdSlsInv.devGrid.deleteRow(0)
-                            console.log(this.grdSlsInv)
-                            console.log(this.docObj.docItems.dt())
                             if(this.checkCombine.value == true)
                             {
                                 this.combineControl = false
@@ -1057,11 +1054,6 @@ export default class salesInvoice extends React.PureComponent
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmSalesInv"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
-                                        console.log(this.docObj.docItems.dt())
-                                        for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
-                                        {
-                                            console.log(this.docObj.docItems.dt()[i].stat)
-                                        }
                                         if(this.docLocked == true)
                                         {
                                             let tmpConfObj =
@@ -1986,9 +1978,7 @@ export default class salesInvoice extends React.PureComponent
                                         }
                                     }}
                                     onRowUpdated={async(e)=>{
-                                        console.log("11111")
                                         let rowIndex = e.component.getRowIndexByKey(e.key)
-                                        console.log(rowIndex)
 
                                         if(typeof e.data.QUANTITY != 'undefined')
                                         {
