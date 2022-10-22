@@ -27,7 +27,7 @@ export class companyCls
             OFFICIAL_SURNAME : '',
             COMPANY_TYPE : '',
             SIREN_NO : '',
-            CAPITAL : '',
+            CAPITAL : 0,
             COUNTRY_NAME : '',
         }
 
