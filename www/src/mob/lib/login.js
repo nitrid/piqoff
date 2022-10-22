@@ -290,7 +290,7 @@ export default class Login extends React.Component
                         width={'100%'}
                         height={'100%'}
                         selection={{mode:"single"}}
-                        title="Kullanıcı Listesi"
+                        title={this.lang.t("userListTitle")}
                         >
                             <Column dataField="CODE" caption="CODE" width={150} defaultSortOrder="asc"/>
                             <Column dataField="NAME" caption="NAME" width={150} defaultSortOrder="asc" />                            

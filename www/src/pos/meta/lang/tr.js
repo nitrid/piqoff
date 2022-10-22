@@ -13,6 +13,7 @@ export const langTr =
     btnNo : "Hayır",
     msgClose : "Sayfayı Kapatmak İstediğinize Eminmisiniz ?",
     txtLangSelect : "Dil Seçimi",
+    userListTitle : "Kullanıcı Listesi",
     txtUser : "Kullanıcı",
     txtPass : "Şifre",
     btnUserSelect : "Kullanıcı Seçimi",
