@@ -828,6 +828,12 @@ export const langFr =
             clmMulticode : "Sélection Document",
             clmBarcode : "Code Barre"
         },
+        msgCode : //BAK
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
+        },
     },
     stk_02_002 : //"Depo/Mağaza Arası Sevk"
     {
@@ -1147,6 +1153,12 @@ export const langFr =
             clmName : "Nom Produit",
             clmMulticode : "Sélection Document",
             clmBarcode : "Code Barre"
+        },
+        msgCode : //BAK
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
         },
     },
     stk_02_004 : //"Etiket Bas"
@@ -1649,6 +1661,12 @@ export const langFr =
             clmMaxPrice : "Prix Max. Vente",
             clmStatus : "Etat",
 
+        },
+        msgCode : //BAK
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
         },
     },
     stk_03_006 : // "Depo Ürün Miktarları Listesi"
@@ -3214,6 +3232,12 @@ export const langFr =
             clmZipcode : "Code postale",   // BAK
             clmCountry : "Pays",   // BAK
         },
+        msgCode : //BAK
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
+        },
     },
     ftr_02_003 : // "İade Faturası"
     {
@@ -4511,6 +4535,12 @@ export const langFr =
             clmZipcode : "Code postal",   // BAK
             clmCountry : "Pays",   // BAK
         },
+        msgCode : //BAK
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
+        },
     },
     promo_01_001: //  "Promosyon Tanımları"
     {
@@ -4609,6 +4639,8 @@ export const langFr =
             giftCheck: "Cadeau certifié",
             generalDiscount: "Remise générale",
             discountAmount: "Montant de la remise",
+            promoType01: "Koşul",//BAK
+            promoType02: "Uygulama",//BAK
         },
         msgHelp: //BAK
         {
@@ -6369,6 +6401,12 @@ export const langFr =
             clmZipcode : "Code postal",   // BAK
             clmCountry : "Pays",   // BAK
         },
+        msgCode : //BAK
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
+        },
     },
     sip_02_002 : // "Satış Sipariş"
     {
@@ -6673,6 +6711,12 @@ export const langFr =
             clmCiyt : "Ville",   // BAK
             clmZipcode : "Code postal",   // BAK
             clmCountry : "Pays",   // BAK
+        },
+        msgCode : //BAK
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
         },
     },
     sip_04_001 : // "Sipariş Ayrıştırma" // YENI EKLENDI KOMPLE BAK
@@ -7782,8 +7826,61 @@ export const langFr =
             msg: "Veuillez saisir les zones nécessaire !"
         },
         validValue :"Ne peut être Vide",
-        zeroValid : "Ne peut pas être 0"
-
+        zeroValid : "Ne peut pas être 0",
+        btnAdd: "Yeni Değer Ekle", //BAK
+        validation:  //BAK
+        {
+            clmMinValue: "Oran sıfırdan küçük olamaz !",
+            clmMaxvalue: "Oran sıfırdan küçük olamaz !",
+            clmPrice: "Fiyat sıfırdan küçük olamaz !",
+        },
+    },
+    set_02_001 : // "Firma Bilgileri"
+    {
+        txtTitle : "Firma Adı",
+        txtCustomerName : "Yetkili Adı",
+        txtCustomerLastname : "Yetkili Soyadı",
+        txtAddress1 : "Adres",
+        txtAddress2 : "Adres 2",
+        cmbCıty : "Şehir",
+        cmbCountry : "Ülke",
+        txtPhone : "Telefon",
+        txtEmail : "E-Mail",
+        txtWeb : "Web Site",
+        txtSiretId : "Siret ID",
+        txtApeCode : "Ape Code",
+        txtTaxOffice : "Tax Office",
+        txtTaxNo : "Tax No",
+        txtIntVatNo : "Int. Vat No",
+        txtSirenNo : "Siren No",
+        txtCapital : "Sermaye",
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
     },
     pos_01_001 : // "Pos Cihaz Tanıtım",
     {
@@ -8522,7 +8619,13 @@ export const langFr =
             title: "Attention",   //bak
             btn01: "OK",   //bak
             msg: "Il y a une ligne dans votre document qui a été convertie en commande. Ce document ne peut pas être supprimé !"   //bak
-        }
+        },
+        msgCode : //BAK
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
+        },
     },
     tkf_02_002 : // "Satış Teklifi",
     {
@@ -8807,8 +8910,13 @@ export const langFr =
             title: "Attention",   //bak
             btn01: "OK",   //bak
             msg: "Une ligne a été convertie en commande dans votre document. Ce document ne peut pas être supprimé !"   //bak
-        }
-
+        },
+        msgCode : //BAK
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
+        },
     },
     proces_01_001 : // "Ürün Grubu Güncelleme" 
     {
@@ -8824,6 +8932,7 @@ export const langFr =
         barkodPlaceHolder :"Veuillez Entrer Le ou Les Codes Produits ou Codes Barres",
         ItemNamePlaceHolder :"Veuillez Entrer le Nom Complet ou une Syllabe",
         btnOk : "Mettre à jour",
+        toolMenu01: "Stok Tanımları", //BAK 
         grdListe : 
         {
             clmCode: "Référence Produit",
