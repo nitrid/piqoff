@@ -4309,6 +4309,9 @@ export const langFr =
         tabTitlePayments : "Evrak Ödeme Bilgileri",
         tabTitleOldInvoices : "Geçmiş Fatura Bilgileri",
         getRemainder : "Kalan Tutarı Getir",
+        txtUnitFactor : "Coefficient unitaire",  // BAK
+        txtUnitQuantity : "Quantité unitaire",  // BAK
+        txtTotalQuantity : "Quantité totale",  // BAK
         msgDiscount:
         {
             title: "Attention",
@@ -4523,6 +4526,11 @@ export const langFr =
             title: "Dizayn seçimi",
             design : "Dizayn",
             lang : "Evrak Dili"
+        },
+        msgUnit:
+        {
+            title: "Sélection de l'unité",
+            btn01: "Approuver",
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
@@ -5104,8 +5112,8 @@ export const langFr =
         },
         msgUnit:
         {
-            title: "Birim Seçimi",
-            btn01: "Onayla",
+            title: "Sélection de l'unité",
+            btn01: "Approuver",
         }, // BAK
         validRef :"Saisir numéro de serie",
         validRefNo : "Saisir numéro de référence",
