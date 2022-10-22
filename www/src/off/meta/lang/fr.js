@@ -13,7 +13,7 @@ export const langFr =
     btnNo : "Non",
     msgClose : "Etes vous sûr(e) de vouloir quitter la page ?",
     txtLangSelect : "Choix de la langue",
-    userListTitle : "Kullanıcı Listesi", //BAK
+    userListTitle : "Liste d'utilisateur", //BAK
     txtUser : "Utilisateur",
     txtPass : "Mot de passe",
     btnUserSelect : "Choix utilisateur",
@@ -109,7 +109,7 @@ export const langFr =
         ftr_01_002: "Liste facture de vente",
         ftr_01_003: "Liste facture retour",
         ftr_01_004:"Liste facture différence de prix",
-        ftr_01_005: "Liste des factures de vente inter-succursales", // BAK
+        ftr_01_005: "Liste des factures de vente interne", // BAK
         ftr_02_001: "Saisie Facture d'achat",
         ftr_02_002: "Saisie Facture de vente",
         ftr_02_003: "Saisie Facture retour",
@@ -123,11 +123,11 @@ export const langFr =
         irs_01_001: "Saisie Bon de livraison d'achat",
         irs_01_002: "Saisie Bon de livraison de vente",
         irs_01_003: "Saisie Bon de livraison de retour",
-        irs_01_004: "Liste des bordereaux de vente inter-succursales", // BAK
+        irs_01_004: "Liste des bordereaux de vente interne", // BAK
         irs_02_001: "Saisie Bon de livraison d'achat",
         irs_02_002: "Saisie Bon de livraison de vente",
         irs_02_003: "Saisie Bon de Retour de livraison",
-        irs_02_004: "Feuille de route des ventes de la succursale", // BAK
+        irs_02_004: "Feuille de route des ventes de l'interne", // BAK
         sip: "Commande",
         sip_01: "Listes",
         sip_02: "Document",
@@ -453,7 +453,7 @@ export const langFr =
         {
             title: "Attention", 
             btn01: "OK", 
-            msg: "Enregistrement similaire non créable" 
+            msg: "Enregistrement similaire ne peut être crée" 
         },
         msgCheckCustomerCode:
         {
@@ -1466,92 +1466,92 @@ export const langFr =
         txtQuantity : "Pièce", 
         pg_Docs : 
         {
-            title : "Evrak Seçimi",
+            title : "Sélection de documents",
             clmDate : "Date",
-            clmRef : "SERİ",
-            clmRefNo : "SIRA",
+            clmRef : "Série",
+            clmRefNo : "Séquence",
         },
         popItemsCode : 
         {
-            title : "Stok Seçimi",
-            clmCode :  "STOK KODU",
-            clmName : "STOK ADI",
+            title : "Sélection d'actions",
+            clmCode :  "Code de stock",
+            clmName : "Nom de stock",
         },
         popItems: 
         {
-            title: "Stok Ekle",
-            txtPopItemsCode : "Stok Kodu",
-            txtPopItemsName: "Stok Adı",
-            txtPopItemsQuantity : "Miktar",
-            dtPopDate : "SKT Tarih"
+            title: "Ajoutez stock",
+            txtPopItemsCode : "Code de stock",
+            txtPopItemsName: "Nom de stock",
+            txtPopItemsQuantity : "Quantité",
+            dtPopDate : "SKT Date"
         },
         grdExpDate:
         {
-            clmName: "Adı",
-            clmCode: "Kodu",
-            clmDate: "SKT Tarih"
+            clmName: "Nom",
+            clmCode: "Code",
+            clmDate: "SKT Date"
         },
         msgDocValid:
         {
             title: "Attention",
             btn01: "Ok",
-            msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
+            msg: "L'inventaire ne peut pas être saisi avant que les en-têtes de document ne soient terminés !"
         },
         msgNotSave:
         {
             title: "Attention",
             btn01: "Ok",
-            msg: "Evrakta Değişiklik Yapılmış! Lütfen Kayıt Edin Yada Değişiklikleri Geri Alın"
+            msg: "Le document a été modifié ! Veuillez enregistrer ou annuler les modifications"
         },
         msgAddItems:
         {
             title: "Attention",
             btn01: "Ok",
-            btn02: "Vazgeç",
-            msg: "Seçmiş olduğunuz kritere uygun ürünler eklenecektir.Onaylıyormusunuz ?"
+            btn02: "Abandonnez",
+            msg: "Les produits correspondant aux critères que vous avez sélectionnés seront ajoutés. Êtes-vous d'accord ?"
         },
         msgSave:
         {
             title: "Attention",
             btn01: "Ok",
-            btn02: "Vazgeç",
-            msg: "Kayıt etmek istediğinize eminmisiniz !"
+            btn02: "Abandonnez",
+            msg: "Êtes-vous sûr de vouloir vous inscrire?"
         },
         msgSaveResult:
         {
             title: "Attention",
             btn01: "Ok",
-            msgSuccess: "Kayıt işleminiz başarılı !",
-            msgFailed: "Kayıt işleminiz başarısız !"
+            msgSuccess: "Votre inscription est réussie !",
+            msgFailed: "Votre inscription a échoué !"
         },
         msgSaveValid:
         {
             title: "Attention",
             btn01: "Ok",
-            msg: "Lütfen gerekli alanları doldurunuz !"
+            msg: "S'il vous plaît remplir les champs obligatoires !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "Ok",
-            btn02: "Vazgeç",
-            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+            btn02: "Abandonnez",
+            msg: "Voulez-vous vraiment supprimer l'enregistrement ?"
         },
         msgItemNotFound:
         {
             title: "Attention",
             btn01: "Ok",
-            msg: "Stok Bulunmadı !!"
+            msg: "Aucun stock trouvé !!"
         },
         msgCombineItem:
         {
             title: "Attention",
-            btn01: "Vazgeç",
-            btn02: "Yeni Ekle",
-            msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Yeni Satır Eklensin Mi ?"
+            btn01: "Abandonne",
+            btn02: "Ajoutez nouveau",
+            msg: "Le produit que vous souhaitez ajouter est dans le document ! Ajouter une nouvelle ligne ?"
         },
-        validDepot : "Depo Seçmelisiniz",
-        validDocDate : "Tarih Seçmelisiniz",
+        validDepot : "Vous devez choisir l'entrepôt",
+        validDocDate : "Vous devez choisir une date",
     },
     stk_03_001 :  // "Stok Listesi" 
     {
@@ -1665,7 +1665,7 @@ export const langFr =
             clmBarcode : "Code Barre"
         },
         txtTotalQuantity : "Quantité Total",
-        ItemNamePlaceHolder : "Ürün Adı Giriniz.."
+        ItemNamePlaceHolder : "Entrez le nom du produit.."
     },
     stk_04_001 : //"Toplu Stok Düzenleme"
     {
@@ -2375,31 +2375,31 @@ export const langFr =
     },
     ftr_01_005 : // "Şube Satış Fatura Listesi" YENI EKLENDI KOMPLE BAK
     {
-        txtCustomerCode : "Cari",
-        menu:"Şubeler Arası Satış Faturası",
+        txtCustomerCode : "Fournisseur",
+        menu:"Facture de vente interne",
         pg_txtCustomerCode : 
         {
-            title : "Cari Seçimi",
-            clmCode :  "CARİ KODU",
-            clmTitle : "CARİ ADI",
-            clmTypeName : "TİPİ",
-            clmGenusName : "CİNSİ"
+            title : "Sélection actuelle",
+            clmCode :  "Code de fournisseur",
+            clmTitle : "Nom du fournisseur",
+            clmTypeName : "Type",
+            clmGenusName : "Fournisseur"
         },
-        btnGet :"Getir",
-        dtFirst : "İlk Tarih",
-        dtLast : "Son Tarih",
+        btnGet :"Ramène",
+        dtFirst : "Première date",
+        dtLast : "Dernière date",
         grdSlsIvcList: 
         {
-            clmRef: "Seri",
-            clmRefNo: "Sıra",
-            clmPrice: "Fiyat",
-            clmInputCode : "Cari Kodu",
-            clmInputName : "Cari Adı",
-            clmDate: "Tarih",
+            clmRef: "Serie",
+            clmRefNo: "Séquence",
+            clmPrice: "Prix",
+            clmInputCode : "Code de fournisseur",
+            clmInputName : "Nom de fournisseur",
+            clmDate: "Date",
             clmVat : "KDV",
-            clmAmount : "Tutar",
-            clmTotal : "Toplam",
-            clmOutputName :"Depo",
+            clmAmount : "Montant",
+            clmTotal : "Total",
+            clmOutputName :"Depôt",
         },
 
     },
@@ -2612,7 +2612,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Ödemesi Yapılmış Evrak Silinemez!" // BAK
+            msg: "Le document payant ne peut pas être supprimé !" // BAK
         },
         msgDoclocked:
         {
@@ -2747,7 +2747,7 @@ export const langFr =
         {
             title : "Details des Contenus"
         },
-        msgUnit:
+        msgUnit: //Bak
         {
             title: "Birim Seçimi",
             btn01: "Onayla",
@@ -3136,8 +3136,8 @@ export const langFr =
         },
         msgUnit:
         {
-            title: "Birim Seçimi",
-            btn01: "Onayla",
+            title: "Sélection de l'unité",
+            btn01: "Approuver",
         }, // BAK
         validRef :"Saisir numéro de serie",
         validRefNo : "Saisir numéro de référence",
@@ -4186,298 +4186,298 @@ export const langFr =
     },
     ftr_04_001 : // "Proforma Fiyat Farkı Faturası" YENI EKLEN DI KOPMLE BAK
     {
-        txtRefRefno : "Seri-Sıra",
-        cmbDepot: "Depo",
-        txtCustomerCode : "Cari Kodu",
-        txtCustomerName : "Cari Adı",
-        dtDocDate : "Tarih",
-        txtAmount : "Tutar",
-        txtDiscount : "İndirim",
-        txtMargin : "Marj",
-        txtVat : "Kdv",
-        txtTotal : "Genel Toplam",
-        dtShipDate :"Sevk Tarihi",
-        getContract : "Alış Faturası Seç",
-        getPayment : "Tahsilat Girişi",
-        cash : "Tutar",
-        description :"Açıklama",
-        checkReference : "Referans",
-        btnCash : "Tahsilat Ekle",
-        btnCheck : "Çek",
-        btnBank : "Havale",
-        cmbCashSafe : "Kasa Seçimi",
-        cmbCheckSafe : "Çek Kasası",
-        cmbBank : "Banka Seçimi",
-        txtPayInvoıceTotal : "Fatura Tutarı",
-        txtPayTotal : "Tahsilat Toplamı",
-        txtRemainder : "Kalan",
-        txtBarcode : "Barkod Ekle",
-        txtBarcodePlace: "Barkod Okutunuz",
-        txtQuantity :"Miktar",
-        tabTitleSubtotal : "Fatura Toplamı",
-        tabTitlePayments : "Evrak Ödeme Bilgileri",
-        tabTitleOldInvoices : "Geçmiş Fatura Bilgileri",
-        getRemainder : "Kalan Tutarı Getir",
+        txtRefRefno : "Serie-Séquence",
+        cmbDepot: "Depôt",
+        txtCustomerCode : "Code de fournisseur",
+        txtCustomerName : "Nom de fournisseur",
+        dtDocDate : "Date",
+        txtAmount : "Montant",
+        txtDiscount : "Promotion",
+        txtMargin : "Marje",
+        txtVat : "TVA",
+        txtTotal : "Total général",
+        dtShipDate :"La date d'expédition",
+        getContract : "Sélectionnez la facture d'achat",
+        getPayment : "Entrée du règlement",
+        cash : "Montant",
+        description :"Explication",
+        checkReference : "Reference",
+        btnCash : "Ajoutez règlement",
+        btnCheck : "Chèque",
+        btnBank : "Transférer",
+        cmbCashSafe : "Sélection de cas",
+        cmbCheckSafe : "Chèque de la caisse",
+        cmbBank : "Sélection de banque",
+        txtPayInvoıceTotal : "Montant de la facture",
+        txtPayTotal : "Total de règlement",
+        txtRemainder : "Reste",
+        txtBarcode : "Ajoutez barre code",
+        txtBarcodePlace: "Faire lire code barre",
+        txtQuantity :"Quantité",
+        tabTitleSubtotal : "Total de la facture",
+        tabTitlePayments : "Documenter les informations de paiement",
+        tabTitleOldInvoices : "Informations de facturation passées",
+        getRemainder : "Apportez le montant restant",
         msgDiscount:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: " Tutar 0 dan düşük olamaz !"
+            title: "Attention",
+            btn01: "OK",
+            msg: " Le montant ne peut pas être inférieur à 0 !"
         },
         pg_Docs : 
         {
-            title : "Evrak Seçimi",
-            clmDate : "TARIH",
-            clmRef : "SERİ",
-            clmRefNo : "SIRA",
-            clmInputName : "CARİ ADI",
-            clmInputCode  : "CARİ KODU",
+            title : "Sélection de documents",
+            clmDate : "Date",
+            clmRef : "Série",
+            clmRefNo : "Séquence",
+            clmInputName : "Nom du fournisseur",
+            clmInputCode  : "Code du fournisseur",
         },
         pg_txtCustomerCode : 
         {
-            title : "Cari Seçimi",
-            clmCode :  "CARİ KODU",
-            clmTitle : "CARİ ADI",
-            clmTypeName : "TİPİ",
-            clmGenusName : "CİNSİ"
+            title : "Sélection fournisseur",
+            clmCode :  "Code du fournisseur",
+            clmTitle : "Nom du fournissseur",
+            clmTypeName : "Type",
+            clmGenusName : "Type"
         },
         pg_txtItemsCode : 
         {
-            title : "Stok Seçimi",
-            clmCode :  "STOK KODU",
-            clmName : "STOK ADI",
+            title : "Choix de stock",
+            clmCode :  "Code de stock",
+            clmName : "Nom de stock",
         },
         pg_contractGrid : 
         {
-            title : "Fatura Seçimi",
-            clmReferans : "Seri - Sıra",
-            clmDocDate : "Evrak Tarihi",
-            clmTotal : "Tutar"
+            title : "Sélection de facture",
+            clmReferans : "Serie - Séquence",
+            clmDocDate : "Historique du document",
+            clmTotal : "Montant"
         },
         grdDiffInv: 
         {
-            clmItemCode: "Kodu",
-            clmItemName: "Adı",
-            clmPrice: "Fiyat",
-            clmQuantity : "Adet",
-            clmDiscount : "İndirim",
-            clmDiscountRate : "İndirim %",
-            clmVat : "KDV",
-            clmAmount : "Tutar",
-            clmTotal : "G. Toplam",
-            clmCreateDate: "Kayıt Tarihi",
-            clmInvNo : "Fatura No",
-            clmInvDate : "Fatura Tarihi",
-            clmDescription :"Açıklama",
-            clmCuser :"Kullanıcı",
-            clmMulticode : "T. Kodu",
-            clmCustomerPrice : "T. Fiyatı",
-            clmPurcPrice : "Fatura Fiyatı",
-            clmVatRate : "KDV %"
+            clmItemCode: "Code",
+            clmItemName: "Nom",
+            clmPrice: "Prix",
+            clmQuantity : "Quantité",
+            clmDiscount : "Promotion",
+            clmDiscountRate : "Promotion %",
+            clmVat : "TVA",
+            clmAmount : "Montant",
+            clmTotal : "G. Total",
+            clmCreateDate: "Date d'enregistrement",
+            clmInvNo : "Facture No",
+            clmInvDate : "Date de facture",
+            clmDescription :"Explication",
+            clmCuser :"Utilisateur",
+            clmMulticode : "T. Code",
+            clmCustomerPrice : "T. Prix",
+            clmPurcPrice : "Prix de la facture",
+            clmVatRate : "TVA %"
         },
         grdInvoicePayment: 
         {
-            clmInputName: "Kasa",
-            clmTypeName: "Tipi",
-            clmPrice: "Fiyat",
-            clmCreateDate: "Kayıt Tarihi",
+            clmInputName: "Caisse",
+            clmTypeName: "Type",
+            clmPrice: "Prix",
+            clmCreateDate: "Date d'enregistrement",
 
         },
         popPayment:
         {
-            title: "Tahsilatlar",
+            title: "Règlement",
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            title: "Remise sur les documents",
+            Percent : "Pourcentage",
+            Price : "Montant"
         },
         popPassword : 
         {
-            title: "Evrakı Açmak İçin Yönetici Şifresini Girmelisiniz",
-            Password : "Şifre",
-            btnApprove : "Onayla"
+            title: "Vous devez entrer le mot de passe administrateur pour ouvrir le document.",
+            Password : "Code",
+            btnApprove : "Approuver"
         },
         msgDocValid:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "L'inventaire ne peut pas être saisi avant que les en-têtes de document ne soient terminés !"
         },
         msgSave:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            btn02: "Vazgeç",
-            msg: "Kayıt etmek istediğinize eminmisiniz !"
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonnez",
+            msg: "Êtes-vous sûr de vouloir vous inscrire?"
         },
         msgSaveResult:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msgSuccess: "Kayıt işleminiz başarılı !",
-            msgFailed: "Kayıt işleminiz başarısız !"
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Votre inscription est réussie !",
+            msgFailed: "Votre inscription a échoué !"
         },
         msgSaveValid:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Lütfen gerekli alanları doldurunuz !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "S'il vous plaît remplir les champs obligatoires !"
         },
         msgDelete:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            btn02: "Vazgeç",
-            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonnez",
+            msg: "Voulez-vous vraiment supprimer l'enregistrement ?"
         },
         msgVatDelete:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            btn02: "Vazgeç",
-            msg: "Vergiyi Sıfırlamak istediğinize eminmisiniz !"
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonnez",
+            msg: "Voulez-vous vraiment réinitialiser la taxe ?"
         },
         msgMoreAmount:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Kalan Tutardan Fazla Tahsilat Girilemez !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Dans le montant restant, le règlement en plus ne peut pas être saisis"
         },
         msgDiscountPrice:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Tutardan Büyük İndirim Yapılamaz !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Aucune grande remise ne peut être faite à partir du montant !"
         },
         msgDiscountPercent:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Tutardan Büyük İndirim Yapılamaz !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Aucune grande remise ne peut être faite à partir du montant !"
         },
         msgLocked:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Evrak Kayıt Edildi Ve Kilitlendi !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Document enregistré et verrouillé !"
         },
         msgPasswordSucces:
         {
-            title: "Başarılı",
-            btn01: "Tamam",
-            msg: "Evrakın Kilidi Açıldı !",
+            title: "Réussis",
+            btn01: "OK",
+            msg: "Document déverrouillé !",
         },
         msgPasswordWrong:
         {
-            title: "Başarısız",
-            btn01: "Tamam",
-            msg: "Şifreniz Hatalı !"
+            title: "Echec",
+            btn01: "OK",
+            msg: "Code incorrect !"
         },
         msgGetLocked:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Document verrouillé ! \n Pour enregistrer les modifications, vous devez déverrouiller avec le mot de passe administrateur !"
         },
         msgDocLocked:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Evrak Kilidi Açılmadan İşlem Yapılamaz !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Aucune transaction ne peut être effectuée sans ouvrir le verrou de document !"
         },
         msgDiscount:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "İndirim Tutardan Yüksek Olamaz !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "La remise ne peut pas être supérieure au montant !"
         },
         msgItemNotFound:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Stok Bulunmadı !!"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Stock introuvable !"
         },
         msgNotCustomer:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Cari Bulunmadı !!"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Fournisseur introuvable !"
         },
         msgCombineItem:
         {
-            title: "Dikkat",
-            btn01: "Birleştir",
-            btn02: "Yeni Ekle",
-            msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Satırlar Birleştirilsin mi ?"
+            title: "Attention",
+            btn01: "Assembler",
+            btn02: "Ajoutez nouveau",
+            msg: "Le produit que vous souhaitez ajouter est dans le document ! Fusionner les lignes ?"
         },
         popCash : 
         {
-            title: "Nakit Girişi",
-            btnApprove : "Ekle"
+            title: "Entrée espèces",
+            btnApprove : "Ajoutez"
         },
         popCheck : 
         {
-            title: "Çek Girişi",
-            btnApprove : "Ekle"
+            title: "Entrée Chèque",
+            btnApprove : "Ajoutez"
         },
         popBank : 
         {
-            title: "Havale Girişi",
-            btnApprove : "Ekle"
+            title: "Entrée de remise",
+            btnApprove : "Ajoutez"
         },
         popDesign : 
         {
-            title: "Dizayn seçimi",
-            design : "Dizayn",
-            lang : "Evrak Dili"
+            title: "Choix du design",
+            design : "Design",
+            lang : "Langue du document"
         },
-        validRef :"Seri Boş Geçilemez",
-        validRefNo : "Sıra Boş Geçilemez",
-        validDepot : "Depo Seçmelisiniz",
-        validCustomerCode : "Cari Kodu Boş Geçilemez",
-        validDocDate : "Tarih Seçmelisiniz",
+        validRef :"Série ne peut pas être vide",
+        validRefNo : "Séquence ne peut pas être vide",
+        validDepot : "Choix du Depôt",
+        validCustomerCode : "Le code de fournisseur ne peut être vide.",
+        validDocDate : "Vous devez choisir une date",
         pg_txtBarcode : 
         {
-            title : "Barkod Seçimi",
-            clmCode :  "STOK KODU",
-            clmName : "STOK ADI",
-            clmMulticode : "TEDARİKÇİ KODU",
-            clmBarcode : "BARKOD"
+            title : "Sélection de code-barres",
+            clmCode :  "Code de Stock",
+            clmName : "Nom de stock",
+            clmMulticode : "Code Fournisseur",
+            clmBarcode : "Barre code"
         },
         msgQuantity:
         {
-            title: "Miktar",
-            btn01: "Ekle",
-            msg: "Miktar Giriniz"
+            title: "Quantité",
+            btn01: "Ajoutez",
+            msg: "Entrée quantité"
         },
         cmbPayType : {
-            title : "Ödeme Tipi",
-            cash : "Nakit",
-            check : "Çek",
-            bankTransfer : "Hesaba Havale",
-            otoTransfer : "Otomatik Ödeme",
-            foodTicket : "Yemek Çeki",
-            bill : "Senet",
+            title : "Type de paiement",
+            cash : "Espèce",
+            check : "Chèque",
+            bankTransfer : "Virement compte courant",
+            otoTransfer : "Paiement automatique",
+            foodTicket : "Bon alimentaire",
+            bill : "Facture",
         },
         msgRowNotUpdate:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Bu Satır  Faturaya Çevirilmiştir Değişiklik Yapamazsınız!"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Cette ligne a été convertie en facture, vous ne pouvez apporter aucune modification !"
         },
         msgRowNotDelete :
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Bu Satır  Faturaya Çevirilmiştir Silme İşlemi Yapamazsınız !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Cette ligne a été convertie en facture, vous ne pouvez pas la supprimer !"
         },
         msgdocNotDelete : 
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Evrakınızda  Faturaya çevirilmiş satır var.. Bu evrak silinemez !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "Une ligne de votre document a été convertie en facture. Ce document ne peut pas être supprimé !"
         },
         pg_adress : 
         {
@@ -4521,7 +4521,7 @@ export const langFr =
             clmName: "Nom", 
             clmGrpName: "Groupe", //BAK
             clmPrice : "Prix", //BAK
-            btnItem: "Promosyon Ürün Seçimi", //BAK
+            btnItem: "Sélection de produits promotionnels", //BAK
         },
         msgRef:
         {
@@ -4608,10 +4608,10 @@ export const langFr =
         },
         msgDeleteAll: //BAK
         {
-            title: "Dikkat",
-            btn01: "Evet",
-            btn02: "Hayır",
-            msg: "Tümünü silmek istediğinize eminmisiniz ?",
+            title: "Attention",
+            btn01: "Oui",
+            btn02: "Non",
+            msg: "Voulez-vous vraiment tout supprimer ?",
         },
     },
     promo_02_001: //  "Promosyon Listesi"
@@ -4740,7 +4740,7 @@ export const langFr =
         dtFirst : "Première Date",
         dtLast : "Dernière Date",
         txtCustomerCode : "Courantari",
-        menu:"Feuille de route des ventes de la succursale",
+        menu:"Feuille de route des ventes interne",
         pg_txtCustomerCode : 
         {
             title : "Sélection actuelle",
@@ -5315,7 +5315,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Ok",
-            msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
+            msg: "Le montant de l'entrepôt est fermé à moins ! Montant maximum pouvant être ajouté :"
         },
         msgQuantity:
         {
@@ -6629,53 +6629,53 @@ export const langFr =
     },
     sip_04_001 : // "Sipariş Ayrıştırma" // YENI EKLENDI KOMPLE BAK
     {
-        txtCustomerCode : "Cari",
-        validDepot : "Lütfen Depo Seçiniz",
-        ItemNamePlaceHolder :"Ürün Adının Tamamını yada İçinde Geçen Bir Hece Giriniz",
+        txtCustomerCode : "Fournisseur",
+        validDepot : "Veuillez choisir le depôt",
+        ItemNamePlaceHolder :"Entrez le nom complet du produit ou une syllabe le contenant",
         pg_txtCustomerCode : 
         {
-            title : "Cari Seçimi",
-            clmCode :  "CARİ KODU",
-            clmTitle : "CARİ ADI",
-            clmTypeName : "TİPİ",
-            clmGenusName : "CİNSİ"
+            title : "Choix du fournisseur",
+            clmCode :  "Code de fournisseur",
+            clmTitle : "Nom de fournisseur",
+            clmTypeName : "Type",
+            clmGenusName : "Type"
         },
-        cmbDepot : 'Depo',
-        btnGet : 'Getir',
-        btnOrder : 'Sipariş Oluştur',
+        cmbDepot : 'Depôt',
+        btnGet : 'Ramène',
+        btnOrder : 'Créer une commande',
         grdOrderList : 
         {
-            clmCode: "Kodu",
-            clmName : "Adı",
-            clmQuantity : "Adet",
-            clmCustomer : "Cari",
-            clmPrice : "Fiyat"
+            clmCode: "Code",
+            clmName : "Nom",
+            clmQuantity : "Quantité",
+            clmCustomer : "Fournisseur",
+            clmPrice : "Prix"
         },
         msgSave:
         {
-            title: "Dikkat",
-            btn01: "Onayla",
-            btn02: "Vazgeç",
-            msg: "Seçili Satırları İade Etmek İstediğinize Eminmisiniz !"
+            title: "Attention",
+            btn01: "Approuver",
+            btn02: "Abandonnez",
+            msg: "Êtes-vous sûr de vouloir renvoyer les lignes sélectionnées !"
         },
         msgSaveResult:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msgSuccess: " İade Evraklarınız Oluşturuldu..!",
-            msgFailed: "Kayıt işleminiz başarısız !"
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: " Vos documents de retour ont été créés.. !",
+            msgFailed: "Votre inscription a échoué !"
         },
         msgDublicateItem : 
         {
-            title: " Dikkat",
-            btn01 : "Tamam",
-            msg : "Ürünü Birden Fazla Cari İçin Seçilmiş Lütfen Kontol Ediniz"
+            title: "Attention",
+            btn01 : "OK",
+            msg : "Le produit a été sélectionné pour plus d'un Fournisseur, Veuillez vérifier"
         },
         msgCustomerFound : 
         {
-            title: " Dikkat",
-            btn01 : "Tamam",
-            msg : "Carisi Tanımlanmamış Ürünler Seçilemez. Lütfen Cari Tanımlayın"
+            title: "Attentin",
+            btn01 : "OK",
+            msg : "Les produits avec des transporteurs non définis ne peuvent pas être sélectionnés. Veuillez définir le Fournisseur"
         }
     },
     cnt_01_001 : // "Alış Anlaşmaları Listesi"
@@ -7249,7 +7249,7 @@ export const langFr =
         },
         msgPasswordWrong:
         {
-            title: "Başarısız",
+            title: "Echec",
             btn01: "OK",
             msg: "Votre mot de passe est incorrect!"
         },

@@ -11,14 +11,14 @@ export const langFr =
     btnNo : "Nom",
     msgClose : "Voulez-vous vraiment fermer la page ?",
     txtLangSelect : "Sélection de la langue",
-    userListTitle : "Kullanıcı Listesi", //BAK
+    userListTitle : "Liste d'utilisateurs", //BAK
     txtUser : "Utilisateur",
     txtPass :"Code",
     btnUserSelect : "Choix d'Utilisateur",
     btnLogin : "Entrée",
     btnLogout : "Sortie",
     msgNotAccess :"L'utilisateur n'est pas autorisé à se connecter.",
-    msgInvalidUser : "Le nom d'utilisateur ou le mot de passe est erroné.",
+    msgInvalidUser : "Le nom d'utilisateur ou le mot de passe est incorrect.",
     txtCardRead :"Veuillez lire votre carte d'utilisateur.",
     checkAll :"Appliquer tout",
     msgAnotherUserAlert: 
@@ -49,7 +49,7 @@ export const langFr =
         ord_01_001: "Bon de commande",
         ord_01_002: "Ordre d'achat",
         ord_01_003: "Commande en groupe",
-        irs: "İrsaliyeler",
+        irs: "Les bons de livraisons",
         irs_01: "Document",
         irs_01_001: "Bon de retour",
         irs_01_002 : "Accusé de réception",
@@ -269,14 +269,14 @@ export const langFr =
     },
     stk_01_004 : // Ü.Grubu Gör-Değiştir",
     {
-        chkAllItems : "Tüm Ürünler",
-        btnChangeGroup : "Ürün Grubu Değiştir",
-        txtBarcode : "Barkod",
-        txtBarcodePlace : "Lütfen Barkod Okutunuz",
-        btnItemEntry : "Stok Girişi",
-        txtBarcodeEnter: "Barkod Girişi",
-        cmbItemGrp: "Ürün Grubu",
-        thisGrp :"Mevcut Grup",
+        chkAllItems : "Tous les produits",
+        btnChangeGroup : "Changer de groupe de produits",
+        txtBarcode : "Barre code",
+        txtBarcodePlace : "Veuillez lire le code-barres",
+        btnItemEntry : "Réception de stock",
+        txtBarcodeEnter: "Saisie de code-barre",
+        cmbItemGrp: "Groupe de produits",
+        thisGrp :"Groupe disponible",
         popItemCode : 
         {
             title : "Choix de stock",
@@ -286,27 +286,27 @@ export const langFr =
         grdChkCustomer :
         {
             clmDate :"Date",
-            clmCustomerCode: "Kodu",
-            clmCustomerName: "Adı",
+            clmCustomerCode: "Code",
+            clmCustomerName: "Nom",
         },
         msgSaveResult:
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Kayıt işleminiz başarılı !",
-            msgFailed: "Kayıt işleminiz başarısız !"
+            msgSuccess: "Votre inscription est réussie !",
+            msgFailed: "Votre inscription a échoué !"
         },
         msgItemNotSelect:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Stok Seçiniz !"
+            msg: "Sélectionnez Stock !"
         },
         msgBarcodeNotFound:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Barkod Bulunamadı !"
+            msg: "Code-barres introuvable !"
         },
     },
     stk_01_005 : // Fiyat Değiştir",
@@ -2791,7 +2791,7 @@ export const langFr =
         },
         msgPasswordSucces:
         {
-            title: "Başarılı",
+            title: "Réussis",
             btn01: "OK",
             msg: "Document déverrouillé !",
         },
@@ -2894,7 +2894,7 @@ export const langFr =
             title: "Attention",
             btn01: "Continuez",
             btn02: "Abandonner",
-            msg: "La concubine du produit sélectionné n'est pas définie ! Voulez-vous continuer"
+            msg: "La concubine du produit sélectionné n'est pas définie ! Voulez-vous continuer ?"
         },
         msgQuantity:
         {

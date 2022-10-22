@@ -569,16 +569,16 @@ export const langFr =
     },
     msgPrintAlert: //Bak
     {
-        title : "Uyarı",
-        msg : "Fişi Yazdırmak İstermisiniz ?",
-        btn01 : "Tamam",
-        btn02 : "İptal"
+        title : "Avertissement",
+        msg : "Souhaitez-vous imprimer le reçu  ?",
+        btn01 : "OK",
+        btn02 : "Annulez"
     },
     msgRePrint: //Bak
     {
-        title : "Uyarı",
-        msg : "Fiş yazdırma sınırına ulaştınız !",
-        btn01 : "Tamam",
+        title : "Avertissement",
+        msg : "Vous avez atteint la limite d'impression de reçus !",
+        btn01 : "OK",
     },
     acsDialog: //Bak
     {
