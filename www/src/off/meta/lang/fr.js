@@ -8,15 +8,15 @@ export const langFr =
     btnPrint :"Imprime",
     btnOk: "OK",
     msgWarning: "Attention",
-    msgSqlService1: "Sql sunucuya bağlanılamıyor.", //BAK
-    msgSqlService2: "Veritabanı yok. Oluşturmak istermisiniz.", //BAK
-    msgSqlService3: "Vt kurulumu başarılı.Lütfen config dosyasını kontrol edip sunucuyu restart ediniz.", //BAK
+    msgSqlService1: "Impossible de se connecter au serveur sql.", //BAK
+    msgSqlService2: "Il n'y a pas de base de données. Souhaitez-vous créer.", //BAK
+    msgSqlService3: "L'installation de databas a réussi. Veuillez vérifier le fichier de configuration et redémarrer le serveur.", //BAK
     btnYes : "Oui",
     btnGet: "Validé",
     btnNo : "Non",
     msgClose : "Etes vous sûr(e) de vouloir quitter la page ?",
     txtLangSelect : "Choix de la langue",
-    userListTitle : "Kullanıcı Listesi", //BAK
+    userListTitle : "Liste d'utilisateur", //BAK
     txtUser : "Utilisateur",
     txtPass : "Mot de passe",
     btnUserSelect : "Choix utilisateur",
@@ -185,8 +185,8 @@ export const langFr =
         set : "Coût Suplement",
         set_01 : "Coût et taxe annexe",
         set_01_001 : "Taxe sucre",
-        set_02 : "Genel Ayarlar",   // BAK
-        set_02_001 : "Firma Bilgileri",   // BAK
+        set_02 : "Réglage général",   // BAK
+        set_02_001 : "Informations sur la société",   // BAK
         proces : "Saisie groupée",
         proces_01 : "Traitement Produit",
         proces_01_001 : "MAJ groupe produit",
@@ -246,7 +246,7 @@ export const langFr =
         maxBuyPrice : "Prix Achat Max.",
         sellPriceAdd : "Ajout Prix Vente",
         clmInvoiceCost : "Frais de service", // BAK
-        validOrigin : "Menşei boş geçemezsiniz !",
+        validOrigin : "Vous ne pouvez pas passer le blanc d'origine !",
         validTaxSucre : "Lütfen şeker oranını doğru giriniz !",
         validName : "Adı boş geçemezsiniz !",
         validQuantity : "Miktar'ı boş geçemezsiniz !" ,
@@ -841,9 +841,9 @@ export const langFr =
         },
         msgCode : //BAK
         {
-            title: "Dikkat",
-            btn01: "Evrağa Git",
-            msg: "Evrak Bulundu"
+            title: "Attention",
+            btn01: "Aller au document",
+            msg: "Document trouvée !"
         },
     },
     stk_02_002 : //"Depo/Mağaza Arası Sevk"
@@ -1167,9 +1167,9 @@ export const langFr =
         },
         msgCode : //BAK
         {
-            title: "Dikkat",
-            btn01: "Evrağa Git",
-            msg: "Evrak Bulundu"
+            title: "Attention",
+            btn01: "Aller au document",
+            msg: "Document trouvé !"
         },
     },
     stk_02_004 : //"Etiket Bas"
@@ -1490,63 +1490,63 @@ export const langFr =
         txtQuantity : "Pièce", 
         pg_Docs : 
         {
-            title : "Evrak Seçimi",
+            title : "Choix du document",
             clmDate : "Date",
-            clmRef : "SERİ",
-            clmRefNo : "SIRA",
+            clmRef : "SERİE",
+            clmRefNo : "SEQUENCE",
         },
         popItemsCode : 
         {
-            title : "Stok Seçimi",
-            clmCode :  "STOK KODU",
-            clmName : "STOK ADI",
+            title : "Choix de stock",
+            clmCode :  "Code de stock",
+            clmName : "Nom de stock",
         },
         popItems: 
         {
-            title: "Stok Ekle",
-            txtPopItemsCode : "Stok Kodu",
-            txtPopItemsName: "Stok Adı",
-            txtPopItemsQuantity : "Miktar",
-            dtPopDate : "SKT Tarih"
+            title: "Ajoutez stock",
+            txtPopItemsCode : "Code de stock",
+            txtPopItemsName: "Nom de stock",
+            txtPopItemsQuantity : "Quantité",
+            dtPopDate : "SKT Date"
         },
         grdExpDate:
         {
-            clmName: "Adı",
-            clmCode: "Kodu",
-            clmDate: "SKT Tarih"
+            clmName: "Nom",
+            clmCode: "Code",
+            clmDate: "SKT Date"
         },
         msgDocValid:
         {
             title: "Attention",
             btn01: "Ok",
-            msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
+            msg: "L'inventaire ne peut pas être saisi avant que les en-têtes de document ne soient terminés !"
         },
         msgNotSave:
         {
             title: "Attention",
             btn01: "Ok",
-            msg: "Evrakta Değişiklik Yapılmış! Lütfen Kayıt Edin Yada Değişiklikleri Geri Alın"
+            msg: "Documentation modifiée ! Veuillez enregistrer ou annuler les modifications"
         },
         msgAddItems:
         {
             title: "Attention",
             btn01: "Ok",
-            btn02: "Vazgeç",
-            msg: "Seçmiş olduğunuz kritere uygun ürünler eklenecektir.Onaylıyormusunuz ?"
+            btn02: "Abandonnez",
+            msg: "Les produits correspondant aux critères que vous avez sélectionnés seront ajoutés. Êtes-vous d'accord ?"
         },
         msgSave:
         {
             title: "Attention",
             btn01: "Ok",
-            btn02: "Vazgeç",
-            msg: "Kayıt etmek istediğinize eminmisiniz !"
+            btn02: "Abandonne",
+            msg: "Êtes-vous sûr de vouloir vous inscrire?"
         },
         msgSaveResult:
         {
             title: "Attention",
             btn01: "Ok",
-            msgSuccess: "Kayıt işleminiz başarılı !",
-            msgFailed: "Kayıt işleminiz başarısız !"
+            msgSuccess: "Votre inscription est réussie !",
+            msgFailed: "Votre inscription a échoué !"
         },
         msgSaveValid:
         {
@@ -1558,24 +1558,24 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Ok",
-            btn02: "Vazgeç",
-            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+            btn02: "Abandonne",
+            msg: "Voulez-vous vraiment supprimer l'enregistrement ?"
         },
         msgItemNotFound:
         {
             title: "Attention",
             btn01: "Ok",
-            msg: "Stok Bulunmadı !!"
+            msg: "Aucun stock trouvé !"
         },
         msgCombineItem:
         {
             title: "Attention",
-            btn01: "Vazgeç",
-            btn02: "Yeni Ekle",
-            msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Yeni Satır Eklensin Mi ?"
+            btn01: "Abandonne",
+            btn02: "Ajoutez nouveau",
+            msg: "Le produit que vous souhaitez ajouter est dans le document ! Ajouter une nouvelle ligne ?"
         },
-        validDepot : "Depo Seçmelisiniz",
-        validDocDate : "Tarih Seçmelisiniz",
+        validDepot : "Vous devez choisir l'entrepôt",
+        validDocDate : "Vous devez sélectionner une date",
     },
     stk_03_001 :  // "Stok Listesi" 
     {
@@ -1675,9 +1675,9 @@ export const langFr =
         },
         msgCode : //BAK
         {
-            title: "Dikkat",
-            btn01: "Evrağa Git",
-            msg: "Evrak Bulundu"
+            title: "Attention",
+            btn01: "Allez au document",
+            msg: "Document trouvé !"
         },
     },
     stk_03_006 : // "Depo Ürün Miktarları Listesi"
@@ -2071,7 +2071,7 @@ export const langFr =
         },
         validation : //BAK
         {
-            frmCustomerAddress: "Kodu boş geçemezsiniz !",
+            frmCustomerAddress: "Vous ne pouvez pas passer le code vide !",
         }
     },
     cri_02_001: // "Cari Listesi"
@@ -2483,9 +2483,9 @@ export const langFr =
         txtDiffrentInv : "Facture de différence de prix déduite",   // BAK
         txtbalance : "Solde total actuel",   // BAK
         getRemainder : "Apportez le montant restant",    // BAK
-        txtUnitFactor : "Birim Katsayısı",  // BAK
-        txtUnitQuantity : "Birim Miktarı",  // BAK
-        txtTotalQuantity : "Toplam Miktar",  // BAK
+        txtUnitFactor : "Coefficient unitaire",  // BAK
+        txtUnitQuantity : "Quantité Unitaire",  // BAK
+        txtTotalQuantity : "Quantité totale",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -2649,7 +2649,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Ödemesi Yapılmış Evrak Silinemez!" // BAK
+            msg: "Le document payant ne peut pas être supprimé !" // BAK
         },
         msgDoclocked:
         {
@@ -2786,8 +2786,8 @@ export const langFr =
         },
         msgUnit:
         {
-            title: "Birim Seçimi",  // BAK
-            btn01: "Onayla",  // BAK
+            title: "Sélection de l'unité",  // BAK
+            btn01: "approuver",  // BAK
         },
         validRef :"Saisir numéro de serie",
         validRefNo : "Saisir numéro de référence",
@@ -2873,9 +2873,9 @@ export const langFr =
         },
         msgCode : //BAK
         {
-            title: "Dikkat",
-            btn01: "Evrağa Git",
-            msg: "Evrak Bulundu"
+            title: "Attention",
+            btn01:"Aller au document",
+            msg: "Document trouvé !"
         },
     },
     ftr_02_002 : // "Satış Faturası"
@@ -2914,9 +2914,9 @@ export const langFr =
         tabTitleOldInvoices : "Informations de facturation passées",  // BAK
         getRemainder : "Apportez le montant restant",  // BAK
         txtbalance : "Solde total actuel",   // BAK
-        txtUnitFactor : "Birim Katsayısı",  // BAK
-        txtUnitQuantity : "Birim Miktarı",  // BAK
-        txtTotalQuantity : "Toplam Miktar",  // BAK
+        txtUnitFactor : "Coefficient unitaire ",  // BAK
+        txtUnitQuantity : "Quantité Unitaire",  // BAK
+        txtTotalQuantity : "Quantité totale",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3179,8 +3179,8 @@ export const langFr =
         },
         msgUnit:
         {
-            title: "Birim Seçimi",
-            btn01: "Onayla",
+            title: "Sélection de l'unité",
+            btn01: "Approuver",
         }, // BAK
         validRef :"Saisir numéro de serie",
         validRefNo : "Saisir numéro de référence",
@@ -3253,9 +3253,9 @@ export const langFr =
         },
         msgCode : //BAK
         {
-            title: "Dikkat",
-            btn01: "Evrağa Git",
-            msg: "Evrak Bulundu"
+            title: "Attention",
+            btn01:"Aller au document",
+            msg: "Document trouvé !"
         },
     },
     ftr_02_003 : // "İade Faturası"
@@ -3293,9 +3293,9 @@ export const langFr =
         tabTitleOldInvoices : "Informations de facturation passées",  // BAK
         getRemainder : "Apportez le montant restant",  // BAK
         txtbalance : "Solde total actuel",   // BAK
-        txtUnitFactor : "Birim Katsayısı",  // BAK
-        txtUnitQuantity : "Birim Miktarı",  // BAK
-        txtTotalQuantity : "Toplam Miktar",  // BAK
+        txtUnitFactor : "Coefficient unitaire",  // BAK
+        txtUnitQuantity : "Quantité unitaire",  // BAK
+        txtTotalQuantity : "Quantité totale",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3521,8 +3521,8 @@ export const langFr =
         },
         msgUnit:
         {
-            title: "Birim Seçimi",
-            btn01: "Onayla",
+            title: "Sélection de l'unité",
+            btn01: "Approuver",
         }, // BAK
         validRef :"Saisir numéro de serie",
         validRefNo : "Saisir numéro de référence",
@@ -3578,9 +3578,9 @@ export const langFr =
         },
         msgCode : //BAK
         {
-            title: "Dikkat",
-            btn01: "Evrağa Git",
-            msg: "Evrak Bulundu"
+            title: "Attention",
+            btn01:"Aller au document",
+            msg: "Document trouvé !"
         },
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
@@ -3619,9 +3619,9 @@ export const langFr =
         getRemainder : "Apportez le montant restant",  // BAK
         txtbalance : "Solde total actuel",   // BAK
         getProforma : "Amenez Pro format ", // BAK
-        txtUnitFactor : "Birim Katsayısı",  // BAK
-        txtUnitQuantity : "Birim Miktarı",  // BAK
-        txtTotalQuantity : "Toplam Miktar",  // BAK
+        txtUnitFactor : "Coefficient unitaire",  // BAK
+        txtUnitQuantity : "Quantité unitaire",  // BAK
+        txtTotalQuantity : "Quantité totale",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3839,8 +3839,8 @@ export const langFr =
         },
         msgUnit:
         {
-            title: "Birim Seçimi",
-            btn01: "Onayla",
+            title: "Sélection de l'unité",
+            btn01: "Approuver",
         }, // BAK
         validRef :"Saisir numéro de serie",
         validRefNo : "Saisir numéro de référence",
@@ -3890,9 +3890,9 @@ export const langFr =
         },
         msgCode : //BAK
         {
-            title: "Dikkat",
-            btn01: "Evrağa Git",
-            msg: "Evrak Bulundu"
+            title: "Attention",
+            btn01:"Aller au document",
+            msg: "Document trouvé !"
         },
     },
     ftr_02_005 : // "Şube Satış Faturası"
@@ -3931,9 +3931,9 @@ export const langFr =
         tabTitleOldInvoices : "Informations de facturation passées",  // BAK
         getRemainder : "Apportez le montant restant",  // BAK
         txtbalance : "Solde total actuel",   // BAK
-        txtUnitFactor : "Birim Katsayısı",  // BAK
-        txtUnitQuantity : "Birim Miktarı",  // BAK
-        txtTotalQuantity : "Toplam Miktar",  // BAK
+        txtUnitFactor : "Coefficient unitaire",  // BAK
+        txtUnitQuantity : "Quantité unitaire",  // BAK
+        txtTotalQuantity : "Quantité unitaire",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -4196,8 +4196,8 @@ export const langFr =
         },
         msgUnit:
         {
-            title: "Birim Seçimi",
-            btn01: "Onayla",
+            title: "Sélection de l'unité",
+            btn01: "Approuver",
         }, // BAK
         validRef :"Saisir numéro de serie",
         validRefNo : "Saisir numéro de référence",
@@ -4270,9 +4270,9 @@ export const langFr =
         },
         msgCode : //BAK
         {
-            title: "Dikkat",
-            btn01: "Evrağa Git",
-            msg: "Evrak Bulundu"
+            title: "Attention",
+            btn01:"Aller au document",
+            msg: "Document trouvé !"
         },
     },
     ftr_04_001 : // "Proforma Fiyat Farkı Faturası" YENI EKLEN DI KOPMLE BAK
@@ -4311,7 +4311,7 @@ export const langFr =
         getRemainder : "Kalan Tutarı Getir",
         msgDiscount:
         {
-            title: "Dikkat",
+            title: "Attention",
             btn01: "Tamam",
             msg: " Tutar 0 dan düşük olamaz !"
         },
@@ -4392,65 +4392,65 @@ export const langFr =
         },
         msgDocValid:
         {
-            title: "Dikkat",
+            title: "Attention",
             btn01: "Tamam",
             msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
         },
         msgSave:
         {
-            title: "Dikkat",
+            title: "Attention",
             btn01: "Tamam",
             btn02: "Vazgeç",
             msg: "Kayıt etmek istediğinize eminmisiniz !"
         },
         msgSaveResult:
         {
-            title: "Dikkat",
+            title: "Attention",
             btn01: "Tamam",
             msgSuccess: "Kayıt işleminiz başarılı !",
             msgFailed: "Kayıt işleminiz başarısız !"
         },
         msgSaveValid:
         {
-            title: "Dikkat",
+            title: "Attention",
             btn01: "Tamam",
             msg: "Lütfen gerekli alanları doldurunuz !"
         },
         msgDelete:
         {
-            title: "Dikkat",
+            title: "Attention",
             btn01: "Tamam",
             btn02: "Vazgeç",
             msg: "Kaydı silmek istediğinize eminmisiniz ?"
         },
         msgVatDelete:
         {
-            title: "Dikkat",
+            title: "Attention",
             btn01: "Tamam",
             btn02: "Vazgeç",
             msg: "Vergiyi Sıfırlamak istediğinize eminmisiniz !"
         },
         msgMoreAmount:
         {
-            title: "Dikkat",
+            title: "Attention",
             btn01: "Tamam",
             msg: "Kalan Tutardan Fazla Tahsilat Girilemez !"
         },
         msgDiscountPrice:
         {
-            title: "Dikkat",
+            title: "Attention",
             btn01: "Tamam",
             msg: "Tutardan Büyük İndirim Yapılamaz !"
         },
         msgDiscountPercent:
         {
-            title: "Dikkat",
+            title: "Attention",
             btn01: "Tamam",
             msg: "Tutardan Büyük İndirim Yapılamaz !"
         },
         msgLocked:
         {
-            title: "Dikkat",
+            title: "Attention",
             btn01: "Tamam",
             msg: "Evrak Kayıt Edildi Ve Kilitlendi !"
         },
@@ -4468,37 +4468,37 @@ export const langFr =
         },
         msgGetLocked:
         {
-            title: "Dikkat",
+            title: "Attention",
             btn01: "Tamam",
             msg: "Evrak Kilitlenmiş !  \n  Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !"
         },
         msgDocLocked:
         {
-            title: "Dikkat",
+            title: "Attention",
             btn01: "Tamam",
             msg: "Evrak Kilidi Açılmadan İşlem Yapılamaz !"
         },
         msgDiscount:
         {
-            title: "Dikkat",
+            title: "Attention",
             btn01: "Tamam",
             msg: "İndirim Tutardan Yüksek Olamaz !"
         },
         msgItemNotFound:
         {
-            title: "Dikkat",
+            title: "Attention",
             btn01: "Tamam",
             msg: "Stok Bulunmadı !!"
         },
         msgNotCustomer:
         {
-            title: "Dikkat",
+            title: "Attention",
             btn01: "Tamam",
             msg: "Cari Bulunmadı !!"
         },
         msgCombineItem:
         {
-            title: "Dikkat",
+            title: "Attention",
             btn01: "Birleştir",
             btn02: "Yeni Ekle",
             msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Satırlar Birleştirilsin mi ?"
@@ -4554,19 +4554,19 @@ export const langFr =
         },
         msgRowNotUpdate:
         {
-            title: "Dikkat",
+            title: "Attention",
             btn01: "Tamam",
             msg: "Bu Satır  Faturaya Çevirilmiştir Değişiklik Yapamazsınız!"
         },
         msgRowNotDelete :
         {
-            title: "Dikkat",
+            title: "Attention",
             btn01: "Tamam",
             msg: "Bu Satır  Faturaya Çevirilmiştir Silme İşlemi Yapamazsınız !"
         },
         msgdocNotDelete : 
         {
-            title: "Dikkat",
+            title: "Attention",
             btn01: "Tamam",
             msg: "Evrakınızda  Faturaya çevirilmiş satır var.. Bu evrak silinemez !"
         },
@@ -4580,9 +4580,9 @@ export const langFr =
         },
         msgCode : //BAK
         {
-            title: "Dikkat",
-            btn01: "Evrağa Git",
-            msg: "Evrak Bulundu"
+            title: "Attention",
+            btn01:"Aller au document",
+            msg: "Document trouvé !"
         },
     },
     promo_01_001: //  "Promosyon Tanımları"
@@ -4682,8 +4682,8 @@ export const langFr =
             giftCheck: "Cadeau certifié",
             generalDiscount: "Remise générale",
             discountAmount: "Montant de la remise",
-            promoType01: "Koşul",//BAK
-            promoType02: "Uygulama",//BAK
+            promoType01: "Condition",//BAK
+            promoType02: "Application",//BAK
         },
         msgHelp: //BAK
         {
@@ -4707,10 +4707,10 @@ export const langFr =
         },
         msgDeleteAll: //BAK
         {
-            title: "Dikkat",
-            btn01: "Evet",
-            btn02: "Hayır",
-            msg: "Tümünü silmek istediğinize eminmisiniz ?",
+            title: "Attention",
+            btn01: "Oui",
+            btn02: "Non",
+            msg: "Voulez-vous vraiment tout supprimer ?",
         },
     },
     promo_02_001: //  "Promosyon Listesi"
@@ -4879,9 +4879,9 @@ export const langFr =
         txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
         getOrders : "Apporter la commande", // BAK
-        txtUnitFactor : "Birim Katsayısı",  // BAK
-        txtUnitQuantity : "Birim Miktarı",  // BAK
-        txtTotalQuantity : "Toplam Miktar",  // BAK
+        txtUnitFactor : "Coefficient unitaire",  // BAK
+        txtUnitQuantity : "Quantité unitaire",  // BAK
+        txtTotalQuantity : "Quantité totale",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -5171,9 +5171,9 @@ export const langFr =
         },
         msgCode : //BAK
         {
-            title: "Dikkat",
-            btn01: "Evrağa Git",
-            msg: "Evrak Bulundu"
+            title: "Attention",
+            btn01:"Aller au document",
+            msg: "Document trouvé !"
         },
     },
     irs_02_002 : // Satış İrsaliyesi"
@@ -5193,9 +5193,9 @@ export const langFr =
         txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
         getOrders : "Sélection Commande", // BAK
-        txtUnitFactor : "Birim Katsayısı",  // BAK
-        txtUnitQuantity : "Birim Miktarı",  // BAK
-        txtTotalQuantity : "Toplam Miktar",  // BAK
+        txtUnitFactor : "Coefficient unitaire",  // BAK
+        txtUnitQuantity : "Quantité unitaire",  // BAK
+        txtTotalQuantity : "Quantité totale",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -5423,8 +5423,8 @@ export const langFr =
         },
         msgUnit:
         {
-            title: "Birim Seçimi",
-            btn01: "Onayla",
+            title: "Sélection de l'unité",
+            btn01: "Approuver",
         }, // BAK
         validRef :"Saisir numéro de serie",
         validRefNo : "Saisir numéro de référence",
@@ -5436,7 +5436,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Ok",
-            msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
+            msg: "Le montant de l'entrepôt est fermé à moins ! Montant maximum pouvant être ajouté :"
         },
         msgQuantity:
         {
@@ -5496,9 +5496,9 @@ export const langFr =
         },
         msgCode : //BAK
         {
-            title: "Dikkat",
-            btn01: "Evrağa Git",
-            msg: "Evrak Bulundu"
+            title: "Attention",
+            btn01:"Aller au document",
+            msg: "Document trouvé !"
         },
     },
     irs_02_003 : // "İade İrsaliyesi"
@@ -5518,9 +5518,9 @@ export const langFr =
         txtBarcode: "Code barre",
         txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
-        txtUnitFactor : "Birim Katsayısı",  // BAK
-        txtUnitQuantity : "Birim Miktarı",  // BAK
-        txtTotalQuantity : "Toplam Miktar",  // BAK
+        txtUnitFactor : "Coefficient unitaire",  // BAK
+        txtUnitQuantity : "Quantité unitaire",  // BAK
+        txtTotalQuantity : "Quantité totale",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -5716,8 +5716,8 @@ export const langFr =
         },
         msgUnit:
         {
-            title: "Birim Seçimi",
-            btn01: "Onayla",
+            title: "Sélection de l'unité",
+            btn01: "Approuver",
         }, // BAK
         validRef :"Saisir numéro de serie",
         validRefNo : "Saisir numéro de référence",
@@ -5773,9 +5773,9 @@ export const langFr =
         },
         msgCode : //BAK
         {
-            title: "Dikkat",
-            btn01: "Evrağa Git",
-            msg: "Evrak Bulundu"
+            title: "Attention",
+            btn01:"Aller au document",
+            msg: "Document trouvé !"
         },
     },
     irs_02_004 : // Şube Satış İrsaliyesi"
@@ -5795,9 +5795,9 @@ export const langFr =
         txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
         getOrders : "Sélection Commande", // BAK
-        txtUnitFactor : "Birim Katsayısı",  // BAK
-        txtUnitQuantity : "Birim Miktarı",  // BAK
-        txtTotalQuantity : "Toplam Miktar",  // BAK
+        txtUnitFactor : "Coefficient unitaire",  // BAK
+        txtUnitQuantity : "Quantité unitaire",  // BAK
+        txtTotalQuantity : "Quantité totale",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -6025,8 +6025,8 @@ export const langFr =
         },
         msgUnit:
         {
-            title: "Birim Seçimi",
-            btn01: "Onayla",
+            title: "Sélection de l'unité",
+            btn01: "Approuver",
         },
         validRef :"Saisir numéro de serie",
         validRefNo : "Saisir numéro de référence",
@@ -6038,7 +6038,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Ok",
-            msg: "Depo Miktarı Eksiye Düşmeye Kapalıdır ! Eklenebilecek En Yüksek Miktar:"
+            msg: "Le montant de l'entrepôt est fermé à moins ! Montant maximum pouvant être ajouté :"
         },
         msgQuantity:
         {
@@ -6098,9 +6098,9 @@ export const langFr =
         },
         msgCode : //BAK
         {
-            title: "Dikkat",
-            btn01: "Evrağa Git",
-            msg: "Evrak Bulundu"
+            title: "Attention",
+            btn01:"Aller au document",
+            msg: "Document trouvé !"
         },
     },
     sip_01_001 : // "Alış Sipariş Listesi"
@@ -6180,9 +6180,9 @@ export const langFr =
         txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
         getOffers : "Obtenir l'offre", // bak
-        txtUnitFactor : "Birim Katsayısı",  // BAK
-        txtUnitQuantity : "Birim Miktarı",  // BAK
-        txtTotalQuantity : "Toplam Miktar",  // BAK
+        txtUnitFactor : "Coefficient unitaire",  // BAK
+        txtUnitQuantity : "Quantité unitaire",  // BAK
+        txtTotalQuantity : "Quantité totale",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -6414,8 +6414,8 @@ export const langFr =
         },
         msgUnit:
         {
-            title: "Birim Seçimi",
-            btn01: "Onayla",
+            title: "Sélection de l'unité",
+            btn01: "Approuver",
         }, // BAK
         validRef :"Saisir numéro de serie",
         validRefNo : "Saisir numéro de référence",
@@ -6485,9 +6485,9 @@ export const langFr =
         },
         msgCode : //BAK
         {
-            title: "Dikkat",
-            btn01: "Evrağa Git",
-            msg: "Evrak Bulundu"
+            title: "Attention",
+            btn01:"Aller au document",
+            msg: "Document trouvé !"
         },
     },
     sip_02_002 : // "Satış Sipariş"
@@ -6507,9 +6507,9 @@ export const langFr =
         txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
         getOffers : "Obtenir l'offre", // bak
-        txtUnitFactor : "Birim Katsayısı",  // BAK
-        txtUnitQuantity : "Birim Miktarı",  // BAK
-        txtTotalQuantity : "Toplam Miktar",  // BAK
+        txtUnitFactor : "Coefficient unitaire",  // BAK
+        txtUnitQuantity : "Quantité unitaire",  // BAK
+        txtTotalQuantity : "Quantité totale",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -6737,8 +6737,8 @@ export const langFr =
         },
         msgUnit:
         {
-            title: "Birim Seçimi",
-            btn01: "Onayla",
+            title: "Sélection de l'unité",
+            btn01: "Approuver",
         }, // BAK
         validRef :"Saisir numéro de serie",
         validRefNo : "Saisir numéro de référence",
@@ -6804,60 +6804,60 @@ export const langFr =
         },
         msgCode : //BAK
         {
-            title: "Dikkat",
-            btn01: "Evrağa Git",
-            msg: "Evrak Bulundu"
+            title: "Attention",
+            btn01:"Aller au document",
+            msg: "Document trouvé !"
         },
     },
     sip_04_001 : // "Sipariş Ayrıştırma" // YENI EKLENDI KOMPLE BAK
     {
-        txtCustomerCode : "Cari",
-        validDepot : "Lütfen Depo Seçiniz",
-        ItemNamePlaceHolder :"Ürün Adının Tamamını yada İçinde Geçen Bir Hece Giriniz",
+        txtCustomerCode : "Fournisseur",
+        validDepot : "Veuillez sélectionner un entrepôt",
+        ItemNamePlaceHolder :"Entrez le nom complet du produit ou une syllabe le contenant",
         pg_txtCustomerCode : 
         {
-            title : "Cari Seçimi",
-            clmCode :  "CARİ KODU",
-            clmTitle : "CARİ ADI",
-            clmTypeName : "TİPİ",
-            clmGenusName : "CİNSİ"
+            title : "Choix du fournisseur",
+            clmCode :  "Code de fournisseur",
+            clmTitle : "Nom de fournisseur",
+            clmTypeName : "Type",
+            clmGenusName : "Type"
         },
-        cmbDepot : 'Depo',
-        btnGet : 'Getir',
-        btnOrder : 'Sipariş Oluştur',
+        cmbDepot : 'Depôt',
+        btnGet : 'Ramène',
+        btnOrder : 'Créer une commande',
         grdOrderList : 
         {
-            clmCode: "Kodu",
-            clmName : "Adı",
-            clmQuantity : "Adet",
-            clmCustomer : "Cari",
-            clmPrice : "Fiyat"
+            clmCode: "Code",
+            clmName : "Nom",
+            clmQuantity : "Quantité",
+            clmCustomer : "Fournisseur",
+            clmPrice : "Prix"
         },
         msgSave:
         {
-            title: "Dikkat",
-            btn01: "Onayla",
-            btn02: "Vazgeç",
-            msg: "Seçili Satırları İade Etmek İstediğinize Eminmisiniz !"
+            title: "Attention",
+            btn01: "Approuver",
+            btn02: "Abandonner",
+            msg: "Êtes-vous sûr de vouloir renvoyer les lignes sélectionnées !"
         },
         msgSaveResult:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msgSuccess: " İade Evraklarınız Oluşturuldu..!",
-            msgFailed: "Kayıt işleminiz başarısız !"
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: " Vos documents de retour ont été créés.. !",
+            msgFailed: "Votre inscription a échoué !"
         },
         msgDublicateItem : 
         {
-            title: " Dikkat",
-            btn01 : "Tamam",
-            msg : "Ürünü Birden Fazla Cari İçin Seçilmiş Lütfen Kontol Ediniz"
+            title: " Attention",
+            btn01 : "OK",
+            msg : "Le produit a été sélectionné pour plus d'un fournisseur Veuillez vérifier"
         },
         msgCustomerFound : 
         {
-            title: " Dikkat",
-            btn01 : "Tamam",
-            msg : "Carisi Tanımlanmamış Ürünler Seçilemez. Lütfen Cari Tanımlayın"
+            title: "Attention",
+            btn01 : "OK",
+            msg : "Les produits avec des transporteurs non définis ne peuvent pas être sélectionnés. Veuillez définir le fournisseur"
         }
     },
     cnt_01_001 : // "Alış Anlaşmaları Listesi"
@@ -7917,59 +7917,59 @@ export const langFr =
         },
         validValue :"Ne peut être Vide",
         zeroValid : "Ne peut pas être 0",
-        btnAdd: "Yeni Değer Ekle", //BAK
+        btnAdd: "Ajouter une nouvelle valeur", //BAK
         validation:  //BAK
         {
-            clmMinValue: "Oran sıfırdan küçük olamaz !",
-            clmMaxvalue: "Oran sıfırdan küçük olamaz !",
-            clmPrice: "Fiyat sıfırdan küçük olamaz !",
+            clmMinValue: "Le rapport ne peut pas être inférieur à zéro !",
+            clmMaxvalue: "Le rapport ne peut pas être inférieur à zéro !",
+            clmPrice: "Le prix ne peut pas être inférieur à zéro !",
         },
     },
     set_02_001 : // "Firma Bilgileri"
     {
-        txtTitle : "Firma Adı",
-        txtCustomerName : "Yetkili Adı",
-        txtCustomerLastname : "Yetkili Soyadı",
-        txtAddress1 : "Adres",
-        txtAddress2 : "Adres 2",
-        cmbCıty : "Şehir",
-        cmbCountry : "Ülke",
-        txtPhone : "Telefon",
+        txtTitle : "Nom de l'entreprise",
+        txtCustomerName : "Nom autorisé",
+        txtCustomerLastname : "Nom de famille autorisé",
+        txtAddress1 : "Adresse",
+        txtAddress2 : "Adresse 2",
+        cmbCıty : "Ville",
+        cmbCountry : "Pays",
+        txtPhone : "Telephone",
         txtEmail : "E-Mail",
         txtWeb : "Web Site",
         txtSiretId : "Siret ID",
-        txtApeCode : "Ape Code",
+        txtApeCode : "App Code",
         txtTaxOffice : "Tax Office",
         txtTaxNo : "Tax No",
         txtIntVatNo : "Int. Vat No",
         txtSirenNo : "Siren No",
-        txtCapital : "Sermaye",
+        txtCapital : "Capital",
         msgSave:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            btn02: "Vazgeç",
-            msg: "Kayıt etmek istediğinize eminmisiniz !"
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonne",
+            msg: "Êtes-vous sûr de vouloir vous inscrire?"
         },
         msgSaveResult:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msgSuccess: "Kayıt işleminiz başarılı !",
-            msgFailed: "Kayıt işleminiz başarısız !"
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Votre inscription est réussie !",
+            msgFailed: "Votre inscription a échoué !"
         },
         msgSaveValid:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Lütfen gerekli alanları doldurunuz !"
+            title: "Attention",
+            btn01: "OK",
+            msg: "S'il vous plaît remplir les champs obligatoires !"
         },
         msgDelete:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            btn02: "Vazgeç",
-            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonne",
+            msg: "Voulez-vous vraiment supprimer l'enregistrement ?"
         },
     },
     pos_01_001 : // "Pos Cihaz Tanıtım",
@@ -8452,9 +8452,9 @@ export const langFr =
         txtBarcode: "Code barre",
         txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
-        txtUnitFactor : "Birim Katsayısı",  // BAK
-        txtUnitQuantity : "Birim Miktarı",  // BAK
-        txtTotalQuantity : "Toplam Miktar",  // BAK
+        txtUnitFactor : "Coefficient unitaire",  // BAK
+        txtUnitQuantity : "Quantité unitaire",  // BAK
+        txtTotalQuantity : "Quantité totale",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -8677,8 +8677,8 @@ export const langFr =
         },
         msgUnit:
         {
-            title: "Birim Seçimi",
-            btn01: "Onayla",
+            title: "Sélection de l'unité",
+            btn01: "Approuver",
         }, // BAK
         validRef :"Saisir numéro de serie",
         validRefNo : "Saisir numéro de référence",
@@ -8720,9 +8720,9 @@ export const langFr =
         },
         msgCode : //BAK
         {
-            title: "Dikkat",
-            btn01: "Evrağa Git",
-            msg: "Evrak Bulundu"
+            title: "Attention",
+            btn01:"Aller au document",
+            msg: "Document trouvé !"
         },
     },
     tkf_02_002 : // "Satış Teklifi",
@@ -8741,9 +8741,9 @@ export const langFr =
         txtBarcode: "Code barre",
         txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Pièce", 
-        txtUnitFactor : "Birim Katsayısı",  // BAK
-        txtUnitQuantity : "Birim Miktarı",  // BAK
-        txtTotalQuantity : "Toplam Miktar",  // BAK
+        txtUnitFactor : "Coefficient unitaire",  // BAK
+        txtUnitQuantity : "Quantité unitaire",  // BAK
+        txtTotalQuantity : "Quantité totale",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -8977,8 +8977,8 @@ export const langFr =
         },
         msgUnit:
         {
-            title: "Birim Seçimi",
-            btn01: "Onayla",
+            title: "Sélection de l'unité",
+            btn01: "Approuver",
         }, // BAK
         validRef :"Saisir numéro de serie",
         validRefNo : "Saisir numéro de référence",
@@ -9020,9 +9020,9 @@ export const langFr =
         },
         msgCode : //BAK
         {
-            title: "Dikkat",
-            btn01: "Evrağa Git",
-            msg: "Evrak Bulundu"
+            title: "Attention",
+            btn01:"Aller au document",
+            msg: "Document trouvé !"
         },
     },
     proces_01_001 : // "Ürün Grubu Güncelleme" 
@@ -9039,7 +9039,7 @@ export const langFr =
         barkodPlaceHolder :"Veuillez Entrer Le ou Les Codes Produits ou Codes Barres",
         ItemNamePlaceHolder :"Veuillez Entrer le Nom Complet ou une Syllabe",
         btnOk : "Mettre à jour",
-        toolMenu01: "Stok Tanımları", //BAK 
+        toolMenu01: "Définitions des stocks", //BAK 
         grdListe : 
         {
             clmCode: "Référence Produit",
