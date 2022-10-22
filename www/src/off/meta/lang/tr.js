@@ -3293,6 +3293,9 @@ export const langTr =
         tabTitleOldInvoices : "Geçmiş Fatura Bilgileri",
         getRemainder : "Kalan Tutarı Getir",
         txtbalance : "Cari Toplam Bakiyesi",
+        txtUnitFactor : "Birim Katsayısı",
+        txtUnitQuantity : "Birim Miktarı",
+        txtTotalQuantity : "Toplam Miktar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -3516,6 +3519,11 @@ export const langTr =
             design : "Dizayn",
             lang : "Evrak Dili"
         },
+        msgUnit:
+        {
+            title: "Birim Seçimi",
+            btn01: "Onayla",
+        },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
         validDepot : "Depo Seçmelisiniz",
@@ -3611,6 +3619,9 @@ export const langTr =
         getRemainder : "Kalan Tutarı Getir",
         txtbalance : "Cari Toplam Bakiyesi",
         getProforma : "Proforma Getir",
+        txtUnitFactor : "Birim Katsayısı",
+        txtUnitQuantity : "Birim Miktarı",
+        txtTotalQuantity : "Toplam Miktar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -3826,6 +3837,11 @@ export const langTr =
             design : "Dizayn",
             lang : "Evrak Dili"
         },
+        msgUnit:
+        {
+            title: "Birim Seçimi",
+            btn01: "Onayla",
+        },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
         validDepot : "Depo Seçmelisiniz",
@@ -3915,6 +3931,9 @@ export const langTr =
         tabTitleOldInvoices : "Geçmiş Fatura Bilgileri",
         getRemainder : "Kalan Tutarı Getir",
         txtbalance : "Cari Toplam Bakiyesi",
+        txtUnitFactor : "Birim Katsayısı",
+        txtUnitQuantity : "Birim Miktarı",
+        txtTotalQuantity : "Toplam Miktar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -4174,6 +4193,11 @@ export const langTr =
             btn01: "Listeyi Temizle ve Hepsini Ekle",
             btn02: "Yeni Yazılanları Listeye Ekle",
             msg: "Listede Ürünler Var! "
+        },
+        msgUnit:
+        {
+            title: "Birim Seçimi",
+            btn01: "Onayla",
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
@@ -4855,6 +4879,9 @@ export const langTr =
         txtBarcodePlace: "Barkod Okutunuz",
         txtQuantity :"Miktar",
         getOrders : "Sipariş Getir",
+        txtUnitFactor : "Birim Katsayısı",
+        txtUnitQuantity : "Birim Miktarı",
+        txtTotalQuantity : "Toplam Miktar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -5075,6 +5102,11 @@ export const langTr =
             btn02: "Yeni Yazılanları Listeye Ekle",
             msg: "Listede Ürünler Var! "
         },
+        msgUnit:
+        {
+            title: "Birim Seçimi",
+            btn01: "Onayla",
+        },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
         validDepot : "Depo Seçmelisiniz",
@@ -5161,6 +5193,9 @@ export const langTr =
         txtBarcodePlace: "Barkod Okutunuz",
         txtQuantity :"Miktar",
         getOrders : "Sipariş Getir",
+        txtUnitFactor : "Birim Katsayısı",
+        txtUnitQuantity : "Birim Miktarı",
+        txtTotalQuantity : "Toplam Miktar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -5386,6 +5421,11 @@ export const langTr =
             btn02: "Yeni Yazılanları Listeye Ekle",
             msg: "Listede Ürünler Var! "
         },
+        msgUnit:
+        {
+            title: "Birim Seçimi",
+            btn01: "Onayla",
+        },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
         validDepot : "Depo Seçmelisiniz",
@@ -5478,6 +5518,9 @@ export const langTr =
         txtBarcode : "Barkod Ekle",
         txtBarcodePlace: "Barkod Okutunuz",
         txtQuantity :"Miktar",
+        txtUnitFactor : "Birim Katsayısı",
+        txtUnitQuantity : "Birim Miktarı",
+        txtTotalQuantity : "Toplam Miktar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -5671,6 +5714,11 @@ export const langTr =
             design : "Dizayn",
             lang : "Evrak Dili"
         },
+        msgUnit:
+        {
+            title: "Birim Seçimi",
+            btn01: "Onayla",
+        },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
         validDepot : "Depo Seçmelisiniz",
@@ -5747,6 +5795,9 @@ export const langTr =
         txtBarcodePlace: "Barkod Okutunuz",
         txtQuantity :"Miktar",
         getOrders : "Sipariş Getir",
+        txtUnitFactor : "Birim Katsayısı",
+        txtUnitQuantity : "Birim Miktarı",
+        txtTotalQuantity : "Toplam Miktar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -5972,6 +6023,11 @@ export const langTr =
             btn02: "Yeni Yazılanları Listeye Ekle",
             msg: "Listede Ürünler Var! "
         },
+        msgUnit:
+        {
+            title: "Birim Seçimi",
+            btn01: "Onayla",
+        },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
         validDepot : "Depo Seçmelisiniz",
@@ -6125,6 +6181,9 @@ export const langTr =
         txtBarcodePlace: "Barkod Okutunuz",
         txtQuantity : "Miktar",
         getOffers : "Teklif Getir",
+        txtUnitFactor : "Birim Katsayısı",
+        txtUnitQuantity : "Birim Miktarı",
+        txtTotalQuantity : "Toplam Miktar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -6354,6 +6413,11 @@ export const langTr =
             btn02: "Yeni Yazılanları Listeye Ekle",
             msg: "Listede Ürünler Var! "
         },
+        msgUnit:
+        {
+            title: "Birim Seçimi",
+            btn01: "Onayla",
+        },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
         validDepot : "Depo Seçmelisiniz",
@@ -6444,6 +6508,9 @@ export const langTr =
         txtBarcodePlace: "Barkod Okutunuz",
         txtQuantity : "Miktar",
         getOffers : "Teklif Getir",
+        txtUnitFactor : "Birim Katsayısı",
+        txtUnitQuantity : "Birim Miktarı",
+        txtTotalQuantity : "Toplam Miktar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -6668,6 +6735,11 @@ export const langTr =
             btn01: "Listeyi Temizle ve Hepsini Ekle",
             btn02: "Yeni Yazılanları Listeye Ekle",
             msg: "Listede Ürünler Var! "
+        },
+        msgUnit:
+        {
+            title: "Birim Seçimi",
+            btn01: "Onayla",
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
@@ -8381,6 +8453,9 @@ export const langTr =
         txtBarcode : "Barkod Ekle",
         txtBarcodePlace: "Barkod Okutunuz",
         txtQuantity :"Miktar",
+        txtUnitFactor : "Birim Katsayısı",
+        txtUnitQuantity : "Birim Miktarı",
+        txtTotalQuantity : "Toplam Miktar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -8601,6 +8676,11 @@ export const langTr =
             btn02: "Yeni Yazılanları Listeye Ekle",
             msg: "Listede Ürünler Var! "
         },
+        msgUnit:
+        {
+            title: "Birim Seçimi",
+            btn01: "Onayla",
+        },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
         validDepot : "Depo Seçmelisiniz",
@@ -8662,6 +8742,9 @@ export const langTr =
         txtBarcode : "Barkod Ekle",
         txtBarcodePlace: "Barkod Okutunuz",
         txtQuantity :"Miktar",
+        txtUnitFactor : "Birim Katsayısı",
+        txtUnitQuantity : "Birim Miktarı",
+        txtTotalQuantity : "Toplam Miktar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -8892,6 +8975,11 @@ export const langTr =
             count: "Toplam Satır",
             quantity: "Toplam Miktar",
             quantity2: "2. Birim Toplamı "
+        },
+        msgUnit:
+        {
+            title: "Birim Seçimi",
+            btn01: "Onayla",
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",

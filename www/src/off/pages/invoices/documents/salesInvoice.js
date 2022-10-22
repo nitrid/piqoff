@@ -411,7 +411,8 @@ export default class salesInvoice extends React.PureComponent
                 value={e.value}
                 onChange={(r)=>
                 {
-                    e.data.QUANTITY = r.component._changedValue
+                    console.log(e)
+                    e.key.QUANTITY = r.component._changedValue
                 }}
                 button=
                 {
@@ -1985,6 +1986,7 @@ export default class salesInvoice extends React.PureComponent
                                         }
                                     }}
                                     onRowUpdated={async(e)=>{
+                                        console.log("11111")
                                         let rowIndex = e.component.getRowIndexByKey(e.key)
                                         console.log(rowIndex)
 
@@ -2060,12 +2062,9 @@ export default class salesInvoice extends React.PureComponent
                                         e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(3));
                                         e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3))
                                         e.key.TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +e.key.VAT).toFixed(3))
-                                       
-                                        console.log(e.key)
+
                                         let tmpMargin = (e.key.TOTAL - e.key.VAT) - (e.key.COST_PRICE * e.key.QUANTITY)
                                         let tmpMarginRate = (tmpMargin /(e.key.TOTAL - e.key.VAT)) * 100
-                                        console.log(tmpMargin.toFixed(2))
-                                        console.log(tmpMarginRate.toFixed(2))
                                         e.key.MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
                                         if(e.key.DISCOUNT > 0)
                                         {
