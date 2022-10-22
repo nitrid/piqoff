@@ -173,8 +173,8 @@ export default class App extends React.PureComponent
                 let tmpSplash = 
                 {
                     type : 0,
-                    headers : 'Warning',
-                    title: 'Sql sunucuya bağlanılamıyor.',   // LANGBAK
+                    headers : this.lang.t('msgWarning'),
+                    title: this.lang.t('msgSqlService1'),
                 }
                 App.instance.setState({logined:false,connected:false,splash:tmpSplash});
             }
@@ -183,7 +183,7 @@ export default class App extends React.PureComponent
                 let tmpSplash = 
                 {
                     type : 1,
-                    headers : 'Veritabanı yok. Oluşturmak istermisiniz.',   // LANGBAK
+                    headers : this.lang.t('msgSqlService2'),
                     title: '',
                 }
 
@@ -267,8 +267,8 @@ export default class App extends React.PureComponent
             let tmpSplash = 
             {
                 type : 1,
-                headers : 'Veritabanı yok. Oluşturmak istermisiniz.',   // LANGBAK
-                title: 'Vt kurulumu başarılı.Lütfen config dosyasını kontrol edip sunucuyu restart ediniz.',   // LANGBAK
+                headers : this.lang.t('msgSqlService2'), 
+                title: this.lang.t('msgSqlService3'),
             }
             App.instance.setState({logined:false,connected:false,splash:tmpSplash});
         }
@@ -277,7 +277,7 @@ export default class App extends React.PureComponent
             let tmpSplash = 
             {
                 type : 1,
-                headers : 'Veritabanı yok. Oluşturmak istermisiniz.',   // LANGBAK
+                headers : this.lang.t('msgSqlService2'),
                 title: tmpResult.msg,
             }
             App.instance.setState({logined:false,connected:false,splash:tmpSplash});
@@ -452,79 +452,79 @@ export default class App extends React.PureComponent
                     </Drawer>
                 </div>
                 <NdPopGrid id={"pg_users"} parent={this} container={"#root"}
-              visible={false}
-              position={{of:'#root'}} 
-              showTitle={true} 
-              showBorders={true}
-              width={'50%'}
-              height={'90%'}
-              title="Kullanıcı Listesi"
-              >
-                  <Column dataField="CODE" caption="CODE" width={150} defaultSortOrder="asc"/>
-                  <Column dataField="NAME" caption="NAME" width={150} defaultSortOrder="asc" />                            
-              </NdPopGrid>
+                visible={false}
+                position={{of:'#root'}} 
+                showTitle={true} 
+                showBorders={true}
+                width={'50%'}
+                height={'90%'}
+                title="Kullanıcı Listesi"
+                >
+                    <Column dataField="CODE" caption="CODE" width={150} defaultSortOrder="asc"/>
+                    <Column dataField="NAME" caption="NAME" width={150} defaultSortOrder="asc" />                            
+                </NdPopGrid>
                 <div>
-                        <NdPopUp parent={this} id={"popPassword"} 
-                        visible={false}
-                        showCloseButton={true}
-                        showTitle={true}
-                        title={this.lang.t("popPassword.title")}
-                        container={"#root"} 
-                        width={'500'}
-                        height={'200'}
-                        position={{of:'#root'}}
-                        >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.lang.t("popPassword.Password")} alignment="right" />
-                                    <NdTextBox id="txtPassword" mode="password" parent={this} simple={true}
-                                            maxLength={32}
-                                    ></NdTextBox>
-                                </Item>
-                                <Item>
-                                    <div className='row'>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("popPassword.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                            onClick={async ()=>
-                                            {       
-                                                if((await this.core.auth.login(this.state.changeUser,this.txtPassword.value,'OFF')))
+                    <NdPopUp parent={this} id={"popPassword"} 
+                    visible={false}
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={this.lang.t("popPassword.title")}
+                    container={"#root"} 
+                    width={'500'}
+                    height={'200'}
+                    position={{of:'#root'}}
+                    >
+                        <Form colCount={1} height={'fit-content'}>
+                            <Item>
+                                <Label text={this.lang.t("popPassword.Password")} alignment="right" />
+                                <NdTextBox id="txtPassword" mode="password" parent={this} simple={true}
+                                        maxLength={32}
+                                ></NdTextBox>
+                            </Item>
+                            <Item>
+                                <div className='row'>
+                                    <div className='col-6'>
+                                        <NdButton text={this.lang.t("popPassword.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
+                                        onClick={async ()=>
+                                        {       
+                                            if((await this.core.auth.login(this.state.changeUser,this.txtPassword.value,'OFF')))
+                                            {
+                                                // POS KULLANICILARININ GİREMEMESİ İÇİN YAPILDI
+                                                if(this.core.auth.data.ROLE == 'Pos')
                                                 {
-                                                    // POS KULLANICILARININ GİREMEMESİ İÇİN YAPILDI
-                                                    if(this.core.auth.data.ROLE == 'Pos')
-                                                    {
-                                                        this.setState({logined:false,alert:this.lang.t("msgUserAccess")})
-                                                    }
-                                                    else
-                                                    {
-                                                        App.instance.setState({logined:true});
-                                                        window.location.reload()
-                                                    }
+                                                    this.setState({logined:false,alert:this.lang.t("msgUserAccess")})
                                                 }
                                                 else
                                                 {
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgPasswordWrong',showTitle:true,title:this.lang.t("msgPasswordWrong.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:this.lang.t("msgPasswordWrong.btn01"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPasswordWrong.msg")}</div>)
-                                                    }
-                                        
-                                                    await dialog(tmpConfObj);
+                                                    App.instance.setState({logined:true});
+                                                    window.location.reload()
                                                 }
-                                            }}/>
-                                        </div>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
+                                            }
+                                            else
                                             {
-                                                this.popPassword.hide();  
-                                            }}/>
-                                        </div>
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgPasswordWrong',showTitle:true,title:this.lang.t("msgPasswordWrong.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("msgPasswordWrong.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPasswordWrong.msg")}</div>)
+                                                }
+                                    
+                                                await dialog(tmpConfObj);
+                                            }
+                                        }}/>
                                     </div>
-                                </Item>
-                            </Form>
-                        </NdPopUp>
-                    </div> 
+                                    <div className='col-6'>
+                                        <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                        onClick={()=>
+                                        {
+                                            this.popPassword.hide();  
+                                        }}/>
+                                    </div>
+                                </div>
+                            </Item>
+                        </Form>
+                    </NdPopUp>
+                </div> 
             </div>
              
         );
