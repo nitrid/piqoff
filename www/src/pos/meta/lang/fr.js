@@ -24,6 +24,7 @@ export const langFr =
     txtCardRead :"Veuillez scanner votre badge",
     price : "Prix",
     quantity : "Quantité",
+    nbCalculator : "Hesap Makinesi", //BAK
     msgCustomerNotFound : 
     {
         title : "Attention",
@@ -568,15 +569,39 @@ export const langFr =
     },
     msgPrintAlert: //Bak
     {
-        title : "Uyarı",
-        msg : "Fişi Yazdırmak İstermisiniz ?",
-        btn01 : "Tamam",
-        btn02 : "İptal"
+        title : "Avertissement",
+        msg : "Souhaitez-vous imprimer le reçu  ?",
+        btn01 : "OK",
+        btn02 : "Annulez"
     },
     msgRePrint: //Bak
     {
-        title : "Uyarı",
-        msg : "Fiş yazdırma sınırına ulaştınız !",
-        btn01 : "Tamam",
+        title : "Avertissement",
+        msg : "Vous avez atteint la limite d'impression de reçus !",
+        btn01 : "OK",
     },
+    acsDialog: //Bak
+    {
+        title1 : "Yetkili şifresini giriniz !",
+        title2 : "Şifrenizi giriniz !",
+        msgAlert: 
+        {
+            title : "Dikkat",
+            msg : "Geçersiz şifre !",
+            btn01 : "Tamam",
+        },
+    },
+    nbPluButtonGrp: //Bak
+    {
+        msgRef:
+        {
+            title : "Dikkat",
+            msg : "Buton üzerinde ne yapmak istiyorsunuz ?",
+            btn01 : "Düzenle",
+            btn02 : "Sil",
+        },
+        popSelectItem : "Stok Seçim",
+        popSelectItemGrp : "Ürün Grubu Seçim",
+        popNameEntry : "Plu Adı"
+    }
 }
