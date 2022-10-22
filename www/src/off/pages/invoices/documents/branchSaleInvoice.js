@@ -143,7 +143,10 @@ export default class branchSaleInvoice extends React.PureComponent
         await this.grdInvoicePayment.dataRefresh({source:this.paymentObj.docCustomer.dt()});
         await this.grdMultiItem.dataRefresh({source:this.multiItemData});
         await this.grdUnit2.dataRefresh({source:this.unitDetailData})
-
+        if(this.sysParam.filter({ID:'randomRefNo',USERS:this.user.CODE}).getValue().value == true)
+        {
+            this.txtRefno.value = Math.floor(Date.now() / 1000)
+        }
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -443,7 +446,7 @@ export default class branchSaleInvoice extends React.PureComponent
                     }
         
                     await dialog(tmpConfObj);
-                    await this.grdSlsInv.devGrid.deleteRow(pIndex)
+                    await this.grdSlsInv.devGrid.deleteRow(0)
                     return
                }
                else
@@ -469,7 +472,7 @@ export default class branchSaleInvoice extends React.PureComponent
                             this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
                             this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
                             this._calculateTotal()
-                            await this.grdSlsInv.devGrid.deleteRow(pIndex)
+                            await this.grdSlsInv.devGrid.deleteRow(0)
                             console.log(this.grdSlsInv)
                             console.log(this.docObj.docItems.dt())
                             if(this.checkCombine.value == true)
@@ -502,7 +505,7 @@ export default class branchSaleInvoice extends React.PureComponent
                     this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
                     this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
                     this._calculateTotal()
-                    await this.grdSlsInv.devGrid.deleteRow(pIndex)
+                    await this.grdSlsInv.devGrid.deleteRow(0)
                     return
                 }
             }
@@ -1232,17 +1235,20 @@ export default class branchSaleInvoice extends React.PureComponent
                                             onValueChanged={(async(e)=>
                                             {
                                                 this.docObj.docCustomer.dt()[0].REF = this.txtRef.value
-                                                let tmpQuery = 
+                                                if(this.sysParam.filter({ID:'randomRefNo',USERS:this.user.CODE}).getValue().value == false)
+                                                {
+                                                    let tmpQuery = 
                                                 {
                                                     query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 22 AND REF = @REF ",
                                                     param : ['REF:string|25'],
                                                     value : [this.txtRef.value]
-                                                }
-                                                let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                if(tmpData.result.recordset.length > 0)
-                                                {
-                                                    this.txtRefno.value = tmpData.result.recordset[0].REF_NO
-                                                    this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
+                                                    }
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    if(tmpData.result.recordset.length > 0)
+                                                    {
+                                                        this.txtRefno.value = tmpData.result.recordset[0].REF_NO
+                                                        this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
+                                                    }
                                                 }
                                             }).bind(this)}
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
@@ -1293,6 +1299,7 @@ export default class branchSaleInvoice extends React.PureComponent
                                             >
                                             <Validator validationGroup={"frmSalesInv"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRefNo")} />
+                                                    <RangeRule min={1} message={this.t("validRefNo")}/>
                                                 </Validator> 
                                             </NdTextBox>
                                         </div>
@@ -2008,7 +2015,7 @@ export default class branchSaleInvoice extends React.PureComponent
                                     >
                                         <Paging defaultPageSize={10} />
                                         <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
-                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
+                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.ftr_02_002")} enabled={true} allowExportSelectedData={true} />

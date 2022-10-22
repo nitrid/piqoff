@@ -394,7 +394,7 @@ export default class purchaseOrder extends React.PureComponent
 
                 if(this.customerClear == true)
                 {
-                    await this.grdPurcOrders.devGrid.deleteRow(pIndex)
+                    await this.grdPurcOrders.devGrid.deleteRow(0)
                     return 
                 }
                 App.instance.setState({isExecute:false})
@@ -409,7 +409,7 @@ export default class purchaseOrder extends React.PureComponent
                     if(e == 'btn02')
                     {
                         tmpCustomerBtn = e
-                        await this.grdPurcOrders.devGrid.deleteRow(pIndex)
+                        await this.grdPurcOrders.devGrid.deleteRow(0)
                         if(this.checkCustomer.value == true)
                         {
                             this.customerClear = true
@@ -441,7 +441,7 @@ export default class purchaseOrder extends React.PureComponent
                             this.docObj.docOrders.dt()[i].AMOUNT = parseFloat((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE).toFixed(9))
                             this.docObj.docOrders.dt()[i].TOTAL = parseFloat((((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE) - this.docObj.docOrders.dt()[i].DISCOUNT) + this.docObj.docOrders.dt()[i].VAT).toFixed(9))
                             this._calculateTotal()
-                            await this.grdPurcOrders.devGrid.deleteRow(pIndex)
+                            await this.grdPurcOrders.devGrid.deleteRow(0)
                             if(this.checkCombine.value == true)
                             {
                                 this.combineControl = false
@@ -474,7 +474,7 @@ export default class purchaseOrder extends React.PureComponent
                     this.docObj.docOrders.dt()[i].TOTAL = parseFloat((((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE) - this.docObj.docOrders.dt()[i].DISCOUNT) + this.docObj.docOrders.dt()[i].VAT).toFixed(9))
                     this._calculateTotal()
                     
-                    await this.grdPurcOrders.devGrid.deleteRow(pIndex)
+                    await this.grdPurcOrders.devGrid.deleteRow(0)
                     return
                 }
             }

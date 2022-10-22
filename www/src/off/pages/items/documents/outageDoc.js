@@ -460,7 +460,7 @@ export default class outageDoc extends React.PureComponent
                     }
         
                     await dialog(tmpConfObj);
-                    await this.grdOutwasItems.devGrid.deleteRow(pIndex)
+                    await this.grdOutwasItems.devGrid.deleteRow(0)
                     return
                }
                else
@@ -484,7 +484,7 @@ export default class outageDoc extends React.PureComponent
                         {
                             this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + 1
                             this._calculateTotal()
-                            await this.grdOutwasItems.devGrid.deleteRow(pIndex)
+                            await this.grdOutwasItems.devGrid.deleteRow(0)
                             if(this.checkCombine.value == true)
                             {
                                 this.combineControl = false
@@ -511,7 +511,7 @@ export default class outageDoc extends React.PureComponent
                 {
                     this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + 1
                     this._calculateTotal()
-                    await this.grdOutwasItems.devGrid.deleteRow(pIndex)
+                    await this.grdOutwasItems.devGrid.deleteRow(0)
                     return
                 }
             }

@@ -133,6 +133,10 @@ export default class priceDifferenceInvoice extends React.PureComponent
         this.frmDocItems.option('disabled',true)
         await this.grdDiffInv.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
         await this.grdInvoicePayment.dataRefresh({source:this.paymentObj.docCustomer.dt()});
+        if(this.sysParam.filter({ID:'randomRefNo',USERS:this.user.CODE}).getValue().value == true)
+        {
+            this.txtRefno.value = Math.floor(Date.now() / 1000)
+        }
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -421,7 +425,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                             this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
                             this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
                             this._calculateTotal()
-                            await this.grdDiffInv.devGrid.deleteRow(pIndex)
+                            await this.grdDiffInv.devGrid.deleteRow(0)
                             if(this.checkCombine.value == true)
                             {
                                 this.combineControl = false
@@ -451,7 +455,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                     this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
                     this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
                     this._calculateTotal()
-                    await this.grdDiffInv.devGrid.deleteRow(pIndex)
+                    await this.grdDiffInv.devGrid.deleteRow(0)
                     return
                 }
             }
@@ -1041,17 +1045,20 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                             maxLength={32}
                                             onValueChanged={(async()=>
                                             {
-                                                let tmpQuery = 
+                                                if(this.sysParam.filter({ID:'randomRefNo',USERS:this.user.CODE}).getValue().value == false)
                                                 {
-                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 21 AND REF = @REF ",
-                                                    param : ['REF:string|25'],
-                                                    value : [this.txtRef.value]
-                                                }
-                                                let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                if(tmpData.result.recordset.length > 0)
-                                                {
-                                                    this.txtRefno.value = tmpData.result.recordset[0].REF_NO
-                                                    this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
+                                                    let tmpQuery = 
+                                                    {
+                                                        query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 21 AND REF = @REF ",
+                                                        param : ['REF:string|25'],
+                                                        value : [this.txtRef.value]
+                                                    }
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    if(tmpData.result.recordset.length > 0)
+                                                    {
+                                                        this.txtRefno.value = tmpData.result.recordset[0].REF_NO
+                                                        this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
+                                                    }
                                                 }
                                             }).bind(this)}
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
@@ -1100,6 +1107,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                             >
                                             <Validator validationGroup={"frmPriceDiffInv"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRefNo")} />
+                                                    <RangeRule min={1} message={this.t("validRefNo")}/>
                                                 </Validator> 
                                             </NdTextBox>
                                         </div>

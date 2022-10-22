@@ -125,6 +125,10 @@ export default class branchSaleDispatch extends React.PureComponent
         this.frmDocItems.option('disabled',true)
         await this.grdSlsDispatch.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
         await this.grdMultiItem.dataRefresh({source:this.multiItemData});
+        if(this.sysParam.filter({ID:'randomRefNo',USERS:this.user.CODE}).getValue().value == true)
+        {
+            this.txtRefno.value = Math.floor(Date.now() / 1000)
+        }
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -533,7 +537,7 @@ export default class branchSaleDispatch extends React.PureComponent
                     }
         
                     await dialog(tmpConfObj);
-                    await this.grdSlsDispatch.devGrid.deleteRow(pIndex)
+                    await this.grdSlsDispatch.devGrid.deleteRow(0)
                     return
                }
                else
@@ -560,7 +564,7 @@ export default class branchSaleDispatch extends React.PureComponent
                             this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
                             this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
                             this._calculateTotal()
-                            await this.grdSlsDispatch.devGrid.deleteRow(pIndex)
+                            await this.grdSlsDispatch.devGrid.deleteRow(0)
                             console.log(this.grdSlsInv)
                             console.log(this.docObj.docItems.dt())
                             if(this.checkCombine.value == true)
@@ -593,7 +597,7 @@ export default class branchSaleDispatch extends React.PureComponent
                     this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
                     this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
                     this._calculateTotal()
-                    await this.grdSlsDispatch.devGrid.deleteRow(pIndex)
+                    await this.grdSlsDispatch.devGrid.deleteRow(0)
                     return
                 }
             }
@@ -1005,16 +1009,19 @@ export default class branchSaleDispatch extends React.PureComponent
                                             maxLength={32}
                                             onChange={(async(e)=>
                                             {
-                                                let tmpQuery = 
+                                                if(this.sysParam.filter({ID:'randomRefNo',USERS:this.user.CODE}).getValue().value == false)
                                                 {
-                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 42 AND REF = @REF ",
-                                                    param : ['REF:string|25'],
-                                                    value : [this.txtRef.value]
-                                                }
-                                                let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                if(tmpData.result.recordset.length > 0)
-                                                {
-                                                    this.txtRefno.value = tmpData.result.recordset[0].REF_NO
+                                                    let tmpQuery = 
+                                                    {
+                                                        query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 42 AND REF = @REF ",
+                                                        param : ['REF:string|25'],
+                                                        value : [this.txtRef.value]
+                                                    }
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    if(tmpData.result.recordset.length > 0)
+                                                    {
+                                                        this.txtRefno.value = tmpData.result.recordset[0].REF_NO
+                                                    }
                                                 }
                                             }).bind(this)}
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
@@ -1062,6 +1069,7 @@ export default class branchSaleDispatch extends React.PureComponent
                                             >
                                             <Validator validationGroup={"frmSalesDis"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRefNo")} />
+                                                    <RangeRule min={1} message={this.t("validRefNo")}/>
                                                 </Validator> 
                                             </NdTextBox>
                                         </div>

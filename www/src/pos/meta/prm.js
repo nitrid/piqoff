@@ -571,6 +571,89 @@ export const prm =
             CAPTION : "Avans Açıklama"
         }
     },
+    //RePrint Açıklama
+    {
+        TYPE : 0,
+        ID :"RePrintDescription",
+        VALUE : 
+        {
+            disable:false,
+            minCharSize:25,
+            buttons:
+            [
+                {
+                    id:"btn01",
+                    title:"Description vide.",
+                    text:"Description non saisie."
+                },
+                {
+                    id:"btn02",
+                    title:"Description vide.",
+                    text:"Description non saisie."
+                },
+                {
+                    id:"btn03",
+                    title:"Description vide.",
+                    text:"Description non saisie."
+                },
+                {
+                    id:"btn04",
+                    title:"Description vide.",
+                    text:"Description non saisie."
+                },
+                {
+                    id:"btn05",
+                    title:"Description vide.",
+                    text:"Description non saisie."
+                },
+                {
+                    id:"btn06",
+                    title:"Description vide.",
+                    text:"Description non saisie."
+                },
+                {
+                    id:"btn07",
+                    title:"Description vide.",
+                    text:"Description non saisie."
+                },
+                {
+                    id:"btn08",
+                    title:"Description vide.",
+                    text:"Description non saisie."
+                },
+                {
+                    id:"btn09",
+                    title:"Description vide.",
+                    text:"Description non saisie."
+                },
+                {
+                    id:"btn10",
+                    title:"Description vide.",
+                    text:"Description non saisie."
+                },
+                {
+                    id:"btn11",
+                    title:"Description vide.",
+                    text:"Description non saisie."
+                },
+                {
+                    id:"btn12",
+                    title:"Description vide.",
+                    text:"Description non saisie."
+                }
+            ]
+        },
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Park Açıklama"
+        }
+    },
     //Açılış da Park Getir
     {
         TYPE : 0,

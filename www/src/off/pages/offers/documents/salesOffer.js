@@ -395,7 +395,7 @@ export default class salesOrder extends React.PureComponent
                             this.docObj.docOffers.dt()[i].AMOUNT = parseFloat((this.docObj.docOffers.dt()[i].QUANTITY * this.docObj.docOffers.dt()[i].PRICE).toFixed(9))
                             this.docObj.docOffers.dt()[i].TOTAL = parseFloat((((this.docObj.docOffers.dt()[i].QUANTITY * this.docObj.docOffers.dt()[i].PRICE) - this.docObj.docOffers.dt()[i].DISCOUNT) + this.docObj.docOffers.dt()[i].VAT).toFixed(9))
                             this._calculateTotal()
-                            await this.grdSlsOffer.devGrid.deleteRow(pIndex)
+                            await this.grdSlsOffer.devGrid.deleteRow(0)
                             if(this.checkCombine.value == true)
                             {
                                 this.combineControl = false
@@ -425,7 +425,7 @@ export default class salesOrder extends React.PureComponent
                     this.docObj.docOffers.dt()[i].AMOUNT = parseFloat((this.docObj.docOffers.dt()[i].QUANTITY * this.docObj.docOffers.dt()[i].PRICE).toFixed(9))
                     this.docObj.docOffers.dt()[i].TOTAL = parseFloat((((this.docObj.docOffers.dt()[i].QUANTITY * this.docObj.docOffers.dt()[i].PRICE) - this.docObj.docOffers.dt()[i].DISCOUNT) + this.docObj.docOffers.dt()[i].VAT).toFixed(9))
                     this._calculateTotal()
-                    await this.grdSlsOffer.devGrid.deleteRow(pIndex)
+                    await this.grdSlsOffer.devGrid.deleteRow(0)
                     return
                 }
                

@@ -13,6 +13,7 @@ export const langTr =
     btnNo : "Hayır",
     msgClose : "Sayfayı Kapatmak İstediğinize Eminmisiniz ?",
     txtLangSelect : "Dil Seçimi",
+    userListTitle : "Kullanıcı Listesi",
     txtUser : "Kullanıcı",
     txtPass : "Şifre",
     btnUserSelect : "Kullanıcı Seçimi",
@@ -2860,6 +2861,9 @@ export const langTr =
         tabTitleOldInvoices : "Geçmiş Fatura Bilgileri",
         getRemainder : "Kalan Tutarı Getir",
         txtbalance : "Cari Toplam Bakiyesi",
+        txtUnitFactor : "Birim Katsayısı",
+        txtUnitQuantity : "Birim Miktarı",
+        txtTotalQuantity : "Toplam Miktar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -3119,6 +3123,11 @@ export const langTr =
             btn01: "Listeyi Temizle ve Hepsini Ekle",
             btn02: "Yeni Yazılanları Listeye Ekle",
             msg: "Listede Ürünler Var! "
+        },
+        msgUnit:
+        {
+            title: "Birim Seçimi",
+            btn01: "Onayla",
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",

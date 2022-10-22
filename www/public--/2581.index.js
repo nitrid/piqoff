@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkwww=self.webpackChunkwww||[]).push([[2581],{82581:(e,i,s)=>{s.r(i),s.d(i,{menu:()=>n});var n=[{id:"lic",text:"Lisans",expanded:!1,items:[{id:"lic_01",text:"Lisans Listesi",path:"../../plugins/admin/licence/licence_list.js"}]}]}}]);

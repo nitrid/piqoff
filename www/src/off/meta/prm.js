@@ -32,7 +32,25 @@ export const prm =
         {
             TYPE : "checkbox",
             PAGE_NAME : "Sistem",
-            CAPTION : "Seri Numarası İçin Cari Kodu Kullan"
+            CAPTION : "Seri  İçin Cari Kodu Kullan"
+        }
+    },
+    //Seri Numarası Rastgele Oluştursun
+    {
+        TYPE : 0,
+        ID :"randomRefNo",
+        VALUE : 
+        {
+            value : true
+        },
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Seri Numarası Rastgele Oluştursun"
         }
     },
     // Alış Faturasından Fiyat Güncelleme
@@ -364,7 +382,7 @@ export const prm =
                     {
                         type : "range",
                         msg : "Le contenue ne peut pas être nul ou inférieur à zéro !",
-                        min : 0.01
+                        min : 0.001
                     }
                 ]
             }

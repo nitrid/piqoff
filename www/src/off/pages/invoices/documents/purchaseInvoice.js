@@ -446,6 +446,7 @@ export default class purchaseInvoice extends React.PureComponent
     }
     async addItem(pData,pIndex,pQuantity,pPrice,pDiscount,pDiscountPer,pVat)
     {
+        console.log(pIndex)
         App.instance.setState({isExecute:true})
         if(typeof pData.ITEM_TYPE == 'undefined')
         {
@@ -472,7 +473,7 @@ export default class purchaseInvoice extends React.PureComponent
                     let tmpCustomerBtn = ''
                     if(this.customerClear == true)
                     {
-                        await this.grdPurcInv.devGrid.deleteRow(pIndex)
+                        await this.grdPurcInv.devGrid.deleteRow(0)
                         return 
                     }
                     App.instance.setState({isExecute:false})
@@ -487,7 +488,7 @@ export default class purchaseInvoice extends React.PureComponent
                         if(e == 'btn02')
                         {
                             tmpCustomerBtn = e
-                            await this.grdPurcInv.devGrid.deleteRow(pIndex)
+                            await this.grdPurcInv.devGrid.deleteRow(0)
                             if(this.checkCustomer.value == true)
                             {
                                 this.customerClear = true
@@ -520,7 +521,7 @@ export default class purchaseInvoice extends React.PureComponent
                                 this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
                                 this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
                                 this._calculateTotal()
-                                await this.grdPurcInv.devGrid.deleteRow(pIndex)
+                                await this.grdPurcInv.devGrid.deleteRow(0)
                                 if(this.checkCombine.value == true)
                                 {
                                     this.combineControl = false
@@ -550,7 +551,7 @@ export default class purchaseInvoice extends React.PureComponent
                         this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
                         this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
                         this._calculateTotal()
-                        await this.grdPurcInv.devGrid.deleteRow(pIndex)
+                        await this.grdPurcInv.devGrid.deleteRow(0)
                         return
                     }
                 }
@@ -1500,19 +1501,7 @@ export default class purchaseInvoice extends React.PureComponent
                                             maxLength={32}
                                             onValueChanged={(async(e)=>
                                             {
-                                                
-                                                let tmpQuery = 
-                                                {
-                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 0 AND DOC_TYPE = 20 AND REF = @REF ",
-                                                    param : ['REF:string|25'],
-                                                    value : [this.txtRef.value]
-                                                }
-                                                let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                if(tmpData.result.recordset.length > 0)
-                                                {
-                                                    this.txtRefno.value = tmpData.result.recordset[0].REF_NO
-                                                    this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
-                                                }
+                                              
                                             }).bind(this)}
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
@@ -1560,6 +1549,7 @@ export default class purchaseInvoice extends React.PureComponent
                                             >
                                             <Validator validationGroup={"frmPurcInv"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRefNo")} />
+                                                    <RangeRule min={1} message={this.t("validRefNo")}/>
                                                 </Validator> 
                                             </NdTextBox>
                                         </div>

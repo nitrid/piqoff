@@ -392,7 +392,7 @@ export default class purchaseDispatch extends React.PureComponent
                 let tmpCustomerBtn = ''
                 if(this.customerClear == true)
                 {
-                    await this.grdPurcDispatch.devGrid.deleteRow(pIndex)
+                    await this.grdPurcDispatch.devGrid.deleteRow(0)
                     return 
                 }
                 App.instance.setState({isExecute:false})
@@ -407,7 +407,7 @@ export default class purchaseDispatch extends React.PureComponent
                     if(e == 'btn02')
                     {
                         tmpCustomerBtn = e
-                        await this.grdPurcDispatch.devGrid.deleteRow(pIndex)
+                        await this.grdPurcDispatch.devGrid.deleteRow(0)
                         if(this.checkCustomer.value == true)
                         {
                             this.customerClear = true
@@ -440,7 +440,7 @@ export default class purchaseDispatch extends React.PureComponent
                             this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
                             this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
                             this._calculateTotal()
-                            await this.grdPurcDispatch.devGrid.deleteRow(pIndex)
+                            await this.grdPurcDispatch.devGrid.deleteRow(0)
                             if(this.checkCombine.value == true)
                             {
                                 this.combineControl = false
@@ -470,7 +470,7 @@ export default class purchaseDispatch extends React.PureComponent
                     this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
                     this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
                     this._calculateTotal()
-                    await this.grdPurcDispatch.devGrid.deleteRow(pIndex)
+                    await this.grdPurcDispatch.devGrid.deleteRow(0)
                     return
                 }
             }
@@ -1025,17 +1025,7 @@ export default class purchaseDispatch extends React.PureComponent
                                             maxLength={32}
                                             onChange={(async(e)=>
                                             {
-                                                let tmpQuery = 
-                                                {
-                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 0 AND DOC_TYPE = 40 AND REF = @REF ",
-                                                    param : ['REF:string|25'],
-                                                    value : [this.txtRef.value]
-                                                }
-                                                let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                if(tmpData.result.recordset.length > 0)
-                                                {
-                                                    this.txtRefno.value = tmpData.result.recordset[0].REF_NO
-                                                }
+                                               
                                             }).bind(this)}
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
@@ -1082,6 +1072,7 @@ export default class purchaseDispatch extends React.PureComponent
                                             >
                                             <Validator validationGroup={"frmPurcDispatch"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRefNo")} />
+                                                    <RangeRule min={1} message={this.t("validRefNo")}/>
                                                 </Validator> 
                                             </NdTextBox>
                                         </div>
@@ -1167,7 +1158,6 @@ export default class purchaseDispatch extends React.PureComponent
                                                     if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                     {
                                                         this.txtRef.value = data[0].CODE;
-                                                        this.txtRef.props.onChange()
                                                     }
                                                     if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                                     {

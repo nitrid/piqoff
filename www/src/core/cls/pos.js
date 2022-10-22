@@ -31,8 +31,9 @@ export class posCls
             TICKET : '', //İADE ALINAN TICKET
             REBATE_CHEQPAY : '', //İADE CEKİ
             STATUS : 0,
-            DELETED : false,
-            DESCRIPTION : ''
+            DELETED : false,            
+            DESCRIPTION : '',
+            CERTIFICATE : ''
         }
 
         this.posSale = new posSaleCls();
