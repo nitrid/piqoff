@@ -3840,8 +3840,8 @@ export default class purchaseInvoice extends React.PureComponent
                             <Column dataField="ZIPCODE" caption={this.t("pg_adress.clmZipcode")} width={300} defaultSortOrder="asc" />
                             <Column dataField="COUNTRY" caption={this.t("pg_adress.clmCountry")} width={200}/>
                         </NdPopGrid>
-                        {/* Birim PopUp */}
-                     <div>
+                    {/* Birim PopUp */}
+                    <div>
                         <NdDialog parent={this} id={"msgUnit"} 
                         visible={false}
                         showCloseButton={true}

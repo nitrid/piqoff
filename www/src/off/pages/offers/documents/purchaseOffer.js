@@ -272,7 +272,7 @@ export default class purchaseoffer extends React.PureComponent
                         {
                             let tmpQuery = 
                             {
-                                query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
+                                query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE,ITEMS_VW_01.UNIT FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
                                 param : ['CODE:string|50'],
                                 value : [r.component._changedValue]
                             }
@@ -349,6 +349,54 @@ export default class purchaseoffer extends React.PureComponent
                                         }
                                     }
                                 }
+                            }
+                        },
+                    ]
+                }
+                >  
+                </NdTextBox>
+            )
+        }
+        if(e.column.dataField == "QUANTITY")
+        {
+            return (
+                <NdTextBox id={"txtGrdQuantity"+e.rowIndex} parent={this} simple={true} 
+                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                value={e.value}
+                onChange={(r)=>
+                {
+                    e.data.QUANTITY = r.component._changedValue
+                }}
+                button=
+                {
+                    [
+                        {
+                            id:'01',
+                            icon:'more',
+                            onClick:async ()  =>
+                            {
+                                let tmpQuery = 
+                                {
+                                    query: "SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,FACTOR FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM ORDER BY TYPE" ,
+                                    param:  ['ITEM:string|50'],
+                                    value:  [e.data.ITEM]
+                                }
+                                let tmpData = await this.core.sql.execute(tmpQuery) 
+                                if(tmpData.result.recordset.length > 0)
+                                {   
+                                    this.cmbUnit.setData(tmpData.result.recordset)
+                                    this.cmbUnit.value = e.data.UNIT
+                                    this.txtUnitFactor.value = e.data.UNIT_FACTOR
+                                    this.txtTotalQuantity.value =  e.data.QUANTITY
+                                    this.txtUnitQuantity.value = e.data.QUANTITY / e.data.UNIT_FACTOR
+
+                                }
+                                await this.msgUnit.show().then(async () =>
+                                {
+                                    e.data.QUANTITY = this.txtTotalQuantity.value
+                                    e.data.UNIT = this.cmbUnit.value
+                                    e.data.UNIT_FACTOR =this.txtUnitFactor.value 
+                                });  
                             }
                         },
                     ]
@@ -476,6 +524,7 @@ export default class purchaseoffer extends React.PureComponent
         this.docObj.docOffers.dt()[pIndex].BARCODE = pData.BARCODE
         this.docObj.docOffers.dt()[pIndex].VAT_RATE = pData.VAT
         this.docObj.docOffers.dt()[pIndex].ITEM_NAME = pData.NAME
+        this.docObj.docOffers.dt()[pIndex].UNIT = pData.UNIT
         this.docObj.docOffers.dt()[pIndex].DISCOUNT = 0
         this.docObj.docOffers.dt()[pIndex].DISCOUNT_RATE = 0
         this.docObj.docOffers.dt()[pIndex].QUANTITY = pQuantity
@@ -512,7 +561,7 @@ export default class purchaseoffer extends React.PureComponent
             {
                 select:
                 {
-                    query : "SELECT GUID,CODE,NAME,VAT,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE," + 
+                    query : "SELECT GUID,CODE,NAME,VAT,UNIT,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE," + 
                     "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
                     " FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) " ,
                     param : ['VAL:string|50']
@@ -529,7 +578,7 @@ export default class purchaseoffer extends React.PureComponent
             source:
             {
                 select:
-                {   query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,COST_PRICE,VAT,BARCODE,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = '"+this.docObj.dt()[0].OUTPUT+"' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE,  " + 
+                {   query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,COST_PRICE,VAT,BARCODE,ITEMS_VW_01.UNIT,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = '"+this.docObj.dt()[0].OUTPUT+"' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE,  " + 
                     "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
                     " FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  ITEM_BARCODE_VW_01.BARCODE LIKE  '%' +@BARCODE",
                     param : ['BARCODE:string|50'],
@@ -564,7 +613,7 @@ export default class purchaseoffer extends React.PureComponent
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY," + 
+                    query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,UNIT," + 
                     "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
                     " FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') = @VALUE " ,
                     param : ['VALUE:string|50'],
@@ -588,7 +637,7 @@ export default class purchaseoffer extends React.PureComponent
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY," + 
+                    query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,UNIT," + 
                     "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
                     " FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VALUE) OR UPPER(NAME) LIKE UPPER(@VALUE) " ,
                     param : ['VALUE:string|50'],
@@ -1299,7 +1348,7 @@ export default class purchaseoffer extends React.PureComponent
                                             return
                                         }
                                         let tmpQuery = 
-                                        {   query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,COST_PRICE,VAT,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = @CUSTOMER AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE,  " + 
+                                        {   query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,COST_PRICE,VAT,ITEMS_VW_01.UNIT,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = @CUSTOMER AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE,  " + 
                                             "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
                                             " FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
                                             param : ['CODE:string|50','CUSTOMER:string|50'],
@@ -1649,7 +1698,7 @@ export default class purchaseoffer extends React.PureComponent
                                         <Column dataField="MULTICODE" caption={this.t("grdPurcoffers.clmMulticode")} width={105}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdPurcoffers.clmItemName")} width={230} />
                                         <Column dataField="ITEM_BARCODE" caption={this.t("grdPurcoffers.clmBarcode")} width={110} allowEditing={false}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdPurcoffers.clmQuantity")} width={50} dataType={'number'}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdPurcoffers.clmQuantity")} width={70} editCellRender={this._cellRoleRender} dataType={'number'}/>
                                         <Column dataField="PRICE" caption={this.t("grdPurcoffers.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                         <Column dataField="AMOUNT" caption={this.t("grdPurcoffers.clmAmount")} width={90} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
                                         <Column dataField="DISCOUNT" caption={this.t("grdPurcoffers.clmDiscount")} width={60} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
@@ -2226,6 +2275,63 @@ export default class purchaseoffer extends React.PureComponent
                             </div>
                         
                     </NdDialog>  
+                    {/* Birim PopUp */}
+                    <div>
+                        <NdDialog parent={this} id={"msgUnit"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("msgUnit.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'400'}
+                        position={{of:'#root'}}
+                        button={[{id:"btn01",caption:this.t("msgUnit.btn01"),location:'after'}]}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <NdSelectBox simple={true} parent={this} id="cmbUnit"
+                                    displayExpr="NAME"                       
+                                    valueExpr="GUID"
+                                    value=""
+                                    searchEnabled={true}
+                                    onValueChanged={(async(e)=>
+                                    {
+                                        // this.txtUnitFactor.setState({value:this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].FACTOR});
+                                        this.txtTotalQuantity.value = Number(this.txtUnitQuantity.value * this.txtUnitFactor.value);
+                                    }).bind(this)}
+                                    >
+                                    </NdSelectBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtUnitFactor")} alignment="right" />
+                                    <NdNumberBox id="txtUnitFactor" parent={this} simple={true}
+                                    readOnly={true}
+                                    maxLength={32}
+                                    >
+                                    </NdNumberBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtUnitQuantity")} alignment="right" />
+                                    <NdNumberBox id="txtUnitQuantity" parent={this} simple={true}
+                                    maxLength={32}
+                                    onValueChanged={(async(e)=>
+                                    {
+                                       this.txtTotalQuantity.value = Number(this.txtUnitQuantity.value * this.txtUnitFactor.value)
+                                    }).bind(this)}
+                                    >
+                                    </NdNumberBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtTotalQuantity")} alignment="right" />
+                                    <NdNumberBox id="txtTotalQuantity" parent={this} simple={true}  readOnly={true}
+                                    maxLength={32}
+                                    >
+                                    </NdNumberBox>
+                                </Item>
+                            </Form>
+                        </NdDialog>
+                    </div>  
                 </ScrollView>                
             </div>
         )
