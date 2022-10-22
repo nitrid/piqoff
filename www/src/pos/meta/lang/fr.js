@@ -13,6 +13,7 @@ export const langFr =
     btnNo : "Non",
     msgClose : "Etes-vous sûr de vouloir fermer la page",
     txtLangSelect : "Choix de la langue",
+    userListTitle : "Kullanıcı Listesi", //BAK
     txtUser : "Utilisateur",
     txtPass : "Mot de passe",
     btnUserSelect : "Choix de l'utilisateur",
@@ -142,11 +143,7 @@ export const langFr =
     msgMinPrice : 
     {
         title : "Attention",
-
-        msg : "Le prix ne peut min prix !! ",
-
         msg : "Le prix ne peut être min prix !! ",
-
         btn01 : "OK",
     },
     msgCostPrice : 
@@ -575,5 +572,11 @@ export const langFr =
         msg : "Fişi Yazdırmak İstermisiniz ?",
         btn01 : "Tamam",
         btn02 : "İptal"
+    },
+    msgRePrint: //Bak
+    {
+        title : "Uyarı",
+        msg : "Fiş yazdırma sınırına ulaştınız !",
+        btn01 : "Tamam",
     },
 }

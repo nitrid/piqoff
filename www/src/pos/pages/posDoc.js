@@ -29,7 +29,7 @@ import NdAcsDialog,{acsDialog} from "../../core/react/devex/acsdialog.js";
 import NbKeyboard from "../../core/react/bootstrap/keyboard.js";
 import IdleTimer from 'react-idle-timer'
 
-import { posCls,posSaleCls,posPaymentCls,posPluCls,posDeviceCls,posPromoCls } from "../../core/cls/pos.js";
+import { posCls,posSaleCls,posPaymentCls,posPluCls,posDeviceCls,posPromoCls, posExtraCls } from "../../core/cls/pos.js";
 import { docCls} from "../../core/cls/doc.js"
 import transferCls from "../lib/transfer.js";
 import { promoCls } from "../../core/cls/promotion.js";
@@ -238,6 +238,7 @@ export default class posDoc extends React.PureComponent
         await this.acsObj.load({APP:'POS'})
 
         this.posObj.addEmpty()
+        this.posObj.dt()[this.posObj.dt().length - 1].CERTIFICATE = this.core.appInfo.name + " version : " + this.core.appInfo.version //+ " - " + this.core.appInfo.certificate + this.core.appInfo.signed;
         this.posObj.dt()[this.posObj.dt().length - 1].DEVICE = window.localStorage.getItem('device') == null ? '' : window.localStorage.getItem('device')
         this.device.value = this.posObj.dt()[this.posObj.dt().length - 1].DEVICE
         
@@ -1222,6 +1223,22 @@ export default class posDoc extends React.PureComponent
                 //******************************** */
                 if(typeof pPrint == 'undefined' || pPrint)
                 {
+                    //POS_EXTRA TABLOSUNA YAZDIRMA BİLDİRİMİ GÖNDERİLİYOR
+                    let tmpInsertQuery = 
+                    {
+                        query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
+                                "@CUSER = @PCUSER, " + 
+                                "@TAG = @PTAG, " +
+                                "@POS_GUID = @PPOS_GUID, " +
+                                "@LINE_GUID = @PLINE_GUID, " +
+                                "@DATA =@PDATA, " +
+                                "@DESCRIPTION = @PDESCRIPTION ", 
+                        param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|50','PDESCRIPTION:string|max'],
+                        value : [this.posObj.dt()[0].CUSER,"REPRINT",this.posObj.dt()[0].GUID,"00000000-0000-0000-0000-000000000000","",""]
+                    }
+
+                    await this.core.sql.execute(tmpInsertQuery)
+                    //***************************************************/
                     let tmpData = 
                     {
                         pos : this.posObj.dt(),
@@ -1231,9 +1248,8 @@ export default class posDoc extends React.PureComponent
                         special : 
                         {
                             type: 'Fis',
-                            safe: '001',
                             ticketCount:0,
-                            reprint: false,
+                            reprint: 1,
                             repas: 0,
                             customerUsePoint:this.popCustomerUsePoint.value,
                             customerPoint:this.customerPoint.value,
@@ -4481,26 +4497,66 @@ export default class posDoc extends React.PureComponent
                                             {
                                                 let tmpLastPos = new datatable();
                                                 tmpLastPos.import(this.grdLastPos.devGrid.getSelectedRowKeys())
-                                                
-                                                let tmpData = 
+                                                if(tmpLastPos.length > 0)
                                                 {
-                                                    pos : tmpLastPos,
-                                                    possale : this.lastPosSaleDt,
-                                                    pospay : this.lastPosPayDt,
-                                                    pospromo : this.lastPosPromoDt,
-                                                    special : 
+                                                    let tmpQuery = 
                                                     {
-                                                        type : 'Repas',
-                                                        safe : '001',
-                                                        ticketCount : 0,
-                                                        reprint : true,
-                                                        repas : tmpResult,
-                                                        customerUsePoint : Math.floor(tmpLastPos[0].LOYALTY * 100),
-                                                        customerPoint : (tmpLastPos[0].CUSTOMER_POINT + Math.floor(tmpLastPos[0].LOYALTY * 100)) - Math.floor(tmpLastPos[0].TOTAL),
-                                                        customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL)
+                                                        query : "SELECT COUNT(TAG) AS PRINT_COUNT FROM POS_EXTRA WHERE POS_GUID = @POS_GUID AND TAG = @TAG", 
+                                                        param : ['POS_GUID:string|50','TAG:string|25'],
+                                                        value : [tmpLastPos[0].GUID,"REPRINT"]
                                                     }
-                                                }
-                                                await this.print(tmpData)
+    
+                                                    let tmpPrintCount = (await this.core.sql.execute(tmpQuery)).result.recordset[0].PRINT_COUNT
+                                                    if(tmpPrintCount < 2)
+                                                    {
+                                                        let tmpRePrintResult = await this.popRePrintDesc.show()
+                                                        if(typeof tmpRePrintResult != 'undefined')
+                                                        {
+                                                            let tmpInsertQuery = 
+                                                            {
+                                                                query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
+                                                                        "@CUSER = @PCUSER, " + 
+                                                                        "@TAG = @PTAG, " +
+                                                                        "@POS_GUID = @PPOS_GUID, " +
+                                                                        "@LINE_GUID = @PLINE_GUID, " +
+                                                                        "@DATA =@PDATA, " +
+                                                                        "@DESCRIPTION = @PDESCRIPTION ", 
+                                                                param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|50','PDESCRIPTION:string|max'],
+                                                                value : [tmpLastPos[0].CUSER,"REPRINT",tmpLastPos[0].GUID,"00000000-0000-0000-0000-000000000000","",tmpRePrintResult]
+                                                            }
+    
+                                                            await this.core.sql.execute(tmpInsertQuery)
+                                                            let tmpData = 
+                                                            {
+                                                                pos : tmpLastPos,
+                                                                possale : this.lastPosSaleDt,
+                                                                pospay : this.lastPosPayDt,
+                                                                pospromo : this.lastPosPromoDt,
+                                                                special : 
+                                                                {
+                                                                    type : 'Repas',
+                                                                    ticketCount : 0,
+                                                                    reprint : tmpPrintCount + 1,
+                                                                    repas : tmpResult,
+                                                                    customerUsePoint : Math.floor(tmpLastPos[0].LOYALTY * 100),
+                                                                    customerPoint : (tmpLastPos[0].CUSTOMER_POINT + Math.floor(tmpLastPos[0].LOYALTY * 100)) - Math.floor(tmpLastPos[0].TOTAL),
+                                                                    customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL)
+                                                                }
+                                                            }
+                                                            await this.print(tmpData)
+                                                        }                                                        
+                                                    }
+                                                    else
+                                                    {
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'msgRePrint',showTitle:true,title:this.lang.t("msgRePrint.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.lang.t("msgRePrint.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgRePrint.msg")}</div>)
+                                                        }
+                                                        await dialog(tmpConfObj);
+                                                    } 
+                                                }                                                
                                             }
                                         }}>
                                             <i className="text-white fa-solid fa-utensils" style={{fontSize: "16px"}} />
@@ -4523,9 +4579,8 @@ export default class posDoc extends React.PureComponent
                                                 special : 
                                                 {
                                                     type : 'Fatura',
-                                                    safe : '001',
                                                     ticketCount : 0,
-                                                    reprint : true,
+                                                    reprint : 1,
                                                     repas : 0,
                                                     customerUsePoint : Math.floor(tmpLastPos[0].LOYALTY * 100),
                                                     customerPoint : (tmpLastPos[0].CUSTOMER_POINT + Math.floor(tmpLastPos[0].LOYALTY * 100)) - Math.floor(tmpLastPos[0].TOTAL),
@@ -4544,39 +4599,69 @@ export default class posDoc extends React.PureComponent
                                         {
                                             let tmpLastPos = new datatable();
                                             tmpLastPos.import(this.grdLastPos.devGrid.getSelectedRowKeys())
-                                            console.log(tmpLastPos[0])
+                                            
                                             if(tmpLastPos.length > 0)
-                                            {
+                                            {                                                
                                                 let tmpQuery = 
                                                 {
                                                     query : "SELECT COUNT(TAG) AS PRINT_COUNT FROM POS_EXTRA WHERE POS_GUID = @POS_GUID AND TAG = @TAG", 
                                                     param : ['POS_GUID:string|50','TAG:string|25'],
-                                                    value : [tmpLastPos[0].GUID,"ROW DELETE"]
+                                                    value : [tmpLastPos[0].GUID,"REPRINT"]
                                                 }
+
                                                 let tmpPrintCount = (await this.core.sql.execute(tmpQuery)).result.recordset[0].PRINT_COUNT
-
-                                                console.log(tmpPrintCount)
-                                            }
-
-                                            let tmpData = 
-                                            {
-                                                pos : tmpLastPos,
-                                                possale : this.lastPosSaleDt,
-                                                pospay : this.lastPosPayDt,
-                                                pospromo : this.lastPosPromoDt,
-                                                special : 
+                                                
+                                                if(tmpPrintCount < 5)
                                                 {
-                                                    type : 'Fis',
-                                                    safe : '001',
-                                                    ticketCount : 0,
-                                                    reprint : true,
-                                                    repas : 0,
-                                                    customerUsePoint : Math.floor(tmpLastPos[0].LOYALTY * 100),
-                                                    customerPoint : (tmpLastPos[0].CUSTOMER_POINT + Math.floor(tmpLastPos[0].LOYALTY * 100)) - Math.floor(tmpLastPos[0].TOTAL),
-                                                    customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL)
+                                                    let tmpRePrintResult = await this.popRePrintDesc.show()
+
+                                                    if(typeof tmpRePrintResult != 'undefined')
+                                                    {
+                                                        let tmpInsertQuery = 
+                                                        {
+                                                            query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
+                                                                    "@CUSER = @PCUSER, " + 
+                                                                    "@TAG = @PTAG, " +
+                                                                    "@POS_GUID = @PPOS_GUID, " +
+                                                                    "@LINE_GUID = @PLINE_GUID, " +
+                                                                    "@DATA =@PDATA, " +
+                                                                    "@DESCRIPTION = @PDESCRIPTION ", 
+                                                            param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|50','PDESCRIPTION:string|max'],
+                                                            value : [tmpLastPos[0].CUSER,"REPRINT",tmpLastPos[0].GUID,"00000000-0000-0000-0000-000000000000","",tmpRePrintResult]
+                                                        }
+
+                                                        await this.core.sql.execute(tmpInsertQuery)
+                                                        let tmpData = 
+                                                        {
+                                                            pos : tmpLastPos,
+                                                            possale : this.lastPosSaleDt,
+                                                            pospay : this.lastPosPayDt,
+                                                            pospromo : this.lastPosPromoDt,
+                                                            special : 
+                                                            {
+                                                                type : 'Fis',
+                                                                ticketCount : 0,
+                                                                reprint : tmpPrintCount + 1,
+                                                                repas : 0,
+                                                                customerUsePoint : Math.floor(tmpLastPos[0].LOYALTY * 100),
+                                                                customerPoint : (tmpLastPos[0].CUSTOMER_POINT + Math.floor(tmpLastPos[0].LOYALTY * 100)) - Math.floor(tmpLastPos[0].TOTAL),
+                                                                customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL)
+                                                            }
+                                                        }
+                                                        await this.print(tmpData)
+                                                    } 
                                                 }
+                                                else
+                                                {
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgRePrint',showTitle:true,title:this.lang.t("msgRePrint.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.lang.t("msgRePrint.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgRePrint.msg")}</div>)
+                                                    }
+                                                    await dialog(tmpConfObj);
+                                                }                                                                                                
                                             }
-                                            await this.print(tmpData)
                                         }}>
                                             <i className="text-white fa-solid fa-print" style={{fontSize: "16px"}} />
                                         </NbButton>
@@ -5924,6 +6009,12 @@ export default class posDoc extends React.PureComponent
                             </div>
                         </div>
                     </NdPopUp>
+                </div>
+                {/* RePrint Description Popup */} 
+                <div>
+                    <NbPopDescboard id={"popRePrintDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={this.lang.t("popRePrintDesc.head")} title={this.lang.t("popRePrintDesc.title")}                    
+                    param={this.prmObj.filter({ID:'RePrintDescription',TYPE:0})}
+                    ></NbPopDescboard>
                 </div>
             </div>
         )

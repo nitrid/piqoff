@@ -382,7 +382,7 @@ export const prm =
                     {
                         type : "range",
                         msg : "Le contenue ne peut pas être nul ou inférieur à zéro !",
-                        min : 0.01
+                        min : 0.001
                     }
                 ]
             }

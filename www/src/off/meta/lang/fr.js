@@ -13,6 +13,7 @@ export const langFr =
     btnNo : "Non",
     msgClose : "Etes vous sûr(e) de vouloir quitter la page ?",
     txtLangSelect : "Choix de la langue",
+    userListTitle : "Kullanıcı Listesi", //BAK
     txtUser : "Utilisateur",
     txtPass : "Mot de passe",
     btnUserSelect : "Choix utilisateur",

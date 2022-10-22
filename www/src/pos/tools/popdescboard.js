@@ -131,6 +131,11 @@ export default class NbPopDescboard extends NbBase
             this.props.onClick(this["txt" + this.props.id].value)
         }
         this[this.props.id].hide()
+
+        if(typeof this.awaitClick != 'undefined')
+        {
+            this.awaitClick(true)
+        }
     }
     async show()
     {
@@ -147,6 +152,26 @@ export default class NbPopDescboard extends NbBase
 
         this["txt" + this.props.id].value = ""
         this[this.props.id].show()
+
+        if(typeof this.props.onClick == 'undefined')
+        {
+            return new Promise(async resolve => 
+            {
+                this.awaitClick = (e) =>
+                {
+                    if(e)
+                    {
+                        resolve(this["txt" + this.props.id].value)
+                        return
+                    }
+                    else
+                    {
+                        resolve()
+                        return
+                    }
+                }
+            });
+        }
     }
     setText(e)
     {
@@ -158,7 +183,7 @@ export default class NbPopDescboard extends NbBase
             <div>
                 <NdPopUp parent={this} id={this.props.id} 
                 visible={false}                        
-                showCloseButton={true}
+                showCloseButton={false}
                 showTitle={true}
                 title={this.state.head}
                 container={this.state.position} 
@@ -195,6 +220,7 @@ export default class NbPopDescboard extends NbBase
                             <NbButton id={"btnCancel" + this.props.id} parent={this} className="form-group btn btn-danger btn-block" style={{height:"55px",width:"100%"}}
                             onClick={()=>
                             {
+                                this.awaitClick(false)
                                 this[this.props.id].hide()
                             }}>
                                 <i className="text-white fa-solid fa-xmark" style={{fontSize: "24px"}} />

@@ -33,7 +33,7 @@ export class core
         this.auth = new auth();
         this.util = new util();                
 
-        this.ioEvents();        
+        this.ioEvents();
     }    
     ioEvents()
     {
