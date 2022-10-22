@@ -244,6 +244,15 @@ export const langFr =
         maxBuyPrice : "Prix Achat Max.",
         sellPriceAdd : "Ajout Prix Vente",
         clmInvoiceCost : "Frais de service", // BAK
+        validOrigin : "Menşei boş geçemezsiniz !",
+        validTaxSucre : "Lütfen şeker oranını doğru giriniz !",
+        validName : "Adı boş geçemezsiniz !",
+        validQuantity : "Miktar'ı boş geçemezsiniz !" ,
+        validPrice :"Fiyatı boş geçemezsiniz !",
+        validPriceFloat : "Fiyat 0'dan yüksek olmalıdır !",
+        validCustomerCode :"Tedarikci Kodu Giriniz !",
+        mainUnitName :"Ana Birim",
+        underUnitName : "Alt Birim",
         pg_txtRef:
         {
             title: "Sélectionner Produit",

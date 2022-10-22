@@ -1271,7 +1271,7 @@ export default class itemCard extends React.PureComponent
                                         }}
                                     >
                                         <Validator validationGroup={this.state.isItemGrpForOrginsValid ? "frmItems" + this.tabIndex : ''}>
-                                            <RequiredRule message="Menşei boş geçemezsiniz !"   // LANGBAK 
+                                            <RequiredRule message={this.t("validOrigin")}   
                                             />
                                         </Validator>
                                     </NdSelectBox>                                    
@@ -1317,7 +1317,7 @@ export default class itemCard extends React.PureComponent
                                         this.taxSugarCalculate()
                                     }}>
                                        <Validator validationGroup={this.state.isTaxSugar ? "frmItems" + this.tabIndex : ''}>
-                                            <RangeRule min={4.001} message={"Şeker oranını doğru giriniz !"}   // LANGBAK
+                                            <RangeRule min={4.001} message={this.t("validTaxSucre")}   
                                              />
                                         </Validator>
                                     </NdNumberBox>
@@ -1335,7 +1335,7 @@ export default class itemCard extends React.PureComponent
                                             this.txtShortName.value = e.value.toUpperCase()
                                     }}>
                                         <Validator validationGroup={"frmItems" + this.tabIndex}>
-                                            <RequiredRule message="Adı boş geçemezsiniz !"   // LANGBAK
+                                            <RequiredRule message={this.t("validName")}   
                                              />
                                         </Validator> 
                                     </NdTextBox>
@@ -1951,7 +1951,7 @@ export default class itemCard extends React.PureComponent
                                     <Label text={this.t("popPrice.txtPopPriQuantity")} alignment="right" />
                                     <NdNumberBox id={"txtPopPriQuantity"} parent={this} simple={true}>
                                         <Validator validationGroup={"frmPrice" + this.tabIndex}>
-                                            <RequiredRule message="Miktar'ı boş geçemezsiniz !"   // LANGBAK
+                                            <RequiredRule message={this.t("validQuantity")}  // LANGBAK
                                              />
                                         </Validator>
                                     </NdNumberBox>
