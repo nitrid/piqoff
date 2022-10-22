@@ -182,6 +182,8 @@ export const langFr =
         set : "Coût Suplement",
         set_01 : "Coût et taxe annexe",
         set_01_001 : "Taxe sucre",
+        set_02 : "Genel Ayarlar", // BAK
+        set_02_001 : "Firma Bilgileri", // BAK
         proces : "Saisie groupée",
         proces_01 : "Traitement Produit",
         proces_01_001 : "MAJ groupe produit",
@@ -7734,6 +7736,53 @@ export const langFr =
         validValue :"Ne peut être Vide",
         zeroValid : "Ne peut pas être 0"
 
+    },
+    set_02_001 : // "Firma Bilgileri" YENI EKLENDI KOMPLE BAK
+    {
+        txtTitle : "Firma Adı",
+        txtCustomerName : "Yetkili Adı",
+        txtCustomerLastname : "Yetkili Soyadı",
+        txtAddress1 : "Adres",
+        txtAddress2 : "Adres 2",
+        cmbCıty : "Şehir",
+        cmbCountry : "Ülke",
+        txtPhone : "Telefon",
+        txtEmail : "E-Mail",
+        txtWeb : "Web Site",
+        txtSiretId : "Siret ID",
+        txtApeCode : "Ape Code",
+        txtTaxOffice : "Tax Office",
+        txtTaxNo : "Tax No",
+        txtIntVatNo : "Int. Vat No",
+        txtSirenNo : "Siren No",
+        txtCapital : "Sermaye",
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
     },
     pos_01_001 : // "Pos Cihaz Tanıtım",
     {

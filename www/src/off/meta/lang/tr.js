@@ -182,6 +182,8 @@ export const langTr =
         set : "Ayarlar",
         set_01 : "Maliyet ve Ek Vergiler",
         set_01_001 : "Tax Sugar",
+        set_02 : "Genel Ayarlar",
+        set_02_001 : "Firma Bilgileri",
         proces : "Toplu işlemler",
         proces_01 : "Stok İşlemleri",
         proces_01_001 : "Ürün Grubu Güncelleme",
@@ -7734,6 +7736,53 @@ export const langTr =
         validValue :"Boş Geçilemez",
         zeroValid : "0'dan Büyük Olmalıdır"
 
+    },
+    set_02_001 : // "Firma Bilgileri"
+    {
+        txtTitle : "Firma Adı",
+        txtCustomerName : "Yetkili Adı",
+        txtCustomerLastname : "Yetkili Soyadı",
+        txtAddress1 : "Adres",
+        txtAddress2 : "Adres 2",
+        cmbCıty : "Şehir",
+        cmbCountry : "Ülke",
+        txtPhone : "Telefon",
+        txtEmail : "E-Mail",
+        txtWeb : "Web Site",
+        txtSiretId : "Siret ID",
+        txtApeCode : "Ape Code",
+        txtTaxOffice : "Tax Office",
+        txtTaxNo : "Tax No",
+        txtIntVatNo : "Int. Vat No",
+        txtSirenNo : "Siren No",
+        txtCapital : "Sermaye",
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
     },
     pos_01_001 : // "Pos Cihaz Tanıtım",
     {

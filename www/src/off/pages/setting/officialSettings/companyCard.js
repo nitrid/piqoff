@@ -59,18 +59,14 @@ export default class CustomerCard extends React.PureComponent
             {
                 if(this.prevCode != '')
                 {
-                    this.btnNew.setState({disabled:true});
                     this.btnBack.setState({disabled:false});
                 }
                 else
                 {
-                    this.btnNew.setState({disabled:false});
                     this.btnBack.setState({disabled:true});
                 }
                 
                 this.btnSave.setState({disabled:false});
-                this.btnDelete.setState({disabled:false});
-                this.btnCopy.setState({disabled:false});
                 this.btnPrint.setState({disabled:false});
             }
         })
@@ -79,10 +75,7 @@ export default class CustomerCard extends React.PureComponent
             if(pData.rowData.stat == 'edit')
             {
                 this.btnBack.setState({disabled:false});
-                this.btnNew.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
-                this.btnDelete.setState({disabled:false});
-                this.btnCopy.setState({disabled:false});
                 this.btnPrint.setState({disabled:false});
 
                 pData.rowData.CUSER = this.user.CODE
@@ -90,69 +83,28 @@ export default class CustomerCard extends React.PureComponent
         })
         this.companyObj.ds.on('onRefresh',(pTblName) =>
         {            
-            this.prevCode = this.companyObj.dt('COMPANY').length > 0 ? this.companyObj.dt('COMPANY')[0].CODE : '';
             this.btnBack.setState({disabled:true});
-            this.btnNew.setState({disabled:false});
-            this.btnSave.setState({disabled:true});
-            this.btnDelete.setState({disabled:false});
-            this.btnCopy.setState({disabled:false});
+            this.btnSave.setState({disabled:false});
             this.btnPrint.setState({disabled:false});          
         })
         this.companyObj.ds.on('onDelete',(pTblName) =>
         {            
             this.btnBack.setState({disabled:false});
-            this.btnNew.setState({disabled:true});
             this.btnSave.setState({disabled:false});
-            this.btnDelete.setState({disabled:false});
-            this.btnCopy.setState({disabled:false});
             this.btnPrint.setState({disabled:false});
         })
 
-        this.companyObj.addEmpty();
-        let tmpOffical = {...this.companyObj.customerOffical.empty}
-        tmpOffical.CUSTOMER = this.companyObj.dt()[0].GUID 
-        this.companyObj.customerOffical.addEmpty(tmpOffical)
-
-        this.txtTitle.readOnly = true
-        this.txtCode.value = ''
-        this.setState({officalVisible:false})
-        this.cmbType.props.onValueChanged()
-        
+        await this.companyObj.load()
+        console.log(this.companyObj.dt().length)
+        if(this.companyObj.dt().length == 0)
+        {
+            this.companyObj.addEmpty();
+        }
     }
     async getCustomer(pCode)
     {
         this.companyObj.clearAll()
         await this.companyObj.load({CODE:pCode});
-    }
-    async checkZipcode(pCode)
-    {
-        return new Promise(async resolve =>
-        {
-            if(pCode !== '')
-            {
-                let tmpQuery = {
-                    query :"SELECT COUNTRY_CODE,PLACE FROM ZIPCODE WHERE ZIPCODE = @ZIPCODE ",
-                    param : ['ZIPCODE:string|50'],
-                    value : [pCode]
-                }
-                let tmpData = await this.core.sql.execute(tmpQuery) 
-                if(tmpData.result.recordset.length > 0)
-                {
-                    
-                    this.cmbPopCity.value = tmpData.result.recordset[0].PLACE
-                    this.cmbPopCountry.value = tmpData.result.recordset[0].COUNTRY_CODE
-                    resolve(1)
-                }
-                else
-                {
-                    resolve(1) // KAYIT BULUNAMADI
-                }
-            }
-            else
-            {
-                resolve(0) //PARAMETRE BOŞ
-            }
-        });
     }
     render()
     {
@@ -260,7 +212,7 @@ export default class CustomerCard extends React.PureComponent
                         <div className="col-12">
                             <Form colCount={2} id={"frmCompany"  + this.tabIndex}>
                                  {/* txtTitle */}
-                                 <Item colSpan={2}>
+                                <Item colSpan={2}>
                                     <Label text={this.t("txtTitle")} alignment="right" />
                                     <NdTextBox id="txtTitle" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.companyObj.dt('COMPANY'),field:"NAME"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
@@ -269,15 +221,22 @@ export default class CustomerCard extends React.PureComponent
                                       
                                     }).bind(this)}
                                     >
+                                        <Validator validationGroup={"frmCompany"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("notValid")} />
+                                        </Validator> 
                                     </NdTextBox>
                                 </Item>
                                 {/* txtCustomerName */}
                                 <Item>
                                     <Label text={this.t("txtCustomerName")} alignment="right" />
-                                    <NdTextBox id="txtCustomerName" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.companyObj.dt('COMPANY'),field:"OFFICIAL_NAME",filter:{TYPE:0}}}
+                                    <NdTextBox id="txtCustomerName" parent={this} simple={true} tabIndex={this.tabIndex} 
+                                    dt={{data:this.companyObj.dt('COMPANY'),field:"OFFICIAL_NAME",filter:{TYPE:0}}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     maxLength={32}
-                                    >                                      
+                                    >                
+                                     <Validator validationGroup={"frmCompany"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("notValid")} />
+                                        </Validator> 
                                     </NdTextBox>
                                 </Item>
                                 {/* txtCustomerLastname */}
@@ -287,258 +246,59 @@ export default class CustomerCard extends React.PureComponent
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         dt={{data:this.companyObj.dt('COMPANY'),field:"OFFICIAL_SURNAME",filter:{TYPE:0}}}
                                         maxLength={32}
-                                        >                                      
+                                        >       
+                                        <Validator validationGroup={"frmCompany"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("notValid")} />
+                                        </Validator>                                
                                     </NdTextBox>
                                 </Item>
-                                 {/* txtPhone1 */}
-                                 <Item>
-                                    <Label text={this.t("txtPhone")} alignment="right" />
-                                        <NdTextBox id="txtPhone" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"TEL",filter:{TYPE:0}}}
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={32}
-                                        access={this.access.filter({ELEMENT:'txtPhone1',USERS:this.user.CODE})}
-                                       />
+                                  {/* txtAddress1 */}
+                                  <Item colSpan={2}>
+                                    <Label text={this.t("txtAddress1")} alignment="right" />
+                                    <NdTextBox id="txtAddress1" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.companyObj.dt('COMPANY'),field:"ADDRESS1"}}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    onChange={(async()=>
+                                    {
+                                      
+                                    }).bind(this)}
+                                    >
+                                        <Validator validationGroup={"frmCompany"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("notValid")} />
+                                        </Validator> 
+                                    </NdTextBox>
                                 </Item>
-                                 {/* txtEmail */}
-                                 <Item>
-                                    <Label text={this.t("txtEmail")} alignment="right" />
-                                        <NdTextBox id="txtEmail" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"EMAIL",filter:{TYPE:0}}}
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={32}
-                                         access={this.access.filter({ELEMENT:'txtEmail',USERS:this.user.CODE})}
-                                        />
+                                  {/* txtAddress2 */}
+                                  <Item colSpan={1}>
+                                    <Label text={this.t("txtAddress2")} alignment="right" />
+                                    <NdTextBox id="txtAddress2" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.companyObj.dt('COMPANY'),field:"ADDRESS2"}}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    onChange={(async()=>
+                                    {
+                                      
+                                    }).bind(this)}
+                                    >
+                                    </NdTextBox>
                                 </Item>
-                                 {/* txtWeb */}
-                                 <Item>
-                                    <Label text={this.t("txtWeb")} alignment="right" />
-                                        <NdTextBox id="txtWeb" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"WEB"}} 
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={32}
-                                         access={this.access.filter({ELEMENT:'txtWeb',USERS:this.user.CODE})}
-                                        />
-                                </Item>
-                            </Form>
-                        </div>
-                        <div className='row px-2 pt-2'>
-                            <div className='col-12'>
-                                <TabPanel height="100%" onItemRendered={this._onItemRendered}>
-                                    <Item title={this.t("tabTitleAdress")}>
-                                        <div className='row px-2 py-2'>
-                                            <div className='col-12'>
-                                                <Toolbar>
-                                                    <Item location="after">
-                                                        <Button icon="add"
-                                                        onClick={async ()=>
-                                                        {
-                                                            this.txtPopAdress.value = "";
-                                                            this.cmbPopZipcode.value = "";
-                                                            this.cmbPopCity.value = "";
-                                                            this.cmbPopCountry.value = ''
-                                                            this.popAdress.show();
-                                                        }}/>
-                                                    </Item>
-                                                </Toolbar>
-                                            </div>
-                                        </div>
-                                        <div className='row px-2 py-2'>
-                                            <div className='col-12'>
-                                                <NdGrid parent={this} id={"grdAdress"} 
-                                                showBorders={true} 
-                                                columnsAutoWidth={true} 
-                                                allowColumnReordering={true} 
-                                                allowColumnResizing={true} 
-                                                height={'100%'} 
-                                                width={'100%'}
-                                                dbApply={false}
-                                                >
-                                                    <Paging defaultPageSize={5} />
-                                                    <Editing mode="popup" allowUpdating={true} allowDeleting={true} />
-                                                    <Column dataField="ADRESS" caption={this.t("grdAdress.clmAdress")} />
-                                                    <Column dataField="ZIPCODE" caption={this.t("grdAdress.clmZipcode")} />
-                                                    <Column dataField="CITY" caption={this.t("grdAdress.clmCity")}/>
-                                                    <Column dataField="COUNTRY" caption={this.t("grdAdress.clmCountry")}/>
-                                                </NdGrid>
-                                            </div>
-                                        </div>
-                                    </Item>   
-                                    <Item title={this.t("tabTitleLegal")}>
-                                        <div className='row px-2 py-2'>
-                                            <div className='col-12'>
-                                                <NdGrid parent={this} id={"grdLegal"} 
-                                                showBorders={true} 
-                                                columnsAutoWidth={true} 
-                                                allowColumnReordering={true} 
-                                                allowColumnResizing={true} 
-                                                height={'100%'} 
-                                                width={'100%'}
-                                                dbApply={false}
-                                                >
-                                                    <Paging defaultPageSize={5} />
-                                                    <Editing mode="cell" allowUpdating={true} allowDeleting={false} />
-                                                    <Column dataField="SIRET_ID" caption={this.t("grdLegal.clmSiretID")}/>
-                                                    <Column dataField="APE_CODE" caption={this.t("grdLegal.clmApeCode")}/>
-                                                    <Column dataField="TAX_OFFICE" caption={this.t("grdLegal.clmTaxOffice")}/>
-                                                    <Column dataField="TAX_NO" caption={this.t("grdLegal.clmTaxNo")}/>
-                                                    <Column dataField="INT_VAT_NO" caption={this.t("grdLegal.clmIntVatNo")}/>
-                                                    <Column dataField="TAX_TYPE" caption={this.t("grdLegal.clmTaxType")} editCellRender={this._cellRoleRender}/>
-                                                </NdGrid>
-                                            </div>
-                                        </div>
-                                    </Item>  
-                                    <Item title={this.t("tabTitleOffical")} visible={this.state.officalVisible}>
-                                        <div className='row px-2 py-2'>
-                                            <div className='col-12'>
-                                                <Toolbar>
-                                                    <Item location="after">
-                                                        <Button icon="add"
-                                                        onClick={async ()=>
-                                                        {
-                                                            this.txtPopName.value = "";
-                                                            this.txtPopLastName.value = "";
-                                                            this.txtPopPhone1.value = "";
-                                                            this.txtPopPhone2.value = ''
-                                                            this.txtPopGsmPhone.value = ''
-                                                            this.txtPopOtherPhone.value = ''
-                                                            this.txtPopMail.value = ''
-                                                            this.popOffical.show();
-                                                        }}/>
-                                                    </Item>
-                                                </Toolbar>
-                                            </div>
-                                        </div>
-                                        <div className='row px-2 py-2'>
-                                            <div className='col-12'>
-                                                <NdGrid parent={this} id={"grdOffical"} 
-                                                showBorders={true} 
-                                                columnsAutoWidth={true} 
-                                                allowColumnReordering={true} 
-                                                allowColumnResizing={true} 
-                                                height={'100%'} 
-                                                width={'100%'}
-                                                dbApply={false}
-                                                >
-                                                    <Paging defaultPageSize={5} />
-                                                    <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                                    <Column dataField="NAME" caption={this.t("grdOffical.clmName")}/>
-                                                    <Column dataField="LAST_NAME" caption={this.t("grdOffical.clmLastName")}/>
-                                                    <Column dataField="PHONE1" caption={this.t("grdOffical.clmPhone1")}/>
-                                                    <Column dataField="PHONE2" caption={this.t("grdOffical.clmPhone2")}/>
-                                                    <Column dataField="GSM_PHONE" caption={this.t("grdOffical.clmGsmPhone")}/>
-                                                    <Column dataField="EMAIL" caption={this.t("grdOffical.clmEMail")}/>
-                                                </NdGrid>
-                                            </div>
-                                        </div>
-                                    </Item>  
-                                    <Item title={this.t("tabCustomerBank")}>
-                                    <div className='row px-2 py-2'>
-                                            <div className='col-12'>
-                                                <Toolbar>
-                                                    <Item location="after">
-                                                        <Button icon="add"
-                                                        onClick={async ()=>
-                                                        {
-                                                            this.txtBankName.value = "";
-                                                            this.txtBankIban.value = "";
-                                                            this.txtBankOffice.value = "";
-                                                            this.txtBankSwift.value = ''
-                                                            this.popBank.show();
-                                                        }}/>
-                                                    </Item>
-                                                </Toolbar>
-                                            </div>
-                                        </div>
-                                        <div className='row px-2 py-2'>
-                                            <div className='col-12'>
-                                                <NdGrid parent={this} id={"grdBank"} 
-                                                showBorders={true} 
-                                                columnsAutoWidth={true} 
-                                                allowColumnReordering={true} 
-                                                allowColumnResizing={true} 
-                                                height={'100%'} 
-                                                width={'100%'}
-                                                dbApply={false}
-                                                >
-                                                    <Paging defaultPageSize={5} />
-                                                    <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                                    <Column dataField="NAME" caption={this.t("grdBank.clmName")}/>
-                                                    <Column dataField="IBAN" caption={this.t("grdBank.clmIban")}/>
-                                                    <Column dataField="OFFICE" caption={this.t("grdBank.clmOffice")}/>
-                                                    <Column dataField="SWIFT" caption={this.t("grdBank.clmSwift")}/>
-                                                </NdGrid>
-                                            </div>
-                                        </div>
-                                    </Item>
-                                    <Item title={this.t("tabTitleDetail")}>
-                                        <div className='row px-2 py-2'>
-                                            <div className='col-12'>
-                                               <Form colCount={6}>
-                                                 {/* chkRebate */}
-                                                <Item>
-                                                    <Label text={this.t("chkRebate")} alignment="right" />
-                                                        <NdCheckBox id="chkRebate" parent={this} value={false}  dt={{data:this.companyObj.dt('COMPANY'),field:"REBATE"}} ></NdCheckBox>
-                                                </Item>
-                                                {/* chkTaxSucre */}
-                                                <Item>
-                                                <Label text={this.t("chkTaxSucre")} alignment="right" />
-                                                    <NdCheckBox id="chkTaxSucre" parent={this} value={false}  dt={{data:this.companyObj.dt('COMPANY'),field:"TAX_SUCRE"}} ></NdCheckBox>
-                                                </Item>
-                                               </Form>
-                                            </div>
-                                        </div>
-                                    </Item>  
-                                                                 
-                                </TabPanel>
-                            </div>
-                        </div> 
-                       
-                    </div>
-                     {/* Adres POPUP */}
-                     <div>
-                        <NdPopUp parent={this} id={"popAdress"} 
-                        visible={false}
-                        showCloseButton={true}
-                        showTitle={true}
-                        title={this.t("popAdress.title")}
-                        container={"#root"} 
-                        width={'500'}
-                        height={'350'}
-                        position={{of:'#root'}}
-                        >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("popAdress.txtPopAdress")} alignment="right" />
-                                    <NdTextBox id={"txtPopAdress"} parent={this} simple={true} 
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popAdress.cmbPopZipcode")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbPopZipcode" acceptCustomValue={true}
-                                    displayExpr="ZIPNAME"                       
-                                    valueExpr="ZIPCODE"
-                                    value=""
-                                    searchEnabled={true}
-                                    showClearButton={true}
-                                    pageSize={50}
-                                    notRefresh={true}
-                                    data={{source:{select:{query : "SELECT [COUNTRY_CODE],[ZIPCODE],[PLACE],ZIPCODE + ' ' + PLACE AS ZIPNAME  FROM [dbo].[ZIPCODE]"},sql:this.core.sql}}}
-                                    />
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popAdress.cmbPopCity")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbPopCity"
-                                    displayExpr="CITYNAME"                       
+                                  {/* cmbCıty */}
+                                  <Item>
+                                    <Label text={this.t("cmbCıty")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbCıty"
+                                    dt={{data:this.companyObj.dt('COMPANY'),field:"CITY"}}
+                                    displayExpr="PLACE"                       
                                     valueExpr="PLACE"
                                     value=""
                                     searchEnabled={true}
                                     showClearButton={true}
                                     pageSize ={50}
                                     notRefresh = {true}
-                                    data={{source:{select:{query : "SELECT COUNTRY_CODE,ZIPCODE,PLACE,PLACE + ' ' + ZIPCODE AS CITYNAME  FROM [dbo].[ZIPCODE]"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT PLACE FROM [dbo].[ZIPCODE] GROUP BY PLACE"},sql:this.core.sql}}}
                                     />
                                 </Item>
+                                  {/* cmbCountry */}
                                 <Item>
-                                    <Label text={this.t("popAdress.cmbPopCountry")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbPopCountry"
+                                    <Label text={this.t("cmbCountry")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbCountry"
+                                     dt={{data:this.companyObj.dt('COMPANY'),field:"COUNTRY"}}
                                     displayExpr="NAME"                       
                                     valueExpr="CODE"
                                     value="FR"
@@ -547,194 +307,94 @@ export default class CustomerCard extends React.PureComponent
                                     data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY NAME ASC"},sql:this.core.sql}}}
                                     />
                                 </Item>
+                                 {/* txtPhone */}
+                                 <Item>
+                                    <Label text={this.t("txtPhone")} alignment="right" />
+                                        <NdTextBox id="txtPhone" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"TEL",filter:{TYPE:0}}}
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                        maxLength={32}
+                                       />
+                                </Item>
+                                 {/* txtEmail */}
+                                 <Item>
+                                    <Label text={this.t("txtEmail")} alignment="right" />
+                                        <NdTextBox id="txtEmail" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"EMAIL",filter:{TYPE:0}}}
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                        maxLength={32}
+                                        />
+                                </Item>
+                                 {/* txtWeb */}
+                                 <Item>
+                                    <Label text={this.t("txtWeb")} alignment="right" />
+                                        <NdTextBox id="txtWeb" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"WEB"}} 
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                        maxLength={32}
+                                        />
+                                </Item>
+                                {/* txtSiretId */}
                                 <Item>
-                                    <div className='row'>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
-                                            onClick={async ()=>
-                                            {
-                                                let tmpEmpty = {...this.companyObj.customerAdress.empty};
-                                               
-                                                
-                                                tmpEmpty.TYPE = this.companyObj.customerAdress.dt().length
-                                                tmpEmpty.ADRESS = this.txtPopAdress.value
-                                                tmpEmpty.ZIPCODE = this.cmbPopZipcode.value
-                                                tmpEmpty.CIYT = this.cmbPopCity.value
-                                                tmpEmpty.COUNTRY = this.cmbPopCountry.value
-                                                tmpEmpty.CUSTOMER = this.companyObj.dt()[0].GUID 
+                                    <Label text={this.t("txtSiretId")} alignment="right" />
+                                        <NdTextBox id="txtSiretId" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"SIRET_ID"}} 
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                        maxLength={32}
 
-                                                this.companyObj.customerAdress.addEmpty(tmpEmpty);    
-                                                this.popAdress.hide(); 
-                                                
-                                            }}/>
-                                        </div>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popAdress.hide();  
-                                            }}/>
-                                        </div>
-                                    </div>
+                                        />
+                                </Item>
+                                {/* txtApeCode */}
+                                <Item>
+                                    <Label text={this.t("txtApeCode")} alignment="right" />
+                                        <NdTextBox id="txtApeCode" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"APE_CODE"}} 
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                        maxLength={32}
+
+                                        />
+                                </Item>
+                                {/* txtTaxOffice */}
+                                <Item>
+                                    <Label text={this.t("txtTaxOffice")} alignment="right" />
+                                        <NdTextBox id="txtTaxOffice" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"TAX_OFFICE"}} 
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                        maxLength={32}
+
+                                        />
+                                </Item>
+                                 {/* txtTaxNo */}
+                                 <Item>
+                                    <Label text={this.t("txtTaxNo")} alignment="right" />
+                                        <NdTextBox id="txtTaxNo" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"TAX_NO"}} 
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                        maxLength={32}
+
+                                        />
+                                </Item>
+                                 {/* txtIntVatNo */}
+                                 <Item>
+                                    <Label text={this.t("txtIntVatNo")} alignment="right" />
+                                        <NdTextBox id="txtIntVatNo" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"INT_VAT_NO"}} 
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                        maxLength={32}
+
+                                        />
+                                </Item>
+                                 {/* txtSirenNo */}
+                                 <Item>
+                                    <Label text={this.t("txtSirenNo")} alignment="right" />
+                                        <NdTextBox id="txtSirenNo" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"SIREN_NO"}} 
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                        maxLength={32}
+                                        />
+                                </Item>
+                                 {/* txtCapital */}
+                                 <Item>
+                                    <Label text={this.t("txtCapital")} alignment="right" />
+                                        <NdNumberBox id="txtCapital" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"CAPITAL"}} 
+                                        maxLength={32}
+                                        />
                                 </Item>
                             </Form>
-                        </NdPopUp>
-                    </div> 
-                    {/* Yetkili POPUP */}
-                    <div>
-                        <NdPopUp parent={this} id={"popOffical"} 
-                        visible={false}
-                        showCloseButton={true}
-                        showTitle={true}
-                        title={this.t("popOffical.title")}
-                        container={"#root"} 
-                        width={'500'}
-                        height={'500'}
-                        position={{of:'#root'}}
-                        >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("popOffical.txtPopName")}alignment="right" />
-                                    <NdTextBox id={"txtPopName"} parent={this} simple={true} 
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popOffical.txtPopLastName")} alignment="right" />
-                                    <NdTextBox simple={true} parent={this} id="txtPopLastName"
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    />
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popOffical.txtPopPhone1")} alignment="right" />
-                                    <NdTextBox simple={true} parent={this} id="txtPopPhone1"
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    />
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popOffical.txtPopPhone2")} alignment="right" />
-                                    <NdTextBox simple={true} parent={this} id="txtPopPhone2"
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    />
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popOffical.txtPopGsmPhone")} alignment="right" />
-                                    <NdTextBox simple={true} parent={this} id="txtPopGsmPhone"
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    />
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popOffical.txtPopOtherPhone")} alignment="right" />
-                                    <NdTextBox simple={true} parent={this} id="txtPopOtherPhone"
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    />
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popOffical.txtPopMail")} alignment="right" />
-                                    <NdTextBox simple={true} parent={this} id="txtPopMail"
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    />
-                                </Item>
-                                <Item>
-                                    <div className='row'>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
-                                            onClick={async ()=>
-                                            {
-                                                let tmpEmpty = {...this.companyObj.customerOffical.empty};
-                                               
-                                                
-                                                tmpEmpty.TYPE = 1
-                                                tmpEmpty.NAME = this.txtPopName.value
-                                                tmpEmpty.LAST_NAME = this.txtPopLastName.value
-                                                tmpEmpty.PHONE1 = this.txtPopPhone1.value
-                                                tmpEmpty.PHONE2 = this.txtPopPhone2.value
-                                                tmpEmpty.GSM_PHONE = this.txtPopGsmPhone.value
-                                                tmpEmpty.OTHER_PHONE = this.txtPopOtherPhone.value          
-                                                tmpEmpty.EMAIL = this.txtPopMail.value
-                                                tmpEmpty.CUSTOMER = this.companyObj.dt()[0].GUID 
-
-                                                this.companyObj.customerOffical.addEmpty(tmpEmpty);    
-                                                this.popOffical.hide(); 
-                                                
-                                            }}/>
-                                        </div>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popOffical.hide();  
-                                            }}/>
-                                        </div>
-                                    </div>
-                                </Item>
-                            </Form>
-                        </NdPopUp>
-                    </div>  
-                     {/* Banka POPUP */}
-                     <div>
-                        <NdPopUp parent={this} id={"popBank"} 
-                        visible={false}
-                        showCloseButton={true}
-                        showTitle={true}
-                        title={this.t("popBank.title")}
-                        container={"#root"} 
-                        width={'500'}
-                        height={'350'}
-                        position={{of:'#root'}}
-                        >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("popBank.txtName")} alignment="right" />
-                                    <NdTextBox id={"txtBankName"} parent={this} simple={true} 
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popBank.txtIban")} alignment="right" />
-                                    <NdTextBox id={"txtBankIban"} parent={this} simple={true} 
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popBank.txtOffice")} alignment="right" />
-                                    <NdTextBox id={"txtBankOffice"} parent={this} simple={true} 
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popBank.txtSwift")} alignment="right" />
-                                    <NdTextBox id={"txtBankSwift"} parent={this} simple={true} 
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
-                                </Item>
-                                <Item>
-                                    <div className='row'>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
-                                            onClick={async ()=>
-                                            {
-                                                let tmpEmpty = {...this.companyObj.customerBank.empty};
-                                               
-                                                
-                                                tmpEmpty.NAME = this.txtBankName.value
-                                                tmpEmpty.IBAN = this.txtBankIban.value
-                                                tmpEmpty.OFFICE = this.txtBankOffice.value
-                                                tmpEmpty.SWIFT = this.txtBankSwift.value
-                                                tmpEmpty.CUSTOMER = this.companyObj.dt()[0].GUID 
-
-                                                this.companyObj.customerBank.addEmpty(tmpEmpty);    
-                                                this.popBank.hide(); 
-                                                
-                                            }}/>
-                                        </div>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popBank.hide();  
-                                            }}/>
-                                        </div>
-                                    </div>
-                                </Item>
-                            </Form>
-                        </NdPopUp>
-                    </div> 
+                        </div>
+                       
+                    </div>
                 </ScrollView>
             </div>
         )
