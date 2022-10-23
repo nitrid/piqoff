@@ -329,6 +329,7 @@ export default class branchSaleInvoice extends React.PureComponent
                                 value : [r.component._changedValue]
                             }
                             let tmpData = await this.core.sql.execute(tmpQuery) 
+                            console.log(tmpData)
                             if(tmpData.result.recordset.length > 0)
                             {
                                 this.combineControl = true
@@ -1740,6 +1741,7 @@ export default class branchSaleInvoice extends React.PureComponent
                                         }
                                         let tmpData = await this.core.sql.execute(tmpQuery) 
                                         this.txtBarcode.setState({value:""})
+                                        console.log(tmpData)
                                         if(tmpData.result.recordset.length > 0)
                                         {
                                             this.txtPopQuantity.value = ''
@@ -2035,7 +2037,7 @@ export default class branchSaleInvoice extends React.PureComponent
                                                 {
                                                     id:'msgUnderPrice2',showTitle:true,title:this.t("msgUnderPrice2.title"),showCloseButton:true,width:'500px',height:'200px',
                                                     button:[{id:"btn01",caption:this.t("msgUnderPrice2.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"msgUnderPrice2.msg"}</div>)
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgUnderPrice2.msg")}</div>)
                                                 }
                                                 dialog(tmpConfObj);
                                                 return
