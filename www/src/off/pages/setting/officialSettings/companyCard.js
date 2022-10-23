@@ -222,7 +222,7 @@ export default class CustomerCard extends React.PureComponent
                                 <Item>
                                     <Label text={this.t("txtCustomerName")} alignment="right" />
                                     <NdTextBox id="txtCustomerName" parent={this} simple={true} tabIndex={this.tabIndex} 
-                                    dt={{data:this.companyObj.dt('COMPANY'),field:"OFFICIAL_NAME",filter:{TYPE:0}}}
+                                    dt={{data:this.companyObj.dt('COMPANY'),field:"OFFICIAL_NAME"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     maxLength={32}
                                     >                
@@ -236,7 +236,7 @@ export default class CustomerCard extends React.PureComponent
                                     <Label text={this.t("txtCustomerLastname")} alignment="right" />
                                         <NdTextBox id="txtCustomerLastname" parent={this} simple={true} tabIndex={this.tabIndex} 
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        dt={{data:this.companyObj.dt('COMPANY'),field:"OFFICIAL_SURNAME",filter:{TYPE:0}}}
+                                        dt={{data:this.companyObj.dt('COMPANY'),field:"OFFICIAL_SURNAME"}}
                                         maxLength={32}
                                         >       
                                         <Validator validationGroup={"frmCompany"  + this.tabIndex}>
@@ -308,12 +308,12 @@ export default class CustomerCard extends React.PureComponent
                                 {/* txtEmail */}
                                 <Item>
                                     <Label text={this.t("txtEmail")} alignment="right" />
-                                    <NdTextBox id="txtEmail" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"EMAIL"}} maxLength={32}/>
+                                    <NdTextBox id="txtEmail" upper={false} parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"MAIL"}} maxLength={32} />
                                 </Item>
                                 {/* txtWeb */}
                                 <Item>
                                     <Label text={this.t("txtWeb")} alignment="right" />
-                                    <NdTextBox id="txtWeb" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"WEB"}} maxLength={32}/>
+                                    <NdTextBox id="txtWeb" upper={false} parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"WEB"}} maxLength={32}/>
                                 </Item>
                                 {/* txtSiretId */}
                                 <Item>
