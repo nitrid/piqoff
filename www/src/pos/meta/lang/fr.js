@@ -604,5 +604,24 @@ export const langFr =
         popSelectItem : "Stok Seçim",
         popSelectItemGrp : "Ürün Grubu Seçim",
         popNameEntry : "Plu Adı"
+    },
+    popOrderList : //Bak
+    {
+        title :"Sipariş Listesi",
+    },
+    grdPopOrderList: //Bak
+    {
+        REF : "SERİ",
+        REF_NO :"SIRA",
+        DOC_DATE : "TARİH",
+        OUTPUT_CODE : "CARİ KODU",
+        OUTPUT_NAME : "CARİ ADI",
+        TOTAL : "TUTAR"
+    },
+    msgOrderAlert: //Bak
+    {
+        title : "Dikkat",
+        msg : "Açıkta satış varken sipariş seçemezsiniz",
+        btn01 : "Tamam"
     }
 }

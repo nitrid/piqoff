@@ -1068,6 +1068,7 @@ export default class posDoc extends React.PureComponent
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_LOYALTY = 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_VAT = 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_TOTAL = 0
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ORDER_GUID = typeof pItemData.POS_SALE_ORDER == 'undefined' ? '00000000-0000-0000-0000-000000000000' : pItemData.POS_SALE_ORDER
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DELETED = false
         
         this.promoApply()
@@ -1508,8 +1509,6 @@ export default class posDoc extends React.PureComponent
             {
                 if(tmpCardPay.tag == "response")
                 {
-                    console.log(14)
-                    console.log(tmpCardPay.msg)
                     if(JSON.parse(tmpCardPay.msg).transaction_result != 0)
                     {
                         this.msgCardPayment.hide()
@@ -3157,9 +3156,23 @@ export default class posDoc extends React.PureComponent
                                             <i className="text-white fa-solid fa-retweet" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
-                                    {/* Blank */}
+                                    {/* Order List */}
                                     <div className="col px-1">
-                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
+                                        <NbButton id={"btnOrderList"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}
+                                        onClick={async()=>
+                                        {          
+                                            let tmpOrderList = new datatable();
+                                            tmpOrderList.selectCmd = 
+                                            {
+                                                query : "SELECT REF,REF_NO,DOC_DATE,INPUT_CODE,INPUT_NAME,DOC_GUID,SUM(TOTAL) AS TOTAL " +
+                                                        "FROM DOC_ORDERS_VW_01 WHERE TYPE = 1 GROUP BY REF,REF_NO,DOC_DATE,INPUT_CODE,INPUT_NAME,DOC_GUID ",
+                                            }
+                                            await tmpOrderList.refresh()
+                                            await this.grdPopOrderList.dataRefresh({source:tmpOrderList});
+                                            this.popOrderList.show();
+                                        }}>
+                                            <i className="text-white fa-solid fa-business-time" style={{fontSize: "24px"}} />
+                                        </NbButton>
                                     </div>
                                     {/* Blank */}
                                     <div className="col px-1">
@@ -3210,12 +3223,12 @@ export default class posDoc extends React.PureComponent
                                     <div className="col px-1">
                                         <NbButton id={"btnGrdList"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}
                                         onClick={async()=>
-                                            {          
-                                                await this.grdPopGrdList.dataRefresh({source:this.posObj.posSale.dt()});
-                                                this.popGridList.show();
-                                            }}>
-                                                <i className="text-white fa-solid fa-bars" style={{fontSize: "24px"}} />
-                                            </NbButton>
+                                        {          
+                                            await this.grdPopGrdList.dataRefresh({source:this.posObj.posSale.dt()});
+                                            this.popGridList.show();
+                                        }}>
+                                            <i className="text-white fa-solid fa-bars" style={{fontSize: "24px"}} />
+                                        </NbButton>
                                     </div>
                                     {/* Blank */}
                                     <div className="col px-1">
@@ -4012,6 +4025,126 @@ export default class posDoc extends React.PureComponent
                                     {
                                         this.getDoc(this.grdPopParkList.devGrid.getSelectedRowsData()[0].GUID)
                                         this.popParkList.hide()
+                                    }
+                                }}>{this.lang.t("select")} </NbButton> 
+                            </div>
+                        </div>
+                    </NdPopUp>
+                </div>
+                {/* Order List Popup */}
+                <div>
+                    <NdPopUp parent={this} id={"popOrderList"} 
+                    visible={false}                        
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={this.lang.t("popOrderList.title")}
+                    container={"#root"} 
+                    width={"800"}
+                    height={"530"}
+                    position={{of:"#root"}}
+                    >
+                        {/* grdPopOrderList */}
+                        <div className="row py-1">
+                            <div className="col-12">
+                                <NdGrid parent={this} id={"grdPopOrderList"} 
+                                showBorders={true} 
+                                columnsAutoWidth={true} 
+                                allowColumnReordering={true} 
+                                allowColumnResizing={true} 
+                                height={"375px"} 
+                                width={"100%"}
+                                dbApply={false}
+                                selection={{mode:"single"}}
+                                onRowPrepared={(e)=>
+                                {
+                                    if(e.rowType == "header")
+                                    {
+                                        e.rowElement.style.fontWeight = "bold";    
+                                    }
+                                    e.rowElement.style.fontSize = "13px";
+                                }}
+                                onCellPrepared={(e)=>
+                                {
+                                    e.cellElement.style.padding = "4px"
+                                }}
+                                >
+                                    <Column dataField="REF" caption={this.lang.t("grdPopOrderList.REF")} width={120} alignment={"center"}/>
+                                    <Column dataField="REF_NO" caption={this.lang.t("grdPopOrderList.REF_NO")} width={75}  />
+                                    <Column dataField="DOC_DATE" caption={this.lang.t("grdPopOrderList.DOC_DATE")} width={150} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"} />
+                                    <Column dataField="INPUT_CODE" caption={this.lang.t("grdPopOrderList.INPUT_CODE")} width={150}/>
+                                    <Column dataField="INPUT_NAME" caption={this.lang.t("grdPopOrderList.INPUT_NAME")} width={150}/>
+                                    <Column dataField="TOTAL" caption={this.lang.t("grdPopOrderList.TOTAL")} width={75} format={"#,##0.00" + Number.money.sign}/>
+                                </NdGrid>
+                            </div>
+                        </div>
+                        {/* btnPopOrderListSelect */}
+                        <div className="row py-1">
+                            <div className="col-12">
+                                <NbButton id={"btnPopOrderListSelect"} parent={this} className="form-group btn btn-success btn-block" 
+                                style={{height:"45px",width:"100%",fontSize:"16px"}}
+                                onClick={async()=>
+                                {
+                                    if(this.grdPopOrderList.devGrid.getSelectedRowsData().length > 0)
+                                    {
+                                        if(this.posObj.posSale.dt().length > 0)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgOrderAlert',showTitle:true,title:this.lang.t("msgOrderAlert.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("msgOrderAlert.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOrderAlert.msg")}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
+                                        else
+                                        {
+                                            let tmpOrderList = new datatable();
+                                            tmpOrderList.selectCmd = 
+                                            {
+                                                query : "SELECT * FROM DOC_ORDERS_VW_01 WHERE DOC_GUID = @DOC_GUID",
+                                                param : ['DOC_GUID:string|50'],
+                                                value : [this.grdPopOrderList.devGrid.getSelectedRowsData()[0].DOC_GUID]
+                                            }
+                                            await tmpOrderList.refresh()
+                                            this.posObj.dt()[0].ORDER_GUID = tmpOrderList[0].DOC_GUID
+                                            tmpOrderList.forEach((items)=>
+                                            {
+                                                let tmpData = 
+                                                {
+                                                    BARCODE: items.ITEM_BARCODE,
+                                                    BARCODE_GUID: "00000000-0000-0000-0000-000000000000",
+                                                    CODE: items.ITEM_CODE,
+                                                    COST_PRICE: items.COST_PRICE,
+                                                    GUID:  items.ITEM,
+                                                    INPUT: items.INPUT_CODE,
+                                                    MAX_PRICE: 0.0,
+                                                    MIN_PRICE: 0.0,
+                                                    NAME: items.ITEM_NAME,
+                                                    PRICE: Number(items.PRICE).toFixed(2),
+                                                    QUANTITY: Number(items.QUANTITY).toFixed(2),
+                                                    SALE_JOIN_LINE: true,
+                                                    SNAME: items.ITEM_NAME,
+                                                    SPECIAL: "",
+                                                    STATUS: true,
+                                                    TICKET_REST: true,
+                                                    UNIQ_CODE: "",
+                                                    UNIQ_PRICE: 0,
+                                                    UNIQ_QUANTITY: 0,
+                                                    UNIT_FACTOR: items.UNIT_FACTOR,
+                                                    UNIT_GUID: items.UNIT,
+                                                    UNIT_ID: "",
+                                                    UNIT_NAME: items.UNIT_NAME,
+                                                    UNIT_SHORT: items.UNIT_SHORT,
+                                                    VAT: items.VAT,
+                                                    VAT_TYPE: "",
+                                                    WEIGHING: false,
+                                                    POS_SALE_ORDER: items.GUID
+                                                }
+                                                this.saleAdd(tmpData)
+                                            })
+                                            this.popOrderList.hide()
+                                        }
                                     }
                                 }}>{this.lang.t("select")} </NbButton> 
                             </div>
