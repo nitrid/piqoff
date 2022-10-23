@@ -2,6 +2,7 @@ import moment from "moment";
 //data.pos
 //data.possale
 //data.pospay
+//data.firm = Firma bilgileri
 //data.special.type = 'Fatura'
 //data.special.safe = 'Kasa Kodu'
 //data.special.ticketCount = 'Günlük Ticket Sayısı'
@@ -27,13 +28,13 @@ export function print()
         {align:"ct",logo:"./resources/logop.png"},
         ()=>{return {font:"a",style:"b",align:"ct",data:""}},
         // ÜST BİLGİ
-        ()=>{return {font:"a",style:"b",align:"ct",data:"ZAC HECKENWALD"}},
-        ()=>{return {font:"a",style:"b",align:"ct",data:"57740 LONGEVILLE-LES-ST-AVOLD FRANCE"}},
-        ()=>{return {font:"a",style:"b",align:"ct",data:"Tel : 03 87 91 00 32"}},
-        ()=>{return {font:"a",style:"b",align:"ct",data:"longeville@prodorplus.fr"}},
-        ()=>{return {font:"a",style:"b",align:"ct",data:"www.prodorplus.fr"}},
-        ()=>{return {font:"a",style:"b",align:"ct",data:"Siret 50 822 309 600 027 - APE 4722Z"}},
-        ()=>{return {font:"a",style:"b",align:"ct",data:"Nr. TVA FR20508223096"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? data.firm[0].ADDRESS1 : "ZAC HECKENWALD"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? data.firm[0].ZIPCODE + " " + data.firm[0].CITY + data.firm[0].COUNTRY_NAME : "57740 LONGEVILLE-LES-ST-AVOLD FRANCE"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? "Tel : " + data.firm[0].TEL : "Tel : 03 87 91 00 32"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? data.firm[0].MAIL : "longeville@prodorplus.fr"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data: "www.prodorplus.fr"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? "Siret " + data.firm[0].SIRET_ID + " - APE " + data.firm[0].APE_CODE : "Siret 50 822 309 600 027 - APE 4722Z"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? "Nr. TVA " + data.firm[0].INT_VAT_NO : "Nr. TVA FR20508223096"}},
         ()=>
         {       
             let tmpArr = []
