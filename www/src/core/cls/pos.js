@@ -33,7 +33,8 @@ export class posCls
             STATUS : 0,
             DELETED : false,            
             DESCRIPTION : '',
-            CERTIFICATE : ''
+            CERTIFICATE : '',
+            ORDER_GUID : '00000000-0000-0000-0000-000000000000'
         }
 
         this.posSale = new posSaleCls();
@@ -292,7 +293,8 @@ export class posSaleCls
             GRAND_TOTAL : 0,
             STATUS : 0,
             NO : 0,
-            DELETED : false
+            DELETED : false,
+            ORDER_GUID : '00000000-0000-0000-0000-000000000000'
         }
         this._initDs();
     }
