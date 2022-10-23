@@ -12,6 +12,7 @@ export class posCls
             GUID : '00000000-0000-0000-0000-000000000000',
             CUSER : this.core.auth.data.CODE,
             LUSER : this.core.auth.data.CODE,
+            FIRM : '00000000-0000-0000-0000-000000000000',
             DEVICE : '',
             DEPOT_GUID : '00000000-0000-0000-0000-000000000000',
             DEPOT_CODE : '',

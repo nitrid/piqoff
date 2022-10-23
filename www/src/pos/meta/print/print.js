@@ -2,6 +2,7 @@ import moment from "moment";
 //data.pos
 //data.possale
 //data.pospay
+//data.firm = Firma bilgileri
 //data.special.type = 'Fatura'
 //data.special.safe = 'Kasa Kodu'
 //data.special.ticketCount = 'Günlük Ticket Sayısı'
@@ -27,13 +28,13 @@ export function print()
         {align:"ct",logo:"./resources/logop.png"},
         ()=>{return {font:"a",style:"b",align:"ct",data:""}},
         // ÜST BİLGİ
-        ()=>{return {font:"a",style:"b",align:"ct",data:"7 ALLEE DU MIDI"}},
-        ()=>{return {font:"a",style:"b",align:"ct",data:"54270 ESSEY LES NANCY FRANCE"}},
-        ()=>{return {font:"a",style:"b",align:"ct",data:"Tel : 03 83 93 33 07"}},
-        ()=>{return {font:"a",style:"b",align:"ct",data:"nancy@prodorplus.fr"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? data.firm[0].ADDRESS1 : "7 ALLEE DU MIDI"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? data.firm[0].ZIPCODE + " " + data.firm[0].CITY + data.firm[0].COUNTRY_NAME : "54270 ESSEY LES NANCY FRANCE"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? "Tel : " + data.firm[0].TEL : "Tel : 03 83 93 33 07"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? data.firm[0].MAIL : "nancy@prodorplus.fr"}},
         ()=>{return {font:"a",style:"b",align:"ct",data:"www.prodorplus.fr"}},
-        ()=>{return {font:"a",style:"b",align:"ct",data:"Siret 88 533 969 700 017 - APE 4722Z"}},
-        ()=>{return {font:"a",style:"b",align:"ct",data:"Nr. TVA FR23885339697"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? "Siret " + data.firm[0].SIRET_ID + " - APE " + data.firm[0].APE_CODE : "Siret 88 533 969 700 017 - APE 4722Z"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? "Nr. TVA " + data.firm[0].INT_VAT_NO : "Nr. TVA FR23885339697"}},
         ()=>
         {       
             let tmpArr = []

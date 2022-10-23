@@ -62,6 +62,7 @@ export default class posDoc extends React.PureComponent
         this.lastPosSaleDt = new datatable();
         this.lastPosPayDt = new datatable();
         this.lastPosPromoDt = new datatable();  
+        this.firm = new datatable();
 
         this.promoObj = new promoCls();
         this.posPromoObj = new posPromoCls();
@@ -249,6 +250,17 @@ export default class posDoc extends React.PureComponent
         await this.grdPay.dataRefresh({source:this.posObj.posPay.dt()});
         await this.grdLastPos.dataRefresh({source:this.lastPosDt});
 
+        //** FIRMA GETIR ******************************/
+        this.firm.selectCmd = 
+        {
+            query : "SELECT TOP 1 * FROM COMPANY_VW_01",
+        }
+        await this.firm.refresh();
+        if(this.firm.length > 0)
+        {
+            this.posObj.dt()[this.posObj.dt().length - 1].FIRM = this.firm[0].GUID
+        }
+        //********************************************* */
         this.cheqDt.selectCmd = 
         {
             query : "SELECT * FROM CHEQPAY_VW_01 WHERE DOC = @DOC ORDER BY CDATE DESC",
@@ -1246,6 +1258,7 @@ export default class posDoc extends React.PureComponent
                         possale : this.posObj.posSale.dt(),
                         pospay : this.posObj.posPay.dt(),
                         pospromo : this.posPromoObj.dt(),
+                        firm : this.firm,
                         special : 
                         {
                             type: 'Fis',
@@ -4679,6 +4692,7 @@ export default class posDoc extends React.PureComponent
                                                                 possale : this.lastPosSaleDt,
                                                                 pospay : this.lastPosPayDt,
                                                                 pospromo : this.lastPosPromoDt,
+                                                                firm : this.firm,
                                                                 special : 
                                                                 {
                                                                     type : 'Repas',
@@ -4723,6 +4737,7 @@ export default class posDoc extends React.PureComponent
                                                 possale : this.lastPosSaleDt,
                                                 pospay : this.lastPosPayDt,
                                                 pospromo : this.lastPosPromoDt,
+                                                firm : this.firm,
                                                 special : 
                                                 {
                                                     type : 'Fatura',
@@ -4784,6 +4799,7 @@ export default class posDoc extends React.PureComponent
                                                             possale : this.lastPosSaleDt,
                                                             pospay : this.lastPosPayDt,
                                                             pospromo : this.lastPosPromoDt,
+                                                            firm : this.firm,
                                                             special : 
                                                             {
                                                                 type : 'Fis',
