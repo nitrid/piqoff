@@ -614,8 +614,8 @@ export const langFr =
         REF : "SERİ",
         REF_NO :"SIRA",
         DOC_DATE : "TARİH",
-        OUTPUT_CODE : "CARİ KODU",
-        OUTPUT_NAME : "CARİ ADI",
+        INPUT_CODE : "CARİ KODU",
+        INPUT_NAME : "CARİ ADI",
         TOTAL : "TUTAR"
     },
     msgOrderAlert: //Bak
