@@ -1790,6 +1790,7 @@ export default class branchSaleDispatch extends React.PureComponent
                                             }
                                             else
                                             {
+                                                e.cancel = true
                                                 let tmpConfObj =
                                                 {
                                                     id:'msgUnderPrice2',showTitle:true,title:this.t("msgUnderPrice2.title"),showCloseButton:true,width:'500px',height:'200px',
