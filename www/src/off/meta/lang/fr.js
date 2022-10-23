@@ -689,7 +689,7 @@ export const langFr =
     },
     stk_02_001 : // Sayım Evrakı"
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Dépot inventaire",
         dtDocDate : "Date",
         txtBarcode : "Ajouter Code Barre",
@@ -850,7 +850,7 @@ export const langFr =
     },
     stk_02_002 : //"Depo/Mağaza Arası Sevk"
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbOutDepot: "Sortie Dépot",
         cmbInDepot: "Entré Dépot",
         dtDocDate : "Date",
@@ -990,7 +990,7 @@ export const langFr =
     },
     stk_02_003 : // "Kayıp Ürün Çıkışı"
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbOutDepot: "Sortie Dépot",
         dtDocDate : "Date",
         txtBarcode : "Ajouter Code Barre",
@@ -1176,7 +1176,7 @@ export const langFr =
     },
     stk_02_004 : //"Etiket Bas"
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         design : "Design" ,
         txtPage : "Page" ,
         txtFreeLabel : "Champ Vide" ,
@@ -1343,7 +1343,7 @@ export const langFr =
     },
     stk_02_005 : // "İade Ürünü Toplama"
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbDepot1: "Sortie Dépot",
         cmbDepot2: "Retour Dépot",
         dtDocDate : "Date",
@@ -2432,11 +2432,11 @@ export const langFr =
             clmRef: "Seri",
             clmRefNo: "Sıra",
             clmPrice: "Fiyat",
-            clmInputCode : "Cari Kodu",
-            clmInputName : "Cari Adı",
-            clmDate: "Tarih",
+            clmInputCode : "Code Fournisseur",
+            clmInputName : "Nom Fournisseur",
+            clmDate: "Date",
             clmVat : "TVA",
-            clmAmount : "Tutar",
+            clmAmount : "Total",
             clmTotal : "Toplam",
             clmOutputName :"Depo",
         },
@@ -2444,7 +2444,7 @@ export const langFr =
     },
     ftr_02_001 : //  "Alış Faturası"
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom fournisseur",
@@ -2884,7 +2884,7 @@ export const langFr =
     },
     ftr_02_002 : // "Satış Faturası"
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom fournisseur",
@@ -3266,7 +3266,7 @@ export const langFr =
     },
     ftr_02_003 : // "İade Faturası"
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom fournisseur",
@@ -3593,7 +3593,7 @@ export const langFr =
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom fournisseur",
@@ -3907,7 +3907,7 @@ export const langFr =
     },
     ftr_02_005 : // "Şube Satış Faturası"
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom fournisseur",
@@ -4289,20 +4289,20 @@ export const langFr =
     },
     ftr_04_001 : // "Proforma Fiyat Farkı Faturası" YENI EKLEN DI KOPMLE BAK
     {
-        txtRefRefno : "Seri-Sıra",
-        cmbDepot: "Depo",
-        txtCustomerCode : "Cari Kodu",
-        txtCustomerName : "Cari Adı",
-        dtDocDate : "Tarih",
-        txtAmount : "Tutar",
-        txtDiscount : "İndirim",
+        txtRefRefno : "Réf.-Réf no:",
+        cmbDepot: "Depot",
+        txtCustomerCode : "Code Fournisseur",
+        txtCustomerName : "Nom Fournisseur",
+        dtDocDate : "Date",
+        txtAmount : "Total",
+        txtDiscount : "Remise",
         txtMargin : "Marj",
         txtVat : "TVA",
-        txtTotal : "Genel Toplam",
+        txtTotal : "Total Général",
         dtShipDate :"Sevk Tarihi",
         getContract : "Alış Faturası Seç",
         getPayment : "Tahsilat Girişi",
-        cash : "Tutar",
+        cash : "Total",
         description :"Açıklama",
         checkReference : "Referans",
         btnCash : "Tahsilat Ekle",
@@ -4333,19 +4333,19 @@ export const langFr =
         pg_Docs : 
         {
             title : "Evrak Seçimi",
-            clmDate : "TARIH",
-            clmRef : "SERİ",
-            clmRefNo : "SIRA",
-            clmInputName : "CARİ ADI",
-            clmInputCode  : "CARİ KODU",
+            clmDate : "Date",
+            clmRef : "Seri",
+            clmRefNo : "Sira",
+            clmInputName : "Cari Adi",
+            clmInputCode  : "Cari Kodu",
         },
         pg_txtCustomerCode : 
         {
             title : "Cari Seçimi",
-            clmCode :  "CARİ KODU",
-            clmTitle : "CARİ ADI",
-            clmTypeName : "TİPİ",
-            clmGenusName : "CİNSİ"
+            clmCode :  "Cari Kodu",
+            clmTitle : "Cari Adi",
+            clmTypeName : "Tipi",
+            clmGenusName : "Cinsi"
         },
         pg_txtItemsCode : 
         {
@@ -4358,7 +4358,7 @@ export const langFr =
             title : "Fatura Seçimi",
             clmReferans : "Seri - Sıra",
             clmDocDate : "Evrak Tarihi",
-            clmTotal : "Tutar"
+            clmTotal : "Total"
         },
         grdDiffInv: 
         {
@@ -4366,10 +4366,10 @@ export const langFr =
             clmItemName: "Adı",
             clmPrice: "Fiyat",
             clmQuantity : "Adet",
-            clmDiscount : "İndirim",
+            clmDiscount : "Remise",
             clmDiscountRate : "İndirim %",
             clmVat : "TVA",
-            clmAmount : "Tutar",
+            clmAmount : "Total",
             clmTotal : "G. Toplam",
             clmCreateDate: "Kayıt Tarihi",
             clmInvNo : "Fatura No",
@@ -4397,7 +4397,7 @@ export const langFr =
         {
             title: "Evrak İndirimi",
             Percent : "Yüzde",
-            Price : "Tutar"
+            Price : "Total"
         },
         popPassword : 
         {
@@ -4552,10 +4552,10 @@ export const langFr =
         pg_txtBarcode : 
         {
             title : "Barkod Seçimi",
-            clmCode :  "STOK KODU",
-            clmName : "STOK ADI",
-            clmMulticode : "TEDARİKÇİ KODU",
-            clmBarcode : "BARKOD"
+            clmCode :  "Stok Kodu",
+            clmName : "Stok Adi",
+            clmMulticode : "Tedarikci Kodu",
+            clmBarcode : "Barkod"
         },
         msgQuantity:
         {
@@ -4884,7 +4884,7 @@ export const langFr =
     },
     irs_02_001 : // "Alış İrsaliyesi"
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom fournisseur",
@@ -5198,7 +5198,7 @@ export const langFr =
     },
     irs_02_002 : // Satış İrsaliyesi"
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom fournisseur",
@@ -5524,7 +5524,7 @@ export const langFr =
     irs_02_003 : // "İade İrsaliyesi"
     {
         getRebate : "Cherche dépôt retour",
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom fournisseur",
@@ -5800,7 +5800,7 @@ export const langFr =
     },
     irs_02_004 : // Şube Satış İrsaliyesi"
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom fournisseur",
@@ -6185,7 +6185,7 @@ export const langFr =
     },
     sip_02_001 : // "Alış Sipariş"
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom fournisseur",
@@ -6512,7 +6512,7 @@ export const langFr =
     },
     sip_02_002 : // "Satış Sipariş"
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom fournisseur",
@@ -7757,7 +7757,7 @@ export const langFr =
     },
     fns_03_003 : // "Hesaplar Arası Virman"
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbOutAccount:  "Compte Entrant",
         cmbInAccount:  "Compte Entrant",
         dtDocDate : "Date",
@@ -8290,7 +8290,7 @@ export const langFr =
         cancel : "Abandonne",
         popOpenTike :
         {
-            title : "Ticket En Attendre"
+            title : "Ticket En Attente"
         },
         grdOpenTike: 
         {
@@ -8458,7 +8458,7 @@ export const langFr =
     },
     tkf_02_001 : // "Alış Teklifi",
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom fournisseur",
@@ -8747,7 +8747,7 @@ export const langFr =
     },
     tkf_02_002 : // "Satış Teklifi",
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom fournisseur",
