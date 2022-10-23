@@ -207,7 +207,7 @@ export default class CustomerCard extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Form colCount={2} id={"frmCompany"  + this.tabIndex}>
-                                 {/* txtTitle */}
+                                {/* txtTitle */}
                                 <Item colSpan={2}>
                                     <Label text={this.t("txtTitle")} alignment="right" />
                                     <NdTextBox id="txtTitle" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.companyObj.dt('COMPANY'),field:"NAME"}}
@@ -218,7 +218,7 @@ export default class CustomerCard extends React.PureComponent
                                     }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmCompany"  + this.tabIndex}>
-                                            <RequiredRule message={this.t("notValid")} />
+                                            <RequiredRule message={this.t("validation.notValid")} />
                                         </Validator> 
                                     </NdTextBox>
                                 </Item>
@@ -230,8 +230,8 @@ export default class CustomerCard extends React.PureComponent
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     maxLength={32}
                                     >                
-                                     <Validator validationGroup={"frmCompany"  + this.tabIndex}>
-                                            <RequiredRule message={this.t("notValid")} />
+                                        <Validator validationGroup={"frmCompany"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validation.notValid")} />
                                         </Validator> 
                                     </NdTextBox>
                                 </Item>
@@ -244,7 +244,7 @@ export default class CustomerCard extends React.PureComponent
                                         maxLength={32}
                                         >       
                                         <Validator validationGroup={"frmCompany"  + this.tabIndex}>
-                                            <RequiredRule message={this.t("notValid")} />
+                                            <RequiredRule message={this.t("validation.notValid")} />
                                         </Validator>                                
                                     </NdTextBox>
                                 </Item>
@@ -259,7 +259,7 @@ export default class CustomerCard extends React.PureComponent
                                     }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmCompany"  + this.tabIndex}>
-                                            <RequiredRule message={this.t("notValid")} />
+                                            <RequiredRule message={this.t("validation.notValid")} />
                                         </Validator> 
                                     </NdTextBox>
                                 </Item>

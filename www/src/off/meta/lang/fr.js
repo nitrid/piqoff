@@ -48,7 +48,7 @@ export const langFr =
     },
     popOpenTike :
     {
-        title : "Reçus incomplet" 
+        title : "Ticket En Attente" 
     },
     grdOpenTike: 
     {
@@ -151,7 +151,7 @@ export const langFr =
         cnt_03 : "Rapports",
         fns : "Finance",
         fns_01 : "Listes",
-        fns_01_001: "Liste paiment",
+        fns_01_001: "Liste paiement",
         fns_01_002 : "Liste de paiment",
         fns_01_003 : "Liste extrait bancaire",
         fns_01_004 : "Liste mouvement coffre",
@@ -182,14 +182,14 @@ export const langFr =
         promo_02: "Listes",
         promo_02_001: "Liste promotion",
         promo_03: "Rapports",
-        set : "Coût Suplement",
+        set : "Paramètre / Supplément",
         set_01 : "Coût et taxe annexe",
         set_01_001 : "Taxe sucre",
         set_02 : "Réglage général",   // BAK
         set_02_001 : "Informations sur la société",   // BAK
         proces : "Saisie groupée",
         proces_01 : "Traitement Produit",
-        proces_01_001 : "MAJ groupe produit",
+        proces_01_001 : "MAJ Famille produit",
         tkf: "Proposition",
         tkf_01: "Listes",
         tkf_02: "Document",
@@ -255,6 +255,8 @@ export const langFr =
         validCustomerCode :"Tedarikci Kodu Giriniz !",
         mainUnitName :"Unité Principale",
         underUnitName : "Sous Unité",
+        chkDayAnalysis : "Günlük",  // BAK
+        chkMountAnalysis : "Aylık",  // BAK
         pg_txtRef:
         {
             title: "Sélectionner Produit",
@@ -687,7 +689,7 @@ export const langFr =
     },
     stk_02_001 : // Sayım Evrakı"
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Dépot inventaire",
         dtDocDate : "Date",
         txtBarcode : "Ajouter Code Barre",
@@ -848,7 +850,7 @@ export const langFr =
     },
     stk_02_002 : //"Depo/Mağaza Arası Sevk"
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbOutDepot: "Sortie Dépot",
         cmbInDepot: "Entré Dépot",
         dtDocDate : "Date",
@@ -988,7 +990,7 @@ export const langFr =
     },
     stk_02_003 : // "Kayıp Ürün Çıkışı"
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbOutDepot: "Sortie Dépot",
         dtDocDate : "Date",
         txtBarcode : "Ajouter Code Barre",
@@ -1174,7 +1176,7 @@ export const langFr =
     },
     stk_02_004 : //"Etiket Bas"
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         design : "Design" ,
         txtPage : "Page" ,
         txtFreeLabel : "Champ Vide" ,
@@ -1341,7 +1343,7 @@ export const langFr =
     },
     stk_02_005 : // "İade Ürünü Toplama"
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbDepot1: "Sortie Dépot",
         cmbDepot2: "Retour Dépot",
         dtDocDate : "Date",
@@ -2430,11 +2432,11 @@ export const langFr =
             clmRef: "Seri",
             clmRefNo: "Sıra",
             clmPrice: "Fiyat",
-            clmInputCode : "Cari Kodu",
-            clmInputName : "Cari Adı",
-            clmDate: "Tarih",
+            clmInputCode : "Code Fournisseur",
+            clmInputName : "Nom Fournisseur",
+            clmDate: "Date",
             clmVat : "TVA",
-            clmAmount : "Tutar",
+            clmAmount : "Total",
             clmTotal : "Toplam",
             clmOutputName :"Depo",
         },
@@ -2442,7 +2444,7 @@ export const langFr =
     },
     ftr_02_001 : //  "Alış Faturası"
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom fournisseur",
@@ -2882,7 +2884,7 @@ export const langFr =
     },
     ftr_02_002 : // "Satış Faturası"
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom fournisseur",
@@ -3264,7 +3266,7 @@ export const langFr =
     },
     ftr_02_003 : // "İade Faturası"
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom fournisseur",
@@ -3591,7 +3593,7 @@ export const langFr =
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom fournisseur",
@@ -3905,7 +3907,7 @@ export const langFr =
     },
     ftr_02_005 : // "Şube Satış Faturası"
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom fournisseur",
@@ -4287,20 +4289,20 @@ export const langFr =
     },
     ftr_04_001 : // "Proforma Fiyat Farkı Faturası" YENI EKLEN DI KOPMLE BAK
     {
-        txtRefRefno : "Seri-Sıra",
-        cmbDepot: "Depo",
-        txtCustomerCode : "Cari Kodu",
-        txtCustomerName : "Cari Adı",
-        dtDocDate : "Tarih",
-        txtAmount : "Tutar",
-        txtDiscount : "İndirim",
+        txtRefRefno : "Réf.-Réf no:",
+        cmbDepot: "Depot",
+        txtCustomerCode : "Code Fournisseur",
+        txtCustomerName : "Nom Fournisseur",
+        dtDocDate : "Date",
+        txtAmount : "Total",
+        txtDiscount : "Remise",
         txtMargin : "Marj",
         txtVat : "TVA",
-        txtTotal : "Genel Toplam",
+        txtTotal : "Total Général",
         dtShipDate :"Sevk Tarihi",
         getContract : "Alış Faturası Seç",
         getPayment : "Tahsilat Girişi",
-        cash : "Tutar",
+        cash : "Total",
         description :"Açıklama",
         checkReference : "Referans",
         btnCash : "Tahsilat Ekle",
@@ -4315,7 +4317,7 @@ export const langFr =
         txtBarcode : "Barkod Ekle",
         txtBarcodePlace: "Barkod Okutunuz",
         txtQuantity :"Miktar",
-        tabTitleSubtotal : "Fatura Toplamı",
+        tabTitleSubtotal : "Total Facture",
         tabTitlePayments : "Evrak Ödeme Bilgileri",
         tabTitleOldInvoices : "Geçmiş Fatura Bilgileri",
         getRemainder : "Kalan Tutarı Getir",
@@ -4331,19 +4333,19 @@ export const langFr =
         pg_Docs : 
         {
             title : "Evrak Seçimi",
-            clmDate : "TARIH",
-            clmRef : "SERİ",
-            clmRefNo : "SIRA",
-            clmInputName : "CARİ ADI",
-            clmInputCode  : "CARİ KODU",
+            clmDate : "Date",
+            clmRef : "Seri",
+            clmRefNo : "Sira",
+            clmInputName : "Cari Adi",
+            clmInputCode  : "Cari Kodu",
         },
         pg_txtCustomerCode : 
         {
             title : "Cari Seçimi",
-            clmCode :  "CARİ KODU",
-            clmTitle : "CARİ ADI",
-            clmTypeName : "TİPİ",
-            clmGenusName : "CİNSİ"
+            clmCode :  "Cari Kodu",
+            clmTitle : "Cari Adi",
+            clmTypeName : "Tipi",
+            clmGenusName : "Cinsi"
         },
         pg_txtItemsCode : 
         {
@@ -4356,7 +4358,7 @@ export const langFr =
             title : "Fatura Seçimi",
             clmReferans : "Seri - Sıra",
             clmDocDate : "Evrak Tarihi",
-            clmTotal : "Tutar"
+            clmTotal : "Total"
         },
         grdDiffInv: 
         {
@@ -4364,10 +4366,10 @@ export const langFr =
             clmItemName: "Adı",
             clmPrice: "Fiyat",
             clmQuantity : "Adet",
-            clmDiscount : "İndirim",
+            clmDiscount : "Remise",
             clmDiscountRate : "İndirim %",
             clmVat : "TVA",
-            clmAmount : "Tutar",
+            clmAmount : "Total",
             clmTotal : "G. Toplam",
             clmCreateDate: "Kayıt Tarihi",
             clmInvNo : "Fatura No",
@@ -4395,7 +4397,7 @@ export const langFr =
         {
             title: "Evrak İndirimi",
             Percent : "Yüzde",
-            Price : "Tutar"
+            Price : "Total"
         },
         popPassword : 
         {
@@ -4550,10 +4552,10 @@ export const langFr =
         pg_txtBarcode : 
         {
             title : "Barkod Seçimi",
-            clmCode :  "STOK KODU",
-            clmName : "STOK ADI",
-            clmMulticode : "TEDARİKÇİ KODU",
-            clmBarcode : "BARKOD"
+            clmCode :  "Stok Kodu",
+            clmName : "Stok Adi",
+            clmMulticode : "Tedarikci Kodu",
+            clmBarcode : "Barkod"
         },
         msgQuantity:
         {
@@ -4705,18 +4707,18 @@ export const langFr =
         },
         msgHelp: //BAK
         {
-            title: "Aider",
-            btn01: "OK",
-            condItemQuantity: "Écrivez ici...",
-            condItemAmount: "Écrivez ici...",
-            condGeneralAmount: "Écrivez ici...",
-            appDiscRate: "Écrivez ici...",
-            appDiscAmount: "Écrivez ici...",
-            appPoint: "Écrivez ici...",
-            appGiftCheck: "Écrivez ici...",
-            appGeneralAmount: "Écrivez ici...",
-            appItemQuantity: "Écrivez ici...",
-            appItemAmount: "Écrivez ici...",
+            title: "Açıklama",
+            btn01: "Tamam",
+            condItemQuantity: "Promosyon tanımlamak istediğiniz ürün yada ürünler için promosyonun geçerli olacağı ürün adetini belirleyiniz. Örnğ: Değeri 5 yaptığınızda promosyon 5. üründen sonra geçerli olacaktır.",
+            condItemAmount: "Promosyon tanımlamak istediğiniz ürün yada ürünler için promosyonun hangi toplam tutardan itibaren geçerli olacağını belirleyiniz. Örnğ: Tutarı 10€ yaptığınızda promosyon seçilen ürünlerin toplam tutarı 10€ olduktan sonra geçerli olacaktır.",
+            condGeneralAmount: "Toplam ticket tutarına hangi tutardan sonra promosyon Uygulamak ıstediğinizi belirleyiniz. Örnğ: Tutarı 10€ yaptığınızda ticket toplam tutarı 10€ olduktan sonra geçerli olacaktır.",
+            appDiscRate: "Koşul oluştuğunda uygulayacağı iskonto oranını belirleyiniz. Örnğ: Koşul oluştuğunda %10 indirim uygulasın.",
+            appDiscAmount: "Koşul oluştuğunda tutarsal olarak yapmak istediğiniz indirim uygulanacak fiyatı belirleyiniz. Örnğ: Koşul oluştuğunda koşulda seçili ürünlere 0,99€ fiyat uygulasın.",
+            appPoint: "Koşul oluştuğunda müşteriye vermek istediğiniz puan tutarını belirleyiniz. Örnğ: Koşul oluştuğunda müşterinin kartına 100 puan eklesin.",
+            appGiftCheck: "Koşul oluştuğunda müşteriye vermek istediğiniz hediye çeki tutarını belirleyiniz. Örnğ: Koşul oluştuğunda müşteriye 100€ luk hediye çeki uluştursun.",
+            appGeneralAmount: "Koşul oluştuğunda uygulanacak rakamsal toplam indirim tutarını belirleyiniz. Örnğ: Koşul oluştuğunda müşteriye tike tutarına 10€ luk indirim yapsın.",
+            appItemQuantity: "Koşul oluştuğunda seçeceğiniz ürün yada ürünler için geçerli olacağı ürün adetini belirleyiniz. Örnğ: Değeri 5 yaptığınızda sectiğiniz ürün yada ürünleri 5 adete kadar belirlediğiniz % lik indirimi yada fiyatı uygulasın.",
+            appItemAmount: "Koşul oluştuğunda seçeceğiniz ürün yada ürünler için geçerli olacağı fiyatı belirleyiniz. Örnğ: Fiyatı 1€ yada %10 yaptığınızda sectiğiniz ürün yada ürünleri 1€ dan yada %10 luk indirim uygulasın.",
         },
         validation: 
         {
@@ -4882,7 +4884,7 @@ export const langFr =
     },
     irs_02_001 : // "Alış İrsaliyesi"
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom fournisseur",
@@ -5196,7 +5198,7 @@ export const langFr =
     },
     irs_02_002 : // Satış İrsaliyesi"
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom fournisseur",
@@ -5522,7 +5524,7 @@ export const langFr =
     irs_02_003 : // "İade İrsaliyesi"
     {
         getRebate : "Cherche dépôt retour",
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom fournisseur",
@@ -5798,7 +5800,7 @@ export const langFr =
     },
     irs_02_004 : // Şube Satış İrsaliyesi"
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom fournisseur",
@@ -6183,7 +6185,7 @@ export const langFr =
     },
     sip_02_001 : // "Alış Sipariş"
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom fournisseur",
@@ -6510,7 +6512,7 @@ export const langFr =
     },
     sip_02_002 : // "Satış Sipariş"
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom fournisseur",
@@ -6841,7 +6843,7 @@ export const langFr =
             clmGenusName : "Type"
         },
         cmbDepot : 'Depôt',
-        btnGet : 'Ramène',
+        btnGet : 'Rechercher',
         btnOrder : 'Créer une commande',
         grdOrderList : 
         {
@@ -7755,7 +7757,7 @@ export const langFr =
     },
     fns_03_003 : // "Hesaplar Arası Virman"
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbOutAccount:  "Compte Entrant",
         cmbInAccount:  "Compte Entrant",
         dtDocDate : "Date",
@@ -7907,7 +7909,7 @@ export const langFr =
         },
         popTaxSugar : 
         {
-            title: "Evaluer Sucre",
+            title: "Calcul Tax Sucre",
             btnApprove : "Ajoute",
             minValue : "Min. Evaluer Sucre Dans(100ML/GR)",
             maxValue : "Max. Evaluer Sucre Dans(100ML/GR)",
@@ -7989,17 +7991,21 @@ export const langFr =
             btn02: "Abandonne",
             msg: "Voulez-vous vraiment supprimer l'enregistrement ?"
         },
+        validation:
+        {
+            notValid: "Boş geçemezsiniz !",
+        },
     },
     pos_01_001 : // "Pos Cihaz Tanıtım",
     {
-        txtCode : "Code",
-        txtName :"Nom",
+        txtCode : "Nr. Caisse",
+        txtName :"Nom De Caisse",
         txtIban :"IBAN",
         validCode :"Vous ne pouvez ne pas sasir le code !",
-        txtScalePort : "Scale Port",
+        txtScalePort : "Balance Port",
         txtLcdPort : "LCD Port",
-        txtPayCardPort : "Pay Card Port",
-        txtPrintDesing : "Tickets de caisse.",
+        txtPayCardPort : "TPE Port",
+        txtPrintDesing : "Dizayn Tickets Imp.",
         pg_txtCode : 
         {
             title : "Sélection Caisse",
@@ -8128,7 +8134,7 @@ export const langFr =
         cancel : "Abandonne",      
         popOpenTike :
         {
-            title : "Reçus incomplet" 
+            title : "Ticket En Attente" 
         },
         grdOpenTike: 
         {
@@ -8204,8 +8210,8 @@ export const langFr =
         TicketId :"Fiche I.D",
         cmbCustomer :"Courant",
         btnGet :"Ramenez",
-        dtFirst : "Premier Date",
-        dtLast : "Derniere date",
+        dtFirst : "Date Début",
+        dtLast : "Date Fin",
         txtCustomerCode : "Courant",
         cmbDevice :"Dispositif",
         txtTicketno : "Fiche I.D",
@@ -8288,7 +8294,7 @@ export const langFr =
         cancel : "Abandonne",
         popOpenTike :
         {
-            title : "Bouchons incomplets"
+            title : "Ticket En Attente"
         },
         grdOpenTike: 
         {
@@ -8326,7 +8332,7 @@ export const langFr =
         },
         popOpenTike :
         {
-            title : "Ticket incomplet"
+            title : "Ticket En Attente"
         },
         grdOpenTike: 
         {
@@ -8456,7 +8462,7 @@ export const langFr =
     },
     tkf_02_001 : // "Alış Teklifi",
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom fournisseur",
@@ -8745,7 +8751,7 @@ export const langFr =
     },
     tkf_02_002 : // "Satış Teklifi",
     {
-        txtRefRefno : "Série-Numéro Doc.",
+        txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom fournisseur",

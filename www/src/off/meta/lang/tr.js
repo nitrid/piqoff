@@ -255,6 +255,8 @@ export const langTr =
         validCustomerCode :"Tedarikci Kodu Giriniz !",
         mainUnitName :"Ana Birim",
         underUnitName : "Alt Birim",
+        chkDayAnalysis : "Günlük",
+        chkMountAnalysis : "Aylık",
         pg_txtRef:
         {
             title: "Stok Seçimi",
@@ -7988,6 +7990,10 @@ export const langTr =
             btn01: "Tamam",
             btn02: "Vazgeç",
             msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        validation:
+        {
+            notValid: "Boş geçemezsiniz !",
         },
     },
     pos_01_001 : // "Pos Cihaz Tanıtım",

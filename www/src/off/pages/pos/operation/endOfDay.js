@@ -1,7 +1,6 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import ReactWizard from 'react-bootstrap-wizard';
-import { Container, Row, Col } from "reactstrap";
 import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
