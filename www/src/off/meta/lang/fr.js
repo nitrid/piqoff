@@ -7991,6 +7991,10 @@ export const langFr =
             btn02: "Abandonne",
             msg: "Voulez-vous vraiment supprimer l'enregistrement ?"
         },
+        validation:
+        {
+            notValid: "Boş geçemezsiniz !",
+        },
     },
     pos_01_001 : // "Pos Cihaz Tanıtım",
     {
