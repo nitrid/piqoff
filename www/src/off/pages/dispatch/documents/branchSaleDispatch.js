@@ -1768,6 +1768,9 @@ export default class branchSaleDispatch extends React.PureComponent
                                         }
                                         if(e.newData.COST_PRICE > e.newData.PRICE )
                                         {
+                                            e.cancel = true
+                                            e.component.cancelEditData()
+
                                             let tmpData = this.acsobj.filter({ID:'underMinCostPrice',USERS:this.user.CODE}).getValue()
                                             if(typeof tmpData != 'undefined' && tmpData ==  true)
                                             {
