@@ -182,7 +182,7 @@ export const langFr =
         promo_02: "Listes",
         promo_02_001: "Liste promotion",
         promo_03: "Rapports",
-        set : "Coût Suplement",
+        set : "Coût Supplément",
         set_01 : "Coût et taxe annexe",
         set_01_001 : "Taxe sucre",
         set_02 : "Réglage général",   // BAK
@@ -4707,18 +4707,18 @@ export const langFr =
         },
         msgHelp: //BAK
         {
-            title: "Aider",
-            btn01: "OK",
-            condItemQuantity: "Écrivez ici...",
-            condItemAmount: "Écrivez ici...",
-            condGeneralAmount: "Écrivez ici...",
-            appDiscRate: "Écrivez ici...",
-            appDiscAmount: "Écrivez ici...",
-            appPoint: "Écrivez ici...",
-            appGiftCheck: "Écrivez ici...",
-            appGeneralAmount: "Écrivez ici...",
-            appItemQuantity: "Écrivez ici...",
-            appItemAmount: "Écrivez ici...",
+            title: "Açıklama",
+            btn01: "Tamam",
+            condItemQuantity: "Promosyon tanımlamak istediğiniz ürün yada ürünler için promosyonun geçerli olacağı ürün adetini belirleyiniz. Örnğ: Değeri 5 yaptığınızda promosyon 5. üründen sonra geçerli olacaktır.",
+            condItemAmount: "Promosyon tanımlamak istediğiniz ürün yada ürünler için promosyonun hangi toplam tutardan itibaren geçerli olacağını belirleyiniz. Örnğ: Tutarı 10€ yaptığınızda promosyon seçilen ürünlerin toplam tutarı 10€ olduktan sonra geçerli olacaktır.",
+            condGeneralAmount: "Toplam ticket tutarına hangi tutardan sonra promosyon Uygulamak ıstediğinizi belirleyiniz. Örnğ: Tutarı 10€ yaptığınızda ticket toplam tutarı 10€ olduktan sonra geçerli olacaktır.",
+            appDiscRate: "Koşul oluştuğunda uygulayacağı iskonto oranını belirleyiniz. Örnğ: Koşul oluştuğunda %10 indirim uygulasın.",
+            appDiscAmount: "Koşul oluştuğunda tutarsal olarak yapmak istediğiniz indirim uygulanacak fiyatı belirleyiniz. Örnğ: Koşul oluştuğunda koşulda seçili ürünlere 0,99€ fiyat uygulasın.",
+            appPoint: "Koşul oluştuğunda müşteriye vermek istediğiniz puan tutarını belirleyiniz. Örnğ: Koşul oluştuğunda müşterinin kartına 100 puan eklesin.",
+            appGiftCheck: "Koşul oluştuğunda müşteriye vermek istediğiniz hediye çeki tutarını belirleyiniz. Örnğ: Koşul oluştuğunda müşteriye 100€ luk hediye çeki uluştursun.",
+            appGeneralAmount: "Koşul oluştuğunda uygulanacak rakamsal toplam indirim tutarını belirleyiniz. Örnğ: Koşul oluştuğunda müşteriye tike tutarına 10€ luk indirim yapsın.",
+            appItemQuantity: "Koşul oluştuğunda seçeceğiniz ürün yada ürünler için geçerli olacağı ürün adetini belirleyiniz. Örnğ: Değeri 5 yaptığınızda sectiğiniz ürün yada ürünleri 5 adete kadar belirlediğiniz % lik indirimi yada fiyatı uygulasın.",
+            appItemAmount: "Koşul oluştuğunda seçeceğiniz ürün yada ürünler için geçerli olacağı fiyatı belirleyiniz. Örnğ: Fiyatı 1€ yada %10 yaptığınızda sectiğiniz ürün yada ürünleri 1€ dan yada %10 luk indirim uygulasın.",
         },
         validation: 
         {
@@ -6843,7 +6843,7 @@ export const langFr =
             clmGenusName : "Type"
         },
         cmbDepot : 'Depôt',
-        btnGet : 'Ramène',
+        btnGet : 'Rechercher',
         btnOrder : 'Créer une commande',
         grdOrderList : 
         {
@@ -7909,7 +7909,7 @@ export const langFr =
         },
         popTaxSugar : 
         {
-            title: "Evaluer Sucre",
+            title: "Calcul Tax Sucre",
             btnApprove : "Ajoute",
             minValue : "Min. Evaluer Sucre Dans(100ML/GR)",
             maxValue : "Max. Evaluer Sucre Dans(100ML/GR)",
@@ -8206,8 +8206,8 @@ export const langFr =
         TicketId :"Fiche I.D",
         cmbCustomer :"Courant",
         btnGet :"Ramenez",
-        dtFirst : "Premier Date",
-        dtLast : "Derniere date",
+        dtFirst : "Date Début",
+        dtLast : "Date Fin",
         txtCustomerCode : "Courant",
         cmbDevice :"Dispositif",
         txtTicketno : "Fiche I.D",
@@ -8290,7 +8290,7 @@ export const langFr =
         cancel : "Abandonne",
         popOpenTike :
         {
-            title : "Bouchons incomplets"
+            title : "Ticket En Attendre"
         },
         grdOpenTike: 
         {
