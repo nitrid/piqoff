@@ -182,7 +182,7 @@ export const langFr =
         promo_02: "Listes",
         promo_02_001: "Liste promotion",
         promo_03: "Rapports",
-        set : "Coût Supplément",
+        set : "Parametre / Supplément",
         set_01 : "Coût et taxe annexe",
         set_01_001 : "Taxe sucre",
         set_02 : "Réglage général",   // BAK
