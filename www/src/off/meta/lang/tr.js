@@ -7991,6 +7991,10 @@ export const langTr =
             btn02: "Vazgeç",
             msg: "Kaydı silmek istediğinize eminmisiniz ?"
         },
+        validation:
+        {
+            notValid: "Boş geçemezsiniz !",
+        },
     },
     pos_01_001 : // "Pos Cihaz Tanıtım",
     {
