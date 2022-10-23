@@ -48,7 +48,7 @@ export const langFr =
     },
     popOpenTike :
     {
-        title : "Reçus incomplet" 
+        title : "Ticket En Attente" 
     },
     grdOpenTike: 
     {
@@ -8130,7 +8130,7 @@ export const langFr =
         cancel : "Abandonne",      
         popOpenTike :
         {
-            title : "Reçus incomplet" 
+            title : "Ticket En Attente" 
         },
         grdOpenTike: 
         {
@@ -8328,7 +8328,7 @@ export const langFr =
         },
         popOpenTike :
         {
-            title : "Ticket incomplet"
+            title : "Ticket En Attente"
         },
         grdOpenTike: 
         {
