@@ -182,14 +182,14 @@ export const langFr =
         promo_02: "Listes",
         promo_02_001: "Liste promotion",
         promo_03: "Rapports",
-        set : "Parametre / Supplément",
+        set : "Paramètre / Supplément",
         set_01 : "Coût et taxe annexe",
         set_01_001 : "Taxe sucre",
         set_02 : "Réglage général",   // BAK
         set_02_001 : "Informations sur la société",   // BAK
         proces : "Saisie groupée",
         proces_01 : "Traitement Produit",
-        proces_01_001 : "MAJ groupe produit",
+        proces_01_001 : "MAJ Famille produit",
         tkf: "Proposition",
         tkf_01: "Listes",
         tkf_02: "Document",
@@ -7998,14 +7998,14 @@ export const langFr =
     },
     pos_01_001 : // "Pos Cihaz Tanıtım",
     {
-        txtCode : "Code",
-        txtName :"Nom",
+        txtCode : "Nr. Caisse",
+        txtName :"Nom De Caisse",
         txtIban :"IBAN",
         validCode :"Vous ne pouvez ne pas sasir le code !",
-        txtScalePort : "Scale Port",
+        txtScalePort : "Balance Port",
         txtLcdPort : "LCD Port",
-        txtPayCardPort : "Pay Card Port",
-        txtPrintDesing : "Tickets de caisse.",
+        txtPayCardPort : "TPE Port",
+        txtPrintDesing : "Dizayn Tickets Imp.",
         pg_txtCode : 
         {
             title : "Sélection Caisse",
