@@ -972,19 +972,19 @@ export default class itemCard extends React.PureComponent
                                         this.dtLastAnalysis.value = moment(new Date())
                                         let tmpQuery = 
                                         {
-                                            query :"SELECT ISNULL(SUM(QUANTITY),0) AS QUANTITY,'BUGÜN' AS DOC_DATE FROM POS_SALE_VW_01 WHERE ITEM_CODE = @CODE  AND DOC_DATE =  CONVERT(NVARCHAR,GETDATE(),112) GROUP BY ITEM_CODE " +
+                                            query :"SELECT ISNULL(SUM(QUANTITY),0) AS QUANTITY,'BUGÜN' AS DOC_DATE FROM POS_SALE_VW_01 WHERE ITEM_GUID = @GUID  AND DOC_DATE =  CONVERT(NVARCHAR,GETDATE(),112) GROUP BY ITEM_GUID " +
                                             "UNION ALL " +
-                                            "SELECT ISNULL(SUM(QUANTITY),0) AS QUANTITY,'DÜN' AS DOC_DATE FROM POS_SALE_VW_01 WHERE ITEM_CODE = @CODE  AND DOC_DATE =  CONVERT(NVARCHAR,GETDATE()-1,112) GROUP BY ITEM_CODE  "+
+                                            "SELECT ISNULL(SUM(QUANTITY),0) AS QUANTITY,'DÜN' AS DOC_DATE FROM POS_SALE_VW_01 WHERE ITEM_GUID = @GUID  AND DOC_DATE =  CONVERT(NVARCHAR,GETDATE()-1,112) GROUP BY ITEM_GUID  "+
                                             "UNION ALL "+
-                                            "SELECT ISNULL(SUM(QUANTITY),0) AS QUANTITY,'BU HAFTA' AS DOC_DATE FROM POS_SALE_VW_01 WHERE ITEM_CODE = @CODE AND DOC_DATE >=  dateadd(day, 2-datepart(dw, getdate()), CONVERT(NVARCHAR,getdate(),112)) AND DOC_DATE <=CONVERT(NVARCHAR,GETDATE(),112) GROUP BY ITEM_CODE  "+
+                                            "SELECT ISNULL(SUM(QUANTITY),0) AS QUANTITY,'BU HAFTA' AS DOC_DATE FROM POS_SALE_VW_01 WHERE ITEM_GUID = @GUID AND DOC_DATE >=  dateadd(day, 2-datepart(dw, getdate()), CONVERT(NVARCHAR,getdate(),112)) AND DOC_DATE <=CONVERT(NVARCHAR,GETDATE(),112) GROUP BY ITEM_GUID  "+
                                             "UNION ALL "+
-                                            "SELECT ISNULL(SUM(QUANTITY),0) AS QUANTITY,'BU AY' AS DOC_DATE FROM POS_SALE_VW_01 WHERE ITEM_CODE = @CODE  AND DOC_DATE >=  dateadd(day, 1-datepart(dd, getdate()), CONVERT(NVARCHAR,getdate(),112)) AND DOC_DATE <=CONVERT(NVARCHAR,GETDATE(),112) GROUP BY DOC_DATE,ITEM_CODE  "+
+                                            "SELECT ISNULL(SUM(QUANTITY),0) AS QUANTITY,'BU AY' AS DOC_DATE FROM POS_SALE_VW_01 WHERE ITEM_GUID = @GUID  AND DOC_DATE >=  dateadd(day, 1-datepart(dd, getdate()), CONVERT(NVARCHAR,getdate(),112)) AND DOC_DATE <=CONVERT(NVARCHAR,GETDATE(),112) GROUP BY DOC_DATE,ITEM_GUID  "+
                                             "UNION ALL "+
-                                            "SELECT ISNULL(SUM(QUANTITY),0) AS QUANTITY,'BU AY' AS DOC_DATE FROM POS_SALE_VW_01 WHERE ITEM_CODE = @CODE  AND DOC_DATE >=  dateadd(day, 1-datepart(dd, getdate()), CONVERT(NVARCHAR,getdate(),112)) AND DOC_DATE <=CONVERT(NVARCHAR,GETDATE(),112) GROUP BY DOC_DATE,ITEM_CODE  "+
+                                            "SELECT ISNULL(SUM(QUANTITY),0) AS QUANTITY,'BU AY' AS DOC_DATE FROM POS_SALE_VW_01 WHERE ITEM_GUID = @GUID  AND DOC_DATE >=  dateadd(day, 1-datepart(dd, getdate()), CONVERT(NVARCHAR,getdate(),112)) AND DOC_DATE <=CONVERT(NVARCHAR,GETDATE(),112) GROUP BY DOC_DATE,ITEM_GUID  "+
                                             "UNION ALL "+
-                                            "SELECT ISNULL(SUM(QUANTITY),0) AS QUANTITY,'BU YIL' AS DOC_DATE FROM POS_SALE_VW_01 WHERE ITEM_CODE = @CODE  AND DOC_DATE >=  dateadd(day, 1-datepart(dy, getdate()), CONVERT(NVARCHAR,getdate(),112)) AND DOC_DATE <=CONVERT(NVARCHAR,GETDATE(),112) GROUP BY DOC_DATE,ITEM_CODE  ",
-                                            param : ['CODE:string|50'],
-                                            value : [this.txtRef.value]
+                                            "SELECT ISNULL(SUM(QUANTITY),0) AS QUANTITY,'BU YIL' AS DOC_DATE FROM POS_SALE_VW_01 WHERE ITEM_GUID = @GUID  AND DOC_DATE >=  dateadd(day, 1-datepart(dy, getdate()), CONVERT(NVARCHAR,getdate(),112)) AND DOC_DATE <=CONVERT(NVARCHAR,GETDATE(),112) GROUP BY DOC_DATE,ITEM_GUID  ",
+                                            param : ['GUID:string|50'],
+                                            value : [this.itemsObj.dt()[0].GUID]
                                         }
                                         let tmpData = await this.core.sql.execute(tmpQuery) 
                                         if(tmpData.result.recordset.length > 0)
