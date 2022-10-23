@@ -1162,10 +1162,10 @@ export const langTr =
         pg_txtBarcode : 
         {
             title : "Barkod Seçimi",
-            clmCode :  "STOK KODU",
-            clmName : "STOK ADI",
-            clmMulticode : "TEDARİKÇİ KODU",
-            clmBarcode : "BARKOD"
+            clmCode :  "Stok Kodu",
+            clmName : "Stok Adi",
+            clmMulticode : "Tedarikçi Kodu",
+            clmBarcode : "Barkod"
         },
         msgCode :
         {
