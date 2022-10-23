@@ -13,7 +13,7 @@ export const langFr =
     btnNo : "Non",
     msgClose : "Etes-vous sûr de vouloir fermer la page",
     txtLangSelect : "Choix de la langue",
-    userListTitle : "Kullanıcı Listesi", //BAK
+    userListTitle : "Liste Utilisateur", 
     txtUser : "Utilisateur",
     txtPass : "Mot de passe",
     btnUserSelect : "Choix de l'utilisateur",
@@ -24,7 +24,7 @@ export const langFr =
     txtCardRead :"Veuillez scanner votre badge",
     price : "Prix",
     quantity : "Quantité",
-    nbCalculator : "Hesap Makinesi", //BAK
+    nbCalculator : "Calculatrice", 
     msgCustomerNotFound : 
     {
         title : "Attention",
@@ -120,7 +120,7 @@ export const langFr =
     msgRebateNotMatch :
     {
         title :"Attention",
-        msg : "Un ou plusieurs produits ne correspondt pas au ticket de caisse saisi ",
+        msg : "Un ou plusieurs produits ne correspondent pas au ticket de caisse saisi ",
         btn01 : "OK",
     },
     msgItemOrQuantityNotMatch : 
@@ -144,7 +144,7 @@ export const langFr =
     msgMinPrice : 
     {
         title : "Attention",
-        msg : "Le prix ne peut être min prix !! ",
+        msg : "Le prix ne peut être inférieur au prix minimum !! ",
         btn01 : "OK",
     },
     msgCostPrice : 
@@ -155,7 +155,7 @@ export const langFr =
     },
     totalLine : "Qte Ligne : ",
     totalQuantity : "Qte Art.:",
-    loyaltyDiscount : "Remisé fidélité :",
+    loyaltyDiscount : "Remise fidélité :",
     ticketRect : "Ticket Rest. : ",
     amount : "Sous-total :",
     vat : "TVA :",
@@ -169,7 +169,7 @@ export const langFr =
     msgTicketForNotCustomer: 
     {
         title : "Attention",
-        msg : "Vous ne pouvez pas scanner la carte de fidélité pour les paiements en tickets restaurants .Veuillez supprimer le client sélectionner ! " ,
+        msg : "Vous ne pouvez pas scanner la carte de fidélité pour les paiements en tickets restaurants .Veuillez supprimer le client sélectionné ! " ,
         btn01 : "OK"
     },
     msgPayForSelling: 
@@ -219,7 +219,7 @@ export const langFr =
     msgCancelCustomerConfirm: 
     {
         title : "Attention",
-        msg : "Etes-vous sûr de quitter le client séléctionné ",
+        msg : "Etes-vous sûr de quitter le client sélectionné ",
         btn01 : "OK",
         btn02 : "Annuler",
     },
@@ -234,19 +234,19 @@ export const langFr =
     lastRead: " Dernière lecture ",
     totalRead : " Totale lecture ",
     remainderPay : " Montant restant ",
-    discountpercent: " Remisé % -",
-    applyDiscountPercent : " Effectuer Remisé (%)",
-    discountPrice : " Remisé ",
+    discountpercent: " Remise % -",
+    applyDiscountPercent : " Effectuer Remise (%)",
+    discountPrice : " Remise ",
     msgDeletePayForDiscount: 
     {
         title : "Attention",
-        msg : " Veuillez supprimer les paiements avant d'appliquer la Remisé !",
+        msg : " Veuillez supprimer les paiements avant d'appliquer la Remise !",
         btn01 : "OK"
     },
     msgDiscountNotBigAmount: 
     {
         title : "Attention",
-        msg : " La Remisé ne peut être supérieure à la Remisé !" ,
+        msg : " La Remise ne peut être supérieure au Montant Total !" ,
         btn01 : "OK"
     },
     popLoyalty:
@@ -260,13 +260,13 @@ export const langFr =
     msgPointNotBigToPoint: 
     {
         title : "Attention",
-        msg : " Points saisie ne peut être supérieur au solde ! ",
+        msg : " Points saisi ne peut être supérieur au solde ! ",
         btn01 : "OK"
     },
     msgPointNotBigToPay: 
     {
         title : "Attention",
-        msg : " Le nombre de point saisi ne peut être supérieur au nombre de point présent sur la carte ! ",
+        msg : " Le nombre de points saisi ne peut être supérieur au nombre de points présent sur la carte ! ",
         btn01 : "OK"
     },
     popLastSaleList : 
@@ -287,7 +287,7 @@ export const langFr =
     msgMissingPay: 
     {
         title : "Attention",
-        msg : "Montant saisi manquant ou érroné , vérifier votre saisi ! ",
+        msg : "Montant saisi manquant ou érroné , vérifier votre saisie ! ",
         btn01 : "OK"
     },
     popPriceDesc : 
@@ -384,11 +384,11 @@ export const langFr =
     popParkList :
     {
         title :"Saisie en attente",
-        btnParkAll : "Tüm Parktakiler" //BAK
+        btnParkAll : "Tous les Tickets en Attente" 
     },
     popBarcodeList :
     {
-        title :"Liste code barre",
+        title :"Liste code-barres",
     },
     popItemList :
     {
@@ -503,27 +503,27 @@ export const langFr =
         btn01 : "Ok",
     },
     listed : "Rechercher",
-    msgDeviceEntryAlert : //Bak
+    msgDeviceEntryAlert : 
     {
         title : "Attention",
         msg : "Veuillez ne pas laisser le code de l'appareil vide !",
         btn01 : "OK",
     },
-    popTitleDevice : "Code de sécurité", //Bak
-    msgDeviceNotChange : //Bak
+    popTitleDevice : "Code de sécurité", 
+    msgDeviceNotChange : 
     {
         title : "Attention",
         msg : "La caisse ne peut pas être modifié pendant la vente ! Veuillez annuler la vente..",
         btn01 : "OK",
     },
-    msgDbTransferAlert : //Bak
+    msgDbTransferAlert : 
     {
         title : "Attention",
         msg : "Voulez-vous mettre à jour la base de données locale ?",
         btn01 : "OK",
         btn02 : "Annuler",
     },
-    popTransfer : //Bak
+    popTransfer : 
     {
         title : "Transfert de données",
         msg1 : "Début du transfert : ",
@@ -532,96 +532,96 @@ export const langFr =
         btnPopTransferManuel : "Démarrage manuel",
         btnPopTransferStop : "Arrêter"
     },
-    msgOfflineWarning: //Bak
+    msgOfflineWarning: 
     {
         title : "Attention",
         msg : "Vous ne pouvez pas faire cela en mode hors ligne !",
         btn01 : "OK"
     },
-    msgOfflineAlert: //Bak
+    msgOfflineAlert: 
     {
         title : "Attention",
         msg : "Votre connexion au serveur a été perdue ! Vous pouvez poursuivre votre transaction hors ligne.",
         btn01 : "OK"
     },
-    msgOnlineAlert: //Bak
+    msgOnlineAlert: 
     {
         title : "Attention",
         msg : "Connexion au serveur établie ! Vous pouvez poursuivre votre transaction en ligne.",
         btn01 : "OK"
     },
-    msgNotWeighing: //Bak
+    msgNotWeighing: 
     {
         title : "Attention",
         msg : "Article non pesé Veuillez ajouter à nouveau",
         btn01 : "OK"
     },
-    msgAnotherUserAlert: //Bak
+    msgAnotherUserAlert: 
     {
         title : "Attention",
         msg : "Connectez-vous à partir d'un autre appareil avec vos informations d'utilisateur.",
         btn01 : "OK"
     },
-    msgPayAmountAlert: //Bak
+    msgPayAmountAlert: 
     {
         title : "Attention",
         msg : "Veuillez entrer un montant valide.",
         btn01 : "OK"
     },
-    msgPrintAlert: //Bak
+    msgPrintAlert: 
     {
         title : "Avertissement",
         msg : "Souhaitez-vous imprimer le reçu  ?",
         btn01 : "OK",
         btn02 : "Annulez"
     },
-    msgRePrint: //Bak
+    msgRePrint: 
     {
         title : "Avertissement",
-        msg : "Vous avez atteint la limite d'impression de reçus !",
+        msg : "Vous avez atteint la limite d'impression de reçu !",
         btn01 : "OK",
     },
-    acsDialog: //Bak
+    acsDialog: 
     {
-        title1 : "Yetkili şifresini giriniz !",
-        title2 : "Şifrenizi giriniz !",
+        title1 : "Veuillez Saisir le Code Responsable!",
+        title2 : "Entrez Votre Code !",
         msgAlert: 
         {
-            title : "Dikkat",
-            msg : "Geçersiz şifre !",
-            btn01 : "Tamam",
+            title : "Attention",
+            msg : "Mdp Invalide !",
+            btn01 : "OK",
         },
     },
-    nbPluButtonGrp: //Bak
+    nbPluButtonGrp: 
     {
         msgRef:
         {
-            title : "Dikkat",
-            msg : "Buton üzerinde ne yapmak istiyorsunuz ?",
-            btn01 : "Düzenle",
-            btn02 : "Sil",
+            title : "Attention",
+            msg : "Que Souhaitez vous faire avec la Touche ?",
+            btn01 : "Corrige",
+            btn02 : "Efface",
         },
-        popSelectItem : "Stok Seçim",
-        popSelectItemGrp : "Ürün Grubu Seçim",
-        popNameEntry : "Plu Adı"
+        popSelectItem : "Choix Du Stock",
+        popSelectItemGrp : "Choix de la Catégorie du Produit",
+        popNameEntry : "Nom Plu "
     },
-    popOrderList : //Bak
+    popOrderList : 
     {
-        title :"Sipariş Listesi",
+        title :"Liste de Commande",
     },
-    grdPopOrderList: //Bak
+    grdPopOrderList: 
     {
-        REF : "SERİ",
-        REF_NO :"SIRA",
-        DOC_DATE : "TARİH",
-        INPUT_CODE : "CARİ KODU",
-        INPUT_NAME : "CARİ ADI",
-        TOTAL : "TUTAR"
+        REF : "Serie",
+        REF_NO :"Ligne",
+        DOC_DATE : "Date",
+        INPUT_CODE : "Code Produit",
+        INPUT_NAME : "Nom Produit",
+        TOTAL : "Total"
     },
-    msgOrderAlert: //Bak
+    msgOrderAlert: 
     {
-        title : "Dikkat",
-        msg : "Açıkta satış varken sipariş seçemezsiniz",
-        btn01 : "Tamam"
+        title : "Attention",
+        msg : "Vous ne pouvez pas passer de commande si vente en attente",
+        btn01 : "OK"
     }
 }
