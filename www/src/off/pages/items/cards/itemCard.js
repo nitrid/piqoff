@@ -5,7 +5,7 @@ import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item } from 'devextreme-react/form';
+import Form, { Label,Item, EmptyItem } from 'devextreme-react/form';
 import TabPanel from 'devextreme-react/tab-panel';
 import {  Chart, Series, CommonSeriesSettings,  Format, Legend, Export } from 'devextreme-react/chart';
 import { Button } from 'devextreme-react/button';
@@ -19,6 +19,7 @@ import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdGrid,{Column,Editing,Paging,Scrolling,Button as grdbutton} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
+import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
@@ -968,8 +969,6 @@ export default class itemCard extends React.PureComponent
                                     onClick={async ()=>
                                     {
                                         App.instance.setState({isExecute:true})
-                                        this.dtFirstAnalysis.value = moment(new Date())
-                                        this.dtLastAnalysis.value = moment(new Date())
                                         let tmpQuery = 
                                         {
                                             query :"SELECT ISNULL(SUM(QUANTITY),0) AS QUANTITY,'BUGÜN' AS DOC_DATE FROM POS_SALE_VW_01 WHERE ITEM_GUID = @GUID  AND DOC_DATE =  CONVERT(NVARCHAR,GETDATE(),112) GROUP BY ITEM_GUID " +
@@ -2460,42 +2459,86 @@ export default class itemCard extends React.PureComponent
                         showTitle={true}
                         title={this.t("popAnalysis.title")}
                         container={"#root"} 
-                        width={'700'}
-                        height={'600'}
+                        width={'1200'}
+                        height={'700'}
                         position={{of:'#root'}}
                         >
                             <Form colCount={3} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("dtFirstAnalysis")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtFirstAnalysis"}/>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("dtLastAnalysis")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtLastAnalysis"}/>
+                                <Item colSpan={2}>
+                                <div className="col-12">
+                                    <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
+                                </div>
                                 </Item>
                                 <Item >
                                 <NdButton id="btnGet" parent={this} text={this.t("btnGet")} type="default" width='100%'
                                     onClick={async()=>
                                     {
-                                        let tmpQuery = 
+                                        if(this.chkDayAnalysis.value == true)
                                         {
-                                            query :"SELECT SUM(QUANTITY) AS QUANTITY,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE FROM POS_SALE_VW_01 " +
-                                                    "WHERE ITEM_CODE = @CODE AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE " +
-                                                    "GROUP BY DOC_DATE,ITEM_CODE ",
-                                            param : ['CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
-                                            value : [this.txtRef.value,this.dtFirstAnalysis.value,this.dtLastAnalysis.value]
+                                            let tmpQuery = 
+                                            {
+                                                query :"SELECT SUM(QUANTITY) AS QUANTITY,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE FROM POS_SALE_VW_01 " +
+                                                        "WHERE ITEM_CODE = @CODE AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE " +
+                                                        "GROUP BY DOC_DATE,ITEM_CODE ",
+                                                param : ['CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
+                                                value : [this.txtRef.value,this.dtDate.startDate,this.dtDate.endDate]
+                                            }
+                                            let tmpData = await this.core.sql.execute(tmpQuery) 
+                                            if(tmpData.result.recordset.length > 0)
+                                            {
+                                                this.setState({dataSource:tmpData.result.recordset})
+                                            }
+                                            else
+                                            {
+                                                this.setState({dataRefresh:{0:{QUANTITY:0,DOC_DATE:''}}})
+                                            }
                                         }
-                                        let tmpData = await this.core.sql.execute(tmpQuery) 
-                                        if(tmpData.result.recordset.length > 0)
+                                        else if(this.chkMountAnalysis.value == true)
                                         {
-                                            this.setState({dataSource:tmpData.result.recordset})
+                                            let tmpQuery = 
+                                            {
+                                                query :"SELECT SUM(QUANTITY) AS QUANTITY,MONTH(DOC_DATE) AS DOC_DATE FROM POS_SALE_VW_01 " +
+                                                        "WHERE ITEM_CODE = @CODE AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE " +
+                                                        "GROUP BY MONTH(DOC_DATE),ITEM_CODE ",
+                                                param : ['CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
+                                                value : [this.txtRef.value,this.dtDate.startDate,this.dtDate.endDate]
+                                            }
+                                            let tmpData = await this.core.sql.execute(tmpQuery) 
+                                            if(tmpData.result.recordset.length > 0)
+                                            {
+                                                this.setState({dataSource:tmpData.result.recordset})
+                                            }
+                                            else
+                                            {
+                                                this.setState({dataRefresh:{0:{QUANTITY:0,DOC_DATE:''}}})
+                                            }
                                         }
-                                        else
+                                       
+                                    }}/>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("chkDayAnalysis")} alignment="right" />
+                                    <NdCheckBox id="chkDayAnalysis" parent={this} defaultValue={true} value={true}
+                                    onValueChanged={(e)=>
+                                    {
+                                        if(e.value == true)
                                         {
-                                            this.setState({dataRefresh:{0:{QUANTITY:0,DOC_DATE:''}}})
+                                            this.chkMountAnalysis.value = false
+                                        }
+                                    }}/>
+                                </Item>  
+                                <Item>
+                                    <Label text={this.t("chkMountAnalysis")} alignment="right" />
+                                    <NdCheckBox id="chkMountAnalysis" parent={this} defaultValue={false} 
+                                    onValueChanged={(e)=>
+                                    {
+                                        if(e.value == true)
+                                        {
+                                            this.chkDayAnalysis.value = false
                                         }
                                     }}/>
                                 </Item>
+                                <EmptyItem/>
                                 <Item colSpan={3}>
                                     <Chart id="chart" dataSource={this.state.dataSource}>
                                     <CommonSeriesSettings

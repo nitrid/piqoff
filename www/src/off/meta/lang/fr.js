@@ -151,7 +151,7 @@ export const langFr =
         cnt_03 : "Rapports",
         fns : "Finance",
         fns_01 : "Listes",
-        fns_01_001: "Liste paiment",
+        fns_01_001: "Liste paiement",
         fns_01_002 : "Liste de paiment",
         fns_01_003 : "Liste extrait bancaire",
         fns_01_004 : "Liste mouvement coffre",
@@ -255,6 +255,8 @@ export const langFr =
         validCustomerCode :"Tedarikci Kodu Giriniz !",
         mainUnitName :"Unité Principale",
         underUnitName : "Sous Unité",
+        chkDayAnalysis : "Günlük",  // BAK
+        chkMountAnalysis : "Aylık",  // BAK
         pg_txtRef:
         {
             title: "Sélectionner Produit",
@@ -4315,7 +4317,7 @@ export const langFr =
         txtBarcode : "Barkod Ekle",
         txtBarcodePlace: "Barkod Okutunuz",
         txtQuantity :"Miktar",
-        tabTitleSubtotal : "Fatura Toplamı",
+        tabTitleSubtotal : "Total Facture",
         tabTitlePayments : "Evrak Ödeme Bilgileri",
         tabTitleOldInvoices : "Geçmiş Fatura Bilgileri",
         getRemainder : "Kalan Tutarı Getir",

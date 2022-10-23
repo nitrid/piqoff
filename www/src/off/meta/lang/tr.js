@@ -255,6 +255,8 @@ export const langTr =
         validCustomerCode :"Tedarikci Kodu Giriniz !",
         mainUnitName :"Ana Birim",
         underUnitName : "Alt Birim",
+        chkDayAnalysis : "Günlük",
+        chkMountAnalysis : "Aylık",
         pg_txtRef:
         {
             title: "Stok Seçimi",
