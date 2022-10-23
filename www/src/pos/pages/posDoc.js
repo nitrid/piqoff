@@ -256,6 +256,7 @@ export default class posDoc extends React.PureComponent
             query : "SELECT TOP 1 * FROM COMPANY_VW_01",
         }
         await this.firm.refresh();
+        console.log(this.firm)
         if(this.firm.length > 0)
         {
             this.posObj.dt()[this.posObj.dt().length - 1].FIRM = this.firm[0].GUID
