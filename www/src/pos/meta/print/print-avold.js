@@ -29,7 +29,7 @@ export function print()
         ()=>{return {font:"a",style:"b",align:"ct",data:""}},
         // ÜST BİLGİ
         ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? data.firm[0].ADDRESS1 : "ZAC HECKENWALD"}},
-        ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? data.firm[0].ZIPCODE + " " + data.firm[0].CITY + data.firm[0].COUNTRY_NAME : "57740 LONGEVILLE-LES-ST-AVOLD FRANCE"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? data.firm[0].ZIPCODE + " " + data.firm[0].CITY + " " + data.firm[0].COUNTRY_NAME : "57740 LONGEVILLE-LES-ST-AVOLD FRANCE"}},
         ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? "Tel : " + data.firm[0].TEL : "Tel : 03 87 91 00 32"}},
         ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? data.firm[0].MAIL : "longeville@prodorplus.fr"}},
         ()=>{return {font:"a",style:"b",align:"ct",data: "www.prodorplus.fr"}},

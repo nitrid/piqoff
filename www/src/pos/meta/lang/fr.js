@@ -315,6 +315,11 @@ export const langFr =
         head : "Motif de retour ",
         title :"Veuillez saisir le motif de retour "
     },
+    popRePrintDesc : 
+    {
+        head : "Raison du duplicata",
+        title : "Veuillez renseigner la raison de l'impressıon du duplicata"
+    },
     msgItemReturnTicket: 
     {
         title : "Attention",

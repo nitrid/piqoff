@@ -315,6 +315,11 @@ export const langTr =
         head : "İade Açıklaması",
         title : "Lütfen İade Nedeninizi Giriniz"
     },
+    popRePrintDesc : 
+    {
+        head : "Yeniden yazdırma açıklaması",
+        title : "Lütfen yeniden yazdırma nedeninizi giriniz"
+    },
     msgItemReturnTicket: 
     {
         title : "Uyarı",
