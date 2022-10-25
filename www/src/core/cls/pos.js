@@ -118,7 +118,7 @@ export class posCls
                      'PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PTICKET:string|50','PSTATUS:int',
                      'PORDER_GUID:string|50'],
             dataprm : ['GUID','CUSER','DEVICE','DEPOT_GUID','TYPE','DOC_DATE','CUSTOMER_GUID','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','TICKET',
-                       'STATUS','CERTIFICATE','ORDER_GUID'],
+                       'STATUS','ORDER_GUID'],
             local : 
             {
                 type : "update",
