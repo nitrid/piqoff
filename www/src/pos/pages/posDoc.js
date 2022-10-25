@@ -3013,12 +3013,12 @@ export default class posDoc extends React.PureComponent
                     <div className="col-6">
                         <div className="row">
                             <div className="col-12">
-                                <NbLabel id="info" parent={this} value={this.core.appInfo.name + " version : " + this.core.appInfo.version}/>
+                                <NbLabel id="info" parent={this} value={this.core.appInfo.name}/>
                             </div>
                         </div>
                         {/* Button Console*/}
                         <div className="row">
-                            <div className="col-12" style={{paddingTop:"19px"}}>
+                            <div className="col-12" style={{paddingTop:"17px"}}>
                                 {/* Line 1-2-3-4 */}
                                 <div className="row px-2">
                                     <div className="col-2">
