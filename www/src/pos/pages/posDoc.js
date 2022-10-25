@@ -3013,7 +3013,7 @@ export default class posDoc extends React.PureComponent
                     <div className="col-6">
                         <div className="row">
                             <div className="col-12">
-                                <NbLabel id="info" parent={this} value={this.core.appInfo.name}/>
+                                <NbLabel id="info" parent={this} value={this.core.appInfo.name + " version : " + this.core.appInfo.version}/>
                             </div>
                         </div>
                         {/* Button Console*/}
