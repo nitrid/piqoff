@@ -3018,7 +3018,7 @@ export default class posDoc extends React.PureComponent
                         </div>
                         {/* Button Console*/}
                         <div className="row">
-                            <div className="col-12" style={{paddingTop:"19px"}}>
+                            <div className="col-12" style={{paddingTop:"18px"}}>
                                 {/* Line 1-2-3-4 */}
                                 <div className="row px-2">
                                     <div className="col-2">
