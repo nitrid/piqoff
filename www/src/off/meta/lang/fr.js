@@ -7952,7 +7952,8 @@ export const langFr =
         txtCustomerLastname : "Nom de famille autorisé",
         txtAddress1 : "Adresse",
         txtAddress2 : "Adresse 2",
-        cmbCıty : "Ville",
+        cmbZipCode : "Code Postal",
+        cmbCity : "Ville",
         cmbCountry : "Pays",
         txtPhone : "Telephone",
         txtEmail : "E-Mail",
@@ -7963,6 +7964,7 @@ export const langFr =
         txtTaxNo : "Tax No",
         txtIntVatNo : "Int. Vat No",
         txtSirenNo : "Siren No",
+        txtRSC : "RSC",
         txtCapital : "Capital",
         msgSave:
         {

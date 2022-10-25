@@ -239,7 +239,7 @@ export default class posDoc extends React.PureComponent
         await this.acsObj.load({APP:'POS'})
 
         this.posObj.addEmpty()
-        this.posObj.dt()[this.posObj.dt().length - 1].CERTIFICATE = this.core.appInfo.name + " version : " + this.core.appInfo.version //+ " - " + this.core.appInfo.certificate + this.core.appInfo.signed;
+        this.posObj.dt()[this.posObj.dt().length - 1].CERTIFICATE = this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + this.core.appInfo.signed;
         this.posObj.dt()[this.posObj.dt().length - 1].DEVICE = window.localStorage.getItem('device') == null ? '' : window.localStorage.getItem('device')
         this.device.value = this.posObj.dt()[this.posObj.dt().length - 1].DEVICE
         
