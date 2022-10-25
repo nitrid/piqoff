@@ -28,7 +28,7 @@ export class companyCls
             OFFICIAL_SURNAME : '',
             COMPANY_TYPE : '',
             SIREN_NO : '',
-            RCS : '',
+            RSC : '',
             CAPITAL : 0,
             COUNTRY_NAME : '',
         }
@@ -47,64 +47,64 @@ export class companyCls
         tmpDt.insertCmd = 
         {
             query : "EXEC [dbo].[PRD_COMPANY_INSERT] " + 
-            "@GUID  = @PGUID," +
-            "@CUSER = @PCUSER, " +
-            "@NAME = @PNAME, " +
-            "@ADDRESS1 = @PADDRESS1, " +
-            "@ADDRESS2 = @PADDRESS2, " +
-            "@ZIPCODE = @PZIPCODE, " +
-            "@COUNTRY = @PCOUNTRY, " +
-            "@CITY = @PCITY, " +
-            "@TEL = @PTEL, " +
-            "@MAIL = @PMAIL, " +
-            "@WEB = @PWEB, " +
-            "@SIRET_ID = @PSIRET_ID, " +
-            "@APE_CODE = @PAPE_CODE, " +
-            "@TAX_OFFICE = @PTAX_OFFICE, " +
-            "@TAX_NO = @PTAX_NO, " +
-            "@INT_VAT_NO = @PINT_VAT_NO, " +
-            "@OFFICIAL_NAME = @POFFICIAL_NAME, " +
-            "@OFFICIAL_SURNAME = @POFFICIAL_SURNAME, " +
-            "@COMPANY_TYPE = @PCOMPANY_TYPE, " +
-            "@SIREN_NO = @PSIREN_NO, " +
-            "@RSC = @PRSC, " +
-            "@CAPITAL  =@PCAPITAL ",
-            param : ['PGUID:string|50','PCUSER:string|50','PNAME:string|50','PADDRESS1:string|50','PADDRESS2:string|50','PZIPCODE:string|50','PCOUNTRY:string|50','PCITY:string|50'
-            ,'PTEL:string|50','PMAIL:string|50','PWEB:string|50','PSIRET_ID:string|50','PAPE_CODE:string|50','PTAX_OFFICE:string|50','PTAX_NO:string|50','PINT_VAT_NO:string|50','POFFICIAL_NAME:string|50'
-            ,'POFFICIAL_SURNAME:string|50','PCOMPANY_TYPE:string|50','PSIREN_NO:string|50','PRSC:string|50','PCAPITAL:float'],
+                    "@GUID  = @PGUID," +
+                    "@CUSER = @PCUSER, " +
+                    "@NAME = @PNAME, " +
+                    "@ADDRESS1 = @PADDRESS1, " +
+                    "@ADDRESS2 = @PADDRESS2, " +
+                    "@ZIPCODE = @PZIPCODE, " +
+                    "@COUNTRY = @PCOUNTRY, " +
+                    "@CITY = @PCITY, " +
+                    "@TEL = @PTEL, " +
+                    "@MAIL = @PMAIL, " +
+                    "@WEB = @PWEB, " +
+                    "@SIRET_ID = @PSIRET_ID, " +
+                    "@APE_CODE = @PAPE_CODE, " +
+                    "@TAX_OFFICE = @PTAX_OFFICE, " +
+                    "@TAX_NO = @PTAX_NO, " +
+                    "@INT_VAT_NO = @PINT_VAT_NO, " +
+                    "@OFFICIAL_NAME = @POFFICIAL_NAME, " +
+                    "@OFFICIAL_SURNAME = @POFFICIAL_SURNAME, " +
+                    "@COMPANY_TYPE = @PCOMPANY_TYPE, " +
+                    "@SIREN_NO = @PSIREN_NO, " +
+                    "@RSC = @PRSC, " +
+                    "@CAPITAL  =@PCAPITAL ",
+            param : ['PGUID:string|50','PCUSER:string|50','PNAME:string|50','PADDRESS1:string|50','PADDRESS2:string|50','PZIPCODE:string|50','PCOUNTRY:string|50','PCITY:string|50',
+                     'PTEL:string|50','PMAIL:string|50','PWEB:string|50','PSIRET_ID:string|50','PAPE_CODE:string|50','PTAX_OFFICE:string|50','PTAX_NO:string|50','PINT_VAT_NO:string|50','POFFICIAL_NAME:string|50',
+                     'POFFICIAL_SURNAME:string|50','PCOMPANY_TYPE:string|50','PSIREN_NO:string|50','PRSC:string|50','PCAPITAL:float'],
             dataprm : ['GUID','CUSER','NAME','ADDRESS1','ADDRESS2','ZIPCODE','COUNTRY','CITY','TEL','MAIL','WEB','SIRET_ID','APE_CODE','TAX_OFFICE','TAX_NO','INT_VAT_NO','OFFICIAL_NAME',
-            'OFFICIAL_SURNAME','COMPANY_TYPE','SIREN_NO','RSC','CAPITAL']
+                       'OFFICIAL_SURNAME','COMPANY_TYPE','SIREN_NO','RSC','CAPITAL']
         } 
         tmpDt.updateCmd = 
         {
             query : "EXEC [dbo].[PRD_COMPANY_UPDATE] " + 
-            "@GUID  = @PGUID," +
-            "@CUSER = @PCUSER, " +
-            "@NAME = @PNAME, " +
-            "@ADDRESS1 = @PADDRESS1, " +
-            "@ADDRESS2 = @PADDRESS2, " +
-            "@ZIPCODE = @PZIPCODE, " +
-            "@COUNTRY = @PCOUNTRY, " +
-            "@CITY = @PCITY, " +
-            "@TEL = @PTEL, " +
-            "@MAIL = @PMAIL, " +
-            "@WEB = @PWEB, " +
-            "@SIRET_ID = @PSIRET_ID, " +
-            "@APE_CODE = @PAPE_CODE, " +
-            "@TAX_OFFICE = @PTAX_OFFICE, " +
-            "@TAX_NO = @PTAX_NO, " +
-            "@INT_VAT_NO = @PINT_VAT_NO, " +
-            "@OFFICIAL_NAME = @POFFICIAL_NAME, " +
-            "@OFFICIAL_SURNAME = @POFFICIAL_SURNAME, " +
-            "@COMPANY_TYPE = @PCOMPANY_TYPE, " +
-            "@SIREN_NO = @PSIREN_NO, " +
-            "@RSC = @PRSC, " +
-            "@CAPITAL  =@PCAPITAL ",
-            param : ['PGUID:string|50','PCUSER:string|50','PNAME:string|50','PADDRESS1:string|50','PADDRESS2:string|50','PZIPCODE:string|50','PCOUNTRY:string|50','PCITY:string|50'
-            ,'PTEL:string|50','PMAIL:string|50','PWEB:string|50','PSIRET_ID:string|50','PAPE_CODE:string|50','PTAX_OFFICE:string|50','PTAX_NO:string|50','PINT_VAT_NO:string|50','POFFICIAL_NAME:string|50'
-            ,'POFFICIAL_SURNAME:string|50','PCOMPANY_TYPE:string|50','PSIREN_NO:string|50','PRSC:string|50','PCAPITAL:float'],
+                    "@GUID  = @PGUID," +
+                    "@CUSER = @PCUSER, " +
+                    "@NAME = @PNAME, " +
+                    "@ADDRESS1 = @PADDRESS1, " +
+                    "@ADDRESS2 = @PADDRESS2, " +
+                    "@ZIPCODE = @PZIPCODE, " +
+                    "@COUNTRY = @PCOUNTRY, " +
+                    "@CITY = @PCITY, " +
+                    "@TEL = @PTEL, " +
+                    "@MAIL = @PMAIL, " +
+                    "@WEB = @PWEB, " +
+                    "@SIRET_ID = @PSIRET_ID, " +
+                    "@APE_CODE = @PAPE_CODE, " +
+                    "@TAX_OFFICE = @PTAX_OFFICE, " +
+                    "@TAX_NO = @PTAX_NO, " +
+                    "@INT_VAT_NO = @PINT_VAT_NO, " +
+                    "@OFFICIAL_NAME = @POFFICIAL_NAME, " +
+                    "@OFFICIAL_SURNAME = @POFFICIAL_SURNAME, " +
+                    "@COMPANY_TYPE = @PCOMPANY_TYPE, " +
+                    "@SIREN_NO = @PSIREN_NO, " +
+                    "@RSC = @PRSC, " +
+                    "@CAPITAL  =@PCAPITAL ",
+            param : ['PGUID:string|50','PCUSER:string|50','PNAME:string|50','PADDRESS1:string|50','PADDRESS2:string|50','PZIPCODE:string|50','PCOUNTRY:string|50','PCITY:string|50',
+                     'PTEL:string|50','PMAIL:string|50','PWEB:string|50','PSIRET_ID:string|50','PAPE_CODE:string|50','PTAX_OFFICE:string|50','PTAX_NO:string|50','PINT_VAT_NO:string|50','POFFICIAL_NAME:string|50',
+                     'POFFICIAL_SURNAME:string|50','PCOMPANY_TYPE:string|50','PSIREN_NO:string|50','PRSC:string|50','PCAPITAL:float'],
             dataprm : ['GUID','CUSER','NAME','ADDRESS1','ADDRESS2','ZIPCODE','COUNTRY','CITY','TEL','MAIL','WEB','SIRET_ID','APE_CODE','TAX_OFFICE','TAX_NO','INT_VAT_NO','OFFICIAL_NAME',
-            'OFFICIAL_SURNAME','COMPANY_TYPE','SIREN_NO','RSC','CAPITAL']
+                       'OFFICIAL_SURNAME','COMPANY_TYPE','SIREN_NO','RSC','CAPITAL']
         } 
         this.ds.add(tmpDt);
     }

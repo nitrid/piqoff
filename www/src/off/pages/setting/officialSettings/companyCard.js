@@ -91,7 +91,7 @@ export default class CustomerCard extends React.PureComponent
         })
 
         await this.companyObj.load()
-        console.log(this.companyObj.dt().length)
+        console.log(this.companyObj.dt())
         if(this.companyObj.dt().length == 0)
         {
             this.companyObj.addEmpty();
@@ -379,9 +379,7 @@ export default class CustomerCard extends React.PureComponent
                                 {/* txtCapital */}
                                 <Item>
                                     <Label text={this.t("txtCapital")} alignment="right" />
-                                        <NdNumberBox id="txtCapital" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"CAPITAL"}} 
-                                        maxLength={32}
-                                        />
+                                    <NdNumberBox id="txtCapital" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"CAPITAL"}} maxLength={32}/>
                                 </Item>
                             </Form>
                         </div>
