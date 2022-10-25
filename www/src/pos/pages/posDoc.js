@@ -1988,24 +1988,24 @@ export default class posDoc extends React.PureComponent
             {
                 let tmpPrint = e.print(pData)
 
-                // let tmpArr = [];
-                // for (let i = 0; i < tmpPrint.length; i++) 
-                // {
-                //     let tmpObj = tmpPrint[i]
-                //     if(typeof tmpPrint[i] == 'function')
-                //     {
-                //         tmpObj = tmpPrint[i]()
-                //     }
-                //     if(Array.isArray(tmpObj))
-                //     {
-                //         tmpArr.push(...tmpObj)
-                //     }
-                //     else if(typeof tmpObj == 'object')
-                //     {
-                //         tmpArr.push(tmpObj)
-                //     }
-                // }
-                // console.log(JSON.stringify(tmpArr))
+                let tmpArr = [];
+                for (let i = 0; i < tmpPrint.length; i++) 
+                {
+                    let tmpObj = tmpPrint[i]
+                    if(typeof tmpPrint[i] == 'function')
+                    {
+                        tmpObj = tmpPrint[i]()
+                    }
+                    if(Array.isArray(tmpObj))
+                    {
+                        tmpArr.push(...tmpObj)
+                    }
+                    else if(typeof tmpObj == 'object')
+                    {
+                        tmpArr.push(tmpObj)
+                    }
+                }
+                console.log(JSON.stringify(tmpArr))
                 
                 await this.posDevice.escPrinter(tmpPrint)
                 resolve()
@@ -3011,9 +3011,14 @@ export default class posDoc extends React.PureComponent
                     </div>
                     {/* Right Column */}
                     <div className="col-6">
+                        <div className="row">
+                            <div className="col-12">
+                                <NbLabel id="info" parent={this} value={this.core.appInfo.name + " version : " + this.core.appInfo.version}/>
+                            </div>
+                        </div>
                         {/* Button Console*/}
                         <div className="row">
-                            <div className="col-12" style={{paddingTop:"40px"}}>
+                            <div className="col-12" style={{paddingTop:"19px"}}>
                                 {/* Line 1-2-3-4 */}
                                 <div className="row px-2">
                                     <div className="col-2">

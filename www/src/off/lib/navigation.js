@@ -3,6 +3,7 @@ import {TreeView,SearchEditorOptions} from 'devextreme-react/tree-view';
 import {menu} from './menu.js'
 import App from './app.js';
 import {menu as userMenu} from '../../core/core'
+import NbLabel from '../../core/react/bootstrap/label.js';
 
 // DOUBLE CLİCK ICIN YAPILDI
 let timeout = null;
@@ -22,7 +23,7 @@ export default class Navigation extends React.PureComponent
         {
             div :
             {
-                height:'100%'
+                height:'97%'
             },
             treeview :
             {
@@ -128,16 +129,23 @@ export default class Navigation extends React.PureComponent
         {
             return(
                 <div style={this.style.div}>
-                    <TreeView id="Menu" style={this.style.treeview}
-                    items = {this.menu}
-                    width = {300}
-                    height = {'100%'}
-                    onItemClick = {this.selectItem}
-                    searchMode={this.state.value}
-                    searchEnabled={true}                
-                    >
-                        <SearchEditorOptions height={'fit-content'} />
-                    </TreeView>  
+                    <div>
+                        <TreeView id="Menu" style={this.style.treeview}
+                        items = {this.menu}
+                        width = {300}
+                        height = {'100%'}
+                        onItemClick = {this.selectItem}
+                        searchMode={this.state.value}
+                        searchEnabled={true}                
+                        >
+                            <SearchEditorOptions height={'fit-content'} />                        
+                        </TreeView> 
+                    </div>
+                    <div className="row">
+                        <div className="col-12 px-4">
+                            <NbLabel id="info" parent={this} value={this.core.appInfo.name + " version : " + this.core.appInfo.version}/>
+                        </div>
+                    </div>
                 </div>
             )
         }
