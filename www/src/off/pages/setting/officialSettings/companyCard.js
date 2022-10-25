@@ -363,10 +363,18 @@ export default class CustomerCard extends React.PureComponent
                                 {/* txtSirenNo */}
                                 <Item>
                                     <Label text={this.t("txtSirenNo")} alignment="right" />
-                                        <NdTextBox id="txtSirenNo" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"SIREN_NO"}} 
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={32}
-                                        />
+                                    <NdTextBox id="txtSirenNo" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"SIREN_NO"}} 
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    maxLength={32}
+                                    />
+                                </Item>
+                                {/* txtRSC */}
+                                <Item>
+                                    <Label text={this.t("txtRSC")} alignment="right" />
+                                    <NdTextBox id="txtRSC" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"RSC"}} 
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    maxLength={32}
+                                    />
                                 </Item>
                                 {/* txtCapital */}
                                 <Item>
