@@ -7960,7 +7960,8 @@ export const langTr =
         txtCustomerLastname : "Yetkili Soyadı",
         txtAddress1 : "Adres",
         txtAddress2 : "Adres 2",
-        cmbCıty : "Şehir",
+        cmbZipCode : "Posta Kodu",
+        cmbCity : "Şehir",
         cmbCountry : "Ülke",
         txtPhone : "Telefon",
         txtEmail : "E-Mail",
@@ -7971,6 +7972,7 @@ export const langTr =
         txtTaxNo : "Tax No",
         txtIntVatNo : "Int. Vat No",
         txtSirenNo : "Siren No",
+        txtRSC : "Sicil No",
         txtCapital : "Sermaye",
         msgSave:
         {

@@ -239,7 +239,8 @@ export default class posDoc extends React.PureComponent
         await this.acsObj.load({APP:'POS'})
 
         this.posObj.addEmpty()
-        this.posObj.dt()[this.posObj.dt().length - 1].CERTIFICATE = this.core.appInfo.name + " version : " + this.core.appInfo.version //+ " - " + this.core.appInfo.certificate + this.core.appInfo.signed;
+
+        this.posObj.dt()[this.posObj.dt().length - 1].DOC_TYPE = 0        
         this.posObj.dt()[this.posObj.dt().length - 1].DEVICE = window.localStorage.getItem('device') == null ? '' : window.localStorage.getItem('device')
         this.device.value = this.posObj.dt()[this.posObj.dt().length - 1].DEVICE
         
@@ -320,7 +321,7 @@ export default class posDoc extends React.PureComponent
                 this.cheqDt.selectCmd.value = [this.parkDt[i].GUID] 
                 await this.cheqDt.refresh();  
 
-                await this.getDoc(this.parkDt[i].GUID)                              
+                await this.getDoc(this.parkDt[i].GUID)                                          
                 return
             }
         }
@@ -1157,6 +1158,17 @@ export default class posDoc extends React.PureComponent
                 })
 
                 this.posObj.dt()[0].STATUS = 1
+                //***** TICKET İMZALAMA *****/
+                await this.posObj.signature()
+                
+                let tmpSigned = "-"
+                if(this.posObj.dt()[0].SIGNATURE != '')
+                {
+                    tmpSigned = this.posObj.dt()[0].SIGNATURE.substring(2,3) + this.posObj.dt()[0].SIGNATURE.substring(6,7) + this.posObj.dt()[0].SIGNATURE.substring(12,13) + this.posObj.dt()[0].SIGNATURE.substring(18,19)
+                }
+
+                this.posObj.dt()[this.posObj.dt().length - 1].CERTIFICATE = this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + " - " + tmpSigned;
+                //************************* */
 
                 if(this.posObj.posPay.dt().length > 0)
                 {
@@ -1236,7 +1248,7 @@ export default class posDoc extends React.PureComponent
                 await this.posPromoObj.save()
                 //******************************** */
                 if(typeof pPrint == 'undefined' || pPrint)
-                {
+                {                    
                     //POS_EXTRA TABLOSUNA YAZDIRMA BİLDİRİMİ GÖNDERİLİYOR
                     let tmpInsertQuery = 
                     {
@@ -1250,7 +1262,6 @@ export default class posDoc extends React.PureComponent
                         param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|50','PDESCRIPTION:string|max'],
                         value : [this.posObj.dt()[0].CUSER,"REPRINT",this.posObj.dt()[0].GUID,"00000000-0000-0000-0000-000000000000","",""]
                     }
-
                     await this.core.sql.execute(tmpInsertQuery)
                     //***************************************************/
                     let tmpData = 
@@ -1988,24 +1999,24 @@ export default class posDoc extends React.PureComponent
             {
                 let tmpPrint = e.print(pData)
 
-                // let tmpArr = [];
-                // for (let i = 0; i < tmpPrint.length; i++) 
-                // {
-                //     let tmpObj = tmpPrint[i]
-                //     if(typeof tmpPrint[i] == 'function')
-                //     {
-                //         tmpObj = tmpPrint[i]()
-                //     }
-                //     if(Array.isArray(tmpObj))
-                //     {
-                //         tmpArr.push(...tmpObj)
-                //     }
-                //     else if(typeof tmpObj == 'object')
-                //     {
-                //         tmpArr.push(tmpObj)
-                //     }
-                // }
-                // console.log(JSON.stringify(tmpArr))
+                let tmpArr = [];
+                for (let i = 0; i < tmpPrint.length; i++) 
+                {
+                    let tmpObj = tmpPrint[i]
+                    if(typeof tmpPrint[i] == 'function')
+                    {
+                        tmpObj = tmpPrint[i]()
+                    }
+                    if(Array.isArray(tmpObj))
+                    {
+                        tmpArr.push(...tmpObj)
+                    }
+                    else if(typeof tmpObj == 'object')
+                    {
+                        tmpArr.push(tmpObj)
+                    }
+                }
+                console.log(JSON.stringify(tmpArr))
                 
                 await this.posDevice.escPrinter(tmpPrint)
                 resolve()
@@ -3011,9 +3022,14 @@ export default class posDoc extends React.PureComponent
                     </div>
                     {/* Right Column */}
                     <div className="col-6">
+                        <div className="row">
+                            <div className="col-12">
+                                <NbLabel id="info" parent={this} value={this.core.appInfo.name + " version : " + this.core.appInfo.version}/>
+                            </div>
+                        </div>
                         {/* Button Console*/}
                         <div className="row">
-                            <div className="col-12" style={{paddingTop:"40px"}}>
+                            <div className="col-12" style={{paddingTop:"17px"}}>
                                 {/* Line 1-2-3-4 */}
                                 <div className="row px-2">
                                     <div className="col-2">
@@ -5543,6 +5559,8 @@ export default class posDoc extends React.PureComponent
                             }
 
                             this.posObj.dt()[0].TYPE = 1;
+                            this.posObj.dt()[0].TYPE_NAME = 'RETOUR';
+                            
                             await this.descSave("REBATE",e,'00000000-0000-0000-0000-000000000000'); 
                         }                
 

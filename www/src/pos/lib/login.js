@@ -13,6 +13,7 @@ import NbKeyboard from "../../core/react/bootstrap/keyboard.js";
 import { Gallery } from 'devextreme-react/gallery';
 import { locale, loadMessages, formatMessage } from 'devextreme/localization';
 import NdDialog,{ dialog } from '../../core/react/devex/dialog.js';
+import NbLabel from '../../core/react/bootstrap/label.js';
 
 export default class Login extends React.Component
 {
@@ -254,6 +255,11 @@ export default class Login extends React.Component
                                         onClick={this.cardIdRead}
                                         />
                                     </div>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-12">
+                                    <NbLabel id="info" parent={this} value={this.core.appInfo.name + " version : " + this.core.appInfo.version}/>
                                 </div>
                             </div>
                             <div>

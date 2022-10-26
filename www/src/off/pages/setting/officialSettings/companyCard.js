@@ -271,10 +271,25 @@ export default class CustomerCard extends React.PureComponent
                                     >
                                     </NdTextBox>
                                 </Item>
-                                {/* cmbCıty */}
+                                {/* cmbZipCode */}
                                 <Item>
-                                    <Label text={this.t("cmbCıty")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbCıty"
+                                    <Label text={this.t("cmbZipCode")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbZipCode"
+                                    dt={{data:this.companyObj.dt('COMPANY'),field:"ZIPCODE"}}
+                                    displayExpr="NAME"                       
+                                    valueExpr="CODE"
+                                    value=""
+                                    searchEnabled={true}
+                                    showClearButton={true}
+                                    pageSize ={50}
+                                    notRefresh = {true}
+                                    data={{source:{select:{query : "SELECT ZIPCODE AS CODE, ZIPCODE + ' ' + MAX(PLACE) AS NAME FROM [dbo].[ZIPCODE] GROUP BY ZIPCODE"},sql:this.core.sql}}}
+                                    />
+                                </Item>
+                                {/* cmbCity */}
+                                <Item>
+                                    <Label text={this.t("cmbCity")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbCity"
                                     dt={{data:this.companyObj.dt('COMPANY'),field:"CITY"}}
                                     displayExpr="PLACE"                       
                                     valueExpr="PLACE"

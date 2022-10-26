@@ -18,7 +18,10 @@ export class posCls
             DEPOT_CODE : '',
             DEPOT_NAME : '',
             TYPE : 0,
+            TYPE_NAME : 'VENTE',
+            DOC_TYPE : 0,
             DOC_DATE : moment(new Date()).format("YYYY-MM-DD"),
+            REF : 0,
             CUSTOMER_GUID : '00000000-0000-0000-0000-000000000000',
             CUSTOMER_CODE : '',
             CUSTOMER_NAME : '',
@@ -35,7 +38,8 @@ export class posCls
             DELETED : false,            
             DESCRIPTION : '',
             CERTIFICATE : '',
-            ORDER_GUID : '00000000-0000-0000-0000-000000000000'
+            ORDER_GUID : '00000000-0000-0000-0000-000000000000',
+            SIGNATURE : ''
         }
 
         this.posSale = new posSaleCls();
@@ -66,8 +70,10 @@ export class posCls
                     "@FIRM = @PFIRM, " +
                     "@DEVICE = @PDEVICE, " +
                     "@DEPOT = @PDEPOT, " +
-                    "@TYPE = @PTYPE, " +                      
+                    "@TYPE = @PTYPE, " +  
+                    "@DOC_TYPE = @PDOC_TYPE, " +                       
                     "@DOC_DATE = @PDOC_DATE, " + 
+                    "@REF = @PREF, " +
                     "@CUSTOMER = @PCUSTOMER, " + 
                     "@FAMOUNT = @PFAMOUNT, " + 
                     "@AMOUNT = @PAMOUNT, " + 
@@ -78,12 +84,13 @@ export class posCls
                     "@TICKET = @PTICKET, " + 
                     "@STATUS = @PSTATUS, " +
                     "@CERTIFICATE = @PCERTIFICATE, " +
-                    "@ORDER_GUID = @PORDER_GUID ",
-            param : ['PGUID:string|50','PCUSER:string|25','PFIRM:string|50','PDEVICE:string|25','PDEPOT:string|50','PTYPE:int','PDOC_DATE:date','PCUSTOMER:string|50',
-                     'PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PTICKET:string|50','PSTATUS:int',
-                     'PCERTIFICATE:string|250','PORDER_GUID:string|50'],
-            dataprm : ['GUID','CUSER','FIRM','DEVICE','DEPOT_GUID','TYPE','DOC_DATE','CUSTOMER_GUID','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','TICKET',
-                       'STATUS','CERTIFICATE','ORDER_GUID'],
+                    "@ORDER_GUID = @PORDER_GUID, " +
+                    "@SIGNATURE = @PSIGNATURE ",
+            param : ['PGUID:string|50','PCUSER:string|25','PFIRM:string|50','PDEVICE:string|25','PDEPOT:string|50','PTYPE:int','PDOC_TYPE:int','PDOC_DATE:date','PREF:int',
+                     'PCUSTOMER:string|50','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PTICKET:string|50','PSTATUS:int',
+                     'PCERTIFICATE:string|250','PORDER_GUID:string|50','PSIGNATURE:string|max'],
+            dataprm : ['GUID','CUSER','FIRM','DEVICE','DEPOT_GUID','TYPE','DOC_TYPE','DOC_DATE','REF','CUSTOMER_GUID','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','TICKET',
+                       'STATUS','CERTIFICATE','ORDER_GUID','SIGNATURE'],
             local : 
             {
                 type : "insert",
@@ -102,8 +109,10 @@ export class posCls
                     "@CUSER = @PCUSER, " + 
                     "@DEVICE = @PDEVICE, " +
                     "@DEPOT = @PDEPOT, " +
-                    "@TYPE = @PTYPE, " +                      
+                    "@TYPE = @PTYPE, " +  
+                    "@DOC_TYPE = @PDOC_TYPE, " +                      
                     "@DOC_DATE = @PDOC_DATE, " + 
+                    "@REF = @PREF, " +
                     "@CUSTOMER = @PCUSTOMER, " + 
                     "@FAMOUNT = @PFAMOUNT, " +
                     "@AMOUNT = @PAMOUNT, " + 
@@ -114,12 +123,13 @@ export class posCls
                     "@TICKET = @PTICKET, " + 
                     "@STATUS = @PSTATUS, " +
                     "@CERTIFICATE = @PCERTIFICATE, " +
-                    "@ORDER_GUID = @PORDER_GUID ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PDEVICE:string|25','PDEPOT:string|50','PTYPE:int','PDOC_DATE:date','PCUSTOMER:string|50',
-                     'PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PTICKET:string|50','PSTATUS:int',
-                     'PCERTIFICATE:string|250','PORDER_GUID:string|50'],
-            dataprm : ['GUID','CUSER','DEVICE','DEPOT_GUID','TYPE','DOC_DATE','CUSTOMER_GUID','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','TICKET',
-                       'STATUS','CERTIFICATE','ORDER_GUID'],
+                    "@ORDER_GUID = @PORDER_GUID, " +
+                    "@SIGNATURE = @PSIGNATURE ",
+            param : ['PGUID:string|50','PCUSER:string|25','PFIRM:string|50','PDEVICE:string|25','PDEPOT:string|50','PTYPE:int','PDOC_TYPE:int','PDOC_DATE:date','PREF:int',
+                     'PCUSTOMER:string|50','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PTICKET:string|50','PSTATUS:int',
+                     'PCERTIFICATE:string|250','PORDER_GUID:string|50','PSIGNATURE:string|max'],
+            dataprm : ['GUID','CUSER','FIRM','DEVICE','DEPOT_GUID','TYPE','DOC_TYPE','DOC_DATE','REF','CUSTOMER_GUID','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','TICKET',
+                       'STATUS','CERTIFICATE','ORDER_GUID','SIGNATURE'],
             local : 
             {
                 type : "update",
@@ -244,6 +254,55 @@ export class posCls
             resolve(await this.ds.update()); 
             this.posSale.subTotalBuild();
         });
+    }
+    signature()
+    {
+        return new Promise(async resolve => 
+        {
+            let tmpQuery = 
+            {
+                query : "SELECT TOP 1 REF,SIGNATURE FROM [dbo].[POS_VW_01] WHERE DEVICE = @DEVICE AND GUID <> @GUID ORDER BY LDATE DESC",
+                param : ['DEVICE:string|25','GUID:string|50'],
+                value : [this.dt()[0].DEVICE,this.dt()[0].GUID]
+            }
+            
+            let tmpResult = await this.core.sql.execute(tmpQuery)
+            let tmpLastRef = 0
+            let tmpLastSignature = ''
+            let tmpSignature = ''
+
+            if(tmpResult.result.recordset.length > 0)
+            {
+                if(tmpResult.result.recordset[0].REF != null)
+                {
+                    tmpLastRef = tmpResult.result.recordset[0].REF
+                }
+                if(tmpResult.result.recordset[0].SIGNATURE != null)
+                {
+                    tmpLastSignature = tmpResult.result.recordset[0].SIGNATURE
+                }
+            }
+
+            this.dt()[0].REF = tmpLastRef + 1
+            console.log(tmpLastSignature)
+            let tmpVatLst = this.posSale.dt().where({GUID:{'<>':'00000000-0000-0000-0000-000000000000'}}).groupBy('VAT_RATE');
+            for (let i = 0; i < tmpVatLst.length; i++) 
+            {
+                tmpSignature = tmpSignature + parseInt(Number(tmpVatLst[i].VAT_RATE) * 100).toString().padStart(4,'0') + ":" + parseInt(Number(this.posSale.dt().where({VAT_TYPE:tmpVatLst[i].VAT_TYPE}).sum('TOTAL',2)) * 100).toString() + "|"
+            }
+            tmpSignature = tmpSignature.toString().substring(0,tmpSignature.length - 1)
+            tmpSignature = tmpSignature + "," + parseInt(Number(this.dt().sum('TOTAL',2)) * 100).toString()
+            tmpSignature = tmpSignature + "," + moment(new Date()).format("YYYYMMDDHHmmss")
+            tmpSignature = tmpSignature + "," + this.dt()[0].DEVICE + "" + this.dt()[0].REF.toString().padStart(8,'0') 
+            tmpSignature = tmpSignature + "," + this.dt()[0].TYPE_NAME
+            tmpSignature = tmpSignature + "," + (tmpLastSignature == "" ? "N" : "O")
+            tmpSignature = tmpSignature + "," + tmpLastSignature
+
+            this.dt()[0].SIGNATURE = btoa(tmpSignature)
+            console.log(btoa(tmpSignature))
+
+            resolve()
+        })
     }
 }
 export class posSaleCls

@@ -13,6 +13,7 @@ import NbKeyboard from "../tools/keyboard.js";
 import { Gallery } from 'devextreme-react/gallery';
 import { locale, loadMessages, formatMessage } from 'devextreme/localization';
 import { dialog } from '../../core/react/devex/dialog.js';
+import NbLabel from '../../core/react/bootstrap/label.js';
 
 export default class Login extends React.Component
 {
@@ -33,7 +34,6 @@ export default class Login extends React.Component
                 top: '30%',
                 width: '400px',
                 height: 'fit-content',
-                backgroundColor : '#4d4d4d',  
             },
             keyboardBox :
             {
@@ -328,10 +328,13 @@ export default class Login extends React.Component
                                         onClick={this.cardIdRead}
                                     />
                                 </div>
+                            </div>                            
+                        </div>    
+                        <div className="row">
+                            <div className="col-12">
+                                <NbLabel id="info" parent={this} value={this.core.appInfo.name + " version : " + this.core.appInfo.version}/>
                             </div>
-                            
-                        </div>
-                        
+                        </div>                    
                         <NdPopGrid id={"pg_users"} parent={this} container={"#root"}
                         visible={false}
                         position={{of:'#root'}} 
@@ -345,8 +348,7 @@ export default class Login extends React.Component
                             <Column dataField="CODE" caption="CODE" width={150} defaultSortOrder="asc"/>
                             <Column dataField="NAME" caption="NAME" width={150} defaultSortOrder="asc" />                            
                         </NdPopGrid>
-                         {/* CardId PopUp */}
-              
+                         {/* CardId PopUp */}              
                         <NdPopUp parent={this} id={"popCardId"} 
                         visible={false}
                         showCloseButton={true}
@@ -384,8 +386,7 @@ export default class Login extends React.Component
                 </div>
                 <div className="p-2"></div>
                 <div className="card" style={this.style.keyboardBox}>
-                <NbKeyboard id={"keyboard"} parent={this}  textobj="Kullanici"
-                />
+                    <NbKeyboard id={"keyboard"} parent={this}  textobj="Kullanici"/>
                 </div>
             </div>
         )
