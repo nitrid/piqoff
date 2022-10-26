@@ -153,6 +153,11 @@ export const menu = (e) =>
                             text : e.t('menu.stk_04_003'),//'Sayım Kesinleştirme',
                             path: 'items/operations/countFinalization'
                         },
+                        {
+                            id: 'stk_04_004',
+                            text : e.t('menu.stk_04_004'),//'SKT Operasyonu',
+                            path: 'items/operations/expdateOperations'
+                        },
                     ]
                 },
                 {

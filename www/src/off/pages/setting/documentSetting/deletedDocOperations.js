@@ -36,7 +36,6 @@ export default class rebateOperation extends React.PureComponent
        
         this._btnGetClick = this._btnGetClick.bind(this)
         this._btnSave = this._btnSave.bind(this)
-        this.txtRef = Math.floor(Date.now() / 1000)
         this.tabIndex = props.data.tabkey
     }
     componentDidMount()
@@ -279,7 +278,6 @@ export default class rebateOperation extends React.PureComponent
                                 <Column dataField="REF_NO" caption={this.t("grdDeleteList.clmRefNo")} visible={true} width={300}/> 
                                 <Column dataField="CUSTOMER" caption={this.t("grdDeleteList.clmCustomer")} visible={true}/> 
                                 <Column dataField="DOC_DATE_CONVERT" caption={this.t("grdDeleteList.clmDate")} visible={true}/> 
-                                          
                             </NdGrid>
                         </div>
                     </div>

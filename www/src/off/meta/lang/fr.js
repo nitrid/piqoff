@@ -89,7 +89,7 @@ export const langFr =
         stk_04_001: "Gerer multi produit",
         stk_04_002: "Saisie retour",
         stk_04_003 : "Inventaire validé",
-        stk_04_004 :"Saisie groupé",
+        stk_04_004 :"SKT Operasyonu", // BAK
         cri: "Fournisseur - Client",
         cri_01: "Saisie",
         cri_02: "Listes",
@@ -1857,6 +1857,28 @@ export const langFr =
             btn01: "OK",
             msg: "Quantité Dépot Mis à jour ! ! Nouvelle Création Non Effectuée",
         },
+    },
+    stk_04_004: 
+    {
+        txtRef : "Stok",    // BAK
+        dtFirstdate : "İlk Tarih",    // BAK
+        dtLastDate : "Son Tarih",    // BAK
+        btnGet : "Getir",    // BAK
+        btnPrint : "Seçili Ürüne Etiket Bas",    // BAK
+        grdExpDateList:      // BAK
+        {    // BAK
+            clmQuantity : "Miktar",    // BAK
+            clmCode : "Kodu",    // BAK
+            clmName : "Adı",    // BAK
+            clmDiff : "Giriş tarihinden itibaren satılan"    // BAK
+        },    // BAK
+        popQuantity :     // BAK
+        {    // BAK
+            title : "Miktar Fiyat Girişi",    // BAK
+            txtQuantity : "Miktar",    // BAK
+            txtPrice : "Fiyat",    // BAK
+            btnSave : "Kaydet ve Yazdır"    // BAK
+        }
     },
     cri_01_001: // "Cari Tanımları"
     {

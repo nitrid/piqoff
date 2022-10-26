@@ -89,7 +89,7 @@ export const langTr =
         stk_04_001: "Toplu Stok Düzenleme",
         stk_04_002: "İade Operasyonları",
         stk_04_003 : "Sayım Kesinleştirme",
-        stk_04_004 :"Toplu İşlemler",
+        stk_04_004 :"SKT Operasyonu",
         cri: "Cari",
         cri_01: "Tanımlar",
         cri_02: "Listeler",
@@ -1857,6 +1857,28 @@ export const langTr =
             btn01: "Tamam",
             msg: " Depo Miktarları Güncel !! Yeni Kayıt Oluşturulmadı",
         },
+    },
+    stk_04_004: 
+    {
+        txtRef : "Stok",
+        dtFirstdate : "İlk Tarih",
+        dtLastDate : "Son Tarih",
+        btnGet : "Getir",
+        btnPrint : "Seçili Ürüne Etiket Bas",
+        grdExpDateList:  
+        {
+            clmQuantity : "Miktar",
+            clmCode : "Kodu",
+            clmName : "Adı",
+            clmDiff : "Giriş tarihinden itibaren satılan"
+        },
+        popQuantity : 
+        {
+            title : "Miktar Fiyat Girişi",
+            txtQuantity : "Miktar",
+            txtPrice : "Fiyat",
+            btnSave : "Kaydet ve Yazdır"
+        }
     },
     cri_01_001: // "Cari Tanımları"
     {
