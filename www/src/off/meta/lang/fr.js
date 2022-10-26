@@ -1858,27 +1858,34 @@ export const langFr =
             msg: "Quantité Dépot Mis à jour ! ! Nouvelle Création Non Effectuée",
         },
     },
-    stk_04_004: 
+    stk_04_004: // SKT operasyonu
     {
-        txtRef : "Stok",    // BAK
-        dtFirstdate : "İlk Tarih",    // BAK
-        dtLastDate : "Son Tarih",    // BAK
-        btnGet : "Getir",    // BAK
-        btnPrint : "Seçili Ürüne Etiket Bas",    // BAK
-        grdExpDateList:      // BAK
-        {    // BAK
-            clmQuantity : "Miktar",    // BAK
-            clmCode : "Kodu",    // BAK
-            clmName : "Adı",    // BAK
-            clmDiff : "Giriş tarihinden itibaren satılan"    // BAK
-        },    // BAK
-        popQuantity :     // BAK
-        {    // BAK
-            title : "Miktar Fiyat Girişi",    // BAK
-            txtQuantity : "Miktar",    // BAK
-            txtPrice : "Fiyat",    // BAK
-            btnSave : "Kaydet ve Yazdır"    // BAK
-        }
+        txtRef : "Stok",   // BAK
+        dtFirstdate : "İlk Tarih",   // BAK
+        dtLastDate : "Son Tarih",   // BAK
+        btnGet : "Getir",   // BAK
+        btnPrint : "Seçili Ürüne Etiket Bas",   // BAK
+        grdExpdateList:     // BAK
+        {   // BAK
+            clmQuantity : "Miktar",   // BAK
+            clmCode : "Kodu",   // BAK
+            clmName : "Adı",   // BAK
+            clmDiff : "Giriş tarihinden itibaren satılan"   // BAK
+        },   // BAK
+        popQuantity :    // BAK
+        {   // BAK
+            title : "Miktar Fiyat Girişi",   // BAK
+            txtQuantity : "Miktar",   // BAK
+            txtPrice : "Fiyat",   // BAK
+            btnSave : "Kaydet ve Yazdır"   // BAK
+        },   // BAK
+        pg_txtRef:   // BAK
+        {   // BAK
+            title: "Stok Seçimi",   // BAK
+            clmCode: "KODU",   // BAK
+            clmName: "ADI",   // BAK
+            clmStatus: "DURUM"   // BAK
+        },
     },
     cri_01_001: // "Cari Tanımları"
     {

@@ -1858,14 +1858,14 @@ export const langTr =
             msg: " Depo Miktarları Güncel !! Yeni Kayıt Oluşturulmadı",
         },
     },
-    stk_04_004: 
+    stk_04_004: // SKT operasyonu
     {
         txtRef : "Stok",
         dtFirstdate : "İlk Tarih",
         dtLastDate : "Son Tarih",
         btnGet : "Getir",
         btnPrint : "Seçili Ürüne Etiket Bas",
-        grdExpDateList:  
+        grdExpdateList:  
         {
             clmQuantity : "Miktar",
             clmCode : "Kodu",
@@ -1878,7 +1878,14 @@ export const langTr =
             txtQuantity : "Miktar",
             txtPrice : "Fiyat",
             btnSave : "Kaydet ve Yazdır"
-        }
+        },
+        pg_txtRef:
+        {
+            title: "Stok Seçimi",
+            clmCode: "KODU",
+            clmName: "ADI",
+            clmStatus: "DURUM"
+        },
     },
     cri_01_001: // "Cari Tanımları"
     {
