@@ -187,6 +187,8 @@ export const langFr =
         set_01_001 : "Taxe sucre",
         set_02 : "Réglage général",   // BAK
         set_02_001 : "Informations sur la société",   // BAK
+        set_03 : "Evrak Ayarları",   // BAK
+        set_03_001 : "Silinmiş Evraklar",   // BAK
         proces : "Saisie groupée",
         proces_01 : "Traitement Produit",
         proces_01_001 : "MAJ Famille produit",
@@ -204,6 +206,12 @@ export const langFr =
         login:"Valide",
         logout : "Annuler",
         selectUser : "Choix utilisateur",
+    },
+    msgDocDeleted : 
+    {   
+        title: "Dikkat",   // BAK
+        btn01: "Tamam",   // BAK
+        msg: "Bu Evrak Numarasıyla Silinmiş Evrak! Lütfen Yetkili İle Görüşün.."   // BAK
     },
     stk_01_001:  // "Yeni Stok Tanımlama" 
     {
@@ -7994,6 +8002,48 @@ export const langFr =
         validation:
         {
             notValid: "Veuillez remplir les champs obligatoires !",
+        },
+    },
+        set_03_001 : // Silinmiş Evraklar
+    {
+        cmbType : "Evrak Tipi",  // BAK
+        btnGet : "Evrakları Getir",  // BAK
+        btnUnlock : "Silinmiş Evrakı Tekrar Oluştur",  // BAK
+        mgsUnlock:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            btn02: "Vazgeç",   // BAK
+            msg: "Seçili evrakı tekrar oluşturmak istediğinize eminmisiniz ?"   // BAK
+        },
+        grdDeleteList : 
+        {
+            clmRef : "SERI",  // BAK
+            clmRefNo : "SIRA",  // BAK
+            clmCustomer : "CARI",  // BAK
+            clmDate : "TARIH"  // BAK
+        },
+        cmbTypeData : 
+        {
+            purchaseDispatch : "Alış İrsaliyesi",   // BAK
+            salesDispatch : "Satış İrsaliyesi",   // BAK
+            rebateDispatch : "İade İrsaliyesi",   // BAK
+            branchSaleDispatch : "Şube Satış İrsaliyesi",   // BAK
+            purchaseInvoice : "Alış Faturası",   // BAK
+            salesInvoice : "Satış Faturası",   // BAK
+            priceDifferenceInvoice : "Fiyat Farkı Faturası",   // BAK
+            rebateInvoice : "İade Faturası",   // BAK
+            branchSaleInvoice : "Şube Satış Faturası",   // BAK
+            purchaseOrder : "Alış Sipariş",   // BAK
+            salesOrder : "Satış Sipariş",   // BAK
+            purchaseOffer : "Alış Teklif",   // BAK
+            salesOffer : "Satış Sipariş",   // BAK
+        },
+        msgSuccess:
+        {
+            title: "Başarılı",  // BAK
+            btn01: "Tamam",  // BAK
+            msg: "Evrak Yeniden Oluşturuldu.."  // BAK
         },
     },
     pos_01_001 : // "Pos Cihaz Tanıtım",

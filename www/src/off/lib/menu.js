@@ -849,6 +849,19 @@ export const menu = (e) =>
                         }
                     ]
                 },
+                {
+                    id: 'set_03',
+                    text : e.t('menu.set_03'),//'Dokuman Ayarları',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'set_03_001',
+                            text: e.t('menu.set_03_001'),//'Silinmiş Evrak Operasyonları',
+                            path: 'setting/documentSetting/deletedDocOperations'
+                        }
+                    ]
+                },
             ]
         }
     ]

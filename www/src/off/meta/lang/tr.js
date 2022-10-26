@@ -187,6 +187,8 @@ export const langTr =
         set_01_001 : "Tax Sugar",
         set_02 : "Genel Ayarlar",
         set_02_001 : "Firma Bilgileri",
+        set_03 : "Evrak Ayarları",
+        set_03_001 : "Silinmiş Evraklar",
         proces : "Toplu işlemler",
         proces_01 : "Stok İşlemleri",
         proces_01_001 : "Ürün Grubu Güncelleme",
@@ -204,6 +206,12 @@ export const langTr =
         login:"Giriş",
         logout : "Çıkış",
         selectUser : "Kullanıcı Seçim",
+    },
+    msgDocDeleted : 
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Bu Evrak Numarasıyla Silinmiş Evrak! Lütfen Yetkili İle Görüşün.."
     },
     stk_01_001:  // "Yeni Stok Tanımlama"
     {
@@ -7994,6 +8002,48 @@ export const langTr =
         validation:
         {
             notValid: "Boş geçemezsiniz !",
+        },
+    },
+    set_03_001 : // Silinmiş Evraklar
+    {
+        cmbType : "Evrak Tipi",
+        btnGet : "Evrakları Getir",
+        btnUnlock : "Silinmiş Evrakı Tekrar Oluştur",
+        mgsUnlock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Seçili evrakı tekrar oluşturmak istediğinize eminmisiniz ?"
+        },
+        grdDeleteList : 
+        {
+            clmRef : "SERI",
+            clmRefNo : "SIRA",
+            clmCustomer : "CARI",
+            clmDate : "TARIH"
+        },
+        cmbTypeData : 
+        {
+            purchaseDispatch : "Alış İrsaliyesi",
+            salesDispatch : "Satış İrsaliyesi",
+            rebateDispatch : "İade İrsaliyesi",
+            branchSaleDispatch : "Şube Satış İrsaliyesi",
+            purchaseInvoice : "Alış Faturası",
+            salesInvoice : "Satış Faturası",
+            priceDifferenceInvoice : "Fiyat Farkı Faturası",
+            rebateInvoice : "İade Faturası",
+            branchSaleInvoice : "Şube Satış Faturası",
+            purchaseOrder : "Alış Sipariş",
+            salesOrder : "Satış Sipariş",
+            purchaseOffer : "Alış Teklif",
+            salesOffer : "Satış Sipariş",
+        },
+        msgSuccess:
+        {
+            title: "Başarılı",
+            btn01: "Tamam",
+            msg: "Evrak Yeniden Oluşturuldu.."
         },
     },
     pos_01_001 : // "Pos Cihaz Tanıtım",
