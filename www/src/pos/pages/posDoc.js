@@ -1164,7 +1164,7 @@ export default class posDoc extends React.PureComponent
                 let tmpSigned = "-"
                 if(this.posObj.dt()[0].SIGNATURE != '')
                 {
-                    tmpSigned = this.posObj.dt()[0].SIGNATURE.substring(3,4) + this.posObj.dt()[0].SIGNATURE.substring(7,8) + this.posObj.dt()[0].SIGNATURE.substring(13,14) + this.posObj.dt()[0].SIGNATURE.substring(19,20)
+                    tmpSigned = this.posObj.dt()[0].SIGNATURE.substring(2,3) + this.posObj.dt()[0].SIGNATURE.substring(6,7) + this.posObj.dt()[0].SIGNATURE.substring(12,13) + this.posObj.dt()[0].SIGNATURE.substring(18,19)
                 }
 
                 this.posObj.dt()[this.posObj.dt().length - 1].CERTIFICATE = this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + " - " + tmpSigned;
