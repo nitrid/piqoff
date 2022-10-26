@@ -159,7 +159,7 @@ export const langFr =
     ticketRect : "Ticket Rest. : ",
     amount : "Sous-total :",
     vat : "TVA :",
-    discount : "Remisé :",
+    discount : "Remise :",
     msgCollectForSale: 
     {
         title : "Attention",
