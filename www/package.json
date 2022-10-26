@@ -2,7 +2,6 @@
   "name": "piqsoft",
   "version": "1.0.0",
   "certificate": "(NF252) B9999",
-  "signed": "Wxi2",
   "description": "",
   "main": "index.js",
   "scripts": {
