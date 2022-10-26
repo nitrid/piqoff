@@ -35,7 +35,8 @@ export class posCls
             DELETED : false,            
             DESCRIPTION : '',
             CERTIFICATE : '',
-            ORDER_GUID : '00000000-0000-0000-0000-000000000000'
+            ORDER_GUID : '00000000-0000-0000-0000-000000000000',
+            SIGNATURE : ''
         }
 
         this.posSale = new posSaleCls();
@@ -78,12 +79,13 @@ export class posCls
                     "@TICKET = @PTICKET, " + 
                     "@STATUS = @PSTATUS, " +
                     "@CERTIFICATE = @PCERTIFICATE, " +
-                    "@ORDER_GUID = @PORDER_GUID ",
+                    "@ORDER_GUID = @PORDER_GUID, " +
+                    "@SIGNATURE = @PSIGNATURE ",
             param : ['PGUID:string|50','PCUSER:string|25','PFIRM:string|50','PDEVICE:string|25','PDEPOT:string|50','PTYPE:int','PDOC_DATE:date','PCUSTOMER:string|50',
                      'PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PTICKET:string|50','PSTATUS:int',
-                     'PCERTIFICATE:string|250','PORDER_GUID:string|50'],
+                     'PCERTIFICATE:string|250','PORDER_GUID:string|50','PSIGNATURE:string|max'],
             dataprm : ['GUID','CUSER','FIRM','DEVICE','DEPOT_GUID','TYPE','DOC_DATE','CUSTOMER_GUID','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','TICKET',
-                       'STATUS','CERTIFICATE','ORDER_GUID'],
+                       'STATUS','CERTIFICATE','ORDER_GUID','SIGNATURE'],
             local : 
             {
                 type : "insert",
