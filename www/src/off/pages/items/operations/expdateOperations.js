@@ -63,12 +63,12 @@ export default class expdateOperations extends React.PureComponent
             {
                 select : 
                 { 
-                    query :"SELECT *," 
-                    +"(QUANTITY-DIFF) AS REMAINDER,[dbo].[FN_PRICE_SALE](ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000') AS PRICE FROM " +
-                    "(SELECT *,ISNULL((SELECT TOP 1 REBATE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.CODE = ITEM_EXPDATE_VW_01.CUSTOMER_CODE),0) AS REBATE, " +
-                    "ISNULL((SELECT SUM(QUANTITY) FROM POS_SALE  WHERE POS_SALE.ITEM = ITEM_EXPDATE_VW_01.ITEM_GUID AND POS_SALE.DELETED = 0 AND POS_SALE.CDATE > ITEM_EXPDATE_VW_01.CDATE),0) AS DIFF " +
-                    "FROM [ITEM_EXPDATE_VW_01] WHERE ((ITEM_GUID = @ITEM) OR (@ITEM = '00000000-0000-0000-0000-000000000000' )) AND ((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) " + 
-                    " AND  ((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = ''))  AND ((EXP_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((EXP_DATE >= @LAST_DATE) OR (@LAST_DATE = '19700101'))) AS TMP WHERE QUANTITY - DIFF > 0 ",
+                    query :"SELECT *, " +
+                            "(QUANTITY-DIFF) AS REMAINDER,[dbo].[FN_PRICE_SALE](ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000') AS PRICE FROM " +
+                            "(SELECT *,ISNULL((SELECT TOP 1 REBATE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.CODE = ITEM_EXPDATE_VW_01.CUSTOMER_CODE),0) AS REBATE, " +
+                            "ISNULL((SELECT SUM(QUANTITY) FROM POS_SALE  WHERE POS_SALE.ITEM = ITEM_EXPDATE_VW_01.ITEM_GUID AND POS_SALE.DELETED = 0 AND POS_SALE.CDATE > ITEM_EXPDATE_VW_01.CDATE),0) AS DIFF " +
+                            "FROM [ITEM_EXPDATE_VW_01] WHERE ((ITEM_GUID = @ITEM) OR (@ITEM = '00000000-0000-0000-0000-000000000000' )) AND ((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) " + 
+                            " AND  ((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = ''))  AND ((EXP_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((EXP_DATE >= @LAST_DATE) OR (@LAST_DATE = '19700101'))) AS TMP WHERE QUANTITY - DIFF > 0 ",
                     param : ['ITEM:string|50','CUSTOMER_CODE:string|50','MAIN_GRP:string|25','FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.txtRef.GUID,this.txtCustomerCode.CODE,this.cmbItemGroup.value,this.dtFirstdate.value,this.dtLastDate.value]
                 },

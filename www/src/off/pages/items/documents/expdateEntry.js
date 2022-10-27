@@ -557,6 +557,7 @@ export default class expdateEntry extends React.Component
                         >
                             <Scrolling mode="standart" />
                             <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
+                            <Column dataField="CUSER_NAME" caption={this.t("grdExpDate.clmCuser")} width={100} allowEditing={false}/>
                             <Column dataField="ITEM_NAME" caption={this.t("grdExpDate.clmName")} width={250} />
                             <Column dataField="ITEM_CODE" caption={this.t("grdExpDate.clmCode")} width={150}/>
                             <Column dataField="QUANTITY" caption={this.t("grdExpDate.clmQuantity")} width={150}/>

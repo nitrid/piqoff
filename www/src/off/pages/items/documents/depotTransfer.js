@@ -1184,6 +1184,7 @@ export default class depotTransfer extends React.PureComponent
                                         <Export fileName={this.lang.t("menu.stk_02_002")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} defaultSortOrder="desc"/>
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdTrnsfItems.clmCreateDate")} width={150} allowEditing={false}/>
+                                        <Column dataField="CUSER_NAME" caption={this.t("grdTrnsfItems.clmCuser")} width={100} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdTrnsfItems.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdTrnsfItems.clmItemName")} width={350} />
                                         <Column dataField="QUANTITY" caption={this.t("grdTrnsfItems.clmQuantity")} dataType={'number'} width={150}/>

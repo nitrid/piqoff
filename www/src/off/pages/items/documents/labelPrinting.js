@@ -1314,6 +1314,7 @@ export default class labelPrinting extends React.PureComponent
                                         <Scrolling mode="standard" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.stk_02_004")} enabled={true} allowExportSelectedData={true} />
+                                        <Column dataField="CUSER_NAME" caption={this.t("grdLabelQueue.clmCuser")} width={100} allowEditing={false}/>
                                         <Column dataField="CODE" caption={this.t("grdLabelQueue.clmItemCode")} width={110} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="BARCODE" caption={this.t("grdLabelQueue.clmBarcode")} width={130} allowEditing={false} />
                                         <Column dataField="NAME" caption={this.t("grdLabelQueue.clmItemName")} width={450} />

@@ -71,6 +71,11 @@ export default class Navigation extends React.PureComponent
         await this.core.util.waitUntil(0)
         this.menu= tmpMenu
         this.setState({menu:tmpMenu})
+        App.instance.menuClick(
+        {
+            text: "PiqSoft",
+            path: 'main.js',
+        })
     }
     async mergeMenu(tmpMenu,tmpMenuData)
     {

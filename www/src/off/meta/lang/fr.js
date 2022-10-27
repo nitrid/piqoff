@@ -58,6 +58,12 @@ export const langFr =
         clmTicketId : "Numéro de ticket",
         clmDescription :"Motif",
     },
+    msgExpUpcoming : 
+    {
+        title: "Dikkat",   // BAK
+        btn01: "Tamam",   // BAK
+        msg : "Son kullanma tarihi yaklaşan ürünler var lütfen kontrol ediniz !"   // BAK
+    },
     menu:
     {
         stk: "Produit",                
@@ -748,6 +754,7 @@ export const langFr =
             clmCustomerName :"Compte Fournisseur",
             clmMulticode : "FRN.Code",
             clmBarcode : "Code barre",
+            clmUser : "Utilisateur",
         },
         popPassword : 
         {
@@ -901,7 +908,8 @@ export const langFr =
             clmItemName: "Nom",
             clmQuantity : "Quantité",
             clmCreateDate: "Date d'Enregistrement",
-            clmDescription :"Motif"
+            clmDescription :"Motif",
+            clmUser : "Utilisateur",
         },
         popPassword : 
         {
@@ -1053,6 +1061,7 @@ export const langFr =
             clmCreateDate: "Date d'Enregistrement",
             clmDescription :"Motif",
             clmCostPrice : "Prix de Revient" ,
+            clmUser : "Utilisateur",
         },
         pg_dispatchGrid : 
         {
@@ -1267,6 +1276,7 @@ export const langFr =
             clmUnderUnitPrice : "Prix Contenu Unité" ,
             clmDescription :"Motif",
             clmOrgins : "Origine",
+            clmUser : "Utilisateur",
         },
         msgDocValid:
         {
@@ -1411,7 +1421,8 @@ export const langFr =
             clmItemName: "Nom",
             clmQuantity : "Quantité",
             clmCreateDate: "Date d'Enregistrement",
-            clmDescription :"Motif"
+            clmDescription :"Motif",
+            clmUser : "Utilisateur",
         },
         popPassword : 
         {
@@ -1568,7 +1579,8 @@ export const langFr =
             clmCode: "Code",
             clmDate: "DLC",
             clmQuantity : "Quantité",
-            clmDescription : "Motif"
+            clmDescription : "Motif",
+            clmUser : "Utilisateur",
         },
         msgDocValid:
         {

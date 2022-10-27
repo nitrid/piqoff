@@ -58,6 +58,12 @@ export const langTr =
         clmTicketId : "Fiş No",
         clmDescription :"Açıklama",
     },
+    msgExpUpcoming : 
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg : "Son kullanma tarihi yaklaşan ürünler var lütfen kontrol ediniz !"
+    },
     menu:
     {
         stk: "Stok",                
@@ -748,6 +754,7 @@ export const langTr =
             clmCustomerName :"Tedarikci Cari",
             clmMulticode : "Tedarikçi Kodu",
             clmBarcode : "Barkod",
+            clmCuser : "Kullanıcı"
         },
         popPassword : 
         {
@@ -901,7 +908,8 @@ export const langTr =
             clmItemName: "Adı",
             clmQuantity : "Adet",
             clmCreateDate: "Kayıt Tarihi",
-            clmDescription :"Açıklama"
+            clmDescription :"Açıklama",
+            clmCuser : "Kullanıcı"
         },
         popPassword : 
         {
@@ -1053,6 +1061,7 @@ export const langTr =
             clmCreateDate: "Kayıt Tarihi",
             clmDescription :"Açıklama",
             clmCostPrice : "Maliyet",
+            clmCuser : "Kullanıcı"
         },
         pg_dispatchGrid : 
         {
@@ -1266,7 +1275,8 @@ export const langTr =
             clmUnderUnit : "Alt Birim",
             clmUnderUnitPrice : "Alt Birim Fiyatı",
             clmDescription :"Açıklama",
-            clmOrgins : "Ülke"
+            clmOrgins : "Ülke",
+            clmCuser : "Kullanıcı"
         },
         msgDocValid:
         {
@@ -1411,7 +1421,8 @@ export const langTr =
             clmItemName: "Adı",
             clmQuantity : "Adet",
             clmCreateDate: "Kayıt Tarihi",
-            clmDescription :"Açıklama"
+            clmDescription :"Açıklama",
+            clmCuser : "Kullanıcı"
         },
         popPassword : 
         {
@@ -1574,7 +1585,8 @@ export const langTr =
             clmCode: "Kodu",
             clmDate: "SKT Tarihi",
             clmQuantity : "Miktar",
-            clmDescription : "Açıklama"
+            clmDescription : "Açıklama",
+            clmCuser : "Kullanıcı"
         },
         msgDocValid:
         {

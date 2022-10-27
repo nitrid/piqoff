@@ -1220,6 +1220,7 @@ export default class itemCount extends React.PureComponent
                                         <Export fileName={this.lang.t("menu.stk_02_001")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} defaultSortOrder="desc"/>
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdItemCount.clmCreateDate")} width={200} visible={true} allowEditing={false}/>
+                                        <Column dataField="CUSER_NAME" caption={this.t("grdItemCount.clmCuser")} width={100} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdItemCount.clmItemCode")} width={150} visible={true} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="BARCODE" caption={this.t("grdItemCount.clmBarcode")} width={150} visible={true} allowEditing={false}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdItemCount.clmItemName")} width={350} visible={true} allowEditing={false}/>
