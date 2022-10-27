@@ -1458,7 +1458,7 @@ export default class salesOrder extends React.PureComponent
                                                 this.txtPopQuantity.value = ''
                                                 setTimeout(async () => 
                                                 {
-                                                this.txtPopQuantity.focus()
+                                                    this.txtPopQuantity.focus()
                                                 }, 700);
                                                 await this.msgQuantity.show().then(async (e) =>
                                                 {

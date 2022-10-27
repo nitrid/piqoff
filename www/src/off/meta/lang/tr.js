@@ -768,12 +768,12 @@ export const langTr =
             btn02: "Vazgeç",
             msg: "Kayıt etmek istediğinize eminmisiniz !"
         },
-        msgQuantiy:
+        msgQuantity:
         {
             title: "Dikkat",
             btn01: "Ekle",
             btn02: "Vazgeç",
-            msg: "Lüten Miktar Giriniz !"
+            msg: "Lütfen Miktar Giriniz !"
         },
         msgSaveResult:
         {
@@ -1550,6 +1550,7 @@ export const langTr =
             clmCode: "Kodu",
             clmDate: "SKT Tarihi",
             clmQuantity : "Miktar",
+            clmDescription : "Açıklama"
         },
         msgDocValid:
         {
@@ -1619,6 +1620,12 @@ export const langTr =
             clmName : "STOK ADI",
             clmMulticode : "TEDARİKÇİ KODU",
             clmBarcode : "BARKOD"
+        },
+        msgQuantity:
+        {
+            title: "Dikkat",
+            btn01: "Ekle",
+            msg: "Lütfen Miktar ve Tarih Giriniz !"
         },
     },
     stk_03_001 :  // "Stok Listesi"

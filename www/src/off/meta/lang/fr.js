@@ -77,7 +77,7 @@ export const langFr =
         stk_02_002: "Transfert interne dépot/magasin",
         stk_02_003: "Sortie perte",
         stk_02_004: "Imprimer étiquette",
-        stk_02_005: "Liste produit retour",
+        stk_02_005: "Saisie multi produit retour",
         stk_02_006: "Imprimer étiquette spéciale",
         stk_02_007: "Entrée DLC",
         stk_03_001: "Liste Produit",
@@ -697,7 +697,7 @@ export const langFr =
             msg : "Le code de service que vous avez saisi est enregistré dans le système !"
         },
         chkActive: "Actif",
-        cmbTax : "Impôt",
+        cmbTax : "TVA %",
         msgNotDelete : 
         {
             title: "Dikkat", // BAK
@@ -768,7 +768,7 @@ export const langFr =
             btn02: "Abandonne",
             msg: "Etes-vous sur de vouloir enregistrer !" ,
         },
-        msgQuantiy:
+        msgQuantity:
         {
             title: "Attention",
             btn01: "Ajouter",
@@ -1544,6 +1544,7 @@ export const langFr =
             clmCode: "Code",
             clmDate: "DLC",
             clmQuantity : "Quantité",
+            clmDescription : "Motif"
         },
         msgDocValid:
         {
@@ -1614,6 +1615,12 @@ export const langFr =
             clmMulticode : "TEDARİKÇİ KODU",    // BAK
             clmBarcode : "BARKOD"    // BAK
         },
+        msgQuantity:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Ekle",   // BAK
+            msg: "Lütfen Miktar ve Tarih Giriniz !"   // BAK
+        }, 
     },
     stk_03_001 :  // "Stok Listesi" 
     {
@@ -7430,7 +7437,7 @@ export const langFr =
         txtAmount : "Total",
         txtDiscount : "Promotion",
         txtMargin : "Marge",
-        txtVat : "Tva",
+        txtVat : "TVA",
         txtTotal : "Total général",
         dtShipDate :"La date d'expédition",
         getDispatch : "Obtenir la lettre de voiture",
@@ -8041,7 +8048,7 @@ export const langFr =
         txtApeCode : "App Code",
         txtTaxOffice : "Tax Office",
         txtTaxNo : "Tax No",
-        txtIntVatNo : "Int. Vat No",
+        txtIntVatNo : "Int. Tax No",
         txtSirenNo : "Siren No",
         txtRSC : "RSC",
         txtCapital : "Capital",

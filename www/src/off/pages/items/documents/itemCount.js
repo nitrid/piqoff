@@ -383,12 +383,12 @@ export default class itemCount extends React.PureComponent
     {
         let tmpQuantity = 1
         let tmpBreak = false
-        await this.msgQuantiy.show().then(async (e) =>
+        await this.msgQuantity.show().then(async (e) =>
         {
             if(e == 'btn01')
             {
                 tmpQuantity = this.txtQuantity.value
-                this.msgQuantiy.hide()
+                this.msgQuantity.hide()
             }
             else if(e == 'btn02')
             {
@@ -397,7 +397,7 @@ export default class itemCount extends React.PureComponent
                 {
                     await this.grdItemCount.devGrid.deleteRow(this.countObj.dt().length - 1)
                 }
-                this.msgQuantiy.hide()
+                this.msgQuantity.hide()
                 this.txtBarcode.focus()
             }
         })
@@ -1277,14 +1277,14 @@ export default class itemCount extends React.PureComponent
                     </NdPopGrid>
                 </ScrollView>  
                 {/* Miktar Dialog  */}
-                <NdDialog id={"msgQuantiy"} container={"#root"} parent={this}
+                <NdDialog id={"msgQuantity"} container={"#root"} parent={this}
                     position={{of:'#root'}} 
                     showTitle={true} 
-                    title={this.t("msgQuantiy.title")} 
+                    title={this.t("msgQuantity.title")} 
                     showCloseButton={false}
                     width={"500px"}
                     height={"250px"}
-                    button={[{id:"btn01",caption:this.t("msgQuantiy.btn01"),location:'before'},{id:"btn02",caption:this.t("msgQuantiy.btn02"),location:'after'}]}
+                    button={[{id:"btn01",caption:this.t("msgQuantity.btn01"),location:'before'},{id:"btn02",caption:this.t("msgQuantity.btn02"),location:'after'}]}
                     onShowed={()=>
                     {
                         this.txtQuantity.setState({value:1})
@@ -1295,7 +1295,7 @@ export default class itemCount extends React.PureComponent
                     >
                         <div className="row">
                             <div className="col-12 py-2">
-                                <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgQuantiy.msg")}</div>
+                                <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgQuantity.msg")}</div>
                             </div>
                             <div className="col-12 py-2">
                             <Form>

@@ -98,22 +98,10 @@ export default class expdateEntry extends React.Component
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
     }
-    async addItem(pData,pIndex)
+    async addItem(pData,pIndex,pQuantity,pDate)
     {
         if(pData.CODE  == '')
         {
-            return
-        }
-        if(this.txtPopQuantity.value == 0)
-        {
-            let tmpConfObj = 
-            {
-                id:'msgZeroQuantity',showTitle:true,title:this.t("msgZeroQuantity.title"),showCloseButton:true,width:'350px',height:'200px',
-                button:[{id:"btn01",caption:this.t("msgZeroQuantity.btn01"),location:'after'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgZeroQuantity.msg")}</div>)
-            }
-            await dialog(tmpConfObj);
-            this.txtPopQuantity.focus()
             return
         }
         for (let i = 0; i < this.expObj.dt().length; i++) 
@@ -142,8 +130,12 @@ export default class expdateEntry extends React.Component
         this.expObj.dt()[pIndex].ITEM_GUID = pData.GUID 
         this.expObj.dt()[pIndex].ITEM_CODE = pData.CODE 
         this.expObj.dt()[pIndex].ITEM_NAME = pData.NAME 
-        this.expObj.dt()[pIndex].QUANTITY = this.txtPopQuantity.value
-        this.expObj.dt()[pIndex].EXP_DATE = this.dtPopDate.value
+        this.expObj.dt()[pIndex].QUANTITY = pQuantity
+        this.expObj.dt()[pIndex].EXP_DATE = pDate
+        if(this.cmbDepot.value !=  '')
+        {
+            this.expObj.dt()[pIndex].DEPOT = this.cmbDepot.value
+        }
         console.log(111)
     }
     render()
@@ -390,7 +382,6 @@ export default class expdateEntry extends React.Component
                                 dt={{data:this.expObj.dt('ITEM_EXPDATE'),field:"DEPOT"}}  
                                 displayExpr="NAME"                       
                                 valueExpr="GUID"
-                                value=""
                                 searchEnabled={true}
                                 notRefresh = {true}
                                 onValueChanged={(async()=>
@@ -400,9 +391,6 @@ export default class expdateEntry extends React.Component
                                 param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                 access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                 >
-                                    <Validator validationGroup={"frmExpDate" + this.tabIndex}>
-                                        <RequiredRule message={this.t("validDepot")} />
-                                    </Validator> 
                                 </NdSelectBox>
                             </Item>
                             {/* dtDocDate */}
@@ -442,7 +430,6 @@ export default class expdateEntry extends React.Component
                                                     let tmpExpItems = {...this.expObj.empty}
                                                     tmpExpItems.REF = this.txtRef.value
                                                     tmpExpItems.REF_NO = this.txtRefno.value
-                                                    tmpExpItems.DEPOT = this.cmbDepot.value
                                                     tmpExpItems.DOC_DATE = this.dtDocDate.value
                                                     this.txtRef.readOnly = true
                                                     this.txtRefno.readOnly = true
@@ -458,31 +445,27 @@ export default class expdateEntry extends React.Component
 
                                                         if(data.length == 1)
                                                         {
-                                                            await this.addItem(data[0],this.expObj.dt().length -1)
-                                                        }
-                                                        else if(data.length > 1)
-                                                        {
-                                                            for (let i = 0; i < data.length; i++) 
+                                                            this.txtMsgQuantity.value =  1
+                                                            this.dtMsgDate.value =  moment(new Date()).format("YYYY-MM-DD"),
+                                                            setTimeout(async () => 
                                                             {
-                                                                if(i == 0)
-                                                                {
-                                                                    this.addItem(data[i],this.expObj.dt().length - 1)
-                                                                }
-                                                                else
+                                                                this.txtMsgQuantity.focus()
+                                                            }, 500);
+                                                            await this.msgQuantity.show().then(async (e) =>
+                                                            {
+                                                                if(typeof this.expObj.dt()[this.expObj.dt().length - 1] == 'undefined' || this.expObj.dt()[this.expObj.dt().length - 1].CODE != '')
                                                                 {
                                                                     let tmpExpItems = {...this.expObj.empty}
                                                                     tmpExpItems.REF = this.txtRef.value
                                                                     tmpExpItems.REF_NO = this.txtRefno.value
-                                                                    tmpExpItems.DEPOT = this.cmbDepot.value
                                                                     tmpExpItems.DOC_DATE = this.dtDocDate.value
                                                                     this.txtRef.readOnly = true
                                                                     this.txtRefno.readOnly = true
                                                                     this.expObj.addEmpty(tmpExpItems)
-
-                                                                    await this.core.util.waitUntil(100)
-                                                                    this.addItem(data[i],this.expObj.dt().length - 1)
                                                                 }
-                                                            }
+                                                            
+                                                                this.addItem(data[0],this.expObj.dt().length -1,this.txtMsgQuantity.value,this.dtMsgDate.value)
+                                                            })
                                                         }
                                                     }
                                                 }
@@ -492,19 +475,6 @@ export default class expdateEntry extends React.Component
                                 }
                                 onEnterKey={(async(e)=>
                                 {
-                                    if(this.cmbDepot.value == '')
-                                    {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
-                                        }
-                                        
-                                        await dialog(tmpConfObj);
-                                        this.txtBarcode.setState({value:""})
-                                        return
-                                    }
                                     let tmpQuery = 
                                     {   query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS MULTICODE,  " + 
                                         "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
@@ -516,19 +486,28 @@ export default class expdateEntry extends React.Component
                                     this.txtBarcode.setState({value:""})
                                     if(tmpData.result.recordset.length > 0)
                                     {
-                                        if(typeof this.expObj.dt()[this.expObj.dt().length - 1] == 'undefined' || this.expObj.dt()[this.expObj.dt().length - 1].CODE != '')
+                                        this.txtMsgQuantity.value =  1
+                                        this.dtMsgDate.value =  moment(new Date()).format("YYYY-MM-DD"),
+                                        setTimeout(async () => 
                                         {
-                                            let tmpExpItems = {...this.expObj.empty}
-                                            tmpExpItems.REF = this.txtRef.value
-                                            tmpExpItems.REF_NO = this.txtRefno.value
-                                            tmpExpItems.DEPOT = this.cmbDepot.value
-                                            tmpExpItems.DOC_DATE = this.dtDocDate.value
-                                            this.txtRef.readOnly = true
-                                            this.txtRefno.readOnly = true
-                                            this.expObj.addEmpty(tmpExpItems)
-                                        }
+                                            this.txtMsgQuantity.focus()
+                                        }, 500);
+                                        await this.msgQuantity.show().then(async (e) =>
+                                        {
+                                            if(typeof this.expObj.dt()[this.expObj.dt().length - 1] == 'undefined' || this.expObj.dt()[this.expObj.dt().length - 1].CODE != '')
+                                            {
+                                                let tmpExpItems = {...this.expObj.empty}
+                                                tmpExpItems.REF = this.txtRef.value
+                                                tmpExpItems.REF_NO = this.txtRefno.value
+                                                tmpExpItems.DOC_DATE = this.dtDocDate.value
+                                                this.txtRef.readOnly = true
+                                                this.txtRefno.readOnly = true
+                                                this.expObj.addEmpty(tmpExpItems)
+                                            }
                                         
-                                        this.addItem(tmpData.result.recordset[0],this.expObj.dt().length - 1)
+                                            this.addItem(tmpData.result.recordset[0],this.expObj.dt().length - 1,this.txtMsgQuantity.value,this.dtMsgDate.value)
+                                        })
+                                      
                                     }
                                     else
                                     {
@@ -592,6 +571,7 @@ export default class expdateEntry extends React.Component
                                 
                                 return
                             }}/>
+                             <Column dataField="DESCRIPTION" caption={this.t("grdExpDate.clmDescription")} width={150}/>
                         </NdGrid>
                     </Item>
                 </Form>
@@ -693,7 +673,7 @@ export default class expdateEntry extends React.Component
                                                         {
                                                             if(data.length == 1)
                                                             {
-                                                                this.addItem(data[0],this.expObj.dt().length - 1)
+                                                                this.addItem(data[0],this.expObj.dt().length - 1,this.txtPopQuantity.value,this.dtPopDate.value)
                                                             }
                                                         }
                                                         return
@@ -702,10 +682,9 @@ export default class expdateEntry extends React.Component
                                                 let tmpExpItems = {...this.expObj.empty}
                                                 tmpExpItems.REF = this.txtRef.value
                                                 tmpExpItems.REF_NO = this.txtRefno.value
-                                                tmpExpItems.DEPOT = this.cmbDepot.value
                                                 tmpExpItems.DOC_DATE = this.dtDocDate.value
                                                 this.expObj.addEmpty(tmpExpItems)
-                                                await this.addItem(this.PopGrdItemData[0],this.expObj.dt().length - 1)
+                                                await this.addItem(this.PopGrdItemData[0],this.expObj.dt().length - 1,this.txtPopQuantity.value,this.dtPopDate.value)
                                                 this.PopGrdItemData = [];
                                                 this.popItems.hide();
                                             }
@@ -791,6 +770,44 @@ export default class expdateEntry extends React.Component
                 <Column dataField="CODE" caption={this.t("pg_txtBarcode.clmCode")} width={150} />
                 <Column dataField="NAME" caption={this.t("pg_txtBarcode.clmName")} width={300} defaultSortOrder="asc" />
             </NdPopGrid>
+            {/* Miktar Dialog  */}
+            <NdDialog id={"msgQuantity"} container={"#root"} parent={this}
+                position={{of:'#root'}} 
+                showTitle={true} 
+                title={this.t("msgQuantity.title")} 
+                showCloseButton={false}
+                width={"350px"}
+                height={"300px"}
+                button={[{id:"btn01",caption:this.t("msgQuantity.btn01"),location:'after'}]}
+                >
+                    <div className="row">
+                        <div className="col-12 py-2">
+                            <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgQuantity.msg")}</div>
+                        </div>
+                        <div className="col-12 py-2">
+                        <Form>
+                            {/* checkCustomer */}
+                            <Item>
+                                <Label text={this.t("popItems.txtPopItemsQuantity")} alignment="right" />
+                                <NdNumberBox id="txtMsgQuantity" parent={this} simple={true} 
+                                onEnterKey={(async(e)=>
+                                {
+                                    this.msgQuantity._onClick()
+                                }).bind(this)} 
+                                >
+                            </NdNumberBox>
+                            </Item>
+                            <Item>
+                                <Label text={this.t("popItems.dtPopDate")} alignment="right" />
+                                <NdDatePicker simple={true}  parent={this} id={"dtMsgDate"}/>
+                            </Item>
+                        </Form>
+                    </div>
+                    </div>
+                    <div className='row'>
+                    
+                    </div>
+            </NdDialog>  
         </ScrollView>
         )
     }

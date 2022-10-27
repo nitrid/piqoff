@@ -1560,6 +1560,7 @@ export class itemExpDateCls
             ITEM_NAME : '',
             QUANTITY : 0,
             EXP_DATE : moment(new Date()).format("YYYY-MM-DD"),
+            DESCRIPTION : '',            
         }
         
         this._initDs();
@@ -1585,9 +1586,11 @@ export class itemExpDateCls
                     "@DEPOT = @PDEPOT, " + 
                     "@ITEM_GUID = @PITEM_GUID, " + 
                     "@QUANTITY = @PQUANTITY, " + 
-                    "@EXP_DATE = @PEXP_DATE " ,
-            param : ['PGUID:string|50','PCUSER:string|25','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PDEPOT:string|50','PITEM_GUID:string|50','PQUANTITY:float','PEXP_DATE:date'],
-            dataprm : ['GUID','CUSER','REF','REF_NO','DOC_DATE','DEPOT','ITEM_GUID','QUANTITY','EXP_DATE']
+                    "@EXP_DATE = @PEXP_DATE, " +
+                    "@DESCRIPTION = @PDESCRIPTION ",
+            param : ['PGUID:string|50','PCUSER:string|25','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PDEPOT:string|50','PITEM_GUID:string|50','PQUANTITY:float',
+            'PEXP_DATE:date','PDESCRIPTION:string|250'],
+            dataprm : ['GUID','CUSER','REF','REF_NO','DOC_DATE','DEPOT','ITEM_GUID','QUANTITY','EXP_DATE','DESCRIPTION']
         } 
         tmpDt.updateCmd = 
         {
@@ -1600,9 +1603,11 @@ export class itemExpDateCls
                     "@DEPOT = @PDEPOT, " + 
                     "@ITEM_GUID = @PITEM_GUID, " + 
                     "@QUANTITY = @PQUANTITY, " + 
-                    "@EXP_DATE = @PEXP_DATE " ,
-            param : ['PGUID:string|50','PCUSER:string|25','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PDEPOT:string|50','PITEM_GUID:string|50','PQUANTITY:float','PEXP_DATE:date'],
-            dataprm : ['GUID','CUSER','REF','REF_NO','DOC_DATE','DEPOT','ITEM_GUID','QUANTITY','EXP_DATE']
+                    "@EXP_DATE = @PEXP_DATE, " +
+                    "@DESCRIPTION = @PDESCRIPTION ",
+            param : ['PGUID:string|50','PCUSER:string|25','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PDEPOT:string|50','PITEM_GUID:string|50','PQUANTITY:float',
+            'PEXP_DATE:date','PDESCRIPTION:string|250'],
+            dataprm : ['GUID','CUSER','REF','REF_NO','DOC_DATE','DEPOT','ITEM_GUID','QUANTITY','EXP_DATE','DESCRIPTION']
         } 
         tmpDt.deleteCmd = 
         {
