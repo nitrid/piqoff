@@ -1011,6 +1011,14 @@ export const langTr =
             clmMulticode : "TEDARİKÇİ KODU",
             clmBarcode : "BARKOD"
         },
+        msgQuantity:
+        {
+            title: "Dikkat",
+            btn01: "Ekle",
+            btn02: "Vazgeç",
+            msg: "Lütfen Miktar Giriniz !"
+        },
+        txtQuantity : "Miktar",
     },
     stk_02_003 : // "Kayıp Ürün Çıkışı"
     {
@@ -1197,6 +1205,14 @@ export const langTr =
             btn01: "Evrağa Git",
             msg: "Evrak Bulundu"
         },
+        msgQuantity:
+        {
+            title: "Dikkat",
+            btn01: "Ekle",
+            btn02: "Vazgeç",
+            msg: "Lütfen Miktar Giriniz !"
+        },
+        txtQuantity : "Miktar",
     },
     stk_02_004 : //Etiket Bas"
     {
@@ -1510,6 +1526,14 @@ export const langTr =
             btn01: "Evrağa Git",
             msg: "Evrak Bulundu"
         },
+        msgQuantity:
+        {
+            title: "Dikkat",
+            btn01: "Ekle",
+            btn02: "Vazgeç",
+            msg: "Lütfen Miktar Giriniz !"
+        },
+        txtQuantity : "Miktar",
     },
     stk_02_007 : // "SKT Girişi",
     {

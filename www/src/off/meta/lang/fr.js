@@ -1011,6 +1011,14 @@ export const langFr =
             clmMulticode : "Sélection Document",
             clmBarcode : "Code Barre"
         },
+        msgQuantity:
+        {
+            title: "Attention",
+            btn01: "Ajouter",
+            btn02: "Abandonne",
+            msg: "Veuillez Saisir la Quantité !" ,
+        },
+        txtQuantity :"Quantité",
     },
     stk_02_003 : // "Kayıp Ürün Çıkışı"
     {
@@ -1197,6 +1205,14 @@ export const langFr =
             btn01: "Aller au document",
             msg: "Document trouvé !"
         },
+        msgQuantity:
+        {
+            title: "Attention",
+            btn01: "Ajouter",
+            btn02: "Abandonne",
+            msg: "Veuillez Saisir la Quantité !" ,
+        },
+        txtQuantity :"Quantité",
     },
     stk_02_004 : //"Etiket Bas"
     {
@@ -1504,6 +1520,14 @@ export const langFr =
             clmMulticode : "Sélection Document",
             clmBarcode : "Code Barre"
         },
+        msgQuantity:
+        {
+            title: "Attention",
+            btn01: "Ajouter",
+            btn02: "Abandonne",
+            msg: "Veuillez Saisir la Quantité !" ,
+        },
+        txtQuantity :"Quantité",
     },
     stk_02_007 : // "SKT Girişi", // BAK
     {

@@ -330,8 +330,12 @@ export default class rebateDoc extends React.PureComponent
             )
         }
     }
-    async addItem(pData,pIndex)
+    async addItem(pData,pIndex,pQuantity)
     {
+        if(typeof pQuantity == 'undefined')
+        {
+            pQuantity = 1
+        }
         App.instance.setState({isExecute:true})
         if(typeof this.quantityControl != 'undefined' && this.quantityControl ==  true)
         {
@@ -377,7 +381,7 @@ export default class rebateDoc extends React.PureComponent
     
                         if(e == 'btn01')
                         {
-                            this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + 1
+                            this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + pQuantity
                             this._calculateTotal()
                             await this.grdRebItems.devGrid.deleteRow(0)
                             if(this.checkCombine.value == true)
@@ -404,7 +408,7 @@ export default class rebateDoc extends React.PureComponent
                 }
                 else if(this.combineNew == false)
                 {
-                    this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + 1
+                    this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + pQuantity
                     this._calculateTotal()
                     await this.grdRebItems.devGrid.deleteRow(0)
                     return
@@ -418,6 +422,7 @@ export default class rebateDoc extends React.PureComponent
         this.docObj.docItems.dt()[pIndex].COST_PRICE = 0
         this.docObj.docItems.dt()[pIndex].DISCOUNT = 0
         this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
+        this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
         App.instance.setState({isExecute:false})
     }
     async checkRow()
@@ -470,7 +475,7 @@ export default class rebateDoc extends React.PureComponent
                                         }
                                         if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                         {
-                                            await this.grdRebItems.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                            await this.grdRebItems.devGrid.deleteRow(0)
                                         }
                                         if(e.validationGroup.validate().status == "valid")
                                         {
@@ -562,7 +567,7 @@ export default class rebateDoc extends React.PureComponent
                                             this.frmDocItems.option('disabled',true)
                                             if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
-                                                await this.grdRebItems.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                                await this.grdRebItems.devGrid.deleteRow(0)
                                             }
                                             if((await this.docObj.save()) == 0)
                                             {                                                    
@@ -940,25 +945,31 @@ export default class rebateDoc extends React.PureComponent
                                         {
                                             this.combineControl = true
                                             this.combineNew = false 
-                                            if(typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] == 'undefined' || this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].CODE != '')
+                                            await this.msgQuantity.show().then(async (e) =>
                                             {
-                                                let tmpDocItems = {...this.docObj.docItems.empty}
-                                                tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                                                tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                                                tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                                                tmpDocItems.REF = this.docObj.dt()[0].REF
-                                                tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                                                tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                                                tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                                                this.txtRef.readOnly = true
-                                                this.txtRefno.readOnly = true
-                                                this.docObj.docItems.addEmpty(tmpDocItems)
-                                            }
-                                            await this.addItem(tmpData.result.recordset[0],this.docObj.docItems.dt().length - 1)
+                                                if(e == 'btn01')
+                                                {
+                                                    if(typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] == 'undefined' || this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].CODE != '')
+                                                    {
+                                                        let tmpDocItems = {...this.docObj.docItems.empty}
+                                                        tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                                                        tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                                                        tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                        tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                                                        tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                                                        tmpDocItems.REF = this.docObj.dt()[0].REF
+                                                        tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                                                        tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                        tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                                                        tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                        tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                                                        this.txtRef.readOnly = true
+                                                        this.txtRefno.readOnly = true
+                                                        this.docObj.docItems.addEmpty(tmpDocItems)
+                                                    }
+                                                    await this.addItem(tmpData.result.recordset[0],this.docObj.docItems.dt().length - 1,this.txtQuantity.value)
+                                                }
+                                            });
                                         }
                                         else
                                         {
@@ -1408,6 +1419,47 @@ export default class rebateDoc extends React.PureComponent
                         <Column dataField="CODE" caption={this.t("pg_txtBarcode.clmCode")} width={150} />
                         <Column dataField="NAME" caption={this.t("pg_txtBarcode.clmName")} width={300} defaultSortOrder="asc" />
                     </NdPopGrid>
+                    {/* Miktar Dialog  */}
+                    <NdDialog id={"msgQuantity"} container={"#root"} parent={this}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    title={this.t("msgQuantity.title")} 
+                    showCloseButton={false}
+                    width={"500px"}
+                    height={"250px"}
+                    button={[{id:"btn01",caption:this.t("msgQuantity.btn01"),location:'before'},{id:"btn02",caption:this.t("msgQuantity.btn02"),location:'after'}]}
+                    onShowed={()=>
+                    {
+                        this.txtQuantity.setState({value:1})
+                        setTimeout(() => {
+                            this.txtQuantity.focus()
+                        }, 500);
+                    }}
+                    >
+                        <div className="row">
+                            <div className="col-12 py-2">
+                                <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgQuantity.msg")}</div>
+                            </div>
+                            <div className="col-12 py-2">
+                            <Form>
+                                {/* txtQuantity */}
+                                <Item>
+                                    <Label text={this.t("txtQuantity")} alignment="right" />
+                                    <NdTextBox id="txtQuantity" parent={this} simple={true}  
+                                    param={this.param.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
+                                    value ={1}
+                                    onFocusIn={(async(e)=>
+                                    {
+                                        
+                                    }).bind(this)}
+                                    >
+                                    </NdTextBox>
+                                </Item>
+                            </Form>
+                            </div>
+                        </div>
+                </NdDialog>
                 </ScrollView>
             </div>
         )

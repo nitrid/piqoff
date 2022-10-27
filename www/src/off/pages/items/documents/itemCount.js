@@ -395,7 +395,7 @@ export default class itemCount extends React.PureComponent
                 tmpBreak = true
                 if(this.countObj.dt()[this.countObj.dt().length - 1].ITEM_CODE == '')
                 {
-                    await this.grdItemCount.devGrid.deleteRow(this.countObj.dt().length - 1)
+                    await this.grdItemCount.devGrid.deleteRow(0)
                 }
                 this.msgQuantity.hide()
                 this.txtBarcode.focus()
@@ -425,7 +425,7 @@ export default class itemCount extends React.PureComponent
                     this.txtAmount.setState({value :totalPrice})
                     if(this.countObj.dt()[this.countObj.dt().length - 1].ITEM_CODE == '')
                     {
-                        await this.grdItemCount.devGrid.deleteRow(this.countObj.dt().length - 1)
+                        await this.grdItemCount.devGrid.deleteRow(0)
                     }
                     this.txtBarcode.focus()
                     return
@@ -437,7 +437,7 @@ export default class itemCount extends React.PureComponent
                     this.txtAmount.setState({value :totalPrice})
                     if(this.countObj.dt()[this.countObj.dt().length - 1].ITEM_CODE == '')
                     {
-                        await this.grdItemCount.devGrid.deleteRow(this.countObj.dt().length - 1)
+                        await this.grdItemCount.devGrid.deleteRow(0)
                     }
                     this.txtBarcode.focus()
                     return
