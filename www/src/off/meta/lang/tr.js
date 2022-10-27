@@ -1877,13 +1877,18 @@ export const langTr =
         dtLastDate : "Son Tarih",
         btnGet : "Getir",
         btnPrint : "Seçili Ürüne Etiket Bas",
+        txtCustomerCode : "Cari",
+        cmbItemGroup : "Ürün Grubu",
         grdExpdateList:  
         {
             clmQuantity : "Miktar",
             clmCode : "Kodu",
             clmName : "Adı",
             clmDiff : "Giriş tarihinden itibaren satılan",
-            clmDate : "SKT Tarih"
+            clmDate : "SKT Tarih",
+            clmRemainder : "Fark",
+            clmCustomer :"Cari",
+            clmRebate : "İade Alır"
         },
         popQuantity : 
         {
@@ -1898,6 +1903,14 @@ export const langTr =
             clmCode: "KODU",
             clmName: "ADI",
             clmStatus: "DURUM"
+        },
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
         },
     },
     cri_01_001: // "Cari Tanımları"

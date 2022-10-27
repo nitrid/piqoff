@@ -50,6 +50,9 @@ export default class expdateOperations extends React.PureComponent
     async Init()
     {
         this.txtRef.GUID = '00000000-0000-0000-0000-000000000000'
+        this.txtCustomerCode.CODE = ''
+        this.txtCustomerCode.value = ''
+        this.txtRef.value = ''
     }
     async _btnGetClick()
     {
@@ -60,12 +63,14 @@ export default class expdateOperations extends React.PureComponent
             {
                 select : 
                 { 
-                    query :"SELECT *,(QUANTITY-DIFF) AS REMAINDER,[dbo].[FN_PRICE_SALE](ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000') AS PRICE FROM " +
-                    "(SELECT *, " +
+                    query :"SELECT *," 
+                    +"(QUANTITY-DIFF) AS REMAINDER,[dbo].[FN_PRICE_SALE](ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000') AS PRICE FROM " +
+                    "(SELECT *,ISNULL((SELECT TOP 1 REBATE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.CODE = ITEM_EXPDATE_VW_01.CUSTOMER_CODE),0) AS REBATE, " +
                     "ISNULL((SELECT SUM(QUANTITY) FROM POS_SALE  WHERE POS_SALE.ITEM = ITEM_EXPDATE_VW_01.ITEM_GUID AND POS_SALE.DELETED = 0 AND POS_SALE.CDATE > ITEM_EXPDATE_VW_01.CDATE),0) AS DIFF " +
-                    "FROM [ITEM_EXPDATE_VW_01] WHERE ((ITEM_GUID = @ITEM) OR (@ITEM = '00000000-0000-0000-0000-000000000000' )) AND ((CDATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND((CDATE >= @LAST_DATE) OR (@LAST_DATE = '19700101'))) AS TMP WHERE QUANTITY - DIFF > 0 ",
-                    param : ['ITEM:string|50','FIRST_DATE:date','LAST_DATE:date'],
-                    value : [this.txtRef.GUID,this.dtFirstdate.value,this.dtLastDate.value]
+                    "FROM [ITEM_EXPDATE_VW_01] WHERE ((ITEM_GUID = @ITEM) OR (@ITEM = '00000000-0000-0000-0000-000000000000' )) AND ((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) " + 
+                    " AND  ((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = ''))  AND ((EXP_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((EXP_DATE >= @LAST_DATE) OR (@LAST_DATE = '19700101'))) AS TMP WHERE QUANTITY - DIFF > 0 ",
+                    param : ['ITEM:string|50','CUSTOMER_CODE:string|50','MAIN_GRP:string|25','FIRST_DATE:date','LAST_DATE:date'],
+                    value : [this.txtRef.GUID,this.txtCustomerCode.CODE,this.cmbItemGroup.value,this.dtFirstdate.value,this.dtLastDate.value]
                 },
                 sql : this.core.sql
             }
@@ -184,6 +189,13 @@ export default class expdateOperations extends React.PureComponent
                 <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
+                            <Item location="after" locateInMenu="auto">
+                                <NdButton id="btnNew" parent={this} icon="file" type="default"
+                                onClick={()=>
+                                {
+                                    this.init(); 
+                                }}/>
+                            </Item>
                             <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
@@ -298,7 +310,95 @@ export default class expdateOperations extends React.PureComponent
                                         <Column dataField="STATUS" caption={this.t("pg_txtRef.clmStatus")} width={'10%'} />
                                     </NdPopGrid>
                                 </Item>
-                                <EmptyItem/>
+                                <Item>
+                                    <Label text={this.t("txtCustomerCode")} alignment="right" />
+                                    <NdTextBox id="txtCustomerCode" parent={this} simple={true}  notRefresh = {true}
+                                    onEnterKey={(async()=>
+                                    {
+                                        await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
+                                        this.pg_txtCustomerCode.show()
+                                        this.pg_txtCustomerCode.onClick = (data) =>
+                                        { 
+                                            if(data.length > 0)
+                                            {
+                                                this.txtCustomerCode.setState({value:data[0].TITLE})
+                                                this.txtCustomerCode.CODE = data[0].CODE
+                                            }
+                                        }
+                                    }).bind(this)}
+                                    button=
+                                    {
+                                        [
+                                            {
+                                                id:'01',
+                                                icon:'more',
+                                                onClick:()=>
+                                                {
+                                                    this.pg_txtCustomerCode.show()
+                                                    this.pg_txtCustomerCode.onClick = (data) =>
+                                                    {
+                                                        if(data.length > 0)
+                                                        {
+                                                            this.txtCustomerCode.setState({value:data[0].TITLE})
+                                                            this.txtCustomerCode.CODE = data[0].CODE
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                id:'02',
+                                                icon:'clear',
+                                                onClick:()=>
+                                                {
+                                                    this.txtCustomerCode.setState({value:''})
+                                                    this.txtCustomerCode.CODE =''
+                                                }
+                                            },
+                                        ]
+                                    }
+                                    >
+                                    </NdTextBox>
+                                    {/*CARI SECIMI POPUP */}
+                                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                    visible={false}
+                                    position={{of:'#root'}} 
+                                    showTitle={true} 
+                                    showBorders={true}
+                                    width={'90%'}
+                                    height={'90%'}
+                                    title={this.t("pg_txtCustomerCode.title")} //
+                                    search={true}
+                                    data = 
+                                    {{
+                                        source:
+                                        {
+                                            select:
+                                            {
+                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                                                param : ['VAL:string|50']
+                                            },
+                                            sql:this.core.sql
+                                        }
+                                    }}
+                                    button=
+                                    {
+                                        {
+                                            id:'01',
+                                            icon:'more',
+                                            onClick:()=>
+                                            {
+                                                console.log(1111)
+                                            }
+                                        }
+                                    }
+                                    >
+                                        <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
+                                        <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
+                                        <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
+                                        <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} filterType={"include"} filterValues={['Tedarikçi']}/>
+                                        
+                                    </NdPopGrid>
+                                </Item> 
                                 <Item>
                                     <Label text={this.t("dtFirstdate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtFirstdate"}
@@ -318,6 +418,38 @@ export default class expdateOperations extends React.PureComponent
                                     }).bind(this)}
                                     >
                                     </NdDatePicker>
+                                </Item>
+                                {/* cmbItemGroup */}
+                                <Item>
+                                    <Label text={this.t("cmbItemGroup")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbItemGroup"
+                                    displayExpr="NAME"                       
+                                    valueExpr="CODE"
+                                    value=""
+                                    showClearButton={true}
+                                    searchEnabled={true}
+                                    notRefresh = {true}
+                                    onValueChanged={(async()=>
+                                        {
+                                        }).bind(this)}
+                                    data={{source:{select:{query : "SELECT CODE,NAME FROM ITEM_GROUP ORDER BY NAME ASC"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbItemGroup',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbItemGroup',USERS:this.user.CODE})}
+                                    button=
+                                    {
+                                        [
+                                            {
+                                                id:'02',
+                                                icon:'clear',
+                                                onClick:()=>
+                                                {
+                                                    this.cmbItemGroup.valueExpr =''
+                                                }
+                                            },
+                                        ]
+                                    }
+                                    >
+                                    </NdSelectBox>
                                 </Item>
                             </Form>
                         </div>
@@ -352,10 +484,10 @@ export default class expdateOperations extends React.PureComponent
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
                                 <Column dataField="ITEM_CODE" caption={this.t("grdExpdateList.clmCode")} visible={true} width={200}/> 
                                 <Column dataField="ITEM_NAME" caption={this.t("grdExpdateList.clmName")} visible={true} width={300}/> 
-                                <Column dataField="QUANTITY" caption={this.t("grdExpdateList.clmQuantity")} visible={true}/> 
-                                <Column dataField="DIFF" caption={this.t("grdExpdateList.clmDiff")} visible={true}/> 
-                                <Column dataField="REMAINDER" caption={this.t("grdExpdateList.clmDiff")} visible={true}/> 
-                                <Column dataField="EXP_DATE" caption={this.t("grdExpdateList.clmDate")} width={250} dataType="date" allowEditing={false}
+                                <Column dataField="QUANTITY" caption={this.t("grdExpdateList.clmQuantity")} visible={true} width={100}/> 
+                                <Column dataField="DIFF" caption={this.t("grdExpdateList.clmDiff")} visible={true} width={130}/> 
+                                <Column dataField="REMAINDER" caption={this.t("grdExpdateList.clmRemainder")} visible={true} width={100}/> 
+                                <Column dataField="EXP_DATE" caption={this.t("grdExpdateList.clmDate")} width={200} dataType="date" allowEditing={false}
                                 editorOptions={{value:null}}
                                 cellRender={(e) => 
                                 {
@@ -366,6 +498,8 @@ export default class expdateOperations extends React.PureComponent
                                     
                                     return
                                 }}/>
+                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdExpdateList.clmCustomer")} visible={true}  allowEditing={false}/> 
+                                 <Column dataField="REBATE" caption={this.t("grdExpdateList.clmRebate")} visible={true}  allowEditing={false}/> 
                             </NdGrid>
                         </div>
                     </div>

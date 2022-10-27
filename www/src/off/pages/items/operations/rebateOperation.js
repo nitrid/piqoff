@@ -53,6 +53,7 @@ export default class rebateOperation extends React.PureComponent
 
         this.txtRef = Math.floor(Date.now() / 1000)
         this.txtCustomerCode.CODE = ''
+        this.txtCustomerCode.value = ''
     }
     async _btnGetClick()
     {
@@ -268,6 +269,13 @@ export default class rebateOperation extends React.PureComponent
                 <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
+                            <Item location="after" locateInMenu="auto">
+                                <NdButton id="btnNew" parent={this} icon="file" type="default"
+                                onClick={()=>
+                                {
+                                    this.init(); 
+                                }}/>
+                            </Item>
                             <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"

@@ -1877,13 +1877,18 @@ export const langFr =
         dtLastDate : "Son Tarih",   // BAK
         btnGet : "Getir",   // BAK
         btnPrint : "Seçili Ürüne Etiket Bas",   // BAK
+        txtCustomerCode : "Cari", // BAK
+        cmbItemGroup : "Ürün Grubu", // BAK
         grdExpdateList:   
         {   
             clmQuantity : "Miktar",   // BAK
             clmCode : "Kodu",   // BAK
             clmName : "Adı",   // BAK
             clmDiff : "Giriş tarihinden itibaren satılan", // BAK
-            clmDate : "SKT Tarih"// BAK
+            clmDate : "SKT Tarih",// BAK
+            clmRemainder : "Fark", // BAK
+            clmCustomer :"Cari",
+            clmRebate : "İade Alır"
         },   
         popQuantity :    
         {   
@@ -1898,6 +1903,14 @@ export const langFr =
             clmCode: "KODU",   // BAK
             clmName: "ADI",   // BAK
             clmStatus: "DURUM"   // BAK
+        },
+        pg_txtCustomerCode : 
+        {
+            title : "Choix Fournisseur",
+            clmCode :  "Sélection Document",
+            clmTitle : "Nom Fournisseur",
+            clmTypeName : "Type",
+            clmGenusName : "Genre"
         },
     },
     cri_01_001: // "Cari Tanımları"
