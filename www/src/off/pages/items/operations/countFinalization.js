@@ -343,11 +343,10 @@ export default class countFinalization extends React.PureComponent
                         <div className="col-12">
                             <NdGrid id="grdCountDocument" parent={this} 
                             selection={{mode:"multiple"}} 
-                            height={'100%'} 
+                            height={'700'} 
                             width={'100%'}
                             showBorders={true}
                             filterRow={{visible:true}} 
-                            headerFilter={{visible:true}}
                             columnAutoWidth={true}
                             allowColumnReordering={true}
                             allowColumnResizing={true}
@@ -389,7 +388,6 @@ export default class countFinalization extends React.PureComponent
                                 columnsAutoWidth={true} 
                                 allowColumnReordering={true} 
                                 allowColumnResizing={true} 
-                                headerFilter={{visible:true}}
                                 height={'80%'} 
                                 width={'100%'}
                                 dbApply={false}

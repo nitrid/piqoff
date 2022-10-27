@@ -442,7 +442,8 @@ export default class rebateOperation extends React.PureComponent
                             selection={{mode:"multiple"}} 
                             showBorders={true}
                             filterRow={{visible:true}} 
-                            headerFilter={{visible:true}}
+                            height={'700'} 
+                            width={'100%'}
                             columnAutoWidth={true}
                             allowColumnReordering={true}
                             loadPanel={{enabled:true}}

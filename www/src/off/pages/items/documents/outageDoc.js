@@ -1236,7 +1236,8 @@ export default class outageDoc extends React.PureComponent
                                     // columnsAutoWidth={true} 
                                     // allowColumnReordering={true} 
                                     // allowColumnResizing={true} 
-                                    height={'400'} 
+                                    filterRow={{visible:true}} 
+                                    height={'590'} 
                                     width={'100%'}
                                     dbApply={false}
                                     loadPanel={{enabled:true}}

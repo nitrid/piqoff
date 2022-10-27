@@ -473,8 +473,9 @@ export default class expdateOperations extends React.PureComponent
                             <NdGrid id="grdExpdateList" parent={this} 
                             selection={{mode:"single"}} 
                             showBorders={true}
+                            height={'650'} 
+                            width={'100%'}
                             filterRow={{visible:true}} 
-                            headerFilter={{visible:true}}
                             columnAutoWidth={true}
                             allowColumnReordering={true}
                             loadPanel={{enabled:true}}
@@ -500,6 +501,7 @@ export default class expdateOperations extends React.PureComponent
                                 }}/>
                                  <Column dataField="CUSTOMER_NAME" caption={this.t("grdExpdateList.clmCustomer")} visible={true}  allowEditing={false}/> 
                                  <Column dataField="REBATE" caption={this.t("grdExpdateList.clmRebate")} visible={true}  allowEditing={false}/> 
+                                 <Column dataField="DESCRIPTION" caption={this.t("grdExpdateList.clmDescription")} visible={true}  allowEditing={false}/> 
                             </NdGrid>
                         </div>
                     </div>

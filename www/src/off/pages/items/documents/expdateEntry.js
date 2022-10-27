@@ -545,7 +545,8 @@ export default class expdateEntry extends React.Component
                         columnsAutoWidth={true} 
                         allowColumnReordering={true} 
                         allowColumnResizing={true} 
-                        height={'400'} 
+                        filterRow={{visible:true}} 
+                        height={'600'} 
                         width={'100%'}
                         dbApply={false}
                         onRowUpdated={async(e)=>{
