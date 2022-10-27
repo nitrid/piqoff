@@ -179,6 +179,7 @@ export default class itemCard extends React.PureComponent
 
         this.itemsObj.addEmpty();
         
+        console.log( this.itemsObj.dt()[0].GUID )
         this.txtRef.value = Math.floor(Date.now() / 1000)
         this.txtCustomer.value = "";
         this.txtCustomer.displayValue = "";   
@@ -188,29 +189,33 @@ export default class itemCard extends React.PureComponent
         let tmpUnit = new unitCls();
         await tmpUnit.load()
         
-        let tmpMainUnitObj = {...this.itemsObj.itemUnit.empty}
-        tmpMainUnitObj.TYPE = 0
-        tmpMainUnitObj.TYPE_NAME = this.t("mainUnitName")   
-        tmpMainUnitObj.ITEM_GUID = this.itemsObj.dt()[0].GUID 
-        
-        if(tmpUnit.dt(0).length > 0)
+        if(typeof this.itemsObj.dt()[0] != 'undefined')
         {
-            tmpMainUnitObj.ID = tmpUnit.dt(0)[0].ID
+            let tmpMainUnitObj = {...this.itemsObj.itemUnit.empty}
+            tmpMainUnitObj.TYPE = 0
+            tmpMainUnitObj.TYPE_NAME = this.t("mainUnitName")   
+            tmpMainUnitObj.ITEM_GUID = this.itemsObj.dt()[0].GUID 
+            
+            if(tmpUnit.dt(0).length > 0)
+            {
+                tmpMainUnitObj.ID = tmpUnit.dt(0)[0].ID
+            }
+            
+            let tmpUnderUnitObj = {...this.itemsObj.itemUnit.empty}
+            tmpUnderUnitObj.TYPE = 1,
+            tmpUnderUnitObj.TYPE_NAME = this.t("underUnitName")   
+            tmpUnderUnitObj.ID  = this.cmbUnderUnit.value
+            tmpUnderUnitObj.ITEM_GUID = this.itemsObj.dt()[0].GUID    
+            tmpUnderUnitObj.FACTOR = 0
+            
+            let tmpBarcodeObj = {...this.itemsObj.itemBarcode.empty}
+            tmpBarcodeObj.ITEM_GUID = this.itemsObj.dt()[0].GUID 
+            this.itemsObj.itemBarcode.addEmpty(tmpBarcodeObj);     
+    
+            this.itemsObj.itemUnit.addEmpty(tmpMainUnitObj);
+            this.itemsObj.itemUnit.addEmpty(tmpUnderUnitObj);
         }
-        
-        let tmpUnderUnitObj = {...this.itemsObj.itemUnit.empty}
-        tmpUnderUnitObj.TYPE = 1,
-        tmpUnderUnitObj.TYPE_NAME = this.t("underUnitName")   
-        tmpUnderUnitObj.ID  = this.cmbUnderUnit.value
-        tmpUnderUnitObj.ITEM_GUID = this.itemsObj.dt()[0].GUID    
-        tmpUnderUnitObj.FACTOR = 0
-        
-        let tmpBarcodeObj = {...this.itemsObj.itemBarcode.empty}
-        tmpBarcodeObj.ITEM_GUID = this.itemsObj.dt()[0].GUID 
-        this.itemsObj.itemBarcode.addEmpty(tmpBarcodeObj);     
 
-        this.itemsObj.itemUnit.addEmpty(tmpMainUnitObj);
-        this.itemsObj.itemUnit.addEmpty(tmpUnderUnitObj);
 
         this.itemGrpForOrginsValidCheck();   
         this.itemGrpForMinMaxAccessCheck();  
@@ -277,6 +282,11 @@ export default class itemCard extends React.PureComponent
         }
         this.prevCode = this.itemsObj.dt('ITEMS').length > 0 ? this.itemsObj.dt('ITEMS')[0].CODE : '';
         console.log("12 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
+        console.log({data:this.itemsObj.dt('ITEM_IMAGE'),field:"IMAGE"})
+        if(typeof this.itemsObj.dt('ITEM_IMAGE')[0] != 'undefined')
+        {
+            this.imgFile.value = this.itemsObj.dt('ITEM_IMAGE')[0].IMAGE
+        }
     }
     async checkItem(pCode)
     {
