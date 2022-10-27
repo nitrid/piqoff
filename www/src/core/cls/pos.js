@@ -255,55 +255,6 @@ export class posCls
             this.posSale.subTotalBuild();
         });
     }
-    signature()
-    {
-        return new Promise(async resolve => 
-        {
-            let tmpQuery = 
-            {
-                query : "SELECT TOP 1 REF,SIGNATURE FROM [dbo].[POS_VW_01] WHERE DEVICE = @DEVICE AND GUID <> @GUID ORDER BY LDATE DESC",
-                param : ['DEVICE:string|25','GUID:string|50'],
-                value : [this.dt()[0].DEVICE,this.dt()[0].GUID]
-            }
-            
-            let tmpResult = await this.core.sql.execute(tmpQuery)
-            let tmpLastRef = 0
-            let tmpLastSignature = ''
-            let tmpSignature = ''
-
-            if(tmpResult.result.recordset.length > 0)
-            {
-                if(tmpResult.result.recordset[0].REF != null)
-                {
-                    tmpLastRef = tmpResult.result.recordset[0].REF
-                }
-                if(tmpResult.result.recordset[0].SIGNATURE != null)
-                {
-                    tmpLastSignature = tmpResult.result.recordset[0].SIGNATURE
-                }
-            }
-
-            this.dt()[0].REF = tmpLastRef + 1
-            console.log(tmpLastSignature)
-            let tmpVatLst = this.posSale.dt().where({GUID:{'<>':'00000000-0000-0000-0000-000000000000'}}).groupBy('VAT_RATE');
-            for (let i = 0; i < tmpVatLst.length; i++) 
-            {
-                tmpSignature = tmpSignature + parseInt(Number(tmpVatLst[i].VAT_RATE) * 100).toString().padStart(4,'0') + ":" + parseInt(Number(this.posSale.dt().where({VAT_TYPE:tmpVatLst[i].VAT_TYPE}).sum('TOTAL',2)) * 100).toString() + "|"
-            }
-            tmpSignature = tmpSignature.toString().substring(0,tmpSignature.length - 1)
-            tmpSignature = tmpSignature + "," + parseInt(Number(this.dt().sum('TOTAL',2)) * 100).toString()
-            tmpSignature = tmpSignature + "," + moment(new Date()).format("YYYYMMDDHHmmss")
-            tmpSignature = tmpSignature + "," + this.dt()[0].DEVICE + "" + this.dt()[0].REF.toString().padStart(8,'0') 
-            tmpSignature = tmpSignature + "," + this.dt()[0].TYPE_NAME
-            tmpSignature = tmpSignature + "," + (tmpLastSignature == "" ? "N" : "O")
-            tmpSignature = tmpSignature + "," + tmpLastSignature
-
-            this.dt()[0].SIGNATURE = btoa(tmpSignature)
-            console.log(btoa(tmpSignature))
-
-            resolve()
-        })
-    }
 }
 export class posSaleCls
 {
@@ -1004,6 +955,7 @@ export class posExtraCls
             POS_GUID : '00000000-0000-0000-0000-000000000000',
             LINE_GUID : '00000000-0000-0000-0000-000000000000',
             DATA : '',
+            APP_VERSION : '',
             DESCRIPTION : ''
         }
 
@@ -1032,9 +984,10 @@ export class posExtraCls
                     "@POS_GUID = @PPOS_GUID, " +
                     "@LINE_GUID = @PLINE_GUID, " +
                     "@DATA =@PDATA, " +
+                    "@APP_VERSION =@PAPP_VERSION, " +
                     "@DESCRIPTION = @PDESCRIPTION ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|50','PDESCRIPTION:string|max'],
-            dataprm : ['GUID','CUSER','TAG','POS_GUID','LINE_GUID','DATA','DESCRIPTION'],
+            param : ['PGUID:string|50','PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|50','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
+            dataprm : ['GUID','CUSER','TAG','POS_GUID','LINE_GUID','DATA','APP_VERSION','DESCRIPTION'],
             local : 
             {
                 type : "insert",
@@ -1062,9 +1015,10 @@ export class posExtraCls
                     "@POS_GUID = @PPOS_GUID, " +
                     "@LINE_GUID = @PLINE_GUID, " +
                     "@DATA =@PDATA, " +
+                    "@APP_VERSION =@PAPP_VERSION, " +
                     "@DESCRIPTION = @PDESCRIPTION ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|50','PDESCRIPTION:string|max'],
-            dataprm : ['GUID','CUSER','TAG','POS_GUID','LINE_GUID','DATA','DESCRIPTION'],
+            param : ['PGUID:string|50','PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|50','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
+            dataprm : ['GUID','CUSER','TAG','POS_GUID','LINE_GUID','DATA','APP_VERSION','DESCRIPTION'],
             local : 
             {
                 type : "update",

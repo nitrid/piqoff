@@ -33,6 +33,7 @@ import { posCls,posSaleCls,posPaymentCls,posPluCls,posDeviceCls,posPromoCls, pos
 import { docCls} from "../../core/cls/doc.js"
 import transferCls from "../lib/transfer.js";
 import { promoCls } from "../../core/cls/promotion.js";
+import { nf525Cls } from "../lib/nf525.js";
 
 import { itemsCls } from "../../core/cls/items.js";
 import { dataset,datatable,param,access } from "../../core/core.js";
@@ -50,7 +51,8 @@ export default class posDoc extends React.PureComponent
         this.t = App.instance.lang.getFixedT(null,null,"pos")
         this.user = this.core.auth.data
         this.prmObj = new param(prm)
-        this.acsObj = new access(acs);        
+        this.acsObj = new access(acs);   
+        this.nf525 = new nf525Cls();
         // NUMBER İÇİN PARAMETREDEN PARA SEMBOLÜ ATANIYOR.
         Number.money = this.prmObj.filter({ID:'MoneySymbol',TYPE:0}).getValue()
         
@@ -321,7 +323,7 @@ export default class posDoc extends React.PureComponent
                 this.cheqDt.selectCmd.value = [this.parkDt[i].GUID] 
                 await this.cheqDt.refresh();  
 
-                await this.getDoc(this.parkDt[i].GUID)                                          
+                await this.getDoc(this.parkDt[i].GUID)                 
                 return
             }
         }
@@ -1159,8 +1161,10 @@ export default class posDoc extends React.PureComponent
 
                 this.posObj.dt()[0].STATUS = 1
                 //***** TICKET İMZALAMA *****/
-                await this.posObj.signature()
-                
+                let tmpSignedData = await this.nf525.signatureSale(this.posObj.dt()[0])
+                this.posObj.dt()[0].REF = tmpSignedData.REF
+                this.posObj.dt()[0].SIGNATURE = tmpSignedData.SIGNATURE
+
                 let tmpSigned = "-"
                 if(this.posObj.dt()[0].SIGNATURE != '')
                 {
@@ -1249,7 +1253,7 @@ export default class posDoc extends React.PureComponent
                 //******************************** */
                 if(typeof pPrint == 'undefined' || pPrint)
                 {                    
-                    //POS_EXTRA TABLOSUNA YAZDIRMA BİLDİRİMİ GÖNDERİLİYOR
+                    //POS_EXTRA TABLOSUNA YAZDIRMA BİLDİRİMİ GÖNDERİLİYOR                    
                     let tmpInsertQuery = 
                     {
                         query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
@@ -1258,9 +1262,10 @@ export default class posDoc extends React.PureComponent
                                 "@POS_GUID = @PPOS_GUID, " +
                                 "@LINE_GUID = @PLINE_GUID, " +
                                 "@DATA =@PDATA, " +
+                                "@APP_VERSION =@PAPP_VERSION, " +
                                 "@DESCRIPTION = @PDESCRIPTION ", 
-                        param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|50','PDESCRIPTION:string|max'],
-                        value : [this.posObj.dt()[0].CUSER,"REPRINT",this.posObj.dt()[0].GUID,"00000000-0000-0000-0000-000000000000","",""]
+                        param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|250','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
+                        value : [this.posObj.dt()[0].CUSER,"REPRINT",this.posObj.dt()[0].GUID,"00000000-0000-0000-0000-000000000000","",this.core.appInfo.version,""]
                     }
                     await this.core.sql.execute(tmpInsertQuery)
                     //***************************************************/
@@ -1999,24 +2004,24 @@ export default class posDoc extends React.PureComponent
             {
                 let tmpPrint = e.print(pData)
 
-                let tmpArr = [];
-                for (let i = 0; i < tmpPrint.length; i++) 
-                {
-                    let tmpObj = tmpPrint[i]
-                    if(typeof tmpPrint[i] == 'function')
-                    {
-                        tmpObj = tmpPrint[i]()
-                    }
-                    if(Array.isArray(tmpObj))
-                    {
-                        tmpArr.push(...tmpObj)
-                    }
-                    else if(typeof tmpObj == 'object')
-                    {
-                        tmpArr.push(tmpObj)
-                    }
-                }
-                console.log(JSON.stringify(tmpArr))
+                // let tmpArr = [];
+                // for (let i = 0; i < tmpPrint.length; i++) 
+                // {
+                //     let tmpObj = tmpPrint[i]
+                //     if(typeof tmpPrint[i] == 'function')
+                //     {
+                //         tmpObj = tmpPrint[i]()
+                //     }
+                //     if(Array.isArray(tmpObj))
+                //     {
+                //         tmpArr.push(...tmpObj)
+                //     }
+                //     else if(typeof tmpObj == 'object')
+                //     {
+                //         tmpArr.push(tmpObj)
+                //     }
+                // }
+                // console.log(JSON.stringify(tmpArr))
                 
                 await this.posDevice.escPrinter(tmpPrint)
                 resolve()
@@ -4689,6 +4694,7 @@ export default class posDoc extends React.PureComponent
                                                         let tmpRePrintResult = await this.popRePrintDesc.show()
                                                         if(typeof tmpRePrintResult != 'undefined')
                                                         {
+                                                            let tmpLastSignature = await this.nf525.signatureDuplicate(tmpLastPos[0].GUID)
                                                             let tmpInsertQuery = 
                                                             {
                                                                 query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
@@ -4696,10 +4702,11 @@ export default class posDoc extends React.PureComponent
                                                                         "@TAG = @PTAG, " +
                                                                         "@POS_GUID = @PPOS_GUID, " +
                                                                         "@LINE_GUID = @PLINE_GUID, " +
-                                                                        "@DATA =@PDATA, " +
+                                                                        "@DATA = @PDATA, " +
+                                                                        "@APP_VERSION =@PAPP_VERSION, " +
                                                                         "@DESCRIPTION = @PDESCRIPTION ", 
-                                                                param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|50','PDESCRIPTION:string|max'],
-                                                                value : [tmpLastPos[0].CUSER,"REPRINT",tmpLastPos[0].GUID,"00000000-0000-0000-0000-000000000000","",tmpRePrintResult]
+                                                                param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|250','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
+                                                                value : [tmpLastPos[0].CUSER,"REPRINT",tmpLastPos[0].GUID,"00000000-0000-0000-0000-000000000000",tmpLastSignature,this.core.appInfo.version,tmpRePrintResult]
                                                             }
     
                                                             await this.core.sql.execute(tmpInsertQuery)
@@ -4796,6 +4803,7 @@ export default class posDoc extends React.PureComponent
 
                                                     if(typeof tmpRePrintResult != 'undefined')
                                                     {
+                                                        let tmpLastSignature = await this.nf525.signatureDuplicate(tmpLastPos[0].GUID)
                                                         let tmpInsertQuery = 
                                                         {
                                                             query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
@@ -4804,9 +4812,10 @@ export default class posDoc extends React.PureComponent
                                                                     "@POS_GUID = @PPOS_GUID, " +
                                                                     "@LINE_GUID = @PLINE_GUID, " +
                                                                     "@DATA =@PDATA, " +
+                                                                    "@APP_VERSION =@PAPP_VERSION, " +
                                                                     "@DESCRIPTION = @PDESCRIPTION ", 
-                                                            param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|50','PDESCRIPTION:string|max'],
-                                                            value : [tmpLastPos[0].CUSER,"REPRINT",tmpLastPos[0].GUID,"00000000-0000-0000-0000-000000000000","",tmpRePrintResult]
+                                                                    param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|250','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
+                                                            value : [tmpLastPos[0].CUSER,"REPRINT",tmpLastPos[0].GUID,"00000000-0000-0000-0000-000000000000",tmpLastSignature,this.core.appInfo.version,tmpRePrintResult]
                                                         }
 
                                                         await this.core.sql.execute(tmpInsertQuery)
