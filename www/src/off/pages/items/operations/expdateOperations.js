@@ -60,7 +60,7 @@ export default class expdateOperations extends React.PureComponent
             {
                 select : 
                 { 
-                    query :"SELECT * FROM " +
+                    query :"SELECT *,(QUANTITY-DIFF) AS REMAINDER,[dbo].[FN_PRICE_SALE](ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000') AS PRICE FROM " +
                     "(SELECT *, " +
                     "ISNULL((SELECT SUM(QUANTITY) FROM POS_SALE  WHERE POS_SALE.ITEM = ITEM_EXPDATE_VW_01.ITEM_GUID AND POS_SALE.DELETED = 0 AND POS_SALE.CDATE > ITEM_EXPDATE_VW_01.CDATE),0) AS DIFF " +
                     "FROM [ITEM_EXPDATE_VW_01] WHERE ((ITEM_GUID = @ITEM) OR (@ITEM = '00000000-0000-0000-0000-000000000000' )) AND ((CDATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND((CDATE >= @LAST_DATE) OR (@LAST_DATE = '19700101'))) AS TMP WHERE QUANTITY - DIFF > 0 ",
@@ -79,11 +79,37 @@ export default class expdateOperations extends React.PureComponent
         this.prilabelCls.clearAll()
         this.labelMainObj.clearAll()
         this.txtQuantity.value = (this.grdExpdateList.getSelectedData()[0].QUANTITY - this.grdExpdateList.getSelectedData()[0].DIFF)
+        this.txtPrice.value = this.grdExpdateList.getSelectedData()[0].PRICE
 
         this.popQuantity.show()
     }
     async _btnSave()
     {
+            // geçici olarak kapatıldı..... bu parametreye bağlanacak
+
+            // let tmpQuery = 
+            // {
+            //     query:  "SELECT CUSTOMER_PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = @ITEM_GUID ORDER BY LDATE DESC ",
+            //     param:  ['ITEM_GUID:string|50'],
+            //     value:  [this.grdExpdateList.getSelectedData()[0].ITEM_GUID]
+            // }
+
+            // let tmpData = await this.core.sql.execute(tmpQuery) 
+            // if(tmpData.result.recordset.length > 0)
+            // {
+            //     if(tmpData.result.recordset[0].CUSTOMER_PRICE >= parseFloat(this.txtPrice.value))
+            //     {
+            //         let tmpConfObj =
+            //         {
+            //             id:'msgPrice',showTitle:true,title:this.t("msgPrice.title"),showCloseButton:true,width:'500px',height:'200px',
+            //             button:[{id:"btn01",caption:this.t("msgPrice.btn01"),location:'after'}],
+            //             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPrice.msg")}</div>)
+            //         }
+                    
+            //         await dialog(tmpConfObj);
+            //         return
+            //     }
+            // }
         let tmpQuery = 
         {
             query : "SELECT ISNULL(REPLACE(STR(SUBSTRING(MAX(CODE),0,8) + 1, 7), SPACE(1), '0'),'2700001') AS CODE FROM ITEM_UNIQ WHERE CODE LIKE '27%' ",
@@ -111,7 +137,7 @@ export default class expdateOperations extends React.PureComponent
                 }
                 tmpCode = tmpdefCode + sonuc.toString();
                 let tmpEmpty = {...this.prilabelCls.empty};
-                tmpEmpty.CODE = this.grdExpdateList.getSelectedData()[0].ITEM_CODE
+                tmpEmpty.CODE = tmpCode
                 tmpEmpty.ITEM =  this.grdExpdateList.getSelectedData()[0].ITEM_GUID
                 tmpEmpty.NAME =  this.grdExpdateList.getSelectedData()[0].ITEM_NAME
                 tmpEmpty.PRICE = this.txtPrice.value
@@ -125,7 +151,6 @@ export default class expdateOperations extends React.PureComponent
         tmpLbl.REF = 'SPECIAL'
         tmpLbl.DATA = JSON.stringify(Data)     
         this.labelMainObj.addEmpty(tmpLbl);
-        console.log(this.labelMainObj.dt())
         await this.labelMainObj.save()
         let tmpPrintQuery = 
         {
@@ -329,6 +354,18 @@ export default class expdateOperations extends React.PureComponent
                                 <Column dataField="ITEM_NAME" caption={this.t("grdExpdateList.clmName")} visible={true} width={300}/> 
                                 <Column dataField="QUANTITY" caption={this.t("grdExpdateList.clmQuantity")} visible={true}/> 
                                 <Column dataField="DIFF" caption={this.t("grdExpdateList.clmDiff")} visible={true}/> 
+                                <Column dataField="REMAINDER" caption={this.t("grdExpdateList.clmDiff")} visible={true}/> 
+                                <Column dataField="EXP_DATE" caption={this.t("grdExpdateList.clmDate")} width={250} dataType="date" allowEditing={false}
+                                editorOptions={{value:null}}
+                                cellRender={(e) => 
+                                {
+                                    if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
+                                    {
+                                        return e.text
+                                    }
+                                    
+                                    return
+                                }}/>
                             </NdGrid>
                         </div>
                     </div>

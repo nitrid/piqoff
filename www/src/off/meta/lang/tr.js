@@ -1528,7 +1528,8 @@ export const langTr =
         {
             clmName: "Adı",
             clmCode: "Kodu",
-            clmDate: "SKT Tarihİ"
+            clmDate: "SKT Tarihİ",
+            clmQuantity : "Miktar",
         },
         msgDocValid:
         {
@@ -1870,7 +1871,8 @@ export const langTr =
             clmQuantity : "Miktar",
             clmCode : "Kodu",
             clmName : "Adı",
-            clmDiff : "Giriş tarihinden itibaren satılan"
+            clmDiff : "Giriş tarihinden itibaren satılan",
+            clmDate : "SKT Tarih"
         },
         popQuantity : 
         {

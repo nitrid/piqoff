@@ -1523,7 +1523,8 @@ export const langFr =
         {
             clmName: "Nom",
             clmCode: "Code",
-            clmDate: "DLC"
+            clmDate: "DLC",
+            clmQuantity : "Quantité",
         },
         msgDocValid:
         {
@@ -1865,22 +1866,23 @@ export const langFr =
         dtLastDate : "Son Tarih",   // BAK
         btnGet : "Getir",   // BAK
         btnPrint : "Seçili Ürüne Etiket Bas",   // BAK
-        grdExpdateList:     // BAK
-        {   // BAK
+        grdExpdateList:   
+        {   
             clmQuantity : "Miktar",   // BAK
             clmCode : "Kodu",   // BAK
             clmName : "Adı",   // BAK
-            clmDiff : "Giriş tarihinden itibaren satılan"   // BAK
-        },   // BAK
-        popQuantity :    // BAK
-        {   // BAK
+            clmDiff : "Giriş tarihinden itibaren satılan", // BAK
+            clmDate : "SKT Tarih"// BAK
+        },   
+        popQuantity :    
+        {   
             title : "Miktar Fiyat Girişi",   // BAK
             txtQuantity : "Miktar",   // BAK
             txtPrice : "Fiyat",   // BAK
             btnSave : "Kaydet ve Yazdır"   // BAK
-        },   // BAK
-        pg_txtRef:   // BAK
-        {   // BAK
+        },  
+        pg_txtRef:  
+        {  
             title: "Stok Seçimi",   // BAK
             clmCode: "KODU",   // BAK
             clmName: "ADI",   // BAK

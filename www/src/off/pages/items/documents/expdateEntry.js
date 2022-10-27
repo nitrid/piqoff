@@ -87,13 +87,13 @@ export default class labelPrinting extends React.Component
         this.dtPopDate.value = moment(new Date()).format("YYYY-MM-DD")
         await this.grdExpDate.dataRefresh({source:this.expObj.dt('ITEM_EXPDATE')});
     }
-    async addItem(pData,pIndex)
+    async addItem(pData,pIndex,pQuantity)
     {
         if(pData.CODE  == '')
         {
             return
         }
-        if(this.txtPopQuantity.value == 0)
+        if(pQuantity == 0)
         {
             let tmpConfObj = 
             {
@@ -131,7 +131,7 @@ export default class labelPrinting extends React.Component
         this.expObj.dt()[pIndex].ITEM_GUID = pData.GUID 
         this.expObj.dt()[pIndex].ITEM_CODE = pData.CODE 
         this.expObj.dt()[pIndex].ITEM_NAME = pData.NAME 
-        this.expObj.dt()[pIndex].QUANTITY = this.txtPopQuantity.value
+        this.expObj.dt()[pIndex].QUANTITY = pQuantity
         this.expObj.dt()[pIndex].EXP_DATE = this.dtPopDate.value
     }
     render()
@@ -321,7 +321,18 @@ export default class labelPrinting extends React.Component
                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                         <Column dataField="ITEM_NAME" caption={this.t("grdExpDate.clmName")} width={250} />
                         <Column dataField="ITEM_CODE" caption={this.t("grdExpDate.clmCode")} width={150}/>
-                        <Column dataField="EXP_DATE" caption={this.t("grdExpDate.clmDate")} width={250} />
+                        <Column dataField="QUANTITY" caption={this.t("grdExpDate.clmQuantity")} width={150}/>
+                        <Column dataField="EXP_DATE" caption={this.t("grdExpDate.clmDate")} width={250} dataType="date"
+                        editorOptions={{value:null}}
+                        cellRender={(e) => 
+                        {
+                            if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
+                            {
+                                return e.text
+                            }
+                            
+                            return
+                        }}/>
                     </NdGrid>
                 </Item>
             </Form>
@@ -413,7 +424,6 @@ export default class labelPrinting extends React.Component
                                     {       
                                         if(e.validationGroup.validate().status == "valid")
                                         {
-                                            this.txtPopQuantity.value = 1 
                                             this.txtPopItemsCode.value = ''
                                             this.txtPopItemsName.value = ''
                                             if(typeof this.expObj.dt()[0] != 'undefined')
@@ -425,7 +435,7 @@ export default class labelPrinting extends React.Component
                                                     {
                                                         if(data.length == 1)
                                                         {
-                                                            this.addItem(data[0],this.expObj.dt().length - 1)
+                                                            this.addItem(data[0],this.expObj.dt().length - 1,this.txtPopQuantity.value)
                                                         }
                                                     }
                                                     return
@@ -434,7 +444,7 @@ export default class labelPrinting extends React.Component
                                             console.log(this.PopGrdItemData[0].CODE)
                                             let tmpExpItems = {...this.expObj.empty}
                                             this.expObj.addEmpty(tmpExpItems)
-                                            await this.addItem(this.PopGrdItemData[0],this.expObj.dt().length - 1)
+                                            await this.addItem(this.PopGrdItemData[0],this.expObj.dt().length - 1,this.txtPopQuantity.value)
                                             this.PopGrdItemData = [];
                                             this.popItems.hide();
                                         }
