@@ -123,7 +123,8 @@ export default class privatePrinting extends React.PureComponent
                                                 await dialog(tmpConfObj);
                                                 return
                                             }
-                                            // geçici olarak kapatıldı.....
+                                            // geçici olarak kapatıldı..... bu parametreye bağlanacak
+
 
                                             // let tmpQuery = 
                                             // {

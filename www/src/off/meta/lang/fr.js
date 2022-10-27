@@ -89,7 +89,7 @@ export const langFr =
         stk_04_001: "Gerer multi produit",
         stk_04_002: "Saisie retour",
         stk_04_003 : "Inventaire validé",
-        stk_04_004 :"Saisie groupé",
+        stk_04_004 :"SKT Operasyonu", // BAK
         cri: "Fournisseur - Client",
         cri_01: "Saisie",
         cri_02: "Listes",
@@ -187,6 +187,8 @@ export const langFr =
         set_01_001 : "Taxe sucre",
         set_02 : "Réglage général",   // BAK
         set_02_001 : "Informations sur la société",   // BAK
+        set_03 : "Evrak Ayarları",   // BAK
+        set_03_001 : "Silinmiş Evraklar",   // BAK
         proces : "Saisie groupée",
         proces_01 : "Traitement Produit",
         proces_01_001 : "MAJ Famille produit",
@@ -204,6 +206,12 @@ export const langFr =
         login:"Valide",
         logout : "Annuler",
         selectUser : "Choix utilisateur",
+    },
+    msgDocDeleted : 
+    {   
+        title: "Dikkat",   // BAK
+        btn01: "Tamam",   // BAK
+        msg: "Bu Evrak Numarasıyla Silinmiş Evrak! Lütfen Yetkili İle Görüşün.."   // BAK
     },
     stk_01_001:  // "Yeni Stok Tanımlama" 
     {
@@ -1490,6 +1498,9 @@ export const langFr =
         txtBarcode : "Ajouter Code Barre",
         txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Quantité", 
+        txtRefRefno : "Seri-Sıra",  // BAK
+        cmbDepot : "Depo",  // BAK
+        dtDocDate : "Tarih",  // BAK
         pg_Docs : 
         {
             title : "Choix du document",
@@ -1515,7 +1526,8 @@ export const langFr =
         {
             clmName: "Nom",
             clmCode: "Code",
-            clmDate: "DLC"
+            clmDate: "DLC",
+            clmQuantity : "Quantité",
         },
         msgDocValid:
         {
@@ -1578,6 +1590,14 @@ export const langFr =
         },
         validDepot : "Vous devez choisir l'entrepôt",
         validDocDate : "Vous devez sélectionner une date",
+        pg_txtBarcode : 
+        {    // BAK
+            title : "Barkod Seçimi",    // BAK
+            clmCode :  "STOK KODU",    // BAK
+            clmName : "STOK ADI",    // BAK
+            clmMulticode : "TEDARİKÇİ KODU",    // BAK
+            clmBarcode : "BARKOD"    // BAK
+        },
     },
     stk_03_001 :  // "Stok Listesi" 
     {
@@ -1848,6 +1868,36 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             msg: "Quantité Dépot Mis à jour ! ! Nouvelle Création Non Effectuée",
+        },
+    },
+    stk_04_004: // SKT operasyonu
+    {
+        txtRef : "Stok",   // BAK
+        dtFirstdate : "İlk Tarih",   // BAK
+        dtLastDate : "Son Tarih",   // BAK
+        btnGet : "Getir",   // BAK
+        btnPrint : "Seçili Ürüne Etiket Bas",   // BAK
+        grdExpdateList:   
+        {   
+            clmQuantity : "Miktar",   // BAK
+            clmCode : "Kodu",   // BAK
+            clmName : "Adı",   // BAK
+            clmDiff : "Giriş tarihinden itibaren satılan", // BAK
+            clmDate : "SKT Tarih"// BAK
+        },   
+        popQuantity :    
+        {   
+            title : "Miktar Fiyat Girişi",   // BAK
+            txtQuantity : "Miktar",   // BAK
+            txtPrice : "Fiyat",   // BAK
+            btnSave : "Kaydet ve Yazdır"   // BAK
+        },  
+        pg_txtRef:  
+        {  
+            title: "Stok Seçimi",   // BAK
+            clmCode: "KODU",   // BAK
+            clmName: "ADI",   // BAK
+            clmStatus: "DURUM"   // BAK
         },
     },
     cri_01_001: // "Cari Tanımları"
@@ -7996,6 +8046,48 @@ export const langFr =
         validation:
         {
             notValid: "Veuillez remplir les champs obligatoires !",
+        },
+    },
+        set_03_001 : // Silinmiş Evraklar
+    {
+        cmbType : "Evrak Tipi",  // BAK
+        btnGet : "Evrakları Getir",  // BAK
+        btnUnlock : "Silinmiş Evrakı Tekrar Oluştur",  // BAK
+        mgsUnlock:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            btn02: "Vazgeç",   // BAK
+            msg: "Seçili evrakı tekrar oluşturmak istediğinize eminmisiniz ?"   // BAK
+        },
+        grdDeleteList : 
+        {
+            clmRef : "SERI",  // BAK
+            clmRefNo : "SIRA",  // BAK
+            clmCustomer : "CARI",  // BAK
+            clmDate : "TARIH"  // BAK
+        },
+        cmbTypeData : 
+        {
+            purchaseDispatch : "Alış İrsaliyesi",   // BAK
+            salesDispatch : "Satış İrsaliyesi",   // BAK
+            rebateDispatch : "İade İrsaliyesi",   // BAK
+            branchSaleDispatch : "Şube Satış İrsaliyesi",   // BAK
+            purchaseInvoice : "Alış Faturası",   // BAK
+            salesInvoice : "Satış Faturası",   // BAK
+            priceDifferenceInvoice : "Fiyat Farkı Faturası",   // BAK
+            rebateInvoice : "İade Faturası",   // BAK
+            branchSaleInvoice : "Şube Satış Faturası",   // BAK
+            purchaseOrder : "Alış Sipariş",   // BAK
+            salesOrder : "Satış Sipariş",   // BAK
+            purchaseOffer : "Alış Teklif",   // BAK
+            salesOffer : "Satış Sipariş",   // BAK
+        },
+        msgSuccess:
+        {
+            title: "Başarılı",  // BAK
+            btn01: "Tamam",  // BAK
+            msg: "Evrak Yeniden Oluşturuldu.."  // BAK
         },
     },
     pos_01_001 : // "Pos Cihaz Tanıtım",

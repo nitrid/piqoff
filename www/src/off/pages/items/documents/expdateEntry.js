@@ -5,7 +5,7 @@ import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item } from 'devextreme-react/form';
+import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
 import DropDownButton from 'devextreme-react/drop-down-button';
 import TabPanel from 'devextreme-react/tab-panel';
 import { Button } from 'devextreme-react/button';
@@ -23,7 +23,7 @@ import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 
-export default class labelPrinting extends React.Component
+export default class expdateEntry extends React.Component
 {
     constructor()
     {
@@ -82,10 +82,21 @@ export default class labelPrinting extends React.Component
 
         this.btnSave.setState({disabled:true});
         this.btnNew.setState({disabled:false});
+        this.txtRef.setState({value:this.user.CODE})
+        this.dtDocDate.value =  moment(new Date()).format("YYYY-MM-DD"),
 
         this.txtPopQuantity.value = 1;
         this.dtPopDate.value = moment(new Date()).format("YYYY-MM-DD")
         await this.grdExpDate.dataRefresh({source:this.expObj.dt('ITEM_EXPDATE')});
+        this.txtRef.props.onChange()
+    }
+    async getDoc(pGuid,pRef,pRefno)
+    {
+        this.expObj.clearAll()
+        await this.expObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno});
+
+        this.txtRef.readOnly = true
+        this.txtRefno.readOnly = true
     }
     async addItem(pData,pIndex)
     {
@@ -133,6 +144,7 @@ export default class labelPrinting extends React.Component
         this.expObj.dt()[pIndex].ITEM_NAME = pData.NAME 
         this.expObj.dt()[pIndex].QUANTITY = this.txtPopQuantity.value
         this.expObj.dt()[pIndex].EXP_DATE = this.dtPopDate.value
+        console.log(111)
     }
     render()
     {
@@ -213,7 +225,11 @@ export default class labelPrinting extends React.Component
                                 let pResult = await dialog(tmpConfObj);
                                 if(pResult == 'btn01')
                                 {
-                                    this.expObj.dt('ITEM_EXPDATE').removeAt(0)
+                                    let tmpDelete = {...this.expObj.dt('ITEM_EXPDATE')}
+                                    for (let i = 0; i < tmpDelete.length; i++) 
+                                    {
+                                        this.expObj.dt('ITEM_EXPDATE').removeAt(0)
+                                    }
                                     await this.expObj.dt('ITEM_EXPDATE').delete();
                                     this.init(); 
                                 }
@@ -250,247 +266,531 @@ export default class labelPrinting extends React.Component
             </div>
             {/* Form */}
             <div className="row px-2 pt-2">
-            <Form colCount={2}>
-                <Item>
-                    <Label text={this.t("txtBarcode")} alignment="right" />
-                    <NdTextBox id="txtBarcode" simple={true} parent={this} placeholder={this.t("txtBarcodePlace")}
-                    onEnterKey={(async(e)=>
-                        {
-                            if(e.component._changedValue == "")
-                            {
-                                return
-                            }
-                            let tmpQuery = 
-                            {
-                                query : "SELECT ITEM_CODE AS CODE,ITEM_NAME AS NAME,ITEM_GUID AS GUID,BARCODE FROM ITEM_BARCODE_VW_01  WHERE BARCODE = @BARCODE OR ITEM_CODE = @BARCODE ",
-                                param : ['BARCODE:string|50'],
-                                value : [e.component._changedValue]
-                            }
-                            let tmpData = await this.core.sql.execute(tmpQuery) 
-                            if(tmpData.result.recordset.length > 0)
-                            {
-                                this.PopGrdItemData = tmpData.result.recordset;
-                                this.txtPopItemsCode.GUID = tmpData.result.recordset[0].GUID 
-                                this.txtPopItemsCode.value = tmpData.result.recordset[0].CODE 
-                                this.txtPopItemsName.value = tmpData.result.recordset[0].NAME
-                                this.popItems.show()
-                                await this.core.util.waitUntil(500)
-                                this.txtPopQuantity.focus()
-                            }
-                            else
-                            {
-                                document.getElementById("Sound").play(); 
-                                let tmpConfObj = 
-                                {
-                                    id:'msgBarcodeNotFound',showTitle:true,title:this.t("msgBarcodeNotFound.title"),showCloseButton:true,width:'350px',height:'200px',
-                                    button:[{id:"btn01",caption:this.t("msgBarcodeNotFound.btn01"),location:'after'}],
-                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcodeNotFound.msg")}</div>)
-                                }
-                                await dialog(tmpConfObj);
-                            }
-                        }).bind(this)}>
-                    </NdTextBox>
-                </Item>
-            </Form>
-            <Form colCount={1}>
-                <Item location="after">
-                        <Button icon="add"
-                        onClick={async (e)=>
-                        {
-                            await this.core.util.waitUntil(100)
-                            this.popItems.show()
-                        }}/>
-                </Item>
-                <Item>
-                    <NdGrid parent={this} id={"grdExpDate"} 
-                    showBorders={true} 
-                    columnsAutoWidth={true} 
-                    allowColumnReordering={true} 
-                    allowColumnResizing={true} 
-                    height={'400'} 
-                    width={'100%'}
-                    dbApply={false}
-                    onRowUpdated={async(e)=>{
-                        
-                    }}
-                    onRowRemoved={async (e)=>{
-                        
-                    }}
-                    >
-                        <Scrolling mode="standart" />
-                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                        <Column dataField="ITEM_NAME" caption={this.t("grdExpDate.clmName")} width={250} />
-                        <Column dataField="ITEM_CODE" caption={this.t("grdExpDate.clmCode")} width={150}/>
-                        <Column dataField="EXP_DATE" caption={this.t("grdExpDate.clmDate")} width={250} />
-                    </NdGrid>
-                </Item>
-            </Form>
-            {/* Stok Popup*/}
-            <div>
-                <NdPopUp parent={this} id={"popItems"} 
-                visible={false}
-                showCloseButton={true}
-                showTitle={true}
-                title={this.t("popItems.title")}
-                container={"#root"} 
-                width={'500'}
-                height={'450'}
-                position={{of:'#root'}}
-                >
-                    <Form colCount={1} height={'fit-content'}>
-                        <Item>
-                            <Label text={this.t("popItems.txtPopItemsCode")} alignment="right" />
-                            <NdTextBox id={"txtPopItemsCode"} parent={this} simple={true}
-                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                            onEnterKey={(async()=>
-                                {
-                                    await this.popItemsCode.setVal(this.txtPopItemsCode.value)
-                                    this.popItemsCode.show()
-                                    this.popItemsCode.onClick = (data) =>
-                                    {
-                                        console.log(data)
-                                        if(data.length > 0)
+                <div className="row px-2 pt-2">
+                    <div className="col-12">
+                        <Form colCount={3} id="frmExpDate">
+                            {/* txtRef-Refno */}
+                            <Item>
+                                <Label text={this.t("txtRefRefno")} alignment="right" />
+                                <div className="row">
+                                    <div className="col-4 pe-0">
+                                        <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.expObj.dt('ITEM_EXPDATE'),field:"REF"}}
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                        readOnly={true}
+                                        maxLength={32}
+                                        onChange={(async(e)=>
                                         {
-                                            this.PopGrdItemData = data;
-                                            this.txtPopQuantity.focus()
-                                         
-                                            this.txtPopItemsCode.GUID = data[0].GUID
-                                            this.txtPopItemsCode.value = data[0].CODE;
-                                            this.txtPopItemsName.value = data[0].NAME;
-                                        }
-                                    }
-                                }).bind(this)}
-                            button=
-                            {
-                                [
-                                    {
-                                        id:'01',
-                                        icon:'more',
-                                        onClick:()=>
-                                        {                  
-                                                                        
-                                            this.popItemsCode.show()
-                                            this.popItemsCode.onClick = (data) =>
+                                            let tmpQuery = 
                                             {
-                                                if(data.length > 0)
+                                                query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM ITEM_EXPDATE_VW_01 WHERE REF = @REF ",
+                                                param : ['REF:string|25'],
+                                                value : [this.txtRef.value]
+                                            }
+                                            let tmpData = await this.core.sql.execute(tmpQuery) 
+                                            if(tmpData.result.recordset.length > 0)
+                                            {
+                                                this.txtRefno.value = tmpData.result.recordset[0].REF_NO
+                                            }
+                                        }).bind(this)}
+                                        param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
+                                        >
+                                        <Validator validationGroup={"frmExpDate" + this.tabIndex}>
+                                                <RequiredRule message={this.t("validRef")} />
+                                            </Validator>  
+                                        </NdTextBox>
+                                    </div>
+                                    <div className="col-5 ps-0">
+                                        <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.expObj.dt('ITEM_EXPDATE'),field:"REF_NO"}}
+                                        readOnly={true}
+                                        button=
+                                        {
+                                            [
                                                 {
-                                                    this.PopGrdItemData = data;
-                                                    this.txtPopQuantity.focus()
-
-                                                    this.txtPopItemsCode.GUID = data[0].GUID
-                                                    this.txtPopItemsCode.value = data[0].CODE;
-                                                    this.txtPopItemsName.value = data[0].NAME;
+                                                    id:'01',
+                                                    icon:'more',
+                                                    onClick:()=>
+                                                    {
+                                                        this.pg_Docs.show()
+                                                        this.pg_Docs.onClick = (data) =>
+                                                        {
+                                                            if(data.length > 0)
+                                                            {
+                                                                this.getDoc('00000000-0000-0000-0000-000000000000',data[0].REF,data[0].REF_NO)
+                                                            }
+                                                        }
+                                                                
+                                                    }
+                                                },
+                                                {
+                                                    id:'02',
+                                                    icon:'arrowdown',
+                                                    onClick:()=>
+                                                    {
+                                                        this.txtRefno.value = Math.floor(Date.now() / 1000)
+                                                    }
                                                 }
+                                            ]
+                                        }
+                                        onChange={(async()=>
+                                        {
+                                            let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
+                                            if(tmpResult == 3)
+                                            {
+                                                this.txtRefno.value = "";
+                                            }
+                                        }).bind(this)}
+                                        param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
+                                        >
+                                        <Validator validationGroup={"frmExpDate" + this.tabIndex}>
+                                                <RequiredRule message={this.t("validRefNo")} />
+                                            </Validator> 
+                                        </NdTextBox>
+                                    </div>
+                                </div>
+                                {/*EVRAK SEÇİM */}
+                                <NdPopGrid id={"pg_Docs"} parent={this} container={"#root"}
+                                visible={false}
+                                position={{of:'#root'}} 
+                                showTitle={true} 
+                                showBorders={true}
+                                width={'90%'}
+                                height={'90%'}
+                                title={this.t("pg_Docs.title")} 
+                                data={{source:{select:{query : "SELECT REF,REF_NO,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE  FROM ITEM_EXPDATE_VW_01 GROUP BY REF,REF_NO,DOC_DATE ORDER BY DOC_DATE DESC"},sql:this.core.sql}}}
+                                button=
+                                {
+                                    [
+                                        {
+                                            id:'01',
+                                            icon:'more',
+                                            onClick:()=>
+                                            {
+                                                
                                             }
                                         }
-                                    },
-                                ]
-                            }>       
-                            <Validator validationGroup={"frmPurcContItems"  + this.tabIndex}>
-                                    <RequiredRule message={this.t("validItemsCode")} />
-                            </Validator>                                 
-                            </NdTextBox>
-                        </Item>
-                        <Item>
-                            <Label text={this.t("popItems.txtPopItemsName")} alignment="right" />
-                            <NdTextBox id={"txtPopItemsName"} parent={this} simple={true} editable={true}
-                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
-                        </Item>
-                        <Item>
-                            <Label text={this.t("popItems.txtPopItemsQuantity")} alignment="right" />
-                            <NdTextBox id="txtPopQuantity" parent={this} simple={true}>
-                            </NdTextBox>
-                        </Item>
-                        <Item>
-                            <Label text={this.t("popItems.dtPopDate")} alignment="right" />
-                            <NdDatePicker simple={true}  parent={this} id={"dtPopDate"}/>
-                        </Item>
-                        <Item>
-                            <div className='row'>
-                                <div className='col-6'>
-                                    <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmPurcContItems"  + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {       
-                                        if(e.validationGroup.validate().status == "valid")
+                                    ]
+                                    
+                                }
+                                >
+                                    <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={70} />
+                                    <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={70}  />                                        
+                                    <Column dataField="DOC_DATE" caption={this.t("pg_Docs.clmDate")} width={100}  />
+                                </NdPopGrid>
+                            </Item>
+                            {/* Boş */}
+                            <EmptyItem />
+                            {/* Boş */}
+                            <EmptyItem />
+                            {/* cmbDepot */}
+                            <Item>
+                                <Label text={this.t("cmbDepot")} alignment="right" />
+                                <NdSelectBox simple={true} parent={this} id="cmbDepot"
+                                dt={{data:this.expObj.dt('ITEM_EXPDATE'),field:"DEPOT"}}  
+                                displayExpr="NAME"                       
+                                valueExpr="GUID"
+                                value=""
+                                searchEnabled={true}
+                                notRefresh = {true}
+                                onValueChanged={(async()=>
+                                {
+                                }).bind(this)}
+                                data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 "},sql:this.core.sql}}}
+                                param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
+                                access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
+                                >
+                                    <Validator validationGroup={"frmExpDate" + this.tabIndex}>
+                                        <RequiredRule message={this.t("validDepot")} />
+                                    </Validator> 
+                                </NdSelectBox>
+                            </Item>
+                            {/* dtDocDate */}
+                            <Item>
+                                <Label text={this.t("dtDocDate")} alignment="right" />
+                                <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
+                                dt={{data:this.expObj.dt('ITEM_EXPDATE'),field:"DOC_DATE"}}
+                                onValueChanged={(async()=>
+                                {
+                                }).bind(this)}
+                                >
+                                    <Validator validationGroup={"frmExpDate" + this.tabIndex}>
+                                        <RequiredRule message={this.t("validDocDate")} />
+                                    </Validator> 
+                                </NdDatePicker>
+                            </Item>
+                            {/* Boş */}
+                            <EmptyItem />
+                            {/* BARKOD EKLEME */}
+                            <Item>
+                                <Label text={this.t("txtBarcode")} alignment="right" />
+                                <NdTextBox id="txtBarcode" parent={this} simple={true}  
+                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                button=
+                                {
+                                    [
                                         {
-                                            this.txtPopQuantity.value = 1 
-                                            this.txtPopItemsCode.value = ''
-                                            this.txtPopItemsName.value = ''
-                                            if(typeof this.expObj.dt()[0] != 'undefined')
+                                            id:'01',
+                                            icon:"fa-solid fa-barcode",
+                                            onClick:async(e)=>
                                             {
-                                                if(this.expObj.dt()[this.expObj.dt().length - 1].CODE == '')
+
+                                                await this.pg_txtBarcode.setVal(this.txtBarcode.value)
+                                                this.pg_txtBarcode.show()
+                                                this.pg_txtBarcode.onClick = async(data) =>
                                                 {
-                                                    this.pg_txtItemsCode.show()
-                                                    this.pg_txtItemsCode.onClick = async(data) =>
+                                                    let tmpExpItems = {...this.expObj.empty}
+                                                    tmpExpItems.REF = this.txtRef.value
+                                                    tmpExpItems.REF_NO = this.txtRefno.value
+                                                    tmpExpItems.DEPOT = this.cmbDepot.value
+                                                    tmpExpItems.DOC_DATE = this.dtDocDate.value
+                                                    this.txtRef.readOnly = true
+                                                    this.txtRefno.readOnly = true
+                                                    this.expObj.addEmpty(tmpExpItems)
+            
+                                                    await this.core.util.waitUntil(100)
+                                                    if(data.length > 0)
                                                     {
+                                                        this.customerControl = true
+                                                        this.customerClear = false
+                                                        this.combineControl = true
+                                                        this.combineNew = false
+
                                                         if(data.length == 1)
                                                         {
-                                                            this.addItem(data[0],this.expObj.dt().length - 1)
+                                                            await this.addItem(data[0],this.expObj.dt().length -1)
+                                                        }
+                                                        else if(data.length > 1)
+                                                        {
+                                                            for (let i = 0; i < data.length; i++) 
+                                                            {
+                                                                if(i == 0)
+                                                                {
+                                                                    this.addItem(data[i],this.expObj.dt().length - 1)
+                                                                }
+                                                                else
+                                                                {
+                                                                    let tmpExpItems = {...this.expObj.empty}
+                                                                    tmpExpItems.REF = this.txtRef.value
+                                                                    tmpExpItems.REF_NO = this.txtRefno.value
+                                                                    tmpExpItems.DEPOT = this.cmbDepot.value
+                                                                    tmpExpItems.DOC_DATE = this.dtDocDate.value
+                                                                    this.txtRef.readOnly = true
+                                                                    this.txtRefno.readOnly = true
+                                                                    this.expObj.addEmpty(tmpExpItems)
+
+                                                                    await this.core.util.waitUntil(100)
+                                                                    this.addItem(data[i],this.expObj.dt().length - 1)
+                                                                }
+                                                            }
                                                         }
                                                     }
-                                                    return
                                                 }
                                             }
-                                            console.log(this.PopGrdItemData[0].CODE)
-                                            let tmpExpItems = {...this.expObj.empty}
-                                            this.expObj.addEmpty(tmpExpItems)
-                                            await this.addItem(this.PopGrdItemData[0],this.expObj.dt().length - 1)
-                                            this.PopGrdItemData = [];
-                                            this.popItems.hide();
                                         }
-                                        else
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgSaveValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveValid.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
-                                        }    
-                                        
-                                    }}/>
-                                </div>
-                                <div className='col-6'>
-                                    <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                    onClick={()=>
+                                    ]
+                                }
+                                onEnterKey={(async(e)=>
+                                {
+                                    if(this.cmbDepot.value == '')
                                     {
-                                        this.popItems.hide();  
-                                    }}/>
-                                </div>
-                            </div>
-                        </Item>
-                    </Form>
-                </NdPopUp>
-            </div>
-            {/* Stok Seçim */}
-            <NdPopGrid id={"popItemsCode"} parent={this} container={"#root"}
-                    visible={false}
-                    position={{of:'#root'}} 
-                    showTitle={true} 
-                    showBoffers={true}
-                    width={'90%'}
-                    height={'90%'}
-                    title={this.t("popItemsCode.title")} //
-                    search={true}
-                    data = 
-                    {{
-                        source:
-                        {
-                            select:
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
+                                        }
+                                        
+                                        await dialog(tmpConfObj);
+                                        this.txtBarcode.setState({value:""})
+                                        return
+                                    }
+                                    let tmpQuery = 
+                                    {   query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS MULTICODE,  " + 
+                                        "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
+                                        " FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
+                                        param : ['CODE:string|50'],
+                                        value : [this.txtBarcode.value]
+                                    }
+                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                    this.txtBarcode.setState({value:""})
+                                    if(tmpData.result.recordset.length > 0)
+                                    {
+                                        if(typeof this.expObj.dt()[this.expObj.dt().length - 1] == 'undefined' || this.expObj.dt()[this.expObj.dt().length - 1].CODE != '')
+                                        {
+                                            let tmpExpItems = {...this.expObj.empty}
+                                            tmpExpItems.REF = this.txtRef.value
+                                            tmpExpItems.REF_NO = this.txtRefno.value
+                                            tmpExpItems.DEPOT = this.cmbDepot.value
+                                            tmpExpItems.DOC_DATE = this.dtDocDate.value
+                                            this.txtRef.readOnly = true
+                                            this.txtRefno.readOnly = true
+                                            this.expObj.addEmpty(tmpExpItems)
+                                        }
+                                        
+                                        this.addItem(tmpData.result.recordset[0],this.expObj.dt().length - 1)
+                                    }
+                                    else
+                                    {
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgItemNotFound',showTitle:true,title:this.t("msgItemNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
+                                        }
+                            
+                                        await dialog(tmpConfObj);
+                                    }
+                                    
+                                }).bind(this)}
+                                param={this.param.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
+                                access={this.access.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
+                                >
+                                </NdTextBox>
+                            </Item>
+                        </Form>
+                    </div>
+                </div>
+                <Form colCount={1}>
+                    <Item location="after">
+                            <Button icon="add"
+                            onClick={async (e)=>
                             {
-                                query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE FROM ITEMS_VW_01 WHERE STATUS = 1 AND UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
-                                param : ['VAL:string|50']
-                            },
-                            sql:this.core.sql
-                        }
-                    }}
+                                await this.core.util.waitUntil(100)
+                                this.popItems.show()
+                            }}/>
+                    </Item>
+                    <Item>
+                        <NdGrid parent={this} id={"grdExpDate"} 
+                        showBorders={true} 
+                        columnsAutoWidth={true} 
+                        allowColumnReordering={true} 
+                        allowColumnResizing={true} 
+                        height={'400'} 
+                        width={'100%'}
+                        dbApply={false}
+                        onRowUpdated={async(e)=>{
+                            
+                        }}
+                        onRowRemoved={async (e)=>{
+                            
+                        }}
+                        >
+                            <Scrolling mode="standart" />
+                            <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
+                            <Column dataField="ITEM_NAME" caption={this.t("grdExpDate.clmName")} width={250} />
+                            <Column dataField="ITEM_CODE" caption={this.t("grdExpDate.clmCode")} width={150}/>
+                            <Column dataField="QUANTITY" caption={this.t("grdExpDate.clmQuantity")} width={150}/>
+                            <Column dataField="EXP_DATE" caption={this.t("grdExpDate.clmDate")} width={250}dataType="date"
+                            editorOptions={{value:null}}
+                            cellRender={(e) => 
+                            {
+                                if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
+                                {
+                                    return e.text
+                                }
+                                
+                                return
+                            }}/>
+                        </NdGrid>
+                    </Item>
+                </Form>
+                {/* Stok Popup*/}
+                <div>
+                    <NdPopUp parent={this} id={"popItems"} 
+                    visible={false}
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={this.t("popItems.title")}
+                    container={"#root"} 
+                    width={'500'}
+                    height={'400'}
+                    position={{of:'#root'}}
                     >
-                        <Column dataField="CODE" caption={this.t("popItemsCode.clmCode")} width={150} />
-                        <Column dataField="NAME" caption={this.t("popItemsCode.clmName")} width={300} defaultSortoffer="asc" />
-            </NdPopGrid>
+                        <Form colCount={1} height={'fit-content'}>
+                            <Item>
+                                <Label text={this.t("popItems.txtPopItemsCode")} alignment="right" />
+                                <NdTextBox id={"txtPopItemsCode"} parent={this} simple={true}
+                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                onEnterKey={(async()=>
+                                    {
+                                        await this.popItemsCode.setVal(this.txtPopItemsCode.value)
+                                        this.popItemsCode.show()
+                                        this.popItemsCode.onClick = (data) =>
+                                        {
+                                            if(data.length > 0)
+                                            {
+                                                this.PopGrdItemData = data;
+                                                this.txtPopQuantity.focus()
+                                            
+                                                this.txtPopItemsCode.GUID = data[0].GUID
+                                                this.txtPopItemsCode.value = data[0].CODE;
+                                                this.txtPopItemsName.value = data[0].NAME;
+                                            }
+                                        }
+                                    }).bind(this)}
+                                button=
+                                {
+                                    [
+                                        {
+                                            id:'01',
+                                            icon:'more',
+                                            onClick:()=>
+                                            {                  
+                                                                            
+                                                this.popItemsCode.show()
+                                                this.popItemsCode.onClick = (data) =>
+                                                {
+                                                    if(data.length > 0)
+                                                    {
+                                                        this.PopGrdItemData = data;
+                                                        this.txtPopQuantity.focus()
+
+                                                        this.txtPopItemsCode.GUID = data[0].GUID
+                                                        this.txtPopItemsCode.value = data[0].CODE;
+                                                        this.txtPopItemsName.value = data[0].NAME;
+                                                    }
+                                                }
+                                            }
+                                        },
+                                    ]
+                                }>       
+                                <Validator validationGroup={"frmPurcContItems"  + this.tabIndex}>
+                                        <RequiredRule message={this.t("validItemsCode")} />
+                                </Validator>                                 
+                                </NdTextBox>
+                            </Item>
+                            <Item>
+                                <Label text={this.t("popItems.txtPopItemsName")} alignment="right" />
+                                <NdTextBox id={"txtPopItemsName"} parent={this} simple={true} editable={true}
+                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
+                            </Item>
+                            <Item>
+                                <Label text={this.t("popItems.txtPopItemsQuantity")} alignment="right" />
+                                <NdTextBox id="txtPopQuantity" parent={this} simple={true}>
+                                </NdTextBox>
+                            </Item>
+                            <Item>
+                                <Label text={this.t("popItems.dtPopDate")} alignment="right" />
+                                <NdDatePicker simple={true}  parent={this} id={"dtPopDate"}/>
+                            </Item>
+                            <Item>
+                                <div className='row'>
+                                    <div className='col-6'>
+                                        <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmPurcContItems"  + this.tabIndex}
+                                        onClick={async (e)=>
+                                        {       
+                                            if(e.validationGroup.validate().status == "valid")
+                                            {
+                                                this.txtPopItemsCode.value = ''
+                                                this.txtPopItemsName.value = ''
+                                                if(typeof this.expObj.dt()[0] != 'undefined')
+                                                {
+                                                    if(this.expObj.dt()[this.expObj.dt().length - 1].CODE == '')
+                                                    {
+                                                        this.pg_txtItemsCode.show()
+                                                        this.pg_txtItemsCode.onClick = async(data) =>
+                                                        {
+                                                            if(data.length == 1)
+                                                            {
+                                                                this.addItem(data[0],this.expObj.dt().length - 1)
+                                                            }
+                                                        }
+                                                        return
+                                                    }
+                                                }
+                                                let tmpExpItems = {...this.expObj.empty}
+                                                tmpExpItems.REF = this.txtRef.value
+                                                tmpExpItems.REF_NO = this.txtRefno.value
+                                                tmpExpItems.DEPOT = this.cmbDepot.value
+                                                tmpExpItems.DOC_DATE = this.dtDocDate.value
+                                                this.expObj.addEmpty(tmpExpItems)
+                                                await this.addItem(this.PopGrdItemData[0],this.expObj.dt().length - 1)
+                                                this.PopGrdItemData = [];
+                                                this.popItems.hide();
+                                            }
+                                            else
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgSaveValid.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveValid.msg")}</div>)
+                                                }
+                                                
+                                                await dialog(tmpConfObj);
+                                            }    
+                                            
+                                        }}/>
+                                    </div>
+                                    <div className='col-6'>
+                                        <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                        onClick={()=>
+                                        {
+                                            this.popItems.hide();  
+                                        }}/>
+                                    </div>
+                                </div>
+                            </Item>
+                        </Form>
+                    </NdPopUp>
+                </div>
+                {/* Stok Seçim */}
+                <NdPopGrid id={"popItemsCode"} parent={this} container={"#root"}
+                        visible={false}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        showBoffers={true}
+                        width={'90%'}
+                        height={'90%'}
+                        title={this.t("popItemsCode.title")} //
+                        search={true}
+                        data = 
+                        {{
+                            source:
+                            {
+                                select:
+                                {
+                                    query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE FROM ITEMS_VW_01 WHERE STATUS = 1 AND UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                    param : ['VAL:string|50']
+                                },
+                                sql:this.core.sql
+                            }
+                        }}
+                        >
+                            <Column dataField="CODE" caption={this.t("popItemsCode.clmCode")} width={150} />
+                            <Column dataField="NAME" caption={this.t("popItemsCode.clmName")} width={300} defaultSortoffer="asc" />
+                </NdPopGrid>
             </div>
+            {/* BARKOD POPUP */}
+            <NdPopGrid id={"pg_txtBarcode"} parent={this} container={"#root"}
+            visible={false}
+            position={{of:'#root'}} 
+            showTitle={true} 
+            showBorders={true}
+            width={'90%'}
+            height={'90%'}
+            title={this.t("pg_txtBarcode.title")} //
+            search={true}
+            data = 
+            {{
+                source:
+                {
+                    select:
+                    {
+                        query : "SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS MULTICODE,  " + 
+                        "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME,ITEM_BARCODE_VW_01.BARCODE AS BARCODE " + 
+                        " FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  ITEM_BARCODE_VW_01.BARCODE LIKE '%'+@BARCODE",
+                        param : ['BARCODE:string|50']
+                    },
+                    sql:this.core.sql
+                }
+            }}
+            >
+                <Column dataField="BARCODE" caption={this.t("pg_txtBarcode.clmBarcode")} width={150} />
+                <Column dataField="CODE" caption={this.t("pg_txtBarcode.clmCode")} width={150} />
+                <Column dataField="NAME" caption={this.t("pg_txtBarcode.clmName")} width={300} defaultSortOrder="asc" />
+            </NdPopGrid>
         </ScrollView>
         )
     }

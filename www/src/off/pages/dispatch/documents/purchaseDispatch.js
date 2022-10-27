@@ -139,7 +139,11 @@ export default class purchaseDispatch extends React.PureComponent
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
-        
+        if(this.docObj.dt()[0].DELETED != 0)
+        {
+            console.log(111)
+        }
+
         if(this.docObj.dt()[0].LOCKED != 0)
         {
             this.docLocked = true
@@ -168,7 +172,7 @@ export default class purchaseDispatch extends React.PureComponent
         {
             if(pRef !== '')
             {
-                let tmpData = await new docCls().load({GUID:pGuid,REF:pRef,REF_NO:pRefno});
+                let tmpData = await new docCls().load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:0,DOC_TYPE:40});
 
                 if(tmpData.length > 0)
                 {
@@ -1110,6 +1114,28 @@ export default class purchaseDispatch extends React.PureComponent
                                             }
                                             onChange={(async()=>
                                             {
+                                                let tmpQuery = 
+                                                {
+                                                    query : "SELECT DELETED FROM DOC WHERE REF = @REF AND REF_NO = @REF_NO AND TYPE = 0 AND DOC_TYPE = 40",
+                                                    param : ['REF:string|50','REF_NO:int'],
+                                                    value : [this.txtRef.value,this.txtRefno.value]
+                                                }
+                                                let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                if(tmpData.result.recordset.length > 0)
+                                                {   
+                                                    if(tmpData.result.recordset[0].DELETED == 1)
+                                                    {
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'msgDocDeleted',showTitle:true,title:this.lang.t("msgDocDeleted.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.lang.t("msgDocDeleted.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDocDeleted.msg")}</div>)
+                                                        }
+                                                        this.txtRefno.value = 0
+                                                        await dialog(tmpConfObj);
+                                                        return
+                                                    }
+                                                }
                                                 let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
                                                 if(tmpResult == 3)
                                                 {
@@ -1212,7 +1238,7 @@ export default class purchaseDispatch extends React.PureComponent
                                                     {
                                                         this.frmDocItems.option('disabled',false)
                                                     }
-                                                     let tmpQuery = 
+                                                    let tmpQuery = 
                                                     {
                                                         query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
                                                         param : ['CUSTOMER:string|50'],

@@ -153,6 +153,11 @@ export const menu = (e) =>
                             text : e.t('menu.stk_04_003'),//'Sayım Kesinleştirme',
                             path: 'items/operations/countFinalization'
                         },
+                        {
+                            id: 'stk_04_004',
+                            text : e.t('menu.stk_04_004'),//'SKT Operasyonu',
+                            path: 'items/operations/expdateOperations'
+                        },
                     ]
                 },
                 {
@@ -846,6 +851,19 @@ export const menu = (e) =>
                             id: 'set_01_001',
                             text: e.t('menu.set_01_001'),//'Tax Sugar Oranları',
                             path: 'setting/costandtax/taxSugar'
+                        }
+                    ]
+                },
+                {
+                    id: 'set_03',
+                    text : e.t('menu.set_03'),//'Dokuman Ayarları',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'set_03_001',
+                            text: e.t('menu.set_03_001'),//'Silinmiş Evrak Operasyonları',
+                            path: 'setting/documentSetting/deletedDocOperations'
                         }
                     ]
                 },

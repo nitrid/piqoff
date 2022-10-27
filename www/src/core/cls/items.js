@@ -1551,11 +1551,15 @@ export class itemExpDateCls
         {
             GUID:'00000000-0000-0000-0000-000000000000',
             CUSER: this.core.auth.data == null ? '' : this.core.auth.data.CODE,
+            REF :'',
+            REF_NO : 0,
+            DOC_DATE :moment(new Date()).format("YYYY-MM-DD"),
+            DEPOT : '00000000-0000-0000-0000-000000000000',          
             ITEM_GUID : '00000000-0000-0000-0000-000000000000',            
             ITEM_CODE : '',            
             ITEM_NAME : '',
             QUANTITY : 0,
-            EXP_DATE :  moment(new Date(0)).format("DD/MM/YYYY HH:mm:ss"),
+            EXP_DATE : moment(new Date()).format("YYYY-MM-DD"),
         }
         
         this._initDs();
@@ -1563,18 +1567,54 @@ export class itemExpDateCls
     //#region Private
     _initDs()
     {
-        let tmpDt = new datatable('ITEM_EXPDATE');      
+        let tmpDt = new datatable('ITEM_EXPDATE');     
+        tmpDt.selectCmd = 
+        {
+            query :"SELECT * FROM [dbo].[ITEM_EXPDATE_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000'))  "+ 
+            " AND ((REF =  @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0))",
+            param : ['GUID:string|50','REF:string|15','REF_NO:int']
+        }  
         tmpDt.insertCmd = 
         {
             query : "EXEC [dbo].[PRD_EXPDATE_INSERT] " + 
                     "@GUID = @PGUID, " +
                     "@CUSER = @PCUSER, " + 
+                    "@REF = @PREF, " + 
+                    "@REF_NO = @PREF_NO, " + 
+                    "@DOC_DATE = @PDOC_DATE, " + 
+                    "@DEPOT = @PDEPOT, " + 
                     "@ITEM_GUID = @PITEM_GUID, " + 
                     "@QUANTITY = @PQUANTITY, " + 
                     "@EXP_DATE = @PEXP_DATE " ,
-            param : ['PGUID:string|50','PCUSER:string|25','PITEM_GUID:string|50','PQUANTITY:float','PEXP_DATE:date'],
-            dataprm : ['GUID','CUSER','ITEM_GUID','QUANTITY','EXP_DATE']
+            param : ['PGUID:string|50','PCUSER:string|25','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PDEPOT:string|50','PITEM_GUID:string|50','PQUANTITY:float','PEXP_DATE:date'],
+            dataprm : ['GUID','CUSER','REF','REF_NO','DOC_DATE','DEPOT','ITEM_GUID','QUANTITY','EXP_DATE']
         } 
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_EXPDATE_UPDATE] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@REF = @PREF, " + 
+                    "@REF_NO = @PREF_NO, " + 
+                    "@DOC_DATE = @PDOC_DATE, " + 
+                    "@DEPOT = @PDEPOT, " + 
+                    "@ITEM_GUID = @PITEM_GUID, " + 
+                    "@QUANTITY = @PQUANTITY, " + 
+                    "@EXP_DATE = @PEXP_DATE " ,
+            param : ['PGUID:string|50','PCUSER:string|25','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PDEPOT:string|50','PITEM_GUID:string|50','PQUANTITY:float','PEXP_DATE:date'],
+            dataprm : ['GUID','CUSER','REF','REF_NO','DOC_DATE','DEPOT','ITEM_GUID','QUANTITY','EXP_DATE']
+        } 
+        tmpDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_EXPDATE_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@UPDATE = 1, " + 
+                    "@GUID = @PGUID, " + 
+                    "@REF = @PREF, " +
+                    "@REF_NO = @PREF_NO ",
+            param : ['PCUSER:string|25','PGUID:string|50','PREF:string|15','PREF_NO:int'],
+            dataprm : ['CUSER','GUID','REF','REF_NO']
+        }
         this.ds.add(tmpDt);
     }
     //#endregion
@@ -1616,7 +1656,32 @@ export class itemExpDateCls
     {
         return new Promise(async resolve => 
         {
+            this.ds.delete()
             resolve(await this.ds.update()); 
+        });
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ.
+        return new Promise(async resolve => 
+        {
+            let tmpPrm = 
+            {
+                GUID : '00000000-0000-0000-0000-000000000000',
+                REF : '',
+                REF_NO : 0
+            }          
+
+            if(arguments.length > 0)
+            {
+                tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
+                tmpPrm.REF = typeof arguments[0].REF == 'undefined' ? '' : arguments[0].REF;
+                tmpPrm.REF_NO = typeof arguments[0].REF_NO == 'undefined' ? 0 : arguments[0].REF_NO;
+            }
+            this.ds.get('ITEM_EXPDATE').selectCmd.value = Object.values(tmpPrm)
+
+            await this.ds.get('ITEM_EXPDATE').refresh();
+            resolve(this.ds.get('ITEM_EXPDATE'));    
         });
     }
 }

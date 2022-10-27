@@ -89,7 +89,7 @@ export const langTr =
         stk_04_001: "Toplu Stok Düzenleme",
         stk_04_002: "İade Operasyonları",
         stk_04_003 : "Sayım Kesinleştirme",
-        stk_04_004 :"Toplu İşlemler",
+        stk_04_004 :"SKT Operasyonu",
         cri: "Cari",
         cri_01: "Tanımlar",
         cri_02: "Listeler",
@@ -187,6 +187,8 @@ export const langTr =
         set_01_001 : "Tax Sugar",
         set_02 : "Genel Ayarlar",
         set_02_001 : "Firma Bilgileri",
+        set_03 : "Evrak Ayarları",
+        set_03_001 : "Silinmiş Evraklar",
         proces : "Toplu işlemler",
         proces_01 : "Stok İşlemleri",
         proces_01_001 : "Ürün Grubu Güncelleme",
@@ -204,6 +206,12 @@ export const langTr =
         login:"Giriş",
         logout : "Çıkış",
         selectUser : "Kullanıcı Seçim",
+    },
+    msgDocDeleted : 
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Bu Evrak Numarasıyla Silinmiş Evrak! Lütfen Yetkili İle Görüşün.."
     },
     stk_01_001:  // "Yeni Stok Tanımlama"
     {
@@ -1495,6 +1503,10 @@ export const langTr =
         AddItems : "Ekle",
         txtBarcode : "Barkod Ekle",
         txtBarcodePlace: "Barkod Okutunuz",
+        txtRefRefno : "Seri-Sıra",
+        txtQuantity : "Miktar", 
+        cmbDepot : "Depo",
+        dtDocDate : "Tarih",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -1514,13 +1526,14 @@ export const langTr =
             txtPopItemsCode : "Stok Kodu",
             txtPopItemsName: "Stok Adı",
             txtPopItemsQuantity : "Miktar",
-            dtPopDate : "SKT Tarihİ"
+            dtPopDate : "SKT Tarihi"
         },
         grdExpDate:
         {
             clmName: "Adı",
             clmCode: "Kodu",
-            clmDate: "SKT Tarihİ"
+            clmDate: "SKT Tarihi",
+            clmQuantity : "Miktar",
         },
         msgDocValid:
         {
@@ -1583,7 +1596,14 @@ export const langTr =
         },
         validDepot : "Depo Seçmelisiniz",
         validDocDate : "Tarih Seçmelisiniz",
-
+        pg_txtBarcode : 
+        {
+            title : "Barkod Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+            clmMulticode : "TEDARİKÇİ KODU",
+            clmBarcode : "BARKOD"
+        },
     },
     stk_03_001 :  // "Stok Listesi"
     {
@@ -1848,6 +1868,36 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: " Depo Miktarları Güncel !! Yeni Kayıt Oluşturulmadı",
+        },
+    },
+    stk_04_004: // SKT operasyonu
+    {
+        txtRef : "Stok",
+        dtFirstdate : "İlk Tarih",
+        dtLastDate : "Son Tarih",
+        btnGet : "Getir",
+        btnPrint : "Seçili Ürüne Etiket Bas",
+        grdExpdateList:  
+        {
+            clmQuantity : "Miktar",
+            clmCode : "Kodu",
+            clmName : "Adı",
+            clmDiff : "Giriş tarihinden itibaren satılan",
+            clmDate : "SKT Tarih"
+        },
+        popQuantity : 
+        {
+            title : "Miktar Fiyat Girişi",
+            txtQuantity : "Miktar",
+            txtPrice : "Fiyat",
+            btnSave : "Kaydet ve Yazdır"
+        },
+        pg_txtRef:
+        {
+            title: "Stok Seçimi",
+            clmCode: "KODU",
+            clmName: "ADI",
+            clmStatus: "DURUM"
         },
     },
     cri_01_001: // "Cari Tanımları"
@@ -7996,6 +8046,48 @@ export const langTr =
         validation:
         {
             notValid: "Boş geçemezsiniz !",
+        },
+    },
+    set_03_001 : // Silinmiş Evraklar
+    {
+        cmbType : "Evrak Tipi",
+        btnGet : "Evrakları Getir",
+        btnUnlock : "Silinmiş Evrakı Tekrar Oluştur",
+        mgsUnlock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Seçili evrakı tekrar oluşturmak istediğinize eminmisiniz ?"
+        },
+        grdDeleteList : 
+        {
+            clmRef : "SERI",
+            clmRefNo : "SIRA",
+            clmCustomer : "CARI",
+            clmDate : "TARIH"
+        },
+        cmbTypeData : 
+        {
+            purchaseDispatch : "Alış İrsaliyesi",
+            salesDispatch : "Satış İrsaliyesi",
+            rebateDispatch : "İade İrsaliyesi",
+            branchSaleDispatch : "Şube Satış İrsaliyesi",
+            purchaseInvoice : "Alış Faturası",
+            salesInvoice : "Satış Faturası",
+            priceDifferenceInvoice : "Fiyat Farkı Faturası",
+            rebateInvoice : "İade Faturası",
+            branchSaleInvoice : "Şube Satış Faturası",
+            purchaseOrder : "Alış Sipariş",
+            salesOrder : "Satış Sipariş",
+            purchaseOffer : "Alış Teklif",
+            salesOffer : "Satış Sipariş",
+        },
+        msgSuccess:
+        {
+            title: "Başarılı",
+            btn01: "Tamam",
+            msg: "Evrak Yeniden Oluşturuldu.."
         },
     },
     pos_01_001 : // "Pos Cihaz Tanıtım",
