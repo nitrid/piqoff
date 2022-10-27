@@ -263,6 +263,8 @@ export default class QuantityList extends React.PureComponent
                             showBorders={true}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
+                            height={'690'} 
+                            width={'100%'}
                             columnAutoWidth={true}
                             allowColumnReordering={true}
                             allowColumnResizing={true}

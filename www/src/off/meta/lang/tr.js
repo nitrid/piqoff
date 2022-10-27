@@ -1947,7 +1947,8 @@ export const langTr =
             clmDate : "SKT Tarih",
             clmRemainder : "Fark",
             clmCustomer :"Cari",
-            clmRebate : "İade Alır"
+            clmRebate : "İade Alır",
+            clmDescription :"Açıklama"
         },
         popQuantity : 
         {

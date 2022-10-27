@@ -93,9 +93,9 @@ export const langFr =
         stk_03_005: "Liste multi code ",
         stk_03_006 : "Liste produit réserve",
         stk_04_001: "Gerer multi produit",
-        stk_04_002: "Saisie retour",
-        stk_04_003 : "Inventaire validé",
-        stk_04_004 :"SKT Operasyonu", // BAK
+        stk_04_002: "Traitement retour",
+        stk_04_003 : "Traitement inventaire",
+        stk_04_004 :"Traitement DLC",
         cri: "Fournisseur - Client",
         cri_01: "Saisie",
         cri_02: "Listes",
@@ -1947,7 +1947,8 @@ export const langFr =
             clmDate : "SKT Tarih",// BAK
             clmRemainder : "Fark", // BAK
             clmCustomer :"Cari",
-            clmRebate : "İade Alır"
+            clmRebate : "İade Alır",
+            clmDescription :"Açıklama"
         },   
         popQuantity :    
         {   

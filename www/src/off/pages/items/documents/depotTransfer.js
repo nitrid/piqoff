@@ -1150,7 +1150,8 @@ export default class depotTransfer extends React.PureComponent
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
-                                    height={'400'} 
+                                    filterRow={{visible:true}} 
+                                    height={'640'} 
                                     width={'100%'}
                                     dbApply={false}
                                     onRowUpdating={async(e)=>

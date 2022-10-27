@@ -1195,7 +1195,7 @@ export default class itemCount extends React.PureComponent
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
-                                    height={'400'} 
+                                    height={'595'} 
                                     width={'100%'}
                                     dbApply={false}
                                     filterRow={{visible:true}} 

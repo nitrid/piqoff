@@ -287,7 +287,6 @@ export default class collectiveItemEdit extends React.PureComponent
                             <NdGrid id="grdItemList" parent={this} 
                             showBorders={true}
                             filterRow={{visible:true}} 
-                            headerFilter={{visible:false}}
                             columnAutoWidth={true}
                             allowColumnReordering={false}
                             allowColumnResizing={true}

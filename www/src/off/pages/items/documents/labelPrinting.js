@@ -1284,7 +1284,7 @@ export default class labelPrinting extends React.PureComponent
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
                                     filterRow={{visible:true}} 
-                                    height={'600'} 
+                                    height={'660'} 
                                     width={'100%'}
                                     dbApply={false}
                                     loadPanel={{enabled:true}}
