@@ -93,8 +93,7 @@ export class nf525Cls
             }
             
             let tmpResult = await this.core.sql.execute(tmpQuery)
-            console.log(tmpResult)
-            console.log(tmpQuery)
+            
             if(tmpResult.result.recordset.length > 0)
             {
                 if(tmpResult.result.recordset[0].SIGNATURE != null)
@@ -108,7 +107,7 @@ export class nf525Cls
                     tmpLastSignature = tmpLastSignature + "," + (tmpResult.result.recordset[0].SIGNATURE == "" ? "N" : "O")
                 }
             }
-            console.log(btoa(tmpLastSignature))
+            
             resolve(btoa(tmpLastSignature))
         })
     }

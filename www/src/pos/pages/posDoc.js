@@ -4900,7 +4900,7 @@ export default class posDoc extends React.PureComponent
                                         this.lastPosDt.selectCmd = 
                                         {
                                             query:  "SELECT *, " +
-                                                    "SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,36) AS REF " + 
+                                                    "SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,36) AS REF_NO " + 
                                                     "FROM POS_VW_01 WHERE DOC_DATE >= @START_DATE AND DOC_DATE <= @FINISH_DATE AND " +
                                                     "((ISNULL((SELECT TOP 1 1 FROM POS_PAYMENT AS PAY WHERE PAY.POS = POS_VW_01.GUID AND TYPE = @TYPE AND DELETED = 0),0) = 1) OR (@TYPE = -1)) AND " + 
                                                     "((LUSER = @USER) OR (@USER = '')) AND STATUS = 1 ORDER BY LDATE DESC",
@@ -4913,7 +4913,7 @@ export default class posDoc extends React.PureComponent
                                         this.lastPosDt.selectCmd = 
                                         {
                                             query:  "SELECT *, " +
-                                                    "SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,36) AS REF " + 
+                                                    "SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,36) AS REF_NO " + 
                                                     "FROM POS_VW_01 WHERE SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,36) = @REF AND STATUS = 1",
                                             param:  ["REF:string|25"],
                                             value:  [this.txtPopLastRef.value]
@@ -5028,9 +5028,9 @@ export default class posDoc extends React.PureComponent
                                     }
                                 }}
                                 >
-                                    <Column dataField="LDATE" caption={this.lang.t("grdLastPos.LDATE")} width={200} alignment={"center"} dataType={"datetime"} format={"dd-MM-yyyy - HH:mm:ss SSSZ"}/>
-                                    <Column dataField="DEVICE" caption={this.lang.t("grdLastPos.DEVICE")} width={100}/>
-                                    <Column dataField="REF" caption={this.lang.t("grdLastPos.REF")} width={150}/>
+                                    <Column dataField="LDATE" caption={this.lang.t("grdLastPos.LDATE")} width={150} alignment={"center"} dataType={"datetime"} format={"dd-MM-yyyy - HH:mm:ss"}/>
+                                    <Column dataField="DEVICE" caption={this.lang.t("grdLastPos.DEVICE")} width={60}/>
+                                    <Column dataField="REF_NO" caption={this.lang.t("grdLastPos.REF")} width={150}/>
                                     <Column dataField="CUSTOMER_NAME" caption={this.lang.t("grdLastPos.CUSTOMER_NAME")} width={200}/> 
                                     <Column dataField="CUSER_NAME" caption={this.lang.t("grdLastPos.CUSER_NAME")} width={100}/>
                                     <Column dataField="DISCOUNT" caption={this.lang.t("grdLastPos.DISCOUNT")} width={100} format={"#,##0.00" + Number.money.sign}/> 
