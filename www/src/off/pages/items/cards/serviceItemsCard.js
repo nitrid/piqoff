@@ -175,7 +175,25 @@ export default class DepotCard extends React.PureComponent
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmService"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
-                                        console.log(this.servicesItemobj.dt()[0])
+                                        let tmpQuery = 
+                                        {
+                                            query :"SELECT TOP 1 ITEM FROM DOC_ITEMS_VW_01 WHERE ITEM=@ITEM",
+                                            param : ['ITEM:string|50'],
+                                            value : [this.servicesItemobj.dt()[0].GUID]
+                                        }
+                                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                                        if(tmpData.result.recordset.length > 0)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgNotUpdate',showTitle:true,title:this.t("msgNotUpdate.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgNotUpdate.btn01"),location:'before'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotUpdate.msg")}</div>)
+                                            }
+                                            
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             let tmpConfObj =
@@ -223,7 +241,25 @@ export default class DepotCard extends React.PureComponent
                                     <NdButton id="btnDelete" parent={this} icon="trash" type="default"
                                     onClick={async()=>
                                     {
-                                        
+                                        let tmpQuery = 
+                                        {
+                                            query :"SELECT TOP 1 ITEM FROM DOC_ITEMS_VW_01 WHERE ITEM=@ITEM",
+                                            param : ['ITEM:string|50'],
+                                            value : [this.servicesItemobj.dt()[0].GUID]
+                                        }
+                                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                                        if(tmpData.result.recordset.length > 0)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgNotDelete',showTitle:true,title:this.t("msgNotDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgNotDelete.btn01"),location:'before'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotDelete.msg")}</div>)
+                                            }
+                                            
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
                                         let tmpConfObj =
                                         {
                                             id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -329,7 +365,7 @@ export default class DepotCard extends React.PureComponent
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_txtCode.title")} //
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM SERVICE_ITEMS"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT CODE,NAME FROM SERVICE_ITEMS_VW_01"},sql:this.core.sql}}}
                                     button=
                                     {
                                         {

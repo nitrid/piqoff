@@ -224,7 +224,25 @@ export default class DepotCard extends React.PureComponent
                                     <NdButton id="btnDelete" parent={this} icon="trash" type="default"
                                     onClick={async()=>
                                     {
-                                        
+                                        let tmpQuery = 
+                                        {
+                                            query :"select top 1 GUID FROM DOC_VW_01 WHERE ((INPUT = @DEPOT) OR (OUTPUT = @DEPOT))",
+                                            param : ['DEPOT:string|50'],
+                                            value : [this.depotObj.dt()[0].GUID]
+                                        }
+                                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                                        if(tmpData.result.recordset.length > 0)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgNotDeleted',showTitle:true,title:this.t("msgNotDeleted.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgNotDeleted.btn01"),location:'before'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotDeleted.msg")}</div>)
+                                            }
+                                            
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
                                         let tmpConfObj =
                                         {
                                             id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',

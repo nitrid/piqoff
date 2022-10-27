@@ -641,7 +641,12 @@ export const langTr =
             msg : "Girmiş olduğunuz Kasa sistem de kayıtlı !"
         },
         chkActive: "Aktif",
-      
+        msgNotDeleted : 
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg : "Bu depo üzerinde işlem yapıldığı için silinemez !"
+        },
     },
     stk_01_007 : // "Hizmet Tanımları"
     {
@@ -692,8 +697,19 @@ export const langTr =
             msg : "Girmiş olduğunuz hizmet kodu sistem de kayıtlı !"
         },
         chkActive: "Aktif",
-        cmbTax : "Vergi"
-      
+        cmbTax : "Vergi",
+        msgNotDelete : 
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg : "Bu kart üzerinde işlem yapıldığı için silinemez !"
+        },
+        msgNotUpdate : 
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg : "Bu kart üzerinde işlem yapıldığı için değişiklik yapılamaz !"
+        },
     },
     stk_02_001 : // Sayım Evrakı"
     {

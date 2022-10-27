@@ -641,7 +641,12 @@ export const langFr =
             msg : "Coffre Saisie déjà enregistré dans notre base ! " ,
         },
         chkActive: "Actif",
-      
+        msgNotDeleted : 
+        {
+            title: "Dikkat",  // BAK
+            btn01: "Tamam",  // BAK
+            msg : "Budepo üzerinde işlem yapıldığı için silinemez !"  // BAK
+        },
     },
     stk_01_007 : // "Hizmet Tanımları" // YENİ EKLENDİ KOMPLE BAK
     {
@@ -692,8 +697,19 @@ export const langFr =
             msg : "Le code de service que vous avez saisi est enregistré dans le système !"
         },
         chkActive: "Actif",
-        cmbTax : "Impôt"
-      
+        cmbTax : "Impôt",
+        msgNotDelete : 
+        {
+            title: "Dikkat", // BAK
+            btn01: "Tamam", // BAK
+            msg : "Bu kart üzerinde işlem yapıldığı için silinemez !" // BAK
+        },
+        msgNotUpdate : 
+        {
+            title: "Dikkat", // BAK
+            btn01: "Tamam", // BAK
+            msg : "Bu kart üzerinde işlem yapıldığı için değişiklik yapılamaz !" // BAK
+        },
     },
     stk_02_001 : // Sayım Evrakı"
     {

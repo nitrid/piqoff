@@ -494,7 +494,7 @@ export default class purchaseInvoice extends React.PureComponent
     }
     async addItem(pData,pIndex,pQuantity,pPrice,pDiscount,pDiscountPer,pVat)
     {
-        console.log(pIndex)
+        console.log(pData.ITEM_TYPE)
         App.instance.setState({isExecute:true})
         if(typeof pData.ITEM_TYPE == 'undefined')
         {
@@ -603,13 +603,6 @@ export default class purchaseInvoice extends React.PureComponent
                         return
                     }
                 }
-            }
-        }
-        else
-        {
-            if(this.docObj.docItems.dt()[i].ITEM_CODE == pData.CODE)
-            {
-                return
             }
         }
         this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
@@ -2948,7 +2941,7 @@ export default class purchaseInvoice extends React.PureComponent
                     width={'90%'}
                     height={'90%'}
                     title={this.t("pg_service.title")} //
-                    data={{source:{select:{query : "SELECT *,1 AS ITEM_TYPE FROM SERVICE_ITEMS WHERE STATUS = 1"},sql:this.core.sql}}}
+                    data={{source:{select:{query : "SELECT *,1 AS ITEM_TYPE FROM SERVICE_ITEMS_VW_01 WHERE STATUS = 1"},sql:this.core.sql}}}
                     >
                         <Column dataField="CODE" caption={this.t("pg_service.clmCode")} width={200}/>
                         <Column dataField="NAME" caption={this.t("pg_service.clmName")} width={300} defaultSortOrder="asc"/>
