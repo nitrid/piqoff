@@ -1498,6 +1498,9 @@ export const langFr =
         txtBarcode : "Ajouter Code Barre",
         txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Quantité", 
+        txtRefRefno : "Seri-Sıra",  // BAK
+        cmbDepot : "Depo",  // BAK
+        dtDocDate : "Tarih",  // BAK
         pg_Docs : 
         {
             title : "Choix du document",
@@ -1587,6 +1590,14 @@ export const langFr =
         },
         validDepot : "Vous devez choisir l'entrepôt",
         validDocDate : "Vous devez sélectionner une date",
+        pg_txtBarcode : 
+        {    // BAK
+            title : "Barkod Seçimi",    // BAK
+            clmCode :  "STOK KODU",    // BAK
+            clmName : "STOK ADI",    // BAK
+            clmMulticode : "TEDARİKÇİ KODU",    // BAK
+            clmBarcode : "BARKOD"    // BAK
+        },
     },
     stk_03_001 :  // "Stok Listesi" 
     {

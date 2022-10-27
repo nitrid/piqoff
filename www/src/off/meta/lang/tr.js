@@ -1503,6 +1503,10 @@ export const langTr =
         AddItems : "Ekle",
         txtBarcode : "Barkod Ekle",
         txtBarcodePlace: "Barkod Okutunuz",
+        txtRefRefno : "Seri-Sıra",
+        txtQuantity : "Miktar", 
+        cmbDepot : "Depo",
+        dtDocDate : "Tarih",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -1522,13 +1526,13 @@ export const langTr =
             txtPopItemsCode : "Stok Kodu",
             txtPopItemsName: "Stok Adı",
             txtPopItemsQuantity : "Miktar",
-            dtPopDate : "SKT Tarihİ"
+            dtPopDate : "SKT Tarihi"
         },
         grdExpDate:
         {
             clmName: "Adı",
             clmCode: "Kodu",
-            clmDate: "SKT Tarihİ",
+            clmDate: "SKT Tarihi",
             clmQuantity : "Miktar",
         },
         msgDocValid:
@@ -1592,7 +1596,14 @@ export const langTr =
         },
         validDepot : "Depo Seçmelisiniz",
         validDocDate : "Tarih Seçmelisiniz",
-
+        pg_txtBarcode : 
+        {
+            title : "Barkod Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+            clmMulticode : "TEDARİKÇİ KODU",
+            clmBarcode : "BARKOD"
+        },
     },
     stk_03_001 :  // "Stok Listesi"
     {
