@@ -30,6 +30,8 @@ import Login from './login.js'
 import NdDialog,{dialog} from '../../core/react/devex/dialog';
 import Page from './page';
 
+import * as appInfo from '../../../package.json'
+
 export default class App extends React.PureComponent
 {
     static instance = null;
@@ -148,7 +150,8 @@ export default class App extends React.PureComponent
         this.core = new core(io(this.device ? 'http://'+localStorage.host : window.origin,{timeout:100000,transports : ['websocket']}));
         this.textValueChanged = this.textValueChanged.bind(this)
         this.onDbClick = this.onDbClick.bind(this)
-
+        this.core.appInfo = appInfo
+        
         if(!App.instance)
         {
             App.instance = this;
