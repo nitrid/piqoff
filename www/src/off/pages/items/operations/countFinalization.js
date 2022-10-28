@@ -16,7 +16,7 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling,Pager,KeyboardNavigation} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Scrolling,Pager,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
@@ -363,7 +363,7 @@ export default class countFinalization extends React.PureComponent
                             >                            
                                 <Paging defaultPageSize={15} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
-
+                                <Export fileName={this.lang.t("menu.stk_04_003")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="REF" caption={this.t("grdCountDocument.clmRef")} visible={true} /> 
                                 <Column dataField="REF_NO" caption={this.t("grdCountDocument.clmRefNo")} visible={true}/> 
                                 <Column dataField="DOC_DATE" caption={this.t("grdCountDocument.clmDate")} visible={true}/> 
@@ -396,6 +396,7 @@ export default class countFinalization extends React.PureComponent
                                     <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
                                     <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                     <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
+                                    <Export fileName={this.lang.t("menu.stk_02_005")} enabled={true} allowExportSelectedData={true} />
                                     <Column dataField="ITEM_CODE" caption={this.t("grdCountItems.clmCode")} width={150} headerFilter={{visible:true}}/>
                                     <Column dataField="ITEM_NAME" caption={this.t("grdCountItems.clmName")} width={350}  headerFilter={{visible:true}}/>
                                     <Column dataField="QUANTITY" caption={this.t("grdCountItems.clmQuantity")} width={150}  headerFilter={{visible:true}}/>

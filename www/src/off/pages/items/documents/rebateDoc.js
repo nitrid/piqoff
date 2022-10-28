@@ -61,7 +61,7 @@ export default class rebateDoc extends React.PureComponent
                 this.btnBack.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
-                this.btnPrint.setState({disabled:false});
+                this.btnPrint.setState({disabled:true});
             }
         })
         this.docObj.ds.on('onEdit',(pTblName,pData) =>
@@ -72,7 +72,7 @@ export default class rebateDoc extends React.PureComponent
                 this.btnNew.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
-                this.btnPrint.setState({disabled:false});
+                this.btnPrint.setState({disabled:true});
 
                 pData.rowData.CUSER = this.user.CODE
             }                 
@@ -83,7 +83,7 @@ export default class rebateDoc extends React.PureComponent
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:true});
             this.btnDelete.setState({disabled:false});
-            this.btnPrint.setState({disabled:false});          
+            this.btnPrint.setState({disabled:true});          
         })
         this.docObj.ds.on('onDelete',(pTblName) =>
         {            
@@ -91,7 +91,7 @@ export default class rebateDoc extends React.PureComponent
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:false});
             this.btnDelete.setState({disabled:false});
-            this.btnPrint.setState({disabled:false});
+            this.btnPrint.setState({disabled:true});
         })
 
         this.quantityControl = this.prmObj.filter({ID:'negativeQuantity',USERS:this.user.CODE}).getValue().value
@@ -137,6 +137,7 @@ export default class rebateDoc extends React.PureComponent
             this.docLocked = false
             this.frmDocItems.option('disabled',false)
         }
+        this.btnPrint.setState({disabled:false});
     }
     async checkDoc(pGuid,pRef,pRefno)
     {
@@ -519,7 +520,8 @@ export default class rebateDoc extends React.PureComponent
                                             }
                                             
                                             await dialog(tmpConfObj);
-                                        }                                                 
+                                        }     
+                                        this.btnPrint.setState({disabled:false});
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">

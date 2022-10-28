@@ -2029,12 +2029,15 @@ export const langTr =
         },
         grdLegal : 
         {
-            clmSiretID : "Siret ID",
+            clmSiretID : "Tic. Sicil Kaydı",
             clmApeCode : "Ape Kodu",
             clmTaxOffice : "Vergi Dairesi",
             clmTaxNo : "Vergi No",
             clmIntVatNo : "Ulus. KDV No",
-            clmTaxType : "Vergi Tipi"
+            clmTaxType : "Vergi Tipi",
+            clmSirenID : "Tic. Sicil No",
+            clmRcs : "Ticaret Odası",
+            clmCapital : "Sermaye",
         },
         grdOffical : 
         {
@@ -2313,12 +2316,15 @@ export const langTr =
         },
         grdLegal : 
         {
-            clmSiretID : "Siret ID",
+            clmSiretID : "Tic. Sicil Kaydı",
             clmApeCode : "Ape Kodu",
             clmTaxOffice : "Vergi Dairesi",
             clmTaxNo : "Vergi No",
             clmIntVatNo : "Ulus. KDV No",
-            clmTaxType : "Vergi Tipi"
+            clmTaxType : "Vergi Tipi",
+            clmSirenID : "Tic. Sicil No",
+            clmRcs : "Ticaret Odası",
+            clmCapital : "Sermaye",
         },
         grdOffical : 
         {

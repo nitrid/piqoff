@@ -2029,12 +2029,15 @@ export const langFr =
         },
         grdLegal : 
         {
-            clmSiretID : "Siret ID",
+            clmSiretID : "Siret No",
             clmApeCode : "Code Ape",
             clmTaxOffice : "Impôt",
             clmTaxNo : "Numéro Impôt",
             clmIntVatNo : "No TVA inter.",
-            clmTaxType : "Type de Taxe"
+            clmTaxType : "Type de Taxe",
+            clmSirenID : "Siren No",
+            clmRcs : "RCS",
+            clmCapital : "Capital",
         },
         grdOffical : 
         {
@@ -2318,7 +2321,10 @@ export const langFr =
             clmTaxOffice : "Impôt",
             clmTaxNo : "Numéro Impôt",
             clmIntVatNo : "No TVA inter.",
-            clmTaxType : "Type de Taxe"
+            clmTaxType : "Type de Taxe",
+            clmSirenID : "Siren No",
+            clmRcs : "RCS",
+            clmCapital : "Capital",
         },
         grdOffical : 
         {
