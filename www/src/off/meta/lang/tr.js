@@ -110,6 +110,7 @@ export const langTr =
         cri_02_003: "Grup Listesi",
         cri_03_001: "Toplu Cari Ekleme",
         cri_04_001 : "Cari Ekstre Raporu",
+        cri_04_003 : "Müşteri Puanı Raporu",
         ftr: "Fatura",
         ftr_01: "Listeler",
         ftr_02: "Evraklar",
@@ -8408,9 +8409,10 @@ export const langTr =
         {
             title: "Dikkat",  
             btn01: "Tamam",   
-            msg: "Lütfen Açıklama Giriniz.. "  
+            msg: "Lütfen en az 15 karakter açıklama giriniz.."
         },
-        btnAdd : "Ekle"
+        btnAdd : "Ekle",
+        descriptionPlace : "Lütfen en az 15 karakter açıklama giriniz.."
     },
     pos_02_005 : // "Degismis Fisler Raporu",
     {
@@ -9367,4 +9369,87 @@ export const langTr =
     {
         chkRowTotal : "Satır Toplamları"
     },    
+    cri_04_003 : // "Müşteri Puanı Raporu"
+    {
+        cmbCustomer :"Cari",
+        btnGet :"Getir",
+        txtCustomerCode : "Cari Kodu",
+        txtCustomerName : "Cari Adı",
+        txtAmount : "Toplam Tutar",
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        grdCustomerPointReport: 
+        {
+            clmCode: "Kodu",
+            clmTitle: "Adı",
+            clmPoint: "Puan",
+            clmLdate : "Son Güncelleme Tarihi",
+            clmEur : "EURO"
+        },
+        popPointDetail : 
+        {
+            title: "Puan Detayı"
+        },
+        grdPointDetail : 
+        {
+            clmDate : "Tarih",
+            clmPoint : "Puan",
+            clmPointType : "Tip",
+            clmPosId :"Fiş No",
+            clmDescription :"Açıklama",
+        },
+        grdSaleTicketItems :
+        {
+            clmBarcode : "Barkod",
+            clmName : "Ürün Adı",
+            clmQuantity : "Adet",
+            clmPrice : "Fiyat",
+            clmTotal : "Tutar"
+        },
+        grdSaleTicketPays : 
+        {
+            clmPayName : "Ödeme Tipi", 
+            clmTotal : "Tutar",
+        },
+        popDetail : 
+        {
+            title : "Fiş Detayı"
+        },
+        TicketId :"Fiş I.D",
+        popLastTotal : 
+        {
+            title : "Tahsilat"
+        },
+        trDeatil: "T.R Detay", 
+        lineDelete :"Satır İptal", 
+        cancel : "Vazgeç", 
+        btnAddpoint : "Puan Giriş Çıkışı",
+        popPointEntry : 
+        {
+            title : "Puan Giriş Çıkışı"
+        },
+        txtPoint : "Puan",
+        txtPointAmount : "Tutar karşılığı",
+        cmbPointType : "İşlem tipi",
+        cmbTypeData : 
+        {
+            in : "Puan Girişi",
+            out : "Puan Çıkışı"
+        },
+        txtDescription : "Açıklama",
+        msgDescription:
+        {
+            title: "Dikkat",  
+            btn01: "Tamam",   
+            msg: "Lütfen en az 15 karakter açıklama giriniz.."
+        },
+        btnAdd : "Ekle",
+        descriptionPlace : "Lütfen en az 15 karakter açıklama giriniz.."
+    },
 }

@@ -82,7 +82,7 @@ export default class salesOrdList extends React.PureComponent
                 select : 
                 {
                     query : "SELECT *, CASE TYPE WHEN 0 THEN '+' + CONVERT(NVARCHAR, POINT) WHEN 1 THEN '-' + CONVERT(NVARCHAR, POINT) END AS POINT_TYPE, " +
-                    "(CONVERT(NVARCHAR, CDATE, 104) + ' ' + CONVERT(NVARCHAR, CDATE, 24)) AS F_DATE,SUBSTRING(CONVERT(NVARCHAR(50),DOC),20,25) AS POS_ID FROM CUSTOMER_POINT_VW_01 WHERE CUSTOMER_CODE = @CODE ORDER BY CDATE " ,
+                    "(CONVERT(NVARCHAR, CDATE, 104) + ' ' + CONVERT(NVARCHAR, CDATE, 24)) AS F_DATE,SUBSTRING(CONVERT(NVARCHAR(50),DOC),20,25) AS POS_ID FROM CUSTOMER_POINT_VW_01 WHERE CUSTOMER_CODE = @CODE ORDER BY CDATE DESC " ,
                     param : ['CODE:string|50'],
                     value : [pCustomer]
                 },
@@ -128,7 +128,7 @@ export default class salesOrdList extends React.PureComponent
     }
     async btnAddPoint()
     {
-        if(this.txtDescription.value == '')
+        if(this.txtDescription.value.length < 14)
         {
             let tmpConfObj =
             {
@@ -163,7 +163,10 @@ export default class salesOrdList extends React.PureComponent
     }
     btnPointPopup()
     {
-       this.popPointEntry.show()
+        this.txtDescription.value = '',
+        this.txtPointAmount.value =  0,
+        this.txtPoint.value = 0,
+        this.popPointEntry.show()
     }
     render()
     {
@@ -532,7 +535,7 @@ export default class salesOrdList extends React.PureComponent
                                 </Item>
                                  <Item>
                                     <Label text={this.t("txtDescription")} alignment="right" />
-                                    <NdTextBox id="txtDescription" title={this.t("txtDescription")} parent={this} simple={true}
+                                    <NdTextBox id="txtDescription" title={this.t("txtDescription")} parent={this} simple={true} placeholder={this.t("descriptionPlace")}
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         onValueChanged={(e)=>
                                         {

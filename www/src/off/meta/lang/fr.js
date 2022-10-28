@@ -110,6 +110,7 @@ export const langFr =
         cri_02_003: "Liste Catégorie ",
         cri_03_001: "Ajouter Multi Client",
         cri_04_001 : "Rapport de relevé actuel", // BAK
+        cri_04_003 : "Rapport point fidelité client",
         ftr: "Facture ",
         ftr_01: "Listes",
         ftr_02: "Document",
@@ -8408,9 +8409,10 @@ export const langFr =
         {
             title: "Attention",  
             btn01: "OK",   
-            msg: "Lütfen Açıklama Giriniz.. "   //BAK
+            msg: "Lütfen en az 15 karakter açıklama giriniz.."  //BAK
         },
-        btnAdd : "Ekle" // BAK
+        btnAdd : "Ekle" ,// BAK
+        descriptionPlace :"Lütfen en az 15 karakter açıklama giriniz.."
     },
     pos_02_005 : // "Degismis Fisler Raporu BAK
     {
@@ -9366,5 +9368,89 @@ export const langFr =
     pos_02_003 : // "Pos Satış Raporu"
     {
         chkRowTotal : "Totaux des lignes." 
-    }
+    },
+    cri_04_003 : // "Müşteri Puanı Raporu"
+    {
+        cmbCustomer :"Fournisseur",
+        btnGet :"Rechercher",
+        txtCustomerCode : "Sélection Document",
+        txtCustomerName : "Nom fournisseur",
+        txtAmount : "Total Points", // BAK
+        pg_txtCustomerCode : 
+        {
+            title : "Choix Fournisseur",
+            clmCode :  "Code Client",
+            clmTitle : "Nom Fournisseur",
+            clmTypeName : "Type",
+            clmGenusName : "Genre"
+        },
+        grdCustomerPointReport: 
+        {
+            clmCode: "Code",
+            clmTitle: "Nom",
+            clmPoint: "Points",
+            clmLdate : "Dernière Date MAJ",
+            clmEur : "EURO"
+        },
+        popPointDetail : 
+        {
+            title: "Détail de points"
+        },
+        grdPointDetail : 
+        {
+            clmDate : "Date",
+            clmPoint : "Poitns",
+            clmPointType : "Type",
+            clmDescription :"Motif",
+            clmPosId :"Numéro de ticket",
+        },
+        grdSaleTicketItems :
+        {
+            clmBarcode : "Code barre",
+            clmName : "Nom produit ",
+            clmQuantity : "Quantité",
+            clmPrice : "Prix",
+            clmTotal : "Montant"
+        },
+        grdSaleTicketPays : 
+        {
+            clmPayName : "Mode de paiement", 
+            clmTotal : "Total",
+        },
+        popDetail : 
+        {
+            title : "Détail Ticket"
+        },
+        TicketId :"Ticket No", 
+        popLastTotal : 
+        {
+            title : "Règlement"
+        },
+        trDeatil: "T.R Detaille", 
+        lineDelete :"Ligne annulé", 
+        cancel : "Abandonne", 
+        btnAddpoint : "Puan Giriş Çıkışı",     // BAK
+        popPointEntry :     
+        {    
+            title : "Puan Giriş Çıkışı"     // BAK
+        },    
+        txtPoint : "Puan",     // BAK
+        txtPointAmount : "Tutar karşılığı",     // BAK
+        cmbPointType : "İşlem tipi",     // BAK
+        cmbTypeData :    
+        {     // BAK
+            in : "Puan Girişi",     // BAK
+            out : "Puan Çıkışı"     // BAK
+        },     // BAK
+        txtDescription : "Açıklama",     // BAK,
+        msgDescription:
+        {
+            title: "Attention",  
+            btn01: "OK",   
+            msg: "Lütfen en az 15 karakter açıklama giriniz.."  //BAK
+        },
+        btnAdd : "Ekle", // BAK
+        descriptionPlace : "Lütfen en az 15 karakter açıklama giriniz.."
+
+    },
 }

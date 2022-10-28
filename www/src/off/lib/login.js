@@ -385,9 +385,7 @@ export default class Login extends React.Component
                    </div>
                 </div>
                 <div className="p-2"></div>
-                <div className="card" style={this.style.keyboardBox}>
-                    <NbKeyboard id={"keyboard"} parent={this}  textobj="Kullanici"/>
-                </div>
+              
             </div>
         )
     }

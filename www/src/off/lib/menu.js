@@ -249,6 +249,12 @@ export const menu = (e) =>
                             text: e.t('menu.fns_04_002'),//'Cari Bakiye Bakiye Raporu',
                             path: 'finance/lists/collectionList'
                         },
+                        //Müşteri Puan Raporu
+                        {
+                            id: 'cri_04_003',
+                            text: e.t('menu.cri_04_003'),
+                            path: 'pos/report/customerPointReport'
+                        },
                     ]
                 }
             ]
