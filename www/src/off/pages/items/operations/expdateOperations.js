@@ -39,6 +39,7 @@ export default class expdateOperations extends React.PureComponent
         this._btnGetClick = this._btnGetClick.bind(this)
         this._btnSave = this._btnSave.bind(this)
         this.tabIndex = props.data.tabkey
+        this.state={itemName :""}
     }
     componentDidMount()
     {
@@ -81,6 +82,23 @@ export default class expdateOperations extends React.PureComponent
     }
     async btnPrint()
     {
+        if(this.grdExpdateList.getSelectedData()[0].PRINT_COUNT > 0)
+        {
+            let tmpConfObj =
+            {
+                id:'msgDoublePrint',showTitle:true,title:this.t("msgDoublePrint.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgDoublePrint.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDoublePrint.btn02"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDoublePrint.msg")}</div>)
+            }
+            
+            let pResult = await dialog(tmpConfObj);
+            if(pResult == 'btn02')
+            {
+                return
+            }
+        }
+     
+        this.setState({itemName:this.grdExpdateList.getSelectedData()[0].ITEM_NAME})
         this.prilabelCls.clearAll()
         this.labelMainObj.clearAll()
         this.txtQuantity.value = (this.grdExpdateList.getSelectedData()[0].QUANTITY - this.grdExpdateList.getSelectedData()[0].DIFF)
@@ -90,6 +108,18 @@ export default class expdateOperations extends React.PureComponent
     }
     async _btnSave()
     {
+        if(this.txtQuantity.value > this.grdExpdateList.getSelectedData()[0].REMAINDER)
+        {
+            let tmpConfObj =
+            {
+                id:'msgLabelCount',showTitle:true,title:this.t("msgLabelCount.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgLabelCount.btn01"),location:'before'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgLabelCount.msg")}</div>)
+            }
+            
+            await dialog(tmpConfObj);
+            return
+        }
             // geçici olarak kapatıldı..... bu parametreye bağlanacak
 
             // let tmpQuery = 
@@ -169,6 +199,15 @@ export default class expdateOperations extends React.PureComponent
         let tmpPrintData = await this.core.sql.execute(tmpPrintQuery) 
         App.instance.setState({isExecute:false})
         this.popQuantity.hide()
+        let tmpUpdateQuery = 
+        {
+            query: "UPDATE ITEM_EXPDATE SET PRINT_COUNT = PRINT_COUNT + @PRINT_COUNT,LUSER= @LUSER WHERE GUID = @GUID ",
+            param:  ['GUID:string|50','LUSER:string|50','PRINT_COUNT:float'],
+            value:  [this.grdExpdateList.getSelectedData()[0].GUID,this.user.CODE,this.txtQuantity.value]
+        }
+        App.instance.setState({isExecute:true})
+        await this.core.sql.execute(tmpUpdateQuery) 
+        App.instance.setState({isExecute:false})
         this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpPrintData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" +  JSON.stringify(tmpPrintData.result.recordset)+ "}",(pResult) => 
         {
             if(pResult.split('|')[0] != 'ERR')
@@ -180,6 +219,7 @@ export default class expdateOperations extends React.PureComponent
                 } 
             }
         });
+        this._btnGetClick()
     }
     render()
     {
@@ -482,13 +522,8 @@ export default class expdateOperations extends React.PureComponent
                             allowColumnResizing={true}
                             >                            
                                 <Paging defaultPageSize={20} />
-                                <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
-                                <Column dataField="ITEM_CODE" caption={this.t("grdExpdateList.clmCode")} visible={true} width={200}/> 
-                                <Column dataField="ITEM_NAME" caption={this.t("grdExpdateList.clmName")} visible={true} width={300}/> 
-                                <Column dataField="QUANTITY" caption={this.t("grdExpdateList.clmQuantity")} visible={true} width={100}/> 
-                                <Column dataField="DIFF" caption={this.t("grdExpdateList.clmDiff")} visible={true} width={130}/> 
-                                <Column dataField="REMAINDER" caption={this.t("grdExpdateList.clmRemainder")} visible={true} width={100}/> 
-                                <Column dataField="EXP_DATE" caption={this.t("grdExpdateList.clmDate")} width={200} dataType="date" allowEditing={false}
+                                <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true}
+                                dataType="date" allowEditing={false}
                                 editorOptions={{value:null}}
                                 cellRender={(e) => 
                                 {
@@ -499,8 +534,28 @@ export default class expdateOperations extends React.PureComponent
                                     
                                     return
                                 }}/>
-                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdExpdateList.clmCustomer")} visible={true}  allowEditing={false}/> 
-                                 <Column dataField="REBATE" caption={this.t("grdExpdateList.clmRebate")} visible={true}  allowEditing={false}/> 
+                                <Column dataField="CDATE_FORMAT" caption={this.t("grdExpdateList.clmCDate")} visible={true} width={150}/> 
+                                <Column dataField="CUSER_NAME" caption={this.t("grdExpdateList.clmUser")} visible={true} width={100}/> 
+                                <Column dataField="ITEM_CODE" caption={this.t("grdExpdateList.clmCode")} visible={true} width={110}/> 
+                                <Column dataField="ITEM_NAME" caption={this.t("grdExpdateList.clmName")} visible={true} width={260}/> 
+                                <Column dataField="QUANTITY" caption={this.t("grdExpdateList.clmQuantity")} visible={true} width={50}/> 
+                                <Column dataField="DIFF" caption={this.t("grdExpdateList.clmDiff")} visible={true} width={150}/> 
+                                <Column dataField="REMAINDER" caption={this.t("grdExpdateList.clmRemainder")} visible={true} width={50}/> 
+                                <Column dataField="PRINT_COUNT" caption={this.t("grdExpdateList.clmPrintCount")} visible={true} width={100}/>
+                                <Column dataField="LUSER_NAME" caption={this.t("grdExpdateList.clmLUser")} visible={true} width={100}/> 
+                                <Column dataField="EXP_DATE" caption={this.t("grdExpdateList.clmDate")} width={100} dataType="date" allowEditing={false}
+                                editorOptions={{value:null}}
+                                cellRender={(e) => 
+                                {
+                                    if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
+                                    {
+                                        return e.text
+                                    }
+                                    
+                                    return
+                                }}/>
+                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdExpdateList.clmCustomer")} visible={true} width={120}  allowEditing={false}/> 
+                                 <Column dataField="REBATE" caption={this.t("grdExpdateList.clmRebate")} visible={true} width={65} allowEditing={false}/> 
                                  <Column dataField="DESCRIPTION" caption={this.t("grdExpdateList.clmDescription")} visible={true}  allowEditing={false}/> 
                             </NdGrid>
                         </div>
@@ -517,6 +572,9 @@ export default class expdateOperations extends React.PureComponent
                         height={'250'}
                         position={{of:'#root'}}
                         >
+                                <div className='row'>
+                                    <h6>{this.state.itemName}</h6>
+                                </div>
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
                                     <Label text={this.t("popQuantity.txtQuantity")} alignment="right" />
@@ -543,7 +601,7 @@ export default class expdateOperations extends React.PureComponent
                                         }}/>
                                     </div>
                                 </div>
-                            </Item>
+                                </Item>
                             </Form>
                         </NdPopUp>
                     </div>  

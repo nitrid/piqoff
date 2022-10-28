@@ -42,19 +42,28 @@ export default class mainPage extends React.PureComponent
                     "(SELECT *, " +
                     "ISNULL((SELECT SUM(QUANTITY) FROM POS_SALE  WHERE POS_SALE.ITEM = ITEM_EXPDATE_VW_01.ITEM_GUID AND POS_SALE.DELETED = 0 AND POS_SALE.CDATE > ITEM_EXPDATE_VW_01.CDATE),0) AS DIFF " +
                     "FROM [ITEM_EXPDATE_VW_01] WHERE  " +
-                    " (EXP_DATE >= GETDATE()-10)) AS TMP WHERE QUANTITY - DIFF > 0",
+                    " (GETDATE()+15 >  EXP_DATE) AND (EXP_DATE >= GETDATE())) AS TMP WHERE QUANTITY - DIFF > 0",
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
         if(tmpData.result.recordset.length > 0)
         {
-            console
             let tmpConfObj =
             {
                 id:'msgExpUpcoming',showTitle:true,title:this.lang.t("msgExpUpcoming.title"),showCloseButton:true,width:'500px',height:'200px',
-                button:[{id:"btn01",caption:this.lang.t("msgExpUpcoming.btn01"),location:'after'}],
+                button:[{id:"btn01",caption:this.lang.t("msgExpUpcoming.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgExpUpcoming.btn02"),location:'after'}],
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgExpUpcoming.msg")}</div>)
             }
-            await dialog(tmpConfObj);
+            let pResult = await dialog(tmpConfObj);
+            if(pResult == 'btn02')
+            {
+                App.instance.menuClick(
+                {
+                    id: 'stk_04_004',
+                    text: this.lang.t('menu.stk_04_004'),
+                    path: 'items/operations/expdateOperations',
+                })
+            }
+           
         }
     }
     render()

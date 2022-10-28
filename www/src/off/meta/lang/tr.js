@@ -62,6 +62,7 @@ export const langTr =
     {
         title: "Dikkat",
         btn01: "Tamam",
+        btn02: "Ürünleri gör",
         msg : "Son kullanma tarihi yaklaşan ürünler var lütfen kontrol ediniz !"
     },
     menu:
@@ -1935,7 +1936,7 @@ export const langTr =
         dtFirstdate : "İlk Tarih",
         dtLastDate : "Son Tarih",
         btnGet : "Getir",
-        btnPrint : "Seçili Ürüne Etiket Bas",
+        btnPrint : "Seçili Ürüne Özel Etiket Bas",
         txtCustomerCode : "Cari",
         cmbItemGroup : "Ürün Grubu",
         grdExpdateList:  
@@ -1943,12 +1944,16 @@ export const langTr =
             clmQuantity : "Miktar",
             clmCode : "Kodu",
             clmName : "Adı",
-            clmDiff : "Giriş tarihinden itibaren satılan",
+            clmDiff : "Giriş tar. itibaren satılan",
             clmDate : "SKT Tarih",
-            clmRemainder : "Fark",
+            clmRemainder : "Kalan",
             clmCustomer :"Cari",
             clmRebate : "İade Alır",
-            clmDescription :"Açıklama"
+            clmDescription :"Açıklama",
+            clmUser : "Kullanıcı",
+            clmCDate : "Giriş Tarih",
+            clmPrintCount : "Yazdırma Sayısı",
+            clmLUser : "Son yaz/işlem" 
         },
         popQuantity : 
         {
@@ -1971,6 +1976,19 @@ export const langTr =
             clmTitle : "CARİ ADI",
             clmTypeName : "TİPİ",
             clmGenusName : "CİNSİ"
+        },
+        msgDoublePrint:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Seçmiş olduğunuz ürün için daha önce özel etiket oluşturulmuş! Tekrar oluşturmak istediğinizden eminmisiniz?"
+        },
+        msgLabelCount:
+        {
+            title: "Dikkat",  
+            btn01: "Tamam",  
+            msg: "Kalan üründen fazla etiket basamazsınız.." 
         },
     },
     cri_01_001: // "Cari Tanımları"

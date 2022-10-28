@@ -62,6 +62,7 @@ export const langFr =
     {
         title: "Dikkat",   // BAK
         btn01: "Tamam",   // BAK
+        btn02: "Ürünleri gör",
         msg : "Son kullanma tarihi yaklaşan ürünler var lütfen kontrol ediniz !"   // BAK
     },
     menu:
@@ -1935,7 +1936,7 @@ export const langFr =
         dtFirstdate : "İlk Tarih",   // BAK
         dtLastDate : "Son Tarih",   // BAK
         btnGet : "Getir",   // BAK
-        btnPrint : "Seçili Ürüne Etiket Bas",   // BAK
+        btnPrint : "Seçili Ürüne Özel Etiket Bas",   // BAK
         txtCustomerCode : "Cari", // BAK
         cmbItemGroup : "Ürün Grubu", // BAK
         grdExpdateList:   
@@ -1943,12 +1944,16 @@ export const langFr =
             clmQuantity : "Miktar",   // BAK
             clmCode : "Kodu",   // BAK
             clmName : "Adı",   // BAK
-            clmDiff : "Giriş tarihinden itibaren satılan", // BAK
+            clmDiff : "Giriş tar. itibaren satılan", // BAK
             clmDate : "SKT Tarih",// BAK
-            clmRemainder : "Fark", // BAK
+            clmRemainder : "Kalan", // BAK
             clmCustomer :"Cari",
             clmRebate : "İade Alır",
-            clmDescription :"Açıklama"
+            clmDescription :"Açıklama",
+            clmUser : "Utilisateur",
+            clmCDate : "Giriş Tarihi" ,// BAK
+            clmPrintCount : "Yazdırma Sayısı", // BAK
+            clmLUser : "Son yaz/işlem"  // BAK
         },   
         popQuantity :    
         {   
@@ -1971,6 +1976,19 @@ export const langFr =
             clmTitle : "Nom Fournisseur",
             clmTypeName : "Type",
             clmGenusName : "Genre"
+        },
+        msgLabelCount:
+        {
+            title: "Dikkat",  // BAK
+            btn01: "Tamam",  // BAK
+            btn02: "Vazgeç",  // BAK
+            msg: "Seçmiş olduğunuz ürün için daha önce özel etiket oluşturulmuş! Tekrar oluşturmak istediğinizden eminmisiniz?" // BAK
+        },
+        msgLabelCount:
+        {
+            title: "Dikkat",  // BAK
+            btn01: "Tamam",  // BAK
+            msg: "Kalan üründen fazla etiket basamazsınız.." // BAK
         },
     },
     cri_01_001: // "Cari Tanımları"
