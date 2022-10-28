@@ -61,7 +61,7 @@ export default class depotTransfer extends React.PureComponent
                 this.btnBack.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
-                this.btnPrint.setState({disabled:false});
+                this.btnPrint.setState({disabled:true});
             }
         })
         this.docObj.ds.on('onEdit',(pTblName,pData) =>
@@ -72,7 +72,7 @@ export default class depotTransfer extends React.PureComponent
                 this.btnNew.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
-                this.btnPrint.setState({disabled:false});
+                this.btnPrint.setState({disabled:true});
 
                 pData.rowData.CUSER = this.user.CODE
             }                 
@@ -83,7 +83,7 @@ export default class depotTransfer extends React.PureComponent
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:true});
             this.btnDelete.setState({disabled:false});
-            this.btnPrint.setState({disabled:false});       
+            this.btnPrint.setState({disabled:true});       
         })
         this.docObj.ds.on('onDelete',(pTblName) =>
         {            
@@ -91,7 +91,7 @@ export default class depotTransfer extends React.PureComponent
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:false});
             this.btnDelete.setState({disabled:false});
-            this.btnPrint.setState({disabled:false});
+            this.btnPrint.setState({disabled:true});
         })
         this.quantityControl = this.prmObj.filter({ID:'negativeQuantity',USERS:this.user.CODE}).getValue().value
         this.txtRef.setState({value:this.user.CODE})
@@ -136,6 +136,7 @@ export default class depotTransfer extends React.PureComponent
             this.docLocked = false
             this.frmTrnsfItems.option('disabled',false)
         }
+        this.btnPrint.setState({disabled:false});
     }
     async checkRow()
     {
@@ -501,6 +502,7 @@ export default class depotTransfer extends React.PureComponent
                                                     await dialog(tmpConfObj1);
                                                     this.btnSave.setState({disabled:true});
                                                     this.btnNew.setState({disabled:false});
+                                                    this.btnPrint.setState({disabled:false});
                                                     this.init()
                                                 }
                                                 else

@@ -17,7 +17,7 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling,Pager,KeyboardNavigation} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Scrolling,Pager,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
@@ -522,18 +522,8 @@ export default class expdateOperations extends React.PureComponent
                             allowColumnResizing={true}
                             >                            
                                 <Paging defaultPageSize={20} />
-                                <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true}
-                                dataType="date" allowEditing={false}
-                                editorOptions={{value:null}}
-                                cellRender={(e) => 
-                                {
-                                    if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
-                                    {
-                                        return e.text
-                                    }
-                                    
-                                    return
-                                }}/>
+                                <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true}/>
+                                <Export fileName={this.lang.t("menu.stk_04_004")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="CDATE_FORMAT" caption={this.t("grdExpdateList.clmCDate")} visible={true} width={150}/> 
                                 <Column dataField="CUSER_NAME" caption={this.t("grdExpdateList.clmUser")} visible={true} width={100}/> 
                                 <Column dataField="ITEM_CODE" caption={this.t("grdExpdateList.clmCode")} visible={true} width={110}/> 

@@ -16,7 +16,7 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling,Pager,KeyboardNavigation} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Scrolling,Pager,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
@@ -366,6 +366,7 @@ export default class collectiveItemEdit extends React.PureComponent
                                 <Paging defaultPageSize={14} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
                                 <Editing mode="batch" allowUpdating={true} allowDeleting={false} confirmDelete={false}/>
+                                <Export fileName={this.lang.t("menu.stk_04_001")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="CODE" caption={this.t("grdItemList.clmCode")} visible={true} width={110} allowEditing={false}/> 
                                 <Column dataField="BARCODE" caption={this.t("grdItemList.clmBarcode")} visible={true} width={130} allowEditing={false}/> 
                                 <Column dataField="NAME" caption={this.t("grdItemList.clmName")} visible={true} width={320} defaultSortOrder="asc"  /> 

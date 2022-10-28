@@ -67,7 +67,7 @@ export default class outageDoc extends React.PureComponent
                 this.btnBack.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
-                this.btnPrint.setState({disabled:false});
+                this.btnPrint.setState({disabled:true});
             }
         })
         this.docObj.ds.on('onEdit',(pTblName,pData) =>
@@ -78,7 +78,7 @@ export default class outageDoc extends React.PureComponent
                 this.btnNew.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
-                this.btnPrint.setState({disabled:false});
+                this.btnPrint.setState({disabled:true});
 
                 pData.rowData.CUSER = this.user.CODE
             }                 
@@ -89,7 +89,7 @@ export default class outageDoc extends React.PureComponent
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:false});
             this.btnDelete.setState({disabled:false});
-            this.btnPrint.setState({disabled:false});          
+            this.btnPrint.setState({disabled:true});          
         })
         this.docObj.ds.on('onDelete',(pTblName) =>
         {            
@@ -97,7 +97,7 @@ export default class outageDoc extends React.PureComponent
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:false});
             this.btnDelete.setState({disabled:false});
-            this.btnPrint.setState({disabled:false});
+            this.btnPrint.setState({disabled:true});
         })
 
         this.quantityControl = this.prmObj.filter({ID:'negativeQuantity',USERS:this.user.CODE}).getValue().value
@@ -145,6 +145,7 @@ export default class outageDoc extends React.PureComponent
             this.frmOutwas.option('disabled',false)
         }
         this._calculateTotal()
+        this.btnPrint.setState({disabled:false});
     }
     async checkDoc(pGuid,pRef,pRefno)
     {
@@ -628,6 +629,7 @@ export default class outageDoc extends React.PureComponent
                                                     await dialog(tmpConfObj1);
                                                     this.btnSave.setState({disabled:true});
                                                     this.btnNew.setState({disabled:false});
+                                                    this.btnPrint.setState({disabled:false});
                                                 }
                                                 else
                                                 {

@@ -49,7 +49,7 @@ export default class expdateEntry extends React.Component
             {
                 this.btnNew.setState({disabled:false});
                 this.btnSave.setState({disabled:false});
-                this.btnPrint.setState({disabled:false});
+                this.btnPrint.setState({disabled:true});
                 this.btnDelete.setState({disabled:false});
             }
         })
@@ -59,7 +59,7 @@ export default class expdateEntry extends React.Component
             {
                 this.btnNew.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
-                this.btnPrint.setState({disabled:false});
+                this.btnPrint.setState({disabled:true});
                 this.btnDelete.setState({disabled:false});
 
                 pData.rowData.CUSER = this.user.CODE
@@ -69,14 +69,14 @@ export default class expdateEntry extends React.Component
         {           
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:true});
-            this.btnPrint.setState({disabled:false});       
+            this.btnPrint.setState({disabled:true});       
             this.btnDelete.setState({disabled:false});   
         })
         this.expObj.ds.on('onDelete',(pTblName) =>
         {
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:false});
-            this.btnPrint.setState({disabled:false});
+            this.btnPrint.setState({disabled:true});
             this.btnDelete.setState({disabled:true});
         })
 
@@ -94,6 +94,7 @@ export default class expdateEntry extends React.Component
     {
         this.expObj.clearAll()
         await this.expObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno});
+        this.btnPrint.setState({disabled:false});
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
@@ -186,6 +187,7 @@ export default class expdateEntry extends React.Component
                                         await dialog(tmpConfObj1);
                                         this.btnSave.setState({disabled:true});
                                         this.btnNew.setState({disabled:false});
+                                        this.btnPrint.setState({disabled:false});
                                     }
                                     else
                                     {

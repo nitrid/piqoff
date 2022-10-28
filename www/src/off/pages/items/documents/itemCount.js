@@ -82,7 +82,7 @@ export default class itemCount extends React.PureComponent
                 this.btnBack.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
-                this.btnPrint.setState({disabled:false});
+                this.btnPrint.setState({disabled:true});
             }
         })
         this.countObj.ds.on('onEdit',(pTblName,pData) =>
@@ -93,7 +93,7 @@ export default class itemCount extends React.PureComponent
                 this.btnNew.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
-                this.btnPrint.setState({disabled:false});
+                this.btnPrint.setState({disabled:true});
 
                 pData.rowData.CUSER = this.user.CODE
             }                 
@@ -104,7 +104,7 @@ export default class itemCount extends React.PureComponent
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:false});
             this.btnDelete.setState({disabled:false});
-            this.btnPrint.setState({disabled:false});          
+            this.btnPrint.setState({disabled:true});          
         })
         this.countObj.ds.on('onDelete',(pTblName) =>
         {            
@@ -112,7 +112,7 @@ export default class itemCount extends React.PureComponent
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:false});
             this.btnDelete.setState({disabled:false});
-            this.btnPrint.setState({disabled:false});
+            this.btnPrint.setState({disabled:true});
         })
 
 
@@ -158,6 +158,7 @@ export default class itemCount extends React.PureComponent
         {
             this.frmCount.option('disabled',false)
         }
+        this.btnPrint.setState({disabled:false});
     }
     async checkDoc(pGuid,pRef,pRefno)
     {
@@ -612,6 +613,7 @@ export default class itemCount extends React.PureComponent
                                                     await dialog(tmpConfObj1);
                                                     this.btnSave.setState({disabled:true});
                                                     this.btnNew.setState({disabled:false});
+                                                    this.btnPrint.setState({disabled:false});
                                                 }
                                                 else
                                                 {
