@@ -31,19 +31,11 @@ export default class Login extends React.Component
             {
                 position: 'inherit',
                 margin:'auto',
-                top: '30%',
-                width: '400px',
-                height: 'fit-content',
+                top: '40%',
+                width: '500px',
+                height: '500px',
             },
-            keyboardBox :
-            {
-                position: 'inherit',
-                backgroundColor : '#0d6efd',        
-                margin:'auto',
-                top: '30%',
-                width: '90%',
-                height: 'fit-content',
-            }
+
         }  
         this.state = 
         {
@@ -263,7 +255,7 @@ export default class Login extends React.Component
                             <div className="dx-field-label">{this.lang.t("txtUser")}</div>
                             <div className="dx-field-value">
                                 <NdTextBox id="Kullanici" parent={this} simple={true} showClearButton={true} height='fit-content' valueChangeEvent="keyup" onValueChanged={this.textValueChanged} 
-                                onFocusIn={()=>{this.keyboard.textobj = "Kullanici"}} placeholder={this.lang.t("txtUser")}
+                                placeholder={this.lang.t("txtUser")}
                                 />
                             </div>
                         </div>
@@ -272,7 +264,7 @@ export default class Login extends React.Component
                             <div className="dx-field-value">
                                 <NdTextBox id="Sifre" parent={this} mode="password" showClearButton={true} height='fit-content' valueChangeEvent="keyup" onValueChanged={this.textValueChanged}
                                 onEnterKey={this.onLoginClick}
-                                onFocusIn={()=>{this.keyboard.textobj="Sifre"}} placeholder={this.lang.t("txtPass")}
+                                placeholder={this.lang.t("txtPass")}
                                 />
                             </div>
                         </div>
@@ -330,11 +322,23 @@ export default class Login extends React.Component
                                 </div>
                             </div>                            
                         </div>    
-                        <div className="row">
+                        {/* <div className="row">
                             <div className="col-12">
                                 <NbLabel id="info" parent={this} value={this.core.appInfo.name + " version : " + this.core.appInfo.version}/>
                             </div>
-                        </div>                    
+                        </div>         */}
+                        <div className="row">
+                             <div className="col-2">
+                            </div>
+                            <div className="col-4">
+                                <img src="./css/img/logo piqsoft.jpg" height="120px"/>
+                            </div>
+                            <div className="col-4">
+                                <img src="./css/img/Logo_NF_525-e1569399608233.jpg" height="130px"/>
+                            </div>
+                            <div className="col-2">         
+                            </div>
+                        </div>     
                         <NdPopGrid id={"pg_users"} parent={this} container={"#root"}
                         visible={false}
                         position={{of:'#root'}} 

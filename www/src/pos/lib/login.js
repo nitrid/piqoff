@@ -32,8 +32,8 @@ export default class Login extends React.Component
                 position: 'inherit',
                 margin:'auto',
                 top: '30%',
-                width: '400px',
-                height: 'fit-content',
+                width: '490px',
+                height: '460px',
             },
             keyboardBox :
             {
@@ -155,7 +155,7 @@ export default class Login extends React.Component
     {
         return (
             <div style={this.style.body}>
-                <div className="p-3"></div>
+                <div className="p-1"></div>
                 <div className="card" style={this.style.login_box}>
                     <div className="card-header">
                         <div className='row'>
@@ -257,11 +257,23 @@ export default class Login extends React.Component
                                     </div>
                                 </div>
                             </div>
-                            <div className="row">
+                            {/* <div className="row">
                                 <div className="col-12">
                                     <NbLabel id="info" parent={this} value={this.core.appInfo.name + " version : " + this.core.appInfo.version}/>
                                 </div>
-                            </div>
+                            </div> */}
+                             <div className="row">
+                                <div className="col-2">
+                                </div>
+                                <div className="col-4">
+                                    <img src="./css/img/logo piqsoft.jpg" height="100px"/>
+                                </div>
+                                <div className="col-4">
+                                    <img src="./css/img/Logo_NF_525-e1569399608233.jpg" height="100px"/>
+                                </div>
+                                <div className="col-2">         
+                                </div>
+                            </div>     
                             <div>
                                 <NdPopGrid id={"pg_users"} parent={this} container={"#root"}
                                 visible={false}
