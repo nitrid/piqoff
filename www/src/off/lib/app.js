@@ -206,7 +206,6 @@ export default class App extends React.PureComponent
                 App.instance.setState({logined:true,connected:true});
                 await this.core.util.waitUntil()
                 this.setUser()
-
             }
             else
             {
