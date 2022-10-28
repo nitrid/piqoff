@@ -8344,7 +8344,8 @@ export const langTr =
             clmDate : "Tarih",
             clmPoint : "Puan",
             clmPointType : "Tip",
-            clmPosId :"Fiş No"
+            clmPosId :"Fiş No",
+            clmDescription :"Açıklama",
         },
         grdSaleTicketItems :
         {
@@ -8371,6 +8372,27 @@ export const langTr =
         trDeatil: "T.R Detay", 
         lineDelete :"Satır İptal", 
         cancel : "Vazgeç", 
+        btnAddpoint : "Puan Giriş Çıkışı",
+        popPointEntry : 
+        {
+            title : "Puan Giriş Çıkışı"
+        },
+        txtPoint : "Puan",
+        txtPointAmount : "Tutar karşılığı",
+        cmbPointType : "İşlem tipi",
+        cmbTypeData : 
+        {
+            in : "Puan Girişi",
+            out : "Puan Çıkışı"
+        },
+        txtDescription : "Açıklama",
+        msgDescription:
+        {
+            title: "Dikkat",  
+            btn01: "Tamam",   
+            msg: "Lütfen Açıklama Giriniz.. "  
+        },
+        btnAdd : "Ekle"
     },
     pos_02_005 : // "Degismis Fisler Raporu",
     {

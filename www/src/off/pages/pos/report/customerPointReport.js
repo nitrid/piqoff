@@ -28,6 +28,8 @@ export default class salesOrdList extends React.PureComponent
         this.core = App.instance.core;
         this.groupList = [];
         this._btnGetClick = this._btnGetClick.bind(this)
+        this.btnAddPoint = this.btnAddPoint.bind(this)
+        this.btnPointPopup = this.btnPointPopup.bind(this)
         this.state={ticketId :""}
     }
     componentDidMount()
@@ -123,6 +125,45 @@ export default class salesOrdList extends React.PureComponent
         }
         await this.grdSaleTicketPays.dataRefresh(tmpPaysSource)
         this.popDetail.show()
+    }
+    async btnAddPoint()
+    {
+        if(this.txtDescription.value == '')
+        {
+            let tmpConfObj =
+            {
+                id:'msgDescription',showTitle:true,title:this.t("msgDescription.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgDescription.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDescription.msg")}</div>)
+            }
+            
+            await dialog(tmpConfObj);
+            return
+        }
+        return new Promise(async resolve => 
+            {
+                let tmpQuery = 
+                {
+                    query : "EXEC [dbo].[PRD_CUSTOMER_POINT_INSERT] " + 
+                            "@CUSER = @PCUSER, " + 
+                            "@TYPE = @PTYPE, " +     
+                            "@CUSTOMER = @PCUSTOMER, " +                  
+                            "@DOC = @PDOC, " + 
+                            "@POINT = @PPOINT, " + 
+                            "@DESCRIPTION = @PDESCRIPTION ", 
+                    param : ['PCUSER:string|25','PTYPE:int','PCUSTOMER:string|50','PDOC:string|50','PPOINT:float','PDESCRIPTION:string|250'],
+                    value : [this.core.auth.data.CODE,this.cmbPointType.value,this.grdCustomerPointReport.getSelectedData()[0].GUID,'00000000-0000-0000-0000-000000000000',this.txtPoint.value,this.txtDescription.value]
+                }
+                await this.core.sql.execute(tmpQuery)
+                this.popPointEntry.hide()
+                this._btnGetClick()
+                this.getPointDetail(this.grdCustomerPointReport.getSelectedData()[0].CODE)
+                resolve()
+            });
+    }
+    btnPointPopup()
+    {
+       this.popPointEntry.show()
     }
     render()
     {
@@ -365,9 +406,18 @@ export default class salesOrdList extends React.PureComponent
                                         <Column dataField="F_DATE" caption={this.t("grdPointDetail.clmDate")} visible={true} width={250}/> 
                                         <Column dataField="POS_ID" caption={this.t("grdPointDetail.clmPosId")} visible={true} width={200}/> 
                                         <Column dataField="POINT_TYPE" caption={this.t("grdPointDetail.clmPoint")} visible={true} width={150}/> 
+                                        <Column dataField="DESCRIPTION" caption={this.t("grdPointDetail.clmDescription")} visible={true} width={150}/> 
                                     </NdGrid>
-                                </Item>
-                         
+                                    </Item>
+                                    <Item>
+                                        <div className="row px-2 pt-2">
+                                            <div className="col-8">
+                                            </div>
+                                            <div className="col-4">
+                                                <NdButton text={this.t("btnAddpoint")}  width="100%" onClick={this.btnPointPopup}></NdButton>
+                                            </div>
+                                        </div>
+                                    </Item>
                             </Form>
                         </NdPopUp>
                     </div> 
@@ -437,6 +487,72 @@ export default class salesOrdList extends React.PureComponent
                             </div>
                         </NdPopUp>
                     </div>
+                    {/* Puan Giriş PopUp */}
+                    <div>
+                        <NdPopUp parent={this} id={"popPointEntry"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popPointEntry.title")}
+                        container={"#root"} 
+                        width={'600'}
+                        height={'400'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("cmbPointType")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbPointType"
+                                    displayExpr="VALUE"                       
+                                    valueExpr="ID"
+                                    value={0}
+                                    data={{source:[{ID:0,VALUE:this.t("cmbTypeData.in")},{ID:1,VALUE:this.t("cmbTypeData.out")}]}}
+                                    >
+                                    </NdSelectBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtPoint")} alignment="right" />
+                                    <NdNumberBox id="txtPoint"  parent={this} simple={true} 
+                                        onValueChanged={(e)=>
+                                        {
+                                            this.txtPointAmount.value = (this.txtPoint.value / 100)
+                                        }}>
+                                    </NdNumberBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtPointAmount")} alignment="right" />
+                                    <NdNumberBox id="txtPointAmount"  parent={this} simple={true} 
+                                        param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
+                                        onValueChanged={(e)=>
+                                        {
+                                            this.txtPoint.value = (this.txtPointAmount.value * 100)
+                                        }}>
+                                    </NdNumberBox>
+                                </Item>
+                                 <Item>
+                                    <Label text={this.t("txtDescription")} alignment="right" />
+                                    <NdTextBox id="txtDescription" title={this.t("txtDescription")} parent={this} simple={true}
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                        onValueChanged={(e)=>
+                                        {
+                                        
+                                        }}>
+                                    </NdTextBox>
+                                </Item>
+                                <Item>
+                                    <div className="row px-2 pt-2">
+                                        <div className="col-9">
+                                        </div>
+                                        <div className="col-3">
+                                            <NdButton text={this.t("btnAdd")}  width="100%" 
+                                            onClick={this.btnAddPoint}></NdButton>
+                                        </div>
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div> 
                 </ScrollView>
             </div>
         )

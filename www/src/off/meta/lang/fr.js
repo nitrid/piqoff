@@ -8344,7 +8344,8 @@ export const langFr =
             clmDate : "Date",
             clmPoint : "Poitns",
             clmPointType : "Type",
-            clmPosId :"Numéro de ticket"
+            clmDescription :"Motif",
+            clmPosId :"Numéro de ticket",
         },
         grdSaleTicketItems :
         {
@@ -8371,6 +8372,27 @@ export const langFr =
         trDeatil: "T.R Detaille", 
         lineDelete :"Ligne annulé", 
         cancel : "Abandonne", 
+        btnAddpoint : "Puan Giriş Çıkışı",     // BAK
+        popPointEntry :     
+        {    
+            title : "Puan Giriş Çıkışı"     // BAK
+        },    
+        txtPoint : "Puan",     // BAK
+        txtPointAmount : "Tutar karşılığı",     // BAK
+        cmbPointType : "İşlem tipi",     // BAK
+        cmbTypeData :    
+        {     // BAK
+            in : "Puan Girişi",     // BAK
+            out : "Puan Çıkışı"     // BAK
+        },     // BAK
+        txtDescription : "Açıklama",     // BAK,
+        msgDescription:
+        {
+            title: "Attention",  
+            btn01: "OK",   
+            msg: "Lütfen Açıklama Giriniz.. "   //BAK
+        },
+        btnAdd : "Ekle" // BAK
     },
     pos_02_005 : // "Degismis Fisler Raporu BAK
     {
