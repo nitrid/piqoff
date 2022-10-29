@@ -100,8 +100,8 @@ export const prm =
                 },
                 {
                     id:"btn04",
-                    title:"Müşteri Yanlış Ürünü Aldı",
-                    text:"Müşteri Yanlış Ürünü Aldı"
+                    title:"Prix pour quantité.",
+                    text:"Un prix a été fait pour une quantité importante."
                 },
                 {
                     id:"btn05",
@@ -115,8 +115,8 @@ export const prm =
                 },
                 {
                     id:"btn07",
-                    title:"Prix pour quantité.",
-                    text:"Un prix a été fait pour une quantité importante."
+                    title:"Description vide.",
+                    text:"Description non saisie."
                 },
                 {
                     id:"btn08",
@@ -188,43 +188,43 @@ export const prm =
                 },
                 {
                     id:"btn05",
-                    title:"TEST.",
-                    text:"Produit scanné suite à test pour une mise à jour."
+                    title:"Scanné 2 fois le produit",
+                    text:"La caissière a scanné 2 fois le produit."
                 },
                 {
                     id:"btn06",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title:"Oublié de Supprimer.",
+                    text:"La caissière a oublié de supprimer le produit non voulu."
                 },
                 {
                     id:"btn07",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title:"Pas sélectionné le bon produit.",
+                    text:"La caissière n’a pas sélectionné le bon produit."
                 },
                 {
                     id:"btn08",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title:"Pas vu l’étiquette jaune.",
+                    text:"La caissière n’a pas vu l’étiquette jaune sur le produit."
                 },
                 {
                     id:"btn09",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title:"Erreur d’étiquetage.",
+                    text:"Le client a retourné le produit car erreur d’étiquetage."
                 },
                 {
                     id:"btn10",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title:"Trop cher.",
+                    text:"Le client a retourné le produit car trop cher."
                 },
                 {
                     id:"btn11",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title:"Mauvaise étiquette jaune.",
+                    text:"Mauvaise étiquette jaune sur le produit."
                 },
                 {
                     id:"btn12",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title:"Boucherie s’est trompée.",
+                    text:"La boucherie s’est trompée d’étiquette."
                 }
             ]
         },
@@ -266,8 +266,8 @@ export const prm =
                 },
                 {
                     id:"btn04",
-                    title:"TEST.",
-                    text:"Produit scanné suite à test pour une mise à jour."
+                    title:"La responsable teste.",
+                    text:"La responsable teste des produits."
                 },
                 {
                     id:"btn05",
@@ -306,8 +306,8 @@ export const prm =
                 },
                 {
                     id:"btn12",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title:"TEST.",
+                    text:"Produit scanné suite à test pour une mise à jour."
                 }
             ]
         },
@@ -359,38 +359,38 @@ export const prm =
                 },
                 {
                     id:"btn06",
-                    title:"TEST.",
-                    text:"Produit scanné suite à test pour une mise à jour."
+                    title:"Scanné 2 fois.",
+                    text:"La caissière a scanné 2 fois le produit."
                 },
                 {
                     id:"btn07",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title:"Vu l’étiquette jaune.",
+                    text:"La caissière n’a pas vu l’étiquette jaune sur le produit ."
                 },
                 {
                     id:"btn08",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title:"Produit cher.",
+                    text:"Le client ne veut pas le produit car produit cher."
                 },
                 {
                     id:"btn09",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title:"Mauvaise étiquette jaune.",
+                    text:"Mauvaise étiquette jaune sur le produit ."
                 },
                 {
                     id:"btn10",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title:"La boucherie trompée.",
+                    text:"La boucherie s’est trompée d’étiquette."
                 },
                 {
                     id:"btn11",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title:"La responsable teste.",
+                    text:"La responsable teste des produits."
                 },
                 {
                     id:"btn12",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title:"TEST.",
+                    text:"Produit scanné suite à test pour une mise à jour."
                 }
             ]
         },
@@ -555,8 +555,8 @@ export const prm =
                 },
                 {
                     id:"btn12",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title:"TEST.",
+                    text:"Produit scanné suite à test pour une mise à jour."
                 }
             ]
         },
@@ -583,23 +583,23 @@ export const prm =
             [
                 {
                     id:"btn01",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title:"justifier un remboursement..",
+                    text:"Impression du ticket car non lisible sur le ticket initial Duplicata pour justifier un remboursement."
                 },
                 {
                     id:"btn02",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title:"La responsable demande.",
+                    text:"La responsable demande un duplicata pour un contrôle prix."
                 },
                 {
                     id:"btn03",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title:" Plus de papiers.",
+                    text:"Réimpression du ticket car plus de papiers."
                 },
                 {
                     id:"btn04",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title:"Client souhaite.",
+                    text:"Le client souhaite avoir un ticket car perte de ticket."
                 },
                 {
                     id:"btn05",
@@ -638,8 +638,8 @@ export const prm =
                 },
                 {
                     id:"btn12",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title:"TEST.",
+                    text:"Produit scanné suite à test pour une mise à jour."
                 }
             ]
         },
