@@ -784,7 +784,14 @@ export default class purchaseContract extends React.PureComponent
                                     dbApply={false}
                                     onRowUpdated={async(e)=>
                                     {
-                                       
+                                        if(typeof e.data.PRICE != 'undefined')
+                                        {
+                                            e.key.PRICE_VAT_EXT = (e.key.PRICE / ((e.key.VAT_RATE / 100) + 1))
+                                        }
+                                        if(typeof e.data.PRICE_VAT_EXT != 'undefined')
+                                        {
+                                            e.key.PRICE = (e.key.PRICE_VAT_EXT + ((e.key.PRICE_VAT_EXT * e.key.VAT_RATE) / 100))
+                                        }
                                     }}
                                     onRowRemoved={async (e)=>{
                                     }}
@@ -799,6 +806,7 @@ export default class purchaseContract extends React.PureComponent
                                         <Column dataField="MULTICODE" caption={this.t("grdContracts.clmMulticode")} width={150} allowEditing={false}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdContracts.clmItemName")} width={350} allowEditing={false}/>
                                         <Column dataField="PRICE" caption={this.t("grdContracts.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                        <Column dataField="PRICE_VAT_EXT" caption={this.t("grdContracts.clmVatExtPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} />
                                         <Column dataField="QUANTITY" caption={this.t("grdContracts.clmQuantity")} dataType={'number'}/>
                                         <Column dataField="START_DATE" caption={this.t("grdContracts.clmStartDate")} dataType={'date'}
                                         editorOptions={{value:null}}

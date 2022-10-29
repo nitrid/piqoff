@@ -140,7 +140,7 @@ export default class itemList extends React.PureComponent
             this.txtUrunAdi.setState({value:tmpUrunAdi})
         }
         
-        if(this.chkMasterBarcode.value == true)
+        if(this.chkMasterBarcode.value == true && this.chkLastCustomer.value == false)
         {
             let tmpSource =
             {
@@ -250,6 +250,121 @@ export default class itemList extends React.PureComponent
                 this.grdListe.dataRefresh(this.grdListe.data.datatable)
             }
            
+        }
+        else if(this.chkMasterBarcode.value == true && this.chkLastCustomer.value == true)
+        {
+            let tmpSource =
+            {
+                source : 
+                {
+                    groupBy : this.groupList,
+                    select : 
+                    {
+                        query : "SELECT GUID,CDATE,CUSER,CUSER_NAME,LDATE,LUSER,LUSER_NAME,TYPE,SPECIAL,CODE,NAME,SNAME,VAT,COST_PRICE,MIN_PRICE,MAX_PRICE,STATUS,MAIN_GRP,MAIN_GRP_NAME,SUB_GRP,ORGINS,ITEMS_GRP_GUID,ORGINS_NAME,RAYON,SHELF,SECTOR, "  +
+                                "SALE_JOIN_LINE,TICKET_REST,WEIGHING,MAX(BARCODE) AS BARCODE,MAX(BARCODE_GUID) AS BARCODE_GUID,UNIT_ID,UNIT_NAME,UNIT_FACTOR," +
+                                "ISNULL((SELECT TOP 1 MULTICODE FROM ITEMS_BARCODE_MULTICODE_VW_01 AS ITEMS WHERE ITEMS.MULTICODE_LDATE = MAX(ITEMS_BARCODE_MULTICODE_VW_01.MULTICODE_LDATE)),'') AS MULTICODE," +
+                                "ISNULL((SELECT TOP 1 CUSTOMER_CODE FROM ITEMS_BARCODE_MULTICODE_VW_01 AS ITEMS WHERE ITEMS.MULTICODE_LDATE = MAX(ITEMS_BARCODE_MULTICODE_VW_01.MULTICODE_LDATE)),'') AS CUSTOMER_CODE," +
+                                "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEMS_BARCODE_MULTICODE_VW_01 AS ITEMS WHERE ITEMS.MULTICODE_LDATE = MAX(ITEMS_BARCODE_MULTICODE_VW_01.MULTICODE_LDATE)),'') AS CUSTOMER_NAME," +
+                                "ISNULL((SELECT TOP 1 CUSTOMER_PRICE FROM ITEMS_BARCODE_MULTICODE_VW_01 AS ITEMS WHERE ITEMS.MULTICODE_LDATE = MAX(ITEMS_BARCODE_MULTICODE_VW_01.MULTICODE_LDATE)),'') AS CUSTOMER_PRICE," +
+                                "PRICE_SALE, " +
+                                "CASE WHEN PRICE_SALE <> 0 THEN  " +
+                                "CONVERT(nvarchar,ROUND((((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / (PRICE_SALE / ((VAT / 100) + 1))) * 100,2)) + '% / €' + CONVERT(nvarchar,ROUND((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE,2)) " +
+                                "ELSE '0'   " +
+                                "END AS MARGIN,  " +
+                                "CASE WHEN PRICE_SALE <> 0 THEN  " +
+                                "CONVERT(nvarchar,ROUND(((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / 1.12,2)) + '/ %' + CONVERT(nvarchar,ROUND(((((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / 1.12) / (PRICE_SALE / ((VAT / 100) + 1))) * 100,2))  " +
+                                "ELSE '0'    " +
+                                "END AS NETMARGIN    " +
+                                "FROM ITEMS_BARCODE_MULTICODE_VW_01  " +
+                                "WHERE {0} " +
+                                "((NAME LIKE @NAME +'%') OR (@NAME = '')) AND " +
+                                "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) AND " +
+                                "((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND ((STATUS = @STATUS) OR (@STATUS = -1)) " +
+                                "GROUP BY GUID,CDATE,CUSER,CUSER_NAME,LDATE,LUSER,LUSER_NAME,TYPE,SPECIAL,CODE,NAME,SNAME,VAT,COST_PRICE,MIN_PRICE,MAX_PRICE,STATUS,MAIN_GRP,MAIN_GRP_NAME,SUB_GRP,ORGINS,ITEMS_GRP_GUID,ORGINS_NAME,RAYON,SHELF,SECTOR,  " +
+                                "SALE_JOIN_LINE,TICKET_REST,WEIGHING,UNIT_ID,UNIT_NAME,UNIT_FACTOR,PRICE_SALE ",
+                        param : ['NAME:string|250','MAIN_GRP:string|25','CUSTOMER_CODE:string|25','STATUS:int'],
+                        value : [this.txtUrunAdi.value.replaceAll("*", "%"),this.cmbUrunGrup.value,this.cmbTedarikci.value,tmpStatus]
+                    },
+                    sql : this.core.sql
+                }
+            }
+            
+            if(this.txtBarkod.value.length == 0)
+            {
+                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "{1}")
+            }
+            else if(this.txtBarkod.value.length == 1)
+            {
+                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE LIKE '" + this.txtBarkod.value[0] + "' + '%') OR (BARCODE LIKE '" + this.txtBarkod.value[0] + "' + '%') {1}) AND")
+            }
+            else
+            {
+                let TmpVal = ''
+                for (let i = 0; i < this.txtBarkod.value.length; i++) 
+                {
+                    TmpVal = TmpVal + ",'" + this.txtBarkod.value[i] + "'"
+                    
+                }
+                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (BARCODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) {1}) AND")
+            }
+            if(this.txtMulticode.value.length == 0)
+            {
+               
+                tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{1}", "")
+            }
+            else if(this.txtMulticode.value.length == 1)
+            {
+                if(this.txtBarkod.value.length == 0)
+                {
+                    tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{1}", " (MULTICODE = '" + this.txtMulticode.value[0] + "') AND")
+                }
+                else
+                {
+                    tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{1}", "OR (MULTICODE = '" + this.txtMulticode.value[0] + "')")
+                }
+            }
+            else
+            {
+                let tmpMultiCode = ''
+                for (let i = 0; i < this.txtMulticode.value.length; i++) 
+                {
+                    tmpMultiCode = tmpMultiCode + ",'" + this.txtMulticode.value[i] + "'"
+                    
+                }
+                if(this.txtBarkod.value.length == 0)
+                {
+                    tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{1}", " (MULTICODE IN (" + tmpMultiCode.substring(1,tmpMultiCode.length) + ")) AND")
+                }
+                else
+                {
+                    tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{1}", "OR (MULTICODE IN (" + tmpMultiCode.substring(1,tmpMultiCode.length) + ")) ")
+                }
+               
+            }
+            App.instance.setState({isExecute:true})
+            await this.grdListe.dataRefresh(tmpSource)
+            App.instance.setState({isExecute:false})
+            let tmpDatas = this.prmObj.filter({ID:'emptyCode',USERS:this.user.CODE}).getValue()
+            if(typeof tmpDatas != 'undefined' && tmpDatas.value ==  true)
+            {
+                for (let i = 0; i < this.txtBarkod.value.length; i++) 
+                {
+                    let TmpData = this.grdListe.data.datatable.find((item) => item.CODE === this.txtBarkod.value[i] || item.BARCODE === this.txtBarkod.value[i]);
+                    if(typeof TmpData == 'undefined')
+                    {
+                        this.grdListe.data.datatable.push({CODE:this.txtBarkod.value[i],NAME:'---',BARCODE:'---',SNAME:'---',MAIN_GRP_NAME:'---',VAT:'---',PRICE_SALE:'---',CUSTOMER_PRICE:'---',MULTICODE:'---',ORGINS_NAME:'---',CUSTOMER_NAME:'---'})
+                    }
+                }
+                for (let i = 0; i < this.txtMulticode.value.length; i++) 
+                {
+                    let TmpMultiData = this.grdListe.data.datatable.find((item) => item.MULTICODE === this.txtMulticode.value[i]);
+                    if(typeof TmpMultiData == 'undefined')
+                    {
+                        this.grdListe.data.datatable.push({MULTICODE:this.txtMulticode.value[i],CODE:'---',NAME:'---',BARCODE:'---',SNAME:'---',MAIN_GRP_NAME:'---',VAT:'---',PRICE_SALE:'---',CUSTOMER_PRICE:'---',ORGINS_NAME:'---',CUSTOMER_NAME:'---'})
+                    }
+                }
+                this.grdListe.dataRefresh(this.grdListe.data.datatable)
+            }
         }
         else
         {
@@ -465,10 +580,17 @@ export default class itemList extends React.PureComponent
                             />
                         </div>
                         <div className="col-3">
-                        <NdCheckBox id="chkMasterBarcode" parent={this} text={this.t("chkMasterBarcode")}  value={true} ></NdCheckBox>
+                            <NdCheckBox id="chkMasterBarcode" parent={this} text={this.t("chkMasterBarcode")}  value={true} ></NdCheckBox>
                         </div>
                         <div className="col-3">
-                            
+                            <NdCheckBox id="chkLastCustomer" parent={this} text={this.t("chkLastCustomer")}  value={false} 
+                            onValueChanged={(e)=>
+                                {
+                                    if(e.value == true)
+                                    {
+                                        this.chkMasterBarcode.value = true
+                                    }
+                                }}></NdCheckBox>
                         </div>
                         <div className="col-3">
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetirClick}></NdButton>

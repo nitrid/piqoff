@@ -1675,6 +1675,7 @@ export const langTr =
         btnCheck : "Aktif",
         btnGet :"Getir",
         chkMasterBarcode : "Barkodları Birleştir",
+        chkLastCustomer : "Son Tedarikçileri Getir",
         txtMulticode : "Tedarikçi Kodu",
         multicodePlaceHolder : "Aratmak İstediğiniz Tedarikçi Kodlarını Giriniz",
         barkodPlaceHolder :"Aratmak İstediğiniz Bir yada Birden Fazla Ürün Kodu yada Barkod Giriniz",

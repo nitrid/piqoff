@@ -769,8 +769,14 @@ export default class purchaseContract extends React.PureComponent
                                     dbApply={false}
                                     onRowUpdated={async(e)=>
                                     {
-                                        let rowIndex = e.component.getRowIndexByKey(e.key)
-                                        e.key.PRICE_VAT_EXT = (e.key.PRICE / ((e.key.VAT_RATE / 100) + 1))
+                                        if(typeof e.data.PRICE != 'undefined')
+                                        {
+                                            e.key.PRICE_VAT_EXT = (e.key.PRICE / ((e.key.VAT_RATE / 100) + 1))
+                                        }
+                                        if(typeof e.data.PRICE_VAT_EXT != 'undefined')
+                                        {
+                                            e.key.PRICE = (e.key.PRICE_VAT_EXT + ((e.key.PRICE_VAT_EXT * e.key.VAT_RATE) / 100))
+                                        }
                                         this._calculateMargin()
                                     }}
                                     onRowRemoved={async (e)=>{
@@ -786,7 +792,7 @@ export default class purchaseContract extends React.PureComponent
                                         <Column dataField="ITEM_NAME" caption={this.t("grdContracts.clmItemName")} width={350} allowEditing={false}/>
                                         <Column dataField="COST_PRICE" caption={this.t("grdContracts.clmCostPrice")} width={80} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
                                         <Column dataField="PRICE" caption={this.t("grdContracts.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
-                                        <Column dataField="PRICE_VAT_EXT" caption={this.t("grdContracts.clmVatExtPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
+                                        <Column dataField="PRICE_VAT_EXT" caption={this.t("grdContracts.clmVatExtPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} />
                                         <Column dataField="QUANTITY" caption={this.t("grdContracts.clmQuantity")} dataType={'number'}/>
                                         <Column dataField="MARGIN" caption={this.t("grdContracts.clmMargin")} allowEditing={false}/>
                                         <Column dataField="START_DATE" caption={this.t("grdContracts.clmStartDate")} dataType={'date'}
