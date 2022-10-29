@@ -223,7 +223,7 @@
                 </Item9>
                 <Item10 Ref="114" ControlType="XRTableCell" Name="tableCell16" Weight="0.14857669966051706" TextFormatString="{0:#,#0.00}€" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 7pt">
                   <ExpressionBindings>
-                    <Item1 Ref="115" EventName="BeforePrint" PropertyName="Text" Expression="[PRICE]-[DIFF_PRICE]" />
+                    <Item1 Ref="115" EventName="BeforePrint" PropertyName="Text" Expression="[DIFF_PRICE]" />
                   </ExpressionBindings>
                   <StylePriority Ref="116" UseFont="false" UseTextAlignment="false" />
                 </Item10>
@@ -241,7 +241,7 @@
                 </Item12>
                 <Item13 Ref="123" ControlType="XRTableCell" Name="tableCell18" Weight="0.1991017315193277" TextFormatString="{0:#,#0.00}€" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 7pt">
                   <ExpressionBindings>
-                    <Item1 Ref="124" EventName="BeforePrint" PropertyName="Text" Expression="[QUANTITY]*([PRICE]-[DIFF_PRICE])" />
+                    <Item1 Ref="124" EventName="BeforePrint" PropertyName="Text" Expression="[QUANTITY]*([DIFF_PRICE])" />
                   </ExpressionBindings>
                   <StylePriority Ref="125" UseFont="false" UseTextAlignment="false" />
                 </Item13>
@@ -265,7 +265,7 @@
         </Item2>
         <Item3 Ref="133" ControlType="XRLabel" Name="label14" TextFormatString="{0:#,#0.00}€" Multiline="true" CanGrow="false" TextAlignment="TopRight" SizeF="162.485657,18.00003" LocationFloat="656.514343, 35.25181" Font="Arial, 10pt" Padding="2,2,0,0,100">
           <ExpressionBindings>
-            <Item1 Ref="134" EventName="BeforePrint" PropertyName="Text" Expression="SUM([QUANTITY]*([PRICE]-[DIFF_PRICE]))" />
+            <Item1 Ref="134" EventName="BeforePrint" PropertyName="Text" Expression="SUM([QUANTITY]*([DIFF_PRICE]))" />
           </ExpressionBindings>
           <StylePriority Ref="135" UseFont="false" UseTextAlignment="false" />
         </Item3>
