@@ -718,7 +718,7 @@ export default class CustomerCard extends React.PureComponent
                                                     <Paging defaultPageSize={5} />
                                                     <Editing mode="cell" allowUpdating={true} allowDeleting={false} />
                                                     <Column dataField="SIRET_ID" caption={this.t("grdLegal.clmSiretID")}/>
-                                                    <Column dataField="SIREN_ID" caption={this.t("grdLegal.clmSirenID")}/>
+                                                    <Column dataField="SIREN_NO" caption={this.t("grdLegal.clmSirenID")}/>
                                                     <Column dataField="RCS" caption={this.t("grdLegal.clmRcs")}/>
                                                     <Column dataField="APE_CODE" caption={this.t("grdLegal.clmApeCode")}/>
                                                     <Column dataField="TAX_OFFICE" caption={this.t("grdLegal.clmTaxOffice")}/>
