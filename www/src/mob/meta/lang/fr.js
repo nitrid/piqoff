@@ -40,7 +40,7 @@ export const langFr =
         stk_01_007: "MAJ Famille Produit",
         stk_02: "Documents Saissie",
         stk_02_001: "Imprimer Etiquette",
-        stk_02_002: "Saisie Multi Produit Retour",
+        stk_02_002: "Saisie Retour Ensemble Produit ",
         stk_02_003: "Saisie Inventaire",
         stk_02_004: "Saisie DLC",
         stk_02_005 : "Transfert Interne Dépot",
