@@ -344,12 +344,12 @@ export const prm =
                 },
                 {
                     id:"btn03",
-                    title:"Erreur produit.",
-                    text:"Le client s'est tromper sur le produit."
+                    title:"Scanné 2 fois.",
+                    text:"La caissière a scanné 2 fois le produit."
                 },
                 {
                     id:"btn04",
-                    title:"Saisie dans la liste.",
+                    title:"Erreur Saisie dans la liste.",
                     text:"Caissière a fait une erreur dans la saisie de la liste du produit."
                 },
                 {
@@ -359,8 +359,8 @@ export const prm =
                 },
                 {
                     id:"btn06",
-                    title:"Scanné 2 fois.",
-                    text:"La caissière a scanné 2 fois le produit."
+                    title:"Client s'est Tromper",
+                    text:"Le client s'est tromper sur le produit."
                 },
                 {
                     id:"btn07",
