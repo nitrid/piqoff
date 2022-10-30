@@ -8,15 +8,15 @@ export const langFr =
     btnPrint :"Imprime",
     btnOk: "OK",
     msgWarning: "Attention",
-    msgSqlService1: "Impossible de se connecter au serveur database", //BAK
-    msgSqlService2: "Il n'y a pas de base de données. Souhaitez-vous créér ?", //BAK
-    msgSqlService3: "L'installation de database a réussi. Veuillez vérifier le fichier de configuration et redémarrer le serveur.", //BAK
+    msgSqlService1: "Impossible de se connecter au serveur database", 
+    msgSqlService2: "Il n'y a pas de base de données. Souhaitez-vous créér ?", 
+    msgSqlService3: "L'installation de database a réussi. Veuillez vérifier le fichier de configuration et redémarrer le serveur.", 
     btnYes : "Oui",
     btnGet: "Validé",
     btnNo : "Non",
     msgClose : "Etes-vous sûr(e) de vouloir quitter la page ?",
     txtLangSelect : "Choix de la langue",
-    userListTitle : "Liste d'utilisateur", //BAK
+    userListTitle : "Liste d'utilisateur", 
     txtUser : "Utilisateur",
     txtPass : "Mot de passe",
     btnUserSelect : "Choix utilisateur",
@@ -171,7 +171,7 @@ export const langFr =
         fns_03_002 : "Sélection banque",
         fns_03_003 : "Virement interne",
         fns_04 : "Rapports",
-        fns_04_001 : "Rapport sur les relevés bancaires",   //BAK
+        fns_04_001 : "Rapport sur les relevés bancaires",   
         fns_04_002 : "Rapport sur le solde actuel",  
         pos: "Traitement Pos",
         pos_01 : "Saisie",
@@ -397,7 +397,7 @@ export const langFr =
             clmCustomer: "Fournisseur",
             clmCustomerPrice: "Prix Achat",
             clmShop: "Magasin",
-            clmDate: "Dernière Date D'Achat" //BAK
+            clmDate: "Dernière Date D'Achat" 
         },
         msgRef:
         {
@@ -874,7 +874,7 @@ export const langFr =
             clmMulticode : "Sélection Document",
             clmBarcode : "Code Barre"
         },
-        msgCode : //BAK
+        msgCode : 
         {
             title: "Attention",
             btn01: "Aller au document",
@@ -1210,7 +1210,7 @@ export const langFr =
             clmMulticode : "Sélection Document",
             clmBarcode : "Code Barre"
         },
-        msgCode : //BAK
+        msgCode : 
         {
             title: "Attention",
             btn01: "Aller au document",
@@ -1756,7 +1756,7 @@ export const langFr =
             clmStatus : "Etat",
 
         },
-        msgCode : //BAK
+        msgCode : 
         {
             title: "Attention",
             btn01: "Allez au document",
@@ -1783,8 +1783,8 @@ export const langFr =
     stk_04_001 : //"Toplu Stok Düzenleme"
     {
         txtCustomerCode : "Fournisseur",
-        codePlaceHolder : "Veuillez saisir le code produit, le code-barres ou le code fournisseur que vous souhaitez rechercher",  //BAK
-        namePlaceHolder :"Entrez le nom complet du produit ou une syllabe le contenant",  //BAK
+        codePlaceHolder : "Veuillez saisir le code produit, le code-barres ou le code fournisseur que vous souhaitez rechercher",  
+        namePlaceHolder :"Entrez le nom complet du produit ou une syllabe le contenant",  
         pg_txtCustomerCode : 
         {
             title : "Choix Fournisseur",
@@ -2147,7 +2147,7 @@ export const langFr =
         },
         chkTaxSucre : "Taxe sucrée",
         tabTitleDetail : "Information détail",
-        validation : //BAK
+        validation : 
         {
             frmCustomers: "Kodu boş geçemezsiniz !",
         }
@@ -2216,7 +2216,7 @@ export const langFr =
             btn02: "OK",
             msg : "Client déja existant !"
         },
-        validation : //BAK
+        validation : 
         {
             frmCustomerAddress: "Vous ne pouvez pas passer le code vide !",
         }
@@ -2432,15 +2432,15 @@ export const langFr =
             btn02: "OK",
             msg : "Client déja existant!"
         },
-        popSettingCustomer :     //bak
+        popSettingCustomer :     
         {    
-            title : "Réglage",    //bak
-            txtStartRef : "Code de départ",    //bak
-            txtFinishRef : "Code de fin",    //bak
-            txtTotal : "Nombre total",    //bak
-            chkDigit : "EAN Code"    //bak
+            title : "Réglage",    
+            txtStartRef : "Code de départ",    
+            txtFinishRef : "Code de fin",    
+            txtTotal : "Nombre total",    
+            chkDigit : "EAN Code"    
         },  
-        btnGet : "Enregistrez"    //bak
+        btnGet : "Enregistrez"    
     },
     ftr_01_001 : // "Alış Fatura Listesi"
     {
@@ -2621,8 +2621,8 @@ export const langFr =
         txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Quantité", 
         getOrders : "Rechercher la commande", 
-        popExcel : {title:"Les en-têtes de ligne de votre fichier Excel doivent être corrects"}, //BAK
-        excelAdd : "Inscription à partir d'Excel",//BAK
+        popExcel : {title:"Les en-têtes de ligne de votre fichier Excel doivent être corrects"}, 
+        excelAdd : "Inscription à partir d'Excel",
         shemaSave : "Enregistrer le Format", 
         tabTitleSubtotal : "Total de la facture", 
         tabTitlePayments : "Informations de paiement", 
@@ -2998,13 +2998,13 @@ export const langFr =
         },
         pg_ordersGrid : 
         {  
-            title : "Sélection de la commande",  //bak
-            clmReferans : "Réf.-Réf no:",  //bak
-            clmCode : "Code",  //bak
-            clmName : "Nom",  //bak
-            clmQuantity : "Quantité",  //bak
-            clmTotal : "Total",  //bak
-            clmPrice : "Prix",  //bak
+            title : "Sélection de la commande",  
+            clmReferans : "Réf.-Réf no:",  
+            clmCode : "Code",  
+            clmName : "Nom",  
+            clmQuantity : "Quantité",  
+            clmTotal : "Total",  
+            clmPrice : "Prix",  
         },
         cmbPayType : {
             title : "Mode de paiement",   
@@ -3023,7 +3023,7 @@ export const langFr =
             clmZipcode : "Code postal",   
             clmCountry : "Pays",   
         },
-        msgCode : //BAK
+        msgCode : 
         {
             title: "Attention",
             btn01:"Aller au document",
@@ -3405,7 +3405,7 @@ export const langFr =
             clmZipcode : "Code postal",   
             clmCountry : "Pays",   
         },
-        msgCode : //BAK
+        msgCode : 
         {
             title: "Attention",
             btn01:"Aller au document",
@@ -3501,9 +3501,9 @@ export const langFr =
             clmMargin :"Marge",
             clmDescription :"Motif",
             clmCuser :"Utilisateur",
-            clmMulticode : "FRN.Code",    //BAK
-            clmBarcode : "Code-barres",    //BAK
-            clmVatRate :"TVA %"     //BAK
+            clmMulticode : "FRN.Code",    
+            clmBarcode : "Code-barres",    
+            clmVatRate :"TVA %"     
         },
         grdInvoicePayment: 
         {
@@ -3732,7 +3732,7 @@ export const langFr =
             clmZipcode : "Code Postal",   
             clmCountry : "Pays",   
         },
-        msgCode : //BAK
+        msgCode : 
         {
             title: "Attention",
             btn01:"Aller au document",
@@ -4046,7 +4046,7 @@ export const langFr =
             clmZipcode : "Code postal",   
             clmCountry : "Pays",   
         },
-        msgCode : //BAK
+        msgCode : 
         {
             title: "Attention",
             btn01:"Aller au document",
@@ -4428,7 +4428,7 @@ export const langFr =
             clmZipcode : "Code Postal",   
             clmCountry : "Pays",   
         },
-        msgCode : //BAK
+        msgCode : 
         {
             title: "Attention",
             btn01:"Aller au document",
@@ -4746,7 +4746,7 @@ export const langFr =
             clmZipcode : "Code postal",   
             clmCountry : "Pays",   
         },
-        msgCode : //BAK
+        msgCode : 
         {
             title: "Attention",
             btn01:"Aller au document",
@@ -4764,7 +4764,7 @@ export const langFr =
         txtCustomerName: "Nom fournisseur",
         cmbPrmType: "Type de Promotion",
         txtPrmItem:  "Produit",
-        btnPrmItem: "Choix", //BAK
+        btnPrmItem: "Choix", 
         txtPrmItemGrp: "Groupe" ,
         txtPrmQuantity: "Quantité",
         txtPrmAmount: "Total" ,
@@ -4773,20 +4773,20 @@ export const langFr =
         txtRstItem :  "Produit",
         cmbRstItemType: "Type",
         txtRstItemQuantity:  "Valeur",
-        txtRstItemAmount: "Évaluer", //BAK
-        txtCodePlace: "Veuillez entrer le code promotionnel", //BAK
-        txtNamePlace: "Veuillez saisir le nom de la promotion", //BAK
-        txtCustomerCodePlace: "Vous pouvez choisir le client pour effectuer la promotion", //BAK
-        txtRstItemPlace: "Veuillez sélectionner le produit promotionnel", //BAK
+        txtRstItemAmount: "Évaluer", 
+        txtCodePlace: "Veuillez entrer le code promotionnel", 
+        txtNamePlace: "Veuillez saisir le nom de la promotion", 
+        txtCustomerCodePlace: "Vous pouvez choisir le client pour effectuer la promotion", 
+        txtRstItemPlace: "Veuillez sélectionner le produit promotionnel", 
         pg_Grid:
         {
             title:  "Choix",
-            clmBarcode: "Code-barres", //BAK
+            clmBarcode: "Code-barres", 
             clmCode: "Code",
             clmName: "Nom", 
-            clmGrpName: "Groupe", //BAK
-            clmPrice : "Prix", //BAK
-            btnItem: "Sélection de produits promotionnels", //BAK
+            clmGrpName: "Groupe", 
+            clmPrice : "Prix", 
+            btnItem: "Sélection de produits promotionnels", 
         },
         msgRef:
         {
@@ -4822,26 +4822,26 @@ export const langFr =
             btn02: "Abandonne",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
-        pop_PrmItemList: //BAK
+        pop_PrmItemList: 
         {
             title: "Stock sélectionnées",
             clmCode: "Code",
             clmName: "Nom", 
         },
-        popDiscount: //BAK
+        popDiscount: 
         {
             title: "Promotion",
             txtDiscRate : "Pourcentage",
             txtDiscAmount : "Total",
             btnSave: "Enregistre"
         },
-        msgDiscRate: //BAK
+        msgDiscRate: 
         {
             title: "Attention",
             btn01: "OK",
             msg: "La remise que vous avez saisie ne peut être inférieure à 0 ou supérieure à 100 !",
         },
-        cmbType: //BAK
+        cmbType: 
         {
             item: "Produit",
             generalAmount: "Montant général",
@@ -4850,10 +4850,10 @@ export const langFr =
             giftCheck: "Bon D'Achat",
             generalDiscount: "Remise Totale",
             discountAmount: "Montant de la remise",
-            promoType01: "Condition",//BAK
-            promoType02: "Application",//BAK
+            promoType01: "Condition",
+            promoType02: "Application",
         },
-        msgHelp: //BAK
+        msgHelp: 
         {
             title: "Information",
             btn01: "OK",
@@ -4873,7 +4873,7 @@ export const langFr =
             txtPrmQuantityValid: "Vous ne pouvez pas ignorer le montant",
             txtRstItemQuantityValid: "le montant ne peut pas être inférieur à zéro",
         },
-        msgDeleteAll: //BAK
+        msgDeleteAll: 
         {
             title: "Attention",
             btn01: "Oui",
@@ -4883,12 +4883,12 @@ export const langFr =
     },
     promo_02_001: //  "Promosyon Listesi"
     {
-        txtCode: "Code", //BAK
-        txtName: "Nom", //BAK
-        txtCodePlace: "Saisissez le code promo ou le code-barres du produit", //BAK
-        txtNamePlace: "Entrez le code promotionnel ou le nom du produit", //BAK
-        btnGet: "Recherche",//BAK
-        grdListe: //BAK
+        txtCode: "Code", 
+        txtName: "Nom", 
+        txtCodePlace: "Saisissez le code promo ou le code-barres du produit", 
+        txtNamePlace: "Entrez le code promotionnel ou le nom du produit", 
+        btnGet: "Recherche",
+        grdListe: 
         {
             clmCode: "Code",
             clmName: "Nom", 
@@ -5319,9 +5319,9 @@ export const langFr =
         },
         msgRowNotDelete :
         {
-            title: "Attention",  //BAK
-            btn01: "OK",  //BAK
-            msg: "Cette ligne a été convertie en facture, vous ne pouvez pas la supprimer !"  //BAK
+            title: "Attention",  
+            btn01: "OK",  
+            msg: "Cette ligne a été convertie en facture, vous ne pouvez pas la supprimer !"  
         },
         msgdocNotDelete : 
         {
@@ -5337,7 +5337,7 @@ export const langFr =
             clmZipcode : "Code postal",   
             clmCountry : "Pays",   
         },
-        msgCode : //BAK
+        msgCode : 
         {
             title: "Attention",
             btn01:"Aller au document",
@@ -5632,9 +5632,9 @@ export const langFr =
         },
         msgCustomerSelect:
         {
-            title: "Attention",  //BAK
-            btn01: "OK",  //BAK
-            msg: "Veuillez sélectionner Client !"  //BAK
+            title: "Attention",  
+            btn01: "OK",  
+            msg: "Veuillez sélectionner Client !"  
         },
         msgRowNotUpdate:
         {
@@ -5644,9 +5644,9 @@ export const langFr =
         },
         msgRowNotDelete :
         {
-            title: "Attention",  //BAK
-            btn01: "OK",  //BAK
-            msg: "Cette ligne a été convertie en facture, vous ne pouvez pas la supprimer !"  //BAK
+            title: "Attention",  
+            btn01: "OK",  
+            msg: "Cette ligne a été convertie en facture, vous ne pouvez pas la supprimer !"  
         },
         msgdocNotDelete : 
         {
@@ -5662,7 +5662,7 @@ export const langFr =
             clmZipcode : "Code postal",   
             clmCountry : "Pays",   
         },
-        msgCode : //BAK
+        msgCode : 
         {
             title: "Attention",
             btn01:"Aller au document",
@@ -5914,9 +5914,9 @@ export const langFr =
         },
         msgRowNotDelete :
         {
-            title: "Attention",  //BAK
-            btn01: "OK",  //BAK
-            msg: "Cette ligne a été convertie en facture, vous ne pouvez pas la supprimer !"  //BAK
+            title: "Attention",  
+            btn01: "OK",  
+            msg: "Cette ligne a été convertie en facture, vous ne pouvez pas la supprimer !"  
         },
         msgdocNotDelete : 
         {
@@ -5939,7 +5939,7 @@ export const langFr =
             btn02: "Abandonne",
             msg: "Le Produit Sélectionné n'a pas de Fournisseur Enregistré ! Voulez-vous Continuer "
         },
-        msgCode : //BAK
+        msgCode : 
         {
             title: "Attention",
             btn01:"Aller au document",
@@ -6234,9 +6234,9 @@ export const langFr =
         },
         msgCustomerSelect:
         {
-            title: "Attention",  //BAK
-            btn01: "OK",  //BAK
-            msg: "Veuillez sélectionner Client !"  //BAK
+            title: "Attention",  
+            btn01: "OK",  
+            msg: "Veuillez sélectionner Client !"  
         },
         msgRowNotUpdate:
         {
@@ -6246,9 +6246,9 @@ export const langFr =
         },
         msgRowNotDelete :
         {
-            title: "Attention",  //BAK
-            btn01: "OK",  //BAK
-            msg: "Cette ligne a été convertie en facture, vous ne pouvez pas la supprimer !"  //BAK
+            title: "Attention",  
+            btn01: "OK",  
+            msg: "Cette ligne a été convertie en facture, vous ne pouvez pas la supprimer !"  
         },
         msgdocNotDelete : 
         {
@@ -6264,7 +6264,7 @@ export const langFr =
             clmZipcode : "Code postal",   
             clmCountry : "Pays",   
         },
-        msgCode : //BAK
+        msgCode : 
         {
             title: "Attention",
             btn01:"Aller au document",
@@ -6621,15 +6621,15 @@ export const langFr =
         },
         msgCustomerSelect:
         {
-            title: "Attention",  //bak
-            btn01: "OK",  //bak
-            msg: "Veuillez sélectionner Client !"  //bak
+            title: "Attention",  
+            btn01: "OK",  
+            msg: "Veuillez sélectionner Client !"  
         },
         msgRowNotUpdate:
         {
-            title: "Attention",  //BAK
-            btn01: "OK",  //BAK
-            msg: "Cette ligne a été convertie en bordereau d'expédition ou en facture. Vous ne pouvez effectuer aucune modification !"  //BAK
+            title: "Attention",  
+            btn01: "OK",  
+            msg: "Cette ligne a été convertie en bordereau d'expédition ou en facture. Vous ne pouvez effectuer aucune modification !"  
         },
         msgRowNotDelete :
         {
@@ -6651,7 +6651,7 @@ export const langFr =
             clmZipcode : "Code postal",   
             clmCountry : "Pays",   
         },
-        msgCode : //BAK
+        msgCode : 
         {
             title: "Attention",
             btn01:"Aller au document",
@@ -6930,25 +6930,25 @@ export const langFr =
         },
         pg_offersGrid : 
         {
-            title : "Sélection d'offres",  //bak
-            clmReferans : "Réf.-Réf. No:",  //bak
-            clmCode : "Code",  //bak
-            clmName : "Nom",  //bak
-            clmQuantity : "Quantité",  //bak
-            clmTotal : "Total",  //bak
-            clmPrice : "Prix",  //bak
+            title : "Sélection d'offres",  
+            clmReferans : "Réf.-Réf. No:",  
+            clmCode : "Code",  
+            clmName : "Nom",  
+            clmQuantity : "Quantité",  
+            clmTotal : "Total",  
+            clmPrice : "Prix",  
         },
         msgCustomerSelect:
         {
-            title: "Attention",  //bak
-            btn01: "OK",  //bak
-            msg: "Veuillez sélectionner Client !"  //bak
+            title: "Attention",  
+            btn01: "OK",  
+            msg: "Veuillez sélectionner Client !"  
         },
         msgRowNotUpdate:
         {
-            title: "Attention",  //BAK
-            btn01: "OK",  //BAK
-            msg: "Cette ligne a été convertie en bordereau d'expédition ou en facture. Vous ne pouvez effectuer aucune modification !"  //BAK
+            title: "Attention",  
+            btn01: "OK",  
+            msg: "Cette ligne a été convertie en bordereau d'expédition ou en facture. Vous ne pouvez effectuer aucune modification !"  
         },
         msgRowNotDelete :
         {
@@ -6970,7 +6970,7 @@ export const langFr =
             clmZipcode : "Code postal",   
             clmCountry : "Pays",   
         },
-        msgCode : //BAK
+        msgCode : 
         {
             title: "Attention",
             btn01:"Aller au document",
@@ -8085,8 +8085,8 @@ export const langFr =
         },
         validValue :"Ne peut être Vide",
         zeroValid : "Ne peut pas être 0",
-        btnAdd: "Ajouter une nouvelle valeur", //BAK
-        validation:  //BAK
+        btnAdd: "Ajouter une nouvelle valeur", 
+        validation:  
         {
             clmMinValue: "Le rapport ne peut pas être inférieur à zéro !",
             clmMaxvalue: "Le rapport ne peut pas être inférieur à zéro !",
@@ -8269,7 +8269,7 @@ export const langFr =
             clmTime: "Heure",
             slmUser: "Utilisateur",
             clmCustomer : "Fournisseur",
-            clmCardId : "Numéro de Carte", //BAK
+            clmCardId : "Numéro de Carte", 
             clmDiscount : "Remise",
             clmLoyalyt: "Fidélité",
             clmHT : "Total",
@@ -8415,7 +8415,7 @@ export const langFr =
         {
             title: "Attention",  
             btn01: "OK",   
-            msg: "Lütfen en az 15 karakter açıklama giriniz.."  //BAK
+            msg: "Lütfen en az 15 karakter açıklama giriniz.."  
         },
         btnAdd : "Ekle" ,
         descriptionPlace :"Lütfen en az 15 karakter açıklama giriniz.."
@@ -8600,18 +8600,18 @@ export const langFr =
         {
             title : "Détaille ticket"
         },
-        msgZeroQuantity: //bak
-        { //bak
-            title: "Attention", //bak
-            btn01: "Annulé", //bak
-            btn02: "Continuer", //bak
-            msg: "Le montant que vous avez saisi est 0€ ! Etes-vous sur de vouloir continuer?" //bak
+        msgZeroQuantity: 
+        { 
+            title: "Attention", 
+            btn01: "Annulé", 
+            btn02: "Continuer", 
+            msg: "Le montant que vous avez saisi est 0€ ! Etes-vous sur de vouloir continuer?" 
         },
         msgBigAmount:
         {
-            title: "Attention",   //BAK
-            btn01: "OK",   //BAK
-            msg: "Vous ne pouvez pas entrer le montant du fond de tiroir supérieur à 600 € ! "   //BAK
+            title: "Attention",   
+            btn01: "OK",   
+            msg: "Vous ne pouvez pas entrer le montant du fond de tiroir supérieur à 600 € ! "   
         },
     },
     tkf_01_001 : // "Alış Teklifi Listesi",
@@ -8947,17 +8947,17 @@ export const langFr =
         },  
         msgRowNotDelete :
         {
-            title: "Attention",  //bak
-            btn01: "OK",  //bak
-            msg: "Cette ligne a été convertie en commande. Vous ne pouvez pas la supprimer !"  //bak
+            title: "Attention",  
+            btn01: "OK",  
+            msg: "Cette ligne a été convertie en commande. Vous ne pouvez pas la supprimer !"  
         },
         msgdocNotDelete : 
         {
-            title: "Attention",   //bak
-            btn01: "OK",   //bak
-            msg: "Il y a une ligne dans votre document qui a été convertie en commande. Ce document ne peut pas être supprimé !"   //bak
+            title: "Attention",   
+            btn01: "OK",   
+            msg: "Il y a une ligne dans votre document qui a été convertie en commande. Ce document ne peut pas être supprimé !"   
         },
-        msgCode : //BAK
+        msgCode : 
         {
             title: "Attention",
             btn01:"Aller au document",
@@ -9247,17 +9247,17 @@ export const langFr =
         },  
         msgRowNotDelete :
         {
-            title: "Attention",  //bak
-            btn01: "OK",  //bak
-            msg: "Cette ligne a été convertie en commande. Vous ne pouvez pas la supprimer !"  //bak
+            title: "Attention",  
+            btn01: "OK",  
+            msg: "Cette ligne a été convertie en commande. Vous ne pouvez pas la supprimer !"  
         },
         msgdocNotDelete : 
         {
-            title: "Attention",   //bak
-            btn01: "OK",   //bak
-            msg: "Une ligne a été convertie en commande dans votre document. Ce document ne peut pas être supprimé !"   //bak
+            title: "Attention",   
+            btn01: "OK",   
+            msg: "Une ligne a été convertie en commande dans votre document. Ce document ne peut pas être supprimé !"   
         },
-        msgCode : //BAK
+        msgCode : 
         {
             title: "Attention",
             btn01:"Aller au document",
@@ -9278,7 +9278,7 @@ export const langFr =
         barkodPlaceHolder :"Veuillez Entrer Le ou Les Codes Produits ou Codes Barres",
         ItemNamePlaceHolder :"Veuillez Entrer le Nom Complet ou une Syllabe",
         btnOk : "Mettre à jour",
-        toolMenu01: "Définition des Produits", //BAK 
+        toolMenu01: "Définition des Produits",  
         grdListe : 
         {
             clmCode: "Référence Produit",
@@ -9453,7 +9453,7 @@ export const langFr =
         {
             title: "Attention",  
             btn01: "OK",   
-            msg: "Lütfen en az 15 karakter açıklama giriniz.."  //BAK
+            msg: "Lütfen en az 15 karakter açıklama giriniz.."  
         },
         btnAdd : "Ekle", 
         descriptionPlace : "Lütfen en az 15 karakter açıklama giriniz.."
