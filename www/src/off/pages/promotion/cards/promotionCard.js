@@ -229,7 +229,7 @@ export default class promotionCard extends React.PureComponent
 
             return(
                 <div className='row'>
-                    <div className='col-12'>                    
+                    <div className='col-12 pb-4'>                    
                         <Form colCount={3} id={"frmCond"  + this.tabIndex}>
                             {/* cmbPrmType */}
                             <Item>
@@ -444,6 +444,7 @@ export default class promotionCard extends React.PureComponent
                                         ]}>
                                             <Validator validationGroup={"frmPromo"  + this.tabIndex}>
                                                 <RequiredRule message={this.t("validation.txtPrmQuantityValid")} />
+                                                <RangeRule min={0.001} message={this.t("validation.txtPrmQuantityMinValid")}/>
                                             </Validator> 
                                         </NdTextBox>     
                                     </Item>
@@ -521,7 +522,7 @@ export default class promotionCard extends React.PureComponent
             
             return(
                 <div className='row'>
-                    <div className='col-12'>
+                    <div className='col-12 pb-4'>
                         <Form colCount={3} id={"frmApp"  + this.tabIndex}>
                             {/* cmbRstType */}
                             <Item>

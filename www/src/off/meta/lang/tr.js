@@ -1772,6 +1772,12 @@ export const langTr =
             clmStatus : "Durum",
 
         },
+        msgCode :
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
+        },
     },
     stk_03_006 : // "Depo Ürün Miktarları Listesi"
     {
@@ -4887,6 +4893,7 @@ export const langTr =
         validation:
         {
             txtPrmQuantityValid: "Miktar'ı boş geçemezsiniz !",
+            txtPrmQuantityMinValid: "Minimum değer en az 0.001 olmalıdır !",
             txtRstItemQuantityValid: "Miktar sıfırdan küçük olamaz !",
         },
         msgDeleteAll:

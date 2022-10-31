@@ -1542,6 +1542,12 @@ export const langFr =
             clmMulticode : "Sélection Document",
             clmBarcode : "Code Barre"
         },
+        msgCode : //BAK
+        {
+            title: "Dikkat",
+            btn01: "Evrağa Git",
+            msg: "Evrak Bulundu"
+        },
         msgQuantity:
         {
             title: "Attention",
@@ -1678,6 +1684,7 @@ export const langFr =
         btnCheck : "Actif",
         btnGet :"Rechercher",
         chkMasterBarcode : "Regrouper code barre ",
+        chkLastCustomer : "Son Tedarikçileri Getir", //BAK
         txtMulticode : "Sélection Document",
         multicodePlaceHolder : "Veuillez Entrer les Codes Fournisseur Recherchés" ,
         barkodPlaceHolder :"Veuillez Entrer Le ou Les Codes Produits ou Codes Barres",
@@ -4886,6 +4893,7 @@ export const langFr =
         validation: 
         {
             txtPrmQuantityValid: "Vous ne pouvez pas ignorer le montant",
+            txtPrmQuantityMinValid: "Minimum değer en az 0.001 olmalıdır !", //BAK
             txtRstItemQuantityValid: "le montant ne peut pas être inférieur à zéro",
         },
         msgDeleteAll: 
@@ -9475,6 +9483,5 @@ export const langFr =
         },
         btnAdd : "Ekle", 
         descriptionPlace : "Lütfen en az 15 karakter açıklama giriniz.."
-
     },
 }
