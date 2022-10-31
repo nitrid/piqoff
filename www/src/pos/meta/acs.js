@@ -18,6 +18,38 @@ export const acs =
             CAPTION : "Cihaz Giriş"
         }
     },
+    //btnReturnEntry
+    {
+        TYPE : 2,
+        ID :"btnReturnEntry",
+        VALUE : {dialog:{type:0}},
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "btnReturnEntry",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Pos",
+            CAPTION : "İade Giriş"
+        }
+    },
+    //btnFullDelete
+    {
+        TYPE : 2,
+        ID :"btnFullDelete",
+        VALUE : {dialog:{type:0}},
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "btnFullDelete",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Pos",
+            CAPTION : "Evrak Silme"
+        }
+    },
     //btnPluEdit
     {
         TYPE : 2,
@@ -70,7 +102,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"btnDiscount",
-        VALUE : {dialog:{type:1}},
+        VALUE : {dialog:{type:0}},
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "btnDiscount",

@@ -49,6 +49,11 @@ export const menu = (e) =>
                             text: e.t('menu.stk_01_007'),//'Hizmet Tanımları',
                             path: 'items/cards/serviceItemsCard'
                         },
+                        {
+                            id: 'stk_01_008',
+                            text: e.t('menu.stk_01_008'),//'Ürün Grubu Tanımları',
+                            path: 'construction.js',
+                        },
                     ]
                 },
                 {
@@ -844,7 +849,38 @@ export const menu = (e) =>
                             id: 'set_02_001',
                             text: e.t('menu.set_02_001'),//'FirmaBilgileri',
                             path: 'setting/officialSettings/companyCard'
-                        }
+                        },
+                        {
+                            id: 'set_02_002',
+                            text: e.t('menu.set_02_002'),//'hakkında',
+                            path: 'construction.js',
+                        },
+                        {
+                            id: 'set_02_004',
+                            text: e.t('menu.set_02_004'),//'kullanım klavuzu',
+                            path: 'construction.js',
+                        },
+                        {
+                            id: 'set_02_005',
+                            text: e.t('menu.set_02_005'),//'yenilikler',
+                            path: 'construction.js',
+                        },
+                        {
+                            id: 'set_02_006',
+                            text: e.t('menu.set_02_006'),//'Destek Talebi Oluştur',
+                            path: 'construction.js',
+                        },
+                        {
+                            id: 'set_02_007',
+                            text: e.t('menu.set_02_007'),//'Destek Talebi Geçmişi',
+                            path: 'construction.js',
+                        },
+                        {
+                            id: 'set_02_003',
+                            text: e.t('menu.set_02_003'),//'anydesk',
+                            path: 'construction.js',
+                        },
+
                     ]
                 },
                 {

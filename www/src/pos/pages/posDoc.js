@@ -3084,6 +3084,16 @@ export default class posDoc extends React.PureComponent
                                                 <NbButton id={"btnDelete"} parent={this} className="form-group btn btn-danger btn-block my-1" style={{height:"70px",width:"100%"}}
                                                 onClick={async()=>
                                                 {
+                                                    let tmpAcsVal = this.acsObj.filter({ID:'btnFullDelete',TYPE:2,USERS:this.user.CODE})
+                                        
+                                                    if(typeof tmpAcsVal.getValue().dialog != 'undefined' && tmpAcsVal.getValue().dialog.type != -1)
+                                                    {   
+                                                        let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:tmpAcsVal.getValue().dialog.type})
+                                                        if(!tmpResult)
+                                                        {
+                                                            return
+                                                        }
+                                                    }
                                                     if(this.posObj.posSale.dt().length > 0)
                                                     {
                                                         let tmpConfObj =
@@ -3166,6 +3176,16 @@ export default class posDoc extends React.PureComponent
                                         <NbButton id={"btnItemReturn"} parent={this} className="form-group btn btn-block my-1" style={{height:"70px",width:"100%",backgroundColor:"#e84393"}}
                                         onClick={async ()=>
                                         {
+                                            let tmpAcsVal = this.acsObj.filter({ID:'btnReturnEntry',TYPE:2,USERS:this.user.CODE})
+                                        
+                                            if(typeof tmpAcsVal.getValue().dialog != 'undefined' && tmpAcsVal.getValue().dialog.type != -1)
+                                            {   
+                                                let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:tmpAcsVal.getValue().dialog.type})
+                                                if(!tmpResult)
+                                                {
+                                                    return
+                                                }
+                                            }
                                             if(this.core.offline)
                                             {
                                                 let tmpConfObj =

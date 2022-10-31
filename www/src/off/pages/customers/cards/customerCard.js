@@ -313,32 +313,50 @@ export default class CustomerCard extends React.PureComponent
                                     {
                                         if(this.cmbType.value == 1)
                                         {
-                                            if(this.customerObj.dt()[0].SIRET_ID == '' || this.customerObj.dt()[0].APE_CODE == '' || this.customerObj.dt()[0].TAX_OFFICE == '' || this.customerObj.dt()[0].TAX_NO == '')
+                                            if(typeof this.customerObj.customerAdress.dt()[0] == 'undefined' || this.customerObj.customerAdress.dt()[0].COUNTRY == '' )
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgLegalNotValid',showTitle:true,title:this.t("msgLegalNotValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgLegalNotValid.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgLegalNotValid.msg")}</div>)
+                                                    id:'msgAdressNotValid',showTitle:true,title:this.t("msgAdressNotValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgAdressNotValid.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAdressNotValid.msg")}</div>)
                                                 }
                                                 
                                                 await dialog(tmpConfObj);
                                                 return
                                             }
-                                        }
-                                        // ADRES BÖLÜMÜNDEKİ ÜLKE KONTROLÜ İÇİN YAPILMIŞTI AMA TAX_SUCRE SEBEBİYLE GEREK KALMAMIS OLABİLİR 
-                                        // if(typeof this.customerObj.customerAdress.dt()[0] == 'undefined' || this.customerObj.customerAdress.dt()[0].COUNTRY == '' )
-                                        // {
-                                        //     let tmpConfObj =
-                                        //     {
-                                        //         id:'msgAdressNotValid',showTitle:true,title:this.t("msgAdressNotValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                        //         button:[{id:"btn01",caption:this.t("msgAdressNotValid.btn01"),location:'after'}],
-                                        //         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAdressNotValid.msg")}</div>)
-                                        //     }
+                                            if(this.customerObj.customerAdress.dt()[0].COUNTRY == 'FR')
+                                            {
+                                                if(this.customerObj.dt()[0].SIRET_ID == '' || this.customerObj.dt()[0].APE_CODE == '' || this.customerObj.dt()[0].TAX_OFFICE == '' || this.customerObj.dt()[0].TAX_NO == '')
+                                                {
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgLegalNotValid',showTitle:true,title:this.t("msgLegalNotValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.t("msgLegalNotValid.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgLegalNotValid.msg")}</div>)
+                                                    }
+                                                    
+                                                    await dialog(tmpConfObj);
+                                                    return
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if(this.customerObj.dt()[0].TAX_NO == '')
+                                                {
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgTaxNo',showTitle:true,title:this.t("msgTaxNo.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.t("msgTaxNo.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgTaxNo.msg")}</div>)
+                                                    }
+                                                    
+                                                    await dialog(tmpConfObj);
+                                                    return
+                                                }
+                                            }
                                             
-                                        //     await dialog(tmpConfObj);
-                                        //     return
-                                        // }
+                                        }
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             let tmpConfObj =

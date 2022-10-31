@@ -945,7 +945,7 @@ export default class salesOrdList extends React.PureComponent
                                         columnsAutoWidth={true} 
                                         allowColumnReordering={true} 
                                         allowColumnResizing={true} 
-                                        headerFilter={{visible:true}}
+                                        filterRow={{visible:true}}
                                         height={350} 
                                         width={'100%'}
                                         dbApply={false}
@@ -959,11 +959,12 @@ export default class salesOrdList extends React.PureComponent
                                         >
                                             <Scrolling mode="standart" />
                                             <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
-                                            <Column dataField="CUSER_NAME" caption={this.t("grdOpenTike.clmUser")} width={110}  headerFilter={{visible:true}}/>
-                                            <Column dataField="DEVICE" caption={this.t("grdOpenTike.clmDevice")} width={80}  headerFilter={{visible:true}}/>
-                                            <Column dataField="DATE" caption={this.t("grdOpenTike.clmDate")} width={100} allowEditing={false} />
-                                            <Column dataField="TICKET_ID" caption={this.t("grdOpenTike.clmTicketId")} width={180}  headerFilter={{visible:true}}/>
-                                            <Column dataField="DESCRIPTION" caption={this.t("grdOpenTike.clmDescription")} width={250}  headerFilter={{visible:true}}/>
+                                            <Column dataField="CUSER_NAME" caption={this.lang.t("grdOpenTike.clmUser")} width={110}  headerFilter={{visible:true}}/>
+                                            <Column dataField="DEVICE" caption={this.lang.t("grdOpenTike.clmDevice")} width={60}  headerFilter={{visible:true}}/>
+                                            <Column dataField="DATE" caption={this.lang.t("grdOpenTike.clmDate")} width={90} allowEditing={false} />
+                                            <Column dataField="TICKET_ID" caption={this.lang.t("grdOpenTike.clmTicketId")} width={150}  headerFilter={{visible:true}}/>
+                                            <Column dataField="TOTAL" caption={this.lang.t("grdOpenTike.clmTotal")} width={100} format={{ style: "currency", currency: "EUR",precision: 2}} headerFilter={{visible:true}}/>
+                                            <Column dataField="DESCRIPTION" caption={this.lang.t("grdOpenTike.clmDescription")} width={250}  headerFilter={{visible:true}}/>
                                     </NdGrid>
                                 </Item>
                             </Form>

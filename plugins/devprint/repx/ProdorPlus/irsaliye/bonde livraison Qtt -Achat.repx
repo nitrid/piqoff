@@ -330,7 +330,7 @@
                 <Item8 Ref="169" ControlType="XRTableCell" Name="tableCell7" Weight="0.11253227783845364" Text="Prix Unit." TextAlignment="MiddleRight" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
                   <StylePriority Ref="170" UseFont="false" UseTextAlignment="false" />
                 </Item8>
-                <Item9 Ref="171" ControlType="XRTableCell" Name="tableCell35" Weight="0.11386781985464363" Multiline="true" Text="Prix Coli" TextAlignment="MiddleRight" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
+                <Item9 Ref="171" ControlType="XRTableCell" Name="tableCell35" Weight="0.11386781985464363" Multiline="true" Text="Prix Colis" TextAlignment="MiddleRight" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">
                   <StylePriority Ref="172" UseFont="false" UseTextAlignment="false" />
                 </Item9>
                 <Item10 Ref="173" ControlType="XRTableCell" Name="tableCell8" Weight="0.13334715311437104" Text="TVA" TextAlignment="MiddleRight" StyleName="DetailCaption1" Font="Arial, 7pt, style=Bold">

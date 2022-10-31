@@ -28,6 +28,7 @@ export const langTr =
     checkAll :"Tümünü Uygula",
     msgUserAccess : "Giriş Yetkiniz Yok",
     collectiveItemAdd: "Toplu Ürün Ekleme",
+    constructionMsg : "Bu sayfa yapım aşamasındadır en kısa zamanda hizmetinize sunulacaktır.",
     popPassword : 
     {
         title: "Kullanıcı Şifrenizi Giriniz",
@@ -56,6 +57,7 @@ export const langTr =
         clmDevice : "Cihaz",
         clmDate : "Tarih",
         clmTicketId : "Fiş No",
+        clmTotal : "Tutar",
         clmDescription :"Açıklama",
     },
     msgExpUpcoming : 
@@ -80,6 +82,7 @@ export const langTr =
         stk_01_005: "Multi Kod Tanımları",
         stk_01_006: "Depo/Mağaza Tanımları",
         stk_01_007: "Hizmet Tanımları",
+        stk_01_008: "Ürün Grubu Tanımlama",
         stk_02_001: "Sayım Evrakı",
         stk_02_002: "Depo/Mağaza Arası Sevk",
         stk_02_003: "Kayıp Ürün Çıkışı",
@@ -195,6 +198,12 @@ export const langTr =
         set_01_001 : "Tax Sugar",
         set_02 : "Genel Ayarlar",
         set_02_001 : "Firma Bilgileri",
+        set_02_002 : "Hakkında",
+        set_02_003 : "Anydesk", 
+        set_02_004 : "Kullanım Klavuzu",
+        set_02_005 : "Versiyon Yenilikleri",
+        set_02_006 : "Destek Talebi Oluştur",
+        set_02_007 : "Destek Talebi Geçmişi",
         set_03 : "Evrak Ayarları",
         set_03_001 : "Silinmiş Evraklar",
         proces : "Toplu işlemler",
@@ -2108,6 +2117,12 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Lütfen Yasal Bölümündeki alanları doldurunuz !"
+        },
+        msgTaxNo:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen vergi numarasını doldurunuz !"
         },
         msgAdressNotValid:
         {
@@ -8335,6 +8350,7 @@ export const langTr =
             clmDevice : "Cihaz",
             clmDate : "Tarih",
             clmTicketId : "Fiş No",
+            clmTotal : "Tutar",
             clmDescription :"Açıklama",
         }
     },
@@ -8518,6 +8534,7 @@ export const langTr =
             clmDevice : "Cihaz",
             clmDate : "Tarih",
             clmTicketId : "Fiş No",
+            clmTotal : "Tutar",
             clmDescription :"Açıklama",
         }
     },
@@ -8556,6 +8573,7 @@ export const langTr =
             clmDevice : "Cihaz",
             clmDate : "Tarih",
             clmTicketId : "Fiş No",
+            clmTotal : "Tutar",
             clmDescription :"Açıklama",
         },
         popAdvance : 

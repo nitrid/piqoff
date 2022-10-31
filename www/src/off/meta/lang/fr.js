@@ -28,6 +28,7 @@ export const langFr =
     checkAll :"Tout saisir",
     msgUserAccess : "Vous n'êtes pas autorisé",
     collectiveItemAdd: "Ajouter Multi Produit",
+    constructionMsg : "Bu sayfa yapım aşamasındadır en kısa zamanda hizmetinize sunulacaktır.", // BAK
     popPassword : 
     {
         title: "Entrez votre mot de passe utilisateur",  
@@ -53,9 +54,10 @@ export const langFr =
     grdOpenTike: 
     {
         clmUser : "Utilisateur",
-        clmDevice : "Appareil",
+        clmDevice : "Pos No",
         clmDate : "Date",
         clmTicketId : "Numéro de ticket",
+        clmTotal : "Total",
         clmDescription :"Motif",
     },
     msgExpUpcoming : 
@@ -80,6 +82,7 @@ export const langFr =
         stk_01_005: "Saisie multi code barre",
         stk_01_006: "Saisie dépot/magasin",
         stk_01_007: "Description des services",  
+        stk_01_008: "Ürün Grubu Tanımlama", // BAK
         stk_02_001: "Document inventaire",
         stk_02_002: "Transfert interne dépot/magasin",
         stk_02_003: "Sortie perte",
@@ -195,6 +198,12 @@ export const langFr =
         set_01_001 : "Taxe sucre",
         set_02 : "Réglage général",   
         set_02_001 : "Informations sur la société",   
+        set_02_002 : "Hakkında",  // BAK
+        set_02_003 : "Anydesk",   // BAK
+        set_02_004 : "Kullanım Klavuzu",  // BAK
+        set_02_005 : "Versiyon Yenilikleri",  // BAK
+        set_02_006 : "Destek Talebi Oluştur",   // BAK
+        set_02_007 : "Destek Talebi Geçmişi",   // BAK
         set_03 : "Evrak Ayarları",   
         set_03_001 : "Silinmiş Evraklar",   
         proces : "Saisie groupée",
@@ -2108,6 +2117,12 @@ export const langFr =
             btn01: "OK",
             msg: "Veuillez Saisir les Zones Légales !"
         },
+        msgTaxNo:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            msg: "Lütfen vergi numarasını doldurunuz !"   // BAK
+        },
         msgAdressNotValid:
         {
             title: "Attention",
@@ -2316,7 +2331,7 @@ export const langFr =
         },
         grdLegal : 
         {
-            clmSiretID : "Siret ID",
+            clmSiretID : "Siret No",
             clmApeCode : "Code Ape",
             clmTaxOffice : "Impôt",
             clmTaxNo : "Numéro Impôt",
@@ -8106,13 +8121,13 @@ export const langFr =
         txtPhone : "Telephone",
         txtEmail : "E-Mail",
         txtWeb : "Web Site",
-        txtSiretId : "Siret ID",
+        txtSiretId : "Siret No",
         txtApeCode : "App Code",
         txtTaxOffice : "Tax Office",
         txtTaxNo : "Tax No",
         txtIntVatNo : "Int. Tax No",
         txtSirenNo : "Siren No",
-        txtRSC : "RSC",
+        txtRSC : "RCS",
         txtCapital : "Capital",
         msgSave:
         {
@@ -8331,9 +8346,10 @@ export const langFr =
         grdOpenTike: 
         {
             clmUser : "Utilisateur",
-            clmDevice : "Appareil",
+            clmDevice : "Pos No",
             clmDate : "Date",
             clmTicketId : "Ticket No",
+            clmTotal : "Total",
             clmDescription :"Motif",
         }
     },
@@ -8514,9 +8530,10 @@ export const langFr =
         grdOpenTike: 
         {
             clmUser : "Utilisateur",
-            clmDevice : "Appareil",
+            clmDevice : "Pos No",
             clmDate : "Date",
             clmTicketId : "Ticket No",
+            clmTotal : "Total",
             clmDescription :"Motif",
         }
     },
@@ -8555,6 +8572,7 @@ export const langFr =
             clmDevice : "Utilisateur",
             clmDate : "Date",
             clmTicketId : "Numéro ticket",
+            clmTotal : "Total",
             clmDescription :"Motif",
         },
         popAdvance : 
