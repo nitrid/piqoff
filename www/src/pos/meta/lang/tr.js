@@ -628,5 +628,19 @@ export const langTr =
         title : "Dikkat",
         msg : "Açıkta satış varken sipariş seçemezsiniz. Lütfen açıktaki satışı kapatınız ya da parka alınız.",
         btn01 : "Tamam"
-    }
+    },
+    msgSaveFailAlert : 
+    {
+        title : "Uyarı",
+        msg : "Kayıt işleminiz başarısız !",
+        btn01 : "Tamam",
+        btn02 : "Tekrar Gönder",
+    },
+    msgCheckRecord : 
+    {
+        title : "Uyarı",
+        msg1 : "Henüz tamamlanmamış kayıtlar var. Lütfen bekleyiniz !",
+        msg2 : "Tamamlanmayan kayıt : ",
+        btn01 : "Tamam",
+    },
 }

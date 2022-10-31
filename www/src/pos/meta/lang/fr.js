@@ -628,5 +628,19 @@ export const langFr =
         title : "Attention",
         msg : "Vous ne pouvez pas passer de commande si vente en attente",
         btn01 : "OK"
-    }
+    },
+    msgSaveFailAlert : //BAK
+    {
+        title : "Uyarı",
+        msg : "Kayıt işleminiz başarısız !",
+        btn01 : "Tamam",
+        btn02 : "Tekrar Gönder",
+    },
+    msgCheckRecord : //BAK
+    {
+        title : "Uyarı",
+        msg1 : "Henüz tamamlanmamış kayıtlar var. Lütfen bekleyiniz !",
+        msg2 : "Tamamlanmayan kayıt : ",
+        btn01 : "Tamam",
+    },
 }

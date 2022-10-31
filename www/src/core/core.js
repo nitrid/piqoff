@@ -685,7 +685,7 @@ export class dataset
             let tmpQuerys = [];
 
             for (let i = 0; i < this.length; i++) 
-            {
+            {                
                 let tmp = this.get(i).toCommands();
                 tmp.forEach(e => 
                 {
@@ -694,6 +694,7 @@ export class dataset
             }
             
             let tmpResult = await this.sql.execute(tmpQuerys)
+            
             if(typeof tmpResult.result.err == 'undefined')
             {             
                 tmpQuerys.forEach(x =>
@@ -720,9 +721,19 @@ export class dataset
                 console.log(tmpResult.result.err)
                 tmpQuerys.forEach(x =>
                 {
-                    if(x.rowData.stat == 'editing' || x.rowData.stat == 'newing')
+                    // KAYIT İŞLEMİNDE HATA VERDİĞİNDE UYARI MESAJINI YAPARKEN DEĞİŞTİRİLDİ.
+                    //İLK HATA MESAJINI VERİYORDU İKİNCİ MESAJI VERMİYORDU ÇÜNKÜ TÜM SATIRLARIN STAT I BOŞALTILIYOR. 31.10.2022 
+                    // if(x.rowData.stat == 'editing' || x.rowData.stat == 'newing')
+                    // {
+                    //     Object.setPrototypeOf(x.rowData,{stat:''})
+                    // }
+                    if(x.rowData.stat == 'newing')
                     {
-                        Object.setPrototypeOf(x.rowData,{stat:''})
+                        Object.setPrototypeOf(x.rowData,{stat:'new'})
+                    }
+                    else if(x.rowData.stat == 'editing')
+                    {
+                        Object.setPrototypeOf(x.rowData,{stat:'edit'})
                     }
                 })  
                 resolve(1)
@@ -978,7 +989,7 @@ export class datatable
                 if(this[i].stat == 'new')
                 {
                     tmpQuery = JSON.parse(JSON.stringify(this.insertCmd))
-                    Object.setPrototypeOf(this[i],{stat:'newing'})
+                    Object.setPrototypeOf(this[i],{stat:'newing'})                    
                     //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 28.02.2022
                     if(core.instance.offline && typeof tmpQuery.local != 'undefined' && typeof tmpQuery.local.values != 'undefined' && tmpQuery.local.values.length > 0)
                     {                        

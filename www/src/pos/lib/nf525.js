@@ -16,7 +16,7 @@ export class nf525Cls
 
             let tmpQuery = 
             {
-                query : "SELECT TOP 1 * FROM [dbo].[POS_VW_01] WHERE DEVICE = @DEVICE AND GUID <> @GUID ORDER BY LDATE DESC",
+                query : "SELECT TOP 1 * FROM [dbo].[POS_VW_01] WHERE DEVICE = @DEVICE AND GUID <> @GUID AND STATUS = 1 ORDER BY LDATE DESC",
                 param : ['DEVICE:string|25','GUID:string|50'],
                 value : [pData.DEVICE,pData.GUID]
             }
