@@ -83,6 +83,7 @@ export const langFr =
         stk_01_006: "Saisie dépot/magasin",
         stk_01_007: "Description des services",  
         stk_01_008: "Ürün Grubu Tanımlama", // BAK
+        stk_01_009: "Ürün Alt Grup Tanımlama", // BAK
         stk_02_001: "Document inventaire",
         stk_02_002: "Transfert interne dépot/magasin",
         stk_02_003: "Sortie perte",
@@ -727,6 +728,54 @@ export const langFr =
             btn01: "OK", 
             msg : "Modification Impossible car Saisie Effectué avec cette Carte !" 
         },
+    },
+        stk_01_008 : // "Ürün Grubu Tanımları"  // YENİ EKLENDİ KOMPLE BAK
+    {
+        txtCode : "Kodu",
+        txtName :"Adı",
+        cmbType :"Tip",
+        validCode :"Kodu Boş Geçemezsiniz !",
+        pg_txtCode : 
+        {
+            title : "Ürün Grubu Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI",
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgCode : 
+        {
+            title: "Dikkat",
+            btn01: "Kasaya Git",
+            btn02: "Tamam",
+            msg : "Girmiş olduğunuz Kasa sistem de kayıtlı !"
+        },
+        chkActive: "Aktif",
     },
     stk_02_001 : // Sayım Evrakı"
     {
