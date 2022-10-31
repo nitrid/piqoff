@@ -3,7 +3,7 @@
     "name": "piqsoft",
     "version": "1.0.1",
     "dependencies": {
-        "gensrv": "^1.0.90",
+        "gensrv": "^1.0.93",
         "node-windows": "^1.0.0-beta.6"
     }
 }
