@@ -4908,6 +4908,8 @@ export const langTr =
     {
         txtCode: "Kodu",
         txtName: "Adı",
+        dtStartDate: "Baş.Tarih",
+        dtFinishDate: "Bit.Tarih",
         txtCodePlace: "Promosyon kodunu ya da ürün barkodunu giriniz", 
         txtNamePlace: "Promosyon kodunu ya da ürün adını giriniz", 
         btnGet: "Getir",

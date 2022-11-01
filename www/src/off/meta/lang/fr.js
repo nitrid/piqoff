@@ -4908,6 +4908,8 @@ export const langFr =
     {
         txtCode: "Code", 
         txtName: "Nom", 
+        dtStartDate: "Date Début",
+        dtFinishDate: "Date Fin",
         txtCodePlace: "Saisissez le code promo ou le code-barres du produit", 
         txtNamePlace: "Entrez le code promotionnel ou le nom du produit", 
         btnGet: "Recherche",

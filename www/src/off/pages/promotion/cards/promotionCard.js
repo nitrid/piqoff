@@ -47,7 +47,6 @@ export default class promotionCard extends React.PureComponent
         this.init();
         if(typeof this.pagePrm != 'undefined')
         {
-            console.log(this.pagePrm.CODE)
             await this.getPromotion(this.pagePrm.CODE);
         }
     }
@@ -316,7 +315,7 @@ export default class promotionCard extends React.PureComponent
                                                 <NdButton text={this.t("pg_Grid.btnItem")} type="default" width="100%" 
                                                 onClick={()=>
                                                 {
-                                                    this["pg_txtPrmItem" + pItem.WITHAL]["txtpg_txtPrmItem" + pItem.WITHAL].value = ""
+                                                    //this["pg_txtPrmItem" + pItem.WITHAL]["txtpg_txtPrmItem" + pItem.WITHAL].value = ""
                                                     this["pg_txtPrmItem" + pItem.WITHAL].show()
                                                     this["pg_txtPrmItem" + pItem.WITHAL].onClick = async(data) =>
                                                     {         
@@ -1229,16 +1228,12 @@ export default class promotionCard extends React.PureComponent
                                         {/* dtStartDate */}
                                         <Item>
                                             <Label text={this.t("dtStartDate")} alignment="right" />
-                                            <NdDatePicker simple={true}  parent={this} id={"dtStartDate"} 
-                                            dt={{data:this.promo.dt(),field:"START_DATE"}}
-                                            />
+                                            <NdDatePicker simple={true}  parent={this} id={"dtStartDate"} dt={{data:this.promo.dt(),field:"START_DATE"}}/>
                                         </Item>
                                         {/* dtFinishDate */}
                                         <Item>
                                             <Label text={this.t("dtFinishDate")} alignment="right" />
-                                            <NdDatePicker simple={true}  parent={this} id={"dtFinishDate"} 
-                                            dt={{data:this.promo.dt(),field:"FINISH_DATE"}}
-                                            />
+                                            <NdDatePicker simple={true}  parent={this} id={"dtFinishDate"} dt={{data:this.promo.dt(),field:"FINISH_DATE"}}/>
                                         </Item>
                                         {/* cmbDepot */}
                                         <Item>

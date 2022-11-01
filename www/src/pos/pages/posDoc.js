@@ -353,7 +353,7 @@ export default class posDoc extends React.PureComponent
             this.posObj.clearAll()
             await this.posObj.load({GUID:pGuid})
             this.posObj.dt()[0].DEVICE = window.localStorage.getItem('device')
-            this.posObj.dt()[0].DOC_DATE =  moment(new Date()).format("YYYY-MM-DD"),
+            this.posObj.dt()[0].DOC_DATE =  moment(new Date()).format("YYYY-MM-DD"),            
             //PROMOSYON GETİR.
             await this.getPromoDb()
             this.promoApply()
@@ -2312,13 +2312,14 @@ export default class posDoc extends React.PureComponent
                 return {table:'POS_SALE',item:this.posObj.posSale.dt()[i].ITEM_NAME}
             }
         }
-        for (let i = 0; i < this.posObj.dt().length; i++) 
-        {
-            if(typeof this.posObj.dt()[i].stat != 'undefined' && this.posObj.dt()[i].stat != '')
-            {
-                return {table:'POS'}
-            }
-        }
+        // for (let i = 0; i < this.posObj.dt().length; i++) 
+        // {
+        //     console.log(this.posObj.dt()[i].stat)
+        //     if(typeof this.posObj.dt()[i].stat != 'undefined' && this.posObj.dt()[i].stat != '')
+        //     {
+        //         return {table:'POS'}
+        //     }
+        // }
         return
     }
     render()

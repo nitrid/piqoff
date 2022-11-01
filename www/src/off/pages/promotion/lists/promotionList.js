@@ -1,6 +1,6 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-
+import moment from 'moment';
 
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
@@ -13,6 +13,7 @@ import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
+import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 
 export default class promotionList extends React.PureComponent
 {
@@ -121,9 +122,9 @@ export default class promotionList extends React.PureComponent
                 {
                     query : "SELECT * FROM PROMO_COND_APP_VW_01 WHERE ((CODE LIKE '%' + @CODE + '%') OR (COND_ITEM_CODE LIKE '%' + @CODE + '%') OR " + 
                             "(COND_BARCODE LIKE '%' + @CODE + '%') OR (APP_ITEM_CODE LIKE '%' + @CODE + '%') OR (APP_BARCODE LIKE '%' + @CODE + '%') OR (@CODE = '')) AND " + 
-                            "((NAME LIKE '%' + @NAME + '%') OR (COND_ITEM_NAME LIKE '%' + @NAME + '%') OR (APP_ITEM_NAME LIKE '%' + @NAME + '%') OR (@NAME = ''))",
-                    param : ['CODE:string|25','NAME:string|250'],
-                    value : [this.txtCode.value,this.txtName.value]
+                            "((NAME LIKE '%' + @NAME + '%') OR (COND_ITEM_NAME LIKE '%' + @NAME + '%') OR (APP_ITEM_NAME LIKE '%' + @NAME + '%') OR (@NAME = '')) AND ((START_DATE >= @START_DATE) OR (@START_DATE = '19700101')) AND ((FINISH_DATE <= @FINISH_DATE) OR (@FINISH_DATE = '19700101'))",
+                    param : ['CODE:string|25','NAME:string|250','START_DATE:date','FINISH_DATE:date'],
+                    value : [this.txtCode.value,this.txtName.value,this.dtStartDate.value,this.dtFinishDate.value]
                 },
                 sql : this.core.sql
             }
@@ -131,7 +132,6 @@ export default class promotionList extends React.PureComponent
         App.instance.setState({isExecute:true})
         await this.grdListe.dataRefresh(tmpSource)
         App.instance.setState({isExecute:false})
-        
     }
     render()
     {
@@ -194,7 +194,15 @@ export default class promotionList extends React.PureComponent
                                     <Label text={this.t("txtName")} alignment="right" />
                                     <NdTextBox id="txtName" parent={this} simple={true} onEnterKey={this._btnGetirClick} placeholder={this.t("txtNamePlace")}/>
                                 </Item>       
-                                <Item> </Item>
+                                {/* <Item> </Item> */}
+                                <Item>
+                                    <Label text={this.t("dtStartDate")} alignment="right" />
+                                    <NdDatePicker simple={true} parent={this} id={"dtStartDate"}/>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("dtFinishDate")} alignment="right" />
+                                    <NdDatePicker simple={true} parent={this} id={"dtFinishDate"}/>
+                                </Item>
                             </Form>
                         </div>
                     </div>
