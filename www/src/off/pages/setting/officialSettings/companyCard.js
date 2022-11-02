@@ -91,10 +91,29 @@ export default class CustomerCard extends React.PureComponent
         })
 
         await this.companyObj.load()
-        console.log(this.companyObj.dt())
         if(this.companyObj.dt().length == 0)
         {
             this.companyObj.addEmpty();
+        }
+        if(this.companyObj.dt().length > 0)
+        {
+            let tmpQuery = 
+            {
+                query : "SELECT [COUNTRY_CODE],[ZIPCODE],[PLACE],ZIPCODE + ' ' + PLACE AS ZIPNAME  FROM [dbo].[ZIPCODE] WHERE COUNTRY_CODE = @COUNTRY_CODE",
+                param : ['COUNTRY_CODE:string|5'],
+                value : [this.companyObj.dt()[0].COUNTRY]
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            if(tmpData.result.recordset.length > 0)
+            {   
+                await this.cmbZipCode.setData(tmpData.result.recordset)
+                await this.cmbCity.setData(tmpData.result.recordset)
+            }
+            else
+            {
+                await this.cmbZipCode.setData([])
+                await this.cmbCity.setData([])
+            }
         }
     }
     async getCustomer(pCode)
@@ -271,19 +290,51 @@ export default class CustomerCard extends React.PureComponent
                                     >
                                     </NdTextBox>
                                 </Item>
+                                 {/* cmbCountry */}
+                                 <Item>
+                                    <Label text={this.t("cmbCountry")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbCountry"
+                                     dt={{data:this.companyObj.dt('COMPANY'),field:"COUNTRY"}}
+                                    displayExpr="NAME"                       
+                                    valueExpr="CODE"
+                                    value="FR"
+                                    searchEnabled={true}
+                                    showClearButton={true}
+                                    data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY NAME ASC"},sql:this.core.sql}}}
+                                    onValueChanged={(async()=>
+                                        {
+                                                let tmpQuery = 
+                                                {
+                                                    query : "SELECT [COUNTRY_CODE],[ZIPCODE],[PLACE],ZIPCODE + ' ' + PLACE AS ZIPNAME  FROM [dbo].[ZIPCODE] WHERE COUNTRY_CODE = @COUNTRY_CODE",
+                                                    param : ['COUNTRY_CODE:string|5'],
+                                                    value : [this.cmbCountry.value]
+                                                }
+                                                let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                if(tmpData.result.recordset.length > 0)
+                                                {   
+                                                    await this.cmbZipCode.setData(tmpData.result.recordset)
+                                                    await this.cmbCity.setData(tmpData.result.recordset)
+                                                }
+                                                else
+                                                {
+                                                    await this.cmbZipCode.setData([])
+                                                    await this.cmbCity.setData([])
+                                                }
+                                        }).bind(this)}
+                                    />
+                                </Item>
                                 {/* cmbZipCode */}
                                 <Item>
                                     <Label text={this.t("cmbZipCode")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbZipCode"
                                     dt={{data:this.companyObj.dt('COMPANY'),field:"ZIPCODE"}}
-                                    displayExpr="NAME"                       
-                                    valueExpr="CODE"
+                                    displayExpr="ZIPNAME"                       
+                                    valueExpr="ZIPCODE"
                                     value=""
                                     searchEnabled={true}
                                     showClearButton={true}
                                     pageSize ={50}
                                     notRefresh = {true}
-                                    data={{source:{select:{query : "SELECT ZIPCODE AS CODE, ZIPCODE + ' ' + MAX(PLACE) AS NAME FROM [dbo].[ZIPCODE] GROUP BY ZIPCODE"},sql:this.core.sql}}}
                                     />
                                 </Item>
                                 {/* cmbCity */}
@@ -298,22 +349,9 @@ export default class CustomerCard extends React.PureComponent
                                     showClearButton={true}
                                     pageSize ={50}
                                     notRefresh = {true}
-                                    data={{source:{select:{query : "SELECT PLACE FROM [dbo].[ZIPCODE] GROUP BY PLACE"},sql:this.core.sql}}}
                                     />
                                 </Item>
-                                {/* cmbCountry */}
-                                <Item>
-                                    <Label text={this.t("cmbCountry")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbCountry"
-                                     dt={{data:this.companyObj.dt('COMPANY'),field:"COUNTRY"}}
-                                    displayExpr="NAME"                       
-                                    valueExpr="CODE"
-                                    value="FR"
-                                    searchEnabled={true}
-                                    showClearButton={true}
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY NAME ASC"},sql:this.core.sql}}}
-                                    />
-                                </Item>
+                               
                                 {/* txtPhone */}
                                 <Item>
                                     <Label text={this.t("txtPhone")} alignment="right" />
