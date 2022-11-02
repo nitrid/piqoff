@@ -346,8 +346,6 @@ export default class NdBase extends React.PureComponent
                                         {
                                             function filterByValue(array, string) 
                                             {
-                                                console.log(array)
-                                                console.log(string)
                                                 return array.filter(o => Object.keys(o).some(k => o[k].toString().toLowerCase().includes(string.toLowerCase())));
                                             }
                                             let tmpData = filterByValue(tmpThis.state.data.datatable.toArray(),loadOption.searchValue)

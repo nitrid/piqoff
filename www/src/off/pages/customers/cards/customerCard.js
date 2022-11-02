@@ -874,6 +874,37 @@ export default class CustomerCard extends React.PureComponent
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
                                 </Item>
                                 <Item>
+                                    <Label text={this.t("popAdress.cmbPopCountry")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbPopCountry"
+                                    displayExpr="NAME"                       
+                                    valueExpr="CODE"
+                                    value="FR"
+                                    searchEnabled={true}
+                                    showClearButton={true}
+                                    data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY NAME ASC"},sql:this.core.sql}}}
+                                    onValueChanged={(async()=>
+                                    {
+                                        let tmpQuery = 
+                                        {
+                                            query : "SELECT [COUNTRY_CODE],[ZIPCODE],[PLACE],ZIPCODE + ' ' + PLACE AS ZIPNAME  FROM [dbo].[ZIPCODE] WHERE COUNTRY_CODE = @COUNTRY_CODE",
+                                            param : ['COUNTRY_CODE:string|5'],
+                                            value : [this.cmbPopCountry.value]
+                                        }
+                                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                                        if(tmpData.result.recordset.length > 0)
+                                        {   
+                                            await this.cmbPopZipcode.setData(tmpData.result.recordset)
+                                            await this.cmbPopCity.setData(tmpData.result.recordset)
+                                        }
+                                        else
+                                        {
+                                            await this.cmbPopZipcode.setData([])
+                                            await this.cmbPopCity.setData([])
+                                        }
+                                    }).bind(this)}
+                                    />
+                                </Item>
+                                <Item>
                                     <Label text={this.t("popAdress.cmbPopZipcode")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbPopZipcode" acceptCustomValue={true}
                                     displayExpr="ZIPNAME"                       
@@ -883,33 +914,21 @@ export default class CustomerCard extends React.PureComponent
                                     showClearButton={true}
                                     pageSize={50}
                                     notRefresh={true}
-                                    data={{source:{select:{query : "SELECT [COUNTRY_CODE],[ZIPCODE],[PLACE],ZIPCODE + ' ' + PLACE AS ZIPNAME  FROM [dbo].[ZIPCODE]"},sql:this.core.sql}}}
                                     />
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popAdress.cmbPopCity")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbPopCity"
-                                    displayExpr="CITYNAME"                       
+                                    displayExpr="PLACE"                       
                                     valueExpr="PLACE"
                                     value=""
                                     searchEnabled={true}
                                     showClearButton={true}
                                     pageSize ={50}
                                     notRefresh = {true}
-                                    data={{source:{select:{query : "SELECT COUNTRY_CODE,ZIPCODE,PLACE,PLACE + ' ' + ZIPCODE AS CITYNAME  FROM [dbo].[ZIPCODE]"},sql:this.core.sql}}}
                                     />
                                 </Item>
-                                <Item>
-                                    <Label text={this.t("popAdress.cmbPopCountry")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbPopCountry"
-                                    displayExpr="NAME"                       
-                                    valueExpr="CODE"
-                                    value="FR"
-                                    searchEnabled={true}
-                                    showClearButton={true}
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY NAME ASC"},sql:this.core.sql}}}
-                                    />
-                                </Item>
+                              
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>
@@ -922,7 +941,7 @@ export default class CustomerCard extends React.PureComponent
                                                 tmpEmpty.TYPE = this.customerObj.customerAdress.dt().length
                                                 tmpEmpty.ADRESS = this.txtPopAdress.value
                                                 tmpEmpty.ZIPCODE = this.cmbPopZipcode.value
-                                                tmpEmpty.CIYT = this.cmbPopCity.value
+                                                tmpEmpty.CITY = this.cmbPopCity.value
                                                 tmpEmpty.COUNTRY = this.cmbPopCountry.value
                                                 tmpEmpty.CUSTOMER = this.customerObj.dt()[0].GUID 
 
