@@ -360,7 +360,11 @@ export default class posDoc extends React.PureComponent
             //************************************************** */
             this.cheqDt.selectCmd.value = [pGuid] 
             await this.cheqDt.refresh(); 
-            
+            //checkRecord İŞLEMİ İÇİN YAPILDI
+            for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
+            {
+                Object.setPrototypeOf(this.posObj.posSale.dt()[i],{stat:''})
+            }
             await this.calcGrandTotal(false)
             resolve();
         });        
