@@ -220,7 +220,10 @@ export default class NbPopDescboard extends NbBase
                             <NbButton id={"btnCancel" + this.props.id} parent={this} className="form-group btn btn-danger btn-block" style={{height:"55px",width:"100%"}}
                             onClick={()=>
                             {
-                                this.awaitClick(false)
+                                if(typeof this.awaitClick != 'undefined')
+                                {
+                                    this.awaitClick(false)
+                                }
                                 this[this.props.id].hide()
                             }}>
                                 <i className="text-white fa-solid fa-xmark" style={{fontSize: "24px"}} />

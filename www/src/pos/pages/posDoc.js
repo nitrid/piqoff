@@ -70,6 +70,7 @@ export default class posDoc extends React.PureComponent
         this.posPromoObj = new posPromoCls();
 
         this.loading = React.createRef();
+        this.loadingPay = React.createRef();
 
         this.state =
         {
@@ -971,7 +972,7 @@ export default class posDoc extends React.PureComponent
             {
                 let tmpClose = await this.saleClosed(true,tmpPayRest,tmpPayChange)
                 let tmpSaveResult = await this.posObj.save()
-                
+                console.log(tmpSaveResult)
                 if(tmpSaveResult == 0)
                 {
                     if(tmpClose)
@@ -1093,7 +1094,7 @@ export default class posDoc extends React.PureComponent
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].PRICE = pItemData.PRICE
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].FAMOUNT = tmpCalc.FAMOUNT
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].AMOUNT = tmpCalc.AMOUNT
-        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DISCOUNT = 0
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DISCOUNT = typeof pItemData.DISCOUNT == 'undefined' ? 0 : pItemData.DISCOUNT
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].LOYALTY = 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].VAT = tmpCalc.VAT
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].VAT_RATE = pItemData.VAT
@@ -1439,7 +1440,7 @@ export default class posDoc extends React.PureComponent
                     return
                 }
             }
-            this.loading.current.instance.show()
+            this.loadingPay.current.instance.show()
             let tmpRowData = this.isRowMerge('PAY',{TYPE:pType})
             //NAKİT ALDIĞINDA KASA AÇMA İŞLEMİ 
             if(pType == 0)
@@ -1455,7 +1456,7 @@ export default class posDoc extends React.PureComponent
             {
                 await this.payRowAdd({PAY_TYPE:pType,AMOUNT:pAmount,CHANGE:0})
             }            
-            this.loading.current.instance.hide()
+            this.loadingPay.current.instance.hide()
         }        
     }
     payRowAdd(pPayData)
@@ -2345,6 +2346,15 @@ export default class posDoc extends React.PureComponent
                 showPane={false}
                 message={""}
                 ref={this.loading}
+                />
+                <LoadPanel
+                shadingColor="rgba(255,255,255,1.0)"
+                position={{ of: '#root' }}
+                showIndicator={true}
+                shading={true}
+                showPane={true}
+                message={"Lütfen bekleyiniz..."}
+                ref={this.loadingPay}
                 />               
                 <div className="top-bar row">
                     <div className="col-12">                    
@@ -4344,7 +4354,7 @@ export default class posDoc extends React.PureComponent
                                                     UNIQ_CODE: "",
                                                     UNIQ_PRICE: 0,
                                                     UNIQ_QUANTITY: 0,
-                                                    UNIT_FACTOR: items.UNIT_FACTOR,
+                                                    UNIT_FACTOR: items.UNIT_FACTOR == 0 ? 1 : items.UNIT_FACTOR,
                                                     UNIT_GUID: items.UNIT,
                                                     UNIT_ID: "",
                                                     UNIT_NAME: items.UNIT_NAME,
@@ -4352,7 +4362,8 @@ export default class posDoc extends React.PureComponent
                                                     VAT: items.VAT,
                                                     VAT_TYPE: "",
                                                     WEIGHING: false,
-                                                    POS_SALE_ORDER: items.GUID
+                                                    POS_SALE_ORDER: items.GUID,
+                                                    DISCOUNT : items.DISCOUNT
                                                 }
                                                 this.saleAdd(tmpData)
                                             })
