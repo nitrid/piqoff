@@ -1498,6 +1498,54 @@ export const prm =
             CAPTION : "Merkez Kasa"
         }
     },
+    // Kredi Kartı kasa 
+    {
+        TYPE : 1,
+        ID :"BankSafe",
+        VALUE : "3848A862-D4FF-4BAD-9AB1-C1A29D9BC7F3",
+        SPECIAL : "",
+        PAGE : "pos_03_001",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Kredi Kartı Kasası"
+        }
+    },
+    // Ticket Restorant Kasası kasa 
+    {
+        TYPE : 1,
+        ID :"TicketRestSafe",
+        VALUE : "3848A862-D4FF-4BAD-9AB1-C1A29D9BC7F3",
+        SPECIAL : "",
+        PAGE : "pos_03_001",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Ticket Restorant Kasası"
+        }
+    },
+    // Çek Kasası 
+    {
+    TYPE : 1,
+    ID :"CheckSafe",
+    VALUE : "3848A862-D4FF-4BAD-9AB1-C1A29D9BC7F3",
+    SPECIAL : "",
+    PAGE : "pos_03_001",
+    ELEMENT : "",
+    APP : "OFF",
+    VIEW : 
+    {
+        TYPE : "text",
+        PAGE_NAME : "Pos",
+        CAPTION : "Çek Kasası"
+    }
+},
      // Anavas Tutar
      {
         TYPE : 1,
