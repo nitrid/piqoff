@@ -643,4 +643,48 @@ export const langFr =
         msg2 : "Tamamlanmayan kayıt : ",
         btn01 : "Tamam",
     },
+    popCustomerAdd : //BAK
+    {
+        title : "Müşteri Ekle",
+        txtPopCustomerCode : "Kodu",
+        txtPopCustomerFirmName : "Unvan",
+        txtPopCustomerName : "Adı",
+        txtPopCustomerSurname : "Soyadı",
+        txtPopCustomerAddress : "Adres",
+        txtPopCustomerCountry : "Ülke",
+        txtPopCustomerCity : "Şehir",
+        txtPopCustomerZipCode : "Posta Kodu",
+        txtPopCustomerEmail : "Email",
+        txtPopCustomerTel : "Telefon",
+    },
+    popCustomerAddList : //BAK
+    {
+        title : "Müşteri Seçim",
+    },
+    popCustomerAddCountry : //BAK
+    {
+        title : "Ülke Seçim",
+    },
+    popCustomerAddCity : //BAK
+    {
+        title : "Şehir Seçim",
+    },
+    popCustomerAddZipCode : //BAK
+    {
+        title : "Posta Kodu Seçim",
+    },
+    msgPrintFacAlert: //BAK
+    {
+        title : "Uyarı",
+        msg : "Fiş mi Fatura mı yazdırmak istersiniz ?",
+        btn01 : "Fatura",
+        btn02 : "Fiş"
+    },
+    msgPrintCustomerAlert: //BAK
+    {
+        title : "Uyarı",
+        msg : "Fatura olarak yazdırmak için müşteri saeçmelisiniz !",
+        btn01 : "Müşteri Seç",
+        btn02 : "İptal"
+    },
 }

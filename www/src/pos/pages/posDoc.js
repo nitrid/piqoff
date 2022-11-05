@@ -40,6 +40,7 @@ import { dataset,datatable,param,access } from "../../core/core.js";
 import {prm} from '../meta/prm.js'
 import {acs} from '../meta/acs.js'
 import { ThemeProvider } from "react-bootstrap";
+import { customersCls } from "../../core/cls/customers.js";
 
 export default class posDoc extends React.PureComponent
 {
@@ -65,6 +66,7 @@ export default class posDoc extends React.PureComponent
         this.lastPosPayDt = new datatable();
         this.lastPosPromoDt = new datatable();  
         this.firm = new datatable();
+        this.customerObj = new customersCls();
 
         this.promoObj = new promoCls();
         this.posPromoObj = new posPromoCls();
@@ -87,6 +89,7 @@ export default class posDoc extends React.PureComponent
             isConnected:this.core.offline ? false : true,
             msgTransfer1:"",
             msgTransfer2:"",
+            isFormation:false
         }   
         
         document.onkeydown = (e) =>
@@ -236,15 +239,25 @@ export default class posDoc extends React.PureComponent
             this.lblTime.value = moment(new Date(),"HH:mm:ss").format("HH:mm:ss")
             this.lblDate.value = new Date().toLocaleDateString('tr-TR',{ year: 'numeric', month: 'numeric', day: 'numeric' })
         },1000)             
+        
+        this.posObj.clearAll()        
 
-        this.posObj.clearAll()
         await this.prmObj.load({APP:'POS'})
         await this.acsObj.load({APP:'POS'})
+
+        if(this.state.isFormation)
+        {
+            this.posObj.dt().selectCmd.query = "SELECT * FROM [dbo].[POS_FRM_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000'))"
+        }
+        else
+        {
+            this.posObj.dt().selectCmd.query = "SELECT * FROM [dbo].[POS_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000'))"
+        }
 
         this.posObj.addEmpty()
 
         this.posObj.dt()[this.posObj.dt().length - 1].DOC_TYPE = 0        
-        this.posObj.dt()[this.posObj.dt().length - 1].DEVICE = window.localStorage.getItem('device') == null ? '' : window.localStorage.getItem('device')
+        this.posObj.dt()[this.posObj.dt().length - 1].DEVICE = this.state.isFormation ? '9999' : window.localStorage.getItem('device') == null ? '' : window.localStorage.getItem('device')
         this.device.value = this.posObj.dt()[this.posObj.dt().length - 1].DEVICE
         
         await this.posDevice.load({CODE:this.posObj.dt()[this.posObj.dt().length - 1].DEVICE})        
@@ -283,8 +296,8 @@ export default class posDoc extends React.PureComponent
         this.parkDt.selectCmd =
         {
             query : "SELECT GUID,LUSER_NAME,LDATE,TOTAL, " + 
-                    "ISNULL((SELECT TOP 1 DESCRIPTION FROM POS_EXTRA WHERE POS_GUID = POS_VW_01.GUID AND TAG = 'PARK DESC'),'') AS DESCRIPTION " +
-                    "FROM POS_VW_01 WHERE STATUS = 0 AND (LUSER = @LUSER OR (@LUSER = '')) ORDER BY LDATE DESC",
+                    "ISNULL((SELECT TOP 1 DESCRIPTION FROM POS_EXTRA WHERE POS_GUID = POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01.GUID AND TAG = 'PARK DESC'),'') AS DESCRIPTION " +
+                    "FROM POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01 WHERE STATUS = 0 AND (LUSER = @LUSER OR (@LUSER = '')) ORDER BY LDATE DESC",
             param : ["LUSER:string|25"],
             value : [this.core.auth.data.CODE],
             local : 
@@ -295,6 +308,7 @@ export default class posDoc extends React.PureComponent
                 order: {by: "LDATE",type: "desc"}
             }
         }
+        
         await this.parkDt.refresh();     
         
         setTimeout(() => 
@@ -353,7 +367,7 @@ export default class posDoc extends React.PureComponent
         {
             this.posObj.clearAll()
             await this.posObj.load({GUID:pGuid})
-            this.posObj.dt()[0].DEVICE = window.localStorage.getItem('device')
+            this.posObj.dt()[0].DEVICE = this.state.isFormation ? '9999' : window.localStorage.getItem('device')
             this.posObj.dt()[0].DOC_DATE =  moment(new Date()).format("YYYY-MM-DD"),            
             //PROMOSYON GETİR.
             await this.getPromoDb()
@@ -1276,6 +1290,7 @@ export default class posDoc extends React.PureComponent
                 //******************************** */
                 if(typeof pPrint == 'undefined' || pPrint)
                 {                    
+                    let tmpType = 'Fis'
                     //POS_EXTRA TABLOSUNA YAZDIRMA BİLDİRİMİ GÖNDERİLİYOR                    
                     let tmpInsertQuery = 
                     {
@@ -1292,6 +1307,21 @@ export default class posDoc extends React.PureComponent
                     }
                     await this.core.sql.execute(tmpInsertQuery)
                     //***************************************************/
+                    //FİŞ Mİ FATURAMI SORULUYOR
+                    if(this.posObj.dt()[0].CUSTOMER_CODE != '')
+                    {
+                        let tmpConfObj =
+                        {
+                            id:'msgPrintFacAlert',showTitle:true,title:this.lang.t("msgPrintFacAlert.title"),showCloseButton:true,width:'500px',height:'250px',
+                            button:[{id:"btn01",caption:this.lang.t("msgPrintFacAlert.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgPrintFacAlert.btn02"),location:'after'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPrintFacAlert.msg")}</div>)
+                        }
+                        if((await dialog(tmpConfObj)) == 'btn01')
+                        {
+                            tmpType = 'Fatura'
+                        }
+                    }                    
+                    //***************************************************/
                     let tmpData = 
                     {
                         pos : this.posObj.dt(),
@@ -1301,7 +1331,7 @@ export default class posDoc extends React.PureComponent
                         firm : this.firm,
                         special : 
                         {
-                            type: 'Fis',
+                            type: tmpType,
                             ticketCount:0,
                             reprint: 1,
                             repas: 0,
@@ -1310,7 +1340,7 @@ export default class posDoc extends React.PureComponent
                             customerGrowPoint:this.popCustomerGrowPoint.value
                         }
                     }
-
+                    //YAZDIRMA İŞLEMİNDEN ÖNCE KULLANICIYA SORULUYOR
                     if(this.prmObj.filter({ID:'PrintAlert',TYPE:0}).getValue() == true)
                     {
                         let tmpConfObj =
@@ -1329,6 +1359,7 @@ export default class posDoc extends React.PureComponent
                     {
                         await this.print(tmpData)
                     }
+                    //***************************************************/
                     //TICKET REST. ALDIĞINDA KASA AÇMA İŞLEMİ 
                     if(this.posObj.posPay.dt().where({PAY_TYPE:3}).length > 0)
                     {
@@ -3195,9 +3226,12 @@ export default class posDoc extends React.PureComponent
                     </div>
                     {/* Right Column */}
                     <div className="col-6">
-                        <div className="row">
-                            <div className="col-12">
+                        <div className="row" style={{backgroundColor:this.state.isFormation ? 'coral' : 'white',marginLeft:'1px',marginRight:'0.5px',borderRadius:'5px'}}>
+                            <div className="col-6">
                                 <NbLabel id="info" parent={this} value={this.core.appInfo.name + " version : " + this.core.appInfo.version}/>
+                            </div>
+                            <div className="col-6 text-end">
+                                <NbLabel id="formation" parent={this} value={''}/>
                             </div>
                         </div>
                         {/* Button Console*/}
@@ -3501,13 +3535,51 @@ export default class posDoc extends React.PureComponent
                                             <i className="text-white fa-solid fa-square-root-variable" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
-                                    {/* Blank */}
+                                    {/* Customer Add */}
                                     <div className="col px-1">
-                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
+                                        <NbButton id={"btnCustomerAdd"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}
+                                        onClick={()=>
+                                        {
+                                            this.customerObj.clearAll()
+
+                                            this.customerObj.addEmpty()
+                                            this.customerObj.customerAdress.addEmpty()
+                                            this.customerObj.customerOffical.addEmpty()
+                                            
+                                            this.txtPopCustomerCode.value = ""
+                                            this.txtPopCustomerFirmName.value = ""
+                                            this.txtPopCustomerName.value = ""
+                                            this.txtPopCustomerSurname.value = ""
+                                            this.txtPopCustomerAddress.value = ""
+                                            this.txtPopCustomerCountry.value = ""
+                                            this.txtPopCustomerCity.value = ""
+                                            this.txtPopCustomerZipCode.value = ""
+                                            this.txtPopCustomerEmail.value = ""
+                                            this.txtPopCustomerTel.value = ""
+
+                                            this.popCustomerAdd.show()
+                                        }}>                                        
+                                            <i className="text-white fa-solid fa-user-plus" style={{fontSize: "24px"}} />
+                                        </NbButton>
                                     </div>
-                                    {/* Blank */}
+                                    {/* Formation */}
                                     <div className="col px-1">
-                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
+                                        <NbButton id={"btnFormation"} parent={this} className={this.state.isFormation == false ? "form-group btn btn-info btn-block my-1" : "form-group btn btn-danger btn-block my-1"} style={{height:"70px",width:"100%",fontSize:"18pt",color:"white"}}
+                                        onClick={async()=>
+                                        {             
+                                            let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:0})
+
+                                            if(!tmpResult)
+                                            {
+                                                return
+                                            }
+
+                                            this.setState({isFormation:this.state.isFormation ? false : true})
+                                            this.formation.value = this.state.isFormation ? '' : 'FORMATION'
+                                            this.init()
+                                        }}>
+                                            <i className="fa-solid fa-highlighter"></i>
+                                        </NbButton>
                                     </div>
                                     {/* Blank */}
                                     <div className="col px-1">
@@ -4944,25 +5016,43 @@ export default class posDoc extends React.PureComponent
                                             let tmpLastPos = new datatable();
                                             tmpLastPos.import(this.grdLastPos.devGrid.getSelectedRowKeys())
                                             
-                                            let tmpData = 
+                                            if(this.grdLastPos.devGrid.getSelectedRowKeys().length > 0 && this.grdLastPos.devGrid.getSelectedRowKeys()[0].CUSTOMER_CODE == '')
                                             {
-                                                pos : tmpLastPos,
-                                                possale : this.lastPosSaleDt,
-                                                pospay : this.lastPosPayDt,
-                                                pospromo : this.lastPosPromoDt,
-                                                firm : this.firm,
-                                                special : 
+                                                let tmpConfObj =
                                                 {
-                                                    type : 'Fatura',
-                                                    ticketCount : 0,
-                                                    reprint : 1,
-                                                    repas : 0,
-                                                    customerUsePoint : Math.floor(tmpLastPos[0].LOYALTY * 100),
-                                                    customerPoint : (tmpLastPos[0].CUSTOMER_POINT + Math.floor(tmpLastPos[0].LOYALTY * 100)) - Math.floor(tmpLastPos[0].TOTAL),
-                                                    customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL)
+                                                    id:'msgPrintCustomerAlert',showTitle:true,title:this.lang.t("msgPrintCustomerAlert.title"),showCloseButton:true,width:'500px',height:'250px',
+                                                    button:[{id:"btn01",caption:this.lang.t("msgPrintCustomerAlert.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgPrintCustomerAlert.btn02"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPrintCustomerAlert.msg")}</div>)
+                                                }
+                                                if((await dialog(tmpConfObj)) == 'btn01')
+                                                {
+                                                    this.popPrintCustomerList.POS_GUID = this.grdLastPos.devGrid.getSelectedRowKeys()[0].GUID
+                                                    this.popPrintCustomerList.show()
                                                 }
                                             }
-                                            await this.print(tmpData)
+                                            else
+                                            {
+                                                let tmpData = 
+                                                {
+                                                    pos : tmpLastPos,
+                                                    possale : this.lastPosSaleDt,
+                                                    pospay : this.lastPosPayDt,
+                                                    pospromo : this.lastPosPromoDt,
+                                                    firm : this.firm,
+                                                    special : 
+                                                    {
+                                                        type : 'Fatura',
+                                                        ticketCount : 0,
+                                                        reprint : 1,
+                                                        repas : 0,
+                                                        customerUsePoint : Math.floor(tmpLastPos[0].LOYALTY * 100),
+                                                        customerPoint : (tmpLastPos[0].CUSTOMER_POINT + Math.floor(tmpLastPos[0].LOYALTY * 100)) - Math.floor(tmpLastPos[0].TOTAL),
+                                                        customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL)
+                                                    }
+                                                }
+                                                await this.print(tmpData)
+                                            }
+                                            
                                         }}>
                                             <i className="text-white fa-solid fa-file-lines" style={{fontSize: "16px"}} />
                                         </NbButton>
@@ -5090,8 +5180,8 @@ export default class posDoc extends React.PureComponent
                                         {
                                             query:  "SELECT *, " +
                                                     "SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,36) AS REF_NO " + 
-                                                    "FROM POS_VW_01 WHERE DOC_DATE >= @START_DATE AND DOC_DATE <= @FINISH_DATE AND " +
-                                                    "((ISNULL((SELECT TOP 1 1 FROM POS_PAYMENT AS PAY WHERE PAY.POS = POS_VW_01.GUID AND TYPE = @TYPE AND DELETED = 0),0) = 1) OR (@TYPE = -1)) AND " + 
+                                                    "FROM POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01 WHERE DOC_DATE >= @START_DATE AND DOC_DATE <= @FINISH_DATE AND " +
+                                                    "((ISNULL((SELECT TOP 1 1 FROM POS_PAYMENT AS PAY WHERE PAY.POS = POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01.GUID AND TYPE = @TYPE AND DELETED = 0),0) = 1) OR (@TYPE = -1)) AND " + 
                                                     "((LUSER = @USER) OR (@USER = '')) AND STATUS = 1 ORDER BY LDATE DESC",
                                             param:  ["START_DATE:date","FINISH_DATE:date","TYPE:int","USER:string|25"],
                                             value:  [this.dtPopLastSaleStartDate.value,this.dtPopLastSaleFinishDate.value,this.cmbPopLastSalePayType.value,this.cmbPopLastSaleUser.value]
@@ -5103,7 +5193,7 @@ export default class posDoc extends React.PureComponent
                                         {
                                             query:  "SELECT *, " +
                                                     "SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,36) AS REF_NO " + 
-                                                    "FROM POS_VW_01 WHERE SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,36) = @REF AND STATUS = 1",
+                                                    "FROM POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01 WHERE SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,36) = @REF AND STATUS = 1",
                                             param:  ["REF:string|25"],
                                             value:  [this.txtPopLastRef.value]
                                         }
@@ -6395,6 +6485,361 @@ export default class posDoc extends React.PureComponent
                     <NbPopDescboard id={"popRePrintDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={this.lang.t("popRePrintDesc.head")} title={this.lang.t("popRePrintDesc.title")}                    
                     param={this.prmObj.filter({ID:'RePrintDescription',TYPE:0})}
                     ></NbPopDescboard>
+                </div>
+                {/* Customer Add Popup */}
+                <div>
+                    <NdPopUp parent={this} id={"popCustomerAdd"} 
+                    visible={false}                        
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={this.lang.t("popCustomerAdd.title")}
+                    container={"#root"} 
+                    width={"100%"} height={"100%"}
+                    position={{of:"#root"}}
+                    >
+                        <div className="row pb-1">
+                            <div className="col-12">
+                                <Form colCount={2} height={'fit-content'} id={"frmCustomerAdd"}>
+                                    {/* txtPopCustomerCode */}
+                                    <Item>
+                                        <Label text={this.lang.t("popCustomerAdd.txtPopCustomerCode")} alignment="right" />
+                                        <NdTextBox id={"txtPopCustomerCode"} parent={this} simple={true} valueChangeEvent="keyup" 
+                                        dt={{data:this.customerObj.dt('CUSTOMERS'),field:"CODE"}}
+                                        button={
+                                        [
+                                            {
+                                                id:'01',
+                                                icon:'more',
+                                                onClick:()=>
+                                                {
+                                                    this.popCustomerAddList.show()
+                                                }
+                                            },
+                                            {
+                                                id:'02',
+                                                icon:'arrowdown',
+                                                onClick:()=>
+                                                {
+                                                    this.txtPopCustomerCode.value = Math.floor(Date.now() / 1000)
+                                                }
+                                            }
+                                        ]}
+                                        onFocusIn={()=>
+                                        {                                    
+                                            this.keyPopCustomerAdd.inputName = "txtPopCustomerCode"
+                                            this.keyPopCustomerAdd.setInput(this.txtPopCustomerCode.value)
+                                        }}/>
+                                    </Item>
+                                    {/* txtPopCustomerFirmName */}
+                                    <Item>
+                                        <Label text={this.lang.t("popCustomerAdd.txtPopCustomerFirmName")} alignment="right" />
+                                        <NdTextBox id={"txtPopCustomerFirmName"} parent={this} simple={true} valueChangeEvent="keyup" 
+                                        onFocusIn={()=>
+                                        {                                    
+                                            this.keyPopCustomerAdd.inputName = "txtPopCustomerFirmName"
+                                            this.keyPopCustomerAdd.setInput(this.txtPopCustomerFirmName.value)
+                                        }}/>
+                                    </Item>
+                                    {/* txtPopCustomerName */}
+                                    <Item>
+                                        <Label text={this.lang.t("popCustomerAdd.txtPopCustomerName")} alignment="right" />
+                                        <NdTextBox id={"txtPopCustomerName"} parent={this} simple={true} valueChangeEvent="keyup" 
+                                        dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"NAME"}}
+                                        onFocusIn={()=>
+                                        {                                    
+                                            this.keyPopCustomerAdd.inputName = "txtPopCustomerName"
+                                            this.keyPopCustomerAdd.setInput(this.txtPopCustomerName.value)
+                                        }}/>
+                                    </Item>
+                                    {/* txtPopCustomerSurname */}
+                                    <Item>
+                                        <Label text={this.lang.t("popCustomerAdd.txtPopCustomerSurname")} alignment="right" />
+                                        <NdTextBox id={"txtPopCustomerSurname"} parent={this} simple={true} valueChangeEvent="keyup" 
+                                        dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"LAST_NAME"}}
+                                        onFocusIn={()=>
+                                        {                                    
+                                            this.keyPopCustomerAdd.inputName = "txtPopCustomerSurname"
+                                            this.keyPopCustomerAdd.setInput(this.txtPopCustomerSurname.value)
+                                        }}/>
+                                    </Item>
+                                    {/* txtPopCustomerAddress */}
+                                    <Item>
+                                        <Label text={this.lang.t("popCustomerAdd.txtPopCustomerAddress")} alignment="right" />
+                                        <NdTextBox id={"txtPopCustomerAddress"} parent={this} simple={true} valueChangeEvent="keyup" 
+                                        dt={{data:this.customerObj.dt('CUSTOMER_ADRESS'),field:"ADRESS"}}
+                                        onFocusIn={()=>
+                                        {                                    
+                                            this.keyPopCustomerAdd.inputName = "txtPopCustomerAddress"
+                                            this.keyPopCustomerAdd.setInput(this.txtPopCustomerAddress.value)
+                                        }}/>
+                                    </Item>
+                                    {/* txtPopCustomerCountry */}
+                                    <Item>
+                                        <Label text={this.lang.t("popCustomerAdd.txtPopCustomerCountry")} alignment="right" />
+                                        <NdTextBox id={"txtPopCustomerCountry"} parent={this} simple={true} valueChangeEvent="keyup" 
+                                        dt={{data:this.customerObj.dt('CUSTOMER_ADRESS'),field:"COUNTRY"}}
+                                        button={
+                                        [
+                                            {
+                                                id:'01',
+                                                icon:'more',
+                                                onClick:()=>
+                                                {
+                                                    this.popCustomerAddCountry.show()
+                                                }
+                                            }
+                                        ]}
+                                        onFocusIn={()=>
+                                        {                                    
+                                            this.keyPopCustomerAdd.inputName = "txtPopSettingsLcd"
+                                            this.keyPopCustomerAdd.setInput(this.txtPopSettingsLcd.value)
+                                        }}/>
+                                    </Item>
+                                    {/* txtPopCustomerCity */}            
+                                    <Item>
+                                        <Label text={this.lang.t("popCustomerAdd.txtPopCustomerCity")} alignment="right" />
+                                        <NdTextBox id={"txtPopCustomerCity"} parent={this} simple={true} valueChangeEvent="keyup" 
+                                        dt={{data:this.customerObj.dt('CUSTOMER_ADRESS'),field:"CITY"}}
+                                        button={
+                                        [
+                                            {
+                                                id:'01',
+                                                icon:'more',
+                                                onClick:()=>
+                                                {
+                                                    this.popCustomerAddCity.show()
+                                                }
+                                            }
+                                        ]}
+                                        onFocusIn={()=>
+                                        {                                    
+                                            this.keyPopCustomerAdd.inputName = "txtPopCustomerCity"
+                                            this.keyPopCustomerAdd.setInput(this.txtPopCustomerCity.value)
+                                        }}/>
+                                    </Item>
+                                    {/* txtPopCustomerZipCode */}
+                                    <Item>
+                                        <Label text={this.lang.t("popCustomerAdd.txtPopCustomerZipCode")} alignment="right" />
+                                        <NdTextBox id={"txtPopCustomerZipCode"} parent={this} simple={true} valueChangeEvent="keyup" 
+                                        dt={{data:this.customerObj.dt('CUSTOMER_ADRESS'),field:"ZIPCODE"}}
+                                        button={
+                                        [
+                                            {
+                                                id:'01',
+                                                icon:'more',
+                                                onClick:()=>
+                                                {
+                                                    this.popCustomerAddZipCode.show()
+                                                }
+                                            }
+                                        ]}
+                                        onFocusIn={()=>
+                                        {                                    
+                                            this.keyPopCustomerAdd.inputName = "txtPopCustomerZipCode"
+                                            this.keyPopCustomerAdd.setInput(this.txtPopCustomerZipCode.value)
+                                        }}/>
+                                    </Item>
+                                    {/* <Item>
+                                        <Label text={"Doğum Tarihi"} alignment="right" />
+                                        <NdDatePicker simple={true}  parent={this} id={"dtPopCustomerBirth"}/>
+                                    </Item> */}
+                                    {/* txtPopCustomerEmail */}
+                                    <Item>
+                                        <Label text={this.lang.t("popCustomerAdd.txtPopCustomerEmail")} alignment="right" />
+                                        <NdTextBox id={"txtPopCustomerEmail"} parent={this} simple={true} valueChangeEvent="keyup" 
+                                        dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"EMAIL"}}
+                                        onFocusIn={()=>
+                                        {                                    
+                                            this.keyPopCustomerAdd.inputName = "txtPopCustomerEmail"
+                                            this.keyPopCustomerAdd.setInput(this.txtPopCustomerEmail.value)
+                                        }}/>
+                                    </Item>
+                                    {/* txtPopCustomerTel */}
+                                    <Item>
+                                        <Label text={this.lang.t("popCustomerAdd.txtPopCustomerTel")} alignment="right" />
+                                        <NdTextBox id={"txtPopCustomerTel"} parent={this} simple={true} valueChangeEvent="keyup" 
+                                        dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"PHONE1"}}
+                                        onFocusIn={()=>
+                                        {                                    
+                                            this.keyPopCustomerAdd.inputName = "txtPopCustomerTel"
+                                            this.keyPopCustomerAdd.setInput(this.txtPopCustomerTel.value)
+                                        }}/>
+                                    </Item>
+                                </Form>
+                            </div>
+                        </div>
+                        <div className="row py-1">
+                            <div className="col-12">                            
+                                <NbButton id={"btnCustomerAddSave"} parent={this} className="form-group btn btn-success btn-block" style={{height:"50px",width:"100%",fontSize:"24px"}}
+                                onClick={async ()=>
+                                {                                    
+                                    this.customerObj.customerAdress.dt()[0].CUSTOMER = this.customerObj.dt()[0].GUID
+                                    this.customerObj.customerOffical.dt()[0].CUSTOMER = this.customerObj.dt()[0].GUID
+
+                                    if(this.txtPopCustomerFirmName.value != '')
+                                    {
+                                        this.customerObj.dt()[0].TYPE = 1
+                                        this.customerObj.dt()[0].TITLE = this.txtPopCustomerFirmName.value
+                                    }
+
+                                    let tmpConfObj1 =
+                                    {
+                                        id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                        button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                    }
+                                    if((await this.customerObj.save()) == 0)
+                                    {                                                    
+                                        tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
+                                        await dialog(tmpConfObj1);
+                                    }
+                                    else
+                                    {
+                                        tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                        await dialog(tmpConfObj1);
+                                    }
+                                    console.log(this.customerObj)
+                                }}>
+                                    <i className="fa-solid fa-floppy-disk"></i>
+                                </NbButton>
+                            </div>
+                        </div>
+                        <div className="row py-1">
+                            <div className="col-12">
+                                <NbKeyboard id={"keyPopCustomerAdd"} parent={this} inputName={"txtPopCustomerCode"}/>
+                            </div>
+                        </div>                        
+                    </NdPopUp>
+                </div>
+                {/* Customer Add List Popup */}
+                <div>
+                    <NbPosPopGrid id={"popCustomerAddList"} parent={this} width={"100%"} height={"100%"} position={"#root"} title={this.lang.t("popCustomerAddList.title")}
+                    data={{source:
+                    {
+                        select:
+                        {
+                            query : "SELECT CODE,TITLE,ADRESS FROM [dbo].[CUSTOMER_VW_02] WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                            param : ['VAL:string|50']
+                        },
+                        sql:this.core.sql
+                    }}}
+                    onSelection={async(pData)=>
+                    {
+                        if(pData.length > 0)
+                        {
+                            this.customerObj.clearAll()
+                            await this.customerObj.load({CODE:pData[0].CODE});
+                            
+                            if(this.customerObj.dt().length > 0 && this.customerObj.dt()[0].TYPE == 1)
+                            {
+                                this.txtPopCustomerFirmName.value = this.customerObj.dt()[0].TITLE
+                            }
+                        }
+                    }}>
+                        <Column dataField="CODE" caption={"CODE"} width={100} />
+                        <Column dataField="TITLE" caption={"NAME"} width={250} />
+                        <Column dataField="ADRESS" caption={"ADRESS"} width={350}/>
+                    </NbPosPopGrid>
+                </div>
+                {/* Customer Add Country Popup */}
+                <div>
+                    <NbPosPopGrid id={"popCustomerAddCountry"} parent={this} width={"100%"} height={"100%"} position={"#root"} title={this.lang.t("popCustomerAddCountry.title")}
+                    data={{source:
+                    {
+                        select:
+                        {
+                            query : "SELECT CODE,NAME FROM COUNTRY WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                            param : ['VAL:string|50'],
+                        },
+                        sql:this.core.sql
+                    }}}
+                    onSelection={async(pData)=>
+                    {
+                        if(pData.length > 0)
+                        {
+                            this.txtPopCustomerCountry.value = pData[0].CODE
+                        }
+                    }}>
+                        <Column dataField="CODE" caption={"CODE"} width={100} />
+                        <Column dataField="NAME" caption={"NAME"} width={250} />
+                    </NbPosPopGrid>
+                </div>
+                {/* Customer Add City Popup */}
+                <div>
+                    <NbPosPopGrid id={"popCustomerAddCity"} parent={this} width={"100%"} height={"100%"} position={"#root"} title={this.lang.t("popCustomerAddCity.title")}
+                    data={{source:
+                    {
+                        select:
+                        {
+                            query : "SELECT ZIPCODE,PLACE FROM ZIPCODE WHERE UPPER(PLACE) LIKE UPPER(@VAL) OR UPPER(ZIPCODE) LIKE UPPER(@VAL)",
+                            param : ['VAL:string|50'],
+                        },
+                        sql:this.core.sql
+                    }}}
+                    onSelection={async(pData)=>
+                    {
+                        if(pData.length > 0)
+                        {
+                            this.txtPopCustomerCity.value = pData[0].PLACE
+                        }
+                    }}>
+                        <Column dataField="ZIPCODE" caption={"ZIPCODE"} width={200} />
+                        <Column dataField="PLACE" caption={"PLACE"} width={250} />
+                    </NbPosPopGrid>
+                </div>
+                {/* Customer Add Zipcode Popup */}
+                <div>
+                    <NbPosPopGrid id={"popCustomerAddZipCode"} parent={this} width={"100%"} height={"100%"} position={"#root"} title={this.lang.t("popCustomerAddZipCode.title")}
+                    data={{source:
+                    {
+                        select:
+                        {
+                            query : "SELECT PLACE,ZIPCODE FROM ZIPCODE WHERE UPPER(ZIPCODE) LIKE UPPER(@VAL) OR UPPER(PLACE) LIKE UPPER(@VAL)",
+                            param : ['VAL:string|50'],
+                        },
+                        sql:this.core.sql
+                    }}}
+                    onSelection={async(pData)=>
+                    {
+                        if(pData.length > 0)
+                        {
+                            this.txtPopCustomerZipCode.value = pData[0].ZIPCODE
+                        }
+                    }}>
+                        <Column dataField="PLACE" caption={"PLACE"} width={200} />
+                        <Column dataField="ZIPCODE" caption={"ZIPCODE"} width={200} />                        
+                    </NbPosPopGrid>
+                </div>
+                {/* Print Customer List Popup */}
+                <div>
+                    <NbPosPopGrid id={"popPrintCustomerList"} parent={this} width={"100%"} height={"100%"} position={"#root"} title={this.lang.t("popCustomerAddList.title")}
+                    data={{source:
+                    {
+                        select:
+                        {
+                            query : "SELECT GUID,CODE,TITLE,ADRESS FROM [dbo].[CUSTOMER_VW_02] WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                            param : ['VAL:string|50']
+                        },
+                        sql:this.core.sql
+                    }}}
+                    onSelection={async(pData)=>
+                    {
+                        if(pData.length > 0)
+                        {
+                            let tmpQuery = 
+                            {
+                                query : "EXEC [dbo].[PRD_POS_UPDATE] @GUID = @PGUID,@CUSER = @PCUSER,@CUSTOMER = @PCUSTOMER",
+                                param : ['PGUID:string|50','PCUSER:string|25','PCUSTOMER:string|50'],
+                                value : [this.popPrintCustomerList.POS_GUID,this.core.auth.data.CODE,pData[0].GUID]
+                            }
+                            await this.core.sql.execute(tmpQuery)
+                            await this.lastPosDt.refresh()
+                            await this.grdLastPos.dataRefresh({source:this.lastPosDt});   
+                        }
+                    }}>
+                        <Column dataField="CODE" caption={"CODE"} width={100} />
+                        <Column dataField="TITLE" caption={"NAME"} width={250} />
+                        <Column dataField="ADRESS" caption={"ADRESS"} width={350}/>
+                    </NbPosPopGrid>
                 </div>
             </div>
         )

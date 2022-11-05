@@ -76,7 +76,7 @@ export default class posSalesReport extends React.PureComponent
                                             "POS.VAT_RATE AS VAT_RATE, " +
                                             "CASE WHEN POS.TYPE = 0 THEN SUM(POS.FAMOUNT) ELSE SUM(POS.FAMOUNT) * -1 END AS AMOUNT " +
                                             "FROM POS_SALE_VW_01 AS POS " +
-                                            "WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END " +
+                                            "WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END AND POS.DEVICE <> '9999' " +
                                             "GROUP BY POS.DOC_DATE,POS.TYPE,POS.VAT_RATE,POS.DEVICE " +
                                             "UNION ALL " +
                                             "SELECT " +
@@ -88,7 +88,7 @@ export default class posSalesReport extends React.PureComponent
                                             "POS.VAT_RATE AS VAT_RATE, " +
                                             "CASE WHEN POS.TYPE = 0 THEN SUM(POS.VAT) ELSE SUM(POS.VAT) * -1 END AS AMOUNT " +
                                             "FROM POS_SALE_VW_01 AS POS " +
-                                            "WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END " +
+                                            "WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END AND POS.DEVICE <> '9999' " +
                                             "GROUP BY POS.DOC_DATE,POS.TYPE,POS.VAT_RATE,POS.DEVICE " +
                                             "UNION ALL " +
                                             "SELECT " +
@@ -105,7 +105,7 @@ export default class posSalesReport extends React.PureComponent
                                             "0 AS VAT_RATE, " +
                                             "CASE WHEN POS.TYPE = 0 THEN SUM(AMOUNT - CHANGE) ELSE SUM(AMOUNT - CHANGE) * -1 END AS AMOUNT  " +
                                             "FROM POS_PAYMENT_VW_01 AS POS " +
-                                            "WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END " +
+                                            "WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END AND POS.DEVICE <> '9999' " +
                                             "GROUP BY POS.GUID,POS.DOC_DATE,POS.TYPE,POS.PAY_TYPE,POS.DEVICE " , 
                                     param : ['START:date','END:date'],
                                     value : [this.dtDate.startDate,this.dtDate.endDate]

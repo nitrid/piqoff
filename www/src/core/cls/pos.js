@@ -25,6 +25,11 @@ export class posCls
             CUSTOMER_GUID : '00000000-0000-0000-0000-000000000000',
             CUSTOMER_CODE : '',
             CUSTOMER_NAME : '',
+            CUSTOMER_TAX_NO : '',
+            CUSTOMER_ADRESS : '',
+            CUSTOMER_ZIPCODE : '',
+            CUSTOMER_COUNTRY : '',
+            CUSTOMER_CITY : '',
             CUSTOMER_POINT : 0,
             FAMOUNT : 0,
             AMOUNT : 0,
@@ -45,7 +50,7 @@ export class posCls
         this.posSale = new posSaleCls();
         this.posPay = new posPaymentCls();
         this.posExtra = new posExtraCls();
-
+        
         this._initDs();
     }
     //#region Private

@@ -16,7 +16,6 @@ export default class NdAcsDialog extends NdBase
         this.state.title = this.props.title;
         this.core = this.props.parent.core;
         this.user = this.props.parent.user;
-        console.log(this)
     }
     show(pType)
     {
