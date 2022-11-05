@@ -982,7 +982,7 @@ export default class itemCard extends React.PureComponent
                                         let tmpQuery = 
                                         {
                                             query :"SELECT SUM(QUANTITY) AS QUANTITY,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE FROM POS_SALE_VW_01 " +
-                                                    "WHERE ITEM_CODE = @CODE AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE " +
+                                                    "WHERE ITEM_CODE = @CODE AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND DEVICE <> '9999' " +
                                                     "GROUP BY DOC_DATE,ITEM_CODE ",
                                             param : ['CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
                                             value : [this.txtRef.value,this.dtDate.startDate,this.dtDate.endDate]
@@ -2481,7 +2481,7 @@ export default class itemCard extends React.PureComponent
                                             let tmpQuery = 
                                             {
                                                 query :"SELECT SUM(QUANTITY) AS QUANTITY,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE FROM POS_SALE_VW_01 " +
-                                                        "WHERE ITEM_CODE = @CODE AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE " +
+                                                        "WHERE ITEM_CODE = @CODE AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND DEVICE <> '9999' " +
                                                         "GROUP BY DOC_DATE,ITEM_CODE ",
                                                 param : ['CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
                                                 value : [this.txtRef.value,this.dtDate.startDate,this.dtDate.endDate]
@@ -2501,7 +2501,7 @@ export default class itemCard extends React.PureComponent
                                             let tmpQuery = 
                                             {
                                                 query :"SELECT SUM(QUANTITY) AS QUANTITY,MONTH(DOC_DATE) AS DOC_DATE FROM POS_SALE_VW_01 " +
-                                                        "WHERE ITEM_CODE = @CODE AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE " +
+                                                        "WHERE ITEM_CODE = @CODE AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND DEVICE <> '9999' " +
                                                         "GROUP BY MONTH(DOC_DATE),ITEM_CODE ",
                                                 param : ['CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
                                                 value : [this.txtRef.value,this.dtDate.startDate,this.dtDate.endDate]
