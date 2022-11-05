@@ -3575,7 +3575,7 @@ export default class posDoc extends React.PureComponent
                                             }
 
                                             this.setState({isFormation:this.state.isFormation ? false : true})
-                                            this.formation.value = this.state.isFormation ? '' : 'FORMATION'
+                                            this.formation.value = this.state.isFormation ? 'FORMATION' : ''
                                             this.init()
                                         }}>
                                             <i className="fa-solid fa-highlighter"></i>
