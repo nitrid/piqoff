@@ -69,7 +69,7 @@ export class customersCls
                     "@TAX_SUCRE = @PTAX_SUCRE " ,
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PTITLE:string|50','PCODE:string|50','PGENUS:int','PCUSTOMER_GRP:string|25','PWEB:string|100','PNOTE:string|1500',
                         'PSIRET_ID:string|25','PSIREN_NO:string|25','PRCS:string|25','PAPE_CODE:string|50','PTAX_OFFICE:string|25','PTAX_NO:string|25','PINT_VAT_NO:string|50',
-                        'PTAX_TYPE:int','PCAPITAL:float','PREBATE:bit','PTAX_SUCRE:bit'],
+                       'PTAX_TYPE:int','PCAPITAL:float','PREBATE:bit','PTAX_SUCRE:bit'],
             dataprm : ['GUID','CUSER','TYPE','TITLE','CODE','GENUS','CUSTOMER_GRP','WEB','NOTE','SIRET_ID','SIREN_NO','RCS','APE_CODE','TAX_OFFICE','TAX_NO','INT_VAT_NO','TAX_TYPE','CAPITAL','REBATE','TAX_SUCRE']
         }
         tmpDt.updateCmd = 

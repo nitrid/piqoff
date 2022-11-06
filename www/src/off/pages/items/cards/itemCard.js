@@ -935,6 +935,7 @@ export default class itemCard extends React.PureComponent
                                         this.itemsObj.dt()[0].VAT = tmpItem.VAT
                                         this.itemsObj.dt()[0].NAME = tmpItem.NAME
                                         this.itemsObj.dt()[0].MAIN_GRP = tmpItem.MAIN_GRP
+                                        this.itemsObj.dt()[0].MAIN_GUID = tmpItem.MAIN_GUID
                                         this.itemsObj.dt()[0].TYPE = tmpItem.TYPE
                                         this.itemsObj.dt()[0].CODE= Math.floor(Date.now() / 1000)
                                         this.itemsObj.dt()[0].WEIGHING = tmpItem.WEIGHING
@@ -1122,9 +1123,9 @@ export default class itemCard extends React.PureComponent
                                 <Item>
                                     <Label text={this.t("cmbItemGrp")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbItemGrp" tabIndex={this.tabIndex}
-                                    dt={{data:this.itemsObj.dt('ITEMS'),field:"MAIN_GRP",display:"MAIN_GRP_NAME"}}
+                                    dt={{data:this.itemsObj.dt('ITEMS'),field:"MAIN_GUID",display:"MAIN_GRP_NAME"}}
                                     displayExpr="NAME"                       
-                                    valueExpr="CODE"
+                                    valueExpr="GUID"
                                     value=""
                                     searchEnabled={true} 
                                     showClearButton={true}
@@ -1132,7 +1133,7 @@ export default class itemCard extends React.PureComponent
                                     notRefresh={true}
                                     param={this.param.filter({ELEMENT:'cmbItemGrp',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbItemGrp',USERS:this.user.CODE})}
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM ITEM_GROUP ORDER BY NAME ASC"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT CODE,NAME,GUID FROM ITEM_GROUP ORDER BY NAME ASC"},sql:this.core.sql}}}
                                     onValueChanged={(e)=>
                                     {
                                         this.itemGrpForOrginsValidCheck()

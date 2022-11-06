@@ -1336,7 +1336,7 @@ export const langFr =
             clmUnderUnitPrice : "Prix Contenu Unité" ,
             clmDescription :"Motif",
             clmOrgins : "Origine",
-            clmUser : "Utilisateur",
+            clmCuser : "Utilisateur",
         },
         msgDocValid:
         {
